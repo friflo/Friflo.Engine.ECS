@@ -1,0 +1,39 @@
+{
+    "editor.wordWrap": "off",
+    "[markdown]": {
+        "editor.wordWrap": "off",
+    },
+	"files.exclude": {
+        "**/obj": true,
+		"**/bin": true,
+        "**/.vs": true,
+        "**/.run": true,
+        "**/.idea": true,
+        "**/*.user": true,
+        "**/*.DotSettings": true,
+        //
+        "**/.obj": true,
+		"**/.bin": true,
+		"**/*.meta": true,
+        
+        // root files / folders
+        "package-lock.json": true,
+        "node_modules": true,
+        "Directory.Build.props": false,
+        "yarn.lock": true
+    },
+    "cSpell.words": [
+        "Avalonia",
+        "bepu",
+        "bepuphysics",
+        "Browsable",
+        "Netcode",
+        "Pids",
+        "SIMD",
+        "Skia",
+        "Tizen",
+        "unloadability",
+        "Veldrid",
+        "Zikmund"
+    ]
+}
