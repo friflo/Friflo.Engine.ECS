@@ -31,6 +31,9 @@ Prefabs are used in Edit & Play mode:
 - Enable reloading an already loaded scene in the same `EntityStore`.  
   The `EntityStore` must be unchanged after reloading.  
   This will require an extra `PrefabEntityComponent` storing the `id` of prefab entities.
+- `DataNode`'s queried via `EntityStoreClient.Query()` can be cleared after added to `EntityStore`.
+- Enable read / write / query entities via HTTP.
+- Enable read / write / query and subscribing database changes via WebSocket.
 
 <br/>
 
