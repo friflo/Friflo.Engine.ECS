@@ -81,11 +81,19 @@ public sealed partial class EntityStore
     }
     
     [Conditional("DEBUG")]
-    private static void AssertPid(int expected, int pid) {
+    private static void AssertPid(int pid, int expected) {
         if (expected == pid) {
             return;
         }
         throw new InvalidOperationException($"invalid pid. expected: {expected}, was: {pid}");
+    }
+    
+    [Conditional("DEBUG")]
+    private static void AssertPid0(int pid, int expected) {
+        if (pid == 0 || pid == expected) {
+            return;
+        }
+        throw new InvalidOperationException($"invalid pid. expected: 0 or {expected}, was: {pid}");
     }
 
     /// <summary>expect <see cref="nodes"/> Length > id</summary> 
@@ -98,10 +106,10 @@ public sealed partial class EntityStore
             AssertPid(node.pid, pid);
             return node.entity;
         }
-        AssertPid(0, node.pid);
         if (nodeMaxId < id) {
             nodeMaxId = id;
         }
+        AssertPid0(node.pid, pid);
         node.pid        = pid;
         var entity      = new GameEntity(id, defaultArchetype);
         // node.parentId   = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.

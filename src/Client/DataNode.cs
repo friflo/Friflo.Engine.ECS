@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
+using System.ComponentModel.DataAnnotations;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Host;
 
@@ -26,6 +26,7 @@ public sealed class DataNode
 {
     /// <summary>permanent id used to identify entities in a database</summary>
     [Serialize        ("id")] 
+    [Key]
     public  int         pid;
     
     /// <remarks>
@@ -37,10 +38,6 @@ public sealed class DataNode
     public  List<int>   children;       // can be null
     
     /// <summary>
-    /// ComponentWriter: create a <see cref="JsonValue"/> from all class / struct components of an entity for serialization.<br/>
-    /// ComponentReader: create all class / struct components for an entity from <see cref="JsonValue"/>
-    ///                  when calling <see cref="EntityStore.CreateFromDataNode"/><br/>
-    /// <br/>
     /// Each key in <see cref="components"/> defines the type of a class / struct component. Its value is the component value.
     /// </summary>
     public  JsonValue   components;     // can be null

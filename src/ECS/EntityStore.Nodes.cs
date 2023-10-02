@@ -2,7 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using Friflo.Fliox.Engine.Client;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
@@ -234,5 +237,20 @@ public sealed partial class EntityStore
         rootId                  = id;
         nodes[rootId].parentId  = Static.RootId;
         SetTreeFlags(nodes, id, TreeNode);
+    }
+    
+    public DataNode EntityAsDataNode(int id, EntityStoreClient client) {
+        ref var node = ref nodes[id];
+        if (!client.entities.Local.TryGetEntity(id, out var dataNode)) {
+            dataNode = new DataNode { pid = id };
+        }
+        if (node.childCount > 0) {
+            var children = dataNode.children = new List<int>(node.childCount); 
+            foreach (var childId in node.ChildIds) {
+                var pid = nodes[childId].pid;
+                children.Add(pid);  
+            }
+        }
+        return dataNode;
     }
 }
