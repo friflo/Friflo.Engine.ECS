@@ -2,6 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Json.Fliox;
+using Friflo.Json.Fliox.Mapper;
+using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
@@ -21,6 +24,29 @@ public sealed partial class EntityStore
         }
         var newHeap = StructHeap<T>.Create(Static.DefaultCapacity, typeStore);
         archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), current, newHeap);
+        AddArchetype(archetype);
+        return archetype;
+    }
+    
+    private Archetype GetArchetypeWith(Archetype current, StructFactory factory)
+    {
+        var hash = factory.hash ^ current.typeHash;
+        if (TryGetArchetype(hash, out var archetype)) {
+            return archetype;
+        }
+        var newHeap = factory.CreateHeap(Static.DefaultCapacity);
+        archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), current, newHeap);
+        AddArchetype(archetype);
+        return archetype;
+    }
+    
+    private Archetype GetArchetype(StructFactory factory)
+    {
+        if (TryGetArchetype(factory.hash, out var archetype)) {
+            return archetype;
+        }
+        var newHeap = factory.CreateHeap(Static.DefaultCapacity);
+        archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), defaultArchetype, newHeap);
         AddArchetype(archetype);
         return archetype;
     }
@@ -127,12 +153,12 @@ public sealed partial class EntityStore
                 return false;
             }
             // --- change entity archetype
-            var newArchetype = GetArchetypeWith<T>(arch);
+            var newArchetype    = GetArchetypeWith<T>(arch);
             compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
             archetype           = arch = newArchetype;
         } else {
             // --- add entity to archetype
-            arch            = GetArchetype<T>();
+            arch                = GetArchetype<T>();
             compIndex           = arch.AddEntity(id);
             archetype           = arch;
         }
@@ -170,5 +196,76 @@ public sealed partial class EntityStore
         compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
         archetype   = newArchetype;
         return true;
+    }
+    
+    public void RegisterStructComponent<T>() where T : struct  {
+        var heapIndex   = StructHeap<T>.ComponentIndex;
+        var key         = StructHeap<T>.ComponentKey;
+        var factory     = new StructFactory<T>(heapIndex, key, typeStore);
+        factories[key]  = factory;
+    }
+    
+    internal bool ReadComponent(
+        ObjectReader        reader,
+        JsonValue           json,
+        int                 id,
+        ref Archetype       archetype,
+        ref int             compIndex,
+        StructFactory       factory,
+        ComponentUpdater    updater)
+    {
+        var arch = archetype;
+        if (arch != defaultArchetype) {
+            var compHeap = arch.FindComponentHeap(factory.heapIndex);
+            if (compHeap != null) {
+                // --- change component value 
+                compHeap.Read(reader, compIndex, json);
+                return false;
+            }
+            // --- change entity archetype
+            var newArchetype    = archetype.store.GetArchetypeWith(archetype, factory);
+            compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
+            archetype           = arch = newArchetype;
+        } else {
+            // --- add entity to archetype
+            arch                = archetype.store.GetArchetype(factory);
+            compIndex           = arch.AddEntity(id);
+            archetype           = arch;
+        }
+        // --- set component value 
+        var structHeap = arch.HeapMap[factory.heapIndex];
+        structHeap.Read(reader, compIndex, json);
+        return true;
+    }
+}
+
+internal abstract class StructFactory
+{
+    internal readonly   int     heapIndex;
+    internal readonly   string  keyName;
+    internal readonly   long    hash;
+        
+    internal abstract StructHeap CreateHeap(int capacity);
+    
+    internal StructFactory(int heapIndex, string keyName, long hash) {
+        this.heapIndex  = heapIndex;
+        this.keyName    = keyName;
+        this.hash       = hash;
+    }
+}
+
+internal class StructFactory<T> : StructFactory 
+    where T : struct
+{
+    private readonly    TypeMapper<T>   typeMapper;
+    
+    internal StructFactory(int heapIndex, string keyName, TypeStore typeStore)
+        : base(heapIndex, keyName, typeof(T).Handle())
+    {
+        typeMapper = typeStore.GetTypeMapper<T>();
+    }
+    
+    internal override StructHeap CreateHeap(int capacity) {
+        return new StructHeap<T>(heapIndex, keyName, capacity, typeMapper);   
     }
 }

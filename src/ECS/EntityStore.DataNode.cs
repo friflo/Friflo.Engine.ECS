@@ -23,7 +23,7 @@ public sealed partial class EntityStore
         } else {
             entity = CreateFromDataNodeRandomPid(dataNode);
         }
-        ComponentReader.Instance.Read(dataNode.components, entity);
+        ComponentReader.Instance.Read(dataNode.components, entity, this);
         return entity;
     }
 

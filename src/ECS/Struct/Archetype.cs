@@ -133,8 +133,7 @@ public sealed class Archetype
         return heapMap[StructHeap<T>.ComponentIndex];
     }
    
-    private StructHeap FindComponentHeap(StructHeap search) {
-        int heapIndex = search.heapIndex;
+    internal StructHeap FindComponentHeap(int heapIndex) {
         if (heapIndex < heapMap.Length) {
             return heapMap[heapIndex];
         }
@@ -149,7 +148,7 @@ public sealed class Archetype
         
         for (int n = 0; n < structHeaps.Length; n++) {
             var sourceHeap  = structHeaps[n];
-            var targetHeap  = newArchetype.FindComponentHeap(sourceHeap);
+            var targetHeap  = newArchetype.FindComponentHeap(sourceHeap.heapIndex);
             if (targetHeap == null) {
                 continue;
             }

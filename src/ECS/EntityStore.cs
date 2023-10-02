@@ -75,14 +75,15 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                 rootId;
     
     // --- node access
-    [Browse(Never)] private readonly    PidType             pidType;
+    [Browse(Never)] private  readonly   PidType             pidType;
     [Browse(Never)] private             Random              randPid;            // null if using PidType.UsePidAsId
-                    private readonly    Dictionary<int,int> pid2Id;             // null if using PidType.UsePidAsId
+                    private  readonly   Dictionary<int,int> pid2Id;             // null if using PidType.UsePidAsId
     [Browse(Never)] internal            EntityNode[]        nodes;              // acts also id2pid
     [Browse(Never)] private             int                 nodeMaxId;
     [Browse(Never)] private             int                 nodeCount;
-    [Browse(Never)] private readonly    TypeStore           typeStore;
-
+    [Browse(Never)] private  readonly   TypeStore           typeStore;
+    
+    [Browse(Never)] internal readonly   Dictionary<string, StructFactory> factories;
                     
                     internal static     bool                HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -117,6 +118,7 @@ public sealed partial class EntityStore
         EnsureNodesLength(2);
         gameEntityUpdater   = new GameEntityUpdater(this);
         defaultArchetype    = Archetype.CreateWithHeaps(GetArchetypeConfig(), Array.Empty<StructHeap>());
+        factories           = new Dictionary<string, StructFactory>();
         AddArchetype(defaultArchetype);
     }
     #endregion

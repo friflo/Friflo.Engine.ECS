@@ -13,6 +13,8 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ReadComponents() {
         var store       = new EntityStore(100, PidType.UsePidAsId);
+        store.RegisterStructComponent<Position>();
+        
         var rootNode    = new DataNode {
             pid         = 10,
             components  = new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"x\": 3 } }"),
@@ -26,6 +28,8 @@ public static class Test_ComponentReader
         
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
+        AreEqual(0,     root.Position.x);   // todo fix x == 1
+
         AreEqual(11,    child.Id);
     }
    

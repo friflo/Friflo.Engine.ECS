@@ -3,6 +3,7 @@
 
 using System;
 using Friflo.Json.Burst;
+using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
@@ -18,7 +19,7 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     internal            StructChunk<T>[]    chunks;
     private  readonly   TypeMapper<T>       typeMapper;
     
-    private StructHeap(int heapIndex, string keyName, int capacity, TypeMapper<T> mapper)
+    internal StructHeap(int heapIndex, string keyName, int capacity, TypeMapper<T> mapper)
         : base (heapIndex, keyName, typeof(T))
     {
         typeMapper  = mapper;
@@ -77,9 +78,14 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         return chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     }
     
-    internal override Bytes Write (ObjectWriter writer, int compIndex) {
+    internal override Bytes Write(ObjectWriter writer, int compIndex) {
         ref var value = ref chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
         return writer.WriteAsBytesMapper(value, typeMapper);
+    }
+    
+    internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
+        chunks[compIndex / ChunkSize].components[compIndex % ChunkSize]
+            = reader.ReadToMapper(typeMapper, json, default, false);
     }
     
     // ReSharper disable once StaticMemberInGenericType
