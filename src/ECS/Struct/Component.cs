@@ -2,10 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Fliox.Engine.ECS.StructUtils;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct Component<T>
     where T : struct

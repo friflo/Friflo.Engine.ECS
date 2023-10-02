@@ -6,7 +6,7 @@ using System;
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 internal abstract class StructHeap
 {

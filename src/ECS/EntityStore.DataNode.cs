@@ -3,10 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using Fliox.Engine.Client;
-using static Fliox.Engine.ECS.StoreOwnership;
+using Friflo.Fliox.Engine.Client;
+using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing DataNode's.
 public sealed partial class EntityStore

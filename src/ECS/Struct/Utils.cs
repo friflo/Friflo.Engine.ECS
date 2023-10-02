@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 public static class StructUtils
 {

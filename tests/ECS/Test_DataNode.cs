@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Fliox.Engine.Client;
-using Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.Client;
+using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-using static Fliox.Engine.ECS.NodeFlags;
-using static Fliox.Engine.ECS.PidType;
+using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Fliox.Engine.ECS.PidType;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming

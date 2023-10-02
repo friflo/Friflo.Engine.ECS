@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 internal static class TypeExtensions
 {

@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 // --------------------------- Position ---------------------------
 [StructComponent("pos")]

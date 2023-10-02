@@ -2,12 +2,12 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Host;
 
 // ReSharper disable ClassNeverInstantiated.Global
-namespace Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Client;
 
 /// <summary>
 /// A <see cref="DataNode"/> is used to serialize entities.<br/>

@@ -2,11 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Fliox.Engine.ECS.EntityStore.Static;
+using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
     
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable once CheckNamespace
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore
 {

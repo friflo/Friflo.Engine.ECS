@@ -4,7 +4,7 @@
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
 
-namespace Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Client;
 
 public class EntityStoreClient : FlioxClient
 {

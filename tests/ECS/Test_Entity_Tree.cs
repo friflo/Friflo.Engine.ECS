@@ -1,10 +1,10 @@
 using System;
-using Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-using static Fliox.Engine.ECS.StoreOwnership;
-using static Fliox.Engine.ECS.TreeMembership;
-using static Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Fliox.Engine.ECS.StoreOwnership;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming

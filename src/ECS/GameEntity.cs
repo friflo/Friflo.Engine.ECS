@@ -3,17 +3,17 @@
 
 using System;
 using System.Text;
-using static Fliox.Engine.ECS.StructUtils;
 using static System.Diagnostics.DebuggerBrowsableState;
-using static Fliox.Engine.ECS.TreeMembership;
-using static Fliox.Engine.ECS.StoreOwnership;
-using static Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Fliox.Engine.ECS.StoreOwnership;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable InconsistentNaming
 // ReSharper disable UseNullPropagation
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// Has currently no id - if doing so the type id is fixed  

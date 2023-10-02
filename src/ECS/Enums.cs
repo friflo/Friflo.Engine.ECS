@@ -2,11 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Fliox.Engine.ECS.TreeMembership;
-using static Fliox.Engine.ECS.StoreOwnership;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
 // ReSharper disable InconsistentNaming
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>Describe the ownership state of a <see cref="GameEntity"/></summary>
 public enum StoreOwnership

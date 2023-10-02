@@ -2,13 +2,13 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Fliox.Engine.ECS.StructUtils;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore
 {

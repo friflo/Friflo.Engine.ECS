@@ -1,9 +1,9 @@
 using System;
 using System.Text;
-using Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-using static Fliox.Engine.ECS.EntityStore.Static;
+using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
 
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value

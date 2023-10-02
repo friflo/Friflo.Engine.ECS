@@ -4,15 +4,15 @@
 using System;
 using System.Collections.Generic;
 using static System.Diagnostics.DebuggerBrowsableState;
-using static Fliox.Engine.ECS.StoreOwnership;
-using static Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.StoreOwnership;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// The <see cref="EntityStore"/> provide the features listed below

@@ -4,7 +4,7 @@
 using System;
 
 // ReSharper disable UnusedParameter.Local
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// Annotated structs can be added as component to <see cref="GameEntity"/>'s using the specified key name.<br/>

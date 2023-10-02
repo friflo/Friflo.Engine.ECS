@@ -3,11 +3,11 @@
 
 using System;
 using System.Text;
-using static Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
 
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore
 {

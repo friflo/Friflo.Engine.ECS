@@ -4,13 +4,13 @@
 using System;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
-using static Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable InconsistentNaming
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree structure.<br/>

@@ -4,16 +4,16 @@
 using System;
 using System.Diagnostics;
 using static System.Diagnostics.DebuggerBrowsableState;
-using static Fliox.Engine.ECS.StoreOwnership;
-using static Fliox.Engine.ECS.TreeMembership;
-using static Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Fliox.Engine.ECS.StoreOwnership;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ConvertConstructorToMemberInitializers
-namespace Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing GameEntity's.
 // The reason to separate handling of GameEntity's is to enable 'entity / component support' without GameEntity's.
