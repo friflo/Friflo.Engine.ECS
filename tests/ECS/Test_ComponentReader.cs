@@ -28,9 +28,12 @@ public static class Test_ComponentReader
         
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
+        AreEqual(1,     root.ComponentCount);
         AreEqual(1f,    root.Position.x);
         AreEqual(2f,    root.Position.y);
         AreEqual(3f,    root.Position.z);
+        var posType = store.GetArchetype<Position>();
+        AreEqual(1,     posType.EntityCount);
 
         AreEqual(11,    child.Id);
     }
