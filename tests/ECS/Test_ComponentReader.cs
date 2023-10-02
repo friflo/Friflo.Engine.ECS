@@ -17,7 +17,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataNode {
             pid         = 10,
-            components  = new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"x\": 3 } }"),
+            components  = new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 } }"),
             children    = new List<int> { 11 } 
         };
         var childNode = new DataNode {
@@ -28,7 +28,9 @@ public static class Test_ComponentReader
         
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
-        AreEqual(0,     root.Position.x);   // todo fix x == 1
+        AreEqual(1f,    root.Position.x);
+        AreEqual(2f,    root.Position.y);
+        AreEqual(3f,    root.Position.z);
 
         AreEqual(11,    child.Id);
     }

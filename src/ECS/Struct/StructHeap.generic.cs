@@ -85,7 +85,7 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
         chunks[compIndex / ChunkSize].components[compIndex % ChunkSize]
-            = reader.ReadToMapper(typeMapper, json, default, false);
+            = reader.ReadMapper(typeMapper, json);  // todo avoid boxing within typeMapper, T is struct
     }
     
     // ReSharper disable once StaticMemberInGenericType

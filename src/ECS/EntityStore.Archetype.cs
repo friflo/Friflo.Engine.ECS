@@ -42,6 +42,7 @@ public sealed partial class EntityStore
     
     private Archetype GetArchetype(StructFactory factory)
     {
+        // could perform lookup per lookup array
         if (TryGetArchetype(factory.hash, out var archetype)) {
             return archetype;
         }

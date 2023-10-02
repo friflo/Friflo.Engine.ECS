@@ -3,6 +3,7 @@
 
 using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -17,63 +18,69 @@ namespace Friflo.Fliox.Engine.ECS;
 
 // --------------------------- Position ---------------------------
 [StructComponent("pos")]
+[StructLayout(LayoutKind.Explicit)]
 public struct  Position
 {
     [Browse(Never)]
-    [Ignore] public Vector3 Value;
-    
-    public float x { get => Value.X; set => Value.X = value; }
-    public float y { get => Value.Y; set => Value.Y = value; }
-    public float z { get => Value.Z; set => Value.Z = value; }
+    [Ignore]
+    [FieldOffset(00)] public    Vector3 value;
+    //
+    [FieldOffset(00)] public    float   x;
+    [FieldOffset(04)] public    float   y;
+    [FieldOffset(08)] public    float   z;
 
     public override string ToString() => $"{x}, {y}, {z}";
 
     public Position (float x, float y, float z) {
-        Value.X = x;
-        Value.Y = y;
-        Value.Z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 }
 
 // --------------------------- Rotation ---------------------------
 [StructComponent("rot")]
+[StructLayout(LayoutKind.Explicit)]
 public struct  Rotation
 {
     [Browse(Never)]
-    [Ignore] public Quaternion Value;
-    
-    public float x { get => Value.X; set => Value.X = value; }
-    public float y { get => Value.Y; set => Value.Y = value; }
-    public float z { get => Value.Z; set => Value.Z = value; }
-    public float w { get => Value.W; set => Value.W = value; }
+    [Ignore]
+    [FieldOffset(00)] public    Quaternion  value;
+    //
+    [FieldOffset(00)] public    float       x;
+    [FieldOffset(04)] public    float       y;
+    [FieldOffset(08)] public    float       z;
+    [FieldOffset(12)] public    float       w;
     
     public override string ToString() => $"{x}, {y}, {z}, {w}";
     
     public Rotation (float x, float y, float z, float w) {
-        Value.X = x;
-        Value.Y = y;
-        Value.Z = z;
-        Value.W = w;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
     }
 }
 
 // --------------------------- Scale3 ---------------------------
 [StructComponent("scl3")]
+[StructLayout(LayoutKind.Explicit)]
 public struct Scale3
 {
     [Browse(Never)]
-    [Ignore] public Vector3 Value;
-    
-    public float x { get => Value.X; set => Value.X = value; }
-    public float y { get => Value.Y; set => Value.Y = value; }
-    public float z { get => Value.Z; set => Value.Z = value; }
+    [Ignore]
+    [FieldOffset(00)] public    Vector3 value;
+    //
+    [FieldOffset(00)] public    float   x;
+    [FieldOffset(04)] public    float   y;
+    [FieldOffset(08)] public    float   z;
 
     public override string ToString() => $"{x}, {y}, {z}";
 
     public Scale3 (float x, float y, float z) {
-        Value.X = x;
-        Value.Y = y;
-        Value.Z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 }
 
