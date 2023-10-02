@@ -19,7 +19,7 @@ public static class Test_ComponentWriter
         entity.AddChild(child);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         
-        var node = store.EntityAsDataNode(10, client);
+        var node = store.EntityAsDataNode(entity, client);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);

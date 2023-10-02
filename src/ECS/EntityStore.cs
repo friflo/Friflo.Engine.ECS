@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
@@ -80,19 +81,22 @@ public sealed partial class EntityStore
     [Browse(Never)] internal            EntityNode[]        nodes;              // acts also id2pid
     [Browse(Never)] private             int                 nodeMaxId;
     [Browse(Never)] private             int                 nodeCount;
+    [Browse(Never)] private readonly    TypeStore           typeStore;
+
                     
                     internal static     bool                HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
     
 #region static fields
     public static class Static {
-        internal const              int     DefaultCapacity = 1;
-        internal static readonly    int[]   EmptyChildNodes = null;
+        internal const              int         DefaultCapacity = 1;
+        internal static readonly    int[]       EmptyChildNodes = null;
+        internal static readonly    TypeStore   TypeStore       = new TypeStore();
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
-        internal const              int     MinNodeId   =  1;
-        public   const              int     NoParentId  =  0;
-        public   const              int     RootId      = -1;
+        internal const              int         MinNodeId   =  1;
+        public   const              int         NoParentId  =  0;
+        public   const              int         RootId      = -1;
     }
     #endregion
     
@@ -104,6 +108,7 @@ public sealed partial class EntityStore
         rootId              = Static.NoParentId;
         archetypes          = new Archetype[2];
         archetypeInfos      = new ArchetypeInfo[2];
+        typeStore           = Static.TypeStore;
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<int, int>();
             randPid = new Random();

@@ -19,7 +19,7 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var newHeap = StructHeap<T>.Create(Static.DefaultCapacity);
+        var newHeap = StructHeap<T>.Create(Static.DefaultCapacity, typeStore);
         archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), current, newHeap);
         AddArchetype(archetype);
         return archetype;
@@ -128,13 +128,13 @@ public sealed partial class EntityStore
             }
             // --- change entity archetype
             var newArchetype = GetArchetypeWith<T>(arch);
-            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
-            archetype   = arch = newArchetype;
+            compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
+            archetype           = arch = newArchetype;
         } else {
             // --- add entity to archetype
-            arch        = GetArchetype<T>();
-            compIndex   = arch.AddEntity(id);
-            archetype   = arch;
+            arch            = GetArchetype<T>();
+            compIndex           = arch.AddEntity(id);
+            archetype           = arch;
         }
         // --- set component value 
         var structHeap = (StructHeap<T>)arch.HeapMap[StructHeap<T>.ComponentIndex];

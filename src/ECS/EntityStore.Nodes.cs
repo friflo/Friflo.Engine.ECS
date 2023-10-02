@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using Friflo.Fliox.Engine.Client;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
@@ -239,10 +238,12 @@ public sealed partial class EntityStore
         SetTreeFlags(nodes, id, TreeNode);
     }
     
-    public DataNode EntityAsDataNode(int id, EntityStoreClient client) {
+    public DataNode EntityAsDataNode(GameEntity entity, EntityStoreClient client) {
+        var id = entity.id;
         ref var node = ref nodes[id];
         if (!client.entities.Local.TryGetEntity(id, out var dataNode)) {
             dataNode = new DataNode { pid = id };
+            client.entities.Local.Add(dataNode);
         }
         if (node.childCount > 0) {
             var children = dataNode.children = new List<int>(node.childCount); 
@@ -251,6 +252,7 @@ public sealed partial class EntityStore
                 children.Add(pid);  
             }
         }
+        dataNode.components = ComponentWriter.Instance.Write(entity);
         return dataNode;
     }
 }

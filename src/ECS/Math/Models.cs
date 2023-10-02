@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Text;
+using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -18,7 +19,8 @@ namespace Friflo.Fliox.Engine.ECS;
 [StructComponent("pos")]
 public struct  Position
 {
-    [Browse(Never)] public Vector3 Value;
+    [Browse(Never)]
+    [Ignore] public Vector3 Value;
     
     public float x { get => Value.X; set => Value.X = value; }
     public float y { get => Value.Y; set => Value.Y = value; }
@@ -37,7 +39,8 @@ public struct  Position
 [StructComponent("rot")]
 public struct  Rotation
 {
-    [Browse(Never)] public Quaternion Value;
+    [Browse(Never)]
+    [Ignore] public Quaternion Value;
     
     public float x { get => Value.X; set => Value.X = value; }
     public float y { get => Value.Y; set => Value.Y = value; }
@@ -58,7 +61,8 @@ public struct  Rotation
 [StructComponent("scl3")]
 public struct Scale3
 {
-    [Browse(Never)] public Vector3 Value;
+    [Browse(Never)]
+    [Ignore] public Vector3 Value;
     
     public float x { get => Value.X; set => Value.X = value; }
     public float y { get => Value.Y; set => Value.Y = value; }
@@ -77,11 +81,11 @@ public struct Scale3
 [StructComponent("name")]
 public struct EntityName
 {
-                    public  string              Value   { get => value; set => SetValue(value); }
-    [Browse(Never)] public  ReadOnlySpan<byte>  UTF8    => new (utf8);
+                            public  string              Value   { get => value; set => SetValue(value); }
+    [Browse(Never)]         public  ReadOnlySpan<byte>  UTF8    => new (utf8);
 
-    [Browse(Never)] private string              value;
-    [Browse(Never)] private byte[]              utf8;
+    [Browse(Never)][Ignore] private string              value;
+    [Browse(Never)][Ignore] private byte[]              utf8;
     
     public override         string              ToString() => $"Name: \"{value}\"";
 

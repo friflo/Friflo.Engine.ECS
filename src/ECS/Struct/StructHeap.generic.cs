@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Json.Fliox.Mapper;
+using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
@@ -12,26 +14,30 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructComponent - not using an interface for struct components
 {
     // --- internal
-    internal    StructChunk<T>[]  chunks;
+    internal            StructChunk<T>[]    chunks;
+    private  readonly   TypeMapper<T>       typeMapper;
     
-    private StructHeap(int heapIndex, string keyName, int capacity)
+    private StructHeap(int heapIndex, string keyName, int capacity, TypeMapper<T> mapper)
         : base (heapIndex, keyName, typeof(T))
     {
+        typeMapper  = mapper;
         chunks      = new StructChunk<T>[1];
         chunks[0]   = new StructChunk<T>(capacity);
     }
     
-    internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(heapIndex, keyName, capacity);
+    internal override StructHeap CreateHeap(int capacity, TypeStore typeStore) {
+        var mapper = typeStore.GetTypeMapper<T>();
+        return new StructHeap<T>(heapIndex, keyName, capacity, mapper);
     }
     
-    internal static StructHeap Create(int capacity) {
+    internal static StructHeap Create(int capacity, TypeStore typeStore) {
         var componentIndex = ComponentIndex;
         if (componentIndex == MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {typeof(T).Namespace}.{typeof(T).Name}";
             throw new InvalidOperationException(msg);
         }
-        return new StructHeap<T>(componentIndex, ComponentKey, capacity);
+        var mapper = typeStore.GetTypeMapper<T>();
+        return new StructHeap<T>(componentIndex, ComponentKey, capacity, mapper);
     }
     
     internal override void SetCapacity(int capacity)
@@ -66,8 +72,13 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override object GetComponentDebug (int archIndex) {
-        return chunks[archIndex / ChunkSize].components[archIndex % ChunkSize];
+    internal override object GetComponentDebug (int compIndex) {
+        return chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    }
+    
+    internal override void Write (ObjectWriter writer, int compIndex) {
+        ref var value = ref chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+        writer.WriteAsBytesMapper(value, typeMapper);
     }
     
     // ReSharper disable once StaticMemberInGenericType

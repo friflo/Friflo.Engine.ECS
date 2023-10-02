@@ -34,8 +34,8 @@ public sealed partial class EntityStore
             return archetype;
         }
         var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(DefaultCapacity),
-            StructHeap<T2>.Create(DefaultCapacity)
+            StructHeap<T1>.Create(DefaultCapacity, typeStore),
+            StructHeap<T2>.Create(DefaultCapacity, typeStore)
         };
         archetype = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
         AddArchetype(archetype);
@@ -55,9 +55,9 @@ public sealed partial class EntityStore
             return archetype;
         }
         var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(DefaultCapacity),
-            StructHeap<T2>.Create(DefaultCapacity),
-            StructHeap<T3>.Create(DefaultCapacity)
+            StructHeap<T1>.Create(DefaultCapacity, typeStore),
+            StructHeap<T2>.Create(DefaultCapacity, typeStore),
+            StructHeap<T3>.Create(DefaultCapacity, typeStore )
         };
         archetype = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
         AddArchetype(archetype);
@@ -78,10 +78,10 @@ public sealed partial class EntityStore
             return archetype;
         }
         var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(DefaultCapacity),
-            StructHeap<T2>.Create(DefaultCapacity),
-            StructHeap<T3>.Create(DefaultCapacity),
-            StructHeap<T4>.Create(DefaultCapacity)
+            StructHeap<T1>.Create(DefaultCapacity, typeStore),
+            StructHeap<T2>.Create(DefaultCapacity, typeStore),
+            StructHeap<T3>.Create(DefaultCapacity, typeStore),
+            StructHeap<T4>.Create(DefaultCapacity, typeStore)
         };
         archetype = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
         AddArchetype(archetype);
@@ -94,7 +94,8 @@ public sealed partial class EntityStore
             store           = this,
             archetypeIndex  = archetypesCount,
             archetypeMax    = archetypeMax,
-            capacity        = DefaultCapacity
+            capacity        = DefaultCapacity,
+            typeStore       = typeStore
         };
     }
 }

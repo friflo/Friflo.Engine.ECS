@@ -2,6 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+
+using Friflo.Json.Fliox.Mapper;
+
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 internal struct StandardComponents
@@ -18,4 +22,5 @@ internal struct ArchetypeConfig
     internal    int         archetypeIndex;
     internal    int         archetypeMax;
     internal    int         capacity;
+    internal    TypeStore   typeStore;
 }

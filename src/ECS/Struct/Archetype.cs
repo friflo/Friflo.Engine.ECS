@@ -81,7 +81,7 @@ public sealed class Archetype
     internal static Archetype Create<T>(in ArchetypeConfig config)
         where T : struct
     {
-        var newComp     = StructHeap<T>.Create(config.capacity);
+        var newComp     = StructHeap<T>.Create(config.capacity, config.typeStore);
         var archetype   = new Archetype(config, Array.Empty<StructHeap>(), newComp);
         archetype.AddStructHeap(0, newComp);
         return archetype;
@@ -92,7 +92,7 @@ public sealed class Archetype
         var heaps = new StructHeap[current.structHeaps.Length]; 
         for (int n = 0; n < heaps.Length; n++) {
             // create same components used in the passed Archetype
-            var heap    = current.structHeaps[n].CreateHeap(config.capacity);
+            var heap    = current.structHeaps[n].CreateHeap(config.capacity, config.typeStore);
             heaps[n]    = heap;
         }
         var archetype = new Archetype(config, heaps, newHeap);

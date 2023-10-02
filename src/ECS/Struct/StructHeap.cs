@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 // ReSharper disable InconsistentNaming
@@ -21,11 +22,12 @@ internal abstract class StructHeap
 
     public   override   string      ToString() => GetString();
     
-    internal abstract   StructHeap  CreateHeap          (int capacity);
+    internal abstract   StructHeap  CreateHeap          (int capacity, TypeStore typeStore);
     internal abstract   void        SetCapacity         (int capacity);
     internal abstract   void        MoveComponent       (int from, int to);
     internal abstract   void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
-    internal abstract   object      GetComponentDebug   (int archIndex);
+    internal abstract   object      GetComponentDebug   (int compIndex);
+    internal abstract   void        Write               (ObjectWriter writer, int compIndex);
 
     internal StructHeap(int heapIndex, string keyName, Type type) {
         this.heapIndex  = heapIndex;
