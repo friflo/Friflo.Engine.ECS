@@ -14,10 +14,10 @@ namespace Friflo.Fliox.Engine.ECS;
 internal abstract class StructHeap
 {
     // --- internal
-    internal readonly   string      keyName;
+    internal readonly   string      structKey;
     internal readonly   Bytes       keyBytes;
     internal readonly   Type        type;
-    internal readonly   int         heapIndex;
+    internal readonly   int         structIndex;
     internal readonly   long        hash;
 #if DEBUG
     internal            Archetype   archetype; // only used provide debug info.
@@ -33,12 +33,12 @@ internal abstract class StructHeap
     internal abstract   Bytes       Write               (ObjectWriter writer, int compIndex);
     internal abstract   void        Read                (ObjectReader reader, int compIndex, JsonValue json);
 
-    internal StructHeap(int heapIndex, string keyName, Type type) {
-        this.heapIndex  = heapIndex;
-        this.keyName    = keyName;
-        keyBytes        = new Bytes(this.keyName);
-        this.type       = type;
-        hash            = type.Handle();
+    internal StructHeap(int structIndex, string structKey, Type type) {
+        this.structIndex    = structIndex;
+        this.structKey      = structKey;
+        keyBytes            = new Bytes(structKey);
+        this.type           = type;
+        hash                = type.Handle();
     }
 
     internal string GetString() {

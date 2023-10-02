@@ -19,8 +19,8 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     internal            StructChunk<T>[]    chunks;
     private  readonly   TypeMapper<T>       typeMapper;
     
-    internal StructHeap(int heapIndex, string keyName, int capacity, TypeMapper<T> mapper)
-        : base (heapIndex, keyName, typeof(T))
+    internal StructHeap(int structIndex, string structKey, int capacity, TypeMapper<T> mapper)
+        : base (structIndex, structKey, typeof(T))
     {
         typeMapper  = mapper;
         chunks      = new StructChunk<T>[1];
@@ -29,17 +29,17 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     
     internal override StructHeap CreateHeap(int capacity, TypeStore typeStore) {
         var mapper = typeStore.GetTypeMapper<T>();
-        return new StructHeap<T>(heapIndex, keyName, capacity, mapper);
+        return new StructHeap<T>(structIndex, structKey, capacity, mapper);
     }
     
     internal static StructHeap Create(int capacity, TypeStore typeStore) {
-        var componentIndex = ComponentIndex;
-        if (componentIndex == MissingAttribute) {
+        var structIndex = StructIndex;
+        if (structIndex == MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {typeof(T).Namespace}.{typeof(T).Name}";
             throw new InvalidOperationException(msg);
         }
         var mapper = typeStore.GetTypeMapper<T>();
-        return new StructHeap<T>(componentIndex, ComponentKey, capacity, mapper);
+        return new StructHeap<T>(structIndex, StructKey, capacity, mapper);
     }
     
     internal override void SetCapacity(int capacity)
@@ -89,8 +89,8 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     }
     
     // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    int     ComponentIndex  = NewComponentIndex(typeof(T), out ComponentKey);
+    internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
     
     // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    string  ComponentKey;
+    internal static readonly    string  StructKey;
 }

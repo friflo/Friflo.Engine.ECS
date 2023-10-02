@@ -70,7 +70,7 @@ public static class Test_StructComponent
         var myComponent = player.GetComponent<MyComponent1>();
         AreEqual(1,                     myComponent.Value.a);
         AreSame(typeof(MyComponent1),   myComponent.Type);
-        AreEqual("my1",                 myComponent.KeyName);
+        AreEqual("my1",                 myComponent.StructKey);
         AreEqual("[MyComponent1]",      myComponent.ToString());
 #if DEBUG
         AreEqual("[MyComponent1] heap - Count: 1", myComponent.HeapInfo);

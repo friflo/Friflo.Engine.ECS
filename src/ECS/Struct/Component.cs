@@ -12,7 +12,7 @@ public readonly struct Component<T>
 {
     // --- public properties
     public              Type            Type        => heap.type;
-    public              string          KeyName     => heap.keyName;
+    public              string          StructKey   => heap.structKey;
     public              string          HeapInfo    => heap.GetString();
 
     // --- internal fields
@@ -29,7 +29,7 @@ public readonly struct Component<T>
     public ref T Value {
         get {
             // ReSharper disable once UnusedVariable
-            var heapTemp = entity.archetype.HeapMap[StructHeap<T>.ComponentIndex].heapIndex;  // force NullReferenceException if entity was removed
+            var heapTemp = entity.archetype.HeapMap[StructHeap<T>.StructIndex].structIndex;  // force NullReferenceException if entity was removed
             return ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
         }
     }

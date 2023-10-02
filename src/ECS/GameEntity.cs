@@ -152,7 +152,7 @@ public sealed class GameEntity
     public  Component<T> GetComponent<T>()
         where T : struct
     {
-        return new Component<T>((StructHeap<T>)archetype.HeapMap[StructHeap<T>.ComponentIndex], this);
+        return new Component<T>((StructHeap<T>)archetype.HeapMap[StructHeap<T>.StructIndex], this);
     }
 
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
@@ -160,7 +160,7 @@ public sealed class GameEntity
     public  ref T        GetComponentValue<T>()
         where T : struct
     {
-        var heap = (StructHeap<T>)archetype.HeapMap[StructHeap<T>.ComponentIndex];
+        var heap = (StructHeap<T>)archetype.HeapMap[StructHeap<T>.StructIndex];
         return ref heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     }
     

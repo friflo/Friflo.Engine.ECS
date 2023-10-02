@@ -164,7 +164,7 @@ public sealed partial class EntityStore
             archetype           = arch;
         }
         // --- set component value 
-        var structHeap = (StructHeap<T>)arch.HeapMap[StructHeap<T>.ComponentIndex];
+        var structHeap = (StructHeap<T>)arch.HeapMap[StructHeap<T>.StructIndex];
         structHeap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         return true;
     }
@@ -200,10 +200,10 @@ public sealed partial class EntityStore
     }
     
     public void RegisterStructComponent<T>() where T : struct  {
-        var heapIndex   = StructHeap<T>.ComponentIndex;
-        var key         = StructHeap<T>.ComponentKey;
-        var factory     = new StructFactory<T>(heapIndex, key, typeStore);
-        factories[key]  = factory;
+        var structIndex         = StructHeap<T>.StructIndex;
+        var structKey           = StructHeap<T>.StructKey;
+        var factory             = new StructFactory<T>(structIndex, structKey, typeStore);
+        factories[structKey]    = factory;
     }
     
     internal bool ReadComponent(
@@ -217,7 +217,7 @@ public sealed partial class EntityStore
     {
         var arch = archetype;
         if (arch != defaultArchetype) {
-            var compHeap = arch.FindComponentHeap(factory.heapIndex);
+            var compHeap = arch.FindComponentHeap(factory.structIndex);
             if (compHeap != null) {
                 // --- change component value 
                 compHeap.Read(reader, compIndex, json);
@@ -234,7 +234,7 @@ public sealed partial class EntityStore
             archetype           = arch;
         }
         // --- set component value 
-        var structHeap = arch.HeapMap[factory.heapIndex];
+        var structHeap = arch.HeapMap[factory.structIndex];
         structHeap.Read(reader, compIndex, json);
         return true;
     }
@@ -242,16 +242,16 @@ public sealed partial class EntityStore
 
 internal abstract class StructFactory
 {
-    internal readonly   int     heapIndex;
-    internal readonly   string  keyName;
+    internal readonly   int     structIndex;
+    internal readonly   string  structKey;
     internal readonly   long    hash;
         
     internal abstract StructHeap CreateHeap(int capacity);
     
-    internal StructFactory(int heapIndex, string keyName, long hash) {
-        this.heapIndex  = heapIndex;
-        this.keyName    = keyName;
-        this.hash       = hash;
+    internal StructFactory(int structIndex, string structKey, long hash) {
+        this.structIndex    = structIndex;
+        this.structKey      = structKey;
+        this.hash           = hash;
     }
 }
 
@@ -260,13 +260,13 @@ internal class StructFactory<T> : StructFactory
 {
     private readonly    TypeMapper<T>   typeMapper;
     
-    internal StructFactory(int heapIndex, string keyName, TypeStore typeStore)
-        : base(heapIndex, keyName, typeof(T).Handle())
+    internal StructFactory(int structIndex, string structKey, TypeStore typeStore)
+        : base(structIndex, structKey, typeof(T).Handle())
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
     internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(heapIndex, keyName, capacity, typeMapper);   
+        return new StructHeap<T>(structIndex, structKey, capacity, typeMapper);   
     }
 }

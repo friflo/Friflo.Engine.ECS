@@ -118,24 +118,24 @@ public sealed class Archetype
 #region struct component handling
     private void AddStructHeap(int pos, StructHeap heap) {
 #if DEBUG
-        heap.archetype          = this;
+        heap.archetype              = this;
 #endif
-        structHeaps[pos]        = heap;
-        heapMap[heap.heapIndex] = heap;
+        structHeaps[pos]            = heap;
+        heapMap[heap.structIndex]   = heap;
     }
     
     internal StructHeap FindComponentHeap<T>()
         where T : struct
     {
-        if (StructHeap<T>.ComponentIndex >= heapMap.Length) {
+        if (StructHeap<T>.StructIndex >= heapMap.Length) {
             return null;
         }
-        return heapMap[StructHeap<T>.ComponentIndex];
+        return heapMap[StructHeap<T>.StructIndex];
     }
    
-    internal StructHeap FindComponentHeap(int heapIndex) {
-        if (heapIndex < heapMap.Length) {
-            return heapMap[heapIndex];
+    internal StructHeap FindComponentHeap(int structIndex) {
+        if (structIndex < heapMap.Length) {
+            return heapMap[structIndex];
         }
         return null;
     }
@@ -148,7 +148,7 @@ public sealed class Archetype
         
         for (int n = 0; n < structHeaps.Length; n++) {
             var sourceHeap  = structHeaps[n];
-            var targetHeap  = newArchetype.FindComponentHeap(sourceHeap.heapIndex);
+            var targetHeap  = newArchetype.FindComponentHeap(sourceHeap.structIndex);
             if (targetHeap == null) {
                 continue;
             }

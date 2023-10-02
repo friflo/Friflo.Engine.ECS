@@ -13,20 +13,20 @@ public static class StructUtils
     internal const              int                                 ChunkSize = 512;
     internal const              int                                 MissingAttribute    = 0;
     
-    private  static             int                                 _nextComponentIndex = 1;
-    private  static readonly    Dictionary<Type, string>            Types           = new Dictionary<Type, string>();
+    private  static             int                                 _nextStructIndex    = 1;
+    private  static readonly    Dictionary<Type, string>            Types               = new Dictionary<Type, string>();
     public   static             IReadOnlyDictionary<Type, string>   RegisteredTypes => Types;
     
-    internal static int NewComponentIndex(Type type, out string key) {
+    internal static int NewStructIndex(Type type, out string structKey) {
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType == typeof(StructComponentAttribute)) {
-                var arg = attr.ConstructorArguments;
-                key     = (string) arg[0].Value;
-                Types.Add(type, key);
-                return _nextComponentIndex++;
+                var arg     = attr.ConstructorArguments;
+                structKey   = (string) arg[0].Value;
+                Types.Add(type, structKey);
+                return _nextStructIndex++;
             }
         }
-        key = null;
+        structKey = null;
         return MissingAttribute;
     }
 }
