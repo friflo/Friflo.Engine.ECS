@@ -37,16 +37,14 @@ internal sealed class ComponentWriter
         for (int n = 0; n < heaps.Length; n++) {
             var heap        = heaps[n];
             var value       = heap.Write(componentWriter, entity.compIndex);
-            var keyBytes    = new Bytes(heap.keyName); // todo cache bytes 
-            writer.MemberBytes(keyBytes, value);
+            writer.MemberBytes(heap.keyBytes, value);
         }
         // --- write class components
         var classComponents = entity.ClassComponents;
         foreach (var component in classComponents) {
             componentWriter.WriteObject(component, ref buffer);
-            var keyName     = ClassUtils.GetKeyName(component.GetType());
-            var keyBytes    = new Bytes(keyName);       // todo cache bytes 
-            writer.MemberBytes(keyBytes, buffer);
+            var keyName     = ClassUtils.GetKeyNameBytes(component.GetType());
+            writer.MemberBytes(keyName, buffer);
         }
         writer.ObjectEnd();
         return new JsonValue(writer.json);

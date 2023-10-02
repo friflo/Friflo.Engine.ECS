@@ -14,6 +14,7 @@ internal abstract class StructHeap
 {
     // --- internal
     internal readonly   string      keyName;
+    internal readonly   Bytes       keyBytes;
     internal readonly   Type        type;
     internal readonly   int         heapIndex;
     internal readonly   long        hash;
@@ -33,6 +34,7 @@ internal abstract class StructHeap
     internal StructHeap(int heapIndex, string keyName, Type type) {
         this.heapIndex  = heapIndex;
         this.keyName    = keyName;
+        keyBytes        = new Bytes(this.keyName);
         this.type       = type;
         hash            = type.Handle();
     }
