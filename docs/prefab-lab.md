@@ -28,12 +28,15 @@ Prefabs are used in Edit & Play mode:
 - Minimize usage of utility containers: Currently - `prefabs` and `mods`.
 - Enable incremental loading: Entities are added to `EntityStore` while loading.  
   Loaded entities can be used in Editor without waiting for finished loading.
-- Enable reloading an already loaded scene in the same `EntityStore`.  
-  The `EntityStore` must be unchanged after reloading.  
-  This will require an extra `PrefabEntityComponent` storing the `node` / `prefabLink` of prefab entities.
 - `DataNode`'s queried via `EntityStoreClient.Query()` can be cleared after added to `EntityStore`.
 - Enable read / write / query entities via HTTP.
 - Enable read / write / query and subscribing database changes via WebSocket.
+
+**Non Goals**
+- Enable reloading an already loaded scene in the same `EntityStore`.  
+  The use case is reloading as modified scene file. The effort and issue probability is too high.  
+  Instead a simple alternative is applied. Remove the current `EntityStore` instance and
+  create a new one for reloading.
 
 <br/>
 
