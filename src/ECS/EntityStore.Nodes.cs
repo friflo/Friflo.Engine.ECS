@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Friflo.Fliox.Engine.Client;
+using Friflo.Json.Fliox;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
@@ -252,7 +253,8 @@ public sealed partial class EntityStore
                 children.Add(pid);  
             }
         }
-        dataNode.components = ComponentWriter.Instance.Write(entity);
+        var jsonComponents = ComponentWriter.Instance.Write(entity);
+        dataNode.components = new JsonValue(jsonComponents); // create array copy for now
         return dataNode;
     }
 }

@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Json.Burst;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
@@ -76,9 +77,9 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         return chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     }
     
-    internal override void Write (ObjectWriter writer, int compIndex) {
+    internal override Bytes Write (ObjectWriter writer, int compIndex) {
         ref var value = ref chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
-        writer.WriteAsBytesMapper(value, typeMapper);
+        return writer.WriteAsBytesMapper(value, typeMapper);
     }
     
     // ReSharper disable once StaticMemberInGenericType

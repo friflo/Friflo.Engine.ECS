@@ -18,12 +18,14 @@ public static class Test_ComponentWriter
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
+        entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
         
         var node = store.EntityAsDataNode(entity, client);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
         AreEqual(11,    node.children[0]);
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node.components.AsString());
     }
 }
 
