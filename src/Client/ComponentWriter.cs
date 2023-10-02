@@ -24,7 +24,7 @@ internal sealed class ComponentWriter
         componentWriter = new ObjectWriter(EntityStore.Static.TypeStore);
     }
     
-    internal JsonValue  Write(GameEntity entity)
+    internal JsonValue Write(GameEntity entity)
     {
         var archetype = entity.archetype;
         if (entity.ComponentCount == 0) {

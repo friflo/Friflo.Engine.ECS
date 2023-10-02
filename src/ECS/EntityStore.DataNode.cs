@@ -17,9 +17,17 @@ public sealed partial class EntityStore
         if (dataNode == null) {
             throw new ArgumentNullException(nameof(dataNode));
         }
+        GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
-            return CreateFromDataNodeUsePidAsId(dataNode);
+            entity = CreateFromDataNodeUsePidAsId(dataNode);
+        } else {
+            entity = CreateFromDataNodeRandomPid(dataNode);
         }
+        ComponentReader.Instance.Read(dataNode.components, entity);
+        return entity;
+    }
+
+    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode) {
         // --- map pid to id
         var pid     = dataNode.pid;
         var pidMap  = pid2Id;

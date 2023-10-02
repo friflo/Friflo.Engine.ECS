@@ -15,7 +15,7 @@ public static class Test_ComponentReader
         var store       = new EntityStore(100, PidType.UsePidAsId);
         var rootNode    = new DataNode {
             pid         = 10,
-            components  = new JsonValue("{ \"pos\": { x: 1, y: 2, x: 3 } }"),
+            components  = new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"x\": 3 } }"),
             children    = new List<int> { 11 } 
         };
         var childNode = new DataNode {
