@@ -43,8 +43,8 @@ internal sealed class ComponentWriter
         var classComponents = entity.ClassComponents;
         foreach (var component in classComponents) {
             componentWriter.WriteObject(component, ref buffer);
-            var keyName     = ClassUtils.GetKeyNameBytes(component.GetType());
-            writer.MemberBytes(keyName, buffer);
+            var classKey = ClassUtils.GetClassKeyBytes(component.GetType());
+            writer.MemberBytes(classKey, buffer);
         }
         writer.ObjectEnd();
         return new JsonValue(writer.json);
