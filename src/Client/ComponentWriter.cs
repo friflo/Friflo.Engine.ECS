@@ -40,8 +40,7 @@ internal sealed class ComponentWriter
             writer.MemberBytes(heap.keyBytes, value);
         }
         // --- write class components
-        var classComponents = entity.ClassComponents;
-        foreach (var component in classComponents) {
+        foreach (var component in entity.ClassComponents) {
             componentWriter.WriteObject(component, ref buffer);
             var classKey = ClassUtils.GetClassKeyBytes(component.GetType());
             writer.MemberBytes(classKey, buffer);
@@ -49,5 +48,4 @@ internal sealed class ComponentWriter
         writer.ObjectEnd();
         return new JsonValue(writer.json);
     }
-    
 }
