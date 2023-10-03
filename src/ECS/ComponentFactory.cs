@@ -14,9 +14,9 @@ internal abstract class ComponentFactory
     internal readonly   string  structKey;
     internal readonly   long    structHash;
         
-    internal abstract   StructHeap      CreateHeap          (int capacity);
-    internal abstract   ClassComponent  ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
-    internal abstract   bool            IsStructFactory     { get; }
+    internal abstract   StructHeap  CreateHeap          (int capacity);
+    internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
+    internal abstract   bool        IsStructFactory     { get; }
     
     internal ComponentFactory(int structIndex, string structKey, long structHash) {
         this.structIndex    = structIndex;
@@ -37,8 +37,8 @@ internal sealed class StructFactory<T> : ComponentFactory
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override   bool            IsStructFactory => true;
-    internal override   ClassComponent  ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
+    internal override   bool    IsStructFactory => true;
+    internal override   void    ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
         => throw new InvalidOperationException("operates only on ClassFactory<>");
     
     internal override StructHeap CreateHeap(int capacity) {
@@ -62,14 +62,13 @@ internal sealed class ClassFactory<T> : ComponentFactory
     internal override   StructHeap  CreateHeap(int capacity)
         => throw new InvalidOperationException("operates only on StructFactory<>");
     
-    internal override ClassComponent ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
+    internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
         var classComponent = entity.GetClassComponent<T>();
         if (classComponent != null) { 
             reader.ReadToMapper(typeMapper, json, classComponent, true);
-        } else {
-            classComponent = reader.ReadMapper(typeMapper, json);
-            entity.AddClassComponent(classComponent);
+            return;
         }
-        return null;
+        classComponent = reader.ReadMapper(typeMapper, json);
+        entity.AddClassComponent(classComponent);
     }
 }
