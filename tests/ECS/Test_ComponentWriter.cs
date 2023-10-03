@@ -10,7 +10,8 @@ namespace Tests.ECS;
 public static class Test_ComponentWriter
 {
     [Test]
-    public static void Test_WriteComponents() {
+    public static void Test_WriteStructComponents()
+    {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new EntityStoreClient(hub);
         var store   = new EntityStore(100, PidType.UsePidAsId);

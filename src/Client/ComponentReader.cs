@@ -43,7 +43,7 @@ internal sealed class ComponentReader
         }
         ReadRawComponents();
         
-        long archetypeHash = entity.archetype.typeHash;
+        long archetypeHash = 0;
         for (int n = 0; n < componentCount; n++) {
             ref var component   = ref components[n];
             var factory         = store.factories[component.key];
