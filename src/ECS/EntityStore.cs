@@ -117,7 +117,8 @@ public sealed partial class EntityStore
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         gameEntityUpdater   = new GameEntityUpdater(this);
-        defaultArchetype    = Archetype.CreateWithHeaps(GetArchetypeConfig(), Array.Empty<StructHeap>());
+        var config          = GetArchetypeConfig();
+        defaultArchetype    = Archetype.CreateWithHeaps(config, Array.Empty<StructHeap>());
         factories           = new Dictionary<string, StructFactory>();
         AddArchetype(defaultArchetype);
     }

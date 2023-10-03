@@ -23,7 +23,8 @@ public sealed partial class EntityStore
             return archetype;
         }
         var newHeap = StructHeap<T>.Create(Static.DefaultCapacity, typeStore);
-        archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), current, newHeap);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateFromArchetype(config, current, newHeap);
         AddArchetype(archetype);
         return archetype;
     }
@@ -35,7 +36,8 @@ public sealed partial class EntityStore
             return archetype;
         }
         var newHeap = factory.CreateHeap(Static.DefaultCapacity);
-        archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), current, newHeap);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateFromArchetype(config, current, newHeap);
         AddArchetype(archetype);
         return archetype;
     }
@@ -47,7 +49,8 @@ public sealed partial class EntityStore
             return archetype;
         }
         var newHeap = factory.CreateHeap(Static.DefaultCapacity);
-        archetype   = Archetype.CreateFromArchetype(GetArchetypeConfig(), defaultArchetype, newHeap);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateFromArchetype(config, defaultArchetype, newHeap);
         AddArchetype(archetype);
         return archetype;
     }
@@ -72,7 +75,8 @@ public sealed partial class EntityStore
         if (n != componentCount) {
             throw new InvalidOperationException("unexpected length");
         }
-        result = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
+        var config  = GetArchetypeConfig();
+        result      = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(result);
         return result;
     }

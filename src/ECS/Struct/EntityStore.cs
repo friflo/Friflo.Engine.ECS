@@ -17,7 +17,8 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        archetype = Archetype.Create<T>(GetArchetypeConfig());
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.Create<T>(config);
         AddArchetype(archetype);
         return archetype;
     }
@@ -37,7 +38,8 @@ public sealed partial class EntityStore
             StructHeap<T1>.Create(DefaultCapacity, typeStore),
             StructHeap<T2>.Create(DefaultCapacity, typeStore)
         };
-        archetype = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(archetype);
         return archetype;
     }
@@ -59,7 +61,8 @@ public sealed partial class EntityStore
             StructHeap<T2>.Create(DefaultCapacity, typeStore),
             StructHeap<T3>.Create(DefaultCapacity, typeStore )
         };
-        archetype = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(archetype);
         return archetype;
     }
@@ -83,7 +86,8 @@ public sealed partial class EntityStore
             StructHeap<T3>.Create(DefaultCapacity, typeStore),
             StructHeap<T4>.Create(DefaultCapacity, typeStore)
         };
-        archetype = Archetype.CreateWithHeaps(GetArchetypeConfig(), heaps);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(archetype);
         return archetype;
     }
