@@ -42,48 +42,13 @@ internal sealed class ComponentReader
             throw new InvalidOperationException("expect object or null");
         }
         ReadRawComponents();
-        
-        long archetypeHash = 0;
-        for (int n = 0; n < componentCount; n++) {
-            ref var component       = ref components[n];
-            var factory             = store.factories[component.key];
-            archetypeHash          ^= factory.structHash;
-            if (factory.IsStructFactory) {
-                component.structFactory = factory;
-            } else {
-                component.classFactory  = factory;
-            }
-        }
-        
-        // --- use / create Archetype with present components to avoid structural changes
-        if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
-        {
-            var config  = store.GetArchetypeConfig();
-            var heaps   = new StructHeap[componentCount];
-            for (int n = 0; n < componentCount; n++) {
-                var structFactory = components[n].structFactory;
-                if (structFactory == null) {
-                    continue;
-                }
-                heaps[n] = structFactory.CreateHeap(config.capacity); 
-            }
-            newArchetype = Archetype.CreateWithHeaps(config, heaps);
-            store.AddArchetype(newArchetype);
-        }
-        if (entity.archetype != newArchetype)
-        {
-            if (entity.archetype == store.defaultArchetype) {
-                newArchetype.AddEntity(entity.id);
-            } else {
-                entity.archetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype, store.gameEntityUpdater);
-            }
-            entity.archetype = newArchetype;
-        }
-        // --- read components as struct components
+        PrepareReadComponents(entity, store);
+
+        // --- read class / struct components
         var updater = store.gameEntityUpdater;
         for (int n = 0; n < componentCount; n++)
         {
-            var component       = components[n];
+            var component = components[n];
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
@@ -94,6 +59,47 @@ internal sealed class ComponentReader
             }
             store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, structFactory, updater);
         }
+    }
+    
+    private void PrepareReadComponents(GameEntity entity, EntityStore store)
+    {
+        long archetypeHash = 0;
+        var count = componentCount;
+        for (int n = 0; n < count; n++)
+        {
+            ref var component       = ref components[n];
+            var factory             = store.factories[component.key];
+            archetypeHash          ^= factory.structHash;
+            if (factory.IsStructFactory) {
+                component.structFactory = factory;
+            } else {
+                component.classFactory  = factory;
+            }
+        }
+        // --- use / create Archetype with present components to avoid structural changes
+        if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
+        {
+            var config  = store.GetArchetypeConfig();
+            var heaps   = new StructHeap[count];
+            for (int n = 0; n < count; n++) {
+                var structFactory = components[n].structFactory;
+                if (structFactory == null) {
+                    continue;
+                }
+                heaps[n] = structFactory.CreateHeap(config.capacity); 
+            }
+            newArchetype = Archetype.CreateWithHeaps(config, heaps);
+            store.AddArchetype(newArchetype);
+        }
+        if (entity.archetype == newArchetype) {
+            return;
+        }
+        if (entity.archetype == store.defaultArchetype) {
+            newArchetype.AddEntity(entity.id);
+        } else {
+            entity.archetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype, store.gameEntityUpdater);
+        }
+        entity.archetype = newArchetype;
     }
     
     private void ReadRawComponents()
