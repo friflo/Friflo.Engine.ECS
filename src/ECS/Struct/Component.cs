@@ -29,7 +29,7 @@ public readonly struct Component<T>
     public ref T Value {
         get {
             // ReSharper disable once UnusedVariable
-            var heapTemp = entity.archetype.HeapMap[StructHeap<T>.StructIndex].structIndex;  // force NullReferenceException if entity was removed
+            var heapTemp = entity.archetype.heapMap[StructHeap<T>.StructIndex].structIndex;  // force NullReferenceException if entity was removed
             return ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
         }
     }

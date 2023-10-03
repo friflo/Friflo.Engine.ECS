@@ -30,9 +30,9 @@ public sealed class Archetype
     [Browse(Never)] private             int[]                       entityIds;      // could use a StructHeap<int> if needed
     [Browse(Never)] private             int                         entityCount;
                     private             int                         capacity;
-    [Browse(Never)] private  readonly   StructHeap[]                heapMap;
     
     // --- internal
+    [Browse(Never)] internal readonly   StructHeap[]                heapMap;
     [Browse(Never)] internal readonly   EntityStore                 store;
     [Browse(Never)] internal readonly   int                         archIndex;
     [Browse(Never)] internal readonly   int                         componentCount; // number of component types
@@ -40,7 +40,6 @@ public sealed class Archetype
                     internal readonly   StandardComponents          std;
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
-    [Browse(Never)] internal            ReadOnlySpan<StructHeap>    HeapMap         => heapMap;
     
                     public override     string                      ToString()      => GetString();
     #endregion
@@ -55,7 +54,7 @@ public sealed class Archetype
         typeHash        = EntityStore.GetHash(heaps, newComp);
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
-        heapMap         = new StructHeap[config.archetypeMax];
+        heapMap         = new StructHeap[config.maxStructIndex];
         if (newComp != null) {
             SetStandardComponentHeaps(newComp, ref std);
         }
@@ -124,20 +123,12 @@ public sealed class Archetype
         heapMap[heap.structIndex]   = heap;
     }
     
-    internal StructHeap FindStructHeap<T>()
-        where T : struct
-    {
-        if (StructHeap<T>.StructIndex >= heapMap.Length) {
-            return null;
-        }
+    internal StructHeap FindStructHeap<T>() where T : struct {
         return heapMap[StructHeap<T>.StructIndex];
     }
    
     internal StructHeap FindStructHeap(int structIndex) {
-        if (structIndex < heapMap.Length) {
-            return heapMap[structIndex];
-        }
-        return null;
+        return heapMap[structIndex];
     }
     
     internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype, ComponentUpdater updater)

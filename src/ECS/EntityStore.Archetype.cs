@@ -164,7 +164,7 @@ public sealed partial class EntityStore
             archetype           = arch;
         }
         // --- set component value 
-        var heap2 = (StructHeap<T>)arch.HeapMap[StructHeap<T>.StructIndex];
+        var heap2 = (StructHeap<T>)arch.heapMap[StructHeap<T>.StructIndex];
         heap2.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         return true;
     }
@@ -234,7 +234,7 @@ public sealed partial class EntityStore
             archetype           = arch;
         }
         // --- set component value 
-        var heap = arch.HeapMap[factory.structIndex];
+        var heap = arch.heapMap[factory.structIndex];
         heap.Read(reader, compIndex, json);
         return true;
     }

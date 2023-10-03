@@ -20,7 +20,7 @@ internal struct ArchetypeConfig
 {
     internal    EntityStore store;
     internal    int         archetypeIndex;
-    internal    int         archetypeMax;
+    internal    int         maxStructIndex;
     internal    int         capacity;
     internal    TypeStore   typeStore;
 }

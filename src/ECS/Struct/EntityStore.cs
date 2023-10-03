@@ -93,7 +93,7 @@ public sealed partial class EntityStore
         return new ArchetypeConfig {
             store           = this,
             archetypeIndex  = archetypesCount,
-            archetypeMax    = archetypeMax,
+            maxStructIndex  = maxStructIndex,
             capacity        = DefaultCapacity,
             typeStore       = typeStore
         };

@@ -71,7 +71,7 @@ public sealed partial class EntityStore
     [Browse(Never)] private             ArchetypeInfo[]     archetypeInfos;     // never null
     [Browse(Never)] private             int                 archetypesCount;
     [Browse(Never)] private readonly    Archetype           defaultArchetype;
-                    private readonly    int                 archetypeMax;
+                    private readonly    int                 maxStructIndex;
     [Browse(Never)] private             int                 rootId;
     
     // --- node access
@@ -102,8 +102,8 @@ public sealed partial class EntityStore
     #endregion
     
 #region initialize
-    public EntityStore(int archetypeMax = 100, PidType pidType = PidType.RandomPids) {
-        this.archetypeMax   = archetypeMax;
+    public EntityStore(int maxStructIndex = 100, PidType pidType = PidType.RandomPids) {
+        this.maxStructIndex = maxStructIndex;
         this.pidType        = pidType;
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;

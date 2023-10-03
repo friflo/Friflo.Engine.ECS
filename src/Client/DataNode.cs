@@ -42,8 +42,8 @@ public sealed class DataNode
     /// </summary>
     public  JsonValue   components;     // can be null
     
-    /// <summary>Reference to the `PreFab` the entity is based on</summary>
-    public  string      preFab;         // can be null
+    /// <summary>Reference to the `Prefab` the entity is based on</summary>
+    public  string      prefab;         // can be null
     
     /// <summary>
     /// Modify the referenced node of a`preFab`.<br/> with <see cref="components"/> != null<br/>
