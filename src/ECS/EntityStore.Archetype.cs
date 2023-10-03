@@ -4,7 +4,6 @@
 using System;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
-using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
@@ -29,9 +28,9 @@ public sealed partial class EntityStore
         return archetype;
     }
     
-    private Archetype GetArchetypeWith(Archetype current, StructFactory factory)
+    private Archetype GetArchetypeWith(Archetype current, ComponentFactory factory)
     {
-        var hash = factory.hash ^ current.typeHash;
+        var hash = factory.typeHash ^ current.typeHash;
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
@@ -42,10 +41,10 @@ public sealed partial class EntityStore
         return archetype;
     }
     
-    private Archetype GetArchetype(StructFactory factory)
+    private Archetype GetArchetype(ComponentFactory factory)
     {
         // could perform lookup per lookup array
-        if (TryGetArchetype(factory.hash, out var archetype)) {
+        if (TryGetArchetype(factory.typeHash, out var archetype)) {
             return archetype;
         }
         var newHeap = factory.CreateHeap(Static.DefaultCapacity);
@@ -206,7 +205,7 @@ public sealed partial class EntityStore
     public void RegisterStructComponent<T>() where T : struct  {
         var structIndex         = StructHeap<T>.StructIndex;
         var structKey           = StructHeap<T>.StructKey;
-        var factory             = new StructFactory<T>(structIndex, structKey, typeStore);
+        var factory             = new ComponentFactory<T>(structIndex, structKey, typeStore);
         factories[structKey]    = factory;
     }
     
@@ -216,7 +215,7 @@ public sealed partial class EntityStore
         int                 id,
         ref Archetype       archetype,
         ref int             compIndex,
-        StructFactory       factory,
+        ComponentFactory    factory,
         ComponentUpdater    updater)
     {
         var arch = archetype;
@@ -244,33 +243,3 @@ public sealed partial class EntityStore
     }
 }
 
-internal abstract class StructFactory
-{
-    internal readonly   int     structIndex;
-    internal readonly   string  structKey;
-    internal readonly   long    hash;
-        
-    internal abstract StructHeap CreateHeap(int capacity);
-    
-    internal StructFactory(int structIndex, string structKey, long hash) {
-        this.structIndex    = structIndex;
-        this.structKey      = structKey;
-        this.hash           = hash;
-    }
-}
-
-internal class StructFactory<T> : StructFactory 
-    where T : struct
-{
-    private readonly    TypeMapper<T>   typeMapper;
-    
-    internal StructFactory(int structIndex, string structKey, TypeStore typeStore)
-        : base(structIndex, structKey, typeof(T).Handle())
-    {
-        typeMapper = typeStore.GetTypeMapper<T>();
-    }
-    
-    internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(structIndex, structKey, capacity, typeMapper);   
-    }
-}

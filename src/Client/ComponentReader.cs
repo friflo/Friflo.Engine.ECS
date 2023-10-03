@@ -45,10 +45,10 @@ internal sealed class ComponentReader
         
         long archetypeHash = 0;
         for (int n = 0; n < componentCount; n++) {
-            ref var component   = ref components[n];
-            var factory         = store.factories[component.key];
-            archetypeHash      ^= factory.hash;
-            component.factory   = factory;
+            ref var component       = ref components[n];
+            var factory             = store.factories[component.key];
+            archetypeHash          ^= factory.typeHash;
+            component.structFactory = factory;
         }
         
         // --- use / create Archetype with present components to avoid structural changes
@@ -57,7 +57,11 @@ internal sealed class ComponentReader
             var config  = store.GetArchetypeConfig();
             var heaps   = new StructHeap[componentCount];
             for (int n = 0; n < componentCount; n++) {
-                heaps[n] = components[n].factory.CreateHeap(config.capacity); 
+                var structFactory = components[n].structFactory;
+                if (structFactory == null) {
+                    continue;
+                }
+                heaps[n] = structFactory.CreateHeap(config.capacity); 
             }
             newArchetype = Archetype.CreateWithHeaps(config, heaps);
             store.AddArchetype(newArchetype);
@@ -75,11 +79,15 @@ internal sealed class ComponentReader
         var updater = store.gameEntityUpdater;
         for (int n = 0; n < componentCount; n++)
         {
-            var component = components[n];
+            var component       = components[n];
+            var structFactory   = component.structFactory;
+            if (structFactory == null) {
+                continue;
+            }
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
-            store.ReadComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, component.factory, updater);
+            store.ReadComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, structFactory, updater);
         }
     }
     
@@ -113,10 +121,10 @@ internal sealed class ComponentReader
 
 internal struct RawComponent
 {
-    internal        string          key;
-    internal        StructFactory   factory;
-    internal        int             start;
-    internal        int             end;
+    internal        string              key;
+    internal        ComponentFactory    structFactory;
+    internal        int                 start;
+    internal        int                 end;
 
-    public override string  ToString() => key;
+    public override string              ToString() => key;
 }

@@ -83,7 +83,7 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                 nodeCount;
     [Browse(Never)] private  readonly   TypeStore           typeStore;
     
-    [Browse(Never)] internal readonly   Dictionary<string, StructFactory> factories;    // todo make static
+    [Browse(Never)] internal readonly   Dictionary<string, ComponentFactory> factories;    // todo make static
                     
                     internal static     bool                HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -119,7 +119,7 @@ public sealed partial class EntityStore
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithHeaps(config, Array.Empty<StructHeap>());
-        factories           = new Dictionary<string, StructFactory>();
+        factories           = new Dictionary<string, ComponentFactory>();
         AddArchetype(defaultArchetype);
     }
     #endregion
