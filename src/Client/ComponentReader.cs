@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -18,13 +17,14 @@ internal sealed class ComponentReader
     private readonly    ObjectReader        componentReader;
     private             Utf8JsonParser      parser;
     private             Bytes               buffer;
-    private readonly    List<RawComponent>  components;
+    private             RawComponent[]      components;
+    private             int                 componentCount;
     
     internal static readonly ComponentReader Instance = new ComponentReader();
     
     private ComponentReader() {
         buffer          = new Bytes(128);
-        components      = new List<RawComponent>();
+        components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
     }
     
@@ -41,11 +41,11 @@ internal sealed class ComponentReader
         if (ev != JsonEvent.ObjectStart) {
             throw new InvalidOperationException("expect object or null");
         }
-        components.Clear();
         ReadRawComponents();
+        
         foreach (var component in components) {
             buffer.Clear();
-            parser.AppendInputSlice(ref buffer, component.startIndex - 1, component.endIndex);
+            parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json    = new JsonValue(buffer);
             var factory = store.factories[component.key];
             store.ReadComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, factory, store.gameEntityUpdater);
@@ -54,15 +54,18 @@ internal sealed class ComponentReader
     
     private void ReadRawComponents()
     {
+        componentCount = 0;
         var ev = parser.NextEvent();
         while (true) {
             switch (ev) {
                 case JsonEvent.ObjectStart:
-                    var key         = parser.key.AsString();  // todo remove heap cause by string creation
-                    var component   = new RawComponent { key = key, startIndex = parser.Position };
+                    var key     = parser.key.AsString();  // todo remove heap cause by string creation
+                    var start   = parser.Position;
                     parser.SkipTree();
-                    component.endIndex = parser.Position;
-                    components.Add(component);
+                    if (componentCount == components.Length) {
+                        Utils.Resize(ref components, 2 * componentCount);
+                    }
+                    components[componentCount++] = new RawComponent { key = key, start = start, end = parser.Position };
                     ev = parser.NextEvent();
                     if (ev == JsonEvent.ObjectEnd) {
                         return;
@@ -79,7 +82,9 @@ internal sealed class ComponentReader
 
 internal struct RawComponent
 {
-    internal string key;
-    internal int    startIndex;
-    internal int    endIndex;
+    internal        string  key;
+    internal        int     start;
+    internal        int     end;
+
+    public override string  ToString() => key;
 }
