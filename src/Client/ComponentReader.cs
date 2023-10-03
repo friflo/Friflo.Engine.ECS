@@ -92,7 +92,7 @@ internal sealed class ComponentReader
                 component.classFactory.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
-            store.ReadComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, structFactory, updater);
+            store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, structFactory, updater);
         }
     }
     

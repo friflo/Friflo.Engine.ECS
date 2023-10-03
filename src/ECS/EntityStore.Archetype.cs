@@ -215,7 +215,7 @@ public sealed partial class EntityStore
         factories[classKey]     = factory;
     }
     
-    internal bool ReadComponent(
+    internal bool ReadStructComponent(
         ObjectReader        reader,
         JsonValue           json,
         int                 id,
