@@ -183,8 +183,11 @@ public static class Test_Entity_Tree
         AreEqual(3,         store.EntityCount);
         AreSame (root,      child.Root);
         AreSame (root,      subChild.Root);
+        var childArchetype = child.Archetype;
+        AreEqual(3,         childArchetype.EntityCount);
         
         child.DeleteEntity();
+        AreEqual(2,         childArchetype.EntityCount);
         AreEqual(2,         store.EntityCount);
         AreEqual(0,         root.ChildCount);
         IsNull  (subChild.Root);        // subChild is floating

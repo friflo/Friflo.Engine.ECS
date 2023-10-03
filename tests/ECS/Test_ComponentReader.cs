@@ -59,7 +59,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataNode { pid = 10, components = json, children = new List<int> { 11 } };
         
-        const int count = 10; // todo 
+        const int count = 10; // 1_000_000 ~ 2.639 ms 
         for (int n = 0; n < count; n++)
         {
             var root = store.CreateFromDataNode(rootNode);

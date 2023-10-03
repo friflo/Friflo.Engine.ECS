@@ -329,7 +329,8 @@ public sealed class GameEntity
     public void DeleteEntity()
     {
         archetype.store.DeleteNode(id);
-        archetype    = null;
+        archetype.MoveLastComponentsTo(compIndex, archetype.store.gameEntityUpdater);
+        archetype = null;
     }
     
     #endregion
