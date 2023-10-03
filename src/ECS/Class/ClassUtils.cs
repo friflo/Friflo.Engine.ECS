@@ -11,7 +11,9 @@ namespace Friflo.Fliox.Engine.ECS;
 internal static class ClassType<T> where T : class
 {
     // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    int     ClassIndex  = ClassUtils.NewClassIndex(typeof(T));
+    internal static readonly    int     ClassIndex  = ClassUtils.NewClassIndex(typeof(T), out ClassKey);
+    // ReSharper disable once StaticMemberInGenericType
+    internal static readonly    string  ClassKey;
 }
 
 public static class ClassUtils
@@ -23,16 +25,17 @@ public static class ClassUtils
     private  static readonly    Dictionary<Type, string>            ClassComponentKeys          = new Dictionary<Type, string>();
     public   static             IReadOnlyDictionary<Type, string>   RegisteredClassComponentKeys => ClassComponentKeys;
 
-    internal static int NewClassIndex(Type type) {
+    internal static int NewClassIndex(Type type, out string classKey) {
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType == typeof(ClassComponentAttribute)) {
-                var arg = attr.ConstructorArguments;
-                var key = (string) arg[0].Value;
-                ClassComponentKeys.Add(type, key);
-                ClassComponentBytes.Add(type, new Bytes(key));
+                var arg     = attr.ConstructorArguments;
+                classKey    = (string) arg[0].Value;
+                ClassComponentKeys.Add(type, classKey);
+                ClassComponentBytes.Add(type, new Bytes(classKey));
                 return _nextClassIndex++;
             }
         }
+        classKey = null;
         return MissingAttribute;
     }
     

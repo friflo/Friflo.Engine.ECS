@@ -10,7 +10,7 @@ namespace Tests.ECS;
 
 public static class Test_ComponentReader
 {
-    private static readonly JsonValue json =
+    private static readonly JsonValue structComponents =
         new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 5, \"z\": 6 } }");
     
     [Test]
@@ -20,7 +20,7 @@ public static class Test_ComponentReader
         store.RegisterStructComponent<Position>();
         store.RegisterStructComponent<Scale3>();
         
-        var rootNode    = new DataNode { pid = 10, components = json, children = new List<int> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<int> { 11 } };
         var childNode   = new DataNode { pid = 11 };
         
         var root        = store.CreateFromDataNode(rootNode);
@@ -57,7 +57,7 @@ public static class Test_ComponentReader
         store.RegisterStructComponent<Position>();
         store.RegisterStructComponent<Scale3>();
         
-        var rootNode    = new DataNode { pid = 10, components = json, children = new List<int> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<int> { 11 } };
         
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
@@ -65,6 +65,21 @@ public static class Test_ComponentReader
             var root = store.CreateFromDataNode(rootNode);
             root.DeleteEntity();
         }
+    }
+    
+    private static readonly JsonValue classComponents =
+        new JsonValue("{ \"testRef1\": { \"val\": 1 } }");
+    
+    [Test]
+    public static void Test_ReadClassComponents()
+    {
+        var store       = new EntityStore(100, PidType.UsePidAsId);
+        store.RegisterClassComponent<TestRefComponent1>();
+        
+        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
+        var childNode   = new DataNode { pid = 11 };
+
+        var root        = store.CreateFromDataNode(rootNode);
     }
 }
 

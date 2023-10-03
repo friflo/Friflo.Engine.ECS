@@ -30,7 +30,7 @@ public sealed partial class EntityStore
     
     private Archetype GetArchetypeWith(Archetype current, ComponentFactory factory)
     {
-        var hash = factory.typeHash ^ current.typeHash;
+        var hash = factory.structHash ^ current.typeHash;
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
@@ -44,7 +44,7 @@ public sealed partial class EntityStore
     private Archetype GetArchetype(ComponentFactory factory)
     {
         // could perform lookup per lookup array
-        if (TryGetArchetype(factory.typeHash, out var archetype)) {
+        if (TryGetArchetype(factory.structHash, out var archetype)) {
             return archetype;
         }
         var newHeap = factory.CreateHeap(Static.DefaultCapacity);
@@ -205,8 +205,14 @@ public sealed partial class EntityStore
     public void RegisterStructComponent<T>() where T : struct  {
         var structIndex         = StructHeap<T>.StructIndex;
         var structKey           = StructHeap<T>.StructKey;
-        var factory             = new ComponentFactory<T>(structIndex, structKey, typeStore);
+        var factory             = new StructFactory<T>(structIndex, structKey, typeStore);
         factories[structKey]    = factory;
+    }
+    
+    public void RegisterClassComponent<T>() where T : class  {
+        var classKey            = ClassType<T>.ClassKey;
+        var factory             = new ClassFactory<T>(classKey, typeStore);
+        factories[classKey]     = factory;
     }
     
     internal bool ReadComponent(
