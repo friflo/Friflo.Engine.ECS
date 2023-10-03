@@ -34,7 +34,7 @@ public sealed class Archetype
     // --- internal
     /// <remarks>
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
-    /// does not require a range check. This is already ensured when at <see cref="StructHeap{T}.Create"/>
+    /// does not require a range check. This is already ensured at <see cref="StructHeap{T}.Create"/>
     /// </remarks>
     [Browse(Never)] internal readonly   StructHeap[]                heapMap;
     [Browse(Never)] internal readonly   EntityStore                 store;
