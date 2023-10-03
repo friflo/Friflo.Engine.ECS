@@ -245,12 +245,6 @@ public sealed class GameEntity
         if (component.entity != null) {
             throw new InvalidOperationException("component already added to an entity");
         }
-        return AddClassComponentInternal(component);
-    }
-    
-    internal T AddClassComponentInternal<T>(T component)
-        where T : ClassComponent
-    {
         component.entity    = this;
         var classes         = classComponents;
         var len             = classes.Length;
@@ -267,6 +261,15 @@ public sealed class GameEntity
         Utils.Resize(ref classComponents, len + 1);
         classComponents[len] = component;
         return null;
+    }
+    
+    internal void AppendClassComponent<T>(T component)
+        where T : ClassComponent
+    {
+        component.entity    = this;
+        var len             = classComponents.Length;
+        Utils.Resize(ref classComponents, len + 1);
+        classComponents[len] = component;
     }
     
     /// <returns>the component previously added to the entity.</returns>

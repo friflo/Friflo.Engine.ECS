@@ -69,6 +69,6 @@ internal sealed class ClassFactory<T> : ComponentFactory
             return;
         }
         classComponent = reader.ReadMapper(typeMapper, json);
-        entity.AddClassComponent(classComponent);
+        entity.AppendClassComponent(classComponent);
     }
 }
