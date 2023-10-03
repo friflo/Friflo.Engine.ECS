@@ -43,11 +43,11 @@ public enum NodeFlags : byte
     /// </summary>
     TreeNode        = 0b_0000_0010,
     // - prefab flags
-    PrefabLink  = 0b_0001_0000, // link to prefab location
-    OpMask      = 0b_0000_1100,
-    OpKeep      = 0b_0000_0100, // keep components of prefab entity as they are
-    OpModify    = 0b_0000_1000, // modify components of prefab entity
-    OpRemove    = 0b_0000_1100, // remove prefab entity
+    PrefabLink      = 0b_0001_0000, // link to prefab location
+    OpMask          = 0b_0000_1100,
+    OpKeep          = 0b_0000_0100, // keep components of prefab entity as they are
+    OpModify        = 0b_0000_1000, // modify components of prefab entity
+    OpRemove        = 0b_0000_1100, // remove prefab entity
 }
 
 public enum PidType
