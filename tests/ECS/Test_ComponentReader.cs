@@ -10,6 +10,9 @@ namespace Tests.ECS;
 
 public static class Test_ComponentReader
 {
+    private static readonly JsonValue json =
+        new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 5, \"z\": 6 } }");
+    
     [Test]
     public static void Test_ReadStructComponents()
     {
@@ -17,12 +20,8 @@ public static class Test_ComponentReader
         store.RegisterStructComponent<Position>();
         store.RegisterStructComponent<Scale3>();
         
-        var rootNode    = new DataNode {
-            pid         = 10,
-            components  = new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 5, \"z\": 6 } }"),
-            children    = new List<int> { 11 } 
-        };
-        var childNode = new DataNode { pid = 11 };
+        var rootNode    = new DataNode { pid = 10, components = json, children = new List<int> { 11 } };
+        var childNode   = new DataNode { pid = 11 };
         
         var root        = store.CreateFromDataNode(rootNode);
         var child       = store.CreateFromDataNode(childNode);
@@ -50,6 +49,22 @@ public static class Test_ComponentReader
         AreEqual(5f,    root.Scale3.y);
         AreEqual(6f,    root.Scale3.z);
     }
-   
+    
+    [Test]
+    public static void Test_ReadStructComponents_Perf()
+    {
+        var store       = new EntityStore(100, PidType.UsePidAsId);
+        store.RegisterStructComponent<Position>();
+        store.RegisterStructComponent<Scale3>();
+        
+        var rootNode    = new DataNode { pid = 10, components = json, children = new List<int> { 11 } };
+        
+        const int count = 10; // todo 
+        for (int n = 0; n < count; n++)
+        {
+            var root = store.CreateFromDataNode(rootNode);
+            root.DeleteEntity();
+        }
+    }
 }
 
