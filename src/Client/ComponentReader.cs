@@ -52,12 +52,11 @@ internal sealed class ComponentReader
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
-            var structFactory   = component.structFactory;
-            if (structFactory == null) {
-                component.classFactory.ReadClassComponent(componentReader, json, entity);
+            if (!component.isStructFactory) {
+                component.factory.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
-            store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, structFactory, updater);
+            store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, component.factory, updater);
         }
     }
     
@@ -67,14 +66,11 @@ internal sealed class ComponentReader
         var count = componentCount;
         for (int n = 0; n < count; n++)
         {
-            ref var component       = ref components[n];
-            var factory             = store.factories[component.key];
-            archetypeHash          ^= factory.structHash;
-            if (factory.IsStructFactory) {
-                component.structFactory = factory;
-            } else {
-                component.classFactory  = factory;
-            }
+            ref var component           = ref components[n];
+            var factory                 = store.factories[component.key];
+            archetypeHash              ^= factory.structHash;
+            component.factory           = factory;
+            component.isStructFactory   = factory.IsStructFactory;
         }
         // --- use / create Archetype with present components to avoid structural changes
         if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
@@ -82,11 +78,12 @@ internal sealed class ComponentReader
             var config  = store.GetArchetypeConfig();
             var heaps   = new StructHeap[count];
             for (int n = 0; n < count; n++) {
-                var structFactory = components[n].structFactory;
-                if (structFactory == null) {
+                ref var component   = ref components[n];
+                var factory         = component.factory;
+                if (!component.isStructFactory) {
                     continue;
                 }
-                heaps[n] = structFactory.CreateHeap(config.capacity); 
+                heaps[n] = factory.CreateHeap(config.capacity); 
             }
             newArchetype = Archetype.CreateWithHeaps(config, heaps);
             store.AddArchetype(newArchetype);
@@ -133,8 +130,8 @@ internal sealed class ComponentReader
 internal struct RawComponent
 {
     internal        string              key;
-    internal        ComponentFactory    structFactory;
-    internal        ComponentFactory    classFactory;
+    internal        ComponentFactory    factory;
+    internal        bool                isStructFactory;
     internal        int                 start;
     internal        int                 end;
 
