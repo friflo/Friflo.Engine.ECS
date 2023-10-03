@@ -92,7 +92,7 @@ public sealed partial class EntityStore
         return archetype;
     }
     
-    private ArchetypeConfig GetArchetypeConfig() {
+    internal ArchetypeConfig GetArchetypeConfig() {
         return new ArchetypeConfig (this, archetypesCount, maxStructIndex, DefaultCapacity, typeStore);
     }
 }

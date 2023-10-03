@@ -81,7 +81,7 @@ public sealed partial class EntityStore
         return result;
     }
     
-    private bool TryGetArchetype (long hash, out Archetype result) {
+    internal bool TryGetArchetype (long hash, out Archetype result) {
         foreach (var arch in archetypeInfos) {
             if (arch.hash != hash) {
                 continue;
@@ -93,7 +93,7 @@ public sealed partial class EntityStore
         return false;
     }
     
-    private void AddArchetype (Archetype archetype) {
+    internal void AddArchetype (Archetype archetype) {
         if (archetype == null) {
             return;
         }
