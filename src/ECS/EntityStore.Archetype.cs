@@ -209,9 +209,9 @@ public sealed partial class EntityStore
         factories[structKey]    = factory;
     }
     
-    public void RegisterClassComponent<T>() where T : class  {
+    public void RegisterClassComponent<T>() where T : ClassComponent  {
         var classKey            = ClassType<T>.ClassKey;
-        var factory             = new ClassFactory<T>(classKey, typeStore);
+        var factory             = new ClassFactory<T>(typeStore);
         factories[classKey]     = factory;
     }
     

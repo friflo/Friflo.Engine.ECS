@@ -67,8 +67,7 @@ public static class Test_ComponentReader
         }
     }
     
-    private static readonly JsonValue classComponents =
-        new JsonValue("{ \"testRef1\": { \"val\": 1 } }");
+    private static readonly JsonValue classComponents = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
     public static void Test_ReadClassComponents()
@@ -77,9 +76,13 @@ public static class Test_ComponentReader
         store.RegisterClassComponent<TestRefComponent1>();
         
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
-        var childNode   = new DataNode { pid = 11 };
 
         var root        = store.CreateFromDataNode(rootNode);
+        
+        AreEqual(1,     root.ClassComponents.Length);
+        var component   = root.GetClassComponent<TestRefComponent1>();
+        
+        AreEqual(2, component.val1);
     }
 }
 

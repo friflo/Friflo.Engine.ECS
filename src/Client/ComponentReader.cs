@@ -89,7 +89,8 @@ internal sealed class ComponentReader
             var json = new JsonValue(buffer);
             var structFactory   = component.structFactory;
             if (structFactory == null) {
-                var obj = component.classFactory.ReadClassComponent(componentReader, json);
+                var classComponent = component.classFactory.ReadClassComponent(componentReader, json);
+                entity.AddClassComponentInternal(classComponent);
                 continue;
             }
             store.ReadComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, structFactory, updater);

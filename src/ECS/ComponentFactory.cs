@@ -12,18 +12,16 @@ internal abstract class ComponentFactory
 {
     internal readonly   int     structIndex;
     internal readonly   string  structKey;
-    internal readonly   string  classKey;
     internal readonly   long    structHash;
         
-    internal abstract   StructHeap  CreateHeap          (int capacity);
-    internal abstract   object      ReadClassComponent  (ObjectReader reader, JsonValue json);
-    internal abstract   bool        IsStructFactory     { get; }
+    internal abstract   StructHeap      CreateHeap          (int capacity);
+    internal abstract   ClassComponent  ReadClassComponent  (ObjectReader reader, JsonValue json);
+    internal abstract   bool            IsStructFactory     { get; }
     
-    internal ComponentFactory(int structIndex, string structKey, long structHash, string  classKey) {
+    internal ComponentFactory(int structIndex, string structKey, long structHash) {
         this.structIndex    = structIndex;
         this.structKey      = structKey;
         this.structHash     = structHash;
-        this.classKey       = classKey;
     }
 }
 
@@ -31,15 +29,17 @@ internal sealed class StructFactory<T> : ComponentFactory
     where T : struct
 {
     private readonly    TypeMapper<T>   typeMapper;
-    
+    public  override    string          ToString() => $"StructFactory: {typeof(T).Name}";
+
     internal StructFactory(int structIndex, string structKey, TypeStore typeStore)
-        : base(structIndex, structKey, typeof(T).Handle(), null)
+        : base(structIndex, structKey, typeof(T).Handle())
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override   bool    IsStructFactory => true;
-    internal override   object  ReadClassComponent(ObjectReader reader, JsonValue json) => throw new InvalidOperationException("operates only on ClassFactory<>");
+    internal override   bool            IsStructFactory => true;
+    internal override   ClassComponent  ReadClassComponent(ObjectReader reader, JsonValue json)
+        => throw new InvalidOperationException("operates only on ClassFactory<>");
     
     internal override StructHeap CreateHeap(int capacity) {
         return new StructHeap<T>(structIndex, structKey, capacity, typeMapper);   
@@ -47,20 +47,22 @@ internal sealed class StructFactory<T> : ComponentFactory
 }
 
 internal sealed class ClassFactory<T> : ComponentFactory 
-    where T : class
+    where T : ClassComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
+    public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
     
-    internal ClassFactory(string classKey, TypeStore typeStore)
-        : base(-1, null, 0, classKey)
+    internal ClassFactory(TypeStore typeStore)
+        : base(-1, null, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
     internal override   bool        IsStructFactory => false;
-    internal override   StructHeap  CreateHeap(int capacity) => throw new InvalidOperationException("operates only on StructFactory<>");
+    internal override   StructHeap  CreateHeap(int capacity)
+        => throw new InvalidOperationException("operates only on StructFactory<>");
     
-    internal override object ReadClassComponent(ObjectReader reader, JsonValue json) {
+    internal override ClassComponent ReadClassComponent(ObjectReader reader, JsonValue json) {
         return reader.ReadMapper(typeMapper, json);
     }
 }

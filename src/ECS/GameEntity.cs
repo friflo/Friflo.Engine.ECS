@@ -245,6 +245,12 @@ public sealed class GameEntity
         if (component.entity != null) {
             throw new InvalidOperationException("component already added to an entity");
         }
+        return AddClassComponentInternal(component);
+    }
+    
+    internal T AddClassComponentInternal<T>(T component)
+        where T : ClassComponent
+    {
         component.entity    = this;
         var classes         = classComponents;
         var len             = classes.Length;
