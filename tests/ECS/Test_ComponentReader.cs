@@ -104,5 +104,12 @@ public static class Test_ComponentReader
             store.CreateFromDataNode(rootNode);
         }
     }
+    
+    [Test]
+    public static void Test_GetComponentTypes()
+    {
+        var componentTypes = Utils.GetComponentTypes();
+        IsTrue(componentTypes.Count > 0);
+    }
 }
 
