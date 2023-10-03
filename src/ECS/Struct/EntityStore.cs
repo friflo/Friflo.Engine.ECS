@@ -34,11 +34,11 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(DefaultCapacity, typeStore),
-            StructHeap<T2>.Create(DefaultCapacity, typeStore)
-        };
         var config  = GetArchetypeConfig();
+        var heaps = new StructHeap[] {
+            StructHeap<T1>.Create(config),
+            StructHeap<T2>.Create(config)
+        };
         archetype   = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(archetype);
         return archetype;
@@ -56,12 +56,12 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(DefaultCapacity, typeStore),
-            StructHeap<T2>.Create(DefaultCapacity, typeStore),
-            StructHeap<T3>.Create(DefaultCapacity, typeStore )
-        };
         var config  = GetArchetypeConfig();
+        var heaps = new StructHeap[] {
+            StructHeap<T1>.Create(config),
+            StructHeap<T2>.Create(config),
+            StructHeap<T3>.Create(config)
+        };
         archetype   = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(archetype);
         return archetype;
@@ -80,26 +80,19 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(DefaultCapacity, typeStore),
-            StructHeap<T2>.Create(DefaultCapacity, typeStore),
-            StructHeap<T3>.Create(DefaultCapacity, typeStore),
-            StructHeap<T4>.Create(DefaultCapacity, typeStore)
-        };
         var config  = GetArchetypeConfig();
+        var heaps = new StructHeap[] {
+            StructHeap<T1>.Create(config),
+            StructHeap<T2>.Create(config),
+            StructHeap<T3>.Create(config),
+            StructHeap<T4>.Create(config)
+        };
         archetype   = Archetype.CreateWithHeaps(config, heaps);
         AddArchetype(archetype);
         return archetype;
     }
     
-    private ArchetypeConfig GetArchetypeConfig()
-    {
-        return new ArchetypeConfig {
-            store           = this,
-            archetypeIndex  = archetypesCount,
-            maxStructIndex  = maxStructIndex,
-            capacity        = DefaultCapacity,
-            typeStore       = typeStore
-        };
+    private ArchetypeConfig GetArchetypeConfig() {
+        return new ArchetypeConfig (this, archetypesCount, maxStructIndex, DefaultCapacity, typeStore);
     }
 }

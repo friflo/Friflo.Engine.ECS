@@ -32,14 +32,18 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         return new StructHeap<T>(structIndex, structKey, capacity, mapper);
     }
     
-    internal static StructHeap Create(int capacity, TypeStore typeStore) {
+    internal static StructHeap Create(in ArchetypeConfig config) {
         var structIndex = StructIndex;
         if (structIndex == MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {typeof(T).Namespace}.{typeof(T).Name}";
             throw new InvalidOperationException(msg);
         }
-        var mapper = typeStore.GetTypeMapper<T>();
-        return new StructHeap<T>(structIndex, StructKey, capacity, mapper);
+        if (structIndex >= config.maxStructIndex) {
+            const string msg = $"number of structs exceed EntityStore.{nameof(EntityStore.maxStructIndex)}";
+            throw new InvalidOperationException(msg);
+        }
+        var mapper = config.typeStore.GetTypeMapper<T>();
+        return new StructHeap<T>(structIndex, StructKey, config.capacity, mapper);
     }
     
     internal override void SetCapacity(int capacity)

@@ -16,11 +16,25 @@ internal struct StandardComponents
     internal    StructHeap<EntityName>  name;
 }
 
-internal struct ArchetypeConfig
+internal readonly struct ArchetypeConfig
 {
-    internal    EntityStore store;
-    internal    int         archetypeIndex;
-    internal    int         maxStructIndex;
-    internal    int         capacity;
-    internal    TypeStore   typeStore;
+    internal readonly   EntityStore store;
+    internal readonly   int         archetypeIndex;
+    internal readonly   int         maxStructIndex;
+    internal readonly   int         capacity;
+    internal readonly   TypeStore   typeStore;
+    
+    internal ArchetypeConfig(
+        EntityStore store,
+        int         archetypeIndex,
+        int         maxStructIndex,
+        int         capacity,
+        TypeStore   typeStore)
+    {
+        this.store          = store;
+        this.archetypeIndex = archetypeIndex;
+        this.maxStructIndex = maxStructIndex;
+        this.capacity       = capacity;
+        this.typeStore      = typeStore;
+    }
 }

@@ -70,8 +70,8 @@ public sealed partial class EntityStore
     [Browse(Never)] private             Archetype[]         archetypes;         // never null
     [Browse(Never)] private             ArchetypeInfo[]     archetypeInfos;     // never null
     [Browse(Never)] private             int                 archetypesCount;
-    [Browse(Never)] private readonly    Archetype           defaultArchetype;
-                    private readonly    int                 maxStructIndex;
+    [Browse(Never)] private  readonly   Archetype           defaultArchetype;
+                    internal readonly   int                 maxStructIndex;
     [Browse(Never)] private             int                 rootId;
     
     // --- node access

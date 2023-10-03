@@ -78,7 +78,7 @@ public sealed class GameEntity
     [Browse(Never)] public  bool            HasRotation     => archetype.std.rotation          != null;
     [Browse(Never)] public  bool            HasScale3       => archetype.std.scale3            != null;
                     public  bool            HasComponent<T> () where T : struct
-                                                            => archetype.FindStructHeap<T>()   != null;
+                                                            => archetype.heapMap[StructHeap<T>.StructIndex] != null;
     #endregion
 
 #region public properties - tree nodes
@@ -168,7 +168,7 @@ public sealed class GameEntity
     public bool TryGetComponentValue<T>(out T result)
         where T : struct
     {
-        var heap = archetype.FindStructHeap<T>();
+        var heap = archetype.heapMap[StructHeap<T>.StructIndex];
         if (heap == null) {
             result = default;
             return false;

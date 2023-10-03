@@ -32,6 +32,10 @@ public sealed class Archetype
                     private             int                         capacity;
     
     // --- internal
+    /// <summary>
+    /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
+    /// does not require a range check. 
+    /// </summary>
     [Browse(Never)] internal readonly   StructHeap[]                heapMap;
     [Browse(Never)] internal readonly   EntityStore                 store;
     [Browse(Never)] internal readonly   int                         archIndex;
@@ -80,7 +84,7 @@ public sealed class Archetype
     internal static Archetype Create<T>(in ArchetypeConfig config)
         where T : struct
     {
-        var newComp     = StructHeap<T>.Create(config.capacity, config.typeStore);
+        var newComp     = StructHeap<T>.Create(config);
         var archetype   = new Archetype(config, Array.Empty<StructHeap>(), newComp);
         archetype.AddStructHeap(0, newComp);
         return archetype;
@@ -122,15 +126,7 @@ public sealed class Archetype
         structHeaps[pos]            = heap;
         heapMap[heap.structIndex]   = heap;
     }
-    
-    internal StructHeap FindStructHeap<T>() where T : struct {
-        return heapMap[StructHeap<T>.StructIndex];
-    }
    
-    internal StructHeap FindStructHeap(int structIndex) {
-        return heapMap[structIndex];
-    }
-    
     internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype, ComponentUpdater updater)
     {
         var sourceIndex = compIndex;
@@ -139,7 +135,7 @@ public sealed class Archetype
         
         for (int n = 0; n < structHeaps.Length; n++) {
             var sourceHeap  = structHeaps[n];
-            var targetHeap  = newArchetype.FindStructHeap(sourceHeap.structIndex);
+            var targetHeap  = newArchetype.heapMap[sourceHeap.structIndex];
             if (targetHeap == null) {
                 continue;
             }

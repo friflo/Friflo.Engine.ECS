@@ -22,8 +22,8 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var newHeap = StructHeap<T>.Create(Static.DefaultCapacity, typeStore);
         var config  = GetArchetypeConfig();
+        var newHeap = StructHeap<T>.Create(config);
         archetype   = Archetype.CreateFromArchetype(config, current, newHeap);
         AddArchetype(archetype);
         return archetype;
@@ -150,7 +150,7 @@ public sealed partial class EntityStore
     {
         var arch = archetype;
         if (arch != defaultArchetype) {
-            var structHeap = arch.FindStructHeap<T>();
+            var structHeap = arch.heapMap[StructHeap<T>.StructIndex];
             if (structHeap != null) {
                 // --- change component value 
                 var heap = (StructHeap<T>)structHeap;
@@ -184,7 +184,7 @@ public sealed partial class EntityStore
         if (arch == null) {
             return false;
         }
-        var heap = arch.FindStructHeap<T>();
+        var heap = arch.heapMap[StructHeap<T>.StructIndex];
         if (heap == null) {
             return false;
         }
@@ -221,7 +221,7 @@ public sealed partial class EntityStore
     {
         var arch = archetype;
         if (arch != defaultArchetype) {
-            var structHeap = arch.FindStructHeap(factory.structIndex);
+            var structHeap = arch.heapMap[factory.structIndex];
             if (structHeap != null) {
                 // --- change component value 
                 structHeap.Read(reader, compIndex, json);
