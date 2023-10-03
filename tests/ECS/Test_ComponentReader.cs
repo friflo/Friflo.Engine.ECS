@@ -90,5 +90,19 @@ public static class Test_ComponentReader
         AreEqual(2,     comp2.val1);
         AreSame(comp1, comp2);
     }
+    
+    [Test]
+    public static void Test_ReadClassComponents_Perf()
+    {
+        var store       = new EntityStore(100, PidType.UsePidAsId);
+        store.RegisterClassComponent<TestRefComponent1>();
+        
+        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
+
+        const int count = 10; // 5_000_000 ~ 3.528 ms
+        for (int n = 0; n < count; n++) {
+            store.CreateFromDataNode(rootNode);
+        }
+    }
 }
 

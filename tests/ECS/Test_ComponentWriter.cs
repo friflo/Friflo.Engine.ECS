@@ -10,7 +10,7 @@ namespace Tests.ECS;
 public static class Test_ComponentWriter
 {
     [Test]
-    public static void Test_WriteStructComponents()
+    public static void Test_WriteComponents()
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new EntityStoreClient(hub);
@@ -27,6 +27,24 @@ public static class Test_ComponentWriter
         AreEqual(1,     node.children.Count);
         AreEqual(11,    node.children[0]);
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node.components.AsString());
+    }
+    
+    [Test]
+    public static void Test_WriteComponents_Perf()
+    {
+        var hub     = new FlioxHub(new MemoryDatabase("test"));
+        var client  = new EntityStoreClient(hub);
+        var store   = new EntityStore(100, PidType.UsePidAsId);
+        var entity  = store.CreateEntity(10);
+        entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
+        entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
+
+        int count = 10; // 2_000_000 ~ 1.935 ms
+        DataNode node = null;
+        for (int n = 0; n < count; n++) {
+            node = store.EntityAsDataNode(entity, client);
+        }
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }
 }
 
