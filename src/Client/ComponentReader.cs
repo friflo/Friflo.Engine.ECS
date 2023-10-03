@@ -52,7 +52,7 @@ internal sealed class ComponentReader
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
-            if (!component.isStructFactory) {
+            if (!component.factory.isStructFactory) {
                 component.factory.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
@@ -70,7 +70,6 @@ internal sealed class ComponentReader
             var factory                 = store.factories[component.key];
             archetypeHash              ^= factory.structHash;
             component.factory           = factory;
-            component.isStructFactory   = factory.IsStructFactory;
         }
         // --- use / create Archetype with present components to avoid structural changes
         if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
@@ -80,7 +79,7 @@ internal sealed class ComponentReader
             for (int n = 0; n < count; n++) {
                 ref var component   = ref components[n];
                 var factory         = component.factory;
-                if (!component.isStructFactory) {
+                if (!factory.isStructFactory) {
                     continue;
                 }
                 heaps[n] = factory.CreateHeap(config.capacity); 
@@ -131,7 +130,6 @@ internal struct RawComponent
 {
     internal        string              key;
     internal        ComponentFactory    factory;
-    internal        bool                isStructFactory;
     internal        int                 start;
     internal        int                 end;
 

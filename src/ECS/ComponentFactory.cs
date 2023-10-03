@@ -13,15 +13,16 @@ internal abstract class ComponentFactory
     internal readonly   int     structIndex;
     internal readonly   string  structKey;
     internal readonly   long    structHash;
+    internal readonly   bool    isStructFactory;
         
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
-    internal abstract   bool        IsStructFactory     { get; }
     
-    internal ComponentFactory(int structIndex, string structKey, long structHash) {
-        this.structIndex    = structIndex;
-        this.structKey      = structKey;
-        this.structHash     = structHash;
+    internal ComponentFactory(bool isStructFactory, int structIndex, string structKey, long structHash) {
+        this.structIndex        = structIndex;
+        this.structKey          = structKey;
+        this.structHash         = structHash;
+        this.isStructFactory    = isStructFactory;
     }
 }
 
@@ -32,12 +33,11 @@ internal sealed class StructFactory<T> : ComponentFactory
     public  override    string          ToString() => $"StructFactory: {typeof(T).Name}";
 
     internal StructFactory(int structIndex, string structKey, TypeStore typeStore)
-        : base(structIndex, structKey, typeof(T).Handle())
+        : base(true, structIndex, structKey, typeof(T).Handle())
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override   bool    IsStructFactory => true;
     internal override   void    ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
         => throw new InvalidOperationException("operates only on ClassFactory<>");
     
@@ -53,12 +53,11 @@ internal sealed class ClassFactory<T> : ComponentFactory
     public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
     
     internal ClassFactory(TypeStore typeStore)
-        : base(-1, null, 0)
+        : base(false, -1, null, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override   bool        IsStructFactory => false;
     internal override   StructHeap  CreateHeap(int capacity)
         => throw new InvalidOperationException("operates only on StructFactory<>");
     
