@@ -15,7 +15,7 @@ internal abstract class ComponentFactory
     internal readonly   long    structHash;
         
     internal abstract   StructHeap      CreateHeap          (int capacity);
-    internal abstract   ClassComponent  ReadClassComponent  (ObjectReader reader, JsonValue json);
+    internal abstract   ClassComponent  ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
     internal abstract   bool            IsStructFactory     { get; }
     
     internal ComponentFactory(int structIndex, string structKey, long structHash) {
@@ -38,7 +38,7 @@ internal sealed class StructFactory<T> : ComponentFactory
     }
     
     internal override   bool            IsStructFactory => true;
-    internal override   ClassComponent  ReadClassComponent(ObjectReader reader, JsonValue json)
+    internal override   ClassComponent  ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
         => throw new InvalidOperationException("operates only on ClassFactory<>");
     
     internal override StructHeap CreateHeap(int capacity) {
@@ -62,7 +62,14 @@ internal sealed class ClassFactory<T> : ComponentFactory
     internal override   StructHeap  CreateHeap(int capacity)
         => throw new InvalidOperationException("operates only on StructFactory<>");
     
-    internal override ClassComponent ReadClassComponent(ObjectReader reader, JsonValue json) {
-        return reader.ReadMapper(typeMapper, json);
+    internal override ClassComponent ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
+        var classComponent = entity.GetClassComponent<T>();
+        if (classComponent != null) { 
+            reader.ReadToMapper(typeMapper, json, classComponent, true);
+        } else {
+            classComponent = reader.ReadMapper(typeMapper, json);
+            entity.AddClassComponent(classComponent);
+        }
+        return null;
     }
 }

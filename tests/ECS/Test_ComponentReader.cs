@@ -29,6 +29,7 @@ public static class Test_ComponentReader
         var type = store.GetArchetype<Position, Scale3>();
         AreEqual(1,     type.EntityCount);
         
+        // --- read same DataNode again
         root.Position   = default;
         root.Scale3     = default;
         root            = store.CreateFromDataNode(rootNode);
@@ -78,11 +79,16 @@ public static class Test_ComponentReader
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
 
         var root        = store.CreateFromDataNode(rootNode);
-        
         AreEqual(1,     root.ClassComponents.Length);
-        var component   = root.GetClassComponent<TestRefComponent1>();
+        var comp1       = root.GetClassComponent<TestRefComponent1>();
+        AreEqual(2,     comp1.val1);
+        comp1.val1      = -1;
         
-        AreEqual(2, component.val1);
+        // --- read same DataNode again
+        store.CreateFromDataNode(rootNode);
+        var comp2       = root.GetClassComponent<TestRefComponent1>();
+        AreEqual(2,     comp2.val1);
+        AreSame(comp1, comp2);
     }
 }
 
