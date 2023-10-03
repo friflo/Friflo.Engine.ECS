@@ -32,6 +32,10 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         return new StructHeap<T>(structIndex, structKey, capacity, mapper);
     }
     
+    /// <remarks>
+    /// Ensures <see cref="StructHeap.structIndex"/> is less than <see cref="ArchetypeConfig.maxStructIndex"/>
+    /// to avoid range check when accessing <see cref="Archetype.heapMap"/>
+    /// </remarks>
     internal static StructHeap Create(in ArchetypeConfig config) {
         var structIndex = StructIndex;
         if (structIndex == MissingAttribute) {
