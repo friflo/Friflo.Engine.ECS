@@ -16,20 +16,20 @@ internal static class ClassType<T> where T : class
 
 public static class ClassUtils
 {
-    internal const              int                                 MissingAttribute    = 0;
+    internal const              int                                 MissingAttribute            = 0;
     
-    private  static             int                                 _nextClassIndex     = 1;
-    private  static readonly    Dictionary<Type, Bytes>             ClassKeysBytes      = new Dictionary<Type, Bytes>();
-    private  static readonly    Dictionary<Type, string>            ClassKeys           = new Dictionary<Type, string>();
-    public   static             IReadOnlyDictionary<Type, string>   RegisteredClassKeys => ClassKeys;
+    private  static             int                                 _nextClassIndex             = 1;
+    private  static readonly    Dictionary<Type, Bytes>             ClassComponentBytes         = new Dictionary<Type, Bytes>();
+    private  static readonly    Dictionary<Type, string>            ClassComponentKeys          = new Dictionary<Type, string>();
+    public   static             IReadOnlyDictionary<Type, string>   RegisteredClassComponentKeys => ClassComponentKeys;
 
     internal static int NewClassIndex(Type type) {
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType == typeof(ClassComponentAttribute)) {
                 var arg = attr.ConstructorArguments;
                 var key = (string) arg[0].Value;
-                ClassKeys.Add(type, key);
-                ClassKeysBytes.Add(type, new Bytes(key));
+                ClassComponentKeys.Add(type, key);
+                ClassComponentBytes.Add(type, new Bytes(key));
                 return _nextClassIndex++;
             }
         }
@@ -37,10 +37,10 @@ public static class ClassUtils
     }
     
     internal static string GetClassKey(Type type) {
-        return ClassKeys[type];
+        return ClassComponentKeys[type];
     }
     
     internal static Bytes GetClassKeyBytes(Type type) {
-        return ClassKeysBytes[type];
+        return ClassComponentBytes[type];
     }
 }

@@ -185,7 +185,7 @@ public static class Test_StructComponent
             // _ = player1.GetComponentValue<Position>();
             _ = player1.Position;
         }
-        IsTrue(StructUtils.RegisteredTypes.ContainsKey(typeof(Rotation)));
+        IsTrue(StructUtils.RegisteredStructComponentKeys.ContainsKey(typeof(Rotation)));
     }
     
     [Test]

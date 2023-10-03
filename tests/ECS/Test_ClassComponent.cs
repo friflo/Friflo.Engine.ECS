@@ -65,7 +65,7 @@ public static class Test_ClassComponent
         AreEqual(2,             player.ComponentCount);
         AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
         
-        IsTrue(ClassUtils.RegisteredClassKeys.ContainsKey(typeof(TestRefComponent1)));
+        IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
         
 #pragma warning disable CS0618 // Type or member is obsolete
         AreEqual(2,             player.Components_.Length);

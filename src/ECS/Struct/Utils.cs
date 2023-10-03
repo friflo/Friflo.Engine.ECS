@@ -11,18 +11,18 @@ namespace Friflo.Fliox.Engine.ECS;
 public static class StructUtils
 {
     internal const              int                                 ChunkSize = 512;
-    internal const              int                                 MissingAttribute    = 0;
+    internal const              int                                 MissingAttribute                = 0;
     
-    private  static             int                                 _nextStructIndex    = 1;
-    private  static readonly    Dictionary<Type, string>            Types               = new Dictionary<Type, string>();
-    public   static             IReadOnlyDictionary<Type, string>   RegisteredTypes => Types;
+    private  static             int                                 _nextStructIndex                = 1;
+    private  static readonly    Dictionary<Type, string>            StructComponentKeys             = new Dictionary<Type, string>();
+    public   static             IReadOnlyDictionary<Type, string>   RegisteredStructComponentKeys   => StructComponentKeys;
     
     internal static int NewStructIndex(Type type, out string structKey) {
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType == typeof(StructComponentAttribute)) {
                 var arg     = attr.ConstructorArguments;
                 structKey   = (string) arg[0].Value;
-                Types.Add(type, structKey);
+                StructComponentKeys.Add(type, structKey);
                 return _nextStructIndex++;
             }
         }
