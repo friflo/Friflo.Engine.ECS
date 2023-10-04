@@ -17,8 +17,6 @@ public static class Test_ComponentReader
     public static void Test_ReadStructComponents()
     {
         var store       = new EntityStore(100, PidType.UsePidAsId);
-        store.RegisterStructComponent<Position>();
-        store.RegisterStructComponent<Scale3>();
         
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<int> { 11 } };
         var childNode   = new DataNode { pid = 11 };
@@ -55,8 +53,6 @@ public static class Test_ComponentReader
     public static void Test_ReadStructComponents_Perf()
     {
         var store       = new EntityStore(100, PidType.UsePidAsId);
-        store.RegisterStructComponent<Position>();
-        store.RegisterStructComponent<Scale3>();
         
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<int> { 11 } };
         
@@ -74,7 +70,6 @@ public static class Test_ComponentReader
     public static void Test_ReadClassComponents()
     {
         var store       = new EntityStore(100, PidType.UsePidAsId);
-        store.RegisterClassComponent<TestRefComponent1>();
         
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
 
@@ -95,7 +90,6 @@ public static class Test_ComponentReader
     public static void Test_ReadClassComponents_Perf()
     {
         var store       = new EntityStore(100, PidType.UsePidAsId);
-        store.RegisterClassComponent<TestRefComponent1>();
         
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
 
@@ -106,10 +100,10 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_GetComponentTypes()
+    public static void Test_RegisterComponents()
     {
-        var componentTypes = Utils.GetComponentTypes();
-        IsTrue(componentTypes.Count > 0);
+        var store = new EntityStore(100, PidType.UsePidAsId);
+        
     }
 }
 

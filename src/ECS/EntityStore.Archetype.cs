@@ -202,19 +202,6 @@ public sealed partial class EntityStore
         return true;
     }
     
-    public void RegisterStructComponent<T>() where T : struct  {
-        var structIndex         = StructHeap<T>.StructIndex;
-        var structKey           = StructHeap<T>.StructKey;
-        var factory             = new StructFactory<T>(structIndex, structKey, typeStore);
-        factories[structKey]    = factory;
-    }
-    
-    public void RegisterClassComponent<T>() where T : ClassComponent  {
-        var classKey            = ClassType<T>.ClassKey;
-        var factory             = new ClassFactory<T>(typeStore);
-        factories[classKey]     = factory;
-    }
-    
     internal bool ReadStructComponent(
         ObjectReader        reader,
         JsonValue           json,

@@ -82,17 +82,16 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                 nodeMaxId;
     [Browse(Never)] private             int                 nodeCount;
     [Browse(Never)] private  readonly   TypeStore           typeStore;
-    
-    [Browse(Never)] internal readonly   Dictionary<string, ComponentFactory> factories;    // todo make static
                     
                     internal static     bool                HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
     
 #region static fields
     public static class Static {
-        internal const              int         DefaultCapacity = 1;
-        internal static readonly    int[]       EmptyChildNodes = null;
-        internal static readonly    TypeStore   TypeStore       = new TypeStore();
+        internal const              int         DefaultCapacity         = 1;
+        internal static readonly    int[]       EmptyChildNodes         = null;
+        internal static readonly    TypeStore   TypeStore               = new TypeStore();
+        internal static readonly    Dictionary<string, ComponentFactory> Factories = ComponentUtils.RegisterComponentTypes(TypeStore);
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
         internal const              int         MinNodeId   =  1;
@@ -103,6 +102,7 @@ public sealed partial class EntityStore
     
 #region initialize
     public EntityStore(int maxStructIndex = 100, PidType pidType = PidType.RandomPids) {
+        _                   = Static.Factories;
         this.maxStructIndex = maxStructIndex;
         this.pidType        = pidType;
         sequenceId          = Static.MinNodeId;
@@ -119,7 +119,6 @@ public sealed partial class EntityStore
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithHeaps(config, Array.Empty<StructHeap>());
-        factories           = new Dictionary<string, ComponentFactory>();
         AddArchetype(defaultArchetype);
     }
     #endregion

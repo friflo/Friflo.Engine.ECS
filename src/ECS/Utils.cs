@@ -24,7 +24,7 @@ public static class Utils
         array = newArray;
     }
     
-    public static List<Type> GetComponentTypes()
+    internal static List<Type> GetComponentTypes()
     {
         var componentTypes  = new List<Type>();
         var engineAssembly  = typeof(Utils).Assembly;
@@ -34,9 +34,9 @@ public static class Utils
         var assemblies      = AppDomain.CurrentDomain.GetAssemblies();
         foreach (var assembly in assemblies)
         { 
-            var assemblyNames = assembly.GetReferencedAssemblies();
-            foreach (var assemblyName in assemblyNames) {
-                if (assemblyName.FullName != engineFullName) {
+            var referencedAssemblies = assembly.GetReferencedAssemblies();
+            foreach (var referencedAssembly in referencedAssemblies) {
+                if (referencedAssembly.FullName != engineFullName) {
                     continue;
                 }
                 AddComponentTypes(componentTypes, assembly);

@@ -67,7 +67,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component           = ref components[n];
-            var factory                 = store.factories[component.key];
+            var factory                 = EntityStore.Static.Factories[component.key];
             archetypeHash              ^= factory.structHash;
             component.factory           = factory;
         }
