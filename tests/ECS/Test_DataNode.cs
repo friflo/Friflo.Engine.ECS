@@ -16,7 +16,7 @@ public static class Test_CreateFromDataNode
 {
     [Test]
     public static void Load_DataNode_Sequential() {
-        var store   = new EntityStore(100, UsePidAsId);
+        var store   = new EntityStore(UsePidAsId);
         var node    = new DataNode{ pid = 10, children = new List<int> { 20 } };
         var entity  = store.CreateFromDataNode(node);
         

@@ -101,9 +101,9 @@ public sealed partial class EntityStore
     #endregion
     
 #region initialize
-    public EntityStore(int maxStructIndex = 100, PidType pidType = PidType.RandomPids) {
+    public EntityStore(PidType pidType = PidType.RandomPids) {
         var componentTypes  = Static.ComponentTypes;
-        this.maxStructIndex = maxStructIndex;
+        maxStructIndex      = componentTypes.structComponentCount + 1;
         this.pidType        = pidType;
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;

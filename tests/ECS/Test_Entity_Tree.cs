@@ -25,7 +25,7 @@ public static class Test_Entity_Tree
     
     [Test]
     public static void Test_CreateEntity_UsePidAsId() {
-        var store   = new EntityStore(100, PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
         AreEqual(1,     entity.Id);
         AreEqual(1,     store.Nodes[entity.Id].Pid);
@@ -229,7 +229,7 @@ public static class Test_Entity_Tree
     
     [Test]
     public static void Test_Add_Child_Entities_UsePidAsId_Perf() {
-        var store   = new EntityStore(100, PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
         long count  = 10; // 10_000_000L ~ 2.014 ms
