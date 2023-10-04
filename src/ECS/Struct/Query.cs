@@ -11,11 +11,13 @@ public class ArchetypeQuery
     
 #region private fields
     private readonly    EntityStore     store;
+    private readonly    ArchetypeMask   mask;
     private             Archetype[]     archetypes;
     #endregion
     
-    internal ArchetypeQuery(EntityStore store) {
+    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices) {
         this.store  = store;
         archetypes  = Array.Empty<Archetype>();
+        mask        = new ArchetypeMask(structIndices);
     }
 }

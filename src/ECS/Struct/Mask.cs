@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics;
+﻿using System;
+using System.Runtime.Intrinsics;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -21,21 +22,30 @@ public readonly struct ArchetypeMask
         masks = new [] { Vector256.Create(l0, l1, l2, l3) };
     }
     
-    public ArchetypeMask(int[] bits) {
+    public ArchetypeMask(int[] indices) {
         long l0 = 0, l1 = 0, l2 = 0, l3 = 0;
-        foreach (var bit in bits) {
-            SetBit(bit, ref l0, ref l1, ref l2, ref l3);
+        foreach (var index in indices) {
+            SetBit(index, ref l0, ref l1, ref l2, ref l3);
         }
         masks = new [] { Vector256.Create(l0, l1, l2, l3) };
     }
     
-    private static void SetBit(int bit, ref long l0, ref long l1, ref long l2, ref long l3)
+    public ArchetypeMask(ReadOnlySpan<int> indices) {
+        long l0 = 0, l1 = 0, l2 = 0, l3 = 0;
+        foreach (var index in indices) {
+            SetBit(index, ref l0, ref l1, ref l2, ref l3);
+        }
+        masks = new [] { Vector256.Create(l0, l1, l2, l3) };
+    }
+
+    
+    private static void SetBit(int index, ref long l0, ref long l1, ref long l2, ref long l3)
     {
-        switch (bit) {
-            case < 64:  l0 = 1L <<  bit;         return;
-            case < 128: l1 = 1L << (bit - 64);   return;
-            case < 192: l2 = 1L << (bit - 128);  return;
-            default:    l3 = 1L << (bit - 192);  return;
+        switch (index) {
+            case < 64:      l0 = 1L <<  index;          return;
+            case < 128:     l1 = 1L << (index - 64);    return;
+            case < 192:     l2 = 1L << (index - 128);   return;
+            default:        l3 = 1L << (index - 192);   return;
         }
     }
     

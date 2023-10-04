@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
     
@@ -106,7 +107,10 @@ public sealed partial class EntityStore
         if (queries.TryGetValue(hash, out var query)) {
             return query;
         }
-        return new ArchetypeQuery(this);
+        ReadOnlySpan<int> structIndices = stackalloc int[] {
+            StructHeap<T>.StructIndex
+        };
+        return new ArchetypeQuery(this, structIndices);
     }
     
     public ArchetypeQuery Query<T1, T2> ()
@@ -118,8 +122,11 @@ public sealed partial class EntityStore
         if (queries.TryGetValue(hash, out var query)) {
             return query;
         }
-
-        return new ArchetypeQuery(this);
+        ReadOnlySpan<int> structIndices = stackalloc int[] {
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex
+        };
+        return new ArchetypeQuery(this, structIndices);
     }
     #endregion
 }
