@@ -128,5 +128,46 @@ public sealed partial class EntityStore
         };
         return new ArchetypeQuery(this, structIndices);
     }
+    
+    public ArchetypeQuery Query<T1, T2, T3> ()
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+    {
+        var hash = typeof(T1).Handle() ^
+                   typeof(T2).Handle() ^
+                   typeof(T3).Handle();
+        if (queries.TryGetValue(hash, out var query)) {
+            return query;
+        }
+        ReadOnlySpan<int> structIndices = stackalloc int[] {
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex
+        };
+        return new ArchetypeQuery(this, structIndices);
+    }
+    
+    public ArchetypeQuery Query<T1, T2, T3, T4> ()
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
+    {
+        var hash = typeof(T1).Handle() ^
+                   typeof(T2).Handle() ^
+                   typeof(T3).Handle() ^
+                   typeof(T4).Handle();
+        if (queries.TryGetValue(hash, out var query)) {
+            return query;
+        }
+        ReadOnlySpan<int> structIndices = stackalloc int[] {
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex
+        };
+        return new ArchetypeQuery(this, structIndices);
+    }
     #endregion
 }
