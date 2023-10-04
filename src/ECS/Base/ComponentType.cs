@@ -29,8 +29,8 @@ public abstract class ComponentType
     
     public   readonly   long    structHash;
     /// <summary>
-    /// If <see cref="isStructType"/> == true  the type of a struct attributed with <see cref="StructComponentAttribute"/><br/>
-    /// If <see cref="isStructType"/> == false the type of a class  attributed with <see cref="ClassComponentAttribute"/>
+    /// If <see cref="isStructType"/> == true  the type of a struct component attributed with <see cref="StructComponentAttribute"/><br/>
+    /// If <see cref="isStructType"/> == false the type of a class  component attributed with <see cref="ClassComponentAttribute"/>
     /// </summary>
     public   readonly   Type    type;
         
