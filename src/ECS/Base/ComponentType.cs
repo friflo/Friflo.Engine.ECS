@@ -11,10 +11,27 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public abstract class ComponentType
 {
+    /// <summary>
+    /// If <see cref="isStructType"/> == true  the key assigned in <see cref="StructComponentAttribute"/><br/>
+    /// If <see cref="isStructType"/> == false the key assigned in <see cref="ClassComponentAttribute"/>
+    /// </summary>
     public   readonly   string  componentKey;
+    /// <summary>
+    /// If <see cref="isStructType"/> == true  the index in <see cref="ComponentTypes.Structs"/><br/>
+    /// If <see cref="isStructType"/> == false the index in <see cref="ComponentTypes.Classes"/>
+    /// </summary>
     public   readonly   int     index;
+    /// <summary>
+    /// true if the type is a struct component<br/>
+    /// false if the type is a struct component<br/>
+    /// </summary>
     public   readonly   bool    isStructType;
+    
     public   readonly   long    structHash;
+    /// <summary>
+    /// If <see cref="isStructType"/> == true  the type of a struct attributed with <see cref="StructComponentAttribute"/><br/>
+    /// If <see cref="isStructType"/> == false the type of a class  attributed with <see cref="ClassComponentAttribute"/>
+    /// </summary>
     public   readonly   Type    type;
         
     internal abstract   StructHeap  CreateHeap          (int capacity);
