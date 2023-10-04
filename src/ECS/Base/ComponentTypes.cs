@@ -13,8 +13,16 @@ public sealed class ComponentTypes
 {
     // --- public properties
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
+    /// <remarks>
+    /// <see cref="ComponentType.index"/> is equal to the array index<br/>
+    /// <see cref="Structs"/>[0] is always null
+    /// </remarks>
     public  ReadOnlySpan<ComponentType>                 Structs             => new (structs);
     /// <summary>return all class component types attributed with <see cref="ClassComponentAttribute"/></summary>
+    /// <remarks>
+    /// <see cref="ComponentType.index"/> is equal to the array index<br/>
+    /// <see cref="Classes"/>[0] is always null
+    /// </remarks>
     public  ReadOnlySpan<ComponentType>                 Classes             => new (classes);
     
     public  IReadOnlyDictionary<string, ComponentType>  ComponentTypeByKey  => componentTypeByKey;
@@ -25,20 +33,22 @@ public sealed class ComponentTypes
     private  readonly   Dictionary<Type,   ComponentType>    componentTypeByType;
     private  readonly   Dictionary<string, ComponentType>    componentTypeByKey;
     
-    internal ComponentTypes(List<ComponentType> structs, List<ComponentType> classes)
+    internal ComponentTypes(List<ComponentType> structList, List<ComponentType> classList)
     {
-        int count           = structs.Count + classes.Count;
+        int count           = structList.Count + classList.Count;
         componentTypeByKey  = new Dictionary<string, ComponentType>(count);
         componentTypeByType = new Dictionary<Type,   ComponentType>(count);
-        this.structs        = structs.ToArray();
-        this.classes        = classes.ToArray();
-        foreach (var structType in this.structs) {
+        structs             = new ComponentType[structList.Count + 1];
+        classes             = new ComponentType[classList.Count  + 1];
+        foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
+            structs[structType.index] = structType;
         }
-        foreach (var classType in this.classes) {
+        foreach (var classType in classList) {
             componentTypeByKey. Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
+            classes[classType.index] = classType;
         }
     }
     
@@ -121,8 +131,9 @@ internal static class ComponentUtils
     }
     
     internal static ComponentType CreateClassFactory<T>(TypeStore typeStore) where T : ClassComponent  {
+        var classIndex  = ClassTypeInfo<T>.ClassIndex;
         var classKey    = ClassTypeInfo<T>.ClassKey;
-        return new ClassComponentType<T>(classKey, typeStore);
+        return new ClassComponentType<T>(classKey, classIndex, typeStore);
     }
     
     // --------------------------- query all struct / class component types ---------------------------

@@ -12,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ComponentType
 {
     public   readonly   string  componentKey;
-    public   readonly   int     structIndex;
+    public   readonly   int     index;
     public   readonly   bool    isStructType;
     public   readonly   long    structHash;
     public   readonly   Type    type;
@@ -20,12 +20,12 @@ public abstract class ComponentType
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
     
-    internal ComponentType(string componentKey, Type type, bool isStructType, int structIndex, long structHash) {
-        this.componentKey       = componentKey;
-        this.structIndex        = structIndex;
-        this.structHash         = structHash;
-        this.isStructType       = isStructType;
-        this.type               = type;
+    internal ComponentType(string componentKey, Type type, bool isStructType, int index, long structHash) {
+        this.componentKey   = componentKey;
+        this.index          = index;
+        this.structHash     = structHash;
+        this.isStructType   = isStructType;
+        this.type           = type;
     }
 }
 
@@ -45,7 +45,7 @@ internal sealed class StructComponentType<T> : ComponentType
         => throw new InvalidOperationException("operates only on ClassFactory<>");
     
     internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(structIndex, componentKey, capacity, typeMapper);   
+        return new StructHeap<T>(index, componentKey, capacity, typeMapper);   
     }
 }
 
@@ -55,8 +55,8 @@ internal sealed class ClassComponentType<T> : ComponentType
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
     
-    internal ClassComponentType(string componentKey, TypeStore typeStore)
-        : base(componentKey, typeof(T), false, -1, 0)
+    internal ClassComponentType(string componentKey, int classIndex, TypeStore typeStore)
+        : base(componentKey, typeof(T), false, classIndex, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }

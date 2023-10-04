@@ -103,14 +103,24 @@ public static class Test_ComponentReader
     public static void Test_RegisterComponents()
     {
         var types = EntityStore.GetComponentTypes();
-        AreEqual(6, types.Structs.Length);
-        AreEqual(3, types.Classes.Length);
-
-        foreach (var type in types.Structs) {
-            IsTrue(type.structIndex > 0);
+        AreEqual(7, types.Structs.Length);
+        AreEqual(4, types.Classes.Length);
+        
+        IsNull(types.Structs[0]);
+        for (int n = 1; n < types.Structs.Length; n++) {
+            var type = types.Structs[n];
+            IsTrue(type.index > 0);
             IsTrue(type.isStructType);
             NotNull(type.componentKey);
         }
+        IsNull(types.Classes[0]);
+        for (int n = 1; n < types.Classes.Length; n++) {
+            var type = types.Classes[n];
+            IsTrue(type.index > 0);
+            IsFalse(type.isStructType);
+            NotNull(type.componentKey);
+        }
+        
         var posType = types.GetComponentTypeByKey("pos");
         NotNull(posType);
         var posHandle = typeof(Position).TypeHandle.Value.ToInt64();

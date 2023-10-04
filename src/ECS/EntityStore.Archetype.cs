@@ -213,7 +213,7 @@ public sealed partial class EntityStore
     {
         var arch = archetype;
         if (arch != defaultArchetype) {
-            var structHeap = arch.heapMap[structType.structIndex];
+            var structHeap = arch.heapMap[structType.index];
             if (structHeap != null) {
                 // --- change component value 
                 structHeap.Read(reader, compIndex, json);
@@ -230,7 +230,7 @@ public sealed partial class EntityStore
             archetype           = arch;
         }
         // --- set component value 
-        var heap = arch.heapMap[structType.structIndex];
+        var heap = arch.heapMap[structType.index];
         heap.Read(reader, compIndex, json);
         return true;
     }
