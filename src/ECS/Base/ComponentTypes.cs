@@ -17,21 +17,21 @@ public sealed class ComponentTypes
     /// <see cref="ComponentType.index"/> is equal to the array index<br/>
     /// <see cref="Structs"/>[0] is always null
     /// </remarks>
-    public  ReadOnlySpan<ComponentType>                 Structs             => new (structs);
+    public   ReadOnlySpan<ComponentType>                    Structs             => new (structs);
     /// <summary>return all class component types attributed with <see cref="ClassComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.index"/> is equal to the array index<br/>
     /// <see cref="Classes"/>[0] is always null
     /// </remarks>
-    public  ReadOnlySpan<ComponentType>                 Classes             => new (classes);
+    public   ReadOnlySpan<ComponentType>                    Classes             => new (classes);
     
-    public  IReadOnlyDictionary<string, ComponentType>  ComponentTypeByKey  => componentTypeByKey;
+    public   IReadOnlyDictionary<string, ComponentType>     ComponentTypeByKey  => componentTypeByKey;
     
     // --- private fields
-    private  readonly   ComponentType[]                      structs;
-    private  readonly   ComponentType[]                      classes;
-    private  readonly   Dictionary<Type,   ComponentType>    componentTypeByType;
-    private  readonly   Dictionary<string, ComponentType>    componentTypeByKey;
+    private  readonly   ComponentType[]                     structs;
+    private  readonly   ComponentType[]                     classes;
+    private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
     
     internal ComponentTypes(List<ComponentType> structList, List<ComponentType> classList)
     {
