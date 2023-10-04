@@ -9,31 +9,31 @@ using Friflo.Json.Fliox.Mapper.Map;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public abstract class ComponentFactory
+public abstract class ComponentType
 {
     internal readonly   string  componentKey;
     internal readonly   int     structIndex;
     internal readonly   long    structHash;
-    internal readonly   bool    isStructFactory;
+    internal readonly   bool    isStructType;
         
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
     
-    internal ComponentFactory(string componentKey, bool isStructFactory, int structIndex, long structHash) {
+    internal ComponentType(string componentKey, bool isStructType, int structIndex, long structHash) {
         this.componentKey       = componentKey;
         this.structIndex        = structIndex;
         this.structHash         = structHash;
-        this.isStructFactory    = isStructFactory;
+        this.isStructType       = isStructType;
     }
 }
 
-internal sealed class StructFactory<T> : ComponentFactory 
+internal sealed class StructComponentType<T> : ComponentType 
     where T : struct
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"StructFactory: {typeof(T).Name}";
 
-    internal StructFactory(string componentKey, int structIndex, TypeStore typeStore)
+    internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
         : base(componentKey, true, structIndex, typeof(T).Handle())
     {
         typeMapper = typeStore.GetTypeMapper<T>();
@@ -47,13 +47,13 @@ internal sealed class StructFactory<T> : ComponentFactory
     }
 }
 
-internal sealed class ClassFactory<T> : ComponentFactory 
+internal sealed class ClassComponentType<T> : ComponentType 
     where T : ClassComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
     
-    internal ClassFactory(string componentKey, TypeStore typeStore)
+    internal ClassComponentType(string componentKey, TypeStore typeStore)
         : base(componentKey, false, -1, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();

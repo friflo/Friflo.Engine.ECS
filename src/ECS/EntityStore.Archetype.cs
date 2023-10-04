@@ -28,26 +28,26 @@ public sealed partial class EntityStore
         return archetype;
     }
     
-    private Archetype GetArchetypeWith(Archetype current, ComponentFactory factory)
+    private Archetype GetArchetypeWith(Archetype current, ComponentType structType)
     {
-        var hash = factory.structHash ^ current.typeHash;
+        var hash = structType.structHash ^ current.typeHash;
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var newHeap = factory.CreateHeap(Static.DefaultCapacity);
+        var newHeap = structType.CreateHeap(Static.DefaultCapacity);
         var config  = GetArchetypeConfig();
         archetype   = Archetype.CreateFromArchetype(config, current, newHeap);
         AddArchetype(archetype);
         return archetype;
     }
     
-    private Archetype GetArchetype(ComponentFactory factory)
+    private Archetype GetArchetype(ComponentType structType)
     {
         // could perform lookup per lookup array
-        if (TryGetArchetype(factory.structHash, out var archetype)) {
+        if (TryGetArchetype(structType.structHash, out var archetype)) {
             return archetype;
         }
-        var newHeap = factory.CreateHeap(Static.DefaultCapacity);
+        var newHeap = structType.CreateHeap(Static.DefaultCapacity);
         var config  = GetArchetypeConfig();
         archetype   = Archetype.CreateFromArchetype(config, defaultArchetype, newHeap);
         AddArchetype(archetype);
@@ -208,29 +208,29 @@ public sealed partial class EntityStore
         int                 id,
         ref Archetype       archetype,
         ref int             compIndex,
-        ComponentFactory    factory,
+        ComponentType       structType,
         ComponentUpdater    updater)
     {
         var arch = archetype;
         if (arch != defaultArchetype) {
-            var structHeap = arch.heapMap[factory.structIndex];
+            var structHeap = arch.heapMap[structType.structIndex];
             if (structHeap != null) {
                 // --- change component value 
                 structHeap.Read(reader, compIndex, json);
                 return false;
             }
             // --- change entity archetype
-            var newArchetype    = archetype.store.GetArchetypeWith(archetype, factory);
+            var newArchetype    = archetype.store.GetArchetypeWith(archetype, structType);
             compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
             archetype           = arch = newArchetype;
         } else {
             // --- add entity to archetype
-            arch                = archetype.store.GetArchetype(factory);
+            arch                = archetype.store.GetArchetype(structType);
             compIndex           = arch.AddEntity(id);
             archetype           = arch;
         }
         // --- set component value 
-        var heap = arch.heapMap[factory.structIndex];
+        var heap = arch.heapMap[structType.structIndex];
         heap.Read(reader, compIndex, json);
         return true;
     }

@@ -15,12 +15,12 @@ namespace Friflo.Fliox.Engine.Client;
 /// </summary>
 internal sealed class ComponentReader
 {
-    private readonly    ObjectReader                            componentReader;
-    private readonly    Dictionary<string, ComponentFactory>    factories;
-    private             Utf8JsonParser                          parser;
-    private             Bytes                                   buffer;
-    private             RawComponent[]                          components;
-    private             int                                     componentCount;
+    private readonly    ObjectReader                        componentReader;
+    private readonly    Dictionary<string, ComponentType>   componentTypes;
+    private             Utf8JsonParser                      parser;
+    private             Bytes                               buffer;
+    private             RawComponent[]                      components;
+    private             int                                 componentCount;
     
     internal static readonly ComponentReader Instance = new ComponentReader();
     
@@ -28,7 +28,7 @@ internal sealed class ComponentReader
         buffer          = new Bytes(128);
         components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
-        factories       = EntityStore.Static.ComponentTypes.factories;
+        componentTypes  = EntityStore.Static.ComponentTypes.types;
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)
@@ -55,11 +55,11 @@ internal sealed class ComponentReader
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
-            if (!component.factory.isStructFactory) {
-                component.factory.ReadClassComponent(componentReader, json, entity);
+            if (!component.type.isStructType) {
+                component.type.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
-            store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, component.factory, updater);
+            store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, component.type, updater);
         }
     }
     
@@ -69,10 +69,10 @@ internal sealed class ComponentReader
         var count = componentCount;
         for (int n = 0; n < count; n++)
         {
-            ref var component           = ref components[n];
-            var factory                 = factories[component.key];
-            archetypeHash              ^= factory.structHash;
-            component.factory           = factory;
+            ref var component   = ref components[n];
+            var type            = componentTypes[component.key];
+            archetypeHash      ^= type.structHash;
+            component.type      = type;
         }
         // --- use / create Archetype with present components to avoid structural changes
         if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
@@ -81,11 +81,11 @@ internal sealed class ComponentReader
             var heaps   = new StructHeap[count];
             for (int n = 0; n < count; n++) {
                 ref var component   = ref components[n];
-                var factory         = component.factory;
-                if (!factory.isStructFactory) {
+                var type            = component.type;
+                if (!type.isStructType) {
                     continue;
                 }
-                heaps[n] = factory.CreateHeap(config.capacity); 
+                heaps[n] = type.CreateHeap(config.capacity); 
             }
             newArchetype = Archetype.CreateWithHeaps(config, heaps);
             store.AddArchetype(newArchetype);
@@ -131,10 +131,10 @@ internal sealed class ComponentReader
 
 internal struct RawComponent
 {
-    internal        string              key;
-    internal        ComponentFactory    factory;
-    internal        int                 start;
-    internal        int                 end;
+    internal        string          key;
+    internal        ComponentType   type;
+    internal        int             start;
+    internal        int             end;
 
-    public override string              ToString() => key;
+    public override string          ToString() => key;
 }
