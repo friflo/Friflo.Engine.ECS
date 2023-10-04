@@ -105,6 +105,8 @@ public static class Test_ComponentReader
         var types   = EntityStore.GetComponentTypes();
         var structs = types.Structs;
         var classes = types.Classes;
+        
+        AreEqual("components - struct: 6 class: 3", types.ToString());
         AreEqual(7, structs.Length);
         AreEqual(4, classes.Length);
         

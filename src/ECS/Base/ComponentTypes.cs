@@ -5,13 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Friflo.Json.Fliox.Mapper;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 public sealed class ComponentTypes
 {
-    // --- public properties
+#region public properties
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.index"/> is equal to the array index<br/>
@@ -27,13 +29,19 @@ public sealed class ComponentTypes
     
     public   IReadOnlyDictionary<string, ComponentType>     ComponentTypeByKey  => componentTypeByKey;
     public   IReadOnlyDictionary<Type,   ComponentType>     ComponentTypeByType => componentTypeByType;
+
+    public override string ToString() => $"components - struct: {structs.Length - 1} class: {classes.Length - 1}";
+
+    #endregion
     
-    // --- private fields
-    private  readonly   ComponentType[]                     structs;
-    private  readonly   ComponentType[]                     classes;
-    private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
-    private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+#region private fields
+    [Browse(Never)] private  readonly   ComponentType[]                     structs;
+    [Browse(Never)] private  readonly   ComponentType[]                     classes;
+    [Browse(Never)] private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
+    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    #endregion
     
+#region internal methods
     internal ComponentTypes(List<ComponentType> structList, List<ComponentType> classList)
     {
         int count           = structList.Count + classList.Count;
@@ -79,6 +87,7 @@ public sealed class ComponentTypes
         componentTypeByType.TryGetValue(typeof(T), out var result);
         return result;
     }
+    #endregion
 }
 
 internal static class ComponentUtils
