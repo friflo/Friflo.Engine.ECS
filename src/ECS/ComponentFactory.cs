@@ -78,7 +78,7 @@ internal static class ComponentUtils
 {
     internal static Dictionary<string, ComponentFactory> RegisterComponentTypes(TypeStore typeStore)
     {
-        var types       = Utils.GetComponentTypes();
+        var types       = GetComponentTypes();
         var factories   = new Dictionary<string, ComponentFactory>(types.Count);
         foreach (var type in types) {
             RegisterComponentType(type, factories, typeStore);
@@ -120,5 +120,44 @@ internal static class ComponentUtils
     internal static ComponentFactory CreateClassFactory<T>(TypeStore typeStore) where T : ClassComponent  {
         var classKey    = ClassType<T>.ClassKey;
         return new ClassFactory<T>(classKey, typeStore);
+    }
+    
+    // --------------------------- query all struct / class component types ---------------------------
+    private static List<Type> GetComponentTypes()
+    {
+        var componentTypes  = new List<Type>();
+        var engineAssembly  = typeof(Utils).Assembly;
+        var engineFullName  = engineAssembly.FullName;
+        AddComponentTypes(componentTypes, engineAssembly);
+        
+        var assemblies      = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (var assembly in assemblies)
+        { 
+            var referencedAssemblies = assembly.GetReferencedAssemblies();
+            foreach (var referencedAssembly in referencedAssemblies) {
+                if (referencedAssembly.FullName != engineFullName) {
+                    continue;
+                }
+                AddComponentTypes(componentTypes, assembly);
+                break;
+            }
+        }
+        return componentTypes;
+    }
+    
+    private static void AddComponentTypes(List<Type> componentTypes, Assembly assembly)
+    {
+        var types = assembly.GetTypes();
+        foreach (var type in types) {
+            foreach (var attr in type.CustomAttributes)
+            {
+                var attributeType = attr.AttributeType;
+                if (attributeType == typeof(StructComponentAttribute) ||
+                    attributeType == typeof(ClassComponentAttribute))
+                {
+                    componentTypes.Add(type);
+                }
+            }
+        }
     }
 }
