@@ -11,15 +11,19 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public class ComponentTypes
 {
+    // --- public properties
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
-    public              ReadOnlySpan<ComponentType>          Structs => new (structs);
+    public  ReadOnlySpan<ComponentType>                 Structs             => new (structs);
     /// <summary>return all class component types attributed with <see cref="ClassComponentAttribute"/></summary>
-    public              ReadOnlySpan<ComponentType>          Classes => new (classes);
+    public  ReadOnlySpan<ComponentType>                 Classes             => new (classes);
     
+    public  IReadOnlyDictionary<string, ComponentType>  ComponentTypeByKey  => componentTypeByKey;
+    
+    // --- private fields
     private  readonly   ComponentType[]                      structs;
     private  readonly   ComponentType[]                      classes;
     private  readonly   Dictionary<Type,   ComponentType>    componentTypeByType;
-    internal readonly   Dictionary<string, ComponentType>    componentTypeByKey;
+    private  readonly   Dictionary<string, ComponentType>    componentTypeByKey;
     
     internal ComponentTypes(List<ComponentType> structs, List<ComponentType> classes)
     {

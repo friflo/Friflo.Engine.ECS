@@ -28,7 +28,7 @@ internal sealed class ComponentReader
         buffer          = new Bytes(128);
         components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
-        componentTypes  = EntityStore.Static.ComponentTypes.componentTypeByKey;
+        componentTypes  = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentTypes.ComponentTypeByKey);
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)
