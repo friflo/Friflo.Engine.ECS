@@ -130,6 +130,9 @@ public static class Test_ComponentReader
         var posType = types.GetComponentTypeByKey("pos");
         AreEqual(typeof(Position), posType.type);
         
+        var testType = types.GetComponentTypeByKey("test");
+        AreEqual(typeof(TestComponent), testType.type);
+        
         var myComponentType = types.GetStructComponentType<MyComponent1>();
         AreEqual("my1", myComponentType.componentKey);
         
