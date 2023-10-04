@@ -102,29 +102,33 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_RegisterComponents()
     {
-        var types = EntityStore.GetComponentTypes();
-        AreEqual(7, types.Structs.Length);
-        AreEqual(4, types.Classes.Length);
+        var types   = EntityStore.GetComponentTypes();
+        var structs = types.Structs;
+        var classes = types.Classes;
+        AreEqual(7, structs.Length);
+        AreEqual(4, classes.Length);
         
-        IsNull(types.Structs[0]);
-        for (int n = 1; n < types.Structs.Length; n++) {
-            var type = types.Structs[n];
-            IsTrue(type.index > 0);
-            IsTrue(type.isStructType);
-            NotNull(type.componentKey);
+        IsNull(structs[0]);
+        for (int n = 1; n < structs.Length; n++) {
+            var type = structs[n];
+            AreEqual(n, type.index);
+            IsTrue  (type.isStructType);
+            NotNull (type.componentKey);
+            var typeHandle = type.type.TypeHandle.Value.ToInt64();
+            AreEqual(typeHandle, type.structHash);
+
         }
-        IsNull(types.Classes[0]);
-        for (int n = 1; n < types.Classes.Length; n++) {
-            var type = types.Classes[n];
-            IsTrue(type.index > 0);
-            IsFalse(type.isStructType);
-            NotNull(type.componentKey);
+        IsNull(classes[0]);
+        for (int n = 1; n < classes.Length; n++) {
+            var type = classes[n];
+            AreEqual(n, type.index);
+            IsFalse (type.isStructType);
+            NotNull (type.componentKey);
+            AreEqual(0, type.structHash);
         }
         
         var posType = types.GetComponentTypeByKey("pos");
-        NotNull(posType);
-        var posHandle = typeof(Position).TypeHandle.Value.ToInt64();
-        AreEqual(posHandle, posType.structHash);
+        AreEqual(typeof(Position), posType.type);
         
         var myComponentType = types.GetStructComponentType<MyComponent1>();
         AreEqual("my1", myComponentType.componentKey);
