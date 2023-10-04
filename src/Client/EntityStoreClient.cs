@@ -8,7 +8,7 @@ namespace Friflo.Fliox.Engine.Client;
 
 public class EntityStoreClient : FlioxClient
 {
-    public  readonly    EntitySet <int, DataNode>   entities;
+    public  readonly    EntitySet <long, DataNode>   entities;
     
     public EntityStoreClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }

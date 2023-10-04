@@ -81,7 +81,7 @@ public sealed partial class EntityStore
     }
     
     [Conditional("DEBUG")]
-    private static void AssertPid(int pid, int expected) {
+    private static void AssertPid(long pid, long expected) {
         if (expected == pid) {
             return;
         }
@@ -89,7 +89,7 @@ public sealed partial class EntityStore
     }
     
     [Conditional("DEBUG")]
-    private static void AssertPid0(int pid, int expected) {
+    private static void AssertPid0(long pid, long expected) {
         if (pid == 0 || pid == expected) {
             return;
         }
@@ -97,7 +97,7 @@ public sealed partial class EntityStore
     }
 
     /// <summary>expect <see cref="nodes"/> Length > id</summary> 
-    private GameEntity CreateEntityInternal(int id, int pid)
+    private GameEntity CreateEntityInternal(int id, long pid)
     {
         AssertIdInNodes(id);
         nodeCount++;

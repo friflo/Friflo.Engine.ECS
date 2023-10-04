@@ -62,15 +62,22 @@ public sealed partial class EntityStore
     }
     
     private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode) {
-        var id          = dataNode.pid;
+        var pid = dataNode.pid;
+        if (pid < 0 || pid > int.MaxValue) {
+            throw new InvalidOperationException("pid mus be in range [0, 2147483647]. was: {pid}");
+        }
+        var id          = (int)pid;
         // --- use pid's as id's
         int[] childIds  = null;
         var children    = dataNode.children;
         var maxPid      = id;
         var childCount  = 0;
         if (children != null) {
-            childIds    = children.ToArray();
             childCount  = children.Count; 
+            childIds    = new int[childCount];
+            for (int n = 0; n < childCount; n++) {
+                childIds[n]= (int)children[n];
+            }
             foreach (var childId in childIds) {
                 maxPid = Math.Max(maxPid, childId);
             }
@@ -86,7 +93,7 @@ public sealed partial class EntityStore
     }
     
     /// update EntityNode.pid of the child nodes
-    private void UpdateEntityNodes(int[] childIds, List<int> children)
+    private void UpdateEntityNodes(int[] childIds, List<long> children)
     {
         for (int n = 0; n < childIds.Length; n++) {
             var childId         = childIds[n];

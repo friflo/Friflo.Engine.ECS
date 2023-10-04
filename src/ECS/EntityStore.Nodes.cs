@@ -32,14 +32,16 @@ public sealed partial class EntityStore
         randPid = new Random(seed);
     }
     
-    private int GeneratePid(int id) {
+    private long GeneratePid(int id) {
         return pidType == PidType.UsePidAsId ? id : GenerateRandomPidForId(id);
     }
     
-    private int GenerateRandomPidForId(int id)
+    private long GenerateRandomPidForId(int id)
     {
         while(true) {
-            var pid = randPid.Next();
+            // generate random int to have numbers with small length e.g. 2147483647 (max int)
+            // could also generate long which requires more memory when persisting entities
+            long pid = randPid.Next();
             if (pid2Id.TryAdd(pid, id)) {
                 return pid;
             }
@@ -247,7 +249,7 @@ public sealed partial class EntityStore
             clientEntities.Add(dataNode);
         }
         if (node.childCount > 0) {
-            var children = dataNode.children = new List<int>(node.childCount); 
+            var children = dataNode.children = new List<long>(node.childCount); 
             foreach (var childId in node.ChildIds) {
                 var pid = nodes[childId].pid;
                 children.Add(pid);  

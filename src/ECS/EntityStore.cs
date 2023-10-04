@@ -80,13 +80,13 @@ public sealed partial class EntityStore
     // --- node access
     [Browse(Never)] private  readonly   PidType             pidType;
     [Browse(Never)] private             Random              randPid;            // null if using PidType.UsePidAsId
-                    private  readonly   Dictionary<int,int> pid2Id;             // null if using PidType.UsePidAsId
+                    private  readonly   Dictionary<long,int>pid2Id;             // null if using PidType.UsePidAsId
     [Browse(Never)] internal            EntityNode[]        nodes;              // acts also id2pid
     [Browse(Never)] private             int                 nodeMaxId;
     [Browse(Never)] private             int                 nodeCount;
     [Browse(Never)] private  readonly   TypeStore           typeStore;
     
-    [Browse(Never)] private  readonly   LocalEntities<int,DataNode> clientEntities;
+    [Browse(Never)] private  readonly   LocalEntities<long,DataNode> clientEntities;
                     
                     internal static     bool                HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -116,7 +116,7 @@ public sealed partial class EntityStore
         archetypeInfos      = new ArchetypeInfo[2];
         typeStore           = Static.TypeStore;
         if (pidType == PidType.RandomPids) {
-            pid2Id  = new Dictionary<int, int>();
+            pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
         nodes               = Array.Empty<EntityNode>();

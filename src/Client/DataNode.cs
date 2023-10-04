@@ -27,7 +27,7 @@ public sealed class DataNode
     /// <summary>permanent id used to identify entities in a database</summary>
     [Serialize        ("id")] 
     [Key]
-    public  int         pid;
+    public  long        pid;
     
     /// <remarks>
     /// Use a list of child ids instead of a single field <c>parentId</c> to enable child order.<br/>
@@ -35,7 +35,7 @@ public sealed class DataNode
     /// An alternative order implementation - using firstChild, nextSibling - is error prone if referenced nodes are missing.<br/>
     /// For now the child order is required to enable a memorable order in the editor and to avoid merge conflicts. 
     /// </remarks>
-    public  List<int>   children;       // can be null
+    public  List<long>  children;       // can be null
     
     /// <summary>
     /// Each key in <see cref="components"/> defines the type of a class / struct component. Its value is the component value.

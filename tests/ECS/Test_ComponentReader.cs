@@ -18,7 +18,7 @@ public static class Test_ComponentReader
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<int> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         var childNode   = new DataNode { pid = 11 };
         
         var root        = store.CreateFromDataNode(rootNode);
@@ -54,7 +54,7 @@ public static class Test_ComponentReader
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<int> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
@@ -71,7 +71,7 @@ public static class Test_ComponentReader
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
         var root        = store.CreateFromDataNode(rootNode);
         AreEqual(1,     root.ClassComponents.Length);
@@ -91,7 +91,7 @@ public static class Test_ComponentReader
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<int> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 3.528 ms
         for (int n = 0; n < count; n++) {

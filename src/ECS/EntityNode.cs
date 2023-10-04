@@ -49,7 +49,7 @@ public struct EntityNode
     /// </code><br/>
     /// See: https://en.wikipedia.org/wiki/Birthday_problem
     /// </remarks>
-                    public              int                 Pid         =>  pid;
+                    public              long                Pid         =>  pid;
                     public              GameEntity          Entity      =>  entity;
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
@@ -58,7 +58,7 @@ public struct EntityNode
     
     // --- internal
     [Browse(Never)] private  readonly   int                 id;         // 4
-    [Browse(Never)] internal            int                 pid;        // 4
+    [Browse(Never)] internal            long                pid;        // 8
     [Browse(Never)] internal            GameEntity          entity;     // 8    can be null
     [Browse(Never)] internal            int                 parentId;   // 4
                     internal            int[]               childIds;   // 8    can be null
