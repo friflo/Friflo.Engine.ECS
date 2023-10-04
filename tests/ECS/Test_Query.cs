@@ -61,13 +61,13 @@ public static class Test_Query
     {
         {
             var mask = new ArchetypeMask(Array.Empty<int>());
-            AreEqual("0 0 0 0", mask.ToString());
+            AreEqual("0000000000000000", mask.ToString());
         } {
             var mask = new ArchetypeMask(new [] { 0 });
-            AreEqual("1 0 0 0", mask.ToString());
+            AreEqual("0000000000000001", mask.ToString());
         } {
             var mask = new ArchetypeMask(new [] { 0, 64, 128, 192 });
-            AreEqual("1 1 1 1", mask.ToString());
+            AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", mask.ToString());
         } {
             var mask = new ArchetypeMask(new [] { 63, 127, 191, 255 });
             AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", mask.ToString());

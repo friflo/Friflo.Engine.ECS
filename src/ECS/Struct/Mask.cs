@@ -54,7 +54,15 @@ public readonly struct ArchetypeMask
     private string GetString() {
         var sb = new StringBuilder();
         foreach (var mask in masks) {
-            sb.Append($"{mask.l0:x} {mask.l1:x} {mask.l2:x} {mask.l3:x}");
+            if (mask.l3 != 0) {
+                sb.Append($"{mask.l0:x16} {mask.l1:x16} {mask.l2:x16} {mask.l3:x16}");
+            } else if (mask.l2 != 0) {
+                sb.Append($"{mask.l0:x16} {mask.l1:x16} {mask.l2:x16}");
+            } else if (mask.l1 != 0) {
+                sb.Append($"{mask.l0:x16} {mask.l1:x16}");
+            } else {
+                sb.Append($"{mask.l0:x16}");
+            }
         }
         return sb.ToString();
     }
