@@ -106,16 +106,21 @@ public static class Test_ComponentReader
         AreEqual(6, types.Structs.Length);
         AreEqual(3, types.Classes.Length);
 
-        var map = new Dictionary<string, ComponentType>();
         foreach (var type in types.Structs) {
-            map[type.componentKey] = type;
             IsTrue(type.structIndex > 0);
             IsTrue(type.isStructType);
+            NotNull(type.componentKey);
         }
-        var posType = map["pos"];
+        var posType = types.GetComponentTypeByKey("pos");
         NotNull(posType);
         var posHandle = typeof(Position).TypeHandle.Value.ToInt64();
         AreEqual(posHandle, posType.structHash);
+        
+        var myComponentType = types.GetStructComponentType<MyComponent1>();
+        AreEqual("my1", myComponentType.componentKey);
+        
+        var TestComponentType = types.GetClassComponentType<TestComponent>();
+        AreEqual("test", TestComponentType.componentKey);
     }
 }
 

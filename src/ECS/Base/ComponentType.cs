@@ -15,15 +15,17 @@ public abstract class ComponentType
     public   readonly   int     structIndex;
     public   readonly   bool    isStructType;
     public   readonly   long    structHash;
+    public   readonly   Type    type;
         
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
     
-    internal ComponentType(string componentKey, bool isStructType, int structIndex, long structHash) {
+    internal ComponentType(string componentKey, Type type, bool isStructType, int structIndex, long structHash) {
         this.componentKey       = componentKey;
         this.structIndex        = structIndex;
         this.structHash         = structHash;
         this.isStructType       = isStructType;
+        this.type               = type;
     }
 }
 
@@ -34,7 +36,7 @@ internal sealed class StructComponentType<T> : ComponentType
     public  override    string          ToString() => $"StructFactory: {typeof(T).Name}";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, true, structIndex, typeof(T).Handle())
+        : base(componentKey, typeof(T), true, structIndex, typeof(T).Handle())
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -54,7 +56,7 @@ internal sealed class ClassComponentType<T> : ComponentType
     public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
     
     internal ClassComponentType(string componentKey, TypeStore typeStore)
-        : base(componentKey, false, -1, 0)
+        : base(componentKey, typeof(T), false, -1, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }

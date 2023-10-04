@@ -11,24 +11,58 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public class ComponentTypes
 {
+    /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
     public              ReadOnlySpan<ComponentType>          Structs => new (structs);
+    /// <summary>return all class component types attributed with <see cref="ClassComponentAttribute"/></summary>
     public              ReadOnlySpan<ComponentType>          Classes => new (classes);
     
     private  readonly   ComponentType[]                      structs;
     private  readonly   ComponentType[]                      classes;
-    internal readonly   Dictionary<string, ComponentType>    types;
+    private  readonly   Dictionary<Type,   ComponentType>    componentTypeByType;
+    internal readonly   Dictionary<string, ComponentType>    componentTypeByKey;
     
     internal ComponentTypes(List<ComponentType> structs, List<ComponentType> classes)
     {
-        types           = new Dictionary<string, ComponentType>(structs.Count + classes.Count);
-        this.structs    = structs.ToArray();
-        this.classes    = classes.ToArray();
-        foreach (var structFactory in this.structs) {
-            types.Add(structFactory.componentKey, structFactory);
+        int count           = structs.Count + classes.Count;
+        componentTypeByKey  = new Dictionary<string, ComponentType>(count);
+        componentTypeByType = new Dictionary<Type,   ComponentType>(count);
+        this.structs        = structs.ToArray();
+        this.classes        = classes.ToArray();
+        foreach (var structType in this.structs) {
+            componentTypeByKey. Add(structType.componentKey, structType);
+            componentTypeByType.Add(structType.type,         structType);
         }
-        foreach (var classFactory in this.classes) {
-            types.Add(classFactory.componentKey, classFactory);
+        foreach (var classType in this.classes) {
+            componentTypeByKey. Add(classType.componentKey, classType);
+            componentTypeByType.Add(classType.type,         classType);
         }
+    }
+    
+    /// <summary>
+    /// return <see cref="ComponentType"/> of a component type attributed with
+    /// <see cref="StructComponentAttribute"/> or <see cref="ClassComponentAttribute"/> for the given key
+    /// </summary>
+    public ComponentType GetComponentTypeByKey(string key) {
+        componentTypeByKey.TryGetValue(key, out var result);
+        return result;
+    }
+    
+    /// <summary>
+    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="StructComponentAttribute"/> for the given key
+    /// </summary>
+    public ComponentType GetStructComponentType<T>() where T : struct
+    {
+        componentTypeByType.TryGetValue(typeof(T), out var result);
+        return result;
+    }
+    
+    /// <summary>
+    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="StructComponentAttribute"/> for the given key
+    /// </summary>
+    public ComponentType GetClassComponentType<T>() where T : ClassComponent
+    {
+        componentTypeByType.TryGetValue(typeof(T), out var result);
+        return result;
     }
 }
 
