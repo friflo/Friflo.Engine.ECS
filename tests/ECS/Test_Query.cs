@@ -12,14 +12,20 @@ public static class Test_Query
     public static void Test_Create_Query()
     {
         IsTrue(true);
-        var store = new EntityStore();
-        var posQuery = store.Query<Position>();
-        NotNull (posQuery);
+        var store       = new EntityStore();
+        var entity      = store.CreateEntity();
+        var posQuery    = store.Query<Position>();
+        var posRotQuery = store.Query<Position, Rotation>();
         AreEqual(0, posQuery.Archetypes.Length);
-        
-        var posRotQuery = store.Query<Position,Rotation>();
-        NotNull (posRotQuery);
         AreEqual(0, posRotQuery.Archetypes.Length);
+        
+        entity.AddComponent<Position>();
+        AreEqual(1, posQuery.Archetypes.Length);
+        AreEqual(0, posRotQuery.Archetypes.Length);
+        
+        entity.AddComponent<Rotation>();
+        AreEqual(2, posQuery.Archetypes.Length);
+        AreEqual(1, posRotQuery.Archetypes.Length);
     }
 
     [Test]

@@ -72,7 +72,7 @@ public sealed partial class EntityStore
 #region private / internal fields
     [Browse(Never)] private             Archetype[]         archetypes;         // never null
     [Browse(Never)] private             ArchetypeInfo[]     archetypeInfos;     // never null
-    [Browse(Never)] private             int                 archetypesCount;
+    [Browse(Never)] internal            int                 archetypesCount;
     [Browse(Never)] internal readonly   Archetype           defaultArchetype;
                     internal readonly   int                 maxStructIndex;
     [Browse(Never)] private             int                 rootId;
