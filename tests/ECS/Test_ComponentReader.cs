@@ -138,6 +138,9 @@ public static class Test_ComponentReader
         
         var TestComponentType = types.GetClassComponentType<TestComponent>();
         AreEqual("test", TestComponentType.componentKey);
+        
+        AreEqual(typeof(Position),  types.ComponentTypeByKey["pos"].type);
+        AreEqual("test",            types.ComponentTypeByType[typeof(TestComponent)].componentKey);
     }
 }
 

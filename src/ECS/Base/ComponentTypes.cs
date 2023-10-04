@@ -26,12 +26,13 @@ public sealed class ComponentTypes
     public   ReadOnlySpan<ComponentType>                    Classes             => new (classes);
     
     public   IReadOnlyDictionary<string, ComponentType>     ComponentTypeByKey  => componentTypeByKey;
+    public   IReadOnlyDictionary<Type,   ComponentType>     ComponentTypeByType => componentTypeByType;
     
     // --- private fields
     private  readonly   ComponentType[]                     structs;
     private  readonly   ComponentType[]                     classes;
-    private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
     private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
+    private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
     
     internal ComponentTypes(List<ComponentType> structList, List<ComponentType> classList)
     {
