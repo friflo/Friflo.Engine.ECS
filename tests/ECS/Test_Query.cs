@@ -20,40 +20,70 @@ public static class Test_Query
         var query2  = store.Query<Position, Rotation>();
         var query3  = store.Query<Position, Rotation, Scale3>();
         var query4  = store.Query<Position, Rotation, Scale3, EntityName>();
+        var query5  = store.Query<Position, Rotation, Scale3, EntityName, MyComponent1>();
+        var query6  = store.Query<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2>();
         
         AreSame(query1, store.Query<Position>());
         AreSame(query2, store.Query<Position, Rotation>());
         AreSame(query3, store.Query<Position, Rotation, Scale3>());
         AreSame(query4, store.Query<Position, Rotation, Scale3, EntityName>());
+        AreSame(query5, store.Query<Position, Rotation, Scale3, EntityName, MyComponent1>());
+        AreSame(query6, store.Query<Position, Rotation, Scale3, EntityName, MyComponent1, MyComponent2>());
         
         AreEqual(0, query1.Archetypes.Length);
         AreEqual(0, query2.Archetypes.Length);
         AreEqual(0, query3.Archetypes.Length);
         AreEqual(0, query4.Archetypes.Length);
+        AreEqual(0, query5.Archetypes.Length);
+        AreEqual(0, query6.Archetypes.Length);
         
         entity.AddComponent<Position>();
         AreEqual(1, query1.Archetypes.Length);
         AreEqual(0, query2.Archetypes.Length);
         AreEqual(0, query3.Archetypes.Length);
         AreEqual(0, query4.Archetypes.Length);
+        AreEqual(0, query5.Archetypes.Length);
+        AreEqual(0, query6.Archetypes.Length);
         
         entity.AddComponent<Rotation>();
         AreEqual(2, query1.Archetypes.Length);
         AreEqual(1, query2.Archetypes.Length);
         AreEqual(0, query3.Archetypes.Length);
         AreEqual(0, query4.Archetypes.Length);
+        AreEqual(0, query5.Archetypes.Length);
+        AreEqual(0, query6.Archetypes.Length);
         
         entity.AddComponent<Scale3>();
         AreEqual(3, query1.Archetypes.Length);
         AreEqual(2, query2.Archetypes.Length);
         AreEqual(1, query3.Archetypes.Length);
         AreEqual(0, query4.Archetypes.Length);
+        AreEqual(0, query5.Archetypes.Length);
+        AreEqual(0, query6.Archetypes.Length);
         
         entity.AddComponent<EntityName>();
         AreEqual(4, query1.Archetypes.Length);
         AreEqual(3, query2.Archetypes.Length);
         AreEqual(2, query3.Archetypes.Length);
         AreEqual(1, query4.Archetypes.Length);
+        AreEqual(0, query5.Archetypes.Length);
+        AreEqual(0, query6.Archetypes.Length);
+        
+        entity.AddComponent<MyComponent1>();
+        AreEqual(5, query1.Archetypes.Length);
+        AreEqual(4, query2.Archetypes.Length);
+        AreEqual(3, query3.Archetypes.Length);
+        AreEqual(2, query4.Archetypes.Length);
+        AreEqual(1, query5.Archetypes.Length);
+        AreEqual(0, query6.Archetypes.Length);
+        
+        entity.AddComponent<MyComponent2>();
+        AreEqual(6, query1.Archetypes.Length);
+        AreEqual(5, query2.Archetypes.Length);
+        AreEqual(4, query3.Archetypes.Length);
+        AreEqual(3, query4.Archetypes.Length);
+        AreEqual(2, query5.Archetypes.Length);
+        AreEqual(1, query6.Archetypes.Length);
     }
 
     [Test]
