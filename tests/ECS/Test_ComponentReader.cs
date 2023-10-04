@@ -102,8 +102,9 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_RegisterComponents()
     {
-        var store = new EntityStore(PidType.UsePidAsId);
-        
+        var types = EntityStore.GetComponentTypes();
+        AreEqual(6, types.structTypeCount);
+        AreEqual(3, types.classTypeCount);
     }
 }
 

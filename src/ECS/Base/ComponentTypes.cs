@@ -4,84 +4,27 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
-using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal abstract class ComponentFactory
+public class ComponentTypes
 {
-    internal readonly   string  componentKey;
-    internal readonly   int     structIndex;
-    internal readonly   long    structHash;
-    internal readonly   bool    isStructFactory;
-        
-    internal abstract   StructHeap  CreateHeap          (int capacity);
-    internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
+    public   readonly   int                                     structTypeCount;
+    public   readonly   int                                     classTypeCount;
+    internal readonly   Dictionary<string, ComponentFactory>    factories;
     
-    internal ComponentFactory(string componentKey, bool isStructFactory, int structIndex, long structHash) {
-        this.componentKey       = componentKey;
-        this.structIndex        = structIndex;
-        this.structHash         = structHash;
-        this.isStructFactory    = isStructFactory;
-    }
-}
-
-internal sealed class StructFactory<T> : ComponentFactory 
-    where T : struct
-{
-    private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"StructFactory: {typeof(T).Name}";
-
-    internal StructFactory(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, true, structIndex, typeof(T).Handle())
-    {
-        typeMapper = typeStore.GetTypeMapper<T>();
-    }
-    
-    internal override   void    ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException("operates only on ClassFactory<>");
-    
-    internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(structIndex, componentKey, capacity, typeMapper);   
-    }
-}
-
-internal sealed class ClassFactory<T> : ComponentFactory 
-    where T : ClassComponent
-{
-    private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
-    
-    internal ClassFactory(string componentKey, TypeStore typeStore)
-        : base(componentKey, false, -1, 0)
-    {
-        typeMapper = typeStore.GetTypeMapper<T>();
-    }
-    
-    internal override   StructHeap  CreateHeap(int capacity)
-        => throw new InvalidOperationException("operates only on StructFactory<>");
-    
-    internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
-        var classComponent = entity.GetClassComponent<T>();
-        if (classComponent != null) { 
-            reader.ReadToMapper(typeMapper, json, classComponent, true);
-            return;
+    internal ComponentTypes(
+        Dictionary<string, ComponentFactory> factories) {
+        this.factories         = factories;
+        foreach (var pair in factories) {
+            if (pair.Value.isStructFactory) {
+                structTypeCount++;
+            } else {
+                classTypeCount++;
+            }
         }
-        classComponent = reader.ReadMapper(typeMapper, json);
-        entity.AppendClassComponent(classComponent);
-    }
-}
-
-internal class ComponentTypes
-{
-    internal readonly int                                   structComponentCount;
-    internal readonly Dictionary<string, ComponentFactory>  factories;
-    
-    internal ComponentTypes(Dictionary<string, ComponentFactory> factories, int structComponentCount) {
-        this.factories              = factories;
-        this.structComponentCount   = structComponentCount;
     }
 }
 
@@ -91,16 +34,13 @@ internal static class ComponentUtils
     {
         var types       = GetComponentTypes();
         var factories   = new Dictionary<string, ComponentFactory>(types.Count);
-        var structCount = 0;
         foreach (var type in types) {
-            if (RegisterComponentType(type, factories, typeStore)) {
-                structCount++;
-            }
+            RegisterComponentType(type, factories, typeStore);
         }
-        return new ComponentTypes(factories, structCount);
+        return new ComponentTypes(factories);
     }
     
-    private static bool RegisterComponentType(
+    private static void RegisterComponentType(
         Type                                    type,
         Dictionary<string, ComponentFactory>    factories,
         TypeStore                               typeStore)
@@ -116,7 +56,7 @@ internal static class ComponentUtils
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var factory         = (ComponentFactory)genericMethod.Invoke(null, createParams);
                 factories.Add(factory!.componentKey, factory);
-                return true;
+                return;
             }
             if (attributeType == typeof(ClassComponentAttribute))
             {
@@ -124,9 +64,10 @@ internal static class ComponentUtils
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var factory         = (ComponentFactory)genericMethod.Invoke(null, createParams);
                 factories.Add(factory!.componentKey, factory);
+                return;
             }
         }
-        return false;
+        throw new InvalidOperationException("missing expected attribute");
     }
     
     internal static ComponentFactory CreateStructFactory<T>(TypeStore typeStore) where T : struct  {

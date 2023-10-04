@@ -63,7 +63,8 @@ public sealed partial class EntityStore
                     public              int                         NodeMaxId       => nodeMaxId;
     [Browse(Never)] private             bool                        HasRoot         => rootId   >= Static.MinNodeId;
     
-                    public  override    string                      ToString()      => $"Count: {nodeCount}";
+                    public  static      ComponentTypes              GetComponentTypes() => Static.ComponentTypes;
+                    public  override    string                      ToString()          => $"Count: {nodeCount}";
     #endregion
     
 #region private / internal fields
@@ -103,7 +104,7 @@ public sealed partial class EntityStore
 #region initialize
     public EntityStore(PidType pidType = PidType.RandomPids) {
         var componentTypes  = Static.ComponentTypes;
-        maxStructIndex      = componentTypes.structComponentCount + 1;
+        maxStructIndex      = componentTypes.structTypeCount + 1;
         this.pidType        = pidType;
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;
