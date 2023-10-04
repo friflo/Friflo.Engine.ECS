@@ -11,10 +11,10 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public abstract class ComponentType
 {
-    internal readonly   string  componentKey;
-    internal readonly   int     structIndex;
-    internal readonly   long    structHash;
-    internal readonly   bool    isStructType;
+    public   readonly   string  componentKey;
+    public   readonly   int     structIndex;
+    public   readonly   bool    isStructType;
+    public   readonly   long    structHash;
         
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);

@@ -105,6 +105,17 @@ public static class Test_ComponentReader
         var types = EntityStore.GetComponentTypes();
         AreEqual(6, types.Structs.Length);
         AreEqual(3, types.Classes.Length);
+
+        var map = new Dictionary<string, ComponentType>();
+        foreach (var type in types.Structs) {
+            map[type.componentKey] = type;
+            IsTrue(type.structIndex > 0);
+            IsTrue(type.isStructType);
+        }
+        var posType = map["pos"];
+        NotNull(posType);
+        var posHandle = typeof(Position).TypeHandle.Value.ToInt64();
+        AreEqual(posHandle, posType.structHash);
     }
 }
 
