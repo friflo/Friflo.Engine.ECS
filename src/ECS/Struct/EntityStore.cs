@@ -118,6 +118,7 @@ public sealed partial class EntityStore
         if (queries.TryGetValue(hash, out var query)) {
             return query;
         }
+
         return new ArchetypeQuery(this);
     }
     #endregion

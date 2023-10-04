@@ -1,4 +1,4 @@
-using System.Runtime.Intrinsics;
+using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -23,11 +23,21 @@ public static class Test_Query
     }
 
     [Test]
-    public static void Test_BitArray()
+    public static void Test_ArchetypeMask()
     {
-        var v1 = Vector256.Create(0);
-        var v2 = Vector256.Create(1);
-        _ = v1 | v2;
+        {
+            var mask = new ArchetypeMask(Array.Empty<int>());
+            AreEqual("<0, 0, 0, 0>", mask.ToString());
+        } {
+            var mask = new ArchetypeMask(new [] { 0 });
+            AreEqual("<1, 0, 0, 0>", mask.ToString());
+        } {
+            var mask = new ArchetypeMask(new [] { 0, 64, 128, 192 });
+            AreEqual("<1, 1, 1, 1>", mask.ToString());
+        }  {
+            var mask = new ArchetypeMask(new [] { 63, 127, 191, 255 });
+            AreEqual("<-9223372036854775808, -9223372036854775808, -9223372036854775808, -9223372036854775808>", mask.ToString());
+        }
     }
 }
 

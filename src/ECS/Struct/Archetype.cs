@@ -42,6 +42,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   int                         componentCount; // number of component types
     [Browse(Never)] internal readonly   long                        typeHash;
                     internal readonly   StandardComponents          std;
+                    internal readonly   ArchetypeMask               mask;
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
     
@@ -59,6 +60,7 @@ public sealed class Archetype
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
+        mask            = new ArchetypeMask(heaps, newComp);
         if (newComp != null) {
             SetStandardComponentHeaps(newComp, ref std);
         }
