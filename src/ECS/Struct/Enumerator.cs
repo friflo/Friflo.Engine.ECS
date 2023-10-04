@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal class StructEnumerator<T> where T : struct
+internal sealed class StructEnumerator<T> where T : struct
 {
     private readonly StructHeap<T> heap;
     

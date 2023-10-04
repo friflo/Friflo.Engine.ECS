@@ -9,7 +9,7 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public class ComponentTypes
+public sealed class ComponentTypes
 {
     // --- public properties
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>

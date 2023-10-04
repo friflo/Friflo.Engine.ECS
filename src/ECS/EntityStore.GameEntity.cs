@@ -135,7 +135,7 @@ internal abstract class ComponentUpdater
     internal abstract void UpdateComponentIndex(int id, int compIndex);
 }
 
-internal class GameEntityUpdater : ComponentUpdater
+internal sealed class GameEntityUpdater : ComponentUpdater
 {
     private readonly EntityStore entityStore;
     
