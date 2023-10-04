@@ -119,14 +119,6 @@ public sealed partial class EntityStore
         return removeType.Handle() ^ archetype.typeHash;
     }
     
-    private static long GetHash(ReadOnlySpan<long> hashes) {
-        long hash = 0;
-        foreach (var h in hashes) {
-            hash ^= h;
-        }
-        return hash;
-    }
-    
     internal static long GetHash(StructHeap[] heaps, StructHeap newComp) {
         long hash = default;
         if (newComp != null) {

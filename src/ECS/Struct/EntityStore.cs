@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
     
@@ -29,10 +28,8 @@ public sealed partial class EntityStore
         where T1 : struct
         where T2 : struct
     {
-        ReadOnlySpan<long> guids = stackalloc long[] {
-            typeof(T1).Handle(), typeof(T2).Handle()
-        };
-        var hash = GetHash(guids);
+        var hash = typeof(T1).Handle() ^
+                   typeof(T2).Handle();
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
@@ -51,10 +48,9 @@ public sealed partial class EntityStore
         where T2 : struct
         where T3 : struct
     {
-        ReadOnlySpan<long> guids = stackalloc long[] {
-            typeof(T1).Handle(), typeof(T2).Handle(), typeof(T3).Handle()
-        };
-        var hash = GetHash(guids);
+        var hash = typeof(T1).Handle() ^
+                   typeof(T2).Handle() ^
+                   typeof(T3).Handle();
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
@@ -75,10 +71,10 @@ public sealed partial class EntityStore
         where T3 : struct
         where T4 : struct
     {
-        ReadOnlySpan<long> guids = stackalloc long[] {
-            typeof(T1).Handle(), typeof(T2).Handle(), typeof(T3).Handle(), typeof(T4).Handle()
-        };
-        var hash = GetHash(guids);
+        var hash = typeof(T1).Handle() ^
+                   typeof(T2).Handle() ^
+                   typeof(T3).Handle() ^
+                   typeof(T4).Handle();
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
@@ -103,7 +99,7 @@ public sealed partial class EntityStore
 #region archetype query
     private readonly Dictionary<long, ArchetypeQuery> queries = new Dictionary<long, ArchetypeQuery>();
     
-    public ArchetypeQuery CreateQuery<T> ()
+    public ArchetypeQuery Query<T> ()
         where T : struct
     {
         var hash = typeof(T).Handle(); // could StructHeap<T>.StructIndex to improve performance 
@@ -113,14 +109,12 @@ public sealed partial class EntityStore
         return new ArchetypeQuery(this);
     }
     
-    public ArchetypeQuery CreateQuery<T1, T2> ()
+    public ArchetypeQuery Query<T1, T2> ()
         where T1 : struct
         where T2 : struct
     {
-        ReadOnlySpan<long> guids = stackalloc long[] {
-            typeof(T1).Handle(), typeof(T2).Handle()
-        };
-        var hash = GetHash(guids);
+        var hash = typeof(T1).Handle() ^
+                   typeof(T2).Handle();
         if (queries.TryGetValue(hash, out var query)) {
             return query;
         }

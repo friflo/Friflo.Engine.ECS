@@ -8,14 +8,18 @@ namespace Tests.ECS;
 
 public static class Test_Query
 {
-    
     [Test]
     public static void Test_Create_Query()
     {
         IsTrue(true);
         var store = new EntityStore();
-        NotNull(store.CreateQuery<Position>());
-        NotNull(store.CreateQuery<Position,Rotation>());
+        var posQuery = store.Query<Position>();
+        NotNull (posQuery);
+        AreEqual(0, posQuery.Archetypes.Length);
+        
+        var posRotQuery = store.Query<Position,Rotation>();
+        NotNull (posRotQuery);
+        AreEqual(0, posRotQuery.Archetypes.Length);
     }
 
     [Test]
