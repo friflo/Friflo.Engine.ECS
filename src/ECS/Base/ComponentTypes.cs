@@ -11,19 +11,23 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public class ComponentTypes
 {
-    public   readonly   int                                     structTypeCount;
-    public   readonly   int                                     classTypeCount;
+    public              ReadOnlySpan<ComponentFactory>          Structs => new (structs);
+    public              ReadOnlySpan<ComponentFactory>          Classes => new (classes);
+    
+    private  readonly   ComponentFactory[]                      structs;
+    private  readonly   ComponentFactory[]                      classes;
     internal readonly   Dictionary<string, ComponentFactory>    factories;
     
-    internal ComponentTypes(
-        Dictionary<string, ComponentFactory> factories) {
-        this.factories         = factories;
-        foreach (var pair in factories) {
-            if (pair.Value.isStructFactory) {
-                structTypeCount++;
-            } else {
-                classTypeCount++;
-            }
+    internal ComponentTypes(List<ComponentFactory> structs, List<ComponentFactory> classes)
+    {
+        factories       = new Dictionary<string, ComponentFactory>(structs.Count + classes.Count);
+        this.structs    = structs.ToArray();
+        this.classes    = classes.ToArray();
+        foreach (var structFactory in this.structs) {
+            factories.Add(structFactory.componentKey, structFactory);
+        }
+        foreach (var classFactory in this.classes) {
+            factories.Add(classFactory.componentKey, classFactory);
         }
     }
 }
@@ -32,18 +36,20 @@ internal static class ComponentUtils
 {
     internal static ComponentTypes RegisterComponentTypes(TypeStore typeStore)
     {
-        var types       = GetComponentTypes();
-        var factories   = new Dictionary<string, ComponentFactory>(types.Count);
+        var types   = GetComponentTypes();
+        var structs = new List<ComponentFactory>(types.Count);
+        var classes = new List<ComponentFactory>(types.Count);
         foreach (var type in types) {
-            RegisterComponentType(type, factories, typeStore);
+            RegisterComponentType(type, structs, classes, typeStore);
         }
-        return new ComponentTypes(factories);
+        return new ComponentTypes(structs, classes);
     }
     
     private static void RegisterComponentType(
-        Type                                    type,
-        Dictionary<string, ComponentFactory>    factories,
-        TypeStore                               typeStore)
+        Type                    type,
+        List<ComponentFactory>  structs,
+        List<ComponentFactory>  classes,
+        TypeStore               typeStore)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         var createParams            = new object[] { typeStore };
@@ -55,7 +61,7 @@ internal static class ComponentUtils
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateStructFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var factory         = (ComponentFactory)genericMethod.Invoke(null, createParams);
-                factories.Add(factory!.componentKey, factory);
+                structs.Add(factory);
                 return;
             }
             if (attributeType == typeof(ClassComponentAttribute))
@@ -63,7 +69,7 @@ internal static class ComponentUtils
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var factory         = (ComponentFactory)genericMethod.Invoke(null, createParams);
-                factories.Add(factory!.componentKey, factory);
+                classes.Add(factory);
                 return;
             }
         }

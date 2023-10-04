@@ -9,7 +9,7 @@ using Friflo.Json.Fliox.Mapper.Map;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal abstract class ComponentFactory
+public abstract class ComponentFactory
 {
     internal readonly   string  componentKey;
     internal readonly   int     structIndex;

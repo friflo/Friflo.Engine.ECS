@@ -103,8 +103,8 @@ public static class Test_ComponentReader
     public static void Test_RegisterComponents()
     {
         var types = EntityStore.GetComponentTypes();
-        AreEqual(6, types.structTypeCount);
-        AreEqual(3, types.classTypeCount);
+        AreEqual(6, types.Structs.Length);
+        AreEqual(3, types.Classes.Length);
     }
 }
 
