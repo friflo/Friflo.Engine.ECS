@@ -57,7 +57,7 @@ public class ComponentTypes
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="StructComponentAttribute"/> for the given key
+    /// return <see cref="ComponentType"/> of a class attributed with <see cref="ClassComponentAttribute"/> for the given type
     /// </summary>
     public ComponentType GetClassComponentType<T>() where T : ClassComponent
     {
