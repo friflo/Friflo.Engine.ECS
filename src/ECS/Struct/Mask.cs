@@ -11,14 +11,18 @@ public readonly struct ArchetypeMask
     private readonly   Vector256Long[]   masks;
 
     public override string ToString() => GetString();
+    
+    public ArchetypeMask(int i) {
+        masks = new Vector256Long[] { default };
+    }
 
     internal ArchetypeMask(StructHeap[] heaps, StructHeap newComp) {
         Vector256Long vec256 = default;
         if (newComp != null) {
-            SetBit(newComp.structIndex, ref vec256);
+            vec256.SetBit(newComp.structIndex);
         }
         foreach (var heap in heaps) {
-            SetBit(heap.structIndex, ref vec256);
+            vec256.SetBit(heap.structIndex);
         }
         masks = new [] { vec256 };
     }
@@ -26,7 +30,7 @@ public readonly struct ArchetypeMask
     public ArchetypeMask(int[] indices) {
         Vector256Long vec256 = default;
         foreach (var index in indices) {
-            SetBit(index, ref vec256);
+            vec256.SetBit(index);
         }
         masks = new [] { vec256 };
     }
@@ -34,22 +38,15 @@ public readonly struct ArchetypeMask
     public ArchetypeMask(ReadOnlySpan<int> indices) {
         Vector256Long vec256 = default;
         foreach (var index in indices) {
-            SetBit(index, ref vec256);
+            vec256.SetBit(index);
         }
         masks = new [] { vec256 };
     }
-
     
-    private static void SetBit(int index, ref Vector256Long vec256)
-    {
-        switch (index) {
-            case < 64:      vec256.l0 |= 1L <<  index;          return;
-            case < 128:     vec256.l1 |= 1L << (index - 64);    return;
-            case < 192:     vec256.l2 |= 1L << (index - 128);   return;
-            default:        vec256.l3 |= 1L << (index - 192);   return;
-        }
+    public void SetBit(int bit) {
+        masks[0].SetBit(bit);
     }
-    
+
     internal bool Has(in ArchetypeMask other) {
         return (masks[0].value & other.masks[0].value) == masks[0].value;
     }
@@ -57,7 +54,7 @@ public readonly struct ArchetypeMask
     private string GetString() {
         var sb = new StringBuilder();
         foreach (var mask in masks) {
-            sb.Append(mask.value.ToString());
+            sb.Append($"{mask.l0:x} {mask.l1:x} {mask.l2:x} {mask.l3:x}");
         }
         return sb.ToString();
     }
@@ -74,4 +71,14 @@ internal struct Vector256Long
     [FieldOffset(24)] internal  long            l3;
 
     public override             string          ToString() => value.ToString();
+    
+    internal void SetBit(int index)
+    {
+        switch (index) {
+            case < 64:      l0 |= 1L <<  index;          return;
+            case < 128:     l1 |= 1L << (index - 64);    return;
+            case < 192:     l2 |= 1L << (index - 128);   return;
+            default:        l3 |= 1L << (index - 192);   return;
+        }
+    }
 }
