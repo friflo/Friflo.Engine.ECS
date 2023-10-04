@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using Friflo.Fliox.Engine.Client;
+using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
@@ -83,6 +85,8 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                 nodeMaxId;
     [Browse(Never)] private             int                 nodeCount;
     [Browse(Never)] private  readonly   TypeStore           typeStore;
+    
+    [Browse(Never)] private  readonly   LocalEntities<int,DataNode> clientEntities;
                     
                     internal static     bool                HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -102,7 +106,7 @@ public sealed partial class EntityStore
     #endregion
     
 #region initialize
-    public EntityStore(PidType pidType = PidType.RandomPids) {
+    public EntityStore(PidType pidType = PidType.RandomPids, EntityStoreClient client = null) {
         var componentTypes  = Static.ComponentTypes;
         maxStructIndex      = componentTypes.Structs.Length + 1;
         this.pidType        = pidType;
@@ -120,6 +124,7 @@ public sealed partial class EntityStore
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithHeaps(config, Array.Empty<StructHeap>());
+        clientEntities      = client?.entities.Local;
         AddArchetype(defaultArchetype);
     }
     #endregion

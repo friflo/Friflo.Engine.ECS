@@ -14,14 +14,14 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new EntityStoreClient(hub);
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId, client);
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
         
-        var node = store.EntityAsDataNode(entity, client);
+        var node = store.EntityAsDataNode(entity);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
@@ -34,7 +34,7 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new EntityStoreClient(hub);
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId, client);
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
@@ -42,7 +42,7 @@ public static class Test_ComponentWriter
         int count = 10; // 2_000_000 ~ 1.935 ms
         DataNode node = null;
         for (int n = 0; n < count; n++) {
-            node = store.EntityAsDataNode(entity, client);
+            node = store.EntityAsDataNode(entity);
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }

@@ -239,12 +239,12 @@ public sealed partial class EntityStore
         SetTreeFlags(nodes, id, TreeNode);
     }
     
-    public DataNode EntityAsDataNode(GameEntity entity, EntityStoreClient client) {
+    public DataNode EntityAsDataNode(GameEntity entity) {
         var id = entity.id;
         ref var node = ref nodes[id];
-        if (!client.entities.Local.TryGetEntity(id, out var dataNode)) {
+        if (!clientEntities.TryGetEntity(id, out var dataNode)) {
             dataNode = new DataNode { pid = id };
-            client.entities.Local.Add(dataNode);
+            clientEntities.Add(dataNode);
         }
         if (node.childCount > 0) {
             var children = dataNode.children = new List<int>(node.childCount); 
