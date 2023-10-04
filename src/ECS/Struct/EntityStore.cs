@@ -110,7 +110,9 @@ public sealed partial class EntityStore
         ReadOnlySpan<int> structIndices = stackalloc int[] {
             StructHeap<T>.StructIndex
         };
-        return new ArchetypeQuery(this, structIndices);
+        query = new ArchetypeQuery(this, structIndices);
+        queries.Add(hash, query);
+        return query;
     }
     
     public ArchetypeQuery Query<T1, T2> ()
@@ -126,7 +128,9 @@ public sealed partial class EntityStore
             StructHeap<T1>.StructIndex,
             StructHeap<T2>.StructIndex
         };
-        return new ArchetypeQuery(this, structIndices);
+        query = new ArchetypeQuery(this, structIndices);
+        queries.Add(hash, query);
+        return query;
     }
     
     public ArchetypeQuery Query<T1, T2, T3> ()
@@ -145,7 +149,9 @@ public sealed partial class EntityStore
             StructHeap<T2>.StructIndex,
             StructHeap<T3>.StructIndex
         };
-        return new ArchetypeQuery(this, structIndices);
+        query = new ArchetypeQuery(this, structIndices);
+        queries.Add(hash, query);
+        return query;
     }
     
     public ArchetypeQuery Query<T1, T2, T3, T4> ()
@@ -167,7 +173,9 @@ public sealed partial class EntityStore
             StructHeap<T3>.StructIndex,
             StructHeap<T4>.StructIndex
         };
-        return new ArchetypeQuery(this, structIndices);
+        query = new ArchetypeQuery(this, structIndices);
+        queries.Add(hash, query);
+        return query;
     }
     #endregion
 }

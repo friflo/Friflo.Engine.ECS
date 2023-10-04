@@ -14,10 +14,16 @@ public static class Test_Query
         IsTrue(true);
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
+        //
         var query1  = store.Query<Position>();
         var query2  = store.Query<Position, Rotation>();
         var query3  = store.Query<Position, Rotation, Scale3>();
         var query4  = store.Query<Position, Rotation, Scale3, EntityName>();
+        
+        AreSame(query1, store.Query<Position>());
+        AreSame(query2, store.Query<Position, Rotation>());
+        AreSame(query3, store.Query<Position, Rotation, Scale3>());
+        AreSame(query4, store.Query<Position, Rotation, Scale3, EntityName>());
         
         AreEqual(0, query1.Archetypes.Length);
         AreEqual(0, query2.Archetypes.Length);
