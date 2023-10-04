@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
     
 // ReSharper disable RedundantExplicitArrayCreation
@@ -10,6 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore
 {
+#region get archetype
     public Archetype GetArchetype<T>()
         where T : struct
     {
@@ -95,4 +97,34 @@ public sealed partial class EntityStore
     internal ArchetypeConfig GetArchetypeConfig() {
         return new ArchetypeConfig (this, archetypesCount, maxStructIndex, DefaultCapacity, typeStore);
     }
+    #endregion
+    
+    // -------------------------------------- archetype query --------------------------------------
+#region archetype query
+    private readonly Dictionary<long, ArchetypeQuery> queries = new Dictionary<long, ArchetypeQuery>();
+    
+    public ArchetypeQuery CreateQuery<T> ()
+        where T : struct
+    {
+        var hash = typeof(T).Handle(); // could StructHeap<T>.StructIndex to improve performance 
+        if (queries.TryGetValue(hash, out var query)) {
+            return query;
+        }
+        return new ArchetypeQuery(this);
+    }
+    
+    public ArchetypeQuery CreateQuery<T1, T2> ()
+        where T1 : struct
+        where T2 : struct
+    {
+        ReadOnlySpan<long> guids = stackalloc long[] {
+            typeof(T1).Handle(), typeof(T2).Handle()
+        };
+        var hash = GetHash(guids);
+        if (queries.TryGetValue(hash, out var query)) {
+            return query;
+        }
+        return new ArchetypeQuery(this);
+    }
+    #endregion
 }
