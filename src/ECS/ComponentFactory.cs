@@ -74,19 +74,36 @@ internal sealed class ClassFactory<T> : ComponentFactory
     }
 }
 
+internal class ComponentTypes
+{
+    internal readonly int                                   structComponentCount;
+    internal readonly Dictionary<string, ComponentFactory>  factories;
+    
+    internal ComponentTypes(Dictionary<string, ComponentFactory> factories, int structComponentCount) {
+        this.factories              = factories;
+        this.structComponentCount   = structComponentCount;
+    }
+}
+
 internal static class ComponentUtils
 {
-    internal static Dictionary<string, ComponentFactory> RegisterComponentTypes(TypeStore typeStore)
+    internal static ComponentTypes RegisterComponentTypes(TypeStore typeStore)
     {
         var types       = GetComponentTypes();
         var factories   = new Dictionary<string, ComponentFactory>(types.Count);
+        var structCount = 0;
         foreach (var type in types) {
-            RegisterComponentType(type, factories, typeStore);
+            if (RegisterComponentType(type, factories, typeStore)) {
+                structCount++;
+            }
         }
-        return factories;
+        return new ComponentTypes(factories, structCount);
     }
     
-    private static void RegisterComponentType(Type type, Dictionary<string, ComponentFactory> factories, TypeStore typeStore)
+    private static bool RegisterComponentType(
+        Type                                    type,
+        Dictionary<string, ComponentFactory>    factories,
+        TypeStore                               typeStore)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         var createParams            = new object[] { typeStore };
@@ -99,7 +116,7 @@ internal static class ComponentUtils
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var factory         = (ComponentFactory)genericMethod.Invoke(null, createParams);
                 factories.Add(factory!.componentKey, factory);
-                return;
+                return true;
             }
             if (attributeType == typeof(ClassComponentAttribute))
             {
@@ -109,6 +126,7 @@ internal static class ComponentUtils
                 factories.Add(factory!.componentKey, factory);
             }
         }
+        return false;
     }
     
     internal static ComponentFactory CreateStructFactory<T>(TypeStore typeStore) where T : struct  {

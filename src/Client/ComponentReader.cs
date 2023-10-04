@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -14,11 +15,12 @@ namespace Friflo.Fliox.Engine.Client;
 /// </summary>
 internal sealed class ComponentReader
 {
-    private readonly    ObjectReader        componentReader;
-    private             Utf8JsonParser      parser;
-    private             Bytes               buffer;
-    private             RawComponent[]      components;
-    private             int                 componentCount;
+    private readonly    ObjectReader                            componentReader;
+    private readonly    Dictionary<string, ComponentFactory>    factories;
+    private             Utf8JsonParser                          parser;
+    private             Bytes                                   buffer;
+    private             RawComponent[]                          components;
+    private             int                                     componentCount;
     
     internal static readonly ComponentReader Instance = new ComponentReader();
     
@@ -26,6 +28,7 @@ internal sealed class ComponentReader
         buffer          = new Bytes(128);
         components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
+        factories       = EntityStore.Static.ComponentTypes.factories;
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)
@@ -67,7 +70,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component           = ref components[n];
-            var factory                 = EntityStore.Static.Factories[component.key];
+            var factory                 = factories[component.key];
             archetypeHash              ^= factory.structHash;
             component.factory           = factory;
         }

@@ -88,10 +88,10 @@ public sealed partial class EntityStore
     
 #region static fields
     public static class Static {
-        internal const              int         DefaultCapacity         = 1;
-        internal static readonly    int[]       EmptyChildNodes         = null;
-        internal static readonly    TypeStore   TypeStore               = new TypeStore();
-        internal static readonly    Dictionary<string, ComponentFactory> Factories = ComponentUtils.RegisterComponentTypes(TypeStore);
+        internal const              int             DefaultCapacity = 1;
+        internal static readonly    int[]           EmptyChildNodes = null;
+        internal static readonly    TypeStore       TypeStore       = new TypeStore();
+        internal static readonly    ComponentTypes  ComponentTypes  = ComponentUtils.RegisterComponentTypes(TypeStore);
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
         internal const              int         MinNodeId   =  1;
@@ -102,7 +102,7 @@ public sealed partial class EntityStore
     
 #region initialize
     public EntityStore(int maxStructIndex = 100, PidType pidType = PidType.RandomPids) {
-        _                   = Static.Factories;
+        var componentTypes  = Static.ComponentTypes;
         this.maxStructIndex = maxStructIndex;
         this.pidType        = pidType;
         sequenceId          = Static.MinNodeId;
