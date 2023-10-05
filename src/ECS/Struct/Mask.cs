@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Text;
@@ -31,14 +30,6 @@ public readonly struct ArchetypeMask
     }
     
     public ArchetypeMask(int[] indices) {
-        Vector256Long vec256 = default;
-        foreach (var index in indices) {
-            vec256.SetBit(index);
-        }
-        masks = new [] { vec256 };
-    }
-    
-    public ArchetypeMask(ReadOnlySpan<int> indices) {
         Vector256Long vec256 = default;
         foreach (var index in indices) {
             vec256.SetBit(index);

@@ -16,13 +16,6 @@ public class ArchetypeQuery
     private             int             archetypeCount;
     #endregion
     
-    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices) {
-        this.store          = store;
-        archetypes          = new Archetype[1];
-        mask                = new ArchetypeMask(structIndices);
-        lastArchetypeCount  = 1;
-    }
-    
     internal ArchetypeQuery(EntityStore store, Signature signature) {
         this.store          = store;
         archetypes          = new Archetype[1];
@@ -57,10 +50,6 @@ public class ArchetypeQuery
 public class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct
 {
-    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
-        : base(store, structIndices) {
-    }
-    
     internal ArchetypeQuery(EntityStore store, Signature<T> signature)
         : base(store, signature) {
     }
@@ -70,10 +59,6 @@ public class ArchetypeQuery<T1, T2> : ArchetypeQuery
     where T1 : struct
     where T2 : struct
 {
-    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
-        : base(store, structIndices) {
-    }
-    
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2> signature)
         : base(store, signature) {
     }
@@ -84,10 +69,6 @@ public class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct
     where T3 : struct
 {
-    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
-        : base(store, structIndices) {
-    }
-    
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3> signature)
         : base(store, signature) {
     }
@@ -99,10 +80,6 @@ public class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct
     where T4 : struct
 {
-    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
-        : base(store, structIndices) {
-    }
-    
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3, T4> signature)
         : base(store, signature) {
     }
@@ -115,10 +92,6 @@ public class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct
     where T5 : struct
 {
-    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
-        : base(store, structIndices) {
-    }
-    
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature) {
     }
