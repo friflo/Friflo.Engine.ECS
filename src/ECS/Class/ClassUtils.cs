@@ -5,14 +5,13 @@ using System;
 using System.Collections.Generic;
 using Friflo.Json.Burst;
 
+// ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 internal static class ClassTypeInfo<T> where T : class
 {
-    // ReSharper disable once StaticMemberInGenericType
     internal static readonly    int     ClassIndex  = ClassUtils.NewClassIndex(typeof(T), out ClassKey);
-    // ReSharper disable once StaticMemberInGenericType
     internal static readonly    string  ClassKey;
 }
 
