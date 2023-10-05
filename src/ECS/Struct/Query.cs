@@ -71,7 +71,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         : base(store, signature) {
     }
     
-    public QueryEnumerator<T1,T2> GetEnumerator() => new QueryEnumerator<T1,T2>(this);
+    public QueryEnumerator2<T1,T2> GetEnumerator() => new QueryEnumerator2<T1,T2>(this);
     
     public void ForEach(Action<T1, T2> lambda)
     {

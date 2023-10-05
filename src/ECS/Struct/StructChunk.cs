@@ -1,13 +1,17 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+
+using System;
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal readonly struct StructChunk<T>
+public readonly struct StructChunk<T>
     where T : struct
 {
-    internal readonly T[]       components;
+    internal readonly   T[]       components;
+    public              Span<T>   Values => new (components, 0, 1);
     
     public override string ToString() => components == null ? "" : "used";
     

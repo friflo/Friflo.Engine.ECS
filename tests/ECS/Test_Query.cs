@@ -98,18 +98,25 @@ public static class Test_Query
     public static void Test_Query_loop()
     {
         var store   = new EntityStore();
-        var entity  = store.CreateEntity();
-        entity.AddComponent(new Position(1,2,3));
-        entity.AddComponent(new Rotation(4,5,6,7));
+        var entity2  = store.CreateEntity();
+        entity2.AddComponent(new Position(1,2,3));
+        entity2.AddComponent(new Rotation(4,5,6,7));
+        
+        var entity3  = store.CreateEntity();
+        entity3.AddComponent(new Position(1,2,3));
+        entity3.AddComponent(new Rotation(8, 8, 8, 8));
+        entity3.AddComponent(new Scale3  (7, 7, 7));
         
         var sig     = Signature.Get<Position, Rotation>();
         var query   = store.Query(sig);
         var count   = 0;
         foreach (var (position, rotation) in query) {
-            AreEqual(3, position.z);
+            AreEqual(3, position.Values[0].z);
+            rotation.Values[0].x = 42;
             count++;
         }
-        AreEqual(1, count);
+        AreEqual(2,  count);
+        AreEqual(42, entity2.Rotation.x);
     }
 
     [Test]
