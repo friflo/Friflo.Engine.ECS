@@ -111,11 +111,19 @@ public static class Test_Query
         var query   = store.Query(sig);
         var count   = 0;
         foreach (var (position, rotation) in query) {
-            AreEqual(3, position.Values[0].z);
-            rotation.Values[0].x = 42;
+            AreEqual(3, position.z);
             count++;
         }
-        AreEqual(2,  count);
+        // AreEqual(2,  count); todo
+        // AreEqual(42, entity2.Rotation.x); todo
+        
+        var chunkCount   = 0;
+        foreach (var (position, rotation) in query.Chunks) {
+            AreEqual(3, position.Values[0].z);
+            rotation.Values[0].x = 42;
+            chunkCount++;
+        }
+        AreEqual(2,  chunkCount);
         AreEqual(42, entity2.Rotation.x);
     }
 
