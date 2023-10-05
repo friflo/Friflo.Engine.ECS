@@ -23,7 +23,7 @@ public sealed partial class EntityStore
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
         var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T>.StructIndex, config, typeof(T))
+            compTypes.GetStructType(StructHeap<T>.StructIndex, config.maxStructIndex, typeof(T))
         };
         archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
@@ -42,8 +42,8 @@ public sealed partial class EntityStore
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
         var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, config, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, config, typeof(T2)),
+            compTypes.GetStructType(StructHeap<T1>.StructIndex, config.maxStructIndex, typeof(T1)),
+            compTypes.GetStructType(StructHeap<T2>.StructIndex, config.maxStructIndex, typeof(T2)),
         };
         archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
@@ -64,9 +64,9 @@ public sealed partial class EntityStore
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
         var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, config, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, config, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, config, typeof(T3)),
+            compTypes.GetStructType(StructHeap<T1>.StructIndex, config.maxStructIndex, typeof(T1)),
+            compTypes.GetStructType(StructHeap<T2>.StructIndex, config.maxStructIndex, typeof(T2)),
+            compTypes.GetStructType(StructHeap<T3>.StructIndex, config.maxStructIndex, typeof(T3)),
         };
         archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
@@ -89,10 +89,10 @@ public sealed partial class EntityStore
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
         var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, config, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, config, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, config, typeof(T3)),
-            compTypes.GetStructType(StructHeap<T4>.StructIndex, config, typeof(T4)),
+            compTypes.GetStructType(StructHeap<T1>.StructIndex, config.maxStructIndex, typeof(T1)),
+            compTypes.GetStructType(StructHeap<T2>.StructIndex, config.maxStructIndex, typeof(T2)),
+            compTypes.GetStructType(StructHeap<T3>.StructIndex, config.maxStructIndex, typeof(T3)),
+            compTypes.GetStructType(StructHeap<T4>.StructIndex, config.maxStructIndex, typeof(T4)),
         };
         archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);

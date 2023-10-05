@@ -92,13 +92,13 @@ public sealed class ComponentTypes
     /// Ensures <see cref="StructHeap.structIndex"/> is less than <see cref="ArchetypeConfig.maxStructIndex"/>
     /// to avoid range check when accessing <see cref="Archetype.heapMap"/>
     /// </remarks>
-    internal ComponentType GetStructType(int structIndex, in ArchetypeConfig config, Type type)
+    internal ComponentType GetStructType(int structIndex, int maxStructIndex, Type type)
     {
         if (structIndex == StructUtils.MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
             throw new InvalidOperationException(msg);
         }
-        if (structIndex >= config.maxStructIndex) {
+        if (structIndex >= maxStructIndex) {
             const string msg = $"number of structs exceed EntityStore.{nameof(EntityStore.maxStructIndex)}";
             throw new InvalidOperationException(msg);
         }
