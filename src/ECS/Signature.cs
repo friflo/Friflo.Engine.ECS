@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Numerics.BitOperations;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable StaticMemberInGenericType
@@ -15,7 +16,8 @@ public abstract class Signature
 {
     // --- public fields
     public   readonly   int                 index;
-    public   readonly   long                hash;
+    /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
+    public   readonly   ulong               signatureHash;
     public   ReadOnlySpan<ComponentType>    ComponentTypes => componentTypes;
     
     public   override   string              ToString() => GetString();
@@ -24,15 +26,15 @@ public abstract class Signature
     internal readonly   ComponentType[]     componentTypes;
     
     // --- static
-    private static readonly Dictionary<long, Signature> Signatures = new Dictionary<long, Signature>();
-    private static          int                         NextSignatureIndex;
+    private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();
+    private static          int                             NextSignatureIndex;
     
     
-    internal Signature(ComponentType[] componentTypes, int index, long hash)
+    internal Signature(ComponentType[] componentTypes, int index, ulong signatureHash)
     {
         this.componentTypes = componentTypes;
         this.index          = index;
-        this.hash           = hash;
+        this.signatureHash  = signatureHash;
     }
     
     private static int NextIndex()
@@ -55,7 +57,7 @@ public abstract class Signature
     public static Signature<T> Get<T>()
         where T : struct
     {
-        var hash = typeof(T).Handle();
+        var hash = typeof(T).HandleUInt64();
         
         if (Signatures.TryGetValue(hash, out var result)) {
             return (Signature<T>)result;
@@ -73,8 +75,9 @@ public abstract class Signature
         where T1 : struct
         where T2 : struct
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle();
+        var hash1   = typeof(T1).HandleUInt64();
+        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
+        var hash    = hash1 ^ hash2;
         
         if (Signatures.TryGetValue(hash, out var result)) {
             return (Signature<T1,T2>)result;
@@ -94,9 +97,10 @@ public abstract class Signature
         where T2 : struct
         where T3 : struct
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle() ^
-                   typeof(T3).Handle();
+        var hash1   = typeof(T1).HandleUInt64();
+        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
+        var hash3   = RotateLeft(typeof(T3).HandleUInt64(), 14);
+        var hash    = hash1 ^ hash2 ^ hash3;
         
         if (Signatures.TryGetValue(hash, out var result)) {
             return (Signature<T1, T2, T3>)result;
@@ -118,10 +122,11 @@ public abstract class Signature
         where T3 : struct
         where T4 : struct
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle() ^
-                   typeof(T3).Handle() ^
-                   typeof(T4).Handle();
+        var hash1   = typeof(T1).HandleUInt64();
+        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
+        var hash3   = RotateLeft(typeof(T3).HandleUInt64(), 14);
+        var hash4   = RotateLeft(typeof(T4).HandleUInt64(), 21);
+        var hash    = hash1 ^ hash2 ^ hash3 ^ hash4;
         
         if (Signatures.TryGetValue(hash, out var result)) {
             return (Signature<T1, T2, T3, T4>)result;
@@ -145,11 +150,12 @@ public abstract class Signature
         where T4 : struct
         where T5 : struct
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle() ^
-                   typeof(T3).Handle() ^
-                   typeof(T4).Handle() ^
-                   typeof(T5).Handle();
+        var hash1   = typeof(T1).HandleUInt64();
+        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
+        var hash3   = RotateLeft(typeof(T3).HandleUInt64(), 14);
+        var hash4   = RotateLeft(typeof(T4).HandleUInt64(), 21);
+        var hash5   = RotateLeft(typeof(T5).HandleUInt64(), 28);
+        var hash    = hash1 ^ hash2 ^ hash3 ^ hash4 ^ hash5;
         
         if (Signatures.TryGetValue(hash, out var result)) {
             return (Signature<T1, T2, T3, T4, T5>)result;
@@ -172,7 +178,7 @@ public abstract class Signature
 public sealed class Signature<T> : Signature
     where T : struct
 {
-    internal Signature(ComponentType[] componentTypes, int index, long hash)
+    internal Signature(ComponentType[] componentTypes, int index, ulong hash)
         : base(componentTypes, index, hash) {
     }
 }
@@ -181,7 +187,7 @@ public sealed class Signature<T1, T2> : Signature
     where T1 : struct
     where T2 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, long hash)
+    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
         : base(componentTypes, signatureIndex, hash) {
     }
 }
@@ -191,7 +197,7 @@ public sealed class Signature<T1, T2, T3> : Signature
     where T2 : struct
     where T3 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, long hash)
+    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
         : base(componentTypes, signatureIndex, hash) {
     }
 }
@@ -202,7 +208,7 @@ public sealed class Signature<T1, T2, T3, T4> : Signature
     where T3 : struct
     where T4 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, long hash)
+    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
         : base(componentTypes, signatureIndex, hash) {
     }
 }
@@ -214,7 +220,7 @@ public sealed class Signature<T1, T2, T3, T4, T5> : Signature
     where T4 : struct
     where T5 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, long hash)
+    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
         : base(componentTypes, signatureIndex, hash) {
     }
 }

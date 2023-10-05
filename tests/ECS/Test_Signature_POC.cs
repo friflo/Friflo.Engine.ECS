@@ -34,6 +34,22 @@ public static class Test_Signature_POC
         AreEqual(5,     sig5.ComponentTypes.Length);
         AreSame(sig5,   Signature.Get<Position, Rotation, Scale3, EntityName, MyComponent1>());
         AreEqual("[Position, Rotation, Scale3, EntityName, MyComponent1]", sig5.ToString());
-
+        
+        // --- permute argument order
+        var sig2_ =     Signature.Get<Rotation, Position>();
+        AreNotSame(sig2, sig2_);
+        AreEqual("[Rotation, Position]", sig2_.ToString());
+        
+        var sig3_ =     Signature.Get<Rotation, Position, Scale3>();
+        AreNotSame(sig3, sig3_);
+        AreEqual("[Rotation, Position, Scale3]", sig3_.ToString());
+        
+        var sig4_ =     Signature.Get<Rotation, Position, Scale3, EntityName>();
+        AreNotSame(sig4, sig4_);
+        AreEqual("[Rotation, Position, Scale3, EntityName]", sig4_.ToString());
+        
+        var sig5_ =     Signature.Get<Rotation, Position, Scale3, EntityName, MyComponent1>();
+        AreNotSame(sig5, sig5_);
+        AreEqual("[Rotation, Position, Scale3, EntityName, MyComponent1]", sig5_.ToString());
     }
 }
