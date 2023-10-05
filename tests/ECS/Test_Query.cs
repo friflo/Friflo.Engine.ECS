@@ -112,9 +112,10 @@ public static class Test_Query
         var count   = 0;
         foreach (var (position, rotation) in query) {
             AreEqual(3, position.z);
+            // rotation.x = 1;
             count++;
         }
-        // AreEqual(2,  count); todo
+        AreEqual(2,  count);
         // AreEqual(42, entity2.Rotation.x); todo
         
         var chunkCount   = 0;
