@@ -20,8 +20,12 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var config  = GetArchetypeConfig();
-        archetype   = Archetype.Create<T>(config);
+        var config      = GetArchetypeConfig();
+        var compTypes   = Static.ComponentTypes;
+        var types       = new ComponentType[] {
+            compTypes.GetStructType(StructHeap<T>.StructIndex, config, typeof(T))
+        };
+        archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }
@@ -35,12 +39,13 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var config  = GetArchetypeConfig();
-        var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(config),
-            StructHeap<T2>.Create(config)
+        var config      = GetArchetypeConfig();
+        var compTypes   = Static.ComponentTypes;
+        var types       = new ComponentType[] {
+            compTypes.GetStructType(StructHeap<T1>.StructIndex, config, typeof(T1)),
+            compTypes.GetStructType(StructHeap<T2>.StructIndex, config, typeof(T2)),
         };
-        archetype   = Archetype.CreateWithHeaps(config, heaps);
+        archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }
@@ -56,13 +61,14 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var config  = GetArchetypeConfig();
-        var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(config),
-            StructHeap<T2>.Create(config),
-            StructHeap<T3>.Create(config)
+        var config      = GetArchetypeConfig();
+        var compTypes   = Static.ComponentTypes;
+        var types       = new ComponentType[] {
+            compTypes.GetStructType(StructHeap<T1>.StructIndex, config, typeof(T1)),
+            compTypes.GetStructType(StructHeap<T2>.StructIndex, config, typeof(T2)),
+            compTypes.GetStructType(StructHeap<T3>.StructIndex, config, typeof(T3)),
         };
-        archetype   = Archetype.CreateWithHeaps(config, heaps);
+        archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }
@@ -80,14 +86,15 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var config  = GetArchetypeConfig();
-        var heaps = new StructHeap[] {
-            StructHeap<T1>.Create(config),
-            StructHeap<T2>.Create(config),
-            StructHeap<T3>.Create(config),
-            StructHeap<T4>.Create(config)
+        var config      = GetArchetypeConfig();
+        var compTypes   = Static.ComponentTypes;
+        var types       = new ComponentType[] {
+            compTypes.GetStructType(StructHeap<T1>.StructIndex, config, typeof(T1)),
+            compTypes.GetStructType(StructHeap<T2>.StructIndex, config, typeof(T2)),
+            compTypes.GetStructType(StructHeap<T3>.StructIndex, config, typeof(T3)),
+            compTypes.GetStructType(StructHeap<T4>.StructIndex, config, typeof(T4)),
         };
-        archetype   = Archetype.CreateWithHeaps(config, heaps);
+        archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }

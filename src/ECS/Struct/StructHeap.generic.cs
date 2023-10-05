@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -35,24 +34,6 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
     internal override StructHeap CreateHeap(int capacity, TypeStore typeStore) {
         var mapper = typeStore.GetTypeMapper<T>();
         return new StructHeap<T>(structIndex, structKey, capacity, mapper);
-    }
-    
-    /// <remarks>
-    /// Ensures <see cref="StructHeap.structIndex"/> is less than <see cref="ArchetypeConfig.maxStructIndex"/>
-    /// to avoid range check when accessing <see cref="Archetype.heapMap"/>
-    /// </remarks>
-    internal static StructHeap Create(in ArchetypeConfig config) {
-        var structIndex = StructIndex;
-        if (structIndex == MissingAttribute) {
-            var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {typeof(T).Namespace}.{typeof(T).Name}";
-            throw new InvalidOperationException(msg);
-        }
-        if (structIndex >= config.maxStructIndex) {
-            const string msg = $"number of structs exceed EntityStore.{nameof(EntityStore.maxStructIndex)}";
-            throw new InvalidOperationException(msg);
-        }
-        var mapper = config.typeStore.GetTypeMapper<T>();
-        return new StructHeap<T>(structIndex, StructKey, config.capacity, mapper);
     }
     
     internal override void SetCapacity(int capacity)

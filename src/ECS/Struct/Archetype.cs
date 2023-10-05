@@ -34,7 +34,7 @@ public sealed class Archetype
     // --- internal
     /// <remarks>
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
-    /// does not require a range check. This is already ensured at <see cref="StructHeap{T}.Create"/>
+    /// does not require a range check. This is already ensured at <see cref="ComponentTypes.GetStructType"/>
     /// </remarks>
     [Browse(Never)] internal readonly   StructHeap[]                heapMap;
     [Browse(Never)] internal readonly   EntityStore                 store;
@@ -83,15 +83,6 @@ public sealed class Archetype
         }
     }
 
-    internal static Archetype Create<T>(in ArchetypeConfig config)
-        where T : struct
-    {
-        var newComp     = StructHeap<T>.Create(config);
-        var archetype   = new Archetype(config, Array.Empty<StructHeap>(), newComp);
-        archetype.AddStructHeap(0, newComp);
-        return archetype;
-    }
-    
     internal static Archetype CreateFromArchetype(in ArchetypeConfig config, Archetype current, StructHeap newHeap)
     {
         var heaps = new StructHeap[current.structHeaps.Length]; 
@@ -109,8 +100,13 @@ public sealed class Archetype
         return archetype;
     }
     
-    internal static Archetype CreateWithHeaps(in ArchetypeConfig config, StructHeap[] componentHeaps)
+    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, ComponentType[] types)
     {
+        var length          = types.Length;
+        var componentHeaps  = new StructHeap[length];
+        for (int n = 0; n < length; n++) {
+            componentHeaps[n] = types[n].CreateHeap(config.capacity);
+        }
         var archetype   = new Archetype(config, componentHeaps, null);
         int pos         = 0;
         foreach (var component in componentHeaps) {

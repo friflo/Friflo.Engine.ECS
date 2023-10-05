@@ -21,9 +21,17 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var config  = GetArchetypeConfig();
-        var newHeap = StructHeap<T>.Create(config);
-        archetype   = Archetype.CreateFromArchetype(config, current, newHeap);
+        var config      = GetArchetypeConfig();
+        var compTypes   = Static.ComponentTypes;
+        var heaps       = current.Heaps;
+        var currentLen  = heaps.Length;
+        var types       = new ComponentType[currentLen + 1];
+        for (int n = 0; n < currentLen; n++) {
+            var heap = heaps[n];
+            types[n] = compTypes.GetStructType(heap.structIndex, config, heap.type);
+        }
+        types[currentLen] = compTypes.GetStructType(StructHeap<T>.StructIndex, config, typeof(T));
+        archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }
@@ -64,18 +72,19 @@ public sealed partial class EntityStore
         if (componentCount == 0) {
             return null;
         }
-        var heaps = new StructHeap[componentCount];
+        var types       = new ComponentType[componentCount];
+        var config      = GetArchetypeConfig();
+        var compTypes   = Static.ComponentTypes;
         int n = 0;
         foreach (var heap in archetype.Heaps) {
             if (heap.type == removeType)
                 continue;
-            heaps[n++] = heap;
+            types[n++] = compTypes.GetStructType(heap.structIndex, config, heap.type);
         }
         if (n != componentCount) {
             throw new InvalidOperationException("unexpected length");
         }
-        var config  = GetArchetypeConfig();
-        result      = Archetype.CreateWithHeaps(config, heaps);
+        result      = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(result);
         return result;
     }

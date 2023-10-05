@@ -17,6 +17,7 @@ internal sealed class ComponentReader
 {
     private readonly    ObjectReader                        componentReader;
     private readonly    Dictionary<string, ComponentType>   componentTypes;
+    private readonly    List<ComponentType>                 structTypes;
     private             Utf8JsonParser                      parser;
     private             Bytes                               buffer;
     private             RawComponent[]                      components;
@@ -29,6 +30,7 @@ internal sealed class ComponentReader
         components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
         componentTypes  = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentTypes.ComponentTypeByKey);
+        structTypes     = new List<ComponentType>();
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)
@@ -78,16 +80,16 @@ internal sealed class ComponentReader
         if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
         {
             var config  = store.GetArchetypeConfig();
-            var heaps   = new StructHeap[count];
+            structTypes.Clear();
             for (int n = 0; n < count; n++) {
                 ref var component   = ref components[n];
-                var type            = component.type;
-                if (!type.isStructType) {
+                if (!component.type.isStructType) {
                     continue;
                 }
-                heaps[n] = type.CreateHeap(config.capacity); 
+                structTypes.Add(component.type);
             }
-            newArchetype = Archetype.CreateWithHeaps(config, heaps);
+            var types       = structTypes.ToArray();
+            newArchetype    = Archetype.CreateWithStructTypes(config, types);
             store.AddArchetype(newArchetype);
         }
         if (entity.archetype == newArchetype) {
