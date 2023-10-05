@@ -74,6 +74,25 @@ public static class Test_Query
         AreEqual(2, query4.Archetypes.Length);
         AreEqual(1, query5.Archetypes.Length);
     }
+    
+    [Test]
+    public static void Test_Query_ForEach()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new Position(1,2,3));
+        entity.AddComponent(new Rotation(4,5,6,7));
+        
+        var sig     = Signature.Get<Position, Rotation>();
+        var query   = store.Query(sig);
+        var count = 0;
+        query.ForEach((position, rotation) => {
+            count++;
+            AreEqual(3, position.z);
+            position.x = position.y * rotation.x;
+        });
+        AreEqual(1, count);
+    }
 
     [Test]
     public static void Test_ArchetypeMask()
