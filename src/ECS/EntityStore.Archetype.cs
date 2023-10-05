@@ -28,9 +28,9 @@ public sealed partial class EntityStore
         var types       = new ComponentType[currentLen + 1];
         for (int n = 0; n < currentLen; n++) {
             var heap = heaps[n];
-            types[n] = compTypes.GetStructType(heap.structIndex, config.maxStructIndex, heap.type);
+            types[n] = compTypes.GetStructType(heap.structIndex, heap.type);
         }
-        types[currentLen] = compTypes.GetStructType(StructHeap<T>.StructIndex, config.maxStructIndex, typeof(T));
+        types[currentLen] = compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T));
         archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
@@ -79,7 +79,7 @@ public sealed partial class EntityStore
         foreach (var heap in archetype.Heaps) {
             if (heap.type == removeType)
                 continue;
-            types[n++] = compTypes.GetStructType(heap.structIndex, config.maxStructIndex, heap.type);
+            types[n++] = compTypes.GetStructType(heap.structIndex, heap.type);
         }
         if (n != componentCount) {
             throw new InvalidOperationException("unexpected length");

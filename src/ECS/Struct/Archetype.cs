@@ -59,7 +59,7 @@ public sealed class Archetype
         typeHash        = EntityStore.GetHash(heaps, newComp);
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
-        heapMap         = new StructHeap[config.maxStructIndex];
+        heapMap         = new StructHeap[EntityStore.Static.ComponentTypes.maxStructIndex];
         mask            = new ArchetypeMask(heaps, newComp);
         if (newComp != null) {
             SetStandardComponentHeaps(newComp, ref std);

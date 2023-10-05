@@ -35,6 +35,7 @@ public sealed class ComponentTypes
     #endregion
     
 #region private fields
+    [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] private  readonly   ComponentType[]                     structs;
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
     [Browse(Never)] private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
@@ -47,8 +48,9 @@ public sealed class ComponentTypes
         int count           = structList.Count + classList.Count;
         componentTypeByKey  = new Dictionary<string, ComponentType>(count);
         componentTypeByType = new Dictionary<Type,   ComponentType>(count);
-        structs             = new ComponentType[structList.Count + 1];
-        classes             = new ComponentType[classList.Count  + 1];
+        maxStructIndex      = structList.Count + 1;
+        structs             = new ComponentType[maxStructIndex];
+        classes             = new ComponentType[classList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
@@ -89,17 +91,17 @@ public sealed class ComponentTypes
     }
     
     /// <remarks>
-    /// Ensures <see cref="StructHeap.structIndex"/> is less than <see cref="ArchetypeConfig.maxStructIndex"/>
+    /// Ensures <see cref="StructHeap.structIndex"/> is less than <see cref="maxStructIndex"/>
     /// to avoid range check when accessing <see cref="Archetype.heapMap"/>
     /// </remarks>
-    internal ComponentType GetStructType(int structIndex, int maxStructIndex, Type type)
+    internal ComponentType GetStructType(int structIndex, Type type)
     {
         if (structIndex == StructUtils.MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
             throw new InvalidOperationException(msg);
         }
         if (structIndex >= maxStructIndex) {
-            const string msg = $"number of structs exceed EntityStore.{nameof(EntityStore.maxStructIndex)}";
+            const string msg = $"number of structs exceed EntityStore.{nameof(maxStructIndex)}";
             throw new InvalidOperationException(msg);
         }
         return structs[structIndex];
