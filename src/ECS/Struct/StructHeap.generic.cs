@@ -16,8 +16,8 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructComponent - not using an interface for struct components
 {
     // --- internal
-    internal            StructChunk<T>[]      chunks;
-    private  readonly   TypeMapper<T>   typeMapper;
+    internal            StructChunk<T>[]    chunks;
+    private  readonly   TypeMapper<T>       typeMapper;
     
     // --- static internal
     internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);

@@ -126,6 +126,16 @@ public static class Test_Query
         AreEqual(2,  chunkCount);
         AreEqual(42, entity2.Rotation.x);
     }
+    
+    // [Test]
+    public static void Test_Position_array_Perf() {
+        var positions = new Position[10_000_000];
+        for (int n = 0; n < 100; n++) {
+            foreach (var position in positions) {
+                _ = position;
+            }
+        }
+    }
 
     [Test]
     public static void Test_ArchetypeMask()

@@ -11,8 +11,8 @@ public ref struct QueryEnumerator<T1, T2>
     where T1 : struct
     where T2 : struct
 {
-    private StructHeap<T1>          heap1;
-    private StructHeap<T2>          heap2;
+    private StructChunk<T1>[]       chunks1;
+    private StructChunk<T2>[]       chunks2;
     private int                     structIndex1;
     private int                     structIndex2;
     private int                     pos;
@@ -29,13 +29,13 @@ public ref struct QueryEnumerator<T1, T2>
         var archetype   = query.Archetypes[0];
         count           = archetype.EntityCount - 1;
         var heapMap     = archetype.heapMap;
-        heap1           = (StructHeap<T1>)heapMap[indices[0]];
-        heap2           = (StructHeap<T2>)heapMap[indices[1]];
+        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
+        chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public (T1, T2) Current   => (heap1.chunks[pos / ChunkSize].components[pos % ChunkSize], 
-                                  heap2.chunks[pos / ChunkSize].components[pos % ChunkSize]);
+    public (T1, T2) Current   => (chunks1[pos / ChunkSize].components[pos % ChunkSize], 
+                                  chunks2[pos / ChunkSize].components[pos % ChunkSize]);
     
     // --- IEnumerator
     public bool MoveNext() {
