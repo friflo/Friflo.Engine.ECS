@@ -24,7 +24,7 @@ public static class Test_ComponentReader
         var root        = store.CreateFromDataNode(rootNode);
         var child       = store.CreateFromDataNode(childNode);
         AssertRootEntity(root);
-        var type = store.GetArchetype<Position, Scale3>();
+        var type = store.GetArchetype(Signature.Get<Position, Scale3>());
         AreEqual(1,     type.EntityCount);
         
         // --- read same DataNode again

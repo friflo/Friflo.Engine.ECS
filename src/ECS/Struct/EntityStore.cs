@@ -10,8 +10,9 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore
 {
+    // -------------------------------------- get archetype --------------------------------------
 #region get archetype
-    public Archetype GetArchetype<T>()
+    private Archetype GetArchetype<T>()
         where T : struct
     {
         var hash = typeof(T).Handle();
@@ -28,77 +29,59 @@ public sealed partial class EntityStore
         return archetype;
     }
     
-    public Archetype GetArchetype<T1, T2>()
-        where T1 : struct
-        where T2 : struct
+    internal ArchetypeConfig GetArchetypeConfig() {
+        return new ArchetypeConfig (this, archetypesCount, DefaultCapacity, typeStore);
+    }
+    
+    private Archetype GetArchetypeInternal(Signature signature)
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle();
-        if (TryGetArchetype(hash, out var archetype)) {
+        if (TryGetArchetype(signature.archetypeHash, out var archetype)) {
             return archetype;
         }
-        var config      = GetArchetypeConfig();
-        var compTypes   = Static.ComponentTypes;
-        var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-        };
-        archetype = Archetype.CreateWithStructTypes(config, types);
+        var config  = GetArchetypeConfig();
+        archetype   = Archetype.CreateWithStructTypes(config, signature.componentTypes);
         AddArchetype(archetype);
         return archetype;
     }
+
+    public Archetype GetArchetype<T>(Signature<T> signature)
+        where T : struct
+    {
+        return GetArchetypeInternal(signature);
+    }
     
-    public Archetype GetArchetype<T1, T2, T3>()
+    public Archetype GetArchetype<T1, T2>(Signature<T1, T2> signature)
+        where T1 : struct
+        where T2 : struct
+    {
+        return GetArchetypeInternal(signature);
+    }
+    
+    public Archetype GetArchetype<T1, T2, T3>(Signature<T1, T2, T3> signature)
         where T1 : struct
         where T2 : struct
         where T3 : struct
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle() ^
-                   typeof(T3).Handle();
-        if (TryGetArchetype(hash, out var archetype)) {
-            return archetype;
-        }
-        var config      = GetArchetypeConfig();
-        var compTypes   = Static.ComponentTypes;
-        var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
-        };
-        archetype = Archetype.CreateWithStructTypes(config, types);
-        AddArchetype(archetype);
-        return archetype;
+        return GetArchetypeInternal(signature);
     }
     
-    public Archetype GetArchetype<T1, T2, T3, T4>()
+    public Archetype GetArchetype<T1, T2, T3, T4>(Signature<T1, T2, T3, T4> signature)
         where T1 : struct
         where T2 : struct
         where T3 : struct
         where T4 : struct
     {
-        var hash = typeof(T1).Handle() ^
-                   typeof(T2).Handle() ^
-                   typeof(T3).Handle() ^
-                   typeof(T4).Handle();
-        if (TryGetArchetype(hash, out var archetype)) {
-            return archetype;
-        }
-        var config      = GetArchetypeConfig();
-        var compTypes   = Static.ComponentTypes;
-        var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
-            compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
-        };
-        archetype = Archetype.CreateWithStructTypes(config, types);
-        AddArchetype(archetype);
-        return archetype;
+        return GetArchetypeInternal(signature);
     }
     
-    internal ArchetypeConfig GetArchetypeConfig() {
-        return new ArchetypeConfig (this, archetypesCount, DefaultCapacity, typeStore);
+    public Archetype GetArchetype<T1, T2, T3, T4, T5>(Signature<T1, T2, T3, T4, T5> signature)
+        where T1 : struct
+        where T2 : struct
+        where T3 : struct
+        where T4 : struct
+        where T5 : struct
+    {
+        return GetArchetypeInternal(signature);
     }
     #endregion
     

@@ -18,6 +18,7 @@ public abstract class Signature
     public   readonly   int                 index;
     /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
     public   readonly   ulong               signatureHash;
+    public   readonly   long                archetypeHash;
     public   ReadOnlySpan<ComponentType>    ComponentTypes => componentTypes;
     
     public   override   string              ToString() => GetString();
@@ -35,6 +36,11 @@ public abstract class Signature
         this.componentTypes = componentTypes;
         this.index          = index;
         this.signatureHash  = signatureHash;
+        long hash = 0;
+        foreach (var type in componentTypes) {
+            hash ^= type.type.Handle();
+        }
+        archetypeHash = hash;
     }
     
     private static int NextIndex()

@@ -127,16 +127,16 @@ public static class Test_StructComponent
         var store   = new EntityStore();
         AreEqual(1, store.Archetypes.Length);
         
-        var type1   = store.GetArchetype<Position, Rotation>();
-        var type2   = store.GetArchetype<Rotation, Position>();
+        var type1   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var type2   = store.GetArchetype(Signature.Get<Rotation, Position>());
         AreSame(type1, type2);
         
-        type1   = store.GetArchetype<Position, Rotation, MyComponent1>();
-        type2   = store.GetArchetype<MyComponent1, Position, Rotation>();
+        type1   = store.GetArchetype(Signature.Get<Position, Rotation, MyComponent1>());
+        type2   = store.GetArchetype(Signature.Get<MyComponent1, Position, Rotation>());
         AreSame(type1, type2);
         
-        type1       = store.GetArchetype<Position, Rotation, MyComponent1, MyComponent2>();
-        type2       = store.GetArchetype<MyComponent1, Position, Rotation,  MyComponent2>();
+        type1       = store.GetArchetype(Signature.Get<Position, Rotation, MyComponent1, MyComponent2>());
+        type2       = store.GetArchetype(Signature.Get<MyComponent1, Position, Rotation,  MyComponent2>());
         AreSame(type1, type2);
         
         AreEqual(4, store.Archetypes.Length);
@@ -147,8 +147,8 @@ public static class Test_StructComponent
     [Test]
     public static void Test_5_AddPositionRotation() {
         var store       = new EntityStore();
-        var posType     = store.GetArchetype<Position>();
-        var posRotType  = store.GetArchetype<Position, Rotation>();
+        var posType     = store.GetArchetype(Signature.Get<Position>());
+        var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
         
         var player1  = store.CreateEntity();
         AreEqual("[]",      player1.Archetype.ToString());
@@ -226,7 +226,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_6_AddRotation() {
         var store   = new EntityStore();
-        var type    = store.GetArchetype<Rotation, Scale3>();
+        var type    = store.GetArchetype(Signature.Get<Rotation, Scale3>());
         
         var player = store.CreateEntity();
         var rotation = new Rotation { x = 1, y = 2 };
@@ -315,7 +315,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_9_Add_Remove_Component_Perf() {
         var store   = new EntityStore();
-        var posType = store.GetArchetype<Position>();
+        var posType = store.GetArchetype(Signature.Get<Position>());
         store.CreateEntity().AddComponent<Position>();
         store.CreateEntity().AddComponent<Position>();
         store.CreateEntity().AddComponent<Position>();
