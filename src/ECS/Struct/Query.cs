@@ -6,7 +6,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public class ArchetypeQuery
+public abstract class ArchetypeQuery
 {
 #region private fields
     private readonly    EntityStore     store;
@@ -47,7 +47,7 @@ public class ArchetypeQuery
 }
 
 
-public class ArchetypeQuery<T> : ArchetypeQuery
+public sealed class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct
 {
     internal ArchetypeQuery(EntityStore store, Signature<T> signature)
@@ -55,7 +55,7 @@ public class ArchetypeQuery<T> : ArchetypeQuery
     }
 }
 
-public class ArchetypeQuery<T1, T2> : ArchetypeQuery
+public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery
     where T1 : struct
     where T2 : struct
 {
@@ -64,7 +64,7 @@ public class ArchetypeQuery<T1, T2> : ArchetypeQuery
     }
 }
 
-public class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
+public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T1 : struct
     where T2 : struct
     where T3 : struct
@@ -74,7 +74,7 @@ public class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     }
 }
 
-public class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
+public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T1 : struct
     where T2 : struct
     where T3 : struct
@@ -85,7 +85,7 @@ public class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     }
 }
 
-public class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
+public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T1 : struct
     where T2 : struct
     where T3 : struct

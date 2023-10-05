@@ -11,7 +11,7 @@ using System.Text;
 namespace Friflo.Fliox.Engine.ECS;
 
 // Could be a readonly struct
-public class Signature
+public abstract class Signature
 {
     // --- public fields
     public   readonly   int                 index;
@@ -169,7 +169,7 @@ public class Signature
 }
 
 
-public class Signature<T> : Signature
+public sealed class Signature<T> : Signature
     where T : struct
 {
     internal Signature(ComponentType[] componentTypes, int index, long hash)
@@ -177,7 +177,7 @@ public class Signature<T> : Signature
     }
 }
 
-public class Signature<T1, T2> : Signature
+public sealed class Signature<T1, T2> : Signature
     where T1 : struct
     where T2 : struct
 {
@@ -186,7 +186,7 @@ public class Signature<T1, T2> : Signature
     }
 }
 
-public class Signature<T1, T2, T3> : Signature
+public sealed class Signature<T1, T2, T3> : Signature
     where T1 : struct
     where T2 : struct
     where T3 : struct
@@ -196,7 +196,7 @@ public class Signature<T1, T2, T3> : Signature
     }
 }
 
-public class Signature<T1, T2, T3, T4> : Signature
+public sealed class Signature<T1, T2, T3, T4> : Signature
     where T1 : struct
     where T2 : struct
     where T3 : struct
@@ -207,7 +207,7 @@ public class Signature<T1, T2, T3, T4> : Signature
     }
 }
 
-public class Signature<T1, T2, T3, T4, T5> : Signature
+public sealed class Signature<T1, T2, T3, T4, T5> : Signature
     where T1 : struct
     where T2 : struct
     where T3 : struct
