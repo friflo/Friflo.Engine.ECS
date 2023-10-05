@@ -14,14 +14,14 @@ namespace Friflo.Fliox.Engine.ECS;
 public class Signature
 {
     // --- public fields
-    public  readonly    int             index;
-    public  readonly    long            hash;
-    public  ReadOnlySpan<ComponentType> ComponentTypes => componentTypes;
+    public   readonly   int                 index;
+    public   readonly   long                hash;
+    public   ReadOnlySpan<ComponentType>    ComponentTypes => componentTypes;
     
-    public  override    string          ToString() => GetString();
+    public   override   string              ToString() => GetString();
 
     // --- private fields
-    private readonly    ComponentType[] componentTypes;
+    internal readonly   ComponentType[]     componentTypes;
     
     // --- static
     private static readonly Dictionary<long, Signature> Signatures = new Dictionary<long, Signature>();
