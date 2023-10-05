@@ -106,6 +106,82 @@ public sealed partial class EntityStore
     
     // -------------------------------------- archetype query --------------------------------------
 #region archetype query
+
+    // ----------------------------------- query via generic Signature -----------------------------------
+    private readonly ArchetypeQuery[] queriesSig = new ArchetypeQuery[100];
+    
+    public ArchetypeQuery<T> Query<T> (Signature<T> signature)
+        where T : struct
+    {
+        var query = queriesSig[signature.index];
+        if (query != null) {
+            return (ArchetypeQuery<T>)query;
+        }
+        var newQuery = new ArchetypeQuery<T>(this, signature); 
+        queriesSig[signature.index] = newQuery;
+        return newQuery;
+    }
+    
+    public ArchetypeQuery<T1, T2> Query<T1, T2> (Signature<T1, T2> signature)
+        where T1: struct
+        where T2: struct
+    {
+        var query = queriesSig[signature.index];
+        if (query != null) {
+            return (ArchetypeQuery<T1, T2>)query;
+        }
+        var newQuery = new ArchetypeQuery<T1, T2>(this, signature); 
+        queriesSig[signature.index] = newQuery;
+        return newQuery;
+    }
+    
+    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (Signature<T1, T2, T3> signature)
+        where T1: struct
+        where T2: struct
+        where T3: struct
+    {
+        var query = queriesSig[signature.index];
+        if (query != null) {
+            return (ArchetypeQuery<T1, T2, T3>)query;
+        }
+        var newQuery = new ArchetypeQuery<T1, T2, T3>(this, signature); 
+        queriesSig[signature.index] = newQuery;
+        return newQuery;
+    }
+    
+    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (Signature<T1, T2, T3, T4> signature)
+        where T1: struct
+        where T2: struct
+        where T3: struct
+        where T4: struct
+    {
+        var query = queriesSig[signature.index];
+        if (query != null) {
+            return (ArchetypeQuery<T1, T2, T3, T4>)query;
+        }
+        var newQuery = new ArchetypeQuery<T1, T2, T3, T4>(this, signature); 
+        queriesSig[signature.index] = newQuery;
+        return newQuery;
+    }
+    
+    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (Signature<T1, T2, T3, T4, T5> signature)
+        where T1: struct
+        where T2: struct
+        where T3: struct
+        where T4: struct
+        where T5: struct
+    {
+        var query = queriesSig[signature.index];
+        if (query != null) {
+            return (ArchetypeQuery<T1, T2, T3, T4, T5>)query;
+        }
+        var newQuery = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature); 
+        queriesSig[signature.index] = newQuery;
+        return newQuery;
+    }
+    
+    
+    // ----------------------------------- query via generic parameters -----------------------------------
     private readonly Dictionary<long, ArchetypeQuery> queries = new Dictionary<long, ArchetypeQuery>();
     
     public ArchetypeQuery<T> Query<T> ()
