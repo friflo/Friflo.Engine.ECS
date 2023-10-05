@@ -9,34 +9,37 @@ public static class Test_Lab
 {
     [Test]
     public static void Test_Ref_Enumerator() {
-        var enumerable = new TestEnumerable<Position>();
-        foreach (ref var value in enumerable) {
-            value.x = 3;
+        var enumerable = new TestEnumerable<Position, Rotation>();
+        foreach (var (position, rotation) in enumerable) {
+            // position.x = 3;
         }
-        AreEqual(3, enumerable.value.x);
+        AreEqual(3, enumerable.value1.x);
     }
 }
 
-public class TestEnumerable<T> 
-    where T : struct
+public class TestEnumerable<T1, T2> 
+    where T1 : struct
+    where T2 : struct
 {
-    internal T       value;
+    internal T1 value1;
+    internal T2 value2;
     
-    public TestEnumerator<T> GetEnumerator() => new TestEnumerator<T>(this);
+    public TestEnumerator<T1, T2> GetEnumerator() => new TestEnumerator<T1, T2>(this);
 }
 
-public struct TestEnumerator<T>
-    where T : struct
+public struct TestEnumerator<T1, T2>
+    where T1 : struct
+    where T2 : struct
 {
-    private TestEnumerable<T>   enumerable;
+    private TestEnumerable<T1, T2>   enumerable;
     private int                 pos;
     
-    internal  TestEnumerator(TestEnumerable<T> enumerable)
+    internal  TestEnumerator(TestEnumerable<T1, T2> enumerable)
     {
         this.enumerable = enumerable;
     }
     
-    public ref T Current   => ref enumerable.value;
+    public (T1, T2) Current   => (enumerable.value1, enumerable.value2);
     
     // --- IEnumerator
     public bool MoveNext() {
