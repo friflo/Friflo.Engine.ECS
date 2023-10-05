@@ -54,13 +54,13 @@ public ref struct QueryEnumerator2<T1, T2>
     private             ReadOnlySpan<Archetype> archetypes;
     private             StructHeap<T1>          heap1;
     private             StructHeap<T2>          heap2;
+    private             Chunk<T1>               chunk1;
+    private             Chunk<T2>               chunk2;
     private readonly    int                     structIndex1;
     private readonly    int                     structIndex2;
     private             int                     chunkPos;
     private             int                     archPos;
     private             int                     chunkCount;
-    private             int                     archCount;
-    
     
     
     internal  QueryEnumerator2(ArchetypeQuery<T1, T2> query)
@@ -79,12 +79,14 @@ public ref struct QueryEnumerator2<T1, T2>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public (Chunk<T1>, Chunk<T2>) Current   => (heap1.chunks[chunkPos], heap2.chunks[chunkPos]);
+    public (Chunk<T1>, Chunk<T2>) Current   => (chunk1, chunk2);
     
     // --- IEnumerator
     public bool MoveNext() {
         if (chunkPos < chunkCount) {
             chunkPos++;
+            chunk1 = new Chunk<T1>(heap1.chunks[chunkPos].components, 1);
+            chunk2 = new Chunk<T2>(heap2.chunks[chunkPos].components, 1);
             return true;
         }
         if (archPos < archetypes.Length -1) {

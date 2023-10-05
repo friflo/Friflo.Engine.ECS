@@ -7,16 +7,29 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct Chunk<T>
+internal readonly struct StructChunk<T>
     where T : struct
 {
     internal readonly   T[]       components;
-    public              Span<T>   Values => new (components, 0, 1);
     
     public override string ToString() => components == null ? "" : "used";
     
-    internal Chunk (int count) {
+    internal StructChunk (int count) {
         components  = new T[count];
+    }
+}
+
+public readonly struct Chunk<T>
+    where T : struct
+{
+    public              Span<T> Values => new(values, 0, count);
+
+    private readonly    T[]     values;
+    private readonly    int     count;
+    
+    public Chunk(T[] values, int count) {
+        this.values = values;
+        this.count  = count;
     }
 }
 
