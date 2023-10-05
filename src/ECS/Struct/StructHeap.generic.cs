@@ -16,19 +16,19 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructComponent - not using an interface for struct components
 {
     // --- internal
-    internal            StructChunk<T>[]    chunks;
-    private  readonly   TypeMapper<T>       typeMapper;
+    internal            Chunk<T>[]      chunks;
+    private  readonly   TypeMapper<T>   typeMapper;
     
     // --- static internal
-    internal static readonly    int         StructIndex  = NewStructIndex(typeof(T), out StructKey);
-    internal static readonly    string      StructKey;
+    internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
+    internal static readonly    string  StructKey;
     
     internal StructHeap(int structIndex, string structKey, int capacity, TypeMapper<T> mapper)
         : base (structIndex, structKey, typeof(T))
     {
         typeMapper  = mapper;
-        chunks      = new StructChunk<T>[1];
-        chunks[0]   = new StructChunk<T>(capacity);
+        chunks      = new Chunk<T>[1];
+        chunks[0]   = new Chunk<T>(capacity);
     }
     
     internal override StructHeap CreateHeap(int capacity, TypeStore typeStore) {
@@ -42,7 +42,7 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         for (int n = 0; n < chunks.Length; n++)
         {
             var cur         = chunks[n].components;
-            var newChunk    = new StructChunk<T>(capacity);
+            var newChunk    = new Chunk<T>(capacity);
             chunks[n] = newChunk;
             for (int i = 0; i < cur.Length; i++) {
                 newChunk.components[i]= cur[i];    

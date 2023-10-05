@@ -79,7 +79,7 @@ public ref struct QueryEnumerator2<T1, T2>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public (StructChunk<T1>, StructChunk<T2>) Current   => (heap1.chunks[chunkPos], heap2.chunks[chunkPos]);
+    public (Chunk<T1>, Chunk<T2>) Current   => (heap1.chunks[chunkPos], heap2.chunks[chunkPos]);
     
     // --- IEnumerator
     public bool MoveNext() {

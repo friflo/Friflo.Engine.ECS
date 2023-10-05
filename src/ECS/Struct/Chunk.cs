@@ -7,7 +7,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct StructChunk<T>
+public readonly struct Chunk<T>
     where T : struct
 {
     internal readonly   T[]       components;
@@ -15,7 +15,7 @@ public readonly struct StructChunk<T>
     
     public override string ToString() => components == null ? "" : "used";
     
-    internal StructChunk (int count) {
+    internal Chunk (int count) {
         components  = new T[count];
     }
 }
