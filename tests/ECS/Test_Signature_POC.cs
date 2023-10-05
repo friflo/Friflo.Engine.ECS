@@ -1,44 +1,28 @@
-﻿// ReSharper disable InconsistentNaming
-
-using Friflo.Fliox.Engine.ECS;
+﻿using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using static NUnit.Framework.Assert;
 
+// ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
 public static class Test_Signature_POC
 {
     [Test]
-    public static void Test_Signature_API() {
-        var pos     = Sig.Create<Position>();
-        var posRot  = Sig.Create<Position, Rotation>();
-        
-        var store = new TestStore();
-        
-        store.Query(Sig.Create<Position>());
-        store.Query(pos);
-        store.Query(posRot);
-    }
-}
-
-public class TestStore
-{
-    public ArchetypeQuery Query(Sig sig) {
-        return null;
-    }
-}
-
-public class Sig
-{
-    public static Sig Create<T>()
-        where T : struct
+    public static void Test_Signature()
     {
-        return null;
-    }
-    
-    public static Sig Create<T1, T2>()
-        where T1 : struct
-        where T2 : struct
-    {
-        return null;
+        var sig1 =      Signature.Create<Position>();
+        AreEqual(1,     sig1.ComponentTypes.Length);
+        AreSame(sig1,   Signature.Create<Position>());
+        AreEqual("[Position]", sig1.ToString());
+        
+        var sig2 =      Signature.Create<Position, Rotation>();
+        AreEqual(2,     sig2.ComponentTypes.Length);
+        AreSame(sig2,   Signature.Create<Position, Rotation>());
+        AreEqual("[Position, Rotation]", sig2.ToString());
+        
+        var sig3 =      Signature.Create<Position, Rotation, Scale3>();
+        AreEqual(3,     sig3.ComponentTypes.Length);
+        AreSame(sig3,   Signature.Create<Position, Rotation, Scale3>());
+        AreEqual("[Position, Rotation, Scale3]", sig3.ToString());
     }
 }

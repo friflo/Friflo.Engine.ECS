@@ -108,37 +108,37 @@ public sealed partial class EntityStore
 #region archetype query
     private readonly Dictionary<long, ArchetypeQuery> queries = new Dictionary<long, ArchetypeQuery>();
     
-    public ArchetypeQuery Query<T> ()
+    public ArchetypeQuery<T> Query<T> ()
         where T : struct
     {
         var hash = typeof(T).Handle(); // could StructHeap<T>.StructIndex to improve performance 
         if (queries.TryGetValue(hash, out var query)) {
-            return query;
+            return (ArchetypeQuery<T>)query;
         }
         ReadOnlySpan<int> structIndices = stackalloc int[] {
             StructHeap<T>.StructIndex
         };
-        query = new ArchetypeQuery(this, structIndices);
-        queries.Add(hash, query);
-        return query;
+        var newQuery = new ArchetypeQuery<T>(this, structIndices);
+        queries.Add(hash, newQuery);
+        return newQuery;
     }
     
-    public ArchetypeQuery Query<T1, T2> ()
+    public ArchetypeQuery<T1, T2> Query<T1, T2> ()
         where T1 : struct
         where T2 : struct
     {
         var hash = typeof(T1).Handle() ^
                    typeof(T2).Handle();
         if (queries.TryGetValue(hash, out var query)) {
-            return query;
+            return (ArchetypeQuery<T1, T2>)query;
         }
         ReadOnlySpan<int> structIndices = stackalloc int[] {
             StructHeap<T1>.StructIndex,
             StructHeap<T2>.StructIndex,
         };
-        query = new ArchetypeQuery(this, structIndices);
-        queries.Add(hash, query);
-        return query;
+        var newQuery = new ArchetypeQuery<T1, T2>(this, structIndices);
+        queries.Add(hash, newQuery);
+        return newQuery;
     }
     
     public ArchetypeQuery Query<T1, T2, T3> ()

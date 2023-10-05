@@ -45,3 +45,21 @@ public class ArchetypeQuery
         }
     }
 }
+
+
+public class ArchetypeQuery<T> : ArchetypeQuery
+    where T : struct
+{
+    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
+        : base(store, structIndices) {
+    }
+}
+
+public class ArchetypeQuery<T1, T2> : ArchetypeQuery
+    where T1 : struct
+    where T2 : struct
+{
+    internal ArchetypeQuery(EntityStore store, ReadOnlySpan<int> structIndices)
+        : base(store, structIndices) {
+    }
+}
