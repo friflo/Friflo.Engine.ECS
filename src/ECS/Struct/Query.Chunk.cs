@@ -63,8 +63,7 @@ public ref struct ChunkEnumerator<T1, T2>
             return true;
         }
         if (archetypePos < archetypes.Length -1) {
-            archetypePos++;
-            var heapMap = archetypes[archetypePos].heapMap;
+            var heapMap = archetypes[archetypePos++].heapMap;
             chunks1     = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
             chunks2     = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
             chunkPos    = 0;
