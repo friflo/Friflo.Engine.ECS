@@ -63,13 +63,15 @@ public sealed class ArchetypeQuery<T> : ArchetypeQuery
     }
 }
 
-public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery
+public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
     where T1 : struct
     where T2 : struct
 {
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2> signature)
         : base(store, signature) {
     }
+    
+    public QueryEnumerator<T1,T2> GetEnumerator() => new QueryEnumerator<T1,T2>(this);
     
     public void ForEach(Action<T1, T2> lambda)
     {

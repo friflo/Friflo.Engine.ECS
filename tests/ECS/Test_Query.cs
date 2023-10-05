@@ -93,6 +93,24 @@ public static class Test_Query
         });
         AreEqual(1, count);
     }
+    
+    [Test]
+    public static void Test_Query_loop()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new Position(1,2,3));
+        entity.AddComponent(new Rotation(4,5,6,7));
+        
+        var sig     = Signature.Get<Position, Rotation>();
+        var query   = store.Query(sig);
+        var count   = 0;
+        foreach (var (position, rotation) in query) {
+            AreEqual(3, position.z);
+            count++;
+        }
+        AreEqual(1, count);
+    }
 
     [Test]
     public static void Test_ArchetypeMask()
