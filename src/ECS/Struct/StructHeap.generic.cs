@@ -16,8 +16,15 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructComponent - not using an interface for struct components
 {
     // --- internal
-    internal            StructChunk<T>[]    chunks;
-    private  readonly   TypeMapper<T>       typeMapper;
+    internal                    StructChunk<T>[]    chunks;
+    private  readonly           TypeMapper<T>       typeMapper;
+    
+    // --- static internal
+    // ReSharper disable once StaticMemberInGenericType
+    internal static readonly    int                 StructIndex  = NewStructIndex(typeof(T), out StructKey);
+    
+    // ReSharper disable once StaticMemberInGenericType
+    internal static readonly    string              StructKey;
     
     internal StructHeap(int structIndex, string structKey, int capacity, TypeMapper<T> mapper)
         : base (structIndex, structKey, typeof(T))
@@ -95,10 +102,4 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         chunks[compIndex / ChunkSize].components[compIndex % ChunkSize]
             = reader.ReadMapper(typeMapper, json);  // todo avoid boxing within typeMapper, T is struct
     }
-    
-    // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
-    
-    // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    string  StructKey;
 }
