@@ -9,21 +9,33 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public struct SignatureTypes
+public readonly struct SignatureTypes
 {
     internal readonly   int             length;
-    internal            ComponentType   T1;
-    internal            ComponentType   T2;
-    internal            ComponentType   T3;
-    internal            ComponentType   T4;
-    internal            ComponentType   T5;
+    internal readonly   ComponentType   T1;
+    internal readonly   ComponentType   T2;
+    internal readonly   ComponentType   T3;
+    internal readonly   ComponentType   T4;
+    internal readonly   ComponentType   T5;
     
     public              int             Length          => length;
     public  SignatureTypesEnumerator    GetEnumerator() => new (this);
     public override     string          ToString()      => GetString();
 
-    internal SignatureTypes(int length) {
+    internal SignatureTypes(
+        int             length,
+        ComponentType   T1 = null,
+        ComponentType   T2 = null,
+        ComponentType   T3 = null,
+        ComponentType   T4 = null,
+        ComponentType   T5 = null)
+    {
         this.length = length;
+        this.T1     = T1;
+        this.T2     = T2;
+        this.T3     = T3;
+        this.T4     = T4;
+        this.T5     = T5;
     }
     
     public ComponentType this [int index] {
