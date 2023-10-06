@@ -87,7 +87,6 @@ public sealed partial class EntityStore
     
     // -------------------------------------- archetype query --------------------------------------
 #region archetype query
-    // ----------------------------------- query via generic Signature -----------------------------------
     private void AddQuery(ArchetypeQuery query) {
         queryMap[query.signature.index] = query;
         queries.Add(query);
