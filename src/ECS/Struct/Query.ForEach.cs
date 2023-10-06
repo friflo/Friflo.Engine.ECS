@@ -24,8 +24,8 @@ public struct QueryForEach<T1, T2>
     {
         this.query  = query;
         this.lambda = lambda;
-        copyT1      = query.readOnlyT1 ? new T1[10] : null;
-        copyT2      = query.readOnlyT2 ? new T2[10] : null;
+        copyT1      = query.readOnlyT1 ? query.copyT1 : null;
+        copyT2      = query.readOnlyT2 ? query.copyT2 : null;
     }
 
     public void Run()
@@ -43,8 +43,8 @@ public struct QueryForEach<T1, T2>
             for (int chunkPos = 0; chunkPos < chunksLen; chunkPos++)
             {
                 var componentLen    = entityCount;
-                ref1.Set(chunks1[chunkPos].components, ref copyT1, componentLen);
-                ref2.Set(chunks2[chunkPos].components, ref copyT2, componentLen);
+                ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
+                ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
                 for (int pos = 0; pos < componentLen; pos++)
                 {
                     ref1.pos = pos;

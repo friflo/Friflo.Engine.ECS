@@ -25,13 +25,10 @@ public struct Ref<T> where T : struct
         this.components = components;
     }
     
-    internal void Set(T[] components, ref T[] copy, int count) {
+    internal void Set(T[] components, T[] copy, int count) {
         if (copy == null) {
             this.components = components;
             return;
-        }
-        if (copy.Length < count) {
-            copy = new T[components.Length];
         }
         Array.Copy(components, copy, count);
         this.components = copy;
