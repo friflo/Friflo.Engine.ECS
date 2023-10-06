@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Friflo.Fliox.Engine.Client;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing DataNode's.

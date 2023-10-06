@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 // ReSharper disable LoopCanBeConvertedToQuery
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 internal static class TypeExtensions

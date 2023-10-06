@@ -8,6 +8,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable InconsistentNaming
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not implemented to avoid boxing

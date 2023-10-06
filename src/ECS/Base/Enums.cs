@@ -6,6 +6,7 @@ using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
 // ReSharper disable InconsistentNaming
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>Describe the ownership state of a <see cref="GameEntity"/></summary>

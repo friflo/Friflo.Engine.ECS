@@ -4,6 +4,7 @@
 using System;
 
 // ReSharper disable UnusedParameter.Local
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>

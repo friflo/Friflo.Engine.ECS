@@ -10,6 +10,7 @@ using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore

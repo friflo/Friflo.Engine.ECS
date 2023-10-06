@@ -10,6 +10,7 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore

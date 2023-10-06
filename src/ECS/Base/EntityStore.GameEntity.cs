@@ -13,6 +13,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ConvertConstructorToMemberInitializers
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing GameEntity's.
