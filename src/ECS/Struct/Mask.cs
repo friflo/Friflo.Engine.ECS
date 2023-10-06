@@ -14,7 +14,7 @@ public readonly struct ArchetypeMask
 
     public override string ToString() => GetString();
     
-    public ArchetypeMask(int i) {
+    public ArchetypeMask(int _) {
         masks = new Vector256Long[] { default };
     }
 

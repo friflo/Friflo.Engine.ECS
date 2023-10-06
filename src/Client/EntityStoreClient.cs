@@ -4,6 +4,7 @@
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
 
+// ReSharper disable UnassignedReadonlyField
 namespace Friflo.Fliox.Engine.Client;
 
 public class EntityStoreClient : FlioxClient

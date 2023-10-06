@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable once CheckNamespace
