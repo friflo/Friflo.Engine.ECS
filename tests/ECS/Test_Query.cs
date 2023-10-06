@@ -2,13 +2,22 @@ using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-// ReSharper disable StringLiteralTypo
 
+// ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
 public static class Test_Query
 {
+    [Test]
+    public static void Test_SignatureTypes()
+    {
+        var types           = new SignatureTypes();
+        AreEqual("[]",      types.ToString());
+        var signature       = Signature.Get<Position>();
+        AreEqual("[Position]", signature.ComponentTypes.ToString());
+    }
+    
     [Test]
     public static void Test_Signature_Query()
     {

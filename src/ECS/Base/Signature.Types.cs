@@ -72,7 +72,7 @@ public struct SignatureTypes
     
     private string GetString () {
         if (length == 0) {
-            return "";
+            return "[]";
         }
         var sb = new StringBuilder();
         sb.Append('[');
