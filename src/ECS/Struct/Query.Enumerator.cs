@@ -33,6 +33,7 @@ public struct Ref<T> where T : struct
         }
         if (copy.Length >= components.Length) {
             Array.Copy(components, copy, count);
+            this.components = copy;
         }
     }
 

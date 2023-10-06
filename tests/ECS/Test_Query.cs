@@ -101,6 +101,25 @@ public static class Test_Query
     }
     
     [Test]
+    public static void Test_Query_ForEach_RO()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new Position(1,2,3));
+        entity.AddComponent(new Rotation(4,5,6,7));
+        
+        var sig     = Signature.Get<Position, Rotation>();
+        var query   = store.Query(sig).RO<Position>();
+        var count   = 0;
+        query.ForEach((position, rotation) => {
+            count++;
+            position.Value.x = 42;
+        }).Run();
+        AreEqual(1,     count);
+        AreEqual(1,     entity.Position.x);
+    }
+    
+    [Test]
     public static void Test_Query_loop()
     {
         var store   = new EntityStore();
