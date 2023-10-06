@@ -22,10 +22,11 @@ public abstract class ArchetypeQuery
 #region private fields
     private  readonly   EntityStore     store;
     private  readonly   ArchetypeMask   mask;
-    private             int             lastArchetypeCount;
-    private             Archetype[]     archetypes;
     internal readonly   StructIndex     structIndex;
+    //
+    private             Archetype[]     archetypes;
     private             int             archetypeCount;
+    private             int             lastArchetypeCount;
     #endregion
     
     internal ArchetypeQuery(EntityStore store, Signature signature) {
