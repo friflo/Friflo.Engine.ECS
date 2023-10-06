@@ -7,26 +7,34 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+public struct Ref<T> where T : struct
+{
+    internal            T[]     components;
+    internal            int     pos;
+    public          ref T       Value => ref components[pos];
+
+    public  override    string  ToString() => Value.ToString();
+}
+
 public ref struct QueryEnumerator<T1, T2>
     where T1 : struct
     where T2 : struct
 {
 
-    private readonly    int         structIndex1;
-    private readonly    int         structIndex2;
+    private readonly    int                 structIndex1;
+    private readonly    int                 structIndex2;
     
-    private     StructChunk<T1>[]   chunks1;
-    private     StructChunk<T2>[]   chunks2;
-    private             int         chunkPos;
-    private             int         chunkLen;
+    private             StructChunk<T1>[]   chunks1;
+    private             StructChunk<T2>[]   chunks2;
+    private             int                 chunkPos;
+    private             int                 chunkLen;
     
-    private             int         componentLen;
-    private             T1[]        components1;
-    private             T2[]        components2;
-    private             int         componentPos;
+    private             int                 componentLen;
+    private             Ref<T1>             ref1;   // its .pos is used as loop condition in MoveNext()
+    private             Ref<T2>             ref2;
     
-    private int                     archetypePos;
-    private ReadOnlySpan<Archetype> archetypes;
+    private             int                 archetypePos;
+    private ReadOnlySpan<Archetype>         archetypes;
     
     internal  QueryEnumerator(ArchetypeQuery<T1, T2> query)
     {
@@ -40,24 +48,28 @@ public ref struct QueryEnumerator<T1, T2>
         chunkLen        = 1;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-        components1     = chunks1[0].components;
-        components2     = chunks2[0].components;
-        componentPos    = -1;
+        ref1.components = chunks1[0].components;
+        ref2.components = chunks2[0].components;
+        ref1.pos        = -1;
+        ref2.pos        = -1;
         componentLen    = archetype.EntityCount - 1;
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public (T1, T2) Current   => (components1[componentPos], components2[componentPos]);
+    public (Ref<T1>, Ref<T2>) Current   => (ref1, ref2);
     
     // --- IEnumerator
     public bool MoveNext() {
-        if (componentPos < componentLen) {
-            componentPos++;
+        if (ref1.pos < componentLen) {
+            ref1.pos++;
+            ref2.pos++;
             return true;
         }
         if (chunkPos < chunks1.Length - 1) {
-            components1     = chunks1[chunkPos].components;
-            components2     = chunks2[chunkPos].components;
+            ref1.components = chunks1[chunkPos].components;
+            ref1.pos = 0;
+            ref2.components = chunks2[chunkPos].components;
+            ref2.pos = 0;
             chunkPos++;
             return true;
         }
@@ -67,9 +79,10 @@ public ref struct QueryEnumerator<T1, T2>
             chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
             chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
             chunkPos        = 0;
-            components1     = chunks1[0].components;
-            components2     = chunks2[0].components;
-            componentPos    = 0;
+            ref1.components = chunks1[0].components;
+            ref1.pos        = 0;
+            ref2.components = chunks2[0].components;
+            ref2.pos        = 0;
             return true;
         }
         return false;  
