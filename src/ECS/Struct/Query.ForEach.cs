@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 #region --- T1 T2
 
-public struct ForEachQuery<T1, T2>
+public struct QueryForEach<T1, T2>
     where T1 : struct
     where T2 : struct
 {
@@ -18,7 +18,7 @@ public struct ForEachQuery<T1, T2>
     private             T1[]                       copyT1;
     private             T2[]                       copyT2;
     
-    internal ForEachQuery(
+    internal QueryForEach(
         ArchetypeQuery<T1, T2>      query,
         Action<Ref<T1>, Ref<T2>>    lambda)
     {
