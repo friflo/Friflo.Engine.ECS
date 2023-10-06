@@ -40,8 +40,8 @@ public ref struct ChunkEnumerator<T1, T2>
     {
         archetypes      = query.Archetypes;
         archetypePos    = 0;
-        structIndex1    = query.structIndex.T1;
-        structIndex2    = query.structIndex.T2;
+        structIndex1    = query.structIndexes.T1;
+        structIndex2    = query.structIndexes.T2;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;

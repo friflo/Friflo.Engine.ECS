@@ -38,27 +38,28 @@ public ref struct QueryEnumerator<T1, T2>
     private             int                 chunkPos;
     private             int                 chunkLen;
     
-    private             int                 componentLen;
     private             Ref<T1>             ref1;   // its .pos is used as loop condition in MoveNext()
     private             Ref<T2>             ref2;
+    private             int                 componentLen;
     
     private             int                 archetypePos;
     private ReadOnlySpan<Archetype>         archetypes;
     
     internal  QueryEnumerator(ArchetypeQuery<T1, T2> query)
     {
-        structIndex1    = query.structIndex.T1;
-        structIndex2    = query.structIndex.T2;
+        structIndex1    = query.structIndexes.T1;
+        structIndex2    = query.structIndexes.T2;
         archetypePos    = 0;
         archetypes      = query.Archetypes;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
-        chunkLen        = 1;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
+        chunkLen        = 1;
+        
         ref1.components = chunks1[0].components;
-        ref2.components = chunks2[0].components;
         ref1.pos        = -1;
+        ref2.components = chunks2[0].components;
         ref2.pos        = -1;
         componentLen    = archetype.EntityCount - 1;
     }
