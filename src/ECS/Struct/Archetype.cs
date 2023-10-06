@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -100,9 +101,24 @@ public sealed class Archetype
         return archetype;
     }
     
-    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, in SignatureTypes types)
+    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypes types)
     {
         var length          = types.Length;
+        var componentHeaps  = new StructHeap[length];
+        for (int n = 0; n < length; n++) {
+            componentHeaps[n] = types[n].CreateHeap(config.capacity);
+        }
+        var archetype   = new Archetype(config, componentHeaps, null);
+        int pos         = 0;
+        foreach (var component in componentHeaps) {
+            archetype.AddStructHeap(pos++, component);
+        }
+        return archetype;
+    }
+    
+    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> types)
+    {
+        var length          = types.Count;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);

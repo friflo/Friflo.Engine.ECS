@@ -32,7 +32,7 @@ public sealed partial class EntityStore
             types[n] = compTypes.GetStructType(heap.structIndex, heap.type);
         }
         types[currentLen] = compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T));
-        archetype = Archetype.CreateWithStructTypes(config, types);
+        archetype = Archetype.CreateWithSignatureTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }
@@ -85,7 +85,7 @@ public sealed partial class EntityStore
         if (n != componentCount) {
             throw new InvalidOperationException("unexpected length");
         }
-        result      = Archetype.CreateWithStructTypes(config, types);
+        result      = Archetype.CreateWithSignatureTypes(config, types);
         AddArchetype(result);
         return result;
     }

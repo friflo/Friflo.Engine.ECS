@@ -17,7 +17,7 @@ internal sealed class ComponentReader
 {
     private readonly    ObjectReader                        componentReader;
     private readonly    Dictionary<string, ComponentType>   componentTypes;
-    private             SignatureTypes                      structTypes;
+    private readonly    List<ComponentType>                 structTypes;
     private             Utf8JsonParser                      parser;
     private             Bytes                               buffer;
     private             RawComponent[]                      components;
@@ -30,6 +30,7 @@ internal sealed class ComponentReader
         components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
         componentTypes  = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentTypes.ComponentTypeByKey);
+        structTypes     = new List<ComponentType>();
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)

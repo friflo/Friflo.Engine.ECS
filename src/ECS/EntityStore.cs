@@ -123,7 +123,7 @@ public sealed partial class EntityStore
         EnsureNodesLength(2);
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
-        defaultArchetype    = Archetype.CreateWithStructTypes(config, new SignatureTypes(0));
+        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypes(0));
         queries             = new List<ArchetypeQuery>();
         clientEntities      = client?.entities.Local;
         AddArchetype(defaultArchetype);

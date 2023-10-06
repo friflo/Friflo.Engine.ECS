@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public struct SignatureTypes
 {
-    internal            int             length;
+    internal readonly   int             length;
     internal            ComponentType   T1;
     internal            ComponentType   T2;
     internal            ComponentType   T3;
@@ -24,19 +24,6 @@ public struct SignatureTypes
 
     internal SignatureTypes(int length) {
         this.length = length;
-    }
-    
-    public void Clear() {
-        length = 0;
-        T1 = null;
-        T2 = null;
-        T3 = null;
-        T4 = null;
-        T5 = null;
-    }
-    
-    public void Add(ComponentType type) {
-        this[length++] = type;
     }
     
     public ComponentType this [int index] {
