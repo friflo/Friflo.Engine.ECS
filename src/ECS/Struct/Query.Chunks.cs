@@ -7,13 +7,13 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct ArchetypeChunks<T1, T2>  // : IEnumerable <>  // <- not implemented to avoid boxing
+public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not implemented to avoid boxing
     where T1 : struct
     where T2 : struct
 {
     readonly ArchetypeQuery<T1, T2> query;
     
-    internal ArchetypeChunks(ArchetypeQuery<T1, T2> query) {
+    internal QueryChunks(ArchetypeQuery<T1, T2> query) {
         this.query = query;
     }
     
