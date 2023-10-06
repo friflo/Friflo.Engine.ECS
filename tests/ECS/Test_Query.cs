@@ -90,7 +90,7 @@ public static class Test_Query
             count++;
             AreEqual(3, position.z);
             position.x = position.y * rotation.x;
-        });
+        }).Run();
         AreEqual(1, count);
     }
     

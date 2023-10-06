@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -108,27 +107,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         : base(store, signature) {
     }
     
-    public ArchetypeChunks<T1,T2> Chunks => new (this);
-    
-    public QueryEnumerator<T1,T2> GetEnumerator() => new QueryEnumerator<T1,T2>(this);
-    
-    public void ForEach(Action<T1, T2> lambda)
-    {
-        foreach (var archetype in Archetypes)
-        {
-            var heapMap     = archetype.heapMap;
-            var entityCount = archetype.EntityCount;
-            var heap1       = (StructHeap<T1>)heapMap[structIndexes.T1];
-            var heap2       = (StructHeap<T2>)heapMap[structIndexes.T2];
-            for (int n = 0; n < entityCount; n++)
-            {
-                // todo unroll loop
-                var component1 = heap1.chunks[n / ChunkSize].components[n % ChunkSize];
-                var component2 = heap2.chunks[n / ChunkSize].components[n % ChunkSize];
-                lambda(component1, component2);
-            }
-        }
-    }
+    public ArchetypeChunks<T1,T2>   Chunks                          => new (this);
+    public QueryEnumerator<T1,T2>   GetEnumerator()                 => new (this);
+    public ForEachQuery<T1, T2>     ForEach(Action<T1, T2> lambda)  => new (this, lambda);
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
