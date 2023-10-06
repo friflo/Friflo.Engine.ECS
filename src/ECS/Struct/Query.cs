@@ -7,6 +7,16 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+
+internal struct StructIndex
+{
+    internal int T1;
+    internal int T2;
+    internal int T3;
+    internal int T4;
+    internal int T5;
+}
+
 public abstract class ArchetypeQuery
 {
 #region private fields
@@ -14,7 +24,7 @@ public abstract class ArchetypeQuery
     private  readonly   ArchetypeMask   mask;
     private             int             lastArchetypeCount;
     private             Archetype[]     archetypes;
-    internal readonly   int[]           structIndices;  // todo use index1, index2, index3, ...   
+    internal readonly   StructIndex     structIndex;
     private             int             archetypeCount;
     #endregion
     
@@ -24,9 +34,34 @@ public abstract class ArchetypeQuery
         mask                = new ArchetypeMask(signature);
         lastArchetypeCount  = 1;
         var componentTypes  = signature.componentTypes;
-        structIndices       = new int[componentTypes.Length];
-        for (int n = 0; n < componentTypes.Length; n++) {
-            structIndices[n] = componentTypes[n].index;
+        switch (componentTypes.Length) {
+            case 1:
+                structIndex.T1 = componentTypes[0].index;
+                break;
+            case 2:
+                structIndex.T1 = componentTypes[0].index;
+                structIndex.T2 = componentTypes[1].index;
+                break;
+            case 3:
+                structIndex.T1 = componentTypes[0].index;
+                structIndex.T2 = componentTypes[1].index;
+                structIndex.T3 = componentTypes[2].index;
+                break;
+            case 4:
+                structIndex.T1 = componentTypes[0].index;
+                structIndex.T2 = componentTypes[1].index;
+                structIndex.T3 = componentTypes[2].index;
+                structIndex.T4 = componentTypes[3].index;
+                break;
+            case 5:
+                structIndex.T1 = componentTypes[0].index;
+                structIndex.T2 = componentTypes[1].index;
+                structIndex.T3 = componentTypes[2].index;
+                structIndex.T4 = componentTypes[3].index;
+                structIndex.T5 = componentTypes[4].index;
+                break;
+            default:
+                throw new NotImplementedException();
         }
     }
     
@@ -79,11 +114,10 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     {
         foreach (var archetype in Archetypes)
         {
-            var indices     = structIndices;
             var heapMap     = archetype.heapMap;
             var entityCount = archetype.EntityCount;
-            var heap1       = (StructHeap<T1>)heapMap[indices[0]];
-            var heap2       = (StructHeap<T2>)heapMap[indices[1]];
+            var heap1       = (StructHeap<T1>)heapMap[structIndex.T1];
+            var heap2       = (StructHeap<T2>)heapMap[structIndex.T2];
             for (int n = 0; n < entityCount; n++)
             {
                 // todo unroll loop

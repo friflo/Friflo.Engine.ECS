@@ -47,9 +47,8 @@ public ref struct QueryEnumerator<T1, T2>
     
     internal  QueryEnumerator(ArchetypeQuery<T1, T2> query)
     {
-        var indices     = query.structIndices;
-        structIndex1    = indices[0];
-        structIndex2    = indices[1];
+        structIndex1    = query.structIndex.T1;
+        structIndex2    = query.structIndex.T2;
         archetypePos    = 0;
         archetypes      = query.Archetypes;
         var archetype   = archetypes[0];
