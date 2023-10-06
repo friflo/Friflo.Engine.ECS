@@ -5,19 +5,8 @@ using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
-
-
-internal struct StructIndexes
-{
-    internal int T1;
-    internal int T2;
-    internal int T3;
-    internal int T4;
-    internal int T5;
-}
 
 public abstract class ArchetypeQuery
 {
@@ -114,7 +103,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         : base(store, signature) {
     }
     
-    public ArchetypeQuery<T1, T2> RO<T>() where T : struct
+    public ArchetypeQuery<T1, T2> ReadOnly<T>() where T : struct
     {
         readOnlyT1 |= typeof(T1) == typeof(T);
         readOnlyT2 |= typeof(T2) == typeof(T);

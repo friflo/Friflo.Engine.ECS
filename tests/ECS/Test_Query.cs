@@ -109,7 +109,7 @@ public static class Test_Query
         entity.AddComponent(new Rotation(4,5,6,7));
         
         var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig).RO<Position>();
+        var query   = store.Query(sig).ReadOnly<Position>();
         var count   = 0;
         query.ForEach((position, rotation) => {
             count++;

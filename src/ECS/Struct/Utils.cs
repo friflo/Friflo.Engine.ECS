@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -28,25 +27,5 @@ public static class StructUtils
         }
         structKey = null;
         return MissingAttribute;
-    }
-}
-
-[StructLayout(LayoutKind.Explicit)]
-internal struct DecomposedGuid
-{
-    [FieldOffset(00)] public Guid Value;
-    [FieldOffset(00)] public long Hi;
-    [FieldOffset(08)] public long Lo;
-    public DecomposedGuid(Guid value) : this() => Value = value;
-}
-
-internal readonly struct ArchetypeInfo
-{
-    public   readonly   Archetype   type;
-    internal readonly   long        hash;
-    
-    public ArchetypeInfo(long hash, Archetype type) {
-        this.type   = type;
-        this.hash   = hash;
     }
 }
