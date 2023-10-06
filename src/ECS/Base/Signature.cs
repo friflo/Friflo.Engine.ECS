@@ -30,7 +30,7 @@ public abstract class Signature
                     public   readonly   long                archetypeHash;
                     public              SignatureTypes      ComponentTypes => componentTypes;
     
-                    public   override   string              ToString() => GetString();
+                    public   override   string              ToString() => componentTypes.GetString();
 
     // --- private fields
     [Browse(Never)] internal readonly   SignatureTypes      componentTypes;
@@ -54,18 +54,6 @@ public abstract class Signature
     private static int NextIndex()
     {
         return NextSignatureIndex++; // todo check max signatures
-    }
-    
-    private string GetString() {
-        var sb = new StringBuilder();
-        sb.Append('[');
-        foreach (var type in componentTypes) {
-            sb.Append(type.type.Name);
-            sb.Append(", ");
-        }
-        sb.Length -= 2;
-        sb.Append(']');
-        return sb.ToString();
     }
     
     /// <summary>

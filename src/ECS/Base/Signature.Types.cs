@@ -70,7 +70,7 @@ public struct SignatureTypes
         }
     }
     
-    private string GetString () {
+    internal string GetString () {
         if (length == 0) {
             return "[]";
         }
