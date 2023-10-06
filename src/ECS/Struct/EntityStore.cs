@@ -88,17 +88,12 @@ public sealed partial class EntityStore
     // -------------------------------------- archetype query --------------------------------------
 #region archetype query
     private void AddQuery(ArchetypeQuery query) {
-        queryMap[query.signature.index] = query;
         queries.Add(query);
     }
     
     public ArchetypeQuery<T> Query<T> (Signature<T> signature)
         where T : struct
     {
-        var query = queryMap[signature.index];
-        if (query != null) {
-            return (ArchetypeQuery<T>)query;
-        }
         var newQuery = new ArchetypeQuery<T>(this, signature); 
         AddQuery(newQuery);
         return newQuery;
@@ -108,10 +103,6 @@ public sealed partial class EntityStore
         where T1: struct
         where T2: struct
     {
-        var query = queryMap[signature.index];
-        if (query != null) {
-            return (ArchetypeQuery<T1, T2>)query;
-        }
         var newQuery = new ArchetypeQuery<T1, T2>(this, signature); 
         AddQuery(newQuery);
         return newQuery;
@@ -122,10 +113,6 @@ public sealed partial class EntityStore
         where T2: struct
         where T3: struct
     {
-        var query = queryMap[signature.index];
-        if (query != null) {
-            return (ArchetypeQuery<T1, T2, T3>)query;
-        }
         var newQuery = new ArchetypeQuery<T1, T2, T3>(this, signature); 
         AddQuery(newQuery);
         return newQuery;
@@ -137,10 +124,6 @@ public sealed partial class EntityStore
         where T3: struct
         where T4: struct
     {
-        var query = queryMap[signature.index];
-        if (query != null) {
-            return (ArchetypeQuery<T1, T2, T3, T4>)query;
-        }
         var newQuery = new ArchetypeQuery<T1, T2, T3, T4>(this, signature); 
         AddQuery(newQuery);
         return newQuery;
@@ -153,10 +136,6 @@ public sealed partial class EntityStore
         where T4: struct
         where T5: struct
     {
-        var query = queryMap[signature.index];
-        if (query != null) {
-            return (ArchetypeQuery<T1, T2, T3, T4, T5>)query;
-        }
         var newQuery = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature); 
         AddQuery(newQuery);
         return newQuery;

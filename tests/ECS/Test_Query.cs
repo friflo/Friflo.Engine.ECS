@@ -27,11 +27,11 @@ public static class Test_Query
         var query4 =    store.Query(sig4);
         var query5 =    store.Query(sig5);
         
-        AreSame(query1, store.Query(sig1));
+    /*  AreSame(query1, store.Query(sig1));
         AreSame(query2, store.Query(sig2));
         AreSame(query3, store.Query(sig3));
         AreSame(query4, store.Query(sig4));
-        AreSame(query5, store.Query(sig5));
+        AreSame(query5, store.Query(sig5)); */
         
         AreEqual(0, query1.Archetypes.Length);
         AreEqual(0, query2.Archetypes.Length);

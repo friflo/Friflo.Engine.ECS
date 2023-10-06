@@ -13,7 +13,6 @@ public abstract class ArchetypeQuery
 #region private fields
                     private  readonly   EntityStore     store;
                     private  readonly   ArchetypeMask   mask;
-    [Browse(Never)] internal readonly   Signature       signature;
     [Browse(Never)] internal readonly   StructIndexes   structIndexes;
     //
     [Browse(Never)] private             Archetype[]     archetypes;
@@ -25,7 +24,6 @@ public abstract class ArchetypeQuery
         this.store          = store;
         archetypes          = new Archetype[1];
         mask                = new ArchetypeMask(signature);
-        this.signature      = signature; 
         lastArchetypeCount  = 1;
         var componentTypes  = signature.componentTypes;
         switch (componentTypes.Length) {
