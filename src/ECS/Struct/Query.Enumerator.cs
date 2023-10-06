@@ -31,10 +31,11 @@ public struct Ref<T> where T : struct
             this.components = components;
             return;
         }
-        if (copy.Length >= components.Length) {
-            Array.Copy(components, copy, count);
-            this.components = copy;
+        if (copy.Length < count) {
+            copy = new T[components.Length];
         }
+        Array.Copy(components, copy, count);
+        this.components = copy;
     }
 
     public  override    string  ToString() => Value.ToString();
