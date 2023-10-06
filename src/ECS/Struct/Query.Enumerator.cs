@@ -7,6 +7,8 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+#region T1 T2
+
 public ref struct QueryEnumerator<T1, T2>
     where T1 : struct
     where T2 : struct
@@ -81,3 +83,4 @@ public ref struct QueryEnumerator<T1, T2>
         return false;  
     }
 }
+#endregion
