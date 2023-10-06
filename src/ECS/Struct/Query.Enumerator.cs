@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;

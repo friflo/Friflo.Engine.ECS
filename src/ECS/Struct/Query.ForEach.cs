@@ -2,21 +2,20 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 #region --- T1 T2
 
-public struct QueryForEach<T1, T2>
+public readonly struct QueryForEach<T1, T2>
     where T1 : struct
     where T2 : struct
 {
     private readonly    ArchetypeQuery<T1,T2>      query;
     private readonly    Action<Ref<T1>, Ref<T2>>   lambda;
-    private             T1[]                       copyT1;
-    private             T2[]                       copyT2;
+    private readonly    T1[]                       copyT1;
+    private readonly    T2[]                       copyT2;
     
     internal QueryForEach(
         ArchetypeQuery<T1, T2>      query,
