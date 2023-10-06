@@ -26,7 +26,7 @@ public sealed partial class EntityStore
         var compTypes   = Static.ComponentTypes;
         var heaps       = current.Heaps;
         var currentLen  = heaps.Length;
-        var types       = new ComponentType[currentLen + 1];
+        var types       = new SignatureTypes(currentLen + 1);
         for (int n = 0; n < currentLen; n++) {
             var heap = heaps[n];
             types[n] = compTypes.GetStructType(heap.structIndex, heap.type);
@@ -73,7 +73,7 @@ public sealed partial class EntityStore
         if (componentCount == 0) {
             return null;
         }
-        var types       = new ComponentType[componentCount];
+        var types       = new SignatureTypes(componentCount);
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
         int n = 0;

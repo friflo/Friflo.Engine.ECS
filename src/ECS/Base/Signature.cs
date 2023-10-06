@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Text;
 using static System.Numerics.BitOperations;
@@ -29,19 +28,19 @@ public abstract class Signature
                     public   readonly   int                 index;
     /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
                     public   readonly   long                archetypeHash;
-                    public   ReadOnlySpan<ComponentType>    ComponentTypes => componentTypes;
+                    public              SignatureTypes      ComponentTypes => componentTypes;
     
                     public   override   string              ToString() => GetString();
 
     // --- private fields
-    [Browse(Never)] internal readonly   ComponentType[]     componentTypes;
+    [Browse(Never)] internal readonly   SignatureTypes      componentTypes;
     
     // --- static
     private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();
     private static          int                             NextSignatureIndex;
     
     
-    internal Signature(ComponentType[] componentTypes, int index)
+    internal Signature(in SignatureTypes componentTypes, int index)
     {
         this.componentTypes = componentTypes;
         this.index          = index;
@@ -86,8 +85,8 @@ public abstract class Signature
             return (Signature<T>)result;
         }
         var compTypes   = EntityStore.Static.ComponentTypes;
-        var types       = new [] {
-            compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T))
+        var types       = new SignatureTypes(1) {
+            T1 = compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         };
         var signature   = new Signature<T>(types, NextIndex());
         Signatures.Add(hash, signature);
@@ -114,9 +113,9 @@ public abstract class Signature
             return (Signature<T1,T2>)result;
         }
         var compTypes   = EntityStore.Static.ComponentTypes;
-        var types       = new [] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
+        var types       = new SignatureTypes(2) {
+            T1 = compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
+            T2 = compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
         };
         var signature   = new Signature<T1, T2>(types, NextIndex());
         Signatures.Add(hash, signature);
@@ -145,10 +144,10 @@ public abstract class Signature
             return (Signature<T1, T2, T3>)result;
         }
         var compTypes   = EntityStore.Static.ComponentTypes;
-        var types       = new [] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
+        var types       = new SignatureTypes(3) {
+            T1 = compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
+            T2 = compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
+            T3 = compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
         };
         var signature   = new Signature<T1, T2, T3>(types, NextIndex());
         Signatures.Add(hash, signature);
@@ -179,11 +178,11 @@ public abstract class Signature
             return (Signature<T1, T2, T3, T4>)result;
         }
         var compTypes   = EntityStore.Static.ComponentTypes;
-        var types       = new [] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
-            compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
+        var types       = new SignatureTypes(4) {
+            T1 = compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
+            T2 = compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
+            T3 = compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
+            T4 = compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
         };
         var signature   = new Signature<T1, T2, T3, T4>(types, NextIndex());
         Signatures.Add(hash, signature);
@@ -216,12 +215,12 @@ public abstract class Signature
             return (Signature<T1, T2, T3, T4, T5>)result;
         }
         var compTypes   = EntityStore.Static.ComponentTypes;
-        var types       = new [] {
-            compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
-            compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
-            compTypes.GetStructType(StructHeap<T5>.StructIndex, typeof(T5)),
+        var types       = new SignatureTypes(5) {
+            T1 = compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
+            T2 = compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
+            T3 = compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
+            T4 = compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
+            T5 = compTypes.GetStructType(StructHeap<T5>.StructIndex, typeof(T5)),
         };
         var signature = new Signature<T1, T2, T3, T4, T5>(types, NextIndex());
         Signatures.Add(hash, signature);
@@ -233,7 +232,7 @@ public abstract class Signature
 public sealed class Signature<T> : Signature
     where T : struct
 {
-    internal Signature(ComponentType[] componentTypes, int index)
+    internal Signature(in SignatureTypes componentTypes, int index)
         : base(componentTypes, index) {
     }
 }
@@ -242,7 +241,7 @@ public sealed class Signature<T1, T2> : Signature
     where T1 : struct
     where T2 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }
@@ -252,7 +251,7 @@ public sealed class Signature<T1, T2, T3> : Signature
     where T2 : struct
     where T3 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }
@@ -263,7 +262,7 @@ public sealed class Signature<T1, T2, T3, T4> : Signature
     where T3 : struct
     where T4 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }
@@ -275,7 +274,7 @@ public sealed class Signature<T1, T2, T3, T4, T5> : Signature
     where T4 : struct
     where T5 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }

@@ -21,8 +21,8 @@ public sealed partial class EntityStore
         }
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
-        var types       = new ComponentType[] {
-            compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T))
+        var types       = new SignatureTypes(1) {
+            T1 = compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         };
         archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);

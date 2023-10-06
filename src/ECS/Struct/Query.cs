@@ -28,29 +28,29 @@ public abstract class ArchetypeQuery
         var componentTypes  = signature.componentTypes;
         switch (componentTypes.Length) {
             case 1:
-                structIndexes.T1 = componentTypes[0].index;
+                structIndexes.T1 = componentTypes.T1.index;
                 break;
             case 2:
-                structIndexes.T1 = componentTypes[0].index;
-                structIndexes.T2 = componentTypes[1].index;
+                structIndexes.T1 = componentTypes.T1.index;
+                structIndexes.T2 = componentTypes.T2.index;
                 break;
             case 3:
-                structIndexes.T1 = componentTypes[0].index;
-                structIndexes.T2 = componentTypes[1].index;
-                structIndexes.T3 = componentTypes[2].index;
+                structIndexes.T1 = componentTypes.T1.index;
+                structIndexes.T2 = componentTypes.T2.index;
+                structIndexes.T3 = componentTypes.T3.index;
                 break;
             case 4:
-                structIndexes.T1 = componentTypes[0].index;
-                structIndexes.T2 = componentTypes[1].index;
-                structIndexes.T3 = componentTypes[2].index;
-                structIndexes.T4 = componentTypes[3].index;
+                structIndexes.T1 = componentTypes.T1.index;
+                structIndexes.T2 = componentTypes.T2.index;
+                structIndexes.T3 = componentTypes.T3.index;
+                structIndexes.T4 = componentTypes.T4.index;
                 break;
             case 5:
-                structIndexes.T1 = componentTypes[0].index;
-                structIndexes.T2 = componentTypes[1].index;
-                structIndexes.T3 = componentTypes[2].index;
-                structIndexes.T4 = componentTypes[3].index;
-                structIndexes.T5 = componentTypes[4].index;
+                structIndexes.T1 = componentTypes.T1.index;
+                structIndexes.T2 = componentTypes.T2.index;
+                structIndexes.T3 = componentTypes.T3.index;
+                structIndexes.T4 = componentTypes.T4.index;
+                structIndexes.T5 = componentTypes.T5.index;
                 break;
             default:
                 throw new NotImplementedException();
