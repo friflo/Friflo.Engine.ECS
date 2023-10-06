@@ -83,15 +83,21 @@ public static class Test_Query
         entity.AddComponent(new Position(1,2,3));
         entity.AddComponent(new Rotation(4,5,6,7));
         
+        var entity3  = store.CreateEntity();
+        entity3.AddComponent(new Position(1,2,3));
+        entity3.AddComponent(new Rotation(8, 8, 8, 8));
+        entity3.AddComponent(new Scale3  (7, 7, 7));
+        
         var sig     = Signature.Get<Position, Rotation>();
         var query   = store.Query(sig);
-        var count = 0;
+        var count   = 0;
         query.ForEach((position, rotation) => {
             count++;
-            AreEqual(3, position.z);
-            position.x = position.y * rotation.x;
+            AreEqual(3, position.Value.z);
+            rotation.Value.x = 42;
         }).Run();
-        AreEqual(1, count);
+        AreEqual(2,     count);
+        AreEqual(42,    entity.Rotation.x);
     }
     
     [Test]
