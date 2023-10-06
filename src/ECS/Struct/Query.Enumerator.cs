@@ -13,6 +13,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <typeparam name="T"></typeparam>
 public struct Ref<T> where T : struct
 {
+    /// <summary>
+    /// Returns a mutable struct component value by reference.<br/>
+    /// <see cref="Value"/> modifications are instantaneously available via <see cref="GameEntity.GetComponentValue{T}"/>  
+    /// </summary>
     public          ref T       Value => ref components[pos];
     
     internal            T[]     components;
