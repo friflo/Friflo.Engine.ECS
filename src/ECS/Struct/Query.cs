@@ -107,6 +107,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     where T1 : struct
     where T2 : struct
 {
+    internal readonly bool readOnlyT1;
+    internal readonly bool readOnlyT2;
+    
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2> signature)
         : base(store, signature) {
     }

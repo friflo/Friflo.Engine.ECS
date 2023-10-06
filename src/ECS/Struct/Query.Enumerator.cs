@@ -19,8 +19,22 @@ public struct Ref<T> where T : struct
     /// </summary>
     public          ref T       Value => ref components[pos];
     
-    internal            T[]     components;
+    private             T[]     components;
     internal            int     pos;
+    
+    internal void Set(T[] components) {
+        this.components = components;
+    }
+    
+    internal void Set(T[] components, ref T[] copy, int count) {
+        if (copy == null) {
+            this.components = components;
+            return;
+        }
+        if (copy.Length >= components.Length) {
+            Array.Copy(components, copy, count);
+        }
+    }
 
     public  override    string  ToString() => Value.ToString();
 }
@@ -57,9 +71,9 @@ public ref struct QueryEnumerator<T1, T2>
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
         chunkLen        = 1;
         
-        ref1.components = chunks1[0].components;
+        ref1.Set(chunks1[0].components);
         ref1.pos        = -1;
-        ref2.components = chunks2[0].components;
+        ref2.Set(chunks2[0].components);
         ref2.pos        = -1;
         componentLen    = archetype.EntityCount - 1;
     }
@@ -77,9 +91,9 @@ public ref struct QueryEnumerator<T1, T2>
             return true;
         }
         if (chunkPos < chunks1.Length - 1) {
-            ref1.components = chunks1[chunkPos].components;
+            ref1.Set(chunks1[chunkPos].components);
             ref1.pos = 0;
-            ref2.components = chunks2[chunkPos].components;
+            ref2.Set(chunks2[chunkPos].components);
             ref2.pos = 0;
             chunkPos++;
             return true;
@@ -90,10 +104,10 @@ public ref struct QueryEnumerator<T1, T2>
             chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
             chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
             chunkPos        = 0;
-            ref1.components = chunks1[0].components;
-            ref1.pos        = 0;
-            ref2.components = chunks2[0].components;
-            ref2.pos        = 0;
+            ref1.Set(chunks1[0].components);
+            ref1.pos = 0;
+            ref2.Set(chunks2[0].components);
+            ref2.pos = 0;
             return true;
         }
         return false;  
