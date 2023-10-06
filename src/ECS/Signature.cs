@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static System.Numerics.BitOperations;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable StaticMemberInGenericType
@@ -15,27 +17,25 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class Signature
 {
     // --- public fields
-    public   readonly   int                 index;
+                    public   readonly   int                 index;
     /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
-    public   readonly   ulong               signatureHash;
-    public   readonly   long                archetypeHash;
-    public   ReadOnlySpan<ComponentType>    ComponentTypes => componentTypes;
+                    public   readonly   long                archetypeHash;
+                    public   ReadOnlySpan<ComponentType>    ComponentTypes => componentTypes;
     
-    public   override   string              ToString() => GetString();
+                    public   override   string              ToString() => GetString();
 
     // --- private fields
-    internal readonly   ComponentType[]     componentTypes;
+    [Browse(Never)] internal readonly   ComponentType[]     componentTypes;
     
     // --- static
     private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();
     private static          int                             NextSignatureIndex;
     
     
-    internal Signature(ComponentType[] componentTypes, int index, ulong signatureHash)
+    internal Signature(ComponentType[] componentTypes, int index)
     {
         this.componentTypes = componentTypes;
         this.index          = index;
-        this.signatureHash  = signatureHash;
         long hash = 0;
         foreach (var type in componentTypes) {
             hash ^= type.type.Handle();
@@ -72,7 +72,7 @@ public abstract class Signature
         var types       = new [] {
             compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         };
-        var signature       = new Signature<T>(types, NextIndex(), hash);
+        var signature   = new Signature<T>(types, NextIndex());
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -93,7 +93,7 @@ public abstract class Signature
             compTypes.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
             compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
         };
-        var signature       = new Signature<T1, T2>(types, NextIndex(), hash);
+        var signature   = new Signature<T1, T2>(types, NextIndex());
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -117,7 +117,7 @@ public abstract class Signature
             compTypes.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
             compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
         };
-        var signature       = new Signature<T1, T2, T3>(types, NextIndex(), hash);
+        var signature   = new Signature<T1, T2, T3>(types, NextIndex());
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -144,7 +144,7 @@ public abstract class Signature
             compTypes.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
             compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
         };
-        var signature       = new Signature<T1, T2, T3, T4>(types, NextIndex(), hash);
+        var signature   = new Signature<T1, T2, T3, T4>(types, NextIndex());
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -174,7 +174,7 @@ public abstract class Signature
             compTypes.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
             compTypes.GetStructType(StructHeap<T5>.StructIndex, typeof(T5)),
         };
-        var signature       = new Signature<T1, T2, T3, T4, T5>(types, NextIndex(), hash);
+        var signature = new Signature<T1, T2, T3, T4, T5>(types, NextIndex());
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -184,8 +184,8 @@ public abstract class Signature
 public sealed class Signature<T> : Signature
     where T : struct
 {
-    internal Signature(ComponentType[] componentTypes, int index, ulong hash)
-        : base(componentTypes, index, hash) {
+    internal Signature(ComponentType[] componentTypes, int index)
+        : base(componentTypes, index) {
     }
 }
 
@@ -193,8 +193,8 @@ public sealed class Signature<T1, T2> : Signature
     where T1 : struct
     where T2 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
-        : base(componentTypes, signatureIndex, hash) {
+    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+        : base(componentTypes, signatureIndex) {
     }
 }
 
@@ -203,8 +203,8 @@ public sealed class Signature<T1, T2, T3> : Signature
     where T2 : struct
     where T3 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
-        : base(componentTypes, signatureIndex, hash) {
+    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+        : base(componentTypes, signatureIndex) {
     }
 }
 
@@ -214,8 +214,8 @@ public sealed class Signature<T1, T2, T3, T4> : Signature
     where T3 : struct
     where T4 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
-        : base(componentTypes, signatureIndex, hash) {
+    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+        : base(componentTypes, signatureIndex) {
     }
 }
 
@@ -226,8 +226,8 @@ public sealed class Signature<T1, T2, T3, T4, T5> : Signature
     where T4 : struct
     where T5 : struct
 {
-    internal Signature(ComponentType[] componentTypes, int signatureIndex, ulong hash)
-        : base(componentTypes, signatureIndex, hash) {
+    internal Signature(ComponentType[] componentTypes, int signatureIndex)
+        : base(componentTypes, signatureIndex) {
     }
 }
 
