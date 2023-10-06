@@ -7,11 +7,16 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+/// <summary>
+/// Enables access to a struct component by reference using its property <see cref="Value"/>
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public struct Ref<T> where T : struct
 {
+    public          ref T       Value => ref components[pos];
+    
     internal            T[]     components;
     internal            int     pos;
-    public          ref T       Value => ref components[pos];
 
     public  override    string  ToString() => Value.ToString();
 }
@@ -55,7 +60,9 @@ public ref struct QueryEnumerator<T1, T2>
         componentLen    = archetype.EntityCount - 1;
     }
     
-    /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
+    /// <summary>
+    /// return each component using a <see cref="Ref{T}"/> to avoid struct copy and enable mutation in library
+    /// </summary>
     public (Ref<T1>, Ref<T2>) Current   => (ref1, ref2);
     
     // --- IEnumerator
