@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
@@ -26,13 +27,13 @@ public sealed partial class EntityStore
         var compTypes   = Static.ComponentTypes;
         var heaps       = current.Heaps;
         var currentLen  = heaps.Length;
-        var types       = new SignatureTypes(currentLen + 1);
+        var types       = new List<ComponentType>(currentLen + 1);
         for (int n = 0; n < currentLen; n++) {
             var heap = heaps[n];
-            types[n] = compTypes.GetStructType(heap.structIndex, heap.type);
+            types.Add(compTypes.GetStructType(heap.structIndex, heap.type));
         }
-        types[currentLen] = compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T));
-        archetype = Archetype.CreateWithSignatureTypes(config, types);
+        types.Add(compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T)));
+        archetype = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(archetype);
         return archetype;
     }
@@ -73,19 +74,15 @@ public sealed partial class EntityStore
         if (componentCount == 0) {
             return null;
         }
-        var types       = new SignatureTypes(componentCount);
+        var types       = new List<ComponentType>(componentCount);
         var config      = GetArchetypeConfig();
         var compTypes   = Static.ComponentTypes;
-        int n = 0;
         foreach (var heap in archetype.Heaps) {
             if (heap.type == removeType)
                 continue;
-            types[n++] = compTypes.GetStructType(heap.structIndex, heap.type);
+            types.Add(compTypes.GetStructType(heap.structIndex, heap.type));
         }
-        if (n != componentCount) {
-            throw new InvalidOperationException("unexpected length");
-        }
-        result      = Archetype.CreateWithSignatureTypes(config, types);
+        result      = Archetype.CreateWithStructTypes(config, types);
         AddArchetype(result);
         return result;
     }

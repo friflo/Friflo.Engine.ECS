@@ -41,7 +41,7 @@ public struct SignatureTypes
                     throw new IndexOutOfRangeException($"length: {length}, index: {index}");
             }
         }
-        set {
+    /*  set {
             if (index >= length) {
                 throw new IndexOutOfRangeException($"length: {length}, index: {index}");
             }
@@ -54,7 +54,7 @@ public struct SignatureTypes
                 default:
                     throw new IndexOutOfRangeException($"length: {length}, index: {index}");
             }
-        }
+        } */
     }
     
     internal string GetString () {
