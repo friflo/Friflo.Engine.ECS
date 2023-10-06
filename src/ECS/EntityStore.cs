@@ -70,20 +70,24 @@ public sealed partial class EntityStore
     #endregion
     
 #region private / internal fields
-    [Browse(Never)] private             Archetype[]         archetypes;         // never null
-    [Browse(Never)] private             ArchetypeInfo[]     archetypeInfos;     // never null
-    [Browse(Never)] internal            int                 archetypesCount;
-    [Browse(Never)] internal readonly   Archetype           defaultArchetype;
-    [Browse(Never)] private             int                 rootId;
+    [Browse(Never)] private             Archetype[]             archetypes;         // never null
+    [Browse(Never)] private             ArchetypeInfo[]         archetypeInfos;     // never null
+    [Browse(Never)] internal            int                     archetypesCount;
+    [Browse(Never)] internal readonly   Archetype               defaultArchetype;
+    [Browse(Never)] private             int                     rootId;
     
     // --- node access
-    [Browse(Never)] private  readonly   PidType             pidType;
-    [Browse(Never)] private             Random              randPid;            // null if using PidType.UsePidAsId
-                    private  readonly   Dictionary<long,int>pid2Id;             // null if using PidType.UsePidAsId
-    [Browse(Never)] internal            EntityNode[]        nodes;              // acts also id2pid
-    [Browse(Never)] private             int                 nodeMaxId;
-    [Browse(Never)] private             int                 nodeCount;
-    [Browse(Never)] private  readonly   TypeStore           typeStore;
+    [Browse(Never)] private  readonly   PidType                 pidType;
+    [Browse(Never)] private             Random                  randPid;            // null if using PidType.UsePidAsId
+                    private  readonly   Dictionary<long, int>   pid2Id;             // null if using PidType.UsePidAsId
+    [Browse(Never)] internal            EntityNode[]            nodes;              // acts also id2pid
+    [Browse(Never)] private             int                     nodeMaxId;
+    [Browse(Never)] private             int                     nodeCount;
+    [Browse(Never)] private  readonly   TypeStore               typeStore;
+    
+    [Browse(Never)] private  readonly   ArchetypeQuery[]        queryMap;
+    // ReSharper disable once CollectionNeverQueried.Local
+                    private  readonly   List<ArchetypeQuery>    queries;            // only for debugging
     
     [Browse(Never)] private  readonly   LocalEntities<long,DataNode> clientEntities;
                     
@@ -121,6 +125,8 @@ public sealed partial class EntityStore
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithStructTypes(config, Array.Empty<ComponentType>());
+        queryMap            = new ArchetypeQuery[100];          // todo use maxSignatureIndex
+        queries             = new List<ArchetypeQuery>();
         clientEntities      = client?.entities.Local;
         AddArchetype(defaultArchetype);
     }

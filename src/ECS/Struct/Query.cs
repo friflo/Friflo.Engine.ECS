@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -20,19 +22,21 @@ internal struct StructIndexes
 public abstract class ArchetypeQuery
 {
 #region private fields
-    private  readonly   EntityStore     store;
-    private  readonly   ArchetypeMask   mask;
-    internal readonly   StructIndexes   structIndexes;
+                    private  readonly   EntityStore     store;
+                    private  readonly   ArchetypeMask   mask;
+    [Browse(Never)] internal readonly   Signature       signature;
+    [Browse(Never)] internal readonly   StructIndexes   structIndexes;
     //
-    private             Archetype[]     archetypes;
-    private             int             archetypeCount;
-    private             int             lastArchetypeCount;
+    [Browse(Never)] private             Archetype[]     archetypes;
+    [Browse(Never)] private             int             archetypeCount;
+                    private             int             lastArchetypeCount;
     #endregion
     
     internal ArchetypeQuery(EntityStore store, Signature signature) {
         this.store          = store;
         archetypes          = new Archetype[1];
         mask                = new ArchetypeMask(signature);
+        this.signature      = signature; 
         lastArchetypeCount  = 1;
         var componentTypes  = signature.componentTypes;
         switch (componentTypes.Length) {
