@@ -2,7 +2,6 @@ using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
-
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
@@ -21,7 +20,7 @@ public static class Test_Tags
         var tag2 = Tags.Get<TestTag, TestTag2>();
         NotNull(tag2);
         
-        AreSame(tag2, Tags.Get<TestTag2, TestTag>());
+        AreEqual(tag2, Tags.Get<TestTag2, TestTag>());
     }
     
     [Test]

@@ -6,12 +6,10 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public class Tags
+public readonly struct Tags
 {
-    internal readonly long tagHash;
-    
-    // --- static
-    private static readonly Dictionary<long, Tags>    TagMap = new Dictionary<long, Tags>();
+    internal readonly long          tagHash;
+    internal readonly Vector256Long bitSet; // todo
     
     private Tags(long tagHash) {
         this.tagHash = tagHash;
@@ -21,11 +19,7 @@ public class Tags
         where T : struct, IEntityTag
     {
         var hash = typeof(T).Handle();
-        if (TagMap.TryGetValue(hash, out var result)) {
-            return result;
-        }
         var tags = new Tags(hash);
-        TagMap.Add(hash, tags);
         return tags;
     }
     
@@ -35,11 +29,7 @@ public class Tags
     {
         var hash = typeof(T1).Handle() ^
                    typeof(T2).Handle();
-        if (TagMap.TryGetValue(hash, out var result)) {
-            return result;
-        }
         var tags = new Tags(hash);
-        TagMap.Add(hash, tags);
         return tags;
     }
 }
