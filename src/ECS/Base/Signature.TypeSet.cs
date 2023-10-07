@@ -62,7 +62,7 @@ public readonly struct SignatureTypeSet
         if (length == 0) {
             if (prefix != null) {
                 return $"{prefix}[]";
-            };
+            }
             return "[]";
         }
         var sb = new StringBuilder();
