@@ -12,14 +12,14 @@ public static class Test_Query
     [Test]
     public static void Test_SignatureTypes()
     {
-        var types           = new SignatureTypeSet();
-        AreEqual("[]",      types.ToString());
+        var types               = new SignatureTypeSet();
+        AreEqual("TypeSet: []", types.ToString());
         var sig1            = Signature.Get<Position>();
-        AreEqual("[Position]", sig1.ToString());
-        AreEqual("[Position]", sig1.types.ToString());
+        AreEqual("Signature: [Position]", sig1.ToString());
+        AreEqual("TypeSet: [Position]", sig1.types.ToString());
         
         var sig2            = Signature.Get<Position, Rotation>();
-        AreEqual("[Position, Rotation]", sig2.ToString());
+        AreEqual("Signature: [Position, Rotation]", sig2.ToString());
     }
     
     [Test]
@@ -40,11 +40,11 @@ public static class Test_Query
         var query4 =    store.Query(sig4);
         var query5 =    store.Query(sig5);
         
-        AreEqual("query: [Position]", query1.ToString());
-        AreEqual("query: [Position, Rotation]", query2.ToString());
-        AreEqual("query: [Position, Rotation, Scale3]", query3.ToString());
-        AreEqual("query: [Position, Rotation, Scale3, MyComponent1]", query4.ToString());
-        AreEqual("query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", query5.ToString());
+        AreEqual("Query: [Position]", query1.ToString());
+        AreEqual("Query: [Position, Rotation]", query2.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3]", query3.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]", query4.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", query5.ToString());
         
     /*  AreSame(query1, store.Query(sig1));
         AreSame(query2, store.Query(sig2));
@@ -115,6 +115,7 @@ public static class Test_Query
             AreEqual(3, position.Value.z);
             rotation.Value.x = 42;
         });
+        AreEqual("ForEach: [Position, Rotation]", forEach.ToString());
         forEach.Run();
         AreEqual(2,     count);
         AreEqual(42,    entity.Rotation.x);
@@ -165,6 +166,7 @@ public static class Test_Query
         AreEqual(42, entity2.Rotation.x);
         
         var chunkCount   = 0;
+        AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
         foreach (var (position, rotation) in query.Chunks) {
             AreEqual(3, position.Values[0].z);
             rotation.Values[0].x = 42;

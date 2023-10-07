@@ -20,7 +20,7 @@ public readonly struct SignatureTypeSet
     
     public              int             Length          => length;
     public   SignatureTypeSetEnumerator GetEnumerator() => new (this);
-    public override     string          ToString()      => GetString();
+    public override     string          ToString()      => GetString("TypeSet: ");
 
     internal SignatureTypeSet(
         int             length,
@@ -58,11 +58,17 @@ public readonly struct SignatureTypeSet
         }
     }
     
-    internal string GetString () {
+    internal string GetString (string prefix) {
         if (length == 0) {
+            if (prefix != null) {
+                return $"{prefix}[]";
+            };
             return "[]";
         }
         var sb = new StringBuilder();
+        if (prefix != null) {
+            sb.Append(prefix);
+        }
         sb.Append('[');
         for (int n = 0; n < length; n++)
         {

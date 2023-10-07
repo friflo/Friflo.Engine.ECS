@@ -28,7 +28,7 @@ public abstract class Signature
                     public   readonly   long                archetypeHash;
                     public   readonly   SignatureTypeSet    types;
     
-                    public   override   string              ToString()  => types.GetString();
+                    public   override   string              ToString()  => types.GetString("Signature: ");
     
     // --- static
     private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();

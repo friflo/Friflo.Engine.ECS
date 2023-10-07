@@ -14,7 +14,9 @@ public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not imple
     where T2 : struct
 {
     readonly ArchetypeQuery<T1, T2> query;
-    
+
+    public  override string         ToString() => query.signature.types.GetString("Chunks: ");
+
     internal QueryChunks(ArchetypeQuery<T1, T2> query) {
         this.query = query;
     }

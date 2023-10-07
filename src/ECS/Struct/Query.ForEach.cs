@@ -12,11 +12,13 @@ public readonly struct QueryForEach<T1, T2>
     where T1 : struct
     where T2 : struct
 {
-    private readonly    ArchetypeQuery<T1,T2>      query;
-    private readonly    Action<Ref<T1>, Ref<T2>>   lambda;
-    private readonly    T1[]                       copyT1;
-    private readonly    T2[]                       copyT2;
-    
+    private readonly    ArchetypeQuery<T1,T2>       query;
+    private readonly    Action<Ref<T1>, Ref<T2>>    lambda;
+    private readonly    T1[]                        copyT1;
+    private readonly    T2[]                        copyT2;
+
+    public  override    string                      ToString() => query.signature.types.GetString("ForEach: ");
+
     internal QueryForEach(
         ArchetypeQuery<T1, T2>      query,
         Action<Ref<T1>, Ref<T2>>    lambda)
