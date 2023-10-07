@@ -65,8 +65,8 @@ public sealed partial class EntityStore
                     public              int                         NodeMaxId       => nodeMaxId;
     [Browse(Never)] private             bool                        HasRoot         => rootId   >= Static.MinNodeId;
     
-                    public  static      ComponentTypes              GetComponentTypes() => Static.ComponentTypes;
-                    public  override    string                      ToString()          => $"Count: {nodeCount}";
+                    public  static      ComponentSchema             GetComponentSchema()    => Static.ComponentSchema;
+                    public  override    string                      ToString()              => $"Count: {nodeCount}";
     #endregion
     
 #region private / internal fields
@@ -98,7 +98,7 @@ public sealed partial class EntityStore
         internal const              int             DefaultCapacity = 1;
         internal static readonly    int[]           EmptyChildNodes = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
-        internal static readonly    ComponentTypes  ComponentTypes  = ComponentUtils.RegisterComponentTypes(TypeStore);
+        internal static readonly    ComponentSchema ComponentSchema = ComponentUtils.RegisterComponentTypes(TypeStore);
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
         internal const              int         MinNodeId   =  1;

@@ -17,8 +17,8 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   string  componentKey;
     /// <summary>
-    /// If <see cref="isStructType"/> == true  the index in <see cref="ComponentTypes.Structs"/><br/>
-    /// If <see cref="isStructType"/> == false the index in <see cref="ComponentTypes.Classes"/>
+    /// If <see cref="isStructType"/> == true  the index in <see cref="ComponentSchema.Structs"/><br/>
+    /// If <see cref="isStructType"/> == false the index in <see cref="ComponentSchema.Classes"/>
     /// </summary>
     public   readonly   int     index;
     /// <summary>

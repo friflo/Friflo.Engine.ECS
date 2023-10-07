@@ -11,7 +11,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public sealed class ComponentTypes
+public sealed class ComponentSchema
 {
 #region public properties
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
@@ -43,7 +43,7 @@ public sealed class ComponentTypes
     #endregion
     
 #region internal methods
-    internal ComponentTypes(List<ComponentType> structList, List<ComponentType> classList)
+    internal ComponentSchema(List<ComponentType> structList, List<ComponentType> classList)
     {
         int count           = structList.Count + classList.Count;
         componentTypeByKey  = new Dictionary<string, ComponentType>(count);
@@ -111,7 +111,7 @@ public sealed class ComponentTypes
 
 internal static class ComponentUtils
 {
-    internal static ComponentTypes RegisterComponentTypes(TypeStore typeStore)
+    internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
     {
         var types   = GetComponentTypes();
         var structs = new List<ComponentType>(types.Count);
@@ -119,7 +119,7 @@ internal static class ComponentUtils
         foreach (var type in types) {
             RegisterComponentType(type, structs, classes, typeStore);
         }
-        return new ComponentTypes(structs, classes);
+        return new ComponentSchema(structs, classes);
     }
     
     private static void RegisterComponentType(

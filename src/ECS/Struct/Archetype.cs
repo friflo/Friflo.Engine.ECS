@@ -35,7 +35,7 @@ public sealed class Archetype
     // --- internal
     /// <remarks>
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
-    /// does not require a range check. This is already ensured at <see cref="ComponentTypes.GetStructType"/>
+    /// does not require a range check. This is already ensured at <see cref="ComponentSchema.GetStructType"/>
     /// </remarks>
     [Browse(Never)] internal readonly   StructHeap[]                heapMap;
     [Browse(Never)] internal readonly   EntityStore                 store;
@@ -60,7 +60,7 @@ public sealed class Archetype
         typeHash        = EntityStore.GetHash(heaps, newComp);
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
-        heapMap         = new StructHeap[EntityStore.Static.ComponentTypes.maxStructIndex];
+        heapMap         = new StructHeap[EntityStore.Static.ComponentSchema.maxStructIndex];
         mask            = new ArchetypeMask(heaps, newComp);
         if (newComp != null) {
             SetStandardComponentHeaps(newComp, ref std);

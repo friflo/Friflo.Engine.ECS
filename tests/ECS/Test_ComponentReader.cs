@@ -102,7 +102,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_RegisterComponents()
     {
-        var types   = EntityStore.GetComponentTypes();
+        var types   = EntityStore.GetComponentSchema();
         var structs = types.Structs;
         var classes = types.Classes;
         

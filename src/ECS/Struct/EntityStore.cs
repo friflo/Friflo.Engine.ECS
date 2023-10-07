@@ -19,10 +19,10 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var archetype)) {
             return archetype;
         }
-        var config      = GetArchetypeConfig();
-        var compTypes   = Static.ComponentTypes;
-        var types       = new SignatureTypes(1,
-            T1: compTypes.GetStructType(StructHeap<T>.StructIndex, typeof(T))
+        var config  = GetArchetypeConfig();
+        var schema  = Static.ComponentSchema;
+        var types   = new SignatureTypes(1,
+            T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         );
         archetype = Archetype.CreateWithSignatureTypes(config, types);
         AddArchetype(archetype);

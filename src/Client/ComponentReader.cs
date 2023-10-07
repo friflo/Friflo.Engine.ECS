@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.Client;
 internal sealed class ComponentReader
 {
     private readonly    ObjectReader                        componentReader;
-    private readonly    Dictionary<string, ComponentType>   componentTypes;
+    private readonly    Dictionary<string, ComponentType>   componentSchema;
     private readonly    List<ComponentType>                 structTypes;
     private             Utf8JsonParser                      parser;
     private             Bytes                               buffer;
@@ -29,7 +29,7 @@ internal sealed class ComponentReader
         buffer          = new Bytes(128);
         components      = new RawComponent[1];
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
-        componentTypes  = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentTypes.ComponentTypeByKey);
+        componentSchema = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentSchema.ComponentTypeByKey);
         structTypes     = new List<ComponentType>();
     }
     
@@ -72,7 +72,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
-            var type            = componentTypes[component.key];
+            var type            = componentSchema[component.key];
             archetypeHash      ^= type.structHash;
             component.type      = type;
         }
