@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using static System.Numerics.BitOperations;
-using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
@@ -13,11 +12,11 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="Signature"/> contains a set of struct <see cref="Types"/>.<br/>
+/// A <see cref="Signature"/> contains a set of struct component <see cref="types"/>.<br/>
 /// <see cref="Signature"/> features:
 /// <list type="bullet">
 ///   <item>Get a specific <see cref="Archetype"/> of an <see cref="EntityStore"/></item>
-///   <item>Create a query to process all entities of an <see cref="EntityStore"/> owning the struct <see cref="Types"/> </item>
+///   <item>Create a query to process all entities of an <see cref="EntityStore"/> owning the struct component <see cref="types"/> </item>
 /// </list> 
 /// </summary>
 // Could be a readonly struct
@@ -27,12 +26,9 @@ public abstract class Signature
                     public   readonly   int                 index;
     /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
                     public   readonly   long                archetypeHash;
-                    public              SignatureTypeSet    Types       => types;
+                    public   readonly   SignatureTypeSet    types;
     
                     public   override   string              ToString()  => types.GetString();
-
-    // --- private fields
-    [Browse(Never)] internal readonly   SignatureTypeSet    types;
     
     // --- static
     private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();

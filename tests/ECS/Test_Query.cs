@@ -16,7 +16,7 @@ public static class Test_Query
         AreEqual("[]",      types.ToString());
         var sig1            = Signature.Get<Position>();
         AreEqual("[Position]", sig1.ToString());
-        AreEqual("[Position]", sig1.Types.ToString());
+        AreEqual("[Position]", sig1.types.ToString());
         
         var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("[Position, Rotation]", sig2.ToString());
