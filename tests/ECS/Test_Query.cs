@@ -104,11 +104,12 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         var query   = store.Query(sig);
         var count   = 0;
-        query.ForEach((position, rotation) => {
+        var forEach = query.ForEach((position, rotation) => {
             count++;
             AreEqual(3, position.Value.z);
             rotation.Value.x = 42;
-        }).Run();
+        });
+        forEach.Run();
         AreEqual(2,     count);
         AreEqual(42,    entity.Rotation.x);
     }
@@ -124,10 +125,11 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         var query   = store.Query(sig).ReadOnly<Position>();
         var count   = 0;
-        query.ForEach((position, rotation) => {
+        var forEach = query.ForEach((position, rotation) => {
             count++;
             position.Value.x = 42;
-        }).Run();
+        });
+        forEach.Run();
         AreEqual(1,     count);
         AreEqual(1,     entity.Position.x);
     }
