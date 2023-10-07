@@ -39,7 +39,7 @@ public readonly struct ArchetypeMask
     
     public ArchetypeMask(Signature signature) {
         Vector256Long vec256 = default;
-        foreach (var type in signature.componentTypes) {
+        foreach (var type in signature.types) {
             vec256.SetBit(type.index);
         }
         masks = new [] { vec256 };

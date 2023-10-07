@@ -120,7 +120,7 @@ public sealed partial class EntityStore
         EnsureNodesLength(2);
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
-        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypes(0));
+        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypeSet(0));
         clientEntities      = client?.entities.Local;
         AddArchetype(defaultArchetype);
     }

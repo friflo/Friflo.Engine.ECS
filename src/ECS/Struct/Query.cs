@@ -25,7 +25,7 @@ public abstract class ArchetypeQuery
         archetypes          = new Archetype[1];
         mask                = new ArchetypeMask(signature);
         lastArchetypeCount  = 1;
-        var componentTypes  = signature.componentTypes;
+        var componentTypes  = signature.types;
         switch (componentTypes.Length) {
             case 1:
                 structIndexes.T1 = componentTypes.T1.index;

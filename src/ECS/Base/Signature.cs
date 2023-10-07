@@ -13,11 +13,11 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="Signature"/> contains a set of struct <see cref="ComponentTypes"/>.<br/>
+/// A <see cref="Signature"/> contains a set of struct <see cref="Types"/>.<br/>
 /// <see cref="Signature"/> features:
 /// <list type="bullet">
 ///   <item>Get a specific <see cref="Archetype"/> of an <see cref="EntityStore"/></item>
-///   <item>Create a query to process all entities of an <see cref="EntityStore"/> owning the struct <see cref="ComponentTypes"/> </item>
+///   <item>Create a query to process all entities of an <see cref="EntityStore"/> owning the struct <see cref="Types"/> </item>
 /// </list> 
 /// </summary>
 // Could be a readonly struct
@@ -27,24 +27,24 @@ public abstract class Signature
                     public   readonly   int                 index;
     /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
                     public   readonly   long                archetypeHash;
-                    public              SignatureTypes      ComponentTypes => componentTypes;
+                    public              SignatureTypeSet    Types       => types;
     
-                    public   override   string              ToString() => componentTypes.GetString();
+                    public   override   string              ToString()  => types.GetString();
 
     // --- private fields
-    [Browse(Never)] internal readonly   SignatureTypes      componentTypes;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
     
     // --- static
     private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();
     private static          int                             NextSignatureIndex;
     
     
-    internal Signature(in SignatureTypes componentTypes, int index)
+    internal Signature(in SignatureTypeSet types, int index)
     {
-        this.componentTypes = componentTypes;
-        this.index          = index;
+        this.types = types;
+        this.index  = index;
         long hash = 0;
-        foreach (var type in componentTypes) {
+        foreach (var type in types) {
             hash ^= type.type.Handle();
         }
         archetypeHash = hash;
@@ -72,7 +72,7 @@ public abstract class Signature
             return (Signature<T>)result;
         }
         var schema  = EntityStore.Static.ComponentSchema;
-        var types   = new SignatureTypes(1,
+        var types   = new SignatureTypeSet(1,
             T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         );
         var signature   = new Signature<T>(types, NextIndex());
@@ -100,7 +100,7 @@ public abstract class Signature
             return (Signature<T1,T2>)result;
         }
         var schema  = EntityStore.Static.ComponentSchema;
-        var types   = new SignatureTypes(2,
+        var types   = new SignatureTypeSet(2,
             T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2))
         );
@@ -131,7 +131,7 @@ public abstract class Signature
             return (Signature<T1, T2, T3>)result;
         }
         var schema  = EntityStore.Static.ComponentSchema;
-        var types   = new SignatureTypes(3,
+        var types   = new SignatureTypeSet(3,
             T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3))
@@ -165,7 +165,7 @@ public abstract class Signature
             return (Signature<T1, T2, T3, T4>)result;
         }
         var schema  = EntityStore.Static.ComponentSchema;
-        var types   = new SignatureTypes(4,
+        var types   = new SignatureTypeSet(4,
             T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
@@ -202,7 +202,7 @@ public abstract class Signature
             return (Signature<T1, T2, T3, T4, T5>)result;
         }
         var schema  = EntityStore.Static.ComponentSchema;
-        var types   = new SignatureTypes(5,
+        var types   = new SignatureTypeSet(5,
             T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
@@ -219,8 +219,8 @@ public abstract class Signature
 public sealed class Signature<T> : Signature
     where T : struct
 {
-    internal Signature(in SignatureTypes componentTypes, int index)
-        : base(componentTypes, index) {
+    internal Signature(in SignatureTypeSet types, int index)
+        : base(types, index) {
     }
 }
 
@@ -228,7 +228,7 @@ public sealed class Signature<T1, T2> : Signature
     where T1 : struct
     where T2 : struct
 {
-    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }
@@ -238,7 +238,7 @@ public sealed class Signature<T1, T2, T3> : Signature
     where T2 : struct
     where T3 : struct
 {
-    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }
@@ -249,7 +249,7 @@ public sealed class Signature<T1, T2, T3, T4> : Signature
     where T3 : struct
     where T4 : struct
 {
-    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }
@@ -261,7 +261,7 @@ public sealed class Signature<T1, T2, T3, T4, T5> : Signature
     where T4 : struct
     where T5 : struct
 {
-    internal Signature(in SignatureTypes componentTypes, int signatureIndex)
+    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
         : base(componentTypes, signatureIndex) {
     }
 }

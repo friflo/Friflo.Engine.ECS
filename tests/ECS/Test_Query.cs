@@ -12,13 +12,13 @@ public static class Test_Query
     [Test]
     public static void Test_SignatureTypes()
     {
-        var types           = new SignatureTypes();
+        var types           = new SignatureTypeSet();
         AreEqual("[]",      types.ToString());
         var sig1            = Signature.Get<Position>();
         AreEqual("[Position]", sig1.ToString());
-        AreEqual("[Position]", sig1.ComponentTypes.ToString());
+        AreEqual("[Position]", sig1.Types.ToString());
         
-        var sig2       =    Signature.Get<Position, Rotation>();
+        var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("[Position, Rotation]", sig2.ToString());
     }
     

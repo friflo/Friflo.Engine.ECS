@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct SignatureTypes
+public readonly struct SignatureTypeSet
 {
     internal readonly   int             length;
     internal readonly   ComponentType   T1;
@@ -19,10 +19,10 @@ public readonly struct SignatureTypes
     internal readonly   ComponentType   T5;
     
     public              int             Length          => length;
-    public  SignatureTypesEnumerator    GetEnumerator() => new (this);
+    public   SignatureTypeSetEnumerator GetEnumerator() => new (this);
     public override     string          ToString()      => GetString();
 
-    internal SignatureTypes(
+    internal SignatureTypeSet(
         int             length,
         ComponentType   T1 = null,
         ComponentType   T2 = null,
@@ -30,6 +30,9 @@ public readonly struct SignatureTypes
         ComponentType   T4 = null,
         ComponentType   T5 = null)
     {
+        if (length > 5) {
+            throw new InvalidOperationException($"exceed maximum length 5. was {length}");
+        }
         this.length = length;
         this.T1     = T1;
         this.T2     = T2;
@@ -86,12 +89,12 @@ public readonly struct SignatureTypes
     }
 }
 
-public struct SignatureTypesEnumerator
+public struct SignatureTypeSetEnumerator
 {
-    private readonly    SignatureTypes  types;
-    private             int             index;
+    private readonly    SignatureTypeSet    types;
+    private             int                 index;
     
-    internal SignatureTypesEnumerator(in SignatureTypes types)
+    internal SignatureTypeSetEnumerator(in SignatureTypeSet types)
     {
         this.types  = types;
         index       = -1;

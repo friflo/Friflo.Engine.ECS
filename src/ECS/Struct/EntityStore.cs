@@ -21,7 +21,7 @@ public sealed partial class EntityStore
         }
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
-        var types   = new SignatureTypes(1,
+        var types   = new SignatureTypeSet(1,
             T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         );
         archetype = Archetype.CreateWithSignatureTypes(config, types);
@@ -39,7 +39,7 @@ public sealed partial class EntityStore
             return archetype;
         }
         var config  = GetArchetypeConfig();
-        archetype   = Archetype.CreateWithSignatureTypes(config, signature.componentTypes);
+        archetype   = Archetype.CreateWithSignatureTypes(config, signature.types);
         AddArchetype(archetype);
         return archetype;
     }

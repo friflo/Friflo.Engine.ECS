@@ -101,7 +101,7 @@ public sealed class Archetype
         return archetype;
     }
     
-    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypes types)
+    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypeSet types)
     {
         var length          = types.Length;
         var componentHeaps  = new StructHeap[length];
