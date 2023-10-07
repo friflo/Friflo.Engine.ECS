@@ -177,7 +177,7 @@ Scene file: `main.scn`
     4 -.->|modify<br/>1:13|13
 ```
 
-**Resource file pair**: `player.scn` / `player.scninfo`
+**Resource file pair**: `player.scn` / `player.scn.info`
 
 **Asset file**: `player.scn`
 ```js
