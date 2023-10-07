@@ -155,13 +155,10 @@ internal static class ComponentUtils
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
         if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
-            var method          = typeof(TagUtils).GetMethod(nameof(TagUtils.NewTagIndex), flags);
+            var method          = typeof(ComponentUtils).GetMethod(nameof(CreateTagType), flags);
             var genericMethod   = method!.MakeGenericMethod(type);
-            var result          = genericMethod.Invoke(null, null);
-            // ReSharper disable once PossibleNullReferenceException
-            var tagIndex        = (int)result;
-            var tagComponent    = new TagType(type, tagIndex);
-            tags.Add(tagComponent);
+            var componentType   = (ComponentType)genericMethod.Invoke(null, null);
+            tags.Add(componentType);
             return;
         }
         var createParams            = new object[] { typeStore };
@@ -198,6 +195,11 @@ internal static class ComponentUtils
         var classIndex  = ClassTypeInfo<T>.ClassIndex;
         var classKey    = ClassTypeInfo<T>.ClassKey;
         return new ClassComponentType<T>(classKey, classIndex, typeStore);
+    }
+    
+    internal static ComponentType CreateTagType<T>() where T : struct, IEntityTag {
+        var tagIndex    = TagTypeInfo<T>.TagIndex;
+        return new TagType(typeof(T), tagIndex);
     }
     
     // --------------------------- query all struct / class component types ---------------------------
