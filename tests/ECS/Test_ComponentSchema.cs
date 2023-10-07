@@ -24,8 +24,8 @@ public static class Test_ComponentSchema
             // var typeHandle = type.type.TypeHandle.Value.ToInt64();
             // AreEqual(typeHandle, type.structHash); todo
         }
-        var testTagType = schema.EntityTagByType[typeof(TestTag)];
-        AreEqual(1,                         schema.EntityTagByType.Count);
+        var testTagType = schema.TagTypeByType[typeof(TestTag)];
+        AreEqual(1,                         schema.TagTypeByType.Count);
         AreEqual(typeof(TestTag),           testTagType.type);
         AreEqual("entity tag: #TestTag",    testTagType.ToString());
     }

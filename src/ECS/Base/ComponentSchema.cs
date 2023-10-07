@@ -35,7 +35,7 @@ public sealed class ComponentSchema
     
     public   IReadOnlyDictionary<string, ComponentType>     ComponentTypeByKey  => componentTypeByKey;
     public   IReadOnlyDictionary<Type,   ComponentType>     ComponentTypeByType => componentTypeByType;
-    public   IReadOnlyDictionary<Type,   ComponentType>     EntityTagByType     => entityTagByType;
+    public   IReadOnlyDictionary<Type,   ComponentType>     TagTypeByType       => tagTypeByType;
 
     public   override string                                ToString()          => GetString();
 
@@ -48,7 +48,7 @@ public sealed class ComponentSchema
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
-    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   entityTagByType;
+    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   tagTypeByType;
     #endregion
     
 #region internal methods
@@ -60,7 +60,7 @@ public sealed class ComponentSchema
         int count           = structList.Count + classList.Count;
         componentTypeByKey  = new Dictionary<string, ComponentType>(count);
         componentTypeByType = new Dictionary<Type,   ComponentType>(count);
-        entityTagByType     = new Dictionary<Type,   ComponentType>(count);
+        tagTypeByType       = new Dictionary<Type,   ComponentType>(count);
         maxStructIndex      = structList.Count + 1;
         structs             = new ComponentType[maxStructIndex];
         classes             = new ComponentType[classList.Count + 1];
@@ -76,7 +76,7 @@ public sealed class ComponentSchema
             classes[classType.index] = classType;
         }
         foreach (var tagType in tagList) {
-            entityTagByType.Add(tagType.type, tagType);
+            tagTypeByType.Add(tagType.type, tagType);
             tags[tagType.index] = tagType;
         }
     }
