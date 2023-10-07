@@ -5,14 +5,12 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-internal struct TestTag : IEntityTag { }
-
 public static class Test_ComponentSchema
 {
     [Test]
     public static void Test_EntityTags() {
         var schema      = EntityStore.GetComponentSchema();
-        AreEqual(2,     schema.Tags.Length);
+        AreEqual(3,     schema.Tags.Length);
         
         var tags = schema.Tags;
         IsNull(tags[0]);
@@ -25,7 +23,7 @@ public static class Test_ComponentSchema
             // AreEqual(typeHandle, type.structHash); todo
         }
         var testTagType = schema.TagTypeByType[typeof(TestTag)];
-        AreEqual(1,                         schema.TagTypeByType.Count);
+        AreEqual(2,                         schema.TagTypeByType.Count);
         AreEqual(typeof(TestTag),           testTagType.type);
         AreEqual("entity tag: #TestTag",    testTagType.ToString());
     }
@@ -37,7 +35,7 @@ public static class Test_ComponentSchema
         var structs = schema.Structs;
         var classes = schema.Classes;
         
-        AreEqual("struct components: 6  class components: 3  entity tags: 1", schema.ToString());
+        AreEqual("struct components: 6  class components: 3  entity tags: 2", schema.ToString());
         AreEqual(7, structs.Length);
         AreEqual(4, classes.Length);
         
