@@ -51,7 +51,7 @@ internal sealed class StructComponentType<T> : ComponentType
     where T : struct
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"StructFactory: {typeof(T).Name}";
+    public  override    string          ToString() => $"struct component: {typeof(T).Name}";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
         : base(componentKey, typeof(T), Struct, structIndex, typeof(T).Handle())
@@ -71,7 +71,7 @@ internal sealed class ClassComponentType<T> : ComponentType
     where T : ClassComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"ClassFactory: {typeof(T).Name}";
+    public  override    string          ToString() => $"class component: *{typeof(T).Name}";
     
     internal ClassComponentType(string componentKey, int classIndex, TypeStore typeStore)
         : base(componentKey, typeof(T), Class, classIndex, 0)

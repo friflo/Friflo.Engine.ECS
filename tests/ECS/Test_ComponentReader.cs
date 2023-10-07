@@ -136,10 +136,12 @@ public static class Test_ComponentReader
         AreEqual(typeof(TestComponent), testType.type);
         
         var myComponentType = types.GetStructComponentType<MyComponent1>();
-        AreEqual("my1", myComponentType.componentKey);
+        AreEqual("my1",                             myComponentType.componentKey);
+        AreEqual("struct component: MyComponent1",  myComponentType.ToString());
         
-        var TestComponentType = types.GetClassComponentType<TestComponent>();
-        AreEqual("test", TestComponentType.componentKey);
+        var testComponentType = types.GetClassComponentType<TestComponent>();
+        AreEqual("test",                            testComponentType.componentKey);
+        AreEqual("class component: *TestComponent", testComponentType.ToString());
         
         AreEqual(typeof(Position),  types.ComponentTypeByKey["pos"].type);
         AreEqual("test",            types.ComponentTypeByType[typeof(TestComponent)].componentKey);
