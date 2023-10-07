@@ -21,7 +21,7 @@ public static class Test_Tags
         var tag2 = Tags.Get<TestTag, TestTag2>();
         NotNull(tag2);
         
-        // AreSame(tag2, Tags.Get<TestTag2, TestTag>()); todo
+        AreSame(tag2, Tags.Get<TestTag2, TestTag>());
     }
 }
 
