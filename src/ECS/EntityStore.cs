@@ -85,7 +85,7 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                     nodeCount;
     [Browse(Never)] private  readonly   TypeStore               typeStore;
     
-    [Browse(Never)] private  readonly   LocalEntities<long,DataNode> clientEntities;
+    [Browse(Never)] private  readonly   LocalEntities<long,DataNode> clientNodes;
                     
                     internal static     bool                    HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -121,7 +121,7 @@ public sealed partial class EntityStore
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypeSet(0));
-        clientEntities      = client?.entities.Local;
+        clientNodes      = client?.nodes.Local;
         AddArchetype(defaultArchetype);
     }
     #endregion

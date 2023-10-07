@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Engine.Client;
 
 public class SceneClient : FlioxClient
 {
-    public  readonly    EntitySet <long, DataNode>   entities;
+    public  readonly    EntitySet <long, DataNode>   nodes;
     
     public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }

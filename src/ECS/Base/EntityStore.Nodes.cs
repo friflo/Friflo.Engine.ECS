@@ -245,9 +245,9 @@ public sealed partial class EntityStore
     public DataNode EntityAsDataNode(GameEntity entity) {
         var id = entity.id;
         ref var node = ref nodes[id];
-        if (!clientEntities.TryGetEntity(id, out var dataNode)) {
+        if (!clientNodes.TryGetEntity(id, out var dataNode)) {
             dataNode = new DataNode { pid = id };
-            clientEntities.Add(dataNode);
+            clientNodes.Add(dataNode);
         }
         if (node.childCount > 0) {
             var children = dataNode.children = new List<long>(node.childCount); 
