@@ -40,6 +40,12 @@ public static class Test_Query
         var query4 =    store.Query(sig4);
         var query5 =    store.Query(sig5);
         
+        AreEqual("query: [Position]", query1.ToString());
+        AreEqual("query: [Position, Rotation]", query2.ToString());
+        AreEqual("query: [Position, Rotation, Scale3]", query3.ToString());
+        AreEqual("query: [Position, Rotation, Scale3, MyComponent1]", query4.ToString());
+        AreEqual("query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", query5.ToString());
+        
     /*  AreSame(query1, store.Query(sig1));
         AreSame(query2, store.Query(sig2));
         AreSame(query3, store.Query(sig3));

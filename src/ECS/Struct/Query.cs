@@ -13,15 +13,19 @@ public abstract class ArchetypeQuery
 #region private fields
                     private  readonly   EntityStore     store;
                     private  readonly   ArchetypeMask   mask;
+                    private  readonly   Signature       signature;
     [Browse(Never)] internal readonly   StructIndexes   structIndexes;
     //
     [Browse(Never)] private             Archetype[]     archetypes;
     [Browse(Never)] private             int             archetypeCount;
                     private             int             lastArchetypeCount;
     #endregion
-    
+
+                    public override     string          ToString() => $"query: {signature.types.GetString()}";
+
     internal ArchetypeQuery(EntityStore store, Signature signature) {
         this.store          = store;
+        this.signature      = signature;
         archetypes          = new Archetype[1];
         mask                = new ArchetypeMask(signature);
         lastArchetypeCount  = 1;
