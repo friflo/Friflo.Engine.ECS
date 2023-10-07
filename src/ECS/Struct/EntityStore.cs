@@ -87,19 +87,13 @@ public sealed partial class EntityStore
     
     // -------------------------------------- archetype query --------------------------------------
 #region archetype query
-    private void AddQuery(ArchetypeQuery query) {
-        queries.Add(query);
-    }
-    
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
     public ArchetypeQuery<T> Query<T> (Signature<T> signature)
         where T : struct
     {
-        var newQuery = new ArchetypeQuery<T>(this, signature);
-        AddQuery(newQuery);
-        return newQuery;
+        return new ArchetypeQuery<T>(this, signature);
     }
     
     /// <summary>
@@ -109,9 +103,7 @@ public sealed partial class EntityStore
         where T1: struct
         where T2: struct
     {
-        var newQuery = new ArchetypeQuery<T1, T2>(this, signature);
-        AddQuery(newQuery);
-        return newQuery;
+        return new ArchetypeQuery<T1, T2>(this, signature);
     }
     
     /// <summary>
@@ -122,9 +114,7 @@ public sealed partial class EntityStore
         where T2: struct
         where T3: struct
     {
-        var newQuery = new ArchetypeQuery<T1, T2, T3>(this, signature);
-        AddQuery(newQuery);
-        return newQuery;
+        return new ArchetypeQuery<T1, T2, T3>(this, signature);
     }
     
     /// <summary>
@@ -136,9 +126,7 @@ public sealed partial class EntityStore
         where T3: struct
         where T4: struct
     {
-        var newQuery = new ArchetypeQuery<T1, T2, T3, T4>(this, signature);
-        AddQuery(newQuery);
-        return newQuery;
+        return new ArchetypeQuery<T1, T2, T3, T4>(this, signature);
     }
     
     /// <summary>
@@ -151,9 +139,7 @@ public sealed partial class EntityStore
         where T4: struct
         where T5: struct
     {
-        var newQuery = new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature);
-        AddQuery(newQuery);
-        return newQuery;
+        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature);
     }
     
     #endregion

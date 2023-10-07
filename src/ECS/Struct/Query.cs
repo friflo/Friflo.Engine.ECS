@@ -55,7 +55,11 @@ public abstract class ArchetypeQuery
             default:
                 throw new NotImplementedException();
         }
+        // store.AddQuery(this);
     }
+    
+    // private  readonly    List<ArchetypeQuery>    queries;            // only for debugging
+    // internal void        AddQuery(ArchetypeQuery query) { queries.Add(query); }
     
     public ReadOnlySpan<Archetype> Archetypes {
         get

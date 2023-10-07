@@ -85,9 +85,6 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                     nodeCount;
     [Browse(Never)] private  readonly   TypeStore               typeStore;
     
-    // ReSharper disable once CollectionNeverQueried.Local
-                    private  readonly   List<ArchetypeQuery>    queries;            // only for debugging
-    
     [Browse(Never)] private  readonly   LocalEntities<long,DataNode> clientEntities;
                     
                     internal static     bool                    HasParent(int id)   => id       >= Static.MinNodeId;
@@ -124,7 +121,6 @@ public sealed partial class EntityStore
         gameEntityUpdater   = new GameEntityUpdater(this);
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypes(0));
-        queries             = new List<ArchetypeQuery>();
         clientEntities      = client?.entities.Local;
         AddArchetype(defaultArchetype);
     }
