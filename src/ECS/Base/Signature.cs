@@ -37,9 +37,9 @@ public abstract class Signature
     
     internal Signature(in SignatureTypeSet types, int index)
     {
-        this.types = types;
+        this.types  = types;
         this.index  = index;
-        long hash = 0;
+        long hash   = 0;
         foreach (var type in types) {
             hash ^= type.type.Handle();
         }
