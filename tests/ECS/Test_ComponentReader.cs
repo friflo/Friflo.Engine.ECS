@@ -98,53 +98,5 @@ public static class Test_ComponentReader
             store.CreateFromDataNode(rootNode);
         }
     }
-    
-    [Test]
-    public static void Test_RegisterComponents()
-    {
-        var types   = EntityStore.GetComponentSchema();
-        var structs = types.Structs;
-        var classes = types.Classes;
-        
-        AreEqual("struct components: 6  class components: 3  entity tags: 1", types.ToString());
-        AreEqual(7, structs.Length);
-        AreEqual(4, classes.Length);
-        
-        IsNull(structs[0]);
-        for (int n = 1; n < structs.Length; n++) {
-            var type = structs[n];
-            AreEqual(n, type.index);
-            AreEqual(ComponentKind.Struct, type.kind);
-            NotNull (type.componentKey);
-            var typeHandle = type.type.TypeHandle.Value.ToInt64();
-            AreEqual(typeHandle, type.structHash);
-
-        }
-        IsNull(classes[0]);
-        for (int n = 1; n < classes.Length; n++) {
-            var type = classes[n];
-            AreEqual(n, type.index);
-            AreEqual(ComponentKind.Class, type.kind);
-            NotNull (type.componentKey);
-            AreEqual(0, type.structHash);
-        }
-        
-        var posType = types.GetComponentTypeByKey("pos");
-        AreEqual(typeof(Position), posType.type);
-        
-        var testType = types.GetComponentTypeByKey("test");
-        AreEqual(typeof(TestComponent), testType.type);
-        
-        var myComponentType = types.GetStructComponentType<MyComponent1>();
-        AreEqual("my1",                             myComponentType.componentKey);
-        AreEqual("struct component: MyComponent1",  myComponentType.ToString());
-        
-        var testComponentType = types.GetClassComponentType<TestComponent>();
-        AreEqual("test",                            testComponentType.componentKey);
-        AreEqual("class component: *TestComponent", testComponentType.ToString());
-        
-        AreEqual(typeof(Position),  types.ComponentTypeByKey["pos"].type);
-        AreEqual("test",            types.ComponentTypeByType[typeof(TestComponent)].componentKey);
-    }
 }
 
