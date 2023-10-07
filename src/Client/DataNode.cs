@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.Client;
 
 /// <summary>
 /// A <see cref="DataNode"/> is used to serialize entities.<br/>
-/// The <see cref="EntityStoreClient"/> provide methods to create, read, update, delete and query entities.
+/// The <see cref="SceneClient"/> provide methods to create, read, update, delete and query entities.
 /// </summary>
 /// <remarks>
 /// When reading / writing <see cref="DataNode"/>'s in the editor a special <see cref="MemoryDatabase"/> implementation is required.<br/>

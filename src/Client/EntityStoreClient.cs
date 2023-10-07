@@ -7,9 +7,9 @@ using Friflo.Json.Fliox.Hub.Host;
 // ReSharper disable UnassignedReadonlyField
 namespace Friflo.Fliox.Engine.Client;
 
-public class EntityStoreClient : FlioxClient
+public class SceneClient : FlioxClient
 {
     public  readonly    EntitySet <long, DataNode>   entities;
     
-    public EntityStoreClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
+    public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }

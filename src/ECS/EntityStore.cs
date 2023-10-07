@@ -105,7 +105,7 @@ public sealed partial class EntityStore
     #endregion
     
 #region initialize
-    public EntityStore(PidType pidType = PidType.RandomPids, EntityStoreClient client = null) {
+    public EntityStore(PidType pidType = PidType.RandomPids, SceneClient client = null) {
         this.pidType        = pidType;
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;

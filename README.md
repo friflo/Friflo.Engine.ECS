@@ -163,11 +163,11 @@ public sealed class DataNode
     public  string      nodeRef;
 }
 
-public class EntityStoreClient : FlioxClient
+public class SceneClient : FlioxClient
 {
     public  readonly    EntitySet <int, DataNode>   entities;
     
-    public EntityStoreClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
+    public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
 ```
 
@@ -201,7 +201,7 @@ Remarks:
 
 ### Loading entities
 
-Entities are loaded in batches of 10.000 entities using the `EntityStoreClient`.  
+Entities are loaded in batches of 10.000 entities using the `SceneClient`.  
 If a batch has finished loading the entities are than added to the `EntityStore` calling `CreateFromDataNode()`
 for each entity.
 

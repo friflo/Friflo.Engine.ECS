@@ -13,7 +13,7 @@ public static class Test_ComponentWriter
     public static void Test_WriteComponents()
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
-        var client  = new EntityStoreClient(hub);
+        var client  = new SceneClient(hub);
         var store   = new EntityStore(PidType.UsePidAsId, client);
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
@@ -33,7 +33,7 @@ public static class Test_ComponentWriter
     public static void Test_WriteComponents_Perf()
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
-        var client  = new EntityStoreClient(hub);
+        var client  = new SceneClient(hub);
         var store   = new EntityStore(PidType.UsePidAsId, client);
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
