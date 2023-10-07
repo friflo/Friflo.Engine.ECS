@@ -23,8 +23,8 @@ public readonly struct QueryForEach<T1, T2>
     {
         this.query  = query;
         this.lambda = lambda;
-        copyT1      = query.readOnlyT1 ? query.copyT1 : null;
-        copyT2      = query.readOnlyT2 ? query.copyT2 : null;
+        copyT1      = query.copyT1;
+        copyT2      = query.copyT2;
     }
 
     public void Run()

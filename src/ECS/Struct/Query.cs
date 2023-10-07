@@ -102,21 +102,17 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     where T1 : struct
     where T2 : struct
 {
-    internal            bool    readOnlyT1;
-    internal            bool    readOnlyT2;
-    internal readonly   T1[]    copyT1;
-    internal readonly   T2[]    copyT2;
+    internal    T1[]    copyT1;
+    internal    T2[]    copyT2;
     
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2> signature)
         : base(store, signature) {
-        copyT1 = readOnlyT1 ? null : new T1[StructUtils.ChunkSize];
-        copyT2 = readOnlyT2 ? null : new T2[StructUtils.ChunkSize];
     }
     
     public ArchetypeQuery<T1, T2> ReadOnly<T>() where T : struct
     {
-        readOnlyT1 |= typeof(T1) == typeof(T);
-        readOnlyT2 |= typeof(T2) == typeof(T);
+        if (typeof(T1) == typeof(T)) copyT1 = new T1[StructUtils.ChunkSize];
+        if (typeof(T2) == typeof(T)) copyT2 = new T2[StructUtils.ChunkSize];
         return this;
     }
     
