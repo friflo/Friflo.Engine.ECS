@@ -26,11 +26,18 @@ public sealed class ComponentSchema
     /// <see cref="Classes"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Classes             => new (classes);
+    /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
+    /// <remarks>
+    /// <see cref="ComponentType.index"/> is equal to the array index<br/>
+    /// <see cref="Tags"/>[0] is always null
+    /// </remarks>
+    public   ReadOnlySpan<ComponentType>                    Tags                => new (tags);
     
     public   IReadOnlyDictionary<string, ComponentType>     ComponentTypeByKey  => componentTypeByKey;
     public   IReadOnlyDictionary<Type,   ComponentType>     ComponentTypeByType => componentTypeByType;
+    public   IReadOnlyDictionary<Type,   ComponentType>     EntityTagByType     => entityTagByType;
 
-    public override string ToString() => $"components - struct: {structs.Length - 1} class: {classes.Length - 1}";
+    public   override string                                ToString()          => GetString();
 
     #endregion
     
@@ -38,19 +45,26 @@ public sealed class ComponentSchema
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] private  readonly   ComponentType[]                     structs;
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
+    [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] private  readonly   Dictionary<string, ComponentType>   componentTypeByKey;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   entityTagByType;
     #endregion
     
 #region internal methods
-    internal ComponentSchema(List<ComponentType> structList, List<ComponentType> classList)
+    internal ComponentSchema(
+        List<ComponentType> structList,
+        List<ComponentType> classList,
+        List<ComponentType> tagList)
     {
         int count           = structList.Count + classList.Count;
         componentTypeByKey  = new Dictionary<string, ComponentType>(count);
         componentTypeByType = new Dictionary<Type,   ComponentType>(count);
+        entityTagByType     = new Dictionary<Type,   ComponentType>(count);
         maxStructIndex      = structList.Count + 1;
         structs             = new ComponentType[maxStructIndex];
         classes             = new ComponentType[classList.Count + 1];
+        tags                = new ComponentType[tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
@@ -60,6 +74,10 @@ public sealed class ComponentSchema
             componentTypeByKey. Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
             classes[classType.index] = classType;
+        }
+        foreach (var tagType in tagList) {
+            entityTagByType.Add(tagType.type, tagType);
+            tags[tagType.index] = tagType;
         }
     }
     
@@ -106,6 +124,10 @@ public sealed class ComponentSchema
         }
         return structs[structIndex];
     }
+    
+    private string GetString() {
+        return $"struct components: {structs.Length - 1}  class components: {classes.Length - 1}  entity tags: {tags.Length - 1}";
+    } 
     #endregion
 }
 
@@ -116,19 +138,32 @@ internal static class ComponentUtils
         var types   = GetComponentTypes();
         var structs = new List<ComponentType>(types.Count);
         var classes = new List<ComponentType>(types.Count);
+        var tags    = new List<ComponentType>(types.Count);
         foreach (var type in types) {
-            RegisterComponentType(type, structs, classes, typeStore);
+            RegisterComponentType(type, structs, classes, tags, typeStore);
         }
-        return new ComponentSchema(structs, classes);
+        return new ComponentSchema(structs, classes, tags);
     }
     
     private static void RegisterComponentType(
         Type                type,
         List<ComponentType> structs,
         List<ComponentType> classes,
+        List<ComponentType> tags,
         TypeStore           typeStore)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
+        
+        if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
+            var method          = typeof(TagUtils).GetMethod(nameof(TagUtils.NewTagIndex), flags);
+            var genericMethod   = method!.MakeGenericMethod(type);
+            var result          = genericMethod.Invoke(null, null);
+            // ReSharper disable once PossibleNullReferenceException
+            var tagIndex        = (int)result;
+            var tagComponent    = new TagType(type, tagIndex);
+            tags.Add(tagComponent);
+            return;
+        }
         var createParams            = new object[] { typeStore };
         foreach (var attr in type.CustomAttributes)
         {
@@ -192,6 +227,10 @@ internal static class ComponentUtils
     {
         var types = assembly.GetTypes();
         foreach (var type in types) {
+            if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
+                componentTypes.Add(type);
+                continue;
+            }
             foreach (var attr in type.CustomAttributes)
             {
                 var attributeType = attr.AttributeType;

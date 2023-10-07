@@ -13,5 +13,8 @@ public enum ComponentKind
     /// <summary>Declare a <see cref="ComponentType"/> is a <b>struct</b> component</summary>
     Struct      = 0,
     /// <summary>Declare a <see cref="ComponentType"/> is a <b>class</b> component</summary>
-    Class       = 1
+    Class       = 1,
+    /// <summary>Declare a <see cref="ComponentType"/> is a entity <b>Tag</b></summary>
+    /// <remarks>A <b>Tag</b> is defined by struct definition without fields / properties extending <see cref="IEntityTag"/></remarks>
+    Tag         = 2
 }

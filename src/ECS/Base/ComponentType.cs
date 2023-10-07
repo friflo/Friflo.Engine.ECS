@@ -92,3 +92,18 @@ internal sealed class ClassComponentType<T> : ComponentType
         entity.AppendClassComponent(classComponent);
     }
 }
+
+internal sealed class TagType : ComponentType 
+{
+    public  override    string  ToString() => $"entity tag: #{type.Name}";
+    
+    internal TagType(Type type, int tagIndex)
+        : base(null, type, Tag, tagIndex, 0)
+    { }
+    
+    internal override   StructHeap  CreateHeap(int capacity)
+        => throw new InvalidOperationException("operates only on StructFactory<>");
+    
+    internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
+        => throw new InvalidOperationException("operates only on ClassFactory<>");
+}

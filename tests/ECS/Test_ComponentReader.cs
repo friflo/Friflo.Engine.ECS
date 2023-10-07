@@ -106,7 +106,7 @@ public static class Test_ComponentReader
         var structs = types.Structs;
         var classes = types.Classes;
         
-        AreEqual("components - struct: 6 class: 3", types.ToString());
+        AreEqual("struct components: 6  class components: 3  entity tags: 1", types.ToString());
         AreEqual(7, structs.Length);
         AreEqual(4, classes.Length);
         
