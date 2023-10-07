@@ -5,6 +5,7 @@ using System;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
+// ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -70,4 +71,15 @@ public enum PidType
     /// This method is intended to be used to store entities of a scene in JSON files or in a database. 
     /// </summary>
     RandomPids
+}
+
+/// <summary>
+/// Declares the <see cref="ComponentType.kind"/> of a <see cref="ComponentType"/> 
+/// </summary>
+public enum ComponentKind
+{
+    /// <summary>Declare a <see cref="ComponentType"/> is a <b>struct</b> component</summary>
+    Struct  = 0,
+    /// <summary>Declare a <see cref="ComponentType"/> is a <b>class</b> component</summary>
+    Class   = 1,
 }

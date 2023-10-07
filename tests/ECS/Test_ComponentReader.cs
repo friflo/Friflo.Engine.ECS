@@ -114,7 +114,7 @@ public static class Test_ComponentReader
         for (int n = 1; n < structs.Length; n++) {
             var type = structs[n];
             AreEqual(n, type.index);
-            IsTrue  (type.isStructType);
+            AreEqual(ComponentKind.Struct, type.kind);
             NotNull (type.componentKey);
             var typeHandle = type.type.TypeHandle.Value.ToInt64();
             AreEqual(typeHandle, type.structHash);
@@ -124,7 +124,7 @@ public static class Test_ComponentReader
         for (int n = 1; n < classes.Length; n++) {
             var type = classes[n];
             AreEqual(n, type.index);
-            IsFalse (type.isStructType);
+            AreEqual(ComponentKind.Class, type.kind);
             NotNull (type.componentKey);
             AreEqual(0, type.structHash);
         }

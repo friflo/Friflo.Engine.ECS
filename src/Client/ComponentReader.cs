@@ -57,7 +57,7 @@ internal sealed class ComponentReader
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
-            if (!component.type.isStructType) {
+            if (component.type.kind == ComponentKind.Class) {
                 component.type.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
@@ -82,11 +82,10 @@ internal sealed class ComponentReader
             var config  = store.GetArchetypeConfig();
             structTypes.Clear();
             for (int n = 0; n < count; n++) {
-                ref var component   = ref components[n];
-                if (!component.type.isStructType) {
-                    continue;
+                ref var component = ref components[n];
+                if (component.type.kind == ComponentKind.Struct) {
+                    structTypes.Add(component.type);
                 }
-                structTypes.Add(component.type);
             }
             newArchetype    = Archetype.CreateWithStructTypes(config, structTypes);
             store.AddArchetype(newArchetype);

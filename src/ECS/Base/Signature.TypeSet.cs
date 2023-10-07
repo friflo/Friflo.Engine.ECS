@@ -56,20 +56,6 @@ public readonly struct SignatureTypeSet
                     throw new IndexOutOfRangeException($"length: {length}, index: {index}");
             }
         }
-    /*  set {
-            if (index >= length) {
-                throw new IndexOutOfRangeException($"length: {length}, index: {index}");
-            }
-            switch (index) {
-                case 0:     T1 = value;     return;
-                case 1:     T2 = value;     return;
-                case 2:     T3 = value;     return;
-                case 3:     T4 = value;     return;
-                case 4:     T5 = value;     return;
-                default:
-                    throw new IndexOutOfRangeException($"length: {length}, index: {index}");
-            }
-        } */
     }
     
     internal string GetString () {
