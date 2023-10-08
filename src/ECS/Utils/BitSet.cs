@@ -11,47 +11,6 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct ArchetypeMask
-{
-    private readonly    BitSet  mask;
-    
-    public  override    string  ToString() => GetString();
-    
-    internal ArchetypeMask(StructHeap[] heaps, StructHeap newComp) {
-        if (newComp != null) {
-            mask.SetBit(newComp.structIndex);
-        }
-        foreach (var heap in heaps) {
-            mask.SetBit(heap.structIndex);
-        }
-    }
-    
-    internal ArchetypeMask(Signature signature) {
-        foreach (var type in signature.types) {
-            mask.SetBit(type.index);
-        }
-    }
-
-    internal bool Has(in ArchetypeMask other) {
-        return (mask.value & other.mask.value) == mask.value;
-    }
-    
-    private string GetString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("Mask: [");
-        foreach (var index in mask) {
-            var tagType = EntityStore.Static.ComponentSchema.GetStructComponentAt(index);
-            sb.Append('#');
-            sb.Append(tagType.type.Name);
-            sb.Append(", ");
-        }
-        sb.Length -= 2;
-        sb.Append(']');
-        return sb.ToString();
-    }
-}
-
 /// <summary>
 /// Support a bit set currently limited to 256 bits.<br/>
 /// If need an additional Vector256Long[] could be added be added for arbitrary length.
@@ -74,7 +33,9 @@ public struct BitSet
     public override             string          ToString() => AppendString(new StringBuilder()).ToString();
     
     public BitSet(int[] indices) {
-        SetBits(indices);
+        foreach (var index in indices) {
+            SetBit(index);
+        }
     }
         
     public void SetBit(int index)
@@ -84,12 +45,6 @@ public struct BitSet
             case < 128:     l1 |= 1L << (index - 64);    return;
             case < 192:     l2 |= 1L << (index - 128);   return;
             default:        l3 |= 1L << (index - 192);   return;
-        }
-    }
-    
-    public void SetBits(int[] indices) {
-        foreach (var index in indices) {
-            SetBit(index);
         }
     }
     
@@ -105,7 +60,7 @@ public struct BitSet
         }
     }
     
-    internal StringBuilder AppendString(StringBuilder sb) {
+    private StringBuilder AppendString(StringBuilder sb) {
         if (l3 != 0) {
             sb.Append($"{l0:x16} {l1:x16} {l2:x16} {l3:x16}");
         } else if (l2 != 0) {
