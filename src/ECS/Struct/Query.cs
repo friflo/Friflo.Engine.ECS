@@ -12,8 +12,9 @@ public abstract class ArchetypeQuery
 {
 #region private fields
                     private  readonly   EntityStore     store;
-                    private  readonly   ArchetypeMask   mask;
-                    internal readonly   Signature       signature;
+    [Browse(Never)] internal readonly   Signature       signature;
+    /// <summary>redundant with <see cref="signature"/> mask but enables masking without dereferencing <see cref="signature"/></summary>
+    [Browse(Never)] private  readonly   ArchetypeMask   mask;
     [Browse(Never)] internal readonly   StructIndexes   structIndexes;
     //
     [Browse(Never)] private             Archetype[]     archetypes;
