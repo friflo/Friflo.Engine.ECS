@@ -210,11 +210,13 @@ public static class Test_Query
         entity3.AddComponent(new Scale3  (7, 7, 7));
         
         var sig     = Signature.Get<Position, Rotation>();
+        var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
+        Mem.AssertAlloc(start, 152);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
         
-        var start   = Mem.GetAllocatedBytes();
+        start       = Mem.GetAllocatedBytes();
         var count   = 0;
         foreach (var (position, rotation) in query) {
             if (3f != position.Value.z) {

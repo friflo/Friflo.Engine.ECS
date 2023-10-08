@@ -18,4 +18,14 @@ public static class Mem
         var msg = $"expected no allocation.\n but was: {diff}";
         throw new AssertionException(msg);
     }
+    
+    /// <summary>Assert allocation of expected bytes</summary>
+    public static void AssertAlloc(long start, long expected) {
+        var diff =  GC.GetAllocatedBytesForCurrentThread() - start;
+        if (diff == expected) {
+            return;
+        }
+        var msg = $"expected allocation of {expected} bytes.\n but was: {diff}";
+        throw new AssertionException(msg);
+    }
 }
