@@ -125,6 +125,10 @@ public sealed class ComponentSchema
         return structs[structIndex];
     }
     
+    internal ComponentType GetTagAt(int index) {
+        return tags[index];
+    }
+    
     private string GetString() {
         return $"struct components: {structs.Length - 1}  class components: {classes.Length - 1}  entity tags: {tags.Length - 1}";
     } 

@@ -14,11 +14,28 @@ public static class Test_Tags
     [Test]
     public static void Test_SignatureTypes()
     {
-        var tag1 = Tags.Get<TestTag>();
-        NotNull(tag1);
+        var schema          = EntityStore.GetComponentSchema();
+        var testTagType     = schema.TagTypeByType[typeof(TestTag)];
+        var testTagType2    = schema.TagTypeByType[typeof(TestTag2)];
         
+        var tag1    = Tags.Get<TestTag>();
+        AreEqual("[#TestTag]", tag1.ToString());
+        NotNull(tag1);
+        int count1 = 0;
+        tag1.ForEach((tagType) => {
+            AreSame(testTagType, tagType);
+            count1++;
+        });
+        AreEqual(1, count1);
+        
+        var count2 = 0;
         var tag2 = Tags.Get<TestTag, TestTag2>();
+        AreEqual("[#TestTag, #TestTag2]", tag2.ToString());
         NotNull(tag2);
+        tag2.ForEach((tagType) => {
+            count2++;
+        });
+        AreEqual(2, count2);
         
         AreEqual(tag2, Tags.Get<TestTag2, TestTag>());
     }

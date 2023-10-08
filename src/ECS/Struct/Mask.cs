@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Text;
@@ -10,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public struct ArchetypeMask
 {
-    private Vector256Long   mask;
+    private BitSet256   mask;
     
     // Could extend with Vector256Long[] if 256 struct components are not enough
     // private readonly   Vector256Long[]   masks;
@@ -56,7 +58,7 @@ public struct ArchetypeMask
 }
 
 [StructLayout(LayoutKind.Explicit)]
-internal struct Vector256Long
+public struct BitSet256
 {
     [FieldOffset(00)] internal  Vector256<long> value;
     
@@ -67,13 +69,41 @@ internal struct Vector256Long
 
     public override             string          ToString() => AppendString(new StringBuilder()).ToString();
     
-    internal void SetBit(int index)
+    public void SetBit(int index)
     {
         switch (index) {
             case < 64:      l0 |= 1L <<  index;          return;
             case < 128:     l1 |= 1L << (index - 64);    return;
             case < 192:     l2 |= 1L << (index - 128);   return;
             default:        l3 |= 1L << (index - 192);   return;
+        }
+    }
+    
+    public void ForEach(Action<int> lambda)
+    {
+        var index   = 0;
+        for (int n = 0; n < 4; n++)
+        {
+            var lng = At(n);
+            while (lng != 0)
+            {
+                var bitPos  = BitOperations.TrailingZeroCount(lng);
+                lambda(index + bitPos);
+                lng ^= 1L << bitPos;
+            }
+            index  += 64;
+        }
+    }
+    
+    private long At(int index)
+    {
+        switch (index) {
+            case 0:     return l0;
+            case 1:     return l1;
+            case 2:     return l2;
+            case 3:     return l3;
+            default:
+                throw new IndexOutOfRangeException($"index: {index}");
         }
     }
     
