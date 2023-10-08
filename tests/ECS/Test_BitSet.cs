@@ -1,5 +1,6 @@
 ﻿using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -24,30 +25,38 @@ public static class Test_BitSet
     public static void Test_BitSet_ForEach()
     {
         {
+            var start = Mem.GetAllocatedBytes();
             int count = 0;
             var bitSet = new BitSet256();
-            bitSet.ForEach(index => {
+            foreach (var _ in bitSet) {
                 count++;
-            });
+            }
+            Mem.AssertNoAlloc(start);
             AreEqual(0, count);
         } {
+            var start = Mem.GetAllocatedBytes();
             int count = 0;
             var bitSet = new BitSet256();
             bitSet.SetBit(1);
-            bitSet.ForEach(index => {
+            foreach (var _ in bitSet) {
                 count++;
-            });
+            }
+            Mem.AssertNoAlloc(start);
             AreEqual(1, count);
         } {
+            var start = Mem.GetAllocatedBytes();
             var bitSet = new BitSet256();
             for (int n = 0; n < 256; n++) {
                 bitSet.SetBit(n);
             }
             int count = 0;
-            bitSet.ForEach(index => {
-                AreEqual(count, index);
+            foreach (var index in bitSet) {
+                if (count != index) {
+                    Fail($"Expect: {count}, was: {index}");
+                }
                 count++;
-            });
+            };
+            Mem.AssertNoAlloc(start);
             AreEqual(256, count);
         }
     }

@@ -1,8 +1,10 @@
 using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
@@ -20,6 +22,24 @@ public static class Test_Query
         
         var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("Signature: [Position, Rotation]", sig2.ToString());
+    }
+    
+    [Test]
+    public static void Test_Signature_Get_Mem()
+    {
+        Signature.Get<Position>();
+        Signature.Get<Position, Rotation>();
+        Signature.Get<Position, Rotation, Scale3>();
+        Signature.Get<Position, Rotation, Scale3, MyComponent1>();
+        Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        
+        var start   = Mem.GetAllocatedBytes();
+        Signature.Get<Position>();
+        Signature.Get<Position, Rotation>();
+        Signature.Get<Position, Rotation, Scale3>();
+        Signature.Get<Position, Rotation, Scale3, MyComponent1>();
+        Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        Mem.AssertNoAlloc(start);
     }
     
     [Test]
@@ -173,6 +193,35 @@ public static class Test_Query
             chunkCount++;
         }
         AreEqual(2,  chunkCount);
+        AreEqual(42, entity2.Rotation.x);
+    }
+    
+    [Ignore("check allocation")][Test]
+    public static void Test_Query_loop_Mem()
+    {
+        var store   = new EntityStore();
+        var entity2  = store.CreateEntity();
+        entity2.AddComponent(new Position(1,2,3));
+        entity2.AddComponent(new Rotation(4,5,6,7));
+        
+        var entity3  = store.CreateEntity();
+        entity3.AddComponent(new Position(1,2,3));
+        entity3.AddComponent(new Rotation(8, 8, 8, 8));
+        entity3.AddComponent(new Scale3  (7, 7, 7));
+        
+        var sig     = Signature.Get<Position, Rotation>();
+        var query   = store.Query(sig);
+        var start   = Mem.GetAllocatedBytes();
+        var count   = 0;
+        foreach (var current in query) {
+            if (3f != current.Item1.Value.z) {
+                Fail($"Expect 3. was: {current.Item1.Value.z}");
+            }
+            current.Item1.Value.x = 42;
+            count++;
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(2,  count);
         AreEqual(42, entity2.Rotation.x);
     }
     

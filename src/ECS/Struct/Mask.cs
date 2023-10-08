@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Text;
 
+// ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
@@ -67,6 +68,8 @@ public struct BitSet256
     [FieldOffset(16)] internal  long            l2;
     [FieldOffset(24)] internal  long            l3;
 
+    public                  BitSet256Enumerator GetEnumerator() => new BitSet256Enumerator(this); 
+    
     public override             string          ToString() => AppendString(new StringBuilder()).ToString();
     
     public void SetBit(int index)
@@ -79,23 +82,7 @@ public struct BitSet256
         }
     }
     
-    public void ForEach(Action<int> lambda)
-    {
-        var index   = 0;
-        for (int n = 0; n < 4; n++)
-        {
-            var lng = At(n);
-            while (lng != 0)
-            {
-                var bitPos  = BitOperations.TrailingZeroCount(lng);
-                lambda(index + bitPos);
-                lng ^= 1L << bitPos;
-            }
-            index  += 64;
-        }
-    }
-    
-    private long At(int index)
+    internal long At(int index)
     {
         switch (index) {
             case 0:     return l0;
@@ -118,5 +105,43 @@ public struct BitSet256
             sb.Append($"{l0:x16}");
         }
         return sb;
+    }
+}
+
+public struct BitSet256Enumerator
+{
+    private readonly    BitSet256   bitSet;
+    private             int         curPos;
+    private             int         lngPos;
+    private             long        lng;
+    
+    internal BitSet256Enumerator(in BitSet256 bitSet) {
+        this.bitSet = bitSet;
+        lng         = bitSet.l0;
+    }
+    
+    public int Current => curPos;
+    
+    // --- IEnumerator
+    public bool MoveNext()
+    {
+        if (lngPos < 4)
+        {
+            while (true)
+            {
+                if (lng != 0) {
+                    var bitPos  = BitOperations.TrailingZeroCount(lng);
+                    lng        ^= 1L << bitPos;
+                    curPos      = (lngPos << 6) + bitPos;
+                    return true;
+                }
+                lngPos++;
+                if (lngPos == 4) {
+                    return false;
+                }
+                lng = bitSet.At(lngPos);
+            }
+        }
+        return false;  
     }
 }

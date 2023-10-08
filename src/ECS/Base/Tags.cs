@@ -9,10 +9,12 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct Tags
 {
-    private  readonly   BitSet256   bitSet;
+    internal readonly   BitSet256       bitSet;
     
-    public   override   string      ToString() => GetString();
-
+    public              TagsEnumerator  GetEnumerator() => new (this);
+    
+    public   override   string          ToString() => GetString();
+    
     private Tags(in BitSet256 bitSet) {
         this.bitSet = bitSet;
     }
@@ -35,27 +37,32 @@ public readonly struct Tags
         return new Tags(bitSet);
     }
     
-    public void ForEach(Action<ComponentType> lambda)
-    {
-        bitSet.ForEach((position) => {
-            var tagType = EntityStore.Static.ComponentSchema.GetTagAt(position);
-            lambda(tagType);
-        });
-    }
-    
     private string GetString()
     {
         var sb = new StringBuilder();
         sb.Append('[');
-        bitSet.ForEach((position) => {
-            var tagType = EntityStore.Static.ComponentSchema.GetTagAt(position);
+        foreach (var index in bitSet) {
+            var tagType = EntityStore.Static.ComponentSchema.GetTagAt(index);
             sb.Append('#');
             sb.Append(tagType.type.Name);
             sb.Append(", ");
-        });
+        }
         sb.Length -= 2;
         sb.Append(']');
         return sb.ToString();
     }
 }
 
+public struct TagsEnumerator
+{
+    private BitSet256Enumerator bitSetEnumerator;
+    
+    public  ComponentType   Current => EntityStore.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
+    
+    internal TagsEnumerator(in Tags tags) {
+        bitSetEnumerator = tags.bitSet.GetEnumerator();
+    }
+    
+    // --- IEnumerator
+    public bool MoveNext() => bitSetEnumerator.MoveNext();
+}

@@ -1,5 +1,6 @@
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -12,7 +13,7 @@ internal struct TestTag2 : IEntityTag { }
 public static class Test_Tags
 {
     [Test]
-    public static void Test_SignatureTypes()
+    public static void Test_Tags_Get()
     {
         var schema          = EntityStore.GetComponentSchema();
         var testTagType     = schema.TagTypeByType[typeof(TestTag)];
@@ -20,24 +21,48 @@ public static class Test_Tags
         
         var tag1    = Tags.Get<TestTag>();
         AreEqual("[#TestTag]", tag1.ToString());
-        NotNull(tag1);
         int count1 = 0;
-        tag1.ForEach((tagType) => {
+        foreach (var tagType in tag1) {
             AreSame(testTagType, tagType);
             count1++;
-        });
+        }
         AreEqual(1, count1);
         
         var count2 = 0;
         var tag2 = Tags.Get<TestTag, TestTag2>();
         AreEqual("[#TestTag, #TestTag2]", tag2.ToString());
-        NotNull(tag2);
-        tag2.ForEach((tagType) => {
+        foreach (var _ in tag2) {
             count2++;
-        });
+        }
         AreEqual(2, count2);
         
         AreEqual(tag2, Tags.Get<TestTag2, TestTag>());
+    }
+    
+    [Test]
+    public static void Test_Tags_Get_Mem()
+    {
+        var tag1    = Tags.Get<TestTag>();
+        foreach (var _ in tag1) { }
+        
+        // --- 1 tag
+        var start   = Mem.GetAllocatedBytes();
+        int count1 = 0;
+        foreach (var _ in tag1) {
+            count1++;
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(1, count1);
+        
+        // --- 2 tags
+        start       = Mem.GetAllocatedBytes();
+        var tag2    = Tags.Get<TestTag, TestTag2>();
+        var count2 = 0;
+        foreach (var _ in tag2) {
+            count2++;
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(2, count2);
     }
     
     [Test]
