@@ -56,15 +56,7 @@ public readonly struct ArchetypeMask
     private string GetString() {
         var sb = new StringBuilder();
         foreach (var mask in masks) {
-            if (mask.l3 != 0) {
-                sb.Append($"{mask.l0:x16} {mask.l1:x16} {mask.l2:x16} {mask.l3:x16}");
-            } else if (mask.l2 != 0) {
-                sb.Append($"{mask.l0:x16} {mask.l1:x16} {mask.l2:x16}");
-            } else if (mask.l1 != 0) {
-                sb.Append($"{mask.l0:x16} {mask.l1:x16}");
-            } else {
-                sb.Append($"{mask.l0:x16}");
-            }
+            mask.AppendString(sb);
         }
         return sb.ToString();
     }
@@ -80,7 +72,7 @@ internal struct Vector256Long
     [FieldOffset(16)] internal  long            l2;
     [FieldOffset(24)] internal  long            l3;
 
-    public override             string          ToString() => value.ToString();
+    public override             string          ToString() => AppendString(new StringBuilder()).ToString();
     
     internal void SetBit(int index)
     {
@@ -90,5 +82,18 @@ internal struct Vector256Long
             case < 192:     l2 |= 1L << (index - 128);   return;
             default:        l3 |= 1L << (index - 192);   return;
         }
+    }
+    
+    internal StringBuilder AppendString(StringBuilder sb) {
+        if (l3 != 0) {
+            sb.Append($"{l0:x16} {l1:x16} {l2:x16} {l3:x16}");
+        } else if (l2 != 0) {
+            sb.Append($"{l0:x16} {l1:x16} {l2:x16}");
+        } else if (l1 != 0) {
+            sb.Append($"{l0:x16} {l1:x16}");
+        } else {
+            sb.Append($"{l0:x16}");
+        }
+        return sb;
     }
 }
