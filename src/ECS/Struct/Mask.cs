@@ -11,19 +11,15 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public struct ArchetypeMask
+public readonly struct ArchetypeMask
 {
-    private BitSet256   mask;
+    private readonly BitSet256   mask;
     
     // Could extend with Vector256Long[] if 256 struct components are not enough
     // private readonly   Vector256Long[]   masks;
 
     public override string ToString() => GetString();
     
-    public ArchetypeMask(int _) {
-        // masks = new Vector256Long[] { default };
-    }
-
     internal ArchetypeMask(StructHeap[] heaps, StructHeap newComp) {
         if (newComp != null) {
             mask.SetBit(newComp.structIndex);
@@ -33,28 +29,29 @@ public struct ArchetypeMask
         }
     }
     
-    public ArchetypeMask(int[] indices) {
-        foreach (var index in indices) {
-            mask.SetBit(index);
-        }
-    }
-    
-    public ArchetypeMask(Signature signature) {
+    internal ArchetypeMask(Signature signature) {
         foreach (var type in signature.types) {
             mask.SetBit(type.index);
         }
-    }
-    
-    public void SetBit(int bit) {
-        mask.SetBit(bit);
     }
 
     internal bool Has(in ArchetypeMask other) {
         return (mask.value & other.mask.value) == mask.value;
     }
     
-    private string GetString() {
-        return mask.AppendString(new StringBuilder()).ToString();
+    private string GetString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("Mask: [");
+        foreach (var index in mask) {
+            var tagType = EntityStore.Static.ComponentSchema.GetStructComponentAt(index);
+            sb.Append('#');
+            sb.Append(tagType.type.Name);
+            sb.Append(", ");
+        }
+        sb.Length -= 2;
+        sb.Append(']');
+        return sb.ToString();
     }
 }
 
@@ -72,6 +69,10 @@ public struct BitSet256
     
     public override             string          ToString() => AppendString(new StringBuilder()).ToString();
     
+    public BitSet256(int[] indices) {
+        SetBits(indices);
+    }
+        
     public void SetBit(int index)
     {
         switch (index) {
@@ -79,6 +80,12 @@ public struct BitSet256
             case < 128:     l1 |= 1L << (index - 64);    return;
             case < 192:     l2 |= 1L << (index - 128);   return;
             default:        l3 |= 1L << (index - 192);   return;
+        }
+    }
+    
+    public void SetBits(int[] indices) {
+        foreach (var index in indices) {
+            SetBit(index);
         }
     }
     

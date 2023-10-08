@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 namespace Tests.ECS;
@@ -12,13 +13,30 @@ public static class Test_BitSet
     [Test]
     public static void Test_BitSet_SetBit()
     {
-        var bitSet = new BitSet256();
-        bitSet.SetBit(1);
-        bitSet.SetBit(2);
-        AreEqual("0000000000000006", bitSet.ToString());
-        
-        bitSet.SetBit(255);
-        AreEqual("0000000000000006 0000000000000000 0000000000000000 8000000000000000", bitSet.ToString());
+        {
+            var bitSet = new BitSet256();
+            bitSet.SetBit(1);
+            bitSet.SetBit(2);
+            AreEqual("0000000000000006", bitSet.ToString());
+            
+            bitSet.SetBit(255);
+            AreEqual("0000000000000006 0000000000000000 0000000000000000 8000000000000000", bitSet.ToString());
+        } {
+            var mask = new BitSet256(new [] { 0 });
+            AreEqual("0000000000000001", mask.ToString());
+        } {
+            var mask = new BitSet256(new [] { 0, 64, 128, 192 });
+            AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", mask.ToString());
+        } {
+            var mask = new BitSet256(new [] { 63, 127, 191, 255 });
+            AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", mask.ToString());
+        } {
+            var bitSet = new BitSet256();
+            for (int n = 0; n < 256; n++) {
+                bitSet.SetBit(n);
+            }
+            AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", bitSet.ToString());
+        }
     }
     
     [Test]
@@ -55,7 +73,7 @@ public static class Test_BitSet
                     Fail($"Expect: {count}, was: {index}");
                 }
                 count++;
-            };
+            }
             Mem.AssertNoAlloc(start);
             AreEqual(256, count);
         }

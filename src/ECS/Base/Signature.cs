@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using static System.Numerics.BitOperations;
+using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
@@ -23,32 +24,26 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class Signature
 {
     // --- public fields
-                    public   readonly   int                 index;
     /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
                     public   readonly   long                archetypeHash;
                     public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public   readonly   ArchetypeMask       mask;
     
                     public   override   string              ToString()  => types.GetString("Signature: ");
     
     // --- static
-    private static readonly Dictionary<ulong, Signature>    Signatures = new Dictionary<ulong, Signature>();
-    private static          int                             NextSignatureIndex;
+    private static readonly Dictionary<ulong, Signature>    Signatures = new();
     
     
-    internal Signature(in SignatureTypeSet types, int index)
+    internal Signature(in SignatureTypeSet types)
     {
         this.types  = types;
-        this.index  = index;
         long hash   = 0;
         foreach (var type in types) {
             hash ^= type.type.Handle();
         }
-        archetypeHash = hash;
-    }
-    
-    private static int NextIndex()
-    {
-        return NextSignatureIndex++; // todo check max signatures
+        archetypeHash   = hash;
+        mask            = new ArchetypeMask(this); 
     }
     
     /// <summary>
@@ -71,7 +66,7 @@ public abstract class Signature
         var types   = new SignatureTypeSet(1,
             T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         );
-        var signature   = new Signature<T>(types, NextIndex());
+        var signature   = new Signature<T>(types);
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -100,7 +95,7 @@ public abstract class Signature
             T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2))
         );
-        var signature   = new Signature<T1, T2>(types, NextIndex());
+        var signature   = new Signature<T1, T2>(types);
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -132,7 +127,7 @@ public abstract class Signature
             T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3))
         );
-        var signature   = new Signature<T1, T2, T3>(types, NextIndex());
+        var signature   = new Signature<T1, T2, T3>(types);
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -167,7 +162,7 @@ public abstract class Signature
             T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
             T4: schema.GetStructType(StructHeap<T4>.StructIndex, typeof(T4))
         );
-        var signature   = new Signature<T1, T2, T3, T4>(types, NextIndex());
+        var signature   = new Signature<T1, T2, T3, T4>(types);
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -205,7 +200,7 @@ public abstract class Signature
             T4: schema.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
             T5: schema.GetStructType(StructHeap<T5>.StructIndex, typeof(T5))
         );
-        var signature = new Signature<T1, T2, T3, T4, T5>(types, NextIndex());
+        var signature = new Signature<T1, T2, T3, T4, T5>(types);
         Signatures.Add(hash, signature);
         return signature;
     }
@@ -215,8 +210,8 @@ public abstract class Signature
 public sealed class Signature<T> : Signature
     where T : struct
 {
-    internal Signature(in SignatureTypeSet types, int index)
-        : base(types, index) {
+    internal Signature(in SignatureTypeSet types)
+        : base(types) {
     }
 }
 
@@ -224,8 +219,8 @@ public sealed class Signature<T1, T2> : Signature
     where T1 : struct
     where T2 : struct
 {
-    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
-        : base(componentTypes, signatureIndex) {
+    internal Signature(in SignatureTypeSet componentTypes)
+        : base(componentTypes) {
     }
 }
 
@@ -234,8 +229,8 @@ public sealed class Signature<T1, T2, T3> : Signature
     where T2 : struct
     where T3 : struct
 {
-    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
-        : base(componentTypes, signatureIndex) {
+    internal Signature(in SignatureTypeSet componentTypes)
+        : base(componentTypes) {
     }
 }
 
@@ -245,8 +240,8 @@ public sealed class Signature<T1, T2, T3, T4> : Signature
     where T3 : struct
     where T4 : struct
 {
-    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
-        : base(componentTypes, signatureIndex) {
+    internal Signature(in SignatureTypeSet componentTypes)
+        : base(componentTypes) {
     }
 }
 
@@ -257,8 +252,8 @@ public sealed class Signature<T1, T2, T3, T4, T5> : Signature
     where T4 : struct
     where T5 : struct
 {
-    internal Signature(in SignatureTypeSet componentTypes, int signatureIndex)
-        : base(componentTypes, signatureIndex) {
+    internal Signature(in SignatureTypeSet componentTypes)
+        : base(componentTypes) {
     }
 }
 

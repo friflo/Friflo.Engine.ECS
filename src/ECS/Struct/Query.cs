@@ -27,7 +27,7 @@ public abstract class ArchetypeQuery
         this.store          = store;
         this.signature      = signature;
         archetypes          = new Archetype[1];
-        mask                = new ArchetypeMask(signature);
+        mask                = signature.mask;
         lastArchetypeCount  = 1;
         var componentTypes  = signature.types;
         switch (componentTypes.Length) {

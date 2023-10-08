@@ -1,4 +1,3 @@
-using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -27,11 +26,17 @@ public static class Test_Query
     [Test]
     public static void Test_Signature_Get_Mem()
     {
-        Signature.Get<Position>();
-        Signature.Get<Position, Rotation>();
-        Signature.Get<Position, Rotation, Scale3>();
-        Signature.Get<Position, Rotation, Scale3, MyComponent1>();
-        Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        var sig1 = Signature.Get<Position>();
+        var sig2 = Signature.Get<Position, Rotation>();
+        var sig3 = Signature.Get<Position, Rotation, Scale3>();
+        var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
+        var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        
+        AreEqual("Mask: [#Position]", sig1.mask.ToString());
+        AreEqual("Mask: [#Position, #Rotation]", sig2.mask.ToString());
+        AreEqual("Mask: [#Position, #Rotation, #Scale3]", sig3.mask.ToString());
+        AreEqual("Mask: [#Position, #Rotation, #Scale3, #MyComponent1]", sig4.mask.ToString());
+        AreEqual("Mask: [#Position, #Rotation, #Scale3, #MyComponent1, #MyComponent2]", sig5.mask.ToString());
         
         var start   = Mem.GetAllocatedBytes();
         Signature.Get<Position>();
@@ -237,30 +242,6 @@ public static class Test_Query
             foreach (var position in positions) {
                 _ = position;
             }
-        }
-    }
-
-    [Test]
-    public static void Test_ArchetypeMask()
-    {
-        {
-            var mask = new ArchetypeMask(Array.Empty<int>());
-            AreEqual("0000000000000000", mask.ToString());
-        } {
-            var mask = new ArchetypeMask(new [] { 0 });
-            AreEqual("0000000000000001", mask.ToString());
-        } {
-            var mask = new ArchetypeMask(new [] { 0, 64, 128, 192 });
-            AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", mask.ToString());
-        } {
-            var mask = new ArchetypeMask(new [] { 63, 127, 191, 255 });
-            AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", mask.ToString());
-        } {
-            var mask = new ArchetypeMask(1);
-            for (int n = 0; n < 256; n++) {
-                mask.SetBit(n);
-            }
-            AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", mask.ToString());
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed class Archetype
 {
-#region public properties
+#region public properties / fields
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                         EntityCount     => entityCount;
     
@@ -23,6 +23,8 @@ public sealed class Archetype
                     public              ReadOnlySpan<int>           EntityIds       => new (entityIds, 0, entityCount);
     
                     public              EntityStore                 Store           => store;
+                    
+    [Browse(Never)] public readonly     ArchetypeMask               mask;
     #endregion
     
 #region internal members
@@ -43,7 +45,6 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   int                         componentCount; // number of component types
     [Browse(Never)] internal readonly   long                        typeHash;
                     internal readonly   StandardComponents          std;
-                    internal readonly   ArchetypeMask               mask;
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
     

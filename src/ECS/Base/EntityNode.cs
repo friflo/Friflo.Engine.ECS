@@ -3,8 +3,8 @@
 
 using System;
 using System.Text;
-using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
