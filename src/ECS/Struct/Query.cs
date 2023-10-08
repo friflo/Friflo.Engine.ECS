@@ -75,7 +75,7 @@ public abstract class ArchetypeQuery
             if (store.archetypesCount == lastArchetypeCount) {
                 return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
             }
-            // --- update archetypes / archetypesCount
+            // --- update archetypes / archetypesCount: Add matching archetypes newly added to the store
             var storeArchetypes = store.Archetypes;
             var newStoreLength  = storeArchetypes.Length;
             var nextArchetypes  = archetypes;
@@ -88,7 +88,6 @@ public abstract class ArchetypeQuery
                 if (nextCount == nextArchetypes.Length) {
                     Utils.Resize(ref nextArchetypes, 2 * nextCount);
                 }
-                // set archetypeCount / archetypes after loop
                 nextArchetypes[nextCount++] = archetype;
             }
             // --- order matters in case of parallel execution
