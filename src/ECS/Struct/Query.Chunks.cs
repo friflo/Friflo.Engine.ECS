@@ -28,7 +28,7 @@ public ref struct ChunkEnumerator<T1, T2>
     where T1 : struct
     where T2 : struct
 {
-    private             ReadOnlySpan<Archetype> archetypes;
+    private readonly    ReadOnlySpan<Archetype> archetypes;
     private             int                     archetypePos;
     private readonly    int                     structIndex1;
     private readonly    int                     structIndex2;

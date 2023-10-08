@@ -13,27 +13,27 @@ public ref struct QueryEnumerator<T1, T2>
     where T2 : struct
 {
 
-    private readonly    int                 structIndex1;
-    private readonly    int                 structIndex2;
+    private  readonly   int                     structIndex1;
+    private  readonly   int                     structIndex2;
     
-    private             StructChunk<T1>[]   chunks1;
-    private             StructChunk<T2>[]   chunks2;
-    private             int                 chunkPos;
-    private             int                 chunkLen;
+    private             StructChunk<T1>[]       chunks1;
+    private             StructChunk<T2>[]       chunks2;
+    private             int                     chunkPos;
+    private             int                     chunkLen;
+        
+    private             Ref<T1>                 ref1;   // its .pos is used as loop condition in MoveNext()
+    private             Ref<T2>                 ref2;
+    private             int                     componentLen;
     
-    private             Ref<T1>             ref1;   // its .pos is used as loop condition in MoveNext()
-    private             Ref<T2>             ref2;
-    private             int                 componentLen;
+    private  readonly   ReadOnlySpan<Archetype> archetypes;
+    private             int                     archetypePos;
     
-    private             int                 archetypePos;
-    private ReadOnlySpan<Archetype>         archetypes;
-    
-    internal  QueryEnumerator(ArchetypeQuery<T1, T2> query)
+    internal QueryEnumerator(ArchetypeQuery<T1, T2> query)
     {
         structIndex1    = query.structIndexes.T1;
         structIndex2    = query.structIndexes.T2;
-        archetypePos    = 0;
         archetypes      = query.Archetypes;
+        archetypePos    = 0;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
