@@ -28,9 +28,8 @@ public struct BitSet
     // Could extend with Vector256Long[] if 256 struct components are not enough
     // private readonly  Vector256Long[]   values;
 
-    public                  BitSet256Enumerator GetEnumerator() => new BitSet256Enumerator(this); 
-    
-    public override             string          ToString() => AppendString(new StringBuilder()).ToString();
+    public              BitSetEnumerator    GetEnumerator() => new BitSetEnumerator(this);
+    public override     string              ToString()      => AppendString(new StringBuilder()).ToString();
     
     public BitSet(int[] indices) {
         foreach (var index in indices) {
@@ -74,18 +73,19 @@ public struct BitSet
     }
 }
 
-public struct BitSet256Enumerator
+public struct BitSetEnumerator
 {
     private readonly    BitSet      bitSet;
-    private             int         curPos;
-    private             int         lngPos;
-    private             long        lng;
+    private             int         curPos; // range: [0, ..., 255]
+    private             int         lngPos; // range: [0, 1, 2, 3, 4]
+    private             long        lng;    // 64 bits
     
-    internal BitSet256Enumerator(in BitSet bitSet) {
+    internal BitSetEnumerator(in BitSet bitSet) {
         this.bitSet = bitSet;
         lng         = bitSet.l0;
     }
     
+    /// <returns>the index of the current bit == 1. The index range is [0, ... , 255]</returns>
     public int Current => curPos;
     
     // --- IEnumerator

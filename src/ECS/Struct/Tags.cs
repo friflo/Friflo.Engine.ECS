@@ -55,9 +55,9 @@ public readonly struct Tags
 
 public struct TagsEnumerator
 {
-    private BitSet256Enumerator bitSetEnumerator;
+    private BitSetEnumerator    bitSetEnumerator;
     
-    public  ComponentType   Current => EntityStore.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
+    public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
         bitSetEnumerator = tags.bitSet.GetEnumerator();
