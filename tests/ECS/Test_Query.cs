@@ -196,7 +196,7 @@ public static class Test_Query
         AreEqual(42, entity2.Rotation.x);
     }
     
-    [Ignore("check allocation")][Test]
+    [Test]
     public static void Test_Query_loop_Mem()
     {
         var store   = new EntityStore();
@@ -211,13 +211,16 @@ public static class Test_Query
         
         var sig     = Signature.Get<Position, Rotation>();
         var query   = store.Query(sig);
+        
+        _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
+        
         var start   = Mem.GetAllocatedBytes();
         var count   = 0;
-        foreach (var current in query) {
-            if (3f != current.Item1.Value.z) {
-                Fail($"Expect 3. was: {current.Item1.Value.z}");
+        foreach (var (position, rotation) in query) {
+            if (3f != position.Value.z) {
+                Fail($"Expect 3. was: {position.Value.z}");
             }
-            current.Item1.Value.x = 42;
+            rotation.Value.x = 42;
             count++;
         }
         Mem.AssertNoAlloc(start);
