@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
 
@@ -55,6 +56,13 @@ public static class Test_StructComponent
         
         success = player2.TryGetComponentValue(out MyComponent2 _);
         IsFalse(success);
+        //
+        var start = Mem.GetAllocatedBytes();
+        player2.TryGetComponentValue(out  pos);
+        player2.TryGetComponentValue(out rot);
+        player2.TryGetComponentValue(out Scale3 _);
+        player2.TryGetComponentValue(out MyComponent2 _);
+        Mem.AssertNoAlloc(start);
     }
     
     [Test]
@@ -66,8 +74,10 @@ public static class Test_StructComponent
         
         var rotation = new Position { x = 2 };
         player.AddComponent(rotation);
+        var start = Mem.GetAllocatedBytes();
         
         var myComponent = player.GetComponent<MyComponent1>();
+        Mem.AssertNoAlloc(start);
         AreEqual(1,                     myComponent.Value.a);
         AreSame(typeof(MyComponent1),   myComponent.Type);
         AreEqual("my1",                 myComponent.StructKey);
@@ -109,9 +119,11 @@ public static class Test_StructComponent
         IsFalse(player1.AddComponent(new Position { x = 10, y = 11 }));
         
         var player2 = store.CreateEntity();
+        // var start = Mem.GetAllocatedBytes();
         player2.AddComponent<Position>();
         player2.AddComponent<Position>();
 
+        // Mem.AssertNoAlloc(start);  // todo
         AreEqual(10f, player1.Position.x);
         AreEqual(11f, player1.Position.y);
         

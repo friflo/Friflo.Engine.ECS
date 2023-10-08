@@ -1,6 +1,7 @@
 using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
@@ -127,8 +128,10 @@ public static class Test_Entity_Tree
         var root    = store.CreateEntity(1);
         IsNull (root.Root);
         IsNull (root.Parent);
+        var start = Mem.GetAllocatedBytes();
         
         store.SetRoot(root);
+        Mem.AssertNoAlloc(start);
         AreSame(root,       store.Root);
         AreSame(root,       root.Root);
         IsNull (root.Parent);
@@ -186,7 +189,9 @@ public static class Test_Entity_Tree
         var childArchetype = child.Archetype;
         AreEqual(3,         childArchetype.EntityCount);
         
+        var start = Mem.GetAllocatedBytes();
         child.DeleteEntity();
+        Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.EntityCount);
         AreEqual(2,         store.EntityCount);
         AreEqual(0,         root.ChildCount);
