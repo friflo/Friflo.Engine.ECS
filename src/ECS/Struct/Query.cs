@@ -8,6 +8,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+/// <summary>
+/// <see cref="ArchetypeQuery"/> an all its generic instances are immutable and designed to reuse its instances.
+/// </summary>
 public abstract class ArchetypeQuery
 {
 #region private fields
@@ -72,20 +75,27 @@ public abstract class ArchetypeQuery
             if (store.archetypesCount == lastArchetypeCount) {
                 return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
             }
+            // --- update archetypes / archetypesCount
             var storeArchetypes = store.Archetypes;
-            var newCount        = storeArchetypes.Length;
-            for (int n = lastArchetypeCount; n < newCount; n++) {
+            var newStoreLength  = storeArchetypes.Length;
+            var nextArchetypes  = archetypes;
+            var nextCount       = archetypeCount;
+            for (int n = lastArchetypeCount; n < newStoreLength; n++) {
                 var archetype = storeArchetypes[n];
                 if (!mask.Has(archetype.mask)) {
                     continue;
                 }
-                if (archetypeCount == archetypes.Length) {
-                    Utils.Resize(ref archetypes, 2 * archetypeCount);
+                if (nextCount == nextArchetypes.Length) {
+                    Utils.Resize(ref nextArchetypes, 2 * nextCount);
                 }
-                archetypes[archetypeCount++] = archetype;
+                // set archetypeCount / archetypes after loop
+                nextArchetypes[nextCount++] = archetype;
             }
-            lastArchetypeCount = newCount;
-            return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
+            // --- order matters in case of parallel execution
+            archetypes          = nextArchetypes;   // using changed (added) archetypes with old archetypeCount         => OK
+            archetypeCount      = nextCount;        // archetypes already changed                                       => OK
+            lastArchetypeCount  = newStoreLength;   // using old lastArchetypeCount result only in a redundant update   => OK
+            return new ReadOnlySpan<Archetype>(nextArchetypes, 0, nextCount);
         }
     }
 }
