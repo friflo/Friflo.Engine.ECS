@@ -40,7 +40,7 @@ public readonly struct Tags
     private string GetString()
     {
         var sb = new StringBuilder();
-        sb.Append('[');
+        sb.Append("Tags: [");
         foreach (var index in bitSet) {
             var tagType = EntityStore.Static.ComponentSchema.GetTagAt(index);
             sb.Append('#');

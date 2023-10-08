@@ -20,7 +20,7 @@ public static class Test_Tags
         var testTagType2    = schema.TagTypeByType[typeof(TestTag2)];
         
         var tag1    = Tags.Get<TestTag>();
-        AreEqual("[#TestTag]", tag1.ToString());
+        AreEqual("Tags: [#TestTag]", tag1.ToString());
         int count1 = 0;
         foreach (var tagType in tag1) {
             AreSame(testTagType, tagType);
@@ -30,7 +30,7 @@ public static class Test_Tags
         
         var count2 = 0;
         var tag2 = Tags.Get<TestTag, TestTag2>();
-        AreEqual("[#TestTag, #TestTag2]", tag2.ToString());
+        AreEqual("Tags: [#TestTag, #TestTag2]", tag2.ToString());
         foreach (var _ in tag2) {
             count2++;
         }

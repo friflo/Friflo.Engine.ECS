@@ -25,7 +25,7 @@ public static class Test_ComponentSchema
         var testTagType = schema.TagTypeByType[typeof(TestTag)];
         AreEqual(2,                         schema.TagTypeByType.Count);
         AreEqual(typeof(TestTag),           testTagType.type);
-        AreEqual("entity tag: #TestTag",    testTagType.ToString());
+        AreEqual("tag: [#TestTag]",    testTagType.ToString());
     }
     
     [Test]
@@ -69,11 +69,11 @@ public static class Test_ComponentSchema
         
         var myComponentType = schema.GetStructComponentType<MyComponent1>();
         AreEqual("my1",                             myComponentType.componentKey);
-        AreEqual("struct component: MyComponent1",  myComponentType.ToString());
+        AreEqual("struct component: [MyComponent1]",  myComponentType.ToString());
         
         var testComponentType = schema.GetClassComponentType<TestComponent>();
         AreEqual("test",                            testComponentType.componentKey);
-        AreEqual("class component: *TestComponent", testComponentType.ToString());
+        AreEqual("class component: [*TestComponent]", testComponentType.ToString());
         
         AreEqual(typeof(Position),  schema.ComponentTypeByKey["pos"].type);
         AreEqual("test",            schema.ComponentTypeByType[typeof(TestComponent)].componentKey);
