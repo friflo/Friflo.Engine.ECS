@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// <see cref="ArchetypeQuery"/> an all its generic instances are immutable and designed to reuse its instances.
+/// <see cref="ArchetypeQuery"/> an all its generic implementation are immutable and designed to reuse its instances.
 /// </summary>
 public abstract class ArchetypeQuery
 {
