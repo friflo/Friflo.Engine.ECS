@@ -13,12 +13,9 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct ArchetypeMask
 {
-    private readonly BitSet256   mask;
+    private readonly    BitSet  mask;
     
-    // Could extend with Vector256Long[] if 256 struct components are not enough
-    // private readonly   Vector256Long[]   masks;
-
-    public override string ToString() => GetString();
+    public  override    string  ToString() => GetString();
     
     internal ArchetypeMask(StructHeap[] heaps, StructHeap newComp) {
         if (newComp != null) {
@@ -55,8 +52,12 @@ public readonly struct ArchetypeMask
     }
 }
 
+/// <summary>
+/// Support a bit set currently limited to 256 bits.<br/>
+/// If need an additional Vector256Long[] could be added be added for arbitrary length.
+/// </summary>
 [StructLayout(LayoutKind.Explicit)]
-public struct BitSet256
+public struct BitSet
 {
     [FieldOffset(00)] internal  Vector256<long> value;
     
@@ -64,12 +65,15 @@ public struct BitSet256
     [FieldOffset(08)] internal  long            l1;
     [FieldOffset(16)] internal  long            l2;
     [FieldOffset(24)] internal  long            l3;
+    
+    // Could extend with Vector256Long[] if 256 struct components are not enough
+    // private readonly  Vector256Long[]   values;
 
     public                  BitSet256Enumerator GetEnumerator() => new BitSet256Enumerator(this); 
     
     public override             string          ToString() => AppendString(new StringBuilder()).ToString();
     
-    public BitSet256(int[] indices) {
+    public BitSet(int[] indices) {
         SetBits(indices);
     }
         
@@ -117,12 +121,12 @@ public struct BitSet256
 
 public struct BitSet256Enumerator
 {
-    private readonly    BitSet256   bitSet;
+    private readonly    BitSet      bitSet;
     private             int         curPos;
     private             int         lngPos;
     private             long        lng;
     
-    internal BitSet256Enumerator(in BitSet256 bitSet) {
+    internal BitSet256Enumerator(in BitSet bitSet) {
         this.bitSet = bitSet;
         lng         = bitSet.l0;
     }

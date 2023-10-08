@@ -5,10 +5,10 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-public static class Test_Signature_POC
+public static class Test_Signature
 {
     [Test]
-    public static void Test_Signature()
+    public static void Test_Signature_Get()
     {
         var sig1 =      Signature.Get<Position>();
         AreEqual(1,     sig1.types.Length);

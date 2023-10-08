@@ -14,7 +14,7 @@ public static class Test_BitSet
     public static void Test_BitSet_SetBit()
     {
         {
-            var bitSet = new BitSet256();
+            var bitSet = new BitSet();
             bitSet.SetBit(1);
             bitSet.SetBit(2);
             AreEqual("0000000000000006", bitSet.ToString());
@@ -22,16 +22,16 @@ public static class Test_BitSet
             bitSet.SetBit(255);
             AreEqual("0000000000000006 0000000000000000 0000000000000000 8000000000000000", bitSet.ToString());
         } {
-            var mask = new BitSet256(new [] { 0 });
+            var mask = new BitSet(new [] { 0 });
             AreEqual("0000000000000001", mask.ToString());
         } {
-            var mask = new BitSet256(new [] { 0, 64, 128, 192 });
+            var mask = new BitSet(new [] { 0, 64, 128, 192 });
             AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", mask.ToString());
         } {
-            var mask = new BitSet256(new [] { 63, 127, 191, 255 });
+            var mask = new BitSet(new [] { 63, 127, 191, 255 });
             AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", mask.ToString());
         } {
-            var bitSet = new BitSet256();
+            var bitSet = new BitSet();
             for (int n = 0; n < 256; n++) {
                 bitSet.SetBit(n);
             }
@@ -45,7 +45,7 @@ public static class Test_BitSet
         {
             var start = Mem.GetAllocatedBytes();
             int count = 0;
-            var bitSet = new BitSet256();
+            var bitSet = new BitSet();
             foreach (var _ in bitSet) {
                 count++;
             }
@@ -54,7 +54,7 @@ public static class Test_BitSet
         } {
             var start = Mem.GetAllocatedBytes();
             int count = 0;
-            var bitSet = new BitSet256();
+            var bitSet = new BitSet();
             bitSet.SetBit(1);
             foreach (var _ in bitSet) {
                 count++;
@@ -63,7 +63,7 @@ public static class Test_BitSet
             AreEqual(1, count);
         } {
             var start = Mem.GetAllocatedBytes();
-            var bitSet = new BitSet256();
+            var bitSet = new BitSet();
             for (int n = 0; n < 256; n++) {
                 bitSet.SetBit(n);
             }

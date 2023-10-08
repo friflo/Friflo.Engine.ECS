@@ -9,20 +9,20 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct Tags
 {
-    internal readonly   BitSet256       bitSet;
+    internal readonly   BitSet          bitSet;
     
     public              TagsEnumerator  GetEnumerator() => new (this);
     
     public   override   string          ToString() => GetString();
     
-    private Tags(in BitSet256 bitSet) {
+    private Tags(in BitSet bitSet) {
         this.bitSet = bitSet;
     }
         
     public static Tags Get<T>()
         where T : struct, IEntityTag
     {
-        BitSet256 bitSet = default;
+        BitSet bitSet = default;
         bitSet.SetBit(TagTypeInfo<T>.TagIndex);
         return new Tags(bitSet);
     }
@@ -31,7 +31,7 @@ public readonly struct Tags
         where T1 : struct, IEntityTag
         where T2 : struct, IEntityTag
     {
-        BitSet256 bitSet = default;
+        BitSet bitSet = default;
         bitSet.SetBit(TagTypeInfo<T1>.TagIndex);
         bitSet.SetBit(TagTypeInfo<T2>.TagIndex);
         return new Tags(bitSet);
