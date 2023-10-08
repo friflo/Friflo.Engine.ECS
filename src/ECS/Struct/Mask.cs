@@ -8,57 +8,50 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct ArchetypeMask
+public struct ArchetypeMask
 {
-    private readonly   Vector256Long[]   masks;
+    private Vector256Long   mask;
+    
+    // Could extend with Vector256Long[] if 256 struct components are not enough
+    // private readonly   Vector256Long[]   masks;
 
     public override string ToString() => GetString();
     
     public ArchetypeMask(int _) {
-        masks = new Vector256Long[] { default };
+        // masks = new Vector256Long[] { default };
     }
 
     internal ArchetypeMask(StructHeap[] heaps, StructHeap newComp) {
-        Vector256Long vec256 = default;
         if (newComp != null) {
-            vec256.SetBit(newComp.structIndex);
+            mask.SetBit(newComp.structIndex);
         }
         foreach (var heap in heaps) {
-            vec256.SetBit(heap.structIndex);
+            mask.SetBit(heap.structIndex);
         }
-        masks = new [] { vec256 };
     }
     
     public ArchetypeMask(int[] indices) {
-        Vector256Long vec256 = default;
         foreach (var index in indices) {
-            vec256.SetBit(index);
+            mask.SetBit(index);
         }
-        masks = new [] { vec256 };
     }
     
     public ArchetypeMask(Signature signature) {
-        Vector256Long vec256 = default;
         foreach (var type in signature.types) {
-            vec256.SetBit(type.index);
+            mask.SetBit(type.index);
         }
-        masks = new [] { vec256 };
     }
     
     public void SetBit(int bit) {
-        masks[0].SetBit(bit);
+        mask.SetBit(bit);
     }
 
     internal bool Has(in ArchetypeMask other) {
-        return (masks[0].value & other.masks[0].value) == masks[0].value;
+        return (mask.value & other.mask.value) == mask.value;
     }
     
     private string GetString() {
-        var sb = new StringBuilder();
-        foreach (var mask in masks) {
-            mask.AppendString(sb);
-        }
-        return sb.ToString();
+        return mask.AppendString(new StringBuilder()).ToString();
     }
 }
 
