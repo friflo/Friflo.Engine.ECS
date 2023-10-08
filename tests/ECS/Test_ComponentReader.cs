@@ -3,6 +3,7 @@ using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -26,6 +27,7 @@ public static class Test_ComponentReader
         AssertRootEntity(root);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
         AreEqual(1,     type.EntityCount);
+        AreEqual(2,     store.EntityCount);
         
         // --- read same DataNode again
         root.Position   = default;
@@ -33,7 +35,7 @@ public static class Test_ComponentReader
         root            = store.CreateFromDataNode(rootNode);
         AssertRootEntity(root);
         AreEqual(1,     type.EntityCount);
-
+        AreEqual(2,     store.EntityCount);
         AreEqual(11,    child.Id);
     }
     
@@ -47,6 +49,33 @@ public static class Test_ComponentReader
         AreEqual(4f,    root.Scale3.x);
         AreEqual(5f,    root.Scale3.y);
         AreEqual(6f,    root.Scale3.z);
+    }
+    
+    [NUnit.Framework.IgnoreAttribute("removed childIds reallocation")][Test]
+    public static void Test_ReadStructComponents_Mem()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        
+        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
+        var childNode   = new DataNode { pid = 11 };
+        
+        var root        = store.CreateFromDataNode(rootNode);
+        var child       = store.CreateFromDataNode(childNode);
+        AssertRootEntity(root);
+        var type = store.GetArchetype(Signature.Get<Position, Scale3>());
+        AreEqual(1,     type.EntityCount);
+        AreEqual(2,     store.EntityCount);
+        
+        // --- read same DataNode again
+        root.Position   = default;
+        root.Scale3     = default;
+        var start       = Mem.GetAllocatedBytes();
+        root            = store.CreateFromDataNode(rootNode);
+        Mem.AssertNoAlloc(start);
+        AssertRootEntity(root);
+        AreEqual(1,     type.EntityCount);
+        AreEqual(2,     store.EntityCount);
+        AreEqual(11,    child.Id);
     }
     
     [Test]

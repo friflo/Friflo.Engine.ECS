@@ -101,12 +101,12 @@ public sealed partial class EntityStore
     private GameEntity CreateEntityInternal(int id, long pid)
     {
         AssertIdInNodes(id);
-        nodeCount++;
         ref var node = ref nodes[id];
         if (node.Is(Created)) {
             AssertPid(node.pid, pid);
             return node.entity;
         }
+        nodeCount++;
         if (nodeMaxId < id) {
             nodeMaxId = id;
         }
