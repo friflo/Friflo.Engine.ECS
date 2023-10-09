@@ -329,6 +329,16 @@ public sealed class GameEntity
                bitSet.Has(TagTypeInfo<T2>.TagIndex) &&
                bitSet.Has(TagTypeInfo<T3>.TagIndex);
     }
+    
+    public  bool    HasAll (in Tags tags)
+    {
+        return archetype.tags.bitSet.HasAll(tags.bitSet); 
+    }
+    
+    public  bool    HasAny (in Tags tags)
+    {
+        return archetype.tags.bitSet.HasAny(tags.bitSet); 
+    }
 
     public bool AddTag<T>()
         where T : struct, IEntityTag

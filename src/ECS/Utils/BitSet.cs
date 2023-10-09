@@ -57,6 +57,16 @@ public struct BitSet
         }
     }
     
+    public bool HasAll(in BitSet bitSet)
+    {
+        return (value & bitSet.value) == bitSet.value;
+    }
+    
+    public bool HasAny(in BitSet bitSet)
+    {
+        return (value & bitSet.value) != default;
+    }
+    
     internal long At(int index)
     {
         switch (index) {

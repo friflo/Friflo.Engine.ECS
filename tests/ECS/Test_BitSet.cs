@@ -44,9 +44,24 @@ public static class Test_BitSet
                     Fail($"Expect bit == false: index: {n}");
                 }
                 bitSet.SetBit(n);
-                IsTrue(bitSet.Has(n));
+                if (!bitSet.Has(n)) {
+                    Fail($"Expect bit == true: index: {n}");
+                }
             }
             AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", bitSet.ToString());
+            var allBits = bitSet;
+            IsTrue(allBits.HasAll(allBits));
+            IsTrue(allBits.HasAny(allBits));
+            
+            for (int n = 0; n < 256; n++) {
+                var singleBit = new BitSet();
+                singleBit.SetBit(n);
+                IsTrue(allBits.HasAll(singleBit));
+                IsTrue(allBits.HasAny(singleBit));
+                
+                IsFalse(singleBit.HasAll(allBits));
+                IsTrue (singleBit.HasAny(allBits));
+            }
         }
     }
     
