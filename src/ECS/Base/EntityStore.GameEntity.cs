@@ -133,18 +133,12 @@ public sealed partial class EntityStore
 
 internal abstract class ComponentUpdater
 {
-    internal abstract void UpdateComponentIndex(int id, int compIndex);
+    internal abstract void UpdateComponentIndex(EntityStore store, int id, int compIndex);
 }
 
 internal sealed class GameEntityUpdater : ComponentUpdater
 {
-    private readonly EntityStore entityStore;
-    
-    internal GameEntityUpdater(EntityStore entityStore) {
-        this.entityStore = entityStore;
-    }
-
-    internal override void UpdateComponentIndex(int id, int compIndex) {
-        entityStore.nodes[id].entity.compIndex = compIndex;
+    internal override void UpdateComponentIndex(EntityStore store, int id, int compIndex) {
+        store.nodes[id].entity.compIndex = compIndex;
     }
 }

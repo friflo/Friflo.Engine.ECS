@@ -118,7 +118,7 @@ public sealed partial class EntityStore
         }
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
-        gameEntityUpdater   = new GameEntityUpdater(this);
+        gameEntityUpdater   = new GameEntityUpdater();
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypeSet(0), default);
         clientNodes      = client?.nodes.Local;

@@ -155,7 +155,7 @@ public sealed class Archetype
             heap.MoveComponent(lastIndex, newIndex);
         }
         var lastEntityId    = entityIds[lastIndex];
-        updater.UpdateComponentIndex(lastEntityId, newIndex);
+        updater.UpdateComponentIndex(store, lastEntityId, newIndex);
         entityIds[newIndex]  = lastEntityId;
         entityCount--;     // remove last entity id
     }
