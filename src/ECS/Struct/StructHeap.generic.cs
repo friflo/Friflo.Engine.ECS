@@ -31,11 +31,6 @@ internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructCo
         chunks[0]   = new StructChunk<T>(capacity);
     }
     
-    internal override StructHeap CreateHeap(int capacity, TypeStore typeStore) {
-        var mapper = typeStore.GetTypeMapper<T>();
-        return new StructHeap<T>(structIndex, structKey, capacity, mapper);
-    }
-    
     internal override void SetCapacity(int capacity)
     {
         // todo fix this

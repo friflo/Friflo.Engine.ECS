@@ -3,8 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Json.Fliox;
-using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
@@ -34,32 +32,6 @@ public sealed partial class EntityStore
         }
         types.Add(schema.GetStructType(StructHeap<T>.StructIndex, typeof(T)));
         archetype = Archetype.CreateWithStructTypes(config, types);
-        AddArchetype(archetype);
-        return archetype;
-    }
-    
-    private Archetype GetArchetypeWith(Archetype current, ComponentType structType)
-    {
-        var hash = structType.structHash ^ current.typeHash;
-        if (TryGetArchetype(hash, out var archetype)) {
-            return archetype;
-        }
-        var newHeap = structType.CreateHeap(Static.DefaultCapacity);
-        var config  = GetArchetypeConfig();
-        archetype   = Archetype.CreateFromArchetype(config, current, newHeap);
-        AddArchetype(archetype);
-        return archetype;
-    }
-    
-    private Archetype GetArchetype(ComponentType structType)
-    {
-        // could perform lookup per lookup array
-        if (TryGetArchetype(structType.structHash, out var archetype)) {
-            return archetype;
-        }
-        var newHeap = structType.CreateHeap(Static.DefaultCapacity);
-        var config  = GetArchetypeConfig();
-        archetype   = Archetype.CreateFromArchetype(config, defaultArchetype, newHeap);
         AddArchetype(archetype);
         return archetype;
     }
@@ -200,38 +172,4 @@ public sealed partial class EntityStore
         archetype   = newArchetype;
         return true;
     }
-    
-    internal bool ReadStructComponent(
-        ObjectReader        reader,
-        JsonValue           json,
-        int                 id,
-        ref Archetype       archetype,
-        ref int             compIndex,
-        ComponentType       structType,
-        ComponentUpdater    updater)
-    {
-        var arch = archetype;
-        if (arch != defaultArchetype) {
-            var structHeap = arch.heapMap[structType.index];
-            if (structHeap != null) {
-                // --- change component value 
-                structHeap.Read(reader, compIndex, json);
-                return false;
-            }
-            // --- change entity archetype
-            var newArchetype    = archetype.store.GetArchetypeWith(archetype, structType);
-            compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
-            archetype           = arch = newArchetype;
-        } else {
-            // --- add entity to archetype
-            arch                = archetype.store.GetArchetype(structType);
-            compIndex           = arch.AddEntity(id);
-            archetype           = arch;
-        }
-        // --- set component value 
-        var heap = arch.heapMap[structType.index];
-        heap.Read(reader, compIndex, json);
-        return true;
-    }
 }
-

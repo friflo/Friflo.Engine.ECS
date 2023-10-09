@@ -25,7 +25,6 @@ internal abstract class StructHeap
 
     public   override   string      ToString() => GetString();
     
-    internal abstract   StructHeap  CreateHeap          (int capacity, TypeStore typeStore);
     internal abstract   void        SetCapacity         (int capacity);
     internal abstract   void        MoveComponent       (int from, int to);
     internal abstract   void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);

@@ -85,23 +85,6 @@ public sealed class Archetype
         }
     }
 
-    internal static Archetype CreateFromArchetype(in ArchetypeConfig config, Archetype current, StructHeap newHeap)
-    {
-        var heaps = new StructHeap[current.structHeaps.Length]; 
-        for (int n = 0; n < heaps.Length; n++) {
-            // create same components used in the passed Archetype
-            var heap    = current.structHeaps[n].CreateHeap(config.capacity, config.typeStore);
-            heaps[n]    = heap;
-        }
-        var archetype = new Archetype(config, heaps, newHeap);
-        int pos = 0;
-        foreach (var component in heaps) {
-            archetype.AddStructHeap(pos++, component);
-        }
-        archetype.AddStructHeap(pos, newHeap);
-        return archetype;
-    }
-    
     internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypeSet types)
     {
         var length          = types.Length;

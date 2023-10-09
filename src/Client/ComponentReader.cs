@@ -48,9 +48,11 @@ internal sealed class ComponentReader
         }
         ReadRawComponents();
         PrepareReadComponents(entity, store);
-
-        // --- read class / struct components
-        var updater = store.gameEntityUpdater;
+        ReadComponents(entity);
+    }
+    
+    private void ReadComponents(GameEntity entity)
+    {
         for (int n = 0; n < componentCount; n++)
         {
             var component = components[n];
@@ -61,10 +63,23 @@ internal sealed class ComponentReader
                 component.type.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
-            store.ReadStructComponent(componentReader, json, entity.id, ref entity.archetype, ref entity.compIndex, component.type, updater);
+            // --- read struct component. Archetype already created in 
+            var structType  = component.type;
+            var heap        = entity.archetype.heapMap[structType.index];
+            if (heap != null) {
+                // --- change component value 
+                heap.Read(componentReader, entity.compIndex, json);
+                continue;
+            }
+            var msg = $"unexpected: heap == null. structType: {structType}. {nameof(PrepareReadComponents)} ensures this.";
+            throw new InvalidOperationException(msg);
         }
     }
     
+    /// <summary>
+    /// Ensures the given entity is in an <see cref="Archetype"/> that contains all struct components 
+    /// inside the current JSON payload.
+    /// </summary>
     private void PrepareReadComponents(GameEntity entity, EntityStore store)
     {
         long archetypeHash = 0;
@@ -76,10 +91,10 @@ internal sealed class ComponentReader
             archetypeHash      ^= type.structHash;
             component.type      = type;
         }
-        // --- use / create Archetype with present components to avoid structural changes
+        // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
         if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
         {
-            var config  = store.GetArchetypeConfig();
+            var config = store.GetArchetypeConfig();
             structTypes.Clear();
             for (int n = 0; n < count; n++) {
                 ref var component = ref components[n];
@@ -87,7 +102,7 @@ internal sealed class ComponentReader
                     structTypes.Add(component.type);
                 }
             }
-            newArchetype    = Archetype.CreateWithStructTypes(config, structTypes);
+            newArchetype = Archetype.CreateWithStructTypes(config, structTypes);
             store.AddArchetype(newArchetype);
         }
         if (entity.archetype == newArchetype) {
