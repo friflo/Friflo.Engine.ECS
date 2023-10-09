@@ -31,7 +31,7 @@ public sealed partial class EntityStore
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
         types.Add(schema.GetStructType(StructHeap<T>.StructIndex, typeof(T)));
-        archetype = Archetype.CreateWithStructTypes(config, types);
+        archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
         AddArchetype(archetype);
         return archetype;
     }
@@ -55,7 +55,7 @@ public sealed partial class EntityStore
                 continue;
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
-        result      = Archetype.CreateWithStructTypes(config, types);
+        result      = Archetype.CreateWithStructTypes(config, types, archetype.tags);
         AddArchetype(result);
         return result;
     }
@@ -131,7 +131,7 @@ public sealed partial class EntityStore
             archetype           = arch = newArchetype;
         } else {
             // --- add entity to archetype
-            arch                = GetArchetype<T>();
+            arch                = GetArchetype<T>(arch.tags);
             compIndex           = arch.AddEntity(id);
             archetype           = arch;
         }

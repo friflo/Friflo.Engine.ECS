@@ -57,7 +57,7 @@ public sealed class Archetype
     /// <summary>
     /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
     /// </summary>
-    private Archetype(in ArchetypeConfig config, StructHeap[] heaps)
+    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
         store           = config.store;
         archIndex       = config.archetypeIndex;
@@ -68,6 +68,7 @@ public sealed class Archetype
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
         mask            = new ArchetypeMask(heaps);
+        this.tags       = tags;
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
         }
@@ -95,28 +96,28 @@ public sealed class Archetype
     }
 
     /// <remarks>Is called by methods using generic struct component type: T1, T2, T3, ...</remarks>
-    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypeSet types)
+    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypeSet types, in Tags tags)
     {
         var length          = types.Length;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);
         }
-        return new Archetype(config, componentHeaps);
+        return new Archetype(config, componentHeaps, tags);
     }
     
     /// <remarks>
     /// Is called by methods using a set of arbitrary struct <see cref="ComponentType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
     /// </remarks>
-    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> types)
+    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> types, in Tags tags)
     {
         var length          = types.Count;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);
         }
-        return new Archetype(config, componentHeaps);
+        return new Archetype(config, componentHeaps, tags);
     }
     
     #endregion

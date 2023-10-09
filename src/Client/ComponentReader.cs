@@ -93,6 +93,7 @@ internal sealed class ComponentReader
             component.type      = type;
         }
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
+        var curArchetype = entity.archetype;
         if (!store.TryGetArchetype(archetypeHash, out var newArchetype))
         {
             var config = store.GetArchetypeConfig();
@@ -103,16 +104,16 @@ internal sealed class ComponentReader
                     structTypes.Add(component.type);
                 }
             }
-            newArchetype = Archetype.CreateWithStructTypes(config, structTypes);
+            newArchetype = Archetype.CreateWithStructTypes(config, structTypes, curArchetype.tags);
             store.AddArchetype(newArchetype);
         }
-        if (entity.archetype == newArchetype) {
+        if (curArchetype == newArchetype) {
             return;
         }
-        if (entity.archetype == store.defaultArchetype) {
+        if (curArchetype == store.defaultArchetype) {
             newArchetype.AddEntity(entity.id);
         } else {
-            entity.archetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype, store.gameEntityUpdater);
+            curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype, store.gameEntityUpdater);
         }
         entity.archetype = newArchetype;
     }

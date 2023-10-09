@@ -12,7 +12,7 @@ public sealed partial class EntityStore
 {
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
-    private Archetype GetArchetype<T>()
+    private Archetype GetArchetype<T>(in Tags tags)
         where T : struct, IStructComponent
     {
         var hash = typeof(T).Handle();
@@ -24,7 +24,7 @@ public sealed partial class EntityStore
         var types   = new SignatureTypeSet(1,
             T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         );
-        archetype = Archetype.CreateWithSignatureTypes(config, types);
+        archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
         AddArchetype(archetype);
         return archetype;
     }
@@ -33,55 +33,55 @@ public sealed partial class EntityStore
         return new ArchetypeConfig (this, archetypesCount, DefaultCapacity);
     }
     
-    private Archetype GetArchetypeInternal(Signature signature)
+    private Archetype GetArchetypeWithSignature(Signature signature, in Tags tags)
     {
         if (TryGetArchetype(signature.archetypeHash, out var archetype)) {
             return archetype;
         }
         var config  = GetArchetypeConfig();
-        archetype   = Archetype.CreateWithSignatureTypes(config, signature.types);
+        archetype   = Archetype.CreateWithSignatureTypes(config, signature.types, tags);
         AddArchetype(archetype);
         return archetype;
     }
 
-    public Archetype GetArchetype<T>(Signature<T> signature)
+    public Archetype GetArchetype<T>(Signature<T> signature, in Tags tags = default)
         where T : struct, IStructComponent
     {
-        return GetArchetypeInternal(signature);
+        return GetArchetypeWithSignature(signature, tags);
     }
     
-    public Archetype GetArchetype<T1, T2>(Signature<T1, T2> signature)
+    public Archetype GetArchetype<T1, T2>(Signature<T1, T2> signature, in Tags tags = default)
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
-        return GetArchetypeInternal(signature);
+        return GetArchetypeWithSignature(signature, tags);
     }
     
-    public Archetype GetArchetype<T1, T2, T3>(Signature<T1, T2, T3> signature)
+    public Archetype GetArchetype<T1, T2, T3>(Signature<T1, T2, T3> signature, in Tags tags = default)
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
     {
-        return GetArchetypeInternal(signature);
+        return GetArchetypeWithSignature(signature, tags);
     }
     
-    public Archetype GetArchetype<T1, T2, T3, T4>(Signature<T1, T2, T3, T4> signature)
+    public Archetype GetArchetype<T1, T2, T3, T4>(Signature<T1, T2, T3, T4> signature, in Tags tags = default)
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
         where T4 : struct, IStructComponent
     {
-        return GetArchetypeInternal(signature);
+        return GetArchetypeWithSignature(signature, tags);
     }
     
-    public Archetype GetArchetype<T1, T2, T3, T4, T5>(Signature<T1, T2, T3, T4, T5> signature)
+    public Archetype GetArchetype<T1, T2, T3, T4, T5>(Signature<T1, T2, T3, T4, T5> signature, in Tags tags = default)
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
         where T4 : struct, IStructComponent
         where T5 : struct, IStructComponent
     {
-        return GetArchetypeInternal(signature);
+        return GetArchetypeWithSignature(signature, tags);
     }
     #endregion
     
