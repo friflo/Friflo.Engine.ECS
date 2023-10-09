@@ -310,9 +310,15 @@ public sealed class GameEntity
     /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
-    public  Tags    Tags => archetype.tags;
+    public  Tags    Tags                                        => archetype.tags;
+    
+    public  bool    HasTag<T>() where T : struct, IEntityTag    => archetype.tags.Has<T>();
+    
+    public  bool    HasAllTags(in Tags tags)                    => archetype.tags.HasAll(tags);
+    
+    public  bool    HasAnyTags(in Tags tags)                    => archetype.tags.HasAny(tags);
 
-    public bool AddTag<T>()
+    public  bool    AddTag<T>()
         where T : struct, IEntityTag
     {
         var store   = archetype.store;
@@ -320,13 +326,13 @@ public sealed class GameEntity
         return store.AddTags(tags, id, ref archetype, ref compIndex);
     }
     
-    public bool AddTags(in Tags tags)
+    public  bool    AddTags(in Tags tags)
     {
         var store   = archetype.store;
         return store.AddTags(tags, id, ref archetype, ref compIndex);
     }
     
-    public bool RemoveTag<T>()
+    public  bool    RemoveTag<T>()
         where T : struct, IEntityTag
     {
         var store   = archetype.store;
@@ -334,7 +340,7 @@ public sealed class GameEntity
         return store.RemoveTags(tags, id, ref archetype, ref compIndex);
     }
     
-    public bool RemoveTags(in Tags tags)
+    public  bool    RemoveTags(in Tags tags)
     {
         var store   = archetype.store;
         return store.RemoveTags(tags, id, ref archetype, ref compIndex);

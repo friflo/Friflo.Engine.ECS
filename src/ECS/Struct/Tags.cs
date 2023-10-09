@@ -51,12 +51,12 @@ public struct Tags : IEnumerable<ComponentType>
     
     public  bool    HasAll (in Tags tags)
     {
-        return bitSet.HasAll(tags.bitSet); 
+        return bitSet.HasAll(tags.bitSet);
     }
     
     public  bool    HasAny (in Tags tags)
     {
-        return bitSet.HasAny(tags.bitSet); 
+        return bitSet.HasAny(tags.bitSet);
     }
     
     // ----------------------------------------- mutate Tags -----------------------------------------
