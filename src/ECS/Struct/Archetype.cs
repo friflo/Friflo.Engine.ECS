@@ -24,7 +24,10 @@ public sealed class Archetype
     
                     public              EntityStore                 Store           => store;
                     
+    [Browse(Never)] public readonly     Tags                        tags;
+
     [Browse(Never)] public readonly     ArchetypeMask               mask;
+    
     #endregion
     
 #region internal members
@@ -44,9 +47,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   int                         archIndex;
     [Browse(Never)] internal readonly   int                         componentCount; // number of component types
     [Browse(Never)] internal readonly   long                        typeHash;
-                    internal readonly   StandardComponents          std;
-    
-    [Browse(Never)] internal readonly   Tags                        tags;
+                    internal readonly   StandardComponents          std;    
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
     
