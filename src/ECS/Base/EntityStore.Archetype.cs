@@ -107,7 +107,7 @@ public sealed partial class EntityStore
         return hash;
     }
     
-    // ------------------------------------ entity / component management ------------------------------------
+    // ------------------------------------ add / remove struct component ------------------------------------
     internal bool AddComponent<T>(
             int                 id,
         ref Archetype           archetype,
@@ -168,6 +168,27 @@ public sealed partial class EntityStore
         // --- change entity archetype
         compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
         archetype   = newArchetype;
+        return true;
+    }
+    
+    // ------------------------------------ add / remove entity Tag ------------------------------------
+    internal bool AddTag<T>(
+        int                 id,
+        ref Archetype       archetype,
+        ref int             compIndex,
+        ComponentUpdater    updater)
+        where T : struct, IEntityTag
+    {
+        return true;
+    }
+    
+    internal bool RemoveTag<T>(
+        int                 id,
+        ref Archetype       archetype,
+        ref int             compIndex,
+        ComponentUpdater    updater)
+        where T : struct, IEntityTag
+    {
         return true;
     }
 }

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -11,7 +10,7 @@ public readonly struct Tags
 {
     internal readonly   BitSet          bitSet;
     
-    public              TagsEnumerator  GetEnumerator() => new (this);
+    public              TagsEnumerator  GetEnumerator()     => new (this);
     
     public   override   string          ToString() => GetString();
     

@@ -80,7 +80,7 @@ public sealed class GameEntity
                     public  bool            HasComponent<T> () where T : struct, IStructComponent
                                                             => archetype.heapMap[StructHeap<T>.StructIndex] != null;
     #endregion
-
+    
 #region public properties - tree nodes
     [Browse(Never)] public  int             ChildCount  => archetype.store.Nodes[id].childCount;
     
@@ -302,6 +302,48 @@ public sealed class GameEntity
     }
     #endregion
     
+    // -------------------------------- entity tag methods ---------------------------------
+#region entity tag methods
+    public  bool    HasTag<T> ()
+        where T : struct, IEntityTag
+    {
+        return archetype.tags.bitSet.Has(TagTypeInfo<T>.TagIndex);
+    }
+
+    public  bool    HasTags<T1, T2> ()
+        where T1 : struct, IEntityTag
+        where T2 : struct, IEntityTag
+    {
+        var bitSet = archetype.tags.bitSet; 
+        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
+               bitSet.Has(TagTypeInfo<T2>.TagIndex);
+    }
+
+    public  bool    HasTags<T1, T2, T3> ()
+        where T1 : struct, IEntityTag
+        where T2 : struct, IEntityTag
+        where T3 : struct, IEntityTag
+    {
+        var bitSet = archetype.tags.bitSet; 
+        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
+               bitSet.Has(TagTypeInfo<T2>.TagIndex) &&
+               bitSet.Has(TagTypeInfo<T3>.TagIndex);
+    }
+
+    public bool AddTag<T>()
+        where T : struct, IEntityTag
+    {
+        var store = archetype.store;
+        return store.AddTag<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);
+    }
+    
+    public bool RemoveTag<T>()
+        where T : struct, IEntityTag
+    {
+        var store = archetype.store;
+        return store.RemoveTag<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);
+    }
+    #endregion
     // -------------------------------------- tree methods ---------------------------------------
 #region tree node methods
     /// <remarks>Executes in O(1)</remarks>

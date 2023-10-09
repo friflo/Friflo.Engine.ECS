@@ -47,6 +47,16 @@ public struct BitSet
         }
     }
     
+    internal bool Has(int index)
+    {
+        switch (index) {
+            case < 64:      return (l0  & 1L <<  index)         != 0;
+            case < 128:     return (l1 |= 1L << (index - 64))   != 0;
+            case < 192:     return (l2 |= 1L << (index - 128))  != 0;
+            default:        return (l3 |= 1L << (index - 192))  != 0;
+        }
+    }
+    
     internal long At(int index)
     {
         switch (index) {

@@ -46,6 +46,8 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   long                        typeHash;
                     internal readonly   StandardComponents          std;
     
+    [Browse(Never)] internal readonly   Tags                        tags;
+    
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
     
                     public override     string                      ToString()      => GetString();
