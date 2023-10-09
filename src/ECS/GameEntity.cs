@@ -77,7 +77,7 @@ public sealed class GameEntity
     [Browse(Never)] public  bool            HasPosition     => archetype.std.position          != null;
     [Browse(Never)] public  bool            HasRotation     => archetype.std.rotation          != null;
     [Browse(Never)] public  bool            HasScale3       => archetype.std.scale3            != null;
-                    public  bool            HasComponent<T> () where T : struct
+                    public  bool            HasComponent<T> () where T : struct, IStructComponent
                                                             => archetype.heapMap[StructHeap<T>.StructIndex] != null;
     #endregion
 
@@ -150,7 +150,7 @@ public sealed class GameEntity
 #region struct component methods
     /// <remarks>Executes in O(1)</remarks>
     public  Component<T> GetComponent<T>()
-        where T : struct
+        where T : struct, IStructComponent
     {
         return new Component<T>((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex], this);
     }
@@ -158,7 +158,7 @@ public sealed class GameEntity
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T        GetComponentValue<T>()
-        where T : struct
+        where T : struct, IStructComponent
     {
         var heap = (StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex];
         return ref heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
@@ -166,7 +166,7 @@ public sealed class GameEntity
     
     /// <remarks>Executes in O(1)</remarks>
     public bool TryGetComponentValue<T>(out T result)
-        where T : struct
+        where T : struct, IStructComponent
     {
         var heap = archetype.heapMap[StructHeap<T>.StructIndex];
         if (heap == null) {
@@ -180,7 +180,7 @@ public sealed class GameEntity
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>()
-        where T : struct
+        where T : struct, IStructComponent
     {
         var store = archetype.store;
         return store.AddComponent<T>(id, ref archetype, ref compIndex, default, store.gameEntityUpdater);
@@ -189,7 +189,7 @@ public sealed class GameEntity
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component)
-        where T : struct
+        where T : struct, IStructComponent
     {
         var store = archetype.store;
         return store.AddComponent(id, ref archetype, ref compIndex, in component, store.gameEntityUpdater);
@@ -198,7 +198,7 @@ public sealed class GameEntity
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool RemoveComponent<T>()
-        where T : struct
+        where T : struct, IStructComponent
     {
         var store = archetype.store;
         return store.RemoveComponent<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);

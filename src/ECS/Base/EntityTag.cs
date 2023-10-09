@@ -10,7 +10,8 @@ namespace Friflo.Fliox.Engine.ECS;
 public interface IEntityTag { }
 
 
-internal static class TagTypeInfo<T> where T : struct, IEntityTag
+internal static class TagTypeInfo<T>
+    where T : struct, IEntityTag
 {
     // ReSharper disable once StaticMemberInGenericType
     internal static readonly    int     TagIndex  = TagUtils.NewTagIndex();

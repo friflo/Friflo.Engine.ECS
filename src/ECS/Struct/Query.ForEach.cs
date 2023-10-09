@@ -9,8 +9,8 @@ namespace Friflo.Fliox.Engine.ECS;
 #region --- T1 T2
 
 public readonly struct QueryForEach<T1, T2>
-    where T1 : struct
-    where T2 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
 {
     private readonly    ArchetypeQuery<T1,T2>       query;
     private readonly    Action<Ref<T1>, Ref<T2>>    lambda;

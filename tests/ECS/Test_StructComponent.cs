@@ -16,13 +16,13 @@ class PlayerRef {
 }
 
 [StructComponent("my1")]
-struct MyComponent1 { public int a; }
+struct MyComponent1 : IStructComponent { public int a; }
 
 [StructComponent("my2")]
-struct MyComponent2 { public int b; }
+struct MyComponent2 : IStructComponent { public int b; }
 
 // test missing [StructComponent()] attribute
-struct MyInvalidComponent { public int b; }
+struct MyInvalidComponent  : IStructComponent { public int b; }
 
 public static class Test_StructComponent
 {

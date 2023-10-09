@@ -93,7 +93,8 @@ public sealed class ComponentSchema
     /// <summary>
     /// return <see cref="ComponentType"/> of a struct attributed with <see cref="StructComponentAttribute"/> for the given key
     /// </summary>
-    public ComponentType GetStructComponentType<T>() where T : struct
+    public ComponentType GetStructComponentType<T>()
+        where T : struct, IStructComponent
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
         return result;
@@ -102,7 +103,8 @@ public sealed class ComponentSchema
     /// <summary>
     /// return <see cref="ComponentType"/> of a class attributed with <see cref="ClassComponentAttribute"/> for the given type
     /// </summary>
-    public ComponentType GetClassComponentType<T>() where T : ClassComponent
+    public ComponentType GetClassComponentType<T>()
+        where T : ClassComponent
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
         return result;
@@ -193,19 +195,25 @@ internal static class ComponentUtils
         throw new InvalidOperationException("missing expected attribute");
     }
     
-    internal static ComponentType CreateStructFactory<T>(TypeStore typeStore) where T : struct  {
+    internal static ComponentType CreateStructFactory<T>(TypeStore typeStore)
+        where T : struct, IStructComponent
+    {
         var structIndex = StructHeap<T>.StructIndex;
         var structKey   = StructHeap<T>.StructKey;
         return new StructComponentType<T>(structKey, structIndex, typeStore);
     }
     
-    internal static ComponentType CreateClassFactory<T>(TypeStore typeStore) where T : ClassComponent  {
+    internal static ComponentType CreateClassFactory<T>(TypeStore typeStore)
+        where T : ClassComponent
+    {
         var classIndex  = ClassTypeInfo<T>.ClassIndex;
         var classKey    = ClassTypeInfo<T>.ClassKey;
         return new ClassComponentType<T>(classKey, classIndex, typeStore);
     }
     
-    internal static ComponentType CreateTagType<T>() where T : struct, IEntityTag {
+    internal static ComponentType CreateTagType<T>()
+        where T : struct, IEntityTag
+    {
         var tagIndex    = TagTypeInfo<T>.TagIndex;
         return new TagType(typeof(T), tagIndex);
     }

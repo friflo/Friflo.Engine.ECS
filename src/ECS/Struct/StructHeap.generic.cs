@@ -11,9 +11,10 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-// public interface IStructComponent { } 
+public interface IStructComponent { } 
 
-internal sealed class StructHeap<T> : StructHeap where T : struct // , IStructComponent - not using an interface for struct components
+internal sealed class StructHeap<T> : StructHeap
+    where T : struct, IStructComponent
 {
     // --- internal
     internal            StructChunk<T>[]    chunks;

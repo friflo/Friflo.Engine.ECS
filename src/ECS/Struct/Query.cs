@@ -101,7 +101,7 @@ public abstract class ArchetypeQuery
 
 
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
-    where T : struct
+    where T : struct, IStructComponent
 {
     internal ArchetypeQuery(EntityStore store, Signature<T> signature)
         : base(store, signature) {
@@ -109,8 +109,8 @@ public sealed class ArchetypeQuery<T> : ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
-    where T1 : struct
-    where T2 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
 {
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
@@ -119,7 +119,8 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         : base(store, signature) {
     }
     
-    public ArchetypeQuery<T1, T2> ReadOnly<T>() where T : struct
+    public ArchetypeQuery<T1, T2> ReadOnly<T>()
+        where T : struct, IStructComponent
     {
         if (typeof(T1) == typeof(T)) copyT1 = new T1[StructUtils.ChunkSize];
         if (typeof(T2) == typeof(T)) copyT2 = new T2[StructUtils.ChunkSize];
@@ -132,9 +133,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
+    where T3 : struct, IStructComponent
 {
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3> signature)
         : base(store, signature) {
@@ -142,10 +143,10 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
-    where T4 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
+    where T3 : struct, IStructComponent
+    where T4 : struct, IStructComponent
 {
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3, T4> signature)
         : base(store, signature) {
@@ -153,11 +154,11 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
-    where T4 : struct
-    where T5 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
+    where T3 : struct, IStructComponent
+    where T4 : struct, IStructComponent
+    where T5 : struct, IStructComponent
 {
     internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature) {

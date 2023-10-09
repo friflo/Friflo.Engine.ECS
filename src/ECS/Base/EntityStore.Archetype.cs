@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed partial class EntityStore
 {
     private Archetype GetArchetypeWith<T>(Archetype current)
-        where T : struct
+        where T : struct, IStructComponent
     {
         var hash = GetHashWith(typeof(T), current);
         if (TryGetArchetype(hash, out var archetype)) {
@@ -114,7 +114,7 @@ public sealed partial class EntityStore
         ref int                 compIndex,
         in  T                   component,
             ComponentUpdater    updater)
-        where T : struct
+        where T : struct, IStructComponent
     {
         var arch = archetype;
         if (arch != defaultArchetype) {
@@ -146,7 +146,7 @@ public sealed partial class EntityStore
         ref Archetype           archetype,
         ref int                 compIndex,
             ComponentUpdater    updater)
-        where T : struct
+        where T : struct, IStructComponent
     {
         var arch = archetype;
         if (arch == null) {

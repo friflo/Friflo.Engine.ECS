@@ -55,7 +55,7 @@ public abstract class Signature
     /// </list> 
     /// </summary>
     public static Signature<T> Get<T>()
-        where T : struct
+        where T : struct, IStructComponent
     {
         var hash = typeof(T).HandleUInt64();
         
@@ -80,8 +80,8 @@ public abstract class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2> Get<T1, T2>()
-        where T1 : struct
-        where T2 : struct
+        where T1 : struct, IStructComponent
+        where T2 : struct, IStructComponent
     {
         var hash1   = typeof(T1).HandleUInt64();
         var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
@@ -109,9 +109,9 @@ public abstract class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3> Get<T1, T2, T3>()
-        where T1 : struct
-        where T2 : struct
-        where T3 : struct
+        where T1 : struct, IStructComponent
+        where T2 : struct, IStructComponent
+        where T3 : struct, IStructComponent
     {
         var hash1   = typeof(T1).HandleUInt64();
         var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
@@ -141,10 +141,10 @@ public abstract class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3, T4> Get<T1, T2, T3, T4>()
-        where T1 : struct
-        where T2 : struct
-        where T3 : struct
-        where T4 : struct
+        where T1 : struct, IStructComponent
+        where T2 : struct, IStructComponent
+        where T3 : struct, IStructComponent
+        where T4 : struct, IStructComponent
     {
         var hash1   = typeof(T1).HandleUInt64();
         var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
@@ -176,11 +176,11 @@ public abstract class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3, T4, T5> Get<T1, T2, T3, T4, T5>()
-        where T1 : struct
-        where T2 : struct
-        where T3 : struct
-        where T4 : struct
-        where T5 : struct
+        where T1 : struct, IStructComponent
+        where T2 : struct, IStructComponent
+        where T3 : struct, IStructComponent
+        where T4 : struct, IStructComponent
+        where T5 : struct, IStructComponent
     {
         var hash1   = typeof(T1).HandleUInt64();
         var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
@@ -208,7 +208,7 @@ public abstract class Signature
 
 
 public sealed class Signature<T> : Signature
-    where T : struct
+    where T : struct, IStructComponent
 {
     internal Signature(in SignatureTypeSet types)
         : base(types) {
@@ -216,8 +216,8 @@ public sealed class Signature<T> : Signature
 }
 
 public sealed class Signature<T1, T2> : Signature
-    where T1 : struct
-    where T2 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
 {
     internal Signature(in SignatureTypeSet componentTypes)
         : base(componentTypes) {
@@ -225,9 +225,9 @@ public sealed class Signature<T1, T2> : Signature
 }
 
 public sealed class Signature<T1, T2, T3> : Signature
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
+    where T3 : struct, IStructComponent
 {
     internal Signature(in SignatureTypeSet componentTypes)
         : base(componentTypes) {
@@ -235,10 +235,10 @@ public sealed class Signature<T1, T2, T3> : Signature
 }
 
 public sealed class Signature<T1, T2, T3, T4> : Signature
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
-    where T4 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
+    where T3 : struct, IStructComponent
+    where T4 : struct, IStructComponent
 {
     internal Signature(in SignatureTypeSet componentTypes)
         : base(componentTypes) {
@@ -246,11 +246,11 @@ public sealed class Signature<T1, T2, T3, T4> : Signature
 }
 
 public sealed class Signature<T1, T2, T3, T4, T5> : Signature
-    where T1 : struct
-    where T2 : struct
-    where T3 : struct
-    where T4 : struct
-    where T5 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
+    where T3 : struct, IStructComponent
+    where T4 : struct, IStructComponent
+    where T5 : struct, IStructComponent
 {
     internal Signature(in SignatureTypeSet componentTypes)
         : base(componentTypes) {

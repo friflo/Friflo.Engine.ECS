@@ -19,7 +19,7 @@ namespace Friflo.Fliox.Engine.ECS;
 // --------------------------- Position ---------------------------
 [StructComponent("pos")]
 [StructLayout(LayoutKind.Explicit)]
-public struct  Position
+public struct  Position : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
@@ -41,7 +41,7 @@ public struct  Position
 // --------------------------- Rotation ---------------------------
 [StructComponent("rot")]
 [StructLayout(LayoutKind.Explicit)]
-public struct  Rotation
+public struct  Rotation : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
@@ -65,7 +65,7 @@ public struct  Rotation
 // --------------------------- Scale3 ---------------------------
 [StructComponent("scl3")]
 [StructLayout(LayoutKind.Explicit)]
-public struct Scale3
+public struct Scale3 : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
@@ -86,7 +86,7 @@ public struct Scale3
 
 // --------------------------- Scale ---------------------------
 [StructComponent("name")]
-public struct EntityName
+public struct EntityName : IStructComponent
 {
                             public  string              Value   { get => value; set => SetValue(value); }
     [Browse(Never)]         public  ReadOnlySpan<byte>  UTF8    => new (utf8);

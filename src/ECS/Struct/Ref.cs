@@ -10,7 +10,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// Enables access to a struct component by reference using its property <see cref="Value"/>
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public struct Ref<T> where T : struct
+public struct Ref<T>
+    where T : struct, IStructComponent
 {
     /// <summary>
     /// Returns a mutable struct component value by reference.<br/>

@@ -8,7 +8,7 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct Component<T>
-    where T : struct
+    where T : struct, IStructComponent
 {
     // --- public properties
     public              Type            Type        => heap.type;

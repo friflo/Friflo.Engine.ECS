@@ -48,7 +48,7 @@ public abstract class ComponentType
 }
 
 internal sealed class StructComponentType<T> : ComponentType 
-    where T : struct
+    where T : struct, IStructComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"struct component: [{typeof(T).Name}]";

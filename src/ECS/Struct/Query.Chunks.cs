@@ -10,8 +10,8 @@ namespace Friflo.Fliox.Engine.ECS;
 #region --- T1 T2
 
 public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not implemented to avoid boxing
-    where T1 : struct
-    where T2 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
 {
     readonly ArchetypeQuery<T1, T2> query;
 
@@ -25,8 +25,8 @@ public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not imple
 }
 
 public ref struct ChunkEnumerator<T1, T2>
-    where T1 : struct
-    where T2 : struct
+    where T1 : struct, IStructComponent
+    where T2 : struct, IStructComponent
 {
     private readonly    ReadOnlySpan<Archetype> archetypes;
     private             int                     archetypePos;

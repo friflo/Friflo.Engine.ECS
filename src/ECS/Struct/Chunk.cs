@@ -8,7 +8,7 @@ using System;
 namespace Friflo.Fliox.Engine.ECS;
 
 internal readonly struct StructChunk<T>
-    where T : struct
+    where T : struct, IStructComponent
 {
     internal readonly   T[]       components;
     
@@ -20,7 +20,7 @@ internal readonly struct StructChunk<T>
 }
 
 public readonly struct Chunk<T>
-    where T : struct
+    where T : struct, IStructComponent
 {
     public              Span<T> Values => new(values, 0, count);
 
