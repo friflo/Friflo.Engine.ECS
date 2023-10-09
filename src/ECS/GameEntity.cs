@@ -306,7 +306,9 @@ public sealed class GameEntity
 #region entity tag methods
     /// <returns>
     /// A copy of the <see cref="Tags"/> assigned to the <see cref="GameEntity"/>.<br/>
-    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/> 
+    /// <br/>
+    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/>.<br/>
+    /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
     public  Tags    Tags => archetype.tags;
 
