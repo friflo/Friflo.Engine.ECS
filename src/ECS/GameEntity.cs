@@ -343,15 +343,29 @@ public sealed class GameEntity
     public bool AddTag<T>()
         where T : struct, IEntityTag
     {
-        var store = archetype.store;
-        return store.AddTag<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        var store   = archetype.store;
+        var tags    = Tags.Get<T>();
+        return store.AddTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
+    }
+    
+    public bool AddTags(in Tags tags)
+    {
+        var store   = archetype.store;
+        return store.AddTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
     }
     
     public bool RemoveTag<T>()
         where T : struct, IEntityTag
     {
-        var store = archetype.store;
-        return store.RemoveTag<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        var store   = archetype.store;
+        var tags    = Tags.Get<T>();
+        return store.RemoveTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
+    }
+    
+    public bool RemoveTags(in Tags tags)
+    {
+        var store   = archetype.store;
+        return store.RemoveTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
     }
     #endregion
     

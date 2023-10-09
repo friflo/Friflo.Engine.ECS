@@ -172,22 +172,22 @@ public sealed partial class EntityStore
     }
     
     // ------------------------------------ add / remove entity Tag ------------------------------------
-    internal bool AddTag<T>(
+    internal bool AddTags(
+        in Tags             tags,
         int                 id,
         ref Archetype       archetype,
         ref int             compIndex,
         ComponentUpdater    updater)
-        where T : struct, IEntityTag
     {
         return true;
     }
     
-    internal bool RemoveTag<T>(
+    internal bool RemoveTags(
+        in Tags             tags,
         int                 id,
         ref Archetype       archetype,
         ref int             compIndex,
         ComponentUpdater    updater)
-        where T : struct, IEntityTag
     {
         return true;
     }
