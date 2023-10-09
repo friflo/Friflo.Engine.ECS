@@ -183,7 +183,7 @@ public sealed class GameEntity
         where T : struct, IStructComponent
     {
         var store = archetype.store;
-        return store.AddComponent<T>(id, ref archetype, ref compIndex, default, store.gameEntityUpdater);
+        return store.AddComponent<T>(id, ref archetype, ref compIndex, default);
     }
     
     /// <returns>true if component is newly added to the entity</returns>
@@ -192,7 +192,7 @@ public sealed class GameEntity
         where T : struct, IStructComponent
     {
         var store = archetype.store;
-        return store.AddComponent(id, ref archetype, ref compIndex, in component, store.gameEntityUpdater);
+        return store.AddComponent(id, ref archetype, ref compIndex, in component);
     }
     
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -201,7 +201,7 @@ public sealed class GameEntity
         where T : struct, IStructComponent
     {
         var store = archetype.store;
-        return store.RemoveComponent<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        return store.RemoveComponent<T>(id, ref archetype, ref compIndex);
     }
     
     #endregion
@@ -311,13 +311,13 @@ public sealed class GameEntity
     {
         var store   = archetype.store;
         var tags    = Tags.Get<T>();
-        return store.AddTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        return store.AddTags(tags, id, ref archetype, ref compIndex);
     }
     
     public bool AddTags(in Tags tags)
     {
         var store   = archetype.store;
-        return store.AddTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        return store.AddTags(tags, id, ref archetype, ref compIndex);
     }
     
     public bool RemoveTag<T>()
@@ -325,13 +325,13 @@ public sealed class GameEntity
     {
         var store   = archetype.store;
         var tags    = Tags.Get<T>();
-        return store.RemoveTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        return store.RemoveTags(tags, id, ref archetype, ref compIndex);
     }
     
     public bool RemoveTags(in Tags tags)
     {
         var store   = archetype.store;
-        return store.RemoveTags(tags, id, ref archetype, ref compIndex, store.gameEntityUpdater);
+        return store.RemoveTags(tags, id, ref archetype, ref compIndex);
     }
     #endregion
     
@@ -371,7 +371,7 @@ public sealed class GameEntity
     public void DeleteEntity()
     {
         archetype.store.DeleteNode(id);
-        archetype.MoveLastComponentsTo(compIndex, archetype.store.gameEntityUpdater);
+        archetype.MoveLastComponentsTo(compIndex);
         archetype = null;
     }
     

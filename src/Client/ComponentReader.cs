@@ -113,7 +113,7 @@ internal sealed class ComponentReader
         if (curArchetype == store.defaultArchetype) {
             newArchetype.AddEntity(entity.id);
         } else {
-            curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype, store.gameEntityUpdater);
+            curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
         }
         entity.archetype = newArchetype;
     }

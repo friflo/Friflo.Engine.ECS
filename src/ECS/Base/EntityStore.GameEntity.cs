@@ -3,7 +3,6 @@
 
 using System;
 using System.Diagnostics;
-using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
@@ -23,7 +22,6 @@ public sealed partial class EntityStore
 {
     // --- private / internal
                     private             int                 sequenceId;
-    [Browse(Never)] internal readonly   GameEntityUpdater   gameEntityUpdater;
     
                     public              GameEntity          Root => nodes[rootId].entity;
 
@@ -128,17 +126,5 @@ public sealed partial class EntityStore
             throw InvalidStoreException(nameof(entity));
         }
         SetRootId(entity.id);
-    }
-}
-
-internal abstract class ComponentUpdater
-{
-    internal abstract void UpdateComponentIndex(GameEntity entity, int compIndex);
-}
-
-internal sealed class GameEntityUpdater : ComponentUpdater
-{
-    internal override void UpdateComponentIndex(GameEntity entity, int compIndex) {
-        entity.compIndex = compIndex;
     }
 }

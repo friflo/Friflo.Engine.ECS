@@ -112,8 +112,7 @@ public sealed partial class EntityStore
             int                 id,
         ref Archetype           archetype,
         ref int                 compIndex,
-        in  T                   component,
-            ComponentUpdater    updater)
+        in  T                   component)
         where T : struct, IStructComponent
     {
         var arch = archetype;
@@ -127,7 +126,7 @@ public sealed partial class EntityStore
             }
             // --- change entity archetype
             var newArchetype    = GetArchetypeWith<T>(arch);
-            compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
+            compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype);
             archetype           = arch = newArchetype;
         } else {
             // --- add entity to archetype
@@ -144,8 +143,7 @@ public sealed partial class EntityStore
     internal bool RemoveComponent<T>(
             int                 id,
         ref Archetype           archetype,
-        ref int                 compIndex,
-            ComponentUpdater    updater)
+        ref int                 compIndex)
         where T : struct, IStructComponent
     {
         var arch = archetype;
@@ -162,11 +160,11 @@ public sealed partial class EntityStore
             // --- update entity
             compIndex   = 0;
             archetype   = null;
-            arch.MoveLastComponentsTo(removePos, updater);
+            arch.MoveLastComponentsTo(removePos);
             return true;
         }
         // --- change entity archetype
-        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype, updater);
+        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         archetype   = newArchetype;
         return true;
     }
@@ -176,8 +174,7 @@ public sealed partial class EntityStore
         in Tags             tags,
         int                 id,
         ref Archetype       archetype,
-        ref int             compIndex,
-        ComponentUpdater    updater)
+        ref int             compIndex)
     {
         return true;
     }
@@ -186,8 +183,7 @@ public sealed partial class EntityStore
         in Tags             tags,
         int                 id,
         ref Archetype       archetype,
-        ref int             compIndex,
-        ComponentUpdater    updater)
+        ref int             compIndex)
     {
         return true;
     }

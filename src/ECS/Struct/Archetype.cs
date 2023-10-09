@@ -124,7 +124,7 @@ public sealed class Archetype
     
 #region struct component handling
 
-    internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype, ComponentUpdater updater)
+    internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype)
     {
         var sourceIndex = compIndex;
         // --- copy entity components to components of new newArchetype
@@ -138,11 +138,11 @@ public sealed class Archetype
             }
             sourceHeap.CopyComponentTo(sourceIndex, targetHeap, targetIndex);
         }
-        MoveLastComponentsTo(sourceIndex, updater);
+        MoveLastComponentsTo(sourceIndex);
         return targetIndex;
     }
     
-    internal void MoveLastComponentsTo(int newIndex, ComponentUpdater updater)
+    internal void MoveLastComponentsTo(int newIndex)
     {
         var lastIndex = entityCount - 1;
         // --- clear entityMap if the entity is the only one in entityMap 
@@ -156,8 +156,8 @@ public sealed class Archetype
         }
         var lastEntityId    = entityIds[lastIndex];
         var entity          = store.nodes[lastEntityId].entity;
-        updater.UpdateComponentIndex(entity, newIndex);
-        entityIds[newIndex]  = lastEntityId;
+        entity.compIndex    = newIndex; // set component index in new archetype 
+        entityIds[newIndex] = lastEntityId;
         entityCount--;     // remove last entity id
     }
     
