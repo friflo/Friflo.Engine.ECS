@@ -146,7 +146,7 @@ public sealed class GameEntity
     
     #endregion
 
-    // -------------------------------- struct component methods ---------------------------------
+    // --------------------------------- struct component methods --------------------------------
 #region struct component methods
     /// <remarks>Executes in O(1)</remarks>
     public  Component<T> GetComponent<T>()
@@ -302,7 +302,7 @@ public sealed class GameEntity
     }
     #endregion
     
-    // -------------------------------- entity tag methods ---------------------------------
+    // ------------------------------------ entity tag methods -----------------------------------
 #region entity tag methods
     public  bool    HasTag<T> ()
         where T : struct, IEntityTag
@@ -354,7 +354,8 @@ public sealed class GameEntity
         return store.RemoveTag<T>(id, ref archetype, ref compIndex, store.gameEntityUpdater);
     }
     #endregion
-    // -------------------------------------- tree methods ---------------------------------------
+    
+    // --------------------------------------- tree methods --------------------------------------
 #region tree node methods
     /// <remarks>Executes in O(1)</remarks>
     public GameEntity GetChild(int index) {
