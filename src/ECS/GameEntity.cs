@@ -304,41 +304,7 @@ public sealed class GameEntity
     
     // ------------------------------------ entity tag methods -----------------------------------
 #region entity tag methods
-    public  bool    HasTag<T> ()
-        where T : struct, IEntityTag
-    {
-        return archetype.tags.bitSet.Has(TagTypeInfo<T>.TagIndex);
-    }
-
-    public  bool    HasTags<T1, T2> ()
-        where T1 : struct, IEntityTag
-        where T2 : struct, IEntityTag
-    {
-        var bitSet = archetype.tags.bitSet; 
-        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
-               bitSet.Has(TagTypeInfo<T2>.TagIndex);
-    }
-
-    public  bool    HasTags<T1, T2, T3> ()
-        where T1 : struct, IEntityTag
-        where T2 : struct, IEntityTag
-        where T3 : struct, IEntityTag
-    {
-        var bitSet = archetype.tags.bitSet; 
-        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
-               bitSet.Has(TagTypeInfo<T2>.TagIndex) &&
-               bitSet.Has(TagTypeInfo<T3>.TagIndex);
-    }
-    
-    public  bool    HasAll (in Tags tags)
-    {
-        return archetype.tags.bitSet.HasAll(tags.bitSet); 
-    }
-    
-    public  bool    HasAny (in Tags tags)
-    {
-        return archetype.tags.bitSet.HasAny(tags.bitSet); 
-    }
+    public  Tags    Tags => archetype.tags;
 
     public bool AddTag<T>()
         where T : struct, IEntityTag

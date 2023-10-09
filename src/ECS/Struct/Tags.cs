@@ -17,6 +17,40 @@ public readonly struct Tags
     private Tags(in BitSet bitSet) {
         this.bitSet = bitSet;
     }
+    
+    public  bool    Has<T> ()
+        where T : struct, IEntityTag
+    {
+        return bitSet.Has(TagTypeInfo<T>.TagIndex);
+    }
+
+    public  bool    Has<T1, T2> ()
+        where T1 : struct, IEntityTag
+        where T2 : struct, IEntityTag
+    {
+        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
+               bitSet.Has(TagTypeInfo<T2>.TagIndex);
+    }
+
+    public  bool    Has<T1, T2, T3> ()
+        where T1 : struct, IEntityTag
+        where T2 : struct, IEntityTag
+        where T3 : struct, IEntityTag
+    {
+        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
+               bitSet.Has(TagTypeInfo<T2>.TagIndex) &&
+               bitSet.Has(TagTypeInfo<T3>.TagIndex);
+    }
+    
+    public  bool    HasAll (in Tags tags)
+    {
+        return bitSet.HasAll(tags.bitSet); 
+    }
+    
+    public  bool    HasAny (in Tags tags)
+    {
+        return bitSet.HasAny(tags.bitSet); 
+    }
         
     public static Tags Get<T>()
         where T : struct, IEntityTag
