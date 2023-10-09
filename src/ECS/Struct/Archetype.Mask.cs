@@ -13,10 +13,7 @@ public readonly struct ArchetypeMask
     
     public  override    string  ToString() => GetString();
     
-    internal ArchetypeMask(StructHeap[] heaps, StructHeap newComp) {
-        if (newComp != null) {
-            mask.SetBit(newComp.structIndex);
-        }
+    internal ArchetypeMask(StructHeap[] heaps) {
         foreach (var heap in heaps) {
             mask.SetBit(heap.structIndex);
         }

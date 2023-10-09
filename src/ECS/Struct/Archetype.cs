@@ -52,20 +52,17 @@ public sealed class Archetype
     #endregion
     
 #region initialize
-    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, StructHeap newComp)
+    private Archetype(in ArchetypeConfig config, StructHeap[] heaps)
     {
         store           = config.store;
         archIndex       = config.archetypeIndex;
         capacity        = config.capacity;
-        componentCount  = heaps.Length + (newComp != null ? 1 : 0);
-        typeHash        = EntityStore.GetHash(heaps, newComp);
+        componentCount  = heaps.Length;
+        typeHash        = EntityStore.GetHash(heaps);
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
         heapMap         = new StructHeap[EntityStore.Static.ComponentSchema.maxStructIndex];
-        mask            = new ArchetypeMask(heaps, newComp);
-        if (newComp != null) {
-            SetStandardComponentHeaps(newComp, ref std);
-        }
+        mask            = new ArchetypeMask(heaps);
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
         }
@@ -92,7 +89,7 @@ public sealed class Archetype
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);
         }
-        var archetype   = new Archetype(config, componentHeaps, null);
+        var archetype   = new Archetype(config, componentHeaps);
         int pos         = 0;
         foreach (var component in componentHeaps) {
             archetype.AddStructHeap(pos++, component);
@@ -107,7 +104,7 @@ public sealed class Archetype
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);
         }
-        var archetype   = new Archetype(config, componentHeaps, null);
+        var archetype   = new Archetype(config, componentHeaps);
         int pos         = 0;
         foreach (var component in componentHeaps) {
             archetype.AddStructHeap(pos++, component);
