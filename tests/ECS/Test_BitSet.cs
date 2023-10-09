@@ -18,22 +18,33 @@ public static class Test_BitSet
             bitSet.SetBit(1);
             bitSet.SetBit(2);
             AreEqual("0000000000000006", bitSet.ToString());
+            IsTrue(bitSet.Has(1));
+            IsTrue(bitSet.Has(2));
             
             bitSet.SetBit(255);
             AreEqual("0000000000000006 0000000000000000 0000000000000000 8000000000000000", bitSet.ToString());
+            IsTrue(bitSet.Has(255));
         } {
-            var mask = new BitSet(new [] { 0 });
-            AreEqual("0000000000000001", mask.ToString());
+            var bitSet = new BitSet(new [] { 0 });
+            AreEqual("0000000000000001", bitSet.ToString());
+            IsTrue(bitSet.Has(0));
         } {
-            var mask = new BitSet(new [] { 0, 64, 128, 192 });
-            AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", mask.ToString());
+            var bitSet = new BitSet(new [] { 0, 64, 128, 192 });
+            AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", bitSet.ToString());
+            IsTrue(bitSet.Has(64));
+            IsTrue(bitSet.Has(128));
+            IsTrue(bitSet.Has(192));
         } {
-            var mask = new BitSet(new [] { 63, 127, 191, 255 });
-            AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", mask.ToString());
+            var bitSet = new BitSet(new [] { 63, 127, 191, 255 });
+            AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", bitSet.ToString());
         } {
             var bitSet = new BitSet();
             for (int n = 0; n < 256; n++) {
+                if (bitSet.Has(n)) {
+                    Fail($"Expect bit == false: index: {n}");
+                }
                 bitSet.SetBit(n);
+                IsTrue(bitSet.Has(n));
             }
             AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", bitSet.ToString());
         }
