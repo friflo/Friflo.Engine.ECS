@@ -21,7 +21,7 @@ public readonly struct ArchetypeMask
     
     internal ArchetypeMask(Signature signature) {
         foreach (var type in signature.types) {
-            mask.SetBit(type.index);
+            mask.SetBit(type.structIndex);
         }
     }
 

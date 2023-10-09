@@ -16,19 +16,19 @@ public sealed class ComponentSchema
 #region public properties
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.index"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Structs"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Structs             => new (structs);
     /// <summary>return all class component types attributed with <see cref="ClassComponentAttribute"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.index"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.classIndex"/> is equal to the array index<br/>
     /// <see cref="Classes"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Classes             => new (classes);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.index"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.tagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Tags                => new (tags);
@@ -68,16 +68,16 @@ public sealed class ComponentSchema
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
-            structs[structType.index] = structType;
+            structs[structType.structIndex] = structType;
         }
         foreach (var classType in classList) {
             componentTypeByKey. Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
-            classes[classType.index] = classType;
+            classes[classType.classIndex] = classType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type, tagType);
-            tags[tagType.index] = tagType;
+            tags[tagType.tagIndex] = tagType;
         }
     }
     

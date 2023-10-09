@@ -16,7 +16,9 @@ public static class Test_ComponentSchema
         IsNull(tags[0]);
         for (int n = 1; n < tags.Length; n++) {
             var type = tags[n];
-            AreEqual(n, type.index);
+            AreEqual(n, type.tagIndex);
+            AreEqual(0, type.structIndex);
+            AreEqual(0, type.classIndex);
             AreEqual(ComponentKind.Tag, type.kind);
             IsNull(type.componentKey);
             // var typeHandle = type.type.TypeHandle.Value.ToInt64();
@@ -45,7 +47,9 @@ public static class Test_ComponentSchema
         IsNull(structs[0]);
         for (int n = 1; n < structs.Length; n++) {
             var type = structs[n];
-            AreEqual(n, type.index);
+            AreEqual(n, type.structIndex);
+            AreEqual(0, type.tagIndex);
+            AreEqual(0, type.classIndex);
             AreEqual(ComponentKind.Struct, type.kind);
             NotNull (type.componentKey);
             var typeHandle = type.type.TypeHandle.Value.ToInt64();
@@ -55,7 +59,9 @@ public static class Test_ComponentSchema
         IsNull(classes[0]);
         for (int n = 1; n < classes.Length; n++) {
             var type = classes[n];
-            AreEqual(n, type.index);
+            AreEqual(n, type.classIndex);
+            AreEqual(0, type.tagIndex);
+            AreEqual(0, type.structIndex);
             AreEqual(ComponentKind.Class, type.kind);
             NotNull (type.componentKey);
             AreEqual(0, type.structHash);

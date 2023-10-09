@@ -66,7 +66,7 @@ internal sealed class ComponentReader
             }
             // --- read struct component
             var structType  = component.type;
-            var heap        = entity.archetype.heapMap[structType.index];
+            var heap        = entity.archetype.heapMap[structType.structIndex];
             if (heap != null) {
                 // --- change component value
                 heap.Read(componentReader, entity.compIndex, json);

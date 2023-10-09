@@ -18,13 +18,21 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   string          componentKey;
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Structs"/><br/>
-    /// If <see cref="kind"/> == <see cref="Class"/>  the index in <see cref="ComponentSchema.Classes"/>
+    /// If <see cref="kind"/> == <see cref="Class"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
     /// </summary>
-    public   readonly   int             index;
+    public   readonly   int             classIndex;
+    /// <summary>
+    /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Structs"/>. Otherwise 0<br/>
+    /// </summary>
+    public   readonly   int             structIndex;
+    /// <summary>
+    /// If <see cref="kind"/> == <see cref="Tag"/> the index in <see cref="ComponentSchema.Tags"/>. Otherwise 0<br/>
+    /// </summary>
+    public   readonly   int             tagIndex;
     /// <returns>
-    /// <see cref="Struct"/> if the type is a struct component<br/>
-    /// <see cref="Class"/>  if the type is a class component<br/>
+    /// <see cref="Class"/> if the type is a <see cref="ClassComponent"/><br/>
+    /// <see cref="Struct"/> if the type is a <see cref="IStructComponent"/><br/>
+    /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
     public   readonly   ComponentKind   kind;
     
@@ -38,9 +46,19 @@ public abstract class ComponentType
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
     
-    internal ComponentType(string componentKey, Type type, ComponentKind kind, int index, long structHash) {
+    internal ComponentType(
+        string          componentKey,
+        Type            type,
+        ComponentKind   kind,
+        int             classIndex,
+        int             structIndex,
+        int             tagIndex,
+        long            structHash)
+    {
         this.componentKey   = componentKey;
-        this.index          = index;
+        this.classIndex     = classIndex;
+        this.structIndex    = structIndex;
+        this.tagIndex       = tagIndex;
         this.structHash     = structHash;
         this.kind           = kind;
         this.type           = type;
@@ -54,7 +72,7 @@ internal sealed class StructComponentType<T> : ComponentType
     public  override    string          ToString() => $"struct component: [{typeof(T).Name}]";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, typeof(T), Struct, structIndex, typeof(T).Handle())
+        : base(componentKey, typeof(T), Struct, 0, structIndex, 0, typeof(T).Handle())
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -63,7 +81,7 @@ internal sealed class StructComponentType<T> : ComponentType
         => throw new InvalidOperationException("operates only on ClassFactory<>");
     
     internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(index, componentKey, capacity, typeMapper);   
+        return new StructHeap<T>(structIndex, componentKey, capacity, typeMapper);   
     }
 }
 
@@ -74,7 +92,7 @@ internal sealed class ClassComponentType<T> : ComponentType
     public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
     
     internal ClassComponentType(string componentKey, int classIndex, TypeStore typeStore)
-        : base(componentKey, typeof(T), Class, classIndex, 0)
+        : base(componentKey, typeof(T), Class, classIndex, 0, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -98,7 +116,7 @@ internal sealed class TagType : ComponentType
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     
     internal TagType(Type type, int tagIndex)
-        : base(null, type, Tag, tagIndex, 0)
+        : base(null, type, Tag, 0, 0, tagIndex, 0)
     { }
     
     internal override   StructHeap  CreateHeap(int capacity)
