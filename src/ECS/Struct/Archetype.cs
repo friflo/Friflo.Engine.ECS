@@ -66,6 +66,10 @@ public sealed class Archetype
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
         }
+        int pos = 0;
+        foreach (var heap in heaps) {
+            AddStructHeap(pos++, heap);
+        }
     }
     
     private static void SetStandardComponentHeaps(StructHeap heap, ref StandardComponents std)
@@ -89,12 +93,7 @@ public sealed class Archetype
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);
         }
-        var archetype   = new Archetype(config, componentHeaps);
-        int pos         = 0;
-        foreach (var component in componentHeaps) {
-            archetype.AddStructHeap(pos++, component);
-        }
-        return archetype;
+        return new Archetype(config, componentHeaps);
     }
     
     internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> types)
@@ -104,12 +103,7 @@ public sealed class Archetype
         for (int n = 0; n < length; n++) {
             componentHeaps[n] = types[n].CreateHeap(config.capacity);
         }
-        var archetype   = new Archetype(config, componentHeaps);
-        int pos         = 0;
-        foreach (var component in componentHeaps) {
-            archetype.AddStructHeap(pos++, component);
-        }
-        return archetype;
+        return new Archetype(config, componentHeaps);
     }
     #endregion
     
