@@ -67,8 +67,11 @@ public sealed class Archetype
             SetStandardComponentHeaps(heap, ref std);
         }
         int pos = 0;
-        foreach (var heap in heaps) {
-            AddStructHeap(pos++, heap);
+        foreach (var heap in heaps)
+        {
+            heap.SetArchetype(this);
+            structHeaps[pos++]          = heap;
+            heapMap[heap.structIndex]   = heap;
         }
     }
     
@@ -108,14 +111,7 @@ public sealed class Archetype
     #endregion
     
 #region struct component handling
-    private void AddStructHeap(int pos, StructHeap heap) {
-#if DEBUG
-        heap.archetype              = this;
-#endif
-        structHeaps[pos]            = heap;
-        heapMap[heap.structIndex]   = heap;
-    }
-   
+
     internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype, ComponentUpdater updater)
     {
         var sourceIndex = compIndex;
