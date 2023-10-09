@@ -238,7 +238,7 @@ public sealed class GameEntity
     public T AddClassComponent<T>(T component)
         where T : ClassComponent
     {
-        if (ClassTypeInfo<T>.ClassIndex == ClassUtils.MissingAttribute) {
+        if (ClassType<T>.ClassIndex == ClassUtils.MissingAttribute) {
             var msg = $"Missing attribute [ClassComponent(\"<key>\")] on type: {typeof(T).Namespace}.{typeof(T).Name}";
             throw new InvalidOperationException(msg);
         }
@@ -276,7 +276,7 @@ public sealed class GameEntity
     public T RemoveClassComponent<T>()
         where T : ClassComponent
     {
-        _           = ClassTypeInfo<T>.ClassIndex; // register class component type
+        _           = ClassType<T>.ClassIndex; // register class component type
         var classes = classComponents;
         var len     = classes.Length;
         for (int n = 0; n < len; n++)

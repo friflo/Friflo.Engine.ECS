@@ -9,7 +9,7 @@ using Friflo.Json.Burst;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal static class ClassTypeInfo<T>
+internal static class ClassType<T>
     where T : ClassComponent
 {
     internal static readonly    int     ClassIndex  = ClassUtils.NewClassIndex(typeof(T), out ClassKey);

@@ -4,13 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-/// <summary>
-/// Use to create entity <b>Tag</b>'s by defining a struct without fields or properties extending <see cref="IEntityTag"/>
-/// </summary>
-public interface IEntityTag { }
-
-
-internal static class TagTypeInfo<T>
+internal static class TagType<T>
     where T : struct, IEntityTag
 {
     // ReSharper disable once StaticMemberInGenericType

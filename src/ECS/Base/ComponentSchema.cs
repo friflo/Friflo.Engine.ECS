@@ -206,15 +206,15 @@ internal static class ComponentUtils
     internal static ComponentType CreateClassFactory<T>(TypeStore typeStore)
         where T : ClassComponent
     {
-        var classIndex  = ClassTypeInfo<T>.ClassIndex;
-        var classKey    = ClassTypeInfo<T>.ClassKey;
+        var classIndex  = ClassType<T>.ClassIndex;
+        var classKey    = ClassType<T>.ClassKey;
         return new ClassComponentType<T>(classKey, classIndex, typeStore);
     }
     
     internal static ComponentType CreateTagType<T>()
         where T : struct, IEntityTag
     {
-        var tagIndex    = TagTypeInfo<T>.TagIndex;
+        var tagIndex    = TagType<T>.TagIndex;
         return new TagType(typeof(T), tagIndex);
     }
     

@@ -21,15 +21,15 @@ public readonly struct Tags
     public  bool    Has<T> ()
         where T : struct, IEntityTag
     {
-        return bitSet.Has(TagTypeInfo<T>.TagIndex);
+        return bitSet.Has(TagType<T>.TagIndex);
     }
 
     public  bool    Has<T1, T2> ()
         where T1 : struct, IEntityTag
         where T2 : struct, IEntityTag
     {
-        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
-               bitSet.Has(TagTypeInfo<T2>.TagIndex);
+        return bitSet.Has(TagType<T1>.TagIndex) &&
+               bitSet.Has(TagType<T2>.TagIndex);
     }
 
     public  bool    Has<T1, T2, T3> ()
@@ -37,9 +37,9 @@ public readonly struct Tags
         where T2 : struct, IEntityTag
         where T3 : struct, IEntityTag
     {
-        return bitSet.Has(TagTypeInfo<T1>.TagIndex) &&
-               bitSet.Has(TagTypeInfo<T2>.TagIndex) &&
-               bitSet.Has(TagTypeInfo<T3>.TagIndex);
+        return bitSet.Has(TagType<T1>.TagIndex) &&
+               bitSet.Has(TagType<T2>.TagIndex) &&
+               bitSet.Has(TagType<T3>.TagIndex);
     }
     
     public  bool    HasAll (in Tags tags)
@@ -56,7 +56,7 @@ public readonly struct Tags
         where T : struct, IEntityTag
     {
         BitSet bitSet = default;
-        bitSet.SetBit(TagTypeInfo<T>.TagIndex);
+        bitSet.SetBit(TagType<T>.TagIndex);
         return new Tags(bitSet);
     }
     
@@ -65,8 +65,8 @@ public readonly struct Tags
         where T2 : struct, IEntityTag
     {
         BitSet bitSet = default;
-        bitSet.SetBit(TagTypeInfo<T1>.TagIndex);
-        bitSet.SetBit(TagTypeInfo<T2>.TagIndex);
+        bitSet.SetBit(TagType<T1>.TagIndex);
+        bitSet.SetBit(TagType<T2>.TagIndex);
         return new Tags(bitSet);
     }
     
