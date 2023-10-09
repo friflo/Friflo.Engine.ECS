@@ -47,7 +47,7 @@ internal sealed class ComponentReader
             throw new InvalidOperationException("expect object or null");
         }
         ReadRawComponents();
-        PrepareReadComponents(entity, store);
+        SetEntityArchetype(entity, store);
         ReadComponents(entity);
     }
     
@@ -60,27 +60,28 @@ internal sealed class ComponentReader
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
             if (component.type.kind == ComponentKind.Class) {
+                // --- read class component
                 component.type.ReadClassComponent(componentReader, json, entity);
                 continue;
             }
-            // --- read struct component. Archetype already created in 
+            // --- read struct component
             var structType  = component.type;
             var heap        = entity.archetype.heapMap[structType.index];
             if (heap != null) {
-                // --- change component value 
+                // --- change component value
                 heap.Read(componentReader, entity.compIndex, json);
                 continue;
             }
-            var msg = $"unexpected: heap == null. structType: {structType}. {nameof(PrepareReadComponents)} ensures this.";
+            var msg = $"unexpected: heap == null. structType: {structType}. {nameof(SetEntityArchetype)} ensures this.";
             throw new InvalidOperationException(msg);
         }
     }
     
     /// <summary>
-    /// Ensures the given entity is in an <see cref="Archetype"/> that contains all struct components 
-    /// inside the current JSON payload.
+    /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all struct components 
+    /// within the current JSON payload.
     /// </summary>
-    private void PrepareReadComponents(GameEntity entity, EntityStore store)
+    private void SetEntityArchetype(GameEntity entity, EntityStore store)
     {
         long archetypeHash = 0;
         var count = componentCount;

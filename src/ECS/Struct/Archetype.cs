@@ -92,6 +92,7 @@ public sealed class Archetype
         }
     }
 
+    /// <remarks>Is called by methods using generic struct component type: T1, T2, T3, ...</remarks>
     internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypeSet types)
     {
         var length          = types.Length;
@@ -102,6 +103,10 @@ public sealed class Archetype
         return new Archetype(config, componentHeaps);
     }
     
+    /// <remarks>
+    /// Is called by methods using a set of arbitrary struct <see cref="ComponentType"/>'s.<br/>
+    /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
+    /// </remarks>
     internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> types)
     {
         var length          = types.Count;
@@ -111,6 +116,7 @@ public sealed class Archetype
         }
         return new Archetype(config, componentHeaps);
     }
+    
     #endregion
     
 #region struct component handling
