@@ -109,6 +109,12 @@ public struct BitSetEnumerator
     public int Current => curPos;
     
     // --- IEnumerator
+    public void Reset() {
+        curPos  = 0;
+        lng     = 0;
+        lng     = 0;
+    }
+    
     public bool MoveNext()
     {
         if (lngPos < 4)

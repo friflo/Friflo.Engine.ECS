@@ -1,18 +1,24 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct Tags
+public readonly struct Tags : IEnumerable<ComponentType>
 {
-    internal readonly   BitSet          bitSet;
+    internal readonly   BitSet  bitSet;
     
-    public              TagsEnumerator  GetEnumerator()     => new (this);
-    
-    public   override   string          ToString() => GetString();
+    public TagsEnumerator       GetEnumerator()                             => new TagsEnumerator (this);
+    // --- IEnumerable
+    IEnumerator                 IEnumerable.GetEnumerator()                 => new TagsEnumerator (this);
+    // --- IEnumerable<>
+    IEnumerator<ComponentType>  IEnumerable<ComponentType>.GetEnumerator()  => new TagsEnumerator (this);
+
+    public   override string    ToString() => GetString();
     
     private Tags(in BitSet bitSet) {
         this.bitSet = bitSet;
@@ -86,10 +92,15 @@ public readonly struct Tags
     }
 }
 
-public struct TagsEnumerator
+public struct TagsEnumerator : IEnumerator<ComponentType>
 {
     private BitSetEnumerator    bitSetEnumerator;
-    
+
+    // --- IEnumerator
+    public  void                Reset()             => bitSetEnumerator.Reset();
+
+            object              IEnumerator.Current => Current;
+
     public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
@@ -98,4 +109,5 @@ public struct TagsEnumerator
     
     // --- IEnumerator
     public bool MoveNext() => bitSetEnumerator.MoveNext();
+    public void Dispose() { }
 }
