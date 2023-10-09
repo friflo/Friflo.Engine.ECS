@@ -3,15 +3,44 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-internal struct TestTag : IEntityTag { }
+internal struct TestTag  : IEntityTag { }
 
 internal struct TestTag2 : IEntityTag { }
 
 public static class Test_Tags
 {
+    [Test]
+    public static void Test_Tags_basics()
+    {
+        var tags    = new Tags();
+        AreEqual("Tags: []",                    tags.ToString());
+        
+        tags.Add<TestTag>();
+        AreEqual("Tags: [#TestTag]",            tags.ToString());
+        
+        tags.Add<TestTag2>();
+        AreEqual("Tags: [#TestTag, #TestTag2]", tags.ToString());
+
+        var copy = new Tags();
+        copy.Add(tags);
+        AreEqual("Tags: [#TestTag, #TestTag2]", copy.ToString());
+        
+        copy.Remove<TestTag>();
+        AreEqual("Tags: [#TestTag2]",           copy.ToString());
+        
+        copy.Remove(tags);
+        AreEqual("Tags: []",                    copy.ToString());
+        
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        
+        AreEqual("Tags: []", entity.Tags.ToString());
+    }
+    
     [Test]
     public static void Test_Tags_Get()
     {

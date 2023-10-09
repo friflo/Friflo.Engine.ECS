@@ -47,6 +47,16 @@ public struct BitSet
         }
     }
     
+    public void ClearBit(int index)
+    {
+        switch (index) {
+            case < 64:      l0 &= ~(1L <<  index);          return;
+            case < 128:     l1 &= ~(1L << (index - 64));    return;
+            case < 192:     l2 &= ~(1L << (index - 128));   return;
+            default:        l3 &= ~(1L << (index - 192));   return;
+        }
+    }
+    
     public bool Has(int index)
     {
         switch (index) {

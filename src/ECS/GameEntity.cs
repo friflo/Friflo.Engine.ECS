@@ -304,6 +304,10 @@ public sealed class GameEntity
     
     // ------------------------------------ entity tag methods -----------------------------------
 #region entity tag methods
+    /// <returns>
+    /// A copy of the <see cref="Tags"/> assigned to the <see cref="GameEntity"/>.<br/>
+    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/> 
+    /// </returns>
     public  Tags    Tags => archetype.tags;
 
     public bool AddTag<T>()

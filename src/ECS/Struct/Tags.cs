@@ -8,9 +8,9 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct Tags : IEnumerable<ComponentType>
+public struct Tags : IEnumerable<ComponentType>
 {
-    internal readonly   BitSet  bitSet;
+    internal   BitSet  bitSet;
     
     public TagsEnumerator       GetEnumerator()                             => new TagsEnumerator (this);
     // --- IEnumerable
@@ -24,6 +24,7 @@ public readonly struct Tags : IEnumerable<ComponentType>
         this.bitSet = bitSet;
     }
     
+    // ----------------------------------------- read Tags ----------------------------------------- 
     public  bool    Has<T> ()
         where T : struct, IEntityTag
     {
@@ -57,7 +58,32 @@ public readonly struct Tags : IEnumerable<ComponentType>
     {
         return bitSet.HasAny(tags.bitSet); 
     }
+    
+    // ----------------------------------------- mutate Tags -----------------------------------------
+    
+    public void Add<T>()
+        where T : struct, IEntityTag
+    {
+        bitSet.SetBit(TagType<T>.TagIndex);
+    }
+    
+    public void Add(in Tags tags)
+    {
+        bitSet.value |= tags.bitSet.value;
+    }
+    
+    public void Remove<T>()
+        where T : struct, IEntityTag
+    {
+        bitSet.ClearBit(TagType<T>.TagIndex);
+    }
+    
+    public void Remove(in Tags tags)
+    {
+        bitSet.value &= ~tags.bitSet.value;
+    }
         
+    // ----------------------------------------- static methods -----------------------------------------    
     public static Tags Get<T>()
         where T : struct, IEntityTag
     {
@@ -78,15 +104,19 @@ public readonly struct Tags : IEnumerable<ComponentType>
     
     private string GetString()
     {
-        var sb = new StringBuilder();
+        var sb          = new StringBuilder();
+        var hasTypes    = false;
         sb.Append("Tags: [");
         foreach (var index in bitSet) {
             var tagType = EntityStore.Static.ComponentSchema.GetTagAt(index);
             sb.Append('#');
             sb.Append(tagType.type.Name);
             sb.Append(", ");
+            hasTypes = true;
         }
-        sb.Length -= 2;
+        if (hasTypes) {
+            sb.Length -= 2;
+        }
         sb.Append(']');
         return sb.ToString();
     }

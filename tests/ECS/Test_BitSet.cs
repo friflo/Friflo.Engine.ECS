@@ -37,31 +37,52 @@ public static class Test_BitSet
         } {
             var bitSet = new BitSet(new [] { 63, 127, 191, 255 });
             AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", bitSet.ToString());
-        } {
-            var bitSet = new BitSet();
-            for (int n = 0; n < 256; n++) {
-                if (bitSet.Has(n)) {
-                    Fail($"Expect bit == false: index: {n}");
-                }
-                bitSet.SetBit(n);
-                if (!bitSet.Has(n)) {
-                    Fail($"Expect bit == true: index: {n}");
-                }
+        }
+    }
+    
+    [Test]
+    public static void Test_BitSet_SetAllBits()
+    {
+        var bitSet = new BitSet();
+        for (int n = 0; n < 256; n++) {
+            if (bitSet.Has(n)) {
+                Fail($"Expect bit == false: index: {n}");
             }
-            AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", bitSet.ToString());
-            var allBits = bitSet;
-            IsTrue(allBits.HasAll(allBits));
-            IsTrue(allBits.HasAny(allBits));
+            bitSet.SetBit(n);
+            if (!bitSet.Has(n)) {
+                Fail($"Expect bit == true: index: {n}");
+            }
+        }
+        AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", bitSet.ToString());
+        var allBits = bitSet;
+        IsTrue(allBits.HasAll(allBits));
+        IsTrue(allBits.HasAny(allBits));
+        
+        for (int n = 0; n < 256; n++) {
+            var singleBit = new BitSet();
+            singleBit.SetBit(n);
+            IsTrue(allBits.HasAll(singleBit));
+            IsTrue(allBits.HasAny(singleBit));
             
-            for (int n = 0; n < 256; n++) {
-                var singleBit = new BitSet();
-                singleBit.SetBit(n);
-                IsTrue(allBits.HasAll(singleBit));
-                IsTrue(allBits.HasAny(singleBit));
-                
-                IsFalse(singleBit.HasAll(allBits));
-                IsTrue (singleBit.HasAny(allBits));
-            }
+            IsFalse(singleBit.HasAll(allBits));
+            IsTrue (singleBit.HasAny(allBits));
+        }
+    }
+    
+    [Test]
+    public static void Test_BitSet_ClearBit()
+    {
+        var allBits = new BitSet();
+        for (int n = 0; n < 256; n++) {
+            allBits.SetBit(n);
+        }
+        AreEqual("ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff", allBits.ToString());
+        
+        var bits = allBits;
+        for (int n = 0; n < 256; n++) {
+            IsTrue(bits.Has(n));
+            bits.ClearBit(n);
+            IsFalse(bits.Has(n));
         }
     }
     
