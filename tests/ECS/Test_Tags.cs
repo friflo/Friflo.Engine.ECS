@@ -16,14 +16,27 @@ public static class Test_Tags
     [Test]
     public static void Test_Tags_basics()
     {
+        var twoTags = Tags.Get<TestTag, TestTag2>();
+        AreEqual("Tags: [#TestTag, #TestTag2]", twoTags.ToString());
+        
         var tags    = new Tags();
         AreEqual("Tags: []",                    tags.ToString());
+        IsFalse(tags.Has<TestTag>());
+        IsFalse(tags.HasAll(twoTags));
+        IsFalse(tags.HasAny(twoTags));
         
         tags.Add<TestTag>();
+        IsTrue (tags.Has<TestTag>());
+        IsFalse(tags.HasAll(twoTags));
+        IsTrue (tags.HasAny(twoTags));
+        
         AreEqual("Tags: [#TestTag]",            tags.ToString());
         
         tags.Add<TestTag2>();
         AreEqual("Tags: [#TestTag, #TestTag2]", tags.ToString());
+        IsTrue (tags.Has<TestTag, TestTag2>());
+        IsTrue (tags.HasAll(twoTags));
+        IsTrue (tags.HasAny(twoTags));
 
         var copy = new Tags();
         copy.Add(tags);
