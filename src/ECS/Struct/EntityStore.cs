@@ -30,7 +30,7 @@ public sealed partial class EntityStore
     }
     
     internal ArchetypeConfig GetArchetypeConfig() {
-        return new ArchetypeConfig (this, archetypesCount, DefaultCapacity, typeStore);
+        return new ArchetypeConfig (this, archetypesCount, DefaultCapacity);
     }
     
     private Archetype GetArchetypeInternal(Signature signature)

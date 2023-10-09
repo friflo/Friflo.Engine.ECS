@@ -52,6 +52,9 @@ public sealed class Archetype
     #endregion
     
 #region initialize
+    /// <summary>
+    /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
+    /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps)
     {
         store           = config.store;
@@ -61,7 +64,7 @@ public sealed class Archetype
         typeHash        = EntityStore.GetHash(heaps);
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
-        heapMap         = new StructHeap[EntityStore.Static.ComponentSchema.maxStructIndex];
+        heapMap         = new StructHeap[config.maxStructIndex];
         mask            = new ArchetypeMask(heaps);
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
