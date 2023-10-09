@@ -21,7 +21,7 @@ internal abstract class StructHeap
     internal readonly   int         structIndex;
     internal readonly   long        hash;
 #if DEBUG
-    internal            Archetype   archetype; // only used provide debug info.
+    private             Archetype   archetype; // only used to provide debug info.
 #endif
 
     public   override   string      ToString() => GetString();
