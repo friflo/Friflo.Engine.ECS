@@ -313,10 +313,6 @@ public sealed class GameEntity
     public  Tags    Tags                                        => archetype.tags;
     
     public  bool    HasTag<T>() where T : struct, IEntityTag    => archetype.tags.Has<T>();
-    
-    public  bool    HasAllTags(in Tags tags)                    => archetype.tags.HasAll(tags);
-    
-    public  bool    HasAnyTags(in Tags tags)                    => archetype.tags.HasAny(tags);
 
     public  bool    AddTag<T>()
         where T : struct, IEntityTag
