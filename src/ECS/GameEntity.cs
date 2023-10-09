@@ -349,8 +349,8 @@ public sealed class GameEntity
     {
         var objects = new object[ComponentCount];
         // --- add struct components
-        var count       = archetype.componentCount;
         var heaps       = archetype.Heaps;
+        var count       = heaps.Length;
         for (int n = 0; n < count; n++) {
             objects[n] = heaps[n].GetComponentDebug(compIndex); 
         }

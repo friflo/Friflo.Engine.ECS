@@ -42,14 +42,15 @@ public sealed partial class EntityStore
         if (TryGetArchetype(hash, out var result)) {
             return result;
         }
-        var componentCount = archetype.Heaps.Length - 1;
+        var heaps           = archetype.Heaps;
+        var componentCount  = heaps.Length - 1;
         if (componentCount == 0) {
             return null;
         }
         var types       = new List<ComponentType>(componentCount);
         var config      = GetArchetypeConfig();
         var schema      = Static.ComponentSchema;
-        foreach (var heap in archetype.Heaps) {
+        foreach (var heap in heaps) {
             if (heap.type == removeType)
                 continue;
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
