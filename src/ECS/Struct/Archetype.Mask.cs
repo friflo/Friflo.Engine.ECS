@@ -127,7 +127,6 @@ public struct ArchetypeMask : IEnumerable<ComponentType>
         var hasTypes    = false;
         foreach (var index in bitSet) {
             var structType = EntityStore.Static.ComponentSchema.GetStructComponentAt(index);
-            sb.Append('#');
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;

@@ -15,16 +15,16 @@ public sealed partial class EntityStore
     private Archetype GetArchetype<T>(in Tags tags)
         where T : struct, IStructComponent
     {
-        var hash = typeof(T).Handle();
-        if (TryGetArchetype(hash, out var archetype)) {
-            return archetype;
+        searchId.SetTagsWith(tags, StructHeap<T>.StructIndex);
+        if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+            return archetypeId.type;
         }
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
         var types   = new SignatureTypeSet(1,
             T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
         );
-        archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
+        var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
         AddArchetype(archetype);
         return archetype;
     }
@@ -35,11 +35,12 @@ public sealed partial class EntityStore
     
     private Archetype GetArchetypeWithSignature(Signature signature, in Tags tags)
     {
-        if (TryGetArchetype(signature.archetypeHash, out var archetype)) {
-            return archetype;
+        searchId.SetSignature(signature, tags);
+        if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+            return archetypeId.type;
         }
-        var config  = GetArchetypeConfig();
-        archetype   = Archetype.CreateWithSignatureTypes(config, signature.types, tags);
+        var config      = GetArchetypeConfig();
+        var archetype   = Archetype.CreateWithSignatureTypes(config, signature.types, tags);
         AddArchetype(archetype);
         return archetype;
     }

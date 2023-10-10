@@ -14,7 +14,7 @@ public static class Test_ArchetypeMask
     public static void Test_ArchetypeMask_basics()
     {
         var twoStructs = ArchetypeMask.Get<Position, Rotation>();
-        AreEqual("Mask: [#Position, #Rotation]", twoStructs.ToString());
+        AreEqual("Mask: [Position, Rotation]", twoStructs.ToString());
         
         var structs    = new ArchetypeMask();
         AreEqual("Mask: []",                    structs.ToString());
@@ -27,20 +27,20 @@ public static class Test_ArchetypeMask
         IsFalse(structs.HasAll(twoStructs));
         IsTrue (structs.HasAny(twoStructs));
         
-        AreEqual("Mask: [#Position]",            structs.ToString());
+        AreEqual("Mask: [Position]",            structs.ToString());
         
         structs.Add<Rotation>();
-        AreEqual("Mask: [#Position, #Rotation]", structs.ToString());
+        AreEqual("Mask: [Position, Rotation]", structs.ToString());
         IsTrue (structs.Has<Position, Rotation>());
         IsTrue (structs.HasAll(twoStructs));
         IsTrue (structs.HasAny(twoStructs));
 
         var copy = new ArchetypeMask();
         copy.Add(structs);
-        AreEqual("Mask: [#Position, #Rotation]", copy.ToString());
+        AreEqual("Mask: [Position, Rotation]", copy.ToString());
         
         copy.Remove<Position>();
-        AreEqual("Mask: [#Rotation]",           copy.ToString());
+        AreEqual("Mask: [Rotation]",           copy.ToString());
         
         copy.Remove(structs);
         AreEqual("Mask: []",                    copy.ToString());
@@ -59,7 +59,7 @@ public static class Test_ArchetypeMask
         var testStructType2  = schema.ComponentTypeByType[typeof(Rotation)];
         
         var struct1    = ArchetypeMask.Get<Position>();
-        AreEqual("Mask: [#Position]", struct1.ToString());
+        AreEqual("Mask: [Position]", struct1.ToString());
         int count1 = 0;
         foreach (var structType in struct1) {
             AreSame(testStructType, structType);
@@ -69,7 +69,7 @@ public static class Test_ArchetypeMask
         
         var count2 = 0;
         var struct2 = ArchetypeMask.Get<Position, Rotation>();
-        AreEqual("Mask: [#Position, #Rotation]", struct2.ToString());
+        AreEqual("Mask: [Position, Rotation]", struct2.ToString());
         foreach (var _ in struct2) {
             count2++;
         }

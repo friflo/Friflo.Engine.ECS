@@ -32,11 +32,11 @@ public static class Test_Query
         var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
         var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
         
-        AreEqual("Mask: [#Position]", sig1.mask.ToString());
-        AreEqual("Mask: [#Position, #Rotation]", sig2.mask.ToString());
-        AreEqual("Mask: [#Position, #Rotation, #Scale3]", sig3.mask.ToString());
-        AreEqual("Mask: [#Position, #Rotation, #Scale3, #MyComponent1]", sig4.mask.ToString());
-        AreEqual("Mask: [#Position, #Rotation, #Scale3, #MyComponent1, #MyComponent2]", sig5.mask.ToString());
+        AreEqual("Mask: [Position]", sig1.mask.ToString());
+        AreEqual("Mask: [Position, Rotation]", sig2.mask.ToString());
+        AreEqual("Mask: [Position, Rotation, Scale3]", sig3.mask.ToString());
+        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1]", sig4.mask.ToString());
+        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", sig5.mask.ToString());
         
         var start   = Mem.GetAllocatedBytes();
         Signature.Get<Position>();

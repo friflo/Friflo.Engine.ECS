@@ -21,8 +21,6 @@ public static class Test_ComponentSchema
             AreEqual(0, type.classIndex);
             AreEqual(ComponentKind.Tag, type.kind);
             IsNull(type.componentKey);
-            // var typeHandle = type.type.TypeHandle.Value.ToInt64();
-            // AreEqual(typeHandle, type.structHash); todo
         }
         var testTagType = schema.TagTypeByType[typeof(TestTag)];
         AreEqual(2,                         schema.TagTypeByType.Count);
@@ -52,9 +50,6 @@ public static class Test_ComponentSchema
             AreEqual(0, type.classIndex);
             AreEqual(ComponentKind.Struct, type.kind);
             NotNull (type.componentKey);
-            var typeHandle = type.type.TypeHandle.Value.ToInt64();
-            AreEqual(typeHandle, type.structHash);
-
         }
         IsNull(classes[0]);
         for (int n = 1; n < classes.Length; n++) {
@@ -64,7 +59,6 @@ public static class Test_ComponentSchema
             AreEqual(0, type.structIndex);
             AreEqual(ComponentKind.Class, type.kind);
             NotNull (type.componentKey);
-            AreEqual(0, type.structHash);
         }
         
         var posType = schema.GetComponentTypeByKey("pos");

@@ -24,8 +24,6 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class Signature
 {
     // --- public fields
-    /// <summary>Note: different order of same generic <see cref="Signature"/> arguments result in a different hash</summary>
-                    public   readonly   long                archetypeHash;
                     public   readonly   SignatureTypeSet    types;
     [Browse(Never)] public   readonly   ArchetypeMask       mask;
     
@@ -42,7 +40,6 @@ public abstract class Signature
         foreach (var type in types) {
             hash ^= type.type.Handle();
         }
-        archetypeHash   = hash;
         mask            = new ArchetypeMask(this); 
     }
     

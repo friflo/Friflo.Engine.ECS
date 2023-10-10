@@ -4,17 +4,6 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal readonly struct ArchetypeInfo
-{
-    public   readonly   Archetype   type;
-    internal readonly   long        hash;
-    
-    public ArchetypeInfo(long hash, Archetype type) {
-        this.type   = type;
-        this.hash   = hash;
-    }
-}
-
 // ReSharper disable InconsistentNaming
 internal struct StructIndexes
 {

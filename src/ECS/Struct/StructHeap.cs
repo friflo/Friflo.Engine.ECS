@@ -19,7 +19,6 @@ internal abstract class StructHeap
     internal readonly   Bytes       keyBytes;
     internal readonly   Type        type;
     internal readonly   int         structIndex;
-    internal readonly   long        hash;
 #if DEBUG
     private             Archetype   archetype; // only used to provide debug info.
 #endif
@@ -38,7 +37,6 @@ internal abstract class StructHeap
         this.structKey      = structKey;
         keyBytes            = new Bytes(structKey);
         this.type           = type;
-        hash                = type.Handle();
     }
 
     internal string GetString() {

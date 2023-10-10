@@ -46,7 +46,6 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   EntityStore                 store;
     [Browse(Never)] internal readonly   int                         archIndex;
     [Browse(Never)] internal readonly   int                         componentCount; // number of component types
-    [Browse(Never)] internal readonly   long                        typeHash;
                     internal readonly   StandardComponents          std;    
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
@@ -67,7 +66,6 @@ public sealed class Archetype
         archIndex       = config.archetypeIndex;
         capacity        = config.capacity;
         componentCount  = heaps.Length;
-        typeHash        = EntityStore.GetHash(heaps);
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
@@ -210,20 +208,82 @@ public sealed class Archetype
 /// As the <see cref="ArchetypeId"/> is a large struct (72 bytes) it performs much better as a class than a struct
 /// in a <see cref="HashSet{T}"/><br/>
 /// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeId"/>
-/// 
 /// </remarks>
-public class ArchetypeId
+public class ArchetypeId    // todo make internal
 {
-    public readonly     ArchetypeMask   mask;   // 32
-    public readonly     Tags            tags;   // 32
-    public readonly     int             hash;   //  4
-    public readonly     Archetype       type;   //  8
+    internal            ArchetypeMask   mask;   // 32
+    internal            Tags            tags;   // 32
+    internal            int             hash;   //  4
+    public   readonly   Archetype       type;   //  8
 
-    public ArchetypeId(Archetype archetype) {
+    public   override   string          ToString() => GetString();
+
+    internal ArchetypeId() { }
+    
+    internal ArchetypeId(Archetype archetype) {
         mask    = archetype.mask;
         tags    = archetype.tags;
         hash    = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
         type    = archetype;
+    }
+    
+    public void Clear() {
+        mask = default;
+        tags = default;
+        hash = default;
+    }
+    
+    public void CalculateHashCode() {
+        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+    }
+    
+    public void SetTagsWith(in Tags tags, int structIndex) {
+        mask        = default;
+        mask.bitSet.SetBit(structIndex);
+        this.tags   = tags;
+        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+    }
+    
+    public void SetSignature(Signature signature, in Tags tags) {
+        mask        = signature.mask;
+        this.tags   = tags;
+        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+    }
+    
+    public void SetWith(Archetype archetype, int structIndex) {
+        mask        = archetype.mask;
+        mask.bitSet.SetBit(structIndex);
+        tags        = archetype.tags;
+        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+    }
+    
+    public void SetWithout(Archetype archetype, int structIndex) {
+        mask        = archetype.mask;
+        mask.bitSet.ClearBit(structIndex);
+        tags        = archetype.tags;
+        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+    }
+    
+    private string GetString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("Id: [");
+        var hasTypes = false;
+        foreach (var structType in mask) {
+            sb.Append(structType.type.Name);
+            sb.Append(", ");
+            hasTypes = true;
+        }
+        foreach (var tag in tags) {
+            sb.Append(tag.type.Name);
+            sb.Append(", ");
+            hasTypes = true;
+        }
+        if (hasTypes) {
+            sb.Length -= 2;
+        }
+        sb.Append(']');
+        return sb.ToString();
     }
 } 
 

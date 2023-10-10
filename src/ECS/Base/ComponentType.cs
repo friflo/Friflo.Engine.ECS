@@ -36,7 +36,6 @@ public abstract class ComponentType
     /// </returns>
     public   readonly   ComponentKind   kind;
     
-    public   readonly   long            structHash;
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a struct component attributed with <see cref="StructComponentAttribute"/><br/>
     /// If <see cref="kind"/> == <see cref="Class"/> the type of a class  component attributed with <see cref="ClassComponentAttribute"/>
@@ -52,14 +51,12 @@ public abstract class ComponentType
         ComponentKind   kind,
         int             classIndex,
         int             structIndex,
-        int             tagIndex,
-        long            structHash)
+        int             tagIndex)
     {
         this.componentKey   = componentKey;
         this.classIndex     = classIndex;
         this.structIndex    = structIndex;
         this.tagIndex       = tagIndex;
-        this.structHash     = structHash;
         this.kind           = kind;
         this.type           = type;
     }
@@ -72,7 +69,7 @@ internal sealed class StructComponentType<T> : ComponentType
     public  override    string          ToString() => $"struct component: [{typeof(T).Name}]";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, typeof(T), Struct, 0, structIndex, 0, typeof(T).Handle())
+        : base(componentKey, typeof(T), Struct, 0, structIndex, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -92,7 +89,7 @@ internal sealed class ClassComponentType<T> : ComponentType
     public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
     
     internal ClassComponentType(string componentKey, int classIndex, TypeStore typeStore)
-        : base(componentKey, typeof(T), Class, classIndex, 0, 0, 0)
+        : base(componentKey, typeof(T), Class, classIndex, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -116,7 +113,7 @@ internal sealed class TagType : ComponentType
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     
     internal TagType(Type type, int tagIndex)
-        : base(null, type, Tag, 0, 0, tagIndex, 0)
+        : base(null, type, Tag, 0, 0, tagIndex)
     { }
     
     internal override   StructHeap  CreateHeap(int capacity)

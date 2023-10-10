@@ -17,9 +17,9 @@ public sealed partial class EntityStore
     private Archetype GetArchetypeWith<T>(Archetype current)
         where T : struct, IStructComponent
     {
-        var hash = GetHashWith(typeof(T), current);
-        if (TryGetArchetype(hash, out var archetype)) {
-            return archetype;
+        searchId.SetWith(current, StructHeap<T>.StructIndex);
+        if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+            return archetypeId.type;
         }
         var config      = GetArchetypeConfig();
         var schema      = Static.ComponentSchema;
@@ -31,16 +31,16 @@ public sealed partial class EntityStore
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
         types.Add(schema.GetStructType(StructHeap<T>.StructIndex, typeof(T)));
-        archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
+        var archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
         AddArchetype(archetype);
         return archetype;
     }
     
-    private Archetype GetArchetypeWithout(Archetype archetype, Type removeType)
+    private Archetype GetArchetypeWithout(Archetype archetype, int structIndex, Type removeType)
     {
-        var hash = GetHashWithout(removeType, archetype);
-        if (TryGetArchetype(hash, out var result)) {
-            return result;
+        searchId.SetWithout(archetype, structIndex);
+        if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+            return archetypeId.type;
         }
         var heaps           = archetype.Heaps;
         var componentCount  = heaps.Length - 1;
@@ -55,21 +55,9 @@ public sealed partial class EntityStore
                 continue;
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
-        result      = Archetype.CreateWithStructTypes(config, types, archetype.tags);
+        var result = Archetype.CreateWithStructTypes(config, types, archetype.tags);
         AddArchetype(result);
         return result;
-    }
-    
-    internal bool TryGetArchetype (long hash, out Archetype result) {
-        foreach (var arch in archetypeInfos) {
-            if (arch.hash != hash) {
-                continue;
-            }
-            result = arch.type;
-            return true;
-        }
-        result = null;
-        return false;
     }
     
     internal void AddArchetype (Archetype archetype)
@@ -77,33 +65,13 @@ public sealed partial class EntityStore
         if (archetypesCount == archetypes.Length) {
             var newLen = 2 * archetypes.Length;
             Utils.Resize(ref archetypes,     newLen);
-            Utils.Resize(ref archetypeInfos, newLen);
         }
         if (archetype.archIndex != archetypesCount) {
             throw new InvalidOperationException("invalid archIndex");
         }
         archetypes    [archetypesCount] = archetype;
-        archetypeInfos[archetypesCount] = new ArchetypeInfo(archetype.typeHash, archetype);
         archetypesCount++;
         archetypeSet.Add(archetype.id);
-    }
-    
-    // ------------------------------------ hash utils ------------------------------------
-    private static long GetHashWith(Type newType, Archetype archetype) {
-        return newType.Handle() ^ archetype.typeHash;
-    }
-    
-    private static long GetHashWithout(Type removeType, Archetype archetype)
-    {
-        return removeType.Handle() ^ archetype.typeHash;
-    }
-    
-    internal static long GetHash(StructHeap[] heaps) {
-        long hash = default;
-        foreach (var heap in heaps) {
-            hash ^= heap.hash;
-        }
-        return hash;
     }
     
     // ------------------------------------ add / remove struct component ------------------------------------
@@ -150,7 +118,7 @@ public sealed partial class EntityStore
         if (heap == null) {
             return false;
         }
-        var newArchetype = GetArchetypeWithout(arch, typeof(T));
+        var newArchetype = GetArchetypeWithout(arch, StructHeap<T>.StructIndex, typeof(T));
         if (newArchetype == defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
