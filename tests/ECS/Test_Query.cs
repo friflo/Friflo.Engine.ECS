@@ -34,25 +34,23 @@ public static class Test_Query
     [Test]
     public static void Test_Signature_Get_Mem()
     {
+        Signature.Get<Position>();  // force one time allocation
+        
+        var start   = Mem.GetAllocatedBytes();
+        
         var sig1 = Signature.Get<Position>();
         var sig2 = Signature.Get<Position, Rotation>();
         var sig3 = Signature.Get<Position, Rotation, Scale3>();
         var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
         var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
         
+        Mem.AssertNoAlloc(start);
+        
         AreEqual("Mask: [Position]", sig1.mask.ToString());
         AreEqual("Mask: [Position, Rotation]", sig2.mask.ToString());
         AreEqual("Mask: [Position, Rotation, Scale3]", sig3.mask.ToString());
         AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1]", sig4.mask.ToString());
         AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", sig5.mask.ToString());
-        
-        var start   = Mem.GetAllocatedBytes();
-        Signature.Get<Position>();
-        Signature.Get<Position, Rotation>();
-        Signature.Get<Position, Rotation, Scale3>();
-        Signature.Get<Position, Rotation, Scale3, MyComponent1>();
-        Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
-        Mem.AssertNoAlloc(start);
     }
     
     [Test]
@@ -166,11 +164,21 @@ public static class Test_Query
         var query   = store.Query(sig).ReadOnly<Position>();
         var count   = 0;
         var forEach = query.ForEach((position, rotation) => {
+            // ReSharper disable once AccessToModifiedClosure
             count++;
             position.Value.x = 42;
-            AreEqual("42, 2, 3", position.ToString());
         });
+        var start = Mem.GetAllocatedBytes();
         forEach.Run();
+        Mem.AssertNoAlloc(start);
+        AreEqual(1,     count);
+        AreEqual(1,     entity.Position.x);
+        //
+        count   = 0;
+        start = Mem.GetAllocatedBytes();
+        forEach.Run();
+        
+        Mem.AssertNoAlloc(start);
         AreEqual(1,     count);
         AreEqual(1,     entity.Position.x);
     }
@@ -195,6 +203,7 @@ public static class Test_Query
             AreEqual(3, position.Value.z);
             rotation.Value.x = 42;
             count++;
+            AreEqual("1, 2, 3", position.ToString());
         }
         AreEqual(2,  count);
         AreEqual(42, entity2.Rotation.x);
@@ -241,6 +250,16 @@ public static class Test_Query
         }
         Mem.AssertNoAlloc(start);
         AreEqual(2,  count);
+        AreEqual(42, entity2.Rotation.x);
+        
+        var chunkCount   = 0;
+        start = Mem.GetAllocatedBytes();
+        foreach (var (position, rotation) in query.Chunks) {
+            rotation.Values[0].x = 42;
+            chunkCount++;
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(2,  chunkCount);
         AreEqual(42, entity2.Rotation.x);
     }
     
