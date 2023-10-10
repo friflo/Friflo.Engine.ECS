@@ -79,7 +79,7 @@ public sealed partial class EntityStore
     // --- node access
     [Browse(Never)] private  readonly   PidType                     pidType;            //  4  
     [Browse(Never)] private             Random                      randPid;            //  8               - null if using PidType.UsePidAsId
-                    private  readonly   Dictionary<long, int>       pid2Id;             //  8 + pid/id pais - null if using PidType.UsePidAsId
+                    private  readonly   Dictionary<long, int>       pid2Id;             //  8 + pid/id      - null if using PidType.UsePidAsId
     [Browse(Never)] internal            EntityNode[]                nodes;              //  8 + nodes       - acts also id2pid
     [Browse(Never)] private             int                         nodeMaxId;          //  4
     [Browse(Never)] private             int                         nodeCount;          //  4
