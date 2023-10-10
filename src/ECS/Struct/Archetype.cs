@@ -51,7 +51,10 @@ public sealed class Archetype
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
     
-                    public override     string                      ToString()      => GetString();
+    [Browse(Never)] public   readonly   ArchetypeId                 id;
+
+
+    public override     string                      ToString()      => GetString();
     #endregion
     
 #region initialize
@@ -69,6 +72,7 @@ public sealed class Archetype
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
         mask            = new ArchetypeMask(heaps);
+        id              = new ArchetypeId(this);
         this.tags       = tags;
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
@@ -200,4 +204,31 @@ public sealed class Archetype
         return sb.ToString();
     }
     #endregion
+}
+
+public readonly struct ArchetypeId
+{
+    public readonly ArchetypeMask   mask;
+    public readonly int             hash;
+    public readonly Archetype       type;
+    
+    public ArchetypeId(Archetype archetype) {
+        mask = archetype.mask;
+        hash = archetype.mask.bitSet.GetHashCode();
+        type = archetype;
+    }
+} 
+
+
+internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeId>
+{
+    internal static readonly ArchetypeIdEqualityComparer Instance = new ();
+
+    public bool Equals(ArchetypeId x, ArchetypeId y) {
+        return x.mask.bitSet.value == y.mask.bitSet.value;
+    }
+
+    public int GetHashCode(ArchetypeId archetype) {
+        return archetype.hash;
+    }
 }

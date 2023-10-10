@@ -72,6 +72,7 @@ public sealed partial class EntityStore
 #region private / internal fields
     [Browse(Never)] private             Archetype[]                 archetypes;         // never null
     [Browse(Never)] private             ArchetypeInfo[]             archetypeInfos;     // never null
+    [Browse(Never)] private  readonly   HashSet<ArchetypeId>        archetypeSet;
     [Browse(Never)] internal            int                         archetypesCount;
     [Browse(Never)] internal readonly   Archetype                   defaultArchetype;
     [Browse(Never)] private             int                         rootId;
@@ -85,6 +86,8 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                         nodeCount;
     
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;
+    
+                    public              bool                        TryGetArchetype(in ArchetypeId id, out ArchetypeId result) => archetypeSet.TryGetValue(id, out result);
                     
                     internal static     bool                        HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -109,6 +112,7 @@ public sealed partial class EntityStore
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;
         archetypes          = new Archetype[2];
+        archetypeSet        = new HashSet<ArchetypeId>(ArchetypeIdEqualityComparer.Instance);
         archetypeInfos      = new ArchetypeInfo[2];
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();

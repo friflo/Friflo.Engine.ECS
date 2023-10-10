@@ -36,6 +36,15 @@ public struct BitSet
             SetBit(index);
         }
     }
+    
+    // hash distribution is probably not good. But executes fast. Leave it for now.
+    public override int GetHashCode()
+    {
+        return unchecked((int)l0) ^ (int)(l0 >> 32) ^
+               unchecked((int)l1) ^ (int)(l1 >> 32) ^
+               unchecked((int)l2) ^ (int)(l2 >> 32) ^
+               unchecked((int)l3) ^ (int)(l3 >> 32);
+    }
         
     public void SetBit(int index)
     {

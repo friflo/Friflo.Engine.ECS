@@ -95,13 +95,33 @@ public static class Test_ArchetypeMask
         
         // --- 2 structs
         start       = Mem.GetAllocatedBytes();
-        var struct2    = ArchetypeMask.Get<Position, Rotation>();
+        var struct2 = ArchetypeMask.Get<Position, Rotation>();
         var count2 = 0;
         foreach (var _ in struct2) {
             count2++;
         }
         Mem.AssertNoAlloc(start);
         AreEqual(2, count2);
+    }
+    
+    [Test]
+    public static void Test_ArchetypeMask_lookup_Perf()
+    {
+        var store = new EntityStore();
+        var type1 = store.GetArchetype(Signature.Get<Position>());
+        var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var type3 = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
+        
+        var id = type1.id;
+        IsTrue(store.TryGetArchetype(id, out _));
+        
+        var start   = Mem.GetAllocatedBytes();
+        var count = 10; // 100_000_000 ~ 1.600 ms
+        for (int n = 0; n < count; n++)
+        {
+            store.TryGetArchetype(id, out _);
+        }
+        Mem.AssertNoAlloc(start);
     }
 }
 

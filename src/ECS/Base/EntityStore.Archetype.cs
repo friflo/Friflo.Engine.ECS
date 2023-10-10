@@ -85,6 +85,7 @@ public sealed partial class EntityStore
         archetypes    [archetypesCount] = archetype;
         archetypeInfos[archetypesCount] = new ArchetypeInfo(archetype.typeHash, archetype);
         archetypesCount++;
+        archetypeSet.Add(archetype.id);
     }
     
     // ------------------------------------ hash utils ------------------------------------
