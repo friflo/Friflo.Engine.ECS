@@ -356,7 +356,7 @@ public static class Test_StructComponent
         entity.AddComponent<Position>();    // force resize type1.entityIds
         
         var start = Mem.GetAllocatedBytes();
-        int count = 10; // 100_000_000 ~ 3.123 ms
+        int count = 10; // 100_000_000 ~ 6.300 ms
         for (var n = 0; n < count; n++) {
             entity.AddComponent<Position>();
             entity.RemoveComponent<Position>();

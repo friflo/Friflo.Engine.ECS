@@ -151,7 +151,7 @@ public static class Test_ClassComponent
         var player  = store.CreateEntity();
         AreEqual("id: 1  []", player.ToString());
         
-        const int count = 10; // 10_000_000 ~ 640 ms
+        const int count = 10; // 100_000_000 ~ 4.534 ms
         for (long n = 0; n < count; n++) {
             var testRef1 = new TestRefComponent1();
             player.AddClassComponent(testRef1);
