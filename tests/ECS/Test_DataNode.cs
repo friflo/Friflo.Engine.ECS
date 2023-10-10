@@ -58,6 +58,7 @@ public static class Test_CreateFromDataNode
         AreEqual(2, entity2.Id);
         AreEqual(0, entity2.ChildNodes.Length);
         AreEqual(1, store.EntityCount);
+        AreEqual("Length: 0", entity2.ChildNodes.ToString());
     }
     
     [Test]

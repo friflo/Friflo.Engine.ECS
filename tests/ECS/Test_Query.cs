@@ -13,14 +13,22 @@ public static class Test_Query
     [Test]
     public static void Test_SignatureTypes()
     {
-        var types               = new SignatureTypeSet();
-        AreEqual("TypeSet: []", types.ToString());
+        var types           = new SignatureTypeSet();
+        AreEqual("TypeSet: []",                     types.ToString());
+        
+
         var sig1            = Signature.Get<Position>();
-        AreEqual("Signature: [Position]", sig1.ToString());
-        AreEqual("TypeSet: [Position]", sig1.types.ToString());
+        AreEqual("Signature: [Position]",           sig1.ToString());
+        AreEqual("TypeSet: [Position]",             sig1.types.ToString());
         
         var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("Signature: [Position, Rotation]", sig2.ToString());
+
+        int count = 0;
+        foreach (var _ in sig2.types) {
+            count++;    
+        }
+        AreEqual(2, count);
     }
     
     [Test]
