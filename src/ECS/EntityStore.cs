@@ -70,17 +70,17 @@ public sealed partial class EntityStore
     #endregion
     
 #region private / internal fields
-    [Browse(Never)] private             Archetype[]                 archetypes;         //  8 - never null
-    [Browse(Never)] internal readonly   HashSet<ArchetypeId>        archetypeSet;       //  8
+    [Browse(Never)] private             Archetype[]                 archetypes;         //  8 + archetypes  - never null
+    [Browse(Never)] internal readonly   HashSet<ArchetypeId>        archetypeSet;       //  8 + ArchetypeId's
     [Browse(Never)] internal            int                         archetypesCount;    //  8
     [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8
     [Browse(Never)] private             int                         rootId;             //  4
     
     // --- node access
     [Browse(Never)] private  readonly   PidType                     pidType;            //  4  
-    [Browse(Never)] private             Random                      randPid;            //  8 - null if using PidType.UsePidAsId
-                    private  readonly   Dictionary<long, int>       pid2Id;             //  8 - null if using PidType.UsePidAsId
-    [Browse(Never)] internal            EntityNode[]                nodes;              //  8 - acts also id2pid
+    [Browse(Never)] private             Random                      randPid;            //  8               - null if using PidType.UsePidAsId
+                    private  readonly   Dictionary<long, int>       pid2Id;             //  8 + pid/id pais - null if using PidType.UsePidAsId
+    [Browse(Never)] internal            EntityNode[]                nodes;              //  8 + nodes       - acts also id2pid
     [Browse(Never)] private             int                         nodeMaxId;          //  4
     [Browse(Never)] private             int                         nodeCount;          //  4
     

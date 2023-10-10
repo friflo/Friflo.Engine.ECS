@@ -26,14 +26,14 @@ public sealed class Archetype
 
     [Browse(Never)] public   readonly   ArchetypeStructs            structs;        // 32
     
-    [Browse(Never)] public   readonly   ArchetypeId                 id;             // 76
+    [Browse(Never)] public   readonly   ArchetypeId                 id;             //  8 (+76)
     
     #endregion
     
 #region internal members
-                    private  readonly   StructHeap[]                structHeaps;    //  8 - Length = number of component types
+                    private  readonly   StructHeap[]                structHeaps;    //  8 + items   - Length = number of component types
     /// Store the entity id for each component. 
-    [Browse(Never)] private             int[]                       entityIds;      //  8 - could use a StructHeap<int> if needed
+    [Browse(Never)] private             int[]                       entityIds;      //  8 + ids     - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                         entityCount;    //  4
                     private             int                         capacity;       //  4
     
@@ -42,10 +42,10 @@ public sealed class Archetype
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
     /// does not require a range check. This is already ensured at <see cref="ComponentSchema.GetStructType"/>
     /// </remarks>
-    [Browse(Never)] internal readonly   StructHeap[]                heapMap;        //  8
-    [Browse(Never)] internal readonly   EntityStore                 store;          //  8
+    [Browse(Never)] internal readonly   StructHeap[]                heapMap;        //  8 + components
+    [Browse(Never)] internal readonly   EntityStore                 store;          //  8 
     [Browse(Never)] internal readonly   int                         archIndex;      //  4
-    [Browse(Never)] internal readonly   int                         componentCount; //  4 - number of component types
+    [Browse(Never)] internal readonly   int                         componentCount; //  4           - number of component types
                     internal readonly   StandardComponents          std;            // 64    
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
