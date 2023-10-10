@@ -52,7 +52,7 @@ public sealed class Archetype
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
     
     [Browse(Never)] public   readonly   ArchetypeId                 id;
-
+    
 
     public override     string                      ToString()      => GetString();
     #endregion
@@ -72,8 +72,8 @@ public sealed class Archetype
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
         mask            = new ArchetypeMask(heaps);
-        id              = new ArchetypeId(this);
         this.tags       = tags;
+        id              = new ArchetypeId(this);
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
         }
@@ -206,16 +206,24 @@ public sealed class Archetype
     #endregion
 }
 
-public readonly struct ArchetypeId
+/// <remarks>
+/// As the <see cref="ArchetypeId"/> is a large struct (72 bytes) it performs much better as a class than a struct
+/// in a <see cref="HashSet{T}"/><br/>
+/// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeId"/>
+/// 
+/// </remarks>
+public class ArchetypeId
 {
-    public readonly ArchetypeMask   mask;
-    public readonly int             hash;
-    public readonly Archetype       type;
-    
+    public readonly     ArchetypeMask   mask;   // 32
+    public readonly     Tags            tags;   // 32
+    public readonly     int             hash;   //  4
+    public readonly     Archetype       type;   //  8
+
     public ArchetypeId(Archetype archetype) {
-        mask = archetype.mask;
-        hash = archetype.mask.bitSet.GetHashCode();
-        type = archetype;
+        mask    = archetype.mask;
+        tags    = archetype.tags;
+        hash    = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        type    = archetype;
     }
 } 
 
@@ -225,7 +233,8 @@ internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeI
     internal static readonly ArchetypeIdEqualityComparer Instance = new ();
 
     public bool Equals(ArchetypeId x, ArchetypeId y) {
-        return x.mask.bitSet.value == y.mask.bitSet.value;
+        return x!.mask.bitSet.value == y!.mask.bitSet.value &&
+               x!.tags.bitSet.value == y!.tags.bitSet.value;
     }
 
     public int GetHashCode(ArchetypeId archetype) {

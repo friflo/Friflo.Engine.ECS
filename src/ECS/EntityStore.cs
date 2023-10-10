@@ -87,7 +87,7 @@ public sealed partial class EntityStore
     
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;
     
-                    public              bool                        TryGetArchetype(in ArchetypeId id, out ArchetypeId result) => archetypeSet.TryGetValue(id, out result);
+                    public              bool                        TryGetArchetype(in ArchetypeId id, out ArchetypeId actualValue) => archetypeSet.TryGetValue(id, out actualValue);
                     
                     internal static     bool                        HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion

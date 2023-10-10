@@ -113,10 +113,11 @@ public static class Test_ArchetypeMask
         var type3 = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
         
         var id = type1.id;
-        IsTrue(store.TryGetArchetype(id, out _));
+        IsTrue(store.TryGetArchetype(id, out var actualValue));
+        AreSame(type1, actualValue.type);
         
         var start   = Mem.GetAllocatedBytes();
-        var count = 10; // 100_000_000 ~ 1.600 ms
+        var count = 10; // 100_000_000 ~ 1.089 ms
         for (int n = 0; n < count; n++)
         {
             store.TryGetArchetype(id, out _);
