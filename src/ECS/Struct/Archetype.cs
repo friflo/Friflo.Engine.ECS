@@ -24,7 +24,7 @@ public sealed class Archetype
                     
     [Browse(Never)] public readonly     Tags                        tags;
 
-    [Browse(Never)] public readonly     ArchetypeMask               mask;
+    [Browse(Never)] public readonly     ArchetypeStructs            structs;
     
     #endregion
     
@@ -67,7 +67,7 @@ public sealed class Archetype
         structHeaps     = new StructHeap[componentCount];
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
-        mask            = new ArchetypeMask(heaps);
+        structs         = new ArchetypeStructs(heaps);
         this.tags       = tags;
         id              = new ArchetypeId(this);
         foreach (var heap in heaps) {

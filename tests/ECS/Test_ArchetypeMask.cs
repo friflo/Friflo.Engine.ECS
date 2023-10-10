@@ -13,10 +13,10 @@ public static class Test_ArchetypeMask
     [Test]
     public static void Test_ArchetypeMask_basics()
     {
-        var twoStructs = ArchetypeMask.Get<Position, Rotation>();
+        var twoStructs = ArchetypeStructs.Get<Position, Rotation>();
         AreEqual("Mask: [Position, Rotation]", twoStructs.ToString());
         
-        var structs    = new ArchetypeMask();
+        var structs    = new ArchetypeStructs();
         AreEqual("Mask: []",                    structs.ToString());
         IsFalse(structs.Has<Position>());
         IsFalse(structs.HasAll(twoStructs));
@@ -35,7 +35,7 @@ public static class Test_ArchetypeMask
         IsTrue (structs.HasAll(twoStructs));
         IsTrue (structs.HasAny(twoStructs));
 
-        var copy = new ArchetypeMask();
+        var copy = new ArchetypeStructs();
         copy.Add(structs);
         AreEqual("Mask: [Position, Rotation]", copy.ToString());
         
@@ -58,7 +58,7 @@ public static class Test_ArchetypeMask
         var testStructType  = schema.ComponentTypeByType[typeof(Position)];
         var testStructType2  = schema.ComponentTypeByType[typeof(Rotation)];
         
-        var struct1    = ArchetypeMask.Get<Position>();
+        var struct1    = ArchetypeStructs.Get<Position>();
         AreEqual("Mask: [Position]", struct1.ToString());
         int count1 = 0;
         foreach (var structType in struct1) {
@@ -68,20 +68,20 @@ public static class Test_ArchetypeMask
         AreEqual(1, count1);
         
         var count2 = 0;
-        var struct2 = ArchetypeMask.Get<Position, Rotation>();
+        var struct2 = ArchetypeStructs.Get<Position, Rotation>();
         AreEqual("Mask: [Position, Rotation]", struct2.ToString());
         foreach (var _ in struct2) {
             count2++;
         }
         AreEqual(2, count2);
         
-        AreEqual(struct2, ArchetypeMask.Get<Position, Rotation>());
+        AreEqual(struct2, ArchetypeStructs.Get<Position, Rotation>());
     }
     
     [Test]
     public static void Test_ArchetypeMask_Get_Mem()
     {
-        var struct1    = ArchetypeMask.Get<Position>();
+        var struct1    = ArchetypeStructs.Get<Position>();
         foreach (var _ in struct1) { }
         
         // --- 1 struct
@@ -95,7 +95,7 @@ public static class Test_ArchetypeMask
         
         // --- 2 structs
         start       = Mem.GetAllocatedBytes();
-        var struct2 = ArchetypeMask.Get<Position, Rotation>();
+        var struct2 = ArchetypeStructs.Get<Position, Rotation>();
         var count2 = 0;
         foreach (var _ in struct2) {
             count2++;

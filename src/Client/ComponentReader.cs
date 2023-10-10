@@ -92,7 +92,7 @@ internal sealed class ComponentReader
             ref var component   = ref components[n];
             var type            = componentSchema[component.key];
             component.type      = type;
-            searchId.mask.bitSet.SetBit(type.structIndex);
+            searchId.structs.bitSet.SetBit(type.structIndex);
         }
         searchId.CalculateHashCode();
         

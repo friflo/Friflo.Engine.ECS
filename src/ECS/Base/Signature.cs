@@ -32,16 +32,16 @@ public static class Signature
     public static Signature<T> Get<T>()
         where T : struct, IStructComponent
     {
-        var mask            = new ArchetypeMask();
+        var structs         = new ArchetypeStructs();
         var structIndex1    = StructHeap<T>.StructIndex;
         
-        mask.bitSet.SetBit(structIndex1);
+        structs.bitSet.SetBit(structIndex1);
         
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(1,
             T1: schema.GetStructType(structIndex1, typeof(T))
         );
-        return new Signature<T>(mask, types);
+        return new Signature<T>(structs, types);
     }
     
     /// <summary>
@@ -56,19 +56,19 @@ public static class Signature
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
-        var mask            = new ArchetypeMask();
+        var structs         = new ArchetypeStructs();
         var structIndex1    = StructHeap<T1>.StructIndex;
         var structIndex2    = StructHeap<T2>.StructIndex;
         
-        mask.bitSet.SetBit(structIndex1);
-        mask.bitSet.SetBit(structIndex2);
+        structs.bitSet.SetBit(structIndex1);
+        structs.bitSet.SetBit(structIndex2);
         
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(2,
             T1: schema.GetStructType(structIndex1, typeof(T1)),
             T2: schema.GetStructType(structIndex2, typeof(T2))
         );
-        return new Signature<T1, T2>(mask, types);
+        return new Signature<T1, T2>(structs, types);
     }
     
     /// <summary>
@@ -84,14 +84,14 @@ public static class Signature
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
     {
-        var mask            = new ArchetypeMask();
+        var structs         = new ArchetypeStructs();
         var structIndex1    = StructHeap<T1>.StructIndex;
         var structIndex2    = StructHeap<T2>.StructIndex;
         var structIndex3    = StructHeap<T3>.StructIndex;
         
-        mask.bitSet.SetBit(structIndex1);
-        mask.bitSet.SetBit(structIndex2);
-        mask.bitSet.SetBit(structIndex3);
+        structs.bitSet.SetBit(structIndex1);
+        structs.bitSet.SetBit(structIndex2);
+        structs.bitSet.SetBit(structIndex3);
         
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(3,
@@ -99,7 +99,7 @@ public static class Signature
             T2: schema.GetStructType(structIndex2, typeof(T2)),
             T3: schema.GetStructType(structIndex3, typeof(T3))
         );
-        return new Signature<T1, T2, T3>(mask, types);
+        return new Signature<T1, T2, T3>(structs, types);
     }
     
     /// <summary>
@@ -116,16 +116,16 @@ public static class Signature
         where T3 : struct, IStructComponent
         where T4 : struct, IStructComponent
     {
-        var mask            = new ArchetypeMask();
+        var structs         = new ArchetypeStructs();
         var structIndex1    = StructHeap<T1>.StructIndex;
         var structIndex2    = StructHeap<T2>.StructIndex;
         var structIndex3    = StructHeap<T3>.StructIndex;
         var structIndex4    = StructHeap<T4>.StructIndex;
         
-        mask.bitSet.SetBit(structIndex1);
-        mask.bitSet.SetBit(structIndex2);
-        mask.bitSet.SetBit(structIndex3);
-        mask.bitSet.SetBit(structIndex4);
+        structs.bitSet.SetBit(structIndex1);
+        structs.bitSet.SetBit(structIndex2);
+        structs.bitSet.SetBit(structIndex3);
+        structs.bitSet.SetBit(structIndex4);
         
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(4,
@@ -134,7 +134,7 @@ public static class Signature
             T3: schema.GetStructType(structIndex3, typeof(T3)),
             T4: schema.GetStructType(structIndex4, typeof(T4))
         );
-        return new Signature<T1, T2, T3, T4>(mask, types);
+        return new Signature<T1, T2, T3, T4>(structs, types);
     }
     
     /// <summary>
@@ -152,18 +152,18 @@ public static class Signature
         where T4 : struct, IStructComponent
         where T5 : struct, IStructComponent
     {
-        var mask            = new ArchetypeMask();
+        var structs         = new ArchetypeStructs();
         var structIndex1    = StructHeap<T1>.StructIndex;
         var structIndex2    = StructHeap<T2>.StructIndex;
         var structIndex3    = StructHeap<T3>.StructIndex;
         var structIndex4    = StructHeap<T4>.StructIndex;
         var structIndex5    = StructHeap<T5>.StructIndex;
         
-        mask.bitSet.SetBit(structIndex1);
-        mask.bitSet.SetBit(structIndex2);
-        mask.bitSet.SetBit(structIndex3);
-        mask.bitSet.SetBit(structIndex4);
-        mask.bitSet.SetBit(structIndex5);
+        structs.bitSet.SetBit(structIndex1);
+        structs.bitSet.SetBit(structIndex2);
+        structs.bitSet.SetBit(structIndex3);
+        structs.bitSet.SetBit(structIndex4);
+        structs.bitSet.SetBit(structIndex5);
         
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(5,
@@ -174,7 +174,7 @@ public static class Signature
             T5: schema.GetStructType(structIndex5, typeof(T5))
             
         );
-        return new Signature<T1, T2, T3, T4, T5>(mask, types);
+        return new Signature<T1, T2, T3, T4, T5>(structs, types);
     }
 }
 #endregion
@@ -186,13 +186,13 @@ public readonly struct Signature<T>
     where T : struct, IStructComponent
 {
                     public   readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
 
     public override string ToString() => types.GetString("Signature: ");
 
-    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
-        this.mask   = mask;
-        this.types  = types;
+    internal Signature(in ArchetypeStructs structs, in SignatureTypeSet types) {
+        this.structs    = structs;
+        this.types      = types;
     }
 }
 
@@ -201,13 +201,13 @@ public readonly struct Signature<T1, T2>
     where T2 : struct, IStructComponent
 {
                     public   readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
     
     public override string ToString() => types.GetString("Signature: ");
     
-    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
-        this.mask   = mask;
-        this.types  = types;
+    internal Signature(in ArchetypeStructs structs, in SignatureTypeSet types) {
+        this.structs    = structs;
+        this.types      = types;
     }
 }
 
@@ -217,13 +217,13 @@ public readonly struct Signature<T1, T2, T3>
     where T3 : struct, IStructComponent
 {
                     public   readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
     
     public override string ToString() => types.GetString("Signature: ");
     
-    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
-        this.mask   = mask;
-        this.types  = types;
+    internal Signature(in ArchetypeStructs structs, in SignatureTypeSet types) {
+        this.structs    = structs;
+        this.types      = types;
     }
 }
 
@@ -234,13 +234,13 @@ public readonly struct Signature<T1, T2, T3, T4>
     where T4 : struct, IStructComponent
 {
                     public   readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
     
     public override string ToString() => types.GetString("Signature: ");
     
-    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
-        this.mask   = mask;
-        this.types  = types;
+    internal Signature(in ArchetypeStructs structs, in SignatureTypeSet types) {
+        this.structs    = structs;
+        this.types      = types;
     }
 }
 
@@ -252,13 +252,13 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     where T5 : struct, IStructComponent
 {
                     public   readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
 
     public override string ToString() => types.GetString("Signature: ");
 
-    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
-        this.mask   = mask;
-        this.types  = types;
+    internal Signature(in ArchetypeStructs structs, in SignatureTypeSet types) {
+        this.structs    = structs;
+        this.types      = types;
     }
 }
 

@@ -9,7 +9,7 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public struct ArchetypeMask : IEnumerable<ComponentType>
+public struct ArchetypeStructs : IEnumerable<ComponentType>
 {
     internal    BitSet  bitSet;
     
@@ -22,18 +22,18 @@ public struct ArchetypeMask : IEnumerable<ComponentType>
 
     public   override               string    ToString() => GetString();
     
-    private ArchetypeMask(in BitSet bitSet) {
+    private ArchetypeStructs(in BitSet bitSet) {
         this.bitSet = bitSet;
     }
     
-    internal ArchetypeMask(StructHeap[] heaps) {
+    internal ArchetypeStructs(StructHeap[] heaps) {
         foreach (var heap in heaps) {
             bitSet.SetBit(heap.structIndex);
         }
     }
     
-    // ----------------------------------------- read mask -----------------------------------------
-    internal bool Has(in ArchetypeMask other) {
+    // ----------------------------------------- structs getter -----------------------------------------
+    internal bool Has(in ArchetypeStructs other) {
         return (bitSet.value & other.bitSet.value) == bitSet.value;
     }
     
@@ -61,14 +61,14 @@ public struct ArchetypeMask : IEnumerable<ComponentType>
                bitSet.Has(StructHeap<T3>.StructIndex);
     }
     
-    public  bool    HasAll (in ArchetypeMask mask)
+    public  bool    HasAll (in ArchetypeStructs structs)
     {
-        return bitSet.HasAll(mask.bitSet);
+        return bitSet.HasAll(structs.bitSet);
     }
     
-    public  bool    HasAny (in ArchetypeMask mask)
+    public  bool    HasAny (in ArchetypeStructs structs)
     {
-        return bitSet.HasAny(mask.bitSet);
+        return bitSet.HasAny(structs.bitSet);
     }
     
     // ----------------------------------------- mutate Mask -----------------------------------------
@@ -79,9 +79,9 @@ public struct ArchetypeMask : IEnumerable<ComponentType>
         bitSet.SetBit(StructHeap<T>.StructIndex);
     }
     
-    public void Add(in ArchetypeMask mask)
+    public void Add(in ArchetypeStructs structs)
     {
-        bitSet.value |= mask.bitSet.value;
+        bitSet.value |= structs.bitSet.value;
     }
     
     public void Remove<T>()
@@ -90,28 +90,28 @@ public struct ArchetypeMask : IEnumerable<ComponentType>
         bitSet.ClearBit(StructHeap<T>.StructIndex);
     }
     
-    public void Remove(in ArchetypeMask mask)
+    public void Remove(in ArchetypeStructs structs)
     {
-        bitSet.value &= ~mask.bitSet.value;
+        bitSet.value &= ~structs.bitSet.value;
     }
     
     // ----------------------------------------- static methods -----------------------------------------    
-    public static ArchetypeMask Get<T>()
+    public static ArchetypeStructs Get<T>()
         where T : struct, IStructComponent
     {
         BitSet bitSet = default;
         bitSet.SetBit(StructHeap<T>.StructIndex);
-        return new ArchetypeMask(bitSet);
+        return new ArchetypeStructs(bitSet);
     }
     
-    public static ArchetypeMask Get<T1, T2>()
+    public static ArchetypeStructs Get<T1, T2>()
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
         BitSet bitSet = default;
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         bitSet.SetBit(StructHeap<T2>.StructIndex);
-        return new ArchetypeMask(bitSet);
+        return new ArchetypeStructs(bitSet);
     }
     
     private string GetString()
@@ -144,8 +144,8 @@ public struct ArchetypeMaskEnumerator : IEnumerator<ComponentType>
 
     public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
     
-    internal ArchetypeMaskEnumerator(in ArchetypeMask mask) {
-        bitSetEnumerator = mask.bitSet.GetEnumerator();
+    internal ArchetypeMaskEnumerator(in ArchetypeStructs structs) {
+        bitSetEnumerator = structs.bitSet.GetEnumerator();
     }
     
     // --- IEnumerator

@@ -15,57 +15,57 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public sealed class ArchetypeId
 {
-    internal            ArchetypeMask   mask;   // 32
-    internal            Tags            tags;   // 32
-    internal            int             hash;   //  4
-    public   readonly   Archetype       type;   //  8
+    internal            ArchetypeStructs    structs;   // 32
+    internal            Tags                tags;   // 32
+    internal            int                 hash;   //  4
+    public   readonly   Archetype           type;   //  8
 
-    public   override   string          ToString() => GetString();
+    public   override   string              ToString() => GetString();
 
     internal ArchetypeId() { }
     
     internal ArchetypeId(Archetype archetype) {
-        mask    = archetype.mask;
-        tags    = archetype.tags;
-        hash    = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
-        type    = archetype;
+        structs     = archetype.structs;
+        tags        = archetype.tags;
+        hash        = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        type        = archetype;
     }
     
     internal void Clear() {
-        mask = default;
+        structs = default;
         tags = default;
         hash = default;
     }
     
     internal void CalculateHashCode() {
-        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash        = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     internal void SetTagsWith(in Tags tags, int structIndex) {
-        mask        = default;
-        mask.bitSet.SetBit(structIndex);
+        structs        = default;
+        structs.bitSet.SetBit(structIndex);
         this.tags   = tags;
-        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash        = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    internal void SetMaskTags(in ArchetypeMask mask, in Tags tags) {
-        this.mask   = mask;
-        this.tags   = tags;
-        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+    internal void SetMaskTags(in ArchetypeStructs structs, in Tags tags) {
+        this.structs    = structs;
+        this.tags       = tags;
+        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     internal void SetWith(Archetype archetype, int structIndex) {
-        mask        = archetype.mask;
-        mask.bitSet.SetBit(structIndex);
-        tags        = archetype.tags;
-        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        structs         = archetype.structs;
+        structs.bitSet.SetBit(structIndex);
+        tags            = archetype.tags;
+        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     internal void SetWithout(Archetype archetype, int structIndex) {
-        mask        = archetype.mask;
-        mask.bitSet.ClearBit(structIndex);
-        tags        = archetype.tags;
-        hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        structs         = archetype.structs;
+        structs.bitSet.ClearBit(structIndex);
+        tags            = archetype.tags;
+        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     private string GetString()
@@ -73,7 +73,7 @@ public sealed class ArchetypeId
         var sb = new StringBuilder();
         sb.Append("Id: [");
         var hasTypes = false;
-        foreach (var structType in mask) {
+        foreach (var structType in structs) {
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;
@@ -96,7 +96,7 @@ internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeI
     internal static readonly ArchetypeIdEqualityComparer Instance = new ();
 
     public bool Equals(ArchetypeId x, ArchetypeId y) {
-        return x!.mask.bitSet.value == y!.mask.bitSet.value &&
+        return x!.structs.bitSet.value == y!.structs.bitSet.value &&
                x!.tags.bitSet.value == y!.tags.bitSet.value;
     }
 
