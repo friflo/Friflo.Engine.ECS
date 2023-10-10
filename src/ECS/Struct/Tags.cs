@@ -10,7 +10,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public struct Tags : IEnumerable<ComponentType>
 {
-    internal   BitSet  bitSet;
+    internal   BitSet  bitSet;  // 32
     
     public TagsEnumerator       GetEnumerator()                             => new TagsEnumerator (this);
     // --- IEnumerable

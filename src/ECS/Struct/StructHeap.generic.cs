@@ -15,8 +15,8 @@ internal sealed class StructHeap<T> : StructHeap
     where T : struct, IStructComponent
 {
     // --- internal
-    internal            StructChunk<T>[]    chunks;
-    private  readonly   TypeMapper<T>       typeMapper;
+    internal            StructChunk<T>[]    chunks;     // 8 
+    private  readonly   TypeMapper<T>       typeMapper; // 8
     
     // --- static internal
     internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);

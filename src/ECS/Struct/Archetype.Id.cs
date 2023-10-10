@@ -15,10 +15,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public sealed class ArchetypeId
 {
-    internal            ArchetypeStructs    structs;   // 32
-    internal            Tags                tags;   // 32
-    internal            int                 hash;   //  4
-    public   readonly   Archetype           type;   //  8
+    internal            ArchetypeStructs    structs;    // 32
+    internal            Tags                tags;       // 32
+    internal            int                 hash;       //  4
+    public   readonly   Archetype           type;       //  8
 
     public   override   string              ToString() => GetString();
 

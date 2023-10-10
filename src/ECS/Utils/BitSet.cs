@@ -18,12 +18,12 @@ namespace Friflo.Fliox.Engine.ECS;
 [StructLayout(LayoutKind.Explicit)]
 public struct BitSet
 {
-    [FieldOffset(00)] internal  Vector256<long> value;
+    [FieldOffset(00)] internal  Vector256<long> value;      // 32
     
-    [FieldOffset(00)] internal  long            l0;
-    [FieldOffset(08)] internal  long            l1;
-    [FieldOffset(16)] internal  long            l2;
-    [FieldOffset(24)] internal  long            l3;
+    [FieldOffset(00)] internal  long            l0;         // (8)
+    [FieldOffset(08)] internal  long            l1;         // (8)
+    [FieldOffset(16)] internal  long            l2;         // (8)
+    [FieldOffset(24)] internal  long            l3;         // (8)
     
     // Could extend with Vector256Long[] if 256 struct components are not enough
     // private readonly  Vector256Long[]   values;

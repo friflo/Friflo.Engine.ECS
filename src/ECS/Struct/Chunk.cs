@@ -10,7 +10,7 @@ namespace Friflo.Fliox.Engine.ECS;
 internal readonly struct StructChunk<T>
     where T : struct, IStructComponent
 {
-    internal readonly   T[]       components;
+    internal readonly   T[]       components;   // 8
     
     public override string ToString() => components == null ? "" : "used";
     
