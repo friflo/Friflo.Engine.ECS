@@ -51,7 +51,7 @@ public static class Test_ComponentReader
         AreEqual(6f,    root.Scale3.z);
     }
     
-    [NUnit.Framework.IgnoreAttribute("removed childIds reallocation")][Test]
+    [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
     public static void Test_ReadStructComponents_Mem()
     {
         var store       = new EntityStore(PidType.UsePidAsId);

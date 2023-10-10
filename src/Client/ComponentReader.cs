@@ -7,6 +7,7 @@ using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
+using static Friflo.Fliox.Engine.ECS.ComponentKind;
 
 namespace Friflo.Fliox.Engine.Client;
 
@@ -61,21 +62,24 @@ internal sealed class ComponentReader
             buffer.Clear();
             parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
             var json = new JsonValue(buffer);
-            if (component.type.kind == ComponentKind.Class) {
-                // --- read class component
-                component.type.ReadClassComponent(componentReader, json, entity);
-                continue;
+            var type = component.type;
+            switch (type.kind) {
+                case Class:
+                    // --- read class component
+                    component.type.ReadClassComponent(componentReader, json, entity);
+                    continue;
+                case Struct:
+                    // --- read struct component
+                    var structType  = component.type;
+                    var heap        = entity.archetype.heapMap[structType.structIndex];
+                    if (heap != null) {
+                        // --- change component value
+                        heap.Read(componentReader, entity.compIndex, json);
+                        continue;
+                    }
+                    var msg = $"unexpected: heap == null. structType: {structType}. {nameof(SetEntityArchetype)} ensures this.";
+                    throw new InvalidOperationException(msg);
             }
-            // --- read struct component
-            var structType  = component.type;
-            var heap        = entity.archetype.heapMap[structType.structIndex];
-            if (heap != null) {
-                // --- change component value
-                heap.Read(componentReader, entity.compIndex, json);
-                continue;
-            }
-            var msg = $"unexpected: heap == null. structType: {structType}. {nameof(SetEntityArchetype)} ensures this.";
-            throw new InvalidOperationException(msg);
         }
     }
     
@@ -85,6 +89,7 @@ internal sealed class ComponentReader
     /// </summary>
     private void SetEntityArchetype(GameEntity entity, EntityStore store)
     {
+        bool hasStructComponent = false;
         searchKey.Clear();
         var count = componentCount;
         for (int n = 0; n < count; n++)
@@ -92,12 +97,18 @@ internal sealed class ComponentReader
             ref var component   = ref components[n];
             var type            = componentSchema[component.key];
             component.type      = type;
+            if (type.kind != Struct) {
+                continue;
+            }
+            hasStructComponent = true;
             searchKey.structs.bitSet.SetBit(type.structIndex);
         }
-        searchKey.CalculateHashCode();
-        
+        if (!hasStructComponent) {
+            return; // early out in absence of struct components 
+        }
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
         var curArchetype = entity.archetype;
+        searchKey.CalculateHashCode();
         Archetype newArchetype;
         if (store.archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
             newArchetype = archetypeId.type;
@@ -106,7 +117,7 @@ internal sealed class ComponentReader
             structTypes.Clear();
             for (int n = 0; n < count; n++) {
                 ref var component = ref components[n];
-                if (component.type.kind == ComponentKind.Struct) {
+                if (component.type.kind == Struct) {
                     structTypes.Add(component.type);
                 }
             }
