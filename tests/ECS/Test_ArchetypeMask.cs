@@ -116,6 +116,8 @@ public static class Test_ArchetypeMask
         IsTrue(store.TryGetArchetypeId(id, out var archetypeId));
         AreSame(type1, archetypeId.type);
         
+        AreEqual("Id: [Position]", archetypeId.ToString());
+        
         var start   = Mem.GetAllocatedBytes();
         var count = 10; // 100_000_000 ~ 1.089 ms
         for (int n = 0; n < count; n++)

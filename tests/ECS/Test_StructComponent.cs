@@ -318,6 +318,14 @@ public static class Test_StructComponent
         AreEqual(1,     type1.EntityCount);
         AreEqual(1,     entity1.ComponentCount);
         
+        entity1.RemoveComponent<Position>();
+        AreEqual(0,     type1.EntityCount);
+        AreEqual(0,     entity1.ComponentCount);
+        
+        entity1.AddComponent(new Position { x = 1 });
+        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     entity1.ComponentCount);
+        
         entity1.AddComponent(new Rotation { x = 2 });
         AreEqual(0,     type1.EntityCount);
         AreEqual(1,     type2.EntityCount);

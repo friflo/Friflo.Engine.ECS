@@ -21,12 +21,12 @@ public sealed partial class EntityStore
         if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
             return archetypeId.type;
         }
-        var config      = GetArchetypeConfig();
-        var schema      = Static.ComponentSchema;
-        var heaps       = current.Heaps;
-        var currentLen  = heaps.Length;
-        var types       = new List<ComponentType>(currentLen + 1);
-        for (int n = 0; n < currentLen; n++) {
+        var config          = GetArchetypeConfig();
+        var schema          = Static.ComponentSchema;
+        var heaps           = current.Heaps;
+        var componentCount  = heaps.Length;
+        var types           = new List<ComponentType>(componentCount + 1);
+        for (int n = 0; n < componentCount; n++) {
             var heap = heaps[n];
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
@@ -44,12 +44,9 @@ public sealed partial class EntityStore
         }
         var heaps           = archetype.Heaps;
         var componentCount  = heaps.Length - 1;
-        if (componentCount == 0) {
-            return null;
-        }
-        var types       = new List<ComponentType>(componentCount);
-        var config      = GetArchetypeConfig();
-        var schema      = Static.ComponentSchema;
+        var types           = new List<ComponentType>(componentCount);
+        var config          = GetArchetypeConfig();
+        var schema          = Static.ComponentSchema;
         foreach (var heap in heaps) {
             if (heap.type == removeType)
                 continue;

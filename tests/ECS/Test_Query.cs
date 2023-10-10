@@ -160,6 +160,7 @@ public static class Test_Query
         var forEach = query.ForEach((position, rotation) => {
             count++;
             position.Value.x = 42;
+            AreEqual("42, 2, 3", position.ToString());
         });
         forEach.Run();
         AreEqual(1,     count);
