@@ -22,19 +22,19 @@ public sealed class Archetype
     
                     public              EntityStore                 Store           => store;
                     
-    [Browse(Never)] public   readonly   Tags                        tags;           // 32
+    [Browse(Never)] public   readonly   Tags                        tags;           // 32       - tags assigned to archetype
 
-    [Browse(Never)] public   readonly   ArchetypeStructs            structs;        // 32
+    [Browse(Never)] public   readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
     
     [Browse(Never)] public   readonly   ArchetypeId                 id;             //  8 (+76)
     
     #endregion
     
 #region internal members
-                    private  readonly   StructHeap[]                structHeaps;    //  8 + items   - Length = number of component types
+                    private  readonly   StructHeap[]                structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
-    [Browse(Never)] private             int[]                       entityIds;      //  8 + ids     - could use a StructHeap<int> if needed
-    [Browse(Never)] private             int                         entityCount;    //  4
+    [Browse(Never)] private             int[]                       entityIds;      //  8 + ids - could use a StructHeap<int> if needed
+    [Browse(Never)] private             int                         entityCount;    //  4       - number of entities in archetype
                     private             int                         capacity;       //  4
     
     // --- internal
@@ -42,11 +42,11 @@ public sealed class Archetype
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
     /// does not require a range check. This is already ensured at <see cref="ComponentSchema.GetStructType"/>
     /// </remarks>
-    [Browse(Never)] internal readonly   StructHeap[]                heapMap;        //  8 + components
-    [Browse(Never)] internal readonly   EntityStore                 store;          //  8 
-    [Browse(Never)] internal readonly   int                         archIndex;      //  4
-    [Browse(Never)] internal readonly   int                         componentCount; //  4           - number of component types
-                    internal readonly   StandardComponents          std;            // 64    
+    [Browse(Never)] internal readonly   StructHeap[]                heapMap;        //  8 + maxStructIndex heap references
+    [Browse(Never)] internal readonly   EntityStore                 store;          //  8       - containing EntityStore
+    [Browse(Never)] internal readonly   int                         archIndex;      //  4       - index in EntityStore
+    [Browse(Never)] internal readonly   int                         componentCount; //  4       - number of component types
+                    internal readonly   StandardComponents          std;            // 64       - heap references to std types: Position, Rotation, ...
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
                     public   override   string                      ToString()      => GetString();

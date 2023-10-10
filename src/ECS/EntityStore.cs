@@ -70,22 +70,22 @@ public sealed partial class EntityStore
     #endregion
     
 #region private / internal fields
-    [Browse(Never)] private             Archetype[]                 archetypes;         //  8 + archetypes  - never null
-    [Browse(Never)] internal readonly   HashSet<ArchetypeId>        archetypeSet;       //  8 + ArchetypeId's
-    [Browse(Never)] internal            int                         archetypesCount;    //  8
-    [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8
-    [Browse(Never)] private             int                         rootId;             //  4
+    [Browse(Never)] private             Archetype[]                 archetypes;         //  8 + archetypes      - array of all archetypes. never null
+    [Browse(Never)] internal readonly   HashSet<ArchetypeId>        archetypeSet;       //  8 + ArchetypeId's   - Set<> to get archetypes by key
+    [Browse(Never)] internal            int                         archetypesCount;    //  8                   - number of archetypes
+    [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8                   - default archetype without components
+    [Browse(Never)] private             int                         rootId;             //  4                   - id of root node
     
     // --- node access
-    [Browse(Never)] private  readonly   PidType                     pidType;            //  4  
-    [Browse(Never)] private             Random                      randPid;            //  8               - null if using PidType.UsePidAsId
-                    private  readonly   Dictionary<long, int>       pid2Id;             //  8 + pid/id      - null if using PidType.UsePidAsId
-    [Browse(Never)] internal            EntityNode[]                nodes;              //  8 + nodes       - acts also id2pid
-    [Browse(Never)] private             int                         nodeMaxId;          //  4
-    [Browse(Never)] private             int                         nodeCount;          //  4
+    [Browse(Never)] private  readonly   PidType                     pidType;            //  4                   - pid != id  /  pid == id
+    [Browse(Never)] private             Random                      randPid;            //  8                   - null if using pid == id
+                    private  readonly   Dictionary<long, int>       pid2Id;             //  8 + all pids->ids   - null if using pid == id
+    [Browse(Never)] internal            EntityNode[]                nodes;              //  8 + all nodes       - acts also id2pid
+    [Browse(Never)] private             int                         nodeMaxId;          //  4                   - highest entity id
+    [Browse(Never)] private             int                         nodeCount;          //  4                   - number of all entities
     
-    [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8 
-    [Browse(Never)] private  readonly   ArchetypeId                 searchId;           // 76
+    [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8                   - client used to persist entities
+    [Browse(Never)] private  readonly   ArchetypeId                 searchId;           // 76                   - key buffer to find archetypes by key
     
                     internal static     bool                        HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
