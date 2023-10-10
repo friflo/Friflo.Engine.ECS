@@ -26,6 +26,8 @@ public sealed class Archetype
 
     [Browse(Never)] public readonly     ArchetypeStructs            structs;
     
+    [Browse(Never)] public   readonly   ArchetypeId                 id;
+    
     #endregion
     
 #region internal members
@@ -47,11 +49,7 @@ public sealed class Archetype
                     internal readonly   StandardComponents          std;    
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
-    
-    [Browse(Never)] public   readonly   ArchetypeId                 id;
-    
-
-    public override     string                      ToString()      => GetString();
+                    public override     string                      ToString()      => GetString();
     #endregion
     
 #region initialize
