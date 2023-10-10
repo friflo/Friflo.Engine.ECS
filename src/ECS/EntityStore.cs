@@ -92,15 +92,15 @@ public sealed partial class EntityStore
     
 #region static fields
     public static class Static {
-        internal const              int             DefaultCapacity = 1;
         internal static readonly    int[]           EmptyChildNodes = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    ComponentSchema ComponentSchema = ComponentUtils.RegisterComponentTypes(TypeStore);
         
+        internal const              int             DefaultCapacity =  1;
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
-        internal const              int         MinNodeId   =  1;
-        public   const              int         NoParentId  =  0;
-        public   const              int         RootId      = -1;
+        internal const              int             MinNodeId       =  1;
+        public   const              int             NoParentId      =  0;
+        public   const              int             RootId          = -1;
     }
     #endregion
     
