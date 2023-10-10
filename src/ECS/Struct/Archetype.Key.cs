@@ -9,11 +9,11 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <remarks>
-/// As the <see cref="ArchetypeId"/> is a large struct (72 bytes) it performs much better as a class than a struct
+/// As the <see cref="ArchetypeKey"/> is a large struct (72 bytes) it performs much better as a class than a struct
 /// in a <see cref="HashSet{T}"/><br/>
-/// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeId"/>
+/// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeKey"/>
 /// </remarks>
-public sealed class ArchetypeId
+public sealed class ArchetypeKey
 {
     internal            ArchetypeStructs    structs;    // 32
     internal            Tags                tags;       // 32
@@ -22,9 +22,9 @@ public sealed class ArchetypeId
 
     public   override   string              ToString() => GetString();
 
-    internal ArchetypeId() { }
+    internal ArchetypeKey() { }
     
-    internal ArchetypeId(Archetype archetype) {
+    internal ArchetypeKey(Archetype archetype) {
         structs = archetype.structs;
         tags    = archetype.tags;
         hash    = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
@@ -91,16 +91,16 @@ public sealed class ArchetypeId
     }
 } 
 
-internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeId>
+internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeKey>
 {
     internal static readonly ArchetypeIdEqualityComparer Instance = new ();
 
-    public bool Equals(ArchetypeId x, ArchetypeId y) {
+    public bool Equals(ArchetypeKey x, ArchetypeKey y) {
         return x!.structs.bitSet.value == y!.structs.bitSet.value &&
                x!.tags.bitSet.value == y!.tags.bitSet.value;
     }
 
-    public int GetHashCode(ArchetypeId archetype) {
+    public int GetHashCode(ArchetypeKey archetype) {
         return archetype.hash;
     }
 }

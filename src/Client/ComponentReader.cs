@@ -18,7 +18,7 @@ internal sealed class ComponentReader
     private readonly    ObjectReader                        componentReader;
     private readonly    Dictionary<string, ComponentType>   componentSchema;
     private readonly    List<ComponentType>                 structTypes;
-    private readonly    ArchetypeId                         searchId;
+    private readonly    ArchetypeKey                        searchKey;
     private             Utf8JsonParser                      parser;
     private             Bytes                               buffer;
     private             RawComponent[]                      components;
@@ -32,7 +32,7 @@ internal sealed class ComponentReader
         componentReader = new ObjectReader(EntityStore.Static.TypeStore);
         componentSchema = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentSchema.ComponentTypeByKey);
         structTypes     = new List<ComponentType>();
-        searchId        = new ArchetypeId();
+        searchKey       = new ArchetypeKey();
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)
@@ -85,21 +85,21 @@ internal sealed class ComponentReader
     /// </summary>
     private void SetEntityArchetype(GameEntity entity, EntityStore store)
     {
-        searchId.Clear();
+        searchKey.Clear();
         var count = componentCount;
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
             var type            = componentSchema[component.key];
             component.type      = type;
-            searchId.structs.bitSet.SetBit(type.structIndex);
+            searchKey.structs.bitSet.SetBit(type.structIndex);
         }
-        searchId.CalculateHashCode();
+        searchKey.CalculateHashCode();
         
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
         var curArchetype = entity.archetype;
         Archetype newArchetype;
-        if (store.archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+        if (store.archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
             newArchetype = archetypeId.type;
         } else {
             var config = store.GetArchetypeConfig();

@@ -71,7 +71,7 @@ public sealed partial class EntityStore
     
 #region private / internal fields
     [Browse(Never)] private             Archetype[]                 archetypes;         //  8 + archetypes      - array of all archetypes. never null
-    [Browse(Never)] internal readonly   HashSet<ArchetypeId>        archetypeSet;       //  8 + ArchetypeId's   - Set<> to get archetypes by key
+    [Browse(Never)] internal readonly   HashSet<ArchetypeKey>       archetypeSet;       //  8 + ArchetypeId's   - Set<> to get archetypes by key
     [Browse(Never)] internal            int                         archetypesCount;    //  8                   - number of archetypes
     [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8                   - default archetype without components
     [Browse(Never)] private             int                         rootId;             //  4                   - id of root node
@@ -85,7 +85,7 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                         nodeCount;          //  4                   - number of all entities
     
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8                   - client used to persist entities
-    [Browse(Never)] private  readonly   ArchetypeId                 searchId;           // 76                   - key buffer to find archetypes by key
+    [Browse(Never)] private  readonly   ArchetypeKey                searchKey;          // 76                   - key buffer to find archetypes by key
     
                     internal static     bool                        HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
@@ -110,7 +110,7 @@ public sealed partial class EntityStore
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;
         archetypes          = new Archetype[2];
-        archetypeSet        = new HashSet<ArchetypeId>(ArchetypeIdEqualityComparer.Instance);
+        archetypeSet        = new HashSet<ArchetypeKey>(ArchetypeIdEqualityComparer.Instance);
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
@@ -120,7 +120,7 @@ public sealed partial class EntityStore
         var config          = GetArchetypeConfig();
         defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypeSet(0), default);
         clientNodes         = client?.nodes.Local;
-        searchId            = new ArchetypeId();
+        searchKey           = new ArchetypeKey();
         AddArchetype(defaultArchetype);
     }
     #endregion

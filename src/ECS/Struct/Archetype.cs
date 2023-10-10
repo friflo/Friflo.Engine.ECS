@@ -26,7 +26,7 @@ public sealed class Archetype
 
     [Browse(Never)] public   readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
     
-    [Browse(Never)] public   readonly   ArchetypeId                 id;             //  8 (+76)
+    [Browse(Never)] public   readonly   ArchetypeKey                key;            //  8 (+76)
     
     #endregion
     
@@ -67,7 +67,7 @@ public sealed class Archetype
         heapMap         = new StructHeap[config.maxStructIndex];
         structs         = new ArchetypeStructs(heaps);
         this.tags       = tags;
-        id              = new ArchetypeId(this);
+        key             = new ArchetypeKey(this);
         foreach (var heap in heaps) {
             SetStandardComponentHeaps(heap, ref std);
         }

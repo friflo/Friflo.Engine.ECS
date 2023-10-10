@@ -17,8 +17,8 @@ public sealed partial class EntityStore
     private Archetype GetArchetypeWith<T>(Archetype current)
         where T : struct, IStructComponent
     {
-        searchId.SetWith(current, StructHeap<T>.StructIndex);
-        if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+        searchKey.SetWith(current, StructHeap<T>.StructIndex);
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
             return archetypeId.type;
         }
         var config          = GetArchetypeConfig();
@@ -38,8 +38,8 @@ public sealed partial class EntityStore
     
     private Archetype GetArchetypeWithout(Archetype archetype, int structIndex, Type removeType)
     {
-        searchId.SetWithout(archetype, structIndex);
-        if (archetypeSet.TryGetValue(searchId, out var archetypeId)) {
+        searchKey.SetWithout(archetype, structIndex);
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
             return archetypeId.type;
         }
         var heaps           = archetype.Heaps;
@@ -68,7 +68,7 @@ public sealed partial class EntityStore
         }
         archetypes    [archetypesCount] = archetype;
         archetypesCount++;
-        archetypeSet.Add(archetype.id);
+        archetypeSet.Add(archetype.key);
     }
     
     // ------------------------------------ add / remove struct component ------------------------------------
