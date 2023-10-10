@@ -8,6 +8,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+// ------------------------------------ generic Signature<> creation ------------------------------------
+#region generic Signature<> creation
+
 /// <summary>
 /// A <see cref="Signature"/> is used to:<br/>
 /// <list type="bullet">
@@ -174,7 +177,10 @@ public static class Signature
         return new Signature<T1, T2, T3, T4, T5>(mask, types);
     }
 }
+#endregion
 
+// ------------------------------------ generic Signature<> types ------------------------------------
+#region generic Signature<> types
 
 public readonly struct Signature<T>
     where T : struct, IStructComponent
@@ -255,3 +261,5 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
         this.types  = types;
     }
 }
+
+#endregion
