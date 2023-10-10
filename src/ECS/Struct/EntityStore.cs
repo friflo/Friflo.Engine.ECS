@@ -44,6 +44,10 @@ public sealed partial class EntityStore
         AddArchetype(archetype);
         return archetype;
     }
+    
+    public bool TryGetArchetypeId(in ArchetypeId id, out ArchetypeId actualValue) {
+        return archetypeSet.TryGetValue(id, out actualValue);
+    }
 
     public Archetype GetArchetype<T>(Signature<T> signature, in Tags tags = default)
         where T : struct, IStructComponent

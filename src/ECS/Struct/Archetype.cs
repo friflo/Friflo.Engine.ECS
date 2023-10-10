@@ -209,7 +209,7 @@ public sealed class Archetype
 /// in a <see cref="HashSet{T}"/><br/>
 /// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeId"/>
 /// </remarks>
-public class ArchetypeId    // todo make internal
+public sealed class ArchetypeId
 {
     internal            ArchetypeMask   mask;   // 32
     internal            Tags            tags;   // 32
@@ -227,37 +227,37 @@ public class ArchetypeId    // todo make internal
         type    = archetype;
     }
     
-    public void Clear() {
+    internal void Clear() {
         mask = default;
         tags = default;
         hash = default;
     }
     
-    public void CalculateHashCode() {
+    internal void CalculateHashCode() {
         hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    public void SetTagsWith(in Tags tags, int structIndex) {
+    internal void SetTagsWith(in Tags tags, int structIndex) {
         mask        = default;
         mask.bitSet.SetBit(structIndex);
         this.tags   = tags;
         hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    public void SetSignature(Signature signature, in Tags tags) {
+    internal void SetSignature(Signature signature, in Tags tags) {
         mask        = signature.mask;
         this.tags   = tags;
         hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    public void SetWith(Archetype archetype, int structIndex) {
+    internal void SetWith(Archetype archetype, int structIndex) {
         mask        = archetype.mask;
         mask.bitSet.SetBit(structIndex);
         tags        = archetype.tags;
         hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    public void SetWithout(Archetype archetype, int structIndex) {
+    internal void SetWithout(Archetype archetype, int structIndex) {
         mask        = archetype.mask;
         mask.bitSet.ClearBit(structIndex);
         tags        = archetype.tags;
