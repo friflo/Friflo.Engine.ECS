@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public struct ArchetypeMask : IEnumerable<ComponentType>
 {
-    internal             BitSet  bitSet;
+    internal    BitSet  bitSet;
     
    
     public ArchetypeMaskEnumerator  GetEnumerator()                             => new ArchetypeMaskEnumerator (this);
@@ -147,7 +147,7 @@ public struct ArchetypeMaskEnumerator : IEnumerator<ComponentType>
     // --- IEnumerator
     public  void                Reset()             => bitSetEnumerator.Reset();
 
-    object              IEnumerator.Current => Current;
+            object              IEnumerator.Current => Current;
 
     public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
     
