@@ -14,26 +14,25 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ArchetypeQuery
 {
 #region private fields
-                    private  readonly   EntityStore     store;
-    [Browse(Never)] internal readonly   Signature       signature;
-    /// <summary>redundant with <see cref="signature"/> mask but enables masking without dereferencing <see cref="signature"/></summary>
-    [Browse(Never)] private  readonly   ArchetypeMask   mask;
-    [Browse(Never)] internal readonly   StructIndexes   structIndexes;
+                    private  readonly   EntityStore         store;
+    [Browse(Never)] private  readonly   ArchetypeMask       mask;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
+    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
     //
-    [Browse(Never)] private             Archetype[]     archetypes;
-    [Browse(Never)] private             int             archetypeCount;
-                    private             int             lastArchetypeCount;
+    [Browse(Never)] private             Archetype[]         archetypes;
+    [Browse(Never)] private             int                 archetypeCount;
+                    private             int                 lastArchetypeCount;
     #endregion
 
-                    public override     string          ToString() => signature.types.GetString("Query: ");
+                    public override     string              ToString() => types.GetString("Query: ");
 
-    internal ArchetypeQuery(EntityStore store, Signature signature) {
+    internal ArchetypeQuery(EntityStore store, in ArchetypeMask mask, in SignatureTypeSet types) {
         this.store          = store;
-        this.signature      = signature;
         archetypes          = new Archetype[1];
-        mask                = signature.mask;
+        this.mask           = mask;
+        this.types          = types;
         lastArchetypeCount  = 1;
-        var componentTypes  = signature.types;
+        var componentTypes  = types;
         switch (componentTypes.Length) {
             case 1:
                 structIndexes.T1 = componentTypes.T1.structIndex;
@@ -103,8 +102,8 @@ public abstract class ArchetypeQuery
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, Signature<T> signature)
-        : base(store, signature) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T> signature)
+        : base(store, signature.mask, signature.types) {
     }
 }
 
@@ -115,8 +114,8 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
     
-    internal ArchetypeQuery(EntityStore store, Signature<T1, T2> signature)
-        : base(store, signature) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2> signature)
+        : base(store, signature.mask, signature.types) {
     }
     
     public ArchetypeQuery<T1, T2> ReadOnly<T>()
@@ -137,8 +136,8 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3> signature)
-        : base(store, signature) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3> signature)
+        : base(store, signature.mask, signature.types) {
     }
 }
 
@@ -148,8 +147,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3, T4> signature)
-        : base(store, signature) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4> signature)
+        : base(store, signature.mask, signature.types) {
     }
 }
 
@@ -160,7 +159,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, Signature<T1, T2, T3, T4, T5> signature)
-        : base(store, signature) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature)
+        : base(store, signature.mask, signature.types) {
     }
 }

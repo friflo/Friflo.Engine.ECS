@@ -244,8 +244,8 @@ public sealed class ArchetypeId
         hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    internal void SetSignature(Signature signature, in Tags tags) {
-        mask        = signature.mask;
+    internal void SetMaskTags(in ArchetypeMask mask, in Tags tags) {
+        this.mask   = mask;
         this.tags   = tags;
         hash        = mask.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }

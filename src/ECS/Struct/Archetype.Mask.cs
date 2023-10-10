@@ -32,12 +32,6 @@ public struct ArchetypeMask : IEnumerable<ComponentType>
         }
     }
     
-    internal ArchetypeMask(Signature signature) {
-        foreach (var type in signature.types) {
-            bitSet.SetBit(type.structIndex);
-        }
-    }
-    
     // ----------------------------------------- read mask -----------------------------------------
     internal bool Has(in ArchetypeMask other) {
         return (bitSet.value & other.bitSet.value) == bitSet.value;

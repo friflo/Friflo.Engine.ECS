@@ -1,48 +1,23 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
-using static System.Numerics.BitOperations;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-// ReSharper disable InconsistentNaming
-// ReSharper disable StaticMemberInGenericType
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="Signature"/> contains a set of struct component <see cref="types"/>.<br/>
-/// <see cref="Signature"/> features:
+/// A <see cref="Signature"/> is used to:<br/>
 /// <list type="bullet">
 ///   <item>Get a specific <see cref="Archetype"/> of an <see cref="EntityStore"/></item>
-///   <item>Create a query to process all entities of an <see cref="EntityStore"/> owning the struct component <see cref="types"/> </item>
+///   <item>Create a query to process all entities of an <see cref="EntityStore"/></item>
 /// </list> 
 /// </summary>
 // Could be a readonly struct
-public abstract class Signature
+public static class Signature
 {
-    // --- public fields
-                    public   readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeMask       mask;
-    
-                    public   override   string              ToString()  => types.GetString("Signature: ");
-    
-    // --- static
-    private static readonly Dictionary<ulong, Signature>    Signatures = new();
-    
-    
-    internal Signature(in SignatureTypeSet types)
-    {
-        this.types  = types;
-        long hash   = 0;
-        foreach (var type in types) {
-            hash ^= type.type.Handle();
-        }
-        mask            = new ArchetypeMask(this); 
-    }
-    
     /// <summary>
     /// Returns a <see cref="Signature{T1}"/> containing the given struct component types.<br/>
     /// <see cref="Signature{T1}"/> features:
@@ -54,18 +29,16 @@ public abstract class Signature
     public static Signature<T> Get<T>()
         where T : struct, IStructComponent
     {
-        var hash = typeof(T).HandleUInt64();
+        var mask            = new ArchetypeMask();
+        var structIndex1    = StructHeap<T>.StructIndex;
         
-        if (Signatures.TryGetValue(hash, out var result)) {
-            return (Signature<T>)result;
-        }
+        mask.bitSet.SetBit(structIndex1);
+        
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(1,
-            T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T))
+            T1: schema.GetStructType(structIndex1, typeof(T))
         );
-        var signature   = new Signature<T>(types);
-        Signatures.Add(hash, signature);
-        return signature;
+        return new Signature<T>(mask, types);
     }
     
     /// <summary>
@@ -80,21 +53,19 @@ public abstract class Signature
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
-        var hash1   = typeof(T1).HandleUInt64();
-        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
-        var hash    = hash1 ^ hash2;
+        var mask            = new ArchetypeMask();
+        var structIndex1    = StructHeap<T1>.StructIndex;
+        var structIndex2    = StructHeap<T2>.StructIndex;
         
-        if (Signatures.TryGetValue(hash, out var result)) {
-            return (Signature<T1,T2>)result;
-        }
+        mask.bitSet.SetBit(structIndex1);
+        mask.bitSet.SetBit(structIndex2);
+        
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(2,
-            T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2))
+            T1: schema.GetStructType(structIndex1, typeof(T1)),
+            T2: schema.GetStructType(structIndex2, typeof(T2))
         );
-        var signature   = new Signature<T1, T2>(types);
-        Signatures.Add(hash, signature);
-        return signature;
+        return new Signature<T1, T2>(mask, types);
     }
     
     /// <summary>
@@ -110,23 +81,22 @@ public abstract class Signature
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
     {
-        var hash1   = typeof(T1).HandleUInt64();
-        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
-        var hash3   = RotateLeft(typeof(T3).HandleUInt64(), 14);
-        var hash    = hash1 ^ hash2 ^ hash3;
+        var mask            = new ArchetypeMask();
+        var structIndex1    = StructHeap<T1>.StructIndex;
+        var structIndex2    = StructHeap<T2>.StructIndex;
+        var structIndex3    = StructHeap<T3>.StructIndex;
         
-        if (Signatures.TryGetValue(hash, out var result)) {
-            return (Signature<T1, T2, T3>)result;
-        }
+        mask.bitSet.SetBit(structIndex1);
+        mask.bitSet.SetBit(structIndex2);
+        mask.bitSet.SetBit(structIndex3);
+        
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(3,
-            T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3))
+            T1: schema.GetStructType(structIndex1, typeof(T1)),
+            T2: schema.GetStructType(structIndex2, typeof(T2)),
+            T3: schema.GetStructType(structIndex3, typeof(T3))
         );
-        var signature   = new Signature<T1, T2, T3>(types);
-        Signatures.Add(hash, signature);
-        return signature;
+        return new Signature<T1, T2, T3>(mask, types);
     }
     
     /// <summary>
@@ -143,25 +113,25 @@ public abstract class Signature
         where T3 : struct, IStructComponent
         where T4 : struct, IStructComponent
     {
-        var hash1   = typeof(T1).HandleUInt64();
-        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
-        var hash3   = RotateLeft(typeof(T3).HandleUInt64(), 14);
-        var hash4   = RotateLeft(typeof(T4).HandleUInt64(), 21);
-        var hash    = hash1 ^ hash2 ^ hash3 ^ hash4;
+        var mask            = new ArchetypeMask();
+        var structIndex1    = StructHeap<T1>.StructIndex;
+        var structIndex2    = StructHeap<T2>.StructIndex;
+        var structIndex3    = StructHeap<T3>.StructIndex;
+        var structIndex4    = StructHeap<T4>.StructIndex;
         
-        if (Signatures.TryGetValue(hash, out var result)) {
-            return (Signature<T1, T2, T3, T4>)result;
-        }
+        mask.bitSet.SetBit(structIndex1);
+        mask.bitSet.SetBit(structIndex2);
+        mask.bitSet.SetBit(structIndex3);
+        mask.bitSet.SetBit(structIndex4);
+        
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(4,
-            T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
-            T4: schema.GetStructType(StructHeap<T4>.StructIndex, typeof(T4))
+            T1: schema.GetStructType(structIndex1, typeof(T1)),
+            T2: schema.GetStructType(structIndex2, typeof(T2)),
+            T3: schema.GetStructType(structIndex3, typeof(T3)),
+            T4: schema.GetStructType(structIndex4, typeof(T4))
         );
-        var signature   = new Signature<T1, T2, T3, T4>(types);
-        Signatures.Add(hash, signature);
-        return signature;
+        return new Signature<T1, T2, T3, T4>(mask, types);
     }
     
     /// <summary>
@@ -179,79 +149,109 @@ public abstract class Signature
         where T4 : struct, IStructComponent
         where T5 : struct, IStructComponent
     {
-        var hash1   = typeof(T1).HandleUInt64();
-        var hash2   = RotateLeft(typeof(T2).HandleUInt64(), 7);
-        var hash3   = RotateLeft(typeof(T3).HandleUInt64(), 14);
-        var hash4   = RotateLeft(typeof(T4).HandleUInt64(), 21);
-        var hash5   = RotateLeft(typeof(T5).HandleUInt64(), 28);
-        var hash    = hash1 ^ hash2 ^ hash3 ^ hash4 ^ hash5;
+        var mask            = new ArchetypeMask();
+        var structIndex1    = StructHeap<T1>.StructIndex;
+        var structIndex2    = StructHeap<T2>.StructIndex;
+        var structIndex3    = StructHeap<T3>.StructIndex;
+        var structIndex4    = StructHeap<T4>.StructIndex;
+        var structIndex5    = StructHeap<T5>.StructIndex;
         
-        if (Signatures.TryGetValue(hash, out var result)) {
-            return (Signature<T1, T2, T3, T4, T5>)result;
-        }
+        mask.bitSet.SetBit(structIndex1);
+        mask.bitSet.SetBit(structIndex2);
+        mask.bitSet.SetBit(structIndex3);
+        mask.bitSet.SetBit(structIndex4);
+        mask.bitSet.SetBit(structIndex5);
+        
         var schema  = EntityStore.Static.ComponentSchema;
         var types   = new SignatureTypeSet(5,
-            T1: schema.GetStructType(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.GetStructType(StructHeap<T2>.StructIndex, typeof(T2)),
-            T3: schema.GetStructType(StructHeap<T3>.StructIndex, typeof(T3)),
-            T4: schema.GetStructType(StructHeap<T4>.StructIndex, typeof(T4)),
-            T5: schema.GetStructType(StructHeap<T5>.StructIndex, typeof(T5))
+            T1: schema.GetStructType(structIndex1, typeof(T1)),
+            T2: schema.GetStructType(structIndex2, typeof(T2)),
+            T3: schema.GetStructType(structIndex3, typeof(T3)),
+            T4: schema.GetStructType(structIndex4, typeof(T4)),
+            T5: schema.GetStructType(structIndex5, typeof(T5))
+            
         );
-        var signature = new Signature<T1, T2, T3, T4, T5>(types);
-        Signatures.Add(hash, signature);
-        return signature;
+        return new Signature<T1, T2, T3, T4, T5>(mask, types);
     }
 }
 
 
-public sealed class Signature<T> : Signature
+public readonly struct Signature<T>
     where T : struct, IStructComponent
 {
-    internal Signature(in SignatureTypeSet types)
-        : base(types) {
+                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+
+    public override string ToString() => types.GetString("Signature: ");
+
+    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
+        this.mask   = mask;
+        this.types  = types;
     }
 }
 
-public sealed class Signature<T1, T2> : Signature
+public readonly struct Signature<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-    internal Signature(in SignatureTypeSet componentTypes)
-        : base(componentTypes) {
+                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    
+    public override string ToString() => types.GetString("Signature: ");
+    
+    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
+        this.mask   = mask;
+        this.types  = types;
     }
 }
 
-public sealed class Signature<T1, T2, T3> : Signature
+public readonly struct Signature<T1, T2, T3>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    internal Signature(in SignatureTypeSet componentTypes)
-        : base(componentTypes) {
+                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    
+    public override string ToString() => types.GetString("Signature: ");
+    
+    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
+        this.mask   = mask;
+        this.types  = types;
     }
 }
 
-public sealed class Signature<T1, T2, T3, T4> : Signature
+public readonly struct Signature<T1, T2, T3, T4>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    internal Signature(in SignatureTypeSet componentTypes)
-        : base(componentTypes) {
+                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+    
+    public override string ToString() => types.GetString("Signature: ");
+    
+    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
+        this.mask   = mask;
+        this.types  = types;
     }
 }
 
-public sealed class Signature<T1, T2, T3, T4, T5> : Signature
+public readonly struct Signature<T1, T2, T3, T4, T5>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    internal Signature(in SignatureTypeSet componentTypes)
-        : base(componentTypes) {
+                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public   readonly   ArchetypeMask       mask;
+
+    public override string ToString() => types.GetString("Signature: ");
+
+    internal Signature(in ArchetypeMask mask, in SignatureTypeSet types) {
+        this.mask   = mask;
+        this.types  = types;
     }
 }
-
-
