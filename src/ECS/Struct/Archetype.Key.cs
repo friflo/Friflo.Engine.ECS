@@ -95,12 +95,12 @@ internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeK
 {
     internal static readonly ArchetypeIdEqualityComparer Instance = new ();
 
-    public bool Equals(ArchetypeKey x, ArchetypeKey y) {
-        return x!.structs.bitSet.value == y!.structs.bitSet.value &&
-               x!.tags.bitSet.value == y!.tags.bitSet.value;
+    public bool Equals(ArchetypeKey left, ArchetypeKey right) {
+        return left!.structs.bitSet.value   == right!.structs.bitSet.value &&
+               left!.tags.bitSet.value      == right!.tags.bitSet.value;
     }
 
-    public int GetHashCode(ArchetypeKey archetype) {
-        return archetype.hash;
+    public int GetHashCode(ArchetypeKey key) {
+        return key.hash;
     }
 }
