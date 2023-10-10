@@ -310,17 +310,37 @@ public static class Test_StructComponent
     [Test]
     public static void Test_9_RemoveComponent() {
         var store   = new EntityStore();
+        var type1 = store.GetArchetype(Signature.Get<Position>());
+        var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         
         var entity1  = store.CreateEntity();
         entity1.AddComponent(new Position { x = 1 });
+        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     entity1.ComponentCount);
+        
         entity1.AddComponent(new Rotation { x = 2 });
+        AreEqual(0,     type1.EntityCount);
+        AreEqual(1,     type2.EntityCount);
+        AreEqual(2,     entity1.ComponentCount);
+        
         entity1.RemoveComponent<Rotation>();
+        AreEqual(1,     type1.EntityCount);
+        AreEqual(0,     type2.EntityCount);
         AreEqual(1f,    entity1.Position.x);
         AreEqual(1,     entity1.ComponentCount);
         //
         var entity2  = store.CreateEntity();
+        entity2.AddComponent(new Position { x = 1 });   // possible alloc: resize type1.entityIds
+        entity2.RemoveComponent<Position>();            // note: remove the last id in type1.entityIds => only type1.entityCount--  
+        AreEqual(1,     type1.EntityCount);
+        AreEqual(0,     entity2.ComponentCount);
+        
+        var start = Mem.GetAllocatedBytes();
         entity2.AddComponent(new Position { x = 1 });
         entity2.RemoveComponent<Position>();
+        Mem.AssertNoAlloc(start);
+        
+        AreEqual(1,     type1.EntityCount);
         AreEqual(0,     entity2.ComponentCount);
     }
     
@@ -333,11 +353,15 @@ public static class Test_StructComponent
         store.CreateEntity().AddComponent<Position>();
         
         var entity  = store.CreateEntity();
-        int count = 10; // 100_000_000 ~ 4.009 ms
+        entity.AddComponent<Position>();    // force resize type1.entityIds
+        
+        var start = Mem.GetAllocatedBytes();
+        int count = 10; // 100_000_000 ~ 3.123 ms
         for (var n = 0; n < count; n++) {
             entity.AddComponent<Position>();
             entity.RemoveComponent<Position>();
         }
+        Mem.AssertNoAlloc(start);
         AreEqual(3, posType.EntityCount);
     }
     

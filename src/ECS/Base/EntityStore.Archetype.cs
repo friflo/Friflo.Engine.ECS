@@ -72,10 +72,8 @@ public sealed partial class EntityStore
         return false;
     }
     
-    internal void AddArchetype (Archetype archetype) {
-        if (archetype == null) {
-            return;
-        }
+    internal void AddArchetype (Archetype archetype)
+    {
         if (archetypesCount == archetypes.Length) {
             var newLen = 2 * archetypes.Length;
             Utils.Resize(ref archetypes,     newLen);
@@ -110,7 +108,7 @@ public sealed partial class EntityStore
     // ------------------------------------ add / remove struct component ------------------------------------
     internal bool AddComponent<T>(
             int                 id,
-        ref Archetype           archetype,
+        ref Archetype           archetype,  // possible mutation is not null
         ref int                 compIndex,
         in  T                   component)
         where T : struct, IStructComponent
@@ -142,24 +140,21 @@ public sealed partial class EntityStore
     
     internal bool RemoveComponent<T>(
             int                 id,
-        ref Archetype           archetype,
+        ref Archetype           archetype,    // possible mutation is not null
         ref int                 compIndex)
         where T : struct, IStructComponent
     {
         var arch = archetype;
-        if (arch == null) {
-            return false;
-        }
         var heap = arch.heapMap[StructHeap<T>.StructIndex];
         if (heap == null) {
             return false;
         }
         var newArchetype = GetArchetypeWithout(arch, typeof(T));
-        if (newArchetype == null) {
+        if (newArchetype == defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
             compIndex   = 0;
-            archetype   = null;
+            archetype   = defaultArchetype;
             arch.MoveLastComponentsTo(removePos);
             return true;
         }
@@ -173,7 +168,7 @@ public sealed partial class EntityStore
     internal bool AddTags(
         in Tags             tags,
         int                 id,
-        ref Archetype       archetype,
+        ref Archetype       archetype,      // possible mutation is not null
         ref int             compIndex)
     {
         return true;
@@ -182,7 +177,7 @@ public sealed partial class EntityStore
     internal bool RemoveTags(
         in Tags             tags,
         int                 id,
-        ref Archetype       archetype,
+        ref Archetype       archetype,      // possible mutation is not null
         ref int             compIndex)
     {
         return true;

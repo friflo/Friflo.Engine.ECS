@@ -146,9 +146,9 @@ public sealed class Archetype
     internal void MoveLastComponentsTo(int newIndex)
     {
         var lastIndex = entityCount - 1;
-        // --- clear entityMap if the entity is the only one in entityMap 
-        if (lastIndex == 0) {
-            entityCount = 0;
+        // --- decrement entityCount if the newIndex is already the last entity id
+        if (lastIndex == newIndex) {
+            entityCount = newIndex;
             return;
         }
         // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
