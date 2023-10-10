@@ -250,6 +250,13 @@ public static class Test_StructComponent
         AreEqual(2f,    player.Rotation.y);
         AreEqual(3f,    player.Scale3.x);
         AreEqual(4f,    player.Scale3.y);
+        
+#pragma warning disable CS0618 // Type or member is obsolete
+        var components  =       player.Components_;
+        AreEqual(2,             components.Length);
+        AreEqual("1, 2, 0, 0",  components[0].ToString());
+        AreEqual("3, 4, 0",     components[1].ToString());
+#pragma warning restore CS0618 // Type or member is obsolete
     }
     
     /// <summary>Test

@@ -68,7 +68,10 @@ public static class Test_ClassComponent
         IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
         
 #pragma warning disable CS0618 // Type or member is obsolete
-        AreEqual(2,             player.Components_.Length);
+        var components  =                   player.Components_;
+        AreEqual(2,                         components.Length);
+        AreEqual("[*TestRefComponent1]",    components[0].ToString());
+        AreEqual("[*TestRefComponent2]",    components[1].ToString());
 #pragma warning restore CS0618 // Type or member is obsolete
         
         for (long n = 0; n < Count; n++) {
