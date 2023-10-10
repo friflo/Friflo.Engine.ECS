@@ -49,6 +49,8 @@ public sealed partial class EntityStore
         }
     }
     
+    internal static bool HasParent(int id)  =>   id >= Static.MinNodeId;
+    
     internal void AddChild (int id, int childId)
     {
         // update child node parent

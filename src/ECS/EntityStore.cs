@@ -86,8 +86,6 @@ public sealed partial class EntityStore
     
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
     [Browse(Never)] private  readonly   ArchetypeKey                searchKey;          // 76                   - key buffer to find archetypes by key
-    
-                    internal static     bool                        HasParent(int id)   => id       >= Static.MinNodeId;
     #endregion
     
 #region static fields
