@@ -22,16 +22,16 @@ public sealed class Archetype
     
                     public              EntityStore                 Store           => store;
                     
-    [Browse(Never)] public readonly     Tags                        tags;
+    [Browse(Never)] public   readonly   Tags                        tags;
 
-    [Browse(Never)] public readonly     ArchetypeStructs            structs;
+    [Browse(Never)] public   readonly   ArchetypeStructs            structs;
     
     [Browse(Never)] public   readonly   ArchetypeId                 id;
     
     #endregion
     
 #region internal members
-                    private   readonly  StructHeap[]                structHeaps;    // Length = number of component types
+                    private  readonly   StructHeap[]                structHeaps;    // Length = number of component types
     /// Store the entity id for each component. 
     [Browse(Never)] private             int[]                       entityIds;      // could use a StructHeap<int> if needed
     [Browse(Never)] private             int                         entityCount;
@@ -49,7 +49,7 @@ public sealed class Archetype
                     internal readonly   StandardComponents          std;    
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
-                    public override     string                      ToString()      => GetString();
+                    public   override   string                      ToString()      => GetString();
     #endregion
     
 #region initialize

@@ -25,27 +25,27 @@ public sealed class ArchetypeId
     internal ArchetypeId() { }
     
     internal ArchetypeId(Archetype archetype) {
-        structs     = archetype.structs;
-        tags        = archetype.tags;
-        hash        = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
-        type        = archetype;
+        structs = archetype.structs;
+        tags    = archetype.tags;
+        hash    = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        type    = archetype;
     }
     
     internal void Clear() {
         structs = default;
-        tags = default;
-        hash = default;
+        tags    = default;
+        hash    = default;
     }
     
     internal void CalculateHashCode() {
-        hash        = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash    = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     internal void SetTagsWith(in Tags tags, int structIndex) {
-        structs        = default;
+        structs         = default;
         structs.bitSet.SetBit(structIndex);
-        this.tags   = tags;
-        hash        = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        this.tags       = tags;
+        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     internal void SetMaskTags(in ArchetypeStructs structs, in Tags tags) {

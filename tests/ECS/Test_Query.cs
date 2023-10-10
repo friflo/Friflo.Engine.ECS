@@ -46,11 +46,11 @@ public static class Test_Query
         
         Mem.AssertNoAlloc(start);
         
-        AreEqual("Mask: [Position]", sig1.structs.ToString());
-        AreEqual("Mask: [Position, Rotation]", sig2.structs.ToString());
-        AreEqual("Mask: [Position, Rotation, Scale3]", sig3.structs.ToString());
-        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1]", sig4.structs.ToString());
-        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", sig5.structs.ToString());
+        AreEqual("Mask: [Position]",                                                sig1.structs.ToString());
+        AreEqual("Mask: [Position, Rotation]",                                      sig2.structs.ToString());
+        AreEqual("Mask: [Position, Rotation, Scale3]",                              sig3.structs.ToString());
+        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1]",                sig4.structs.ToString());
+        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.structs.ToString());
     }
     
     [Test]
