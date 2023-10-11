@@ -26,38 +26,39 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   <item><see cref="Entity"/> to access the <see cref="GameEntity"/> attached to a node</item>
 ///   <item><see cref="ParentId"/> and <see cref="ChildIds"/> to get the direct related nodes</item>
 /// </list>
+/// <b><see cref="Id"/></b><br/>
+/// The entity id change when performing an <see cref="EntityStore"/> id cleanup.<br/>
+/// The clean remove unused ids and ensure that entities with the same <see cref="Archetype"/> have consecutive ids.<br/>
+/// <br/>
+/// <b><see cref="Pid"/></b><br/>
+/// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
+/// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
+/// Using random pid's avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
+/// The probability generating the same pid by two different users is:
+/// <code>
+///     p = 1 - exp(-r^2 / (2 * N))
+///     r:  number of new entities added by a user to an existing scene (not the number of all entities)
+///     N:  number of possible values = int.MaxValue = 2147483647
+/// </code>
+/// See: https://en.wikipedia.org/wiki/Birthday_problem
 /// </remarks>
 public struct EntityNode
 {
-    // --- public
+#region public properties
     /// <summary>Unique id within an <see cref="EntityNode"/> instance</summary>
-    /// <remarks>
-    /// The entity id change when performing an <see cref="EntityStore"/> id cleanup<br/>
-    /// The clean remove unused ids and ensure that entities with the same <see cref="Archetype"/> have consecutive ids.
-    /// </remarks>
                     public              int                 Id          =>  id;
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
-    /// <remarks>
-    /// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
-    /// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
-    /// Using random pid's avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
-    /// The probability generating the same pid by two different users is:<br/>
-    /// <code>
-    ///     p = 1 - exp(-r^2 / (2 * N))
-    ///     
-    ///     r:  number of new entities added by a user to an existing scene (not the number of all entities)
-    ///     N:  number of possible values = int.MaxValue = 2147483647
-    /// </code><br/>
-    /// See: https://en.wikipedia.org/wiki/Birthday_problem
-    /// </remarks>
                     public              long                Pid         =>  pid;
                     public              GameEntity          Entity      =>  entity;
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
                     public              int                 ParentId    =>  parentId;
                     public              NodeFlags           Flags       =>  flags;
+                    
+                    public override     string              ToString()  => GetString();
+    #endregion
     
-    // --- internal
+ #region internal fields
     [Browse(Never)] private  readonly   int                 id;         // 4
     [Browse(Never)] internal            long                pid;        // 8
     [Browse(Never)] internal            GameEntity          entity;     // 8    can be null
@@ -68,9 +69,9 @@ public struct EntityNode
                     
                     internal            bool                Is      (NodeFlags flag) => (flags & flag) != 0;
                     internal            bool                IsNot   (NodeFlags flag) => (flags & flag) == 0;
-
-                    public override     string              ToString()  => GetString();
-                    
+    #endregion
+    
+#region internal methods
     internal EntityNode(int id) {
         this.id     = id;
     }
@@ -109,4 +110,5 @@ public struct EntityNode
         }
         return "-";
     }
+    #endregion
 }
