@@ -13,13 +13,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// in a <see cref="HashSet{T}"/><br/>
 /// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeKey"/>
 /// </remarks>
-public sealed class ArchetypeKey
+internal sealed class ArchetypeKey
 {
-    // --- public properties
-    public                  Archetype           Archetype   => archetype; // not null if ArchetypeKey is returned by EntityStore.FindArchetype()
-    public   ref readonly   Tags                Tags        => ref tags;
-    public   ref readonly   ArchetypeStructs    Structs     => ref structs;
-    
     // --- internal fields
     internal                ArchetypeStructs    structs;    // 32
     internal                Tags                tags;       // 32

@@ -23,7 +23,6 @@ public sealed class Archetype
                     public              EntityStore                 Store           => store;
                     public ref readonly Tags                        Tags            => ref tags;
                     public ref readonly ArchetypeStructs            Structs         => ref structs;
-                    public              ArchetypeKey                Key             => key;
     #endregion
     
 #region private / internal members

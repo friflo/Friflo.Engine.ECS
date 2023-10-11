@@ -107,29 +107,21 @@ public static class Test_ArchetypeMask
     [Test]
     public static void Test_ArchetypeMask_lookup_Perf()
     {
-        var store = new EntityStore();
-        var type1 = store.GetArchetype(Signature.Get<Position>());
-        var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
-        var type3 = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
+        var store   = new EntityStore();
+        var type1   = store.GetArchetype(Signature.Get<Position>());
+        var type2   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var type3   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
         
-        var key     = type1.Key;
-        var key2    = store.FindArchetype(type1.Structs, type1.Tags);
-        AreSame (type1,             key2.Archetype); // Archetype is never null
-        AreEqual(type1.Tags,        key2.Tags);
-        AreEqual(type1.Structs,     key2.Structs);
-        AreEqual("Id: [Position]",  key2.ToString());
-        
-        var key3    = store.FindArchetype(key);
-        AreSame (type1,             key3.Archetype); // Archetype is never null
-        AreEqual(type1.Tags,        key3.Tags);
-        AreEqual(type1.Structs,     key3.Structs);
-        AreEqual("Id: [Position]",  key3.ToString());
+        var result  = store.FindArchetype(type1.Structs, type1.Tags);
+        AreSame (type1, result);
         
         var start   = Mem.GetAllocatedBytes();
-        var count = 10; // 100_000_000 ~ 1.089 ms
+        var structs = type1.Structs;
+        var tags    = type1.Tags;
+        var count   = 10; // 100_000_000 ~ 1.707 ms
         for (int n = 0; n < count; n++)
         {
-            store.FindArchetype(key);
+            store.FindArchetype(structs, tags);
         }
         Mem.AssertNoAlloc(start);
     }
