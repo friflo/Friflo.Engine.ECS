@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 internal abstract class StructHeap
 {
-    // --- internal
+    // --- internal fields
     internal readonly   string      structKey;
     internal readonly   Bytes       keyBytes;
     internal readonly   Type        type;

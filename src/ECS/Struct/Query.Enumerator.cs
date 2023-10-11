@@ -12,7 +12,6 @@ public ref struct QueryEnumerator<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-
     private  readonly   int                     structIndex1;
     private  readonly   int                     structIndex2;
     

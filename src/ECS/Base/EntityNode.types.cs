@@ -11,22 +11,20 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+/// <remarks>
+/// <see cref="Entities_"/><br/>
+/// It has poor performance due to its array creation.<br/>
+/// To access the <see cref="GameEntity"/>'s use either a <b>foreach</b> loop, <see cref="ToArray"/> or <see cref="this[int]"/>
+/// </remarks>
 public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not implemented to avoid boxing
 {
     // --- public properties
-    [Browse(Never)] public              int                 Length          => childLength;
-    [Browse(Never)] public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childLength);
+    [Browse(Never)]     public              int                 Length          => childLength;
+    [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childLength);
     
-    /// <summary>
-    /// Property is only to display child entities in the Debugger.<br/>
-    /// </summary>
-    /// <remarks>
-    /// It has poor performance due to its array creation.<br/>
-    /// To access the <see cref="GameEntity"/>'s use either a <b>foreach</b> loop, <see cref="ToArray"/> or <see cref="this[int]"/>
-    /// </remarks>
+    /// <summary>Property <b>only used</b> to display child entities in Debugger. See <see cref="ChildNodes"/> remarks.</summary>
     [Obsolete("use either ChildNodes[], ChildNodes.ToArray() or foreach (var node in entity.ChildNodes)")]
     [Browse(RootHidden)]public              GameEntity[]        Entities_       => GetEntities();
-    
                         public              GameEntity          this[int index] => nodes[Ids[index]].entity;
                         public override     string              ToString()      => $"Length: {childLength}";
     
