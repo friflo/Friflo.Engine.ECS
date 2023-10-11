@@ -104,7 +104,7 @@ public sealed partial class EntityStore
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature, Tags tags = default)
+    public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature, in Tags tags = default)
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
     {

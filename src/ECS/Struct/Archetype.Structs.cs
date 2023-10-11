@@ -22,10 +22,6 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
 
     public   override               string    ToString() => GetString();
     
-    private ArchetypeStructs(in BitSet bitSet) {
-        this.bitSet = bitSet;
-    }
-    
     internal ArchetypeStructs(StructHeap[] heaps) {
         foreach (var heap in heaps) {
             bitSet.SetBit(heap.structIndex);
@@ -99,19 +95,19 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     public static ArchetypeStructs Get<T>()
         where T : struct, IStructComponent
     {
-        BitSet bitSet = default;
-        bitSet.SetBit(StructHeap<T>.StructIndex);
-        return new ArchetypeStructs(bitSet);
+        var structs = new ArchetypeStructs();
+        structs.bitSet.SetBit(StructHeap<T>.StructIndex);
+        return structs;
     }
     
     public static ArchetypeStructs Get<T1, T2>()
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
-        BitSet bitSet = default;
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        return new ArchetypeStructs(bitSet);
+        var structs = new ArchetypeStructs();
+        structs.bitSet.SetBit(StructHeap<T1>.StructIndex);
+        structs.bitSet.SetBit(StructHeap<T2>.StructIndex);
+        return structs;
     }
     
     private string GetString()

@@ -310,11 +310,11 @@ public sealed class GameEntity
     /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
-    public  Tags    Tags                                        => archetype.tags;
+    public  ref readonly Tags    Tags                       => ref archetype.tags;
     
-    public  bool    HasTag<T>() where T : struct, IEntityTag    => archetype.tags.Has<T>();
+    public  bool HasTag<T>() where T : struct, IEntityTag   => archetype.tags.Has<T>();
 
-    public  bool    AddTag<T>()
+    public  bool AddTag<T>()
         where T : struct, IEntityTag
     {
         var store   = archetype.store;

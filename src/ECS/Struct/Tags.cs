@@ -20,10 +20,6 @@ public struct Tags : IEnumerable<ComponentType>
 
     public   override string    ToString() => GetString();
     
-    private Tags(in BitSet bitSet) {
-        this.bitSet = bitSet;
-    }
-    
     // ----------------------------------------- read Tags ----------------------------------------- 
     public  bool    Has<T> ()
         where T : struct, IEntityTag
@@ -87,19 +83,19 @@ public struct Tags : IEnumerable<ComponentType>
     public static Tags Get<T>()
         where T : struct, IEntityTag
     {
-        BitSet bitSet = default;
-        bitSet.SetBit(TagType<T>.TagIndex);
-        return new Tags(bitSet);
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagType<T>.TagIndex);
+        return tags;
     }
     
     public static Tags Get<T1, T2>()
         where T1 : struct, IEntityTag
         where T2 : struct, IEntityTag
     {
-        BitSet bitSet = default;
-        bitSet.SetBit(TagType<T1>.TagIndex);
-        bitSet.SetBit(TagType<T2>.TagIndex);
-        return new Tags(bitSet);
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagType<T1>.TagIndex);
+        tags.bitSet.SetBit(TagType<T2>.TagIndex);
+        return tags;
     }
     
     private string GetString()
