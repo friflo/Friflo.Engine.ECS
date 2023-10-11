@@ -85,7 +85,7 @@ public sealed partial class EntityStore
     [Browse(Never)] private             int                         nodeCount;          //  4                   - number of all entities
     
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
-    [Browse(Never)] private  readonly   ArchetypeKey                searchKey;          // 76                   - key buffer to find archetypes by key
+    [Browse(Never)] private  readonly   ArchetypeKey                searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion
     
 #region static fields
