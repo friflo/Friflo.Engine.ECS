@@ -114,13 +114,13 @@ public static class Test_ArchetypeMask
         
         var key     = type1.Key;
         var key2    = store.FindArchetype(type1.Structs, type1.Tags);
-        AreSame (type1,             key2.Type); // Type is never null
+        AreSame (type1,             key2.Archetype); // Archetype is never null
         AreEqual(type1.Tags,        key2.Tags);
         AreEqual(type1.Structs,     key2.Structs);
         AreEqual("Id: [Position]",  key2.ToString());
         
         var key3    = store.FindArchetype(key);
-        AreSame (type1,             key3.Type); // Type is never null
+        AreSame (type1,             key3.Archetype); // Archetype is never null
         AreEqual(type1.Tags,        key3.Tags);
         AreEqual(type1.Structs,     key3.Structs);
         AreEqual("Id: [Position]",  key3.ToString());

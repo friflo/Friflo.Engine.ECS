@@ -16,8 +16,8 @@ public sealed partial class EntityStore
         where T : struct, IStructComponent
     {
         searchKey.SetTagsWith(tags, StructHeap<T>.StructIndex);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
-            return archetypeId.type;
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
@@ -36,8 +36,8 @@ public sealed partial class EntityStore
     private Archetype GetArchetypeWithSignature(in ArchetypeStructs structs, in SignatureTypeSet types, in Tags tags)
     {
         searchKey.SetMaskTags(structs, tags);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
-            return archetypeId.type;
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig();
         var archetype   = Archetype.CreateWithSignatureTypes(config, types, tags);

@@ -16,25 +16,25 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed class ArchetypeKey
 {
     // --- public properties
-    public                  Archetype           Type    => type; // not null if ArchetypeKey is returned by EntityStore.FindArchetype()
-    public   ref readonly   Tags                Tags    => ref tags;
-    public   ref readonly   ArchetypeStructs    Structs => ref structs;
+    public                  Archetype           Archetype   => archetype; // not null if ArchetypeKey is returned by EntityStore.FindArchetype()
+    public   ref readonly   Tags                Tags        => ref tags;
+    public   ref readonly   ArchetypeStructs    Structs     => ref structs;
     
     // --- internal fields
     internal                ArchetypeStructs    structs;    // 32
     internal                Tags                tags;       // 32
     internal                int                 hash;       //  4
-    internal readonly       Archetype           type;       //  8
+    internal readonly       Archetype           archetype;  //  8
 
     public   override       string              ToString() => GetString();
     
     internal ArchetypeKey() { }
     
     internal ArchetypeKey(Archetype archetype) {
-        structs = archetype.structs;
-        tags    = archetype.tags;
-        hash    = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
-        type    = archetype;
+        structs         = archetype.structs;
+        tags            = archetype.tags;
+        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        this.archetype  = archetype;
     }
     
     internal void Clear() {

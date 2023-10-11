@@ -110,8 +110,8 @@ internal sealed class ComponentReader
         var curArchetype = entity.archetype;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
-        if (store.archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
-            newArchetype = archetypeId.type;
+        if (store.archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            newArchetype = archetypeKey.archetype;
         } else {
             var config = store.GetArchetypeConfig();
             structTypes.Clear();

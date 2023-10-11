@@ -18,8 +18,8 @@ public sealed partial class EntityStore
         where T : struct, IStructComponent
     {
         searchKey.SetWith(current, StructHeap<T>.StructIndex);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
-            return archetypeId.type;
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var config          = GetArchetypeConfig();
         var schema          = Static.ComponentSchema;
@@ -39,8 +39,8 @@ public sealed partial class EntityStore
     private Archetype GetArchetypeWithout(Archetype archetype, int structIndex, Type removeType)
     {
         searchKey.SetWithout(archetype, structIndex);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeId)) {
-            return archetypeId.type;
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var heaps           = archetype.Heaps;
         var componentCount  = heaps.Length - 1;
