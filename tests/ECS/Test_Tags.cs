@@ -199,13 +199,15 @@ public static class Test_Tags
                 AreEqual(2, id);
             }
             AreEqual(1, count);
-        } // todo
-        /* { 
+        } { 
             var query12 = store.Query(Tags.Get<TestTag, TestTag2>());
+            int count   = 0;
             foreach (var id in query12) {
+                count++;
                 AreEqual(2, id);
             }
-        }*/
+            AreEqual(1, count);
+        }
     }
 }
 
