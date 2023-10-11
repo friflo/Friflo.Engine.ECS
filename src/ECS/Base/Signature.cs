@@ -186,8 +186,8 @@ public readonly struct Signature<T>
     where T : struct, IStructComponent
 {
     [Browse(Never)] public              int                 StructCount => types.length;
-                    internal readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
+                    public   readonly   ArchetypeStructs    structs;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
 
     public override string ToString() => types.GetString("Signature: ");
 
@@ -202,8 +202,9 @@ public readonly struct Signature<T1, T2>
     where T2 : struct, IStructComponent
 {
     [Browse(Never)] public              int                 StructCount => types.length;
-                    internal readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
+                    public   readonly   ArchetypeStructs    structs;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
+
     
     public override string ToString() => types.GetString("Signature: ");
     
@@ -219,8 +220,8 @@ public readonly struct Signature<T1, T2, T3>
     where T3 : struct, IStructComponent
 {
     [Browse(Never)] public              int                 StructCount => types.length;
-                    internal readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
+                    public   readonly   ArchetypeStructs    structs;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
     
     public override string ToString() => types.GetString("Signature: ");
     
@@ -237,8 +238,8 @@ public readonly struct Signature<T1, T2, T3, T4>
     where T4 : struct, IStructComponent
 {
     [Browse(Never)] public              int                 StructCount => types.length;
-                    internal readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
+                    public   readonly   ArchetypeStructs    structs;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
     
     public override string ToString() => types.GetString("Signature: ");
     
@@ -256,8 +257,8 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     where T5 : struct, IStructComponent
 {
     [Browse(Never)] public              int                 StructCount => types.length;
-                    internal readonly   SignatureTypeSet    types;
-    [Browse(Never)] public   readonly   ArchetypeStructs    structs;
+                    public   readonly   ArchetypeStructs    structs;
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;
 
     public override string ToString() => types.GetString("Signature: ");
 
