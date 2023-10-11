@@ -51,11 +51,11 @@ public static class Test_Query
     [Test]
     public static void Test_generic_Query() {
         var store   = new EntityStore();
-        var query1 =    store.Query<Position>(Tags.Get<TestTag>());
-        var query2 =    store.Query<Position, Rotation>(Tags.Get<TestTag>());
-        var query3 =    store.Query<Position, Rotation, Scale3>(Tags.Get<TestTag>());
-        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>(Tags.Get<TestTag>());
-        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>(Tags.Get<TestTag>());
+        var query1 =    store.Query<Position>();
+        var query2 =    store.Query<Position, Rotation>();
+        var query3 =    store.Query<Position, Rotation, Scale3>();
+        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>();
+        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
     }
     
     [Test]

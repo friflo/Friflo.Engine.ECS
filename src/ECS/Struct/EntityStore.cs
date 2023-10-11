@@ -104,104 +104,104 @@ public sealed partial class EntityStore
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery Query (in Tags tags = default)
+    public ArchetypeQuery Query ()
     {
-        return new ArchetypeQuery(this, default, default, tags);
+        return new ArchetypeQuery(this, default, default);
     }
 
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery<T> Query<T> (in Signature<T> signature, in Tags tags = default)
+    public ArchetypeQuery<T> Query<T> (in Signature<T> signature)
         where T : struct, IStructComponent
     {
-        return new ArchetypeQuery<T>(this, signature, tags);
+        return new ArchetypeQuery<T>(this, signature);
     }
     
-    public ArchetypeQuery<T> Query<T> (in Tags tags = default)
+    public ArchetypeQuery<T> Query<T> ()
         where T : struct, IStructComponent
     {
-        return new ArchetypeQuery<T>(this, Signature.Get<T>(), tags);
+        return new ArchetypeQuery<T>(this, Signature.Get<T>());
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature, in Tags tags = default)
+    public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature)
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2>(this, signature, tags);
+        return new ArchetypeQuery<T1, T2>(this, signature);
     }
     
-    public ArchetypeQuery<T1, T2> Query<T1, T2> (in Tags tags = default)
+    public ArchetypeQuery<T1, T2> Query<T1, T2> ()
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>(), tags);
+        return new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>());
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (in Signature<T1, T2, T3> signature, in Tags tags = default)
+    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (in Signature<T1, T2, T3> signature)
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
         where T3: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2, T3>(this, signature, tags);
+        return new ArchetypeQuery<T1, T2, T3>(this, signature);
     }
     
-    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (in Tags tags = default)
+    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> ()
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
         where T3: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>(), tags);
+        return new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>());
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (in Signature<T1, T2, T3, T4> signature, in Tags tags = default)
+    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (in Signature<T1, T2, T3, T4> signature)
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
         where T3: struct, IStructComponent
         where T4: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4>(this, signature, tags);
+        return new ArchetypeQuery<T1, T2, T3, T4>(this, signature);
     }
     
-    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (in Tags tags = default)
+    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> ()
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
         where T3: struct, IStructComponent
         where T4: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>(), tags);
+        return new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>());
     }
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>
-    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (in Signature<T1, T2, T3, T4, T5> signature, in Tags tags = default)
+    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (in Signature<T1, T2, T3, T4, T5> signature)
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
         where T3: struct, IStructComponent
         where T4: struct, IStructComponent
         where T5: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature, tags);
+        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature);
     }
     
-    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (in Tags tags = default)
+    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> ()
         where T1: struct, IStructComponent
         where T2: struct, IStructComponent
         where T3: struct, IStructComponent
         where T4: struct, IStructComponent
         where T5: struct, IStructComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>(), tags);
+        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>());
     }
     
     #endregion
