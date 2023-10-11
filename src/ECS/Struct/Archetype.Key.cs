@@ -15,13 +15,19 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public sealed class ArchetypeKey
 {
-    internal            ArchetypeStructs    structs;    // 32
-    internal            Tags                tags;       // 32
-    internal            int                 hash;       //  4
-    public   readonly   Archetype           type;       //  8
+    // --- public properties
+    public                  Archetype           Type    => type; // not null if ArchetypeKey is returned by EntityStore.FindArchetype()
+    public   ref readonly   Tags                Tags    => ref tags;
+    public   ref readonly   ArchetypeStructs    Structs => ref structs;
+    
+    // --- internal fields
+    internal                ArchetypeStructs    structs;    // 32
+    internal                Tags                tags;       // 32
+    internal                int                 hash;       //  4
+    internal readonly       Archetype           type;       //  8
 
-    public   override   string              ToString() => GetString();
-
+    public   override       string              ToString() => GetString();
+    
     internal ArchetypeKey() { }
     
     internal ArchetypeKey(Archetype archetype) {

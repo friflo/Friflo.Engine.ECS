@@ -112,17 +112,24 @@ public static class Test_ArchetypeMask
         var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         var type3 = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
         
-        var key   = type1.key;
-        IsTrue(store.TryGetArchetypeId(key, out var archetypeId));
-        AreSame(type1, archetypeId.type);
+        var key     = type1.Key;
+        var key2    = store.FindArchetype(type1.Structs, type1.Tags);
+        AreSame (type1,             key2.Type); // Type is never null
+        AreEqual(type1.Tags,        key2.Tags);
+        AreEqual(type1.Structs,     key2.Structs);
+        AreEqual("Id: [Position]",  key2.ToString());
         
-        AreEqual("Id: [Position]", archetypeId.ToString());
+        var key3    = store.FindArchetype(key);
+        AreSame (type1,             key3.Type); // Type is never null
+        AreEqual(type1.Tags,        key3.Tags);
+        AreEqual(type1.Structs,     key3.Structs);
+        AreEqual("Id: [Position]",  key3.ToString());
         
         var start   = Mem.GetAllocatedBytes();
         var count = 10; // 100_000_000 ~ 1.089 ms
         for (int n = 0; n < count; n++)
         {
-            store.TryGetArchetypeId(key, out _);
+            store.FindArchetype(key);
         }
         Mem.AssertNoAlloc(start);
     }

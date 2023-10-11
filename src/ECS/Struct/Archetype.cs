@@ -21,23 +21,21 @@ public sealed class Archetype
                     public              ReadOnlySpan<int>           EntityIds       => new (entityIds, 0, entityCount);
     
                     public              EntityStore                 Store           => store;
-                    
-    [Browse(Never)] public   readonly   Tags                        tags;           // 32       - tags assigned to archetype
-
-    [Browse(Never)] public   readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
-    
-    [Browse(Never)] public   readonly   ArchetypeKey                key;            //  8 (+76)
-    
+                    public ref readonly Tags                        Tags            => ref tags;
+                    public ref readonly ArchetypeStructs            Structs         => ref structs;
+                    public              ArchetypeKey                Key             => key;
     #endregion
     
-#region internal members
+#region private / internal members
                     private  readonly   StructHeap[]                structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
     [Browse(Never)] private             int[]                       entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                         entityCount;    //  4       - number of entities in archetype
                     private             int                         capacity;       //  4
-    
     // --- internal
+    [Browse(Never)] internal readonly   Tags                        tags;           // 32       - tags assigned to archetype
+    [Browse(Never)] internal readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
+    [Browse(Never)] internal readonly   ArchetypeKey                key;            //  8 (+76)
     /// <remarks>
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
     /// does not require a range check. This is already ensured at <see cref="ComponentSchema.GetStructType"/>
