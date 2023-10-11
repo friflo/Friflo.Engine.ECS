@@ -14,13 +14,14 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ArchetypeQuery
 {
 #region private fields
+    // --- non blittable types
                     private  readonly   EntityStore         store;
-    [Browse(Never)] private  readonly   ArchetypeStructs    structs;
+    [Browse(Never)] private             Archetype[]         archetypes;
     [Browse(Never)] internal readonly   SignatureTypeSet    types;
+    // --- blittable types
+    [Browse(Never)] private  readonly   ArchetypeStructs    structs;
     [Browse(Never)] internal readonly   StructIndexes       structIndexes;
     [Browse(Never)] internal readonly   Tags                tags;
-    //
-    [Browse(Never)] private             Archetype[]         archetypes;
     [Browse(Never)] private             int                 archetypeCount;
                     private             int                 lastArchetypeCount;
     #endregion
