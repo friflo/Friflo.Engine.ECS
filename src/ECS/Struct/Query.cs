@@ -22,11 +22,11 @@ public class ArchetypeQuery
     // --- blittable types
     [Browse(Never)] private  readonly   ArchetypeStructs    structs;            // 32 
     [Browse(Never)] internal readonly   StructIndexes       structIndexes;      // 20
-    [Browse(Never)] internal            Tags                tags;               // 32
+    [Browse(Never)] internal            Tags                allTags;            // 32
     [Browse(Never)] private             int                 archetypeCount;     //  4
                     private             int                 lastArchetypeCount; //  4
                     
-                    public              ArchetypeQuery      With(in Tags tags) { this.tags = tags; return this; }
+                    public              ArchetypeQuery      AllTags(in Tags tags) { allTags = tags; return this; }
                     
                     public override     string              ToString() => GetString();
     #endregion
@@ -96,7 +96,7 @@ public class ArchetypeQuery
             var nextCount       = archetypeCount;
             for (int n = lastArchetypeCount; n < newStoreLength; n++) {
                 var archetype       = storeArchetypes[n];
-                bool hasAllTypes    = structs.Has(archetype.structs) && archetype.tags.HasAll(tags);
+                bool hasAllTypes    = structs.Has(archetype.structs) && archetype.tags.HasAll(allTags);
                 if (!hasAllTypes) {
                     continue;
                 }
@@ -122,7 +122,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in tags) {
+        foreach (var tag in allTags) {
             sb.Append('#');
             sb.Append(tag.type.Name);
             sb.Append(", ");
@@ -140,7 +140,7 @@ public class ArchetypeQuery
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct, IStructComponent
 {
-    public new ArchetypeQuery<T> With (in Tags tags) { this.tags = tags; return this; }
+    public new ArchetypeQuery<T> AllTags (in Tags tags) { allTags = tags; return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T> signature)
         : base(store, signature.structs, signature.types) {
@@ -154,7 +154,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
     
-     public new ArchetypeQuery<T1, T2> With (in Tags tags) { this.tags = tags; return this; }
+     public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { allTags = tags; return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2> signature)
         : base(store, signature.structs, signature.types) {
@@ -178,7 +178,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    public new ArchetypeQuery<T1, T2, T3> With (in Tags tags) { this.tags = tags; return this; }
+    public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { allTags = tags; return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3> signature)
         : base(store, signature.structs, signature.types) {
@@ -191,7 +191,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    public new ArchetypeQuery<T1, T2, T3, T4> With (in Tags tags) { this.tags = tags; return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { allTags = tags; return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4> signature)
         : base(store, signature.structs, signature.types) {
@@ -205,7 +205,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> With (in Tags tags) { this.tags = tags; return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { allTags = tags; return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature.structs, signature.types) {
