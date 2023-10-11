@@ -16,15 +16,15 @@ public class ArchetypeQuery
 {
 #region private fields
     // --- non blittable types
-                    private  readonly   EntityStore         store;
-    [Browse(Never)] private             Archetype[]         archetypes;
-    [Browse(Never)] internal readonly   SignatureTypeSet    types;
+                    private  readonly   EntityStore         store;              //  8
+    [Browse(Never)] private             Archetype[]         archetypes;         //  8
+    [Browse(Never)] internal readonly   SignatureTypeSet    types;              // 48 
     // --- blittable types
-    [Browse(Never)] private  readonly   ArchetypeStructs    structs;
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
-    [Browse(Never)] internal            Tags                tags;
-    [Browse(Never)] private             int                 archetypeCount;
-                    private             int                 lastArchetypeCount;
+    [Browse(Never)] private  readonly   ArchetypeStructs    structs;            // 32 
+    [Browse(Never)] internal readonly   StructIndexes       structIndexes;      // 20
+    [Browse(Never)] internal            Tags                tags;               // 32
+    [Browse(Never)] private             int                 archetypeCount;     //  4
+                    private             int                 lastArchetypeCount; //  4
                     
                     public              ArchetypeQuery      With(in Tags tags) { this.tags = tags; return this; }
                     
