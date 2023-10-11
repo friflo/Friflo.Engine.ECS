@@ -312,7 +312,7 @@ public sealed class GameEntity
     /// </returns>
     public  ref readonly Tags    Tags                       => ref archetype.tags;
     
-    public  bool HasTag<T>() where T : struct, IEntityTag   => archetype.tags.Has<T>();
+    // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
 
     public  bool AddTag<T>()
         where T : struct, IEntityTag
