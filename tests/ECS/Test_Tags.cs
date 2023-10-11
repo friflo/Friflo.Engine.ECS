@@ -149,8 +149,9 @@ public static class Test_Tags
         AreEqual(4,                                 store.Archetypes.Length);
         
         // Execute previous operations again. All required archetypes are now present
+        const int count = 10; // 10_000_000 ~ 1.349 ms
         var start = Mem.GetAllocatedBytes();
-        for (int n = 0; n < 10; n++) {
+        for (int n = 0; n < count; n++) {
             entity.AddTag       <TestTag>();
             entity.AddTags      (testTag2);
             entity.RemoveTag    <TestTag>();
