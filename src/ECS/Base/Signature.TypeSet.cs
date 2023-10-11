@@ -14,12 +14,12 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 public readonly struct SignatureTypeSet
 {
-    internal readonly   int             length;
-    internal readonly   ComponentType   T1;
-    internal readonly   ComponentType   T2;
-    internal readonly   ComponentType   T3;
-    internal readonly   ComponentType   T4;
-    internal readonly   ComponentType   T5;
+    internal readonly   int             length; // 4
+    internal readonly   ComponentType   T1;     // 8
+    internal readonly   ComponentType   T2;     // 8
+    internal readonly   ComponentType   T3;     // 8
+    internal readonly   ComponentType   T4;     // 8
+    internal readonly   ComponentType   T5;     // 8
     
     public              int             Length          => length;
     public   SignatureTypeSetEnumerator GetEnumerator() => new (this);

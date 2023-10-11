@@ -7,9 +7,9 @@ namespace Friflo.Fliox.Engine.ECS;
 // ReSharper disable InconsistentNaming
 internal struct StructIndexes
 {
-    internal int T1;
-    internal int T2;
-    internal int T3;
-    internal int T4;
-    internal int T5;
+    internal int T1;    // 4
+    internal int T2;    // 4
+    internal int T3;    // 4
+    internal int T4;    // 4
+    internal int T5;    // 4
 }

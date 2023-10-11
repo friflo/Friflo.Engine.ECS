@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -59,5 +60,18 @@ public static class Test_Misc
     public static unsafe void Test_sizeof_ArchetypeStructs() {
         var size = sizeof(ArchetypeStructs);
         AreEqual(32, size);
+    }
+        
+    [Test]
+    public static unsafe void Test_sizeof_SignatureTypeSet() {
+        var size = sizeof(SignatureTypeSet);
+        AreEqual(48, size);
+    }
+    
+    [Test]
+    public static unsafe void Test_sizeof_StructIndexes() {
+        var type = typeof(EntityStore).Assembly.GetType("Friflo.Fliox.Engine.ECS.StructIndexes");
+        var size = Marshal.SizeOf(type!);
+        AreEqual(20, size);
     }
 }
