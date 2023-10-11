@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// <see cref="ArchetypeQuery"/> an all its generic implementation are immutable and designed to reuse its instances.
 /// </summary>
-public abstract class ArchetypeQuery
+public class ArchetypeQuery
 {
 #region private fields
     // --- non blittable types
@@ -21,7 +21,7 @@ public abstract class ArchetypeQuery
     // --- blittable types
     [Browse(Never)] private  readonly   ArchetypeStructs    structs;
     [Browse(Never)] internal readonly   StructIndexes       structIndexes;
-    [Browse(Never)] internal readonly   Tags                tags;
+    [Browse(Never)] private  readonly   Tags                tags;
     [Browse(Never)] private             int                 archetypeCount;
                     private             int                 lastArchetypeCount;
     #endregion
@@ -42,6 +42,8 @@ public abstract class ArchetypeQuery
         lastArchetypeCount  = 1;
         var componentTypes  = types;
         switch (componentTypes.Length) {
+            case 0:
+                break;
             case 1:
                 structIndexes.T1 = componentTypes.T1.structIndex;
                 break;
@@ -88,8 +90,9 @@ public abstract class ArchetypeQuery
             var nextArchetypes  = archetypes;
             var nextCount       = archetypeCount;
             for (int n = lastArchetypeCount; n < newStoreLength; n++) {
-                var archetype = storeArchetypes[n];
-                if (!structs.Has(archetype.structs)) {
+                var archetype       = storeArchetypes[n];
+                bool hasAllTypes    = structs.Has(archetype.structs) && archetype.tags.HasAll(tags);
+                if (!hasAllTypes) {
                     continue;
                 }
                 if (nextCount == nextArchetypes.Length) {
@@ -104,8 +107,11 @@ public abstract class ArchetypeQuery
             return new ReadOnlySpan<Archetype>(nextArchetypes, 0, nextCount);
         }
     }
+    
+//  public QueryChunks      Chunks                                      => new (this);
+    public QueryEnumerator  GetEnumerator()                             => new (this);
+//  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
 }
-
 
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct, IStructComponent

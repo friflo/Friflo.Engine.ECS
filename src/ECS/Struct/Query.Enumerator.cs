@@ -6,6 +6,50 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+#region --- none
+
+public ref struct QueryEnumerator
+{
+    private             int                     entityPos;
+    private             int                     componentLen;
+    private             int[]                   entityIds;
+    
+    private  readonly   ReadOnlySpan<Archetype> archetypes;
+    private             int                     archetypePos;
+    
+    internal QueryEnumerator(ArchetypeQuery query)
+    {
+        archetypes      = query.Archetypes;
+        archetypePos    = 0;
+        var archetype   = archetypes[0];
+        entityIds       = archetype.entityIds;
+        entityPos       = -1;
+        componentLen    = archetype.EntityCount - 1;
+    }
+    
+    /// <summary>
+    /// return each component using a <see cref="Ref{T}"/> to avoid struct copy and enable mutation in library
+    /// </summary>
+    public int Current   => entityIds[entityPos];
+    
+    // --- IEnumerator
+    public bool MoveNext() {
+        if (entityPos < componentLen) {
+            entityPos++;
+            return true;
+        }
+        if (archetypePos < archetypes.Length - 1) {
+            var archetype   = archetypes[++archetypePos];
+            entityPos       = 0;
+            entityIds       = archetype.entityIds;
+            componentLen    = archetype.EntityCount - 1;
+            return true;
+        }
+        return false;  
+    }
+}
+#endregion
+
 #region --- T1 T2
 
 public ref struct QueryEnumerator<T1, T2>

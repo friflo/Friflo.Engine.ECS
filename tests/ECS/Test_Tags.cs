@@ -161,5 +161,51 @@ public static class Test_Tags
         AreEqual(1,                                 store.EntityCount);
         AreEqual(4,                                 store.Archetypes.Length);
     }
+    
+    [Test]
+    public static void Test_Tags_Query() {
+        var store           = new EntityStore();
+        var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
+        var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
+        AreEqual(3,                                store.Archetypes.Length);
+        
+        var entity1     = store.CreateEntity(1);
+        var entity2     = store.CreateEntity(2);
+        entity1.AddTag<TestTag>();
+        entity2.AddTag<TestTag>();
+        entity2.AddTag<TestTag2>();
+        AreEqual("[TestTag]  Count: 1",             entity1.Archetype.ToString());
+        AreEqual("[TestTag, TestTag2]  Count: 1",   entity2.Archetype.ToString());
+        AreEqual(2,                                 store.EntityCount);
+        AreEqual(3,                                 store.Archetypes.Length);
+        AreEqual(1,                                 archTestTag.EntityCount);
+        AreEqual(1,                                 archTestTagAll.EntityCount);
+        {
+            var query1  = store.Query(Tags.Get<TestTag>());
+            int count   = 0;
+            foreach (var id in query1) {
+                switch (count) {
+                    case 0: AreEqual(1, id); break;
+                    case 1: AreEqual(2, id); break;
+                }
+                count++;
+            }
+            AreEqual(2, count);
+        } {
+            var query2  = store.Query(Tags.Get<TestTag2>());
+            int count   = 0;
+            foreach (var id in query2) {
+                count++;
+                AreEqual(2, id);
+            }
+            AreEqual(1, count);
+        } // todo
+        /* { 
+            var query12 = store.Query(Tags.Get<TestTag, TestTag2>());
+            foreach (var id in query12) {
+                AreEqual(2, id);
+            }
+        }*/
+    }
 }
 

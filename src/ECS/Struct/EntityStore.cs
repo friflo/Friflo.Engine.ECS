@@ -52,6 +52,11 @@ public sealed partial class EntityStore
         archetypeSet.TryGetValue(searchKey, out var actualValue);
         return actualValue?.archetype;
     }
+    
+    public Archetype GetArchetype(in Tags tags)
+    {
+        return GetArchetypeWithSignature(default, default, tags);
+    }
 
     public Archetype GetArchetype<T>(in Signature<T> signature, in Tags tags = default)
         where T : struct, IStructComponent
@@ -96,6 +101,14 @@ public sealed partial class EntityStore
     
     // -------------------------------------- archetype query --------------------------------------
 #region archetype query
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// </summary>
+    public ArchetypeQuery Query (in Tags tags = default)
+    {
+        return new ArchetypeQuery(this, default, default, tags);
+    }
+
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
     /// </summary>

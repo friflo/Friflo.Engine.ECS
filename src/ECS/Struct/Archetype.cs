@@ -28,7 +28,7 @@ public sealed class Archetype
 #region private / internal members
                     private  readonly   StructHeap[]                structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
-    [Browse(Never)] private             int[]                       entityIds;      //  8 + ids - could use a StructHeap<int> if needed
+    [Browse(Never)] internal            int[]                       entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                         entityCount;    //  4       - number of entities in archetype
                     private             int                         capacity;       //  4
     // --- internal
