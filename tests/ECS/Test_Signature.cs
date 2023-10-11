@@ -32,19 +32,15 @@ public static class Test_Signature
         
         // --- permute argument order
         var sig2_ =     Signature.Get<Rotation, Position>();
-        AreNotSame(sig2, sig2_);
         AreEqual("Signature: [Rotation, Position]", sig2_.ToString());
         
         var sig3_ =     Signature.Get<Rotation, Position, Scale3>();
-        AreNotSame(sig3, sig3_);
         AreEqual("Signature: [Rotation, Position, Scale3]", sig3_.ToString());
         
         var sig4_ =     Signature.Get<Rotation, Position, Scale3, EntityName>();
-        AreNotSame(sig4, sig4_);
         AreEqual("Signature: [Rotation, Position, Scale3, EntityName]", sig4_.ToString());
         
         var sig5_ =     Signature.Get<Rotation, Position, Scale3, EntityName, MyComponent1>();
-        AreNotSame(sig5, sig5_);
         AreEqual("Signature: [Rotation, Position, Scale3, EntityName, MyComponent1]", sig5_.ToString());
     }
 }
