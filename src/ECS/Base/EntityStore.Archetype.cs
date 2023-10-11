@@ -197,13 +197,16 @@ public sealed partial class EntityStore
         } else {
             newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
         }
-        if (arch != defaultArchetype) {
-            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
-            archetype   = newArchetype;
+        if (newArchetype == defaultArchetype) {
+            int removePos = compIndex; 
+            // --- update entity
+            compIndex   = 0;
+            archetype   = defaultArchetype;
+            arch.MoveLastComponentsTo(removePos);
             return true;
         }
-        compIndex           = newArchetype.AddEntity(id);
-        archetype           = newArchetype;
+        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+        archetype   = newArchetype;
         return true;
     }
 }

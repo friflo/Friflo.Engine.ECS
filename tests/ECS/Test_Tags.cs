@@ -125,20 +125,41 @@ public static class Test_Tags
     [Test]
     public static void Test_Tags_Add_Remove() {
         var store       = new EntityStore();
+        AreEqual(1,                                 store.Archetypes.Length);
         var entity      = store.CreateEntity();
         var testTag2    = Tags.Get<TestTag2>();
         
         entity.AddTag<TestTag>();
         AreEqual("[TestTag]  Count: 1",             entity.Archetype.ToString());
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(2,                                 store.Archetypes.Length);
         
         entity.AddTags(testTag2);
         AreEqual("[TestTag, TestTag2]  Count: 1",   entity.Archetype.ToString());
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(3,                                 store.Archetypes.Length);
         
         entity.RemoveTag<TestTag>();
         AreEqual("[TestTag2]  Count: 1",            entity.Archetype.ToString());
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(4,                                 store.Archetypes.Length);
         
         entity.RemoveTags(testTag2);
         AreEqual("[]",                              entity.Archetype.ToString());
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(4,                                 store.Archetypes.Length);
+        
+        // Execute previous operations again. All required archetypes are now present
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < 10; n++) {
+            entity.AddTag       <TestTag>();
+            entity.AddTags      (testTag2);
+            entity.RemoveTag    <TestTag>();
+            entity.RemoveTags   (testTag2);
+        }
+        Mem.AssertNoAlloc(start);
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(4,                                 store.Archetypes.Length);
     }
 }
 
