@@ -18,6 +18,7 @@ public abstract class ArchetypeQuery
     [Browse(Never)] private  readonly   ArchetypeStructs    structs;
     [Browse(Never)] internal readonly   SignatureTypeSet    types;
     [Browse(Never)] internal readonly   StructIndexes       structIndexes;
+    [Browse(Never)] internal readonly   Tags                tags;
     //
     [Browse(Never)] private             Archetype[]         archetypes;
     [Browse(Never)] private             int                 archetypeCount;
@@ -26,11 +27,17 @@ public abstract class ArchetypeQuery
 
                     public override     string              ToString() => types.GetString("Query: ");
 
-    internal ArchetypeQuery(EntityStore store, in ArchetypeStructs structs, in SignatureTypeSet types) {
+    internal ArchetypeQuery(
+        EntityStore         store,
+        in ArchetypeStructs structs,
+        in SignatureTypeSet types,
+        in Tags             tags)
+    {
         this.store          = store;
         archetypes          = new Archetype[1];
         this.structs        = structs;
         this.types          = types;
+        this.tags           = tags;
         lastArchetypeCount  = 1;
         var componentTypes  = types;
         switch (componentTypes.Length) {
@@ -102,8 +109,8 @@ public abstract class ArchetypeQuery
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, in Signature<T> signature)
-        : base(store, signature.structs, signature.types) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T> signature, in Tags tags)
+        : base(store, signature.structs, signature.types, tags) {
     }
 }
 
@@ -114,8 +121,8 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
     
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2> signature)
-        : base(store, signature.structs, signature.types) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2> signature, in Tags tags)
+        : base(store, signature.structs, signature.types, tags) {
     }
     
     public ArchetypeQuery<T1, T2> ReadOnly<T>()
@@ -136,8 +143,8 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3> signature)
-        : base(store, signature.structs, signature.types) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3> signature, in Tags tags)
+        : base(store, signature.structs, signature.types, tags) {
     }
 }
 
@@ -147,8 +154,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4> signature)
-        : base(store, signature.structs, signature.types) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4> signature, in Tags tags)
+        : base(store, signature.structs, signature.types, tags) {
     }
 }
 
@@ -159,7 +166,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature)
-        : base(store, signature.structs, signature.types) {
+    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature, in Tags tags)
+        : base(store, signature.structs, signature.types, tags) {
     }
 }

@@ -52,6 +52,15 @@ public static class Test_Query
         AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1]",                sig4.structs.ToString());
         AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.structs.ToString());
     }
+    [Test]
+    public static void Test_generic_Query() {
+        var store   = new EntityStore();
+        var query1 =    store.Query<Position>(Tags.Get<TestTag>());
+        var query2 =    store.Query<Position, Rotation>(Tags.Get<TestTag>());
+        var query3 =    store.Query<Position, Rotation, Scale3>(Tags.Get<TestTag>());
+        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>(Tags.Get<TestTag>());
+        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>(Tags.Get<TestTag>());
+    }
     
     [Test]
     public static void Test_Signature_Query()
@@ -235,7 +244,7 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
-        Mem.AssertAlloc(start, 200);
+        Mem.AssertAlloc(start, 256);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
         
