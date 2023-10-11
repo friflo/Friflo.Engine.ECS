@@ -40,15 +40,15 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </summary>
 /// <remarks>
-/// <b><see cref="GameEntity"/> free usage.</b><br/>
-/// Current <see cref="EntityStore"/> implementation is prepared for <b><see cref="GameEntity"/> free usage.</b><br/>
+/// <i>GameEntity free usage</i><br/>
+/// <see cref="EntityStore"/> implementation is prepared for <see cref="GameEntity"/> free usage.<br/>
 /// The focus of the this usage type is performance.<br/>
 /// The key is to reduce heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
 /// In this case entities are only stored in the <see cref="EntityStore"/> and <see cref="Archetype"/> containers.<br/>
 /// <br/>
 /// The downside of this approach are:<br/>
-/// - Entities can be created only programmatically but not within the editor which requires (managed) <see cref="GameEntity"/>'s<br/>
-/// - Structural changes (moving entities from one <see cref="Archetypes"/> to another) may not be supported because of it high CPU cost.<br/>
+/// - Entities can be created only programmatically but not within the editor which requires (managed) <see cref="GameEntity"/>'s.<br/>
+/// - API to access / query / mutate <see cref="EntityNode"/>'s is less convenient.<br/>
 /// </remarks>
 public sealed partial class EntityStore
 {
