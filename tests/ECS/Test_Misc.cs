@@ -42,4 +42,22 @@ public static class Test_Misc
         var size = sizeof(EntityNode);
         AreEqual(40, size);
     }
+    
+    [Test]
+    public static unsafe void Test_sizeof_BitSet() {
+        var size = sizeof(BitSet);
+        AreEqual(32, size);
+    }
+    
+    [Test]
+    public static unsafe void Test_sizeof_Tags() {
+        var size = sizeof(Tags);
+        AreEqual(32, size);
+    }
+    
+    [Test]
+    public static unsafe void Test_sizeof_ArchetypeStructs() {
+        var size = sizeof(ArchetypeStructs);
+        AreEqual(32, size);
+    }
 }
