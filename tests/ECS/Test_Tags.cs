@@ -129,10 +129,16 @@ public static class Test_Tags
         var testTag2    = Tags.Get<TestTag2>();
         
         entity.AddTag<TestTag>();
+        AreEqual("[TestTag]  Count: 1",             entity.Archetype.ToString());
+        
         entity.AddTags(testTag2);
+        AreEqual("[TestTag, TestTag2]  Count: 1",   entity.Archetype.ToString());
         
         entity.RemoveTag<TestTag>();
+        AreEqual("[TestTag2]  Count: 1",            entity.Archetype.ToString());
+        
         entity.RemoveTags(testTag2);
+        AreEqual("[]",                              entity.Archetype.ToString());
     }
 }
 

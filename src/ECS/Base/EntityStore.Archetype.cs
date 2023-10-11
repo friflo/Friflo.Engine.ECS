@@ -57,6 +57,20 @@ public sealed partial class EntityStore
         return result;
     }
     
+    private Archetype GetArchetypeWithTags(Archetype archetype, in Tags tags)
+    {
+        var heaps           = archetype.Heaps;
+        var types           = new List<ComponentType>(heaps.Length);
+        var config          = GetArchetypeConfig();
+        var schema          = Static.ComponentSchema;
+        foreach (var heap in heaps) {
+            types.Add(schema.GetStructType(heap.structIndex, heap.type));
+        }
+        var result = Archetype.CreateWithStructTypes(config, types, tags);
+        AddArchetype(result);
+        return result;
+    }
+    
     internal void AddArchetype (Archetype archetype)
     {
         if (archetypesCount == archetypes.Length) {
@@ -137,6 +151,28 @@ public sealed partial class EntityStore
         ref Archetype       archetype,      // possible mutation is not null
         ref int             compIndex)
     {
+        var arch            = archetype;
+        var archTagsValue   = arch.tags.bitSet.value;
+        var tagsValue       = tags.bitSet.value;
+        if (archTagsValue == tagsValue) {
+            return false;
+        } 
+        searchKey.structs           = arch.structs;
+        searchKey.tags.bitSet.value = archTagsValue | tagsValue;
+        searchKey.CalculateHashCode();
+        Archetype newArchetype;
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            newArchetype = archetypeKey.archetype;
+        } else {
+            newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
+        }
+        if (arch != defaultArchetype) {
+            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+            archetype   = newArchetype;
+            return true;
+        }
+        compIndex           = newArchetype.AddEntity(id);
+        archetype           = newArchetype;
         return true;
     }
     
@@ -146,6 +182,28 @@ public sealed partial class EntityStore
         ref Archetype       archetype,      // possible mutation is not null
         ref int             compIndex)
     {
+        var arch            = archetype;
+        var archTags        = arch.tags.bitSet.value;
+        var archTagsRemoved = archTags & ~tags.bitSet.value;
+        if (archTagsRemoved == archTags) {
+            return false;
+        }
+        searchKey.structs           = arch.structs;
+        searchKey.tags.bitSet.value = archTagsRemoved;
+        searchKey.CalculateHashCode();
+        Archetype newArchetype;
+        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+            newArchetype = archetypeKey.archetype;
+        } else {
+            newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
+        }
+        if (arch != defaultArchetype) {
+            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+            archetype   = newArchetype;
+            return true;
+        }
+        compIndex           = newArchetype.AddEntity(id);
+        archetype           = newArchetype;
         return true;
     }
 }

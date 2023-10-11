@@ -179,20 +179,26 @@ public sealed class Archetype
     }
     
     private string GetString() {
-        var sb = new StringBuilder();
-        if (structHeaps.Length == 0) {
-            sb.Append("[]");    
-        } else {
-            sb.Append('[');
-            foreach (var heap in structHeaps) {
-                sb.Append(heap.type.Name);
-                sb.Append(", ");
-            }
+        var sb          = new StringBuilder();
+        var hasTypes    = false;
+        sb.Append('[');
+        foreach (var heap in structHeaps) {
+            sb.Append(heap.type.Name);
+            sb.Append(", ");
+            hasTypes = true;
+        }
+        foreach (var tag in tags) {
+            sb.Append(tag.type.Name);
+            sb.Append(", ");
+            hasTypes = true;
+        }
+        if (hasTypes) {
             sb.Length -= 2;
             sb.Append("]  Count: ");
             sb.Append(entityCount);
+            return sb.ToString();
         }
-        return sb.ToString();
+        return "[]";
     }
     #endregion
 }
