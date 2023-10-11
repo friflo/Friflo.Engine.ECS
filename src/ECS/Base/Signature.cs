@@ -26,7 +26,7 @@ public static class Signature
     /// <see cref="Signature{T1}"/> features:
     /// <list type="bullet">
     ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1}"/>.</item>
-    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore.Query{T1}"/></item>
+    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
     public static Signature<T> Get<T>()
@@ -49,7 +49,7 @@ public static class Signature
     /// <see cref="Signature{T1,T2}"/> features:
     /// <list type="bullet">
     ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2}"/>.</item>
-    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore.Query{T1,T2}"/></item>
+    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
     public static Signature<T1, T2> Get<T1, T2>()
@@ -76,7 +76,7 @@ public static class Signature
     /// <see cref="Signature{T1,T2,T3}"/> features:
     /// <list type="bullet">
     ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2,T3}"/>.</item>
-    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore.Query{T1,T2,T3}"/></item>
+    ///   <item>Create a query to process all entities containing the given struct component types <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3> Get<T1, T2, T3>()
@@ -107,7 +107,7 @@ public static class Signature
     /// <see cref="Signature{T1,T2,T3,T4}"/> features:
     /// <list type="bullet">
     ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2,T3,T4}"/>.</item>
-    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore.Query{T1,T2,T3,T4}"/></item>
+    ///   <item>Create a query to process all entities containing the given struct component types <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3, T4> Get<T1, T2, T3, T4>()
@@ -142,7 +142,7 @@ public static class Signature
     /// <see cref="Signature{T1,T2,T3,T4,T5}"/> features:
     /// <list type="bullet">
     ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2,T3,T4,T5}"/>.</item>
-    ///   <item>Create a query to process all entities containing the given struct component types with <see cref="EntityStore.Query{T1,T2,T3,T4,T5}"/></item>
+    ///   <item>Create a query to process all entities containing the given struct component types <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3, T4, T5> Get<T1, T2, T3, T4, T5>()
@@ -185,7 +185,8 @@ public static class Signature
 public readonly struct Signature<T>
     where T : struct, IStructComponent
 {
-                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public              int                 StructCount => types.length;
+                    internal readonly   SignatureTypeSet    types;
     [Browse(Never)] public   readonly   ArchetypeStructs    structs;
 
     public override string ToString() => types.GetString("Signature: ");
@@ -200,7 +201,8 @@ public readonly struct Signature<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public              int                 StructCount => types.length;
+                    internal readonly   SignatureTypeSet    types;
     [Browse(Never)] public   readonly   ArchetypeStructs    structs;
     
     public override string ToString() => types.GetString("Signature: ");
@@ -216,7 +218,8 @@ public readonly struct Signature<T1, T2, T3>
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public              int                 StructCount => types.length;
+                    internal readonly   SignatureTypeSet    types;
     [Browse(Never)] public   readonly   ArchetypeStructs    structs;
     
     public override string ToString() => types.GetString("Signature: ");
@@ -233,7 +236,8 @@ public readonly struct Signature<T1, T2, T3, T4>
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public              int                 StructCount => types.length;
+                    internal readonly   SignatureTypeSet    types;
     [Browse(Never)] public   readonly   ArchetypeStructs    structs;
     
     public override string ToString() => types.GetString("Signature: ");
@@ -251,7 +255,8 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-                    public   readonly   SignatureTypeSet    types;
+    [Browse(Never)] public              int                 StructCount => types.length;
+                    internal readonly   SignatureTypeSet    types;
     [Browse(Never)] public   readonly   ArchetypeStructs    structs;
 
     public override string ToString() => types.GetString("Signature: ");

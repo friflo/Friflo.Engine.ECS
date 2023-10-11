@@ -63,13 +63,14 @@ public static class Test_Misc
     }
         
     [Test]
-    public static unsafe void Test_sizeof_SignatureTypeSet() {
-        var size = sizeof(SignatureTypeSet);
+    public static void Test_sizeof_SignatureTypeSet() {
+        var type = typeof(EntityStore).Assembly.GetType("Friflo.Fliox.Engine.ECS.SignatureTypeSet");
+        var size = Marshal.SizeOf(type!);
         AreEqual(48, size);
     }
     
     [Test]
-    public static unsafe void Test_sizeof_StructIndexes() {
+    public static void Test_sizeof_StructIndexes() {
         var type = typeof(EntityStore).Assembly.GetType("Friflo.Fliox.Engine.ECS.StructIndexes");
         var size = Marshal.SizeOf(type!);
         AreEqual(20, size);

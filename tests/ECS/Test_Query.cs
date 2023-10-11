@@ -13,19 +13,15 @@ public static class Test_Query
     [Test]
     public static void Test_SignatureTypes()
     {
-        var types           = new SignatureTypeSet();
-        AreEqual("TypeSet: []",                     types.ToString());
-        
-
         var sig1            = Signature.Get<Position>();
         AreEqual("Signature: [Position]",           sig1.ToString());
-        AreEqual("TypeSet: [Position]",             sig1.types.ToString());
+        AreEqual("Structs: [Position]",             sig1.structs.ToString());
         
         var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("Signature: [Position, Rotation]", sig2.ToString());
 
         int count = 0;
-        foreach (var _ in sig2.types) {
+        foreach (var _ in sig2.structs) {
             count++;    
         }
         AreEqual(2, count);
@@ -46,11 +42,11 @@ public static class Test_Query
         
         Mem.AssertNoAlloc(start);
         
-        AreEqual("Mask: [Position]",                                                sig1.structs.ToString());
-        AreEqual("Mask: [Position, Rotation]",                                      sig2.structs.ToString());
-        AreEqual("Mask: [Position, Rotation, Scale3]",                              sig3.structs.ToString());
-        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1]",                sig4.structs.ToString());
-        AreEqual("Mask: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.structs.ToString());
+        AreEqual("Structs: [Position]",                                                sig1.structs.ToString());
+        AreEqual("Structs: [Position, Rotation]",                                      sig2.structs.ToString());
+        AreEqual("Structs: [Position, Rotation, Scale3]",                              sig3.structs.ToString());
+        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1]",                sig4.structs.ToString());
+        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.structs.ToString());
     }
     [Test]
     public static void Test_generic_Query() {

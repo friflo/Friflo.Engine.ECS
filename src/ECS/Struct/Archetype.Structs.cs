@@ -113,7 +113,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     private string GetString()
     {
         var sb = new StringBuilder();
-        sb.Append("Mask: [");
+        sb.Append("Structs: [");
         var hasTypes    = false;
         foreach (var index in bitSet) {
             var structType = EntityStore.Static.ComponentSchema.GetStructComponentAt(index);

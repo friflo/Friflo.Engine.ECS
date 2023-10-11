@@ -12,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// Used by methods using generic struct component types like: T1, T2, T3, ...
 /// </summary>
-public readonly struct SignatureTypeSet
+internal readonly struct SignatureTypeSet
 {
     internal readonly   int             length; // 4
     internal readonly   ComponentType   T1;     // 8
