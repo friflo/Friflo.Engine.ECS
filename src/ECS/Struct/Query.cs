@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -24,9 +25,13 @@ public class ArchetypeQuery
     [Browse(Never)] private  readonly   Tags                tags;
     [Browse(Never)] private             int                 archetypeCount;
                     private             int                 lastArchetypeCount;
+                    
+                    public override     string              ToString() => GetString();
     #endregion
 
-                    public override     string              ToString() => types.GetString("Query: ");
+//  public QueryChunks      Chunks                                      => new (this);
+    public QueryEnumerator  GetEnumerator()                             => new (this);
+//  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
 
     internal ArchetypeQuery(
         EntityStore         store,
@@ -107,10 +112,29 @@ public class ArchetypeQuery
             return new ReadOnlySpan<Archetype>(nextArchetypes, 0, nextCount);
         }
     }
-    
-//  public QueryChunks      Chunks                                      => new (this);
-    public QueryEnumerator  GetEnumerator()                             => new (this);
-//  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
+
+    private string GetString() {
+        var sb          = new StringBuilder();
+        var hasTypes    = false;
+        sb.Append("Query: [");
+        foreach (var structType in structs) {
+            sb.Append(structType.type.Name);
+            sb.Append(", ");
+            hasTypes = true;
+        }
+        foreach (var tag in tags) {
+            sb.Append('#');
+            sb.Append(tag.type.Name);
+            sb.Append(", ");
+            hasTypes = true;
+        }
+        if (hasTypes) {
+            sb.Length -= 2;
+            sb.Append(']');
+            return sb.ToString();
+        }
+        return "[]";
+    }
 }
 
 public sealed class ArchetypeQuery<T> : ArchetypeQuery

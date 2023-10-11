@@ -181,9 +181,10 @@ public static class Test_Tags
         AreEqual(1,                                 archTestTag.EntityCount);
         AreEqual(1,                                 archTestTagAll.EntityCount);
         {
-            var query1  = store.Query(Tags.Get<TestTag>());
+            var query  = store.Query(Tags.Get<TestTag>());
+            AreEqual("Query: [#TestTag]", query.ToString());
             int count   = 0;
-            foreach (var id in query1) {
+            foreach (var id in query) {
                 switch (count) {
                     case 0: AreEqual(1, id); break;
                     case 1: AreEqual(2, id); break;
@@ -192,17 +193,19 @@ public static class Test_Tags
             }
             AreEqual(2, count);
         } {
-            var query2  = store.Query(Tags.Get<TestTag2>());
+            var query  = store.Query(Tags.Get<TestTag2>());
+            AreEqual("Query: [#TestTag2]", query.ToString());
             int count   = 0;
-            foreach (var id in query2) {
+            foreach (var id in query) {
                 count++;
                 AreEqual(2, id);
             }
             AreEqual(1, count);
         } { 
-            var query12 = store.Query(Tags.Get<TestTag, TestTag2>());
+            var query = store.Query(Tags.Get<TestTag, TestTag2>());
+            AreEqual("Query: [#TestTag, #TestTag2]", query.ToString());
             int count   = 0;
-            foreach (var id in query12) {
+            foreach (var id in query) {
                 count++;
                 AreEqual(2, id);
             }
