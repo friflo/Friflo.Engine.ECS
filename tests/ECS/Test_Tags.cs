@@ -121,6 +121,18 @@ public static class Test_Tags
 
         var query2 =    store.Query(sig2, Tags.Get<TestTag, TestTag2>());
     }
-
+    
+    [Test]
+    public static void Test_Tags_Add_Remove() {
+        var store       = new EntityStore();
+        var entity      = store.CreateEntity();
+        var testTag2    = Tags.Get<TestTag2>();
+        
+        entity.AddTag<TestTag>();
+        entity.AddTags(testTag2);
+        
+        entity.RemoveTag<TestTag>();
+        entity.RemoveTags(testTag2);
+    }
 }
 
