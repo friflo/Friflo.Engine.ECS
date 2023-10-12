@@ -19,8 +19,8 @@ public class ArchetypeQuery
                     private  readonly   EntityStore         store;              //  8
     [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
     // --- blittable types
-    [Browse(Never)] private  readonly   ArchetypeStructs    structs;            // 32   the BitSet         of struct component types (T1,T2,...)
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;      // 20   the struct indices of struct component types (T1,T2,...)
+    [Browse(Never)] private  readonly   ArchetypeStructs    structs;            // 32   the BitSet             of struct component types: T1,T2,T3,T4,T5
+    [Browse(Never)] internal readonly   StructIndexes       structIndexes;      // 20   ordered struct indices of struct component types: T1,T2,T3,T4,T5
     [Browse(Never)] internal            Tags                allTags;            // 32   entity tags an Archetype must have
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
                     private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
@@ -84,7 +84,11 @@ public class ArchetypeQuery
         var sb          = new StringBuilder();
         var hasTypes    = false;
         sb.Append("Query: [");
-        foreach (var structType in structs) {
+        var schema = EntityStore.Static.ComponentSchema;
+        for (int n = 0; n < structIndexes.length; n++)
+        {
+            var structIndex = structIndexes.GetIndex(n);
+            var structType = schema.Structs[structIndex];
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;

@@ -9,6 +9,10 @@ using System.Text;
 namespace Friflo.Fliox.Engine.ECS;
 
 // ReSharper disable InconsistentNaming
+/// <summary>
+/// Note: The order of struct type indices matters.<br/>
+/// The struct is used when dealing with generic types like: T1, T2, T3, ...   
+/// </summary>
 internal readonly struct StructIndexes
 {
     internal readonly   int     length; // 4     
