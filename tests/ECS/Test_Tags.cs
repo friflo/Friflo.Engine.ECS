@@ -70,6 +70,26 @@ public static class Test_Tags
     }
     
     [Test]
+    public static void Test_TagsEnumerator()
+    {
+        var tags = Tags.Get<TestTag>();
+        var enumerator = tags.GetEnumerator();
+        int count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(1, count);
+        
+        count = 0;
+        enumerator.Reset();
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(1, count);
+        enumerator.Dispose();
+    }
+    
+    [Test]
     public static void Test_Tags_Get()
     {
         var schema          = EntityStore.GetComponentSchema();

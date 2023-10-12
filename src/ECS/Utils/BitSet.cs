@@ -129,9 +129,9 @@ public struct BitSetEnumerator
     
     // --- IEnumerator
     public void Reset() {
+        lng     = bitSet.l0;
         curPos  = 0;
-        lng     = 0;
-        lng     = 0;
+        lngPos  = 0;
     }
     
     public bool MoveNext()
