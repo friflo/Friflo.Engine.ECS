@@ -114,10 +114,10 @@ public struct BitSet
 
 public struct BitSetEnumerator
 {
-    private readonly    BitSet      bitSet;
-    private             int         curPos; // range: [0, ..., 255]
-    private             int         lngPos; // range: [0, 1, 2, 3, 4] - higher values are not assigned
-    private             long        lng;    // 64 bits
+    private readonly    BitSet      bitSet; // 32
+    private             long        lng;    //  8   - 64 bits
+    private             int         lngPos; //  4   - range: [0, 1, 2, 3, 4] - higher values are not assigned
+    private             int         curPos; //  4   - range: [0, ..., 255]
     
     internal BitSetEnumerator(in BitSet bitSet) {
         this.bitSet = bitSet;
@@ -130,8 +130,8 @@ public struct BitSetEnumerator
     // --- IEnumerator
     public void Reset() {
         lng     = bitSet.l0;
-        curPos  = 0;
         lngPos  = 0;
+        curPos  = 0;
     }
     
     public bool MoveNext()
