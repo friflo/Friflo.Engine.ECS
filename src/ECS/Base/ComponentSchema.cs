@@ -111,8 +111,8 @@ public sealed class ComponentSchema
     }
     
     /// <remarks>
-    /// Ensures <see cref="StructHeap.structIndex"/> is less than <see cref="maxStructIndex"/>
-    /// to avoid range check when accessing <see cref="Archetype.heapMap"/>
+    /// Ensures <see cref="StructHeap.structIndex"/> and <see cref="StructHeap{T}.StructIndex"/> is less than <see cref="maxStructIndex"/><br/>
+    /// to make range check redundant when accessing <see cref="Archetype.heapMap"/>[] using an index.
     /// </remarks>
     internal ComponentType GetStructType(int structIndex, Type type)
     {

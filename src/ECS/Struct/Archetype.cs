@@ -37,10 +37,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
     [Browse(Never)] internal readonly   Tags                        tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey                key;            //  8 (+76)
-    /// <remarks>
-    /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
-    /// does not require a range check. This is already ensured at <see cref="ComponentSchema.GetStructType"/>
-    /// </remarks>
+    /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.GetStructType"/></remarks>
     [Browse(Never)] internal readonly   StructHeap[]                heapMap;        //  8 + maxStructIndex heap references
     [Browse(Never)] internal readonly   EntityStore                 store;          //  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                         archIndex;      //  4       - index in EntityStore
