@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <remarks>
-/// As the <see cref="ArchetypeKey"/> is a large struct (72 bytes) it performs much better as a class than a struct
+/// As the <see cref="ArchetypeKey"/> requires ~72 bytes it performs much better as a class than a struct
 /// in a <see cref="HashSet{T}"/><br/>
 /// The <see cref="IEqualityComparer{T}"/> requires two copies of an <see cref="ArchetypeKey"/>
 /// </remarks>
