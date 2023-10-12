@@ -71,23 +71,23 @@ public sealed partial class EntityStore
     #endregion
     
 #region private / internal fields
+    // --- archetypes
     [Browse(Never)] private             Archetype[]                 archetypes;         //  8 + archetypes      - array of all archetypes. never null
     [Browse(Never)] internal readonly   HashSet<ArchetypeKey>       archetypeSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
     [Browse(Never)] internal            int                         archetypesCount;    //  4                   - number of archetypes
     [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8                   - default archetype without components
-    [Browse(Never)] private             int                         rootId;             //  4                   - id of root node. 0 = NoParentId
-    
-    // --- node access
+    // --- nodes
     [Browse(Never)] private  readonly   PidType                     pidType;            //  4                   - pid != id  /  pid == id
     [Browse(Never)] private             Random                      randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>       pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] internal            EntityNode[]                nodes;              //  8 + all nodes       - acts also id2pid
     [Browse(Never)] private             int                         nodeMaxId;          //  4                   - highest entity id
     [Browse(Never)] private             int                         nodeCount;          //  4                   - number of all entities
-    
+    [Browse(Never)] private             int                         rootId;             //  4                   - id of root node. 0 = NoParentId
+                    private             int                         sequenceId;         //  4                   - incrementing id used for next new EntityNode               
+    // --- misc
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
     [Browse(Never)] private  readonly   ArchetypeKey                searchKey;          //  8 (+76)             - key buffer to find archetypes by key
-                    private             int                         sequenceId;         //  4                   - incrementing id used for next new EntityNode               
     #endregion
     
 #region static fields
