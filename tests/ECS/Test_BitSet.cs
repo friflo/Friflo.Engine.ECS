@@ -1,4 +1,5 @@
-﻿using Friflo.Fliox.Engine.ECS;
+﻿using System;
+using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
@@ -17,7 +18,7 @@ public static class Test_BitSet
             var bitSet = new BitSet();
             bitSet.SetBit(1);
             bitSet.SetBit(2);
-            AreEqual("0000000000000006", bitSet.ToString());
+            AreEqual("0000000000000006",                                                    bitSet.ToString());
             IsTrue(bitSet.Has(1));
             IsTrue(bitSet.Has(2));
             
@@ -26,8 +27,16 @@ public static class Test_BitSet
             IsTrue(bitSet.Has(255));
         } {
             var bitSet = new BitSet(new [] { 0 });
-            AreEqual("0000000000000001", bitSet.ToString());
+            AreEqual("0000000000000001",                                                    bitSet.ToString());
             IsTrue(bitSet.Has(0));
+        } {
+            var bitSet = new BitSet(new [] { 64 });
+            AreEqual("0000000000000000 0000000000000001",                                   bitSet.ToString());
+            IsTrue(bitSet.Has(64));
+        } {
+            var bitSet = new BitSet(new [] { 128 });
+            AreEqual("0000000000000000 0000000000000000 0000000000000001",                  bitSet.ToString());
+            IsTrue(bitSet.Has(128));
         } {
             var bitSet = new BitSet(new [] { 0, 64, 128, 192 });
             AreEqual("0000000000000001 0000000000000001 0000000000000001 0000000000000001", bitSet.ToString());
@@ -38,6 +47,30 @@ public static class Test_BitSet
             var bitSet = new BitSet(new [] { 63, 127, 191, 255 });
             AreEqual("8000000000000000 8000000000000000 8000000000000000 8000000000000000", bitSet.ToString());
         }
+    }
+    
+    [Test]
+    public static void Test_BitSet_Enumerator() {
+        var bitSet      = new BitSet();
+        AreEqual(0L, bitSet.LongAt(0));
+        
+        Throws<IndexOutOfRangeException>(() => {
+            _ = bitSet.LongAt(5);
+        });
+        
+        var enumerator  = bitSet.GetEnumerator();
+        var count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(0, count);
+        
+        enumerator.Reset();;
+        count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(0, count);
     }
     
     [Test]

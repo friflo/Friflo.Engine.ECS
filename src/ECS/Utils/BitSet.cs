@@ -86,7 +86,7 @@ public struct BitSet
         return (value & bitSet.value) != default;
     }
     
-    internal long At(int index)
+    public long LongAt(int index)
     {
         switch (index) {
             case 0:     return l0;
@@ -150,7 +150,7 @@ public struct BitSetEnumerator
                 if (lngPos == 4) {
                     return false;
                 }
-                lng = bitSet.At(lngPos);
+                lng = bitSet.LongAt(lngPos);
             }
         }
         return false;  

@@ -113,9 +113,8 @@ public class ArchetypeQuery
         if (hasTypes) {
             sb.Length -= 2;
             sb.Append(']');
-            return sb.ToString();
         }
-        return "[]";
+        return sb.ToString();
     }
     #endregion
 }
