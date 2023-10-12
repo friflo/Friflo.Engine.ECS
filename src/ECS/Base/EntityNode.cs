@@ -33,7 +33,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b><see cref="Pid"/></b><br/>
 /// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
 /// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
-/// Using random pid's avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
+/// Using random pids avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
 /// The probability generating the same pid by two different users is:
 /// <code>
 ///     p = 1 - exp(-r^2 / (2 * N))

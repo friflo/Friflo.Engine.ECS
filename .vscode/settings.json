@@ -26,6 +26,7 @@
         "Avalonia",
         "bepu",
         "bepuphysics",
+        "blittable",
         "Browsable",
         "Netcode",
         "Pids",
