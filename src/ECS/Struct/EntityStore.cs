@@ -22,7 +22,7 @@ public sealed partial class EntityStore
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
         var types   = new StructIndexes(1,
-            T1: schema.GetStructType(StructHeap<T>.StructIndex, typeof(T)).structIndex
+            T1: schema.CheckStructIndex(StructHeap<T>.StructIndex, typeof(T))
         );
         var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
         AddArchetype(archetype);

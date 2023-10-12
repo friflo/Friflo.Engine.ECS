@@ -116,6 +116,12 @@ public sealed class ComponentSchema
     /// </remarks>
     internal ComponentType GetStructType(int structIndex, Type type)
     {
+        CheckStructIndex(structIndex, type);
+        return structs[structIndex];
+    }
+    
+    internal int CheckStructIndex(int structIndex, Type type)
+    {
         if (structIndex == StructUtils.MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
             throw new InvalidOperationException(msg);
@@ -124,7 +130,7 @@ public sealed class ComponentSchema
             const string msg = $"number of structs exceed EntityStore.{nameof(maxStructIndex)}";
             throw new InvalidOperationException(msg);
         }
-        return structs[structIndex];
+        return structIndex;
     }
     
     internal ComponentType GetTagAt(int index) {
