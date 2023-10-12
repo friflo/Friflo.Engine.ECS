@@ -141,7 +141,7 @@ public readonly struct Signature<T>
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
 
     public override string ToString() => signatureIndexes.GetString("Signature: ");
 
@@ -156,7 +156,7 @@ public readonly struct Signature<T1, T2>
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
     
     public override string ToString() => signatureIndexes.GetString("Signature: ");
     
@@ -172,7 +172,7 @@ public readonly struct Signature<T1, T2, T3>
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
     
     
     public override string ToString() => signatureIndexes.GetString("Signature: ");
@@ -190,7 +190,7 @@ public readonly struct Signature<T1, T2, T3, T4>
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
     
     public override string ToString() => signatureIndexes.GetString("Signature: ");
     
@@ -208,7 +208,7 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
 
     public override string ToString() => signatureIndexes.GetString("Signature: ");
 

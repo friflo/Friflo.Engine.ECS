@@ -29,9 +29,9 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
                         public override     string              ToString()      => $"Length: {childLength}";
     
     // --- internal fields
-    [Browse(Never)]     internal readonly   int                 childLength;
-    [Browse(Never)]     internal readonly   int[]               childIds;
-    [Browse(Never)]     internal readonly   EntityNode[]        nodes;
+    [Browse(Never)]     internal readonly   int                 childLength;    //  4
+    [Browse(Never)]     internal readonly   int[]               childIds;       //  8
+    [Browse(Never)]     internal readonly   EntityNode[]        nodes;          //  8
 
 
     public ChildEnumerator GetEnumerator() => new ChildEnumerator(this);
@@ -65,8 +65,8 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
 
 public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented to enable returning Current by ref
 {
-    private             int         index;
-    private readonly    ChildNodes  childNodes;
+    private             int         index;      //  4
+    private readonly    ChildNodes  childNodes; // 20
     
     internal ChildEnumerator(in ChildNodes childNodes) {
         this.childNodes = childNodes;

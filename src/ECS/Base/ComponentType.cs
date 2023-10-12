@@ -16,31 +16,31 @@ public abstract class ComponentType
     /// If <see cref="kind"/> == <see cref="Struct"/> the key assigned in <see cref="StructComponentAttribute"/><br/>
     /// If <see cref="kind"/> == <see cref="Class"/>  the key assigned in <see cref="ClassComponentAttribute"/>
     /// </summary>
-    public   readonly   string          componentKey;
+    public   readonly   string          componentKey;   //  8
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Class"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
     /// </summary>
-    public   readonly   int             classIndex;
+    public   readonly   int             classIndex;     //  4
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Structs"/>. Otherwise 0<br/>
     /// </summary>
-    public   readonly   int             structIndex;
+    public   readonly   int             structIndex;    //  4
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Tag"/> the index in <see cref="ComponentSchema.Tags"/>. Otherwise 0<br/>
     /// </summary>
-    public   readonly   int             tagIndex;
+    public   readonly   int             tagIndex;       //  4
     /// <returns>
     /// <see cref="Class"/> if the type is a <see cref="ClassComponent"/><br/>
     /// <see cref="Struct"/> if the type is a <see cref="IStructComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
-    public   readonly   ComponentKind   kind;
+    public   readonly   ComponentKind   kind;           //  4
     
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a struct component attributed with <see cref="StructComponentAttribute"/><br/>
     /// If <see cref="kind"/> == <see cref="Class"/> the type of a class  component attributed with <see cref="ClassComponentAttribute"/>
     /// </summary>
-    public   readonly   Type            type;
+    public   readonly   Type            type;           //  8
         
     internal abstract   StructHeap  CreateHeap          (int capacity);
     internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);

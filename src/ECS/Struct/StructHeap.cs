@@ -15,10 +15,10 @@ namespace Friflo.Fliox.Engine.ECS;
 internal abstract class StructHeap
 {
     // --- internal fields
-    internal readonly   string      structKey;
-    internal readonly   Bytes       keyBytes;
-    internal readonly   Type        type;
-    internal readonly   int         structIndex;
+    internal readonly   string      structKey;      //  8
+    internal readonly   Bytes       keyBytes;       // 16
+    internal readonly   Type        type;           //  8
+    internal readonly   int         structIndex;    //  4
 #if DEBUG
     private             Archetype   archetype; // only used to provide debug info.
 #endif

@@ -23,11 +23,11 @@ public struct  Position : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
-    [FieldOffset(00)] public    Vector3 value;
+    [FieldOffset(00)] public    Vector3 value;  // 12
     //
-    [FieldOffset(00)] public    float   x;
-    [FieldOffset(04)] public    float   y;
-    [FieldOffset(08)] public    float   z;
+    [FieldOffset(00)] public    float   x;      // (4)
+    [FieldOffset(04)] public    float   y;      // (4)
+    [FieldOffset(08)] public    float   z;      // (4)
 
     public override string ToString() => $"{x}, {y}, {z}";
 
@@ -45,12 +45,12 @@ public struct  Rotation : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
-    [FieldOffset(00)] public    Quaternion  value;
+    [FieldOffset(00)] public    Quaternion  value;  // 16
     //
-    [FieldOffset(00)] public    float       x;
-    [FieldOffset(04)] public    float       y;
-    [FieldOffset(08)] public    float       z;
-    [FieldOffset(12)] public    float       w;
+    [FieldOffset(00)] public    float       x;      // (4)
+    [FieldOffset(04)] public    float       y;      // (4)
+    [FieldOffset(08)] public    float       z;      // (4)
+    [FieldOffset(12)] public    float       w;      // (4)
     
     public override string ToString() => $"{x}, {y}, {z}, {w}";
     
@@ -69,11 +69,11 @@ public struct Scale3 : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
-    [FieldOffset(00)] public    Vector3 value;
+    [FieldOffset(00)] public    Vector3 value;  // 12
     //
-    [FieldOffset(00)] public    float   x;
-    [FieldOffset(04)] public    float   y;
-    [FieldOffset(08)] public    float   z;
+    [FieldOffset(00)] public    float   x;      // (4)
+    [FieldOffset(04)] public    float   y;      // (4)
+    [FieldOffset(08)] public    float   z;      // (4)
 
     public override string ToString() => $"{x}, {y}, {z}";
 
@@ -91,8 +91,8 @@ public struct EntityName : IStructComponent
                             public  string              Value   { get => value; set => SetValue(value); }
     [Browse(Never)]         public  ReadOnlySpan<byte>  UTF8    => new (utf8);
 
-    [Browse(Never)][Ignore] private string              value;
-    [Browse(Never)][Ignore] private byte[]              utf8;
+    [Browse(Never)][Ignore] private string              value;  //  8
+    [Browse(Never)][Ignore] private byte[]              utf8;   //  8
     
     public override         string              ToString() => $"Name: \"{value}\"";
 

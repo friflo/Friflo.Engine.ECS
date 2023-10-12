@@ -19,8 +19,8 @@ public struct Ref<T>
     /// </summary>
     public          ref T       Value => ref components[pos];
     
-    private             T[]     components;
-    internal            int     pos;
+    private             T[]     components; //  8
+    internal            int     pos;        //  4
     
     internal void Set(T[] components) {
         this.components = components;
