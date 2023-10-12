@@ -52,12 +52,6 @@ public static class Test_BitSet
     [Test]
     public static void Test_BitSet_Enumerator() {
         var bitSet      = new BitSet();
-        AreEqual(0L, bitSet.LongAt(0));
-        
-        Throws<IndexOutOfRangeException>(() => {
-            _ = bitSet.LongAt(5);
-        });
-        
         var enumerator  = bitSet.GetEnumerator();
         var count = 0;
         while (enumerator.MoveNext()) {

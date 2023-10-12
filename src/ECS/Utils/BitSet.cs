@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
@@ -86,18 +85,6 @@ public struct BitSet
         return (value & bitSet.value) != default;
     }
     
-    public long LongAt(int index)
-    {
-        switch (index) {
-            case 0:     return l0;
-            case 1:     return l1;
-            case 2:     return l2;
-            case 3:     return l3;
-            default:
-                throw new IndexOutOfRangeException();
-        }
-    }
-    
     private StringBuilder AppendString(StringBuilder sb) {
         if (l3 != 0) {
             sb.Append($"{l0:x16} {l1:x16} {l2:x16} {l3:x16}");
@@ -144,11 +131,13 @@ public struct BitSetEnumerator
                 curPos      = (lngPos << 6) + bitPos;
                 return true;
             }
-            lngPos++;
-            if (lngPos == 4) {
-                return false;
+            switch (++lngPos) {
+            //  case 0      not possible
+                case 1:     lng = bitSet.l1;    continue;
+                case 2:     lng = bitSet.l2;    continue;
+                case 3:     lng = bitSet.l3;    continue;
+                case 4:     return false;
             }
-            lng = bitSet.LongAt(lngPos);
         }
     }
 }
