@@ -59,21 +59,18 @@ public sealed class Archetype
         archIndex       = config.archetypeIndex;
         capacity        = config.capacity;
         componentCount  = heaps.Length;
-        structHeaps     = new StructHeap[componentCount];
+        structHeaps     = heaps;
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
         structs         = new ArchetypeStructs(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
-        foreach (var heap in heaps) {
-            SetStandardComponentHeaps(heap, ref std);
-        }
-        int pos = 0;
-        foreach (var heap in heaps)
+        for (int pos = 0; pos < componentCount; pos++)
         {
+            var heap = heaps[pos];
             heap.SetArchetype(this);
-            structHeaps[pos++]          = heap;
-            heapMap[heap.structIndex]   = heap;
+            heapMap[heap.structIndex] = heap;
+            SetStandardComponentHeaps(heap, ref std);
         }
     }
     

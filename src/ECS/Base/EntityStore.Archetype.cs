@@ -80,7 +80,7 @@ public sealed partial class EntityStore
         if (archetype.archIndex != archetypesCount) {
             throw new InvalidOperationException("invalid archIndex");
         }
-        archetypes    [archetypesCount] = archetype;
+        archetypes[archetypesCount] = archetype;
         archetypesCount++;
         archetypeSet.Add(archetype.key);
     }
