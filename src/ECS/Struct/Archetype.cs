@@ -21,8 +21,8 @@ public sealed class Archetype
                     public              ReadOnlySpan<int>           EntityIds       => new (entityIds, 0, entityCount);
     
                     public              EntityStore                 Store           => store;
-                    public ref readonly Tags                        Tags            => ref tags;
                     public ref readonly ArchetypeStructs            Structs         => ref structs;
+                    public ref readonly Tags                        Tags            => ref tags;
     #endregion
     
 #region private / internal members
@@ -32,8 +32,8 @@ public sealed class Archetype
     [Browse(Never)] private             int                         entityCount;    //  4       - number of entities in archetype
                     private             int                         capacity;       //  4
     // --- internal
-    [Browse(Never)] internal readonly   Tags                        tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
+    [Browse(Never)] internal readonly   Tags                        tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey                key;            //  8 (+76)
     /// <remarks>
     /// Lookups on <see cref="heapMap"/> with <see cref="StructHeap.structIndex"/> or <see cref="StructHeap{T}.StructIndex"/>
