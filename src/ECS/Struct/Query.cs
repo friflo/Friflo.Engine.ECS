@@ -150,9 +150,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         return this;
     }
     
-    public QueryChunks      <T1,T2> Chunks                                      => new (this);
-    public QueryEnumerator  <T1,T2> GetEnumerator()                             => new (this);
-    public QueryForEach     <T1,T2> ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
+    public      QueryChunks    <T1,T2>  Chunks                                      => new (this);
+    public new  QueryEnumerator<T1,T2>  GetEnumerator()                             => new (this);
+    public      QueryForEach   <T1,T2>  ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
