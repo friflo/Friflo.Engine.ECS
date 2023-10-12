@@ -58,8 +58,7 @@ public class ArchetypeQuery
             var newStoreLength  = storeArchetypes.Length;
             var nextArchetypes  = archetypes;
             var nextCount       = archetypeCount;
-            var structs         = new ArchetypeStructs();
-            signatureIndexes.ToArchetypeStructs(ref structs);
+            var structs         = new ArchetypeStructs(signatureIndexes);
             for (int n = lastArchetypeCount; n < newStoreLength; n++) {
                 var archetype       = storeArchetypes[n];
                 bool hasAllTypes    = structs.Has(archetype.structs) && archetype.tags.HasAll(allTags);

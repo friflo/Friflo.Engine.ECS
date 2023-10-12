@@ -50,7 +50,7 @@ internal sealed class ArchetypeKey
     }
     
     internal void SetSignatureTags(in SignatureIndexes indexes, in Tags tags) {
-        indexes.ToArchetypeStructs(ref structs);
+        structs         = new ArchetypeStructs(indexes);
         this.tags       = tags;
         hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }

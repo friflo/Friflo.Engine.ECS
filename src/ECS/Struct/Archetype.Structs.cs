@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,24 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
         foreach (var heap in heaps) {
             bitSet.SetBit(heap.structIndex);
         }
+    }
+    
+    internal ArchetypeStructs(in SignatureIndexes indexes)
+    {
+        switch (indexes.length) {
+            case 0: return;
+            case 1: goto Type1;
+            case 2: goto Type2;
+            case 3: goto Type3;
+            case 4: goto Type4;
+            case 5: goto Type5;
+            default: throw new InvalidOperationException($"invalid index: {indexes.length}");
+        }
+        Type5:   bitSet.SetBit(indexes.T5);
+        Type4:   bitSet.SetBit(indexes.T4);
+        Type3:   bitSet.SetBit(indexes.T3);
+        Type2:   bitSet.SetBit(indexes.T2);
+        Type1:   bitSet.SetBit(indexes.T1);
     }
     
     // ----------------------------------------- structs getter -----------------------------------------

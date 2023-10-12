@@ -139,7 +139,7 @@ public static class Signature
 public readonly struct Signature<T>
     where T : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
 
@@ -154,7 +154,7 @@ public readonly struct Signature<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
     
@@ -170,7 +170,7 @@ public readonly struct Signature<T1, T2, T3>
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
     
@@ -188,7 +188,7 @@ public readonly struct Signature<T1, T2, T3, T4>
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
     
@@ -206,7 +206,7 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
 
