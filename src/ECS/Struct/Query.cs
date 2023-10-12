@@ -22,14 +22,14 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
                     private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of struct component types: T1,T2,T3,T4,T5
-    [Browse(Never)] internal            Tags                allTags;            // 32   entity tags an Archetype must have
-                    
-                    public              ArchetypeQuery      AllTags(in Tags tags) { allTags = tags; return this; }
+    [Browse(Never)] private             Tags                allTags;            // 32   entity tags an Archetype must have
                     
                     public override     string              ToString() => GetString();
     #endregion
 
 #region methods
+    public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
+
 //  public QueryChunks      Chunks                                      => new (this);
     public QueryEnumerator  GetEnumerator()                             => new (this);
 //  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
@@ -43,6 +43,14 @@ public class ArchetypeQuery
         lastArchetypeCount  = 1;
         signatureIndexes    = indexes;
         // store.AddQuery(this);
+    }
+    
+    /// <remarks>
+    /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
+    /// </remarks>
+    internal void SetRequiredTags(in Tags tags) {
+        allTags             = tags;
+        lastArchetypeCount  = 1;
     }
     
     // private  readonly    List<ArchetypeQuery>    queries;            // only for debugging
@@ -112,7 +120,7 @@ public class ArchetypeQuery
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
     where T : struct, IStructComponent
 {
-    public new ArchetypeQuery<T> AllTags (in Tags tags) { allTags = tags; return this; }
+    public new ArchetypeQuery<T> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T> signature)
         : base(store, signature.signatureIndexes) {
@@ -126,7 +134,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
     
-     public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { allTags = tags; return this; }
+     public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2> signature)
         : base(store, signature.signatureIndexes) {
@@ -150,7 +158,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { allTags = tags; return this; }
+    public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3> signature)
         : base(store, signature.signatureIndexes) {
@@ -163,7 +171,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { allTags = tags; return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4> signature)
         : base(store, signature.signatureIndexes) {
@@ -177,7 +185,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { allTags = tags; return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature.signatureIndexes) {
