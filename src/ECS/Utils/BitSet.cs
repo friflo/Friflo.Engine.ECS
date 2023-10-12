@@ -116,7 +116,7 @@ public struct BitSetEnumerator
 {
     private readonly    BitSet      bitSet;
     private             int         curPos; // range: [0, ..., 255]
-    private             int         lngPos; // range: [0, 1, 2, 3, 4]
+    private             int         lngPos; // range: [0, 1, 2, 3, 4] - higher values are not assigned
     private             long        lng;    // 64 bits
     
     internal BitSetEnumerator(in BitSet bitSet) {
@@ -136,23 +136,19 @@ public struct BitSetEnumerator
     
     public bool MoveNext()
     {
-        if (lngPos < 4)
+        while (true)
         {
-            while (true)
-            {
-                if (lng != 0) {
-                    var bitPos  = BitOperations.TrailingZeroCount(lng);
-                    lng        ^= 1L << bitPos;
-                    curPos      = (lngPos << 6) + bitPos;
-                    return true;
-                }
-                lngPos++;
-                if (lngPos == 4) {
-                    return false;
-                }
-                lng = bitSet.LongAt(lngPos);
+            if (lng != 0) {
+                var bitPos  = BitOperations.TrailingZeroCount(lng);
+                lng        ^= 1L << bitPos;
+                curPos      = (lngPos << 6) + bitPos;
+                return true;
             }
+            lngPos++;
+            if (lngPos == 4) {
+                return false;
+            }
+            lng = bitSet.LongAt(lngPos);
         }
-        return false;  
     }
 }
