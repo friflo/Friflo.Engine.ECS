@@ -22,7 +22,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
                     private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of struct component types: T1,T2,T3,T4,T5
-    [Browse(Never)] private             Tags                allTags;            // 32   entity tags an Archetype must have
+    [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
                     
                     public override     string              ToString() => GetString();
     #endregion
@@ -49,7 +49,7 @@ public class ArchetypeQuery
     /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
     /// </remarks>
     internal void SetRequiredTags(in Tags tags) {
-        allTags             = tags;
+        requiredTags        = tags;
         lastArchetypeCount  = 1;
     }
     
@@ -67,11 +67,14 @@ public class ArchetypeQuery
             var newStoreLength  = storeArchetypes.Length;
             var nextArchetypes  = archetypes;
             var nextCount       = archetypeCount;
-            var structs         = new ArchetypeStructs(signatureIndexes);
-            for (int n = lastArchetypeCount; n < newStoreLength; n++) {
-                var archetype       = storeArchetypes[n];
-                bool hasAllTypes    = structs.Has(archetype.structs) && archetype.tags.HasAll(allTags);
-                if (!hasAllTypes) {
+            var requiredStructs = new ArchetypeStructs(signatureIndexes);
+            
+            for (int n = lastArchetypeCount; n < newStoreLength; n++)
+            {
+                var archetype         = storeArchetypes[n];
+                var hasRequiredTypes  = archetype.structs.HasAll(requiredStructs) &&
+                                        archetype.tags.   HasAll(requiredTags);
+                if (!hasRequiredTypes) {
                     continue;
                 }
                 if (nextCount == nextArchetypes.Length) {
@@ -101,7 +104,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in allTags) {
+        foreach (var tag in requiredTags) {
             sb.Append('#');
             sb.Append(tag.type.Name);
             sb.Append(", ");

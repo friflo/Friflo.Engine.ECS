@@ -48,10 +48,6 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- structs getter -----------------------------------------
-    internal bool Has(in ArchetypeStructs other) {
-        return (bitSet.value & other.bitSet.value) == bitSet.value;
-    }
-    
     public  bool    Has<T> ()
         where T : struct, IStructComponent
     {
