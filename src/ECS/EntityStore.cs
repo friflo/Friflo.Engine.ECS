@@ -116,7 +116,7 @@ public sealed partial class EntityStore
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         var config          = GetArchetypeConfig();
-        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureTypeSet(0), default);
+        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new StructIndexes(0), default);
         clientNodes         = client?.nodes.Local;
         searchKey           = new ArchetypeKey();
         AddArchetype(defaultArchetype);

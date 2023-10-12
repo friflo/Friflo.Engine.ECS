@@ -240,7 +240,7 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
-        Mem.AssertAlloc(start, 256);
+        Mem.AssertAlloc(start, 192);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
         

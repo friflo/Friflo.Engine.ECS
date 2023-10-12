@@ -92,12 +92,15 @@ public sealed class Archetype
     }
 
     /// <remarks>Is called by methods using generic struct component type: T1, T2, T3, ...</remarks>
-    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureTypeSet types, in Tags tags)
+    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in StructIndexes indexes, in Tags tags)
     {
-        var length          = types.Length;
+        var length          = indexes.length;
         var componentHeaps  = new StructHeap[length];
+        var schema          = EntityStore.Static.ComponentSchema;
         for (int n = 0; n < length; n++) {
-            componentHeaps[n] = types[n].CreateHeap(config.capacity);
+            var structIndex   = indexes.GetIndex(n);
+            var structType    = schema.Structs[structIndex];
+            componentHeaps[n] = structType.CreateHeap(config.capacity);
         }
         return new Archetype(config, componentHeaps, tags);
     }
