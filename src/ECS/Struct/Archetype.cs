@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
+using ReadOnlyHeaps = System.ReadOnlySpan<Friflo.Fliox.Engine.ECS.StructHeap>;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
@@ -15,37 +16,37 @@ public sealed class Archetype
 {
 #region public properties / fields
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
-    [Browse(Never)] public              int                         EntityCount     => entityCount;
-    [Browse(Never)] public              int                         ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
-                                                                                    => (entityCount - 1) / StructUtils.ChunkSize;
+    [Browse(Never)] public              int                 EntityCount     => entityCount;
+    [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
+                                                                            => (entityCount - 1) / StructUtils.ChunkSize;
     
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
-                    public              ReadOnlySpan<int>           EntityIds       => new (entityIds, 0, entityCount);
+                    public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
-                    public              EntityStore                 Store           => store;
-                    public ref readonly ArchetypeStructs            Structs         => ref structs;
-                    public ref readonly Tags                        Tags            => ref tags;
+                    public              EntityStore         Store           => store;
+                    public ref readonly ArchetypeStructs    Structs         => ref structs;
+                    public ref readonly Tags                Tags            => ref tags;
     #endregion
     
 #region private / internal members
-                    private  readonly   StructHeap[]                structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
+                    private  readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
-    [Browse(Never)] internal            int[]                       entityIds;      //  8 + ids - could use a StructHeap<int> if needed
-    [Browse(Never)] private             int                         entityCount;    //  4       - number of entities in archetype
-                    private             int                         capacity;       //  4
+    [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
+    [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
+                    private             int                 capacity;       //  4
     // --- internal
-    [Browse(Never)] internal readonly   ArchetypeStructs            structs;        // 32       - struct component types of archetype
-    [Browse(Never)] internal readonly   Tags                        tags;           // 32       - tags assigned to archetype
-    [Browse(Never)] internal readonly   ArchetypeKey                key;            //  8 (+76)
+    [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
+    [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
+    [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.GetStructType"/></remarks>
-    [Browse(Never)] internal readonly   StructHeap[]                heapMap;        //  8 + maxStructIndex heap references
-    [Browse(Never)] internal readonly   EntityStore                 store;          //  8       - containing EntityStore
-    [Browse(Never)] internal readonly   int                         archIndex;      //  4       - index in EntityStore
-    [Browse(Never)] internal readonly   int                         componentCount; //  4       - number of component types
-                    internal readonly   StandardComponents          std;            // 32       - heap references to std types: Position, Rotation, ...
+    [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8 + maxStructIndex heap references
+    [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
+    [Browse(Never)] internal readonly   int                 archIndex;      //  4       - index in EntityStore
+    [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
+                    internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     
-    [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
-                    public   override   string                      ToString()      => GetString();
+    [Browse(Never)] internal            ReadOnlyHeaps       Heaps           => structHeaps;
+                    public   override   string              ToString()      => GetString();
     #endregion
     
 #region initialize
