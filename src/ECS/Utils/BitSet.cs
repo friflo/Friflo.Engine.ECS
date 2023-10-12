@@ -101,14 +101,21 @@ public struct BitSet
 
 public struct BitSetEnumerator
 {
-    private readonly    BitSet      bitSet; // 32
-    private             long        lng;    //  8   - 64 bits
-    private             int         lngPos; //  4   - range: [0, 1, 2, 3, 4] - higher values are not assigned
-    private             int         curPos; //  4   - range: [0, ..., 255]
+    private readonly    long    l0;     //  8
+    private readonly    long    l1;     //  8
+    private readonly    long    l2;     //  8
+    private readonly    long    l3;     //  8
+    
+    private             long    lng;    //  8   - 64 bits
+    private             int     lngPos; //  4   - range: [0, 1, 2, 3, 4] - higher values are not assigned
+    private             int     curPos; //  4   - range: [0, ..., 255]
     
     internal BitSetEnumerator(in BitSet bitSet) {
-        this.bitSet = bitSet;
-        lng         = bitSet.l0;
+        l0  = bitSet.l0;
+        l1  = bitSet.l1;
+        l2  = bitSet.l2;
+        l3  = bitSet.l3;
+        lng = l0;
     }
     
     /// <returns>the index of the current bit == 1. The index range is [0, ... , 255]</returns>
@@ -116,7 +123,7 @@ public struct BitSetEnumerator
     
     // --- IEnumerator
     public void Reset() {
-        lng     = bitSet.l0;
+        lng     = l0;
         lngPos  = 0;
         curPos  = 0;
     }
@@ -133,9 +140,9 @@ public struct BitSetEnumerator
             }
             switch (++lngPos) {
             //  case 0      not possible
-                case 1:     lng = bitSet.l1;    continue;
-                case 2:     lng = bitSet.l2;    continue;
-                case 3:     lng = bitSet.l3;    continue;
+                case 1:     lng = l1;   continue;
+                case 2:     lng = l2;   continue;
+                case 3:     lng = l3;   continue;
                 case 4:     return false;
             }
         }
