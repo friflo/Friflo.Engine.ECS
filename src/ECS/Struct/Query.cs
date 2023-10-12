@@ -98,8 +98,8 @@ public class ArchetypeQuery
         var structs = EntityStore.Static.ComponentSchema.Structs;
         for (int n = 0; n < signatureIndexes.length; n++)
         {
-            var structIndex = signatureIndexes.GetIndex(n);
-            var structType = structs[structIndex];
+            var structIndex = signatureIndexes.GetStructIndex(n);
+            var structType  = structs[structIndex];
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;

@@ -97,7 +97,7 @@ public sealed class Archetype
         var componentHeaps  = new StructHeap[length];
         var structs         = EntityStore.Static.ComponentSchema.Structs;
         for (int n = 0; n < length; n++) {
-            var structIndex   = indexes.GetIndex(n);
+            var structIndex   = indexes.GetStructIndex(n);
             var structType    = structs[structIndex];
             componentHeaps[n] = structType.CreateHeap(config.capacity);
         }

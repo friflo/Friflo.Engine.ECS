@@ -42,7 +42,7 @@ internal readonly struct SignatureIndexes
         this.T5     = T5;
     }
     
-    internal int GetIndex(int index) {
+    internal int GetStructIndex(int index) {
         switch (index) {
             case 0:     return T1;
             case 1:     return T2;
@@ -68,8 +68,8 @@ internal readonly struct SignatureIndexes
         var structs = EntityStore.Static.ComponentSchema.Structs;
         for (int n = 0; n < length; n++)
         {
-            var index = GetIndex(n);
-            sb.Append(structs[index].type.Name);
+            var structIndex = GetStructIndex(n);
+            sb.Append(structs[structIndex].type.Name);
             sb.Append(", "); 
         }
         sb.Length -= 2;
