@@ -19,11 +19,11 @@ public class ArchetypeQuery
                     private  readonly   EntityStore         store;              //  8
     [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
     // --- blittable types
+    [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
+                    private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
     [Browse(Never)] private  readonly   ArchetypeStructs    structs;            // 32   the BitSet             of struct component types: T1,T2,T3,T4,T5
     [Browse(Never)] internal readonly   StructIndexes       structIndexes;      // 24   ordered struct indices of struct component types: T1,T2,T3,T4,T5
     [Browse(Never)] internal            Tags                allTags;            // 32   entity tags an Archetype must have
-    [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
-                    private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
                     
                     public              ArchetypeQuery      AllTags(in Tags tags) { allTags = tags; return this; }
                     
@@ -40,9 +40,9 @@ public class ArchetypeQuery
         in StructIndexes    indexes)
     {
         this.store          = store;
-        archetypes          = new Archetype[1];
-        this.structs        = structs;
+        archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
+        this.structs        = structs;
         structIndexes       = indexes;
         // store.AddQuery(this);
     }
@@ -68,7 +68,8 @@ public class ArchetypeQuery
                     continue;
                 }
                 if (nextCount == nextArchetypes.Length) {
-                    Utils.Resize(ref nextArchetypes, 2 * nextCount);
+                    var length = Math.Max(4, 2 * nextCount);
+                    Utils.Resize(ref nextArchetypes, length);
                 }
                 nextArchetypes[nextCount++] = archetype;
             }

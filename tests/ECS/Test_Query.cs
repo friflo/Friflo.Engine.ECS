@@ -173,7 +173,8 @@ public static class Test_Query
             count++;
             position.Value.x = 42;
         });
-        var start = Mem.GetAllocatedBytes();
+        _           = query.Archetypes; // update Archetypes for subsequent Mem check
+        var start   = Mem.GetAllocatedBytes();
         forEach.Run();
         Mem.AssertNoAlloc(start);
         AreEqual(1,     count);
@@ -240,7 +241,7 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
-        Mem.AssertAlloc(start, 192);
+        Mem.AssertAlloc(start, 160);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
         
