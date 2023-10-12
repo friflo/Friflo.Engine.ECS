@@ -151,6 +151,7 @@ public static class Test_Tags
         // Execute previous operations again. All required archetypes are now present
         const int count = 10; // 10_000_000 ~ 1.349 ms
         var start = Mem.GetAllocatedBytes();
+        // each tags mutation causes a structural change
         for (int n = 0; n < count; n++) {
             entity.AddTag       <TestTag>();
             entity.AddTags      (testTag2);
