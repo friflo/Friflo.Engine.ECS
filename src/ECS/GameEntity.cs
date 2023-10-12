@@ -284,10 +284,6 @@ public sealed class GameEntity
             if (classes[n] is T classComponent)
             {
                 classComponent.entity = null;
-                if (len == 0) {
-                    classComponents = Static.EmptyComponents;
-                    return classComponent;
-                }
                 classComponents = new ClassComponent[len - 1];
                 for (int i = 0; i < n; i++) {
                     classComponents[i]     = classes[i];

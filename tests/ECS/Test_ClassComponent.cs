@@ -19,6 +19,11 @@ class TestRefComponent2 : ClassComponent {
     public int  val2;
 }
 
+[ClassComponent("testRef3")]
+class TestRefComponent3 : ClassComponent {
+    public int  val3;
+}
+
 // test missing [ClassComponent()] attribute
 class InvalidRefComponent : ClassComponent { }
 
@@ -80,7 +85,7 @@ public static class Test_ClassComponent
     }
     
     [Test]
-    public static void Test_2_RemoveComponent() {
+    public static void Test_2_RemoveClassComponent() {
         var store   = new EntityStore();
         var player = store.CreateEntity();
         
@@ -104,6 +109,21 @@ public static class Test_ClassComponent
         IsNull(testRef1.Entity);
         
         IsNull(player.RemoveClassComponent<TestRefComponent1>());
+    }
+    
+    [Test]
+    public static void Test_3_RemoveClassComponent() {
+        var store   = new EntityStore();
+        var player = store.CreateEntity();
+        
+        IsNull (player.AddClassComponent(new TestRefComponent1()));
+        IsNull (player.AddClassComponent(new TestRefComponent2()));
+        IsNull (player.AddClassComponent(new TestRefComponent3()));
+        NotNull(player.RemoveClassComponent<TestRefComponent2>());
+        
+        NotNull(player.GetClassComponent<TestRefComponent1>());
+        IsNull (player.GetClassComponent<TestRefComponent2>());
+        NotNull(player.GetClassComponent<TestRefComponent3>());
     }
     
     [Test]
