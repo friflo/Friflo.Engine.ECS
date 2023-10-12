@@ -42,7 +42,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   EntityStore                 store;          //  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                         archIndex;      //  4       - index in EntityStore
     [Browse(Never)] internal readonly   int                         componentCount; //  4       - number of component types
-                    internal readonly   StandardComponents          std;            // 64       - heap references to std types: Position, Rotation, ...
+                    internal readonly   StandardComponents          std;            // 32       - heap references to std types: Position, Rotation, ...
     
     [Browse(Never)] internal            ReadOnlySpan<StructHeap>    Heaps           => structHeaps;
                     public   override   string                      ToString()      => GetString();
