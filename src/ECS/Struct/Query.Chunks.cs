@@ -15,7 +15,7 @@ public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not imple
 {
     readonly ArchetypeQuery<T1, T2> query;
 
-    public  override string         ToString() => query.structIndexes.GetString("Chunks: ");
+    public  override string         ToString() => query.signatureIndexes.GetString("Chunks: ");
 
     internal QueryChunks(ArchetypeQuery<T1, T2> query) {
         this.query = query;
@@ -44,8 +44,8 @@ public ref struct ChunkEnumerator<T1, T2>
     {
         archetypes      = query.Archetypes;
         archetypePos    = 0;
-        structIndex1    = query.structIndexes.T1;
-        structIndex2    = query.structIndexes.T2;
+        structIndex1    = query.signatureIndexes.T1;
+        structIndex2    = query.signatureIndexes.T2;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;

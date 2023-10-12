@@ -21,7 +21,7 @@ public sealed partial class EntityStore
         }
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
-        var types   = new StructIndexes(1,
+        var types   = new SignatureIndexes(1,
             T1: schema.CheckStructIndex(StructHeap<T>.StructIndex, typeof(T))
         );
         var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
@@ -33,7 +33,7 @@ public sealed partial class EntityStore
         return new ArchetypeConfig (this, archetypesCount, DefaultCapacity);
     }
     
-    private Archetype GetArchetypeWithSignature(in StructIndexes indexes, in Tags tags)
+    private Archetype GetArchetypeWithSignature(in SignatureIndexes indexes, in Tags tags)
     {
         var structs = indexes.AsArchetypeStructs();
         searchKey.SetMaskTags(structs, tags);
@@ -62,14 +62,14 @@ public sealed partial class EntityStore
     public Archetype GetArchetype<T>(in Signature<T> signature, in Tags tags = default)
         where T : struct, IStructComponent
     {
-        return GetArchetypeWithSignature(signature.structIndexes, tags);
+        return GetArchetypeWithSignature(signature.signatureIndexes, tags);
     }
     
     public Archetype GetArchetype<T1, T2>(in Signature<T1, T2> signature, in Tags tags = default)
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
-        return GetArchetypeWithSignature(signature.structIndexes, tags);
+        return GetArchetypeWithSignature(signature.signatureIndexes, tags);
     }
     
     public Archetype GetArchetype<T1, T2, T3>(in Signature<T1, T2, T3> signature, in Tags tags = default)
@@ -77,7 +77,7 @@ public sealed partial class EntityStore
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
     {
-        return GetArchetypeWithSignature(signature.structIndexes, tags);
+        return GetArchetypeWithSignature(signature.signatureIndexes, tags);
     }
     
     public Archetype GetArchetype<T1, T2, T3, T4>(in Signature<T1, T2, T3, T4> signature, in Tags tags = default)
@@ -86,7 +86,7 @@ public sealed partial class EntityStore
         where T3 : struct, IStructComponent
         where T4 : struct, IStructComponent
     {
-        return GetArchetypeWithSignature(signature.structIndexes, tags);
+        return GetArchetypeWithSignature(signature.signatureIndexes, tags);
     }
     
     public Archetype GetArchetype<T1, T2, T3, T4, T5>(in Signature<T1, T2, T3, T4, T5> signature, in Tags tags = default)
@@ -96,7 +96,7 @@ public sealed partial class EntityStore
         where T4 : struct, IStructComponent
         where T5 : struct, IStructComponent
     {
-        return GetArchetypeWithSignature(signature.structIndexes, tags);
+        return GetArchetypeWithSignature(signature.signatureIndexes, tags);
     }
     #endregion
     

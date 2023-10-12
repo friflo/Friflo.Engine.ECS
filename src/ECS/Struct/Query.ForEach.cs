@@ -17,7 +17,7 @@ public readonly struct QueryForEach<T1, T2>
     private readonly    T1[]                        copyT1;
     private readonly    T2[]                        copyT2;
 
-    public  override    string                      ToString() => query.structIndexes.GetString("ForEach: ");
+    public  override    string                      ToString() => query.signatureIndexes.GetString("ForEach: ");
 
     internal QueryForEach(
         ArchetypeQuery<T1, T2>      query,
@@ -37,8 +37,8 @@ public readonly struct QueryForEach<T1, T2>
         {
             var heapMap     = archetype.heapMap;
             var entityCount = archetype.EntityCount;
-            var chunks1     = ((StructHeap<T1>)heapMap[query.structIndexes.T1]).chunks;
-            var chunks2     = ((StructHeap<T2>)heapMap[query.structIndexes.T2]).chunks;
+            var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
+            var chunks2     = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]).chunks;
             var chunksLen   =  chunks1.Length;
             
             for (int chunkPos = 0; chunkPos < chunksLen; chunkPos++)

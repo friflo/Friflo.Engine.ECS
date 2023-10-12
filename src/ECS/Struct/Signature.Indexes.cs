@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-// ReSharper disable once CheckNamespace
-
 using System;
 using System.Text;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 // ReSharper disable InconsistentNaming
@@ -13,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// Note: The order of struct type indices matters.<br/>
 /// The struct is used when dealing with generic types like: T1, T2, T3, ...   
 /// </summary>
-internal readonly struct StructIndexes
+internal readonly struct SignatureIndexes
 {
     internal readonly   int     length; // 4
     
@@ -27,7 +26,7 @@ internal readonly struct StructIndexes
     
     public override     string          ToString()      => GetString("StructIndexes: ");
     
-    internal StructIndexes (
+    internal SignatureIndexes (
         int length,
         int T1  = 0,
         int T2  = 0,

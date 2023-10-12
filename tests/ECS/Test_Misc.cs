@@ -64,7 +64,7 @@ public static class Test_Misc
         
     [Test]
     public static void Test_sizeof_StructIndexes() {
-        var type = typeof(EntityStore).Assembly.GetType("Friflo.Fliox.Engine.ECS.StructIndexes");
+        var type = typeof(EntityStore).Assembly.GetType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
         var size = Marshal.SizeOf(type!);
         AreEqual(24, size);
     }

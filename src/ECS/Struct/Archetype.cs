@@ -92,7 +92,7 @@ public sealed class Archetype
     }
 
     /// <remarks>Is called by methods using generic struct component type: T1, T2, T3, ...</remarks>
-    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in StructIndexes indexes, in Tags tags)
+    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureIndexes indexes, in Tags tags)
     {
         var length          = indexes.length;
         var componentHeaps  = new StructHeap[length];

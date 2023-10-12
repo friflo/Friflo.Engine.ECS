@@ -33,7 +33,7 @@ public static class Signature
         where T : struct, IStructComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
-        var indexes   = new StructIndexes(1,
+        var indexes   = new SignatureIndexes(1,
             T1: schema.CheckStructIndex(StructHeap<T>.StructIndex, typeof(T))
         );
         return new Signature<T>(indexes);
@@ -52,7 +52,7 @@ public static class Signature
         where T2 : struct, IStructComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
-        var indexes   = new StructIndexes(2,
+        var indexes = new SignatureIndexes(2,
             T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2))
         );
@@ -73,7 +73,7 @@ public static class Signature
         where T3 : struct, IStructComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
-        var indexes   = new StructIndexes(3,
+        var indexes = new SignatureIndexes(3,
             T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.CheckStructIndex(StructHeap<T3>.StructIndex, typeof(T3))
@@ -96,7 +96,7 @@ public static class Signature
         where T4 : struct, IStructComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
-        var indexes   = new StructIndexes(4,
+        var indexes = new SignatureIndexes(4,
             T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.CheckStructIndex(StructHeap<T3>.StructIndex, typeof(T3)),
@@ -121,7 +121,7 @@ public static class Signature
         where T5 : struct, IStructComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
-        var indexes   = new StructIndexes(5,
+        var indexes = new SignatureIndexes(5,
             T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
             T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2)),
             T3: schema.CheckStructIndex(StructHeap<T3>.StructIndex, typeof(T3)),
@@ -139,14 +139,14 @@ public static class Signature
 public readonly struct Signature<T>
     where T : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => structIndexes.AsArchetypeStructs();
-    [Browse(Never)] public              int                 StructCount => structIndexes.length;
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
+    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
 
-    public override string ToString() => structIndexes.GetString("Signature: ");
+    public override string ToString() => signatureIndexes.GetString("Signature: ");
 
-    internal Signature(StructIndexes structIndexes) {
-        this.structIndexes  = structIndexes;
+    internal Signature(SignatureIndexes signatureIndexes) {
+        this.signatureIndexes  = signatureIndexes;
     }
 }
 
@@ -154,14 +154,14 @@ public readonly struct Signature<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => structIndexes.AsArchetypeStructs();
-    [Browse(Never)] public              int                 StructCount => structIndexes.length;
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
+    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
     
-    public override string ToString() => structIndexes.GetString("Signature: ");
+    public override string ToString() => signatureIndexes.GetString("Signature: ");
     
-    internal Signature(in StructIndexes structIndexes) {
-        this.structIndexes  = structIndexes;
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes  = signatureIndexes;
     }
 }
 
@@ -170,15 +170,15 @@ public readonly struct Signature<T1, T2, T3>
     where T2 : struct, IStructComponent
     where T3 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => structIndexes.AsArchetypeStructs();
-    [Browse(Never)] public              int                 StructCount => structIndexes.length;
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
+    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
     
     
-    public override string ToString() => structIndexes.GetString("Signature: ");
+    public override string ToString() => signatureIndexes.GetString("Signature: ");
     
-    internal Signature(in StructIndexes structIndexes) {
-        this.structIndexes  = structIndexes;
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
     }
 }
 
@@ -188,14 +188,14 @@ public readonly struct Signature<T1, T2, T3, T4>
     where T3 : struct, IStructComponent
     where T4 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => structIndexes.AsArchetypeStructs();
-    [Browse(Never)] public              int                 StructCount => structIndexes.length;
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
+    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
     
-    public override string ToString() => structIndexes.GetString("Signature: ");
+    public override string ToString() => signatureIndexes.GetString("Signature: ");
     
-    internal Signature(in StructIndexes structIndexes) {
-        this.structIndexes  = structIndexes;
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
     }
 }
 
@@ -206,14 +206,14 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     where T4 : struct, IStructComponent
     where T5 : struct, IStructComponent
 {
-    public                              ArchetypeStructs    Structs     => structIndexes.AsArchetypeStructs();
-    [Browse(Never)] public              int                 StructCount => structIndexes.length;
-    [Browse(Never)] internal readonly   StructIndexes       structIndexes;
+    public                              ArchetypeStructs    Structs     => signatureIndexes.AsArchetypeStructs();
+    [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;
 
-    public override string ToString() => structIndexes.GetString("Signature: ");
+    public override string ToString() => signatureIndexes.GetString("Signature: ");
 
-    internal Signature(in StructIndexes structIndexes) {
-        this.structIndexes  = structIndexes;
+    internal Signature(in SignatureIndexes signatureIndexes) {
+        this.signatureIndexes = signatureIndexes;
     }
 }
 
