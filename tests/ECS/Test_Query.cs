@@ -239,6 +239,7 @@ public static class Test_Query
         entity3.AddComponent(new Scale3  (7, 7, 7));
         
         var sig     = Signature.Get<Position, Rotation>();
+        _           = store.Query(sig); // for one time allocation for Mem check
         var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
         Mem.AssertAlloc(start, 160);
