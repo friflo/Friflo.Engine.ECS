@@ -105,10 +105,7 @@ public struct EntityNode
                 sb.Append("Created");
             }
         }
-        if (sb.Length > 0) { 
-            return sb.ToString();
-        }
-        return "-";
+        return sb.ToString();
     }
     #endregion
 }
