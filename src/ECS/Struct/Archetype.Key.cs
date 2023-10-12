@@ -49,8 +49,8 @@ internal sealed class ArchetypeKey
         hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
-    internal void SetMaskTags(in ArchetypeStructs structs, in Tags tags) {
-        this.structs    = structs;
+    internal void SetSignatureTags(in SignatureIndexes indexes, in Tags tags) {
+        indexes.ToArchetypeStructs(ref structs);
         this.tags       = tags;
         hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }

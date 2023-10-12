@@ -35,8 +35,7 @@ public sealed partial class EntityStore
     
     private Archetype GetArchetypeWithSignature(in SignatureIndexes indexes, in Tags tags)
     {
-        var structs = indexes.AsArchetypeStructs();
-        searchKey.SetMaskTags(structs, tags);
+        searchKey.SetSignatureTags(indexes, tags);
         if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }

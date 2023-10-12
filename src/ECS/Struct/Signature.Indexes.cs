@@ -53,11 +53,10 @@ internal readonly struct SignatureIndexes
         }
     }
     
-    internal ArchetypeStructs AsArchetypeStructs()
+    internal void ToArchetypeStructs(ref ArchetypeStructs structs)
     {
-        var structs = new ArchetypeStructs();
         switch (length) {
-            case 0: goto Type0;
+            case 0: return;
             case 1: goto Type1;
             case 2: goto Type2;
             case 3: goto Type3;
@@ -70,7 +69,13 @@ internal readonly struct SignatureIndexes
         Type3:   structs.bitSet.SetBit(T3);
         Type2:   structs.bitSet.SetBit(T2);
         Type1:   structs.bitSet.SetBit(T1);
-        Type0:   return structs;
+    }
+    
+    internal ArchetypeStructs AsArchetypeStructs()
+    {
+        var structs = new ArchetypeStructs();
+        ToArchetypeStructs(ref structs);
+        return structs;
     }
     
     internal string GetString (string prefix) {
