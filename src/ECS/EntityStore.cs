@@ -73,7 +73,7 @@ public sealed partial class EntityStore
 #region private / internal fields
     [Browse(Never)] private             Archetype[]                 archetypes;         //  8 + archetypes      - array of all archetypes. never null
     [Browse(Never)] internal readonly   HashSet<ArchetypeKey>       archetypeSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
-    [Browse(Never)] internal            int                         archetypesCount;    //  8                   - number of archetypes
+    [Browse(Never)] internal            int                         archetypesCount;    //  4                   - number of archetypes
     [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8                   - default archetype without components
     [Browse(Never)] private             int                         rootId;             //  4                   - id of root node. 0 = NoParentId
     
