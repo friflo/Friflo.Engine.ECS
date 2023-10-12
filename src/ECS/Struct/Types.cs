@@ -54,6 +54,26 @@ internal readonly struct StructIndexes
         }
     }
     
+    internal ArchetypeStructs AsArchetypeStructs()
+    {
+        var structs = new ArchetypeStructs();
+        switch (length) {
+            case 0: goto Type0;
+            case 1: goto Type1;
+            case 2: goto Type2;
+            case 3: goto Type3;
+            case 4: goto Type4;
+            case 5: goto Type5;
+            default: throw new InvalidOperationException($"invalid index: {length}");
+        }
+        Type5:   structs.bitSet.SetBit(T5);
+        Type4:   structs.bitSet.SetBit(T4);
+        Type3:   structs.bitSet.SetBit(T3);
+        Type2:   structs.bitSet.SetBit(T2);
+        Type1:   structs.bitSet.SetBit(T1);
+        Type0:   return structs;
+    }
+    
     internal string GetString (string prefix) {
         if (length == 0) {
             if (prefix != null) {

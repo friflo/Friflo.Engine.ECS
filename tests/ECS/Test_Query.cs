@@ -15,13 +15,13 @@ public static class Test_Query
     {
         var sig1            = Signature.Get<Position>();
         AreEqual("Signature: [Position]",           sig1.ToString());
-        AreEqual("Structs: [Position]",             sig1.structs.ToString());
+        AreEqual("Structs: [Position]",             sig1.Structs.ToString());
         
         var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("Signature: [Position, Rotation]", sig2.ToString());
 
         int count = 0;
-        foreach (var _ in sig2.structs) {
+        foreach (var _ in sig2.Structs) {
             count++;    
         }
         AreEqual(2, count);
@@ -42,11 +42,11 @@ public static class Test_Query
         
         Mem.AssertNoAlloc(start);
         
-        AreEqual("Structs: [Position]",                                                sig1.structs.ToString());
-        AreEqual("Structs: [Position, Rotation]",                                      sig2.structs.ToString());
-        AreEqual("Structs: [Position, Rotation, Scale3]",                              sig3.structs.ToString());
-        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1]",                sig4.structs.ToString());
-        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.structs.ToString());
+        AreEqual("Structs: [Position]",                                                sig1.Structs.ToString());
+        AreEqual("Structs: [Position, Rotation]",                                      sig2.Structs.ToString());
+        AreEqual("Structs: [Position, Rotation, Scale3]",                              sig3.Structs.ToString());
+        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1]",                sig4.Structs.ToString());
+        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.Structs.ToString());
     }
     [Test]
     public static void Test_generic_Query() {
@@ -242,7 +242,7 @@ public static class Test_Query
         _           = store.Query(sig); // for one time allocation for Mem check
         var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
-        Mem.AssertAlloc(start, 160);
+        Mem.AssertAlloc(start, 128);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
         
