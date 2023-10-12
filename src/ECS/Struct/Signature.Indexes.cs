@@ -65,11 +65,11 @@ internal readonly struct SignatureIndexes
             sb.Append(prefix);
         }
         sb.Append('[');
-        var schema = EntityStore.Static.ComponentSchema;
+        var structs = EntityStore.Static.ComponentSchema.Structs;
         for (int n = 0; n < length; n++)
         {
             var index = GetIndex(n);
-            sb.Append(schema.Structs[index].type.Name);
+            sb.Append(structs[index].type.Name);
             sb.Append(", "); 
         }
         sb.Length -= 2;
