@@ -21,6 +21,8 @@ public struct Tags : IEnumerable<ComponentType>
     public   override string    ToString() => GetString();
     
     // ----------------------------------------- read Tags ----------------------------------------- 
+    public  int     Count => bitSet.GetBitCount();
+    
     public  bool    Has<T> ()
         where T : struct, IEntityTag
     {

@@ -161,6 +161,8 @@ public static class Test_StructComponent
         var store       = new EntityStore();
         var posType     = store.GetArchetype(Signature.Get<Position>());
         var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
+        AreEqual(1,         posType.Structs.Count);
+        AreEqual(2,         posRotType.Structs.Count);
         
         var player1  = store.CreateEntity();
         AreEqual("[]",      player1.Archetype.ToString());

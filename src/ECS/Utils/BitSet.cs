@@ -44,6 +44,14 @@ public struct BitSet
                unchecked((int)l2) ^ (int)(l2 >> 32) ^
                unchecked((int)l3) ^ (int)(l3 >> 32);
     }
+    
+    public int GetBitCount() {
+        return
+            BitOperations.PopCount((ulong)l0) +
+            BitOperations.PopCount((ulong)l1) +
+            BitOperations.PopCount((ulong)l2) + 
+            BitOperations.PopCount((ulong)l3);
+    }
         
     public void SetBit(int index)
     {

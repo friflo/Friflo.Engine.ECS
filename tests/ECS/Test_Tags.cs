@@ -23,12 +23,14 @@ public static class Test_Tags
         AreEqual("Tags: [#TestTag, #TestTag2]", twoTags.ToString());
         
         var tags    = new Tags();
+        AreEqual(0, tags.Count);
         AreEqual("Tags: []",                    tags.ToString());
         IsFalse(tags.Has<TestTag>());
         IsFalse(tags.HasAll(twoTags));
         IsFalse(tags.HasAny(twoTags));
         
         tags.Add<TestTag>();
+        AreEqual(1, tags.Count);
         IsTrue (tags.Has<TestTag>());
         IsFalse(tags.HasAll(twoTags));
         IsTrue (tags.HasAny(twoTags));
@@ -36,6 +38,7 @@ public static class Test_Tags
         AreEqual("Tags: [#TestTag]",            tags.ToString());
         
         tags.Add<TestTag2>();
+        AreEqual(2, tags.Count);
         AreEqual("Tags: [#TestTag, #TestTag2]", tags.ToString());
         IsTrue (tags.Has<TestTag, TestTag2>());
         IsFalse(tags.Has<TestTag, TestTag2, TestTag3>());
@@ -44,12 +47,15 @@ public static class Test_Tags
 
         var copy = new Tags();
         copy.Add(tags);
+        AreEqual(2, tags.Count);
         AreEqual("Tags: [#TestTag, #TestTag2]", copy.ToString());
         
         copy.Remove<TestTag>();
+        AreEqual(1, copy.Count);
         AreEqual("Tags: [#TestTag2]",           copy.ToString());
         
         copy.Remove(tags);
+        AreEqual(0, copy.Count);
         AreEqual("Tags: []",                    copy.ToString());
         
         var store   = new EntityStore();

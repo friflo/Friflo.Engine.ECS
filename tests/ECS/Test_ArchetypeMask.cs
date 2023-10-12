@@ -113,6 +113,7 @@ public static class Test_ArchetypeMask
         var type3   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
         
         var result  = store.FindArchetype(type1.Structs, type1.Tags);
+        AreEqual(1, type1.Structs.Count);
         AreSame (type1, result);
         
         var start   = Mem.GetAllocatedBytes();

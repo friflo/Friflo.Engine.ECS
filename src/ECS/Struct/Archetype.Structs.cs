@@ -14,6 +14,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
 {
     internal    BitSet  bitSet;     // 32
     
+    public      int     Count       => bitSet.GetBitCount();
    
     public ArchetypeMaskEnumerator  GetEnumerator()                             => new ArchetypeMaskEnumerator (this);
     // --- IEnumerable
