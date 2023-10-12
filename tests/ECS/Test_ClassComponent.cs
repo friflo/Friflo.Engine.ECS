@@ -116,9 +116,9 @@ public static class Test_ClassComponent
         var store   = new EntityStore();
         var player = store.CreateEntity();
         
-        IsNull (player.AddClassComponent(new TestRefComponent1()));
-        IsNull (player.AddClassComponent(new TestRefComponent2()));
-        IsNull (player.AddClassComponent(new TestRefComponent3()));
+        IsNull (player.AddClassComponent(new TestRefComponent1 { val1 = 1 }));
+        IsNull (player.AddClassComponent(new TestRefComponent2 { val2 = 2 }));
+        IsNull (player.AddClassComponent(new TestRefComponent3 { val3 = 3 }));
         NotNull(player.RemoveClassComponent<TestRefComponent2>());
         
         NotNull(player.GetClassComponent<TestRefComponent1>());
