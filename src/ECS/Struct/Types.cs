@@ -15,7 +15,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 internal readonly struct StructIndexes
 {
-    internal readonly   int     length; // 4     
+    internal readonly   int     length; // 4
+    
     internal readonly   int     T1;     // 4
     internal readonly   int     T2;     // 4
     internal readonly   int     T3;     // 4
