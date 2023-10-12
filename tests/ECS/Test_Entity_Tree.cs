@@ -220,6 +220,24 @@ public static class Test_Entity_Tree
     }
     
     [Test]
+    public static void Test_Entity_Tree_InvalidStoreException() {
+        var store1   = new EntityStore();
+        var store2   = new EntityStore();
+        
+        var entity1 = store1.CreateEntity();
+        var entity2 = store2.CreateEntity();
+
+        var e = Throws<ArgumentException>(() => {
+            entity1.AddChild(entity2);
+        });
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+        e = Throws<ArgumentException>(() => {
+            entity1.RemoveChild(entity2);
+        });
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Add_Child_Entities_UseRandomPids_Perf() {
         var store   = new EntityStore();
         var root    = store.CreateEntity();
