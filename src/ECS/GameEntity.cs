@@ -10,9 +10,7 @@ using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-// ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable InconsistentNaming
-// ReSharper disable UseNullPropagation
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
@@ -21,7 +19,6 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed class GameEntity
 {
 #region public properties
-    // ReSharper disable once InconsistentNaming
     /// <summary>Unique entity id.<br/>
     /// Uniqueness is relates to the <see cref="GameEntity"/>'s stored in its <see cref="EntityStore"/></summary>
                     public   int            Id              => id;
