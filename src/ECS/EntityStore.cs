@@ -64,6 +64,7 @@ public sealed partial class EntityStore
                     public              ReadOnlySpan<EntityNode>    Nodes           => new (nodes);
                     public              int                         NodeMaxId       => nodeMaxId;
     [Browse(Never)] private             bool                        HasRoot         => rootId   >= Static.MinNodeId;
+                    public              GameEntity                  Root            => nodes[rootId].entity;    // null if no root set
     
                     public  static      ComponentSchema             GetComponentSchema()    => Static.ComponentSchema;
                     public  override    string                      ToString()              => $"Count: {nodeCount}";
@@ -74,7 +75,7 @@ public sealed partial class EntityStore
     [Browse(Never)] internal readonly   HashSet<ArchetypeKey>       archetypeSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
     [Browse(Never)] internal            int                         archetypesCount;    //  8                   - number of archetypes
     [Browse(Never)] internal readonly   Archetype                   defaultArchetype;   //  8                   - default archetype without components
-    [Browse(Never)] private             int                         rootId;             //  4                   - id of root node
+    [Browse(Never)] private             int                         rootId;             //  4                   - id of root node. 0 = NoParentId
     
     // --- node access
     [Browse(Never)] private  readonly   PidType                     pidType;            //  4                   - pid != id  /  pid == id
@@ -86,6 +87,7 @@ public sealed partial class EntityStore
     
     [Browse(Never)] private  readonly LocalEntities<long, DataNode> clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
     [Browse(Never)] private  readonly   ArchetypeKey                searchKey;          //  8 (+76)             - key buffer to find archetypes by key
+                    private             int                         sequenceId;         //  4                   - incrementing id used for next new EntityNode               
     #endregion
     
 #region static fields
