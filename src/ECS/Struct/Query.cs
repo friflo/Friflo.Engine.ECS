@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 public class ArchetypeQuery
 {
-#region private fields
+#region private / internal fields
     // --- non blittable types
                     private  readonly   EntityStore         store;              //  8
     [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
@@ -29,6 +29,7 @@ public class ArchetypeQuery
                     public override     string              ToString() => GetString();
     #endregion
 
+#region methods
 //  public QueryChunks      Chunks                                      => new (this);
     public QueryEnumerator  GetEnumerator()                             => new (this);
 //  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
@@ -105,6 +106,7 @@ public class ArchetypeQuery
         }
         return "[]";
     }
+    #endregion
 }
 
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
