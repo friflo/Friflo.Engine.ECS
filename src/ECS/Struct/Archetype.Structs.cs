@@ -25,7 +25,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     
     internal ArchetypeStructs(StructHeap[] heaps) {
         foreach (var heap in heaps) {
-            bitSet.SetBit(heap.structIndex);
+            SetBit(heap.structIndex);
         }
     }
     
@@ -38,13 +38,13 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
             case 3: goto Type3;
             case 4: goto Type4;
             case 5: goto Type5;
-            default: throw new InvalidOperationException($"invalid index: {indexes.length}");
+            default: throw new IndexOutOfRangeException();
         }
-        Type5:   bitSet.SetBit(indexes.T5);
-        Type4:   bitSet.SetBit(indexes.T4);
-        Type3:   bitSet.SetBit(indexes.T3);
-        Type2:   bitSet.SetBit(indexes.T2);
-        Type1:   bitSet.SetBit(indexes.T1);
+        Type5:   SetBit(indexes.T5);
+        Type4:   SetBit(indexes.T4);
+        Type3:   SetBit(indexes.T3);
+        Type2:   SetBit(indexes.T2);
+        Type1:   SetBit(indexes.T1);
     }
     
     // ----------------------------------------- structs getter -----------------------------------------
@@ -87,11 +87,18 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- mutate Mask -----------------------------------------
+    internal void SetBit(int structIndex) {
+        bitSet.SetBit(structIndex);
+    }
+    
+    internal void ClearBit(int structIndex) {
+        bitSet.ClearBit(structIndex);
+    }
     
     public void Add<T>()
         where T : struct, IStructComponent
     {
-        bitSet.SetBit(StructHeap<T>.StructIndex);
+        SetBit(StructHeap<T>.StructIndex);
     }
     
     public void Add(in ArchetypeStructs structs)
@@ -102,7 +109,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     public void Remove<T>()
         where T : struct, IStructComponent
     {
-        bitSet.ClearBit(StructHeap<T>.StructIndex);
+        ClearBit(StructHeap<T>.StructIndex);
     }
     
     public void Remove(in ArchetypeStructs structs)
@@ -115,7 +122,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
         where T : struct, IStructComponent
     {
         var structs = new ArchetypeStructs();
-        structs.bitSet.SetBit(StructHeap<T>.StructIndex);
+        structs.SetBit(StructHeap<T>.StructIndex);
         return structs;
     }
     
@@ -124,8 +131,8 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
         where T2 : struct, IStructComponent
     {
         var structs = new ArchetypeStructs();
-        structs.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        structs.bitSet.SetBit(StructHeap<T2>.StructIndex);
+        structs.SetBit(StructHeap<T1>.StructIndex);
+        structs.SetBit(StructHeap<T2>.StructIndex);
         return structs;
     }
     

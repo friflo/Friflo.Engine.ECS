@@ -44,7 +44,7 @@ internal sealed class ArchetypeKey
     
     internal void SetTagsWith(in Tags tags, int structIndex) {
         structs         = default;
-        structs.bitSet.SetBit(structIndex);
+        structs.SetBit(structIndex);
         this.tags       = tags;
         hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
@@ -57,14 +57,14 @@ internal sealed class ArchetypeKey
     
     internal void SetWith(Archetype archetype, int structIndex) {
         structs         = archetype.structs;
-        structs.bitSet.SetBit(structIndex);
+        structs.SetBit(structIndex);
         tags            = archetype.tags;
         hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }
     
     internal void SetWithout(Archetype archetype, int structIndex) {
         structs         = archetype.structs;
-        structs.bitSet.ClearBit(structIndex);
+        structs.ClearBit(structIndex);
         tags            = archetype.tags;
         hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
     }

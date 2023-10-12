@@ -101,7 +101,7 @@ internal sealed class ComponentReader
                 continue;
             }
             hasStructComponent = true;
-            searchKey.structs.bitSet.SetBit(type.structIndex);
+            searchKey.structs.SetBit(type.structIndex);
         }
         if (!hasStructComponent) {
             return; // early out in absence of struct components 

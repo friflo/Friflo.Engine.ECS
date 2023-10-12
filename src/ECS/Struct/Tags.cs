@@ -56,11 +56,18 @@ public struct Tags : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- mutate Tags -----------------------------------------
+    private void SetBit(int tagIndex) {
+        bitSet.SetBit(tagIndex);
+    }
+    
+    private void ClearBit(int tagIndex) {
+        bitSet.ClearBit(tagIndex);
+    }
     
     public void Add<T>()
         where T : struct, IEntityTag
     {
-        bitSet.SetBit(TagType<T>.TagIndex);
+        SetBit(TagType<T>.TagIndex);
     }
     
     public void Add(in Tags tags)
@@ -71,7 +78,7 @@ public struct Tags : IEnumerable<ComponentType>
     public void Remove<T>()
         where T : struct, IEntityTag
     {
-        bitSet.ClearBit(TagType<T>.TagIndex);
+        ClearBit(TagType<T>.TagIndex);
     }
     
     public void Remove(in Tags tags)
@@ -84,7 +91,7 @@ public struct Tags : IEnumerable<ComponentType>
         where T : struct, IEntityTag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagType<T>.TagIndex);
+        tags.SetBit(TagType<T>.TagIndex);
         return tags;
     }
     
@@ -93,8 +100,8 @@ public struct Tags : IEnumerable<ComponentType>
         where T2 : struct, IEntityTag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagType<T1>.TagIndex);
-        tags.bitSet.SetBit(TagType<T2>.TagIndex);
+        tags.SetBit(TagType<T1>.TagIndex);
+        tags.SetBit(TagType<T2>.TagIndex);
         return tags;
     }
     

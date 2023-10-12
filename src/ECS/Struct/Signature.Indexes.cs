@@ -49,7 +49,7 @@ internal readonly struct SignatureIndexes
             case 2:     return T3;
             case 3:     return T4;
             case 4:     return T5;
-            default:    throw new InvalidOperationException($"invalid index: {index}");
+            default:    throw new IndexOutOfRangeException();
         }
     }
     
