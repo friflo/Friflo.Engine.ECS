@@ -10,22 +10,22 @@ public static class Test_ComponentSchema
     [Test]
     public static void Test_EntityTags() {
         var schema      = EntityStore.GetComponentSchema();
-        AreEqual(3,     schema.Tags.Length);
+        AreEqual(4,     schema.Tags.Length);
         
         var tags = schema.Tags;
         IsNull(tags[0]);
         for (int n = 1; n < tags.Length; n++) {
             var type = tags[n];
-            AreEqual(n, type.tagIndex);
-            AreEqual(0, type.structIndex);
-            AreEqual(0, type.classIndex);
+            AreEqual(n,                 type.tagIndex);
+            AreEqual(0,                 type.structIndex);
+            AreEqual(0,                 type.classIndex);
             AreEqual(ComponentKind.Tag, type.kind);
             IsNull(type.componentKey);
         }
         var testTagType = schema.TagTypeByType[typeof(TestTag)];
-        AreEqual(2,                         schema.TagTypeByType.Count);
-        AreEqual(typeof(TestTag),           testTagType.type);
-        AreEqual("tag: [#TestTag]",    testTagType.ToString());
+        AreEqual(3,                     schema.TagTypeByType.Count);
+        AreEqual(typeof(TestTag),       testTagType.type);
+        AreEqual("tag: [#TestTag]",     testTagType.ToString());
     }
     
     [Test]
@@ -35,7 +35,7 @@ public static class Test_ComponentSchema
         var structs = schema.Structs;
         var classes = schema.Classes;
         
-        AreEqual("struct components: 6  class components: 4  entity tags: 2", schema.ToString());
+        AreEqual("struct components: 6  class components: 4  entity tags: 3", schema.ToString());
         AreEqual(7,     structs.Length);
         AreEqual(5,     classes.Length);
         

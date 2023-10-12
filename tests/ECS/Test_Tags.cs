@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -10,6 +11,8 @@ namespace Tests.ECS;
 internal struct TestTag  : IEntityTag { }
 
 internal struct TestTag2 : IEntityTag { }
+
+internal struct TestTag3 : IEntityTag { }
 
 public static class Test_Tags
 {
@@ -35,6 +38,7 @@ public static class Test_Tags
         tags.Add<TestTag2>();
         AreEqual("Tags: [#TestTag, #TestTag2]", tags.ToString());
         IsTrue (tags.Has<TestTag, TestTag2>());
+        IsFalse(tags.Has<TestTag, TestTag2, TestTag3>());
         IsTrue (tags.HasAll(twoTags));
         IsTrue (tags.HasAny(twoTags));
 
@@ -52,6 +56,17 @@ public static class Test_Tags
         var entity  = store.CreateEntity();
         
         AreEqual("Tags: []", entity.Tags.ToString());
+    }
+    
+    [Test]
+    public static void Test_Tags_generic_IEnumerator()
+    {
+        IEnumerable<ComponentType> tags = Tags.Get<TestTag>();
+        int count = 0;
+        foreach (var _ in tags) {
+            count++;
+        }
+        AreEqual(1, count);
     }
     
     [Test]
