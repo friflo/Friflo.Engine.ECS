@@ -16,6 +16,8 @@ public sealed class Archetype
 #region public properties / fields
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                         EntityCount     => entityCount;
+    [Browse(Never)] public              int                         ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
+                                                                                    => (entityCount - 1) / StructUtils.ChunkSize;
     
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
                     public              ReadOnlySpan<int>           EntityIds       => new (entityIds, 0, entityCount);

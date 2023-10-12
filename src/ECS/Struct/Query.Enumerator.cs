@@ -62,7 +62,7 @@ public ref struct QueryEnumerator<T1, T2>
     private             StructChunk<T1>[]       chunks1;
     private             StructChunk<T2>[]       chunks2;
     private             int                     chunkPos;
-    private             int                     chunkLen;
+    private  readonly   int                     chunkEnd;
         
     private             Ref<T1>                 ref1;   // its .pos is used as loop condition in MoveNext()
     private             Ref<T2>                 ref2;
@@ -81,7 +81,7 @@ public ref struct QueryEnumerator<T1, T2>
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-        chunkLen        = 1;
+        chunkEnd        = archetype.ChunkEnd;
         
         ref1.Set(chunks1[0].components);
         ref1.pos        = -1;
@@ -102,7 +102,7 @@ public ref struct QueryEnumerator<T1, T2>
             ref2.pos++;
             return true;
         }
-        if (chunkPos < chunks1.Length - 1) {
+        if (chunkPos < chunkEnd) {
             ref1.Set(chunks1[chunkPos].components);
             ref1.pos = 0;
             ref2.Set(chunks2[chunkPos].components);
