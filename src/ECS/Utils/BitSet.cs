@@ -94,7 +94,7 @@ public struct BitSet
             case 2:     return l2;
             case 3:     return l3;
             default:
-                throw new IndexOutOfRangeException($"index: {index}");
+                throw new IndexOutOfRangeException();
         }
     }
     
