@@ -52,5 +52,5 @@ public sealed class DataNode
     public  string      modify;         // can be null
 
     
-    public  override string ToString() => $"id: {pid}";
+    public  override string ToString() => $"pid: {pid}";
 }
