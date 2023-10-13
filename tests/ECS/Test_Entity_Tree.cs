@@ -220,7 +220,27 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Entity_Tree_InvalidStoreException() {
+    public static void Test_Entity_Tree_ChildEnumerator() {
+        var store   = new EntityStore();
+        var root    = store.CreateEntity(1);
+        var child   = store.CreateEntity(2);
+        root.AddChild(child);
+        
+        ChildEnumerator enumerator = root.ChildNodes.GetEnumerator();
+        while (enumerator.MoveNext()) { }
+        enumerator.Reset();
+        
+        int count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        enumerator.Dispose();
+        AreEqual(1, count);
+    }
+    
+    [Test]
+    public static void Test_Entity_Tree_InvalidStoreException()
+    {
         var store1   = new EntityStore();
         var store2   = new EntityStore();
         
