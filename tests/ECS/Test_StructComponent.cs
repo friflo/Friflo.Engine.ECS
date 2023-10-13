@@ -34,11 +34,11 @@ public static class Test_StructComponent
         IsTrue(player1.AddComponent<Scale3>());
         
         var player2 = store.CreateEntity();
-        var position = new MyComponent1 { a = 1 };
-        IsTrue(player2.AddComponent(position));
+        var myComponent1 = new MyComponent1 { a = 1 };
+        IsTrue(player2.AddComponent(myComponent1));
         
-        var rotation = new Position { x = 2 };
-        IsTrue(player2.AddComponent(rotation));
+        var position = new Position { x = 2 };
+        IsTrue(player2.AddComponent(position));
 
         var count = player2.ComponentCount;
         AreEqual(2, count);
