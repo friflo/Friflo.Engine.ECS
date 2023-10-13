@@ -101,6 +101,7 @@ public static class Test_ClassComponent
         AreSame(testRef1, result);
         AreEqual("id: 1  [*TestRefComponent1]", player.ToString());
         NotNull(testRef1.Entity);
+        IsFalse(player.TryGetClassComponent<TestRefComponent2>(out _)); // classComponents.Length > 0
         
         NotNull(player.RemoveClassComponent<TestRefComponent1>());
         IsNull(player.GetClassComponent<TestRefComponent1>());

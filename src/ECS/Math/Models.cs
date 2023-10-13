@@ -102,6 +102,6 @@ public struct EntityName : IStructComponent
     
     private void SetValue(string value) {
         this.value  = value;
-        utf8        = Encoding.UTF8.GetBytes(value);
+        utf8        = value != null ? Encoding.UTF8.GetBytes(value) : null;
     }
 }
