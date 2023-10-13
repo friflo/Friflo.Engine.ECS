@@ -13,10 +13,6 @@ internal static class TypeExtensions
     internal static long Handle(this Type type) {
         return type.TypeHandle.Value.ToInt64();
     }
-    
-    internal static ulong HandleUInt64(this Type type) {
-        return (ulong)type.TypeHandle.Value.ToInt64();
-    }
 }
 
 internal static class Utils

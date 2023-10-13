@@ -31,5 +31,17 @@ public static class Test_ArchetypeStructs
         AreEqual("Key: [Position]",             posType.key.ToString());
         AreEqual("Key: [Position, Rotation]",   posRotType.key.ToString());
     }
+    
+    [Test]
+    public static void Test_StructComponentAttribute()
+    {
+        _ = new StructComponentAttribute("abc");
+        _ = new ClassComponentAttribute("xyz");
+        
+        var type = typeof(Test_ArchetypeStructs);
+        var handle = type.Handle();
+        var expect = type.TypeHandle.Value.ToInt64();
+        AreEqual(expect, handle);
+    }
 }
 
