@@ -9,7 +9,7 @@ namespace Tests.Utils;
 
 public static class Reflect
 {
-    public static Type GetType(string name) {
+    public static Type EcsType(string name) {
         return typeof(EntityStore).Assembly.GetType(name);
     }
     

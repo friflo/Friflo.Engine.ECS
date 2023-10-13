@@ -49,7 +49,7 @@ public static class Test_Signature
     [Test]
     public static void Test_SignatureIndexes()
     {
-        var type = Reflect.GetType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
+        var type = Reflect.EcsType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
         var parameters = new object[] { 6, 0, 0, 0, 0, 0 };
         Throws<IndexOutOfRangeException>(() => {
             _ = type.InvokeConstructor(parameters);
