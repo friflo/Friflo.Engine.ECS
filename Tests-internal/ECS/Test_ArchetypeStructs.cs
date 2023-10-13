@@ -53,6 +53,9 @@ public static class Test_ArchetypeStructs
         var posType     = store.GetArchetype(Signature.Get<Position>());
         StructHeap heap = posType.Heaps[0];
         AreEqual("[Position] heap - Count: 1", heap.ToString());
+        
+        var genericHeap = (StructHeap<Position>)heap;
+        AreEqual("used", genericHeap.chunks[0].ToString());
     }
 }
 
