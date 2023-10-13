@@ -15,11 +15,12 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public class AssemblyLoader
 {
-    private readonly HashSet<Assembly>  checkedAssemblies   = new HashSet<Assembly>();
-    private readonly HashSet<Assembly>  dependencies        = new HashSet<Assembly>();
-    private readonly SortedSet<string>  loadedAssemblies    = new SortedSet<string>();
+    private readonly    HashSet<Assembly>   checkedAssemblies   = new HashSet<Assembly>();
+    private readonly    HashSet<Assembly>   dependencies        = new HashSet<Assembly>();
+    private readonly    SortedSet<string>   loadedAssemblies    = new SortedSet<string>();
 
-    private readonly string             engineFullName;
+    private readonly    string              engineFullName;
+    private             long                duration;
     
     internal AssemblyLoader()
     {
@@ -27,7 +28,11 @@ public class AssemblyLoader
         engineFullName  = engineAssembly.FullName;
         dependencies.Add(engineAssembly);
     }
-    
+
+    public override string ToString() {
+        return $"Assemblies loaded: {loadedAssemblies.Count}, dependencies: {dependencies.Count}, duration: {duration} ms";
+    }
+
     // --------------------------- query all struct / class component types ---------------------------
     internal Assembly[] GetAssemblies()
     {
@@ -40,10 +45,7 @@ public class AssemblyLoader
         foreach (var assembly in assemblies) {
             CheckAssembly(assembly);
         }
-        
-        var duration = stopwatch.ElapsedMilliseconds;
-        var msg = $"Assemblies loaded: {loadedAssemblies.Count}, dependencies: {dependencies.Count}, duration: {duration} ms";
-        Console.WriteLine(msg);
+        duration = stopwatch.ElapsedMilliseconds;
         /*
         // Assemblies with same name but different versions return the same reference in Assembly.Load()
         var thread = loadedAssemblies.Where(name => name.StartsWith("System.Threading.Thread,")).ToArray();
