@@ -43,5 +43,16 @@ public static class Test_ArchetypeStructs
         var expect = type.TypeHandle.Value.ToInt64();
         AreEqual(expect, handle);
     }
+    
+    [Test]
+    public static void Test_StructHeap_ToString()
+    {
+        var store       = new EntityStore();
+        var entity      = store.CreateEntity();
+        entity.AddComponent<Position>();
+        var posType     = store.GetArchetype(Signature.Get<Position>());
+        StructHeap heap = posType.Heaps[0];
+        AreEqual("[Position] heap - Count: 1", heap.ToString());
+    }
 }
 
