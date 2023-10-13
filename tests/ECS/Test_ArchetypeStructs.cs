@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -32,6 +33,7 @@ public static class Test_ArchetypeStructs
         structs.Add<Rotation>();
         AreEqual("Structs: [Position, Rotation]",  structs.ToString());
         IsTrue (structs.Has<Position, Rotation>());
+        IsFalse(structs.Has<Position, Rotation, Scale3>());
         IsTrue (structs.HasAll(twoStructs));
         IsTrue (structs.HasAny(twoStructs));
 
@@ -117,6 +119,17 @@ public static class Test_ArchetypeStructs
         }
         AreEqual(1, count);
         enumerator.Dispose();
+    }
+    
+    [Test]
+    public static void Test_ArchetypeMask_generic_IEnumerator()
+    {
+        IEnumerable<ComponentType> tags = ArchetypeStructs.Get<Position>();
+        int count = 0;
+        foreach (var _ in tags) {
+            count++;
+        }
+        AreEqual(1, count);
     }
     
     [Test]
