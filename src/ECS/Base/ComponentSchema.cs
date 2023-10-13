@@ -14,6 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed class ComponentSchema
 {
 #region public properties
+    public   ReadOnlySpan<Assembly>                         Dependencies        => new (dependencies);
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
@@ -42,6 +43,7 @@ public sealed class ComponentSchema
     #endregion
     
 #region private fields
+    [Browse(Never)] internal readonly   Assembly[]                          dependencies;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] private  readonly   ComponentType[]                     structs;
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
@@ -53,10 +55,12 @@ public sealed class ComponentSchema
     
 #region internal methods
     internal ComponentSchema(
+        Assembly[]          dependencies,
         List<ComponentType> structList,
         List<ComponentType> classList,
         List<ComponentType> tagList)
     {
+        this.dependencies   = dependencies;
         int count           = structList.Count + classList.Count;
         componentTypeByKey  = new Dictionary<string, ComponentType>(count);
         componentTypeByType = new Dictionary<Type,   ComponentType>(count);
@@ -151,14 +155,18 @@ internal static class ComponentUtils
 {
     internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
     {
-        var types   = GetComponentTypes();
-        var structs = new List<ComponentType>(types.Count);
-        var classes = new List<ComponentType>(types.Count);
-        var tags    = new List<ComponentType>(types.Count);
+        var dependencies    = GetDependencies();
+        var types           = new List<Type>();
+        foreach (var assembly in dependencies) {
+            AddComponentTypes(types, assembly);
+        }
+        var structs         = new List<ComponentType>(types.Count);
+        var classes         = new List<ComponentType>(types.Count);
+        var tags            = new List<ComponentType>(types.Count);
         foreach (var type in types) {
             RegisterComponentType(type, structs, classes, tags, typeStore);
         }
-        return new ComponentSchema(structs, classes, tags);
+        return new ComponentSchema(dependencies, structs, classes, tags);
     }
     
     private static void RegisterComponentType(
@@ -225,13 +233,13 @@ internal static class ComponentUtils
     }
     
     // --------------------------- query all struct / class component types ---------------------------
-    private static List<Type> GetComponentTypes()
+    private static Assembly[] GetDependencies()
     {
         var componentTypes  = new List<Type>();
         var engineAssembly  = typeof(Utils).Assembly;
         var engineFullName  = engineAssembly.FullName;
-        AddComponentTypes(componentTypes, engineAssembly);
-        
+        var dependencies    = new List<Assembly>();
+        dependencies.Add(engineAssembly);
         var assemblies      = AppDomain.CurrentDomain.GetAssemblies();
         foreach (var assembly in assemblies)
         { 
@@ -240,11 +248,11 @@ internal static class ComponentUtils
                 if (referencedAssembly.FullName != engineFullName) {
                     continue;
                 }
-                AddComponentTypes(componentTypes, assembly);
+                dependencies.Add(assembly);
                 break;
             }
         }
-        return componentTypes;
+        return dependencies.ToArray();
     }
     
     private static void AddComponentTypes(List<Type> componentTypes, Assembly assembly)

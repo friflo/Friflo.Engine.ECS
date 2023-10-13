@@ -56,9 +56,11 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeMask_Get()
     {
-        var schema          = EntityStore.GetComponentSchema();
+        var schema = EntityStore.GetComponentSchema();
+        AreEqual(2, schema.Dependencies.Length);
+        
         var testStructType  = schema.ComponentTypeByType[typeof(Position)];
-        var testStructType2  = schema.ComponentTypeByType[typeof(Rotation)];
+        var testStructType2 = schema.ComponentTypeByType[typeof(Rotation)];
         
         var struct1    = ArchetypeStructs.Get<Position>();
         AreEqual("Structs: [Position]", struct1.ToString());

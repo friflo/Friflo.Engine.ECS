@@ -8,6 +8,13 @@ namespace Internal.ECS;
 
 public static class Test_Signature
 {
+    [Ignore("missing dependency")][Test]
+    public static void Test_ComponentSchema_Dependencies()
+    {
+        var schema  = EntityStore.GetComponentSchema();
+        AreEqual(3, schema.Dependencies.Length);
+    }
+    
     [Test]
     public static void Test_SignatureIndexes()
     {
