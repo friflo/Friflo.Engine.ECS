@@ -2,9 +2,12 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using System.Text;
+
+[assembly: InternalsVisibleTo("Tests-internal")]
 
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace

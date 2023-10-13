@@ -8,11 +8,11 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-internal struct TestTag  : IEntityTag { }
+public struct TestTag  : IEntityTag { }
 
-internal struct TestTag2 : IEntityTag { }
+public struct TestTag2 : IEntityTag { }
 
-internal struct TestTag3 : IEntityTag { }
+public struct TestTag3 : IEntityTag { }
 
 public static class Test_Tags
 {
@@ -210,8 +210,6 @@ public static class Test_Tags
         var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);
-        AreEqual("Key: [#TestTag]",             archTestTag.GetInternalField("key").ToString());
-        AreEqual("Key: [#TestTag, #TestTag2]",  archTestTagAll.GetInternalField("key").ToString());
         
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);

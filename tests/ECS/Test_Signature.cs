@@ -1,7 +1,5 @@
-﻿using System;
-using Friflo.Fliox.Engine.ECS;
+﻿using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -44,25 +42,5 @@ public static class Test_Signature
         
         var sig5_ =     Signature.Get<Rotation, Position, Scale3, EntityName, MyComponent1>();
         AreEqual("Signature: [Rotation, Position, Scale3, EntityName, MyComponent1]", sig5_.ToString());
-    }
-    
-    [Test]
-    public static void Test_SignatureIndexes()
-    {
-        var type = Reflect.EcsType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
-        var parameters = new object[] { 6, 0, 0, 0, 0, 0 };
-        Throws<IndexOutOfRangeException>(() => {
-            _ = type.InvokeConstructor(parameters);
-        });
-        
-        var signatureIndexes = type.InvokeConstructor(new object[] { 1, 1, 0, 0, 0, 0 });
-        Throws<IndexOutOfRangeException>(() => {
-            signatureIndexes.InvokeInternalMethod("GetStructIndex", new object[] { 5 });
-        });
-        
-        var schema  = EntityStore.GetComponentSchema();
-        var posType = schema.GetStructComponentType<Position>();
-        signatureIndexes = type.InvokeConstructor(new object[] { 1, posType.structIndex, 0, 0, 0, 0 });
-        AreEqual("StructIndexes: [Position]", signatureIndexes.ToString());
     }
 }

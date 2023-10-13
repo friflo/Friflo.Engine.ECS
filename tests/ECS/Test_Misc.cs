@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -36,37 +33,5 @@ public static class Test_Misc
                 _ = array[n];
             }
         }
-    }
-    
-#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type ('EntityNode')
-    [Test]
-    public static unsafe void Test_sizeof_EntityNode() {
-        var size = sizeof(EntityNode);
-        AreEqual(40, size);
-    }
-    
-    [Test]
-    public static unsafe void Test_sizeof_BitSet() {
-        var size = sizeof(BitSet);
-        AreEqual(32, size);
-    }
-    
-    [Test]
-    public static unsafe void Test_sizeof_Tags() {
-        var size = sizeof(Tags);
-        AreEqual(32, size);
-    }
-    
-    [Test]
-    public static unsafe void Test_sizeof_ArchetypeStructs() {
-        var size = sizeof(ArchetypeStructs);
-        AreEqual(32, size);
-    }
-        
-    [Test]
-    public static void Test_sizeof_StructIndexes() {
-        var type = Reflect.EcsType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
-        var size = Marshal.SizeOf(type!);
-        AreEqual(24, size);
     }
 }

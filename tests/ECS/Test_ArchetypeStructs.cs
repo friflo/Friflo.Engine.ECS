@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
@@ -131,17 +130,6 @@ public static class Test_ArchetypeStructs
             count++;
         }
         AreEqual(1, count);
-    }
-    
-    [Test]
-    public static void Test_ArchetypeMask_invalid_constructor()
-    {
-        var type = Reflect.EcsType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
-        var signatureIndexes = type.InvokeConstructor(null);
-        signatureIndexes.SetInternalField("length", 6);
-        Throws<IndexOutOfRangeException>(() => {
-            Reflect.InvokeConstructor<ArchetypeStructs>(new [] { signatureIndexes });
-        });
     }
     
     [Test]
