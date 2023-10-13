@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using Friflo.Fliox.Engine.ECS;
 
-namespace Tests.Utils;
+namespace Internal;
 
 public static class Reflect
 {

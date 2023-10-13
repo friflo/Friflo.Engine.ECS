@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.Internal.ECS;
+namespace Internal.ECS;
 
 public static class Test_ArchetypeStructs
 {

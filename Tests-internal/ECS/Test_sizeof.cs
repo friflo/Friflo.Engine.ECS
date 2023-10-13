@@ -4,7 +4,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.Internal.ECS;
+namespace Internal.ECS;
 
 public static class Test_sizeof
 {
