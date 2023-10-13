@@ -16,13 +16,13 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     
     public      int     Count       => bitSet.GetBitCount();
    
-    public ArchetypeMaskEnumerator  GetEnumerator()                             => new ArchetypeMaskEnumerator (this);
+    public ArchetypeStructsEnumerator   GetEnumerator()                             => new ArchetypeStructsEnumerator (this);
     // --- IEnumerable
-    IEnumerator                     IEnumerable.GetEnumerator()                 => new ArchetypeMaskEnumerator (this);
+    IEnumerator                         IEnumerable.GetEnumerator()                 => new ArchetypeStructsEnumerator (this);
     // --- IEnumerable<>
-    IEnumerator<ComponentType>      IEnumerable<ComponentType>.GetEnumerator()  => new ArchetypeMaskEnumerator (this);
+    IEnumerator<ComponentType>          IEnumerable<ComponentType>.GetEnumerator()  => new ArchetypeStructsEnumerator (this);
 
-    public   override               string    ToString() => GetString();
+    public   override                   string    ToString() => GetString();
     
     internal ArchetypeStructs(StructHeap[] heaps) {
         foreach (var heap in heaps) {
@@ -152,7 +152,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
 }
 
-public struct ArchetypeMaskEnumerator : IEnumerator<ComponentType>
+public struct ArchetypeStructsEnumerator : IEnumerator<ComponentType>
 {
     private BitSetEnumerator    bitSetEnumerator;
 
@@ -163,7 +163,7 @@ public struct ArchetypeMaskEnumerator : IEnumerator<ComponentType>
 
     public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
     
-    internal ArchetypeMaskEnumerator(in ArchetypeStructs structs) {
+    internal ArchetypeStructsEnumerator(in ArchetypeStructs structs) {
         bitSetEnumerator = structs.bitSet.GetEnumerator();
     }
     

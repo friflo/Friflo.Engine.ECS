@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS;
 
 
-public static class Test_ArchetypeMask
+public static class Test_ArchetypeStructs
 {
     [Test]
     public static void Test_ArchetypeMask_basics()
@@ -102,6 +102,21 @@ public static class Test_ArchetypeMask
         }
         Mem.AssertNoAlloc(start);
         AreEqual(2, count2);
+    }
+    
+    [Test]
+    public static void Test_ArchetypeMask_Enumerator_Reset()
+    {
+        var structs    = ArchetypeStructs.Get<Position>();
+        var enumerator = structs.GetEnumerator();
+        while (enumerator.MoveNext()) { }
+        enumerator.Reset();
+        int count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(1, count);
+        enumerator.Dispose();
     }
     
     [Test]
