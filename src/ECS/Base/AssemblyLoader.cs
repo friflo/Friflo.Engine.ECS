@@ -60,13 +60,14 @@ public class AssemblyLoader
         if (!checkedAssemblies.Add(assembly)) {
             return;
         }
+        // if (assembly.FullName.Contains("Tests,"))           { int i = 3; }
+        // if (assembly.FullName.Contains("Tests-internal,"))  { int i = 3; }
         var referencedAssemblies = assembly.GetReferencedAssemblies();
         foreach (var referencedAssemblyName in referencedAssemblies)
         {
             if (referencedAssemblyName.FullName == engineFullName) {
                 dependencies.Add(assembly);
             }
-            // if (referencedAssemblyName.FullName.Contains("Tests,")) { int i = 3; }
             var name = referencedAssemblyName.FullName;
             if (!loadedAssemblies.Add(name)) {
                 continue;

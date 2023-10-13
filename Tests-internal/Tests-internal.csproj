@@ -26,7 +26,6 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Engine.csproj" />
       <ProjectReference Include="..\tests\Tests.csproj" />
     </ItemGroup>
 
