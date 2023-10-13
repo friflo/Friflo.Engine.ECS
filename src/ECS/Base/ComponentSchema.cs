@@ -155,9 +155,10 @@ internal static class ComponentUtils
 {
     internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
     {
-        var types           = new List<Type>();
-        var componentAssemblies = new  AssemblyLoader();
-        var assemblies      = componentAssemblies.GetAssemblies();
+        var componentAssemblies = new AssemblyLoader();
+        var assemblies          = componentAssemblies.GetAssemblies();
+        
+        var types               = new List<Type>();
         foreach (var assembly in assemblies) {
             AssemblyLoader.AddComponentTypes(types, assembly);
         }

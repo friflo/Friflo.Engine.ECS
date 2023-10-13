@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,14 +31,19 @@ public class AssemblyLoader
     // --------------------------- query all struct / class component types ---------------------------
     internal Assembly[] GetAssemblies()
     {
+        var stopwatch = new Stopwatch(); 
+        stopwatch.Start();
         // LoadAssemblies(); // used only for debugging
         
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-        foreach (var assembly in assemblies)
-        {
+        foreach (var assembly in assemblies) {
             CheckAssembly(assembly);
         }
+        
+        var duration = stopwatch.ElapsedMilliseconds;
+        var msg = $"Assemblies loaded: {loadedAssemblies.Count}, dependencies: {dependencies.Count}, duration: {duration} ms";
+        Console.WriteLine(msg);
         /*
         // Assemblies with same name but different versions return the same reference in Assembly.Load()
         var thread = loadedAssemblies.Where(name => name.StartsWith("System.Threading.Thread,")).ToArray();
