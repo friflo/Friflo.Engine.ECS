@@ -4,12 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-// ReSharper disable UnusedMember.Local
 
+// ReSharper disable UnusedMember.Local
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
@@ -79,7 +78,8 @@ public class AssemblyLoader
     }
     
 
-    /// Used for debugging: Do not remove
+    // Note!: Used for debugging: Do not remove
+    /* 
     private static void LoadAssemblies()
     {
         var domain              = AppDomain.CurrentDomain;
@@ -88,7 +88,7 @@ public class AssemblyLoader
         var referencedPaths     = Directory.GetFiles(domain.BaseDirectory, "*.dll");
         var toLoad              = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
         toLoad.ForEach(path => loadedAssemblies.Add(domain.Load(AssemblyName.GetAssemblyName(path))));        
-    }
+    } */
    
     internal static void AddComponentTypes(List<Type> componentTypes, Assembly assembly)
     {
