@@ -42,8 +42,10 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   Type            type;           //  8
         
-    internal abstract   StructHeap  CreateHeap          (int capacity);
-    internal abstract   void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity);
+    internal virtual    StructHeap  CreateHeap          (int capacity)
+        => throw new InvalidOperationException("operates only on StructFactory<>");
+    internal virtual    void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity)
+        => throw new InvalidOperationException("operates only on ClassFactory<>");
     
     internal ComponentType(
         string          componentKey,
@@ -73,10 +75,6 @@ internal sealed class StructComponentType<T> : ComponentType
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
-    
-    internal override   void    ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException("operates only on ClassFactory<>");
-    
     internal override StructHeap CreateHeap(int capacity) {
         return new StructHeap<T>(structIndex, componentKey, capacity, typeMapper);   
     }
@@ -93,9 +91,6 @@ internal sealed class ClassComponentType<T> : ComponentType
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
-    
-    internal override   StructHeap  CreateHeap(int capacity)
-        => throw new InvalidOperationException("operates only on StructFactory<>");
     
     internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
         var classComponent = entity.GetClassComponent<T>();
@@ -115,10 +110,4 @@ internal sealed class TagType : ComponentType
     internal TagType(Type type, int tagIndex)
         : base(null, type, Tag, 0, 0, tagIndex)
     { }
-    
-    internal override   StructHeap  CreateHeap(int capacity)
-        => throw new InvalidOperationException("operates only on StructFactory<>");
-    
-    internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException("operates only on ClassFactory<>");
 }

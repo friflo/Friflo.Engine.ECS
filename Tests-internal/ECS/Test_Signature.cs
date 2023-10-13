@@ -26,6 +26,18 @@ public static class Test_Signature
     }
     
     [Test]
+    public static void Test_ComponentType_Exceptions()
+    {
+        ComponentType componentTYpe = new TagType(typeof(string), 0);
+        Throws<InvalidOperationException>(() => {
+            componentTYpe.ReadClassComponent(null, default, null);
+        });
+        Throws<InvalidOperationException>(() => {
+            componentTYpe.CreateHeap(0);
+        });
+    }
+    
+    [Test]
     public static void Test_SignatureIndexes()
     {
         var parameters = new object[] { 6, 0, 0, 0, 0, 0 };
