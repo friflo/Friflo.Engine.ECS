@@ -72,7 +72,7 @@ internal sealed class ArchetypeKey
     private string GetString()
     {
         var sb = new StringBuilder();
-        sb.Append("Id: [");
+        sb.Append("Key: [");
         var hasTypes = false;
         foreach (var structType in structs) {
             sb.Append(structType.type.Name);
@@ -80,6 +80,7 @@ internal sealed class ArchetypeKey
             hasTypes = true;
         }
         foreach (var tag in tags) {
+            sb.Append('#');
             sb.Append(tag.type.Name);
             sb.Append(", ");
             hasTypes = true;

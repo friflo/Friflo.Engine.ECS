@@ -209,7 +209,9 @@ public static class Test_Tags
         var store           = new EntityStore();
         var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
-        AreEqual(3,                                store.Archetypes.Length);
+        AreEqual(3,                             store.Archetypes.Length);
+        AreEqual("Key: [#TestTag]",             archTestTag.GetInternalField("key").ToString());
+        AreEqual("Key: [#TestTag, #TestTag2]",  archTestTagAll.GetInternalField("key").ToString());
         
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
