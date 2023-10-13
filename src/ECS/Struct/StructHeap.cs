@@ -47,7 +47,6 @@ internal abstract class StructHeap
 #endif
     }
 
-    [Conditional("DEBUG")]
     internal void SetArchetype(Archetype archetype) {
 #if DEBUG
         this.archetype = archetype;
