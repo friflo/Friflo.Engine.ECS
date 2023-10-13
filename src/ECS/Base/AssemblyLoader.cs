@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public class ComponentAssemblies
+public class AssemblyLoader
 {
     private readonly HashSet<Assembly>  checkedAssemblies   = new HashSet<Assembly>();
     private readonly HashSet<Assembly>  dependencies        = new HashSet<Assembly>();
@@ -20,7 +20,7 @@ public class ComponentAssemblies
 
     private readonly string             engineFullName;
     
-    internal ComponentAssemblies()
+    internal AssemblyLoader()
     {
         var engineAssembly = typeof(Utils).Assembly;
         engineFullName  = engineAssembly.FullName;
