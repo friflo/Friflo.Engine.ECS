@@ -145,7 +145,7 @@ public readonly struct Signature<T>
 
     public override string ToString() => signatureIndexes.GetString("Signature: ");
 
-    internal Signature(SignatureIndexes signatureIndexes) {
+    internal Signature(in SignatureIndexes signatureIndexes) {
         this.signatureIndexes  = signatureIndexes;
     }
 }

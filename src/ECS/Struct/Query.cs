@@ -34,9 +34,7 @@ public class ArchetypeQuery
     public QueryEnumerator  GetEnumerator()                             => new (this);
 //  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
 
-    internal ArchetypeQuery(
-        EntityStore         store,
-        in SignatureIndexes indexes)
+    internal ArchetypeQuery(EntityStore store, in SignatureIndexes indexes)
     {
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
