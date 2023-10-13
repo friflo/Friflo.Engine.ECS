@@ -6,12 +6,14 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
 
+public struct InternalTestTag  : IEntityTag { }
+
 public static class Test_Signature
 {
-    [Ignore("missing dependency")][Test]
+    [Test]
     public static void Test_ComponentSchema_Dependencies()
     {
-        var schema  = EntityStore.GetComponentSchema();
+        var schema = EntityStore.GetComponentSchema();
         AreEqual(3, schema.Dependencies.Length);
     }
     

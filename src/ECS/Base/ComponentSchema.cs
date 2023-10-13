@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -155,9 +157,9 @@ internal static class ComponentUtils
 {
     internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
     {
-        var dependencies    = GetDependencies();
         var types           = new List<Type>();
-        foreach (var assembly in dependencies) {
+        var assemblies      = GetAssemblies();
+        foreach (var assembly in assemblies) {
             AddComponentTypes(types, assembly);
         }
         var structs         = new List<ComponentType>(types.Count);
@@ -166,7 +168,7 @@ internal static class ComponentUtils
         foreach (var type in types) {
             RegisterComponentType(type, structs, classes, tags, typeStore);
         }
-        return new ComponentSchema(dependencies, structs, classes, tags);
+        return new ComponentSchema(assemblies, structs, classes, tags);
     }
     
     private static void RegisterComponentType(
@@ -233,16 +235,21 @@ internal static class ComponentUtils
     }
     
     // --------------------------- query all struct / class component types ---------------------------
-    private static Assembly[] GetDependencies()
+    private static Assembly[] GetAssemblies()
     {
-        var componentTypes  = new List<Type>();
+        // Need to load all assemblies for now. todo
+        LoadAssemblies();
+        
         var engineAssembly  = typeof(Utils).Assembly;
         var engineFullName  = engineAssembly.FullName;
         var dependencies    = new List<Assembly>();
         dependencies.Add(engineAssembly);
         var assemblies      = AppDomain.CurrentDomain.GetAssemblies();
         foreach (var assembly in assemblies)
-        { 
+        {
+            if (assembly.FullName.Contains("internal")) {
+                int n = 1;
+            }
             var referencedAssemblies = assembly.GetReferencedAssemblies();
             foreach (var referencedAssembly in referencedAssemblies) {
                 if (referencedAssembly.FullName != engineFullName) {
@@ -255,21 +262,47 @@ internal static class ComponentUtils
         return dependencies.ToArray();
     }
     
+    private static void LoadAssemblies()
+    {
+        var domain              = AppDomain.CurrentDomain;
+        var loadedAssemblies    = domain.GetAssemblies().ToList();
+        var loadedPaths         = loadedAssemblies.Select(a => a.Location).ToArray();
+        var referencedPaths     = Directory.GetFiles(domain.BaseDirectory, "*.dll");
+        var toLoad              = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
+        toLoad.ForEach(path => loadedAssemblies.Add(domain.Load(AssemblyName.GetAssemblyName(path))));        
+    }
+   
     private static void AddComponentTypes(List<Type> componentTypes, Assembly assembly)
     {
-        var types = assembly.GetTypes();
-        foreach (var type in types) {
-            if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
+        var types       = assembly.GetTypes();
+        foreach (var type in types)
+        {
+            if (type.IsGenericType) {
+                continue;
+            }
+            bool isValueType    = type.IsValueType;
+            bool isClass        = type.IsClass;
+            if (!isValueType && !isClass) {
+                continue;
+            }
+            if (isValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
                 componentTypes.Add(type);
                 continue;
             }
             foreach (var attr in type.CustomAttributes)
             {
-                var attributeType = attr.AttributeType;
-                if (attributeType == typeof(StructComponentAttribute) ||
-                    attributeType == typeof(ClassComponentAttribute))
-                {
-                    componentTypes.Add(type);
+                if (isValueType) {
+                    var attributeType = attr.AttributeType;
+                    if (attributeType == typeof(StructComponentAttribute)) {
+                        componentTypes.Add(type);
+                    }
+                }
+                if (isClass) {
+                    var attributeType = attr.AttributeType;
+                    if (attributeType == typeof(ClassComponentAttribute))
+                    {
+                        componentTypes.Add(type);
+                    }
                 }
             }
         }

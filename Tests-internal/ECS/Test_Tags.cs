@@ -10,8 +10,7 @@ namespace Internal.ECS;
 
 public static class Test_Tags
 {
-
-    [Ignore("check IndexOutOfRangeException")][Test]
+    [Test]
     public static void Test_Tags_Query()
     {
         var store           = new EntityStore();
