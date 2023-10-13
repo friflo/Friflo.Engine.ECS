@@ -13,8 +13,16 @@ public static class Test_Signature
     [Test]
     public static void Test_ComponentSchema_Dependencies()
     {
-        var schema = EntityStore.GetComponentSchema();
+        ComponentSchema schema = EntityStore.GetComponentSchema();
         AreEqual(3, schema.Dependencies.Length);
+        
+        
+        var e = Throws<InvalidOperationException>(() =>
+        {
+            schema.GetStructType(schema.maxStructIndex, typeof(string));    
+        });
+        var expect = $"number of structs exceed EntityStore.maxStructIndex: {schema.maxStructIndex}";
+        AreEqual(expect, e!.Message);
     }
     
     [Test]

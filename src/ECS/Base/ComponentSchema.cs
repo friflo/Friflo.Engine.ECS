@@ -131,7 +131,7 @@ public sealed class ComponentSchema
             throw new InvalidOperationException(msg);
         }
         if (structIndex >= maxStructIndex) {
-            const string msg = $"number of structs exceed EntityStore.{nameof(maxStructIndex)}";
+            string msg = $"number of structs exceed EntityStore.{nameof(maxStructIndex)}: {maxStructIndex}";
             throw new InvalidOperationException(msg);
         }
         return structIndex;
