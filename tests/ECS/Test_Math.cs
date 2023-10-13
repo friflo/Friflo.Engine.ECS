@@ -31,18 +31,5 @@ public static class Test_Math
         AreEqual(2, scale3.value.Y);
         AreEqual(3, scale3.value.Z);
     }
-
-    // #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type ('EntityNode')
-    [Test]
-    public static unsafe void Test_Math_sizeof() {
-        var size = sizeof(Position);
-        AreEqual(12, size);
-        
-        size = sizeof(Rotation);
-        AreEqual(16, size);
-        
-        size = sizeof(Scale3);
-        AreEqual(12, size);
-    }
 }
 

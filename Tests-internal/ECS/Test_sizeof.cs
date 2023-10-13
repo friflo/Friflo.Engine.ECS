@@ -39,4 +39,16 @@ public static class Test_sizeof
         var size = Marshal.SizeOf(type!);
         AreEqual(24, size);
     }
+    
+    [Test]
+    public static unsafe void Test_Math_sizeof() {
+        var size = sizeof(Position);
+        AreEqual(12, size);
+        
+        size = sizeof(Rotation);
+        AreEqual(16, size);
+        
+        size = sizeof(Scale3);
+        AreEqual(12, size);
+    }
 }
