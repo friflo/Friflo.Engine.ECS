@@ -136,11 +136,11 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeMask_invalid_constructor()
     {
-        var type = typeof(ArchetypeStructs).Assembly.GetType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
-        var signatureIndexes = TestExtensions.InvokeConstructor(type, null);
+        var type = Reflect.GetType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
+        var signatureIndexes = type.InvokeConstructor(null);
         signatureIndexes.SetInternalField("length", 6);
         Throws<IndexOutOfRangeException>(() => {
-            TestExtensions.InvokeConstructor<ArchetypeStructs>(new [] { signatureIndexes });
+            Reflect.InvokeConstructor<ArchetypeStructs>(new [] { signatureIndexes });
         });
     }
     

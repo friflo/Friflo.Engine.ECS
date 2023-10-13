@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -64,7 +65,7 @@ public static class Test_Misc
         
     [Test]
     public static void Test_sizeof_StructIndexes() {
-        var type = typeof(EntityStore).Assembly.GetType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
+        var type = Reflect.GetType("Friflo.Fliox.Engine.ECS.SignatureIndexes");
         var size = Marshal.SizeOf(type!);
         AreEqual(24, size);
     }

@@ -3,11 +3,16 @@
 
 using System;
 using System.Reflection;
+using Friflo.Fliox.Engine.ECS;
 
 namespace Tests.Utils;
 
-public static class TestExtensions
+public static class Reflect
 {
+    public static Type GetType(string name) {
+        return typeof(EntityStore).Assembly.GetType(name);
+    }
+    
     public static object GetInternalField(this object obj, string name) {
         var type    = obj.GetType();
         var field   = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -24,13 +29,30 @@ public static class TestExtensions
             throw new InvalidOperationException($"field not found. type: {type}, name: {name}");
         }
         field.SetValue(obj, value);
+    }
+    
+    public static object InvokeInternalMethod(this object obj, string name, object[] parameters) {
+        var type    = obj.GetType();
+        var method  = type.GetMethod(name, BindingFlags.NonPublic | BindingFlags.Instance);
+        if (method == null) {
+            throw new InvalidOperationException($"method not found. type: {type}, name: {name}");
+        }
+        try {
+            return method.Invoke(obj, parameters);
+        } catch (TargetInvocationException e) {
+            var inner = e.InnerException;
+            if (inner != null) {
+                throw inner;
+            }
+            throw;
+        }
     } 
     
     public static object InvokeConstructor<T>(object[] parameters) {
         return InvokeConstructor(typeof(T), parameters);        
     }
     
-    public static object InvokeConstructor(Type type, object[] parameters)
+    public static object InvokeConstructor(this Type type, object[] parameters)
     {
         if (parameters == null) {
             return Activator.CreateInstance(type);

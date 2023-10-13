@@ -34,6 +34,9 @@ internal readonly struct SignatureIndexes
         int T4  = 0,
         int T5  = 0
     ) {
+        if (length > 5) {
+            throw new IndexOutOfRangeException();
+        }
         this.length = length;
         this.T1     = T1;
         this.T2     = T2;
@@ -54,12 +57,6 @@ internal readonly struct SignatureIndexes
     }
     
     internal string GetString (string prefix) {
-        if (length == 0) {
-            if (prefix != null) {
-                return $"{prefix}[]";
-            }
-            return "[]";
-        }
         var sb = new StringBuilder();
         if (prefix != null) {
             sb.Append(prefix);
