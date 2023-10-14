@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -8,6 +9,7 @@ namespace Internal.ECS;
 
 public struct InternalTestTag  : IEntityTag { }
 
+[ExcludeFromCodeCoverage]
 public static class Test_Signature
 {
     [Test]

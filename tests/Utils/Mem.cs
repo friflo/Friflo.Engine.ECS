@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace Tests.Utils;
 
+[ExcludeFromCodeCoverage]
 public static class Mem
 {
     public static long GetAllocatedBytes() {
