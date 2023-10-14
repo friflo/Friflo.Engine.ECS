@@ -14,7 +14,8 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed class ComponentSchema
 {
 #region public properties
-    public   ReadOnlySpan<Assembly>                         Dependencies        => new (dependencies);
+    /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
+    public   ReadOnlySpan<Assembly>                         EngineDependants    => new (engineDependants);
     /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
@@ -43,7 +44,7 @@ public sealed class ComponentSchema
     #endregion
     
 #region private fields
-    [Browse(Never)] private  readonly   Assembly[]                          dependencies;
+    [Browse(Never)] private  readonly   Assembly[]                          engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] private  readonly   ComponentType[]                     structs;
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
@@ -55,20 +56,20 @@ public sealed class ComponentSchema
     
 #region internal methods
     internal ComponentSchema(
-        Assembly[]          dependencies,
+        Assembly[]          engineDependants,
         List<ComponentType> structList,
         List<ComponentType> classList,
         List<ComponentType> tagList)
     {
-        this.dependencies   = dependencies;
-        int count           = structList.Count + classList.Count;
-        componentTypeByKey  = new Dictionary<string, ComponentType>(count);
-        componentTypeByType = new Dictionary<Type,   ComponentType>(count);
-        tagTypeByType       = new Dictionary<Type,   ComponentType>(count);
-        maxStructIndex      = structList.Count + 1;
-        structs             = new ComponentType[maxStructIndex];
-        classes             = new ComponentType[classList.Count + 1];
-        tags                = new ComponentType[tagList.Count + 1];
+        this.engineDependants   = engineDependants;
+        int count               = structList.Count + classList.Count;
+        componentTypeByKey      = new Dictionary<string, ComponentType>(count);
+        componentTypeByType     = new Dictionary<Type,   ComponentType>(count);
+        tagTypeByType           = new Dictionary<Type,   ComponentType>(count);
+        maxStructIndex          = structList.Count + 1;
+        structs                 = new ComponentType[maxStructIndex];
+        classes                 = new ComponentType[classList.Count + 1];
+        tags                    = new ComponentType[tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
@@ -156,7 +157,7 @@ internal static class ComponentUtils
     internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
     {
         var assemblyLoader  = new AssemblyLoader();
-        var assemblies      = assemblyLoader.GetAssemblies();
+        var assemblies      = assemblyLoader.GetEngineDependants();
         Console.WriteLine(assemblyLoader);
         
         var types           = new List<Type>();

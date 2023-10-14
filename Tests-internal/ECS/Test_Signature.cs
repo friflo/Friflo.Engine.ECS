@@ -16,7 +16,7 @@ public static class Test_Signature
     public static void Test_ComponentSchema_Dependencies()
     {
         ComponentSchema schema = EntityStore.GetComponentSchema();
-        AreEqual(3, schema.Dependencies.Length);
+        AreEqual(3, schema.EngineDependants.Length);
         
         
         var e = Throws<InvalidOperationException>(() =>

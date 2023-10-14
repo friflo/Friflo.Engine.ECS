@@ -33,7 +33,7 @@ public class AssemblyLoader
     }
 
     // --------------------------- query all struct / class component types ---------------------------
-    internal Assembly[] GetAssemblies()
+    internal Assembly[] GetEngineDependants()
     {
         var stopwatch = new Stopwatch(); 
         stopwatch.Start();

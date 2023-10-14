@@ -52,7 +52,7 @@ public static class Test_ArchetypeStructs
     public static void Test_ArchetypeMask_Get()
     {
         var schema = EntityStore.GetComponentSchema();
-        AreEqual(2, schema.Dependencies.Length);
+        AreEqual(2, schema.EngineDependants.Length);
         
         var testStructType  = schema.ComponentTypeByType[typeof(Position)];
         
