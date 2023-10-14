@@ -137,6 +137,17 @@ public static class Test_Query
     }
     
     [Test]
+    public static void Test_Query_creation_Perf()
+    {
+        var store   = new EntityStore();
+        var sig     = Signature.Get<Position, Rotation>();
+        var count   = 10; // 100_000_000 ~ 1.897 ms
+        for (int n = 0; n < count; n++) {
+            _ = store.Query(sig);
+        }
+    }
+    
+    [Test]
     public static void Test_Query_ForEach()
     {
         var store   = new EntityStore();
