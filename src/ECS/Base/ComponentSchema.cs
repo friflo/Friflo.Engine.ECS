@@ -172,7 +172,7 @@ internal static class ComponentUtils
         return new ComponentSchema(assemblies, structs, classes, tags);
     }
     
-    private static void RegisterComponentType(
+    internal static void RegisterComponentType(
         Type                type,
         List<ComponentType> structs,
         List<ComponentType> classes,
@@ -209,7 +209,7 @@ internal static class ComponentUtils
                 return;
             }
         }
-        throw new InvalidOperationException("missing expected attribute");
+        throw new InvalidOperationException($"missing expected attribute. Type: {type}");
     }
     
     internal static ComponentType CreateStructFactory<T>(TypeStore typeStore)
