@@ -16,10 +16,10 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class ArchetypeKey
 {
     // --- internal fields
-    internal                ArchetypeStructs    structs;    // 32
-    internal                Tags                tags;       // 32
-    internal                int                 hash;       //  4
-    internal readonly       Archetype           archetype;  //  8
+    internal                ArchetypeStructs    structs;    // 32   - struct components of an Archetype
+    internal                Tags                tags;       // 32   - tags of an Archetype
+    internal                int                 hash;       //  4   - hash code from structs & tags
+    internal readonly       Archetype           archetype;  //  8   - the result of a key lookup
 
     public   override       string              ToString() => GetString();
     
