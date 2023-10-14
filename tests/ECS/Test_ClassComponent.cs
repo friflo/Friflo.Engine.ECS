@@ -227,7 +227,7 @@ public static class Test_ClassComponent
 [ClassComponent("test")]
 class TestComponent : ClassComponent
 {
-    public int                      health;     // is serialized
+    private int                      health;     // is serialized
     
     private Component<MyComponent1> myComponent;
     private Component<Position>     position;

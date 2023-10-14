@@ -46,11 +46,6 @@ public static class Test_ArchetypeStructs
         
         copy.Remove(structs);
         AreEqual("Structs: []",                    copy.ToString());
-        
-        var store   = new EntityStore();
-        var entity  = store.CreateEntity();
-        
-        // AreEqual("Structs: []", entity.Tags.ToString());
     }
     
     [Test]
@@ -60,7 +55,6 @@ public static class Test_ArchetypeStructs
         AreEqual(2, schema.Dependencies.Length);
         
         var testStructType  = schema.ComponentTypeByType[typeof(Position)];
-        var testStructType2 = schema.ComponentTypeByType[typeof(Rotation)];
         
         var struct1    = ArchetypeStructs.Get<Position>();
         AreEqual("Structs: [Position]", struct1.ToString());
@@ -139,9 +133,6 @@ public static class Test_ArchetypeStructs
     {
         var store   = new EntityStore();
         var type1   = store.GetArchetype(Signature.Get<Position>());
-        var type2   = store.GetArchetype(Signature.Get<Position, Rotation>());
-        var type3   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3>());
-        
         var result  = store.FindArchetype(type1.Structs, type1.Tags);
         AreEqual(1, type1.Structs.Count);
         AreSame (type1, result);

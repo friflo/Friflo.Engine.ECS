@@ -100,7 +100,6 @@ public static class Test_Tags
     {
         var schema          = EntityStore.GetComponentSchema();
         var testTagType     = schema.TagTypeByType[typeof(TestTag)];
-        var testTagType2    = schema.TagTypeByType[typeof(TestTag2)];
         
         var tag1    = Tags.Get<TestTag>();
         AreEqual("Tags: [#TestTag]", tag1.ToString());
@@ -151,15 +150,13 @@ public static class Test_Tags
     [Test]
     public static void Test_tagged_Query() {
         var store   = new EntityStore();
-        var entity  = store.CreateEntity();
+        var sig     = Signature.Get<Position>();
+
+        var query1 = store.Query(sig).AllTags(Tags.Get<TestTag>());
+        var query2 = store.Query(sig).AllTags(Tags.Get<TestTag, TestTag2>());
         
-        var sig1 = Signature.Get<Position>();
-        var sig2 = Signature.Get<Position, Rotation>();
-        var sig3 = Signature.Get<Position, Rotation, Scale3>();
-        var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
-        var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
-        //
-        var query2 = store.Query(sig2).AllTags(Tags.Get<TestTag, TestTag2>());
+        AreEqual("Query: [Position, #TestTag]",             query1.ToString());
+        AreEqual("Query: [Position, #TestTag, #TestTag2]",  query2.ToString());
     }
     
     [Test]

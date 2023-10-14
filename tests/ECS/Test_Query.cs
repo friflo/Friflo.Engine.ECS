@@ -56,6 +56,12 @@ public static class Test_Query
         var query3 =    store.Query<Position, Rotation, Scale3>();
         var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>();
         var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        
+        AreEqual("Query: [Position]",                                               query1.ToString());
+        AreEqual("Query: [Position, Rotation]",                                     query2.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3]",                             query3.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]",               query4.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", query5.ToString());
     }
     
     [Test]
@@ -168,7 +174,7 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         var query   = store.Query(sig).ReadOnly<Position>();
         var count   = 0;
-        var forEach = query.ForEach((position, rotation) => {
+        var forEach = query.ForEach((position, _) => {
             // ReSharper disable once AccessToModifiedClosure
             count++;
             position.Value.x = 42;
@@ -261,7 +267,7 @@ public static class Test_Query
         
         var chunkCount   = 0;
         start = Mem.GetAllocatedBytes();
-        foreach (var (position, rotation) in query.Chunks) {
+        foreach (var (_, rotation) in query.Chunks) {
             rotation.Values[0].x = 42;
             chunkCount++;
         }

@@ -66,7 +66,7 @@ public static class Test_BitSet
         }
         AreEqual(0, count);
         
-        enumerator.Reset();;
+        enumerator.Reset();
         count = 0;
         while (enumerator.MoveNext()) {
             count++;
@@ -164,7 +164,7 @@ public static class Test_BitSet
     [Test]
     public static void Test_BitSet_GetHashCode_Perf()
     {
-        var bitSet = new BitSet(new int[] { 1, 10, 20, 30, 60, 64, 100, 110, 120, 170, 180, 200, 240, 250});
+        var bitSet = new BitSet(new [] { 1, 10, 20, 30, 60, 64, 100, 110, 120, 170, 180, 200, 240, 250});
         var count = 10; // 10_000_000_000 ~ 2.355 ms
         for (long n = 0; n < count; n++)
         {
