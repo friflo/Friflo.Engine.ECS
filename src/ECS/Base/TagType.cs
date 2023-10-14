@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable UnusedTypeParameter
 namespace Friflo.Fliox.Engine.ECS;
 
 internal static class TagType<T>

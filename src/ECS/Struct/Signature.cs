@@ -4,6 +4,7 @@
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable UnusedTypeParameter
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;

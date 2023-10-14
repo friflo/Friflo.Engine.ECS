@@ -43,7 +43,7 @@ public sealed class ComponentSchema
     #endregion
     
 #region private fields
-    [Browse(Never)] internal readonly   Assembly[]                          dependencies;
+    [Browse(Never)] private  readonly   Assembly[]                          dependencies;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] private  readonly   ComponentType[]                     structs;
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
