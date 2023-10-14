@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Fliox.Engine.ECS;
 
@@ -9,10 +10,12 @@ namespace Internal;
 
 public static class Reflect
 {
+    [ExcludeFromCodeCoverage]
     public static Type EcsType(string name) {
         return typeof(EntityStore).Assembly.GetType(name);
     }
     
+    [ExcludeFromCodeCoverage]
     public static object GetInternalField(this object obj, string name) {
         var type    = obj.GetType();
         var field   = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -22,6 +25,7 @@ public static class Reflect
         return field.GetValue(obj);
     }
     
+    [ExcludeFromCodeCoverage]
     public static void SetInternalField(this object obj, string name, object value) {
         var type    = obj.GetType();
         var field   = type.GetField(name, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -31,6 +35,7 @@ public static class Reflect
         field.SetValue(obj, value);
     }
     
+    [ExcludeFromCodeCoverage]
     public static object InvokeInternalMethod(this object obj, string name, object[] parameters) {
         var type    = obj.GetType();
         var method  = type.GetMethod(name, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -48,11 +53,13 @@ public static class Reflect
         }
     } 
     
+    [ExcludeFromCodeCoverage]
     public static object InvokeConstructor<T>(object[] parameters) {
         return InvokeConstructor(typeof(T), parameters);        
     }
     
-    public static object InvokeConstructor(this Type type, object[] parameters)
+    [ExcludeFromCodeCoverage]
+    private static object InvokeConstructor(this Type type, object[] parameters)
     {
         if (parameters == null) {
             return Activator.CreateInstance(type);
@@ -74,6 +81,7 @@ public static class Reflect
         }
     }
     
+    [ExcludeFromCodeCoverage]
     private static  ConstructorInfo FindConstructor(Type type, object[] parameters)
     {
         var constructors    = type.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);

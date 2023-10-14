@@ -1,8 +1,11 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace ComponentTest.SIMD;
 
+[ExcludeFromCodeCoverage]
 public class VectorOps
 {
     public static readonly VectorOps Instance = GetInstance();

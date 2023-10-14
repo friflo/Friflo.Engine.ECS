@@ -1,10 +1,12 @@
 // Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Intrinsics.X86;
 
 namespace ComponentTest.SIMD;
 
+[ExcludeFromCodeCoverage]
 public sealed class VectorOpsCLR : VectorOps
 {
     public override unsafe void Xor(
