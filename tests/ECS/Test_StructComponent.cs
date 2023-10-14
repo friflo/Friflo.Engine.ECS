@@ -15,6 +15,10 @@ class PlayerRef {
     public Position position;
 }
 
+[AttributeUsage(AttributeTargets.Struct)]
+public sealed class CodeCoverageTestAttribute : Attribute { }
+
+[CodeCoverageTest]
 [StructComponent("my1")]
 public struct MyComponent1 : IStructComponent { public int a; }
 
