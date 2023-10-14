@@ -183,6 +183,15 @@ public static class Test_ClassComponent
         }
     }
     
+    [ClassComponent("empty")]
+    private class EmptyClassComponent : ClassComponent { }
+    
+    [Test]
+    public static void Test_Empty_Lifecycle_methods() {
+        var empty = new EmptyClassComponent();
+        empty.Start();
+        empty.Update();
+    }
     
     /* Editor Inspector would look like
     
@@ -234,3 +243,6 @@ class TestComponent : ClassComponent
         AreEqual(2f, position.Value.x);
     }
 }
+
+
+
