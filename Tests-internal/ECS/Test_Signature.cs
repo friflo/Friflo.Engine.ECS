@@ -56,7 +56,7 @@ public static class Test_Signature
         
         var indexes = new SignatureIndexes(0);
         Throws<IndexOutOfRangeException>(() => {
-            indexes.GetStructIndex(5);
+            indexes.GetStructIndex(0);
         });
         var schema  = EntityStore.GetComponentSchema();
         var posType = schema.GetStructComponentType<Position>();

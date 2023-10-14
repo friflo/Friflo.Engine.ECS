@@ -46,14 +46,18 @@ internal readonly struct SignatureIndexes
     }
     
     internal int GetStructIndex(int index) {
+        if (index >= length) {
+            throw new IndexOutOfRangeException();
+        }
         switch (index) {
             case 0:     return T1;
             case 1:     return T2;
             case 2:     return T3;
             case 3:     return T4;
             case 4:     return T5;
-            default:    throw new IndexOutOfRangeException();
+        //  default:    throw new IndexOutOfRangeException(); // unreachable - already ensured by constructor
         }
+        return -1;
     }
     
     internal string GetString (string prefix) {
