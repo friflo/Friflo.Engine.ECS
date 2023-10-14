@@ -13,8 +13,8 @@ public static class StructUtils
     internal const              int                                 MissingAttribute                = 0;
     
     private  static             int                                 _nextStructIndex                = 1;
-    private  static readonly    Dictionary<Type, string>            StructComponentKeys             = new Dictionary<Type, string>();
-    public   static             IReadOnlyDictionary<Type, string>   RegisteredStructComponentKeys   => StructComponentKeys;
+//  private  static readonly    Dictionary<Type, string>            StructComponentKeys             = new Dictionary<Type, string>();
+//  public   static             IReadOnlyDictionary<Type, string>   RegisteredStructComponentKeys   => StructComponentKeys;
     
     internal static int NewStructIndex(Type type, out string structKey) {
         foreach (var attr in type.CustomAttributes) {
@@ -23,7 +23,7 @@ public static class StructUtils
             }
             var arg     = attr.ConstructorArguments;
             structKey   = (string) arg[0].Value;
-            StructComponentKeys.Add(type, structKey);
+        //  StructComponentKeys.Add(type, structKey);
             return _nextStructIndex++;
         }
         structKey = null;
