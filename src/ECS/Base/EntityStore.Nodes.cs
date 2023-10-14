@@ -234,13 +234,14 @@ public sealed partial class EntityStore
     
     private void SetRootId(int id) {
         if (HasRoot) {
-            throw new InvalidOperationException("EntityStore already has a root entity");
+            throw new InvalidOperationException($"EntityStore already has a root entity. current root id: {rootId}");
         }
-        if (HasParent(nodes[id].parentId)) {
-            throw new InvalidOperationException("entity must not have a parent to be root");
+        ref var parentId = ref nodes[id].parentId;
+        if (HasParent(parentId)) {
+            throw new InvalidOperationException($"entity must not have a parent to be root. current parent id: {parentId}");
         }
-        rootId                  = id;
-        nodes[rootId].parentId  = Static.RootId;
+        rootId      = id;
+        parentId    = Static.RootId;
         SetTreeFlags(nodes, id, TreeNode);
     }
     

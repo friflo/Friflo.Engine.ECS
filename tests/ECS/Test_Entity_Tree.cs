@@ -254,19 +254,40 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_Entity_Root_assertions() {
-        var store1  = new EntityStore();
-        var e1 = Throws<ArgumentNullException>(() => {
-            store1.SetRoot(null);
-        });
-        AreEqual("Value cannot be null. (Parameter 'entity')", e1!.Message);
-        
-        var store2  = new EntityStore();
-        var entity = store1.CreateEntity();
-        var e2 = Throws<ArgumentException>(() => {
-            store2.SetRoot(entity);            
-        });
-        AreEqual("entity is owned by a different store (Parameter 'entity')", e2!.Message);
+    public static void Test_Entity_SetRoot_assertions() {
+        {
+            var store   = new EntityStore();
+            var e       = Throws<ArgumentNullException>(() => {
+                store.SetRoot(null);
+            });
+            AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
+        } {
+            var store1  = new EntityStore();
+            var store2  = new EntityStore();
+            var entity  = store1.CreateEntity();
+            var e       = Throws<ArgumentException>(() => {
+                store2.SetRoot(entity);            
+            });
+            AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+        } {
+            var store   = new EntityStore();
+            var entity1 = store.CreateEntity();
+            var entity2 = store.CreateEntity();
+            store.SetRoot(entity1);
+            var e = Throws<InvalidOperationException>(() => {
+                store.SetRoot(entity2);
+            });
+            AreEqual("EntityStore already has a root entity. current root id: 1", e!.Message);
+        } {
+            var store   = new EntityStore();
+            var entity1 = store.CreateEntity();
+            var entity2 = store.CreateEntity();
+            entity1.AddChild(entity2);
+            var e = Throws<InvalidOperationException>(() => {
+                store.SetRoot(entity2);
+            });
+            AreEqual("entity must not have a parent to be root. current parent id: 1", e!.Message);
+        }
     }
     
     [Test]
