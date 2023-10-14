@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed class Archetype
 {
-#region public properties / fields
+#region public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
