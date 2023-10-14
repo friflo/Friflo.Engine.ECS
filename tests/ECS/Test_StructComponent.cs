@@ -15,7 +15,7 @@ class PlayerRef {
     public Position position;
 }
 
-[AttributeUsage(AttributeTargets.Struct)]
+[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }
 
 [CodeCoverageTest]

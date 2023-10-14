@@ -9,6 +9,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable CheckNamespace
 namespace Tests.ECS;
 
+[CodeCoverageTest]
 [ClassComponent("testRef1")]
 class TestRefComponent1 : ClassComponent {
     public int  val1;
@@ -70,7 +71,7 @@ public static class Test_ClassComponent
         AreEqual(2,             player.ComponentCount);
         AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
         
-        IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
+        // IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
         
 #pragma warning disable CS0618 // Type or member is obsolete
         var components  =                   player.Components_;

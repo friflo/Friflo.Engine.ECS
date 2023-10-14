@@ -7,7 +7,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public static class StructUtils
+internal static class StructUtils
 {
     internal const              int                                 ChunkSize = 512;
     internal const              int                                 MissingAttribute                = 0;
