@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
@@ -66,7 +67,7 @@ public sealed partial class EntityStore
         return entity;
     }
     
-    [Conditional("DEBUG")]
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
     private void AssertIdInNodes(int id) {
         if (id < nodes.Length) {
             return;
@@ -74,7 +75,7 @@ public sealed partial class EntityStore
         throw new InvalidOperationException("expect id < node.length");
     }
     
-    [Conditional("DEBUG")]
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
     private static void AssertPid(long pid, long expected) {
         if (expected == pid) {
             return;
@@ -82,7 +83,7 @@ public sealed partial class EntityStore
         throw new InvalidOperationException($"invalid pid. expected: {expected}, was: {pid}");
     }
     
-    [Conditional("DEBUG")]
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
     private static void AssertPid0(long pid, long expected) {
         if (pid == 0 || pid == expected) {
             return;
