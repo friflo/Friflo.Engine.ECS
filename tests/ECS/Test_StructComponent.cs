@@ -344,6 +344,7 @@ public static class Test_StructComponent
         player.RemoveComponent<MyInvalidComponent>();
     }
     
+    /// <summary>Similar to <see cref="Test_EntityNode.Test_EntityNode_RemoveComponent"/></summary>
     [Test]
     public static void Test_9_RemoveComponent() {
         var store   = new EntityStore();

@@ -26,7 +26,15 @@ public sealed partial class EntityStore
         var id      = sequenceId++;
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return CreateEntityInternal(id, pid);
+        return CreateEntityNode(id, pid, BindNode.ToGameEntity);
+    }
+    
+    public int CreateEntityNode() {
+        var id      = sequenceId++;
+        EnsureNodesLength(id + 1);
+        var pid = GeneratePid(id);
+        CreateEntityNode(id, pid, BindNode.None);
+        return id;
     }
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
@@ -39,7 +47,7 @@ public sealed partial class EntityStore
         }
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return CreateEntityInternal(id, pid);
+        return CreateEntityNode(id, pid, BindNode.ToGameEntity);
     }
     
     public GameEntity CreateFrom(int id, int[] childIds = null) {
@@ -60,7 +68,7 @@ public sealed partial class EntityStore
         }
         EnsureNodesLength(maxId + 1);
         var pid     = GeneratePid(id);
-        var entity  = CreateEntityInternal(id, pid);
+        var entity  = CreateEntityNode(id, pid, BindNode.ToGameEntity);
         if (childIds != null) {
             SetChildNodes(id, childIds, childCount);
         }
@@ -92,7 +100,7 @@ public sealed partial class EntityStore
     }
 
     /// <summary>expect <see cref="nodes"/> Length > id</summary> 
-    private GameEntity CreateEntityInternal(int id, long pid)
+    private GameEntity CreateEntityNode(int id, long pid, BindNode bindNode)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
@@ -106,7 +114,7 @@ public sealed partial class EntityStore
         }
         AssertPid0(node.pid, pid);
         node.pid        = pid;
-        var entity      = new GameEntity(id, defaultArchetype);
+        var entity      = bindNode == BindNode.ToGameEntity ? new GameEntity(id, defaultArchetype) : null;
         // node.parentId   = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds   = Static.EmptyChildNodes;
         node.flags      = Created;

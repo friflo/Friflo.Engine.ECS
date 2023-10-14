@@ -56,11 +56,11 @@ public struct EntityNode
                     public              int                 ParentId    =>  parentId;
                     public              NodeFlags           Flags       =>  flags;
                     
-                    public override     string              ToString()  => GetString();
+                    public   override   string              ToString()  => GetString();
     #endregion
     
  #region internal fields
-    [Browse(Never)] private  readonly   int         id;         // 4
+    [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            long        pid;        // 8
     [Browse(Never)] internal            GameEntity  entity;     // 8    can be null
     [Browse(Never)] internal            int         parentId;   // 4
