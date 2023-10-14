@@ -20,15 +20,15 @@ public sealed partial class EntityStore
         }
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
-            entity = CreateFromDataNodeUsePidAsId(dataNode, BindNode.ToGameEntity);
+            entity = CreateFromDataNodeUsePidAsId(dataNode, NodeBinding.GameEntity);
         } else {
-            entity = CreateFromDataNodeRandomPid (dataNode, BindNode.ToGameEntity);
+            entity = CreateFromDataNodeRandomPid (dataNode, NodeBinding.GameEntity);
         }
         ComponentReader.Instance.Read(dataNode.components, entity, this);
         return entity;
     }
 
-    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode, BindNode bindNode) {
+    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode, NodeBinding nodeBinding) {
         // --- map pid to id
         var pid     = dataNode.pid;
         var pidMap  = pid2Id;
@@ -53,7 +53,7 @@ public sealed partial class EntityStore
             }
         }
         EnsureNodesLength(sequenceId);
-        var entity  = CreateEntityNode(id, pid, bindNode);
+        var entity  = CreateEntityNode(id, pid, nodeBinding);
 
         if (childIds != null) {
             UpdateEntityNodes(childIds, children);
@@ -62,7 +62,7 @@ public sealed partial class EntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode, BindNode bindNode) {
+    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode, NodeBinding nodeBinding) {
         var pid = dataNode.pid;
         if (pid < 0 || pid > int.MaxValue) {
             throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(dataNode));
@@ -84,7 +84,7 @@ public sealed partial class EntityStore
             }
         }
         EnsureNodesLength(maxPid + 1);
-        var entity  = CreateEntityNode(id, id, bindNode);
+        var entity  = CreateEntityNode(id, id, nodeBinding);
         
         if (childIds != null) {
             UpdateEntityNodes(childIds, children);

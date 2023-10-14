@@ -4,17 +4,17 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal enum BindNode
+internal enum NodeBinding
 {
     /// <summary>
-    /// Does not create and bind a <see cref="GameEntity"/> to an <see cref="EntityNode"/>.<br/>
+    /// Does not create and bind a <see cref="ECS.GameEntity"/> to an <see cref="EntityNode"/>.<br/>
     /// In this case <see cref="EntityNode"/>.<see cref="EntityNode.entity"/> is always null.
     /// </summary>
-    None            = 0,
+    None        = 0,
     
     /// <summary>
-    /// Create and bind a <see cref="GameEntity"/> to an <see cref="EntityNode"/>.<br/>
-    /// The <see cref="GameEntity"/> is available via <see cref="EntityNode"/>.<see cref="EntityNode.entity"/>.
+    /// Create and bind a <see cref="ECS.GameEntity"/> to an <see cref="EntityNode"/>.<br/>
+    /// The <see cref="ECS.GameEntity"/> is available via <see cref="EntityNode"/>.<see cref="EntityNode.entity"/>.
     /// </summary>
-    ToGameEntity    = 1
+    GameEntity  = 1
 }
