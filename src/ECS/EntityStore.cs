@@ -96,11 +96,12 @@ public sealed partial class EntityStore
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    ComponentSchema ComponentSchema = ComponentUtils.RegisterComponentTypes(TypeStore);
         
-        internal const              int             DefaultCapacity =  1;
+        internal const              int             DefaultArchIndex    =  0;
+        internal const              int             DefaultCapacity     =  1;
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
-        internal const              int             MinNodeId       =  1;
-        public   const              int             NoParentId      =  0;
-        public   const              int             RootId          = -1;
+        internal const              int             MinNodeId           =  1;
+        public   const              int             NoParentId          =  0;
+        public   const              int             RootId              = -1;
     }
     #endregion
     
@@ -118,7 +119,8 @@ public sealed partial class EntityStore
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         var config          = GetArchetypeConfig();
-        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, new SignatureIndexes(0), default);
+        var indexes         = new SignatureIndexes(Static.DefaultArchIndex); 
+        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, indexes, default);
         clientNodes         = client?.nodes.Local;
         searchKey           = new ArchetypeKey();
         AddArchetype(defaultArchetype);

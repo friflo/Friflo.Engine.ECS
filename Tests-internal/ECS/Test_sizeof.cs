@@ -12,7 +12,7 @@ public static class Test_sizeof
     [Test]
     public static unsafe void Test_sizeof_EntityNode() {
         var size = sizeof(EntityNode);
-        AreEqual(40, size);
+        AreEqual(48, size);
     }
     
     [Test]

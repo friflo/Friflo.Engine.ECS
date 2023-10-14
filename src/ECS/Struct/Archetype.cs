@@ -151,10 +151,13 @@ public sealed class Archetype
             heap.MoveComponent(lastIndex, newIndex);
         }
         var lastEntityId    = entityIds[lastIndex];
-        var entity          = store.nodes[lastEntityId].entity;
-        entity.compIndex    = newIndex; // set component index in new archetype 
+        ref var lastNode    = ref store.nodes[lastEntityId];
+        lastNode.archIndex  = archIndex;
+        lastNode.compIndex  = newIndex; // set component index for new archetype
+        var entity          = lastNode.entity;
+        entity.compIndex    = newIndex; // set component index for new archetype
         entityIds[newIndex] = lastEntityId;
-        entityCount--;     // remove last entity id
+        entityCount--;      // remove last entity id
     }
     
     internal int AddEntity(int id)

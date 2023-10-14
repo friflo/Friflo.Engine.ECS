@@ -112,7 +112,10 @@ public sealed partial class EntityStore
             compIndex           = arch.AddEntity(id);
             archetype           = arch;
         }
-        // --- set component value 
+        ref var node    = ref nodes[id];
+        node.archIndex  = arch.archIndex;
+        node.compIndex  = compIndex;
+        // --- set component value
         var heap2 = (StructHeap<T>)arch.heapMap[StructHeap<T>.StructIndex];
         heap2.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         return true;
@@ -129,18 +132,23 @@ public sealed partial class EntityStore
         if (heap == null) {
             return false;
         }
-        var newArchetype = GetArchetypeWithout(arch, StructHeap<T>.StructIndex, typeof(T));
+        var newArchetype    = GetArchetypeWithout(arch, StructHeap<T>.StructIndex, typeof(T));
+        ref var node        = ref nodes[id];
         if (newArchetype == defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
-            compIndex   = 0;
-            archetype   = defaultArchetype;
+            archetype       = defaultArchetype;
+            compIndex       = 0;
+            node.archIndex  = Static.DefaultArchIndex;
+            node.compIndex  = 0;
             arch.MoveLastComponentsTo(removePos);
             return true;
         }
         // --- change entity archetype
-        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
-        archetype   = newArchetype;
+        archetype       = newArchetype;
+        compIndex       = arch.MoveEntityTo(id, compIndex, newArchetype);
+        node.archIndex  = newArchetype.archIndex;
+        node.compIndex  = compIndex;            
         return true;
     }
     

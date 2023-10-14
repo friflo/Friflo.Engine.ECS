@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -59,16 +60,18 @@ public struct EntityNode
     #endregion
     
  #region internal fields
-    [Browse(Never)] private  readonly   int                 id;         // 4
-    [Browse(Never)] internal            long                pid;        // 8
-    [Browse(Never)] internal            GameEntity          entity;     // 8    can be null
-    [Browse(Never)] internal            int                 parentId;   // 4
-                    internal            int[]               childIds;   // 8    can be null
-    [Browse(Never)] internal            int                 childCount; // 4
-    [Browse(Never)] internal            NodeFlags           flags;      // 4 (1)
+    [Browse(Never)] private  readonly   int         id;         // 4
+    [Browse(Never)] internal            long        pid;        // 8
+    [Browse(Never)] internal            GameEntity  entity;     // 8    can be null
+    [Browse(Never)] internal            int         parentId;   // 4
+                    internal            int[]       childIds;   // 8    can be null
+    [Browse(Never)] internal            int         childCount; // 4
+    [Browse(Never)] internal            NodeFlags   flags;      // 4 (1)
+    [Browse(Never)] internal            int         archIndex;  // 4    for 'GameEntity free usage'
+    [Browse(Never)] internal            int         compIndex;  // 4    for 'GameEntity free usage'
                     
-                    internal            bool                Is      (NodeFlags flag) => (flags & flag) != 0;
-                    internal            bool                IsNot   (NodeFlags flag) => (flags & flag) == 0;
+                    internal            bool        Is      (NodeFlags flag) => (flags & flag) != 0;
+                    internal            bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
     #endregion
     
 #region internal methods

@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
@@ -114,12 +115,13 @@ public sealed class GameEntity
     
 #region internal fields
     [Browse(Never)] internal readonly   int                 id;                 //  4
-    /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
-    /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal            int                 compIndex;          //  4
     
     /// <summary>The <see cref="Archetype"/> used to store the struct components of they the entity</summary>
     [Browse(Never)] internal            Archetype           archetype;          //  8 - never null
+
+    /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
+    /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
+    [Browse(Never)] internal            int                 compIndex;          //  4
     
     /// <summary>Container of class type components added to the entity</summary>
     [Browse(Never)] private             ClassComponent[]    classComponents;    //  8 - never null
@@ -179,8 +181,7 @@ public sealed class GameEntity
     public bool AddComponent<T>()
         where T : struct, IStructComponent
     {
-        var store = archetype.store;
-        return store.AddComponent<T>(id, ref archetype, ref compIndex, default);
+        return archetype.store.AddComponent<T>(id, ref archetype, ref compIndex, default);
     }
     
     /// <returns>true if component is newly added to the entity</returns>
@@ -188,8 +189,7 @@ public sealed class GameEntity
     public bool AddComponent<T>(in T component)
         where T : struct, IStructComponent
     {
-        var store = archetype.store;
-        return store.AddComponent(id, ref archetype, ref compIndex, in component);
+        return archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
     }
     
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -197,8 +197,15 @@ public sealed class GameEntity
     public bool RemoveComponent<T>()
         where T : struct, IStructComponent
     {
-        var store = archetype.store;
-        return store.RemoveComponent<T>(id, ref archetype, ref compIndex);
+        return archetype.store.RemoveComponent<T>(id, ref archetype, ref compIndex);
+    }
+    
+    [ExcludeFromCodeCoverage]   // used to validate archIndex/compIndex of GameEntity in sync with EntityNode
+    private void AssertArchCompIndexes() {
+        ref var node = ref archetype.store.nodes[id];
+        if (archetype.archIndex != node.archIndex || compIndex != node.compIndex) {
+            throw new InvalidOperationException("invalid node.archIndex/compIndex");
+        }
     }
     
     #endregion
@@ -230,7 +237,7 @@ public sealed class GameEntity
         result = null;
         return false;
     }
-
+    
     /// <returns>the component previously added to the entity.</returns>
     public T AddClassComponent<T>(T component)
         where T : ClassComponent
