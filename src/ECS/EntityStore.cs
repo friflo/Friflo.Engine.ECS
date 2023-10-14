@@ -110,7 +110,7 @@ public sealed partial class EntityStore
         sequenceId          = Static.MinNodeId;
         rootId              = Static.NoParentId;
         archetypes          = new Archetype[2];
-        archetypeSet        = new HashSet<ArchetypeKey>(ArchetypeIdEqualityComparer.Instance);
+        archetypeSet        = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();

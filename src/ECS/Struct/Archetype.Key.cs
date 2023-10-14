@@ -93,9 +93,9 @@ internal sealed class ArchetypeKey
     }
 } 
 
-internal sealed class ArchetypeIdEqualityComparer : IEqualityComparer<ArchetypeKey>
+internal sealed class ArchetypeKeyEqualityComparer : IEqualityComparer<ArchetypeKey>
 {
-    internal static readonly ArchetypeIdEqualityComparer Instance = new ();
+    internal static readonly ArchetypeKeyEqualityComparer Instance = new ();
 
     public bool Equals(ArchetypeKey left, ArchetypeKey right) {
         return left!.structs.bitSet.value   == right!.structs.bitSet.value &&
