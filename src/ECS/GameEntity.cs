@@ -201,6 +201,7 @@ public sealed class GameEntity
     }
     
     [ExcludeFromCodeCoverage]   // used to validate archIndex/compIndex of GameEntity in sync with EntityNode
+    // ReSharper disable once UnusedMember.Local
     private void AssertArchCompIndexes() {
         ref var node = ref archetype.store.nodes[id];
         if (archetype.archIndex != node.archIndex || compIndex != node.compIndex) {
