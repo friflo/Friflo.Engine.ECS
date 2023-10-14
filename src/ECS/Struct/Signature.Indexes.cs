@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 internal readonly struct SignatureIndexes
 {
-    internal readonly   int     length; // 4
+    internal readonly   int     length; // 4    - values: [0, 5] ensured by assertion
     
     internal readonly   int     T1;     // 4
     internal readonly   int     T2;     // 4

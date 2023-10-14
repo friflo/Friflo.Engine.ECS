@@ -10,16 +10,6 @@ namespace Internal.ECS;
 public static class Test_ArchetypeStructs
 {
     [Test]
-    public static void Test_ArchetypeMask_invalid_constructor()
-    {
-        object signatureIndexes = new SignatureIndexes();
-        signatureIndexes.SetInternalField(nameof(SignatureIndexes.length), 6);
-        Throws<IndexOutOfRangeException>(() => {
-            _ = new ArchetypeStructs ((SignatureIndexes)signatureIndexes);
-        });
-    }
-    
-    [Test]
     public static void Test_ArchetypeKey()
     {
         var store       = new EntityStore();
