@@ -167,7 +167,7 @@ public sealed class DataNode
 
 public class SceneClient : FlioxClient
 {
-    public  readonly    EntitySet <int, DataNode>   entities;
+    public  readonly    EntitySet <long, DataNode>   entities;
     
     public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
