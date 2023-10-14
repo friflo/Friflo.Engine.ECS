@@ -65,7 +65,7 @@ public sealed partial class EntityStore
     private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode) {
         var pid = dataNode.pid;
         if (pid < 0 || pid > int.MaxValue) {
-            throw new InvalidOperationException("pid mus be in range [0, 2147483647]. was: {pid}");
+            throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(dataNode));
         }
         var id          = (int)pid;
         // --- use pid's as id's

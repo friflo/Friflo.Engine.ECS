@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
@@ -37,6 +38,25 @@ public static class Test_ComponentReader
         AreEqual(1,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         AreEqual(11,    child.Id);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_CreateFromDataNode_assertions()
+    {
+        {
+            var store = new EntityStore(PidType.UsePidAsId);
+            var e = Throws<ArgumentNullException>(() => {
+                store.CreateFromDataNode(null);
+            });
+            AreEqual("Value cannot be null. (Parameter 'dataNode')", e!.Message);
+        } {
+            var store       = new EntityStore(PidType.UsePidAsId);
+            var childNode   = new DataNode { pid = int.MaxValue + 1L };
+            var e = Throws<ArgumentException>(() => {
+                store.CreateFromDataNode(childNode);
+            });
+            AreEqual("pid mus be in range [0, 2147483647]. was: {pid} (Parameter 'dataNode')", e!.Message);
+        }
     }
     
     private static void AssertRootEntity(GameEntity root) {
