@@ -308,6 +308,17 @@ public static class Test_Entity_Tree
         });
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
     }
+
+    /// <summary><see cref="EntityStore.GenerateRandomPidForId"/></summary>
+    [Test]
+    public static void Test_Entity_Tree_RandomPid_Coverage()
+    {
+        var store   = new EntityStore();
+        store.SetRandomSeed(1);
+        store.CreateEntity();
+        store.SetRandomSeed(1); // Random generate same pid. use Next() pid
+        store.CreateEntity();
+    }
     
     [Test]
     public static void Test_Add_Child_Entities_UseRandomPids_Perf() {
