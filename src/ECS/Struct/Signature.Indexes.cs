@@ -57,7 +57,7 @@ internal readonly struct SignatureIndexes
             case 4:     return T5;
         //  default:    throw new IndexOutOfRangeException(); // unreachable - already ensured by constructor
         }
-        return -1;
+        return -1;  // unreachable - all valid cases are covered
     }
     
     internal string GetString (string prefix) {

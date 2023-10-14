@@ -10,6 +10,15 @@ namespace Internal.ECS;
 public static class Test_ArchetypeStructs
 {
     [Test]
+    public static void Test_SignatureIndexes_coverage()
+    {
+        object obj = new SignatureIndexes();
+        obj.SetInternalField(nameof(SignatureIndexes.length), 6);
+        var indexes = (SignatureIndexes)obj;
+        AreEqual(-1, indexes.GetStructIndex(5));
+    }
+    
+    [Test]
     public static void Test_ArchetypeKey()
     {
         var store       = new EntityStore();
