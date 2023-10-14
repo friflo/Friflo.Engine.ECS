@@ -157,8 +157,8 @@ Entities are loaded using a `FlioxClient`
 ```csharp
 public sealed class DataNode
 {
-    public  int             id;
-    public  List<int>       children;   // can be null
+    public  long            id;         // pid - permanent id
+    public  List<long>      children;   // can be null
     public  JsonValue       components; // can be null
     public  List<string>    tags;       // can be null
     public  string          preFab;     // can be null
