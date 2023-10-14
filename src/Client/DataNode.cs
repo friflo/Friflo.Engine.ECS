@@ -25,9 +25,9 @@ namespace Friflo.Fliox.Engine.Client;
 public sealed class DataNode
 {
     /// <summary>permanent id used to identify entities in a database</summary>
-    [Serialize        ("id")] 
     [Key]
-    public  long        pid;
+    [Serialize            ("id")] 
+    public  long            pid;        //  8
     
     /// <remarks>
     /// Use a list of child ids instead of a single field <c>parentId</c> to enable child order.<br/>
@@ -35,21 +35,24 @@ public sealed class DataNode
     /// An alternative order implementation - using firstChild, nextSibling - is error prone if referenced nodes are missing.<br/>
     /// For now the child order is required to enable a memorable order in the editor and to avoid merge conflicts. 
     /// </remarks>
-    public  List<long>  children;       // can be null
+    public  List<long>      children;   //  8   - can be null
     
     /// <summary>
     /// Each key in <see cref="components"/> defines the type of a class / struct component. Its value is the component value.
     /// </summary>
-    public  JsonValue   components;     // can be null
+    public  JsonValue       components; // 16   - can be null
+    
+    /// <summary>List of tags assigned to an entity</summary>
+    public  List<string>    tags;       //  8   - can be null
     
     /// <summary>Reference to the `Prefab` the entity is based on</summary>
-    public  string      prefab;         // can be null
+    public  string          prefab;     //  8   - can be null
     
     /// <summary>
     /// Modify the referenced node of a`preFab`.<br/> with <see cref="components"/> != null<br/>
     /// Remove the referenced node if <see cref="components"/> == null
     /// </summary>
-    public  string      modify;         // can be null
+    public  string          modify;     //  8   - can be null
 
     
     public  override string ToString() => $"pid: {pid}";

@@ -119,6 +119,7 @@ Types:
           struct components are value types and have **no** behaviors (methods).
         - **class** components.  
           class components are reference types and have behaviors (methods).
+    - `tags`        - list of tags assigned to an entity. Tags have no data.
     - `children`    - contains and array of child entity `id`'s.
 - `Archetype`       - contains all entities with the same set of **struct** components  
 The **struct** components of an `Archetype` are stored linear in memory to improve memory locality.  
@@ -137,6 +138,7 @@ Serialized entity example
         "rot": { x: 0, y: 0, x: 0, w: 0 },  // struct component
         "my1": { a: 1 }                     // class  component
     },
+    "tags":["PlayerTag"],                   // can be null
     "children": [1,2,3]                     // can be null
 }
 ```
@@ -155,12 +157,12 @@ Entities are loaded using a `FlioxClient`
 ```csharp
 public sealed class DataNode
 {
-    public  int         id;
-    public  List<int>   children;
-    public  JsonValue   components;
-    
-    public  string      preFab;
-    public  string      nodeRef;
+    public  int             id;
+    public  List<int>       children;   // can be null
+    public  JsonValue       components; // can be null
+    public  List<string>    tags;       // can be null
+    public  string          preFab;     // can be null
+    public  string          nodeRef;    // can be null
 }
 
 public class SceneClient : FlioxClient
