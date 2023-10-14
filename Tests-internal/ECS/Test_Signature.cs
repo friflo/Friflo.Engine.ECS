@@ -30,13 +30,16 @@ public static class Test_Signature
     [Test]
     public static void Test_ComponentType_Exceptions()
     {
-        ComponentType componentTYpe = new TagType(typeof(string), 0);
-        Throws<InvalidOperationException>(() => {
-            componentTYpe.ReadClassComponent(null, default, null);
+        ComponentType componentType = new TagType(typeof(string), 0);
+        var e = Throws<InvalidOperationException>(() => {
+            componentType.ReadClassComponent(null, default, null);
         });
-        Throws<InvalidOperationException>(() => {
-            componentTYpe.CreateHeap(0);
+        AreEqual("operates only on ClassComponentType<>", e!.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
+            componentType.CreateHeap(0);
         });
+        AreEqual("operates only on StructComponentType<>", e!.Message);
     }
     
     [Test]

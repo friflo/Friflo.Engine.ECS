@@ -43,9 +43,10 @@ public abstract class ComponentType
     public   readonly   Type            type;           //  8
         
     internal virtual    StructHeap  CreateHeap          (int capacity)
-        => throw new InvalidOperationException("operates only on StructFactory<>");
+        => throw new InvalidOperationException("operates only on StructComponentType<>");
+    
     internal virtual    void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException("operates only on ClassFactory<>");
+        => throw new InvalidOperationException("operates only on ClassComponentType<>");
     
     internal ComponentType(
         string          componentKey,
