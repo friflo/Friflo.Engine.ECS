@@ -43,13 +43,12 @@ public static class Test_Signature
         var e = Throws<InvalidOperationException>(() => {
             ComponentUtils.RegisterComponentType(typeof(string), null, null, null, null);
         });
-        AreEqual("missing expected attribute. Type: System.String", e.Message);
+        AreEqual("missing expected attribute. Type: System.String", e!.Message);
     }
     
     [Test]
     public static void Test_SignatureIndexes()
     {
-        var parameters = new object[] { 6, 0, 0, 0, 0, 0 };
         Throws<IndexOutOfRangeException>(() => {
             _ = new SignatureIndexes (6);
         });
