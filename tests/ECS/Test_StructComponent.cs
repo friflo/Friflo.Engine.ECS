@@ -25,6 +25,13 @@ public struct MyComponent1 : IStructComponent { public int a; }
 [StructComponent("my2")]
 public struct MyComponent2 : IStructComponent { public int b; }
 
+
+public static class EntityExtensions
+{
+    public static ref MyComponent1 MyComponent1(this GameEntity entity) => ref entity.GetComponentValue<MyComponent1>();
+    public static ref MyComponent2 MyComponent2(this GameEntity entity) => ref entity.GetComponentValue<MyComponent2>();
+}
+
 // test missing [StructComponent()] attribute
 struct MyInvalidComponent  : IStructComponent { public int b; }
 
@@ -67,6 +74,20 @@ public static class Test_StructComponent
         player2.TryGetComponentValue(out Scale3 _);
         player2.TryGetComponentValue(out MyComponent2 _);
         Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
+    public static void Test_1_custom_Entity_Extensions() {
+        var store   = new EntityStore();
+        var player  = store.CreateEntity();
+        player.AddComponent<MyComponent1>();
+        player.AddComponent<MyComponent2>();
+        
+        player.MyComponent1().a = 1;
+        AreEqual(1, player.MyComponent1().a);
+        
+        player.MyComponent2().b = 2;
+        AreEqual(2, player.MyComponent2().b);
     }
     
     [Test]
