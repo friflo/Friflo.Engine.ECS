@@ -17,7 +17,7 @@ public sealed partial class EntityStore
     }
         
     private static Exception IdAlreadyInUseException(int id, string parameterName) {
-        return new ArgumentException($"id already in use in EntityStore. was: {id}", parameterName);
+        return new ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
     }
         
     private static Exception EntityAlreadyHasParent(int child, int curParent, int newParent) {

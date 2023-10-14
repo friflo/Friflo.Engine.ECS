@@ -120,6 +120,23 @@ public static class Test_CreateFromDataNode
     }
     
     [Test]
+    public static void Load_CreateFrom_assertions() {
+        var store   = new EntityStore();
+        {
+            var e = Throws<ArgumentException>(() => {
+                store.CreateFrom(0);    
+            });
+            AreEqual("invalid node id <= 0. was: 0 (Parameter 'id')", e!.Message);
+        } {
+            store.CreateFrom(1);
+            var e = Throws<ArgumentException>(() => {
+                store.CreateFrom(1);    
+            });
+            AreEqual("id already in use in EntityStore. id: 1 (Parameter 'id')", e!.Message);
+        }
+    }
+    
+    [Test]
     public static void Load_error_multiple_parents_1() {
         var store   = new EntityStore();
         

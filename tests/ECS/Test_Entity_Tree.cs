@@ -250,7 +250,7 @@ public static class Test_Entity_Tree
         e = Throws<ArgumentException>(() => {
             store.CreateEntity(42);
         });
-        AreEqual("id already in use in EntityStore. was: 42 (Parameter 'id')", e!.Message);
+        AreEqual("id already in use in EntityStore. id: 42 (Parameter 'id')", e!.Message);
     }
     
     [Test]

@@ -44,7 +44,7 @@ public sealed partial class EntityStore
     
     public GameEntity CreateFrom(int id, int[] childIds = null) {
         if (id < Static.MinNodeId) {
-            throw InvalidEntityIdException(id, "dataNode.id");
+            throw InvalidEntityIdException(id, nameof(id));
         }
         if (id < nodes.Length && nodes[id].Is(Created)) {
             throw IdAlreadyInUseException(id, nameof(id));
