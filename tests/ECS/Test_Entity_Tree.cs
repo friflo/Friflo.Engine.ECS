@@ -242,15 +242,31 @@ public static class Test_Entity_Tree
     public static void Test_Entity_id_argument_exceptions() {
         var store   = new EntityStore();
         var e = Throws<ArgumentException>(() => {
-            store.CreateEntity(0);            
+            store.CreateEntity(0);
         });
         AreEqual("invalid node id <= 0. was: 0 (Parameter 'id')", e!.Message);
         
         store.CreateEntity(42);
         e = Throws<ArgumentException>(() => {
-            store.CreateEntity(42);            
+            store.CreateEntity(42);
         });
         AreEqual("id already in use in EntityStore. was: 42 (Parameter 'id')", e!.Message);
+    }
+    
+    [Test]
+    public static void Test_Entity_Root_assertions() {
+        var store1  = new EntityStore();
+        var e1 = Throws<ArgumentNullException>(() => {
+            store1.SetRoot(null);
+        });
+        AreEqual("Value cannot be null. (Parameter 'entity')", e1!.Message);
+        
+        var store2  = new EntityStore();
+        var entity = store1.CreateEntity();
+        var e2 = Throws<ArgumentException>(() => {
+            store2.SetRoot(entity);            
+        });
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e2!.Message);
     }
     
     [Test]
