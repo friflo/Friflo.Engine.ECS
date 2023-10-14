@@ -239,6 +239,21 @@ public static class Test_Entity_Tree
     }
     
     [Test]
+    public static void Test_Entity_id_argument_exceptions() {
+        var store   = new EntityStore();
+        var e = Throws<ArgumentException>(() => {
+            store.CreateEntity(0);            
+        });
+        AreEqual("invalid node id <= 0. was: 0 (Parameter 'id')", e!.Message);
+        
+        store.CreateEntity(42);
+        e = Throws<ArgumentException>(() => {
+            store.CreateEntity(42);            
+        });
+        AreEqual("id already in use in EntityStore. was: 42 (Parameter 'id')", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Entity_Tree_InvalidStoreException()
     {
         var store1   = new EntityStore();

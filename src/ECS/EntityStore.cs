@@ -144,23 +144,4 @@ public sealed partial class EntityStore
         return ref nodes[pid];
     }
     #endregion
-    
-#region exceptions
-    internal static Exception InvalidStoreException(string parameterName) {
-        return new ArgumentException("entity is owned by a different store", parameterName);
-    }
-    
-    private static Exception InvalidEntityIdException(int id, string parameterName) {
-        return new ArgumentException($"Invalid node id <= 0. id: {id}", parameterName);
-    }
-    
-    private static Exception IdAlreadyInUseException(int id) {
-        return new InvalidOperationException($"id already in use in EntityStore. id: {id}");
-    }
-    
-    private static Exception EntityAlreadyHasParent(int child, int curParent, int newParent) {
-        var msg = $"child has already a parent. child: {child} current parent: {curParent}, new parent: {newParent}";
-        return new InvalidOperationException(msg);
-    }
-    #endregion
 }

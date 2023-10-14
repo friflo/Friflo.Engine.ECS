@@ -34,7 +34,7 @@ public sealed partial class EntityStore
             throw InvalidEntityIdException(id, nameof(id));
         }
         if (id < nodes.Length && nodes[id].Is(Created)) {
-            throw IdAlreadyInUseException(id);
+            throw IdAlreadyInUseException(id, nameof(id));
         }
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
@@ -46,7 +46,7 @@ public sealed partial class EntityStore
             throw InvalidEntityIdException(id, "dataNode.id");
         }
         if (id < nodes.Length && nodes[id].Is(Created)) {
-            throw IdAlreadyInUseException(id);
+            throw IdAlreadyInUseException(id, nameof(id));
         }
         // --- ensure EntityNode's referenced by child ids are present in nodes[]
         var maxId       = id;

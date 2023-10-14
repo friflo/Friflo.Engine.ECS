@@ -176,7 +176,11 @@ public static class Test_StructComponent
         type2       = store.GetArchetype(Signature.Get<MyComponent1, Position, Rotation,  MyComponent2>());
         AreSame(type1, type2);
         
-        AreEqual(4, store.Archetypes.Length);
+        type1       = store.GetArchetype(Signature.Get<Position, Rotation, MyComponent1, Scale3, MyComponent2>());
+        type2       = store.GetArchetype(Signature.Get<Scale3, MyComponent1, Position, Rotation, MyComponent2>());
+        AreSame(type1, type2);
+        
+        AreEqual(5, store.Archetypes.Length);
         AreEqual(0, type1.EntityCount);
         AreEqual(0, type2.EntityCount);
     }
