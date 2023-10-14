@@ -7,14 +7,14 @@ namespace Friflo.Fliox.Engine.ECS;
 internal enum BindNode
 {
     /// <summary>
-    /// Does not bind a <see cref="ToGameEntity"/> to an <see cref="EntityNode"/>.<br/>
-    /// In this case <see cref="EntityNode.entity"/> is null.
+    /// Does not create and bind a <see cref="GameEntity"/> to an <see cref="EntityNode"/>.<br/>
+    /// In this case <see cref="EntityNode"/>.<see cref="EntityNode.entity"/> is always null.
     /// </summary>
     None            = 0,
     
     /// <summary>
-    /// Create and bind a <see cref="ToGameEntity"/> to an <see cref="EntityNode"/>.<br/>
-    /// The <see cref="ToGameEntity"/> is available via <see cref="EntityNode.entity"/>.
+    /// Create and bind a <see cref="GameEntity"/> to an <see cref="EntityNode"/>.<br/>
+    /// The <see cref="GameEntity"/> is available via <see cref="EntityNode"/>.<see cref="EntityNode.entity"/>.
     /// </summary>
     ToGameEntity    = 1
 }
