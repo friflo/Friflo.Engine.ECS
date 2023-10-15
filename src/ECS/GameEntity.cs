@@ -36,7 +36,7 @@ public sealed class GameEntity
     /// If <see cref="TreeMembership"/> is <see cref="treeNode"/> <see cref="Root"/> is not null.<br/>
     /// If <see cref="floating"/> <see cref="Root"/> is null.
     /// </remarks>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.store.nodes[id].Is(TreeNode) ? treeNode : floating;
+    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.nodes[id].Is(TreeNode) ? treeNode : floating;
     
     [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
@@ -83,7 +83,7 @@ public sealed class GameEntity
     
                     /// <returns>return null if the entity is <see cref="floating"/></returns>
                     /// <remarks>Executes in O(1) independent from its depth in the node tree</remarks>
-                    public  GameEntity      Root        => archetype.store.nodes[id].Is(TreeNode) ? archetype.gameEntityStore.Root : null;
+                    public  GameEntity      Root        => archetype.gameEntityStore.nodes[id].Is(TreeNode) ? archetype.gameEntityStore.Root : null;
                     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
@@ -92,7 +92,7 @@ public sealed class GameEntity
                     /// <remarks>Executes in O(1)</remarks> 
                     public  GameEntity      Parent
                     { get {
-                        var store       = archetype.store;
+                        var store       = archetype.gameEntityStore;
                         var parentNode  = store.nodes[id].parentId;
                         return GameEntityStore.HasParent(parentNode) ? store.nodes[parentNode].entity : null;
                     } }
@@ -106,7 +106,7 @@ public sealed class GameEntity
                     /// <remarks>Executes in O(1)</remarks>
                     public  ChildNodes      ChildNodes
                     { get {
-                        var store       = archetype.store;
+                        var store       = archetype.gameEntityStore;
                         ref var node    = ref store.nodes[id];
                         return new ChildNodes(store.nodes, node.childIds, node.childCount);
                     } }
@@ -333,7 +333,7 @@ public sealed class GameEntity
 #region tree node methods
     /// <remarks>Executes in O(1)</remarks>
     public GameEntity GetChild(int index) {
-        var store   = archetype.store;
+        var store   = archetype.gameEntityStore;
         return store.nodes[store.nodes[id].childIds[index]].entity;
     }
     

@@ -35,7 +35,6 @@ public partial class EntityStore
     [Browse(Never)] internal            int                     archetypesCount;    //  4                   - number of archetypes
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype without components
     // --- nodes
-    [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
     [Browse(Never)] protected           int                     nodeMaxId;          //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodeCount;          //  4                   - number of all entities
                     protected           int                     sequenceId;         //  4                   - incrementing id used for next new EntityNode
