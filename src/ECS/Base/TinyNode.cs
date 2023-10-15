@@ -15,8 +15,6 @@ public struct TinyNode
 #region public properties
     /// <summary>Unique id within an <see cref="EntityNode"/> instance</summary>
                     public              int                 Id          =>  id;
-    /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
-                    public              long                Pid         =>  pid;
                     public              NodeFlags           Flags       =>  flags;
                     
                     public   override   string              ToString()  => GetString();
@@ -24,10 +22,9 @@ public struct TinyNode
     
  #region internal fields
     [Browse(Never)] internal readonly   int         id;         // 4
-    [Browse(Never)] internal            long        pid;        // 8
-    [Browse(Never)] internal            NodeFlags   flags;      // 4 (1)
+    [Browse(Never)] internal            NodeFlags   flags;      // 1
     
-    [Browse(Never)] internal            short       archIndex;  // 4    for 'GameEntity free usage'
+    [Browse(Never)] internal            short       archIndex;  // 2    for 'GameEntity free usage'
     [Browse(Never)] internal            int         compIndex;  // 4    for 'GameEntity free usage'
 
                     

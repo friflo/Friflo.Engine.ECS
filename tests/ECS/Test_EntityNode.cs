@@ -61,9 +61,12 @@ public static class Test_TinyNodes
     [Test]
     public static void Test_TinyNodes_Create_Perf()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
-        int count       = 10; // 100_000_000 ~ 2.285 ms
+        var store       = new EntityStore(PidType.UsePidAsId);  // todo add TinyNodes mode
+        store.CreateTinyNode(); // load required methods to avoid measuring this in perf loop. 
+        
+        int count       = 10; // 100_000_000 ~ 413 ms
         var stopwatch   = new Stopwatch();
+        store.EnsureTinyNodeCapacity(count);
         stopwatch.Start();
         for (int n = 0; n < count; n++) {
             store.CreateTinyNode();

@@ -14,6 +14,10 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class EntityStore
 {
+    public void EnsureTinyNodeCapacity(int length) {
+        EnsureTinyNodesLength(sequenceId + length);
+    }
+
     private void EnsureTinyNodesLength(int length)
     {
         var curLength = tinyNodes.Length;
@@ -30,8 +34,16 @@ public sealed partial class EntityStore
     public int CreateTinyNode() {
         var id      = sequenceId++;
         EnsureTinyNodesLength(id + 1);
-        var pid = GeneratePid(id);
-        CreateTinyNodeInternal(id, pid);
+        
+        ref var node = ref tinyNodes[id];
+        if (node.Is(Created)) {
+            return id;
+        }
+        nodeCount++;
+        if (nodeMaxId < id) {
+            nodeMaxId = id;
+        }
+        node.flags      = Created;
         return id;
     }
     
@@ -41,25 +53,6 @@ public sealed partial class EntityStore
             return;
         }
         throw new InvalidOperationException("expect id < tinyNodes.length");
-    }
-    
-    /// <summary>expect <see cref="tinyNodes"/> Length > id</summary> 
-    private void CreateTinyNodeInternal(int id, long pid)
-    {
-        AssertIdInTinyNodes(id);
-        ref var node = ref tinyNodes[id];
-        if (node.Is(Created)) {
-            AssertPid(node.pid, pid);
-            return;
-        }
-        nodeCount++;
-        if (nodeMaxId < id) {
-            nodeMaxId = id;
-        }
-        AssertPid0(node.pid, pid);
-        node.pid        = pid;
-        // node.parentId   = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
-        node.flags      = Created;
     }
     
     public int GetEntityComponentCount(int id) {

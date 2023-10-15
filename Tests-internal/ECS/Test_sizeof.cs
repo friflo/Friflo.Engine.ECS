@@ -18,7 +18,7 @@ public static class Test_sizeof
     [Test]
     public static unsafe void Test_sizeof_TinyNode() {
         var size = sizeof(TinyNode);
-        AreEqual(24, size);
+        AreEqual(12, size);
     }
     
     [Test]
