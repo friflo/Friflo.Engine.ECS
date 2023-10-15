@@ -208,6 +208,7 @@ public partial class GameEntityStore
             for (var i = n + 1; i < count; i++) {
                 childIds[i - 1] = childIds[i];
             }
+            childIds[n + 1] = 0; // clear last child id for debug clarity. not necessary because of nodeCount--
             return;
         }
         throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {id}");

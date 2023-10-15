@@ -198,7 +198,7 @@ public static class Test_Entity_Tree
         IsNull  (subChild.Root);        // subChild is floating
         IsNull  (child.Archetype);
         AreEqual("id: 2  (detached)", child.ToString());
-        AreSame (subChild,   store.Nodes[3].Entity);
+        AreSame (subChild,  store.Nodes[3].Entity);
         AreEqual(detached,  child.StoreOwnership);
         
         var childNode = store.Nodes[2]; // child is detached => all fields have their default value
@@ -217,6 +217,23 @@ public static class Test_Entity_Tree
         Throws<NullReferenceException> (() => {
             _ = child.Root; // access tree node
         });
+    }
+    
+    /// <summary>cover <see cref="GameEntityStore.DeleteNode"/></summary>
+    [Test]
+    public static void Test_Test_Entity_Tree_cover_DeleteNode() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        var child4  = store.CreateEntity(4);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        root.AddChild(child4);
+        AreEqual(3, root.ChildCount);
+        
+        child3.DeleteEntity();
+        AreEqual(2, root.ChildCount);
     }
     
     [Test]

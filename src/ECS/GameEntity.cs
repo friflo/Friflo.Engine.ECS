@@ -364,8 +364,11 @@ public sealed class GameEntity
     /// </summary>
     public void DeleteEntity()
     {
-        archetype.gameEntityStore.DeleteNode(id);
-        archetype.MoveLastComponentsTo(compIndex);
+        var store = archetype.gameEntityStore;
+        store.DeleteNode(id);
+        if (archetype != store.defaultArchetype) {
+            archetype.MoveLastComponentsTo(compIndex);
+        }
         archetype = null;
     }
     
