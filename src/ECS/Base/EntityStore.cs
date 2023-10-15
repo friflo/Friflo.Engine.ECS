@@ -33,7 +33,7 @@ public partial class EntityStore
     // --- archetypes
     [Browse(Never)] protected           Archetype[]             archetypes;         //  8 + archetypes      - array of all archetypes. never null
     [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archetypeSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
-    [Browse(Never)] internal            int                     archetypesCount;    //  4                   - number of archetypes
+    [Browse(Never)] internal            ushort                  archetypesCount;    //  2                   - number of archetypes
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype without components
     // --- nodes
     [Browse(Never)] protected           int                     nodeMaxId;          //  4                   - highest entity id

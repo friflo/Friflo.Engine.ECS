@@ -42,7 +42,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8 + maxStructIndex heap references
     [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
     [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing EntityStore
-    [Browse(Never)] internal readonly   int                 archIndex;      //  4       - index in EntityStore
+    [Browse(Never)] internal readonly   ushort              archIndex;      //  2       - index in EntityStore
     [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     

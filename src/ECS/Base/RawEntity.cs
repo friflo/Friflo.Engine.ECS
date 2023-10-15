@@ -15,7 +15,7 @@ internal struct RawEntity
 #region internal fields
     [Browse(Never)] internal            NodeFlags   flags;      // 1
     
-    [Browse(Never)] internal            short       archIndex;  // 2    for 'GameEntity free usage'
+    [Browse(Never)] internal            ushort      archIndex;  // 2    for 'GameEntity free usage'
     [Browse(Never)] internal            int         compIndex;  // 4    for 'GameEntity free usage'
 
                     public   override   string              ToString()  => GetString();
