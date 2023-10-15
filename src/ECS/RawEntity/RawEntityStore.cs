@@ -100,7 +100,7 @@ public sealed class RawEntityStore : EntityStore
         ref var entity      = ref entities[id];
         var archetype       = archetypes[entity.archIndex];
         var result          = AddComponent(id, ref archetype, ref entity.compIndex, component);
-        entity.archIndex    = (short)archetype.archIndex;
+        entity.archIndex    = archetype.archIndex;
         return result;
     }
     

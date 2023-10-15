@@ -11,8 +11,8 @@ internal struct RawEntity
 {
     
 #region internal fields
-    [Browse(Never)] internal            short       archIndex;  // 2    for 'GameEntity free usage'
-    [Browse(Never)] internal            int         compIndex;  // 4    for 'GameEntity free usage'
+    [Browse(Never)] internal            int         archIndex;  // 4    could be short. if changing check perf
+    [Browse(Never)] internal            int         compIndex;  // 4
 
     #endregion
     
