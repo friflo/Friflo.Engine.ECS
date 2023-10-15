@@ -9,39 +9,26 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public struct TinyEntity
+internal struct TinyEntity
 {
-#region public properties
-    /// <summary>Unique id within an <see cref="EntityNode"/> instance</summary>
-                    public              int                 Id          =>  id;
-                    public              NodeFlags           Flags       =>  flags;
-                    
-                    public   override   string              ToString()  => GetString();
-    #endregion
     
 #region internal fields
-    [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            NodeFlags   flags;      // 1
     
     [Browse(Never)] internal            short       archIndex;  // 2    for 'GameEntity free usage'
     [Browse(Never)] internal            int         compIndex;  // 4    for 'GameEntity free usage'
 
-                    
+                    public   override   string              ToString()  => GetString();
                     internal            bool        Is      (NodeFlags flag) => (flags & flag) != 0;
                     internal            bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
     #endregion
     
 #region internal methods
-    internal TinyEntity(int id) {
-        this.id     = id;
-    }
-    
     private string GetString()
     {
         var sb = new StringBuilder();
 
-        sb.Append("id: ");
-        sb.Append(id);
+        sb.Append("TinyEntity - ");
 
         if (flags != 0) {
             sb.Append("  flags: ");

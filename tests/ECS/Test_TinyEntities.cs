@@ -9,7 +9,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-public static class Test_TinyNodes
+public static class Test_TinyEntities
 {
     /// <summary>Similar to <see cref="Test_StructComponent.Test_9_RemoveComponent"/></summary>
     [Test]
@@ -23,7 +23,6 @@ public static class Test_TinyNodes
         store.AddEntityComponent(entity1, new Position { x = 1 });
         AreEqual(1,     type1.EntityCount);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
-        AreEqual(1,     store.Entities[1].Id);
         
         store.RemoveEntityComponent<Position>(entity1);
         AreEqual(0,     type1.EntityCount);
@@ -61,11 +60,12 @@ public static class Test_TinyNodes
     
     [Test]
     public static void Test_TinyNodes_Create_Perf()
+    
     {
         var store   = new TinyEntityStore();
         store.CreateEntity(); // load required methods to avoid measuring this in perf loop. 
         
-        int count       = 10; // 100_000_000 ~ 413 ms
+        int count       = 10; // 100_000_000 ~ 408 ms
         var stopwatch   = new Stopwatch();
         store.EnsureEntityCapacity(count);
         stopwatch.Start();

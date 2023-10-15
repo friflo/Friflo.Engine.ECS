@@ -33,8 +33,6 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public sealed class TinyEntityStore : EntityStore
 {
-                    public             ReadOnlySpan<TinyEntity> Entities           => new (entities);
-                    
     [Browse(Never)] private            TinyEntity[]             entities;          //  8 + all tiny entities
 
     public TinyEntityStore()
@@ -54,8 +52,10 @@ public sealed class TinyEntityStore : EntityStore
         }
         var newLength = Math.Max(length, 2 * entities.Length);
         Utils.Resize(ref entities, newLength);
+        // Note: Assigning each new entity a default value ensures they get filled into the memory cache.
+        //       As a result subsequent calls to CreateEntity() are faster in perf test 
         for (int n = curLength; n < length; n++) {
-            entities[n] = new TinyEntity (n);
+            entities[n] = default;
         }
     }
     
@@ -105,7 +105,7 @@ public sealed class TinyEntityStore : EntityStore
     {
         ref var entity      = ref entities[id];
         var archetype       = archetypes[entity.archIndex];
-        var result          = AddComponent(entity.id, ref archetype, ref entity.compIndex, component);
+        var result          = AddComponent(id, ref archetype, ref entity.compIndex, component);
         entity.archIndex    = (short)archetype.archIndex;
         return result;
     }
@@ -115,7 +115,7 @@ public sealed class TinyEntityStore : EntityStore
     {
         ref var entity      = ref entities[id];
         var archetype       = archetypes[entity.archIndex];
-        var result          =  RemoveComponent<T>(entity.id, ref archetype, ref entity.compIndex);
+        var result          =  RemoveComponent<T>(id, ref archetype, ref entity.compIndex);
         entity.archIndex    = (short)archetype.archIndex;
         return result;
     }
