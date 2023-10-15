@@ -66,10 +66,6 @@ public struct EntityNode
                     internal            int[]       childIds;   // 8    can be null
     [Browse(Never)] internal            int         childCount; // 4
     [Browse(Never)] internal            NodeFlags   flags;      // 4 (1)
-    /// <summary>Required for <see cref="NodeBinding.None"/> usage</summary>
-    [Browse(Never)] internal            int         archIndex;  // 4    for 'GameEntity free usage'
-    /// <summary>Required for <see cref="NodeBinding.None"/> usage</summary>
-    [Browse(Never)] internal            int         compIndex;  // 4    for 'GameEntity free usage'
                     
                     internal            bool        Is      (NodeFlags flag) => (flags & flag) != 0;
                     internal            bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;

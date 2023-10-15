@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
@@ -199,16 +198,6 @@ public sealed class GameEntity
     {
         return archetype.store.RemoveComponent<T>(id, ref archetype, ref compIndex);
     }
-    
-    [ExcludeFromCodeCoverage]   // used to validate archIndex/compIndex of GameEntity in sync with EntityNode
-    // ReSharper disable once UnusedMember.Local
-    private void AssertArchCompIndexes() {
-        ref var node = ref archetype.store.nodes[id];
-        if (archetype.archIndex != node.archIndex || compIndex != node.compIndex) {
-            throw new InvalidOperationException("invalid node.archIndex/compIndex");
-        }
-    }
-    
     #endregion
     
     // --------------------------------- class component methods ---------------------------------

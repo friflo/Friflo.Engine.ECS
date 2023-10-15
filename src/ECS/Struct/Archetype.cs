@@ -152,8 +152,6 @@ public sealed class Archetype
         }
         var lastEntityId    = entityIds[lastIndex];
         ref var lastNode    = ref store.nodes[lastEntityId];
-        lastNode.archIndex  = archIndex;
-        lastNode.compIndex  = newIndex; // set component index for new archetype
         var entity          = lastNode.entity;
         entity.compIndex    = newIndex; // set component index for new archetype
         entityIds[newIndex] = lastEntityId;

@@ -40,7 +40,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </summary>
 /// <remarks>
-/// <i>Usage type: <see cref="NodeBinding"/>: <see cref="NodeBinding.None"/></i><br/>
+/// <i>Usage type:</i> <b>TinyNodes</b><br/>
 /// This approach enables using the <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
 /// The focus of the this usage type is performance.<br/>
 /// The key is to reduce heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
@@ -86,6 +86,7 @@ public sealed partial class EntityStore
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
+    [Browse(Never)] internal            TinyNode[]              tinyNodes;          //  8 + all tiny nodes
     [Browse(Never)] private             int                     nodeMaxId;          //  4                   - highest entity id
     [Browse(Never)] private             int                     nodeCount;          //  4                   - number of all entities
     [Browse(Never)] private             int                     rootId;             //  4                   - id of root node. 0 = NoParentId
@@ -122,6 +123,7 @@ public sealed partial class EntityStore
             randPid = new Random();
         }
         nodes               = Array.Empty<EntityNode>();
+        tinyNodes           = Array.Empty<TinyNode>();
         EnsureNodesLength(2);
         var config          = GetArchetypeConfig();
         var indexes         = new SignatureIndexes(Static.DefaultArchIndex); 

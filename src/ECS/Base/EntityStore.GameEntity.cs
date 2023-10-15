@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable SuggestBaseTypeForParameter
@@ -26,7 +25,7 @@ public sealed partial class EntityStore
         var id      = sequenceId++;
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return CreateEntityNode(id, pid, NodeBinding.GameEntity);
+        return CreateEntityNode(id, pid);
     }
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
@@ -39,7 +38,7 @@ public sealed partial class EntityStore
         }
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return CreateEntityNode(id, pid, NodeBinding.GameEntity);
+        return CreateEntityNode(id, pid);
     }
     
     public GameEntity CreateFrom(int id, int[] childIds = null) {
@@ -60,7 +59,7 @@ public sealed partial class EntityStore
         }
         EnsureNodesLength(maxId + 1);
         var pid     = GeneratePid(id);
-        var entity  = CreateEntityNode(id, pid, NodeBinding.GameEntity);
+        var entity  = CreateEntityNode(id, pid);
         if (childIds != null) {
             SetChildNodes(id, childIds, childCount);
         }
@@ -72,7 +71,7 @@ public sealed partial class EntityStore
         if (id < nodes.Length) {
             return;
         }
-        throw new InvalidOperationException("expect id < node.length");
+        throw new InvalidOperationException("expect id < nodes.length");
     }
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
@@ -92,7 +91,7 @@ public sealed partial class EntityStore
     }
 
     /// <summary>expect <see cref="nodes"/> Length > id</summary> 
-    private GameEntity CreateEntityNode(int id, long pid, NodeBinding nodeBinding)
+    private GameEntity CreateEntityNode(int id, long pid)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
@@ -106,7 +105,7 @@ public sealed partial class EntityStore
         }
         AssertPid0(node.pid, pid);
         node.pid        = pid;
-        var entity      = nodeBinding == NodeBinding.GameEntity ? new GameEntity(id, defaultArchetype) : null;
+        var entity      = new GameEntity(id, defaultArchetype);
         // node.parentId   = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds   = Static.EmptyChildNodes;
         node.flags      = Created;

@@ -20,15 +20,15 @@ public sealed partial class EntityStore
         }
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
-            entity = CreateFromDataNodeUsePidAsId(dataNode, NodeBinding.GameEntity);
+            entity = CreateFromDataNodeUsePidAsId(dataNode);
         } else {
-            entity = CreateFromDataNodeRandomPid (dataNode, NodeBinding.GameEntity);
+            entity = CreateFromDataNodeRandomPid (dataNode);
         }
         ComponentReader.Instance.Read(dataNode.components, entity, this);
         return entity;
     }
 
-    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode, NodeBinding nodeBinding) {
+    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode) {
         // --- map pid to id
         var pid     = dataNode.pid;
         var pidMap  = pid2Id;
@@ -53,7 +53,7 @@ public sealed partial class EntityStore
             }
         }
         EnsureNodesLength(sequenceId);
-        var entity  = CreateEntityNode(id, pid, nodeBinding);
+        var entity  = CreateEntityNode(id, pid);
 
         if (childIds != null) {
             UpdateEntityNodes(childIds, children);
@@ -62,7 +62,7 @@ public sealed partial class EntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode, NodeBinding nodeBinding) {
+    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode) {
         var pid = dataNode.pid;
         if (pid < 0 || pid > int.MaxValue) {
             throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(dataNode));
@@ -84,7 +84,7 @@ public sealed partial class EntityStore
             }
         }
         EnsureNodesLength(maxPid + 1);
-        var entity  = CreateEntityNode(id, id, nodeBinding);
+        var entity  = CreateEntityNode(id, id);
         
         if (childIds != null) {
             UpdateEntityNodes(childIds, children);
