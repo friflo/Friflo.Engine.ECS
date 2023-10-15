@@ -12,8 +12,10 @@ using static Friflo.Fliox.Engine.ECS.NodeFlags;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public sealed partial class EntityStore
+public class TinyEntityStore : EntityStore
 {
+    public TinyEntityStore() : base(PidType.UsePidAsId) { }
+        
     public void EnsureTinyNodeCapacity(int length) {
         EnsureTinyNodesLength(sequenceId + length);
     }

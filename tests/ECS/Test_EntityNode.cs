@@ -15,7 +15,7 @@ public static class Test_TinyNodes
     [Test]
     public static void Test_TinyNodes_Components()
     {
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store   = new TinyEntityStore();
         var type1 = store.GetArchetype(Signature.Get<Position>());
         var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         
@@ -61,10 +61,10 @@ public static class Test_TinyNodes
     [Test]
     public static void Test_TinyNodes_Create_Perf()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);  // todo add TinyNodes mode
+        var store   = new TinyEntityStore();
         store.CreateTinyNode(); // load required methods to avoid measuring this in perf loop. 
         
-        int count       = 10; // 100_000_000 ~ 413 ms
+        int count       = 100_000_000; // 100_000_000 ~ 413 ms
         var stopwatch   = new Stopwatch();
         store.EnsureTinyNodeCapacity(count);
         stopwatch.Start();

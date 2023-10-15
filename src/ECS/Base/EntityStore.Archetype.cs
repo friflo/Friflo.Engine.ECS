@@ -12,7 +12,7 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public sealed partial class EntityStore
+public partial class EntityStore
 {
     private Archetype GetArchetypeWith<T>(Archetype current)
         where T : struct, IStructComponent

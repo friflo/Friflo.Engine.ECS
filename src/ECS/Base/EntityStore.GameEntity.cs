@@ -18,7 +18,7 @@ namespace Friflo.Fliox.Engine.ECS;
 // This file contains implementation specific for storing GameEntity's.
 // The reason to separate handling of GameEntity's is to enable 'entity / component support' without GameEntity's.
 // EntityStore remarks.
-public sealed partial class EntityStore
+public partial class EntityStore
 {
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public GameEntity CreateEntity() {

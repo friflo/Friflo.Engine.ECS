@@ -8,7 +8,7 @@ using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public sealed partial class EntityStore
+public partial class EntityStore
 {
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
