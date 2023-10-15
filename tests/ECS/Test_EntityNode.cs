@@ -7,17 +7,17 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-public static class Test_EntityNode
+public static class Test_TinyNodes
 {
     /// <summary>Similar to <see cref="Test_StructComponent.Test_9_RemoveComponent"/></summary>
     [Test]
-    public static void Test_EntityNode_RemoveComponent()
+    public static void Test_TinyNodes_Components()
     {
         var store   = new EntityStore();
         var type1 = store.GetArchetype(Signature.Get<Position>());
         var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         
-        var entity1  = store.CreateEntityNode();
+        var entity1  = store.CreateTineNode();
         store.AddEntityComponent(entity1, new Position { x = 1 });
         AreEqual(1,     type1.EntityCount);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
@@ -41,7 +41,7 @@ public static class Test_EntityNode
         AreEqual(1f,    store.GetEntityComponentValue<Position>(entity1).x);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
         //
-        var entity2  = store.CreateEntityNode();
+        var entity2  = store.CreateTineNode();
         store.AddEntityComponent(entity2, new Position { x = 1 });    // possible alloc: resize type1.entityIds
         store.RemoveEntityComponent<Position>(entity2);               // note: remove the last id in type1.entityIds => only type1.entityCount--  
         AreEqual(1,     type1.EntityCount);

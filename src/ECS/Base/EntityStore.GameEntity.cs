@@ -29,14 +29,6 @@ public sealed partial class EntityStore
         return CreateEntityNode(id, pid, NodeBinding.GameEntity);
     }
     
-    public int CreateEntityNode() {
-        var id      = sequenceId++;
-        EnsureNodesLength(id + 1);
-        var pid = GeneratePid(id);
-        CreateEntityNode(id, pid, NodeBinding.None);
-        return id;
-    }
-    
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public GameEntity CreateEntity(int id) {
         if (id < Static.MinNodeId) {

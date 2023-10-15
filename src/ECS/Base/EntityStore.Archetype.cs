@@ -86,28 +86,6 @@ public sealed partial class EntityStore
     }
     
     // ------------------------------------ add / remove struct component ------------------------------------
-    
-    public int GetEntityComponentCount(int id) {
-        return archetypes[nodes[id].archIndex].componentCount;
-    }
-    
-    public ref T GetEntityComponentValue<T>(int id)
-        where T : struct, IStructComponent
-    {
-        ref var node    = ref nodes[id];
-        var heap        = (StructHeap<T>)archetypes[node.archIndex].heapMap[StructHeap<T>.StructIndex];
-        return ref heap.chunks[node.compIndex / ChunkSize].components[node.compIndex % ChunkSize];
-    }
-    
-    public bool AddEntityComponent<T>(int id, in T component)
-        where T : struct, IStructComponent
-    {
-        ref var node    = ref nodes[id];
-        var archetype   = archetypes[node.archIndex];
-        var compIndex   = node.compIndex; 
-        return AddComponent(node.id, ref archetype, ref compIndex, component);
-    }
-    
     internal bool AddComponent<T>(
             int                 id,
         ref Archetype           archetype,  // possible mutation is not null
@@ -141,15 +119,6 @@ public sealed partial class EntityStore
         var heap2 = (StructHeap<T>)arch.heapMap[StructHeap<T>.StructIndex];
         heap2.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         return true;
-    }
-    
-    public bool RemoveEntityComponent<T>(int id)
-        where T : struct, IStructComponent
-    {
-        ref var node    = ref nodes[id];
-        var archetype   = archetypes[node.archIndex];
-        var compIndex   = node.compIndex; 
-        return RemoveComponent<T>(node.id, ref archetype, ref compIndex);
     }
     
     internal bool RemoveComponent<T>(
