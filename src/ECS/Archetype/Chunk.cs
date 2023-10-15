@@ -14,7 +14,7 @@ internal readonly struct StructChunk<T>
     
     public override string ToString() => components == null ? "" : "used";
     
-    internal StructChunk (int count) {
+    internal StructChunk (uint count) {
         components  = new T[count];
     }
 }

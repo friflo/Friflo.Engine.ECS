@@ -22,7 +22,7 @@ internal sealed class StructHeap<T> : StructHeap
     internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
     internal static readonly    string  StructKey;
     
-    internal StructHeap(int structIndex, string structKey, int capacity, TypeMapper<T> mapper)
+    internal StructHeap(int structIndex, string structKey, uint capacity, TypeMapper<T> mapper)
         : base (structIndex, structKey, typeof(T))
     {
         typeMapper  = mapper;
@@ -30,7 +30,7 @@ internal sealed class StructHeap<T> : StructHeap
         chunks[0]   = new StructChunk<T>(capacity);
     }
     
-    internal override void SetCapacity(int capacity)
+    internal override void SetCapacity(uint capacity)
     {
         // todo fix this
         for (int n = 0; n < chunks.Length; n++)
@@ -44,13 +44,13 @@ internal sealed class StructHeap<T> : StructHeap
         }
     }
     
-    internal override void MoveComponent(int from, int to)
+    internal override void MoveComponent(uint from, uint to)
     {
         chunks[to   / ChunkSize].components[to   % ChunkSize] =
         chunks[from / ChunkSize].components[from % ChunkSize];
     }
     
-    internal override void CopyComponentTo(int sourcePos, StructHeap target, int targetPos)
+    internal override void CopyComponentTo(uint sourcePos, StructHeap target, uint targetPos)
     {
         var targetHeap = (StructHeap<T>)target;
         targetHeap.chunks[targetPos / ChunkSize].components[targetPos % ChunkSize] =
@@ -62,16 +62,16 @@ internal sealed class StructHeap<T> : StructHeap
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override object GetComponentDebug (int compIndex) {
+    internal override object GetComponentDebug (uint compIndex) {
         return chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     }
     
-    internal override Bytes Write(ObjectWriter writer, int compIndex) {
+    internal override Bytes Write(ObjectWriter writer, uint compIndex) {
         ref var value = ref chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
         return writer.WriteAsBytesMapper(value, typeMapper);
     }
     
-    internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
+    internal override void Read(ObjectReader reader, uint compIndex, JsonValue json) {
         chunks[compIndex / ChunkSize].components[compIndex % ChunkSize]
             = reader.ReadMapper(typeMapper, json);  // todo avoid boxing within typeMapper, T is struct
     }

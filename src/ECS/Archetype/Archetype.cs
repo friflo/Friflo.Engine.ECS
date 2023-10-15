@@ -16,12 +16,12 @@ public sealed class Archetype
 {
 #region public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
-    [Browse(Never)] public              int                 EntityCount     => entityCount;
+    [Browse(Never)] public              int                 EntityCount     => (int)entityCount;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
-                                                                            => (entityCount - 1) / StructUtils.ChunkSize;
+                                                                            => ((int)entityCount - 1) / StructUtils.ChunkSize;
     
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
-                    public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
+                    public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, (int)entityCount);
     
                     public              EntityStore         Store           => store;
                     public ref readonly ArchetypeStructs    Structs         => ref structs;
@@ -32,8 +32,8 @@ public sealed class Archetype
                     private  readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
-    [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
-                    private             int                 capacity;       //  4
+    [Browse(Never)] private             uint                entityCount;    //  4       - number of entities in archetype
+                    private             uint                capacity;       //  4
     // --- internal
     [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
@@ -122,7 +122,7 @@ public sealed class Archetype
     
 #region struct component handling
 
-    internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype)
+    internal uint MoveEntityTo(int id, uint compIndex, Archetype newArchetype)
     {
         var sourceIndex = compIndex;
         // --- copy entity components to components of new newArchetype
@@ -140,7 +140,7 @@ public sealed class Archetype
         return targetIndex;
     }
     
-    internal void MoveLastComponentsTo(int newIndex)
+    internal void MoveLastComponentsTo(uint newIndex)
     {
         var lastIndex = entityCount - 1;
         // --- decrement entityCount if the newIndex is already the last entity id
@@ -160,7 +160,7 @@ public sealed class Archetype
         entityCount--;      // remove last entity id
     }
     
-    internal int AddEntity(int id)
+    internal uint AddEntity(int id)
     {
         var index = entityCount;
         if (index == entityIds.Length) {
@@ -171,7 +171,7 @@ public sealed class Archetype
         return index;
     }
     
-    private void  EnsureCapacity(int newCapacity) {
+    private void  EnsureCapacity(uint newCapacity) {
         if (capacity >= newCapacity) {
             return;
         }

@@ -24,12 +24,12 @@ internal abstract class StructHeap
 
     public   override   string      ToString() => GetString();
     
-    internal abstract   void        SetCapacity         (int capacity);
-    internal abstract   void        MoveComponent       (int from, int to);
-    internal abstract   void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
-    internal abstract   object      GetComponentDebug   (int compIndex);
-    internal abstract   Bytes       Write               (ObjectWriter writer, int compIndex);
-    internal abstract   void        Read                (ObjectReader reader, int compIndex, JsonValue json);
+    internal abstract   void        SetCapacity         (uint capacity);
+    internal abstract   void        MoveComponent       (uint from, uint to);
+    internal abstract   void        CopyComponentTo     (uint sourcePos, StructHeap target, uint targetPos);
+    internal abstract   object      GetComponentDebug   (uint compIndex);
+    internal abstract   Bytes       Write               (ObjectWriter writer, uint compIndex);
+    internal abstract   void        Read                (ObjectReader reader, uint compIndex, JsonValue json);
 
     internal StructHeap(int structIndex, string structKey, Type type) {
         this.structIndex    = structIndex;

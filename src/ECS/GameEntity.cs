@@ -120,7 +120,7 @@ public sealed class GameEntity
 
     /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal            int                 compIndex;          //  4
+    [Browse(Never)] internal            uint                compIndex;          //  4
     
     /// <summary>Container of class type components added to the entity</summary>
     [Browse(Never)] private             ClassComponent[]    classComponents;    //  8 - never null
