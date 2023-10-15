@@ -167,6 +167,12 @@ public static class Test_Tags
         AreEqual(1,                                 store.EntityCount);
         AreEqual(2,                                 store.Archetypes.Length);
         
+        // add same tag again
+        entity.AddTag<TestTag>();
+        AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(2,                                 store.Archetypes.Length);
+        
         entity.AddTags(testTag2);
         AreEqual("[#TestTag, #TestTag2]  Count: 1",  entity.Archetype.ToString());
         AreEqual(1,                                 store.EntityCount);
@@ -177,6 +183,12 @@ public static class Test_Tags
         AreEqual(1,                                 store.EntityCount);
         AreEqual(4,                                 store.Archetypes.Length);
         
+        entity.RemoveTags(testTag2);
+        AreEqual("[]",                              entity.Archetype.ToString());
+        AreEqual(1,                                 store.EntityCount);
+        AreEqual(4,                                 store.Archetypes.Length);
+        
+        // remove same tag again
         entity.RemoveTags(testTag2);
         AreEqual("[]",                              entity.Archetype.ToString());
         AreEqual(1,                                 store.EntityCount);
