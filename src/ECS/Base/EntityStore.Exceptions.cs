@@ -6,7 +6,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public partial class EntityStore
+public partial class GameEntityStore
 {
     internal static Exception InvalidStoreException(string parameterName) {
         return new ArgumentException("entity is owned by a different store", parameterName);

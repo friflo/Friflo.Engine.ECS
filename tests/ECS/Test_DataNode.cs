@@ -16,7 +16,7 @@ public static class Test_CreateFromDataNode
 {
     [Test]
     public static void Load_DataNode_Sequential() {
-        var store   = new EntityStore(UsePidAsId);
+        var store   = new GameEntityStore(UsePidAsId);
         var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
         var entity  = store.CreateFromDataNode(node);
         
@@ -34,7 +34,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_DataNode_Pid() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
         var entity  = store.CreateFromDataNode(node);
         
@@ -52,7 +52,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_single_entity() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var entity2 = store.CreateFrom(2);
         
         AreEqual(2, entity2.Id);
@@ -63,7 +63,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_parent_child() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
 
         // --- create parent 5 first
         var entity5 = store.CreateFrom(5, new [] { 8 });
@@ -92,7 +92,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_child_parent() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         
         // --- create child 8 first
         var entity8 = store.CreateFrom(8);
@@ -121,7 +121,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_CreateFrom_assertions() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         {
             var e = Throws<ArgumentException>(() => {
                 store.CreateFrom(0);    
@@ -138,7 +138,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_error_multiple_parents_1() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         
         store.CreateFrom(1, new [] { 2, 3 });
 
@@ -150,7 +150,7 @@ public static class Test_CreateFromDataNode
 
     [Test]
     public static void Load_error_multiple_parents_2() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         
         store.CreateFrom(1, new [] { 2 });
 
@@ -162,7 +162,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_error_cycle_1() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         
         var e = Throws<InvalidOperationException> (() => {
             store.CreateFrom(1, new [] { 1 });
@@ -172,7 +172,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_error_cycle_2() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         
         store.CreateFrom(1, new [] { 2 });
         
@@ -184,7 +184,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_error_cycle_3() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         
         store.CreateFrom(1, new [] { 2 });
         store.CreateFrom(2, new [] { 3 });
@@ -197,7 +197,7 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_Perf() {
-        var store       = new EntityStore();
+        var store       = new GameEntityStore();
         int count       = 10; // 10_000_000 ~ 2.117 ms
         for (int n = 1; n <= count; n++) {
             _ = store.CreateFrom(n);

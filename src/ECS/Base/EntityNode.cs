@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree structure.<br/>
 /// The tree is stored in an <see cref="EntityStore"/> to build up a scene stating with
-/// a single <see cref="EntityStore.Root"/> entity. 
+/// a single <see cref="GameEntityStore.Root"/> entity. 
 /// </summary>
 /// <remarks>
 /// It provide the properties listed below
@@ -32,7 +32,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <br/>
 /// <b><see cref="Pid"/></b><br/>
 /// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
-/// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
+/// using <see cref="GameEntityStore.GenerateRandomPidForId"/>.<br/>
 /// Using random pids avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
 /// The probability generating the same pid by two different users is:
 /// <code>

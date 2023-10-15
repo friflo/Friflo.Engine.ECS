@@ -58,7 +58,7 @@ public static class Test_Tags
         AreEqual(0, copy.Count);
         AreEqual("Tags: []",                    copy.ToString());
         
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var entity  = store.CreateEntity();
         
         AreEqual("Tags: []", entity.Tags.ToString());
@@ -149,7 +149,7 @@ public static class Test_Tags
     
     [Test]
     public static void Test_tagged_Query() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var sig     = Signature.Get<Position>();
 
         var query1 = store.Query(sig).AllTags(Tags.Get<TestTag>());
@@ -161,7 +161,7 @@ public static class Test_Tags
     
     [Test]
     public static void Test_Tags_Add_Remove() {
-        var store       = new EntityStore();
+        var store       = new GameEntityStore();
         AreEqual(1,                                 store.Archetypes.Length);
         var entity      = store.CreateEntity();
         var testTag2    = Tags.Get<TestTag2>();
@@ -203,7 +203,7 @@ public static class Test_Tags
     
     [Test]
     public static void Test_Tags_Query() {
-        var store           = new EntityStore();
+        var store           = new GameEntityStore();
         var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);

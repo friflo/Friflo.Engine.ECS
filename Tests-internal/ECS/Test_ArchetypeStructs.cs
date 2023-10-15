@@ -20,7 +20,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeKey()
     {
-        var store       = new EntityStore();
+        var store       = new GameEntityStore();
         var posType     = store.GetArchetype(Signature.Get<Position>());
         var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
         
@@ -45,7 +45,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_StructHeap_ToString()
     {
-        var store       = new EntityStore();
+        var store       = new GameEntityStore();
         var entity      = store.CreateEntity();
         entity.AddComponent<Position>();
         var posType     = store.GetArchetype(Signature.Get<Position>());

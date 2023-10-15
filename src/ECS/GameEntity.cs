@@ -79,22 +79,22 @@ public sealed class GameEntity
     #endregion
     
 #region public properties - tree nodes
-    [Browse(Never)] public  int             ChildCount  => archetype.store.Nodes[id].childCount;
+    [Browse(Never)] public  int             ChildCount  => archetype.gameEntityStore.Nodes[id].childCount;
     
                     /// <returns>return null if the entity is <see cref="floating"/></returns>
                     /// <remarks>Executes in O(1) independent from its depth in the node tree</remarks>
-                    public  GameEntity      Root        => archetype.store.nodes[id].Is(TreeNode) ? archetype.store.Root : null;
+                    public  GameEntity      Root        => archetype.store.nodes[id].Is(TreeNode) ? archetype.gameEntityStore.Root : null;
                     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
-                    /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.Root"/> returns always null
+                    /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="GameEntityStore.Root"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
                     public  GameEntity      Parent
                     { get {
                         var store       = archetype.store;
                         var parentNode  = store.nodes[id].parentId;
-                        return EntityStore.HasParent(parentNode) ? store.nodes[parentNode].entity : null;
+                        return GameEntityStore.HasParent(parentNode) ? store.nodes[parentNode].entity : null;
                     } }
     
                     /// <summary>
@@ -342,8 +342,8 @@ public sealed class GameEntity
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public void AddChild(GameEntity entity) {
-        var store = archetype.store;
-        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
+        var store = archetype.gameEntityStore;
+        if (store != entity.archetype.store) throw GameEntityStore.InvalidStoreException(nameof(entity));
         store.AddChild(id, entity.id);
     }
     
@@ -352,8 +352,8 @@ public sealed class GameEntity
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public void RemoveChild(GameEntity entity) {
-        var store = archetype.store;
-        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
+        var store = archetype.gameEntityStore;
+        if (store != entity.archetype.store) throw GameEntityStore.InvalidStoreException(nameof(entity));
         store.RemoveChild(id, entity.id);
     }
     
@@ -364,7 +364,7 @@ public sealed class GameEntity
     /// </summary>
     public void DeleteEntity()
     {
-        archetype.store.DeleteNode(id);
+        archetype.gameEntityStore.DeleteNode(id);
         archetype.MoveLastComponentsTo(compIndex);
         archetype = null;
     }

@@ -13,7 +13,7 @@ using static Friflo.Fliox.Engine.ECS.NodeFlags;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public partial class EntityStore
+public partial class GameEntityStore
 {
     // --------------------------------- tree node methods ---------------------------------
     private void EnsureNodesLength(int length)

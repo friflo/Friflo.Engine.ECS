@@ -131,7 +131,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeMask_lookup_Perf()
     {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var type1   = store.GetArchetype(Signature.Get<Position>());
         var result  = store.FindArchetype(type1.Structs, type1.Tags);
         AreEqual(1, type1.Structs.Count);

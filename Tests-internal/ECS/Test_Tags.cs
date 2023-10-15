@@ -13,7 +13,7 @@ public static class Test_Tags
     [Test]
     public static void Test_Tags_Query()
     {
-        var store           = new EntityStore();
+        var store           = new GameEntityStore();
         var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);

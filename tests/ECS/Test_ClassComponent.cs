@@ -34,7 +34,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_1_AddComponent() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var player  = store.CreateEntity();
         AreEqual("id: 1  []",   player.ToString());
         AreSame(store,          player.Archetype.Store);
@@ -87,7 +87,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_2_RemoveClassComponent() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
         var testRef1 = new TestRefComponent1();
@@ -115,7 +115,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_3_RemoveClassComponent() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
         IsNull (player.AddClassComponent(new TestRefComponent1 { val1 = 1 }));
@@ -130,7 +130,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_3_InvalidRefComponent() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var player  = store.CreateEntity();
         
         var testRef1 = new InvalidRefComponent();
@@ -149,7 +149,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_2_Perf() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var list = new List<GameEntity>();
         for (long n = 0; n < 10; n++) {
             list.Add(store.CreateEntity());
@@ -159,7 +159,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_GetClassComponent_Perf() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var player  = store.CreateEntity();
         player.AddClassComponent(new TestRefComponent1());
         NotNull(player.GetClassComponent<TestRefComponent1>());
@@ -172,7 +172,7 @@ public static class Test_ClassComponent
     
     [Test]
     public static void Test_3_Perf_Add_Remove_Component() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var player  = store.CreateEntity();
         AreEqual("id: 1  []", player.ToString());
         
@@ -204,7 +204,7 @@ public static class Test_ClassComponent
     */
     [Test]
     public static void Test_3_Simulate_Editor() {
-        var store   = new EntityStore();
+        var store   = new GameEntityStore();
         var entity  = store.CreateEntity();
         
         var test    = new TestComponent();

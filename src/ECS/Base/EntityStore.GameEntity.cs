@@ -18,7 +18,7 @@ namespace Friflo.Fliox.Engine.ECS;
 // This file contains implementation specific for storing GameEntity's.
 // The reason to separate handling of GameEntity's is to enable 'entity / component support' without GameEntity's.
 // EntityStore remarks.
-public partial class EntityStore
+public partial class GameEntityStore
 {
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public GameEntity CreateEntity() {
@@ -90,7 +90,7 @@ public partial class EntityStore
         throw new InvalidOperationException($"invalid pid. expected: 0 or {expected}, was: {pid}");
     }
 
-    /// <summary>expect <see cref="nodes"/> Length > id</summary> 
+    /// <summary>expect <see cref="EntityStore.nodes"/> Length > id</summary> 
     private GameEntity CreateEntityNode(int id, long pid)
     {
         AssertIdInNodes(id);

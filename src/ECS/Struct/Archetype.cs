@@ -41,6 +41,7 @@ public sealed class Archetype
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.GetStructType"/></remarks>
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8 + maxStructIndex heap references
     [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
+    [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - index in EntityStore
     [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
@@ -56,6 +57,7 @@ public sealed class Archetype
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
         store           = config.store;
+        gameEntityStore = store as GameEntityStore;
         archIndex       = config.archetypeIndex;
         capacity        = config.capacity;
         componentCount  = heaps.Length;

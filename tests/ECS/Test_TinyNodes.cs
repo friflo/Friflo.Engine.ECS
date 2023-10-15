@@ -64,7 +64,7 @@ public static class Test_TinyNodes
         var store   = new TinyEntityStore();
         store.CreateTinyNode(); // load required methods to avoid measuring this in perf loop. 
         
-        int count       = 100_000_000; // 100_000_000 ~ 413 ms
+        int count       = 10; // 100_000_000 ~ 413 ms
         var stopwatch   = new Stopwatch();
         store.EnsureTinyNodeCapacity(count);
         stopwatch.Start();

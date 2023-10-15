@@ -18,7 +18,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ReadStructComponents()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
         
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         var childNode   = new DataNode { pid = 11 };
@@ -44,13 +44,13 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_CreateFromDataNode_assertions()
     {
         {
-            var store = new EntityStore(PidType.UsePidAsId);
+            var store = new GameEntityStore(PidType.UsePidAsId);
             var e = Throws<ArgumentNullException>(() => {
                 store.CreateFromDataNode(null);
             });
             AreEqual("Value cannot be null. (Parameter 'dataNode')", e!.Message);
         } {
-            var store       = new EntityStore(PidType.UsePidAsId);
+            var store       = new GameEntityStore(PidType.UsePidAsId);
             var childNode   = new DataNode { pid = int.MaxValue + 1L };
             var e = Throws<ArgumentException>(() => {
                 store.CreateFromDataNode(childNode);
@@ -74,7 +74,7 @@ public static class Test_ComponentReader
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
     public static void Test_ReadStructComponents_Mem()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
         
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         var childNode   = new DataNode { pid = 11 };
@@ -101,7 +101,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ReadStructComponents_Perf()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
         
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         
@@ -118,7 +118,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ReadClassComponents()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
         
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
@@ -138,7 +138,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ReadClassComponents_Perf()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
         
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
 

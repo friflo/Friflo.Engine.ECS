@@ -10,7 +10,7 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing DataNode's.
-public partial class EntityStore
+public partial class GameEntityStore
 {
 /// <returns>an <see cref="attached"/> entity</returns>
     public GameEntity CreateFromDataNode(DataNode dataNode)
