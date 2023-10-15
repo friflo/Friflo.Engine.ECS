@@ -78,7 +78,7 @@ public partial class EntityStore
             Utils.Resize(ref archetypes,     newLen);
         }
         if (archetype.archIndex != archetypesCount) {
-            throw new InvalidOperationException("invalid archIndex");
+            throw new InvalidOperationException($"invalid archIndex. expect: {archetypesCount}, was: {archetype.archIndex}");
         }
         archetypes[archetypesCount] = archetype;
         archetypesCount++;

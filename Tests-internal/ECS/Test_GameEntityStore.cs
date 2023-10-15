@@ -21,5 +21,19 @@ public static class Test_GameEntityStore
         });
         AreEqual("unexpected state: child id not found. parent id: 5, child id: 10", e!.Message);
     }
+    
+    /// <summary>Cover <see cref="EntityStore.AddArchetype"/></summary>
+    [Test]
+    public static void Test_Tags_cover_AddArchetype() {
+        var store       = new GameEntityStore();
+        var archetype   = store.GetArchetype(Signature.Get<Position>());
+        
+        archetype.SetInternalField(nameof(archetype.archIndex), 5);
+        
+        var e = Throws<InvalidOperationException>(() => {
+            store.AddArchetype(archetype);
+        });
+        AreEqual("invalid archIndex. expect: 2, was: 5", e!.Message);
+    }
 }
 
