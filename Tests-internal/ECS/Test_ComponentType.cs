@@ -10,7 +10,7 @@ namespace Internal.ECS;
 public struct InternalTestTag  : IEntityTag { }
 
 [ExcludeFromCodeCoverage]
-public static class Test_Signature
+public static class Test_ComponentType
 {
     [Test]
     public static void Test_ComponentSchema_Dependencies()
@@ -50,22 +50,5 @@ public static class Test_Signature
         });
         AreEqual("missing expected attribute. Type: System.String", e!.Message);
     }
-    
-    [Test]
-    public static void Test_SignatureIndexes()
-    {
-        Throws<IndexOutOfRangeException>(() => {
-            _ = new SignatureIndexes (6);
-        });
-        
-        var indexes = new SignatureIndexes(0);
-        Throws<IndexOutOfRangeException>(() => {
-            indexes.GetStructIndex(0);
-        });
-        var schema  = EntityStore.GetComponentSchema();
-        var posType = schema.GetStructComponentType<Position>();
-        
-        indexes = new SignatureIndexes(1, posType.structIndex);
-        AreEqual("StructIndexes: [Position]", indexes.ToString());
-    }
+
 }
