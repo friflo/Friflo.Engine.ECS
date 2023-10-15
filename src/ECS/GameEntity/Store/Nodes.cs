@@ -210,7 +210,7 @@ public partial class GameEntityStore
             }
             return;
         }
-        throw new InvalidOperationException($"unexpected state: child id not found: {id}");
+        throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {id}");
     }
     
     private static void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {
