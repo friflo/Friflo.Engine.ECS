@@ -209,6 +209,18 @@ public static class Test_Tags
         AreEqual(4,                                 store.Archetypes.Length);
     }
     
+    /// <summary>Cover <see cref="EntityStore.GetArchetypeWithTags"/></summary>
+    [Test]
+    public static void Test_Tags_with_struct_components() {
+        var store   = new GameEntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent<Position>();
+        entity.AddTag<TestTag>();
+        
+        var archetype = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
+        AreEqual(1, archetype.EntityCount);
+    }
+    
     [Test]
     public static void Test_Tags_Query() {
         var store           = new GameEntityStore();
