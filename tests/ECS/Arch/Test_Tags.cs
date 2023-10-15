@@ -211,7 +211,7 @@ public static class Test_Tags
     
     /// <summary>Cover <see cref="EntityStore.GetArchetypeWithTags"/></summary>
     [Test]
-    public static void Test_Tags_with_struct_components() {
+    public static void Test_Tags_cover_GetArchetypeWithTags() {
         var store   = new GameEntityStore();
         var entity  = store.CreateEntity();
         entity.AddComponent<Position>();
