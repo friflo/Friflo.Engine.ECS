@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -39,7 +37,8 @@ public sealed class RawEntityStore : EntityStore
     {
         entities = Array.Empty<RawEntity>();
     }
-        
+
+#region entity create
     public void EnsureEntityCapacity(int length) {
         EnsureEntitiesLength(sequenceId + length);
     }
@@ -73,15 +72,9 @@ public sealed class RawEntityStore : EntityStore
         }
         return id;
     }
-    
-    [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
-    private void AssertIdInRawEntities(int id) {
-        if (id < entities.Length) {
-            return;
-        }
-        throw new InvalidOperationException("expect id < entities.length");
-    }
-    
+    #endregion
+
+#region struct components
     public int GetEntityComponentCount(int id) {
         return archetypes[entities[id].archIndex].componentCount;
     }
@@ -113,4 +106,29 @@ public sealed class RawEntityStore : EntityStore
         entity.archIndex    = archetype.archIndex;
         return result;
     }
+    #endregion
+    
+#region tags
+    public  ref readonly Tags    GetEntityTags(int id) {
+        return ref archetypes[entities[id].archIndex].tags;
+    }
+
+    public  bool AddEntityTags(int id, in Tags tags)
+    {
+        ref var entity      = ref entities[id];
+        var archetype       = archetypes[entity.archIndex];
+        var result          = archetype.store.AddTags(tags, id, ref archetype, ref entity.compIndex);
+        entity.archIndex    = archetype.archIndex; 
+        return result;
+    }
+        
+    public  bool RemoveEntityTags(int id, in Tags tags)
+    {
+        ref var entity      = ref entities[id];
+        var archetype       = archetypes[entity.archIndex];
+        var result          = archetype.store.RemoveTags(tags, id, ref archetype, ref entity.compIndex);
+        entity.archIndex    = archetype.archIndex; 
+        return result;
+    }
+    #endregion
 }

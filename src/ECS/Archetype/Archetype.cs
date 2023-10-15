@@ -153,9 +153,9 @@ public sealed class Archetype
             heap.MoveComponent(lastIndex, newIndex);
         }
         var lastEntityId    = entityIds[lastIndex];
-        ref var lastNode    = ref gameEntityStore.nodes[lastEntityId];
-        var entity          = lastNode.entity;
-        entity.compIndex    = newIndex; // set component index for new archetype
+        if (gameEntityStore != null) {
+            gameEntityStore.nodes[lastEntityId].entity.compIndex = newIndex; // set component index for new archetype
+        }
         entityIds[newIndex] = lastEntityId;
         entityCount--;      // remove last entity id
     }

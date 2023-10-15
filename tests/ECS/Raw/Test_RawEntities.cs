@@ -59,6 +59,35 @@ public static class Test_RawEntities
     }
     
     [Test]
+    public static void Test_RawEntities_Tags()
+    {
+        var store       = new RawEntityStore();
+        var testTag     = Tags.Get<TestTag>();
+        var testTag2    = Tags.Get<TestTag2>();
+        var testTag12   = Tags.Get<TestTag, TestTag2>();
+        var tags1       = store.GetArchetype(testTag);
+        var tags2       = store.GetArchetype(testTag2);
+        var tags12      = store.GetArchetype(testTag12);
+        
+        var entity     = store.CreateEntity(1);
+        
+        store.AddEntityTags(entity, testTag);
+        AreEqual(1,         tags1.EntityCount);
+        AreEqual(testTag,   store.GetEntityTags(entity));
+        
+        store.AddEntityTags(entity, testTag2);
+        AreEqual(0,         tags1.EntityCount);
+        AreEqual(1,         tags12.EntityCount);
+        AreEqual(testTag12, store.GetEntityTags(entity));
+        
+        store.RemoveEntityTags(entity, testTag);
+        AreEqual(0,         tags12.EntityCount);
+        AreEqual(1,         tags2.EntityCount);
+        
+        AreEqual(4,         store.Archetypes.Length);
+    }
+    
+    [Test]
     public static void Test_RawEntities_Create_Perf()
     
     {
