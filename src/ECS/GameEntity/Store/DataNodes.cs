@@ -12,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 // This file contains implementation specific for storing DataNode's.
 public partial class GameEntityStore
 {
-/// <returns>an <see cref="attached"/> entity</returns>
+    /// <returns>an <see cref="attached"/> entity</returns>
     public GameEntity CreateFromDataNode(DataNode dataNode)
     {
         if (dataNode == null) {
