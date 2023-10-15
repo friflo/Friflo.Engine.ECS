@@ -15,19 +15,20 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-/// <remarks>
-/// <i>Usage type:</i> <b>TinyNodes</b><br/>
-/// This approach enables using an <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
-/// The focus of the this usage type is performance.<br/>
-/// The key is to reduce heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
-/// In this case entities are stored only as <see cref="TinyEntity"/>'s without <see cref="GameEntity"/> instances
-/// in the <see cref="TinyEntityStore"/>.<br/>
+/// <summary>
+/// A <see cref="TinyEntityStore"/> enables using an <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
 /// <br/>
+/// The focus of the this <see cref="EntityStore"/> implementation is performance.<br/>
+/// The key is to eliminate heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
+/// A <see cref="TinyEntityStore"/> stores only an array of blittable <see cref="TinyEntity"/>'s -
+/// structs having no reference type fields<br/>
+/// </summary>
+/// <remarks>
 /// The downside of this approach are:<br/>
 /// <list type="bullet">
 ///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="GameEntity"/>'s.</item>
 ///   <item>The API to access / query / mutate <see cref="TinyEntity"/>'s is less convenient.<br/>
-///     It requires always two parameters - <see cref="TinyEntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
+///     It requires always two parameters - a <see cref="TinyEntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
 ///   </item>
 /// </list>
 /// </remarks>
