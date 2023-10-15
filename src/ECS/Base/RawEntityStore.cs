@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
-using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -68,16 +67,10 @@ public sealed class RawEntityStore : EntityStore
     
     public int CreateEntity(int id) {
         EnsureEntitiesLength(id + 1);
-        
-        ref var entity = ref entities[id];
-        if (entity.Is(Created)) {
-            return id;
-        }
         nodeCount++;
         if (nodeMaxId < id) {
             nodeMaxId = id;
         }
-        entity.flags      = Created;
         return id;
     }
     

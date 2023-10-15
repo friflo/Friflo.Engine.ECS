@@ -65,7 +65,7 @@ public static class Test_RawEntities
         var store   = new RawEntityStore();
         store.CreateEntity(); // load required methods to avoid measuring this in perf loop. 
         
-        int count       = 10; // 100_000_000 ~ 408 ms
+        int count       = 10; // 100_000_000 ~ 240 ms
         var stopwatch   = new Stopwatch();
         store.EnsureEntityCapacity(count);
         stopwatch.Start();
