@@ -20,7 +20,7 @@ public sealed class GameEntity
 {
 #region public properties
     /// <summary>Unique entity id.<br/>
-    /// Uniqueness is relates to the <see cref="GameEntity"/>'s stored in its <see cref="EntityStore"/></summary>
+    /// Uniqueness relates to the <see cref="GameEntity"/>'s stored in its <see cref="GameEntityStore"/></summary>
                     public   int            Id              => id;
 
     [Browse(Never)] public   int            ComponentCount  => archetype.componentCount + classComponents.Length;
@@ -31,7 +31,7 @@ public sealed class GameEntity
     /// <remarks>If <see cref="attached"/> <see cref="Archetype"/> is not null. Otherwise null.</remarks>
     [Browse(Never)] public  StoreOwnership  StoreOwnership  => archetype != null ? attached : detached;
     
-    /// <returns><see cref="treeNode"/> if the entity is member of the <see cref="EntityStore"/> tree. Otherwise <see cref="floating"/></returns>
+    /// <returns><see cref="treeNode"/> if the entity is member of the <see cref="GameEntityStore"/> tree. Otherwise <see cref="floating"/></returns>
     /// <remarks>
     /// If <see cref="TreeMembership"/> is <see cref="treeNode"/> <see cref="Root"/> is not null.<br/>
     /// If <see cref="floating"/> <see cref="Root"/> is null.
@@ -87,7 +87,7 @@ public sealed class GameEntity
                     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
-                    /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="GameEntityStore.Root"/> returns always null
+                    /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.Root"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
                     public  GameEntity      Parent
@@ -358,7 +358,7 @@ public sealed class GameEntity
     }
     
     /// <summary>
-    /// Remove the entity from its <see cref="EntityStore"/>.<br/>
+    /// Remove the entity from its <see cref="GameEntityStore"/>.<br/>
     /// The deleted instance is in <see cref="detached"/> state.
     /// Calling <see cref="GameEntity"/> methods result in <see cref="NullReferenceException"/>'s
     /// </summary>

@@ -17,17 +17,17 @@ namespace Friflo.Fliox.Engine.ECS;
 
 /// <remarks>
 /// <i>Usage type:</i> <b>TinyNodes</b><br/>
-/// This approach enables using the <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
+/// This approach enables using an <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
 /// The focus of the this usage type is performance.<br/>
 /// The key is to reduce heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
-/// In this case entities are stored only as <see cref="EntityNode"/>'s without <see cref="GameEntity"/> instances
-/// in the <see cref="EntityStore"/>.<br/>
+/// In this case entities are stored only as <see cref="TinyEntity"/>'s without <see cref="GameEntity"/> instances
+/// in the <see cref="TinyEntityStore"/>.<br/>
 /// <br/>
 /// The downside of this approach are:<br/>
 /// <list type="bullet">
 ///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="GameEntity"/>'s.</item>
-///   <item>The API to access / query / mutate <see cref="EntityNode"/>'s is less convenient.<br/>
-///     It requires always two parameters - <see cref="EntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
+///   <item>The API to access / query / mutate <see cref="TinyEntity"/>'s is less convenient.<br/>
+///     It requires always two parameters - <see cref="TinyEntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
 ///   </item>
 /// </list>
 /// </remarks>

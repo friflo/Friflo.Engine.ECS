@@ -7,13 +7,13 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-/// <summary>Describe the membership of a <see cref="GameEntity"/> to the tree of an <see cref="EntityStore"/></summary>
-/// <remarks>Requirement: The entity must be <see cref="attached"/> to an <see cref="EntityStore"/></remarks>
+/// <summary>Describe the membership of a <see cref="GameEntity"/> to the tree of an <see cref="GameEntityStore"/></summary>
+/// <remarks>Requirement: The entity must be <see cref="attached"/> to an <see cref="GameEntityStore"/></remarks>
 public enum TreeMembership
 {
-    /// <summary>The entity is not member of the <see cref="EntityStore"/> tree</summary>
+    /// <summary>The entity is not member of the <see cref="GameEntityStore"/> tree</summary>
     floating    = 0,
-    /// <summary>The entity is member of the <see cref="EntityStore"/> tree</summary>
+    /// <summary>The entity is member of the <see cref="GameEntityStore"/> tree</summary>
     treeNode    = 1,
 }
 

@@ -90,7 +90,7 @@ public partial class GameEntityStore
         throw new InvalidOperationException($"invalid pid. expected: 0 or {expected}, was: {pid}");
     }
 
-    /// <summary>expect <see cref="EntityStore.nodes"/> Length > id</summary> 
+    /// <summary>expect <see cref="GameEntityStore.nodes"/> Length > id</summary> 
     private GameEntity CreateEntityNode(int id, long pid)
     {
         AssertIdInNodes(id);

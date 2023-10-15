@@ -14,7 +14,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// The <see cref="EntityStore"/> provide the features listed below
+/// The <see cref="GameEntityStore"/> provide the features listed below
 /// <list type="bullet">
 ///   <item>
 ///   Store a map (container) of entities in linear memory.<br/>
@@ -39,7 +39,7 @@ public sealed partial class GameEntityStore : EntityStore
 {
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
-    /// <returns>a node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
+    /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
                     public              ReadOnlySpan<EntityNode>    Nodes           => new (nodes);
     [Browse(Never)] private             bool                        HasRoot         => rootId   >= Static.MinNodeId;
                     public              GameEntity                  Root            => nodes[rootId].entity;    // null if no root set
