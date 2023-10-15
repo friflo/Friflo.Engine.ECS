@@ -116,7 +116,7 @@ public sealed class GameEntity
     [Browse(Never)] internal readonly   int                 id;                 //  4
     
     /// <summary>The <see cref="Archetype"/> used to store the struct components of they the entity</summary>
-    [Browse(Never)] internal            Archetype           archetype;          //  8 - never null
+    [Browse(Never)] internal            Archetype           archetype;          //  8 - null if detached. See property Archetype
 
     /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
