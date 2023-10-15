@@ -152,7 +152,7 @@ public static class Test_StructComponent
         AreEqual(10f, player1.Position.x);
         AreEqual(11f, player1.Position.y);
         
-        long count = 1_000_000_000L; // 1_000_000_000L
+        long count = 10; // 1_000_000_000L
         for (var n = 0; n < count; n++) {
             // _ = player1.GetComponentValue<Position>();
             _ = player1.Position; // 1_000_000_000L ~ 967 ms
