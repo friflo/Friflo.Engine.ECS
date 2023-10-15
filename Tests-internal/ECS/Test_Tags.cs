@@ -1,6 +1,7 @@
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
+using Tests.ECS.Base;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer

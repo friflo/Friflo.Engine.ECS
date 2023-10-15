@@ -6,27 +6,8 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-// ReSharper disable CheckNamespace
-namespace Tests.ECS;
+namespace Tests.ECS.GE;
 
-[CodeCoverageTest]
-[ClassComponent("testRef1")]
-class TestRefComponent1 : ClassComponent {
-    public int  val1;
-}
-
-[ClassComponent("testRef2")]
-class TestRefComponent2 : ClassComponent {
-    public int  val2;
-}
-
-[ClassComponent("testRef3")]
-class TestRefComponent3 : ClassComponent {
-    public int  val3;
-}
-
-// test missing [ClassComponent()] attribute
-class InvalidRefComponent : ClassComponent { }
 
 public static class Test_ClassComponent
 {
@@ -224,26 +205,6 @@ public static class Test_ClassComponent
     }
 }
 
-[ClassComponent("test")]
-class TestComponent : ClassComponent
-{
-    private int                      health;     // is serialized
-    
-    private Component<MyComponent1> myComponent;
-    private Component<Position>     position;
-        
-    public override void Start() {
-        myComponent = Entity.GetComponent<MyComponent1>();
-        position    = Entity.GetComponent<Position>();
-    }
-    
-    public override  void Update() {
-        health = 4;
-        myComponent.Value.a = 5 + health;
-        position.Value.x += 1;
-        AreEqual(2f, position.Value.x);
-    }
-}
 
 
 

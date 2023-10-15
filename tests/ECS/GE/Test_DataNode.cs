@@ -10,7 +10,7 @@ using static Friflo.Fliox.Engine.ECS.PidType;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS;
+namespace Tests.ECS.GE;
 
 public static class Test_CreateFromDataNode
 {

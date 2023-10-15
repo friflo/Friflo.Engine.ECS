@@ -9,31 +9,11 @@ using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
 
-namespace Tests.ECS;
+namespace Tests.ECS.GE;
 
 class PlayerRef {
     public Position position;
 }
-
-[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
-public sealed class CodeCoverageTestAttribute : Attribute { }
-
-[CodeCoverageTest]
-[StructComponent("my1")]
-public struct MyComponent1 : IStructComponent { public int a; }
-
-[StructComponent("my2")]
-public struct MyComponent2 : IStructComponent { public int b; }
-
-/// <summary>Example shows an extension class to enable component access using less code.</summary>
-public static class EntityExtensions
-{
-    public static ref MyComponent1 MyComponent1(this GameEntity entity) => ref entity.GetComponentValue<MyComponent1>();
-    public static ref MyComponent2 MyComponent2(this GameEntity entity) => ref entity.GetComponentValue<MyComponent2>();
-}
-
-// test missing [StructComponent()] attribute
-struct MyInvalidComponent  : IStructComponent { public int b; }
 
 public static class Test_StructComponent
 {
@@ -344,7 +324,7 @@ public static class Test_StructComponent
         player.RemoveComponent<MyInvalidComponent>();
     }
     
-    /// <summary>Similar to <see cref="Test_RawEntities.Test_RawEntities_Components"/></summary>
+    /// <summary>Similar to <see cref="Raw.Test_RawEntities.Test_RawEntities_Components"/></summary>
     [Test]
     public static void Test_9_RemoveComponent() {
         var store   = new GameEntityStore();

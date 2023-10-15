@@ -8,7 +8,7 @@ using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS;
+namespace Tests.ECS.GE;
 
 public static class Test_ComponentReader
 {

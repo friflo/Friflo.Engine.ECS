@@ -5,8 +5,8 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
-// ReSharper disable CheckNamespace
-namespace Tests.ECS;
+
+namespace Tests.ECS.Base;
 
 public static class Test_BitSet
 {
