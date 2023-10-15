@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
 
@@ -14,7 +16,13 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public class TinyEntityStore : EntityStore
 {
-    public TinyEntityStore() : base(PidType.UsePidAsId) { }
+    [Browse(Never)] private            TinyNode[]              tinyNodes;          //  8 + all tiny nodes
+
+    public TinyEntityStore()
+        : base(PidType.UsePidAsId)
+    {
+        tinyNodes = Array.Empty<TinyNode>();
+    }
         
     public void EnsureTinyNodeCapacity(int length) {
         EnsureTinyNodesLength(sequenceId + length);

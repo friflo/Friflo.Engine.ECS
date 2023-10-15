@@ -86,7 +86,6 @@ public partial class EntityStore
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
-    [Browse(Never)] internal            TinyNode[]              tinyNodes;          //  8 + all tiny nodes
     [Browse(Never)] protected           int                     nodeMaxId;          //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodeCount;          //  4                   - number of all entities
     [Browse(Never)] private             int                     rootId;             //  4                   - id of root node. 0 = NoParentId
@@ -123,7 +122,6 @@ public partial class EntityStore
             randPid = new Random();
         }
         nodes               = Array.Empty<EntityNode>();
-        tinyNodes           = Array.Empty<TinyNode>();
         EnsureNodesLength(2);
         var config          = GetArchetypeConfig();
         var indexes         = new SignatureIndexes(Static.DefaultArchIndex); 
