@@ -11,8 +11,7 @@ using LocalEntities = Friflo.Json.Fliox.Hub.Client.LocalEntities<long, Friflo.Fl
 
 // Hard rule: this file/section MUST NOT use GameEntity instances
 
-// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
-// ReSharper disable ConvertConstructorToMemberInitializers
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 public partial class EntityStore
@@ -74,5 +73,4 @@ public partial class EntityStore
         AddArchetype(defaultArchetype);
     }
     #endregion
-
 }
