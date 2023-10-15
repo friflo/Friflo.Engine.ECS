@@ -89,7 +89,7 @@ public partial class EntityStore
     internal bool AddComponent<T>(
             int                 id,
         ref Archetype           archetype,  // possible mutation is not null
-        ref uint                compIndex,
+        ref int                 compIndex,
         in  T                   component)
         where T : struct, IStructComponent
     {
@@ -121,7 +121,7 @@ public partial class EntityStore
     internal bool RemoveComponent<T>(
             int                 id,
         ref Archetype           archetype,    // possible mutation is not null
-        ref uint                compIndex)
+        ref int                 compIndex)
         where T : struct, IStructComponent
     {
         var arch = archetype;
@@ -131,7 +131,7 @@ public partial class EntityStore
         }
         var newArchetype    = GetArchetypeWithout(arch, StructHeap<T>.StructIndex, typeof(T));
         if (newArchetype == defaultArchetype) {
-            uint removePos = compIndex; 
+            int removePos = compIndex; 
             // --- update entity
             archetype       = defaultArchetype;
             compIndex       = 0;
@@ -149,7 +149,7 @@ public partial class EntityStore
         in Tags             tags,
         int                 id,
         ref Archetype       archetype,      // possible mutation is not null
-        ref uint            compIndex)
+        ref int             compIndex)
     {
         var arch            = archetype;
         var archTagsValue   = arch.tags.bitSet.value;
@@ -180,7 +180,7 @@ public partial class EntityStore
         in Tags             tags,
         int                 id,
         ref Archetype       archetype,      // possible mutation is not null
-        ref uint            compIndex)
+        ref int             compIndex)
     {
         var arch            = archetype;
         var archTags        = arch.tags.bitSet.value;
@@ -198,7 +198,7 @@ public partial class EntityStore
             newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
         }
         if (newArchetype == defaultArchetype) {
-            uint removePos = compIndex; 
+            int removePos = compIndex; 
             // --- update entity
             compIndex   = 0;
             archetype   = defaultArchetype;

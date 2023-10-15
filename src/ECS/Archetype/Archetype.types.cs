@@ -15,14 +15,14 @@ internal struct StandardComponents
 internal readonly struct ArchetypeConfig
 {
     internal readonly   EntityStore store;
-    internal readonly   ushort      archetypeIndex;
-    internal readonly   uint        capacity;
+    internal readonly   int         archetypeIndex;
+    internal readonly   int         capacity;
     internal readonly   int         maxStructIndex;
     
     internal ArchetypeConfig(
         EntityStore store,
-        ushort      archetypeIndex,
-        uint        capacity)
+        int         archetypeIndex,
+        int         capacity)
     {
         this.store          = store;
         this.archetypeIndex = archetypeIndex;

@@ -19,8 +19,8 @@ public class ArchetypeQuery
                     private  readonly   EntityStore         store;              //  8
     [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
     // --- blittable types
-    [Browse(Never)] private             ushort              archetypeCount;     //  4   current number archetypes 
-                    private             ushort              lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
+    [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
+                    private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of struct component types: T1,T2,T3,T4,T5
     [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
                     
@@ -62,7 +62,7 @@ public class ArchetypeQuery
             }
             // --- update archetypes / archetypesCount: Add matching archetypes newly added to the store
             var storeArchetypes = store.Archetypes;
-            var newStoreLength  = (ushort)storeArchetypes.Length;
+            var newStoreLength  = storeArchetypes.Length;
             var nextArchetypes  = archetypes;
             var nextCount       = archetypeCount;
             var requiredStructs = new ArchetypeStructs(signatureIndexes);
