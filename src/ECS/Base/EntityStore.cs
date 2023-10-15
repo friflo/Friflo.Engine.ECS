@@ -73,4 +73,19 @@ public partial class EntityStore
         AddArchetype(defaultArchetype);
     }
     #endregion
+
+#region exceptions
+    internal static Exception InvalidStoreException(string parameterName) {
+        return new ArgumentException("entity is owned by a different store", parameterName);
+    }
+        
+    internal static Exception InvalidEntityIdException(int id, string parameterName) {
+        return new ArgumentException($"invalid node id <= 0. was: {id}", parameterName);
+    }
+        
+    internal static Exception IdAlreadyInUseException(int id, string parameterName) {
+        return new ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
+    }
+    #endregion
+
 }

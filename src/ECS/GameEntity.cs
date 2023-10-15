@@ -343,7 +343,7 @@ public sealed class GameEntity
     /// </remarks>
     public void AddChild(GameEntity entity) {
         var store = archetype.gameEntityStore;
-        if (store != entity.archetype.store) throw GameEntityStore.InvalidStoreException(nameof(entity));
+        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
         store.AddChild(id, entity.id);
     }
     
@@ -353,7 +353,7 @@ public sealed class GameEntity
     /// </remarks>
     public void RemoveChild(GameEntity entity) {
         var store = archetype.gameEntityStore;
-        if (store != entity.archetype.store) throw GameEntityStore.InvalidStoreException(nameof(entity));
+        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
         store.RemoveChild(id, entity.id);
     }
     

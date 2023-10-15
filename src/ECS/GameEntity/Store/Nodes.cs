@@ -135,6 +135,11 @@ public partial class GameEntityStore
         }
     }
     
+    private static Exception EntityAlreadyHasParent(int child, int curParent, int newParent) {
+        var msg = $"child has already a parent. child: {child} current parent: {curParent}, new parent: {newParent}";
+        return new InvalidOperationException(msg);
+    }
+    
     private bool HasCycle(int id, int childId, out InvalidOperationException exception)
     {
         if (id == childId) {
