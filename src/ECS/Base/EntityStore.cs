@@ -19,7 +19,8 @@ public partial class EntityStore
 #region public properties
     /// <summary>Number of all entities stored in the <see cref="EntityStore"/></summary>
                     public              int                         EntityCount     => nodeCount;
-    
+                    public              int                         NodeMaxId       => nodeMaxId;
+
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the <see cref="EntityStore"/></summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
                     public              ReadOnlySpan<Archetype>     Archetypes      => new (archetypes, 0, archetypesCount);

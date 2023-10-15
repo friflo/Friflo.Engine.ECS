@@ -33,83 +33,90 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public sealed class TinyEntityStore : EntityStore
 {
-    [Browse(Never)] private            TinyNode[]              tinyNodes;          //  8 + all tiny nodes
+                    public             ReadOnlySpan<TinyEntity> Entities           => new (entities);
+                    
+    [Browse(Never)] private            TinyEntity[]             entities;          //  8 + all tiny entities
 
     public TinyEntityStore()
     {
-        tinyNodes = Array.Empty<TinyNode>();
+        entities = Array.Empty<TinyEntity>();
     }
         
-    public void EnsureTinyNodeCapacity(int length) {
-        EnsureTinyNodesLength(sequenceId + length);
+    public void EnsureEntityCapacity(int length) {
+        EnsureEntitiesLength(sequenceId + length);
     }
 
-    private void EnsureTinyNodesLength(int length)
+    private void EnsureEntitiesLength(int length)
     {
-        var curLength = tinyNodes.Length;
+        var curLength = entities.Length;
         if (length <= curLength) {
             return;
         }
-        var newLength = Math.Max(length, 2 * tinyNodes.Length);
-        Utils.Resize(ref tinyNodes, newLength);
+        var newLength = Math.Max(length, 2 * entities.Length);
+        Utils.Resize(ref entities, newLength);
         for (int n = curLength; n < length; n++) {
-            tinyNodes[n] = new TinyNode (n);
+            entities[n] = new TinyEntity (n);
         }
     }
     
-    public int CreateTinyNode() {
+    public int CreateEntity() {
         var id      = sequenceId++;
-        EnsureTinyNodesLength(id + 1);
+        CreateEntity(id);
+        return id;
+    }
+    
+    public int CreateEntity(int id) {
+        EnsureEntitiesLength(id + 1);
         
-        ref var node = ref tinyNodes[id];
-        if (node.Is(Created)) {
+        ref var entity = ref entities[id];
+        if (entity.Is(Created)) {
             return id;
         }
         nodeCount++;
         if (nodeMaxId < id) {
             nodeMaxId = id;
         }
-        node.flags      = Created;
+        entity.flags      = Created;
         return id;
     }
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
     private void AssertIdInTinyNodes(int id) {
-        if (id < tinyNodes.Length) {
+        if (id < entities.Length) {
             return;
         }
         throw new InvalidOperationException("expect id < tinyNodes.length");
     }
     
     public int GetEntityComponentCount(int id) {
-        return archetypes[tinyNodes[id].archIndex].componentCount;
+        return archetypes[entities[id].archIndex].componentCount;
     }
     
     public ref T GetEntityComponentValue<T>(int id)
         where T : struct, IStructComponent
     {
-        ref var node    = ref tinyNodes[id];
-        var heap        = (StructHeap<T>)archetypes[node.archIndex].heapMap[StructHeap<T>.StructIndex];
-        return ref heap.chunks[node.compIndex / ChunkSize].components[node.compIndex % ChunkSize];
+        ref var entity  = ref entities[id];
+        var heap        = (StructHeap<T>)archetypes[entity.archIndex].heapMap[StructHeap<T>.StructIndex];
+        return ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
     }
     
     public bool AddEntityComponent<T>(int id, in T component)
         where T : struct, IStructComponent
     {
-        ref var node    = ref tinyNodes[id];
-        var archetype   = archetypes[node.archIndex];
-        var result      = AddComponent(node.id, ref archetype, ref node.compIndex, component);
-        node.archIndex  = (short)archetype.archIndex;
+        ref var entity      = ref entities[id];
+        var archetype       = archetypes[entity.archIndex];
+        var result          = AddComponent(entity.id, ref archetype, ref entity.compIndex, component);
+        entity.archIndex    = (short)archetype.archIndex;
         return result;
     }
     
     public bool RemoveEntityComponent<T>(int id)
         where T : struct, IStructComponent
     {
-        ref var node    = ref tinyNodes[id];
-        var archetype   = archetypes[node.archIndex];
-        var result      =  RemoveComponent<T>(node.id, ref archetype, ref node.compIndex);
-        node.archIndex  = (short)archetype.archIndex;
+        ref var entity      = ref entities[id];
+        var archetype       = archetypes[entity.archIndex];
+        var result          =  RemoveComponent<T>(entity.id, ref archetype, ref entity.compIndex);
+        entity.archIndex    = (short)archetype.archIndex;
         return result;
     }
 }

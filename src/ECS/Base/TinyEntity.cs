@@ -9,8 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-
-public struct TinyNode
+public struct TinyEntity
 {
 #region public properties
     /// <summary>Unique id within an <see cref="EntityNode"/> instance</summary>
@@ -20,7 +19,7 @@ public struct TinyNode
                     public   override   string              ToString()  => GetString();
     #endregion
     
- #region internal fields
+#region internal fields
     [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            NodeFlags   flags;      // 1
     
@@ -33,7 +32,7 @@ public struct TinyNode
     #endregion
     
 #region internal methods
-    internal TinyNode(int id) {
+    internal TinyEntity(int id) {
         this.id     = id;
     }
     

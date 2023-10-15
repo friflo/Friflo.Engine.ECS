@@ -41,7 +41,6 @@ public sealed partial class GameEntityStore : EntityStore
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>a node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
                     public              ReadOnlySpan<EntityNode>    Nodes           => new (nodes);
-                    public              int                         NodeMaxId       => nodeMaxId;
     [Browse(Never)] private             bool                        HasRoot         => rootId   >= Static.MinNodeId;
                     public              GameEntity                  Root            => nodes[rootId].entity;    // null if no root set
     #endregion

@@ -19,10 +19,11 @@ public static class Test_TinyNodes
         var type1 = store.GetArchetype(Signature.Get<Position>());
         var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         
-        var entity1  = store.CreateTinyNode();
+        var entity1  = store.CreateEntity(1);
         store.AddEntityComponent(entity1, new Position { x = 1 });
         AreEqual(1,     type1.EntityCount);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
+        AreEqual(1,     store.Entities[1].Id);
         
         store.RemoveEntityComponent<Position>(entity1);
         AreEqual(0,     type1.EntityCount);
@@ -43,7 +44,7 @@ public static class Test_TinyNodes
         AreEqual(1f,    store.GetEntityComponentValue<Position>(entity1).x);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
         //
-        var entity2  = store.CreateTinyNode();
+        var entity2  = store.CreateEntity(2);
         store.AddEntityComponent(entity2, new Position { x = 1 });    // possible alloc: resize type1.entityIds
         store.RemoveEntityComponent<Position>(entity2);               // note: remove the last id in type1.entityIds => only type1.entityCount--  
         AreEqual(1,     type1.EntityCount);
@@ -62,14 +63,14 @@ public static class Test_TinyNodes
     public static void Test_TinyNodes_Create_Perf()
     {
         var store   = new TinyEntityStore();
-        store.CreateTinyNode(); // load required methods to avoid measuring this in perf loop. 
+        store.CreateEntity(); // load required methods to avoid measuring this in perf loop. 
         
         int count       = 10; // 100_000_000 ~ 413 ms
         var stopwatch   = new Stopwatch();
-        store.EnsureTinyNodeCapacity(count);
+        store.EnsureEntityCapacity(count);
         stopwatch.Start();
         for (int n = 0; n < count; n++) {
-            store.CreateTinyNode();
+            store.CreateEntity();
         }
         Console.WriteLine($"create TinyNode's. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
