@@ -9,13 +9,13 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS;
 
-public static class Test_TinyEntities
+public static class Test_RawEntities
 {
     /// <summary>Similar to <see cref="Test_StructComponent.Test_9_RemoveComponent"/></summary>
     [Test]
-    public static void Test_TinyNodes_Components()
+    public static void Test_RawEntities_Components()
     {
-        var store   = new TinyEntityStore();
+        var store   = new RawEntityStore();
         var type1 = store.GetArchetype(Signature.Get<Position>());
         var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         
@@ -59,10 +59,10 @@ public static class Test_TinyEntities
     }
     
     [Test]
-    public static void Test_TinyNodes_Create_Perf()
+    public static void Test_RawEntities_Create_Perf()
     
     {
-        var store   = new TinyEntityStore();
+        var store   = new RawEntityStore();
         store.CreateEntity(); // load required methods to avoid measuring this in perf loop. 
         
         int count       = 10; // 100_000_000 ~ 408 ms
@@ -72,6 +72,6 @@ public static class Test_TinyEntities
         for (int n = 0; n < count; n++) {
             store.CreateEntity();
         }
-        Console.WriteLine($"create TinyNode's. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"create RawEntity's. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
 }

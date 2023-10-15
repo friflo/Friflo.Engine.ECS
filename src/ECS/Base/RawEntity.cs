@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal struct TinyEntity
+internal struct RawEntity
 {
     
 #region internal fields
@@ -28,7 +28,7 @@ internal struct TinyEntity
     {
         var sb = new StringBuilder();
 
-        sb.Append("TinyEntity - ");
+        sb.Append("RawEntity - ");
 
         if (flags != 0) {
             sb.Append("  flags: ");

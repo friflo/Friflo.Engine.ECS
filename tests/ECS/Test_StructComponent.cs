@@ -344,7 +344,7 @@ public static class Test_StructComponent
         player.RemoveComponent<MyInvalidComponent>();
     }
     
-    /// <summary>Similar to <see cref="Test_TinyEntities.Test_TinyNodes_Components"/></summary>
+    /// <summary>Similar to <see cref="Test_RawEntities.Test_RawEntities_Components"/></summary>
     [Test]
     public static void Test_9_RemoveComponent() {
         var store   = new GameEntityStore();

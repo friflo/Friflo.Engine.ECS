@@ -16,8 +16,8 @@ public static class Test_sizeof
     }
     
     [Test]
-    public static unsafe void Test_sizeof_TinyNode() {
-        var size = sizeof(TinyEntity);
+    public static unsafe void Test_sizeof_RawEntity() {
+        var size = sizeof(RawEntity);
         AreEqual(8, size);
     }
     

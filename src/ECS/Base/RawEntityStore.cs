@@ -16,29 +16,29 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="TinyEntityStore"/> enables using an <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
+/// A <see cref="RawEntityStore"/> enables using an <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
 /// <br/>
 /// The focus of the this <see cref="EntityStore"/> implementation is performance.<br/>
 /// The key is to eliminate heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
-/// A <see cref="TinyEntityStore"/> stores only an array of blittable <see cref="TinyEntity"/>'s -
+/// A <see cref="RawEntityStore"/> stores only an array of blittable <see cref="RawEntity"/>'s -
 /// structs having no reference type fields<br/>
 /// </summary>
 /// <remarks>
 /// The downside of this approach are:<br/>
 /// <list type="bullet">
 ///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="GameEntity"/>'s.</item>
-///   <item>The API to access / query / mutate <see cref="TinyEntity"/>'s is less convenient.<br/>
-///     It requires always two parameters - a <see cref="TinyEntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
+///   <item>The API to access / query / mutate <see cref="RawEntity"/>'s is less convenient.<br/>
+///     It requires always two parameters - a <see cref="RawEntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
 ///   </item>
 /// </list>
 /// </remarks>
-public sealed class TinyEntityStore : EntityStore
+public sealed class RawEntityStore : EntityStore
 {
-    [Browse(Never)] private            TinyEntity[]             entities;          //  8 + all tiny entities
+    [Browse(Never)] private            RawEntity[]             entities;          //  8 + all raw entities
 
-    public TinyEntityStore()
+    public RawEntityStore()
     {
-        entities = Array.Empty<TinyEntity>();
+        entities = Array.Empty<RawEntity>();
     }
         
     public void EnsureEntityCapacity(int length) {
@@ -82,11 +82,11 @@ public sealed class TinyEntityStore : EntityStore
     }
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
-    private void AssertIdInTinyNodes(int id) {
+    private void AssertIdInRawEntities(int id) {
         if (id < entities.Length) {
             return;
         }
-        throw new InvalidOperationException("expect id < tinyNodes.length");
+        throw new InvalidOperationException("expect id < entities.length");
     }
     
     public int GetEntityComponentCount(int id) {
