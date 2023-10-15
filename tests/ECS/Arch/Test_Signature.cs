@@ -3,7 +3,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Arch;
 
 public static class Test_Signature
 {

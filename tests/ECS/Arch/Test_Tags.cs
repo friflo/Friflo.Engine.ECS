@@ -6,13 +6,9 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Arch;
 
-public struct TestTag  : IEntityTag { }
 
-public struct TestTag2 : IEntityTag { }
-
-public struct TestTag3 : IEntityTag { }
 
 public static class Test_Tags
 {

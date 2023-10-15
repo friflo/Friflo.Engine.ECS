@@ -6,7 +6,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Arch;
 
 public static class Test_Query
 {
