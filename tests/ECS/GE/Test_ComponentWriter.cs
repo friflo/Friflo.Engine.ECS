@@ -10,7 +10,7 @@ namespace Tests.ECS.GE;
 public static class Test_ComponentWriter
 {
     [Test]
-    public static void Test_WriteComponents()
+    public static void Test_ComponentWriter_WriteComponents()
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
@@ -30,7 +30,20 @@ public static class Test_ComponentWriter
     }
     
     [Test]
-    public static void Test_WriteComponents_Perf()
+    public static void Test_ComponentWriter_Write_empty_components()
+    {
+        var hub     = new FlioxHub(new MemoryDatabase("test"));
+        var client  = new SceneClient(hub);
+        var store   = new GameEntityStore(PidType.UsePidAsId, client);
+        var entity  = store.CreateEntity(10);
+        var node    = store.EntityAsDataNode(entity);
+        
+        AreEqual(10,    node.pid);
+        IsNull  (node.children);
+    }
+    
+    [Test]
+    public static void Test_ComponentWriter_Perf()
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
