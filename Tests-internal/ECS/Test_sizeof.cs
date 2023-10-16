@@ -56,5 +56,8 @@ public static class Test_sizeof
         
         size = sizeof(Scale3);
         AreEqual(12, size);
+        
+        size = sizeof(Transform);
+        AreEqual(64, size);
     }
 }

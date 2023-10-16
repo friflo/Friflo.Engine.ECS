@@ -16,11 +16,11 @@ public struct Scale3 : IStructComponent
 {
     [Browse(Never)]
     [Ignore]
-    [FieldOffset(00)] public    Vector3 value;  // 12
+    [FieldOffset(0)] public     Vector3 value;  // 12
     //
-    [FieldOffset(00)] public    float   x;      // (4)
-    [FieldOffset(04)] public    float   y;      // (4)
-    [FieldOffset(08)] public    float   z;      // (4)
+    [FieldOffset(0)] public     float   x;      // (4)
+    [FieldOffset(4)] public     float   y;      // (4)
+    [FieldOffset(8)] public     float   z;      // (4)
 
     public override string ToString() => $"{x}, {y}, {z}";
 
