@@ -80,6 +80,16 @@ public static class Test_ComponentReader
     }
     
     [Test]
+    public static void Test_ComponentReader_read_tags()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var node    = new DataNode { pid = 10, tags = new List<string> { nameof(TestTag) } };
+        var entity  = store.CreateFromDataNode(node, out var error);
+        AreEqual(0, entity.ComponentCount);
+        IsTrue  (entity.Tags.Has<TestTag>());
+    }
+    
+    [Test]
     public static void Test_ComponentReader_read_invalid_component()
     {
         var store   = new GameEntityStore(PidType.UsePidAsId);
@@ -97,7 +107,7 @@ public static class Test_ComponentReader
         var node    = new DataNode { pid = 10, components = new JsonValue("123") };
         var entity  = store.CreateFromDataNode(node, out var error);
         NotNull(entity);
-        AreEqual("expect 'components' == object or null. id: 10", error);
+        AreEqual("expect 'components' == object or null. id: 10. was: ValueNumber", error);
         
         node        = new DataNode { pid = 10, components = new JsonValue("invalid") };
         entity      = store.CreateFromDataNode(node, out error);

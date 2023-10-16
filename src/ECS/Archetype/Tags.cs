@@ -60,7 +60,7 @@ public struct Tags : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- mutate Tags -----------------------------------------
-    private void SetBit(int tagIndex) {
+    internal void SetBit(int tagIndex) {
         bitSet.SetBit(tagIndex);
     }
     

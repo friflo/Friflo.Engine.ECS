@@ -17,6 +17,7 @@ internal sealed class ComponentReader
 {
     private readonly    ObjectReader                        componentReader;
     private readonly    Dictionary<string, ComponentType>   componentTypeByKey;
+    private readonly    Dictionary<string, ComponentType>   tagTypeByName;
     private readonly    List<ComponentType>                 structTypes;
     private readonly    ArchetypeKey                        searchKey;
     private             Utf8JsonParser                      parser;
@@ -30,29 +31,39 @@ internal sealed class ComponentReader
         buffer              = new Bytes(128);
         components          = new RawComponent[1];
         componentReader     = new ObjectReader(EntityStore.Static.TypeStore);
-        componentTypeByKey  = EntityStore.Static.ComponentSchema.componentTypeByKey;
+        var schema          = EntityStore.Static.ComponentSchema;
+        componentTypeByKey  = schema.componentTypeByKey;
+        tagTypeByName       = schema.tagTypeByName;
         structTypes         = new List<ComponentType>();
         searchKey           = new ArchetypeKey();
     }
     
     internal string Read(DataNode dataNode, GameEntity entity, EntityStore store)
     {
-        if (dataNode.components.IsNull()) {
+        componentCount      = 0;
+        var hasTags         = dataNode.tags?.Count > 0;
+        var hasComponents   = !dataNode.components.IsNull();
+        if (!hasComponents && !hasTags) {
             return null;
         }
         parser.InitParser(dataNode.components);
         var ev = parser.NextEvent();
-        if (ev == JsonEvent.Error) {
-            var error = parser.error.GetMessage();
-            return $"{error}. id: {entity.id}";
-        }
-        if (ev != JsonEvent.ObjectStart) {
-            return $"expect 'components' == object or null. id: {entity.id}";
-        }
-        ev = ReadRawComponents();
-        if (ev != JsonEvent.ObjectEnd) {
-            // could support also scalar types in future: string, number or boolean
-            return $"component must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
+        switch (ev)
+        {
+            case JsonEvent.Error:
+                var error = parser.error.GetMessage();
+                return $"{error}. id: {entity.id}";
+            case JsonEvent.ValueNull:
+                break;
+            case JsonEvent.ObjectStart:
+                ev = ReadRawComponents();
+                if (ev != JsonEvent.ObjectEnd) {
+                    // could support also scalar types in future: string, number or boolean
+                    return $"component must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
+                }
+                break;
+            default:
+                return $"expect 'components' == object or null. id: {entity.id}. was: {ev}";
         }
         SetEntityArchetype(dataNode, entity, store);
         ReadComponents(entity);
@@ -102,12 +113,15 @@ internal sealed class ComponentReader
             hasStructComponent = true;
             searchKey.structs.SetBit(type.structIndex);
         }
-        var tags = dataNode.tags;
-        if (!hasStructComponent && (tags == null || tags.Count == 0)) {
-            return; // early out in absence of struct components 
+        var tags    = dataNode.tags;
+        var hasTags = tags?.Count > 0;
+        if (!hasStructComponent && !hasTags) {
+            return; // early out in absence of struct components and tags
+        }
+        if (hasTags) {
+            ProcessTags(tags);
         }
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
-        var curArchetype = entity.archetype;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
         if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -121,9 +135,10 @@ internal sealed class ComponentReader
                     structTypes.Add(component.type);
                 }
             }
-            newArchetype = Archetype.CreateWithStructTypes(config, structTypes, curArchetype.tags);
+            newArchetype = Archetype.CreateWithStructTypes(config, structTypes, searchKey.tags);
             store.AddArchetype(newArchetype);
         }
+        var curArchetype = entity.archetype;
         if (curArchetype == newArchetype) {
             return;
         }
@@ -137,7 +152,6 @@ internal sealed class ComponentReader
     
     private JsonEvent ReadRawComponents()
     {
-        componentCount = 0;
         var ev = parser.NextEvent();
         while (true) {
             switch (ev) {
@@ -159,6 +173,14 @@ internal sealed class ComponentReader
                 default:
                     return ev;
             }
+        }
+    }
+    
+    private void ProcessTags(List<string> tags)
+    {
+        foreach (var tag in tags) {
+            var tagType = tagTypeByName[tag];
+            searchKey.tags.SetBit(tagType.tagIndex);
         }
     }
 }

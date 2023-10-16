@@ -51,6 +51,7 @@ public sealed class ComponentSchema
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   tagTypeByName;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   tagTypeByType;
     #endregion
     
@@ -65,6 +66,7 @@ public sealed class ComponentSchema
         int count               = structList.Count + classList.Count;
         componentTypeByKey      = new Dictionary<string, ComponentType>(count);
         componentTypeByType     = new Dictionary<Type,   ComponentType>(count);
+        tagTypeByName           = new Dictionary<string, ComponentType>(count);
         tagTypeByType           = new Dictionary<Type,   ComponentType>(count);
         maxStructIndex          = structList.Count + 1;
         structs                 = new ComponentType[maxStructIndex];
@@ -81,7 +83,8 @@ public sealed class ComponentSchema
             classes[classType.classIndex] = classType;
         }
         foreach (var tagType in tagList) {
-            tagTypeByType.Add(tagType.type, tagType);
+            tagTypeByType.Add(tagType.type,      tagType);
+            tagTypeByName.Add(tagType.type.Name, tagType);
             tags[tagType.tagIndex] = tagType;
         }
     }
