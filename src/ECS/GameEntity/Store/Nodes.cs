@@ -20,10 +20,11 @@ public partial class GameEntityStore
         if (length <= curLength) {
             return;
         }
-        var newLength = Math.Max(length, 2 * nodes.Length);
+        var newLength = Math.Max(length, 2 * curLength);
         Utils.Resize(ref nodes, newLength);
+        var localNodes = nodes;
         for (int n = curLength; n < length; n++) {
-            nodes[n] = new EntityNode (n);
+            localNodes[n] = new EntityNode (n);
         }
     }
     
@@ -51,8 +52,9 @@ public partial class GameEntityStore
     
     internal void AddChild (int id, int childId)
     {
+        var localNodes = nodes;
         // update child node parent
-        ref var childNode = ref nodes[childId];
+        ref var childNode = ref localNodes[childId];
         if (HasParent(childNode.parentId)) {
             if (childNode.parentId == id) {
                 // case: child node is already a child the entity
@@ -64,7 +66,7 @@ public partial class GameEntityStore
         childNode.parentId = id;
         
         // --- add child to entity
-        ref var node    = ref nodes[id];
+        ref var node    = ref localNodes[id];
         int index       = node.childCount;
         if (node.childIds == null) {
             node.childIds = new int[4];
@@ -74,7 +76,7 @@ public partial class GameEntityStore
         }
         node.childIds[index] = childId;
         node.childCount++;
-        SetTreeFlags(nodes, childId, node.flags & TreeNode);
+        SetTreeFlags(localNodes, childId, node.flags & TreeNode);
     }
     
     internal void RemoveChild (int id, int childId)
@@ -107,8 +109,9 @@ public partial class GameEntityStore
     
     private void SetChildNodes(int id, int[] childIds, int childCount)
     {
+        var localNodes  = nodes;
         // --- add child ids to EntityNode
-        ref var node    = ref nodes[id];
+        ref var node    = ref localNodes[id];
         node.childIds   = childIds;
         node.childCount = childCount;
         
@@ -116,7 +119,7 @@ public partial class GameEntityStore
         for (int n = 0; n < childCount; n++)
         {
             var childId     = childIds[n];
-            ref var child   = ref nodes[childId];
+            ref var child   = ref localNodes[childId];
             if (child.parentId < Static.MinNodeId)
             {
                 child.parentId = id;
@@ -182,12 +185,13 @@ public partial class GameEntityStore
     internal void DeleteNode(int id)
     {
         nodeCount--;
-        ref var node        = ref nodes[id];
+        var localNodes  = nodes;
+        ref var node    = ref localNodes[id];
         
         // --- mark its child nodes as floating
-        ClearTreeFlags(nodes, id, TreeNode);
+        ClearTreeFlags(localNodes, id, TreeNode);
         foreach (var childId in node.ChildIds) {
-            nodes[childId].parentId = Static.NoParentId;
+            localNodes[childId].parentId = Static.NoParentId;
         }
         var parentId    = node.parentId;
         // --- clear node entry
@@ -197,7 +201,7 @@ public partial class GameEntityStore
         if (!HasParent(parentId)) {
             return;
         }
-        ref var parent  = ref nodes[parentId];
+        ref var parent  = ref localNodes[parentId];
         var childIds    = parent.childIds;
         var count       = parent.childCount;
         for (int n = count - 1; n >= 0; n--) {

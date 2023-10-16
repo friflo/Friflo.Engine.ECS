@@ -96,9 +96,10 @@ public partial class GameEntityStore
     /// update EntityNode.pid of the child nodes
     private void UpdateEntityNodes(int[] childIds, List<long> children)
     {
+        var localNodes = nodes;
         for (int n = 0; n < childIds.Length; n++) {
-            var childId         = childIds[n];
-            nodes[childId].pid  = children[n];
+            var childId             = childIds[n];
+            localNodes[childId].pid = children[n];
         }
     }
 }
