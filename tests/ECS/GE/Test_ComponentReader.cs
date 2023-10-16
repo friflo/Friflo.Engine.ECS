@@ -16,7 +16,7 @@ public static class Test_ComponentReader
         new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 5, \"z\": 6 } }");
     
     [Test]
-    public static void Test_ComponentReader_ReadStructComponents()
+    public static void Test_ComponentReader_read_struct_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -107,7 +107,7 @@ public static class Test_ComponentReader
     
     /// <summary>cover <see cref="ComponentReader.Read"/></summary>
     [Test]
-    public static void Test_ComponentReader_CreateFromDataNode_assertions()
+    public static void Test_ComponentReader_DataNode_assertions()
     {
         {
             var store = new GameEntityStore(PidType.UsePidAsId);
@@ -138,7 +138,7 @@ public static class Test_ComponentReader
     }
     
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
-    public static void Test_ComponentReader_ReadStructComponents_Mem()
+    public static void Test_ComponentReader_read_struct_components_Mem()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -165,7 +165,7 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_ComponentReader_ReadStructComponents_Perf()
+    public static void Test_ComponentReader_read_struct_components_Perf()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -182,7 +182,7 @@ public static class Test_ComponentReader
     private static readonly JsonValue classComponents = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
-    public static void Test_ComponentReader_ReadClassComponents()
+    public static void Test_ComponentReader_read_class_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -202,7 +202,7 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_ComponentReader_ReadClassComponents_Perf()
+    public static void Test_ComponentReader_read_class_components_Perf()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
