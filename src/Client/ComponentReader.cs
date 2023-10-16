@@ -17,7 +17,7 @@ namespace Friflo.Fliox.Engine.Client;
 internal sealed class ComponentReader
 {
     private readonly    ObjectReader                        componentReader;
-    private readonly    Dictionary<string, ComponentType>   componentSchema;
+    private readonly    Dictionary<string, ComponentType>   componentTypeByKey;
     private readonly    List<ComponentType>                 structTypes;
     private readonly    ArchetypeKey                        searchKey;
     private             Utf8JsonParser                      parser;
@@ -28,12 +28,12 @@ internal sealed class ComponentReader
     internal static readonly ComponentReader Instance = new ComponentReader();
     
     private ComponentReader() {
-        buffer          = new Bytes(128);
-        components      = new RawComponent[1];
-        componentReader = new ObjectReader(EntityStore.Static.TypeStore);
-        componentSchema = new Dictionary<string, ComponentType>(EntityStore.Static.ComponentSchema.ComponentTypeByKey);
-        structTypes     = new List<ComponentType>();
-        searchKey       = new ArchetypeKey();
+        buffer              = new Bytes(128);
+        components          = new RawComponent[1];
+        componentReader     = new ObjectReader(EntityStore.Static.TypeStore);
+        componentTypeByKey  = EntityStore.Static.ComponentSchema.componentTypeByKey;
+        structTypes         = new List<ComponentType>();
+        searchKey           = new ArchetypeKey();
     }
     
     internal void Read(JsonValue value, GameEntity entity, EntityStore store)
@@ -95,7 +95,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
-            var type            = componentSchema[component.key];
+            var type            = componentTypeByKey[component.key];
             component.type      = type;
             if (type.kind != Struct) {
                 continue;
@@ -148,7 +148,7 @@ internal sealed class ComponentReader
                     if (componentCount == components.Length) {
                         Utils.Resize(ref components, 2 * componentCount);
                     }
-                    components[componentCount++] = new RawComponent { key = key, start = start, end = parser.Position };
+                    components[componentCount++] = new RawComponent(key, start, parser.Position);
                     ev = parser.NextEvent();
                     if (ev == JsonEvent.ObjectEnd) {
                         return;
@@ -165,10 +165,17 @@ internal sealed class ComponentReader
 
 internal struct RawComponent
 {
-    internal        string          key;
-    internal        ComponentType   type;
-    internal        int             start;
-    internal        int             end;
+    internal  readonly  string          key;
+    internal  readonly  int             start;
+    internal  readonly  int             end;
+    /// <summary>Is set when looking up components in <see cref="ComponentSchema.componentTypeByKey"/></summary>
+    internal            ComponentType   type; 
 
-    public override string          ToString() => key;
+    public    override  string          ToString() => key;
+    
+    internal RawComponent(string key, int start, int end) {
+        this.key    = key;
+        this.start  = start;
+        this.end    = end;
+    }
 }
