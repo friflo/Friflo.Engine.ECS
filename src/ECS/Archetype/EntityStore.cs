@@ -17,7 +17,7 @@ using LocalEntities = Friflo.Json.Fliox.Hub.Client.LocalEntities<long, Friflo.Fl
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
-public partial class EntityStore
+public abstract partial class EntityStore
 {
 #region public properties
     /// <summary>Number of all entities stored in the <see cref="EntityStore"/></summary>
