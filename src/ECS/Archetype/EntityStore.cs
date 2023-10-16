@@ -36,7 +36,7 @@ public abstract partial class EntityStore
     // --- archetypes
     [Browse(Never)] protected           Archetype[]             archs;              //  8 + archetypes      - array of all archetypes. never null
     [Browse(Never)] internal            int                     archsCount;         //  4                   - number of archetypes
-    [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
+    [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archSet;            //  8 + Set<Key>'s      - Set<> to get archetypes by key
     /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.Structs"/> and <see cref="Archetype.Tags"/>.<br/>
     /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype. has no struct components & tags
