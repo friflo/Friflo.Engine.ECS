@@ -409,7 +409,7 @@ public static class Test_StructComponent
         AreEqual("id: 1  \"Hello\"",    entity.ToString());
         
         AreEqual("Hello",               entity.Name.Value);
-        AreEqual("Hello",               Encoding.UTF8.GetString(entity.Name.UTF8));
+        AreEqual("Hello",               Encoding.UTF8.GetString(entity.Name.Utf8));
         
         entity.Name.Value = null;
         AreEqual("id: 1  [EntityName]", entity.ToString());
