@@ -18,7 +18,7 @@ public partial class EntityStore
         where T : struct, IStructComponent
     {
         searchKey.SetTagsWith(tags, StructHeap<T>.StructIndex);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config  = GetArchetypeConfig();
@@ -32,13 +32,13 @@ public partial class EntityStore
     }
     
     internal ArchetypeConfig GetArchetypeConfig() {
-        return new ArchetypeConfig (this, archetypesCount, DefaultCapacity);
+        return new ArchetypeConfig (this, archsCount, DefaultCapacity);
     }
     
     private Archetype GetArchetypeWithSignature(in SignatureIndexes indexes, in Tags tags)
     {
         searchKey.SetSignatureTags(indexes, tags);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig();
@@ -51,7 +51,7 @@ public partial class EntityStore
         searchKey.structs   = structs;
         searchKey.tags      = tags;
         searchKey.CalculateHashCode();
-        archetypeSet.TryGetValue(searchKey, out var actualValue);
+        archSet.TryGetValue(searchKey, out var actualValue);
         return actualValue?.archetype;
     }
     

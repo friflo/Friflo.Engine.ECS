@@ -185,7 +185,7 @@ public partial class GameEntityStore
     
     internal void DeleteNode(int id)
     {
-        nodeCount--;
+        nodesCount--;
         var localNodes  = nodes;
         ref var node    = ref localNodes[id];
         

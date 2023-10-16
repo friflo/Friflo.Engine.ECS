@@ -9,37 +9,40 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using LocalEntities = Friflo.Json.Fliox.Hub.Client.LocalEntities<long, Friflo.Fliox.Engine.Client.DataNode>;
 
+[assembly: CLSCompliant(true)]
+
 // Hard rule: this file MUST NOT access GameEntity's
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+[CLSCompliant(true)]
 public partial class EntityStore
 {
 #region public properties
     /// <summary>Number of all entities stored in the <see cref="EntityStore"/></summary>
-                    public              int                         EntityCount     => nodeCount;
-                    public              int                         NodeMaxId       => nodeMaxId;
+                    public              int                     EntityCount         => nodesCount;
+                    public              int                     NodeMaxId           => nodesMaxId;
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the <see cref="EntityStore"/></summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
-                    public              ReadOnlySpan<Archetype>     Archetypes      => new (archetypes, 0, archetypesCount);
+                    public              ReadOnlySpan<Archetype> Archetypes          => new (archs, 0, archsCount);
     
-                    public  static      ComponentSchema             GetComponentSchema()    => Static.ComponentSchema;
-                    public  override    string                      ToString()              => $"Count: {nodeCount}";
+                    public  static      ComponentSchema         GetComponentSchema()=> Static.ComponentSchema;
+                    public  override    string                  ToString()          => $"Count: {nodesCount}";
     #endregion
     
 #region private / internal fields
     // --- archetypes
-    [Browse(Never)] protected           Archetype[]             archetypes;         //  8 + archetypes      - array of all archetypes. never null
-    [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archetypeSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
-    [Browse(Never)] internal            int                     archetypesCount;    //  4                   - number of archetypes
+    [Browse(Never)] protected           Archetype[]             archs;              //  8 + archetypes      - array of all archetypes. never null
+    [Browse(Never)] internal            int                     archsCount;         //  4                   - number of archetypes
+    [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
     /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.Structs"/> and <see cref="Archetype.Tags"/>.<br/>
     /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype. has no struct components & tags
     // --- nodes
-    [Browse(Never)] protected           int                     nodeMaxId;          //  4                   - highest entity id
-    [Browse(Never)] protected           int                     nodeCount;          //  4                   - number of all entities
+    [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
+    [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
                     protected           int                     sequenceId;         //  4                   - incrementing id used for next new EntityNode
     // --- misc
     [Browse(Never)] protected readonly  LocalEntities           clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
@@ -72,8 +75,8 @@ public partial class EntityStore
     protected EntityStore(SceneClient client = null)
     {
         sequenceId          = Static.MinNodeId;
-        archetypes          = new Archetype[2];
-        archetypeSet        = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
+        archs               = new Archetype[2];
+        archSet             = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
         var config          = GetArchetypeConfig();
         var indexes         = new SignatureIndexes(Static.DefaultArchIndex); 
         defaultArchetype    = Archetype.CreateWithSignatureTypes(config, indexes, default);

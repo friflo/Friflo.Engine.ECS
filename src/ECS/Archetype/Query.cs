@@ -57,7 +57,7 @@ public class ArchetypeQuery
     public ReadOnlySpan<Archetype> Archetypes {
         get
         {
-            if (store.archetypesCount == lastArchetypeCount) {
+            if (store.archsCount == lastArchetypeCount) {
                 return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
             }
             // --- update archetypes / archetypesCount: Add matching archetypes newly added to the store

@@ -18,7 +18,7 @@ public partial class EntityStore
         where T : struct, IStructComponent
     {
         searchKey.SetWith(current, StructHeap<T>.StructIndex);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config          = GetArchetypeConfig();
@@ -39,7 +39,7 @@ public partial class EntityStore
     private Archetype GetArchetypeWithout(Archetype archetype, int structIndex, Type removeType)
     {
         searchKey.SetWithout(archetype, structIndex);
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var heaps           = archetype.Heaps;
@@ -73,16 +73,16 @@ public partial class EntityStore
     
     internal void AddArchetype (Archetype archetype)
     {
-        if (archetypesCount == archetypes.Length) {
-            var newLen = 2 * archetypes.Length;
-            Utils.Resize(ref archetypes,     newLen);
+        if (archsCount == archs.Length) {
+            var newLen = 2 * archs.Length;
+            Utils.Resize(ref archs,     newLen);
         }
-        if (archetype.archIndex != archetypesCount) {
-            throw new InvalidOperationException($"invalid archIndex. expect: {archetypesCount}, was: {archetype.archIndex}");
+        if (archetype.archIndex != archsCount) {
+            throw new InvalidOperationException($"invalid archIndex. expect: {archsCount}, was: {archetype.archIndex}");
         }
-        archetypes[archetypesCount] = archetype;
-        archetypesCount++;
-        archetypeSet.Add(archetype.key);
+        archs[archsCount] = archetype;
+        archsCount++;
+        archSet.Add(archetype.key);
     }
     
     // ------------------------------------ add / remove struct component ------------------------------------
@@ -161,7 +161,7 @@ public partial class EntityStore
         searchKey.tags.bitSet.value = archTagsValue | tagsValue;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
             newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
@@ -192,7 +192,7 @@ public partial class EntityStore
         searchKey.tags.bitSet.value = archTagsRemoved;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
-        if (archetypeSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
             newArchetype = GetArchetypeWithTags(arch, searchKey.tags);

@@ -66,9 +66,9 @@ public sealed class RawEntityStore : EntityStore
     
     public int CreateEntity(int id) {
         EnsureEntitiesLength(id + 1);
-        nodeCount++;
-        if (nodeMaxId < id) {
-            nodeMaxId = id;
+        nodesCount++;
+        if (nodesMaxId < id) {
+            nodesMaxId = id;
         }
         return id;
     }
@@ -76,14 +76,14 @@ public sealed class RawEntityStore : EntityStore
 
 #region struct components
     public int GetEntityComponentCount(int id) {
-        return archetypes[entities[id].archIndex].componentCount;
+        return archs[entities[id].archIndex].componentCount;
     }
     
     public ref T GetEntityComponentValue<T>(int id)
         where T : struct, IStructComponent
     {
         ref var entity  = ref entities[id];
-        var heap        = (StructHeap<T>)archetypes[entity.archIndex].heapMap[StructHeap<T>.StructIndex];
+        var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructHeap<T>.StructIndex];
         return ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
     }
     
@@ -91,7 +91,7 @@ public sealed class RawEntityStore : EntityStore
         where T : struct, IStructComponent
     {
         ref var entity      = ref entities[id];
-        var archetype       = archetypes[entity.archIndex];
+        var archetype       = archs[entity.archIndex];
         var result          = AddComponent(id, ref archetype, ref entity.compIndex, component);
         entity.archIndex    = archetype.archIndex;
         return result;
@@ -101,7 +101,7 @@ public sealed class RawEntityStore : EntityStore
         where T : struct, IStructComponent
     {
         ref var entity      = ref entities[id];
-        var archetype       = archetypes[entity.archIndex];
+        var archetype       = archs[entity.archIndex];
         var result          = RemoveComponent<T>(id, ref archetype, ref entity.compIndex);
         entity.archIndex    = archetype.archIndex;
         return result;
@@ -110,13 +110,13 @@ public sealed class RawEntityStore : EntityStore
     
 #region tags
     public  ref readonly Tags    GetEntityTags(int id) {
-        return ref archetypes[entities[id].archIndex].tags;
+        return ref archs[entities[id].archIndex].tags;
     }
 
     public  bool AddEntityTags(int id, in Tags tags)
     {
         ref var entity      = ref entities[id];
-        var archetype       = archetypes[entity.archIndex];
+        var archetype       = archs[entity.archIndex];
         var result          = archetype.store.AddTags(tags, id, ref archetype, ref entity.compIndex);
         entity.archIndex    = archetype.archIndex; 
         return result;
@@ -125,7 +125,7 @@ public sealed class RawEntityStore : EntityStore
     public  bool RemoveEntityTags(int id, in Tags tags)
     {
         ref var entity      = ref entities[id];
-        var archetype       = archetypes[entity.archIndex];
+        var archetype       = archs[entity.archIndex];
         var result          = archetype.store.RemoveTags(tags, id, ref archetype, ref entity.compIndex);
         entity.archIndex    = archetype.archIndex; 
         return result;

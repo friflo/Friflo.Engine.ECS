@@ -99,9 +99,9 @@ public partial class GameEntityStore
             AssertPid(node.pid, pid);
             return node.entity;
         }
-        nodeCount++;
-        if (nodeMaxId < id) {
-            nodeMaxId = id;
+        nodesCount++;
+        if (nodesMaxId < id) {
+            nodesMaxId = id;
         }
         AssertPid0(node.pid, pid);
         node.pid        = pid;
