@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -259,7 +260,8 @@ public static class Test_Query
         _           = store.Query(sig); // for one time allocation for Mem check
         var start   = Mem.GetAllocatedBytes();
         var query   = store.Query(sig);
-        Mem.AssertAlloc(start, 128);
+        var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 112 : 128;
+        Mem.AssertAlloc(start, expect);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
         
