@@ -12,7 +12,7 @@ namespace Tests.ECS.Arch;
 public static class Test_ArchetypeStructs
 {
     [Test]
-    public static void Test_ArchetypeMask_basics()
+    public static void Test_ArchetypeStructs_basics()
     {
         var twoStructs = ArchetypeStructs.Get<Position, Rotation>();
         AreEqual("Structs: [Position, Rotation]",  twoStructs.ToString());
@@ -49,7 +49,7 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeMask_Get()
+    public static void Test_ArchetypeStructs_Get()
     {
         var schema = EntityStore.GetComponentSchema();
         AreEqual(2, schema.EngineDependants.Length);
@@ -77,7 +77,7 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeMask_Get_Mem()
+    public static void Test_ArchetypeStructs_Get_Mem()
     {
         var struct1    = ArchetypeStructs.Get<Position>();
         foreach (var _ in struct1) { }
@@ -103,7 +103,7 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeMask_Enumerator_Reset()
+    public static void Test_ArchetypeStructs_Enumerator_Reset()
     {
         var structs    = ArchetypeStructs.Get<Position>();
         var enumerator = structs.GetEnumerator();
@@ -118,7 +118,7 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeMask_generic_IEnumerator()
+    public static void Test_ArchetypeStructs_generic_IEnumerator()
     {
         IEnumerable<ComponentType> tags = ArchetypeStructs.Get<Position>();
         int count = 0;
@@ -129,7 +129,25 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeMask_lookup_Perf()
+    public static void Test_ArchetypeStructs_Tags()
+    {
+        var store       = new GameEntityStore();
+        var type        = store.GetArchetype(Tags.Get<TestTag2, TestTag3>());
+        var tags        = type.Tags;
+        AreEqual(2, tags.Count);
+        var enumerator =  tags.GetEnumerator();
+        IsTrue(enumerator.MoveNext());
+        AreEqual(typeof(TestTag2), enumerator.Current!.type);
+        
+        IsTrue(enumerator.MoveNext());
+        AreEqual(typeof(TestTag3), enumerator.Current!.type);
+        
+        IsFalse(enumerator.MoveNext());
+        enumerator.Dispose();
+    }
+    
+    [Test]
+    public static void Test_ArchetypeStructs_lookup_structs_and_tags_Perf()
     {
         var store   = new GameEntityStore();
         var type1   = store.GetArchetype(Signature.Get<Position>());
