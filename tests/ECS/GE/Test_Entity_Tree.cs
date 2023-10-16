@@ -121,6 +121,24 @@ public static class Test_Entity_Tree
     }
     
     [Test]
+    public static void Test_RemoveChild_from_multiple_children() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        var child4  = store.CreateEntity(4);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        root.AddChild(child4);
+        
+        root.RemoveChild(child3);
+        var childIds = root.ChildIds; 
+        AreEqual(2, childIds.Length);
+        AreEqual(2, childIds[0]);
+        AreEqual(4, childIds[1]);
+    }
+    
+    [Test]
     public static void Test_SetRoot() {
         var store   = new GameEntityStore();
         IsNull (store.Root);
@@ -236,6 +254,11 @@ public static class Test_Entity_Tree
         AreEqual(2, root.ChildCount);
         AreEqual(2, root.GetChildAt(0).Id);
         AreEqual(4, root.GetChildAt(1).Id);
+        
+        var childIds = root.ChildIds; 
+        AreEqual(2, childIds.Length);
+        AreEqual(2, childIds[0]);
+        AreEqual(4, childIds[1]);
     }
     
     [Test]

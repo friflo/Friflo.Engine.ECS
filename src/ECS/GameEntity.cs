@@ -92,9 +92,9 @@ public sealed class GameEntity
                     /// <remarks>Executes in O(1)</remarks> 
                     public  GameEntity      Parent
                     { get {
-                        var store       = archetype.gameEntityStore;
-                        var parentNode  = store.nodes[id].parentId;
-                        return GameEntityStore.HasParent(parentNode) ? store.nodes[parentNode].entity : null;
+                        var nodes       = archetype.gameEntityStore.nodes;
+                        var parentNode  = nodes[id].parentId;
+                        return GameEntityStore.HasParent(parentNode) ? nodes[parentNode].entity : null;
                     } }
     
                     /// <summary>
@@ -106,9 +106,15 @@ public sealed class GameEntity
                     /// <remarks>Executes in O(1)</remarks>
                     public  ChildNodes      ChildNodes
                     { get {
-                        var store       = archetype.gameEntityStore;
-                        ref var node    = ref store.nodes[id];
-                        return new ChildNodes(store.nodes, node.childIds, node.childCount);
+                        var nodes       = archetype.gameEntityStore.nodes;
+                        ref var node    = ref nodes[id];
+                        return new ChildNodes(nodes, node.childIds, node.childCount);
+                    } }
+                    
+    [Browse(Never)] public ReadOnlySpan<int> ChildIds
+                    { get {
+                        ref var node = ref archetype.gameEntityStore.nodes[id];
+                        return new ReadOnlySpan<int>(node.childIds, 0, node.childCount);
                     } }
     #endregion
     
