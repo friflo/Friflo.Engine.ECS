@@ -261,6 +261,7 @@ public partial class GameEntityStore
             dataNode = new DataNode { pid = id };
             clientNodes.Add(dataNode);
         }
+        // --- process child ids
         if (node.childCount > 0) {
             var children = dataNode.children = new List<long>(node.childCount); 
             foreach (var childId in node.ChildIds) {
@@ -268,8 +269,20 @@ public partial class GameEntityStore
                 children.Add(pid);  
             }
         }
+        // --- write struct & class components
         var jsonComponents = ComponentWriter.Instance.Write(entity);
         dataNode.components = new JsonValue(jsonComponents); // create array copy for now
+        
+        // --- process tags
+        var tagCount = entity.Tags.Count; 
+        if (tagCount == 0) {
+            dataNode.tags = null;
+        } else {
+            dataNode.tags = new List<string>(tagCount);
+            foreach(var tag in entity.Tags) {
+                dataNode.tags.Add(tag.tagName);
+            }
+        }
         return dataNode;
     }
 }

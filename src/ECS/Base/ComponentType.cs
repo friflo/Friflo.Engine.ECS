@@ -17,6 +17,8 @@ public abstract class ComponentType
     /// If <see cref="kind"/> == <see cref="Class"/>  the key assigned in <see cref="ClassComponentAttribute"/>
     /// </summary>
     public   readonly   string          componentKey;   //  8
+    
+    public   readonly   string          tagName;        //  8
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Class"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
     /// </summary>
@@ -50,6 +52,7 @@ public abstract class ComponentType
     
     internal ComponentType(
         string          componentKey,
+        string          tagName,
         Type            type,
         ComponentKind   kind,
         int             classIndex,
@@ -57,6 +60,7 @@ public abstract class ComponentType
         int             tagIndex)
     {
         this.componentKey   = componentKey;
+        this.tagName        = tagName;
         this.classIndex     = classIndex;
         this.structIndex    = structIndex;
         this.tagIndex       = tagIndex;
@@ -72,7 +76,7 @@ internal sealed class StructComponentType<T> : ComponentType
     public  override    string          ToString() => $"struct component: [{typeof(T).Name}]";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, typeof(T), Struct, 0, structIndex, 0)
+        : base(componentKey, null, typeof(T), Struct, 0, structIndex, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -88,7 +92,7 @@ internal sealed class ClassComponentType<T> : ComponentType
     public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
     
     internal ClassComponentType(string componentKey, int classIndex, TypeStore typeStore)
-        : base(componentKey, typeof(T), Class, classIndex, 0, 0)
+        : base(componentKey, null, typeof(T), Class, classIndex, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
@@ -109,6 +113,6 @@ internal sealed class TagType : ComponentType
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     
     internal TagType(Type type, int tagIndex)
-        : base(null, type, Tag, 0, 0, tagIndex)
+        : base(null, type.Name, type, Tag, 0, 0, tagIndex)
     { }
 }
