@@ -61,7 +61,7 @@ public static class Test_Entity_Tree
         AreEqual(1,         childNodes.Ids.Length);
         AreEqual(4,         childNodes.Ids[0]);
         AreEqual(1,         root.ChildCount);
-        AreSame (child,     root.GetChild(0));
+        AreSame (child,     root.GetChildAt(0));
         int count = 0;
         foreach (ref var node in root.ChildNodes) {
             count++;
@@ -166,7 +166,7 @@ public static class Test_Entity_Tree
         entity2.AddChild(child);
         AreEqual(0,     entity1.ChildCount);
         AreEqual(1,     entity2.ChildCount);
-        AreSame(child,  entity2.GetChild(0));
+        AreSame(child,  entity2.GetChildAt(0));
     }
     
     [Test]
@@ -234,6 +234,8 @@ public static class Test_Entity_Tree
         
         child3.DeleteEntity();
         AreEqual(2, root.ChildCount);
+        AreEqual(2, root.GetChildAt(0).Id);
+        AreEqual(4, root.GetChildAt(1).Id);
     }
     
     [Test]

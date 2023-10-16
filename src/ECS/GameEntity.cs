@@ -332,7 +332,7 @@ public sealed class GameEntity
     // --------------------------------------- tree methods --------------------------------------
 #region tree node methods
     /// <remarks>Executes in O(1)</remarks>
-    public GameEntity GetChild(int index) {
+    public GameEntity GetChildAt(int index) {
         var store   = archetype.gameEntityStore;
         return store.nodes[store.nodes[id].childIds[index]].entity;
     }
