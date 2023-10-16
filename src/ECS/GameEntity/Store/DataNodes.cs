@@ -24,7 +24,7 @@ public partial class GameEntityStore
         } else {
             entity = CreateFromDataNodeRandomPid (dataNode);
         }
-        error = ComponentReader.Instance.Read(dataNode.components, entity, this);
+        error = ComponentReader.Instance.Read(dataNode, entity, this);
         return entity;
     }
 

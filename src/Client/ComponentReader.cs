@@ -35,12 +35,12 @@ internal sealed class ComponentReader
         searchKey           = new ArchetypeKey();
     }
     
-    internal string Read(JsonValue value, GameEntity entity, EntityStore store)
+    internal string Read(DataNode dataNode, GameEntity entity, EntityStore store)
     {
-        if (value.IsNull()) {
+        if (dataNode.components.IsNull()) {
             return null;
         }
-        parser.InitParser(value);
+        parser.InitParser(dataNode.components);
         var ev = parser.NextEvent();
         if (ev == JsonEvent.Error) {
             var error = parser.error.GetMessage();
@@ -54,7 +54,7 @@ internal sealed class ComponentReader
             // could support also scalar types in future: string, number or boolean
             return $"component must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
         }
-        SetEntityArchetype(entity, store);
+        SetEntityArchetype(dataNode, entity, store);
         ReadComponents(entity);
         return null;
     }
@@ -86,7 +86,7 @@ internal sealed class ComponentReader
     /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all struct components 
     /// within the current JSON payload.
     /// </summary>
-    private void SetEntityArchetype(GameEntity entity, EntityStore store)
+    private void SetEntityArchetype(DataNode dataNode, GameEntity entity, EntityStore store)
     {
         bool hasStructComponent = false;
         searchKey.Clear();
@@ -102,7 +102,8 @@ internal sealed class ComponentReader
             hasStructComponent = true;
             searchKey.structs.SetBit(type.structIndex);
         }
-        if (!hasStructComponent) {
+        var tags = dataNode.tags;
+        if (!hasStructComponent && (tags == null || tags.Count == 0)) {
             return; // early out in absence of struct components 
         }
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
