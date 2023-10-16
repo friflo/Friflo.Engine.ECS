@@ -11,6 +11,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+[CLSCompliant(true)]
 public sealed class ComponentSchema
 {
 #region public properties

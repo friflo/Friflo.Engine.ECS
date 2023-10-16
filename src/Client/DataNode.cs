@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Friflo.Json.Fliox;
@@ -22,6 +23,7 @@ namespace Friflo.Fliox.Engine.Client;
 /// Otherwise the entity order in a JSON file would be arbitrary.<br/>
 /// Even small changes will show a massive diff in version control. 
 /// </remarks>
+[CLSCompliant(true)]
 public sealed class DataNode
 {
     /// <summary>permanent id used to identify entities in a database</summary>

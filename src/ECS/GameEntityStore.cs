@@ -35,6 +35,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   <item>Store the values of <b>struct</b> components - attributed with <see cref="StructComponentAttribute"/> - in linear memory</item>
 /// </list>
 /// </summary>
+[CLSCompliant(true)]
 public sealed partial class GameEntityStore : EntityStore
 {
 #region public properties

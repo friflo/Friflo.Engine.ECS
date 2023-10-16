@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -19,7 +20,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   <item>Create a query to process all entities of an <see cref="EntityStore"/></item>
 /// </list> 
 /// </summary>
-// Could be a readonly struct
+[CLSCompliant(true)]
 public static class Signature
 {
     /// <summary>

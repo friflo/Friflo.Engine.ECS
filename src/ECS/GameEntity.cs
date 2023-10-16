@@ -16,6 +16,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// Has currently no id - if doing so the type id is fixed  
 /// </summary>
+[CLSCompliant(true)]
 public sealed class GameEntity
 {
 #region public properties

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+[CLSCompliant(true)]
 public struct Tags : IEnumerable<ComponentType>
 {
     internal   BitSet  bitSet;  // 32
