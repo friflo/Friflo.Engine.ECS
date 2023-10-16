@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
@@ -50,7 +49,11 @@ internal sealed class ComponentReader
         if (ev != JsonEvent.ObjectStart) {
             return $"expect 'components' == object or null. id: {entity.id}";
         }
-        ReadRawComponents();
+        ev = ReadRawComponents();
+        if (ev != JsonEvent.ObjectEnd) {
+            // could support also scalar types in future: string, number or boolean
+            return $"component must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
+        }
         SetEntityArchetype(entity, store);
         ReadComponents(entity);
         return null;
@@ -69,12 +72,12 @@ internal sealed class ComponentReader
                 case Class:
                     // --- read class component
                     component.type.ReadClassComponent(componentReader, json, entity);
-                    continue;
+                    break;
                 case Struct:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
                     // --- read & change struct component
                     heap.Read(componentReader, entity.compIndex, json);
-                    continue;
+                    break;
             }
         }
     }
@@ -131,7 +134,7 @@ internal sealed class ComponentReader
         entity.archetype = newArchetype;
     }
     
-    private void ReadRawComponents()
+    private JsonEvent ReadRawComponents()
     {
         componentCount = 0;
         var ev = parser.NextEvent();
@@ -147,11 +150,13 @@ internal sealed class ComponentReader
                     components[componentCount++] = new RawComponent(key, start, parser.Position);
                     ev = parser.NextEvent();
                     if (ev == JsonEvent.ObjectEnd) {
-                        return;
+                        return JsonEvent.ObjectEnd;
                     }
                     break;
+                case JsonEvent.ObjectEnd:
+                    return JsonEvent.ObjectEnd;
                 default:
-                    throw new InvalidOperationException($"expect object. was: {ev}");
+                    return ev;
             }
         }
     }

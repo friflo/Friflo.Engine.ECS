@@ -68,8 +68,30 @@ public static class Test_ComponentReader
         IsNull  (error);
     }
     
+    /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
     [Test]
-    public static void Test_ComponentReader_read_components_invalid()
+    public static void Test_ComponentReader_read_components_empty()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var node    = new DataNode { pid = 10, components = new JsonValue("{}") };
+        var entity  = store.CreateFromDataNode(node, out var error);
+        AreEqual(0, entity.ComponentCount);
+        IsNull  (error);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_read_invalid_component()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var json    = new JsonValue("{ \"pos\": [] }");
+        var node    = new DataNode { pid = 10, components = json };
+        var entity  = store.CreateFromDataNode(node, out var error);
+        NotNull(entity);
+        AreEqual("component must be an object. was ArrayStart. id: 10, component: 'pos'", error);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_read_invalid_components()
     {
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var node    = new DataNode { pid = 10, components = new JsonValue("123") };
