@@ -9,7 +9,7 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using LocalEntities = Friflo.Json.Fliox.Hub.Client.LocalEntities<long, Friflo.Fliox.Engine.Client.DataNode>;
 
-// Hard rule: this file/section MUST NOT use GameEntity instances
+// Hard rule: this file MUST NOT access GameEntity's
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -34,7 +34,9 @@ public partial class EntityStore
     [Browse(Never)] protected           Archetype[]             archetypes;         //  8 + archetypes      - array of all archetypes. never null
     [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archetypeSet;       //  8 + Set<Key>'s      - Set<> to get archetypes by key
     [Browse(Never)] internal            int                     archetypesCount;    //  4                   - number of archetypes
-    [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype without components
+    /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.Structs"/> and <see cref="Archetype.Tags"/>.<br/>
+    /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
+    [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype. has no struct components & tags
     // --- nodes
     [Browse(Never)] protected           int                     nodeMaxId;          //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodeCount;          //  4                   - number of all entities
@@ -50,8 +52,11 @@ public partial class EntityStore
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    ComponentSchema ComponentSchema = ComponentUtils.RegisterComponentTypes(TypeStore);
         
+        /// <summary>The index of the <see cref="EntityStore.defaultArchetype"/> - this index always 0</summary>
         internal const              int             DefaultArchIndex    =  0;
+        
         internal const              int             DefaultCapacity     =  1;
+        
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
         internal const              int             MinNodeId           =  1;
         /// <summary>

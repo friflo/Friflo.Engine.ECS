@@ -6,7 +6,7 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-// Hard rule: this file/section MUST NOT use GameEntity instances
+// Hard rule: this file MUST NOT access GameEntity's
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace

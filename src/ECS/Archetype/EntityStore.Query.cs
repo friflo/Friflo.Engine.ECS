@@ -3,7 +3,7 @@
 
 using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
 
-// Hard rule: this file/section MUST NOT use GameEntity instances
+// Hard rule: this file MUST NOT access GameEntity's
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation
