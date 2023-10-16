@@ -13,7 +13,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class GameEntityStore
 {
     /// <returns>an <see cref="attached"/> entity</returns>
-    public GameEntity CreateFromDataNode(DataNode dataNode)
+    public GameEntity CreateFromDataNode(DataNode dataNode, out string error)
     {
         if (dataNode == null) {
             throw new ArgumentNullException(nameof(dataNode));
@@ -24,7 +24,7 @@ public partial class GameEntityStore
         } else {
             entity = CreateFromDataNodeRandomPid (dataNode);
         }
-        ComponentReader.Instance.Read(dataNode.components, entity, this);
+        error = ComponentReader.Instance.Read(dataNode.components, entity, this);
         return entity;
     }
 

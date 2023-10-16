@@ -18,7 +18,7 @@ public static class Test_CreateFromDataNode
     public static void Load_DataNode_Sequential() {
         var store   = new GameEntityStore(UsePidAsId);
         var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
-        var entity  = store.CreateFromDataNode(node);
+        var entity  = store.CreateFromDataNode(node, out _);
         
         AreEqual(10,    store.PidToId(10));
         AreEqual(10,    store.GetNodeByPid(10).Pid);
@@ -36,7 +36,7 @@ public static class Test_CreateFromDataNode
     public static void Load_DataNode_Pid() {
         var store   = new GameEntityStore();
         var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
-        var entity  = store.CreateFromDataNode(node);
+        var entity  = store.CreateFromDataNode(node, out _);
         
         AreEqual(1,     store.PidToId(10));
         AreEqual(1,     store.GetNodeByPid(10).Id);

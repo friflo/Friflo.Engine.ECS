@@ -36,22 +36,24 @@ internal sealed class ComponentReader
         searchKey           = new ArchetypeKey();
     }
     
-    internal void Read(JsonValue value, GameEntity entity, EntityStore store)
+    internal string Read(JsonValue value, GameEntity entity, EntityStore store)
     {
         if (value.IsNull()) {
-            return;
+            return null;
         }
         parser.InitParser(value);
         var ev = parser.NextEvent();
-        if (ev == JsonEvent.ValueNull) {
-            return;
+        if (ev == JsonEvent.Error) {
+            var error = parser.error.GetMessage();
+            return $"{error}. id: {entity.id}";
         }
         if (ev != JsonEvent.ObjectStart) {
-            throw new InvalidOperationException("expect object or null");
+            return $"expect 'components' == object or null. id: {entity.id}";
         }
         ReadRawComponents();
         SetEntityArchetype(entity, store);
         ReadComponents(entity);
+        return null;
     }
     
     private void ReadComponents(GameEntity entity)
@@ -148,8 +150,6 @@ internal sealed class ComponentReader
                         return;
                     }
                     break;
-                case JsonEvent.ObjectEnd:
-                    return;
                 default:
                     throw new InvalidOperationException($"expect object. was: {ev}");
             }

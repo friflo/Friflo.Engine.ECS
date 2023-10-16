@@ -23,8 +23,8 @@ public static class Test_ComponentReader
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         var childNode   = new DataNode { pid = 11 };
         
-        var root        = store.CreateFromDataNode(rootNode);
-        var child       = store.CreateFromDataNode(childNode);
+        var root        = store.CreateFromDataNode(rootNode, out _);
+        var child       = store.CreateFromDataNode(childNode, out _);
         AssertRootEntity(root);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
         AreEqual(1,     type.EntityCount);
@@ -33,7 +33,7 @@ public static class Test_ComponentReader
         // --- read same DataNode again
         root.Position   = default;
         root.Scale3     = default;
-        root            = store.CreateFromDataNode(rootNode);
+        root            = store.CreateFromDataNode(rootNode, out _);
         AssertRootEntity(root);
         AreEqual(1,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -51,26 +51,53 @@ public static class Test_ComponentReader
         IsFalse (root.HasPosition);
         
         var rootNode    = new DataNode { pid = 10, components = structComponents };
-        var rootResult  = store.CreateFromDataNode(rootNode);  // archetype changes
+        var rootResult  = store.CreateFromDataNode(rootNode, out _);  // archetype changes
         AreSame (root, rootResult);
         IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DataNode components
         IsTrue  (root.HasPosition);
     }
     
+    /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
+    [Test]
+    public static void Test_ComponentReader_read_components_null()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var node    = new DataNode { pid = 10, components = default };
+        var entity  = store.CreateFromDataNode(node, out var error);
+        AreEqual(0, entity.ComponentCount);
+        IsNull  (error);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_read_components_invalid()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var node    = new DataNode { pid = 10, components = new JsonValue("123") };
+        var entity  = store.CreateFromDataNode(node, out var error);
+        NotNull(entity);
+        AreEqual("expect 'components' == object or null. id: 10", error);
+        
+        node        = new DataNode { pid = 10, components = new JsonValue("invalid") };
+        entity      = store.CreateFromDataNode(node, out error);
+        NotNull(entity);
+        AreEqual("unexpected character while reading value. Found: i path: '(root)' at position: 1. id: 10", error);
+    }
+    
+    /// <summary>cover <see cref="ComponentReader.Read"/></summary>
     [Test]
     public static void Test_ComponentReader_CreateFromDataNode_assertions()
     {
         {
             var store = new GameEntityStore(PidType.UsePidAsId);
             var e = Throws<ArgumentNullException>(() => {
-                store.CreateFromDataNode(null);
+                store.CreateFromDataNode(null, out _);
             });
             AreEqual("Value cannot be null. (Parameter 'dataNode')", e!.Message);
         } {
             var store       = new GameEntityStore(PidType.UsePidAsId);
             var childNode   = new DataNode { pid = int.MaxValue + 1L };
             var e = Throws<ArgumentException>(() => {
-                store.CreateFromDataNode(childNode);
+                store.CreateFromDataNode(childNode, out _);
             });
             AreEqual("pid mus be in range [0, 2147483647]. was: {pid} (Parameter 'dataNode')", e!.Message);
         }
@@ -96,8 +123,8 @@ public static class Test_ComponentReader
         var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
         var childNode   = new DataNode { pid = 11 };
         
-        var root        = store.CreateFromDataNode(rootNode);
-        var child       = store.CreateFromDataNode(childNode);
+        var root        = store.CreateFromDataNode(rootNode, out _);
+        var child       = store.CreateFromDataNode(childNode, out _);
         AssertRootEntity(root);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
         AreEqual(1,     type.EntityCount);
@@ -107,7 +134,7 @@ public static class Test_ComponentReader
         root.Position   = default;
         root.Scale3     = default;
         var start       = Mem.GetAllocatedBytes();
-        root            = store.CreateFromDataNode(rootNode);
+        root            = store.CreateFromDataNode(rootNode, out _);
         Mem.AssertNoAlloc(start);
         AssertRootEntity(root);
         AreEqual(1,     type.EntityCount);
@@ -125,7 +152,7 @@ public static class Test_ComponentReader
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
         {
-            var root = store.CreateFromDataNode(rootNode);
+            var root = store.CreateFromDataNode(rootNode, out _);
             root.DeleteEntity();
         }
     }
@@ -139,14 +166,14 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
-        var root        = store.CreateFromDataNode(rootNode);
+        var root        = store.CreateFromDataNode(rootNode, out _);
         AreEqual(1,     root.ClassComponents.Length);
         var comp1       = root.GetClassComponent<TestRefComponent1>();
         AreEqual(2,     comp1.val1);
         comp1.val1      = -1;
         
         // --- read same DataNode again
-        store.CreateFromDataNode(rootNode);
+        store.CreateFromDataNode(rootNode, out _);
         var comp2       = root.GetClassComponent<TestRefComponent1>();
         AreEqual(2,     comp2.val1);
         AreSame(comp1, comp2);
@@ -161,7 +188,7 @@ public static class Test_ComponentReader
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
-            store.CreateFromDataNode(rootNode);
+            store.CreateFromDataNode(rootNode, out _);
         }
     }
 }
