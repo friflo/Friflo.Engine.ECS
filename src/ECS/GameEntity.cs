@@ -31,12 +31,14 @@ public sealed class GameEntity
     /// <remarks>If <see cref="attached"/> <see cref="Archetype"/> is not null. Otherwise null.</remarks>
     [Browse(Never)] public  StoreOwnership  StoreOwnership  => archetype != null ? attached : detached;
     
-    /// <returns><see cref="treeNode"/> if the entity is member of the <see cref="GameEntityStore"/> tree. Otherwise <see cref="floating"/></returns>
+    /// <returns>
+    /// <see cref="rootTreeNode"/> if the entity is member of the <see cref="GameEntityStore"/> <see cref="GameEntityStore.Root"/> tree.<br/>
+    /// Otherwise <see cref="floating"/></returns>
     /// <remarks>
-    /// If <see cref="TreeMembership"/> is <see cref="treeNode"/> <see cref="Root"/> is not null.<br/>
-    /// If <see cref="floating"/> <see cref="Root"/> is null.
+    /// If <see cref="TreeMembership"/> is <see cref="rootTreeNode"/> its <see cref="Root"/> is not null.<br/>
+    /// If <see cref="floating"/> its <see cref="Root"/> is null.
     /// </remarks>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.nodes[id].Is(TreeNode) ? treeNode : floating;
+    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.nodes[id].Is(TreeNode) ? rootTreeNode : floating;
     
     [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);

@@ -54,6 +54,10 @@ public partial class EntityStore
         internal const              int             DefaultCapacity     =  1;
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
         internal const              int             MinNodeId           =  1;
+        /// <summary>
+        /// An <see cref="EntityNode"/> with <see cref="EntityNode.parentId"/> == <see cref="NoParentId"/>
+        /// is declared as <see cref="TreeMembership.floating"/>.
+        /// </summary>
         public   const              int             NoParentId          =  0;
         public   const              int             RootId              = -1;
     }

@@ -8,6 +8,7 @@ using Friflo.Fliox.Engine.Client;
 using Friflo.Json.Fliox;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
+// ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 

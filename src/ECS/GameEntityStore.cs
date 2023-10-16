@@ -26,8 +26,8 @@ namespace Friflo.Fliox.Engine.ECS;
 ///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="GameEntity"/> methods.
 ///     </item>
 ///     <item>
-///       <b><see cref="TreeMembership"/>:</b> <see cref="treeNode"/> / <see cref="floating"/> node (not part of the store tree).<br/>
-///       All children of a <see cref="treeNode"/> are <see cref="treeNode"/>'s themselves.
+///       <b><see cref="TreeMembership"/>:</b> <see cref="rootTreeNode"/> / <see cref="floating"/> node (not part of the store <see cref="Root"/> tree).<br/>
+///       All children of a <see cref="rootTreeNode"/> are <see cref="rootTreeNode"/>'s themselves.
 ///     </item>
 ///     </list>
 ///   </item>

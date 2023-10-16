@@ -14,7 +14,7 @@ public enum NodeFlags : byte
     NullNode        = 0b_0000_0000,
     Created         = 0b_0000_0001,
     /// <summary>
-    /// If set node is a <see cref="treeNode"/>. Otherwise <see cref="floating"/>
+    /// If set node is a <see cref="rootTreeNode"/>. Otherwise <see cref="floating"/>
     /// </summary>
     TreeNode        = 0b_0000_0010,
     // - prefab flags

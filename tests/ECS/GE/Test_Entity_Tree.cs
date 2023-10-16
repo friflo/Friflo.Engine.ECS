@@ -102,8 +102,8 @@ public static class Test_Entity_Tree
         store.SetRoot(root);
         NotNull (root.Root);
         NotNull (child.Root);
-        AreEqual(treeNode,  root.TreeMembership);
-        AreEqual(treeNode,  child.TreeMembership);
+        AreEqual(rootTreeNode,  root.TreeMembership);
+        AreEqual(rootTreeNode,  child.TreeMembership);
         
         // --- remove child
         root.RemoveChild(child);
@@ -156,9 +156,9 @@ public static class Test_Entity_Tree
         
         var child   = store.CreateEntity(2);
         root.AddChild(child);
-        AreSame(root,       child.Root);
-        AreEqual(treeNode,  child.TreeMembership);
-        AreEqual(2,         store.EntityCount);
+        AreSame(root,           child.Root);
+        AreEqual(rootTreeNode,  child.TreeMembership);
+        AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
         AreEqual("id: 0",                               nodes[0].ToString());
         AreEqual("id: 2  []  flags: TreeNode | Created",nodes[2].ToString());
