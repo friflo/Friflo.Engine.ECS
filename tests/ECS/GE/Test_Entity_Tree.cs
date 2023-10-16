@@ -88,6 +88,27 @@ public static class Test_Entity_Tree
 #pragma warning restore CS0618 // Type or member is obsolete
     }
     
+    /// <summary>code coverage for <see cref="GameEntityStore.SetTreeFlags"/></summary>
+    [Test]
+    public static void Test_AddChild_move_root_tree_entity() {
+        var store       = new GameEntityStore();
+        var root        = store.CreateEntity(1);
+        store.SetRoot(root);
+        var child1      = store.CreateEntity(2);
+        var child2      = store.CreateEntity(3);
+        var subChild    = store.CreateEntity(4);
+        
+        root.AddChild(child1);
+        child1.AddChild(subChild);
+        root.AddChild(child2);
+        AreEqual(1, child1.ChildCount);
+        AreEqual(0, child2.ChildCount);
+        
+        child2.AddChild(subChild);  // subChild is moved from child1 to child2
+        AreEqual(0, child1.ChildCount);
+        AreEqual(1, child2.ChildCount);
+    }
+    
     [Test]
     public static void Test_RemoveChild() {
         var store   = new GameEntityStore();
@@ -160,11 +181,11 @@ public static class Test_Entity_Tree
         AreEqual(rootTreeNode,  child.TreeMembership);
         AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
-        AreEqual("id: 0",                               nodes[0].ToString());
-        AreEqual("id: 2  []  flags: TreeNode | Created",nodes[2].ToString());
+        AreEqual("id: 0",                                   nodes[0].ToString());
+        AreEqual("id: 2  []  flags: RootTreeNode | Created",nodes[2].ToString());
         
-        AreEqual(NullNode,                              nodes[0].Flags);
-        AreEqual(TreeNode | Created,                    nodes[2].Flags);
+        AreEqual(NullNode,                                  nodes[0].Flags);
+        AreEqual(RootTreeNode | Created,                    nodes[2].Flags);
     }
     
     [Test]

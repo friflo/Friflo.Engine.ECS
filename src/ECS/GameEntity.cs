@@ -38,7 +38,7 @@ public sealed class GameEntity
     /// If <see cref="TreeMembership"/> is <see cref="rootTreeNode"/> its <see cref="Root"/> is not null.<br/>
     /// If <see cref="floating"/> its <see cref="Root"/> is null.
     /// </remarks>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.nodes[id].Is(TreeNode) ? rootTreeNode : floating;
+    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.nodes[id].Is(RootTreeNode) ? rootTreeNode : floating;
     
     [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
@@ -85,7 +85,7 @@ public sealed class GameEntity
     
                     /// <returns>return null if the entity is <see cref="floating"/></returns>
                     /// <remarks>Executes in O(1) independent from its depth in the node tree</remarks>
-                    public  GameEntity      Root        => archetype.gameEntityStore.nodes[id].Is(TreeNode) ? archetype.gameEntityStore.Root : null;
+                    public  GameEntity      Root        => archetype.gameEntityStore.nodes[id].Is(RootTreeNode) ? archetype.gameEntityStore.Root : null;
                     
                     /// <returns>
                     /// null if the entity has no parent.<br/>

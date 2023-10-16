@@ -16,7 +16,7 @@ public enum NodeFlags : byte
     /// <summary>
     /// If set node is a <see cref="rootTreeNode"/>. Otherwise <see cref="floating"/>
     /// </summary>
-    TreeNode        = 0b_0000_0010,
+    RootTreeNode    = 0b_0000_0010,
     // - prefab flags
     PrefabLink      = 0b_0001_0000, // link to prefab location
     OpMask          = 0b_0000_1100,

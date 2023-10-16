@@ -58,7 +58,7 @@ public partial class GameEntityStore
         ref var childNode = ref localNodes[childId];
         if (HasParent(childNode.parentId)) {
             if (childNode.parentId == id) {
-                // case: child node is already a child the entity
+                // case: entity with given id is already a child of this entity
                 return;
             }
             // --- remove child from current parent
@@ -66,7 +66,7 @@ public partial class GameEntityStore
         }
         childNode.parentId = id;
         
-        // --- add child to entity
+        // --- add entity with given id as child to this entity
         ref var node    = ref localNodes[id];
         int index       = node.childCount;
         if (node.childIds == null) {
@@ -77,7 +77,7 @@ public partial class GameEntityStore
         }
         node.childIds[index] = childId;
         node.childCount++;
-        SetTreeFlags(localNodes, childId, node.flags & TreeNode);
+        SetTreeFlags(localNodes, childId, node.flags & RootTreeNode);
     }
     
     internal void RemoveChild (int id, int childId)
@@ -88,7 +88,7 @@ public partial class GameEntityStore
         }
         childNode.parentId = Static.NoParentId;
         RemoveChildNode(id, childId);
-        ClearTreeFlags(nodes, childId, TreeNode);
+        ClearTreeFlags(nodes, childId, RootTreeNode);
     }
     
     private void RemoveChildNode (int entity, int childEntity)
@@ -190,7 +190,7 @@ public partial class GameEntityStore
         ref var node    = ref localNodes[id];
         
         // --- mark its child nodes as floating
-        ClearTreeFlags(localNodes, id, TreeNode);
+        ClearTreeFlags(localNodes, id, RootTreeNode);
         foreach (var childId in node.ChildIds) {
             localNodes[childId].parentId = Static.NoParentId;
         }
@@ -251,7 +251,7 @@ public partial class GameEntityStore
         }
         rootId      = id;
         parentId    = Static.RootId;
-        SetTreeFlags(nodes, id, TreeNode);
+        SetTreeFlags(nodes, id, RootTreeNode);
     }
     
     public DataNode EntityAsDataNode(GameEntity entity) {

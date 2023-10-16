@@ -87,7 +87,7 @@ public static class Test_CreateFromDataNode
         //
         IsNull(                         store.Root);
         store.SetRoot(entity5);
-        AreEqual(Created | TreeNode,    store.Nodes[8].Flags);
+        AreEqual(Created | RootTreeNode,store.Nodes[8].Flags);
     }
     
     [Test]
@@ -116,7 +116,7 @@ public static class Test_CreateFromDataNode
         //
         IsNull(                         store.Root);
         store.SetRoot(entity5);
-        AreEqual(Created | TreeNode,    store.Nodes[8].Flags);
+        AreEqual(Created | RootTreeNode,store.Nodes[8].Flags);
     }
     
     [Test]
