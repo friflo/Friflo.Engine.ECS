@@ -16,7 +16,7 @@ public static class Test_ComponentReader
         new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 5, \"z\": 6 } }");
     
     [Test]
-    public static void Test_ReadStructComponents()
+    public static void Test_ComponentReader_ReadStructComponents()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -38,6 +38,23 @@ public static class Test_ComponentReader
         AreEqual(1,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         AreEqual(11,    child.Id);
+    }
+    
+    /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
+    [Test]
+    public static void Test_ComponentReader_change_archetype()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(10);
+        root.AddComponent(new Scale3(1, 2, 3));
+        IsTrue  (root.HasScale3);
+        IsFalse (root.HasPosition);
+        
+        var rootNode    = new DataNode { pid = 10, components = structComponents };
+        var rootResult  = store.CreateFromDataNode(rootNode);  // archetype changes
+        AreSame (root, rootResult);
+        IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DataNode components
+        IsTrue  (root.HasPosition);
     }
     
     [Test]
@@ -72,7 +89,7 @@ public static class Test_ComponentReader
     }
     
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
-    public static void Test_ReadStructComponents_Mem()
+    public static void Test_ComponentReader_ReadStructComponents_Mem()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -99,7 +116,7 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_ReadStructComponents_Perf()
+    public static void Test_ComponentReader_ReadStructComponents_Perf()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -116,7 +133,7 @@ public static class Test_ComponentReader
     private static readonly JsonValue classComponents = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
-    public static void Test_ReadClassComponents()
+    public static void Test_ComponentReader_ReadClassComponents()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
@@ -136,7 +153,7 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_ReadClassComponents_Perf()
+    public static void Test_ComponentReader_ReadClassComponents_Perf()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
