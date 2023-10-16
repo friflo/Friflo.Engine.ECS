@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable UnusedMember.Local
 // ReSharper disable once CheckNamespace
