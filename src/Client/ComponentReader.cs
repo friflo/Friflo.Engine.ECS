@@ -69,16 +69,10 @@ internal sealed class ComponentReader
                     component.type.ReadClassComponent(componentReader, json, entity);
                     continue;
                 case Struct:
-                    // --- read struct component
-                    var structType  = component.type;
-                    var heap        = entity.archetype.heapMap[structType.structIndex];
-                    if (heap != null) {
-                        // --- change component value
-                        heap.Read(componentReader, entity.compIndex, json);
-                        continue;
-                    }
-                    var msg = $"unexpected: heap == null. structType: {structType}. {nameof(SetEntityArchetype)} ensures this.";
-                    throw new InvalidOperationException(msg);
+                    var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
+                    // --- read & change struct component
+                    heap.Read(componentReader, entity.compIndex, json);
+                    continue;
             }
         }
     }
