@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public class AssemblyLoader
+internal sealed class AssemblyLoader
 {
     private readonly    HashSet<Assembly>   checkedAssemblies   = new HashSet<Assembly>();
     private readonly    HashSet<Assembly>   dependencies        = new HashSet<Assembly>();
