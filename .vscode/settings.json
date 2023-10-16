@@ -23,11 +23,13 @@
         "yarn.lock": true
     },
     "cSpell.words": [
+        "archs",
         "Avalonia",
         "bepu",
         "bepuphysics",
         "blittable",
         "Browsable",
+        "Dependants",
         "Netcode",
         "Pids",
         "SIMD",
