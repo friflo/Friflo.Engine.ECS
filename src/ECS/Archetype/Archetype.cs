@@ -43,7 +43,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
     [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - index in EntityStore
-    [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
+    [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     
     [Browse(Never)] internal            ReadOnlyHeaps       Heaps           => structHeaps;
@@ -76,14 +76,14 @@ public sealed class Archetype
         gameEntityStore = store as GameEntityStore;
         archIndex       = config.archetypeIndex;
         capacity        = config.capacity;
-        componentCount  = heaps.Length;
+        structCount     = heaps.Length;
         structHeaps     = heaps;
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
         structs         = new ArchetypeStructs(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
-        for (int pos = 0; pos < componentCount; pos++)
+        for (int pos = 0; pos < structCount; pos++)
         {
             var heap = heaps[pos];
             heap.SetArchetype(this);

@@ -95,7 +95,7 @@ public sealed class RawEntityStore : EntityStore
 
 #region struct components
     public int GetEntityComponentCount(int id) {
-        return archs[entities[id].archIndex].componentCount;
+        return archs[entities[id].archIndex].structCount;
     }
     
     public ref T EntityComponent<T>(int id)

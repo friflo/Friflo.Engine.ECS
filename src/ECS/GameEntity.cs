@@ -24,7 +24,7 @@ public sealed class GameEntity
     /// Uniqueness relates to the <see cref="GameEntity"/>'s stored in its <see cref="GameEntityStore"/></summary>
                     public   int            Id              => id;
 
-    [Browse(Never)] public   int            ComponentCount  => archetype.componentCount + classComponents.Length;
+    [Browse(Never)] public   int            ComponentCount  => archetype.structCount + classComponents.Length;
     
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
                     public   Archetype      Archetype       => archetype;
