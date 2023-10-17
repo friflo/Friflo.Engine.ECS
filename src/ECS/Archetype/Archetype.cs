@@ -43,7 +43,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8       - Length always = maxStructIndex. Used for heap lookup
     [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
     [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing EntityStore
-    [Browse(Never)] internal readonly   int                 archIndex;      //  4       - index in EntityStore
+    [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in its EntityStore
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     
     [Browse(Never)] internal            ReadOnlyHeaps       Heaps           => structHeaps;
