@@ -40,7 +40,7 @@ public struct BitSet
     }
     
     // hash distribution is probably not good. But executes fast. Leave it for now.
-    public override int GetHashCode()
+    public int HashCode()
     {
         return unchecked((int)l0) ^ (int)(l0 >> 32) ^
                unchecked((int)l1) ^ (int)(l1 >> 32) ^

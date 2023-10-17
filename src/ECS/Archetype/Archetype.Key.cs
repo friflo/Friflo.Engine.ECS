@@ -27,7 +27,7 @@ internal sealed class ArchetypeKey
     internal ArchetypeKey(Archetype archetype) {
         structs         = archetype.structs;
         tags            = archetype.tags;
-        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
         this.archetype  = archetype;
     }
     
@@ -38,34 +38,34 @@ internal sealed class ArchetypeKey
     }
     
     internal void CalculateHashCode() {
-        hash    = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash    = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetTagsWith(in Tags tags, int structIndex) {
         structs         = default;
         structs.SetBit(structIndex);
         this.tags       = tags;
-        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetSignatureTags(in SignatureIndexes indexes, in Tags tags) {
         structs         = new ArchetypeStructs(indexes);
         this.tags       = tags;
-        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetWith(Archetype archetype, int structIndex) {
         structs         = archetype.structs;
         structs.SetBit(structIndex);
         tags            = archetype.tags;
-        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetWithout(Archetype archetype, int structIndex) {
         structs         = archetype.structs;
         structs.ClearBit(structIndex);
         tags            = archetype.tags;
-        hash            = structs.bitSet.GetHashCode() ^ tags.bitSet.GetHashCode();
+        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     private string GetString()
