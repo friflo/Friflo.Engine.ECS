@@ -25,26 +25,26 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="StoreOwnership"/></item>
 ///     <item><see cref="TreeMembership"/></item>
 /// </list>
-/// <b>struct components </b>
+/// <b>struct components</b> · generic
 /// <list type="bullet">
 ///     <item><see cref="HasComponent{T}"/></item>
-///     <item><see cref="ComponentRef{T}"/> read / write</item>
+///     <item><see cref="ComponentRef{T}"/> - read / write</item>
 ///     <item><see cref="TryGetComponent{T}"/></item>
 ///     <item><see cref="AddComponent{T}()"/></item>
 ///     <item><see cref="RemoveComponent{T}"/></item>
 /// </list>
-/// <b>struct components</b> - standard
+/// <b>struct components</b> · common
 /// <list type="bullet">
 ///     <item><see cref="Name"/></item>
 ///     <item><see cref="Position"/></item>
 ///     <item><see cref="Rotation"/></item>
 ///     <item><see cref="Scale3"/></item>
+///     <item><see cref="HasName"/></item>
 ///     <item><see cref="HasPosition"/></item>
 ///     <item><see cref="HasRotation"/></item>
 ///     <item><see cref="HasScale3"/></item>
-///     <item><see cref="HasName"/></item>
 /// </list>
-/// <b>class</b> components 
+/// <b>class components</b> · generic
 /// <list type="bullet">
 ///     <item><see cref="ClassComponents"/></item>
 ///     <item><see cref="GetClassComponent{T}"/></item>
