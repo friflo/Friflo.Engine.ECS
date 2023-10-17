@@ -142,12 +142,12 @@ internal sealed class ComponentReader
         if (curArchetype == newArchetype) {
             return;
         }
-        if (curArchetype == store.defaultArchetype) {
-            newArchetype.AddEntity(entity.id);
-        } else {
-            curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
-        }
         entity.archetype = newArchetype;
+        if (curArchetype == store.defaultArchetype) {
+            entity.compIndex = newArchetype.AddEntity(entity.id);
+        } else {
+            entity.compIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
+        }
     }
     
     private JsonEvent ReadRawComponents()

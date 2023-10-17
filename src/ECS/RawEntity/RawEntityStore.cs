@@ -73,8 +73,7 @@ public sealed class RawEntityStore : EntityStore
         var id              = CreateEntity();
         ref var entity      = ref entities[id]; 
         entity.archIndex    = archetype.archIndex;
-        entity.compIndex    = archetype.EntityCount;
-        archetype.AddEntity(id);
+        entity.compIndex    = archetype.AddEntity(id);
         return id;
     }
     

@@ -167,8 +167,8 @@ public partial class EntityStore
             newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
         }
         if (arch != defaultArchetype) {
-            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
             archetype   = newArchetype;
+            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
             return true;
         }
         compIndex           = newArchetype.AddEntity(id);

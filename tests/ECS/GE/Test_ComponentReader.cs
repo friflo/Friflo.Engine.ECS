@@ -12,32 +12,43 @@ namespace Tests.ECS.GE;
 
 public static class Test_ComponentReader
 {
-    private static readonly JsonValue structComponents =
-        new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 2, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 5, \"z\": 6 } }");
+    private static readonly JsonValue rootComponents =
+        new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 1, \"z\": 1 }, \"scl3\": { \"x\": 2, \"y\": 2, \"z\": 2 } }");
+    
+    private static readonly JsonValue childComponents =
+        new JsonValue("{ \"pos\": { \"x\": 3, \"y\": 3, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 4, \"z\": 4 } }");
     
     [Test]
     public static void Test_ComponentReader_read_struct_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
-        var childNode   = new DataNode { pid = 11 };
+        var rootNode    = new DataNode { pid = 10, components = rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataNode { pid = 11, components = childComponents };
         
         var root        = store.CreateFromDataNode(rootNode, out _);
         var child       = store.CreateFromDataNode(childNode, out _);
         AssertRootEntity(root);
+        AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
-        AreEqual(1,     type.EntityCount);
+        AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
-        // --- read same DataNode again
+        // --- read root DataNode again
         root.Position   = default;
         root.Scale3     = default;
         root            = store.CreateFromDataNode(rootNode, out _);
         AssertRootEntity(root);
-        AreEqual(1,     type.EntityCount);
+        AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
-        AreEqual(11,    child.Id);
+        
+        // --- read child DataNode again
+        child.Position  = default;
+        child.Scale3    = default;
+        child           = store.CreateFromDataNode(childNode, out _);
+        AssertChildEntity(child);
+        AreEqual(2,     type.EntityCount);
+        AreEqual(2,     store.EntityCount);
     }
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
@@ -50,7 +61,7 @@ public static class Test_ComponentReader
         IsTrue  (root.HasScale3);
         IsFalse (root.HasPosition);
         
-        var rootNode    = new DataNode { pid = 10, components = structComponents };
+        var rootNode    = new DataNode { pid = 10, components = rootComponents };
         var rootResult  = store.CreateFromDataNode(rootNode, out _);  // archetype changes
         AreSame (root, rootResult);
         IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DataNode components
@@ -84,7 +95,7 @@ public static class Test_ComponentReader
     {
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var node    = new DataNode { pid = 10, tags = new List<string> { nameof(TestTag) } };
-        var entity  = store.CreateFromDataNode(node, out var error);
+        var entity  = store.CreateFromDataNode(node, out _);
         AreEqual(0, entity.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
     }
@@ -136,15 +147,28 @@ public static class Test_ComponentReader
     }
     
     private static void AssertRootEntity(GameEntity root) {
+        AreEqual(10,    root.Id);
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
         AreEqual(2,     root.ComponentCount);
         AreEqual(1f,    root.Position.x);
-        AreEqual(2f,    root.Position.y);
-        AreEqual(3f,    root.Position.z);
-        AreEqual(4f,    root.Scale3.x);
-        AreEqual(5f,    root.Scale3.y);
-        AreEqual(6f,    root.Scale3.z);
+        AreEqual(1f,    root.Position.y);
+        AreEqual(1f,    root.Position.z);
+        AreEqual(2f,    root.Scale3.x);
+        AreEqual(2f,    root.Scale3.y);
+        AreEqual(2f,    root.Scale3.z);
+    }
+    
+    private static void AssertChildEntity(GameEntity child) {
+        AreEqual(11,    child.Id);
+        AreEqual(0,     child.ChildCount);
+        AreEqual(2,     child.ComponentCount);
+        AreEqual(3f,    child.Position.x);
+        AreEqual(3f,    child.Position.y);
+        AreEqual(3f,    child.Position.z);
+        AreEqual(4f,    child.Scale3.x);
+        AreEqual(4f,    child.Scale3.y);
+        AreEqual(4f,    child.Scale3.z);
     }
     
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
@@ -152,14 +176,15 @@ public static class Test_ComponentReader
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
-        var childNode   = new DataNode { pid = 11 };
+        var rootNode    = new DataNode { pid = 10, components = rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataNode { pid = 11, components = childComponents };
         
         var root        = store.CreateFromDataNode(rootNode, out _);
         var child       = store.CreateFromDataNode(childNode, out _);
         AssertRootEntity(root);
+        AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
-        AreEqual(1,     type.EntityCount);
+        AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
         // --- read same DataNode again
@@ -169,9 +194,9 @@ public static class Test_ComponentReader
         root            = store.CreateFromDataNode(rootNode, out _);
         Mem.AssertNoAlloc(start);
         AssertRootEntity(root);
-        AreEqual(1,     type.EntityCount);
+        AssertChildEntity(child);
+        AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
-        AreEqual(11,    child.Id);
     }
     
     [Test]
@@ -179,7 +204,7 @@ public static class Test_ComponentReader
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
-        var rootNode    = new DataNode { pid = 10, components = structComponents, children = new List<long> { 11 } };
+        var rootNode    = new DataNode { pid = 10, components = rootComponents, children = new List<long> { 11 } };
         
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)

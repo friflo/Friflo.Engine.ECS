@@ -133,8 +133,7 @@ public partial class GameEntityStore
         }
         var entity          = archetype.gameEntityStore.CreateEntity();
         entity.archetype    = archetype;
-        entity.compIndex    = archetype.EntityCount;
-        archetype.AddEntity(entity.id);
+        entity.compIndex    = archetype.AddEntity(entity.id);
         return entity;
     }
 }
