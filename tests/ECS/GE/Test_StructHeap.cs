@@ -13,12 +13,12 @@ public static class Test_StructHeap
     {
         var store       = new RawEntityStore();
         var arch1       = store.GetArchetype(Signature.Get<Position>());
-        var ids         = new List<int>();
         int count       = 2; 
+        var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
             var id  = store.CreateEntity(arch1);
-            ids.Add(id);
+            ids[n]  = id;
             AreSame(arch1,              store.GetEntityArchetype(id));
             AreEqual(n + 1,             arch1.EntityCount);
             AreEqual(new Position(),    store.GetEntityComponentValue<Position>(id)); // Position is present & default
@@ -35,15 +35,15 @@ public static class Test_StructHeap
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var arch1       = store.GetArchetype(Signature.Get<Position>());
-        var entities    = new List<GameEntity>();
         int count       = 2; 
+        var entities    = new GameEntity[count];
         for (int n = 0; n < count; n++)
         {
             var entity = store.CreateEntity(arch1);
-            entities.Add(entity);
+            entities[n] = entity;
             AreSame(arch1,              entity.Archetype);
             AreEqual(n + 1,             arch1.EntityCount);
-            AreEqual(new Position(),    entity.Position); // // Position is present & default
+            AreEqual(new Position(),    entity.Position); // Position is present & default
             entity.Position.x = n;
         }
         for (int n = 0; n < count; n++) {
