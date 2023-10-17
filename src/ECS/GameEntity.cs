@@ -16,6 +16,63 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// Has currently no id - if doing so the type id is fixed  
 /// </summary>
+/// <remarks>
+/// <b>general properties</b>
+/// <list type="bullet">
+///     <item><see cref="Id"/></item>
+///     <item><see cref="Archetype"/></item>
+///     <item><see cref="ComponentCount"/></item>
+///     <item><see cref="StoreOwnership"/></item>
+///     <item><see cref="TreeMembership"/></item>
+/// </list>
+/// <b>struct components </b>
+/// <list type="bullet">
+///     <item><see cref="HasComponent{T}"/></item>
+///     <item><see cref="ComponentRef{T}"/></item>
+///     <item><see cref="TryGetComponent{T}"/></item>
+///     <item><see cref="AddComponent{T}()"/></item>
+///     <item><see cref="RemoveComponent{T}"/></item>
+/// </list>
+/// <b>standard struct components</b>
+/// <list type="bullet">
+///     <item><see cref="Name"/></item>
+///     <item><see cref="Position"/></item>
+///     <item><see cref="Rotation"/></item>
+///     <item><see cref="Scale3"/></item>
+///     <item><see cref="HasPosition"/></item>
+///     <item><see cref="HasRotation"/></item>
+///     <item><see cref="HasScale3"/></item>
+///     <item><see cref="HasName"/></item>
+/// </list>
+/// <b>class</b> components 
+/// <list type="bullet">
+///     <item><see cref="ClassComponents"/></item>
+///     <item><see cref="GetClassComponent{T}"/></item>
+///     <item><see cref="TryGetClassComponent{T}"/></item>
+///     <item><see cref="AddClassComponent{T}"/></item>
+///     <item><see cref="RemoveClassComponent{T}"/></item>
+/// </list>
+/// <b>tags</b>
+/// <list type="bullet">
+///     <item><see cref="Tags"/></item>
+///     <item><see cref="AddTag{T}"/></item>
+///     <item><see cref="AddTags"/></item>
+///     <item><see cref="RemoveTag{T}"/></item>
+///     <item><see cref="RemoveTags"/></item>
+/// </list>
+/// <b>tree nodes</b>
+/// <list type="bullet">
+///     <item><see cref="Root"/></item>
+///     <item><see cref="Parent"/></item>
+///     <item><see cref="ChildNodes"/></item>
+///     <item><see cref="ChildIds"/></item>
+///     <item><see cref="ChildCount"/></item>
+///     <item><see cref="GetChildAt"/></item>
+///     <item><see cref="AddChild"/></item>
+///     <item><see cref="RemoveChild"/></item>
+///     <item><see cref="DeleteEntity"/></item>
+/// </list>
+/// </remarks>
 [CLSCompliant(true)]
 public sealed class GameEntity
 {
