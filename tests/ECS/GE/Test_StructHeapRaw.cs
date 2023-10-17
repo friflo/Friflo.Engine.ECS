@@ -21,12 +21,12 @@ public static class Test_StructHeapRaw
             ids[n]  = id;
             AreSame(arch1,              store.GetEntityArchetype(id));
             AreEqual(n + 1,             arch1.EntityCount);
-            AreEqual(new Position(),    store.GetEntityComponentValue<Position>(id)); // Position is present & default
-            store.GetEntityComponentValue<Position>(id).x = n;  
+            AreEqual(new Position(),    store.EntityComponent<Position>(id)); // Position is present & default
+            store.EntityComponent<Position>(id).x = n;  
         }
         
         for (int n = 0; n < count; n++) {
-            AreEqual(n, store.GetEntityComponentValue<Position>(ids[n]).x);
+            AreEqual(n, store.EntityComponent<Position>(ids[n]).x);
         }
     }
     
