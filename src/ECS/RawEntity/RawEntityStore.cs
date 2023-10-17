@@ -102,7 +102,7 @@ public sealed class RawEntityStore : EntityStore
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        var result          = RemoveComponent<T>(id, ref archetype, ref entity.compIndex);
+        var result          = RemoveComponent(id, ref archetype, ref entity.compIndex, StructHeap<T>.StructIndex);
         entity.archIndex    = archetype.archIndex;
         return result;
     }

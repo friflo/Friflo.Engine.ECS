@@ -205,7 +205,7 @@ public sealed class GameEntity
     public bool RemoveComponent<T>()
         where T : struct, IStructComponent
     {
-        return archetype.store.RemoveComponent<T>(id, ref archetype, ref compIndex);
+        return archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     }
     #endregion
     

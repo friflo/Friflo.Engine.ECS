@@ -35,7 +35,7 @@ public partial class EntityStore
         return archetype;
     }
     
-    private Archetype GetArchetypeWithout(Archetype archetype, Type structType, int structIndex)
+    private Archetype GetArchetypeWithout(Archetype archetype, int structIndex)
     {
         searchKey.SetWithout(archetype, structIndex);
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -47,7 +47,7 @@ public partial class EntityStore
         var config          = GetArchetypeConfig();
         var schema          = Static.ComponentSchema;
         foreach (var heap in heaps) {
-            if (heap.type == structType)
+            if (heap.structIndex == structIndex)
                 continue;
             types.Add(schema.GetStructType(heap.type, heap.structIndex));
         }
@@ -86,10 +86,10 @@ public partial class EntityStore
     
     // ------------------------------------ add / remove struct component ------------------------------------
     internal bool AddComponent<T>(
-            int                 id,
-        ref Archetype           archetype,  // possible mutation is not null
-        ref int                 compIndex,
-        in  T                   component)
+            int         id,
+        ref Archetype   archetype,  // possible mutation is not null
+        ref int         compIndex,
+        in  T           component)
         where T : struct, IStructComponent
     {
         var arch        = archetype;
@@ -118,19 +118,18 @@ public partial class EntityStore
         return true;
     }
     
-    internal bool RemoveComponent<T>(
-            int                 id,
-        ref Archetype           archetype,    // possible mutation is not null
-        ref int                 compIndex)
-        where T : struct, IStructComponent
+    internal bool RemoveComponent(
+            int         id,
+        ref Archetype   archetype,    // possible mutation is not null
+        ref int         compIndex,
+            int         structIndex)
     {
         var arch        = archetype;
-        var structIndex = StructHeap<T>.StructIndex;
         var heap = arch.heapMap[structIndex];
         if (heap == null) {
             return false;
         }
-        var newArchetype    = GetArchetypeWithout(arch, typeof(T), structIndex);
+        var newArchetype    = GetArchetypeWithout(arch, structIndex);
         if (newArchetype == defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
