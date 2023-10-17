@@ -122,15 +122,13 @@ public sealed class Archetype
     
 #region struct component handling
 
-    internal int MoveEntityTo(int id, int compIndex, Archetype newArchetype)
+    internal int MoveEntityTo(int id, int sourceIndex, Archetype newArchetype)
     {
-        var sourceIndex = compIndex;
         // --- copy entity components to components of new newArchetype
         var targetIndex = newArchetype.AddEntity(id);
-        
-        for (int n = 0; n < structHeaps.Length; n++) {
-            var sourceHeap  = structHeaps[n];
-            var targetHeap  = newArchetype.heapMap[sourceHeap.structIndex];
+        foreach (var sourceHeap in structHeaps)
+        {
+            var targetHeap = newArchetype.heapMap[sourceHeap.structIndex];
             if (targetHeap == null) {
                 continue;
             }
