@@ -68,7 +68,7 @@ public sealed class RawEntityStore : EntityStore
     public int CreateEntity(Archetype archetype)
     {
         if (this != archetype.store) {
-            InvalidStoreException(nameof(archetype));
+            throw InvalidStoreException(nameof(archetype));
         }
         var id              = CreateEntity();
         ref var entity      = ref entities[id]; 

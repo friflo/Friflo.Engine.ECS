@@ -6,34 +6,35 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.GE;
 
-public static class Test_StructHeap
+public static class Test_StructHeapRaw
 {
     [Test]
-    public static void Test_StructHeap_increase_entity_capacity()
+    public static void Test_StructHeapRaw_increase_entity_capacity()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new RawEntityStore();
         var arch1       = store.GetArchetype(Signature.Get<Position>());
         int count       = 2; 
-        var entities    = new GameEntity[count];
+        var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
-            var entity = store.CreateEntity(arch1);
-            entities[n] = entity;
-            AreSame(arch1,              entity.Archetype);
+            var id  = store.CreateEntity(arch1);
+            ids[n]  = id;
+            AreSame(arch1,              store.GetEntityArchetype(id));
             AreEqual(n + 1,             arch1.EntityCount);
-            AreEqual(new Position(),    entity.Position); // Position is present & default
-            entity.Position.x = n;
+            AreEqual(new Position(),    store.GetEntityComponentValue<Position>(id)); // Position is present & default
+            store.GetEntityComponentValue<Position>(id).x = n;  
         }
+        
         for (int n = 0; n < count; n++) {
-            AreEqual(n, entities[n].Position.x);
+            AreEqual(n, store.GetEntityComponentValue<Position>(ids[n]).x);
         }
     }
     
     [Test]
-    public static void Test_StructHeap_invalid_store()
+    public static void Test_StructHeapRaw_invalid_store()
     {
-        var store1      = new GameEntityStore();
-        var store2      = new GameEntityStore();
+        var store1      = new RawEntityStore();
+        var store2      = new RawEntityStore();
         var arch1       = store1.GetArchetype(Signature.Get<Position>());
         var e = Throws<ArgumentException>(() => {
             store2.CreateEntity(arch1);

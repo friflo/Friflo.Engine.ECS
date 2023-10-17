@@ -129,7 +129,7 @@ public partial class GameEntityStore
     public GameEntity CreateEntity(Archetype archetype)
     {
         if (this != archetype.store) {
-            InvalidStoreException(nameof(archetype));
+            throw InvalidStoreException(nameof(archetype));
         }
         var entity          = archetype.gameEntityStore.CreateEntity();
         entity.archetype    = archetype;
