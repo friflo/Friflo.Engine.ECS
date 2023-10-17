@@ -14,10 +14,9 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public partial class EntityStore
 {
-    private Archetype GetArchetypeWith<T>(Archetype current)
-        where T : struct, IStructComponent
+    private Archetype GetArchetypeWith(Archetype current, Type structType, int structIndex)
     {
-        searchKey.SetWith(current, StructHeap<T>.StructIndex);
+        searchKey.SetWith(current, structIndex);
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
@@ -30,13 +29,13 @@ public partial class EntityStore
             var heap = heaps[n];
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
-        types.Add(schema.GetStructType(StructHeap<T>.StructIndex, typeof(T)));
+        types.Add(schema.GetStructType(structIndex, structType));
         var archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
         AddArchetype(archetype);
         return archetype;
     }
     
-    private Archetype GetArchetypeWithout(Archetype archetype, int structIndex, Type removeType)
+    private Archetype GetArchetypeWithout(Archetype archetype, Type structType, int structIndex)
     {
         searchKey.SetWithout(archetype, structIndex);
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -48,7 +47,7 @@ public partial class EntityStore
         var config          = GetArchetypeConfig();
         var schema          = Static.ComponentSchema;
         foreach (var heap in heaps) {
-            if (heap.type == removeType)
+            if (heap.type == structType)
                 continue;
             types.Add(schema.GetStructType(heap.structIndex, heap.type));
         }
@@ -93,9 +92,10 @@ public partial class EntityStore
         in  T                   component)
         where T : struct, IStructComponent
     {
-        var arch = archetype;
+        var arch        = archetype;
+        var structIndex = StructHeap<T>.StructIndex;
         if (arch != defaultArchetype) {
-            var structHeap = arch.heapMap[StructHeap<T>.StructIndex];
+            var structHeap = arch.heapMap[structIndex];
             if (structHeap != null) {
                 // --- change component value 
                 var heap = (StructHeap<T>)structHeap;
@@ -103,17 +103,17 @@ public partial class EntityStore
                 return false;
             }
             // --- change entity archetype
-            var newArchetype    = GetArchetypeWith<T>(arch);
+            var newArchetype    = GetArchetypeWith(arch, typeof(T), structIndex);
             compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype);
             archetype           = arch = newArchetype;
         } else {
             // --- add entity to archetype
-            arch                = GetArchetype<T>(arch.tags);
+            arch                = GetArchetype(arch.tags, typeof(T), structIndex);
             compIndex           = arch.AddEntity(id);
             archetype           = arch;
         }
         // --- set component value
-        var heap2 = (StructHeap<T>)arch.heapMap[StructHeap<T>.StructIndex];
+        var heap2 = (StructHeap<T>)arch.heapMap[structIndex];
         heap2.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         return true;
     }
@@ -124,12 +124,13 @@ public partial class EntityStore
         ref int                 compIndex)
         where T : struct, IStructComponent
     {
-        var arch = archetype;
-        var heap = arch.heapMap[StructHeap<T>.StructIndex];
+        var arch        = archetype;
+        var structIndex = StructHeap<T>.StructIndex;
+        var heap = arch.heapMap[structIndex];
         if (heap == null) {
             return false;
         }
-        var newArchetype    = GetArchetypeWithout(arch, StructHeap<T>.StructIndex, typeof(T));
+        var newArchetype    = GetArchetypeWithout(arch, typeof(T), structIndex);
         if (newArchetype == defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity

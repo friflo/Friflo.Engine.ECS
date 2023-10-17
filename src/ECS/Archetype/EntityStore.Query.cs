@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
 
 // Hard rule: this file MUST NOT access GameEntity's
@@ -14,17 +15,16 @@ public partial class EntityStore
 {
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
-    private Archetype GetArchetype<T>(in Tags tags)
-        where T : struct, IStructComponent
+    private Archetype GetArchetype(in Tags tags, Type structType, int structIndex)
     {
-        searchKey.SetTagsWith(tags, StructHeap<T>.StructIndex);
+        searchKey.SetTagsWith(tags, structIndex);
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
         var types   = new SignatureIndexes(1,
-            T1: schema.CheckStructIndex(StructHeap<T>.StructIndex, typeof(T))
+            T1: schema.CheckStructIndex(structIndex, structType)
         );
         var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
         AddArchetype(archetype);
