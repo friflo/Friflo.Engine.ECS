@@ -17,7 +17,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// Has currently no id - if doing so the type id is fixed  
 /// </summary>
 /// <remarks>
-/// <b>general properties</b>
+/// <b>general</b>
 /// <list type="bullet">
 ///     <item><see cref="Id"/></item>
 ///     <item><see cref="Archetype"/></item>
@@ -28,12 +28,12 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b>struct components </b>
 /// <list type="bullet">
 ///     <item><see cref="HasComponent{T}"/></item>
-///     <item><see cref="ComponentRef{T}"/></item>
+///     <item><see cref="ComponentRef{T}"/> read / write</item>
 ///     <item><see cref="TryGetComponent{T}"/></item>
 ///     <item><see cref="AddComponent{T}()"/></item>
 ///     <item><see cref="RemoveComponent{T}"/></item>
 /// </list>
-/// <b>standard struct components</b>
+/// <b>struct components</b> - standard
 /// <list type="bullet">
 ///     <item><see cref="Name"/></item>
 ///     <item><see cref="Position"/></item>
@@ -67,7 +67,6 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="ChildNodes"/></item>
 ///     <item><see cref="ChildIds"/></item>
 ///     <item><see cref="ChildCount"/></item>
-///     <item><see cref="GetChildAt"/></item>
 ///     <item><see cref="AddChild"/></item>
 ///     <item><see cref="RemoveChild"/></item>
 ///     <item><see cref="DeleteEntity"/></item>
@@ -390,12 +389,6 @@ public sealed class GameEntity
     
     // --------------------------------------- tree methods --------------------------------------
 #region tree node methods
-    /// <remarks>Executes in O(1)</remarks>
-    public GameEntity GetChildAt(int index) {
-        var store   = archetype.gameEntityStore;
-        return store.nodes[store.nodes[id].childIds[index]].entity;
-    }
-    
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
