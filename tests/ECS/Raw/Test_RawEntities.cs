@@ -40,7 +40,7 @@ public static class Test_RawEntities
         store.RemoveEntityComponent<Rotation>(entity1);
         AreEqual(1,     type1.EntityCount);
         AreEqual(0,     type2.EntityCount);
-        AreEqual(1f,    store.EntityComponent<Position>(entity1).x);
+        AreEqual(1f,    store.EntityComponentRef<Position>(entity1).x);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
         //
         var entity2  = store.CreateEntity(2);

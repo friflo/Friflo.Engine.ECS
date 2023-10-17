@@ -50,7 +50,7 @@ public sealed class GameEntity
     /// </summary>
     /// <remarks>
     /// To access <b>class</b>  components use <see cref="GetClassComponent{T}"/> or <see cref="ClassComponents"/><br/>
-    /// To access <b>struct</b> components use <see cref="Component{T}"/>
+    /// To access <b>struct</b> components use <see cref="ComponentRef{T}"/>
     /// </remarks>
     [Obsolete("use either GetClassComponent() or GetComponentValue()")]
     public  object[]                        Components_     => GetComponentsDebug();
@@ -164,7 +164,7 @@ public sealed class GameEntity
 
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
-    public  ref T        Component<T>()
+    public  ref T        ComponentRef<T>()
         where T : struct, IStructComponent
     {
         var heap = (StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex];

@@ -300,7 +300,7 @@ public static class Test_StructComponent
         var player = store.CreateEntity();
         player.AddComponent<Position>();
         // set via GetComponent<>()
-        ref var pos = ref player.Component<Position>();
+        ref var pos = ref player.ComponentRef<Position>();
         pos.x = 1;
         // read via Property
         var p2 = player.Position;
@@ -317,7 +317,7 @@ public static class Test_StructComponent
         AreEqual("Missing attribute [StructComponent(\"<key>\")] on type: Tests.ECS.MyInvalidComponent", e1!.Message);
         
         var e2 = Throws<NullReferenceException>(() => {
-            player.Component<MyInvalidComponent>();
+            player.ComponentRef<MyInvalidComponent>();
         });
         AreEqual("Object reference not set to an instance of an object.", e2!.Message);
         
@@ -404,7 +404,7 @@ public static class Test_StructComponent
         AreEqual("id: 1  []",           entity.ToString());
         
         entity.AddComponent(new EntityName("Hello"));
-        AreEqual("Name: \"Hello\"",     entity.Component<EntityName>().ToString());
+        AreEqual("Name: \"Hello\"",     entity.ComponentRef<EntityName>().ToString());
         IsTrue(entity.HasName);
         IsTrue(entity.HasComponent<EntityName>());
         AreEqual("id: 1  \"Hello\"",    entity.ToString());
