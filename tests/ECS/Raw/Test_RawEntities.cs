@@ -89,7 +89,6 @@ public static class Test_RawEntities
     
     [Test]
     public static void Test_RawEntities_Create_Perf()
-    
     {
         var store   = new RawEntityStore();
         store.CreateEntity(); // load required methods to avoid measuring this in perf loop. 
@@ -102,5 +101,17 @@ public static class Test_RawEntities
             store.CreateEntity();
         }
         Console.WriteLine($"create RawEntity's. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_RawEntities_RawEntityStore_creation_Perf() {
+        _ = new RawEntityStore();
+        var stopwatch =  new Stopwatch();
+        stopwatch.Start();
+        int count = 10; // 1_000_000 ~ 218 ms
+        for (int n = 0; n < count; n++) {
+            _ = new RawEntityStore();
+        }
+        Console.WriteLine($"RawEntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
 }
