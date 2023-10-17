@@ -35,8 +35,8 @@ public sealed class Archetype
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
                     private             int                 capacity;       //  4
     // --- internal
-    [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
     [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
+    [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.GetStructType"/></remarks>
