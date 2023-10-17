@@ -54,6 +54,8 @@ public abstract partial class EntityStore
         internal static readonly    int[]           EmptyChildNodes = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    ComponentSchema ComponentSchema = ComponentUtils.RegisterComponentTypes(TypeStore);
+        /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
+        internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[ComponentSchema.maxStructIndex];
         
         /// <summary>The index of the <see cref="EntityStore.defaultArchetype"/> - this index always 0</summary>
         internal const              int             DefaultArchIndex    =  0;
@@ -78,8 +80,7 @@ public abstract partial class EntityStore
         archs               = new Archetype[2];
         archSet             = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
         var config          = GetArchetypeConfig();
-        var indexes         = new SignatureIndexes(Static.DefaultArchIndex); 
-        defaultArchetype    = Archetype.CreateWithSignatureTypes(config, indexes, default);
+        defaultArchetype    = new Archetype(config);
         clientNodes         = client?.nodes.Local;
         searchKey           = new ArchetypeKey();
         AddArchetype(defaultArchetype);
