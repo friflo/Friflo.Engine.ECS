@@ -8,7 +8,7 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-
+using LocalEntities = Friflo.Json.Fliox.Hub.Client.LocalEntities<long, Friflo.Fliox.Engine.Client.DataNode>;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -53,11 +53,12 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] private             int                     rootId;             //  4                   - id of root node. 0 = NoParentId
+    // --- misc
+    [Browse(Never)] private  readonly   LocalEntities           clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
     #endregion
     
 #region initialize
     public GameEntityStore(PidType pidType = PidType.RandomPids, SceneClient client = null)
-        : base (client)
     {
         this.pidType        = pidType;
         nodes               = Array.Empty<EntityNode>();
@@ -67,6 +68,7 @@ public sealed partial class GameEntityStore : EntityStore
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
+        clientNodes = client?.nodes.Local;
     }
     #endregion
     

@@ -3,11 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.Client;
 using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using LocalEntities = Friflo.Json.Fliox.Hub.Client.LocalEntities<long, Friflo.Fliox.Engine.Client.DataNode>;
 
 [assembly: CLSCompliant(true)]
 
@@ -45,7 +43,6 @@ public abstract partial class EntityStore
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
                     protected           int                     sequenceId;         //  4                   - incrementing id used for next new EntityNode
     // --- misc
-    [Browse(Never)] protected readonly  LocalEntities           clientNodes;        //  8 Map<pid,DataNode> - client used to persist entities
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion
     
@@ -74,14 +71,13 @@ public abstract partial class EntityStore
     #endregion
     
 #region initialize
-    protected EntityStore(SceneClient client = null)
+    protected EntityStore()
     {
         sequenceId          = Static.MinNodeId;
         archs               = new Archetype[2];
         archSet             = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
         var config          = GetArchetypeConfig();
         defaultArchetype    = new Archetype(config);
-        clientNodes         = client?.nodes.Local;
         searchKey           = new ArchetypeKey();
         AddArchetype(defaultArchetype);
     }
