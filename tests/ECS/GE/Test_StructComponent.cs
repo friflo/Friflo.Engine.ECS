@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
@@ -413,6 +414,18 @@ public static class Test_StructComponent
         
         entity.Name.Value = null;
         AreEqual("id: 1  [EntityName]", entity.ToString());
+    }
+    
+    [Test]
+    public static void Test_StructComponent_GameEntityStore_creation_Perf() {
+        _ = new GameEntityStore();
+        var stopwatch =  new Stopwatch();
+        stopwatch.Start();
+        int count = 1_000_000; // 1_000_000 ~ 454 ms
+        for (int n = 0; n < count; n++) {
+            _ = new GameEntityStore();
+        }
+        Console.WriteLine($"GameEntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
 }
 
