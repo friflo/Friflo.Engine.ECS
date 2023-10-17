@@ -63,18 +63,10 @@ class TestComponent : ClassComponent
 {
     private int                      health;     // is serialized
     
-    private Component<MyComponent1> myComponent;
-    private Component<Position>     position;
-        
-    public override void Start() {
-        myComponent = Entity.GetComponent<MyComponent1>();
-        position    = Entity.GetComponent<Position>();
-    }
-    
     public override  void Update() {
         health = 4;
-        myComponent.Value.a = 5 + health;
-        position.Value.x += 1;
-        AreEqual(2f, position.Value.x);
+        Entity.ComponentRef<MyComponent1>().a = 5 + health;
+        Entity.Position.x += 1;
+        AreEqual(2f, Entity.Position.x);
     }
 }

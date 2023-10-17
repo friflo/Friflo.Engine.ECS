@@ -198,10 +198,6 @@ public static class Test_ClassComponent
         AreSame(entity, test.Entity);
         test.Start();
         test.Update();
-        var position = entity.GetComponent<Position>();
-        for (long n = 0; n < Count; n++) {
-            _ = position.Value;
-        }
     }
 }
 

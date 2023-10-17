@@ -72,43 +72,6 @@ public static class Test_StructComponent
     }
     
     [Test]
-    public static void Test_2_GetComponent() {
-        var store           = new GameEntityStore();
-        var player          = store.CreateEntity();
-        var myComponent1    = new MyComponent1 { a = 1 };
-        player.AddComponent(myComponent1);
-        
-        var rotation = new Position { x = 2 };
-        player.AddComponent(rotation);
-        var start = Mem.GetAllocatedBytes();
-        
-        var myComponent = player.GetComponent<MyComponent1>();
-        Mem.AssertNoAlloc(start);
-        AreEqual(1,                     myComponent.Value.a);
-        AreSame(typeof(MyComponent1),   myComponent.Type);
-        AreEqual("my1",                 myComponent.StructKey);
-        AreEqual("[MyComponent1]",      myComponent.ToString());
-#if DEBUG
-        AreEqual("[MyComponent1] heap - Count: 1", myComponent.HeapInfo);
-#endif
-        var posComponent = player.GetComponent<Position>();
-        AreSame(typeof(Position),       posComponent.Type);
-        
-        long count = 10; // 1_000_000_000L ~2.874 ms
-        for (var n = 0; n < count; n++) {
-            _ = myComponent.Value;
-        }
-        IsTrue(player.RemoveComponent<MyComponent1>());
-        AreEqual(1,                     player.ComponentCount);
-        IsFalse(player.RemoveComponent<MyComponent1>());
-        
-        var e = Throws<NullReferenceException>(() => {
-            _ = myComponent.Value;
-        });
-        AreEqual("Object reference not set to an instance of an object.", e!.Message);
-    }
-    
-    [Test]
     public static void Test_2_CreateEntity() {
         var store = new GameEntityStore();
         for (int n = 0; n < 512; n++) {

@@ -155,13 +155,6 @@ public sealed class GameEntity
 
     // --------------------------------- struct component methods --------------------------------
 #region struct component methods
-    /// <remarks>Executes in O(1)</remarks>
-    public  Component<T> GetComponent<T>()
-        where T : struct, IStructComponent
-    {
-        return new Component<T>((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex], this);
-    }
-
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T        ComponentRef<T>()
