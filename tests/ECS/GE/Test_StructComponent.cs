@@ -71,6 +71,24 @@ public static class Test_StructComponent
         AreEqual(2, player.MyComponent2().b);
     }
     
+    /// <summary>cover <see cref="EntityStore.GetArchetypeWithout"/></summary>
+    [Test]
+    public static void Test_2_add_remove_struct_component() {
+        var store  = new GameEntityStore();
+        var player = store.CreateEntity();
+        IsTrue(player.AddComponent(new MyComponent1()));
+        IsTrue(player.AddComponent(new Position()));
+        AreEqual(2,     player.ComponentCount);
+
+        // remove in same order to force creation of new Archetype based on exiting
+        IsTrue(player.RemoveComponent<MyComponent1>());
+        AreEqual(1,     player.ComponentCount);
+        
+        // Archetype remains unchanged. struct component is already removed
+        IsFalse(player.RemoveComponent<MyComponent1>());
+        AreEqual(1,     player.ComponentCount);
+    }
+    
     [Test]
     public static void Test_2_CreateEntity() {
         var store = new GameEntityStore();
