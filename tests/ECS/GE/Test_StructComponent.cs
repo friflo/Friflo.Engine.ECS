@@ -35,25 +35,25 @@ public static class Test_StructComponent
         var count = player2.ComponentCount;
         AreEqual(2, count);
         
-        var success = player2.TryGetComponentValue(out Position pos);
+        var success = player2.TryGetComponent(out Position pos);
         IsTrue(success);
         AreEqual(2, pos.x);
         
-        success = player2.TryGetComponentValue(out MyComponent1 rot);
+        success = player2.TryGetComponent(out MyComponent1 rot);
         IsTrue(success);
         AreEqual(1, rot.a);
         
-        success = player2.TryGetComponentValue(out Scale3 _);
+        success = player2.TryGetComponent(out Scale3 _);
         IsFalse(success);
         
-        success = player2.TryGetComponentValue(out MyComponent2 _);
+        success = player2.TryGetComponent(out MyComponent2 _);
         IsFalse(success);
         //
         var start = Mem.GetAllocatedBytes();
-        player2.TryGetComponentValue(out  pos);
-        player2.TryGetComponentValue(out rot);
-        player2.TryGetComponentValue(out Scale3 _);
-        player2.TryGetComponentValue(out MyComponent2 _);
+        player2.TryGetComponent(out  pos);
+        player2.TryGetComponent(out rot);
+        player2.TryGetComponent(out Scale3 _);
+        player2.TryGetComponent(out MyComponent2 _);
         Mem.AssertNoAlloc(start);
     }
     

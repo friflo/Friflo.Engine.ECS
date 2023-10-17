@@ -165,7 +165,7 @@ public sealed class GameEntity
     }
     
     /// <remarks>Executes in O(1)</remarks>
-    public bool TryGetComponentValue<T>(out T result)
+    public bool TryGetComponent<T>(out T result)
         where T : struct, IStructComponent
     {
         var heap = archetype.heapMap[StructHeap<T>.StructIndex];
