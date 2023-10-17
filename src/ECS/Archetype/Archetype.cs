@@ -51,6 +51,22 @@ public sealed class Archetype
     #endregion
     
 #region initialize
+    /// <summary>Create an instance of an <see cref="EntityStore.defaultArchetype"/></summary>
+    internal Archetype(in ArchetypeConfig config)
+    {
+        store           = config.store;
+        gameEntityStore = store as GameEntityStore;
+        archIndex       = EntityStore.Static.DefaultArchIndex;
+        structHeaps     = Array.Empty<StructHeap>();
+        heapMap         = EntityStore.Static.DefaultHeapMap; // all items are always null
+        key             = new ArchetypeKey(this);
+        // entityIds        = null      // stores no entities
+        // capacity         = 0         // stores no entities
+        // componentCount   = 0         // has no struct components
+        // structs          = default   // has no struct components
+        // tags             = default   // has no tags
+    }
+    
     /// <summary>
     /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
     /// </summary>
@@ -74,22 +90,6 @@ public sealed class Archetype
             heapMap[heap.structIndex] = heap;
             SetStandardComponentHeaps(heap, ref std);
         }
-    }
-    
-    /// <summary>Create an instance of an <see cref="EntityStore.defaultArchetype"/></summary>
-    internal Archetype(in ArchetypeConfig config)
-    {
-        store           = config.store;
-        gameEntityStore = store as GameEntityStore;
-        archIndex       = EntityStore.Static.DefaultArchIndex;
-        structHeaps     = Array.Empty<StructHeap>();
-        heapMap         = EntityStore.Static.DefaultHeapMap;
-        key             = new ArchetypeKey(this);
-        // entityIds        = null      // stores no entities
-        // capacity         = 0         // stores no entities
-        // componentCount   = 0         // has no struct components
-        // structs          = default   // has no struct components
-        // tags             = default   // has no tags
     }
     
     private static void SetStandardComponentHeaps(StructHeap heap, ref StandardComponents std)
