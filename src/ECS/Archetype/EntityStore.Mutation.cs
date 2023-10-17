@@ -27,9 +27,9 @@ public partial class EntityStore
         var types           = new List<ComponentType>(componentCount + 1);
         for (int n = 0; n < componentCount; n++) {
             var heap = heaps[n];
-            types.Add(schema.GetStructType(heap.structIndex, heap.type));
+            types.Add(schema.GetStructType(heap.type, heap.structIndex));
         }
-        types.Add(schema.GetStructType(structIndex, structType));
+        types.Add(schema.GetStructType(structType, structIndex));
         var archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
         AddArchetype(archetype);
         return archetype;
@@ -49,7 +49,7 @@ public partial class EntityStore
         foreach (var heap in heaps) {
             if (heap.type == structType)
                 continue;
-            types.Add(schema.GetStructType(heap.structIndex, heap.type));
+            types.Add(schema.GetStructType(heap.type, heap.structIndex));
         }
         var result = Archetype.CreateWithStructTypes(config, types, archetype.tags);
         AddArchetype(result);
@@ -63,7 +63,7 @@ public partial class EntityStore
         var config          = GetArchetypeConfig();
         var schema          = Static.ComponentSchema;
         foreach (var heap in heaps) {
-            types.Add(schema.GetStructType(heap.structIndex, heap.type));
+            types.Add(schema.GetStructType(heap.type, heap.structIndex));
         }
         var result = Archetype.CreateWithStructTypes(config, types, tags);
         AddArchetype(result);

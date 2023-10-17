@@ -36,7 +36,7 @@ public static class Signature
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes   = new SignatureIndexes(1,
-            T1: schema.CheckStructIndex(StructHeap<T>.StructIndex, typeof(T))
+            T1: schema.CheckStructIndex(typeof(T), StructHeap<T>.StructIndex)
         );
         return new Signature<T>(indexes);
     }
@@ -55,8 +55,8 @@ public static class Signature
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(2,
-            T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2))
+            T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
+            T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex)
         );
         return new Signature<T1, T2>(indexes);
     }
@@ -76,9 +76,9 @@ public static class Signature
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(3,
-            T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2)),
-            T3: schema.CheckStructIndex(StructHeap<T3>.StructIndex, typeof(T3))
+            T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
+            T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
+            T3: schema.CheckStructIndex(typeof(T3), StructHeap<T3>.StructIndex)
         );
         return new Signature<T1, T2, T3>(indexes);
     }
@@ -99,10 +99,10 @@ public static class Signature
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(4,
-            T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2)),
-            T3: schema.CheckStructIndex(StructHeap<T3>.StructIndex, typeof(T3)),
-            T4: schema.CheckStructIndex(StructHeap<T4>.StructIndex, typeof(T4))
+            T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
+            T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
+            T3: schema.CheckStructIndex(typeof(T3), StructHeap<T3>.StructIndex),
+            T4: schema.CheckStructIndex(typeof(T4), StructHeap<T4>.StructIndex)
         );
         return new Signature<T1, T2, T3, T4>(indexes);
     }
@@ -124,11 +124,11 @@ public static class Signature
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(5,
-            T1: schema.CheckStructIndex(StructHeap<T1>.StructIndex, typeof(T1)),
-            T2: schema.CheckStructIndex(StructHeap<T2>.StructIndex, typeof(T2)),
-            T3: schema.CheckStructIndex(StructHeap<T3>.StructIndex, typeof(T3)),
-            T4: schema.CheckStructIndex(StructHeap<T4>.StructIndex, typeof(T4)),
-            T5: schema.CheckStructIndex(StructHeap<T5>.StructIndex, typeof(T5))
+            T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
+            T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
+            T3: schema.CheckStructIndex(typeof(T3), StructHeap<T3>.StructIndex),
+            T4: schema.CheckStructIndex(typeof(T4), StructHeap<T4>.StructIndex),
+            T5: schema.CheckStructIndex(typeof(T5), StructHeap<T5>.StructIndex)
         );
         return new Signature<T1, T2, T3, T4, T5>(indexes);
     }

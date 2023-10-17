@@ -24,7 +24,7 @@ public partial class EntityStore
         var config  = GetArchetypeConfig();
         var schema  = Static.ComponentSchema;
         var types   = new SignatureIndexes(1,
-            T1: schema.CheckStructIndex(structIndex, structType)
+            T1: schema.CheckStructIndex(structType, structIndex)
         );
         var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
         AddArchetype(archetype);
