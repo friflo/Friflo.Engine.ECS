@@ -58,6 +58,10 @@ public sealed class RawEntityStore : EntityStore
         }
     }
     
+    public Archetype GetEntityArchetype(int id) {
+        return archs[entities[id].archIndex];
+    }
+    
     /// <summary>
     /// Creates a new entity with the struct components and tags of the given <paramref name="archetype"/>
     /// </summary>

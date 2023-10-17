@@ -19,8 +19,9 @@ public static class Test_StructHeap
         {
             var id  = store.CreateEntity(arch1);
             ids.Add(id);
-            AreEqual(n + 1, arch1.EntityCount);
-            AreEqual(new Position(), store.GetEntityComponentValue<Position>(id)); // Position is present & default
+            AreSame(arch1,              store.GetEntityArchetype(id));
+            AreEqual(n + 1,             arch1.EntityCount);
+            AreEqual(new Position(),    store.GetEntityComponentValue<Position>(id)); // Position is present & default
             store.GetEntityComponentValue<Position>(id).x = n;  
         }
         
