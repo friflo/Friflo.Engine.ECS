@@ -124,23 +124,23 @@ public partial class EntityStore
         ref int         compIndex,
             int         structIndex)
     {
-        var arch        = archetype;
-        var heap = arch.heapMap[structIndex];
+        var arch    = archetype;
+        var heap    = arch.heapMap[structIndex];
         if (heap == null) {
             return false;
         }
-        var newArchetype    = GetArchetypeWithout(arch, structIndex);
+        var newArchetype = GetArchetypeWithout(arch, structIndex);
         if (newArchetype == defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
-            archetype       = defaultArchetype;
-            compIndex       = 0;
+            archetype   = defaultArchetype;
+            compIndex   = 0;
             arch.MoveLastComponentsTo(removePos);
             return true;
         }
         // --- change entity archetype
-        archetype       = newArchetype;
-        compIndex       = arch.MoveEntityTo(id, compIndex, newArchetype);
+        archetype   = newArchetype;
+        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         return true;
     }
     
