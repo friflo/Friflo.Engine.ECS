@@ -133,10 +133,10 @@ public static class Test_StructComponent
         AreEqual(10f, player1.Position.x);
         AreEqual(11f, player1.Position.y);
         
-        long count = 10; // 1_000_000_000L
+        long count = 10; // 1_000_000_000L ~ 967 ms
         for (var n = 0; n < count; n++) {
             // _ = player1.GetComponentValue<Position>();
-            _ = player1.Position; // 1_000_000_000L ~ 967 ms
+            _ = player1.Position;
         }
     }
     
@@ -421,7 +421,7 @@ public static class Test_StructComponent
         _ = new GameEntityStore();
         var stopwatch =  new Stopwatch();
         stopwatch.Start();
-        int count = 1_000_000; // 1_000_000 ~ 454 ms
+        int count = 10; // 1_000_000 ~ 454 ms
         for (int n = 0; n < count; n++) {
             _ = new GameEntityStore();
         }
