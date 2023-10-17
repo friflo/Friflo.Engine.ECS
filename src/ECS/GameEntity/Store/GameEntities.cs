@@ -122,4 +122,19 @@ public partial class GameEntityStore
         }
         SetRootId(entity.id);
     }
+    
+    /// <summary>
+    /// Creates a new entity with the struct components and tags of the given <paramref name="archetype"/>
+    /// </summary>
+    public GameEntity CreateEntity(Archetype archetype)
+    {
+        if (this != archetype.store) {
+            InvalidStoreException(nameof(archetype));
+        }
+        var entity          = archetype.gameEntityStore.CreateEntity();
+        entity.archetype    = archetype;
+        entity.compIndex    = archetype.EntityCount;
+        archetype.AddEntity(entity.id);
+        return entity;
+    }
 }

@@ -58,6 +58,22 @@ public sealed class RawEntityStore : EntityStore
         }
     }
     
+    /// <summary>
+    /// Creates a new entity with the struct components and tags of the given <paramref name="archetype"/>
+    /// </summary>
+    public int CreateEntity(Archetype archetype)
+    {
+        if (this != archetype.store) {
+            InvalidStoreException(nameof(archetype));
+        }
+        var id              = CreateEntity();
+        ref var entity      = ref entities[id]; 
+        entity.archIndex    = archetype.archIndex;
+        entity.compIndex    = archetype.EntityCount;
+        archetype.AddEntity(id);
+        return id;
+    }
+    
     public int CreateEntity() {
         var id      = sequenceId++;
         CreateEntity(id);
