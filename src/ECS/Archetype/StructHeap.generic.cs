@@ -47,7 +47,7 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override Type  StructType => typeof(T);
     
-    internal override void SetComponentCapacity(int chunkCount, int chunkSize)
+    internal override void SetChunkCapacity(int chunkCount, int chunkSize)
     {
         var currentLength = chunks.Length;
         if (chunkCount > currentLength)

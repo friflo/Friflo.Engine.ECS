@@ -211,7 +211,7 @@ public sealed class Archetype
         shrinkThreshold = entityCapacity - StructUtils.ChunkSize * 2;   // -512, 0, 512, 1024, ...
         
         foreach (var heap in structHeaps) {
-            heap.SetComponentCapacity(chunkCount, StructUtils.ChunkSize);
+            heap.SetChunkCapacity(chunkCount, StructUtils.ChunkSize);
         }
     }
     

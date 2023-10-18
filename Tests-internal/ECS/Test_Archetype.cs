@@ -56,15 +56,15 @@ public static class Test_Archetype
         AreEqual("used", genericHeap.chunks[0].ToString());
     }
     
-    /// <summary>cover <see cref="StructHeap{T}.SetComponentCapacity"/></summary>
+    /// <summary>cover <see cref="StructHeap{T}.SetChunkCapacity"/></summary>
     [Test]
-    public static void Test_Archetype_StructHeap_SetComponentCapacity()
+    public static void Test_Archetype_StructHeap_SetChunkCapacity()
     {
         var store   = new GameEntityStore();
         var arch    = store.GetArchetype(Signature.Get<Position>());
         var heap    = arch.Heaps[0];
         var e = Throws<InvalidOperationException>(() => {
-            heap.SetComponentCapacity(1, StructUtils.ChunkSize);    
+            heap.SetChunkCapacity(1, StructUtils.ChunkSize);    
         });
         AreEqual("chunks.Length will remain unchanged. chunkCount: 1", e!.Message);
     }
