@@ -95,7 +95,7 @@ public sealed class GameEntity
     /// If <see cref="TreeMembership"/> is <see cref="rootTreeNode"/> its <see cref="Root"/> is not null.<br/>
     /// If <see cref="floating"/> its <see cref="Root"/> is null.
     /// </remarks>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.nodes[id].Is(RootTreeNode) ? rootTreeNode : floating;
+    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
     
     [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
@@ -138,23 +138,18 @@ public sealed class GameEntity
     #endregion
     
 #region public properties - tree nodes
-    [Browse(Never)] public  int             ChildCount  => archetype.gameEntityStore.Nodes[id].childCount;
+    [Browse(Never)] public int              ChildCount  => archetype.gameEntityStore.Nodes[id].childCount;
     
                     /// <returns>return null if the entity is <see cref="floating"/></returns>
                     /// <remarks>Executes in O(1) independent from its depth in the node tree</remarks>
-                    public  GameEntity      Root        => archetype.gameEntityStore.nodes[id].Is(RootTreeNode) ? archetype.gameEntityStore.Root : null;
+                    public GameEntity       Root        => archetype.gameEntityStore.GetRoot(id);
                     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
                     /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.Root"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
-                    public  GameEntity      Parent
-                    { get {
-                        var nodes       = archetype.gameEntityStore.nodes;
-                        var parentNode  = nodes[id].parentId;
-                        return GameEntityStore.HasParent(parentNode) ? nodes[parentNode].entity : null;
-                    } }
+                    public GameEntity       Parent      => archetype.gameEntityStore.GetParent(id);
     
                     /// <summary>
                     /// Use <b>ref</b> variable when iterating with <b>foreach</b> to copy struct copy. E.g. 
@@ -163,18 +158,9 @@ public sealed class GameEntity
                     /// </code>
                     /// </summary>
                     /// <remarks>Executes in O(1)</remarks>
-                    public  ChildNodes      ChildNodes
-                    { get {
-                        var nodes       = archetype.gameEntityStore.nodes;
-                        ref var node    = ref nodes[id];
-                        return new ChildNodes(nodes, node.childIds, node.childCount);
-                    } }
+                    public ChildNodes       ChildNodes  => archetype.gameEntityStore.GetChildNodes(id);
                     
-    [Browse(Never)] public ReadOnlySpan<int> ChildIds
-                    { get {
-                        ref var node = ref archetype.gameEntityStore.nodes[id];
-                        return new ReadOnlySpan<int>(node.childIds, 0, node.childCount);
-                    } }
+    [Browse(Never)] public ReadOnlySpan<int> ChildIds   => archetype.gameEntityStore.GetChildIds(id);
     #endregion
     
 #region internal fields

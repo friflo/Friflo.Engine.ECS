@@ -258,6 +258,34 @@ public partial class GameEntityStore
         SetTreeFlags(nodes, id, RootTreeNode);
     }
     
+    // ------------------------------------- GameEntity access -------------------------------------
+    internal TreeMembership  GetTreeMembership(int id) {
+        return nodes[id].Is(RootTreeNode) ? TreeMembership.rootTreeNode : TreeMembership.floating;
+    }
+
+    internal GameEntity GetRoot(int id) {
+        return nodes[id].Is(RootTreeNode) ? Root : null;
+    }
+    
+    internal GameEntity GetParent(int id)
+    { 
+        var parentNode  = nodes[id].parentId;
+        return HasParent(parentNode) ? nodes[parentNode].entity : null;
+    }
+    
+    internal ChildNodes GetChildNodes(int id)
+    {
+        ref var node    = ref nodes[id];
+        return new ChildNodes(nodes, node.childIds, node.childCount);
+    }
+    
+    internal ReadOnlySpan<int> GetChildIds(int id)
+    {
+        ref var node = ref nodes[id];
+        return new ReadOnlySpan<int>(node.childIds, 0, node.childCount);
+    }
+    
+    // ----------------------------------------- DataNode -----------------------------------------
     public DataNode EntityAsDataNode(GameEntity entity) {
         var id = entity.id;
         ref var node = ref nodes[id];
