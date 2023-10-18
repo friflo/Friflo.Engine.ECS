@@ -153,7 +153,7 @@ public sealed class RawEntityStore : EntityStore
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        var result          = archetype.store.AddTags(tags, id, ref archetype, ref entity.compIndex);
+        var result          = AddTags(tags, id, ref archetype, ref entity.compIndex);
         entity.archIndex    = archetype.archIndex; 
         return result;
     }
@@ -162,8 +162,8 @@ public sealed class RawEntityStore : EntityStore
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        var result          = archetype.store.RemoveTags(tags, id, ref archetype, ref entity.compIndex);
-        entity.archIndex    = archetype.archIndex; 
+        var result          = RemoveTags(tags, id, ref archetype, ref entity.compIndex);
+        entity.archIndex    = archetype.archIndex;
         return result;
     }
     #endregion
