@@ -95,7 +95,8 @@ public static class Test_StructHeapRaw
         Console.WriteLine($"Iterate_Ref. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.");
     }
     
-    private const int Count = 10; // 10_000_000
+    /// user greater than <see cref="StructUtils.ChunkSize"/> for coverage
+    private const int Count = 1000; // 10_000_000
     
     [Test]
     public static void Test_StructHeapRaw_Query_Perf()
