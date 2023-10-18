@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -13,7 +14,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch1       = store.GetArchetype(Signature.Get<Position>());
-        int count       = 2; 
+        int count       = 2000;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
@@ -24,10 +25,26 @@ public static class Test_StructHeapRaw
             AreEqual(new Position(),    store.EntityComponentRef<Position>(id)); // Position is present & default
             store.EntityComponentRef<Position>(id).x = n;  
         }
-        
         for (int n = 0; n < count; n++) {
             AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
         }
+    }
+    
+    [Test]
+    public static void Test_StructHeapRaw_CreateEntity_Perf()
+    {
+        var store   = new RawEntityStore();
+        var arch1   = store.GetArchetype(Signature.Get<Position>());
+        _ = store.CreateEntity(arch1); // warmup
+        
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        int count       = 10; // 10_000_000 ~ 1424 ms
+        for (int n = 0; n < count; n++) {
+            _ = store.CreateEntity(arch1);
+        }
+        Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        AreEqual(count + 1, arch1.EntityCount);
     }
     
     [Test]

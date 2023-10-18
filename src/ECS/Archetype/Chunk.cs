@@ -10,12 +10,12 @@ namespace Friflo.Fliox.Engine.ECS;
 internal readonly struct StructChunk<T>
     where T : struct, IStructComponent
 {
-    internal readonly   T[]       components;   // 8
+    internal readonly   T[]     components;   // 8
     
-    public override string ToString() => components == null ? "" : "used";
+    public   override   string  ToString() => components == null ? "" : "used";
     
-    internal StructChunk (int count) {
-        components  = new T[count];
+    internal StructChunk (int chunkSize) {
+        components  = new T[chunkSize];
     }
 }
 

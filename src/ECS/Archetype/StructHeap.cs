@@ -20,7 +20,7 @@ internal abstract class StructHeap
 #endif
 
     internal abstract   Type        StructType          { get; }
-    internal abstract   void        SetCapacity         (int capacity);
+    internal abstract   void        SetComponentCapacity(int chunkCount, int chunkSize);
     internal abstract   void        MoveComponent       (int from, int to);
     internal abstract   void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
     internal abstract   object      GetComponentDebug   (int compIndex);

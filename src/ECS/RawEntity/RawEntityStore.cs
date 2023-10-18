@@ -91,6 +91,9 @@ public sealed class RawEntityStore : EntityStore
         }
         return id;
     }
+    
+    // todo implement DeleteEntity(int id)
+    
     #endregion
 
 #region struct components

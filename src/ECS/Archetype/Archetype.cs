@@ -184,15 +184,21 @@ public sealed class Archetype
         if (index < entityCapacity) {
             return index;
         }
-        EnsureCapacity(entityCount);
+        SetComponentCapacity();
         return index;
     }
     
-    private void EnsureCapacity(int newCapacity)
+    private void SetComponentCapacity()
     {
-        entityCapacity = newCapacity;
+        //  chunkCount (entityCount)    [   0,  512] -> 1
+        //                              [ 513, 1024] -> 2
+        //                              [1025, 1536] -> 3
+        //                              ...
+        var chunkCount  = (entityCount - 1) / StructUtils.ChunkSize + 1; 
+        entityCapacity  = chunkCount * StructUtils.ChunkSize; // 512, 1024, 1536, 2048, ...
+        
         foreach (var heap in structHeaps) {
-            heap.SetCapacity(newCapacity);
+            heap.SetComponentCapacity(chunkCount, StructUtils.ChunkSize);
         }
     }
     

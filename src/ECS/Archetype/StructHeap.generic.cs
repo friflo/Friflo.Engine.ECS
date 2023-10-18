@@ -24,12 +24,12 @@ internal sealed class StructHeap<T> : StructHeap
     internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
     internal static readonly    string  StructKey;
     
-    internal StructHeap(int structIndex, int capacity, TypeMapper<T> mapper)
+    internal StructHeap(int structIndex, int chunkSize, TypeMapper<T> mapper)
         : base (structIndex)
     {
         typeMapper  = mapper;
         chunks      = new StructChunk<T>[1];
-        chunks[0]   = new StructChunk<T>(capacity);
+        chunks[0]   = new StructChunk<T>(chunkSize);
     }
     
     public override   string      ToString() {
@@ -47,18 +47,25 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override Type  StructType => typeof(T);
     
-    internal override void SetCapacity(int capacity)
+    internal override void SetComponentCapacity(int chunkCount, int chunkSize)
     {
-        // todo fix this
-        for (int n = 0; n < chunks.Length; n++)
+        if (chunkCount > chunks.Length)
         {
-            var cur         = chunks[n].components;
-            var newChunk    = new StructChunk<T>(capacity);
-            chunks[n] = newChunk;
-            for (int i = 0; i < cur.Length; i++) {
-                newChunk.components[i]= cur[i];    
+            var newChunks       = new StructChunk<T>[chunkCount];
+            var currentLength   = chunks.Length;
+            for (int n = 0; n < currentLength; n++) {
+                newChunks[n] = chunks[n];
             }
+            chunks = newChunks;
+            for (int n = currentLength; n  < chunkCount; n++) {
+                chunks[n] = new StructChunk<T>(chunkSize);
+            }
+            return;
         }
+        if (chunkCount == chunks.Length) {
+            throw new InvalidOperationException($"chunks.Length will remain unchanged: {chunkCount}");
+        }
+        throw new NotImplementedException($"shrink chunks");
     }
     
     internal override void MoveComponent(int from, int to)
