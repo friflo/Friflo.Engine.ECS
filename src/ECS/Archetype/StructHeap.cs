@@ -16,10 +16,8 @@ internal abstract class StructHeap
     // --- internal fields
     internal readonly   int         structIndex;    //  4
 #if DEBUG
-    private             Archetype   archetype;      // only used for debugging
+    internal            Archetype   archetype;      // only used for debugging
 #endif
-
-    public   override   string      ToString() => GetString();
 
     internal abstract   Type        StructType          { get; }
     internal abstract   void        SetCapacity         (int capacity);
@@ -31,14 +29,6 @@ internal abstract class StructHeap
 
     internal StructHeap(int structIndex) {
         this.structIndex    = structIndex;
-    }
-
-    private string GetString() {
-#if DEBUG
-        return $"[{StructType.Name}] heap - Count: {archetype.EntityCount}";
-#else
-        return $"[{StructType.Name}] heap";
-#endif
     }
 
     internal void SetArchetype(Archetype archetype) {
