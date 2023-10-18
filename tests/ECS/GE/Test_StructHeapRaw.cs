@@ -75,30 +75,32 @@ public static class Test_StructHeapRaw
         AreEqual(count + 1, arch1.EntityCount);
     }
     
-    // [Test]
+    [Test]
     public static void Test_StructHeapRaw_Query_Perf()
     {
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
-        int count   = 10; //   CreateEntity() 10_000_000 ~ ??? ms      Query() foreach: 10_000_000 ~ ??? ms
+        int count   = 10; //   CreateEntity() 10_000_000 ~ 2430 ms      Query() foreach: 10_000_000 ~ 145 ms
         var query   = store.Query(Signature.Get<Position, Rotation>());
         foreach (var (position, rotation) in query) { } // force one time allocation
         {
-            _ = store.CreateEntity(arch1); // warmup
+            // _ = store.CreateEntity(arch1); // warmup
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int n = 0; n < count; n++) {
-                _ = store.CreateEntity(arch1);
+                var id = store.CreateEntity(arch1);
+                store.EntityComponentRef<Position>(id).x = n;
             }
             Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-            AreEqual(count + 1, arch1.EntityCount);
-        }
-        {
+            AreEqual(count, arch1.EntityCount);
+        } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             int n = 0;
             var memStart = Mem.GetAllocatedBytes();
             foreach (var (position, rotation) in query) {
+                var x = (int)position.Value.x;
+                if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
                 n++;
             }
             Mem.AssertNoAlloc(memStart);

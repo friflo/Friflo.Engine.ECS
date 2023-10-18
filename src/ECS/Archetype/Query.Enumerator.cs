@@ -87,7 +87,7 @@ public ref struct QueryEnumerator<T1, T2>
         ref1.pos        = -1;
         ref2.Set(chunks2[0].components);
         ref2.pos        = -1;
-        componentLen    = archetype.EntityCount - 1;
+        componentLen    = Math.Min(archetype.EntityCount, StructUtils.ChunkSize) - 1;
     }
     
     /// <summary>
@@ -103,11 +103,14 @@ public ref struct QueryEnumerator<T1, T2>
             return true;
         }
         if (chunkPos < chunkEnd) {
+            if (++chunkPos == chunkEnd) {
+                var archetype   = archetypes[archetypePos];
+                componentLen    = (archetype.EntityCount % StructUtils.ChunkSize) - 1;
+            }
             ref1.Set(chunks1[chunkPos].components);
             ref1.pos = 0;
             ref2.Set(chunks2[chunkPos].components);
             ref2.pos = 0;
-            chunkPos++;
             return true;
         }
         if (archetypePos < archetypes.Length - 1) {
@@ -120,6 +123,7 @@ public ref struct QueryEnumerator<T1, T2>
             ref1.pos = 0;
             ref2.Set(chunks2[0].components);
             ref2.pos = 0;
+            componentLen    = Math.Min(archetype.EntityCount, StructUtils.ChunkSize) - 1;
             return true;
         }
         return false;  
