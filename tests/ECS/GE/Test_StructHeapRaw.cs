@@ -154,8 +154,8 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
-            foreach (var (positions, rotations) in query.Chunks) {
-                foreach (var position in positions.Values) {
+            foreach (var (positionChunk, rotationChunk) in query.Chunks) {
+                foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
                     if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
                     n++;
