@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public partial class EntityStore
 {
-    private Archetype GetArchetypeWith(Archetype current, Type structType, int structIndex)
+    private Archetype GetArchetypeWith(Archetype current, int structIndex)
     {
         searchKey.SetWith(current, structIndex);
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -23,12 +23,11 @@ public partial class EntityStore
         var config          = GetArchetypeConfig();
         var schema          = Static.ComponentSchema;
         var heaps           = current.Heaps;
-        var componentCount  = heaps.Length;
-        var types           = new List<ComponentType>(componentCount + 1);
-        for (int n = 0; n < componentCount; n++) {
-            types.Add(schema.structs[heaps[n].structIndex]);
+        var types           = new List<ComponentType>(heaps.Length + 1);
+        foreach (var heap in current.Heaps) {
+            types.Add(schema.structs[heap.structIndex]);
         }
-        types.Add(schema.GetStructType(structType, structIndex));
+        types.Add(schema.structs[structIndex]);
         var archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
         AddArchetype(archetype);
         return archetype;
@@ -102,7 +101,7 @@ public partial class EntityStore
                 return false;
             }
             // --- change entity archetype
-            var newArchetype    = GetArchetypeWith(arch, typeof(T), structIndex);
+            var newArchetype    = GetArchetypeWith(arch, structIndex);
             compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype);
             archetype           = arch = newArchetype;
         } else {
