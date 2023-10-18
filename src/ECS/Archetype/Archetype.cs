@@ -175,19 +175,20 @@ public sealed class Archetype
     
     internal int AddEntity(int id)
     {
-        var index = entityCount;
+        var index = entityCount++;
         if (index == entityIds.Length) {
             Utils.Resize(ref entityIds, 2 * entityIds.Length);
         }
-        entityIds[entityCount++] = id;  // add entity id
-        EnsureCapacity(index + 1);
+        entityIds[index] = id;  // add entity id
+        if (index < capacity) {
+            return index;
+        }
+        EnsureCapacity(entityCount);
         return index;
     }
     
-    private void  EnsureCapacity(int newCapacity) {
-        if (capacity >= newCapacity) {
-            return;
-        }
+    private void EnsureCapacity(int newCapacity)
+    {
         capacity = newCapacity;
         foreach (var heap in structHeaps) {
             heap.SetCapacity(newCapacity);
