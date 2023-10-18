@@ -14,6 +14,10 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public partial class EntityStore
 {
+    internal bool TryGetValue(ArchetypeKey searchKey, out ArchetypeKey archetypeKey) {
+        return archSet.TryGetValue(searchKey, out archetypeKey);
+    }
+        
     private Archetype GetArchetypeWith(Archetype current, int structIndex)
     {
         searchKey.SetWith(current, structIndex);

@@ -12,6 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // Hard rule: this file MUST NOT access GameEntity's
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
@@ -25,7 +26,7 @@ public abstract partial class EntityStore
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the <see cref="EntityStore"/></summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
                     public              ReadOnlySpan<Archetype> Archetypes          => new (archs, 0, archsCount);
-    
+    [Browse(Never)] public              int                     ArchetypeCount      => archsCount;
                     public  static      ComponentSchema         GetComponentSchema()=> Static.ComponentSchema;
                     public  override    string                  ToString()          => $"Count: {nodesCount}";
     #endregion
@@ -33,8 +34,8 @@ public abstract partial class EntityStore
 #region private / internal fields
     // --- archetypes
     [Browse(Never)] protected           Archetype[]             archs;              //  8 + archetypes      - array of all archetypes. never null
-    [Browse(Never)] internal            int                     archsCount;         //  4                   - number of archetypes
-    [Browse(Never)] internal readonly   HashSet<ArchetypeKey>   archSet;            //  8 + Set<Key>'s      - Set<> to get archetypes by key
+    [Browse(Never)] private             int                     archsCount;         //  4                   - number of archetypes
+    [Browse(Never)] private  readonly   HashSet<ArchetypeKey>   archSet;            //  8 + Set<Key>'s      - Set<> to get archetypes by key
     /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.Structs"/> and <see cref="Archetype.Tags"/>.<br/>
     /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype. has no struct components & tags
@@ -54,7 +55,7 @@ public abstract partial class EntityStore
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
         internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[ComponentSchema.maxStructIndex];
         
-        /// <summary>The index of the <see cref="EntityStore.defaultArchetype"/> - this index always 0</summary>
+        /// <summary>The index of the <see cref="EntityStore.defaultArchetype"/> - index is always 0</summary>
         internal const              int             DefaultArchIndex        =  0;
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>

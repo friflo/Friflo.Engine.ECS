@@ -124,7 +124,7 @@ internal sealed class ComponentReader
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
         searchKey.CalculateHashCode();
         Archetype newArchetype;
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (store.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
             var config = store.GetArchetypeConfig();
