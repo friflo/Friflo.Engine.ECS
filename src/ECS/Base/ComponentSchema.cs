@@ -50,7 +50,7 @@ public sealed class ComponentSchema
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
-    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    [Browse(Never)] internal readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   tagTypeByName;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   tagTypeByType;
     #endregion

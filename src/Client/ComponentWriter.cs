@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -13,18 +15,20 @@ namespace Friflo.Fliox.Engine.Client;
 /// </summary>
 internal sealed class ComponentWriter
 {
-    private readonly    ObjectWriter    componentWriter;
-    private             Utf8JsonWriter  writer;
-    private             Bytes           buffer;
-    private readonly    ComponentType[] structTypes;
+    private readonly    ObjectWriter                    componentWriter;
+    private             Utf8JsonWriter                  writer;
+    private             Bytes                           buffer;
+    private readonly    ComponentType[]                 structTypes;
+    private readonly    Dictionary<Type, ComponentType> componentTypeByType;
     
     internal static readonly ComponentWriter Instance = new ComponentWriter();
     
     private ComponentWriter() {
-        buffer          = new Bytes(128);
-        componentWriter = new ObjectWriter(EntityStore.Static.TypeStore);
-        var schema      = EntityStore.Static.ComponentSchema;
-        structTypes     = schema.structs;
+        buffer              = new Bytes(128);
+        componentWriter     = new ObjectWriter(EntityStore.Static.TypeStore);
+        var schema          = EntityStore.Static.ComponentSchema;
+        structTypes         = schema.structs;
+        componentTypeByType = schema.componentTypeByType;
     }
     
     internal JsonValue Write(GameEntity entity)
@@ -46,8 +50,9 @@ internal sealed class ComponentWriter
         // --- write class components
         foreach (var component in entity.ClassComponents) {
             componentWriter.WriteObject(component, ref buffer);
-            var classKey = ClassUtils.GetClassKeyBytes(component.GetType());
-            writer.MemberBytes(classKey, buffer);
+            var classType   = componentTypeByType[component.GetType()];
+            var keyBytes    = classType.componentKeyBytes;
+            writer.MemberBytes(keyBytes, buffer);
         }
         writer.ObjectEnd();
         return new JsonValue(writer.json);
