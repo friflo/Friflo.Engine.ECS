@@ -55,18 +55,16 @@ public abstract partial class EntityStore
         internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[ComponentSchema.maxStructIndex];
         
         /// <summary>The index of the <see cref="EntityStore.defaultArchetype"/> - this index always 0</summary>
-        internal const              int             DefaultArchIndex    =  0;
-        
-        internal const              int             DefaultCapacity     =  1;
+        internal const              int             DefaultArchIndex        =  0;
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
-        internal const              int             MinNodeId           =  1;
+        internal const              int             MinNodeId               =  1;
         /// <summary>
         /// An <see cref="EntityNode"/> with <see cref="EntityNode.parentId"/> == <see cref="NoParentId"/>
         /// is declared as <see cref="TreeMembership.floating"/>.
         /// </summary>
-        public   const              int             NoParentId          =  0;
-        public   const              int             RootId              = -1;
+        public   const              int             NoParentId              =  0;
+        public   const              int             RootId                  = -1;
     }
     #endregion
     

@@ -33,7 +33,8 @@ public sealed class Archetype
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
-                    private             int                 capacity;       //  4
+    /// <summary>Multiple of <see cref="StructUtils.ChunkSize"/> struct components / entities</summary>
+                    private             int                 entityCapacity; //  4       - multiple of chunk size entities
     // --- internal
     [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
     [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
@@ -75,7 +76,7 @@ public sealed class Archetype
         store           = config.store;
         gameEntityStore = store as GameEntityStore;
         archIndex       = config.archetypeIndex;
-        capacity        = config.capacity;
+        entityCapacity  = config.chunkSize;
         structCount     = heaps.Length;
         structHeaps     = heaps;
         entityIds       = new int [1];
@@ -115,7 +116,7 @@ public sealed class Archetype
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
             var structType    = structs[structIndex];
-            componentHeaps[n] = structType.CreateHeap(config.capacity);
+            componentHeaps[n] = structType.CreateHeap(config.chunkSize);
         }
         return new Archetype(config, componentHeaps, tags);
     }
@@ -129,7 +130,7 @@ public sealed class Archetype
         var length          = structTypes.Count;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
-            componentHeaps[n] = structTypes[n].CreateHeap(config.capacity);
+            componentHeaps[n] = structTypes[n].CreateHeap(config.chunkSize);
         }
         return new Archetype(config, componentHeaps, tags);
     }
@@ -180,7 +181,7 @@ public sealed class Archetype
             Utils.Resize(ref entityIds, 2 * entityIds.Length);
         }
         entityIds[index] = id;  // add entity id
-        if (index < capacity) {
+        if (index < entityCapacity) {
             return index;
         }
         EnsureCapacity(entityCount);
@@ -189,7 +190,7 @@ public sealed class Archetype
     
     private void EnsureCapacity(int newCapacity)
     {
-        capacity = newCapacity;
+        entityCapacity = newCapacity;
         foreach (var heap in structHeaps) {
             heap.SetCapacity(newCapacity);
         }
