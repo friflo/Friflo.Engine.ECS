@@ -36,23 +36,30 @@ public readonly struct QueryForEach<T1, T2>
         foreach (var archetype in query.Archetypes)
         {
             var heapMap     = archetype.heapMap;
-            var entityCount = archetype.EntityCount;
             var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
             var chunks2     = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]).chunks;
             var chunksLen   =  chunks1.Length;
-            
-            for (int chunkPos = 0; chunkPos < chunksLen; chunkPos++)
+            int chunkPos    = 0;
+            for (; chunkPos < chunksLen - 1; chunkPos++)
             {
-                var componentLen    = entityCount;
-                ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
-                ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
-                for (int pos = 0; pos < componentLen; pos++)
+                ref1.Set(chunks1[chunkPos].components, copyT1, StructUtils.ChunkSize);
+                ref2.Set(chunks2[chunkPos].components, copyT2, StructUtils.ChunkSize);
+                for (int pos = 0; pos < StructUtils.ChunkSize; pos++)
                 {
                     ref1.pos = pos;
                     ref2.pos = pos;
                     lambda(ref1, ref2);
                 }
-            } 
+            }
+            var componentLen = archetype.EntityCount % StructUtils.ChunkSize;
+            ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
+            ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
+            for (int pos = 0; pos < componentLen; pos++)
+            {
+                ref1.pos = pos;
+                ref2.pos = pos;
+                lambda(ref1, ref2);
+            }
         }
     }
 }

@@ -12,22 +12,35 @@ public static class Mem
     }
         
     /// <summary>Assert no allocation were performed</summary>
-    public static void AssertNoAlloc(long start) {
-        var diff =  GC.GetAllocatedBytesForCurrentThread() - start;
+    public static long AssertNoAlloc(long start) {
+        long current    = GC.GetAllocatedBytesForCurrentThread();
+        var diff        = current - start;
         if (diff == 0) {
-            return;
+            return current;
         }
         var msg = $"expected no allocation.\n but was: {diff}";
         throw new AssertionException(msg);
     }
     
     /// <summary>Assert allocation of expected bytes</summary>
-    public static void AssertAlloc(long start, long expected) {
-        var diff =  GC.GetAllocatedBytesForCurrentThread() - start;
+    public static long AssertAlloc(long start, long expected) {
+        long current    = GC.GetAllocatedBytesForCurrentThread();
+        var diff        = current - start;
         if (diff == expected) {
-            return;
+            return current;
         }
         var msg = $"expected allocation of {expected} bytes.\n but was: {diff}";
         throw new AssertionException(msg);
     }
+    
+    public static bool IsDebug => IsDebugInternal();
+    
+    private static bool IsDebugInternal() {
+#if DEBUG
+        return true;
+#else
+        return false;
+#endif        
+    }
+
 }

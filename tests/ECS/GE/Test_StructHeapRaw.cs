@@ -80,9 +80,13 @@ public static class Test_StructHeapRaw
     {
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
-        int count   = 10; //   CreateEntity() 10_000_000 ~ 2430 ms      Query() foreach: 10_000_000 ~ 145 ms
+        int count   = 10;   // 10_000_000
+                            // CreateEntity()  ~ 2430 ms
+                            // Query() foreach ~  145 ms
+                            // Query.ForEach() ~  114 ms
         var query   = store.Query(Signature.Get<Position, Rotation>());
-        foreach (var (position, rotation) in query) { } // force one time allocation
+        foreach (var (position, rotation) in query) { }     // force one time allocation
+        query.ForEach((position, rotation) => {}).Run();    // warmup
         {
             // _ = store.CreateEntity(arch1); // warmup
             var stopwatch = new Stopwatch();
@@ -96,16 +100,30 @@ public static class Test_StructHeapRaw
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            int n = 0;
-            var memStart = Mem.GetAllocatedBytes();
+            int n           = 0;
+            var memStart    = Mem.GetAllocatedBytes();
             foreach (var (position, rotation) in query) {
-                var x = (int)position.Value.x;
+                 var x = (int)position.Value.x;
                 if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
                 n++;
             }
             Mem.AssertNoAlloc(memStart);
             AreEqual(count, n);
-            Console.WriteLine($"Query() foreach - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            Console.WriteLine($"Query() foreach. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        } {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            int n           = 0;
+            var memStart    = Mem.GetAllocatedBytes();
+            var forEach     = query.ForEach((position, rotation) => {
+                var x = (int)position.Value.x;
+                if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                n++;
+            });
+            forEach.Run();
+            var diff = Mem.GetAllocatedBytes() - memStart;
+            AreEqual(count, n);
+            Console.WriteLine($"Query.ForEach(). count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
         }
     }
     
