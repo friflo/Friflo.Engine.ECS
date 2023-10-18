@@ -35,6 +35,10 @@ public static class Test_Archetype
         AreEqual(expect, handle);
     }
     
+    /// <summary>
+    /// cover <see cref="StructHeap{T}.ToString"/>
+    /// cover <see cref="StructChunk{T}.ToString"/>
+    /// </summary>
     [Test]
     public static void Test_Archetype_StructHeap_ToString()
     {
@@ -50,6 +54,19 @@ public static class Test_Archetype
 #endif
         var genericHeap = (StructHeap<Position>)heap;
         AreEqual("used", genericHeap.chunks[0].ToString());
+    }
+    
+    /// <summary>cover <see cref="StructHeap{T}.SetComponentCapacity"/></summary>
+    [Test]
+    public static void Test_Archetype_StructHeap_SetComponentCapacity()
+    {
+        var store   = new GameEntityStore();
+        var arch    = store.GetArchetype(Signature.Get<Position>());
+        var heap    = arch.Heaps[0];
+        var e = Throws<InvalidOperationException>(() => {
+            heap.SetComponentCapacity(1, StructUtils.ChunkSize);    
+        });
+        AreEqual("chunks.Length will remain unchanged. chunkCount: 1", e!.Message);
     }
     
     [Test]

@@ -63,7 +63,7 @@ internal sealed class StructHeap<T> : StructHeap
             return;
         }
         if (chunkCount == chunks.Length) {
-            throw new InvalidOperationException($"chunks.Length will remain unchanged: {chunkCount}");
+            throw new InvalidOperationException($"chunks.Length will remain unchanged. chunkCount: {chunkCount}");
         }
         throw new NotImplementedException($"shrink chunks");
     }
