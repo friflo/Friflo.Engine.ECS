@@ -48,7 +48,7 @@ public sealed partial class GameEntityStore : EntityStore
     
 #region internal fields
     // --- nodes
-    [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
+    [Browse(Never)] private             EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4                   - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id

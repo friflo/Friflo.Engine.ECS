@@ -9,12 +9,14 @@ namespace Internal.ECS;
 
 public static class Test_GameEntityStore
 {
+    /// <summary>Cover <see cref="GameEntityStore.DeleteNode"/></summary>
     [Test]
     public static void Test_GameEntityStore_DeleteEntity()
     {
         var store = new GameEntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity(10);
-        store.nodes[10].parentId = 5;
+        var nodes = (EntityNode[])store.GetInternalField("nodes");
+        nodes[10].parentId = 5;
         
         var e = Throws<InvalidOperationException>(() => {
             entity.DeleteEntity();
