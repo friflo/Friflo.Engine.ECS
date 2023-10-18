@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -72,6 +73,38 @@ public static class Test_StructHeapRaw
         }
         Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         AreEqual(count + 1, arch1.EntityCount);
+    }
+    
+    // [Test]
+    public static void Test_StructHeapRaw_Query_Perf()
+    {
+        var store   = new RawEntityStore();
+        var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        int count   = 10; //   CreateEntity() 10_000_000 ~ ??? ms      Query() foreach: 10_000_000 ~ ??? ms
+        var query   = store.Query(Signature.Get<Position, Rotation>());
+        foreach (var (position, rotation) in query) { } // force one time allocation
+        {
+            _ = store.CreateEntity(arch1); // warmup
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int n = 0; n < count; n++) {
+                _ = store.CreateEntity(arch1);
+            }
+            Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            AreEqual(count + 1, arch1.EntityCount);
+        }
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            int n = 0;
+            var memStart = Mem.GetAllocatedBytes();
+            foreach (var (position, rotation) in query) {
+                n++;
+            }
+            Mem.AssertNoAlloc(memStart);
+            AreEqual(count, n);
+            Console.WriteLine($"Query() foreach - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        }
     }
     
     [Test]
