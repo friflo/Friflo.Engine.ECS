@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.GE;
 

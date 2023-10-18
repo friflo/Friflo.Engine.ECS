@@ -7,7 +7,6 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
-using static Friflo.Fliox.Engine.ECS.NodeFlags;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming

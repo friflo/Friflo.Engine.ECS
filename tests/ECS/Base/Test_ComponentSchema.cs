@@ -1,6 +1,5 @@
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
-using Tests.ECS.Arch;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming

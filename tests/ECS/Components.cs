@@ -9,7 +9,6 @@ namespace Tests.ECS;
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }
 
-
 // ------------------------------------------------ struct components
 [CodeCoverageTest]
 [StructComponent("my1")]

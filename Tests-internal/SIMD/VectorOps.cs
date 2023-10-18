@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace ComponentTest.SIMD;
+namespace Internal.SIMD;
 
 [ExcludeFromCodeCoverage]
 public class VectorOps

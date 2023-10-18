@@ -8,7 +8,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch;
 
-
 public static class Test_ArchetypeStructs
 {
     [Test]

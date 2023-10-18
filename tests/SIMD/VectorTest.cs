@@ -15,6 +15,7 @@ public static class VectorTest
         var v1 = new Vector2(0.1f, 0.2f);
         var v2 = new Vector2(1.1f, 2.2f);
         var vResult = v1 + v2;
+        Assert.AreEqual(new Vector2(1.2f, 2.4f), vResult);
     }
 }
 
@@ -34,12 +35,12 @@ public static class MyExtensions
         }
         return sum;
     }
-    
-    public static T Sum<T>(this T[] source)
+
+    private static T Sum<T>(this T[] source)
         where T : struct, IAdditionOperators<T, T, T>, IAdditiveIdentity<T, T>
         => Sum<T>(source.AsSpan());
-    
-    public static T Sum<T>(this ReadOnlySpan<T> source)
+
+    private static T Sum<T>(this ReadOnlySpan<T> source)
         where T : struct, IAdditionOperators<T, T, T>, IAdditiveIdentity<T, T>
     {
         var sum = T.AdditiveIdentity;
