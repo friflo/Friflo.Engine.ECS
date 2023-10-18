@@ -92,8 +92,22 @@ public sealed class RawEntityStore : EntityStore
         return id;
     }
     
-    // todo implement DeleteEntity(int id)
+    protected internal override void UpdateEntityCompIndex(int id, int compIndex) {
+        entities[id].compIndex = compIndex;
+    }
     
+    public void DeleteEntity(int id)
+    {
+        ref var entity  = ref entities[id]; 
+        var archetype   = archs[entity.archIndex];
+        if (archetype == defaultArchetype) {
+            return;
+        }
+        archetype.MoveLastComponentsTo(entity.compIndex);
+        entity.archIndex = 0;
+        entity.compIndex = 0;
+    }
+
     #endregion
 
 #region struct components

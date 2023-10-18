@@ -183,6 +183,10 @@ public partial class GameEntityStore
         return new InvalidOperationException(sb.ToString());
     }
     
+    protected internal override void UpdateEntityCompIndex(int id, int compIndex) {
+        nodes[id].entity.compIndex = compIndex;
+    }
+    
     internal void DeleteNode(int id)
     {
         nodesCount--;

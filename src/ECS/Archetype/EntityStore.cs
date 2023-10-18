@@ -79,6 +79,9 @@ public abstract partial class EntityStore
         searchKey           = new ArchetypeKey();
         AddArchetype(defaultArchetype);
     }
+    
+    protected internal abstract void UpdateEntityCompIndex(int id, int compIndex); 
+    
     #endregion
 
 #region exceptions

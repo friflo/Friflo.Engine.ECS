@@ -45,11 +45,10 @@ public static class Test_StructHeapRaw
             ids[n] = id;
             store.EntityComponentRef<Position>(id).x = n;
         }
-        return;
         // --- delete majority of entities
         const int remaining = 500;
         for (int n = remaining; n < count; n++) {
-            // store.DeleteEntity(ids[n]); // todo implement DeleteEntity
+            store.DeleteEntity(ids[n]);
             AreEqual(count + remaining - n - 1, arch1.EntityCount);
         }
         AreEqual(1024, arch1.Capacity);

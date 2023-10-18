@@ -14,6 +14,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 internal struct RawEntity
 {
-    internal    int     archIndex;  // 4    could be short. if changing check perf
-    internal    int     compIndex;  // 4
+    internal        int     archIndex;  // 4    could be short. if changing check perf
+    internal        int     compIndex;  // 4
+
+    public override string  ToString() => $"archIndex: {archIndex}  compIndex: {compIndex}";
 }

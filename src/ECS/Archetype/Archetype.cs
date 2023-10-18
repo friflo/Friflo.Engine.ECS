@@ -45,7 +45,7 @@ public sealed class Archetype
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.GetStructType"/></remarks>
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8       - Length always = maxStructIndex. Used for heap lookup
     [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
-    [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing EntityStore
+    [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing GameEntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     
@@ -175,9 +175,8 @@ public sealed class Archetype
             heap.MoveComponent(lastIndex, newIndex);
         }
         var lastEntityId    = entityIds[lastIndex];
-        if (gameEntityStore != null) {
-            gameEntityStore.nodes[lastEntityId].entity.compIndex = newIndex; // set component index for new archetype
-        }
+        store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
+        
         entityIds[newIndex] = lastEntityId;
         entityCount--;      // remove last entity id
         if (entityCount > shrinkThreshold) {
