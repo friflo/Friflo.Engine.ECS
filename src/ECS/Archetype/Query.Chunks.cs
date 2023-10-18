@@ -37,7 +37,7 @@ public ref struct ChunkEnumerator<T1, T2>
     private             Chunk<T1>               chunk1;
     private             Chunk<T2>               chunk2;
     private             int                     chunkPos;
-    private             int                     chunkCount;
+    private             int                     chunkEnd;
     
     
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2> query)
@@ -51,7 +51,7 @@ public ref struct ChunkEnumerator<T1, T2>
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
         chunkPos        = -1;
-        chunkCount      = archetype.EntityCount / ChunkSize;
+        chunkEnd        = archetype.ChunkEnd;
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
@@ -59,13 +59,18 @@ public ref struct ChunkEnumerator<T1, T2>
     
     // --- IEnumerator
     public bool MoveNext() {
-        if (chunkPos < chunkCount) {
-            chunkPos++;
-            chunk1 = new Chunk<T1>(chunks1[chunkPos].components, 1);
-            chunk2 = new Chunk<T2>(chunks2[chunkPos].components, 1);
+        if (chunkPos < chunkEnd) {
+            int componentLen;
+            if (++chunkPos == chunkEnd) {
+                componentLen    = archetypes[archetypePos].EntityCount % ChunkSize;
+            } else {
+                componentLen    = ChunkSize;
+            }
+            chunk1 = new Chunk<T1>(chunks1[chunkPos].components, componentLen);
+            chunk2 = new Chunk<T2>(chunks2[chunkPos].components, componentLen);
             return true;
         }
-        if (archetypePos < archetypes.Length -1) {
+        if (archetypePos < archetypes.Length - 1) {
             var heapMap = archetypes[archetypePos++].heapMap;
             chunks1     = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
             chunks2     = ((StructHeap<T2>)heapMap[structIndex2]).chunks;

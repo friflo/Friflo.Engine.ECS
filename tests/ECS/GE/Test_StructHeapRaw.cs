@@ -103,12 +103,14 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
          // 10_000_000
-        //      CreateEntity()  ~ 2430 ms
-        //      Query() foreach ~  145 ms
-        //      Query.ForEach() ~  114 ms
+        //      CreateEntity()          ~ 2430 ms
+        //      foreach Query()         ~  145 ms
+        //      Query.ForEach()         ~  114 ms
+        //      foreach Query.Chunks    ~   10 ms
         var query   = store.Query(Signature.Get<Position, Rotation>());
         foreach (var (position, rotation) in query) { }     // force one time allocation
         query.ForEach((position, rotation) => {}).Run();    // warmup
+        foreach (var _ in query.Chunks) { }                 // warmup
         {
             // _ = store.CreateEntity(arch1); // warmup
             var stopwatch = new Stopwatch();
@@ -131,7 +133,7 @@ public static class Test_StructHeapRaw
             }
             Mem.AssertNoAlloc(memStart);
             AreEqual(Count, n);
-            Console.WriteLine($"Query() foreach. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            Console.WriteLine($"foreach Query(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -146,10 +148,23 @@ public static class Test_StructHeapRaw
             var diff = Mem.GetAllocatedBytes() - memStart;
             AreEqual(Count, n);
             Console.WriteLine($"Query.ForEach(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
+        } {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            int n           = 0;
+            var memStart    = Mem.GetAllocatedBytes();
+            foreach (var chunk in query.Chunks) {
+                foreach (var position in chunk.Item1.Values) {
+                    var x = (int)position.x;
+                    if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                    n++;
+                }
+            }
+            var diff = Mem.GetAllocatedBytes() - memStart;
+            AreEqual(Count, n);
+            Console.WriteLine($"foreach Query.Chunks. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
         }
     }
-    
-
     
     [Test]
     public static void Test_StructHeapRaw_invalid_store()
