@@ -131,7 +131,7 @@ public partial class GameEntityStore
         if (this != archetype.store) {
             throw InvalidStoreException(nameof(archetype));
         }
-        var entity          = archetype.gameEntityStore.CreateEntity();
+        var entity          = CreateEntity();
         entity.archetype    = archetype;
         entity.compIndex    = archetype.AddEntity(entity.id);
         return entity;
