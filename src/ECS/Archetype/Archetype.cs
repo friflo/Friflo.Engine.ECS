@@ -94,7 +94,7 @@ public sealed class Archetype
     
     private static void SetStandardComponentHeaps(StructHeap heap, ref StandardComponents std)
     {
-        var type = heap.type;
+        var type = heap.StructType;
         if        (type == typeof(Position)) {
             std.position    = (StructHeap<Position>)    heap;
         } else if (type == typeof(Rotation)) {
@@ -199,7 +199,7 @@ public sealed class Archetype
         var hasTypes    = false;
         sb.Append('[');
         foreach (var heap in structHeaps) {
-            sb.Append(heap.type.Name);
+            sb.Append(heap.StructType.Name);
             sb.Append(", ");
             hasTypes = true;
         }

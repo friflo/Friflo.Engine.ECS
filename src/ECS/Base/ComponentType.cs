@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
@@ -43,6 +44,9 @@ public abstract class ComponentType
     /// If <see cref="kind"/> == <see cref="Class"/> the type of a class  component attributed with <see cref="ClassComponentAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
+    
+    
+    internal readonly   Bytes           componentKeyBytes;
         
     internal virtual    StructHeap  CreateHeap          (int capacity)
         => throw new InvalidOperationException("operates only on StructComponentType<>");
@@ -66,6 +70,9 @@ public abstract class ComponentType
         this.tagIndex       = tagIndex;
         this.kind           = kind;
         this.type           = type;
+        if (this.componentKey != null) {
+            componentKeyBytes = new Bytes(componentKey);   
+        }
     }
 }
 
@@ -81,7 +88,7 @@ internal sealed class StructComponentType<T> : ComponentType
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     internal override StructHeap CreateHeap(int capacity) {
-        return new StructHeap<T>(structIndex, componentKey, capacity, typeMapper);   
+        return new StructHeap<T>(structIndex, capacity, typeMapper);   
     }
 }
 

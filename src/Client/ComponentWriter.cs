@@ -16,12 +16,15 @@ internal sealed class ComponentWriter
     private readonly    ObjectWriter    componentWriter;
     private             Utf8JsonWriter  writer;
     private             Bytes           buffer;
+    private readonly    ComponentType[] structTypes;
     
     internal static readonly ComponentWriter Instance = new ComponentWriter();
     
     private ComponentWriter() {
         buffer          = new Bytes(128);
         componentWriter = new ObjectWriter(EntityStore.Static.TypeStore);
+        var schema      = EntityStore.Static.ComponentSchema;
+        structTypes     = schema.structs;
     }
     
     internal JsonValue Write(GameEntity entity)
@@ -37,7 +40,8 @@ internal sealed class ComponentWriter
         for (int n = 0; n < heaps.Length; n++) {
             var heap        = heaps[n];
             var value       = heap.Write(componentWriter, entity.compIndex);
-            writer.MemberBytes(heap.keyBytes, value);
+            var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
+            writer.MemberBytes(keyBytes, value);
         }
         // --- write class components
         foreach (var component in entity.ClassComponents) {

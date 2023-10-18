@@ -471,7 +471,7 @@ public sealed class GameEntity
             }
             if (archetype != null) {
                 foreach (var heap in archetype.Heaps) {
-                    sb.Append(heap.type.Name);
+                    sb.Append(heap.StructType.Name);
                     sb.Append(", ");
                 }
             }

@@ -14,16 +14,14 @@ namespace Friflo.Fliox.Engine.ECS;
 internal abstract class StructHeap
 {
     // --- internal fields
-    internal readonly   string      structKey;      //  8
-    internal readonly   Bytes       keyBytes;       // 16
-    internal readonly   Type        type;           //  8
     internal readonly   int         structIndex;    //  4
 #if DEBUG
-    private             Archetype   archetype; // only used to provide debug info.
+    private             Archetype   archetype;      // only used for debugging
 #endif
 
     public   override   string      ToString() => GetString();
-    
+
+    internal abstract   Type        StructType          { get; }
     internal abstract   void        SetCapacity         (int capacity);
     internal abstract   void        MoveComponent       (int from, int to);
     internal abstract   void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
@@ -31,18 +29,15 @@ internal abstract class StructHeap
     internal abstract   Bytes       Write               (ObjectWriter writer, int compIndex);
     internal abstract   void        Read                (ObjectReader reader, int compIndex, JsonValue json);
 
-    internal StructHeap(int structIndex, string structKey, Type type) {
+    internal StructHeap(int structIndex) {
         this.structIndex    = structIndex;
-        this.structKey      = structKey;
-        keyBytes            = new Bytes(structKey);
-        this.type           = type;
     }
 
-    internal string GetString() {
+    private string GetString() {
 #if DEBUG
-        return $"[{type.Name}] heap - Count: {archetype.EntityCount}";
+        return $"[{StructType.Name}] heap - Count: {archetype.EntityCount}";
 #else
-        return $"[{type.Name}] heap";
+        return $"[{StructType.Name}] heap";
 #endif
     }
 

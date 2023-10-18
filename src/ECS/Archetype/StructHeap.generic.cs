@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -22,13 +23,15 @@ internal sealed class StructHeap<T> : StructHeap
     internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
     internal static readonly    string  StructKey;
     
-    internal StructHeap(int structIndex, string structKey, int capacity, TypeMapper<T> mapper)
-        : base (structIndex, structKey, typeof(T))
+    internal StructHeap(int structIndex, int capacity, TypeMapper<T> mapper)
+        : base (structIndex)
     {
         typeMapper  = mapper;
         chunks      = new StructChunk<T>[1];
         chunks[0]   = new StructChunk<T>(capacity);
     }
+    
+    internal override Type  StructType => typeof(T);
     
     internal override void SetCapacity(int capacity)
     {

@@ -46,7 +46,7 @@ public sealed class ComponentSchema
 #region private fields
     [Browse(Never)] private  readonly   Assembly[]                          engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
-    [Browse(Never)] private  readonly   ComponentType[]                     structs;
+    [Browse(Never)] internal readonly   ComponentType[]                     structs;
     [Browse(Never)] private  readonly   ComponentType[]                     classes;
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
