@@ -76,14 +76,36 @@ public static class Test_StructHeapRaw
     }
     
     [Test]
+    public static void Test_StructHeapRaw_for_array_Reference()
+    {
+        var positions = new Position[Count];
+        for (int n = 0; n < Count; n++) {
+            positions[n].x = n;
+        }
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var i = 0;
+        // 10_000_000 ~ 9 ms
+        for (int n = 0; n < Count; n++) {
+            var x = (int)positions[n].x;
+            if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+            i++;
+        }
+        AreEqual(Count, i);
+        Console.WriteLine($"Iterate_Ref. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.");
+    }
+    
+    private const int Count = 10; // 10_000_000
+    
+    [Test]
     public static void Test_StructHeapRaw_Query_Perf()
     {
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
-        int count   = 10;   // 10_000_000
-                            // CreateEntity()  ~ 2430 ms
-                            // Query() foreach ~  145 ms
-                            // Query.ForEach() ~  114 ms
+         // 10_000_000
+        //      CreateEntity()  ~ 2430 ms
+        //      Query() foreach ~  145 ms
+        //      Query.ForEach() ~  114 ms
         var query   = store.Query(Signature.Get<Position, Rotation>());
         foreach (var (position, rotation) in query) { }     // force one time allocation
         query.ForEach((position, rotation) => {}).Run();    // warmup
@@ -91,12 +113,12 @@ public static class Test_StructHeapRaw
             // _ = store.CreateEntity(arch1); // warmup
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (int n = 0; n < count; n++) {
+            for (int n = 0; n < Count; n++) {
                 var id = store.CreateEntity(arch1);
                 store.EntityComponentRef<Position>(id).x = n;
             }
-            Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-            AreEqual(count, arch1.EntityCount);
+            Console.WriteLine($"CreateEntity() - raw. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            AreEqual(Count, arch1.EntityCount);
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -108,8 +130,8 @@ public static class Test_StructHeapRaw
                 n++;
             }
             Mem.AssertNoAlloc(memStart);
-            AreEqual(count, n);
-            Console.WriteLine($"Query() foreach. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            AreEqual(Count, n);
+            Console.WriteLine($"Query() foreach. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -122,10 +144,12 @@ public static class Test_StructHeapRaw
             });
             forEach.Run();
             var diff = Mem.GetAllocatedBytes() - memStart;
-            AreEqual(count, n);
-            Console.WriteLine($"Query.ForEach(). count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
+            AreEqual(Count, n);
+            Console.WriteLine($"Query.ForEach(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
         }
     }
+    
+
     
     [Test]
     public static void Test_StructHeapRaw_invalid_store()
