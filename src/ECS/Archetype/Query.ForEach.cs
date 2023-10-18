@@ -38,9 +38,9 @@ public readonly struct QueryForEach<T1, T2>
             var heapMap     = archetype.heapMap;
             var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
             var chunks2     = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]).chunks;
-            var chunksLen   =  chunks1.Length;
+            var chunkEnd    = archetype.ChunkEnd;
             int chunkPos    = 0;
-            for (; chunkPos < chunksLen - 1; chunkPos++)
+            for (; chunkPos < chunkEnd; chunkPos++)
             {
                 ref1.Set(chunks1[chunkPos].components, copyT1, StructUtils.ChunkSize);
                 ref2.Set(chunks2[chunkPos].components, copyT2, StructUtils.ChunkSize);

@@ -68,12 +68,31 @@ public static class Test_StructHeapRaw
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        int count       = 10; // 10_000_000 ~ 1424 ms
+        int count       = 10; // 10_000_000 ~ 336 ms
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
         Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         AreEqual(count + 1, arch1.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_StructHeapRaw_DeleteEntity_Perf()
+    {
+        var store   = new RawEntityStore();
+        var arch1   = store.GetArchetype(Signature.Get<Position>());
+        int count   = 10; // 10_000_000 ~ 217 ms
+        for (int n = 0; n < count; n++) {
+            _ = store.CreateEntity(arch1);
+        }
+        AreEqual(count, arch1.EntityCount);
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        for (int n = 1; n <= count; n++) {
+            store.DeleteEntity(n);
+        }
+        Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        AreEqual(0, arch1.EntityCount);
     }
     
     [Test]
@@ -97,7 +116,7 @@ public static class Test_StructHeapRaw
     }
     
     /// user greater than <see cref="StructUtils.ChunkSize"/> for coverage
-    private const int Count = 1000; // 10_000_000
+    private const int Count = 10; // 10_000_000
     
     [Test]
     public static void Test_StructHeapRaw_Query_Perf()
@@ -105,7 +124,7 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
          // 10_000_000
-        //      CreateEntity()          ~ 2430 ms
+        //      CreateEntity()          ~  662 ms
         //      foreach Query()         ~  145 ms
         //      Query.ForEach()         ~  114 ms
         //      foreach Query.Chunks    ~   10 ms

@@ -106,6 +106,7 @@ public sealed class RawEntityStore : EntityStore
         archetype.MoveLastComponentsTo(entity.compIndex);
         entity.archIndex = 0;
         entity.compIndex = 0;
+        nodesCount--;
     }
 
     #endregion
