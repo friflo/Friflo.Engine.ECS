@@ -20,15 +20,15 @@ public partial class EntityStore
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
-        var config          = GetArchetypeConfig();
-        var schema          = Static.ComponentSchema;
-        var heaps           = current.Heaps;
-        var types           = new List<ComponentType>(heaps.Length + 1);
+        var config      = GetArchetypeConfig();
+        var schema      = Static.ComponentSchema;
+        var heaps       = current.Heaps;
+        var structTypes = new List<ComponentType>(heaps.Length + 1);
         foreach (var heap in current.Heaps) {
-            types.Add(schema.structs[heap.structIndex]);
+            structTypes.Add(schema.structs[heap.structIndex]);
         }
-        types.Add(schema.structs[structIndex]);
-        var archetype = Archetype.CreateWithStructTypes(config, types, current.tags);
+        structTypes.Add(schema.structs[structIndex]);
+        var archetype = Archetype.CreateWithStructTypes(config, structTypes, current.tags);
         AddArchetype(archetype);
         return archetype;
     }
@@ -41,29 +41,29 @@ public partial class EntityStore
         }
         var heaps           = archetype.Heaps;
         var componentCount  = heaps.Length - 1;
-        var types           = new List<ComponentType>(componentCount);
+        var structTypes     = new List<ComponentType>(componentCount);
         var config          = GetArchetypeConfig();
         var schema          = Static.ComponentSchema;
         foreach (var heap in heaps) {
             if (heap.structIndex == structIndex)
                 continue;
-            types.Add(schema.structs[heap.structIndex]);
+            structTypes.Add(schema.structs[heap.structIndex]);
         }
-        var result = Archetype.CreateWithStructTypes(config, types, archetype.tags);
+        var result = Archetype.CreateWithStructTypes(config, structTypes, archetype.tags);
         AddArchetype(result);
         return result;
     }
     
     private Archetype GetArchetypeWithTags(Archetype archetype, in Tags tags)
     {
-        var heaps           = archetype.Heaps;
-        var types           = new List<ComponentType>(heaps.Length);
-        var config          = GetArchetypeConfig();
-        var schema          = Static.ComponentSchema;
+        var heaps       = archetype.Heaps;
+        var structTypes = new List<ComponentType>(heaps.Length);
+        var config      = GetArchetypeConfig();
+        var schema      = Static.ComponentSchema;
         foreach (var heap in heaps) {
-            types.Add(schema.structs[heap.structIndex]);
+            structTypes.Add(schema.structs[heap.structIndex]);
         }
-        var result = Archetype.CreateWithStructTypes(config, types, tags);
+        var result = Archetype.CreateWithStructTypes(config, structTypes, tags);
         AddArchetype(result);
         return result;
     }

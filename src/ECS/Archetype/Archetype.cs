@@ -124,12 +124,12 @@ public sealed class Archetype
     /// Is called by methods using a set of arbitrary struct <see cref="ComponentType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
     /// </remarks>
-    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> types, in Tags tags)
+    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> structTypes, in Tags tags)
     {
-        var length          = types.Count;
+        var length          = structTypes.Count;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
-            componentHeaps[n] = types[n].CreateHeap(config.capacity);
+            componentHeaps[n] = structTypes[n].CreateHeap(config.capacity);
         }
         return new Archetype(config, componentHeaps, tags);
     }
