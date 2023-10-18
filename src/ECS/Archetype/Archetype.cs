@@ -17,6 +17,7 @@ public sealed class Archetype
 #region public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
+                    public              int                 Capacity        => entityCapacity;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
                                                                             => (entityCount - 1) / StructUtils.ChunkSize;
     
@@ -34,7 +35,8 @@ public sealed class Archetype
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
     /// <summary>Multiple of <see cref="StructUtils.ChunkSize"/> struct components / entities</summary>
-                    private             int                 entityCapacity; //  4       - multiple of chunk size entities
+    [Browse(Never)] private             int                 entityCapacity; //  4       - multiple of chunk size entities
+    [Browse(Never)] private             int                 shrinkThreshold;//  4       - multiple of chunk size entities
     // --- internal
     [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
     [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
@@ -62,7 +64,8 @@ public sealed class Archetype
         heapMap         = EntityStore.Static.DefaultHeapMap; // all items are always null
         key             = new ArchetypeKey(this);
         // entityIds        = null      // stores no entities
-        // capacity         = 0         // stores no entities
+        // entityCapacity   = 0         // stores no entities
+        // shrinkThreshold  = 0         // stores no entities - will not shrink
         // componentCount   = 0         // has no struct components
         // structs          = default   // has no struct components
         // tags             = default   // has no tags
@@ -77,6 +80,7 @@ public sealed class Archetype
         gameEntityStore = store as GameEntityStore;
         archIndex       = config.archetypeIndex;
         entityCapacity  = config.chunkSize;
+        shrinkThreshold = -1;
         structCount     = heaps.Length;
         structHeaps     = heaps;
         entityIds       = new int [1];
@@ -160,6 +164,10 @@ public sealed class Archetype
         // --- decrement entityCount if the newIndex is already the last entity id
         if (lastIndex == newIndex) {
             entityCount = newIndex;
+            if (entityCount > shrinkThreshold) {
+                return;
+            }
+            SetComponentCapacity();
             return;
         }
         // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
@@ -172,6 +180,10 @@ public sealed class Archetype
         }
         entityIds[newIndex] = lastEntityId;
         entityCount--;      // remove last entity id
+        if (entityCount > shrinkThreshold) {
+            return;
+        }
+        SetComponentCapacity();
     }
     
     internal int AddEntity(int id)
@@ -195,7 +207,8 @@ public sealed class Archetype
         //                              [1025, 1536] -> 3
         //                              ...
         var chunkCount  = (entityCount - 1) / StructUtils.ChunkSize + 1; 
-        entityCapacity  = chunkCount * StructUtils.ChunkSize; // 512, 1024, 1536, 2048, ...
+        entityCapacity  = chunkCount * StructUtils.ChunkSize;           // 512, 1024, 1536, 2048, ...
+        shrinkThreshold = entityCapacity - StructUtils.ChunkSize * 2;   // -512, 0, 512, 1024, ...
         
         foreach (var heap in structHeaps) {
             heap.SetComponentCapacity(chunkCount, StructUtils.ChunkSize);

@@ -23,9 +23,36 @@ public static class Test_StructHeapRaw
             AreSame(arch1,              store.GetEntityArchetype(id));
             AreEqual(n + 1,             arch1.EntityCount);
             AreEqual(new Position(),    store.EntityComponentRef<Position>(id)); // Position is present & default
-            store.EntityComponentRef<Position>(id).x = n;  
+            store.EntityComponentRef<Position>(id).x = n;
         }
+        AreEqual(2048, arch1.Capacity);
         for (int n = 0; n < count; n++) {
+            AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
+        }
+    }
+    
+    [Test]
+    public static void Test_StructHeapRaw_shrink_entity_capacity()
+    {
+        var store       = new RawEntityStore();
+        var arch1       = store.GetArchetype(Signature.Get<Position>());
+        int count       = 2000;
+        var ids         = new int[count];
+        for (int n = 0; n < count; n++)
+        {
+            var id = store.CreateEntity(arch1);
+            ids[n] = id;
+            store.EntityComponentRef<Position>(id).x = n;
+        }
+        return;
+        // --- delete majority of entities
+        const int remaining = 500;
+        for (int n = remaining; n < count; n++) {
+            // store.DeleteEntity(ids[n]); // todo implement DeleteEntity
+            AreEqual(count + remaining - n - 1, arch1.EntityCount);
+        }
+        AreEqual(1024, arch1.Capacity);
+        for (int n = 0; n < remaining; n++) {
             AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
         }
     }

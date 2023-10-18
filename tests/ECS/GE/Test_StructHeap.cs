@@ -25,7 +25,33 @@ public static class Test_StructHeap
             AreEqual(new Position(),    entity.Position); // Position is present & default
             entity.Position.x = n;
         }
+        AreEqual(2048, arch1.Capacity);
         for (int n = 0; n < count; n++) {
+            AreEqual(n, entities[n].Position.x);
+        }
+    }
+    
+    [Test]
+    public static void Test_StructHeap_shrink_entity_capacity()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var arch1       = store.GetArchetype(Signature.Get<Position>());
+        int count       = 2000;
+        var entities    = new GameEntity[count];
+        for (int n = 0; n < count; n++)
+        {
+            var entity = store.CreateEntity(arch1);
+            entities[n] = entity;
+            entity.Position.x = n;
+        }
+        // --- delete majority of entities
+        const int remaining = 500;
+        for (int n = remaining; n < count; n++) {
+            entities[n].DeleteEntity();
+            AreEqual(count + remaining - n - 1, arch1.EntityCount);
+        }
+        AreEqual(1024, arch1.Capacity);
+        for (int n = 0; n < remaining; n++) {
             AreEqual(n, entities[n].Position.x);
         }
     }

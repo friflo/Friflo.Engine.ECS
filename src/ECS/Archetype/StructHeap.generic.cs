@@ -49,10 +49,10 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override void SetComponentCapacity(int chunkCount, int chunkSize)
     {
-        if (chunkCount > chunks.Length)
+        var currentLength = chunks.Length;
+        if (chunkCount > currentLength)
         {
-            var newChunks       = new StructChunk<T>[chunkCount];
-            var currentLength   = chunks.Length;
+            var newChunks = new StructChunk<T>[chunkCount];
             for (int n = 0; n < currentLength; n++) {
                 newChunks[n] = chunks[n];
             }
@@ -62,10 +62,16 @@ internal sealed class StructHeap<T> : StructHeap
             }
             return;
         }
-        if (chunkCount == chunks.Length) {
-            throw new InvalidOperationException($"chunks.Length will remain unchanged. chunkCount: {chunkCount}");
+        if (chunkCount < currentLength)
+        {
+            var newChunks = new StructChunk<T>[chunkCount];
+            for (int n = 0; n < chunkCount; n++) {
+                newChunks[n] = chunks[n];
+            }
+            chunks = newChunks;
+            return;
         }
-        throw new NotImplementedException($"shrink chunks");
+        throw new InvalidOperationException($"chunks.Length will remain unchanged. chunkCount: {chunkCount}");
     }
     
     internal override void MoveComponent(int from, int to)
