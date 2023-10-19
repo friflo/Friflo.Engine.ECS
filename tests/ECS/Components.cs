@@ -17,6 +17,11 @@ public struct MyComponent1 : IStructComponent { public int a; }
 [StructComponent("my2")]
 public struct MyComponent2 : IStructComponent { public int b; }
 
+
+[CodeCoverageTest]
+[StructComponent("byte")]
+public struct ByteComponent : IStructComponent { public byte b; }
+
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
 public static class EntityExtensions
 {
