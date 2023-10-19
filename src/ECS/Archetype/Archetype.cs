@@ -17,7 +17,7 @@ public sealed class Archetype
 #region public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
-                    public              int                 Capacity        => memory.Capacity;
+                    public              int                 Capacity        => memory.capacity;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
                                                                             => (entityCount - 1) / StructUtils.ChunkSize;
     
@@ -201,39 +201,38 @@ public sealed class Archetype
     
     private void SetComponentCapacity()
     {
-        //  chunkCount (entityCount)    [   0,  512] -> 1
+        //  newChunkCount (entityCount) [   0,  512] -> 1
         //                              [ 513, 1024] -> 2
         //                              [1025, 1536] -> 3
         //                              ...
-        var newChunkCount       = (entityCount - 1) / StructUtils.ChunkSize + 1; 
-        memory.capacity         = newChunkCount * StructUtils.ChunkSize;        // 512, 1024, 1536, 2048, ...
-        memory.shrinkThreshold  = memory.capacity - StructUtils.ChunkSize * 2;  // -512, 0, 512, 1024, ...
-        
-        int newChunkLength = memory.chunkLength;
+        var newChunkCount   = (entityCount - 1) / StructUtils.ChunkSize + 1; 
+        int newChunkLength  = memory.chunkLength;
         
         if      (newChunkCount > memory.chunkCount) {
-            // --- double chunks array if needed
+            // --- double length of chunks array if needed
             if (newChunkCount > memory.chunkLength) {
                 newChunkLength *= 2;
             }
-            SetChunkCapacity(memory.chunkCount, newChunkCount, memory.chunkLength, newChunkLength);
+            SetChunkCapacity(newChunkCount, memory.chunkCount, newChunkLength);
         }
         else if (newChunkCount < memory.chunkCount) {
             int quarterCount = memory.chunkLength / 4;
-            // --- halve chunks array if newChunkCount is significant lower (1/4) of current chunks length 
+            // --- halve length of chunks array if newChunkCount is significant lower (1/4) of current chunks length 
             if (newChunkCount <= quarterCount) {
                 newChunkLength /= 2;
-                SetChunkCapacity(newChunkLength, newChunkLength, memory.chunkLength, newChunkLength);
+                SetChunkCapacity(newChunkLength, newChunkLength, newChunkLength);
             }
         }
     }
     
-    private void SetChunkCapacity(int chunkCount, int newChunkCount, int chunkLength, int newChunkLength) {
+    private void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength) {
         foreach (var heap in structHeaps) {
-            heap.SetChunkCapacity(chunkCount, newChunkCount, chunkLength, newChunkLength, StructUtils.ChunkSize);
+            heap.SetChunkCapacity(newChunkCount, chunkCount, newChunkLength, memory.chunkLength);
         }
-        memory.chunkCount   = newChunkCount;
-        memory.chunkLength  = newChunkLength;
+        memory.chunkCount       = newChunkCount;
+        memory.chunkLength      = newChunkLength;
+        memory.capacity         = newChunkCount * StructUtils.ChunkSize;        // 512, 1024, 1536, 2048, ...
+        memory.shrinkThreshold  = memory.capacity - StructUtils.ChunkSize * 2;  // -512, 0, 512, 1024, ...
     }
     
     private string GetString() {

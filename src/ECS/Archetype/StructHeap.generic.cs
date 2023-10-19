@@ -47,10 +47,7 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override Type  StructType => typeof(T);
     
-    internal override void SetChunkCapacity(
-        int chunkCount,     int newChunkCount,
-        int chunkLength,    int newChunkLength,
-        int chunkSize)
+    internal override void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength, int chunkLength)
     {
         // --- set new chunks array if requested. Length values: 1, 2, 4, 8, 16, ...
         if (chunkLength != newChunkLength)
@@ -61,9 +58,9 @@ internal sealed class StructHeap<T> : StructHeap
             }
             chunks = newChunks;
         }
-        // --- add new chunks 
-        for (int n = chunkCount; n  < newChunkCount; n++) {
-            chunks[n] = new StructChunk<T>(chunkSize);
+        // --- add new chunks if needed
+        for (int n = chunkCount; n < newChunkCount; n++) {
+            chunks[n] = new StructChunk<T>(ChunkSize);
         }
     }
     

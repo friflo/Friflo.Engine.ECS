@@ -74,7 +74,7 @@ public static class Test_StructHeapRaw
                 int i = 111;
             }
         }
-        AreEqual(2048, arch.Capacity);
+        AreEqual(1024, arch.Capacity);
         for (int n = 0; n < remaining; n++) {
             AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
         }

@@ -33,11 +33,10 @@ internal readonly struct ArchetypeConfig
 
 internal struct ChunkMemory
 {
+    internal    int     chunkCount;         //  4       - 1 <= chunkCount <= chunkLength
+    internal    int     chunkLength;        //  4       - 1, 2, 4, 8, 16, ...
+    // --- fields derived from chunkCount & chunkLength
     /// <summary>Multiple of <see cref="StructUtils.ChunkSize"/> struct components / entities</summary>
     internal    int     capacity;           //  4       - multiple of chunk size entities
     internal    int     shrinkThreshold;    //  4       - multiple of chunk size entities
-    internal    int     chunkCount;         //  4       - 1 <= chunkCount <= chunkLength
-    internal    int     chunkLength;        //  4       - 1, 2, 4, 8, 16, ...
-    
-    internal    int     Capacity    => chunkCount * StructUtils.ChunkSize;
 }
