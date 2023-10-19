@@ -46,6 +46,7 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength, int chunkLength)
     {
+        AssertChunksLength(chunks.Length, chunkLength);
         // --- set new chunks array if requested. Length values: 1, 2, 4, 8, 16, ...
         if (chunkLength != newChunkLength)
         {
@@ -57,6 +58,7 @@ internal sealed class StructHeap<T> : StructHeap
         }
         // --- add new chunks if needed
         for (int n = chunkCount; n < newChunkCount; n++) {
+            AssertChunkComponentsNull(chunks[n].components);
             chunks[n] = new StructChunk<T>(ChunkSize);
         }
     }

@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -37,6 +39,16 @@ internal abstract class StructHeap
 #if DEBUG
         this.archetype = archetype;
 #endif
+    }
+    
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    internal static void AssertChunksLength(int expect, int actual) {
+        if (expect != actual) throw new InvalidOperationException($"expect chunk length: {expect}, was: {actual}");
+    }
+    
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    internal static void AssertChunkComponentsNull(object components) {
+        if (components != null) throw new InvalidOperationException($"expect components == null");
     }
     
     public override string ToString() {
