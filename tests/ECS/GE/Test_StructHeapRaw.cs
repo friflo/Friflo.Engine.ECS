@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable ConvertToConstant.Local
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
@@ -16,21 +17,31 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_increase_entity_capacity()
     {
         var store       = new RawEntityStore();
-        var arch1       = store.GetArchetype(Signature.Get<Position>());
-        int count       = 2000;
+        var arch        = store.GetArchetype(Signature.Get<Position>());
+        int count       = 4096; // 8388608;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
-            var id  = store.CreateEntity(arch1);
+            var id  = store.CreateEntity(arch);
             ids[n]  = id;
-            AreSame(arch1,              store.GetEntityArchetype(id));
-            AreEqual(n + 1,             arch1.EntityCount);
-            AreEqual(new Position(),    store.EntityComponentRef<Position>(id)); // Position is present & default
-            store.EntityComponentRef<Position>(id).x = n;
+            if (arch != store.GetEntityArchetype(id)) {
+                Fail($"unexpected Archetype. n: {n}");
+            }
+            if (n + 1 != arch.EntityCount) {
+                Fail($"expect: ${n + 1}, was: {arch.EntityCount}, n: {n}");
+            }
+            ref var pos = ref store.EntityComponentRef<Position>(id);
+            if (new Position() != pos) {
+                Fail($"expect default value. n: {n}");
+            }
+            pos.x = n;
         }
-        AreEqual(2048, arch1.Capacity);
+        AreEqual(count, arch.Capacity);
         for (int n = 0; n < count; n++) {
-            AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
+            ref var val = ref store.EntityComponentRef<Position>(ids[n]);
+            if (n != (int)val.x) {
+                Fail($"expect: {n}, was: {val.x}, n: {n}");
+            }
         }
     }
     
@@ -38,12 +49,12 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_shrink_entity_capacity()
     {
         var store       = new RawEntityStore();
-        var arch1       = store.GetArchetype(Signature.Get<Position>());
+        var arch       = store.GetArchetype(Signature.Get<Position>());
         int count       = 2000;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
-            var id = store.CreateEntity(arch1);
+            var id = store.CreateEntity(arch);
             ids[n] = id;
             store.EntityComponentRef<Position>(id).x = n;
         }
@@ -51,9 +62,12 @@ public static class Test_StructHeapRaw
         const int remaining = 500;
         for (int n = remaining; n < count; n++) {
             store.DeleteEntity(ids[n]);
-            AreEqual(count + remaining - n - 1, arch1.EntityCount);
+            var expectCount = count + remaining - n - 1;
+            if (expectCount != arch.EntityCount) {
+                Fail($"expect Archetype.EntityCount: ${expectCount}, was: {arch.EntityCount}, n: {n}");
+            }
         }
-        AreEqual(1024, arch1.Capacity);
+        AreEqual(1024, arch.Capacity);
         for (int n = 0; n < remaining; n++) {
             AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
         }

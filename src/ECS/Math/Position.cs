@@ -29,4 +29,7 @@ public struct  Position : IStructComponent
         this.y = y;
         this.z = z;
     }
+    
+    public static bool operator ==  (in Position p1, in Position p2) => p1.value == p2.value;
+    public static bool operator !=  (in Position p1, in Position p2) => p1.value != p2.value;
 }
