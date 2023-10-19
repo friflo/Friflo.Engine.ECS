@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Text;
 
 // ReSharper disable ConvertToAutoProperty
@@ -14,15 +13,17 @@ namespace Friflo.Fliox.Engine.ECS;
 [CLSCompliant(true)]
 public struct ArchetypeStructs : IEnumerable<ComponentType>
 {
-    internal    BitSet  bitSet;     // 32
+    internal        BitSet  bitSet;     // 32
     
-    public      int     Count       => bitSet.GetBitCount();
+    public readonly int     Count       => bitSet.GetBitCount();
    
-    public ArchetypeStructsEnumerator   GetEnumerator()                             => new ArchetypeStructsEnumerator (this);
+    public readonly ArchetypeStructsEnumerator   GetEnumerator()                             => new ArchetypeStructsEnumerator (this);
+
     // --- IEnumerable
-    IEnumerator                         IEnumerable.GetEnumerator()                 => new ArchetypeStructsEnumerator (this);
+           readonly IEnumerator                  IEnumerable.GetEnumerator()                 => new ArchetypeStructsEnumerator (this);
+
     // --- IEnumerable<>
-    IEnumerator<ComponentType>          IEnumerable<ComponentType>.GetEnumerator()  => new ArchetypeStructsEnumerator (this);
+           readonly IEnumerator<ComponentType>   IEnumerable<ComponentType>.GetEnumerator()  => new ArchetypeStructsEnumerator (this);
 
     public   override                   string    ToString() => GetString();
     
@@ -51,13 +52,13 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- structs getter -----------------------------------------
-    public  bool    Has<T> ()
+    public readonly bool    Has<T> ()
         where T : struct, IStructComponent
     {
         return bitSet.Has(StructHeap<T>.StructIndex);
     }
     
-    public  bool    Has<T1, T2> ()
+    public readonly bool    Has<T1, T2> ()
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
     {
@@ -65,7 +66,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
                bitSet.Has(StructHeap<T2>.StructIndex);
     }
 
-    public  bool    Has<T1, T2, T3> ()
+    public readonly bool    Has<T1, T2, T3> ()
         where T1 : struct, IStructComponent
         where T2 : struct, IStructComponent
         where T3 : struct, IStructComponent
@@ -75,14 +76,12 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
                bitSet.Has(StructHeap<T3>.StructIndex);
     }
     
-    [Pure]
-    public  bool    HasAll (in ArchetypeStructs structs)
+    public readonly bool HasAll (in ArchetypeStructs structs)
     {
         return bitSet.HasAll(structs.bitSet);
     }
     
-    [Pure]
-    public  bool    HasAny (in ArchetypeStructs structs)
+    public readonly bool HasAny (in ArchetypeStructs structs)
     {
         return bitSet.HasAny(structs.bitSet);
     }
@@ -161,17 +160,17 @@ public struct ArchetypeStructsEnumerator : IEnumerator<ComponentType>
     private BitSetEnumerator    bitSetEnumerator;
 
     // --- IEnumerator
-    public  void                Reset()             => bitSetEnumerator.Reset();
+    public          void                Reset()             => bitSetEnumerator.Reset();
 
-            object              IEnumerator.Current => Current;
+           readonly object              IEnumerator.Current => Current;
 
-    public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
+    public readonly ComponentType       Current => EntityStore.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
     
     internal ArchetypeStructsEnumerator(in ArchetypeStructs structs) {
         bitSetEnumerator = structs.bitSet.GetEnumerator();
     }
     
     // --- IEnumerator
-    public bool MoveNext() => bitSetEnumerator.MoveNext();
-    public void Dispose() { }
+    public          bool MoveNext() => bitSetEnumerator.MoveNext();
+    public readonly void Dispose() { }
 }

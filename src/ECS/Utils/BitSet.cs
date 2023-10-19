@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -31,9 +30,9 @@ public struct BitSet
     // Could extend with Vector256Long[] if 256 struct components are not enough
     // private readonly  Vector256Long[]   values;
 
-    [Pure]
-    public              BitSetEnumerator    GetEnumerator() => new BitSetEnumerator(this);
-    public override     string              ToString()      => AppendString(new StringBuilder()).ToString();
+
+    public readonly          BitSetEnumerator    GetEnumerator() => new BitSetEnumerator(this);
+    public readonly override string              ToString()      => AppendString(new StringBuilder()).ToString();
     
     public BitSet(int[] indices) {
         foreach (var index in indices) {
@@ -42,7 +41,7 @@ public struct BitSet
     }
     
     // hash distribution is probably not good. But executes fast. Leave it for now.
-    public int HashCode()
+    public readonly int HashCode()
     {
         return unchecked((int)l0) ^ (int)(l0 >> 32) ^
                unchecked((int)l1) ^ (int)(l1 >> 32) ^
@@ -50,7 +49,7 @@ public struct BitSet
                unchecked((int)l3) ^ (int)(l3 >> 32);
     }
     
-    public int GetBitCount() {
+    public readonly int GetBitCount() {
         return
             BitOperations.PopCount((ulong)l0) +
             BitOperations.PopCount((ulong)l1) +
@@ -78,7 +77,7 @@ public struct BitSet
         }
     }
     
-    public bool Has(int index)
+    public readonly bool Has(int index)
     {
         switch (index) {
             case < 64:      return (l0 & (1L <<  index))        != 0;
@@ -88,17 +87,17 @@ public struct BitSet
         }
     }
     
-    public bool HasAll(in BitSet bitSet)
+    public readonly bool HasAll(in BitSet bitSet)
     {
         return (value & bitSet.value) == bitSet.value;
     }
     
-    public bool HasAny(in BitSet bitSet)
+    public readonly bool HasAny(in BitSet bitSet)
     {
         return (value & bitSet.value) != default;
     }
     
-    private StringBuilder AppendString(StringBuilder sb) {
+    private readonly StringBuilder AppendString(StringBuilder sb) {
         if (l3 != 0) {
             sb.Append($"{l0:x16} {l1:x16} {l2:x16} {l3:x16}");
         } else if (l2 != 0) {
@@ -132,7 +131,7 @@ public struct BitSetEnumerator
     }
     
     /// <returns>the index of the current bit == 1. The index range is [0, ... , 255]</returns>
-    public int Current => curPos;
+    public readonly int Current => curPos;
     
     // --- IEnumerator
     public void Reset() {

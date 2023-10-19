@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -13,26 +12,28 @@ namespace Friflo.Fliox.Engine.ECS;
 [CLSCompliant(true)]
 public struct Tags : IEnumerable<ComponentType>
 {
-    internal   BitSet  bitSet;  // 32
+    internal            BitSet  bitSet;  // 32
     
-    public TagsEnumerator       GetEnumerator()                             => new TagsEnumerator (this);
-    // --- IEnumerable
-    IEnumerator                 IEnumerable.GetEnumerator()                 => new TagsEnumerator (this);
-    // --- IEnumerable<>
-    IEnumerator<ComponentType>  IEnumerable<ComponentType>.GetEnumerator()  => new TagsEnumerator (this);
+    public readonly     TagsEnumerator  GetEnumerator()                             => new TagsEnumerator (this);
 
-    public   override string    ToString() => GetString();
+    // --- IEnumerable
+           readonly     IEnumerator     IEnumerable.GetEnumerator()                 => new TagsEnumerator (this);
+
+    // --- IEnumerable<>
+    readonly IEnumerator<ComponentType> IEnumerable<ComponentType>.GetEnumerator()  => new TagsEnumerator (this);
+
+    public  readonly override string    ToString() => GetString();
     
     // ----------------------------------------- read Tags ----------------------------------------- 
-    public  int     Count => bitSet.GetBitCount();
+    public readonly int     Count => bitSet.GetBitCount();
     
-    public  bool    Has<T> ()
+    public readonly bool    Has<T> ()
         where T : struct, IEntityTag
     {
         return bitSet.Has(TagType<T>.TagIndex);
     }
 
-    public  bool    Has<T1, T2> ()
+    public readonly bool    Has<T1, T2> ()
         where T1 : struct, IEntityTag
         where T2 : struct, IEntityTag
     {
@@ -40,7 +41,7 @@ public struct Tags : IEnumerable<ComponentType>
                bitSet.Has(TagType<T2>.TagIndex);
     }
 
-    public  bool    Has<T1, T2, T3> ()
+    public readonly bool    Has<T1, T2, T3> ()
         where T1 : struct, IEntityTag
         where T2 : struct, IEntityTag
         where T3 : struct, IEntityTag
@@ -50,14 +51,12 @@ public struct Tags : IEnumerable<ComponentType>
                bitSet.Has(TagType<T3>.TagIndex);
     }
     
-    [Pure]
-    public  bool    HasAll (in Tags tags)
+    public readonly bool HasAll (in Tags tags)
     {
         return bitSet.HasAll(tags.bitSet);
     }
     
-    [Pure]
-    public  bool    HasAny (in Tags tags)
+    public readonly bool HasAny (in Tags tags)
     {
         return bitSet.HasAny(tags.bitSet);
     }
@@ -112,7 +111,7 @@ public struct Tags : IEnumerable<ComponentType>
         return tags;
     }
     
-    private string GetString()
+    private readonly string GetString()
     {
         var sb          = new StringBuilder();
         var hasTypes    = false;
@@ -137,17 +136,17 @@ public struct TagsEnumerator : IEnumerator<ComponentType>
     private BitSetEnumerator    bitSetEnumerator;
 
     // --- IEnumerator
-    public  void                Reset()             => bitSetEnumerator.Reset();
+    public          void                Reset()             => bitSetEnumerator.Reset();
 
-            object              IEnumerator.Current => Current;
+           readonly object              IEnumerator.Current => Current;
 
-    public  ComponentType       Current => EntityStore.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
+    public readonly ComponentType       Current             => EntityStore.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
         bitSetEnumerator = tags.bitSet.GetEnumerator();
     }
     
     // --- IEnumerator
-    public bool MoveNext() => bitSetEnumerator.MoveNext();
-    public void Dispose() { }
+    public          bool MoveNext() => bitSetEnumerator.MoveNext();
+    public readonly void Dispose() { }
 }
