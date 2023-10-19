@@ -14,7 +14,8 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var store   = new GameEntityStore(PidType.UsePidAsId, client);
+        var sync    = new GameEntityStoreSync(client);
+        var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
@@ -34,7 +35,8 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var store   = new GameEntityStore(PidType.UsePidAsId, client);
+        var sync    = new GameEntityStoreSync(client);
+        var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         var node    = store.EntityAsDataNode(entity);
         
@@ -47,7 +49,8 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var store   = new GameEntityStore(PidType.UsePidAsId, client);
+        var sync    = new GameEntityStoreSync(client);
+        var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         entity.AddTag<TestTag>();
         var node    = store.EntityAsDataNode(entity);
@@ -62,7 +65,8 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var store   = new GameEntityStore(PidType.UsePidAsId, client);
+        var sync    = new GameEntityStoreSync(client);
+        var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });

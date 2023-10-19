@@ -289,9 +289,9 @@ public partial class GameEntityStore
     public DataNode EntityAsDataNode(GameEntity entity) {
         var id = entity.id;
         ref var node = ref nodes[id];
-        if (!clientNodes.TryGetEntity(id, out var dataNode)) {
+        if (!storeSync.TryGetDataNode(id, out var dataNode)) {
             dataNode = new DataNode { pid = id };
-            clientNodes.Add(dataNode);
+            storeSync.AddDataNode(dataNode);
         }
         // --- process child ids
         if (node.childCount > 0) {
