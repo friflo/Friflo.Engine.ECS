@@ -167,7 +167,7 @@ public sealed class Archetype
             if (entityCount > memory.shrinkThreshold) {
                 return;
             }
-            SetComponentCapacity();
+            CheckChunkCapacity();
             return;
         }
         // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
@@ -182,7 +182,7 @@ public sealed class Archetype
         if (entityCount > memory.shrinkThreshold) {
             return;
         }
-        SetComponentCapacity();
+        CheckChunkCapacity();
     }
     
     internal int AddEntity(int id)
@@ -195,28 +195,28 @@ public sealed class Archetype
         if (index < memory.capacity) {
             return index;
         }
-        SetComponentCapacity();
+        CheckChunkCapacity();
         return index;
     }
     
-    private void SetComponentCapacity()
+    private void CheckChunkCapacity()
     {
-        //  newChunkCount (entityCount) [   0,  512] -> 1
+        //  newChunkCount(entityCount)  [   0,  512] -> 1
         //                              [ 513, 1024] -> 2
         //                              [1025, 1536] -> 3
-        //                              ...
         var newChunkCount   = (entityCount - 1) / StructUtils.ChunkSize + 1;
-        
-        if      (newChunkCount > memory.chunkCount)
+        var chunkCount      = memory.chunkCount;
+        if (newChunkCount > chunkCount)
         {
-            int newChunkLength  = memory.chunkLength;
+            int newChunkLength = memory.chunkLength;
             // --- double Length of chunks array if needed
             if (newChunkCount > memory.chunkLength) {
                 newChunkLength *= 2;
             }
-            SetChunkCapacity(newChunkCount, memory.chunkCount, newChunkLength);
+            SetChunkCapacity(newChunkCount, chunkCount, newChunkLength);
+            return;
         }
-        else if (newChunkCount < memory.chunkCount)
+        if (newChunkCount < chunkCount)
         {
             // --- halve Length of chunks array if newChunkCount is significant less than (1/4) of current chunks length 
             if (newChunkCount <=  memory.chunkLength / 4)

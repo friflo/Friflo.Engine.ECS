@@ -22,7 +22,7 @@ public static class Test_StructHeap
             entities[n] = entity;
             AreSame(arch1,              entity.Archetype);
             AreEqual(n + 1,             arch1.EntityCount);
-            AreEqual(new Position(),    entity.Position); // Position is present & default
+            IsTrue(new Position() == entity.Position); // Position is present & default
             entity.Position.x = n;
         }
         AreEqual(2048, arch1.Capacity);

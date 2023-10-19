@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Friflo.Json.Fliox;
@@ -30,6 +31,9 @@ public struct  Position : IStructComponent
         this.z = z;
     }
     
-    public static bool operator ==  (in Position p1, in Position p2) => p1.value == p2.value;
-    public static bool operator !=  (in Position p1, in Position p2) => p1.value != p2.value;
+    public static   bool    operator ==  (in Position p1, in Position p2) => p1.value == p2.value;
+    public static   bool    operator !=  (in Position p1, in Position p2) => p1.value != p2.value;
+
+    public override int     GetHashCode()       => throw new NotImplementedException("to avoid boxing");
+    public override bool    Equals(object obj)  => throw new NotImplementedException("to avoid boxing");
 }
