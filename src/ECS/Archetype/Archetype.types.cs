@@ -30,3 +30,10 @@ internal readonly struct ArchetypeConfig
         maxStructIndex      = EntityStore.Static.ComponentSchema.maxStructIndex;
     }
 }
+
+internal struct ChunkMemory
+{
+    /// <summary>Multiple of <see cref="StructUtils.ChunkSize"/> struct components / entities</summary>
+    internal    int     capacity;           //  4       - multiple of chunk size entities
+    internal    int     shrinkThreshold;    //  4       - multiple of chunk size entities
+}

@@ -18,7 +18,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 4096; // 8388608;
+        int count       = 16384; // 8388608;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
