@@ -18,7 +18,6 @@ internal sealed class StructHeap<T> : StructHeap
 {
     // --- internal fields
     internal            StructChunk<T>[]    chunks;     // 8 - Length: 1, 2, 4, 8
-    private             int                 chunkCount; // 4
     private  readonly   TypeMapper<T>       typeMapper; // 8
     
     // --- static internal
@@ -29,7 +28,6 @@ internal sealed class StructHeap<T> : StructHeap
         : base (structIndex)
     {
         typeMapper  = mapper;
-        chunkCount  = 1;
         chunks      = new StructChunk<T>[1];
         chunks[0]   = new StructChunk<T>(chunkSize);
     }
@@ -49,41 +47,24 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override Type  StructType => typeof(T);
     
-    internal override void SetChunkCapacity(int newChunkCount, int chunkSize)
+    internal override void SetChunkCapacity(
+        int chunkCount,     int newChunkCount,
+        int chunkLength,    int newChunkLength,
+        int chunkSize)
     {
-        if (newChunkCount > chunkCount)
+        // --- set new chunks array if requested. Length values: 1, 2, 4, 8, 16, ...
+        if (chunkLength != newChunkLength)
         {
-            // --- double chunks array if needed
-            if (newChunkCount > chunks.Length) {
-                var newChunks = new StructChunk<T>[2 * chunks.Length];
-                for (int n = 0; n < chunkCount; n++) {
-                    newChunks[n] = chunks[n];
-                }
-                chunks = newChunks;
+            var newChunks = new StructChunk<T>[newChunkLength];
+            for (int n = 0; n < chunkCount; n++) {
+                newChunks[n] = chunks[n];
             }
-            for (int n = chunkCount; n  < newChunkCount; n++) {
-                if (chunks[n].components == null) {
-                    chunks[n] = new StructChunk<T>(chunkSize);
-                }
-            }
-            chunkCount = newChunkCount;
-            return;
+            chunks = newChunks;
         }
-        if (newChunkCount < chunkCount)
-        {
-            int quarterCount = chunks.Length / 4;
-            // --- halve chunks array if newChunkCount is significant lower (1/4) of current chunks length 
-            if (newChunkCount <= quarterCount) {
-                var newChunks = new StructChunk<T>[2 * quarterCount];
-                for (int n = 0; n < newChunkCount; n++) {
-                    newChunks[n] = chunks[n];
-                }
-                chunks = newChunks;
-            }
-            chunkCount = newChunkCount;
-            return;
+        // --- add new chunks 
+        for (int n = chunkCount; n  < newChunkCount; n++) {
+            chunks[n] = new StructChunk<T>(chunkSize);
         }
-        throw new InvalidOperationException($"chunks.Length will remain unchanged. chunkCount: {newChunkCount}");
     }
     
     internal override void MoveComponent(int from, int to)

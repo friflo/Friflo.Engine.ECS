@@ -49,8 +49,8 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_shrink_entity_capacity()
     {
         var store       = new RawEntityStore();
-        var arch       = store.GetArchetype(Signature.Get<Position>());
-        int count       = 2000;
+        var arch        = store.GetArchetype(Signature.Get<Position>());
+        int count       = 16384; // 8388608;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {

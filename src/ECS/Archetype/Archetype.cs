@@ -17,7 +17,7 @@ public sealed class Archetype
 #region public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
-                    public              int                 Capacity        => memory.capacity;
+                    public              int                 Capacity        => memory.chunkCount * StructUtils.ChunkSize;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
                                                                             => (entityCount - 1) / StructUtils.ChunkSize;
     
@@ -34,7 +34,7 @@ public sealed class Archetype
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
-                    private             ChunkMemory         memory;
+                    private             ChunkMemory         memory;         // 16
     // --- internal
     [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
     [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
@@ -74,8 +74,10 @@ public sealed class Archetype
     /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
-        memory.capacity  = config.chunkSize;
-        memory.shrinkThreshold = -1;
+        memory.capacity         = config.chunkSize;
+        memory.shrinkThreshold  = -1;
+        memory.chunkCount       = 1;
+        memory.chunkLength      = 1;
         store           = config.store;
         gameEntityStore = store as GameEntityStore;
         archIndex       = config.archetypeIndex;
@@ -203,13 +205,32 @@ public sealed class Archetype
         //                              [ 513, 1024] -> 2
         //                              [1025, 1536] -> 3
         //                              ...
-        var chunkCount  = (entityCount - 1) / StructUtils.ChunkSize + 1; 
-        memory.capacity  = chunkCount * StructUtils.ChunkSize;           // 512, 1024, 1536, 2048, ...
-        memory.shrinkThreshold = memory.capacity - StructUtils.ChunkSize * 2;   // -512, 0, 512, 1024, ...
+        var newChunkCount       = (entityCount - 1) / StructUtils.ChunkSize + 1; 
+        memory.capacity         = newChunkCount * StructUtils.ChunkSize;        // 512, 1024, 1536, 2048, ...
+        memory.shrinkThreshold  = memory.capacity - StructUtils.ChunkSize * 2;  // -512, 0, 512, 1024, ...
         
-        foreach (var heap in structHeaps) {
-            heap.SetChunkCapacity(chunkCount, StructUtils.ChunkSize);
+        int newChunkLength = memory.chunkLength;
+        
+        if      (newChunkCount > memory.chunkCount) {
+            // --- double chunks array if needed
+            if (newChunkCount > memory.chunkLength) {
+                newChunkLength *= 2;
+            }
         }
+        else if (newChunkCount < memory.chunkCount) {
+            int quarterCount = memory.chunkLength / 4;
+            // --- halve chunks array if newChunkCount is significant lower (1/4) of current chunks length 
+            if (newChunkCount <= quarterCount) {
+                newChunkLength /= 2;
+            }
+        } else {
+            return;
+        }
+        foreach (var heap in structHeaps) {
+            heap.SetChunkCapacity(memory.chunkCount, newChunkCount, memory.chunkLength, newChunkLength, StructUtils.ChunkSize);
+        }
+        memory.chunkCount   = newChunkCount;
+        memory.chunkLength  = newChunkLength;
     }
     
     private string GetString() {
