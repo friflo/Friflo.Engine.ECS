@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Text;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -32,17 +31,15 @@ internal sealed class StructHeap<T> : StructHeap
         chunks[0]   = new StructChunk<T>(chunkSize);
     }
     
-    public override   string      ToString() {
-        var sb = new StringBuilder();
-        sb.Append('[');
-        sb.Append(StructType.Name);
-        sb.Append("] chunks - Count: ");
-        sb.Append(chunks.Length);
-#if DEBUG
-        sb.Append(", EntityCount: ");
-        sb.Append(archetype.EntityCount);
-#endif
-        return sb.ToString();
+    protected override void DebugInfo(out int count, out int length) {
+        count = 0;
+        foreach (var chunk in chunks) {
+            if (chunk.components != null) {
+                count++;
+            }
+            break;
+        }
+        length = chunks.Length;
     }
     
     internal override Type  StructType => typeof(T);
