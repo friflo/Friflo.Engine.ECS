@@ -219,6 +219,22 @@ public static class Test_StructHeapRaw
     }
     
     [Test]
+    public static void Test_StructHeapRaw_DeleteEntity_twice()
+    {
+        var store   = new RawEntityStore();
+        var arch    = store.GetArchetype(Signature.Get<Position>());
+        var entity  = store.CreateEntity(arch);
+        AreEqual(1,     store.EntityCount);
+        AreEqual(1,     arch.EntityCount);
+        store.DeleteEntity(entity);
+        AreEqual(0,     store.EntityCount);
+        AreEqual(0,     arch.EntityCount);
+        store.DeleteEntity(entity);
+        AreEqual(0,     store.EntityCount);
+        AreEqual(0,     arch.EntityCount);
+    }
+    
+    [Test]
     public static void Test_StructHeapRaw_invalid_store()
     {
         var store1      = new RawEntityStore();
