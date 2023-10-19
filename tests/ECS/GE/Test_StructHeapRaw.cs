@@ -18,8 +18,10 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 16384, 8388608;
+        int count       = 16384; // 16384 ~ 6 ms    8388608 ~ 384 ms
         var ids         = new int[count];
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
         for (int n = 0; n < count; n++)
         {
             var id  = store.CreateEntity(arch);
@@ -35,10 +37,8 @@ public static class Test_StructHeapRaw
                 Fail($"expect default value. n: {n}");
             }
             pos.x = n;
-            if (n % 512 == 0) {
-                int i = 111;
-            }
         }
+        Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         AreEqual(count, arch.Capacity);
         for (int n = 0; n < count; n++) {
             ref var val = ref store.EntityComponentRef<Position>(ids[n]);
@@ -53,7 +53,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 16384, 8388608;
+        int count       = 16384; // 16384 ~ 0-1 ms     8388608 ~ 98 ms
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
@@ -62,6 +62,8 @@ public static class Test_StructHeapRaw
             store.EntityComponentRef<Position>(id).x = n;
         }
         // --- delete majority of entities
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
         const int remaining = 500;
         for (int n = remaining; n < count; n++)
         {
@@ -70,10 +72,8 @@ public static class Test_StructHeapRaw
             if (expectCount != arch.EntityCount) {
                 Fail($"expect Archetype.EntityCount: ${expectCount}, was: {arch.EntityCount}, n: {n}");
             }
-            if (n % 512 == 0) {
-                int i = 111;
-            }
         }
+        Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         AreEqual(1024, arch.Capacity);
         for (int n = 0; n < remaining; n++) {
             AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
@@ -137,7 +137,7 @@ public static class Test_StructHeapRaw
     }
     
     /// user greater than <see cref="StructUtils.ChunkSize"/> for coverage
-    private const int Count = 10; // 10_000_000
+    private const int Count = 1000; // 10_000_000
     
     [Test]
     public static void Test_StructHeapRaw_Query_Perf()
@@ -145,7 +145,7 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
          // 10_000_000
-        //      CreateEntity()          ~  662 ms
+        //      CreateEntity()          ~  498 ms
         //      foreach Query()         ~  145 ms
         //      Query.ForEach()         ~  114 ms
         //      foreach Query.Chunks    ~   10 ms
