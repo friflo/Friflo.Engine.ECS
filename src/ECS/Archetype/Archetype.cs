@@ -91,7 +91,7 @@ public sealed class Archetype
         for (int pos = 0; pos < structCount; pos++)
         {
             var heap = heaps[pos];
-            heap.SetArchetype(this);
+            heap.SetArchetypeDebug(this);
             heapMap[heap.structIndex] = heap;
             SetStandardComponentHeaps(heap, ref std);
         }

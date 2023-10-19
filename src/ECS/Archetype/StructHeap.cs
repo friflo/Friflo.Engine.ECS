@@ -35,7 +35,7 @@ internal abstract class StructHeap
         this.structIndex    = structIndex;
     }
 
-    internal void SetArchetype(Archetype archetype) {
+    internal void SetArchetypeDebug(Archetype archetype) {
 #if DEBUG
         this.archetype = archetype;
 #endif
