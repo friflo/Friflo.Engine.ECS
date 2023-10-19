@@ -14,7 +14,7 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var sync    = new GameEntityStoreSync(client);
+        var sync    = new EntityStoreSync(client);
         var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
@@ -35,7 +35,7 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var sync    = new GameEntityStoreSync(client);
+        var sync    = new EntityStoreSync(client);
         var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         var node    = store.EntityAsDataNode(entity);
@@ -49,7 +49,7 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var sync    = new GameEntityStoreSync(client);
+        var sync    = new EntityStoreSync(client);
         var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         entity.AddTag<TestTag>();
@@ -65,7 +65,7 @@ public static class Test_ComponentWriter
     {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new SceneClient(hub);
-        var sync    = new GameEntityStoreSync(client);
+        var sync    = new EntityStoreSync(client);
         var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });

@@ -8,7 +8,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public interface IGameEntityStoreSync
+public interface IEntityStoreSync
 {
     bool TryGetDataNode (long pid, out DataNode dataNode);
     void AddDataNode    (DataNode dataNode);

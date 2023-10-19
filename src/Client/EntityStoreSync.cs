@@ -4,16 +4,14 @@
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Hub.Client;
 
-
 namespace Friflo.Fliox.Engine.Client;
 
-
-public class GameEntityStoreSync : IGameEntityStoreSync
+public class EntityStoreSync : IEntityStoreSync
 {
 
     private readonly LocalEntities<long, DataNode>  dataNodes;
     
-    public GameEntityStoreSync(SceneClient client) {
+    public EntityStoreSync(SceneClient client) {
         dataNodes = client.nodes.Local;
     }
         

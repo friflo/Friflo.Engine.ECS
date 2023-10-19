@@ -52,11 +52,11 @@ public sealed partial class GameEntityStore : EntityStore
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] private             int                     rootId;             //  4                   - id of root node. 0 = NoParentId
     // --- misc
-    [Browse(Never)] private  readonly   IGameEntityStoreSync    storeSync;          //  8
+    [Browse(Never)] private  readonly   IEntityStoreSync    storeSync;          //  8
     #endregion
     
 #region initialize
-    public GameEntityStore(PidType pidType = PidType.RandomPids, IGameEntityStoreSync storeSync = null)
+    public GameEntityStore(PidType pidType = PidType.RandomPids, IEntityStoreSync storeSync = null)
     {
         this.pidType        = pidType;
         nodes               = Array.Empty<EntityNode>();
