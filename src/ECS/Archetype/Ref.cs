@@ -17,7 +17,7 @@ public struct Ref<T>
     /// Returns a mutable struct component value by reference.<br/>
     /// <see cref="Value"/> modifications are instantaneously available via <see cref="GameEntity.ComponentRef{T}"/>  
     /// </summary>
-    public          ref T       Value => ref components[pos];
+    public readonly ref T       Value => ref components[pos];
     
     private             T[]     components; //  8
     internal            int     pos;        //  4
@@ -35,5 +35,5 @@ public struct Ref<T>
         this.components = copy;
     }
 
-    public  override    string  ToString() => Value.ToString();
+    public  override readonly string  ToString() => Value.ToString();
 }

@@ -67,8 +67,8 @@ public struct EntityNode
     [Browse(Never)] internal            int         childCount; // 4
     [Browse(Never)] internal            NodeFlags   flags;      // 4 (1)
                     
-                    internal            bool        Is      (NodeFlags flag) => (flags & flag) != 0;
-                    internal            bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
+                    internal readonly   bool        Is      (NodeFlags flag) => (flags & flag) != 0;
+                    internal readonly   bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
     #endregion
     
 #region internal methods
@@ -76,7 +76,7 @@ public struct EntityNode
         this.id     = id;
     }
     
-    private string GetString()
+    private readonly string GetString()
     {
         var sb = new StringBuilder();
         if (entity != null) {

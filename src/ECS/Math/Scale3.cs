@@ -22,7 +22,7 @@ public struct Scale3 : IStructComponent
     [FieldOffset(4)] public     float   y;      // (4)
     [FieldOffset(8)] public     float   z;      // (4)
 
-    public override string ToString() => $"{x}, {y}, {z}";
+    public override readonly string ToString() => $"{x}, {y}, {z}";
 
     public Scale3 (float x, float y, float z) {
         this.x = x;

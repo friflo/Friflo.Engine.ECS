@@ -13,8 +13,8 @@ namespace Friflo.Fliox.Engine.ECS;
 [StructComponent("name")]
 public struct EntityName : IStructComponent
 {
-    public  string              Value   { get => value; set => SetValue(value); }
-    [Browse(Never)]         public  ReadOnlySpan<byte>  Utf8    => new (utf8);
+                            public  string              Value   { readonly get => value; set => SetValue(value); }
+    [Browse(Never)] public readonly ReadOnlySpan<byte>  Utf8    => new (utf8);
 
     [Browse(Never)][Ignore] private string              value;  //  8
     [Browse(Never)][Ignore] private byte[]              utf8;   //  8
