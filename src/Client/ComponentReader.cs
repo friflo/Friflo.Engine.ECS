@@ -99,45 +99,20 @@ internal sealed class ComponentReader
     /// </summary>
     private void SetEntityArchetype(DataNode dataNode, GameEntity entity, EntityStore store)
     {
-        bool hasStructComponent = false;
         searchKey.Clear();
-        var count = componentCount;
-        for (int n = 0; n < count; n++)
-        {
-            ref var component   = ref components[n];
-            var type            = componentTypeByKey[component.key];
-            component.type      = type;
-            if (type.kind != Struct) {
-                continue;
-            }
-            hasStructComponent = true;
-            searchKey.structs.SetBit(type.structIndex);
-        }
-        var tags    = dataNode.tags;
+        var hasStructComponent  = GetStructComponents(ref searchKey.structs);
+        var tags                = dataNode.tags;
         var hasTags = tags?.Count > 0;
         if (!hasStructComponent && !hasTags) {
             return; // early out in absence of struct components and tags
         }
         if (hasTags) {
-            ProcessTags(tags);
+            AddTags(tags, ref searchKey.tags);
         }
-        // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
         searchKey.CalculateHashCode();
-        Archetype newArchetype;
-        if (store.TryGetValue(searchKey, out var archetypeKey)) {
-            newArchetype = archetypeKey.archetype;
-        } else {
-            var config = store.GetArchetypeConfig();
-            structTypes.Clear();
-            for (int n = 0; n < count; n++) {
-                ref var component = ref components[n];
-                if (component.type.kind == Struct) {
-                    structTypes.Add(component.type);
-                }
-            }
-            newArchetype = Archetype.CreateWithStructTypes(config, structTypes, searchKey.tags);
-            store.AddArchetype(newArchetype);
-        }
+        // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
+        var newArchetype = FindArchetype(searchKey, store);
+        
         var curArchetype = entity.archetype;
         if (curArchetype == newArchetype) {
             return;
@@ -148,6 +123,42 @@ internal sealed class ComponentReader
         } else {
             entity.compIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
         }
+    }
+    
+    private bool GetStructComponents(ref ArchetypeStructs structs)
+    {
+        var hasStructComponent  = false;
+        var count               = componentCount;
+        for (int n = 0; n < count; n++)
+        {
+            ref var component   = ref components[n];
+            var type            = componentTypeByKey[component.key];
+            component.type      = type;
+            if (type.kind != Struct) {
+                continue;
+            }
+            hasStructComponent = true;
+            structs.SetBit(type.structIndex);
+        }
+        return hasStructComponent;
+    }
+    
+    private Archetype FindArchetype(ArchetypeKey searchKey, EntityStore store)
+    {
+        if (store.TryGetValue(searchKey, out var archetypeKey)) {
+            return archetypeKey.archetype;
+        }
+        var config = store.GetArchetypeConfig();
+        structTypes.Clear();
+        for (int n = 0; n < componentCount; n++) {
+            ref var component = ref components[n];
+            if (component.type.kind == Struct) {
+                structTypes.Add(component.type);
+            }
+        }
+        var newArchetype = Archetype.CreateWithStructTypes(config, structTypes, searchKey.tags);
+        store.AddArchetype(newArchetype);
+        return newArchetype;
     }
     
     private JsonEvent ReadRawComponents()
@@ -176,11 +187,11 @@ internal sealed class ComponentReader
         }
     }
     
-    private void ProcessTags(List<string> tags)
+    private void AddTags(List<string> tagList, ref Tags tags)
     {
-        foreach (var tag in tags) {
+        foreach (var tag in tagList) {
             var tagType = tagTypeByName[tag];
-            searchKey.tags.SetBit(tagType.tagIndex);
+            tags.SetBit(tagType.tagIndex);
         }
     }
 }
