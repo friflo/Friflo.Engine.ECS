@@ -8,6 +8,7 @@ using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.ComponentKind;
 
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Engine.Client;
 
 /// <summary>
@@ -46,6 +47,17 @@ internal sealed class ComponentReader
         if (!hasComponents && !hasTags) {
             return null;
         }
+        var error = ReadRaw(dataNode, entity);
+        if (error != null) {
+            return error;
+        }
+        SetEntityArchetype(dataNode, entity, store);
+        ReadComponents(entity);
+        return null;
+    }
+    
+    private string ReadRaw (DataNode dataNode, GameEntity entity)
+    {
         parser.InitParser(dataNode.components);
         var ev = parser.NextEvent();
         switch (ev)
@@ -65,8 +77,6 @@ internal sealed class ComponentReader
             default:
                 return $"expect 'components' == object or null. id: {entity.id}. was: {ev}";
         }
-        SetEntityArchetype(dataNode, entity, store);
-        ReadComponents(entity);
         return null;
     }
     
