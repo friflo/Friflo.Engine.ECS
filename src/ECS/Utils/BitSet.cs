@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -30,6 +31,7 @@ public struct BitSet
     // Could extend with Vector256Long[] if 256 struct components are not enough
     // private readonly  Vector256Long[]   values;
 
+    [Pure]
     public              BitSetEnumerator    GetEnumerator() => new BitSetEnumerator(this);
     public override     string              ToString()      => AppendString(new StringBuilder()).ToString();
     

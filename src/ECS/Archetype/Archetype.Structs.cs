@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Text;
 
 // ReSharper disable ConvertToAutoProperty
@@ -74,11 +75,13 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
                bitSet.Has(StructHeap<T3>.StructIndex);
     }
     
+    [Pure]
     public  bool    HasAll (in ArchetypeStructs structs)
     {
         return bitSet.HasAll(structs.bitSet);
     }
     
+    [Pure]
     public  bool    HasAny (in ArchetypeStructs structs)
     {
         return bitSet.HasAny(structs.bitSet);

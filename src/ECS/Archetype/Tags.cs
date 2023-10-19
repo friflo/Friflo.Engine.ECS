@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -49,11 +50,13 @@ public struct Tags : IEnumerable<ComponentType>
                bitSet.Has(TagType<T3>.TagIndex);
     }
     
+    [Pure]
     public  bool    HasAll (in Tags tags)
     {
         return bitSet.HasAll(tags.bitSet);
     }
     
+    [Pure]
     public  bool    HasAny (in Tags tags)
     {
         return bitSet.HasAny(tags.bitSet);
