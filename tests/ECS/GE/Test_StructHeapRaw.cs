@@ -145,10 +145,11 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
          // 10_000_000
-        //      CreateEntity()          ~  498 ms
-        //      foreach Query()         ~  145 ms
-        //      Query.ForEach()         ~  114 ms
-        //      foreach Query.Chunks    ~   10 ms
+        //      CreateEntity()              ~  498 ms
+        //      for EntityComponentRef<>()  ~   56 ms (good performance only, because archetypes remain unchanged after e 
+        //      foreach Query()             ~  145 ms
+        //      Query.ForEach()             ~  114 ms
+        //      foreach Query.Chunks        ~   10 ms
         var query   = store.Query(Signature.Get<Position, Rotation>());
         foreach (var (position, rotation) in query) { }     // force one time allocation
         query.ForEach((position, rotation) => {}).Run();    // warmup
@@ -163,6 +164,15 @@ public static class Test_StructHeapRaw
             }
             Console.WriteLine($"CreateEntity() - raw. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
             AreEqual(Count, arch1.EntityCount);
+        } {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int n = 1; n < Count; n++) {
+                ref var position = ref store.EntityComponentRef<Position>(n);                
+                var x = (int)position.x;
+                if (x != n - 1) throw new InvalidOperationException($"expect: {n - 1}, was: {x}");
+            }
+            Console.WriteLine($"for EntityComponentRef<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
