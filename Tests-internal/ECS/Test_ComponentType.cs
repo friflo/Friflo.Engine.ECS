@@ -21,7 +21,7 @@ public static class Test_ComponentType
         
         var e = Throws<InvalidOperationException>(() =>
         {
-            schema.GetStructType(typeof(string), schema.maxStructIndex);    
+            schema.CheckStructIndex(typeof(string), schema.maxStructIndex);    
         });
         var expect = $"number of structs exceed EntityStore.maxStructIndex: {schema.maxStructIndex}";
         AreEqual(expect, e!.Message);

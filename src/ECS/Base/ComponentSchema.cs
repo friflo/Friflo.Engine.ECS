@@ -122,12 +122,6 @@ public sealed class ComponentSchema
     /// Ensures <see cref="StructHeap.structIndex"/> and <see cref="StructHeap{T}.StructIndex"/> is less than <see cref="maxStructIndex"/><br/>
     /// to make range check redundant when accessing <see cref="Archetype.heapMap"/>[] using an index.
     /// </remarks>
-    internal ComponentType GetStructType(Type structType, int structIndex)
-    {
-        CheckStructIndex(structType, structIndex);
-        return structs[structIndex];
-    }
-    
     internal int CheckStructIndex(Type structType, int structIndex)
     {
         if (structIndex == StructUtils.MissingAttribute) {
