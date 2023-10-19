@@ -83,25 +83,24 @@ public static class Test_StructHeapRaw
     [Test]
     public static void Test_StructHeapRaw_CreateEntity_Perf()
     {
-        var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<ByteComponent>());
-        _ = store.CreateEntity(arch1); // warmup
-        
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        int count       = 1000;
-        //   1_000_000 ~   26 ms
-        //  10_000_000 ~  276 ms
-        // 100_000_000 ~ 1862 ms
-        // 500_000_000 ~ 9257 ms
-        for (int n = 0; n < count; n++) {
-            _ = store.CreateEntity(arch1);
-            if (n % 10_000_000 == 0) {
-                Console.WriteLine(n);
+        for (int o = 0; o < 1; o++) {
+            var store   = new RawEntityStore();
+            var arch1   = store.GetArchetype(Signature.Get<ByteComponent>());
+            _ = store.CreateEntity(arch1); // warmup
+            
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            int count       = 1000;
+            //   1_000_000 ~   24 ms
+            //  10_000_000 ~  276 ms
+            // 100_000_000 ~ 1862 ms
+            // 500_000_000 ~ 9257 ms
+            for (int n = 0; n < count; n++) {
+                _ = store.CreateEntity(arch1);
             }
+            Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            AreEqual(count + 1, arch1.EntityCount);
         }
-        Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        AreEqual(count + 1, arch1.EntityCount);
     }
     
     [Test]
