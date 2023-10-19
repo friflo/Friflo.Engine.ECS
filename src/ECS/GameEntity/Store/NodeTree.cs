@@ -49,7 +49,7 @@ public partial class GameEntityStore
         }
     }
     
-    internal static bool HasParent(int id)  =>   id >= Static.MinNodeId;
+    private static bool HasParent(int id)  =>   id >= Static.MinNodeId;
     
     internal void AddChild (int id, int childId)
     {
