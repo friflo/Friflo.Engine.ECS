@@ -205,21 +205,25 @@ public sealed class Archetype
         //                              [ 513, 1024] -> 2
         //                              [1025, 1536] -> 3
         //                              ...
-        var newChunkCount   = (entityCount - 1) / StructUtils.ChunkSize + 1; 
-        int newChunkLength  = memory.chunkLength;
+        var newChunkCount   = (entityCount - 1) / StructUtils.ChunkSize + 1;
         
-        if      (newChunkCount > memory.chunkCount) {
-            // --- double length of chunks array if needed
+        if      (newChunkCount > memory.chunkCount)
+        {
+            int newChunkLength  = memory.chunkLength;
+            // --- double Length of chunks array if needed
             if (newChunkCount > memory.chunkLength) {
                 newChunkLength *= 2;
             }
             SetChunkCapacity(newChunkCount, memory.chunkCount, newChunkLength);
         }
-        else if (newChunkCount < memory.chunkCount) {
-            int quarterCount = memory.chunkLength / 4;
-            // --- halve length of chunks array if newChunkCount is significant lower (1/4) of current chunks length 
-            if (newChunkCount <= quarterCount) {
-                newChunkLength /= 2;
+        else if (newChunkCount < memory.chunkCount)
+        {
+            // --- halve Length of chunks array if newChunkCount is significant less than (1/4) of current chunks length 
+            if (newChunkCount <=  memory.chunkLength / 4)
+            {
+                int newChunkLength  = memory.chunkLength / 2;
+                // Create new chunks array with half the Length of the current one.
+                // Copy newChunkLength component buffers from current to new one.
                 SetChunkCapacity(newChunkLength, newChunkLength, newChunkLength);
             }
         }
