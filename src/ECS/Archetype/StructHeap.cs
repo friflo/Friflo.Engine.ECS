@@ -19,7 +19,7 @@ internal abstract class StructHeap
     // --- internal fields
     internal readonly   int         structIndex;    //  4
 #if DEBUG
-    internal            Archetype   archetype;      // only used for debugging
+    private             Archetype   archetype;      // only used for debugging
 #endif
 
     internal  abstract  Type        StructType          { get; }
