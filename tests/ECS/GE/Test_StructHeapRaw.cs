@@ -18,7 +18,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 8388608;
+        int count       = 16384; // 16384, 8388608;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
@@ -35,6 +35,9 @@ public static class Test_StructHeapRaw
                 Fail($"expect default value. n: {n}");
             }
             pos.x = n;
+            if (n % 512 == 0) {
+                int i = 111;
+            }
         }
         AreEqual(count, arch.Capacity);
         for (int n = 0; n < count; n++) {
@@ -50,7 +53,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 8388608;
+        int count       = 16384; // 16384, 8388608;
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
@@ -60,14 +63,18 @@ public static class Test_StructHeapRaw
         }
         // --- delete majority of entities
         const int remaining = 500;
-        for (int n = remaining; n < count; n++) {
+        for (int n = remaining; n < count; n++)
+        {
             store.DeleteEntity(ids[n]);
             var expectCount = count + remaining - n - 1;
             if (expectCount != arch.EntityCount) {
                 Fail($"expect Archetype.EntityCount: ${expectCount}, was: {arch.EntityCount}, n: {n}");
             }
+            if (n % 512 == 0) {
+                int i = 111;
+            }
         }
-        AreEqual(1024, arch.Capacity);
+        AreEqual(2048, arch.Capacity);
         for (int n = 0; n < remaining; n++) {
             AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
         }

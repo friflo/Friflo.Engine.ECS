@@ -38,4 +38,6 @@ internal struct ChunkMemory
     internal    int     shrinkThreshold;    //  4       - multiple of chunk size entities
     internal    int     chunkCount;         //  4       - 1 <= chunkCount <= chunkLength
     internal    int     chunkLength;        //  4       - 1, 2, 4, 8, 16, ...
+    
+    internal    int     Capacity    => chunkCount * StructUtils.ChunkSize;
 }

@@ -17,7 +17,7 @@ public sealed class Archetype
 #region public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
-                    public              int                 Capacity        => memory.chunkCount * StructUtils.ChunkSize;
+                    public              int                 Capacity        => memory.Capacity;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
                                                                             => (entityCount - 1) / StructUtils.ChunkSize;
     
@@ -216,18 +216,21 @@ public sealed class Archetype
             if (newChunkCount > memory.chunkLength) {
                 newChunkLength *= 2;
             }
+            SetChunkCapacity(memory.chunkCount, newChunkCount, memory.chunkLength, newChunkLength);
         }
         else if (newChunkCount < memory.chunkCount) {
             int quarterCount = memory.chunkLength / 4;
             // --- halve chunks array if newChunkCount is significant lower (1/4) of current chunks length 
             if (newChunkCount <= quarterCount) {
                 newChunkLength /= 2;
+                SetChunkCapacity(newChunkLength, newChunkLength, memory.chunkLength, newChunkLength);
             }
-        } else {
-            return;
         }
+    }
+    
+    private void SetChunkCapacity(int chunkCount, int newChunkCount, int chunkLength, int newChunkLength) {
         foreach (var heap in structHeaps) {
-            heap.SetChunkCapacity(memory.chunkCount, newChunkCount, memory.chunkLength, newChunkLength, StructUtils.ChunkSize);
+            heap.SetChunkCapacity(chunkCount, newChunkCount, chunkLength, newChunkLength, StructUtils.ChunkSize);
         }
         memory.chunkCount   = newChunkCount;
         memory.chunkLength  = newChunkLength;

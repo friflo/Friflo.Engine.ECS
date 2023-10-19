@@ -50,7 +50,7 @@ public static class Test_StructHeap
             entities[n].DeleteEntity();
             AreEqual(count + remaining - n - 1, arch1.EntityCount);
         }
-        AreEqual(1024, arch1.Capacity);
+        AreEqual(2048, arch1.Capacity);
         for (int n = 0; n < remaining; n++) {
             AreEqual(n, entities[n].Position.x);
         }
