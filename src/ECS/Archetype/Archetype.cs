@@ -34,7 +34,7 @@ public sealed class Archetype
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
-                    private             ChunkMemory         memory;         // 16
+                    private             ChunkMemory         memory;         // 16       - count & length used to store struct components in chunks  
     // --- internal
     [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
     [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
