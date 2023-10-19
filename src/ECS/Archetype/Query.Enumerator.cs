@@ -30,7 +30,7 @@ public ref struct QueryEnumerator
     /// <summary>
     /// return each component using a <see cref="Ref{T}"/> to avoid struct copy and enable mutation in library
     /// </summary>
-    public int Current   => entityIds[entityPos];
+    public readonly int Current   => entityIds[entityPos];
     
     // --- IEnumerator
     public bool MoveNext() {
@@ -93,7 +93,7 @@ public ref struct QueryEnumerator<T1, T2>
     /// <summary>
     /// return each component using a <see cref="Ref{T}"/> to avoid struct copy and enable mutation in library
     /// </summary>
-    public (Ref<T1>, Ref<T2>) Current   => (ref1, ref2);
+    public readonly (Ref<T1>, Ref<T2>) Current   => (ref1, ref2);
     
     // --- IEnumerator
     public bool MoveNext() {

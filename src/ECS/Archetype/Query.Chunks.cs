@@ -55,7 +55,7 @@ public ref struct ChunkEnumerator<T1, T2>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public (Chunk<T1>, Chunk<T2>) Current   => (chunk1, chunk2);
+    public readonly (Chunk<T1>, Chunk<T2>) Current   => (chunk1, chunk2);
     
     // --- IEnumerator
     public bool MoveNext() {

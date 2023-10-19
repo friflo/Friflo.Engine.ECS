@@ -73,7 +73,7 @@ public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public ref EntityNode Current   => ref childNodes.nodes[childNodes.childIds[index - 1]];
+    public readonly ref EntityNode Current   => ref childNodes.nodes[childNodes.childIds[index - 1]];
     
     // --- IEnumerator
     public bool MoveNext() {
