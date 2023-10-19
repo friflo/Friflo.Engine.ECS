@@ -13,7 +13,7 @@ public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not imple
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-    readonly ArchetypeQuery<T1, T2> query;
+    private readonly ArchetypeQuery<T1, T2> query;
 
     public  override string         ToString() => query.signatureIndexes.GetString("Chunks: ");
 
