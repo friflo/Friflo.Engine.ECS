@@ -300,15 +300,6 @@ public sealed class GameEntity
         return null;
     }
     
-    internal void AppendClassComponent<T>(T component)
-        where T : ClassComponent
-    {
-        component.entity    = this;
-        var len             = classComponents.Length;
-        Utils.Resize(ref classComponents, len + 1);
-        classComponents[len] = component;
-    }
-    
     /// <returns>the component previously added to the entity.</returns>
     public T RemoveClassComponent<T>()
         where T : ClassComponent
@@ -411,7 +402,16 @@ public sealed class GameEntity
     
     #endregion
     
-#region private methods
+#region internal / private methods
+    internal void AppendClassComponent<T>(T component)
+        where T : ClassComponent
+    {
+        component.entity    = this;
+        var len             = classComponents.Length;
+        Utils.Resize(ref classComponents, len + 1);
+        classComponents[len] = component;
+    }
+    
     private object[] GetComponentsDebug()
     {
         var objects = new object[ComponentCount];
