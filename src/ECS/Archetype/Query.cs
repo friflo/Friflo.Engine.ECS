@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -190,5 +192,13 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     
     internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature.signatureIndexes) {
+    }
+}
+
+internal static class EnumeratorUtils
+{
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    internal static void AssertComponentLenGreater0 (int componentLen) {
+        if (componentLen <= 0) throw new InvalidOperationException("expect componentLen > 0");
     }
 }

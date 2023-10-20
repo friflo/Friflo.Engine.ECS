@@ -7,8 +7,6 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-#region --- T1 T2
-
 public readonly struct QueryForEach<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
@@ -67,4 +65,3 @@ public readonly struct QueryForEach<T1, T2>
         }
     }
 }
-#endregion

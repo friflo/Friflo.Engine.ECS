@@ -1,0 +1,51 @@
+// Copyright (c) Ullrich Praetz. All rights reserved.
+// See LICENSE file in the project root for full license information.
+
+using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
+
+// ReSharper disable once CheckNamespace
+namespace Friflo.Fliox.Engine.ECS;
+
+public ref struct QueryEnumerator
+{
+    private             int                     entityPos;
+    private             int                     componentLen;
+    private             int[]                   entityIds;
+    
+    private  readonly   ReadOnlySpan<Archetype> archetypes;
+    private             int                     archetypePos;
+    
+    internal QueryEnumerator(ArchetypeQuery query)
+    {
+        archetypes      = query.Archetypes;
+        archetypePos    = 0;
+        var archetype   = archetypes[0];
+        entityIds       = archetype.entityIds;
+        entityPos       = -1;
+        componentLen    = archetype.EntityCount - 1;
+    }
+    
+    /// <summary>
+    /// return each component using a <see cref="Ref{T}"/> to avoid struct copy and enable mutation in library
+    /// </summary>
+    public readonly int Current   => entityIds[entityPos];
+    
+    // --- IEnumerator
+    public bool MoveNext() {
+        if (entityPos < componentLen) {
+            entityPos++;
+            return true;
+        }
+        if (archetypePos < archetypes.Length - 1) {
+            var archetype   = archetypes[++archetypePos];
+            entityPos       = 0;
+            entityIds       = archetype.entityIds;
+            componentLen    = archetype.EntityCount - 1;
+            return true;
+        }
+        return false;  
+    }
+}
