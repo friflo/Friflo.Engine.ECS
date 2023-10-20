@@ -8,7 +8,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 internal static class StructUtils
 {
-    internal const      int     ChunkSize           = 512;
+    internal const      int     ChunkSize           = 512; // check 64
     internal const      int     MissingAttribute    = 0;
     
     private  static     int     _nextStructIndex    = 1;

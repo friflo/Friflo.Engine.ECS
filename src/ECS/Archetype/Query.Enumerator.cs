@@ -84,7 +84,7 @@ public ref struct QueryEnumerator<T1, T2>
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-        chunkEnd        = archetype.ChunkEnd - 1;
+        chunkEnd        = archetype.ChunkCount - 1;
         
         componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
         ref1.Set(chunks1[0].components);
@@ -108,7 +108,7 @@ public ref struct QueryEnumerator<T1, T2>
         if (chunkPos < chunkEnd) {
             goto Next;
         }
-        if (chunkPos == chunkEnd && chunkPos > -1) {
+        if (chunkPos == chunkEnd && chunkPos >= 0) {
             componentLen = archetypes[archetypePos].ChunkRest - 1;
             if (componentLen >= 0) {
                 goto Next;
