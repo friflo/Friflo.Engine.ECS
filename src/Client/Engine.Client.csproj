@@ -5,7 +5,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <RootNamespace>Friflo.Fliox.Engine</RootNamespace>
+    <RootNamespace>Friflo.Fliox.Engine.Client</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -18,6 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="Friflo.Json.Fliox.Hub" Version="0.47.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ECS\Engine.ECS.csproj" />
   </ItemGroup>
 
 </Project>

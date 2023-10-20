@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.Client;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
 // ReSharper disable once CheckNamespace

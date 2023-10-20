@@ -3,12 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
-namespace Friflo.Fliox.Engine.Client;
+// ReSharper disable once CheckNamespace
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// Create the <see cref="JsonValue"/> from all class / struct components used at <see cref="DataNode.components"/>.<br/>

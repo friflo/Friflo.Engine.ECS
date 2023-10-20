@@ -1,4 +1,4 @@
-﻿using Friflo.Fliox.Engine.Client;
+﻿using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 
 namespace Internal.ECS;

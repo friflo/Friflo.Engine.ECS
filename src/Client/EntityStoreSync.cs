@@ -8,7 +8,6 @@ namespace Friflo.Fliox.Engine.Client;
 
 public class EntityStoreSync : IEntityStoreSync
 {
-
     private readonly LocalEntities<long, DataNode>  dataNodes;
     
     public EntityStoreSync(SceneClient client) {

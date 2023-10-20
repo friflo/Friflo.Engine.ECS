@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox;
 using NUnit.Framework;

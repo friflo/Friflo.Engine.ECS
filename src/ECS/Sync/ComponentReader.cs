@@ -2,14 +2,14 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.ComponentKind;
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-namespace Friflo.Fliox.Engine.Client;
+// ReSharper disable once CheckNamespace
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// Create all class / struct components for an entity from <see cref="JsonValue"/> used as <see cref="DataNode.components"/>

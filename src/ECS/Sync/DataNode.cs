@@ -5,17 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Friflo.Json.Fliox;
-using Friflo.Json.Fliox.Hub.Host;
 
 // ReSharper disable ClassNeverInstantiated.Global
-namespace Friflo.Fliox.Engine.Client;
+// ReSharper disable once CheckNamespace
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="DataNode"/> is used to serialize entities.<br/>
-/// The <see cref="SceneClient"/> provide methods to create, read, update, delete and query entities.
+/// A <see cref="DataNode"/> is used to serialize entities.
 /// </summary>
 /// <remarks>
-/// When reading / writing <see cref="DataNode"/>'s in the editor a special <see cref="MemoryDatabase"/> implementation is required.<br/>
+/// When reading / writing <see cref="DataNode"/>'s in the editor a special MemoryDatabase" implementation is required.<br/>
 /// This implementation preserves the order of entities stored in a JSON file.<br/>
 /// Therefor it stores the order of each entity when loaded and apply this order when writing them back to the JSON file.<br/> 
 /// <br/>

@@ -25,7 +25,8 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Engine.csproj" />
+      <ProjectReference Include="..\src\Client\Engine.Client.csproj" />
+      <ProjectReference Include="..\src\ECS\Engine.ECS.csproj" />
     </ItemGroup>
 
 
