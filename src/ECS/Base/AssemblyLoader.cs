@@ -92,7 +92,7 @@ internal sealed class AssemblyLoader
    
     internal static void AddComponentTypes(List<Type> componentTypes, Assembly assembly)
     {
-        var types       = assembly.GetTypes();
+        var types = assembly.GetTypes();
         foreach (var type in types)
         {
             if (type.IsGenericType) {
@@ -107,20 +107,25 @@ internal sealed class AssemblyLoader
                 componentTypes.Add(type);
                 continue;
             }
-            foreach (var attr in type.CustomAttributes)
-            {
-                if (isValueType) {
-                    var attributeType = attr.AttributeType;
-                    if (attributeType == typeof(StructComponentAttribute)) {
-                        componentTypes.Add(type);
-                    }
+            AddComponentType(componentTypes, type);
+        }
+    }
+    
+    private static void AddComponentType(List<Type> componentTypes, Type type)
+    {
+        foreach (var attr in type.CustomAttributes)
+        {
+            if (type.IsValueType) {
+                var attributeType = attr.AttributeType;
+                if (attributeType == typeof(StructComponentAttribute)) {
+                    componentTypes.Add(type);
                 }
-                if (isClass) {
-                    var attributeType = attr.AttributeType;
-                    if (attributeType == typeof(ClassComponentAttribute))
-                    {
-                        componentTypes.Add(type);
-                    }
+            }
+            if (type.IsClass) {
+                var attributeType = attr.AttributeType;
+                if (attributeType == typeof(ClassComponentAttribute))
+                {
+                    componentTypes.Add(type);
                 }
             }
         }
