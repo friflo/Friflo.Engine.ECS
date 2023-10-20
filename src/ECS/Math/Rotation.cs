@@ -23,7 +23,7 @@ public struct  Rotation : IStructComponent
     [FieldOffset (8)] public    float       z;      // (4)
     [FieldOffset(12)] public    float       w;      // (4)
     
-    public override readonly string ToString() => $"{x}, {y}, {z}, {w}";
+    public readonly override string ToString() => $"{x}, {y}, {z}, {w}";
     
     public Rotation (float x, float y, float z, float w) {
         this.x = x;

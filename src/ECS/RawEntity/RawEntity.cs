@@ -17,5 +17,5 @@ internal struct RawEntity
     internal        int     archIndex;  // 4    could be short. if changing check perf
     internal        int     compIndex;  // 4
 
-    public override readonly string  ToString() => $"archIndex: {archIndex}  compIndex: {compIndex}";
+    public readonly override string  ToString() => $"archIndex: {archIndex}  compIndex: {compIndex}";
 }

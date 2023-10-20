@@ -35,5 +35,5 @@ public struct Ref<T>
         this.components = copy;
     }
 
-    public  override readonly string  ToString() => Value.ToString();
+    public  readonly override string  ToString() => Value.ToString();
 }
