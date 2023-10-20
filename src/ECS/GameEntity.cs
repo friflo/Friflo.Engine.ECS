@@ -108,9 +108,9 @@ public sealed class GameEntity
     /// To access <b>struct</b> components use <see cref="ComponentRef{T}"/>
     /// </remarks>
     [Obsolete("use either GetClassComponent() or GetComponentValue()")]
-    public  object[]                        Components_     => GameEntityStore.GetComponentsDebug(this);
+    public  object[]                        Components_     => GameEntityUtils.GetComponentsDebug(this);
     
-    public override string                  ToString()      => GameEntityStore.GameEntityToString(this, new StringBuilder());
+    public override string                  ToString()      => GameEntityUtils.GameEntityToString(this, new StringBuilder());
 
     #endregion
 

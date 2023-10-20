@@ -80,7 +80,7 @@ public struct EntityNode
     {
         var sb = new StringBuilder();
         if (entity != null) {
-            GameEntityStore.GameEntityToString(entity, sb);
+            GameEntityUtils.GameEntityToString(entity, sb);
         } else {
             sb.Append("id: ");
             sb.Append(id);
