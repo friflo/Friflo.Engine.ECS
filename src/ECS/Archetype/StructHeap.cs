@@ -14,8 +14,14 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+/// <remarks>
+/// <b>Note:</b> Should not contain any other fields. Reasons:<br/>
+/// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
+///   for collection.
+/// </remarks>
 internal abstract class StructHeap
 {
+    // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     internal readonly   int         structIndex;    //  4
 #if DEBUG

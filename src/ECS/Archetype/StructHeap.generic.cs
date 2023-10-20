@@ -12,9 +12,15 @@ using static Friflo.Fliox.Engine.ECS.StructUtils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+/// <remarks>
+/// <b>Note:</b> Should not contain any other fields. Reasons:<br/>
+/// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
+///   for collection.
+/// </remarks>
 internal sealed class StructHeap<T> : StructHeap
     where T : struct, IStructComponent
 {
+    // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     internal            StructChunk<T>[]    chunks;     // 8 - Length: 1, 2, 4, 8
     private  readonly   TypeMapper<T>       typeMapper; // 8
