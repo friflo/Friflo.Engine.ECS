@@ -180,18 +180,12 @@ public sealed class GameEntity
     
     #endregion
     
-#region initialize
-
-    private static class Static {
-        internal static readonly ClassComponent[] EmptyComponents   = Array.Empty<ClassComponent>();
-    }
-    
+#region constructor
     internal GameEntity(int id, Archetype archetype) {
         this.id         = id;
         this.archetype  = archetype;
-        classComponents = Static.EmptyComponents;
+        classComponents = GameEntityUtils.EmptyComponents;
     }
-    
     #endregion
 
     // --------------------------------- struct component methods --------------------------------

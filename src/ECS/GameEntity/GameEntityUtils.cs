@@ -65,6 +65,8 @@ public static class GameEntityUtils
     }
     
     // ---------------------------------- ClassComponent utils ----------------------------------
+    internal static readonly ClassComponent[] EmptyComponents   = Array.Empty<ClassComponent>();
+    
     internal static void AppendClassComponent<T>(GameEntity entity, T component)
         where T : ClassComponent
     {
