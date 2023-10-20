@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Text;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
@@ -46,16 +48,6 @@ public static class GameEntityUtils
         return sb.ToString();
     }
     
-    internal static void AppendClassComponent<T>(GameEntity entity, T component)
-        where T : ClassComponent
-    {
-        component.entity        = entity;
-        ref var classComponents = ref entity.classComponents;
-        var len                 = classComponents.Length;
-        Utils.Resize(ref classComponents, len + 1);
-        classComponents[len] = component;
-    }
-    
     internal static object[] GetComponentsDebug(GameEntity entity)
     {
         var objects = new object[entity.ComponentCount];
@@ -70,5 +62,81 @@ public static class GameEntityUtils
             objects[count++] = component;
         }
         return objects;
+    }
+    
+    // ---------------------------------- ClassComponent utils ----------------------------------
+    internal static void AppendClassComponent<T>(GameEntity entity, T component)
+        where T : ClassComponent
+    {
+        component.entity        = entity;
+        ref var classComponents = ref entity.classComponents;
+        var len                 = classComponents.Length;
+        Utils.Resize(ref classComponents, len + 1);
+        classComponents[len] = component;
+    }
+    
+    private static Exception MissingAttributeException(Type type) {
+        var msg = $"Missing attribute [ClassComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
+        return new InvalidOperationException(msg);
+    }
+    
+    internal static ClassComponent GetClassComponent(GameEntity entity, Type classType)
+    {
+        foreach (var component in entity.classComponents) {
+            if (component.GetType() == classType) {
+                return component;
+            }
+        }
+        return null;
+    }
+    
+    internal static ClassComponent AddClassComponent(GameEntity entity, ClassComponent component, Type classType, int classIndex)
+    {
+        if (classIndex == ClassUtils.MissingAttribute) {
+            throw MissingAttributeException(classType);
+        }
+        if (component.entity != null) {
+            throw new InvalidOperationException("component already added to an entity");
+        }
+        component.entity    = entity;
+        var classes         = entity.classComponents;
+        var len             = classes.Length;
+        for (int n = 0; n < len; n++)
+        {
+            var current = classes[n]; 
+            if (current.GetType() == classType) {
+                classes[n] = component;
+                current.entity = null;
+                return component;
+            }
+        }
+        // --- case: map does not contain a component Type
+        Utils.Resize(ref entity.classComponents, len + 1);
+        entity.classComponents[len] = component;
+        return null;
+    }
+    
+    internal static ClassComponent RemoveClassComponent(GameEntity entity, Type classType)
+    {
+        var classes = entity.classComponents;
+        var len     = classes.Length;
+        for (int n = 0; n < len; n++)
+        {
+            var classComponent = classes[n];
+            if (classComponent.GetType() == classType)
+            {
+                var classComponents = new ClassComponent[len - 1];
+                for (int i = 0; i < n; i++) {
+                    classComponents[i]     = classes[i];
+                }
+                for (int i = n + 1; i < len; i++) {
+                    classComponents[i - 1] = classes[i];
+                }
+                classComponent.entity   = null;
+                entity.classComponents  = classComponents;
+                return classComponent;
+            }
+        }
+        return null;
     }
 }

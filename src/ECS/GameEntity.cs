@@ -248,82 +248,27 @@ public sealed class GameEntity
     /// <returns>the entity component of Type <typeparamref name="T"/>. Otherwise null</returns>
     public T    GetClassComponent<T>()
         where T : ClassComponent
-    {
-        foreach (var component in classComponents) {
-            if (component is T classComponent) {
-                return classComponent;
-            }
-        }
-        return null;
-    }
+    => (T)GameEntityUtils.GetClassComponent(this, typeof(T));
     
     /// <returns>true if the entity has component of Type <typeparamref name="T"/>. Otherwise false</returns>
     public bool TryGetClassComponent<T>(out T result)
         where T : ClassComponent
     {
-        foreach (var component in classComponents) {
-            if (component is T classComponent) {
-                result = classComponent;
-                return true;
-            }
-        }
-        result = null;
-        return false;
+        var component = GameEntityUtils.GetClassComponent(this, typeof(T));
+        result = (T)component;
+        return component != null;
     }
     
     /// <returns>the component previously added to the entity.</returns>
-    public T AddClassComponent<T>(T component)
+    public T AddClassComponent<T>(T component) 
         where T : ClassComponent
-    {
-        if (ClassType<T>.ClassIndex == ClassUtils.MissingAttribute) {
-            var msg = $"Missing attribute [ClassComponent(\"<key>\")] on type: {typeof(T).Namespace}.{typeof(T).Name}";
-            throw new InvalidOperationException(msg);
-        }
-        if (component.entity != null) {
-            throw new InvalidOperationException("component already added to an entity");
-        }
-        component.entity    = this;
-        var classes         = classComponents;
-        var len             = classes.Length;
-        for (int n = 0; n < len; n++)
-        {
-            var current = classes[n]; 
-            if (current is T classComponent) {
-                classes[n] = component;
-                classComponent.entity = null;
-                return classComponent;
-            }
-        }
-        // --- case: map does not contain a component Type
-        Utils.Resize(ref classComponents, len + 1);
-        classComponents[len] = component;
-        return null;
-    }
+    => (T)GameEntityUtils.AddClassComponent(this, component, typeof(T), ClassType<T>.ClassIndex);
+    
     
     /// <returns>the component previously added to the entity.</returns>
     public T RemoveClassComponent<T>()
         where T : ClassComponent
-    {
-        _           = ClassType<T>.ClassIndex; // register class component type
-        var classes = classComponents;
-        var len     = classes.Length;
-        for (int n = 0; n < len; n++)
-        {
-            if (classes[n] is T classComponent)
-            {
-                classComponent.entity = null;
-                classComponents = new ClassComponent[len - 1];
-                for (int i = 0; i < n; i++) {
-                    classComponents[i]     = classes[i];
-                }
-                for (int i = n + 1; i < len; i++) {
-                    classComponents[i - 1] = classes[i];
-                }
-                return classComponent;
-            }
-        }
-        return null;
-    }
+    => (T)GameEntityUtils.RemoveClassComponent(this, typeof(T));
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------
