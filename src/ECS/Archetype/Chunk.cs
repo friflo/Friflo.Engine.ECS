@@ -10,6 +10,9 @@ namespace Friflo.Fliox.Engine.ECS;
 internal readonly struct StructChunk<T>
     where T : struct, IStructComponent
 {
+    // Note: must not contain any other field. Reasons:
+    // - to save memory as many StructChunk<T>'s are stored within a StructHeap<T>.chunks[].
+    // - to enable maximum efficiency when GC iterate components[] for collection.
     internal readonly   T[]     components;   // 8
     
     public   override   string  ToString() => components == null ? "" : "used";
