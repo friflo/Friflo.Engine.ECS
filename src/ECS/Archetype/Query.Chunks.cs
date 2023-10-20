@@ -62,7 +62,7 @@ public ref struct ChunkEnumerator<T1, T2>
         if (chunkPos < chunkEnd) {
             int componentLen;
             if (++chunkPos == chunkEnd) {
-                componentLen    = archetypes[archetypePos].EntityCount % ChunkSize;
+                componentLen    = archetypes[archetypePos].ChunkRest;
             } else {
                 componentLen    = ChunkSize;
             }

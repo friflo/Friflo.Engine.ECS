@@ -52,7 +52,7 @@ public readonly struct QueryForEach<T1, T2>
                     lambda(ref1, ref2);
                 }
             }
-            var componentLen = archetype.EntityCount % ChunkSize;
+            var componentLen = archetype.ChunkRest;
             ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
             ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
             for (int pos = 0; pos < componentLen; pos++)

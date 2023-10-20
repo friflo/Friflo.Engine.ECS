@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
@@ -82,13 +84,13 @@ public ref struct QueryEnumerator<T1, T2>
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-        chunkEnd        = archetype.ChunkEnd;
+        chunkEnd        = archetype.ChunkEnd - 1;
         
+        componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
         ref1.Set(chunks1[0].components);
         ref1.pos        = -1;
         ref2.Set(chunks2[0].components);
         ref2.pos        = -1;
-        componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
     }
     
     /// <summary>
@@ -104,30 +106,37 @@ public ref struct QueryEnumerator<T1, T2>
             return true;
         }
         if (chunkPos < chunkEnd) {
-            if (++chunkPos == chunkEnd) {
-                var archetype   = archetypes[archetypePos];
-                componentLen    = (archetype.EntityCount % ChunkSize) - 1;
-            }
-            ref1.Set(chunks1[chunkPos].components);
-            ref1.pos = 0;
-            ref2.Set(chunks2[chunkPos].components);
-            ref2.pos = 0;
-            return true;
+            goto Next;
         }
-        if (archetypePos < archetypes.Length - 1) {
-            var archetype   = archetypes[++archetypePos];
-            var heapMap     = archetype.heapMap;
-            chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-            chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-            chunkPos        = 0;
-            ref1.Set(chunks1[0].components);
-            ref1.pos = 0;
-            ref2.Set(chunks2[0].components);
-            ref2.pos = 0;
-            componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
-            return true;
+        if (chunkPos == chunkEnd && chunkPos > -1) {
+            componentLen = archetypes[archetypePos].ChunkRest - 1;
+            EnumeratorUtils.AssertComponentLenGreater0(componentLen);
+            goto Next;
         }
-        return false;  
+        if (archetypePos >= archetypes.Length - 1) {
+            return false;
+        }
+        var archetype   = archetypes[++archetypePos];
+        var heapMap     = archetype.heapMap;
+        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
+        chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
+        chunkPos        = -1;
+        componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
+    Next:
+        chunkPos++;
+        ref1.Set(chunks1[chunkPos].components);
+        ref1.pos = 0;
+        ref2.Set(chunks2[chunkPos].components);
+        ref2.pos = 0;
+        return true;
     }
 }
 #endregion
+
+internal static class EnumeratorUtils
+{
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    internal static void AssertComponentLenGreater0 (int componentLen) {
+        if (componentLen <= 0) throw new InvalidOperationException("expect componentLen > 0");
+    }
+}

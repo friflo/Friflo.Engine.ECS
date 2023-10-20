@@ -19,9 +19,7 @@ public sealed class Archetype
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
                     public              int                 Capacity        => memory.capacity;
-    [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
-                                                                            => (entityCount - 1) / ChunkSize;
-    
+
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
@@ -49,6 +47,9 @@ public sealed class Archetype
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     
     [Browse(Never)] internal            ReadOnlyHeaps       Heaps           => structHeaps;
+    [Browse(Never)] internal            int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
+                                                                            => entityCount / ChunkSize;
+    [Browse(Never)] internal            int                 ChunkRest       => entityCount % ChunkSize;
                     public   override   string              ToString()      => GetString();
     #endregion
     
