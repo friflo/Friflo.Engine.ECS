@@ -10,7 +10,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <remarks>
 /// <b>Note!</b> Must not contain any other field. Reasons:<br/>
 /// - to save memory as many <see cref="StructChunk{T}"/>'s are stored within a <see cref="StructHeap{T}.chunks"/><br/>
-/// - to enable maximum efficiency when GC iterate <see cref="components"/> for collection.
+/// - to enable maximum efficiency when GC iterate <see cref="StructHeap{T}.chunks"/> for collection.
 /// </remarks>
 internal readonly struct StructChunk<T>
     where T : struct, IStructComponent
