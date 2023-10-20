@@ -110,8 +110,9 @@ public ref struct QueryEnumerator<T1, T2>
         }
         if (chunkPos == chunkEnd && chunkPos > -1) {
             componentLen = archetypes[archetypePos].ChunkRest - 1;
-            EnumeratorUtils.AssertComponentLenGreater0(componentLen);
-            goto Next;
+            if (componentLen >= 0) {
+                goto Next;
+            }
         }
         if (archetypePos >= archetypes.Length - 1) {
             return false;

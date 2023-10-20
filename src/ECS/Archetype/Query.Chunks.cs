@@ -50,8 +50,7 @@ public ref struct ChunkEnumerator<T1, T2>
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-        chunkPos        = -1;
-        chunkEnd        = archetype.ChunkEnd;
+        chunkEnd        = archetype.ChunkCount;
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
@@ -59,25 +58,32 @@ public ref struct ChunkEnumerator<T1, T2>
     
     // --- IEnumerator
     public bool MoveNext() {
+        int componentLen;
         if (chunkPos < chunkEnd) {
-            int componentLen;
-            if (++chunkPos == chunkEnd) {
-                componentLen    = archetypes[archetypePos].ChunkRest;
-            } else {
-                componentLen    = ChunkSize;
+            componentLen = ChunkSize;
+            goto Next;
+        }
+        if (chunkPos == chunkEnd)  {
+            componentLen    = archetypes[archetypePos].ChunkRest;
+            if (componentLen > 0) {
+                goto Next;
             }
-            chunk1 = new Chunk<T1>(chunks1[chunkPos].components, componentLen);
-            chunk2 = new Chunk<T2>(chunks2[chunkPos].components, componentLen);
-            return true;
         }
-        if (archetypePos < archetypes.Length - 1) {
-            var heapMap = archetypes[archetypePos++].heapMap;
-            chunks1     = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-            chunks2     = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-            chunkPos    = 0;
-            return true;
+        if (archetypePos >= archetypes.Length - 1) {
+            return false;
         }
-        return false;  
+        var archetype   = archetypes[++archetypePos];
+        var heapMap     = archetype.heapMap;
+        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
+        chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
+        chunkPos        = 0;
+        chunkEnd        = archetype.ChunkEnd;
+        componentLen    = chunkEnd == 0 ? archetype.ChunkRest : ChunkSize;
+    Next:
+        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, componentLen);
+        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, componentLen);
+        chunkPos++;
+        return true;  
     }
 }
 #endregion
