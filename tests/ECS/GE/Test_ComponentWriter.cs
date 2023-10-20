@@ -23,7 +23,7 @@ public static class Test_ComponentWriter
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
         
-        var node = store.EntityAsDataNode(entity);
+        var node = store.DataNodeFromEntity(entity);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
@@ -39,7 +39,7 @@ public static class Test_ComponentWriter
         var sync    = new EntityStoreSync(client);
         var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
-        var node    = store.EntityAsDataNode(entity);
+        var node    = store.DataNodeFromEntity(entity);
         
         AreEqual(10,    node.pid);
         IsNull  (node.children);
@@ -54,7 +54,7 @@ public static class Test_ComponentWriter
         var store   = new GameEntityStore(PidType.UsePidAsId, sync);
         var entity  = store.CreateEntity(10);
         entity.AddTag<TestTag>();
-        var node    = store.EntityAsDataNode(entity);
+        var node    = store.DataNodeFromEntity(entity);
         
         AreEqual(10,                node.pid);
         AreEqual(1,                 node.tags.Count);
@@ -75,7 +75,7 @@ public static class Test_ComponentWriter
         int count = 10; // 2_000_000 ~ 1.935 ms
         DataNode node = null;
         for (int n = 0; n < count; n++) {
-            node = store.EntityAsDataNode(entity);
+            node = store.DataNodeFromEntity(entity);
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }
