@@ -151,15 +151,15 @@ public static class Test_StructHeapRaw
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
         var query   = store.Query(Signature.Get<Position, Rotation>());
         for (int count = 0; count < QueryCount; count++) {
-            var id = store.CreateEntity(arch1);
-            store.EntityComponentRef<Position>(id).x = count;
             int n = 0;
             foreach (var (position, rotation) in query) {
                 var x = (int)position.Value.x;
                 if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
                 n++;
             }
-            AreEqual(count + 1, n);
+            AreEqual(count, n);
+            var id = store.CreateEntity(arch1);
+            store.EntityComponentRef<Position>(id).x = count;
         }
         AreEqual(QueryCount, arch1.EntityCount);
     }
@@ -171,8 +171,6 @@ public static class Test_StructHeapRaw
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
         var query   = store.Query(Signature.Get<Position, Rotation>());
         for (int count = 0; count < QueryCount; count++) {
-            var id = store.CreateEntity(arch1);
-            store.EntityComponentRef<Position>(id).x = count;
             int n = 0;
             var forEach     = query.ForEach((position, rotation) => {
                 var x = (int)position.Value.x;
@@ -180,7 +178,9 @@ public static class Test_StructHeapRaw
                 n++;
             });
             forEach.Run();
-            AreEqual(count + 1, n);
+            AreEqual(count, n);
+            var id = store.CreateEntity(arch1);
+            store.EntityComponentRef<Position>(id).x = count;
         }
         AreEqual(QueryCount, arch1.EntityCount);
     }
@@ -192,8 +192,6 @@ public static class Test_StructHeapRaw
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
         var query   = store.Query(Signature.Get<Position, Rotation>());
         for (int count = 0; count < QueryCount; count++) {
-            var id = store.CreateEntity(arch1);
-            store.EntityComponentRef<Position>(id).x = count;
             int n = 0;
             foreach (var (positionChunk, rotationChunk) in query.Chunks) {
                 foreach (var position in positionChunk.Values) {
@@ -202,7 +200,9 @@ public static class Test_StructHeapRaw
                     n++;
                 }
             }
-            AreEqual(count + 1, n);
+            AreEqual(count, n);
+            var id = store.CreateEntity(arch1);
+            store.EntityComponentRef<Position>(id).x = count;
         }
         AreEqual(QueryCount, arch1.EntityCount);
     }
