@@ -108,9 +108,9 @@ public sealed class GameEntity
     /// To access <b>struct</b> components use <see cref="ComponentRef{T}"/>
     /// </remarks>
     [Obsolete("use either GetClassComponent() or GetComponentValue()")]
-    public  object[]                        Components_     => GetComponentsDebug();
+    public  object[]                        Components_     => GameEntityStore.GetComponentsDebug(this);
     
-    public override string                  ToString()      => GetString(new StringBuilder());
+    public override string                  ToString()      => GameEntityStore.GameEntityToString(this, new StringBuilder());
 
     #endregion
 
@@ -173,7 +173,7 @@ public sealed class GameEntity
     [Browse(Never)] internal            int                 compIndex;          //  4
     
     /// <summary>Container of class type components added to the entity</summary>
-    [Browse(Never)] private             ClassComponent[]    classComponents;    //  8 - never null
+    [Browse(Never)] internal            ClassComponent[]    classComponents;    //  8 - never null
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
@@ -398,72 +398,6 @@ public sealed class GameEntity
             archetype.MoveLastComponentsTo(compIndex);
         }
         archetype = null;
-    }
-    
-    #endregion
-    
-#region internal / private methods
-    internal void AppendClassComponent<T>(T component)
-        where T : ClassComponent
-    {
-        component.entity    = this;
-        var len             = classComponents.Length;
-        Utils.Resize(ref classComponents, len + 1);
-        classComponents[len] = component;
-    }
-    
-    private object[] GetComponentsDebug()
-    {
-        var objects = new object[ComponentCount];
-        // --- add struct components
-        var heaps       = archetype.Heaps;
-        var count       = heaps.Length;
-        for (int n = 0; n < count; n++) {
-            objects[n] = heaps[n].GetComponentDebug(compIndex); 
-        }
-        // --- add class components
-        foreach (var component in classComponents) {
-            objects[count++] = component;
-        }
-        return objects;
-    }
-    
-    internal string GetString(StringBuilder sb)
-    {
-        sb.Append("id: ");
-        sb.Append(id);
-        if (archetype == null) {
-            sb.Append("  (detached)");
-            return sb.ToString();
-        }
-        if (HasName) {
-            var name = Name.Value;
-            if (name != null) {
-                sb.Append("  \"");
-                sb.Append(name);
-                sb.Append('\"');
-                return sb.ToString();
-            }
-        }
-        if (ComponentCount == 0) {
-            sb.Append("  []");
-        } else {
-            sb.Append("  [");
-            foreach (var refComp in classComponents) {
-                sb.Append('*');
-                sb.Append(refComp.GetType().Name);
-                sb.Append(", ");
-            }
-            if (archetype != null) {
-                foreach (var heap in archetype.Heaps) {
-                    sb.Append(heap.StructType.Name);
-                    sb.Append(", ");
-                }
-            }
-            sb.Length -= 2;
-            sb.Append(']');
-        }
-        return sb.ToString();
     }
     #endregion
 }

@@ -111,7 +111,7 @@ internal sealed class ClassComponentType<T> : ComponentType
             return;
         }
         classComponent = reader.ReadMapper(typeMapper, json);
-        entity.AppendClassComponent(classComponent);
+        GameEntityStore.AppendClassComponent(entity, classComponent);
     }
 }
 
