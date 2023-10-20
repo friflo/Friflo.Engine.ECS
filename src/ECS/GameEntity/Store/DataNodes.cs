@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Json.Fliox;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
 // ReSharper disable once CheckNamespace
@@ -12,6 +13,7 @@ namespace Friflo.Fliox.Engine.ECS;
 // This file contains implementation specific for storing DataNode's.
 public partial class GameEntityStore
 {
+    // ------------------------------------- DataNode -> GameEntity -------------------------------------
     /// <returns>an <see cref="attached"/> entity</returns>
     public GameEntity CreateFromDataNode(DataNode dataNode, out string error)
     {
@@ -101,5 +103,38 @@ public partial class GameEntityStore
             var childId             = childIds[n];
             localNodes[childId].pid = children[n];
         }
+    }
+    
+    // ------------------------------------- GameEntity -> DataNode -------------------------------------
+    public DataNode EntityAsDataNode(GameEntity entity) {
+        var id = entity.id;
+        ref var node = ref nodes[id];
+        if (!storeSync.TryGetDataNode(id, out var dataNode)) {
+            dataNode = new DataNode { pid = id };
+            storeSync.AddDataNode(dataNode);
+        }
+        // --- process child ids
+        if (node.childCount > 0) {
+            var children = dataNode.children = new List<long>(node.childCount); 
+            foreach (var childId in node.ChildIds) {
+                var pid = nodes[childId].pid;
+                children.Add(pid);  
+            }
+        }
+        // --- write struct & class components
+        var jsonComponents = ComponentWriter.Instance.Write(entity);
+        dataNode.components = new JsonValue(jsonComponents); // create array copy for now
+        
+        // --- process tags
+        var tagCount = entity.Tags.Count; 
+        if (tagCount == 0) {
+            dataNode.tags = null;
+        } else {
+            dataNode.tags = new List<string>(tagCount);
+            foreach(var tag in entity.Tags) {
+                dataNode.tags.Add(tag.tagName);
+            }
+        }
+        return dataNode;
     }
 }
