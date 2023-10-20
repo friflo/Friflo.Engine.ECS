@@ -12,7 +12,7 @@ internal static class TagType<T>
     internal static readonly    int     TagIndex  = TagUtils.NewTagIndex();
 }
 
-public static class TagUtils
+internal static class TagUtils
 {
     private  static             int     _nextTagIndex             = 1;
 

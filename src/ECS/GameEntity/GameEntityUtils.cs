@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public static class GameEntityUtils
+internal static class GameEntityUtils
 {
     internal static string GameEntityToString(GameEntity entity, StringBuilder sb)
     {
