@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 

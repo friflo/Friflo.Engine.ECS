@@ -7,8 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using Friflo.Json.Fliox;
 
 // ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
 /// A <see cref="DataNode"/> is used to serialize entities.

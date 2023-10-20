@@ -8,8 +8,7 @@ using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.ComponentKind;
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
 /// Create all class / struct components for an entity from <see cref="JsonValue"/> used as <see cref="DataNode.components"/>

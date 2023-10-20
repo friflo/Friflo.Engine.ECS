@@ -1,5 +1,6 @@
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox.Hub.Host;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
