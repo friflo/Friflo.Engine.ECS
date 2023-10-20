@@ -78,7 +78,7 @@ public sealed class Archetype
     /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
-        memory.capacity         = config.chunkSize;
+        memory.capacity         = ChunkSize;
         memory.shrinkThreshold  = -1;
         memory.chunkCount       = 1;
         memory.chunkLength      = 1;
@@ -124,7 +124,7 @@ public sealed class Archetype
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
             var structType    = structs[structIndex];
-            componentHeaps[n] = structType.CreateHeap(config.chunkSize);
+            componentHeaps[n] = structType.CreateHeap();
         }
         return new Archetype(config, componentHeaps, tags);
     }
@@ -138,7 +138,7 @@ public sealed class Archetype
         var length          = structTypes.Count;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
-            componentHeaps[n] = structTypes[n].CreateHeap(config.chunkSize);
+            componentHeaps[n] = structTypes[n].CreateHeap();
         }
         return new Archetype(config, componentHeaps, tags);
     }

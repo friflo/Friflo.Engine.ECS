@@ -31,7 +31,7 @@ public partial class EntityStore
     }
     
     internal ArchetypeConfig GetArchetypeConfig() {
-        return new ArchetypeConfig (this, archsCount, StructUtils.ChunkSize);
+        return new ArchetypeConfig (this, archsCount);
     }
     
     private Archetype GetArchetypeWithSignature(in SignatureIndexes indexes, in Tags tags)

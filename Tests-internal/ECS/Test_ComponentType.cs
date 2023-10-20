@@ -37,7 +37,7 @@ public static class Test_ComponentType
         AreEqual("operates only on ClassComponentType<>", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
-            componentType.CreateHeap(0);
+            componentType.CreateHeap();
         });
         AreEqual("operates only on StructComponentType<>", e!.Message);
     }

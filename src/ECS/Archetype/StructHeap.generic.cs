@@ -29,12 +29,12 @@ internal sealed class StructHeap<T> : StructHeap
     internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
     internal static readonly    string  StructKey;
     
-    internal StructHeap(int structIndex, int chunkSize, TypeMapper<T> mapper)
+    internal StructHeap(int structIndex, TypeMapper<T> mapper)
         : base (structIndex)
     {
         typeMapper  = mapper;
         chunks      = new StructChunk<T>[1];
-        chunks[0]   = new StructChunk<T>(chunkSize);
+        chunks[0]   = new StructChunk<T>(ChunkSize);
     }
     
     protected override void DebugInfo(out int count, out int length) {

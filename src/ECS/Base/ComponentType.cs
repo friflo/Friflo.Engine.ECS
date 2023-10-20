@@ -48,7 +48,7 @@ public abstract class ComponentType
     
     internal readonly   Bytes           componentKeyBytes;
         
-    internal virtual    StructHeap  CreateHeap          (int chunkSize)
+    internal virtual    StructHeap  CreateHeap          ()
         => throw new InvalidOperationException("operates only on StructComponentType<>");
     
     internal virtual    void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity)
@@ -87,8 +87,8 @@ internal sealed class StructComponentType<T> : ComponentType
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
-    internal override StructHeap CreateHeap(int chunkSize) {
-        return new StructHeap<T>(structIndex, chunkSize, typeMapper);   
+    internal override StructHeap CreateHeap() {
+        return new StructHeap<T>(structIndex, typeMapper);
     }
 }
 
