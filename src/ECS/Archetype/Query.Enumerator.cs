@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -87,7 +88,7 @@ public ref struct QueryEnumerator<T1, T2>
         ref1.pos        = -1;
         ref2.Set(chunks2[0].components);
         ref2.pos        = -1;
-        componentLen    = Math.Min(archetype.EntityCount, StructUtils.ChunkSize) - 1;
+        componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
     }
     
     /// <summary>
@@ -105,7 +106,7 @@ public ref struct QueryEnumerator<T1, T2>
         if (chunkPos < chunkEnd) {
             if (++chunkPos == chunkEnd) {
                 var archetype   = archetypes[archetypePos];
-                componentLen    = (archetype.EntityCount % StructUtils.ChunkSize) - 1;
+                componentLen    = (archetype.EntityCount % ChunkSize) - 1;
             }
             ref1.Set(chunks1[chunkPos].components);
             ref1.pos = 0;
@@ -123,7 +124,7 @@ public ref struct QueryEnumerator<T1, T2>
             ref1.pos = 0;
             ref2.Set(chunks2[0].components);
             ref2.pos = 0;
-            componentLen    = Math.Min(archetype.EntityCount, StructUtils.ChunkSize) - 1;
+            componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
             return true;
         }
         return false;  

@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -42,16 +43,16 @@ public readonly struct QueryForEach<T1, T2>
             int chunkPos    = 0;
             for (; chunkPos < chunkEnd; chunkPos++)
             {
-                ref1.Set(chunks1[chunkPos].components, copyT1, StructUtils.ChunkSize);
-                ref2.Set(chunks2[chunkPos].components, copyT2, StructUtils.ChunkSize);
-                for (int pos = 0; pos < StructUtils.ChunkSize; pos++)
+                ref1.Set(chunks1[chunkPos].components, copyT1, ChunkSize);
+                ref2.Set(chunks2[chunkPos].components, copyT2, ChunkSize);
+                for (int pos = 0; pos < ChunkSize; pos++)
                 {
                     ref1.pos = pos;
                     ref2.pos = pos;
                     lambda(ref1, ref2);
                 }
             }
-            var componentLen = archetype.EntityCount % StructUtils.ChunkSize;
+            var componentLen = archetype.EntityCount % ChunkSize;
             ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
             ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
             for (int pos = 0; pos < componentLen; pos++)

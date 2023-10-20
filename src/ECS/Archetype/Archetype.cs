@@ -7,6 +7,7 @@ using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using ReadOnlyHeaps = System.ReadOnlySpan<Friflo.Fliox.Engine.ECS.StructHeap>;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
@@ -19,7 +20,7 @@ public sealed class Archetype
     [Browse(Never)] public              int                 EntityCount     => entityCount;
                     public              int                 Capacity        => memory.capacity;
     [Browse(Never)] public              int                 ChunkEnd        // entity count: 0: 0, 1: 0, 512: 0, 513: 1, ...
-                                                                            => (entityCount - 1) / StructUtils.ChunkSize;
+                                                                            => (entityCount - 1) / ChunkSize;
     
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
@@ -204,7 +205,7 @@ public sealed class Archetype
         //  newChunkCount(entityCount)  [   0,  512] -> 1
         //                              [ 513, 1024] -> 2
         //                              [1025, 1536] -> 3
-        var newChunkCount   = (entityCount - 1) / StructUtils.ChunkSize + 1;
+        var newChunkCount   = (entityCount - 1) / ChunkSize + 1;
         var chunkCount      = memory.chunkCount;
         if (newChunkCount > chunkCount)
         {
@@ -235,8 +236,8 @@ public sealed class Archetype
         }
         memory.chunkCount       = newChunkCount;
         memory.chunkLength      = newChunkLength;
-        memory.capacity         = newChunkCount * StructUtils.ChunkSize;        // 512, 1024, 1536, 2048, ...
-        memory.shrinkThreshold  = memory.capacity - StructUtils.ChunkSize * 2;  // -512, 0, 512, 1024, ...
+        memory.capacity         = newChunkCount * ChunkSize;        // 512, 1024, 1536, 2048, ...
+        memory.shrinkThreshold  = memory.capacity - ChunkSize * 2;  // -512, 0, 512, 1024, ...
     }
     
     private string GetString() {

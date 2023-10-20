@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
+using static Friflo.Fliox.Engine.ECS.StructUtils;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -143,8 +144,8 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     public ArchetypeQuery<T1, T2> ReadOnly<T>()
         where T : struct, IStructComponent
     {
-        if (typeof(T1) == typeof(T)) copyT1 = new T1[StructUtils.ChunkSize];
-        if (typeof(T2) == typeof(T)) copyT2 = new T2[StructUtils.ChunkSize];
+        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
+        if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
         return this;
     }
     
