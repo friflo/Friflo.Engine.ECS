@@ -12,9 +12,9 @@ using Friflo.Json.Fliox.Hub.Host;
 namespace Friflo.Fliox.Engine.Client;
 
 [CLSCompliant(true)]
-public class SceneClient : FlioxClient
+public class GameClient : FlioxClient
 {
     public  readonly    EntitySet <long, DataNode>   nodes;
     
-    public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
+    public GameClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }

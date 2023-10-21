@@ -6,11 +6,11 @@ using Friflo.Json.Fliox.Hub.Client;
 
 namespace Friflo.Fliox.Engine.Client;
 
-public class ClientDatabaseSync : IEntityDatabaseSync
+public class GameClientSync : IGameDatabaseSync
 {
     private readonly LocalEntities<long, DataNode>  dataNodes;
     
-    public ClientDatabaseSync(SceneClient client) {
+    public GameClientSync(GameClient client) {
         dataNodes = client.nodes.Local;
     }
         

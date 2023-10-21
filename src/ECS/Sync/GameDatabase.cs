@@ -6,7 +6,7 @@ using System;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.ECS.Sync;
 
-public interface IEntityDatabaseSync
+public interface IGameDatabaseSync
 {
     bool TryGetDataNode (long pid, out DataNode dataNode);
     void AddDataNode    (DataNode dataNode);
@@ -15,9 +15,9 @@ public interface IEntityDatabaseSync
 public class GameDatabase
 {
     private readonly    GameEntityStore     store;
-    private readonly    IEntityDatabaseSync databaseSync;
+    private readonly    IGameDatabaseSync   databaseSync;
     
-    public GameDatabase (GameEntityStore store, IEntityDatabaseSync databaseSync) {
+    public GameDatabase (GameEntityStore store, IGameDatabaseSync databaseSync) {
         this.store      = store;
         this.databaseSync  = databaseSync;
     }

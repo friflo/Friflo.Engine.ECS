@@ -9,8 +9,8 @@ public static class TestUtils
 {
     public static GameEntityStore CreateGameEntityStore(out GameDatabase database, PidType pidType = PidType.UsePidAsId) {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
-        var client  = new SceneClient(hub);
-        var sync    = new ClientDatabaseSync(client);
+        var client  = new GameClient(hub);
+        var sync    = new GameClientSync(client);
         var store   = new GameEntityStore(pidType);
         database    = new GameDatabase(store, sync);
         return store;
