@@ -65,6 +65,34 @@ This enables UI rendering is exactly the same on all platforms with a single cod
 <br/><br/>
 
 
+## `GameEntityStore` / `GameDatabase`
+
+Both `GameEntityStore` and `GameDatabase` are used to store game entities.  
+The `GameEntityStore` store game entities at runtime.  
+The `GameDatabase` store serialized game entities in databases or files and transfer them via a network.  
+
+
+### `GameEntityStore`
+
+The `GameEntityStore` is used almost without exception when scripting game logic / behavior with **C#**.  
+It stores game entities at runtime by using an ECS data structure.  
+Its focus is simplicity and performance.  
+
+Scripting is mainly driven by the API of `GameEntity`'s stored in a `GameEntityStore`.  
+The performance and efficiency is implemented by using ECS as data structure.
+
+A `GameEntityStore` stores game entities in a hierarchy - a tree graph to build a game scene.  
+Game entities in this hierarchy can be declared as sub scene to persist them as separate scene files on disk.  
+The use case of sub scenes is to enhance the scene structure and minimize merge conflicts when used by multiple creators.
+
+
+### `GameDatabase`
+
+The `GameDatabase` is used to convert `GameEntity` to `DatabaseEntity`s or vise versa so that they can be stored in 
+scene files or in a database.
+
+
+
 
 ## Data structure
 
@@ -152,7 +180,7 @@ This enables reading already serialized data after refactoring a **class** compo
 
 ### Entity serialization model
 
-Entities are loaded using a `FlioxClient`
+Entities are loaded using a `GameClient`
 
 ```csharp
 public sealed class DatabaseEntity
