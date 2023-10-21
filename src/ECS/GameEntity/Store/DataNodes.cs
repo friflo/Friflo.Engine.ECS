@@ -44,11 +44,8 @@ public partial class GameEntityStore
     
     // ------------------------------------- DataNode -> GameEntity -------------------------------------
     /// <returns>an <see cref="attached"/> entity</returns>
-    public GameEntity DataNodeToEntity(DataNode dataNode, out string error)
+    internal GameEntity DataNodeToEntity(DataNode dataNode, out string error)
     {
-        if (dataNode == null) {
-            throw new ArgumentNullException(nameof(dataNode));
-        }
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
             entity = CreateFromDataNodeUsePidAsId(dataNode);

@@ -6,7 +6,6 @@ using Friflo.Fliox.Engine.ECS.Sync;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
-using static Friflo.Fliox.Engine.ECS.PidType;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
@@ -16,9 +15,9 @@ public static class Test_CreateFromDataNode
 {
     [Test]
     public static void Load_DataNode_Sequential() {
-        var store   = new GameEntityStore(UsePidAsId);
+        var store   = TestUtils.CreateGameEntityStore(out var database);
         var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
-        var entity  = store.DataNodeToEntity(node, out _);
+        var entity  = database.DataNodeToEntity(node, out _);
         
         AreEqual(10,    store.PidToId(10));
         AreEqual(10,    store.GetNodeByPid(10).Pid);
@@ -34,9 +33,9 @@ public static class Test_CreateFromDataNode
     
     [Test]
     public static void Load_DataNode_Pid() {
-        var store   = new GameEntityStore();
+        var store   = TestUtils.CreateGameEntityStore(out var database, PidType.RandomPids);
         var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
-        var entity  = store.DataNodeToEntity(node, out _);
+        var entity  = database.DataNodeToEntity(node, out _);
         
         AreEqual(1,     store.PidToId(10));
         AreEqual(1,     store.GetNodeByPid(10).Id);

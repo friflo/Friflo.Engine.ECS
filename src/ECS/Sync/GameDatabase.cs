@@ -12,18 +12,21 @@ public interface IEntityDatabaseSync
     void AddDataNode    (DataNode dataNode);
 }
 
-public class EntityDatabase
+public class GameDatabase
 {
     private readonly    GameEntityStore     store;
     private readonly    IEntityDatabaseSync databaseSync;
     
-    public EntityDatabase (GameEntityStore store, IEntityDatabaseSync databaseSync) {
+    public GameDatabase (GameEntityStore store, IEntityDatabaseSync databaseSync) {
         this.store      = store;
         this.databaseSync  = databaseSync;
     }
         
     public DataNode DataNodeFromEntity(GameEntity entity)
     {
+        if (entity == null) {
+            throw new ArgumentNullException(nameof(entity));
+        }
         var entityStore = entity.archetype.gameEntityStore;
         if (entityStore != store) {
             throw new InvalidOperationException();
@@ -34,5 +37,13 @@ public class EntityDatabase
         }
         entityStore.DataNodeFromEntity(entity, dataNode);
         return dataNode;
+    }
+    
+    public GameEntity DataNodeToEntity(DataNode dataNode, out string error)
+    {
+        if (dataNode == null) {
+            throw new ArgumentNullException(nameof(dataNode));
+        }
+        return store.DataNodeToEntity(dataNode, out error);
     }
 }
