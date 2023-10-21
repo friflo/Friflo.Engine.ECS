@@ -45,6 +45,9 @@ public sealed class DataNode
     /// <summary>List of tags assigned to an entity</summary>
     public  List<string>    tags;       //  8   - can be null
     
+    /// <summary>if != null the entity is the root of a scene using the assigned <see cref="sceneName"/></summary>
+    public  string          sceneName;  //  8   - can be null
+    
     /// <summary>Reference to the `Prefab` the entity is based on</summary>
     public  string          prefab;     //  8   - can be null
     
