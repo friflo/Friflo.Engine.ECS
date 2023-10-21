@@ -94,7 +94,7 @@ public sealed class GameEntity
     /// If <see cref="TreeMembership"/> is <see cref="treeNode"/> its <see cref="GraphOrigin"/> is not null.<br/>
     /// If <see cref="floating"/> its <see cref="GraphOrigin"/> is null.
     /// </remarks>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeGraphMembership(id);
+    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
     
     [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);

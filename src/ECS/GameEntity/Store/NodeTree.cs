@@ -257,7 +257,7 @@ public partial class GameEntityStore
     }
     
     // ------------------------------------- GameEntity access -------------------------------------
-    internal TreeMembership  GetTreeGraphMembership(int id) {
+    internal TreeMembership  GetTreeMembership(int id) {
         return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
