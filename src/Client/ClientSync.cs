@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using Friflo.Fliox.Engine.ECS.Database;
 using Friflo.Json.Fliox.Hub.Client;
 
 namespace Friflo.Fliox.Engine.Client;
 
+[CLSCompliant(true)]
 public sealed class ClientSync : IDatabaseSync
 {
     private readonly LocalEntities<long, DatabaseEntity>  entities;

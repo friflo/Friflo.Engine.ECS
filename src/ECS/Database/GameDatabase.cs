@@ -8,6 +8,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.ECS.Database;
 
+[CLSCompliant(true)]
 public sealed class GameDatabase
 {
     private readonly    GameEntityStore     store;
