@@ -10,6 +10,7 @@ using Friflo.Json.Fliox;
 namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing DatabaseEntity's.
+// Loading and storing DatabaseEntity's is implemented in GameEntityStore to enable declare all its fields private.
 public partial class GameEntityStore
 {
     // ---------------------------------- GameEntity -> DatabaseEntity ----------------------------------

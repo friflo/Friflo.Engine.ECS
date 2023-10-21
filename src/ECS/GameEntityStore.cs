@@ -45,12 +45,12 @@ public sealed partial class GameEntityStore : EntityStore
     #endregion
     
 #region internal fields
-    // --- nodes
-    [Browse(Never)] private             EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
-    [Browse(Never)] private  readonly   PidType                 pidType;            //  4                   - pid != id  /  pid == id
-    [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
-                    private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
-    [Browse(Never)] private             GameEntity              graphOrigin;        //  8                   - origin of the tree graph. null if no origin assigned
+    // --- Note: all fields must stay private to limit the scope of mutations
+    [Browse(Never)] private             EntityNode[]            nodes;          //  8 + all nodes       - acts also id2pid
+    [Browse(Never)] private  readonly   PidType                 pidType;        //  4                   - pid != id  /  pid == id
+    [Browse(Never)] private             Random                  randPid;        //  8                   - null if using pid == id
+                    private  readonly   Dictionary<long, int>   pid2Id;         //  8 + Map<pid,id>     - null if using pid == id
+    [Browse(Never)] private             GameEntity              graphOrigin;    //  8                   - origin of the tree graph. null if no origin assigned
     #endregion
     
 #region initialize
