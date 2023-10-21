@@ -26,10 +26,12 @@ public ref struct ChunkEnumerator<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
-    private readonly    ReadOnlySpan<Archetype> archetypes;
-    private             int                     archetypePos;
     private readonly    int                     structIndex1;
     private readonly    int                     structIndex2;
+    
+    private readonly    ReadOnlySpan<Archetype> archetypes;
+    private             int                     archetypePos;
+    
     private             StructChunk<T1>[]       chunks1;
     private             StructChunk<T2>[]       chunks2;
     private             Chunk<T1>               chunk1;
@@ -40,10 +42,10 @@ public ref struct ChunkEnumerator<T1, T2>
     
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2> query)
     {
-        archetypes      = query.Archetypes;
-        archetypePos    = 0;
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
+        archetypes      = query.Archetypes;
+        archetypePos    = 0;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
