@@ -165,11 +165,11 @@ public sealed class DatabaseEntity
     public  string          nodeRef;    // can be null
 }
 
-public class SceneClient : FlioxClient
+public class GameClient : FlioxClient
 {
     public  readonly    EntitySet <long, DatabaseEntity>   entities;
     
-    public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
+    public GameClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
 ```
 
@@ -203,9 +203,9 @@ Remarks:
 
 ### Loading entities
 
-Entities are loaded in batches of 10.000 entities using the `SceneClient`.  
-If a batch has finished loading the entities are than added to the `EntityStore` calling `CreateFromDataNode()`
-for each entity.
+Entities are loaded in batches of 10.000 entities using the `GameClient`.  
+If a batch has finished loading `DatabaseEntity`'s they are than added to the `EntityStore`
+by calling `GameDatabase.LoadEntity()` for each `DatabaseEntity`.
 
 The entity tree is build by utilizing the field `children` of a `DatabaseEntity`.  
 In case ids in `children` are inconsistent the errors can be ignored or cause a loading error.

@@ -28,7 +28,7 @@ Prefabs are used in Edit & Play mode:
 - Minimize usage of utility containers: Currently - `prefabs` and `mods`.
 - Enable incremental loading: Entities are added to `EntityStore` while loading.  
   Loaded entities can be used in Editor without waiting for finished loading.
-- `DatabaseEntity`'s queried via `SceneClient.Query()` can be cleared after added to `EntityStore`.
+- `DatabaseEntity`'s queried via `GameClient.Query()` can be cleared after added to `EntityStore`.
 - Enable read / write / query entities via HTTP.
 - Enable read / write / query and subscribing database changes via WebSocket.
 
@@ -40,7 +40,7 @@ Prefabs are used in Edit & Play mode:
 
 <br/>
 
-### Load entities from `SceneClient` into `EntityStore` using Prefabs
+### Load entities from `GameClient` into `EntityStore` using Prefabs
 
 **Precondition**: The entities of a scene are not in any reliable order iteration can rely on.
 ```typescript
@@ -57,7 +57,7 @@ Prefabs are used in Edit & Play mode:
 
 **Load Step 1** - Scene `DatabaseEntity` iteration
 
-Load and iterate all entities of the base scene using an `SceneClient`.  
+Load and iterate all entities of the base scene using an `GameClient`.  
 Update `prefabs`, `mods` and `EntityNode.flags` while iterating.
 
 | `DatabaseEntity`                             | `id` | flags        | action                                  | remarks
@@ -85,7 +85,7 @@ Iterate all `mods` and add their `node` to `prefabs[].nodes`. Result:
 **Load Step 3** - Prefab `DatabaseEntity` iteration
 
 Iterate all `prefabs`.  
-Load prefab and iterate its entities using an `SceneClient`.  
+Load prefab and iterate its entities using an `GameClient`.  
 Add `GameObject` struct / class components and set `EntityNode.flags`
 
 | `prefab.nodes`               | `id`   |  flags   | operation                                            | remarks
@@ -98,10 +98,10 @@ Add `GameObject` struct / class components and set `EntityNode.flags`
 <br/>
 
 
-### Save entities in `EntityStore` to `SceneClient` using Prefabs
+### Save entities in `EntityStore` to `GameClient` using Prefabs
 
 *Note:* Saving prefab entities is utilized only in Edit mode.  
-Iterate all `GameObject`'s in the `EntityStore` and update the scene using an `SceneClient`.  
+Iterate all `GameObject`'s in the `EntityStore` and update the scene using an `GameClient`.  
 Set `DatabaseEntity.components`, `DatabaseEntity.prefab` and `DatabaseEntity.modify`
 
 | flags         | `id`    | `DatabaseEntity.components`      | `prefab`        | `modify` | operation | remarks
