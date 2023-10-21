@@ -307,7 +307,7 @@ public static class Test_Entity_Tree
         var e = Throws<ArgumentException>(() => {
             store.CreateEntity(0);
         });
-        AreEqual("invalid node id <= 0. was: 0 (Parameter 'id')", e!.Message);
+        AreEqual("invalid entity id <= 0. was: 0 (Parameter 'id')", e!.Message);
         
         store.CreateEntity(42);
         e = Throws<ArgumentException>(() => {

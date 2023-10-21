@@ -126,7 +126,7 @@ public static class Test_GameDatabase
             var e = Throws<ArgumentException>(() => {
                 store.CreateFrom(0);    
             });
-            AreEqual("invalid node id <= 0. was: 0 (Parameter 'id')", e!.Message);
+            AreEqual("invalid entity id <= 0. was: 0 (Parameter 'id')", e!.Message);
         } {
             store.CreateFrom(1);
             var e = Throws<ArgumentException>(() => {

@@ -43,18 +43,18 @@ public sealed class GameDatabase
             throw new ArgumentNullException(nameof(databaseEntity));
         }
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
-        if (!sync.TryGetEntity(databaseEntity.pid, out var storedNode)) {
-            storedNode = new DatabaseEntity();
+        if (!sync.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
+            storedEntity = new DatabaseEntity();
         }
         // --- copy all fields to eliminate side effects by mutations on the passed databaseEntity
-        storedNode.pid          = databaseEntity.pid;
-        storedNode.children     = databaseEntity.children?.ToList();
-        storedNode.components   = new JsonValue(databaseEntity.components);
-        storedNode.tags         = databaseEntity.tags?.ToList();
-        storedNode.sceneName    = databaseEntity.sceneName;
-        storedNode.prefab       = databaseEntity.prefab;
-        storedNode.modify       = databaseEntity.modify;
+        storedEntity.pid        = databaseEntity.pid;
+        storedEntity.children   = databaseEntity.children?.ToList();
+        storedEntity.components = new JsonValue(databaseEntity.components);
+        storedEntity.tags       = databaseEntity.tags?.ToList();
+        storedEntity.sceneName  = databaseEntity.sceneName;
+        storedEntity.prefab     = databaseEntity.prefab;
+        storedEntity.modify     = databaseEntity.modify;
         
-        return store.LoadEntity(storedNode, out error);
+        return store.LoadEntity(storedEntity, out error);
     }
 }

@@ -42,7 +42,7 @@ public abstract partial class EntityStore
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
-                    protected           int                     sequenceId;         //  4                   - incrementing id used for next new EntityNode
+                    protected           int                     sequenceId;         //  4                   - incrementing id used for next new GameEntity
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion
@@ -91,7 +91,7 @@ public abstract partial class EntityStore
     }
         
     internal static Exception InvalidEntityIdException(int id, string parameterName) {
-        return new ArgumentException($"invalid node id <= 0. was: {id}", parameterName);
+        return new ArgumentException($"invalid entity id <= 0. was: {id}", parameterName);
     }
         
     internal static Exception IdAlreadyInUseException(int id, string parameterName) {

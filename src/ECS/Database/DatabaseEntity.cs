@@ -52,8 +52,8 @@ public sealed class DatabaseEntity
     public  string          prefab;     //  8   - can be null
     
     /// <summary>
-    /// Modify the referenced node of a`preFab`.<br/> with <see cref="components"/> != null<br/>
-    /// Remove the referenced node if <see cref="components"/> == null
+    /// Modify the referenced entity of a`preFab`.<br/> with <see cref="components"/> != null<br/>
+    /// Remove the referenced entity if <see cref="components"/> == null
     /// </summary>
     public  string          modify;     //  8   - can be null
 
