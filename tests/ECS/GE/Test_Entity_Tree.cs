@@ -182,7 +182,7 @@ public static class Test_Entity_Tree
         AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
         AreEqual("id: 0",                                   nodes[0].ToString());
-        AreEqual("id: 2  []  flags: RootTreeNode | Created",nodes[2].ToString());
+        AreEqual("id: 2  []  flags: TreeNode | Created",    nodes[2].ToString());
         
         AreEqual(NullNode,                                  nodes[0].Flags);
         AreEqual(TreeNode | Created,                        nodes[2].Flags);
@@ -340,7 +340,7 @@ public static class Test_Entity_Tree
             var e = Throws<InvalidOperationException>(() => {
                 store.SetGraphOrigin(entity2);
             });
-            AreEqual("EntityStore already has a GraphOrigin entity. current root id: 1", e!.Message);
+            AreEqual("EntityStore already has a GraphOrigin entity. current GraphOrigin id: 1", e!.Message);
         } {
             var store   = new GameEntityStore();
             var entity1 = store.CreateEntity();

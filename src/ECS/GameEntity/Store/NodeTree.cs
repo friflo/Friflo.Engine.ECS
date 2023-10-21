@@ -244,7 +244,7 @@ public partial class GameEntityStore
     
     private void SetGraphOriginEntity(GameEntity entity) {
         if (graphOrigin != null) {
-            throw new InvalidOperationException($"EntityStore already has a GraphOrigin entity. current root id: {graphOrigin.id}");
+            throw new InvalidOperationException($"EntityStore already has a GraphOrigin entity. current GraphOrigin id: {graphOrigin.id}");
         }
         var id = entity.id;
         ref var parentId = ref nodes[id].parentId;

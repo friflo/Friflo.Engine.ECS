@@ -51,7 +51,7 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4                   - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
-    [Browse(Never)] private             GameEntity              graphOrigin;        //  8                   - root entity. null if no root assigned
+    [Browse(Never)] private             GameEntity              graphOrigin;        //  8                   - origin of the tree graph. null if no origin assigned
     // --- misc
     [Browse(Never)] private  readonly   IEntityStoreSync        storeSync;          //  8
     #endregion
