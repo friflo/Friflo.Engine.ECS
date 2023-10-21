@@ -6,7 +6,7 @@ using Friflo.Json.Fliox.Hub.Client;
 
 namespace Friflo.Fliox.Engine.Client;
 
-public class ClientSync : IDatabaseSync
+public sealed class ClientSync : IDatabaseSync
 {
     private readonly LocalEntities<long, DatabaseEntity>  entities;
     
