@@ -71,6 +71,12 @@ Both `GameEntityStore` and `GameDatabase` are used to store game entities.
 The `GameEntityStore` store game entities at runtime.  
 The `GameDatabase` store serialized game entities in databases or files and transfer them via a network.  
 
+Using the `GameEntityStore` / `GameDatabase` enables instant synchronization of a game scene between multiple creators.  
+In this workflow the game scene is stored in a shared database without using a version control system like `Git`.  
+
+The common approach to store game scenes in scene files is also available.  
+It is the preferred use case when sharing demos or assets via a GitHub project or a file bundle.
+
 
 ### `GameEntityStore`
 
