@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
-using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -14,7 +13,8 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class GameEntityStore
 {
     // ------------------------------------- GameEntity -> DataNode -------------------------------------
-    internal void DataNodeFromEntity(GameEntity entity, DataNode dataNode) {
+    internal void StoreEntity(GameEntity entity, DataNode dataNode)
+    {
         var id = entity.id;
         ref var node = ref nodes[id];
 
@@ -43,8 +43,7 @@ public partial class GameEntityStore
     }
     
     // ------------------------------------- DataNode -> GameEntity -------------------------------------
-    /// <returns>an <see cref="attached"/> entity</returns>
-    internal GameEntity DataNodeToEntity(DataNode dataNode, out string error)
+    internal GameEntity LoadEntity(DataNode dataNode, out string error)
     {
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
@@ -56,7 +55,8 @@ public partial class GameEntityStore
         return entity;
     }
 
-    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode) {
+    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode)
+    {
         // --- map pid to id
         var pid     = dataNode.pid;
         var pidMap  = pid2Id;
@@ -90,7 +90,8 @@ public partial class GameEntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode) {
+    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode)
+    {
         var pid = dataNode.pid;
         if (pid < 0 || pid > int.MaxValue) {
             throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(dataNode));

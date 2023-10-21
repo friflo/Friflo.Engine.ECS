@@ -22,28 +22,29 @@ public class GameDatabase
         this.databaseSync  = databaseSync;
     }
         
-    public DataNode DataNodeFromEntity(GameEntity entity)
+    public DataNode StoreEntity(GameEntity entity)
     {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
         }
         var entityStore = entity.archetype.gameEntityStore;
         if (entityStore != store) {
-            throw new InvalidOperationException();
+            throw EntityStore.InvalidStoreException(nameof(entity));
         }
         if (!databaseSync.TryGetDataNode(entity.id, out var dataNode)) {
             dataNode = new DataNode { pid = entity.id };
             databaseSync.AddDataNode(dataNode);
         }
-        entityStore.DataNodeFromEntity(entity, dataNode);
+        entityStore.StoreEntity(entity, dataNode);
         return dataNode;
     }
     
-    public GameEntity DataNodeToEntity(DataNode dataNode, out string error)
+    /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
+    public GameEntity LoadEntity(DataNode dataNode, out string error)
     {
         if (dataNode == null) {
             throw new ArgumentNullException(nameof(dataNode));
         }
-        return store.DataNodeToEntity(dataNode, out error);
+        return store.LoadEntity(dataNode, out error);
     }
 }
