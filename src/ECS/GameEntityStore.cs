@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -26,8 +26,8 @@ namespace Friflo.Fliox.Engine.ECS;
 ///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="GameEntity"/> methods.
 ///     </item>
 ///     <item>
-///       <b><see cref="TreeGraphMembership"/>:</b> <see cref="graphNode"/> / <see cref="floating"/> node (not part of the <see cref="GameEntityStore"/> tree graph).<br/>
-///       All children of a <see cref="graphNode"/> are <see cref="graphNode"/>'s themselves.
+///       <b><see cref="TreeMembership"/>:</b> <see cref="treeNode"/> / <see cref="floating"/> node (not part of the <see cref="GameEntityStore"/> tree graph).<br/>
+///       All children of a <see cref="treeNode"/> are <see cref="treeNode"/>'s themselves.
 ///     </item>
 ///     </list>
 ///   </item>

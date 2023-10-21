@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
+using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // ReSharper disable HeuristicUnreachableCode
@@ -114,8 +114,8 @@ public static class Test_Entity_Tree
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
-        AreEqual(floating,  root.TreeGraphMembership);
-        AreEqual(floating,  child.TreeGraphMembership);
+        AreEqual(floating,  root.TreeMembership);
+        AreEqual(floating,  child.TreeMembership);
         
         root.AddChild(child);
         IsNull  (child.GraphOrigin);
@@ -123,13 +123,13 @@ public static class Test_Entity_Tree
         store.SetGraphOrigin(root);
         NotNull (root.GraphOrigin);
         NotNull (child.GraphOrigin);
-        AreEqual(graphNode,  root.TreeGraphMembership);
-        AreEqual(graphNode,  child.TreeGraphMembership);
+        AreEqual(treeNode,  root.TreeMembership);
+        AreEqual(treeNode,  child.TreeMembership);
         
         // --- remove child
         root.RemoveChild(child);
         IsNull  (child.GraphOrigin);
-        AreEqual(floating,  child.TreeGraphMembership);
+        AreEqual(floating,  child.TreeMembership);
         AreEqual(0,         root.ChildCount);
         IsNull  (child.Parent);
         
@@ -178,14 +178,14 @@ public static class Test_Entity_Tree
         var child   = store.CreateEntity(2);
         root.AddChild(child);
         AreSame(root,           child.GraphOrigin);
-        AreEqual(graphNode,     child.TreeGraphMembership);
+        AreEqual(treeNode,      child.TreeMembership);
         AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
         AreEqual("id: 0",                                   nodes[0].ToString());
         AreEqual("id: 2  []  flags: RootTreeNode | Created",nodes[2].ToString());
         
         AreEqual(NullNode,                                  nodes[0].Flags);
-        AreEqual(RootTreeNode | Created,                    nodes[2].Flags);
+        AreEqual(TreeNode | Created,                        nodes[2].Flags);
     }
     
     [Test]

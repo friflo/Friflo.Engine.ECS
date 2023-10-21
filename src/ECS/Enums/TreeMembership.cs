@@ -11,10 +11,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// Describe the membership of a <see cref="GameEntity"/> to the <see cref="GameEntityStore"/> tree graph.
 /// </summary>
 /// <remarks>Requirement: The entity must be <see cref="attached"/> to an <see cref="GameEntityStore"/></remarks>
-public enum TreeGraphMembership
+public enum TreeMembership
 {
     /// <summary>The entity is not member of the <see cref="GameEntityStore"/> tree graph</summary>
     floating    = 0,
     /// <summary>The entity is member of the <see cref="GameEntityStore"/> tree graph</summary>
-    graphNode   = 1,
+    treeNode    = 1,
 }

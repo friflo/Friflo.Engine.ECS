@@ -87,7 +87,7 @@ public static class Test_CreateFromDataNode
         //
         IsNull(                         store.GraphOrigin);
         store.SetGraphOrigin(entity5);
-        AreEqual(Created | RootTreeNode,store.Nodes[8].Flags);
+        AreEqual(Created | TreeNode,store.Nodes[8].Flags);
     }
     
     [Test]
@@ -116,7 +116,7 @@ public static class Test_CreateFromDataNode
         //
         IsNull(                         store.GraphOrigin);
         store.SetGraphOrigin(entity5);
-        AreEqual(Created | RootTreeNode,store.Nodes[8].Flags);
+        AreEqual(Created | TreeNode,store.Nodes[8].Flags);
     }
     
     [Test]

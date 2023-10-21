@@ -74,7 +74,7 @@ public partial class GameEntityStore
         }
         node.childIds[index] = childId;
         node.childCount++;
-        SetTreeFlags(localNodes, childId, node.flags & RootTreeNode);
+        SetTreeFlags(localNodes, childId, node.flags & TreeNode);
     }
     
     internal void RemoveChild (int id, int childId)
@@ -85,7 +85,7 @@ public partial class GameEntityStore
         }
         childNode.parentId = Static.NoParentId;
         RemoveChildNode(id, childId);
-        ClearTreeFlags(nodes, childId, RootTreeNode);
+        ClearTreeFlags(nodes, childId, TreeNode);
     }
     
     private void RemoveChildNode (int entity, int childEntity)
@@ -191,7 +191,7 @@ public partial class GameEntityStore
         ref var node    = ref localNodes[id];
         
         // --- mark its child nodes as floating
-        ClearTreeFlags(localNodes, id, RootTreeNode);
+        ClearTreeFlags(localNodes, id, TreeNode);
         foreach (var childId in node.ChildIds) {
             localNodes[childId].parentId = Static.NoParentId;
         }
@@ -253,16 +253,16 @@ public partial class GameEntityStore
         }
         graphOrigin = entity;
         parentId    = Static.GraphOriginParentId;
-        SetTreeFlags(nodes, id, RootTreeNode);
+        SetTreeFlags(nodes, id, TreeNode);
     }
     
     // ------------------------------------- GameEntity access -------------------------------------
-    internal TreeGraphMembership  GetTreeGraphMembership(int id) {
-        return nodes[id].Is(RootTreeNode) ? TreeGraphMembership.graphNode : TreeGraphMembership.floating;
+    internal TreeMembership  GetTreeGraphMembership(int id) {
+        return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
     internal GameEntity GetGraphOrigin(int id) {
-        return nodes[id].Is(RootTreeNode) ? GraphOrigin : null;
+        return nodes[id].Is(TreeNode) ? GraphOrigin : null;
     }
     
     internal GameEntity GetParent(int id)
