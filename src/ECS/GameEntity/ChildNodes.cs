@@ -23,7 +23,7 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
     [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childLength);
     
     /// <summary>Property <b>only used</b> to display child entities in Debugger. See <see cref="ChildNodes"/> remarks.</summary>
-    [Obsolete("use either ChildNodes[], ChildNodes.ToArray() or foreach (var node in entity.ChildNodes)")]
+    [Obsolete($"use either {nameof(ChildNodes)}[], {nameof(ChildNodes)}.{nameof(ToArray)}() or foreach (var node in entity.{nameof(ChildNodes)})")]
     [Browse(RootHidden)]public              GameEntity[]        Entities_       => GetEntities();
                         public              GameEntity          this[int index] => nodes[Ids[index]].entity;
                         public override     string              ToString()      => $"Length: {childLength}";
