@@ -124,7 +124,7 @@ public sealed class ComponentSchema
     /// </remarks>
     internal int CheckStructIndex(Type structType, int structIndex)
     {
-        if (structIndex == StructUtils.MissingAttribute) {
+        if (structIndex == StructInfo.MissingAttribute) {
             var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {structType.Namespace}.{structType.Name}";
             throw new InvalidOperationException(msg);
         }

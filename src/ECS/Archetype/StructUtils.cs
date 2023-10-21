@@ -6,12 +6,15 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+public static class StructInfo
+{
+    public   const  int     ChunkSize           = 512; // check 64
+    internal const  int     MissingAttribute    = 0;
+}
+
 internal static class StructUtils
 {
-    internal const      int     ChunkSize           = 512; // check 64
-    internal const      int     MissingAttribute    = 0;
-    
-    private  static     int     _nextStructIndex    = 1;
+    private static  int     _nextStructIndex    = 1;
     
     internal static int NewStructIndex(Type type, out string structKey) {
         foreach (var attr in type.CustomAttributes) {
@@ -23,6 +26,6 @@ internal static class StructUtils
             return _nextStructIndex++;
         }
         structKey = null;
-        return MissingAttribute;
+        return StructInfo.MissingAttribute;
     }
 }

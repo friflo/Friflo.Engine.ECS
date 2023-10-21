@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using static Friflo.Fliox.Engine.ECS.StructUtils;
+using static Friflo.Fliox.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT access GameEntity's
 

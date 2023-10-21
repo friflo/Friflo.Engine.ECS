@@ -7,7 +7,7 @@ using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using ReadOnlyHeaps = System.ReadOnlySpan<Friflo.Fliox.Engine.ECS.StructHeap>;
-using static Friflo.Fliox.Engine.ECS.StructUtils;
+using static Friflo.Fliox.Engine.ECS.StructInfo;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace

@@ -6,7 +6,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
-using static Friflo.Fliox.Engine.ECS.StructUtils;
+using static Friflo.Fliox.Engine.ECS.StructInfo;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
@@ -26,7 +26,7 @@ internal sealed class StructHeap<T> : StructHeap
     private  readonly   TypeMapper<T>       typeMapper; // 8
     
     // --- static internal
-    internal static readonly    int     StructIndex  = NewStructIndex(typeof(T), out StructKey);
+    internal static readonly    int     StructIndex  = StructUtils.NewStructIndex(typeof(T), out StructKey);
     internal static readonly    string  StructKey;
     
     internal StructHeap(int structIndex, TypeMapper<T> mapper)
