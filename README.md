@@ -68,8 +68,8 @@ This enables UI rendering is exactly the same on all platforms with a single cod
 ## `GameEntityStore` / `GameDatabase`
 
 Both `GameEntityStore` and `GameDatabase` are used to store game entities.  
-The `GameEntityStore` store game entities at runtime.  
-The `GameDatabase` store serialized game entities in databases or files and transfer them via a network.  
+The `GameEntityStore` store `GameEntity`'s at runtime.  
+The `GameDatabase` store serialized `GameEntity`'s as `DatabaseEntity`' in databases or files and transfer them via a network.  
 
 Using the `GameEntityStore` / `GameDatabase` enables instant synchronization of a game scene between multiple creators.  
 In this workflow the game scene is stored in a shared database without using a version control system like `Git`.  
