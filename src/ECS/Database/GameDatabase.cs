@@ -4,7 +4,7 @@
 using System;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
-namespace Friflo.Fliox.Engine.ECS.Sync;
+namespace Friflo.Fliox.Engine.ECS.Database;
 
 public interface IGameDatabaseSync
 {

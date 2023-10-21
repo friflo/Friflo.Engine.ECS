@@ -7,8 +7,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS.Sync;
+namespace Friflo.Fliox.Engine.ECS.Database;
 
 /// <summary>
 /// Create the <see cref="JsonValue"/> from all class / struct components used at <see cref="DataNode.components"/>.<br/>
