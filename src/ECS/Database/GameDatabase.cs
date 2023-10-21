@@ -8,20 +8,14 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.ECS.Database;
 
-public interface IGameDatabaseSync
-{
-    bool TryGetEntity (long pid, out DatabaseEntity databaseEntity);
-    void AddEntity    (DatabaseEntity databaseEntity);
-}
-
 public class GameDatabase
 {
     private readonly    GameEntityStore     store;
-    private readonly    IGameDatabaseSync   sync;
+    private readonly    IDatabaseSync       sync;
     
-    public GameDatabase (GameEntityStore store, IGameDatabaseSync sync) {
-        this.store      = store;
-        this.sync  = sync;
+    public GameDatabase (GameEntityStore store, IDatabaseSync sync) {
+        this.store  = store;
+        this.sync   = sync;
     }
         
     public DatabaseEntity StoreEntity(GameEntity entity)
