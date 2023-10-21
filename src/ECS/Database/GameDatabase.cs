@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Linq;
+using Friflo.Json.Fliox;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.ECS.Database;
@@ -15,11 +17,11 @@ public interface IGameDatabaseSync
 public class GameDatabase
 {
     private readonly    GameEntityStore     store;
-    private readonly    IGameDatabaseSync   databaseSync;
+    private readonly    IGameDatabaseSync   sync;
     
-    public GameDatabase (GameEntityStore store, IGameDatabaseSync databaseSync) {
+    public GameDatabase (GameEntityStore store, IGameDatabaseSync sync) {
         this.store      = store;
-        this.databaseSync  = databaseSync;
+        this.sync  = sync;
     }
         
     public DataNode StoreEntity(GameEntity entity)
@@ -31,9 +33,9 @@ public class GameDatabase
         if (entityStore != store) {
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
-        if (!databaseSync.TryGetDataNode(entity.id, out var dataNode)) {
+        if (!sync.TryGetDataNode(entity.id, out var dataNode)) {
             dataNode = new DataNode { pid = entity.id };
-            databaseSync.AddDataNode(dataNode);
+            sync.AddDataNode(dataNode);
         }
         entityStore.StoreEntity(entity, dataNode);
         return dataNode;
@@ -45,6 +47,19 @@ public class GameDatabase
         if (dataNode == null) {
             throw new ArgumentNullException(nameof(dataNode));
         }
-        return store.LoadEntity(dataNode, out error);
+        // --- stored DataNode's references have an identity - their reference and their pid   
+        if (!sync.TryGetDataNode(dataNode.pid, out var storedNode)) {
+            storedNode = new DataNode();
+        }
+        // --- copy all fields to eliminate side effects by mutations on the passed dataNode
+        storedNode.pid          = dataNode.pid;
+        storedNode.children     = dataNode.children?.ToList();
+        storedNode.components   = new JsonValue(dataNode.components);
+        storedNode.tags         = dataNode.tags?.ToList();
+        storedNode.sceneName    = dataNode.sceneName;
+        storedNode.prefab       = dataNode.prefab;
+        storedNode.modify       = dataNode.modify;
+        
+        return store.LoadEntity(storedNode, out error);
     }
 }
