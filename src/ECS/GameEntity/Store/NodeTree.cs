@@ -242,15 +242,16 @@ public partial class GameEntityStore
         }
     }
     
-    private void SetRootId(int id) {
-        if (HasRoot) {
-            throw new InvalidOperationException($"EntityStore already has a root entity. current root id: {rootId}");
+    private void SetRootEntity(GameEntity entity) {
+        if (root != null) {
+            throw new InvalidOperationException($"EntityStore already has a root entity. current root id: {root.id}");
         }
+        var id = entity.id;
         ref var parentId = ref nodes[id].parentId;
         if (HasParent(parentId)) {
             throw new InvalidOperationException($"entity must not have a parent to be root. current parent id: {parentId}");
         }
-        rootId      = id;
+        root        = entity;
         parentId    = Static.RootId;
         SetTreeFlags(nodes, id, RootTreeNode);
     }

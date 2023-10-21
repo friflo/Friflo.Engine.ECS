@@ -120,7 +120,7 @@ public partial class GameEntityStore
         if (this != entity.archetype.store) {
             throw InvalidStoreException(nameof(entity));
         }
-        SetRootId(entity.id);
+        SetRootEntity(entity);
     }
     
     /// <summary>

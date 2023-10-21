@@ -9,6 +9,7 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
@@ -41,8 +42,7 @@ public sealed partial class GameEntityStore : EntityStore
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
                     public              ReadOnlySpan<EntityNode>    Nodes           => new (nodes);
-    [Browse(Never)] private             bool                        HasRoot         => rootId   >= Static.MinNodeId;
-                    public              GameEntity                  Root            => nodes[rootId].entity;    // null if no root set
+                    public              GameEntity                  Root            => root;                // null if no root set
     #endregion
     
 #region internal fields
@@ -51,9 +51,9 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4                   - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
-    [Browse(Never)] private             int                     rootId;             //  4                   - id of root node. 0 = NoParentId
+    [Browse(Never)] private             GameEntity              root;               //  8                   - root entity. null if no root assigned
     // --- misc
-    [Browse(Never)] private  readonly   IEntityStoreSync    storeSync;          //  8
+    [Browse(Never)] private  readonly   IEntityStoreSync        storeSync;          //  8
     #endregion
     
 #region initialize
@@ -62,7 +62,6 @@ public sealed partial class GameEntityStore : EntityStore
         this.pidType        = pidType;
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
-        rootId              = Static.NoParentId;
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
