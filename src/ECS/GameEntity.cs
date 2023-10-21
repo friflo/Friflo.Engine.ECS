@@ -6,7 +6,7 @@ using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
@@ -22,7 +22,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="Archetype"/></item>
 ///     <item><see cref="ComponentCount"/></item>
 ///     <item><see cref="StoreOwnership"/></item>
-///     <item><see cref="TreeMembership"/></item>
+///     <item><see cref="TreeGraphMembership"/></item>
 /// </list>
 /// <b>struct components</b> · generic
 /// <list type="bullet">
@@ -61,7 +61,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// <b>tree nodes</b>
 /// <list type="bullet">
-///     <item><see cref="Root"/></item>
+///     <item><see cref="GraphOrigin"/></item>
 ///     <item><see cref="Parent"/></item>
 ///     <item><see cref="ChildNodes"/></item>
 ///     <item><see cref="ChildIds"/></item>
@@ -88,13 +88,13 @@ public sealed class GameEntity
     [Browse(Never)] public  StoreOwnership  StoreOwnership  => archetype != null ? attached : detached;
     
     /// <returns>
-    /// <see cref="rootTreeNode"/> if the entity is member of the <see cref="GameEntityStore"/> <see cref="GameEntityStore.Root"/> tree.<br/>
+    /// <see cref="graphNode"/> if the entity is member of the <see cref="GameEntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
     /// <remarks>
-    /// If <see cref="TreeMembership"/> is <see cref="rootTreeNode"/> its <see cref="Root"/> is not null.<br/>
-    /// If <see cref="floating"/> its <see cref="Root"/> is null.
+    /// If <see cref="TreeGraphMembership"/> is <see cref="graphNode"/> its <see cref="GraphOrigin"/> is not null.<br/>
+    /// If <see cref="floating"/> its <see cref="GraphOrigin"/> is null.
     /// </remarks>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
+    [Browse(Never)] public  TreeGraphMembership  TreeGraphMembership  => archetype.gameEntityStore.GetTreeGraphMembership(id);
     
     [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
@@ -141,11 +141,11 @@ public sealed class GameEntity
     
                     /// <returns>return null if the entity is <see cref="floating"/></returns>
                     /// <remarks>Executes in O(1) independent from its depth in the node tree</remarks>
-                    public GameEntity       Root        => archetype.gameEntityStore.GetRoot(id);
+                    public GameEntity       GraphOrigin => archetype.gameEntityStore.GetGraphOrigin(id);
                     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
-                    /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.Root"/> returns always null
+                    /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.GraphOrigin"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
                     public GameEntity       Parent      => archetype.gameEntityStore.GetParent(id);
@@ -305,7 +305,7 @@ public sealed class GameEntity
     // --------------------------------------- tree methods --------------------------------------
 #region tree node methods
     /// <remarks>
-    /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
+    /// Executes in O(1).<br/>If its <see cref="TreeGraphMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public void AddChild(GameEntity entity) {
@@ -315,7 +315,7 @@ public sealed class GameEntity
     }
     
     /// <remarks>
-    /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
+    /// Executes in O(1).<br/>If its <see cref="TreeGraphMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public void RemoveChild(GameEntity entity) {

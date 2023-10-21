@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // ReSharper disable InlineTemporaryVariable
@@ -113,14 +113,14 @@ public partial class GameEntityStore
         return entity;
     }
     
-    public void SetRoot(GameEntity entity) {
+    public void SetGraphOrigin(GameEntity entity) {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
         }
         if (this != entity.archetype.store) {
             throw InvalidStoreException(nameof(entity));
         }
-        SetRootEntity(entity);
+        SetGraphOriginEntity(entity);
     }
     
     /// <summary>

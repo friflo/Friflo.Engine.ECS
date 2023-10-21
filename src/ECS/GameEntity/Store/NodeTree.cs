@@ -242,27 +242,27 @@ public partial class GameEntityStore
         }
     }
     
-    private void SetRootEntity(GameEntity entity) {
-        if (root != null) {
-            throw new InvalidOperationException($"EntityStore already has a root entity. current root id: {root.id}");
+    private void SetGraphOriginEntity(GameEntity entity) {
+        if (graphOrigin != null) {
+            throw new InvalidOperationException($"EntityStore already has a GraphOrigin entity. current root id: {graphOrigin.id}");
         }
         var id = entity.id;
         ref var parentId = ref nodes[id].parentId;
         if (HasParent(parentId)) {
-            throw new InvalidOperationException($"entity must not have a parent to be root. current parent id: {parentId}");
+            throw new InvalidOperationException($"entity must not have a parent to be GraphOrigin. current parent id: {parentId}");
         }
-        root        = entity;
-        parentId    = Static.RootId;
+        graphOrigin = entity;
+        parentId    = Static.GraphOriginParentId;
         SetTreeFlags(nodes, id, RootTreeNode);
     }
     
     // ------------------------------------- GameEntity access -------------------------------------
-    internal TreeMembership  GetTreeMembership(int id) {
-        return nodes[id].Is(RootTreeNode) ? TreeMembership.rootTreeNode : TreeMembership.floating;
+    internal TreeGraphMembership  GetTreeGraphMembership(int id) {
+        return nodes[id].Is(RootTreeNode) ? TreeGraphMembership.graphNode : TreeGraphMembership.floating;
     }
 
-    internal GameEntity GetRoot(int id) {
-        return nodes[id].Is(RootTreeNode) ? Root : null;
+    internal GameEntity GetGraphOrigin(int id) {
+        return nodes[id].Is(RootTreeNode) ? GraphOrigin : null;
     }
     
     internal GameEntity GetParent(int id)

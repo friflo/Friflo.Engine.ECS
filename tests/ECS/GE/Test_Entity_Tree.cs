@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // ReSharper disable HeuristicUnreachableCode
@@ -54,7 +54,7 @@ public static class Test_Entity_Tree
         child.AddComponent(new EntityName("child"));
         root.AddChild(child);
         
-        IsNull  (child.Root);
+        IsNull  (child.GraphOrigin);
         AreSame (root,      child.Parent);
         AreEqual(attached,  child.StoreOwnership);
         var childNodes =    root.ChildNodes;
@@ -93,7 +93,7 @@ public static class Test_Entity_Tree
     public static void Test_AddChild_move_root_tree_entity() {
         var store       = new GameEntityStore();
         var root        = store.CreateEntity(1);
-        store.SetRoot(root);
+        store.SetGraphOrigin(root);
         var child1      = store.CreateEntity(2);
         var child2      = store.CreateEntity(3);
         var subChild    = store.CreateEntity(4);
@@ -114,22 +114,22 @@ public static class Test_Entity_Tree
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
-        AreEqual(floating,  root.TreeMembership);
-        AreEqual(floating,  child.TreeMembership);
+        AreEqual(floating,  root.TreeGraphMembership);
+        AreEqual(floating,  child.TreeGraphMembership);
         
         root.AddChild(child);
-        IsNull  (child.Root);
+        IsNull  (child.GraphOrigin);
         
-        store.SetRoot(root);
-        NotNull (root.Root);
-        NotNull (child.Root);
-        AreEqual(rootTreeNode,  root.TreeMembership);
-        AreEqual(rootTreeNode,  child.TreeMembership);
+        store.SetGraphOrigin(root);
+        NotNull (root.GraphOrigin);
+        NotNull (child.GraphOrigin);
+        AreEqual(graphNode,  root.TreeGraphMembership);
+        AreEqual(graphNode,  child.TreeGraphMembership);
         
         // --- remove child
         root.RemoveChild(child);
-        IsNull  (child.Root);
-        AreEqual(floating,  child.TreeMembership);
+        IsNull  (child.GraphOrigin);
+        AreEqual(floating,  child.TreeGraphMembership);
         AreEqual(0,         root.ChildCount);
         IsNull  (child.Parent);
         
@@ -162,23 +162,23 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_SetRoot() {
         var store   = new GameEntityStore();
-        IsNull (store.Root);
+        IsNull (store.GraphOrigin);
         
         var root    = store.CreateEntity(1);
-        IsNull (root.Root);
+        IsNull (root.GraphOrigin);
         IsNull (root.Parent);
         var start = Mem.GetAllocatedBytes();
         
-        store.SetRoot(root);
+        store.SetGraphOrigin(root);
         Mem.AssertNoAlloc(start);
-        AreSame(root,       store.Root);
-        AreSame(root,       root.Root);
+        AreSame(root,       store.GraphOrigin);
+        AreSame(root,       root.GraphOrigin);
         IsNull (root.Parent);
         
         var child   = store.CreateEntity(2);
         root.AddChild(child);
-        AreSame(root,           child.Root);
-        AreEqual(rootTreeNode,  child.TreeMembership);
+        AreSame(root,           child.GraphOrigin);
+        AreEqual(graphNode,     child.TreeGraphMembership);
         AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
         AreEqual("id: 0",                                   nodes[0].ToString());
@@ -213,7 +213,7 @@ public static class Test_Entity_Tree
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
-        store.SetRoot(root);
+        store.SetGraphOrigin(root);
         var child   = store.CreateEntity(2);
         AreEqual(attached,  child.StoreOwnership);
         child.AddComponent(new EntityName("child"));
@@ -223,8 +223,8 @@ public static class Test_Entity_Tree
         child.AddChild(subChild);
         
         AreEqual(3,         store.EntityCount);
-        AreSame (root,      child.Root);
-        AreSame (root,      subChild.Root);
+        AreSame (root,      child.GraphOrigin);
+        AreSame (root,      subChild.GraphOrigin);
         var childArchetype = child.Archetype;
         AreEqual(3,         childArchetype.EntityCount);
         
@@ -234,7 +234,7 @@ public static class Test_Entity_Tree
         AreEqual(2,         childArchetype.EntityCount);
         AreEqual(2,         store.EntityCount);
         AreEqual(0,         root.ChildCount);
-        IsNull  (subChild.Root);        // subChild is floating
+        IsNull  (subChild.GraphOrigin);        // subChild is floating
         IsNull  (child.Archetype);
         AreEqual("id: 2  (detached)", child.ToString());
         AreSame (subChild,  store.Nodes[3].Entity);
@@ -254,7 +254,7 @@ public static class Test_Entity_Tree
             _ = child.Name; // access struct component
         });
         Throws<NullReferenceException> (() => {
-            _ = child.Root; // access tree node
+            _ = child.GraphOrigin; // access tree node
         });
     }
     
@@ -321,7 +321,7 @@ public static class Test_Entity_Tree
         {
             var store   = new GameEntityStore();
             var e       = Throws<ArgumentNullException>(() => {
-                store.SetRoot(null);
+                store.SetGraphOrigin(null);
             });
             AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
         } {
@@ -329,27 +329,27 @@ public static class Test_Entity_Tree
             var store2  = new GameEntityStore();
             var entity  = store1.CreateEntity();
             var e       = Throws<ArgumentException>(() => {
-                store2.SetRoot(entity);            
+                store2.SetGraphOrigin(entity);            
             });
             AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         } {
             var store   = new GameEntityStore();
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
-            store.SetRoot(entity1);
+            store.SetGraphOrigin(entity1);
             var e = Throws<InvalidOperationException>(() => {
-                store.SetRoot(entity2);
+                store.SetGraphOrigin(entity2);
             });
-            AreEqual("EntityStore already has a root entity. current root id: 1", e!.Message);
+            AreEqual("EntityStore already has a GraphOrigin entity. current root id: 1", e!.Message);
         } {
             var store   = new GameEntityStore();
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
             entity1.AddChild(entity2);
             var e = Throws<InvalidOperationException>(() => {
-                store.SetRoot(entity2);
+                store.SetGraphOrigin(entity2);
             });
-            AreEqual("entity must not have a parent to be root. current parent id: 1", e!.Message);
+            AreEqual("entity must not have a parent to be GraphOrigin. current parent id: 1", e!.Message);
         }
     }
     

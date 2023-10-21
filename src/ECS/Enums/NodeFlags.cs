@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable once CheckNamespace
@@ -14,7 +14,7 @@ public enum NodeFlags : byte
     NullNode        = 0b_0000_0000,
     Created         = 0b_0000_0001,
     /// <summary>
-    /// If set node is a <see cref="rootTreeNode"/>. Otherwise <see cref="floating"/>
+    /// If set a node is a <see cref="graphNode"/>. Otherwise <see cref="floating"/>
     /// </summary>
     RootTreeNode    = 0b_0000_0010,
     // - prefab flags

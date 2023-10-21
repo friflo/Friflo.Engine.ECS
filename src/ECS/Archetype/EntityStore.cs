@@ -62,10 +62,10 @@ public abstract partial class EntityStore
         internal const              int             MinNodeId               =  1;
         /// <summary>
         /// An <see cref="EntityNode"/> with <see cref="EntityNode.parentId"/> == <see cref="NoParentId"/>
-        /// is declared as <see cref="TreeMembership.floating"/>.
+        /// is declared as <see cref="TreeGraphMembership.floating"/>.
         /// </summary>
         public   const              int             NoParentId              =  0;
-        public   const              int             RootId                  = -1;
+        public   const              int             GraphOriginParentId     = -1;
     }
     #endregion
     

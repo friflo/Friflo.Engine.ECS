@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Fliox.Engine.ECS.TreeGraphMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -26,12 +26,12 @@ namespace Friflo.Fliox.Engine.ECS;
 ///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="GameEntity"/> methods.
 ///     </item>
 ///     <item>
-///       <b><see cref="TreeMembership"/>:</b> <see cref="rootTreeNode"/> / <see cref="floating"/> node (not part of the store <see cref="Root"/> tree).<br/>
-///       All children of a <see cref="rootTreeNode"/> are <see cref="rootTreeNode"/>'s themselves.
+///       <b><see cref="TreeGraphMembership"/>:</b> <see cref="graphNode"/> / <see cref="floating"/> node (not part of the <see cref="GameEntityStore"/> tree graph).<br/>
+///       All children of a <see cref="graphNode"/> are <see cref="graphNode"/>'s themselves.
 ///     </item>
 ///     </list>
 ///   </item>
-///   <item>Manage a tree of entities which starts with the <see cref="Root"/> entity to build up a scene</item>
+///   <item>Manage a tree graph of entities which starts with the <see cref="GraphOrigin"/> entity to build up a scene</item>
 ///   <item>Store the values of <b>struct</b> components - attributed with <see cref="StructComponentAttribute"/> - in linear memory</item>
 /// </list>
 /// </summary>
@@ -41,8 +41,8 @@ public sealed partial class GameEntityStore : EntityStore
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
-                    public              ReadOnlySpan<EntityNode>    Nodes           => new (nodes);
-                    public              GameEntity                  Root            => root;                // null if no root set
+                    public ReadOnlySpan<EntityNode>             Nodes           => new (nodes);
+                    public              GameEntity              GraphOrigin     => graphOrigin; // null if no graph origin set
     #endregion
     
 #region internal fields
@@ -51,7 +51,7 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4                   - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
-    [Browse(Never)] private             GameEntity              root;               //  8                   - root entity. null if no root assigned
+    [Browse(Never)] private             GameEntity              graphOrigin;        //  8                   - root entity. null if no root assigned
     // --- misc
     [Browse(Never)] private  readonly   IEntityStoreSync        storeSync;          //  8
     #endregion
