@@ -19,6 +19,9 @@ public sealed class GameDatabase
         this.sync   = sync;
     }
         
+    /// <summary>
+    /// Stores the given <see cref="GameEntity"/> as a <see cref="DatabaseEntity"/> in the <see cref="GameDatabase"/>
+    /// </summary>
     public DatabaseEntity StoreEntity(GameEntity entity)
     {
         if (entity == null) {
@@ -36,6 +39,9 @@ public sealed class GameDatabase
         return dbEntity;
     }
     
+    /// <summary>
+    /// Loads the given <see cref="DatabaseEntity"/> as a <see cref="GameEntity"/> from the <see cref="GameDatabase"/>
+    /// </summary>
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
     public GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
     {
