@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using ReadOnlyHeaps = System.ReadOnlySpan<Friflo.Fliox.Engine.ECS.StructHeap>;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -46,7 +45,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     
-    [Browse(Never)] internal            ReadOnlyHeaps       Heaps           => structHeaps;
+    [Browse(Never)] internal ReadOnlySpan<StructHeap>       Heaps           => structHeaps;
     [Browse(Never)] internal            int                 ChunkCount      // entity count: 0: 0   1:0   512:0   513:1, ...
                                                                             => entityCount / ChunkSize;
     [Browse(Never)] internal            int                 ChunkEnd        // entity count: 0:-1   1:0   512:0   513:1, ...
