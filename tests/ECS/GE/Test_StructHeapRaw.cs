@@ -142,7 +142,18 @@ public static class Test_StructHeapRaw
         Console.WriteLine($"Iterate_Ref. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.");
     }
     
-    private const int QueryCount = 1000;
+    /// <summary>
+    /// Test cases that need to be covered: <br/>
+    /// 0 <br/>
+    /// 1 <br/>
+    /// <see cref="StructInfo.ChunkSize"/> - 1<br/>
+    /// <see cref="StructInfo.ChunkSize"/> <br/>
+    /// <see cref="StructInfo.ChunkSize"/> + 1 <br/>
+    /// 2 * <see cref="StructInfo.ChunkSize"/> - 1<br/>
+    /// 2 * <see cref="StructInfo.ChunkSize"/> <br/>
+    /// 2 * <see cref="StructInfo.ChunkSize"/> + 1 <br/>
+    /// </summary>
+    private const int QueryCount = 2 * StructInfo.ChunkSize + 1;
     
     [Test]
     public static void Test_StructHeapRaw_Query_foreach()
@@ -207,7 +218,7 @@ public static class Test_StructHeapRaw
         AreEqual(QueryCount, arch1.EntityCount);
     }
     
-    /// user greater than <see cref="StructUtils.ChunkSize"/> for coverage
+    /// use greater than <see cref="StructInfo.ChunkSize"/> for coverage
     private const int Count = 10_000; // 10_000_000
     
     [Test]
