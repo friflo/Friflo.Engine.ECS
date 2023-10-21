@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed class Archetype
 {
-#region public properties
+#region     public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
                     public              int                 Capacity        => memory.capacity;
@@ -25,9 +25,19 @@ public sealed class Archetype
                     public              EntityStore         Store           => store;
                     public ref readonly ArchetypeStructs    Structs         => ref structs;
                     public ref readonly Tags                Tags            => ref tags;
-    #endregion
-    
-#region private / internal members
+#endregion
+
+#region     internal properties
+    [Browse(Never)] internal ReadOnlySpan<StructHeap>       Heaps           => structHeaps;
+    [Browse(Never)] internal            int                 ChunkCount      // entity count: 0: 0   1:0   512:0   513:1, ...
+                                                                            => entityCount / ChunkSize;
+    [Browse(Never)] internal            int                 ChunkEnd        // entity count: 0:-1   1:0   512:0   513:1, ...
+                                                                            => (entityCount + ChunkSize - 1) / ChunkSize - 1;
+    [Browse(Never)] internal            int                 ChunkRest       => entityCount % ChunkSize;
+                    public   override   string              ToString()      => GetString();
+#endregion
+
+#region     private / internal members
                     private  readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
@@ -44,16 +54,8 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing GameEntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
-    
-    [Browse(Never)] internal ReadOnlySpan<StructHeap>       Heaps           => structHeaps;
-    [Browse(Never)] internal            int                 ChunkCount      // entity count: 0: 0   1:0   512:0   513:1, ...
-                                                                            => entityCount / ChunkSize;
-    [Browse(Never)] internal            int                 ChunkEnd        // entity count: 0:-1   1:0   512:0   513:1, ...
-                                                                            => (entityCount + ChunkSize - 1) / ChunkSize - 1;
-    [Browse(Never)] internal            int                 ChunkRest       => entityCount % ChunkSize;
-                    public   override   string              ToString()      => GetString();
     #endregion
-    
+
 #region initialize
     /// <summary>Create an instance of an <see cref="EntityStore.defaultArchetype"/></summary>
     internal Archetype(in ArchetypeConfig config)
@@ -142,7 +144,7 @@ public sealed class Archetype
         return new Archetype(config, componentHeaps, tags);
     }
     #endregion
-    
+
 #region struct component handling
 
     internal int MoveEntityTo(int id, int sourceIndex, Archetype newArchetype)
