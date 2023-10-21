@@ -14,13 +14,10 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class GameEntityStore
 {
     // ------------------------------------- GameEntity -> DataNode -------------------------------------
-    public DataNode DataNodeFromEntity(GameEntity entity) {
+    internal void DataNodeFromEntity(GameEntity entity, DataNode dataNode) {
         var id = entity.id;
         ref var node = ref nodes[id];
-        if (!storeSync.TryGetDataNode(id, out var dataNode)) {
-            dataNode = new DataNode { pid = id };
-            storeSync.AddDataNode(dataNode);
-        }
+
         // --- process child ids
         if (node.childCount > 0) {
             var children = dataNode.children = new List<long>(node.childCount); 
@@ -43,7 +40,6 @@ public partial class GameEntityStore
                 dataNode.tags.Add(tag.tagName);
             }
         }
-        return dataNode;
     }
     
     // ------------------------------------- DataNode -> GameEntity -------------------------------------

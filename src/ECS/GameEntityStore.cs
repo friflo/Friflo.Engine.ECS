@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS.Sync;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
@@ -52,12 +51,10 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] private             GameEntity              graphOrigin;        //  8                   - origin of the tree graph. null if no origin assigned
-    // --- misc
-    [Browse(Never)] private  readonly   IEntityStoreSync        storeSync;          //  8
     #endregion
     
 #region initialize
-    public GameEntityStore(PidType pidType = PidType.RandomPids, IEntityStoreSync storeSync = null)
+    public GameEntityStore(PidType pidType = PidType.RandomPids)
     {
         this.pidType        = pidType;
         nodes               = Array.Empty<EntityNode>();
@@ -66,7 +63,6 @@ public sealed partial class GameEntityStore : EntityStore
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
-        this.storeSync = storeSync;
     }
     #endregion
     
