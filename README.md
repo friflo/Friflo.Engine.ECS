@@ -155,7 +155,7 @@ This enables reading already serialized data after refactoring a **class** compo
 Entities are loaded using a `FlioxClient`
 
 ```csharp
-public sealed class DataNode
+public sealed class DatabaseEntity
 {
     public  long            id;         // pid - permanent id
     public  List<long>      children;   // can be null
@@ -167,7 +167,7 @@ public sealed class DataNode
 
 public class SceneClient : FlioxClient
 {
-    public  readonly    EntitySet <long, DataNode>   entities;
+    public  readonly    EntitySet <long, DatabaseEntity>   entities;
     
     public SceneClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
@@ -184,7 +184,7 @@ Remarks:
 
 - Entity `id`'s used in a scene are stable (permanent). So references to them are stable too.
 
-- Each entity must have only one parent so it must be included in only one `DataNode.children`.
+- Each entity must have only one parent so it must be included in only one `DatabaseEntity.children`.
 
 - When creating new entities in a scene the engine creates random `id`'s by default using `PidType.RandomPids`.
 
@@ -207,7 +207,7 @@ Entities are loaded in batches of 10.000 entities using the `SceneClient`.
 If a batch has finished loading the entities are than added to the `EntityStore` calling `CreateFromDataNode()`
 for each entity.
 
-The entity tree is build by utilizing the field `children` of a `DataNode`.  
+The entity tree is build by utilizing the field `children` of a `DatabaseEntity`.  
 In case ids in `children` are inconsistent the errors can be ignored or cause a loading error.
 
 Possible inconsistencies:

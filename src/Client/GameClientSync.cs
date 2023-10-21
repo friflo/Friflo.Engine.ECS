@@ -8,17 +8,17 @@ namespace Friflo.Fliox.Engine.Client;
 
 public class GameClientSync : IGameDatabaseSync
 {
-    private readonly LocalEntities<long, DataNode>  dataNodes;
+    private readonly LocalEntities<long, DatabaseEntity>  entities;
     
     public GameClientSync(GameClient client) {
-        dataNodes = client.nodes.Local;
+        entities = client.entities.Local;
     }
         
-    public bool TryGetDataNode(long pid, out DataNode dataNode) {
-        return dataNodes.TryGetEntity(pid, out dataNode);
+    public bool TryGetEntity(long pid, out DatabaseEntity databaseEntity) {
+        return entities.TryGetEntity(pid, out databaseEntity);
     }
 
-    public void AddDataNode(DataNode dataNode) {
-        dataNodes.Add(dataNode);
+    public void AddEntity(DatabaseEntity databaseEntity) {
+        entities.Add(databaseEntity);
     }
 }

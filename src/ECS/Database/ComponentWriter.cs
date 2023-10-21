@@ -10,7 +10,7 @@ using Friflo.Json.Fliox.Mapper;
 namespace Friflo.Fliox.Engine.ECS.Database;
 
 /// <summary>
-/// Create the <see cref="JsonValue"/> from all class / struct components used at <see cref="DataNode.components"/>.<br/>
+/// Create the <see cref="JsonValue"/> from all class / struct components used at <see cref="DatabaseEntity.components"/>.<br/>
 /// </summary>
 internal sealed class ComponentWriter
 {

@@ -10,8 +10,8 @@ namespace Friflo.Fliox.Engine.ECS.Database;
 
 public interface IGameDatabaseSync
 {
-    bool TryGetDataNode (long pid, out DataNode dataNode);
-    void AddDataNode    (DataNode dataNode);
+    bool TryGetEntity (long pid, out DatabaseEntity databaseEntity);
+    void AddEntity    (DatabaseEntity databaseEntity);
 }
 
 public class GameDatabase
@@ -24,7 +24,7 @@ public class GameDatabase
         this.sync  = sync;
     }
         
-    public DataNode StoreEntity(GameEntity entity)
+    public DatabaseEntity StoreEntity(GameEntity entity)
     {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
@@ -33,32 +33,32 @@ public class GameDatabase
         if (entityStore != store) {
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
-        if (!sync.TryGetDataNode(entity.id, out var dataNode)) {
-            dataNode = new DataNode { pid = entity.id };
-            sync.AddDataNode(dataNode);
+        if (!sync.TryGetEntity(entity.id, out var dbEntity)) {
+            dbEntity = new DatabaseEntity { pid = entity.id };
+            sync.AddEntity(dbEntity);
         }
-        entityStore.StoreEntity(entity, dataNode);
-        return dataNode;
+        entityStore.StoreEntity(entity, dbEntity);
+        return dbEntity;
     }
     
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
-    public GameEntity LoadEntity(DataNode dataNode, out string error)
+    public GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
     {
-        if (dataNode == null) {
-            throw new ArgumentNullException(nameof(dataNode));
+        if (databaseEntity == null) {
+            throw new ArgumentNullException(nameof(databaseEntity));
         }
-        // --- stored DataNode's references have an identity - their reference and their pid   
-        if (!sync.TryGetDataNode(dataNode.pid, out var storedNode)) {
-            storedNode = new DataNode();
+        // --- stored DatabaseEntity references have an identity - their reference and their pid   
+        if (!sync.TryGetEntity(databaseEntity.pid, out var storedNode)) {
+            storedNode = new DatabaseEntity();
         }
-        // --- copy all fields to eliminate side effects by mutations on the passed dataNode
-        storedNode.pid          = dataNode.pid;
-        storedNode.children     = dataNode.children?.ToList();
-        storedNode.components   = new JsonValue(dataNode.components);
-        storedNode.tags         = dataNode.tags?.ToList();
-        storedNode.sceneName    = dataNode.sceneName;
-        storedNode.prefab       = dataNode.prefab;
-        storedNode.modify       = dataNode.modify;
+        // --- copy all fields to eliminate side effects by mutations on the passed databaseEntity
+        storedNode.pid          = databaseEntity.pid;
+        storedNode.children     = databaseEntity.children?.ToList();
+        storedNode.components   = new JsonValue(databaseEntity.components);
+        storedNode.tags         = databaseEntity.tags?.ToList();
+        storedNode.sceneName    = databaseEntity.sceneName;
+        storedNode.prefab       = databaseEntity.prefab;
+        storedNode.modify       = databaseEntity.modify;
         
         return store.LoadEntity(storedNode, out error);
     }

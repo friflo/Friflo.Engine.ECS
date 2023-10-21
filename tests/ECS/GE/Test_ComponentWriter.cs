@@ -59,7 +59,7 @@ public static class Test_ComponentWriter
         entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
 
         int count = 10; // 2_000_000 ~ 1.935 ms
-        DataNode node = null;
+        DatabaseEntity node = null;
         for (int n = 0; n < count; n++) {
             node = database.StoreEntity(entity);
         }

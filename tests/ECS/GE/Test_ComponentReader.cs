@@ -27,8 +27,8 @@ public static class Test_ComponentReader
     {
         var store       = TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DataNode { pid = 10, components = rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataNode { pid = 11, components = childComponents };
+        var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DatabaseEntity { pid = 11, components = childComponents };
         
         var root        = database.LoadEntity(rootNode, out _);
         var child       = database.LoadEntity(childNode, out _);
@@ -38,7 +38,7 @@ public static class Test_ComponentReader
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
-        // --- read root DataNode again
+        // --- read root DatabaseEntity again
         root.Position   = default;
         root.Scale3     = default;
         root            = database.LoadEntity(rootNode, out _);
@@ -46,7 +46,7 @@ public static class Test_ComponentReader
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
-        // --- read child DataNode again
+        // --- read child DatabaseEntity again
         child.Position  = default;
         child.Scale3    = default;
         child           = database.LoadEntity(childNode, out _);
@@ -65,10 +65,10 @@ public static class Test_ComponentReader
         IsTrue  (root.HasScale3);
         IsFalse (root.HasPosition);
         
-        var rootNode    = new DataNode { pid = 10, components = rootComponents };
+        var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents };
         var rootResult  = database.LoadEntity(rootNode, out _);  // archetype changes
         AreSame (root, rootResult);
-        IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DataNode components
+        IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DatabaseEntity components
         IsTrue  (root.HasPosition);
     }
     
@@ -77,7 +77,7 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_read_components_null()
     {
         TestUtils.CreateGameEntityStore(out var database);
-        var node    = new DataNode { pid = 10, components = default };
+        var node    = new DatabaseEntity { pid = 10, components = default };
         var entity  = database.LoadEntity(node, out var error);
         AreEqual(0, entity.ComponentCount);
         IsNull  (error);
@@ -88,7 +88,7 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_read_components_empty()
     {
         TestUtils.CreateGameEntityStore(out var database);
-        var node    = new DataNode { pid = 10, components = new JsonValue("{}") };
+        var node    = new DatabaseEntity { pid = 10, components = new JsonValue("{}") };
         var entity  = database.LoadEntity(node, out var error);
         AreEqual(0, entity.ComponentCount);
         IsNull  (error);
@@ -98,7 +98,7 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_read_tags()
     {
         TestUtils.CreateGameEntityStore(out var database);
-        var node    = new DataNode { pid = 10, tags = new List<string> { nameof(TestTag) } };
+        var node    = new DatabaseEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
         var entity  = database.LoadEntity(node, out _);
         AreEqual(0, entity.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
@@ -109,7 +109,7 @@ public static class Test_ComponentReader
     {
         TestUtils.CreateGameEntityStore(out var database);
         var json    = new JsonValue("{ \"pos\": [] }");
-        var node    = new DataNode { pid = 10, components = json };
+        var node    = new DatabaseEntity { pid = 10, components = json };
         var entity  = database.LoadEntity(node, out var error);
         NotNull(entity);
         AreEqual("component must be an object. was ArrayStart. id: 10, component: 'pos'", error);
@@ -119,12 +119,12 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_read_invalid_components()
     {
         TestUtils.CreateGameEntityStore(out var database);
-        var node    = new DataNode { pid = 10, components = new JsonValue("123") };
+        var node    = new DatabaseEntity { pid = 10, components = new JsonValue("123") };
         var entity  = database.LoadEntity(node, out var error);
         NotNull(entity);
         AreEqual("expect 'components' == object or null. id: 10. was: ValueNumber", error);
         
-        node        = new DataNode { pid = 10, components = new JsonValue("invalid") };
+        node        = new DatabaseEntity { pid = 10, components = new JsonValue("invalid") };
         entity      = database.LoadEntity(node, out error);
         NotNull(entity);
         AreEqual("unexpected character while reading value. Found: i path: '(root)' at position: 1. id: 10", error);
@@ -132,21 +132,21 @@ public static class Test_ComponentReader
     
     /// <summary>cover <see cref="ComponentReader.Read"/></summary>
     [Test]
-    public static void Test_ComponentReader_DataNode_assertions()
+    public static void Test_ComponentReader_DatabaseEntity_assertions()
     {
         {
             TestUtils.CreateGameEntityStore(out var database);
             var e = Throws<ArgumentNullException>(() => {
                 database.LoadEntity(null, out _);
             });
-            AreEqual("Value cannot be null. (Parameter 'dataNode')", e!.Message);
+            AreEqual("Value cannot be null. (Parameter 'databaseEntity')", e!.Message);
         } {
             TestUtils.CreateGameEntityStore(out var database);
-            var childNode   = new DataNode { pid = int.MaxValue + 1L };
+            var childNode   = new DatabaseEntity { pid = int.MaxValue + 1L };
             var e = Throws<ArgumentException>(() => {
                 database.LoadEntity(childNode, out _);
             });
-            AreEqual("pid mus be in range [0, 2147483647]. was: {pid} (Parameter 'dataNode')", e!.Message);
+            AreEqual("pid mus be in range [0, 2147483647]. was: {pid} (Parameter 'databaseEntity')", e!.Message);
         }
     }
     
@@ -180,8 +180,8 @@ public static class Test_ComponentReader
     {
         var store       = TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DataNode { pid = 10, components = rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataNode { pid = 11, components = childComponents };
+        var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DatabaseEntity { pid = 11, components = childComponents };
         
         var root        = database.LoadEntity(rootNode, out _);
         var child       = database.LoadEntity(childNode, out _);
@@ -191,7 +191,7 @@ public static class Test_ComponentReader
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
-        // --- read same DataNode again
+        // --- read same DatabaseEntity again
         root.Position   = default;
         root.Scale3     = default;
         var start       = Mem.GetAllocatedBytes();
@@ -208,7 +208,7 @@ public static class Test_ComponentReader
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DataNode { pid = 10, components = rootComponents, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
         
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
@@ -225,7 +225,7 @@ public static class Test_ComponentReader
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
         var root        = database.LoadEntity(rootNode, out _);
         AreEqual(1,     root.ClassComponents.Length);
@@ -233,7 +233,7 @@ public static class Test_ComponentReader
         AreEqual(2,     comp1.val1);
         comp1.val1      = -1;
         
-        // --- read same DataNode again
+        // --- read same DatabaseEntity again
         database.LoadEntity(rootNode, out _);
         var comp2       = root.GetClassComponent<TestRefComponent1>();
         AreEqual(2,     comp2.val1);
@@ -245,7 +245,7 @@ public static class Test_ComponentReader
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DataNode { pid = 10, components = classComponents, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {

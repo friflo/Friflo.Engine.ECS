@@ -14,10 +14,10 @@ namespace Tests.ECS.GE;
 public static class Test_GameDatabase
 {
     [Test]
-    public static void Test_GameDatabase_Load_DataNode_UsePidAsId()
+    public static void Test_GameDatabase_Load_DatabaseEntity_UsePidAsId()
     {
         var store   = TestUtils.CreateGameEntityStore(out var database);
-        var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
+        var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
         var entity  = database.LoadEntity(node, out _);
         
         AreEqual(10,    store.PidToId(10));
@@ -33,9 +33,9 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_DataNode_RandomPids() {
+    public static void Test_GameDatabase_Load_DatabaseEntity_RandomPids() {
         var store   = TestUtils.CreateGameEntityStore(out var database, PidType.RandomPids);
-        var node    = new DataNode{ pid = 10, children = new List<long> { 20 } };
+        var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
         var entity  = database.LoadEntity(node, out _);
         
         AreEqual(1,     store.PidToId(10));
@@ -202,7 +202,7 @@ public static class Test_GameDatabase
             var e = Throws<ArgumentNullException>(() => {
                 database.LoadEntity(null, out _);    
             });
-            AreEqual("Value cannot be null. (Parameter 'dataNode')", e!.Message);
+            AreEqual("Value cannot be null. (Parameter 'databaseEntity')", e!.Message);
         } {
             var e = Throws<ArgumentNullException>(() => {
                 database.StoreEntity(null);    

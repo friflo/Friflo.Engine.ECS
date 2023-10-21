@@ -28,7 +28,7 @@ Prefabs are used in Edit & Play mode:
 - Minimize usage of utility containers: Currently - `prefabs` and `mods`.
 - Enable incremental loading: Entities are added to `EntityStore` while loading.  
   Loaded entities can be used in Editor without waiting for finished loading.
-- `DataNode`'s queried via `SceneClient.Query()` can be cleared after added to `EntityStore`.
+- `DatabaseEntity`'s queried via `SceneClient.Query()` can be cleared after added to `EntityStore`.
 - Enable read / write / query entities via HTTP.
 - Enable read / write / query and subscribing database changes via WebSocket.
 
@@ -55,12 +55,12 @@ Prefabs are used in Edit & Play mode:
     type NodeFlags  = PrefabLink | OpKeep | OpRemove | OpModify
 ```
 
-**Load Step 1** - Scene `DataNode` iteration
+**Load Step 1** - Scene `DatabaseEntity` iteration
 
 Load and iterate all entities of the base scene using an `SceneClient`.  
 Update `prefabs`, `mods` and `EntityNode.flags` while iterating.
 
-| `DataNode`                                   | `id` | flags        | action                                  | remarks
+| `DatabaseEntity`                             | `id` | flags        | action                                  | remarks
 | -------------------------------------------- | ---- | ------------ | --------------------------------------- | -----------
 | `modify` == null                             | 2, 5 |              |                                         | common case
 | `prefab` != null                             | 1    | `PrefabLink` | `prefabs[1].link = "player.scn:bb898e"` |
@@ -82,7 +82,7 @@ Iterate all `mods` and add their `node` to `prefabs[].nodes`. Result:
 ```
 
 
-**Load Step 3** - Prefab `DataNode` iteration
+**Load Step 3** - Prefab `DatabaseEntity` iteration
 
 Iterate all `prefabs`.  
 Load prefab and iterate its entities using an `SceneClient`.  
@@ -102,9 +102,9 @@ Add `GameObject` struct / class components and set `EntityNode.flags`
 
 *Note:* Saving prefab entities is utilized only in Edit mode.  
 Iterate all `GameObject`'s in the `EntityStore` and update the scene using an `SceneClient`.  
-Set `DataNode.components`, `DataNode.prefab` and `DataNode.modify`
+Set `DatabaseEntity.components`, `DatabaseEntity.prefab` and `DatabaseEntity.modify`
 
-| flags         | `id`    | `DataNode.components`            | `prefab`        | `modify` | operation | remarks
+| flags         | `id`    | `DatabaseEntity.components`      | `prefab`        | `modify` | operation | remarks
 | ------------- | ------- | -------------------------------- | --------------- | -------- | --------- | -------
 | 0             | 2, 5    | Add all `GameObject` components  |                 | null     | Upsert()  | common case
 | `PrefabLink`  | 1 (10)  |                                  | prefabs[1].link |          | Upsert()  |

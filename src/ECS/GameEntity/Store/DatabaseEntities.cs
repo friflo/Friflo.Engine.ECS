@@ -9,18 +9,18 @@ using Friflo.Json.Fliox;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-// This file contains implementation specific for storing DataNode's.
+// This file contains implementation specific for storing DatabaseEntity's.
 public partial class GameEntityStore
 {
-    // ------------------------------------- GameEntity -> DataNode -------------------------------------
-    internal void StoreEntity(GameEntity entity, DataNode dataNode)
+    // ---------------------------------- GameEntity -> DatabaseEntity ----------------------------------
+    internal void StoreEntity(GameEntity entity, DatabaseEntity databaseEntity)
     {
         var id = entity.id;
         ref var node = ref nodes[id];
 
         // --- process child ids
         if (node.childCount > 0) {
-            var children = dataNode.children = new List<long>(node.childCount); 
+            var children = databaseEntity.children = new List<long>(node.childCount); 
             foreach (var childId in node.ChildIds) {
                 var pid = nodes[childId].pid;
                 children.Add(pid);  
@@ -28,37 +28,37 @@ public partial class GameEntityStore
         }
         // --- write struct & class components
         var jsonComponents = ComponentWriter.Instance.Write(entity);
-        dataNode.components = new JsonValue(jsonComponents); // create array copy for now
+        databaseEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
         // --- process tags
         var tagCount = entity.Tags.Count; 
         if (tagCount == 0) {
-            dataNode.tags = null;
+            databaseEntity.tags = null;
         } else {
-            dataNode.tags = new List<string>(tagCount);
+            databaseEntity.tags = new List<string>(tagCount);
             foreach(var tag in entity.Tags) {
-                dataNode.tags.Add(tag.tagName);
+                databaseEntity.tags.Add(tag.tagName);
             }
         }
     }
     
-    // ------------------------------------- DataNode -> GameEntity -------------------------------------
-    internal GameEntity LoadEntity(DataNode dataNode, out string error)
+    // ---------------------------------- DatabaseEntity -> GameEntity ----------------------------------
+    internal GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
     {
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
-            entity = CreateFromDataNodeUsePidAsId(dataNode);
+            entity = CreateFromDbEntityUsePidAsId(databaseEntity);
         } else {
-            entity = CreateFromDataNodeRandomPid (dataNode);
+            entity = CreateFromDbEntityRandomPid (databaseEntity);
         }
-        error = ComponentReader.Instance.Read(dataNode, entity, this);
+        error = ComponentReader.Instance.Read(databaseEntity, entity, this);
         return entity;
     }
 
-    private GameEntity CreateFromDataNodeRandomPid(DataNode dataNode)
+    private GameEntity CreateFromDbEntityRandomPid(DatabaseEntity databaseEntity)
     {
         // --- map pid to id
-        var pid     = dataNode.pid;
+        var pid     = databaseEntity.pid;
         var pidMap  = pid2Id;
         if (!pidMap.TryGetValue(pid, out int id)) {
             id = sequenceId++;
@@ -66,7 +66,7 @@ public partial class GameEntityStore
         }
         // --- map children pid's to id's
         int[] childIds  = null;
-        var children    = dataNode.children;
+        var children    = databaseEntity.children;
         var childCount  = 0;
         if (children != null) {
             childCount = children.Count;
@@ -90,16 +90,16 @@ public partial class GameEntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDataNodeUsePidAsId(DataNode dataNode)
+    private GameEntity CreateFromDbEntityUsePidAsId(DatabaseEntity databaseEntity)
     {
-        var pid = dataNode.pid;
+        var pid = databaseEntity.pid;
         if (pid < 0 || pid > int.MaxValue) {
-            throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(dataNode));
+            throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(databaseEntity));
         }
         var id          = (int)pid;
         // --- use pid's as id's
         int[] childIds  = null;
-        var children    = dataNode.children;
+        var children    = databaseEntity.children;
         var maxPid      = id;
         var childCount  = 0;
         if (children != null) {
