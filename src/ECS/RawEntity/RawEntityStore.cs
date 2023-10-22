@@ -115,7 +115,7 @@ public sealed class RawEntityStore : EntityStore
         return archs[entities[id].archIndex].structCount;
     }
     
-    public ref T EntityComponentRef<T>(int id)
+    public ref T GetEntityComponent<T>(int id)
         where T : struct, IStructComponent
     {
         ref var entity  = ref entities[id];

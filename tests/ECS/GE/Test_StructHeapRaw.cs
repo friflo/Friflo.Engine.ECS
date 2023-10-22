@@ -29,14 +29,14 @@ public static class Test_StructHeapRaw
             var entityArch = store.GetEntityArchetype(id);
             if (arch != entityArch)             Mem.FailAreEqual(arch, entityArch);
             if (n + 1 != arch.EntityCount)      Mem.FailAreEqual(n + 1, arch.EntityCount);
-            ref var pos = ref store.EntityComponentRef<Position>(id);
+            ref var pos = ref store.GetEntityComponent<Position>(id);
             if (default != pos)                 Mem.FailAreEqual(default, pos);
             pos.x = n;
         }
         Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(count, arch.Capacity);
         for (int n = 0; n < count; n++) {
-            var x = (int)store.EntityComponentRef<Position>(ids[n]).x;
+            var x = (int)store.GetEntityComponent<Position>(ids[n]).x;
             if (n != x)                         Mem.FailAreEqual(n, x);
         }
     }
@@ -52,7 +52,7 @@ public static class Test_StructHeapRaw
         {
             var id = store.CreateEntity(arch);
             ids[n] = id;
-            store.EntityComponentRef<Position>(id).x = n;
+            store.GetEntityComponent<Position>(id).x = n;
         }
         // --- delete majority of entities
         var stopwatch = new Stopwatch();
@@ -67,7 +67,7 @@ public static class Test_StructHeapRaw
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(1024, arch.Capacity);
         for (int n = 0; n < remaining; n++) {
-            Mem.AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
+            Mem.AreEqual(n, store.GetEntityComponent<Position>(ids[n]).x);
         }
     }
     
@@ -161,7 +161,7 @@ public static class Test_StructHeapRaw
             }
             if (count != n)         Mem.FailAreEqual(count, n);
             var id = store.CreateEntity(arch1);
-            store.EntityComponentRef<Position>(id).x = count;
+            store.GetEntityComponent<Position>(id).x = count;
         }
         Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
@@ -182,7 +182,7 @@ public static class Test_StructHeapRaw
             forEach.Run();
             Mem.AreEqual(count, n);
             var id = store.CreateEntity(arch1);
-            store.EntityComponentRef<Position>(id).x = count;
+            store.GetEntityComponent<Position>(id).x = count;
         }
         Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
@@ -204,7 +204,7 @@ public static class Test_StructHeapRaw
             }
             Mem.AreEqual(count, n);
             var id = store.CreateEntity(arch1);
-            store.EntityComponentRef<Position>(id).x = count;
+            store.GetEntityComponent<Position>(id).x = count;
         }
         Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
@@ -219,7 +219,7 @@ public static class Test_StructHeapRaw
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
          // 10_000_000
         //      CreateEntity()              ~  498 ms
-        //      for EntityComponentRef<>()  ~   56 ms (good performance only, because archetypes remain unchanged after e 
+        //      for GetEntityComponent<>()  ~   56 ms (good performance only, because archetypes remain unchanged after e 
         //      foreach Query()             ~  145 ms
         //      Query.ForEach()             ~  114 ms
         //      foreach Query.Chunks        ~   10 ms
@@ -233,7 +233,7 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             for (int n = 0; n < Count; n++) {
                 var id = store.CreateEntity(arch1);
-                store.EntityComponentRef<Position>(id).x = n;
+                store.GetEntityComponent<Position>(id).x = n;
             }
             Console.WriteLine($"CreateEntity() - raw. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
             Mem.AreEqual(Count, arch1.EntityCount);
@@ -241,11 +241,11 @@ public static class Test_StructHeapRaw
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int n = 1; n < Count; n++) {
-                ref var position = ref store.EntityComponentRef<Position>(n);                
+                ref var position = ref store.GetEntityComponent<Position>(n);                
                 var x = (int)position.x;
                 if (x != n - 1)     Mem.FailAreEqual(x, n - 1);
             }
-            Console.WriteLine($"for EntityComponentRef<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+            Console.WriteLine($"for GetEntityComponent<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();

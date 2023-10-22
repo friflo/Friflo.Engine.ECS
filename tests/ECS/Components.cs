@@ -25,8 +25,8 @@ public struct ByteComponent : IStructComponent { public byte b; }
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
 public static class EntityExtensions
 {
-    public static ref MyComponent1 MyComponent1(this GameEntity entity) => ref entity.ComponentRef<MyComponent1>();
-    public static ref MyComponent2 MyComponent2(this GameEntity entity) => ref entity.ComponentRef<MyComponent2>();
+    public static ref MyComponent1 MyComponent1(this GameEntity entity) => ref entity.GetComponent<MyComponent1>();
+    public static ref MyComponent2 MyComponent2(this GameEntity entity) => ref entity.GetComponent<MyComponent2>();
 }
 
 // test missing [StructComponent()] attribute
@@ -69,7 +69,7 @@ class TestComponent : ClassComponent
     
     public override  void Update() {
         health = 4;
-        Entity.ComponentRef<MyComponent1>().a = 5 + health;
+        Entity.GetComponent<MyComponent1>().a = 5 + health;
         Entity.Position.x += 1;
         AreEqual(2f, Entity.Position.x);
     }

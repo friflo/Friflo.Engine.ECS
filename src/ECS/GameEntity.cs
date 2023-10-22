@@ -27,7 +27,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b>struct components</b> · generic
 /// <list type="bullet">
 ///     <item><see cref="HasComponent{T}"/></item>
-///     <item><see cref="ComponentRef{T}"/> - read / write</item>
+///     <item><see cref="GetComponent{T}"/> - read / write</item>
 ///     <item><see cref="TryGetComponent{T}"/></item>
 ///     <item><see cref="AddComponent{T}()"/></item>
 ///     <item><see cref="RemoveComponent{T}"/></item>
@@ -105,9 +105,9 @@ public sealed class GameEntity
     /// </summary>
     /// <remarks>
     /// To access <b>class</b>  components use <see cref="GetClassComponent{T}"/> or <see cref="ClassComponents"/><br/>
-    /// To access <b>struct</b> components use <see cref="ComponentRef{T}"/>
+    /// To access <b>struct</b> components use <see cref="GetComponent{T}"/>
     /// </remarks>
-    [Obsolete($"use either {nameof(GetClassComponent)}<T>() or {nameof(ComponentRef)}<T>()")]
+    [Obsolete($"use either {nameof(GetClassComponent)}<T>() or {nameof(GetComponent)}<T>()")]
     public  object[]                        Components_     => GameEntityUtils.GetComponentsDebug(this);
     
     public override string                  ToString()      => GameEntityUtils.GameEntityToString(this, new StringBuilder());
@@ -192,7 +192,7 @@ public sealed class GameEntity
 #region struct component methods
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
-    public  ref T        ComponentRef<T>()
+    public  ref T        GetComponent<T>()
         where T : struct, IStructComponent
     {
         var heap = (StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex];
