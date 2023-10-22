@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Friflo.Json.Fliox;
@@ -29,4 +31,11 @@ public struct Scale3 : IStructComponent
         this.y = y;
         this.z = z;
     }
+    
+    public          bool    Equals      (Scale3 other)                  => value == other.value;
+    public static   bool    operator == (in Scale3 p1, in Scale3 p2)    => p1.value == p2.value;
+    public static   bool    operator != (in Scale3 p1, in Scale3 p2)    => p1.value != p2.value;
+
+    [ExcludeFromCodeCoverage] public override   int     GetHashCode()       => throw new NotImplementedException("to avoid boxing");
+    [ExcludeFromCodeCoverage] public override   bool    Equals(object obj)  => throw new NotImplementedException("to avoid boxing");
 }

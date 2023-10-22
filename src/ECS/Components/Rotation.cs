@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Friflo.Json.Fliox;
@@ -31,4 +33,11 @@ public struct  Rotation : IStructComponent
         this.z = z;
         this.w = w;
     }
+    
+    public          bool    Equals      (Rotation other)                    => value == other.value;
+    public static   bool    operator == (in Rotation p1, in Rotation p2)    => p1.value == p2.value;
+    public static   bool    operator != (in Rotation p1, in Rotation p2)    => p1.value != p2.value;
+
+    [ExcludeFromCodeCoverage] public override   int     GetHashCode()       => throw new NotImplementedException("to avoid boxing");
+    [ExcludeFromCodeCoverage] public override   bool    Equals(object obj)  => throw new NotImplementedException("to avoid boxing");
 }

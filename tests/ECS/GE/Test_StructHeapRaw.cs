@@ -26,25 +26,17 @@ public static class Test_StructHeapRaw
         {
             var id  = store.CreateEntity(arch);
             ids[n]  = id;
-            if (arch != store.GetEntityArchetype(id)) {
-                Fail($"unexpected Archetype. n: {n}");
-            }
-            if (n + 1 != arch.EntityCount) {
-                Fail($"expect: ${n + 1}, was: {arch.EntityCount}, n: {n}");
-            }
+            Mem.AreEqual(arch, store.GetEntityArchetype(id));
+            Mem.AreEqual(n + 1, arch.EntityCount);
             ref var pos = ref store.EntityComponentRef<Position>(id);
-            if (new Position() != pos) {
-                Fail($"expect default value. n: {n}");
-            }
+            Mem.AreEqual(default, pos);
             pos.x = n;
         }
         Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         AreEqual(count, arch.Capacity);
         for (int n = 0; n < count; n++) {
             ref var val = ref store.EntityComponentRef<Position>(ids[n]);
-            if (n != (int)val.x) {
-                Fail($"expect: {n}, was: {val.x}, n: {n}");
-            }
+            Mem.AreEqual(n, (int)val.x);
         }
     }
     
@@ -69,9 +61,7 @@ public static class Test_StructHeapRaw
         {
             store.DeleteEntity(ids[n]);
             var expectCount = count + remaining - n - 1;
-            if (expectCount != arch.EntityCount) {
-                Fail($"expect Archetype.EntityCount: ${expectCount}, was: {arch.EntityCount}, n: {n}");
-            }
+            Mem.AreEqual(expectCount, arch.EntityCount);
         }
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         AreEqual(1024, arch.Capacity);
@@ -135,7 +125,7 @@ public static class Test_StructHeapRaw
         // 10_000_000 ~ 9 ms
         for (int n = 0; n < Count; n++) {
             var x = (int)positions[n].x;
-            if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+            Mem.AreEqual(x, n);
             i++;
         }
         AreEqual(Count, i);
@@ -165,7 +155,7 @@ public static class Test_StructHeapRaw
             int n = 0;
             foreach (var (position, rotation) in query) {
                 var x = (int)position.Value.x;
-                if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                Mem.AreEqual(x, n);
                 n++;
             }
             AreEqual(count, n);
@@ -185,7 +175,7 @@ public static class Test_StructHeapRaw
             int n = 0;
             var forEach     = query.ForEach((position, rotation) => {
                 var x = (int)position.Value.x;
-                if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                Mem.AreEqual(x, n);
                 n++;
             });
             forEach.Run();
@@ -207,7 +197,7 @@ public static class Test_StructHeapRaw
             foreach (var (positionChunk, rotationChunk) in query.Chunks) {
                 foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
-                    if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                    Mem.AreEqual(x, n);
                     n++;
                 }
             }
@@ -252,7 +242,7 @@ public static class Test_StructHeapRaw
             for (int n = 1; n < Count; n++) {
                 ref var position = ref store.EntityComponentRef<Position>(n);                
                 var x = (int)position.x;
-                if (x != n - 1) throw new InvalidOperationException($"expect: {n - 1}, was: {x}");
+                Mem.AreEqual(x, n - 1);
             }
             Console.WriteLine($"for EntityComponentRef<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
@@ -261,8 +251,8 @@ public static class Test_StructHeapRaw
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
             foreach (var (position, rotation) in query) {
-                 var x = (int)position.Value.x;
-                if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                var x = (int)position.Value.x;
+                Mem.AreEqual(x, n);
                 n++;
             }
             Mem.AssertNoAlloc(memStart);
@@ -275,7 +265,7 @@ public static class Test_StructHeapRaw
             var memStart    = Mem.GetAllocatedBytes();
             var forEach     = query.ForEach((position, rotation) => {
                 var x = (int)position.Value.x;
-                if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                Mem.AreEqual(x, n);
                 n++;
             });
             forEach.Run();
@@ -290,7 +280,7 @@ public static class Test_StructHeapRaw
             foreach (var (positionChunk, rotationChunk) in query.Chunks) {
                 foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
-                    if (x != n) throw new InvalidOperationException($"expect: {n}, was: {x}");
+                    Mem.AreEqual(x, n);
                     n++;
                 }
             }

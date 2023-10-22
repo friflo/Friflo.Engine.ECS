@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 [StructComponent("pos")]
 [StructLayout(LayoutKind.Explicit)]
-public struct  Position : IStructComponent
+public struct  Position : IStructComponent, IEquatable<Position>
 {
     [Browse(Never)]
     [Ignore]
@@ -32,8 +32,9 @@ public struct  Position : IStructComponent
         this.z = z;
     }
     
-    public static   bool    operator ==  (in Position p1, in Position p2) => p1.value == p2.value;
-    public static   bool    operator !=  (in Position p1, in Position p2) => p1.value != p2.value;
+    public          bool    Equals      (Position other)                    => value == other.value;
+    public static   bool    operator == (in Position p1, in Position p2)    => p1.value == p2.value;
+    public static   bool    operator != (in Position p1, in Position p2)    => p1.value != p2.value;
 
     [ExcludeFromCodeCoverage] public override   int     GetHashCode()       => throw new NotImplementedException("to avoid boxing");
     [ExcludeFromCodeCoverage] public override   bool    Equals(object obj)  => throw new NotImplementedException("to avoid boxing");
