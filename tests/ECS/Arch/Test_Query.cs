@@ -185,12 +185,13 @@ public static class Test_Query
         entity.AddComponent(new Rotation(4,5,6,7));
         
         var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig).ReadOnly<Position>();
+        var query   = store.Query(sig).ReadOnly<Position>().ReadOnly<Rotation>();
         var count   = 0;
-        var forEach = query.ForEach((position, _) => {
+        var forEach = query.ForEach((position, rotation) => {
             // ReSharper disable once AccessToModifiedClosure
             count++;
             position.Value.x = 42;
+            rotation.Value.x = 43;
         });
         _           = query.Archetypes; // update Archetypes for subsequent Mem check
         var start   = GetAllocatedBytes();
@@ -198,6 +199,7 @@ public static class Test_Query
         AssertNoAlloc(start);
         AreEqual(1,     count);
         AreEqual(1,     entity.Position.x);
+        AreEqual(4,     entity.Rotation.x);
     }
     
     [Test]
