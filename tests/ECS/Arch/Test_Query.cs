@@ -50,7 +50,8 @@ public static class Test_Query
         AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.Structs.ToString());
     }
     [Test]
-    public static void Test_generic_Query() {
+    public static void Test_generic_Query_with_AllTags()
+    {
         var store   = new GameEntityStore();
         var query1 =    store.Query<Position>();
         var query2 =    store.Query<Position, Rotation>();
@@ -63,6 +64,13 @@ public static class Test_Query
         AreEqual("Query: [Position, Rotation, Scale3]",                             query3.ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]",               query4.ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", query5.ToString());
+        
+        var tags = Tags.Get<TestTag>();
+        AreEqual("Query: [Position, #TestTag]",                                                 query1.AllTags(tags).ToString());
+        AreEqual("Query: [Position, Rotation, #TestTag]",                                       query2.AllTags(tags).ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, #TestTag]",                               query3.AllTags(tags).ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, #TestTag]",                 query4.AllTags(tags).ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2, #TestTag]",   query5.AllTags(tags).ToString());
     }
     
     [Test]
