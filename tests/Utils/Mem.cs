@@ -33,6 +33,16 @@ public static class Mem
         throw new AssertionException(msg);
     }
     
+    public static void FailAreEqual(object expect, object actual) {
+        var msg = $"Expect: {expect}\n  But was:  {actual}\n";
+        throw new AssertionException(msg);
+    }
+    
+    public static void FailAreEqual<T>(T expect, T actual) where T : IEquatable<T> {
+        var msg = $"Expect: {expect}\n  But was:  {actual}\n";
+        throw new AssertionException(msg);
+    }
+
     public static void AreEqual(object expect, object actual)  {
         if (expect.Equals(actual)) {
             return;
@@ -45,7 +55,7 @@ public static class Mem
     /// Similar behavior as <see cref="Assert.AreEqual(object, object)"/> but without memory allocation.<br/>
     /// It also requires both parameters are of the same type.
     /// </summary>
-    public static void AreEqual<T>(T expect, T actual) where T : IEquatable<T>{
+    public static void AreEqual<T>(T expect, T actual) where T : IEquatable<T> {
         if (expect.Equals(actual)) {
             return;
         }

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
-using static NUnit.Framework.Assert;
+
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable UnusedParameter.Local
@@ -26,17 +26,18 @@ public static class Test_StructHeapRaw
         {
             var id  = store.CreateEntity(arch);
             ids[n]  = id;
-            Mem.AreEqual(arch, store.GetEntityArchetype(id));
-            Mem.AreEqual(n + 1, arch.EntityCount);
+            var entityArch = store.GetEntityArchetype(id);
+            if (arch != entityArch)             Mem.FailAreEqual(arch, entityArch);
+            if (n + 1 != arch.EntityCount)      Mem.FailAreEqual(n + 1, arch.EntityCount);
             ref var pos = ref store.EntityComponentRef<Position>(id);
-            Mem.AreEqual(default, pos);
+            if (default != pos)                 Mem.FailAreEqual(default, pos);
             pos.x = n;
         }
         Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        AreEqual(count, arch.Capacity);
+        Mem.AreEqual(count, arch.Capacity);
         for (int n = 0; n < count; n++) {
-            ref var val = ref store.EntityComponentRef<Position>(ids[n]);
-            Mem.AreEqual(n, (int)val.x);
+            var x = (int)store.EntityComponentRef<Position>(ids[n]).x;
+            if (n != x)                         Mem.FailAreEqual(n, x);
         }
     }
     
@@ -61,12 +62,12 @@ public static class Test_StructHeapRaw
         {
             store.DeleteEntity(ids[n]);
             var expectCount = count + remaining - n - 1;
-            Mem.AreEqual(expectCount, arch.EntityCount);
+            if (expectCount != arch.EntityCount)    Mem.FailAreEqual(expectCount, arch.EntityCount);
         }
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        AreEqual(1024, arch.Capacity);
+        Mem.AreEqual(1024, arch.Capacity);
         for (int n = 0; n < remaining; n++) {
-            AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
+            Mem.AreEqual(n, store.EntityComponentRef<Position>(ids[n]).x);
         }
     }
     
@@ -89,7 +90,7 @@ public static class Test_StructHeapRaw
                 _ = store.CreateEntity(arch1);
             }
             Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-            AreEqual(count + 1, arch1.EntityCount);
+            Mem.AreEqual(count + 1, arch1.EntityCount);
         }
     }
     
@@ -102,14 +103,14 @@ public static class Test_StructHeapRaw
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
-        AreEqual(count, arch1.EntityCount);
+        Mem.AreEqual(count, arch1.EntityCount);
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int n = 1; n <= count; n++) {
             store.DeleteEntity(n);
         }
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        AreEqual(0, arch1.EntityCount);
+        Mem.AreEqual(0, arch1.EntityCount);
     }
     
     [Test]
@@ -125,10 +126,10 @@ public static class Test_StructHeapRaw
         // 10_000_000 ~ 9 ms
         for (int n = 0; n < Count; n++) {
             var x = (int)positions[n].x;
-            Mem.AreEqual(x, n);
+            if (x != n)             Mem.FailAreEqual(x, n);
             i++;
         }
-        AreEqual(Count, i);
+        Mem.AreEqual(Count, i);
         Console.WriteLine($"Iterate_Ref. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.");
     }
     
@@ -155,14 +156,14 @@ public static class Test_StructHeapRaw
             int n = 0;
             foreach (var (position, rotation) in query) {
                 var x = (int)position.Value.x;
-                Mem.AreEqual(x, n);
+                if (x != n)         Mem.FailAreEqual(x, n);
                 n++;
             }
-            AreEqual(count, n);
+            if (count != n)         Mem.FailAreEqual(count, n);
             var id = store.CreateEntity(arch1);
             store.EntityComponentRef<Position>(id).x = count;
         }
-        AreEqual(QueryCount, arch1.EntityCount);
+        Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
     
     [Test]
@@ -175,15 +176,15 @@ public static class Test_StructHeapRaw
             int n = 0;
             var forEach     = query.ForEach((position, rotation) => {
                 var x = (int)position.Value.x;
-                Mem.AreEqual(x, n);
+                if (x != n)         Mem.FailAreEqual(x, n);
                 n++;
             });
             forEach.Run();
-            AreEqual(count, n);
+            Mem.AreEqual(count, n);
             var id = store.CreateEntity(arch1);
             store.EntityComponentRef<Position>(id).x = count;
         }
-        AreEqual(QueryCount, arch1.EntityCount);
+        Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
     
     [Test]
@@ -197,19 +198,19 @@ public static class Test_StructHeapRaw
             foreach (var (positionChunk, rotationChunk) in query.Chunks) {
                 foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
-                    Mem.AreEqual(x, n);
+                    if (x != n)     Mem.FailAreEqual(x, n);
                     n++;
                 }
             }
-            AreEqual(count, n);
+            Mem.AreEqual(count, n);
             var id = store.CreateEntity(arch1);
             store.EntityComponentRef<Position>(id).x = count;
         }
-        AreEqual(QueryCount, arch1.EntityCount);
+        Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
     
     /// use greater than <see cref="StructInfo.ChunkSize"/> for coverage
-    private const int Count = 10_000; // 10_000_000
+    private const int Count = 10_000; // 10_000  /  10_000_000
     
     [Test]
     public static void Test_StructHeapRaw_Query_Perf()
@@ -235,14 +236,14 @@ public static class Test_StructHeapRaw
                 store.EntityComponentRef<Position>(id).x = n;
             }
             Console.WriteLine($"CreateEntity() - raw. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-            AreEqual(Count, arch1.EntityCount);
+            Mem.AreEqual(Count, arch1.EntityCount);
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int n = 1; n < Count; n++) {
                 ref var position = ref store.EntityComponentRef<Position>(n);                
                 var x = (int)position.x;
-                Mem.AreEqual(x, n - 1);
+                if (x != n - 1)     Mem.FailAreEqual(x, n - 1);
             }
             Console.WriteLine($"for EntityComponentRef<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
@@ -252,11 +253,11 @@ public static class Test_StructHeapRaw
             var memStart    = Mem.GetAllocatedBytes();
             foreach (var (position, rotation) in query) {
                 var x = (int)position.Value.x;
-                Mem.AreEqual(x, n);
+                if (x != n)         Mem.FailAreEqual(x, n);
                 n++;
             }
             Mem.AssertNoAlloc(memStart);
-            AreEqual(Count, n);
+            Mem.AreEqual(Count, n);
             Console.WriteLine($"foreach Query(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
             var stopwatch = new Stopwatch();
@@ -265,12 +266,12 @@ public static class Test_StructHeapRaw
             var memStart    = Mem.GetAllocatedBytes();
             var forEach     = query.ForEach((position, rotation) => {
                 var x = (int)position.Value.x;
-                Mem.AreEqual(x, n);
+                if (x != n)         Mem.FailAreEqual(x, n);
                 n++;
             });
             forEach.Run();
             var diff = Mem.GetAllocatedBytes() - memStart;
-            AreEqual(Count, n);
+            Mem.AreEqual(Count, n);
             Console.WriteLine($"Query.ForEach(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
         } {
             var stopwatch = new Stopwatch();
@@ -280,12 +281,12 @@ public static class Test_StructHeapRaw
             foreach (var (positionChunk, rotationChunk) in query.Chunks) {
                 foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
-                    Mem.AreEqual(x, n);
+                    if (x !=n)      Mem.FailAreEqual(x, n);
                     n++;
                 }
             }
             var diff = Mem.GetAllocatedBytes() - memStart;
-            AreEqual(Count, n);
+            Mem.AreEqual(Count, n);
             Console.WriteLine($"foreach Query.Chunks. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
         }
     }
@@ -296,14 +297,14 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch    = store.GetArchetype(Signature.Get<Position>());
         var entity  = store.CreateEntity(arch);
-        AreEqual(1,     store.EntityCount);
-        AreEqual(1,     arch.EntityCount);
+        Mem.AreEqual(1,     store.EntityCount);
+        Mem.AreEqual(1,     arch.EntityCount);
         store.DeleteEntity(entity);
-        AreEqual(0,     store.EntityCount);
-        AreEqual(0,     arch.EntityCount);
+        Mem.AreEqual(0,     store.EntityCount);
+        Mem.AreEqual(0,     arch.EntityCount);
         store.DeleteEntity(entity);
-        AreEqual(0,     store.EntityCount);
-        AreEqual(0,     arch.EntityCount);
+        Mem.AreEqual(0,     store.EntityCount);
+        Mem.AreEqual(0,     arch.EntityCount);
     }
     
     [Test]
@@ -312,10 +313,10 @@ public static class Test_StructHeapRaw
         var store1      = new RawEntityStore();
         var store2      = new RawEntityStore();
         var arch1       = store1.GetArchetype(Signature.Get<Position>());
-        var e = Throws<ArgumentException>(() => {
+        var e = Assert.Throws<ArgumentException>(() => {
             store2.CreateEntity(arch1);
         });
-        AreEqual("entity is owned by a different store (Parameter 'archetype')", e!.Message);
+        Mem.AreEqual("entity is owned by a different store (Parameter 'archetype')", e!.Message);
     }
 }
 
