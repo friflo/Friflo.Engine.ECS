@@ -124,8 +124,6 @@ public sealed class GameEntity
     [Browse(Never)] public  bool            HasPosition     => archetype.std.position          != null;
     [Browse(Never)] public  bool            HasRotation     => archetype.std.rotation          != null;
     [Browse(Never)] public  bool            HasScale3       => archetype.std.scale3            != null;
-                    public  bool            HasComponent<T> () where T : struct, IStructComponent
-                                                            => archetype.heapMap[StructHeap<T>.StructIndex] != null;
     #endregion
     
 #region public properties - tree nodes
@@ -178,9 +176,12 @@ public sealed class GameEntity
 
     // --------------------------------- struct component methods --------------------------------
 #region struct component methods
+    public  bool    HasComponent<T> () where T : struct, IStructComponent
+                        => archetype.heapMap[StructHeap<T>.StructIndex] != null;
+
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
-    public  ref T        GetComponent<T>()
+    public  ref T   GetComponent<T>()
         where T : struct, IStructComponent
     {
         var heap = (StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex];
@@ -188,7 +189,7 @@ public sealed class GameEntity
     }
     
     /// <remarks>Executes in O(1)</remarks>
-    public bool TryGetComponent<T>(out T result)
+    public bool     TryGetComponent<T>(out T result)
         where T : struct, IStructComponent
     {
         var heap = archetype.heapMap[StructHeap<T>.StructIndex];
