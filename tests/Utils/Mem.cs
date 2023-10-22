@@ -63,6 +63,27 @@ public static class Mem
         throw new AssertionException(msg);
     }
     
+    /// <summary>
+    /// Similar behavior as <see cref="Assert.AreSame(object?,object?)"/> but without memory allocation.<br/>
+    /// </summary>
+    public static void AreSame(object expect, object actual) {
+        if (expect.Equals(actual)) {
+            return;
+        }
+        var msg = $"Expect: {expect}\n  But was:  {actual}\n";
+        throw new AssertionException(msg);
+    }
+    
+    /// <summary>
+    /// Similar behavior as <see cref="Assert.IsTrue(System.Nullable{bool})"/> but without memory allocation.<br/>
+    /// </summary>
+    public static void IsTrue(bool value) {
+        if (value) {
+            return;
+        }
+        throw new AssertionException("Expect: True\n  But was:  False\n");
+    }
+    
     public static bool IsDebug => IsDebugInternal();
     
     private static bool IsDebugInternal() {

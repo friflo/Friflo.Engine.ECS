@@ -1,8 +1,7 @@
 using System.Runtime.InteropServices;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
-using Tests.Utils;
-using static NUnit.Framework.Assert;
+using static Tests.Utils.Mem;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable StringLiteralTypo
@@ -33,7 +32,7 @@ public static class Test_Query
     {
         Signature.Get<Position>();  // force one time allocation
         
-        var start   = Mem.GetAllocatedBytes();
+        var start   = GetAllocatedBytes();
         
         var sig1 = Signature.Get<Position>();
         var sig2 = Signature.Get<Position, Rotation>();
@@ -41,7 +40,7 @@ public static class Test_Query
         var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
         var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
         
-        Mem.AssertNoAlloc(start);
+        AssertNoAlloc(start);
         
         AreEqual("Structs: [Position]",                                                sig1.Structs.ToString());
         AreEqual("Structs: [Position, Rotation]",                                      sig2.Structs.ToString());
@@ -200,9 +199,9 @@ public static class Test_Query
             position.Value.x = 42;
         });
         _           = query.Archetypes; // update Archetypes for subsequent Mem check
-        var start   = Mem.GetAllocatedBytes();
+        var start   = GetAllocatedBytes();
         forEach.Run();
-        Mem.AssertNoAlloc(start);
+        AssertNoAlloc(start);
         AreEqual(1,     count);
         AreEqual(1,     entity.Position.x);
     }
@@ -259,30 +258,30 @@ public static class Test_Query
         var sig     = Signature.Get<Position, Rotation>();
         _           = store.Query(sig); // for one time allocation for Mem check
         var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 112 : 128;
-        var start   = Mem.GetAllocatedBytes();
+        var start   = GetAllocatedBytes();
         var query   = store.Query(sig);
-        Mem.AssertAlloc(start, expect);
+        AssertAlloc(start, expect);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
 
-        start       = Mem.GetAllocatedBytes();
+        start       = GetAllocatedBytes();
         var count   = 0;
         foreach (var (position, rotation) in query) {
-            Mem.AreEqual(3f, position.Value.z);
+            AreEqual(3f, position.Value.z);
             rotation.Value.x = 42;
             count++;
         }
-        Mem.AssertNoAlloc(start);
+        AssertNoAlloc(start);
         AreEqual(2,  count);
         AreEqual(42, entity2.Rotation.x);
         
         var chunkCount   = 0;
-        start = Mem.GetAllocatedBytes();
+        start = GetAllocatedBytes();
         foreach (var (_, rotation) in query.Chunks) {
             rotation.Values[0].x = 42;
             chunkCount++;
         }
-        Mem.AssertNoAlloc(start);
+        AssertNoAlloc(start);
         AreEqual(2,  chunkCount);
         AreEqual(42, entity2.Rotation.x);
     }
