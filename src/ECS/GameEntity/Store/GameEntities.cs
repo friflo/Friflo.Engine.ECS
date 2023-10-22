@@ -113,14 +113,14 @@ public partial class GameEntityStore
         return entity;
     }
     
-    public void SetGraphOrigin(GameEntity entity) {
+    public void SetStoreRoot(GameEntity entity) {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
         }
         if (this != entity.archetype.store) {
             throw InvalidStoreException(nameof(entity));
         }
-        SetGraphOriginEntity(entity);
+        SetStoreRootEntity(entity);
     }
     
     /// <summary>

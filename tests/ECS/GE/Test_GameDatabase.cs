@@ -85,8 +85,8 @@ public static class Test_GameDatabase
         AreEqual(5,                     store.Nodes[8].ParentId);
         AreEqual(2,                     store.EntityCount);
         //
-        IsNull(                         store.GraphOrigin);
-        store.SetGraphOrigin(entity5);
+        IsNull(                         store.StoreRoot);
+        store.SetStoreRoot(entity5);
         AreEqual(Created | TreeNode,store.Nodes[8].Flags);
     }
     
@@ -114,8 +114,8 @@ public static class Test_GameDatabase
         AreEqual(2,                     store.EntityCount);
         
         //
-        IsNull(                         store.GraphOrigin);
-        store.SetGraphOrigin(entity5);
+        IsNull(                         store.StoreRoot);
+        store.SetStoreRoot(entity5);
         AreEqual(Created | TreeNode,store.Nodes[8].Flags);
     }
     

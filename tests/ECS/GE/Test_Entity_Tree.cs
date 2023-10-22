@@ -92,7 +92,7 @@ public static class Test_Entity_Tree
     public static void Test_AddChild_move_root_tree_entity() {
         var store       = new GameEntityStore();
         var root        = store.CreateEntity(1);
-        store.SetGraphOrigin(root);
+        store.SetStoreRoot(root);
         var child1      = store.CreateEntity(2);
         var child2      = store.CreateEntity(3);
         var subChild    = store.CreateEntity(4);
@@ -118,7 +118,7 @@ public static class Test_Entity_Tree
         
         root.AddChild(child);
         
-        store.SetGraphOrigin(root);
+        store.SetStoreRoot(root);
         IsNull  (root.Parent);
         NotNull (child.Parent);
         AreEqual(treeNode,  root.TreeMembership);
@@ -165,9 +165,9 @@ public static class Test_Entity_Tree
         IsNull (root.Parent);
         var start = Mem.GetAllocatedBytes();
         
-        store.SetGraphOrigin(root);
+        store.SetStoreRoot(root);
         Mem.AssertNoAlloc(start);
-        AreSame(root,       store.GraphOrigin);
+        AreSame(root,           store.StoreRoot);
         IsNull (root.Parent);
         
         var child   = store.CreateEntity(2);
@@ -208,19 +208,19 @@ public static class Test_Entity_Tree
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
-        store.SetGraphOrigin(root);
+        store.SetStoreRoot(root);
         var child   = store.CreateEntity(2);
         AreEqual(attached,  child.StoreOwnership);
         child.AddComponent(new EntityName("child"));
         root.AddChild(child);
         var subChild= store.CreateEntity(3);
-        AreSame (root,      subChild.Store.GraphOrigin);
+        AreSame (root,      subChild.Store.StoreRoot);
         subChild.AddComponent(new EntityName("subChild"));
         child.AddChild(subChild);
         
         AreEqual(3,         store.EntityCount);
         AreSame (root,      child.Parent);
-        AreSame (root,      subChild.Store.GraphOrigin);
+        AreSame (root,      subChild.Store.StoreRoot);
         var childArchetype = child.Archetype;
         AreEqual(3,         childArchetype.EntityCount);
         AreEqual(treeNode,  subChild.TreeMembership);
@@ -322,7 +322,7 @@ public static class Test_Entity_Tree
         {
             var store   = new GameEntityStore();
             var e       = Throws<ArgumentNullException>(() => {
-                store.SetGraphOrigin(null);
+                store.SetStoreRoot(null);
             });
             AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
         } {
@@ -330,27 +330,27 @@ public static class Test_Entity_Tree
             var store2  = new GameEntityStore();
             var entity  = store1.CreateEntity();
             var e       = Throws<ArgumentException>(() => {
-                store2.SetGraphOrigin(entity);            
+                store2.SetStoreRoot(entity);            
             });
             AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         } {
             var store   = new GameEntityStore();
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
-            store.SetGraphOrigin(entity1);
+            store.SetStoreRoot(entity1);
             var e = Throws<InvalidOperationException>(() => {
-                store.SetGraphOrigin(entity2);
+                store.SetStoreRoot(entity2);
             });
-            AreEqual("EntityStore already has a GraphOrigin entity. current GraphOrigin id: 1", e!.Message);
+            AreEqual("EntityStore already has a StoreRoot. StoreRoot id: 1", e!.Message);
         } {
             var store   = new GameEntityStore();
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
             entity1.AddChild(entity2);
             var e = Throws<InvalidOperationException>(() => {
-                store.SetGraphOrigin(entity2);
+                store.SetStoreRoot(entity2);
             });
-            AreEqual("entity must not have a parent to be GraphOrigin. current parent id: 1", e!.Message);
+            AreEqual("entity must not have a parent to be StoreRoot. current parent id: 1", e!.Message);
         }
     }
     

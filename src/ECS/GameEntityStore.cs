@@ -30,7 +30,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     </item>
 ///     </list>
 ///   </item>
-///   <item>Manage a tree graph of entities which starts with the <see cref="GraphOrigin"/> entity to build up a scene</item>
+///   <item>Manage a tree graph of entities which starts with the <see cref="StoreRoot"/> entity to build up a scene</item>
 ///   <item>Store the values of <b>struct</b> components - attributed with <see cref="StructComponentAttribute"/> - in linear memory</item>
 /// </list>
 /// </summary>
@@ -40,17 +40,17 @@ public sealed partial class GameEntityStore : EntityStore
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
-                    public ReadOnlySpan<EntityNode>             Nodes           => new (nodes);
-                    public              GameEntity              GraphOrigin     => graphOrigin; // null if no graph origin set
+                    public ReadOnlySpan<EntityNode>             Nodes       => new (nodes);
+                    public              GameEntity              StoreRoot   => storeRoot; // null if no graph origin set
     #endregion
     
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
-    [Browse(Never)] private             EntityNode[]            nodes;          //  8 + all nodes       - acts also id2pid
-    [Browse(Never)] private  readonly   PidType                 pidType;        //  4                   - pid != id  /  pid == id
-    [Browse(Never)] private             Random                  randPid;        //  8                   - null if using pid == id
-                    private  readonly   Dictionary<long, int>   pid2Id;         //  8 + Map<pid,id>     - null if using pid == id
-    [Browse(Never)] private             GameEntity              graphOrigin;    //  8                   - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] private             EntityNode[]            nodes;      //  8 + all nodes       - acts also id2pid
+    [Browse(Never)] private  readonly   PidType                 pidType;    //  4                   - pid != id  /  pid == id
+    [Browse(Never)] private             Random                  randPid;    //  8                   - null if using pid == id
+                    private  readonly   Dictionary<long, int>   pid2Id;     //  8 + Map<pid,id>     - null if using pid == id
+    [Browse(Never)] private             GameEntity              storeRoot;  //  8                   - origin of the tree graph. null if no origin assigned
     #endregion
     
 #region initialize

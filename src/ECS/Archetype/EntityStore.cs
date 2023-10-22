@@ -65,7 +65,7 @@ public abstract partial class EntityStore
         /// is declared as <see cref="TreeMembership.floating"/>.
         /// </summary>
         public   const              int             NoParentId              =  0;
-        public   const              int             GraphOriginParentId     = -1;
+        public   const              int             StoreRootParentId       = -1;
     }
     #endregion
     

@@ -242,17 +242,17 @@ public partial class GameEntityStore
         }
     }
     
-    private void SetGraphOriginEntity(GameEntity entity) {
-        if (graphOrigin != null) {
-            throw new InvalidOperationException($"EntityStore already has a GraphOrigin entity. current GraphOrigin id: {graphOrigin.id}");
+    private void SetStoreRootEntity(GameEntity entity) {
+        if (storeRoot != null) {
+            throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.id}");
         }
         var id = entity.id;
         ref var parentId = ref nodes[id].parentId;
         if (HasParent(parentId)) {
-            throw new InvalidOperationException($"entity must not have a parent to be GraphOrigin. current parent id: {parentId}");
+            throw new InvalidOperationException($"entity must not have a parent to be {nameof(StoreRoot)}. current parent id: {parentId}");
         }
-        graphOrigin = entity;
-        parentId    = Static.GraphOriginParentId;
+        storeRoot   = entity;
+        parentId    = Static.StoreRootParentId;
         SetTreeFlags(nodes, id, TreeNode);
     }
     

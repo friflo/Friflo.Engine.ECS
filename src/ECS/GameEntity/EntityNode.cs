@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
 /// The tree graph is stored in an <see cref="GameEntityStore"/> to build up a scene stating with
-/// a single <see cref="GameEntityStore.GraphOrigin"/> entity. 
+/// a single <see cref="GameEntityStore.StoreRoot"/> entity. 
 /// </summary>
 /// <remarks>
 /// It provide the properties listed below

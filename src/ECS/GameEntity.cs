@@ -146,7 +146,7 @@ public sealed class GameEntity
     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
-                    /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.GraphOrigin"/> returns always null
+                    /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.StoreRoot"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
                     public GameEntity       Parent      => archetype.gameEntityStore.GetParent(id);
