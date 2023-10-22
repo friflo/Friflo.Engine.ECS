@@ -26,6 +26,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <list type="bullet">
 ///     <item><see cref="Id"/></item>
 ///     <item><see cref="Archetype"/></item>
+///     <item><see cref="Store"/></item>
 ///     <item><see cref="ComponentCount"/></item>
 ///     <item><see cref="StoreOwnership"/></item>
 ///     <item><see cref="TreeMembership"/></item>
@@ -67,7 +68,6 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// <b>tree nodes</b>
 /// <list type="bullet">
-///     <item><see cref="GraphOrigin"/></item>
 ///     <item><see cref="Parent"/></item>
 ///     <item><see cref="ChildNodes"/></item>
 ///     <item><see cref="ChildIds"/></item>
@@ -89,17 +89,16 @@ public sealed class GameEntity
     
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
                     public   Archetype      Archetype       => archetype;
+    
+    /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
+    [Browse(Never)] public  GameEntityStore Store           => archetype?.gameEntityStore;
                     
-    /// <remarks>If <see cref="attached"/> <see cref="Archetype"/> is not null. Otherwise null.</remarks>
+    /// <remarks>If <see cref="attached"/> its <see cref="Store"/> and <see cref="Archetype"/> are not null. Otherwise null.</remarks>
     [Browse(Never)] public  StoreOwnership  StoreOwnership  => archetype != null ? attached : detached;
     
     /// <returns>
     /// <see cref="treeNode"/> if the entity is member of the <see cref="GameEntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
-    /// <remarks>
-    /// If <see cref="TreeMembership"/> is <see cref="treeNode"/> its <see cref="GraphOrigin"/> is not null.<br/>
-    /// If <see cref="floating"/> its <see cref="GraphOrigin"/> is null.
-    /// </remarks>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
     
     [Browse(Never)]
@@ -145,10 +144,6 @@ public sealed class GameEntity
 #region public properties - tree nodes
     [Browse(Never)] public int              ChildCount  => archetype.gameEntityStore.Nodes[id].childCount;
     
-                    /// <returns>return null if the entity is <see cref="floating"/></returns>
-                    /// <remarks>Executes in O(1) independent from its depth in the node tree</remarks>
-                    public GameEntity       GraphOrigin => archetype.gameEntityStore.GetGraphOrigin(id);
-                    
                     /// <returns>
                     /// null if the entity has no parent.<br/>
                     /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.GraphOrigin"/> returns always null

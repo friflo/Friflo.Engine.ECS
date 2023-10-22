@@ -261,10 +261,6 @@ public partial class GameEntityStore
         return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
-    internal GameEntity GetGraphOrigin(int id) {
-        return nodes[id].Is(TreeNode) ? GraphOrigin : null;
-    }
-    
     internal GameEntity GetParent(int id)
     { 
         var parentNode  = nodes[id].parentId;

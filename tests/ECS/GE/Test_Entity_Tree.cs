@@ -54,7 +54,6 @@ public static class Test_Entity_Tree
         child.AddComponent(new EntityName("child"));
         root.AddChild(child);
         
-        IsNull  (child.GraphOrigin);
         AreSame (root,      child.Parent);
         AreEqual(attached,  child.StoreOwnership);
         var childNodes =    root.ChildNodes;
@@ -118,17 +117,16 @@ public static class Test_Entity_Tree
         AreEqual(floating,  child.TreeMembership);
         
         root.AddChild(child);
-        IsNull  (child.GraphOrigin);
         
         store.SetGraphOrigin(root);
-        NotNull (root.GraphOrigin);
-        NotNull (child.GraphOrigin);
+        IsNull  (root.Parent);
+        NotNull (child.Parent);
         AreEqual(treeNode,  root.TreeMembership);
         AreEqual(treeNode,  child.TreeMembership);
         
         // --- remove child
         root.RemoveChild(child);
-        IsNull  (child.GraphOrigin);
+        AreEqual(treeNode,  root.TreeMembership);
         AreEqual(floating,  child.TreeMembership);
         AreEqual(0,         root.ChildCount);
         IsNull  (child.Parent);
@@ -162,22 +160,19 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_SetRoot() {
         var store   = new GameEntityStore();
-        IsNull (store.GraphOrigin);
         
         var root    = store.CreateEntity(1);
-        IsNull (root.GraphOrigin);
         IsNull (root.Parent);
         var start = Mem.GetAllocatedBytes();
         
         store.SetGraphOrigin(root);
         Mem.AssertNoAlloc(start);
         AreSame(root,       store.GraphOrigin);
-        AreSame(root,       root.GraphOrigin);
         IsNull (root.Parent);
         
         var child   = store.CreateEntity(2);
         root.AddChild(child);
-        AreSame(root,           child.GraphOrigin);
+        AreSame(root,           child.Parent);
         AreEqual(treeNode,      child.TreeMembership);
         AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
@@ -219,14 +214,18 @@ public static class Test_Entity_Tree
         child.AddComponent(new EntityName("child"));
         root.AddChild(child);
         var subChild= store.CreateEntity(3);
+        AreSame (root,      subChild.Store.GraphOrigin);
         subChild.AddComponent(new EntityName("subChild"));
         child.AddChild(subChild);
         
         AreEqual(3,         store.EntityCount);
-        AreSame (root,      child.GraphOrigin);
-        AreSame (root,      subChild.GraphOrigin);
+        AreSame (root,      child.Parent);
+        AreSame (root,      subChild.Store.GraphOrigin);
         var childArchetype = child.Archetype;
         AreEqual(3,         childArchetype.EntityCount);
+        AreEqual(treeNode,  subChild.TreeMembership);
+        NotNull (child.Archetype);
+        NotNull (child.Store);
         
         var start = Mem.GetAllocatedBytes();
         child.DeleteEntity();
@@ -234,11 +233,13 @@ public static class Test_Entity_Tree
         AreEqual(2,         childArchetype.EntityCount);
         AreEqual(2,         store.EntityCount);
         AreEqual(0,         root.ChildCount);
-        IsNull  (subChild.GraphOrigin);        // subChild is floating
+        AreEqual(floating,  subChild.TreeMembership);
         IsNull  (child.Archetype);
         AreEqual("id: 2  (detached)", child.ToString());
         AreSame (subChild,  store.Nodes[3].Entity);
         AreEqual(detached,  child.StoreOwnership);
+        IsNull  (child.Archetype);
+        IsNull  (child.Store);
         
         var childNode = store.Nodes[2]; // child is detached => all fields have their default value
         IsNull  (           childNode.Entity);
@@ -254,7 +255,7 @@ public static class Test_Entity_Tree
             _ = child.Name; // access struct component
         });
         Throws<NullReferenceException> (() => {
-            _ = child.GraphOrigin; // access tree node
+            _ = child.Parent; // access tree node
         });
     }
     
