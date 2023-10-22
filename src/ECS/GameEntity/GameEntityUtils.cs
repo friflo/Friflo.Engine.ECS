@@ -59,10 +59,13 @@ internal static class GameEntityUtils
     internal static object[] GetComponentsDebug(GameEntity entity)
     {
         var archetype   = entity.archetype;
-        var components  = new object[archetype.ComponentCount];
+        var count       = archetype.ComponentCount;
+        if (count == 0) {
+            return EmptyStructComponents;
+        }
+        var components  = new object[count];
         // --- add struct components
         var heaps       = archetype.Heaps;
-        var count       = heaps.Length;
         for (int n = 0; n < count; n++) {
             components[n] = heaps[n].GetComponentDebug(entity.compIndex); 
         }
@@ -70,7 +73,8 @@ internal static class GameEntityUtils
     }
     
     // ---------------------------------- ClassComponent utils ----------------------------------
-    internal static readonly ClassComponent[] EmptyComponents   = Array.Empty<ClassComponent>();
+    private  static readonly object[]           EmptyStructComponents   = Array.Empty<object>();
+    internal static readonly ClassComponent[]   EmptyClassComponents    = Array.Empty<ClassComponent>();
     
     internal static void AppendClassComponent<T>(GameEntity entity, T component)
         where T : ClassComponent

@@ -88,8 +88,6 @@ public sealed class GameEntity
     /// Uniqueness relates to the <see cref="GameEntity"/>'s stored in its <see cref="GameEntityStore"/></summary>
                     public   int            Id              => id;
 
-    [Browse(Never)] public   int            ComponentCount  => archetype.structCount + classComponents.Length;
-    
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
                     public   Archetype      Archetype       => archetype;
     
@@ -103,19 +101,6 @@ public sealed class GameEntity
     /// <see cref="treeNode"/> if the entity is member of the <see cref="GameEntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
-    
-    public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
-    
-    /// <summary>
-    /// Property is only to display <b>struct</b> and <b>class</b> components in the Debugger.<br/>
-    /// It has poor performance as is creates an array and boxes all struct components. 
-    /// </summary>
-    /// <remarks>
-    /// To access <b>class</b>  components use <see cref="GetClassComponent{T}"/> or <see cref="ClassComponents"/><br/>
-    /// To access <b>struct</b> components use <see cref="GetComponent{T}"/>
-    /// </remarks>
-    [Obsolete($"use either {nameof(GetClassComponent)}<T>() or {nameof(GetComponent)}<T>()")]
-    public  object[]                        Components_     => GameEntityUtils.GetComponentsDebug(this);
     
     public override string                  ToString()      => GameEntityUtils.GameEntityToString(this, new StringBuilder());
 
@@ -187,7 +172,7 @@ public sealed class GameEntity
     internal GameEntity(int id, Archetype archetype) {
         this.id         = id;
         this.archetype  = archetype;
-        classComponents = GameEntityUtils.EmptyComponents;
+        classComponents = GameEntityUtils.EmptyClassComponents;
     }
     #endregion
 
@@ -238,10 +223,23 @@ public sealed class GameEntity
     {
         return archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     }
+    
+    /// <summary>
+    /// Property is only to display <b>struct</b> and <b>class</b> components in the Debugger.<br/>
+    /// It has poor performance as is creates an array and boxes all struct components. 
+    /// </summary>
+    /// <remarks>
+    /// To access <b>class</b>  components use <see cref="GetClassComponent{T}"/> or <see cref="ClassComponents"/><br/>
+    /// To access <b>struct</b> components use <see cref="GetComponent{T}"/>
+    /// </remarks>
+    [Obsolete($"use either {nameof(GetClassComponent)}<T>() or {nameof(GetComponent)}<T>()")]
+    public  object[]                        Components_     => GameEntityUtils.GetComponentsDebug(this);
     #endregion
     
     // --------------------------------- class component methods ---------------------------------
 #region class component methods
+    public      ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
+
     /// <returns>the entity component of Type <typeparamref name="T"/>. Otherwise null</returns>
     public T    GetClassComponent<T>()
         where T : ClassComponent

@@ -79,7 +79,7 @@ public static class Test_ComponentReader
         TestUtils.CreateGameEntityStore(out var database);
         var node    = new DatabaseEntity { pid = 10, components = default };
         var entity  = database.LoadEntity(node, out var error);
-        AreEqual(0, entity.ComponentCount);
+        AreEqual(0, entity.ClassComponents.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
     
@@ -90,7 +90,7 @@ public static class Test_ComponentReader
         TestUtils.CreateGameEntityStore(out var database);
         var node    = new DatabaseEntity { pid = 10, components = new JsonValue("{}") };
         var entity  = database.LoadEntity(node, out var error);
-        AreEqual(0, entity.ComponentCount);
+        AreEqual(0, entity.ClassComponents.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
     
@@ -100,7 +100,7 @@ public static class Test_ComponentReader
         TestUtils.CreateGameEntityStore(out var database);
         var node    = new DatabaseEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
         var entity  = database.LoadEntity(node, out _);
-        AreEqual(0, entity.ComponentCount);
+        AreEqual(0, entity.ClassComponents.Length + entity.Archetype.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
     }
     
