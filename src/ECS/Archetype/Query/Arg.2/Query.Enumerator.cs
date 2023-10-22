@@ -11,6 +11,9 @@ public ref struct QueryEnumerator<T1, T2>
     where T1 : struct, IStructComponent
     where T2 : struct, IStructComponent
 {
+    private readonly    T1[]                    copyT1;
+    private readonly    T2[]                    copyT2;
+    
     private  readonly   int                     structIndex1;
     private  readonly   int                     structIndex2;
 
@@ -28,6 +31,8 @@ public ref struct QueryEnumerator<T1, T2>
     
     internal QueryEnumerator(ArchetypeQuery<T1, T2> query)
     {
+        copyT1          = query.copyT1;
+        copyT2          = query.copyT2;
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
         archetypes      = query.Archetypes;
@@ -39,9 +44,9 @@ public ref struct QueryEnumerator<T1, T2>
         chunkEnd        = archetype.ChunkCount - 1;
         
         componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
-        ref1.Set(chunks1[0].components);
+        ref1.Set(chunks1[0].components, copyT1, componentLen);
         ref1.pos        = -1;
-        ref2.Set(chunks2[0].components);
+        ref2.Set(chunks2[0].components, copyT2, componentLen);
         ref2.pos        = -1;
     }
     
@@ -77,9 +82,9 @@ public ref struct QueryEnumerator<T1, T2>
         componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
     Next:
         chunkPos++;
-        ref1.Set(chunks1[chunkPos].components);
+        ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
         ref1.pos = 0;
-        ref2.Set(chunks2[chunkPos].components);
+        ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
         ref2.pos = 0;
         return true;
     }

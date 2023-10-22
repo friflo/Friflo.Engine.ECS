@@ -22,10 +22,6 @@ public struct Ref<T>
     private             T[]     components; //  8
     internal            int     pos;        //  4
     
-    internal void Set(T[] components) {
-        this.components = components;
-    }
-    
     internal void Set(T[] components, T[] copy, int count) {
         if (copy == null) {
             this.components = components;

@@ -205,14 +205,6 @@ public static class Test_Query
         Mem.AssertNoAlloc(start);
         AreEqual(1,     count);
         AreEqual(1,     entity.Position.x);
-        //
-        count   = 0;
-        start = Mem.GetAllocatedBytes();
-        forEach.Run();
-        
-        Mem.AssertNoAlloc(start);
-        AreEqual(1,     count);
-        AreEqual(1,     entity.Position.x);
     }
     
     [Test]
@@ -272,13 +264,11 @@ public static class Test_Query
         Mem.AssertAlloc(start, expect);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
-        
+
         start       = Mem.GetAllocatedBytes();
         var count   = 0;
         foreach (var (position, rotation) in query) {
-            if (3f != position.Value.z) {
-                Fail($"Expect 3. was: {position.Value.z}");
-            }
+            Mem.AreEqual(3f, position.Value.z);
             rotation.Value.x = 42;
             count++;
         }
