@@ -33,7 +33,7 @@ internal sealed class ComponentWriter
     internal JsonValue Write(GameEntity entity)
     {
         var archetype = entity.archetype;
-        if (entity.ComponentCount == 0) {
+        if (entity.ComponentCount() == 0) {
             return default;
         }
         writer.InitSerializer();

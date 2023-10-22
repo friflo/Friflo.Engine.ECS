@@ -17,6 +17,7 @@ public sealed class Archetype
 #region     public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
+    [Browse(Never)] public              int                 ComponentCount  => structCount;
                     public              int                 Capacity        => memory.capacity;
 
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>

@@ -9,6 +9,14 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+internal static class GameEntityExtensions
+{
+    internal static int ComponentCount (this GameEntity entity) {
+        return entity.archetype.ComponentCount + entity.ClassComponents.Length;
+    }
+}
+    
+    
 internal static class GameEntityUtils
 {
     internal static string GameEntityToString(GameEntity entity, StringBuilder sb)
@@ -29,7 +37,7 @@ internal static class GameEntityUtils
                 return sb.ToString();
             }
         }
-        if (entity.ComponentCount == 0) {
+        if (entity.ComponentCount() == 0) {
             sb.Append("  []");
         } else {
             sb.Append("  [");
@@ -50,18 +58,15 @@ internal static class GameEntityUtils
     
     internal static object[] GetComponentsDebug(GameEntity entity)
     {
-        var objects = new object[entity.ComponentCount];
+        var archetype   = entity.archetype;
+        var components  = new object[archetype.ComponentCount];
         // --- add struct components
-        var heaps       = entity.archetype.Heaps;
+        var heaps       = archetype.Heaps;
         var count       = heaps.Length;
         for (int n = 0; n < count; n++) {
-            objects[n] = heaps[n].GetComponentDebug(entity.compIndex); 
+            components[n] = heaps[n].GetComponentDebug(entity.compIndex); 
         }
-        // --- add class components
-        foreach (var component in entity.classComponents) {
-            objects[count++] = component;
-        }
-        return objects;
+        return components;
     }
     
     // ---------------------------------- ClassComponent utils ----------------------------------

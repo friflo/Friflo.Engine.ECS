@@ -25,7 +25,7 @@ public static class Test_ClassComponent
         IsNull(player.AddClassComponent(testRef1));
         NotNull(testRef1.Entity);
         AreSame(testRef1,       player.GetClassComponent<TestRefComponent1>());
-        AreEqual(1,             player.ComponentCount);
+        AreEqual(1,             player.ClassComponents.Length);
         AreEqual("id: 1  [*TestRefComponent1]", player.ToString());
         AreEqual(1,             player.ClassComponents.Length);
         AreSame (testRef1,      player.ClassComponents[0]);
@@ -34,14 +34,14 @@ public static class Test_ClassComponent
             player.AddClassComponent(testRef1);
         });
         AreEqual("component already added to an entity", e!.Message);
-        AreEqual(1,             player.ComponentCount);
+        AreEqual(1,             player.ClassComponents.Length);
         
         var testRef2 = new TestRefComponent2 { val2 = 2 };
         IsNull (player.AddClassComponent(testRef2));
         NotNull (testRef2.Entity);
         
         AreSame (testRef2,      player.GetClassComponent<TestRefComponent2>());
-        AreEqual(2,             player.ComponentCount);
+        AreEqual(2,             player.ClassComponents.Length);
         AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
         
         var testRef3 = new TestRefComponent2();
@@ -49,17 +49,10 @@ public static class Test_ClassComponent
         IsNull  (testRef2.Entity);
         NotNull (testRef3.Entity);
         AreSame (testRef3,      player.GetClassComponent<TestRefComponent2>());
-        AreEqual(2,             player.ComponentCount);
+        AreEqual(2,             player.ClassComponents.Length);
         AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
         
         // IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
-        
-#pragma warning disable CS0618 // Type or member is obsolete
-        var components  =                   player.Components_;
-        AreEqual(2,                         components.Length);
-        AreEqual("[*TestRefComponent1]",    components[0].ToString());
-        AreEqual("[*TestRefComponent2]",    components[1].ToString());
-#pragma warning restore CS0618 // Type or member is obsolete
         
         for (long n = 0; n < Count; n++) {
             _ = player.GetClassComponent<TestRefComponent1>();
@@ -119,7 +112,7 @@ public static class Test_ClassComponent
             player.AddClassComponent(testRef1); 
         });
         AreEqual("Missing attribute [ClassComponent(\"<key>\")] on type: Tests.ECS.InvalidRefComponent", e!.Message);
-        AreEqual(0, player.ComponentCount);
+        AreEqual(0, player.ClassComponents.Length);
         
         var component = player.GetClassComponent<InvalidRefComponent>();
         IsNull(component);
@@ -193,7 +186,8 @@ public static class Test_ClassComponent
         entity.AddComponent(new Position { x = 1 });    // class  component added via editor
         entity.AddComponent(new MyComponent1 { a = 1}); // class  component added via editor
         
-        AreEqual(3, entity.ComponentCount);
+        AreEqual(1, entity.ClassComponents.Length);
+        AreEqual(2, entity.Archetype.ComponentCount);
         AreEqual("id: 1  [*TestComponent, Position, MyComponent1]", entity.ToString());
         AreSame(entity, test.Entity);
         test.Start();

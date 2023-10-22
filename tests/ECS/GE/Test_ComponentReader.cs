@@ -154,7 +154,7 @@ public static class Test_ComponentReader
         AreEqual(10,    root.Id);
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
-        AreEqual(2,     root.ComponentCount);
+        AreEqual(2,     root.Archetype.ComponentCount);
         AreEqual(1f,    root.Position.x);
         AreEqual(1f,    root.Position.y);
         AreEqual(1f,    root.Position.z);
@@ -166,7 +166,7 @@ public static class Test_ComponentReader
     private static void AssertChildEntity(GameEntity child) {
         AreEqual(11,    child.Id);
         AreEqual(0,     child.ChildCount);
-        AreEqual(2,     child.ComponentCount);
+        AreEqual(2,     child.Archetype.ComponentCount);
         AreEqual(3f,    child.Position.x);
         AreEqual(3f,    child.Position.y);
         AreEqual(3f,    child.Position.z);

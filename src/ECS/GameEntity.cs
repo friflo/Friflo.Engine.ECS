@@ -31,7 +31,6 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="Id"/></item>
 ///     <item><see cref="Archetype"/></item>
 ///     <item><see cref="Store"/></item>
-///     <item><see cref="ComponentCount"/></item>
 ///     <item><see cref="StoreOwnership"/></item>
 ///     <item><see cref="TreeMembership"/></item>
 /// </list>
@@ -105,7 +104,6 @@ public sealed class GameEntity
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
     
-    [Browse(Never)]
     public   ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
     
     /// <summary>
