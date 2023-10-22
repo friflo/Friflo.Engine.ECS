@@ -96,12 +96,6 @@ public static class Test_Query
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]", query4.ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]", query5.ToString());
         
-    /*  AreSame(query1, store.Query(sig1));
-        AreSame(query2, store.Query(sig2));
-        AreSame(query3, store.Query(sig3));
-        AreSame(query4, store.Query(sig4));
-        AreSame(query5, store.Query(sig5)); */
-        
         AreEqual(0, query1.Archetypes.Length);
         AreEqual(0, query2.Archetypes.Length);
         AreEqual(0, query3.Archetypes.Length);
@@ -220,42 +214,6 @@ public static class Test_Query
         entity3.AddComponent(new Scale3  (7, 7, 7));
         
         var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig);
-        var count   = 0;
-        foreach (var (position, rotation) in query) {
-            AreEqual(3, position.Value.z);
-            rotation.Value.x = 42;
-            count++;
-            AreEqual("1, 2, 3", position.ToString());
-        }
-        AreEqual(2,  count);
-        AreEqual(42, entity2.Rotation.x);
-        
-        var chunkCount   = 0;
-        AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
-        foreach (var (position, rotation) in query.Chunks) {
-            AreEqual(3, position.Values[0].z);
-            rotation.Values[0].x = 42;
-            chunkCount++;
-        }
-        AreEqual(2,  chunkCount);
-        AreEqual(42, entity2.Rotation.x);
-    }
-    
-    [Test]
-    public static void Test_Query_loop_Mem()
-    {
-        var store   = new GameEntityStore();
-        var entity2  = store.CreateEntity();
-        entity2.AddComponent(new Position(1,2,3));
-        entity2.AddComponent(new Rotation(4,5,6,7));
-        
-        var entity3  = store.CreateEntity();
-        entity3.AddComponent(new Position(1,2,3));
-        entity3.AddComponent(new Rotation(8, 8, 8, 8));
-        entity3.AddComponent(new Scale3  (7, 7, 7));
-        
-        var sig     = Signature.Get<Position, Rotation>();
         _           = store.Query(sig); // for one time allocation for Mem check
         var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 112 : 128;
         var start   = GetAllocatedBytes();
@@ -267,7 +225,7 @@ public static class Test_Query
         start       = GetAllocatedBytes();
         var count   = 0;
         foreach (var (position, rotation) in query) {
-            AreEqual(3f, position.Value.z);
+            AreEqual(3, position.Value.z);
             rotation.Value.x = 42;
             count++;
         }
@@ -276,8 +234,10 @@ public static class Test_Query
         AreEqual(42, entity2.Rotation.x);
         
         var chunkCount   = 0;
+        AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
         start = GetAllocatedBytes();
-        foreach (var (_, rotation) in query.Chunks) {
+        foreach (var (position, rotation) in query.Chunks) {
+            AreEqual(3, position.Values[0].z);
             rotation.Values[0].x = 42;
             chunkCount++;
         }
