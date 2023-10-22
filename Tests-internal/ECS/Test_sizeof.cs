@@ -66,6 +66,19 @@ public static class Test_sizeof
         AreEqual(64, size);
     }
     
+    [Test]
+    public static void Test_Ref_sizeof()
+    {
+        var refPosition = new Ref<Position>();
+        var size = Marshal.SizeOf(refPosition);
+        AreEqual(16, size); // expected 12
+        
+        var positions = new [] { new Position(1, 2, 3) };
+        refPosition.Set(positions, null, 1);
+        refPosition.pos = 0;
+        AreEqual("1, 2, 3", refPosition.ToString());
+    }
+    
     // ---------------------------------------- Tests project types ------------------------------------------
     [Test]
     public static unsafe void Test_sizeof_ByteComponent() {
