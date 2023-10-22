@@ -13,7 +13,13 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// Has currently no id - if doing so the type id is fixed  
+/// A <see cref="GameEntity"/> represent any kind of object in a game scene.<br/>
+/// It is typically an object that can be rendered on screen like a cube, a sphere a capsule, a mesh, a sprite, ... .<br/>
+/// Therefore a renderable struct component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
+/// <br/>
+/// A <see cref="GameEntity"/> can be added a another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
+/// The added <see cref="GameEntity"/> becomes a child of the <see cref="GameEntity"/> it is added to - its <see cref="Parent"/>.<br/>
+/// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
 /// </summary>
 /// <remarks>
 /// <b>general</b>
