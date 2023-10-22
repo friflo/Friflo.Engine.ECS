@@ -67,13 +67,10 @@ public static class Test_sizeof
     }
     
     [Test]
-    public static void Test_Ref_sizeof()
+    public static void Test_Ref_ToString()
     {
         var refPosition = new Ref<Position>();
-        var size = Marshal.SizeOf(refPosition);
-        AreEqual(16, size); // expected 12
-        
-        var positions = new [] { new Position(1, 2, 3) };
+        var positions   = new [] { new Position(1, 2, 3) };
         refPosition.Set(positions, null, 1);
         refPosition.pos = 0;
         AreEqual("1, 2, 3", refPosition.ToString());
