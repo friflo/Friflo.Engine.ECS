@@ -20,6 +20,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// A <see cref="GameEntity"/> can be added a another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
 /// The added <see cref="GameEntity"/> becomes a child of the <see cref="GameEntity"/> it is added to - its <see cref="Parent"/>.<br/>
 /// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
+/// <br/>
+/// <see cref="Tags"/> can be added to a <see cref="GameEntity"/> to control or modify its behavior.<br/>
+/// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
+/// these <see cref="Tags"/>.
 /// </summary>
 /// <remarks>
 /// <b>general</b>
