@@ -10,7 +10,7 @@ using Friflo.Json.Fliox.Mapper;
 namespace Friflo.Fliox.Engine.ECS.Database;
 
 /// <summary>
-/// Create the <see cref="JsonValue"/> from all class / struct components used at <see cref="DatabaseEntity.components"/>.<br/>
+/// Create the <see cref="JsonValue"/> from all components and behaviors used at <see cref="DatabaseEntity.components"/>.<br/>
 /// </summary>
 internal sealed class ComponentWriter
 {
@@ -38,7 +38,7 @@ internal sealed class ComponentWriter
         }
         writer.InitSerializer();
         writer.ObjectStart();
-        // --- write struct components
+        // --- write components
         var heaps           = archetype.Heaps;
         for (int n = 0; n < heaps.Length; n++) {
             var heap        = heaps[n];
@@ -46,7 +46,7 @@ internal sealed class ComponentWriter
             var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
             writer.MemberBytes(keyBytes, value);
         }
-        // --- write class components
+        // --- write behaviors
         foreach (var component in entity.Behaviors) {
             componentWriter.WriteObject(component, ref buffer);
             var classType   = componentTypeByType[component.GetType()];

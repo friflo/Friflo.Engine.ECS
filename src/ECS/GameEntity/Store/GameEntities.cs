@@ -124,7 +124,7 @@ public partial class GameEntityStore
     }
     
     /// <summary>
-    /// Creates a new entity with the struct components and tags of the given <paramref name="archetype"/>
+    /// Creates a new entity with the components and tags of the given <paramref name="archetype"/>
     /// </summary>
     public GameEntity CreateEntity(Archetype archetype)
     {

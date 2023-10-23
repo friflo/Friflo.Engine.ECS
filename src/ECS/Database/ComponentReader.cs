@@ -11,7 +11,7 @@ using static Friflo.Fliox.Engine.ECS.ComponentKind;
 namespace Friflo.Fliox.Engine.ECS.Database;
 
 /// <summary>
-/// Create all class / struct components for an entity from <see cref="JsonValue"/> used as <see cref="DatabaseEntity.components"/>
+/// Create all components / behaviors for an entity from <see cref="JsonValue"/> used as <see cref="DatabaseEntity.components"/>
 /// </summary>
 internal sealed class ComponentReader
 {
@@ -95,7 +95,7 @@ internal sealed class ComponentReader
                     break;
                 case Struct:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
-                    // --- read & change struct component
+                    // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
                     break;
             }
@@ -103,7 +103,7 @@ internal sealed class ComponentReader
     }
     
     /// <summary>
-    /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all struct components 
+    /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all components 
     /// within the current JSON payload.
     /// </summary>
     private void SetEntityArchetype(DatabaseEntity databaseEntity, GameEntity entity, EntityStore store)
@@ -113,7 +113,7 @@ internal sealed class ComponentReader
         var tags                = databaseEntity.tags;
         var hasTags = tags?.Count > 0;
         if (!hasStructComponent && !hasTags) {
-            return; // early out in absence of struct components and tags
+            return; // early out in absence of components and tags
         }
         if (hasTags) {
             AddTags(tags, ref searchKey.tags);

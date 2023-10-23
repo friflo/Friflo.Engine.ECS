@@ -84,7 +84,7 @@ public static class Test_StructComponent
         IsTrue(player.RemoveComponent<MyComponent1>());
         AreEqual(1,     player.Archetype.ComponentCount);
         
-        // Archetype remains unchanged. struct component is already removed
+        // Archetype remains unchanged. component is already removed
         IsFalse(player.RemoveComponent<MyComponent1>());
         AreEqual(1,     player.Archetype.ComponentCount);
     }

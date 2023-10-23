@@ -14,6 +14,6 @@ public interface IEntityTag { }
 /// <summary>
 /// To enable adding <b>struct</b> components to a <see cref="GameEntity"/> it need to extend <see cref="IComponent"/>.<br/>
 /// A <b>struct</b> component is a value type which only contains data <b>but no</b> behavior / methods.<br/>
-/// A <see cref="GameEntity"/> can contain multiple struct components but only one of each type.
+/// A <see cref="GameEntity"/> can contain multiple components but only one of each type.
 /// </summary>
 public interface IComponent { }

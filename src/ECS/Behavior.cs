@@ -8,12 +8,12 @@ namespace Friflo.Fliox.Engine.ECS;
 
 
 /// <summary>
-/// To enable adding <b>class</b> components to a <see cref="GameEntity"/> it need to extend <see cref="Behavior"/>.<br/>
-/// A <b>class</b> component is a reference type which contains data <b>and</b> behavior / methods.<br/> 
-/// A <see cref="GameEntity"/> can contain multiple class components but only one of each type.
+/// To enable adding <b>behaviors</b> to a <see cref="GameEntity"/> it need to extend <see cref="Behavior"/>.<br/>
+/// A <b><see cref="Behavior"/></b> is a reference type (a class) which contains data <b>and</b> behavior / methods.<br/> 
+/// A <see cref="GameEntity"/> can contain multiple <see cref="Behavior"/>'s but only one of each type.
 /// </summary>
 /// <remarks>
-/// <b><c>class</c></b> components can be used if <b>OPP</b> programming approach is preferred
+/// <see cref="Behavior"/>'s can be used if <b>OPP</b> programming approach is preferred
 /// while dealing with a small amount (&lt; 100) of <see cref="GameEntity"/>'s.<br/>
 /// <br/>
 /// <i>Info:</i> Its functionality is similar to <c>MonoBehavior</c> added to <c>GameObject</c>'s in Unity

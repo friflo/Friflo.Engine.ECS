@@ -27,7 +27,7 @@ public struct BitSet
     [FieldOffset(16)] internal  long            l2;         // (8)
     [FieldOffset(24)] internal  long            l3;         // (8)
     
-    // Could extend with Vector256Long[] if 256 struct components are not enough
+    // Could extend with Vector256Long[] if 256 components are not enough
     // private readonly  Vector256Long[]   values;
 
 

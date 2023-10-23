@@ -86,7 +86,7 @@ public partial class EntityStore
         archSet.Add(archetype.key);
     }
     
-    // ------------------------------------ add / remove struct component ------------------------------------
+    // ------------------------------------ add / remove component ------------------------------------
     internal bool AddComponent<T>(
             int         id,
         ref Archetype   archetype,  // possible mutation is not null

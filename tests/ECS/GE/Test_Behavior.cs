@@ -180,9 +180,9 @@ public static class Test_Behavior
         var entity  = store.CreateEntity();
         
         var test    = new TestComponent();
-        entity.AddBehavior(test);                 // struct component added via editor
-        entity.AddComponent(new Position { x = 1 });    // class  component added via editor
-        entity.AddComponent(new MyComponent1 { a = 1}); // class  component added via editor
+        entity.AddBehavior(test);                       // component added via editor
+        entity.AddComponent(new Position { x = 1 });    // behavior added via editor
+        entity.AddComponent(new MyComponent1 { a = 1}); // behavior added via editor
         
         AreEqual(1, entity.Behaviors.Length);
         AreEqual(2, entity.Archetype.ComponentCount);

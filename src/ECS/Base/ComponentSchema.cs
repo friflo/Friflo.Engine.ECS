@@ -16,7 +16,7 @@ public sealed class ComponentSchema
 #region public properties
     /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
     public   ReadOnlySpan<Assembly>                         EngineDependants    => new (engineDependants);
-    /// <summary>return all struct component types attributed with <see cref="ComponentAttribute"/></summary>
+    /// <summary>return all component types attributed with <see cref="ComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Structs"/>[0] is always null

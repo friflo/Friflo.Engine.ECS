@@ -38,7 +38,7 @@ internal struct ChunkMemory
     /// </summary>
     internal    int     chunkLength;        //  4       - 1, 2, 4, 8, 16, ...
     // --- fields derived from chunkCount & chunkLength
-    /// <summary>The sum of allocated struct components in <see cref="StructHeap{T}"/>.<see cref="StructHeap{T}.chunks"/>.</summary>
+    /// <summary>The sum of allocated components in <see cref="StructHeap{T}"/>.<see cref="StructHeap{T}.chunks"/>.</summary>
     internal    int     capacity;           //  4       - multiple of chunk size
     internal    int     shrinkThreshold;    //  4       - multiple of chunk size
 }

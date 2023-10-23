@@ -24,7 +24,7 @@ public class ArchetypeQuery
     // --- blittable types
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
                     private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of struct component types: T1,T2,T3,T4,T5
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
                     
                     public override     string              ToString() => GetString();

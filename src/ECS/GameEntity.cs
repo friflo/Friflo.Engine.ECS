@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// A <see cref="GameEntity"/> represent any kind of object in a game scene.<br/>
 /// It is typically an object that can be rendered on screen like a cube, a sphere a capsule, a mesh, a sprite, ... .<br/>
-/// Therefore a renderable struct component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
+/// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
 /// <br/>
 /// A <see cref="GameEntity"/> can be added a another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
 /// The added <see cref="GameEntity"/> becomes a child of the <see cref="GameEntity"/> it is added to - its <see cref="Parent"/>.<br/>
@@ -34,7 +34,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="StoreOwnership"/></item>
 ///     <item><see cref="TreeMembership"/></item>
 /// </list>
-/// <b>struct components</b> · generic
+/// <b>components</b> · generic
 /// <list type="bullet">
 ///     <item><see cref="HasComponent{T}"/></item>
 ///     <item><see cref="GetComponent{T}"/> - read / write</item>
@@ -42,7 +42,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="AddComponent{T}()"/></item>
 ///     <item><see cref="RemoveComponent{T}"/></item>
 /// </list>
-/// <b>struct components</b> · common
+/// <b>components</b> · common
 /// <list type="bullet">
 ///     <item><see cref="Name"/></item>
 ///     <item><see cref="Position"/></item>
@@ -53,7 +53,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="HasRotation"/></item>
 ///     <item><see cref="HasScale3"/></item>
 /// </list>
-/// <b>class components</b> · generic
+/// <b>behaviors</b> · generic
 /// <list type="bullet">
 ///     <item><see cref="Behaviors"/></item>
 ///     <item><see cref="GetBehavior{T}"/></item>
@@ -106,7 +106,7 @@ public sealed class GameEntity
 
     #endregion
 
-#region public properties - struct components
+#region public properties - components
     
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName  Name        => ref archetype.std.name.    chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
@@ -151,7 +151,7 @@ public sealed class GameEntity
 #region internal fields
     [Browse(Never)] internal readonly   int                 id;                 //  4
     
-    /// <summary>The <see cref="Archetype"/> used to store the struct components of they the entity</summary>
+    /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
     [Browse(Never)] internal            Archetype           archetype;          //  8 - null if detached. See property Archetype
 
     /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
@@ -173,8 +173,8 @@ public sealed class GameEntity
     }
     #endregion
 
-    // --------------------------------- struct component methods --------------------------------
-#region struct component methods
+    // --------------------------------- component methods --------------------------------
+#region component methods
     public  bool    HasComponent<T> () where T : struct, IComponent
                         => archetype.heapMap[StructHeap<T>.StructIndex] != null;
 
@@ -226,7 +226,7 @@ public sealed class GameEntity
     
     /// <summary>
     /// Property is only to display <b>struct</b> and <b>class</b> components in the Debugger.<br/>
-    /// It has poor performance as is creates an array and boxes all struct components. 
+    /// It has poor performance as is creates an array and boxes all components. 
     /// </summary>
     /// <remarks>
     /// To access <b>class</b>  components use <see cref="GetBehavior{T}"/> or <see cref="Behaviors"/><br/>

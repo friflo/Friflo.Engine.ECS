@@ -9,7 +9,7 @@ namespace Tests.ECS;
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }
 
-// ------------------------------------------------ struct components
+// ------------------------------------------------ components
 [CodeCoverageTest]
 [Component("my1")]
 public struct MyComponent1 : IComponent { public int a; }
@@ -41,7 +41,7 @@ public struct TestTag2 : IEntityTag { }
 public struct TestTag3 : IEntityTag { }
 
 
-// ------------------------------------------------ class components
+// ------------------------------------------------ behaviors
 [CodeCoverageTest]
 [Behavior("testRef1")]
 class TestBehavior1 : Behavior {

@@ -27,7 +27,7 @@ public partial class GameEntityStore
                 children.Add(pid);  
             }
         }
-        // --- write struct & class components
+        // --- write components & behaviors
         var jsonComponents = ComponentWriter.Instance.Write(entity);
         databaseEntity.components = new JsonValue(jsonComponents); // create array copy for now
         

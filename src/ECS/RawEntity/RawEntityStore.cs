@@ -62,7 +62,7 @@ public sealed class RawEntityStore : EntityStore
     }
     
     /// <summary>
-    /// Creates a new entity with the struct components and tags of the given <paramref name="archetype"/>
+    /// Creates a new entity with the components and tags of the given <paramref name="archetype"/>
     /// </summary>
     public int CreateEntity(Archetype archetype)
     {
@@ -110,7 +110,7 @@ public sealed class RawEntityStore : EntityStore
 
     #endregion
 
-#region struct components
+#region components
     public int GetEntityComponentCount(int id) {
         return archs[entities[id].archIndex].structCount;
     }

@@ -40,8 +40,8 @@ public abstract class ComponentType
     public   readonly   ComponentKind   kind;           //  4
     
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a struct component attributed with <see cref="ComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Behavior"/> the type of a class  component attributed with <see cref="BehaviorAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a component attributed with <see cref="ComponentAttribute"/><br/>
+    /// If <see cref="kind"/> == <see cref="Behavior"/> the type of a behavior attributed with <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
     

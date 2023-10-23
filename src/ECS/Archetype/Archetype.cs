@@ -43,10 +43,10 @@ public sealed class Archetype
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
-                    private             ChunkMemory         memory;         // 16       - count & length used to store struct components in chunks  
+                    private             ChunkMemory         memory;         // 16       - count & length used to store components in chunks  
     // --- internal
-    [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of struct component types
-    [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - struct component types of archetype
+    [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of component types
+    [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - component types of archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.CheckStructIndex"/></remarks>
@@ -70,8 +70,8 @@ public sealed class Archetype
         // entityIds        = null      // stores no entities
         // entityCapacity   = 0         // stores no entities
         // shrinkThreshold  = 0         // stores no entities - will not shrink
-        // componentCount   = 0         // has no struct components
-        // structs          = default   // has no struct components
+        // componentCount   = 0         // has no components
+        // structs          = default   // has no components
         // tags             = default   // has no tags
     }
     
@@ -117,7 +117,7 @@ public sealed class Archetype
         }
     }
 
-    /// <remarks>Is called by methods using generic struct component type: T1, T2, T3, ...</remarks>
+    /// <remarks>Is called by methods using generic component type: T1, T2, T3, ...</remarks>
     internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureIndexes indexes, in Tags tags)
     {
         var length          = indexes.length;
@@ -146,7 +146,7 @@ public sealed class Archetype
     }
     #endregion
 
-#region struct component handling
+#region component handling
 
     internal int MoveEntityTo(int id, int sourceIndex, Archetype newArchetype)
     {

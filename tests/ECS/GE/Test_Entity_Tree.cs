@@ -250,9 +250,9 @@ public static class Test_Entity_Tree
         AreEqual(0,         childNode.ParentId);
         AreEqual(NullNode,  childNode.Flags);
         
-        // From now: access to struct components and tree nodes throw a NullReferenceException
+        // From now: access to components and tree nodes throw a NullReferenceException
         Throws<NullReferenceException> (() => {
-            _ = child.Name; // access struct component
+            _ = child.Name; // access component
         });
         Throws<NullReferenceException> (() => {
             _ = child.Parent; // access tree node

@@ -66,7 +66,7 @@ internal static class GameEntityUtils
             return EmptyStructComponents;
         }
         var components  = new object[count];
-        // --- add struct components
+        // --- add components
         var heaps       = archetype.Heaps;
         for (int n = 0; n < count; n++) {
             components[n] = heaps[n].GetComponentDebug(entity.compIndex); 
