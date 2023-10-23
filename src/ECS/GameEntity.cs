@@ -182,21 +182,15 @@ public sealed class GameEntity
 
     // ------------------------------------ component methods ------------------------------------
 #region component methods
-    public  bool    HasComponent<T> () where T : struct, IComponent
-                        => archetype.heapMap[StructHeap<T>.StructIndex] != null;
+    public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructHeap<T>.StructIndex] != null;
 
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
-    public  ref T   GetComponent<T>()
-        where T : struct, IComponent
-    {
-        var heap = (StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex];
-        return ref heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
-    }
+    public  ref T   GetComponent<T>()   where T : struct, IComponent
+    => ref ((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex]).chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     
     /// <remarks>Executes in O(1)</remarks>
-    public bool     TryGetComponent<T>(out T result)
-        where T : struct, IComponent
+    public bool     TryGetComponent<T>(out T result) where T : struct, IComponent
     {
         var heap = archetype.heapMap[StructHeap<T>.StructIndex];
         if (heap == null) {
@@ -209,27 +203,15 @@ public sealed class GameEntity
     
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
-    public bool AddComponent<T>()
-        where T : struct, IComponent
-    {
-        return archetype.store.AddComponent<T>(id, ref archetype, ref compIndex, default);
-    }
+    public bool AddComponent<T>()               where T : struct, IComponent => archetype.store.AddComponent<T>(id, ref archetype, ref compIndex, default);
     
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
-    public bool AddComponent<T>(in T component)
-        where T : struct, IComponent
-    {
-        return archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
-    }
+    public bool AddComponent<T>(in T component) where T : struct, IComponent => archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
     
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>Executes in O(1)</remarks>
-    public bool RemoveComponent<T>()
-        where T : struct, IComponent
-    {
-        return archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
-    }
+    public bool RemoveComponent<T>()            where T : struct, IComponent => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     
     /// <summary>
     /// Property is only used to display components in the Debugger.<br/>
@@ -244,32 +226,22 @@ public sealed class GameEntity
     
     // ------------------------------------ behavior methods -------------------------------------
 #region behavior methods
-    public      ReadOnlySpan<Behavior>   Behaviors => new (GameEntityUtils.GetBehaviors(this));
+    public      ReadOnlySpan<Behavior>   Behaviors          => new (GameEntityUtils.GetBehaviors(this));
 
     /// <returns>the <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
-    public T    GetBehavior<T>()
-        where T : Behavior
-    => (T)GameEntityUtils.GetBehavior(this, typeof(T));
+    public T    GetBehavior<T>()        where T : Behavior  => (T)GameEntityUtils.GetBehavior(this, typeof(T));
     
     /// <returns>true if the entity has a <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
     public bool TryGetBehavior<T>(out T result)
         where T : Behavior
     {
-        var behavior = GameEntityUtils.GetBehavior(this, typeof(T));
-        result = (T)behavior;
-        return behavior != null;
+        result = (T)GameEntityUtils.GetBehavior(this, typeof(T));
+        return result != null;
     }
-    
     /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
-    public T AddBehavior<T>(T behavior) 
-        where T : Behavior
-    => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
-    
-    
+    public T AddBehavior<T>(T behavior) where T : Behavior  => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
     /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
-    public T RemoveBehavior<T>()
-        where T : Behavior
-    => (T)GameEntityUtils.RemoveBehavior(this, typeof(T));
+    public T RemoveBehavior<T>()        where T : Behavior  => (T)GameEntityUtils.RemoveBehavior(this, typeof(T));
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------
@@ -280,33 +252,12 @@ public sealed class GameEntity
     /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
-    public  ref readonly Tags    Tags                       => ref archetype.tags;
-    
+    public ref readonly Tags    Tags                        => ref archetype.tags;
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
-
-    public  bool AddTag<T>()
-        where T : struct, IEntityTag
-    {
-        var tags = Tags.Get<T>();
-        return archetype.store.AddTags(tags, id, ref archetype, ref compIndex);
-    }
-    
-    public  bool    AddTags(in Tags tags)
-    {
-        return archetype.store.AddTags(tags, id, ref archetype, ref compIndex);
-    }
-    
-    public  bool    RemoveTag<T>()
-        where T : struct, IEntityTag
-    {
-        var tags = Tags.Get<T>();
-        return archetype.store.RemoveTags(tags, id, ref archetype, ref compIndex);
-    }
-    
-    public  bool    RemoveTags(in Tags tags)
-    {
-        return archetype.store.RemoveTags(tags, id, ref archetype, ref compIndex);
-    }
+    public bool AddTag<T>()    where T : struct, IEntityTag => archetype.store.AddTags(Tags.Get<T>(), id, ref archetype, ref compIndex);
+    public bool AddTags(in Tags tags)                       => archetype.store.AddTags(tags, id, ref archetype, ref compIndex);
+    public bool RemoveTag<T>() where T : struct, IEntityTag => archetype.store.RemoveTags(Tags.Get<T>(), id, ref archetype, ref compIndex);
+    public bool RemoveTags(in Tags tags)                    => archetype.store.RemoveTags(tags, id, ref archetype, ref compIndex);
     #endregion
     
     // ------------------------------------ tree methods -----------------------------------------
