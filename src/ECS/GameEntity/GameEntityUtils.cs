@@ -79,7 +79,7 @@ internal static class GameEntityUtils
     private  static readonly Behavior[] EmptyBehaviors          = Array.Empty<Behavior>();
     internal const  int                 NoBehaviors             = -1;  
     
-    internal static Exception MissingAttributeException(Type type) {
+    private  static Exception MissingAttributeException(Type type) {
         var msg = $"Missing attribute [Behavior(\"<key>\")] on type: {type.Namespace}.{type.Name}";
         return new InvalidOperationException(msg);
     }
@@ -97,5 +97,23 @@ internal static class GameEntityUtils
             return null;
         }
         return entity.archetype.gameEntityStore.GetBehavior(entity, behaviorType);
+    }
+    
+    internal static Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType, int behaviorIndex)
+    {
+        if (behaviorIndex == ClassUtils.MissingAttribute) {
+            throw MissingAttributeException(behaviorType);
+        }
+        if (behavior.entity != null) {
+            throw new InvalidOperationException($"behavior already added to an entity. current entity id: {behavior.entity.id}");
+        }
+        return entity.archetype.gameEntityStore.AddBehavior(entity, behavior, behaviorType, behaviorIndex);
+    }
+    
+    internal static Behavior RemoveBehavior(GameEntity entity, Type behaviorType) {
+        if (entity.behaviorIndex == NoBehaviors) {
+            return null;
+        }
+        return entity.archetype.gameEntityStore.RemoveBehavior(entity, behaviorType);
     }
 }

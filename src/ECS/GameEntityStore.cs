@@ -51,15 +51,17 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] private             GameEntity              storeRoot;          //  8                   - origin of the tree graph. null if no origin assigned
+    /// <summary>Contains implicit all entities with one or more <see cref="Behavior"/>'s to minimize iteration cost for <see cref="Behavior.Update"/>.</summary>
                     private             Behaviors[]             entityBehaviors;    //  8
+    /// <summary>Count of entities with one or more <see cref="Behavior"/>'s</summary>
                     private             int                     entityBehaviorCount;//  4                   - >= 0  and  <= entityBehaviors.Length
     #endregion
     
 #region initialize
     public GameEntityStore(PidType pidType = PidType.RandomPids)
     {
-        this.pidType        = pidType;
-        nodes               = Array.Empty<EntityNode>();
+        this.pidType    = pidType;
+        nodes           = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();

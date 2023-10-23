@@ -47,12 +47,6 @@ public partial class GameEntityStore
     
     internal Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType, int behaviorIndex)
     {
-        if (behaviorIndex == ClassUtils.MissingAttribute) {
-            throw GameEntityUtils.MissingAttributeException(behaviorType);
-        }
-        if (behavior.entity != null) {
-            throw new InvalidOperationException($"behavior already added to an entity. current entity id: {behavior.entity.id}");
-        }
         behavior.entity = entity;
         if (entity.behaviorIndex == GameEntityUtils.NoBehaviors)
         {
@@ -87,9 +81,6 @@ public partial class GameEntityStore
     
     internal Behavior RemoveBehavior(GameEntity entity, Type behaviorType)
     {
-        if (entity.behaviorIndex == GameEntityUtils.NoBehaviors) {
-            return null;
-        }
         ref var entityBehavior  = ref entityBehaviors[entity.behaviorIndex];
         var classes             = entityBehavior.classes;
         var len                 = classes.Length;
@@ -111,8 +102,8 @@ public partial class GameEntityStore
                     entityBehaviors[entity.behaviorIndex] = entityBehaviors[lastIndex];
                     SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
                 }
-                entityBehaviors[lastIndex] = default; // clear last Behavior entry
-                entity.behaviorIndex = GameEntityUtils.NoBehaviors;      // set entity state to: contains no behaviors 
+                entityBehaviors[lastIndex] = default;               // clear last Behavior entry
+                entity.behaviorIndex = GameEntityUtils.NoBehaviors; // set entity state to: contains no behaviors 
                 return behavior;
             }
             // case: entity has two or more behaviors. Remove the given one from its behaviors
