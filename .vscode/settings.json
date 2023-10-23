@@ -32,6 +32,7 @@
         "Dependants",
         "Netcode",
         "Pids",
+        "renderable",
         "SIMD",
         "Skia",
         "Tizen",
