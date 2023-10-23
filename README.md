@@ -149,13 +149,13 @@ Types:
 - `GameEntity`      - each instances contains the following properties
     - `id`          - type: `int` / id > 0
     - `components`
-        - **struct** components stored in `Archetype`'s.  
-          struct components are value types and have **no** behaviors (methods).
-        - **class** components.  
-          class components are reference types and have behaviors (methods).
+        - **Archetype** components stored in `Archetype`'s.  
+          These are value types (`struct`) having only data and **no** behavior (methods).
+        - **Behavior** components.  
+          Behavior components are reference types (`class`) and have behavior (methods).
     - `tags`        - list of tags assigned to an entity. Tags have no data.
     - `children`    - contains and array of child entity `id`'s.
-- `Archetype`       - contains all entities with the same set of **struct** components  
+- `Archetype`       - contains all entities with the same set of **struct** `IComponent` types.  
 The **struct** components of an `Archetype` are stored linear in memory to improve memory locality.  
 Each component is indexed from 0, ... , N.  
 Its property `EntityIds` stores the entity `id`'s each component is owned by.
@@ -167,10 +167,10 @@ Serialized entity example
 {
     "id": 11,
     "components": {                         // can be null
-        "name": "Root",                     // struct component
-        "pos": { x: 1, y: 2, x: 3},         // struct component
-        "rot": { x: 0, y: 0, x: 0, w: 0 },  // struct component
-        "my1": { a: 1 }                     // class  component
+        "name": "Root",                     // Archetype component
+        "pos": { x: 1, y: 2, x: 3},         // Archetype component
+        "rot": { x: 0, y: 0, x: 0, w: 0 },  // Archetype component
+        "my1": { a: 1 }                     // Behavior component
     },
     "tags":["PlayerTag"],                   // can be null
     "children": [1,2,3]                     // can be null
@@ -179,9 +179,9 @@ Serialized entity example
 
 Note:  
 Both component types are serialized into the same `components` array.  
-The engines uses the registered **struct** or **class** component type.
+The engines uses the registered **`IComponent`** or **`Behavior`** type for serialization.
 
-This enables reading already serialized data after refactoring a **class** component to a **struct** or vice versa.
+This enables reading already serialized data after refactoring a **`Behavior`** to a **`struct`** `IComponent` or vice versa.
 
 
 ### Entity serialization model

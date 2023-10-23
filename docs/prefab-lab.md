@@ -86,7 +86,7 @@ Iterate all `mods` and add their `node` to `prefabs[].nodes`. Result:
 
 Iterate all `prefabs`.  
 Load prefab and iterate its entities using an `GameClient`.  
-Add `GameObject` struct / class components and set `EntityNode.flags`
+Add `GameObject` components / behaviors and set `EntityNode.flags`
 
 | `prefab.nodes`               | `id`   |  flags   | operation                                            | remarks
 | ---------------------------- | ------ | -------- | ---------------------------------------------------- | -----------
