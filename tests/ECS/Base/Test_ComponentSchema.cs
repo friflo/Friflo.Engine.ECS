@@ -31,13 +31,13 @@ public static class Test_ComponentSchema
     [Test]
     public static void Test_ComponentTypes()
     {
-        var schema  = EntityStore.GetComponentSchema();
-        var structs = schema.Structs;
-        var classes = schema.Classes;
+        var schema      = EntityStore.GetComponentSchema();
+        var structs     = schema.Structs;
+        var behaviors   = schema.Behaviors;
         
-        AreEqual("struct components: 8  class components: 5  entity tags: 3", schema.ToString());
+        AreEqual("components: 8  behaviors: 5  entity tags: 3", schema.ToString());
         AreEqual(9,     structs.Length);
-        AreEqual(6,     classes.Length);
+        AreEqual(6,     behaviors.Length);
         
         AreEqual(13,    schema.ComponentTypeByKey.Count);
         AreEqual(13,    schema.ComponentTypeByType.Count);
@@ -51,9 +51,9 @@ public static class Test_ComponentSchema
             AreEqual(ComponentKind.Struct, type.kind);
             NotNull (type.componentKey);
         }
-        IsNull(classes[0]);
-        for (int n = 1; n < classes.Length; n++) {
-            var type = classes[n];
+        IsNull(behaviors[0]);
+        for (int n = 1; n < behaviors.Length; n++) {
+            var type = behaviors[n];
             AreEqual(n, type.behaviorIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.structIndex);
@@ -69,11 +69,11 @@ public static class Test_ComponentSchema
         
         var myComponentType = schema.GetStructComponentType<MyComponent1>();
         AreEqual("my1",                             myComponentType.componentKey);
-        AreEqual("struct component: [MyComponent1]",  myComponentType.ToString());
+        AreEqual("component: [MyComponent1]",       myComponentType.ToString());
         
         var testComponentType = schema.GetBehaviorType<TestComponent>();
         AreEqual("test",                            testComponentType.componentKey);
-        AreEqual("class component: [*TestComponent]", testComponentType.ToString());
+        AreEqual("behavior: [*TestComponent]",      testComponentType.ToString());
         
         AreEqual(typeof(Position),  schema.ComponentTypeByKey["pos"].type);
         AreEqual("test",            schema.ComponentTypeByType[typeof(TestComponent)].componentKey);

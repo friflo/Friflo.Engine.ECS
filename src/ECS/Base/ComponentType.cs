@@ -21,7 +21,7 @@ public abstract class ComponentType
     
     public   readonly   string          tagName;        //  8
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Behavior"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Behavior"/> the index in <see cref="ComponentSchema.Behaviors"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             behaviorIndex;  //  4
     /// <summary>
@@ -80,7 +80,7 @@ internal sealed class StructComponentType<T> : ComponentType
     where T : struct, IComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"struct component: [{typeof(T).Name}]";
+    public  override    string          ToString() => $"component: [{typeof(T).Name}]";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
         : base(componentKey, null, typeof(T), Struct, 0, structIndex, 0)
@@ -96,7 +96,7 @@ internal sealed class BehaviorType<T> : ComponentType
     where T : Behavior
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
+    public  override    string          ToString() => $"behavior: [*{typeof(T).Name}]";
     
     internal BehaviorType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
         : base(behaviorKey, null, typeof(T), ComponentKind.Behavior, behaviorIndex, 0, 0)

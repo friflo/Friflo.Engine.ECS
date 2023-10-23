@@ -31,7 +31,7 @@ internal sealed class AssemblyLoader
         return $"Assemblies loaded: {loadedAssemblies.Count}, dependencies: {dependencies.Count}, duration: {duration} ms";
     }
 
-    // --------------------------- query all struct / class component types ---------------------------
+    // --------------------------- query all component, behavior and tag types ---------------------------
     internal Assembly[] GetEngineDependants()
     {
         var stopwatch = new Stopwatch(); 

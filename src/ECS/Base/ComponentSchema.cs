@@ -25,9 +25,9 @@ public sealed class ComponentSchema
     /// <summary>return all class component types attributed with <see cref="BehaviorAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.behaviorIndex"/> is equal to the array index<br/>
-    /// <see cref="Classes"/>[0] is always null
+    /// <see cref="Behaviors"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Classes             => new (classes);
+    public   ReadOnlySpan<ComponentType>                    Behaviors           => new (classes);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.tagIndex"/> is equal to the array index<br/>
@@ -144,7 +144,7 @@ public sealed class ComponentSchema
     }
     
     private string GetString() {
-        return $"struct components: {structs.Length - 1}  class components: {classes.Length - 1}  entity tags: {tags.Length - 1}";
+        return $"components: {structs.Length - 1}  behaviors: {classes.Length - 1}  entity tags: {tags.Length - 1}";
     } 
     #endregion
 }
