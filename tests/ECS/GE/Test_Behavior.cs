@@ -100,7 +100,7 @@ public static class Test_Behavior
         NotNull(player.GetBehavior<TestBehavior3>());
     }
     
-    /// <summary>Cover <see cref="GameEntityStore.SetEntityBehaviorIndex"/></summary>
+    /// <summary>Cover move last behavior in <see cref="GameEntityStore.RemoveBehavior"/> </summary>
     [Test]
     public static void Test_3_cover_move_last_behavior() {
         var store   = new GameEntityStore();

@@ -98,9 +98,9 @@ public partial class GameEntityStore
                 var lastEntityId    = entityBehaviors[lastIndex].id;
                 // Is the Behavior not the last in store.entityBehaviors?
                 if (entity.id != lastEntityId) {
-                    // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
+                    // move behaviorIndex of last item in store.entityBehaviors to the index which will be removed
                     entityBehaviors[entity.behaviorIndex] = entityBehaviors[lastIndex];
-                    SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
+                    nodes[lastEntityId].entity.behaviorIndex = entity.behaviorIndex;
                 }
                 entityBehaviors[lastIndex] = default;               // clear last Behavior entry
                 entity.behaviorIndex = GameEntityUtils.NoBehaviors; // set entity state to: contains no behaviors 

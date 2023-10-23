@@ -256,7 +256,7 @@ public static class Test_ComponentReader
     private static readonly JsonValue behaviors = new JsonValue(
         "{ \"testRef1\": { \"val1\": 11 }, \"testRef2\": { \"val2\": 22 }, \"testRef3\": { \"val3\": 33 } }");
     
-    /// <summary>Cover <see cref="GameEntityUtils.AppendBehavior"/></summary>
+    /// <summary>Cover <see cref="GameEntityStore.AppendBehavior"/></summary>
     [Test]
     public static void Test_ComponentReader_read_multiple_behaviors()
     {
