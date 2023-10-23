@@ -77,14 +77,17 @@ public static class Test_sizeof
     }
     
     [Test]
-    public static void Test_Behaviors_ToString()
+    public static unsafe void Test_Behaviors_sizeof()
     {
+        var size = sizeof(Behaviors);
+        AreEqual(16, size);
+        
         var behaviors       = new Behaviors();
         AreEqual("unused", behaviors.ToString());
         
         var behaviorsArray  = new Behavior[] { new TestBehavior() };
         behaviors           = new Behaviors(1, behaviorsArray);
-        AreEqual("id: 1  [TestBehavior]", behaviors.ToString());
+        AreEqual("id: 1  [*TestBehavior]", behaviors.ToString());
     }
     
     class TestBehavior : Behavior { }

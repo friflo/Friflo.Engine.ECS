@@ -35,6 +35,7 @@ internal struct Behaviors
         sb.Append(id);
         sb.Append("  [");
         foreach (var behavior in classes) {
+            sb.Append('*');
             sb.Append(behavior.GetType().Name);
             sb.Append(", ");
         }
