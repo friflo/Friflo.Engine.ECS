@@ -100,6 +100,23 @@ public static class Test_Behavior
         NotNull(player.GetBehavior<TestBehavior3>());
     }
     
+    /// <summary>Cover <see cref="GameEntityStore.SetEntityBehaviorIndex"/></summary>
+    [Test]
+    public static void Test_3_Cover_() {
+        var store   = new GameEntityStore();
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        
+        IsNull (entity1.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        IsNull (entity2.AddBehavior(new TestBehavior2 { val2 = 2 }));
+        
+        NotNull(entity1.RemoveBehavior<TestBehavior1>());
+        NotNull(entity2.RemoveBehavior<TestBehavior2>());
+        
+        IsNull (entity1.GetBehavior<TestBehavior1>());
+        IsNull (entity2.GetBehavior<TestBehavior2>());
+    }
+    
     [Test]
     public static void Test_3_InvalidRefComponent() {
         var store   = new GameEntityStore();

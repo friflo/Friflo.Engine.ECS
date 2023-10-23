@@ -184,11 +184,12 @@ internal static class GameEntityUtils
                     // case: behavior is the only one attached to the entity => remove complete behaviors entry 
                     var lastIndex       = --store.entityBehaviorCount;
                     var lastEntityId    = store.entityBehaviors[lastIndex].id;
-                    store.entityBehaviors[lastIndex] = default;
                     // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
                     if (entity.id != lastEntityId) {
+                        store.entityBehaviors[entity.behaviorIndex] = store.entityBehaviors[lastIndex];
                         store.SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
                     }
+                    store.entityBehaviors[lastIndex] = default;
                     entity.behaviorIndex    = NoBehaviors;
                     return behavior;
                 }
