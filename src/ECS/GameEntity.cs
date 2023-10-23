@@ -20,9 +20,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// It is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
 /// <br/>
-/// A <see cref="GameEntity"/> can be added a another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
+/// A <see cref="GameEntity"/> can be added to another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
 /// The added <see cref="GameEntity"/> becomes a child of the <see cref="GameEntity"/> it is added to - its <see cref="Parent"/>.<br/>
 /// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
+/// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
 /// <see cref="ECS.Behavior"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (behavior) and data to an entity.<br/>
 /// <see cref="ECS.Behavior"/>'s are added or removed with <see cref="AddBehavior{T}"/> / <see cref="RemoveBehavior{T}"/>.<br/>
