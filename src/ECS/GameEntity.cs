@@ -263,13 +263,13 @@ public sealed class GameEntity
     /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
     public T AddBehavior<T>(T behavior) 
         where T : Behavior
-    => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
+    => (T)archetype.gameEntityStore.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
     
     
     /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
     public T RemoveBehavior<T>()
         where T : Behavior
-    => (T)GameEntityUtils.RemoveBehavior(this, typeof(T));
+    => (T)archetype.gameEntityStore.RemoveBehavior(this, typeof(T));
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------

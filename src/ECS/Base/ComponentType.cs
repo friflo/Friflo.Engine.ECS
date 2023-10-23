@@ -111,7 +111,7 @@ internal sealed class BehaviorType<T> : ComponentType
             return;
         }
         behavior = reader.ReadMapper(typeMapper, json);
-        GameEntityUtils.AppendBehavior(entity, behavior);
+        entity.archetype.gameEntityStore.AppendBehavior(entity, behavior);
     }
 }
 

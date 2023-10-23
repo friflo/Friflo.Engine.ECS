@@ -51,8 +51,8 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] private             GameEntity              storeRoot;          //  8                   - origin of the tree graph. null if no origin assigned
-                    internal            Behaviors[]             entityBehaviors;    //  8
-                    internal            int                     entityBehaviorCount;//  4                   - >= 0  and  <= entityBehaviors.Length
+                    private             Behaviors[]             entityBehaviors;    //  8
+                    private             int                     entityBehaviorCount;//  4                   - >= 0  and  <= entityBehaviors.Length
     #endregion
     
 #region initialize
