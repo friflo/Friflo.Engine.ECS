@@ -176,7 +176,7 @@ public static class Test_Behavior
         player.AddBehavior(new TestBehavior1());
         NotNull(player.GetBehavior<TestBehavior1>());
         
-        const int count = 10; // 1_000_000_000 ~ 5.730 ms
+        const int count = 10; // 1_000_000_000 ~ 5.398 ms
         for (long n = 0; n < count; n++) {
             player.GetBehavior<TestBehavior1>();
         }
@@ -188,7 +188,7 @@ public static class Test_Behavior
         var player  = store.CreateEntity();
         AreEqual("id: 1  []", player.ToString());
         
-        const int count = 10; // 100_000_000 ~ 4.534 ms
+        const int count = 10; // 100_000_000 ~ 3.038 ms
         for (long n = 0; n < count; n++) {
             var testRef1 = new TestBehavior1();
             player.AddBehavior(testRef1);
