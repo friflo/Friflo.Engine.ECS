@@ -146,7 +146,7 @@ internal static class GameEntityUtils
             store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior [] { behavior });
             return null;
         }
-        // case: entity has already behaviors => add behavior to its behaviors
+        // case: entity has already behaviors => add / replace behavior to / in behaviors
         ref var entityBehavior  = ref store.entityBehaviors[entity.behaviorIndex];
         var classes             = entityBehavior.classes;
         var len                 = classes.Length;
@@ -154,12 +154,13 @@ internal static class GameEntityUtils
         {
             var current = classes[n]; 
             if (current.GetType() == behaviorType) {
+                // case: behaviors contains a behavior of the given behaviorType => replace current behavior
                 classes[n] = behavior;
                 current.entity = null;
                 return behavior;
             }
         }
-        // --- case: map does not contain a behavior of the given behaviorType
+        // --- case: behaviors does not contain a behavior of the given behaviorType => add behavior
         Utils.Resize(ref entityBehavior.classes, len + 1);
         entityBehavior.classes[len] = behavior;
         return null;
@@ -186,13 +187,14 @@ internal static class GameEntityUtils
                 // case: behavior is the only one attached to the entity => remove complete behaviors entry 
                 var lastIndex       = --store.entityBehaviorCount;
                 var lastEntityId    = store.entityBehaviors[lastIndex].id;
-                // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
+                // Is the Behavior not the last in store.entityBehaviors?
                 if (entity.id != lastEntityId) {
+                    // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
                     store.entityBehaviors[entity.behaviorIndex] = store.entityBehaviors[lastIndex];
                     store.SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
                 }
-                store.entityBehaviors[lastIndex] = default;
-                entity.behaviorIndex    = NoBehaviors;
+                store.entityBehaviors[lastIndex] = default; // clear last Behavior entry
+                entity.behaviorIndex    = NoBehaviors;      // set entity state to: contains no behaviors 
                 return behavior;
             }
             // case: entity has two or more behaviors. Remove the given one from its behaviors
