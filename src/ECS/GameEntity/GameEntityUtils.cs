@@ -99,15 +99,15 @@ internal static class GameEntityUtils
         return entity.archetype.gameEntityStore.GetBehavior(entity, behaviorType);
     }
     
-    internal static Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType, int behaviorIndex)
+    internal static Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType, int classIndex)
     {
-        if (behaviorIndex == ClassUtils.MissingAttribute) {
+        if (classIndex == ClassUtils.MissingAttribute) {
             throw MissingAttributeException(behaviorType);
         }
         if (behavior.entity != null) {
             throw new InvalidOperationException($"behavior already added to an entity. current entity id: {behavior.entity.id}");
         }
-        return entity.archetype.gameEntityStore.AddBehavior(entity, behavior, behaviorType, behaviorIndex);
+        return entity.archetype.gameEntityStore.AddBehavior(entity, behavior, behaviorType);
     }
     
     internal static Behavior RemoveBehavior(GameEntity entity, Type behaviorType) {

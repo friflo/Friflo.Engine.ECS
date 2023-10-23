@@ -45,7 +45,7 @@ public partial class GameEntityStore
         }
     }
     
-    internal Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType, int behaviorIndex)
+    internal Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType)
     {
         behavior.entity = entity;
         if (entity.behaviorIndex == GameEntityUtils.NoBehaviors)
