@@ -65,7 +65,7 @@ public sealed partial class GameEntityStore : EntityStore
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
-        entityBehaviors = new Behaviors[1];
+        entityBehaviors = Array.Empty<Behaviors>();
     }
     #endregion
     

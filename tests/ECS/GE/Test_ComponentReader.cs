@@ -23,7 +23,7 @@ public static class Test_ComponentReader
         new JsonValue("{ \"pos\": { \"x\": 3, \"y\": 3, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 4, \"z\": 4 } }");
     
     [Test]
-    public static void Test_ComponentReader_read_struct_components()
+    public static void Test_ComponentReader_read_components()
     {
         var store       = TestUtils.CreateGameEntityStore(out var database);
         
@@ -176,7 +176,7 @@ public static class Test_ComponentReader
     }
     
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
-    public static void Test_ComponentReader_read_struct_components_Mem()
+    public static void Test_ComponentReader_read_components_Mem()
     {
         var store       = TestUtils.CreateGameEntityStore(out var database);
         
@@ -204,7 +204,7 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_ComponentReader_read_struct_components_Perf()
+    public static void Test_ComponentReader_read_components_Perf()
     {
         TestUtils.CreateGameEntityStore(out var database);
         
@@ -218,14 +218,14 @@ public static class Test_ComponentReader
         }
     }
     
-    private static readonly JsonValue behaviors = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
+    private static readonly JsonValue behavior = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
-    public static void Test_ComponentReader_read_class_components()
+    public static void Test_ComponentReader_read_behavior()
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DatabaseEntity { pid = 10, components = behaviors, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = behavior, children = new List<long> { 11 } };
 
         var root        = database.LoadEntity(rootNode, out _);
         AreEqual(1,     root.Behaviors.Length);
@@ -241,16 +241,51 @@ public static class Test_ComponentReader
     }
     
     [Test]
-    public static void Test_ComponentReader_read_class_components_Perf()
+    public static void Test_ComponentReader_read_behavior_Perf()
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DatabaseEntity { pid = 10, components = behaviors, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = behavior, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
             database.LoadEntity(rootNode, out _);
         }
+    }
+    
+    private static readonly JsonValue behaviors = new JsonValue(
+        "{ \"testRef1\": { \"val1\": 11 }, \"testRef2\": { \"val2\": 22 }, \"testRef3\": { \"val3\": 33 } }");
+    
+    /// <summary>Cover <see cref="GameEntityUtils.AppendBehavior"/></summary>
+    [Test]
+    public static void Test_ComponentReader_read_multiple_behaviors()
+    {
+        TestUtils.CreateGameEntityStore(out var database);
+        
+        var rootNode    = new DatabaseEntity { pid = 10, components = behaviors };
+
+        var root        = database.LoadEntity(rootNode, out _);
+        AreEqual(3,     root.Behaviors.Length);
+        var behavior1   = root.GetBehavior<TestBehavior1>();
+        AreEqual(11,    behavior1.val1);
+        var behavior2   = root.GetBehavior<TestBehavior2>();
+        AreEqual(22,    behavior2.val2);
+        var behavior3   = root.GetBehavior<TestBehavior3>();
+        AreEqual(33,    behavior3.val3);
+        
+        behavior1.val1      = -1;
+        behavior2.val2      = -1;
+        behavior3.val3      = -1;
+        
+        // --- read same DatabaseEntity again
+        database.LoadEntity(rootNode, out _);
+        AreEqual(3,     root.Behaviors.Length);
+        behavior1       = root.GetBehavior<TestBehavior1>();
+        AreEqual(11,    behavior1.val1);
+        behavior2       = root.GetBehavior<TestBehavior2>();
+        AreEqual(22,    behavior2.val2);
+        behavior3    = root.GetBehavior<TestBehavior3>();
+        AreEqual(33,    behavior3.val3);
     }
 }
 

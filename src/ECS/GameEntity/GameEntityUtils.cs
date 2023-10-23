@@ -113,7 +113,8 @@ internal static class GameEntityUtils
             // case: entity has not behaviors => add new Behaviors entry
             var lastIndex = entity.behaviorIndex = store.entityBehaviorCount++;
             if (store.entityBehaviors.Length == lastIndex) {
-                Utils.Resize(ref store.entityBehaviors, 2 * lastIndex);
+                var newLength = Math.Max(1, 2 * lastIndex);
+                Utils.Resize(ref store.entityBehaviors, newLength);
             }
             store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior[] { behavior });
         } else {
@@ -139,7 +140,8 @@ internal static class GameEntityUtils
             // case: entity has not behaviors => add new Behaviors entry
             var lastIndex = entity.behaviorIndex = store.entityBehaviorCount++;
             if (store.entityBehaviors.Length == lastIndex) {
-                Utils.Resize(ref store.entityBehaviors, 2 * lastIndex);
+                var newLength = Math.Max(1, 2 * lastIndex);
+                Utils.Resize(ref store.entityBehaviors, newLength);
             }
             store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior [] { behavior });
             return null;
