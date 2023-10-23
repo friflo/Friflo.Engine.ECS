@@ -96,11 +96,11 @@ public class ArchetypeQuery
         var sb          = new StringBuilder();
         var hasTypes    = false;
         sb.Append("Query: [");
-        var structs = EntityStore.Static.ComponentSchema.Structs;
+        var components  = EntityStore.Static.ComponentSchema.Components;
         for (int n = 0; n < signatureIndexes.length; n++)
         {
             var structIndex = signatureIndexes.GetStructIndex(n);
-            var structType  = structs[structIndex];
+            var structType  = components[structIndex];
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;

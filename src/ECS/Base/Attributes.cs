@@ -17,8 +17,8 @@ public sealed class ComponentAttribute : Attribute {
 }
 
 /// <summary>
-/// Annotated classes a can be added as component to <see cref="GameEntity"/>'s using the specified key name.<br/>
-/// <b><c>class</c></b> components can be used if <b>OPP</b> programming approach is preferred
+/// Annotated classes a can be added as <see cref="Behavior"/>'s to <see cref="GameEntity"/>'s using the specified key name.<br/>
+/// <b><see cref="Behavior"/></b>'s can be used if <b>OPP</b> programming approach is preferred
 /// while dealing with a small amount (&lt; 100) of <see cref="GameEntity"/>'s
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]

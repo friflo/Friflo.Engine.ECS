@@ -225,19 +225,18 @@ public sealed class GameEntity
     }
     
     /// <summary>
-    /// Property is only to display <b>struct</b> and <b>class</b> components in the Debugger.<br/>
+    /// Property is only used to display components in the Debugger.<br/>
     /// It has poor performance as is creates an array and boxes all components. 
     /// </summary>
     /// <remarks>
-    /// To access <b>class</b>  components use <see cref="GetBehavior{T}"/> or <see cref="Behaviors"/><br/>
-    /// To access <b>struct</b> components use <see cref="GetComponent{T}"/>
+    /// To access a component use <see cref="GetComponent{T}"/>
     /// </remarks>
-    [Obsolete($"use either {nameof(GetBehavior)}<T>() or {nameof(GetComponent)}<T>()")]
+    [Obsolete($"use {nameof(GetComponent)}<T>() to access a component")]
     public  object[]                     Components_     => GameEntityUtils.GetComponentsDebug(this);
     #endregion
     
     // --------------------------------- behavior methods ---------------------------------
-#region class component methods
+#region behavior methods
     public      ReadOnlySpan<Behavior>   Behaviors => new (GameEntityUtils.GetBehaviors(this));
 
     /// <returns>the entity component of Type <typeparamref name="T"/>. Otherwise null</returns>

@@ -122,10 +122,10 @@ public sealed class Archetype
     {
         var length          = indexes.length;
         var componentHeaps  = new StructHeap[length];
-        var structs         = EntityStore.Static.ComponentSchema.Structs;
+        var components      = EntityStore.Static.ComponentSchema.Components;
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
-            var structType    = structs[structIndex];
+            var structType    = components[structIndex];
             componentHeaps[n] = structType.CreateHeap();
         }
         return new Archetype(config, componentHeaps, tags);

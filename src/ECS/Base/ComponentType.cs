@@ -25,7 +25,7 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   int             behaviorIndex;  //  4
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Structs"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Components"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             structIndex;    //  4
     /// <summary>

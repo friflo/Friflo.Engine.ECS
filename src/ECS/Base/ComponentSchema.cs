@@ -19,15 +19,15 @@ public sealed class ComponentSchema
     /// <summary>return all component types attributed with <see cref="ComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
-    /// <see cref="Structs"/>[0] is always null
+    /// <see cref="Components"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Structs             => new (structs);
-    /// <summary>return all class component types attributed with <see cref="BehaviorAttribute"/></summary>
+    public   ReadOnlySpan<ComponentType>                    Components          => new (components);
+    /// <summary>return all <see cref="Behavior"/> types attributed with <see cref="BehaviorAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.behaviorIndex"/> is equal to the array index<br/>
     /// <see cref="Behaviors"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Behaviors           => new (classes);
+    public   ReadOnlySpan<ComponentType>                    Behaviors           => new (behaviors);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.tagIndex"/> is equal to the array index<br/>
@@ -46,8 +46,8 @@ public sealed class ComponentSchema
 #region private fields
     [Browse(Never)] private  readonly   Assembly[]                          engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
-    [Browse(Never)] internal readonly   ComponentType[]                     structs;
-    [Browse(Never)] private  readonly   ComponentType[]                     classes;
+    [Browse(Never)] internal readonly   ComponentType[]                     components;
+    [Browse(Never)] private  readonly   ComponentType[]                     behaviors;
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
     [Browse(Never)] internal readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
@@ -69,18 +69,18 @@ public sealed class ComponentSchema
         tagTypeByName           = new Dictionary<string, ComponentType>(count);
         tagTypeByType           = new Dictionary<Type,   ComponentType>(count);
         maxStructIndex          = structList.Count + 1;
-        structs                 = new ComponentType[maxStructIndex];
-        classes                 = new ComponentType[classList.Count + 1];
+        components              = new ComponentType[maxStructIndex];
+        behaviors               = new ComponentType[classList.Count + 1];
         tags                    = new ComponentType[tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
-            structs[structType.structIndex] = structType;
+            components[structType.structIndex] = structType;
         }
         foreach (var classType in classList) {
             componentTypeByKey. Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
-            classes[classType.behaviorIndex] = classType;
+            behaviors[classType.behaviorIndex] = classType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type,      tagType);
@@ -140,11 +140,11 @@ public sealed class ComponentSchema
     }
     
     internal ComponentType GetStructComponentAt(int index) {
-        return structs[index];
+        return components[index];
     }
     
     private string GetString() {
-        return $"components: {structs.Length - 1}  behaviors: {classes.Length - 1}  entity tags: {tags.Length - 1}";
+        return $"components: {components.Length - 1}  behaviors: {behaviors.Length - 1}  entity tags: {tags.Length - 1}";
     } 
     #endregion
 }

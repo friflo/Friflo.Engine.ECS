@@ -32,19 +32,19 @@ public static class Test_ComponentSchema
     public static void Test_ComponentTypes()
     {
         var schema      = EntityStore.GetComponentSchema();
-        var structs     = schema.Structs;
+        var components  = schema.Components;
         var behaviors   = schema.Behaviors;
         
         AreEqual("components: 8  behaviors: 5  entity tags: 3", schema.ToString());
-        AreEqual(9,     structs.Length);
+        AreEqual(9,     components.Length);
         AreEqual(6,     behaviors.Length);
         
         AreEqual(13,    schema.ComponentTypeByKey.Count);
         AreEqual(13,    schema.ComponentTypeByType.Count);
         
-        IsNull(structs[0]);
-        for (int n = 1; n < structs.Length; n++) {
-            var type = structs[n];
+        IsNull(components[0]);
+        for (int n = 1; n < components.Length; n++) {
+            var type = components[n];
             AreEqual(n, type.structIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.behaviorIndex);

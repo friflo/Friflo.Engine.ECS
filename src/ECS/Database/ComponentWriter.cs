@@ -26,7 +26,7 @@ internal sealed class ComponentWriter
         buffer              = new Bytes(128);
         componentWriter     = new ObjectWriter(EntityStore.Static.TypeStore);
         var schema          = EntityStore.Static.ComponentSchema;
-        structTypes         = schema.structs;
+        structTypes         = schema.components;
         componentTypeByType = schema.componentTypeByType;
     }
     
