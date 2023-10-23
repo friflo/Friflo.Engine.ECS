@@ -79,9 +79,12 @@ public static class Test_sizeof
     [Test]
     public static void Test_Behaviors_ToString()
     {
+        var behaviors       = new Behaviors();
+        AreEqual("unused", behaviors.ToString());
+        
         var classComponents = new ClassComponent[] { new TestClassComponent() };
-        var behaviors       = new Behaviors(classComponents);
-        AreEqual("[TestClassComponent]", behaviors.ToString());
+        behaviors       = new Behaviors(1, classComponents);
+        AreEqual("id: 1  [TestClassComponent]", behaviors.ToString());
     }
     
     class TestClassComponent : ClassComponent { }

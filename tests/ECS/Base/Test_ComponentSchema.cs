@@ -35,12 +35,12 @@ public static class Test_ComponentSchema
         var structs = schema.Structs;
         var classes = schema.Classes;
         
-        AreEqual("struct components: 9  class components: 5  entity tags: 3", schema.ToString());
-        AreEqual(10,    structs.Length);
+        AreEqual("struct components: 8  class components: 5  entity tags: 3", schema.ToString());
+        AreEqual(9,     structs.Length);
         AreEqual(6,     classes.Length);
         
-        AreEqual(14,    schema.ComponentTypeByKey.Count);
-        AreEqual(14,    schema.ComponentTypeByType.Count);
+        AreEqual(13,    schema.ComponentTypeByKey.Count);
+        AreEqual(13,    schema.ComponentTypeByType.Count);
         
         IsNull(structs[0]);
         for (int n = 1; n < structs.Length; n++) {

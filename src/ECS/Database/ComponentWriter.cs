@@ -40,12 +40,8 @@ internal sealed class ComponentWriter
         writer.ObjectStart();
         // --- write struct components
         var heaps           = archetype.Heaps;
-        var behaviorsIndex  = GameEntityUtils.BehaviorsIndex;
         for (int n = 0; n < heaps.Length; n++) {
             var heap        = heaps[n];
-            if (heap.structIndex == behaviorsIndex) {
-                continue;
-            }
             var value       = heap.Write(componentWriter, entity.compIndex);
             var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
             writer.MemberBytes(keyBytes, value);

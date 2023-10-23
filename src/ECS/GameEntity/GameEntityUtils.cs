@@ -4,8 +4,8 @@
 using System;
 using System.Text;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
 
+// ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -77,7 +77,7 @@ internal static class GameEntityUtils
     // ---------------------------------- ClassComponent utils ----------------------------------
     private  static readonly object[]           EmptyStructComponents   = Array.Empty<object>();
     private  static readonly ClassComponent[]   EmptyClassComponents    = Array.Empty<ClassComponent>();
-    internal static readonly int                BehaviorsIndex          = StructHeap<Behaviors>.StructIndex;
+    internal const  int                         NoBehaviors             = -1;  
     
     private static Exception MissingAttributeException(Type type) {
         var msg = $"Missing attribute [ClassComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
@@ -85,20 +85,18 @@ internal static class GameEntityUtils
     }
 
     internal static ClassComponent[] GetClassComponents(GameEntity entity) {
-        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
-        if (heap == null) {
+        if (entity.behaviorIndex == NoBehaviors) {
             return EmptyClassComponents;
         }
-        return heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize].classComponents;
+        return entity.archetype.gameEntityStore.entityBehaviors[entity.behaviorIndex].classComponents;
     }
     
     internal static ClassComponent GetClassComponent(GameEntity entity, Type classType)
     {
-        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
-        if (heap == null) {
+        if (entity.behaviorIndex == NoBehaviors) {
             return null;
         }
-        var classComponents = heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize].classComponents;
+        var classComponents = entity.archetype.gameEntityStore.entityBehaviors[entity.behaviorIndex].classComponents;
         foreach (var component in classComponents) {
             if (component.GetType() == classType) {
                 return component;
@@ -110,13 +108,18 @@ internal static class GameEntityUtils
     internal static void AppendClassComponent<T>(GameEntity entity, T component)
         where T : ClassComponent
     {
-        component.entity = entity;
-        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
-        if (heap == null) {
-            var classComponents = new ClassComponent[] { component };
-            entity.AddComponent(new Behaviors(classComponents));
+        component.entity    = entity;
+        var store           = entity.archetype.gameEntityStore;
+        if (entity.behaviorIndex == NoBehaviors) {
+            // case: entity has not behaviors => add new Behaviors entry
+            var lastIndex = entity.behaviorIndex = store.entityBehaviorCount++;
+            if (store.entityBehaviors.Length == lastIndex) {
+                Utils.Resize(ref store.entityBehaviors, 2 * lastIndex);
+            }
+            store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new ClassComponent[] { component });
         } else {
-            ref var classComponents = ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize].classComponents;
+            // case: entity already has behaviors => add component to its behaviors
+            ref var classComponents = ref store.entityBehaviors[entity.behaviorIndex].classComponents;
             var len                 = classComponents.Length;
             Utils.Resize(ref classComponents, len + 1);
             classComponents[len] = component;
@@ -132,13 +135,18 @@ internal static class GameEntityUtils
             throw new InvalidOperationException("component already added to an entity");
         }
         component.entity    = entity;
-        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
-        if (heap == null) {
-            var classComponents = new [] { component };
-            entity.AddComponent(new Behaviors(classComponents));
+        var store           = entity.archetype.gameEntityStore;
+        if (entity.behaviorIndex == NoBehaviors) {
+            // case: entity has not behaviors => add new Behaviors entry
+            var lastIndex = entity.behaviorIndex = store.entityBehaviorCount++;
+            if (store.entityBehaviors.Length == lastIndex) {
+                Utils.Resize(ref store.entityBehaviors, 2 * lastIndex);
+            }
+            store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new ClassComponent [] { component });
             return null;
         }
-        ref var behaviors   = ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
+        // case: entity has already behaviors => add component to its behaviors
+        ref var behaviors   = ref store.entityBehaviors[entity.behaviorIndex];
         var classes         = behaviors.classComponents;
         var len             = classes.Length;
         for (int n = 0; n < len; n++)
@@ -158,11 +166,11 @@ internal static class GameEntityUtils
     
     internal static ClassComponent RemoveClassComponent(GameEntity entity, Type classType)
     {
-        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
-        if (heap == null) {
+        if (entity.behaviorIndex == NoBehaviors) {
             return null;
         }
-        ref var behaviors   = ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
+        var store           = entity.archetype.gameEntityStore;
+        ref var behaviors   = ref store.entityBehaviors[entity.behaviorIndex];
         var classes         = behaviors.classComponents;
         var len             = classes.Length;
         for (int n = 0; n < len; n++)
@@ -170,11 +178,21 @@ internal static class GameEntityUtils
             var classComponent = classes[n];
             if (classComponent.GetType() == classType)
             {
+                // case: found behavior in entity behaviors
+                classComponent.entity   = null;
                 if (len == 1) {
-                    classComponent.entity   = null;
-                    entity.RemoveComponent<Behaviors>();
+                    // case: behavior is the only one attached to the entity => remove complete behaviors entry 
+                    var lastIndex       = --store.entityBehaviorCount;
+                    var lastEntityId    = store.entityBehaviors[lastIndex].id;
+                    store.entityBehaviors[lastIndex] = default;
+                    // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
+                    if (entity.id != lastEntityId) {
+                        store.nodes[lastEntityId].entity.behaviorIndex = entity.behaviorIndex;
+                    }
+                    entity.behaviorIndex    = NoBehaviors;
                     return classComponent;
                 }
+                // case: entity has two or more behaviors. Remove the given one from its behaviors
                 var classComponents = new ClassComponent[len - 1];
                 for (int i = 0; i < n; i++) {
                     classComponents[i]     = classes[i];
@@ -182,8 +200,7 @@ internal static class GameEntityUtils
                 for (int i = n + 1; i < len; i++) {
                     classComponents[i - 1] = classes[i];
                 }
-                classComponent.entity       = null;
-                behaviors.classComponents   = classComponents;
+                behaviors.classComponents = classComponents;
                 return classComponent;
             }
         }
