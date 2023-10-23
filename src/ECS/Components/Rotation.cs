@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 [Component("rot")]
 [StructLayout(LayoutKind.Explicit)]
-public struct  Rotation : IComponent
+public struct  Rotation : IComponent, IEquatable<Rotation>
 {
     [Browse(Never)]
     [Ignore]

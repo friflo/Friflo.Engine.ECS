@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 [Component("scl3")]
 [StructLayout(LayoutKind.Explicit)]
-public struct Scale3 : IComponent
+public struct Scale3 : IComponent, IEquatable<Scale3>
 {
     [Browse(Never)]
     [Ignore]
