@@ -65,24 +65,28 @@ public static class Test_Behavior
         var testRef1 = new TestBehavior1();
         IsFalse(player.TryGetBehavior<TestBehavior1>(out _));
         IsNull(player.RemoveBehavior<TestBehavior1>());
-        AreEqual("id: 1  []",                   player.ToString());
+        AreEqual("id: 1  []",               player.ToString());
+        AreEqual(0,                         player.Behaviors.Length);
         AreEqual("[*TestBehavior1]",        testRef1.ToString());
         
         player.AddBehavior(testRef1);
-        AreSame(testRef1, player.GetBehavior<TestBehavior1>());
-        IsTrue(player.TryGetBehavior<TestBehavior1>(out var result));
-        AreSame(testRef1, result);
+        AreEqual(1,                         player.Behaviors.Length);
+        AreSame (testRef1, player.GetBehavior<TestBehavior1>());
+        IsTrue  (player.TryGetBehavior<TestBehavior1>(out var result));
+        AreSame (testRef1, result);
         AreEqual("id: 1  [*TestBehavior1]", player.ToString());
-        NotNull(testRef1.Entity);
-        IsFalse(player.TryGetBehavior<TestBehavior2>(out _));
+        NotNull (testRef1.Entity);
+        IsFalse (player.TryGetBehavior<TestBehavior2>(out _));
         
-        NotNull(player.RemoveBehavior<TestBehavior1>());
-        IsNull(player.GetBehavior<TestBehavior1>());
-        IsFalse(player.TryGetBehavior<TestBehavior1>(out _));
-        AreEqual("id: 1  []",                   player.ToString());
+        NotNull (player.RemoveBehavior<TestBehavior1>());
+        AreEqual(0,                         player.Behaviors.Length);
+        IsNull  (player.GetBehavior<TestBehavior1>());
+        IsFalse (player.TryGetBehavior<TestBehavior1>(out _));
+        AreEqual("id: 1  []",               player.ToString());
         IsNull(testRef1.Entity);
         
         IsNull(player.RemoveBehavior<TestBehavior1>());
+        AreEqual(0,                         player.Behaviors.Length);
     }
     
     [Test]
@@ -90,10 +94,11 @@ public static class Test_Behavior
         var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
-        IsNull (player.AddBehavior(new TestBehavior1 { val1 = 1 }));
-        IsNull (player.AddBehavior(new TestBehavior2 { val2 = 2 }));
-        IsNull (player.AddBehavior(new TestBehavior3 { val3 = 3 }));
-        NotNull(player.RemoveBehavior<TestBehavior2>());
+        IsNull  (player.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        IsNull  (player.AddBehavior(new TestBehavior2 { val2 = 2 }));
+        IsNull  (player.AddBehavior(new TestBehavior3 { val3 = 3 }));
+        NotNull (player.RemoveBehavior<TestBehavior2>());
+        AreEqual(2, player.Behaviors.Length);
         
         NotNull(player.GetBehavior<TestBehavior1>());
         IsNull (player.GetBehavior<TestBehavior2>());
@@ -107,14 +112,18 @@ public static class Test_Behavior
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         
-        IsNull (entity1.AddBehavior(new TestBehavior1 { val1 = 1 }));
-        IsNull (entity2.AddBehavior(new TestBehavior2 { val2 = 2 }));
+        IsNull  (entity1.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        IsNull  (entity2.AddBehavior(new TestBehavior2 { val2 = 2 }));
+        AreEqual(1,                         entity1.Behaviors.Length);
+        AreEqual(1,                         entity2.Behaviors.Length);
         
-        NotNull(entity1.RemoveBehavior<TestBehavior1>());
-        NotNull(entity2.RemoveBehavior<TestBehavior2>());
+        NotNull (entity1.RemoveBehavior<TestBehavior1>());
+        AreEqual(0,                         entity1.Behaviors.Length);
+        NotNull (entity2.RemoveBehavior<TestBehavior2>());
+        AreEqual(0,                         entity2.Behaviors.Length);
         
-        IsNull (entity1.GetBehavior<TestBehavior1>());
-        IsNull (entity2.GetBehavior<TestBehavior2>());
+        IsNull  (entity1.GetBehavior<TestBehavior1>());
+        IsNull  (entity2.GetBehavior<TestBehavior2>());
     }
     
     /// <summary>Cover <see cref="GameEntityUtils.RemoveBehavior"/></summary>
@@ -123,9 +132,11 @@ public static class Test_Behavior
         var store   = new GameEntityStore();
         var entity  = store.CreateEntity();
         
-        IsNull (entity.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        IsNull  (entity.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        AreEqual(1, entity.Behaviors.Length);
         
-        IsNull (entity.RemoveBehavior<TestBehavior2>());
+        IsNull  (entity.RemoveBehavior<TestBehavior2>());
+        AreEqual(1, entity.Behaviors.Length); // remains unchanged
     }
     
     [Test]
@@ -141,10 +152,11 @@ public static class Test_Behavior
         AreEqual(0, player.Behaviors.Length);
         
         var behavior = player.GetBehavior<InvalidRefComponent>();
-        IsNull(behavior);
+        IsNull  (behavior);
         
         // throws currently no exception
         player.RemoveBehavior<InvalidRefComponent>();
+        AreEqual(0, player.Behaviors.Length);
     }
     
     [Test]
