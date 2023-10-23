@@ -173,7 +173,7 @@ public sealed class GameEntity
     }
     #endregion
 
-    // --------------------------------- component methods --------------------------------
+    // ------------------------------------ component methods ------------------------------------
 #region component methods
     public  bool    HasComponent<T> () where T : struct, IComponent
                         => archetype.heapMap[StructHeap<T>.StructIndex] != null;
@@ -235,7 +235,7 @@ public sealed class GameEntity
     public  object[]                     Components_     => GameEntityUtils.GetComponentsDebug(this);
     #endregion
     
-    // --------------------------------- behavior methods ---------------------------------
+    // ------------------------------------ behavior methods -------------------------------------
 #region behavior methods
     public      ReadOnlySpan<Behavior>   Behaviors => new (GameEntityUtils.GetBehaviors(this));
 
@@ -302,7 +302,7 @@ public sealed class GameEntity
     }
     #endregion
     
-    // --------------------------------------- tree methods --------------------------------------
+    // ------------------------------------ tree methods -----------------------------------------
 #region tree node methods
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
