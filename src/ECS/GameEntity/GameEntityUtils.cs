@@ -187,7 +187,7 @@ internal static class GameEntityUtils
                     store.entityBehaviors[lastIndex] = default;
                     // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
                     if (entity.id != lastEntityId) {
-                        store.nodes[lastEntityId].entity.behaviorIndex = entity.behaviorIndex;
+                        store.SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
                     }
                     entity.behaviorIndex    = NoBehaviors;
                     return behavior;

@@ -278,4 +278,8 @@ public partial class GameEntityStore
         ref var node = ref nodes[id];
         return new ReadOnlySpan<int>(node.childIds, 0, node.childCount);
     }
+    
+    internal void SetEntityBehaviorIndex(int entityId, int behaviorIndex) {
+        nodes[entityId].entity.behaviorIndex = behaviorIndex;
+    }
 }
