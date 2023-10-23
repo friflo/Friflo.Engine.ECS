@@ -177,34 +177,34 @@ internal static class GameEntityUtils
         for (int n = 0; n < len; n++)
         {
             var behavior = classes[n];
-            if (behavior.GetType() == behaviorType)
-            {
-                // case: found behavior in entity behaviors
-                behavior.entity   = null;
-                if (len == 1) {
-                    // case: behavior is the only one attached to the entity => remove complete behaviors entry 
-                    var lastIndex       = --store.entityBehaviorCount;
-                    var lastEntityId    = store.entityBehaviors[lastIndex].id;
-                    // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
-                    if (entity.id != lastEntityId) {
-                        store.entityBehaviors[entity.behaviorIndex] = store.entityBehaviors[lastIndex];
-                        store.SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
-                    }
-                    store.entityBehaviors[lastIndex] = default;
-                    entity.behaviorIndex    = NoBehaviors;
-                    return behavior;
+            if (behavior.GetType() != behaviorType) {
+                continue;
+            }
+            // case: found behavior in entity behaviors
+            behavior.entity   = null;
+            if (len == 1) {
+                // case: behavior is the only one attached to the entity => remove complete behaviors entry 
+                var lastIndex       = --store.entityBehaviorCount;
+                var lastEntityId    = store.entityBehaviors[lastIndex].id;
+                // set behaviorIndex of last item in store.entityBehaviors to the index which will be removed
+                if (entity.id != lastEntityId) {
+                    store.entityBehaviors[entity.behaviorIndex] = store.entityBehaviors[lastIndex];
+                    store.SetEntityBehaviorIndex(lastEntityId, entity.behaviorIndex);
                 }
-                // case: entity has two or more behaviors. Remove the given one from its behaviors
-                var behaviors = new Behavior[len - 1];
-                for (int i = 0; i < n; i++) {
-                    behaviors[i]     = classes[i];
-                }
-                for (int i = n + 1; i < len; i++) {
-                    behaviors[i - 1] = classes[i];
-                }
-                entityBehavior.classes = behaviors;
+                store.entityBehaviors[lastIndex] = default;
+                entity.behaviorIndex    = NoBehaviors;
                 return behavior;
             }
+            // case: entity has two or more behaviors. Remove the given one from its behaviors
+            var behaviors = new Behavior[len - 1];
+            for (int i = 0; i < n; i++) {
+                behaviors[i]     = classes[i];
+            }
+            for (int i = n + 1; i < len; i++) {
+                behaviors[i - 1] = classes[i];
+            }
+            entityBehavior.classes = behaviors;
+            return behavior;
         }
         return null;
     }

@@ -102,7 +102,7 @@ public static class Test_Behavior
     
     /// <summary>Cover <see cref="GameEntityStore.SetEntityBehaviorIndex"/></summary>
     [Test]
-    public static void Test_3_Cover_() {
+    public static void Test_3_cover_move_last_behavior() {
         var store   = new GameEntityStore();
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
@@ -115,6 +115,17 @@ public static class Test_Behavior
         
         IsNull (entity1.GetBehavior<TestBehavior1>());
         IsNull (entity2.GetBehavior<TestBehavior2>());
+    }
+    
+    /// <summary>Cover <see cref="GameEntityUtils.RemoveBehavior"/></summary>
+    [Test]
+    public static void Test_3_cover_remove_non_added_behavior() {
+        var store   = new GameEntityStore();
+        var entity  = store.CreateEntity();
+        
+        IsNull (entity.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        
+        IsNull (entity.RemoveBehavior<TestBehavior2>());
     }
     
     [Test]
