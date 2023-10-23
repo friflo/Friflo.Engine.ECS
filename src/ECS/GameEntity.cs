@@ -14,14 +14,20 @@ namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// A <see cref="GameEntity"/> represent any kind of object in a game scene.<br/>
-/// It is typically an object that can be rendered on screen like a cube, a sphere a capsule, a mesh, a sprite, ... .<br/>
+/// Every <see cref="GameEntity"/> has an <see cref="Id"/> and is a container of
+/// <see cref="ECS.IComponent"/>'s, <see cref="ECS.Behavior"/>'s and <see cref="ECS.Tags"/><br/>
+/// <br/>
+/// It is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
 /// <br/>
 /// A <see cref="GameEntity"/> can be added a another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
 /// The added <see cref="GameEntity"/> becomes a child of the <see cref="GameEntity"/> it is added to - its <see cref="Parent"/>.<br/>
 /// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
 /// <br/>
-/// <see cref="Tags"/> can be added to a <see cref="GameEntity"/> to control or modify its behavior.<br/>
+/// <see cref="ECS.Behavior"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (behavior) and data to an entity.<br/>
+/// <see cref="ECS.Behavior"/>'s are added or removed with <see cref="AddBehavior{T}"/> / <see cref="RemoveBehavior{T}"/>.<br/>
+/// <br/>
+/// <see cref="Tags"/> can be added to a <see cref="GameEntity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
 /// these <see cref="Tags"/>.
 /// </summary>
