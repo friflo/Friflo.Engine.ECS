@@ -105,8 +105,7 @@ internal static class GameEntityUtils
         return null;
     }
     
-    internal static void AppendBehavior<T>(GameEntity entity, T behavior)
-        where T : Behavior
+    internal static void AppendBehavior(GameEntity entity, Behavior behavior)
     {
         behavior.entity    = entity;
         var store           = entity.archetype.gameEntityStore;

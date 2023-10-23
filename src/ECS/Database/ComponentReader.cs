@@ -90,7 +90,7 @@ internal sealed class ComponentReader
             var type = component.type;
             switch (type.kind) {
                 case ComponentKind.Behavior:
-                    // --- read class component
+                    // --- read behavior
                     component.type.ReadBehavior(componentReader, json, entity);
                     break;
                 case Component:

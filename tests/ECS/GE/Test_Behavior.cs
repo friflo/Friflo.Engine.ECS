@@ -20,7 +20,7 @@ public static class Test_Behavior
         AreEqual("id: 1  []",   player.ToString());
         AreSame(store,          player.Archetype.Store);
         
-        // --- add class component
+        // --- add behavior
         var testRef1 = new TestBehavior1 { val1 = 1 };
         IsNull(player.AddBehavior(testRef1));
         NotNull(testRef1.Entity);
