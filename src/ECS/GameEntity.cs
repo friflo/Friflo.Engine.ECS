@@ -158,9 +158,6 @@ public sealed class GameEntity
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
     [Browse(Never)] internal            int                 compIndex;          //  4
     
-    /// <summary>Container of class type components added to the entity</summary>
-    [Browse(Never)] internal            ClassComponent[]    classComponents;    //  8 - never null
-    
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
     
@@ -170,7 +167,6 @@ public sealed class GameEntity
     internal GameEntity(int id, Archetype archetype) {
         this.id         = id;
         this.archetype  = archetype;
-        classComponents = GameEntityUtils.EmptyClassComponents;
     }
     #endregion
 
@@ -239,7 +235,7 @@ public sealed class GameEntity
     
     // --------------------------------- class component methods ---------------------------------
 #region class component methods
-    public      ReadOnlySpan<ClassComponent>   ClassComponents => new (classComponents);
+    public      ReadOnlySpan<ClassComponent>   ClassComponents => new (GameEntityUtils.GetClassComponents(this));
 
     /// <returns>the entity component of Type <typeparamref name="T"/>. Otherwise null</returns>
     public T    GetClassComponent<T>()

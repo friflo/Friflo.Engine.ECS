@@ -4,6 +4,7 @@
 using System;
 using System.Text;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
+using static Friflo.Fliox.Engine.ECS.StructInfo;
 
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace
@@ -41,7 +42,8 @@ internal static class GameEntityUtils
             sb.Append("  []");
         } else {
             sb.Append("  [");
-            foreach (var refComp in entity.classComponents) {
+            var classComponents = GetClassComponents(entity);
+            foreach (var refComp in classComponents) {
                 sb.Append('*');
                 sb.Append(refComp.GetType().Name);
                 sb.Append(", ");
@@ -74,31 +76,51 @@ internal static class GameEntityUtils
     
     // ---------------------------------- ClassComponent utils ----------------------------------
     private  static readonly object[]           EmptyStructComponents   = Array.Empty<object>();
-    internal static readonly ClassComponent[]   EmptyClassComponents    = Array.Empty<ClassComponent>();
-    
-    internal static void AppendClassComponent<T>(GameEntity entity, T component)
-        where T : ClassComponent
-    {
-        component.entity        = entity;
-        ref var classComponents = ref entity.classComponents;
-        var len                 = classComponents.Length;
-        Utils.Resize(ref classComponents, len + 1);
-        classComponents[len] = component;
-    }
+    private  static readonly ClassComponent[]   EmptyClassComponents    = Array.Empty<ClassComponent>();
+    internal static readonly int                BehaviorsIndex          = StructHeap<Behaviors>.StructIndex;
     
     private static Exception MissingAttributeException(Type type) {
         var msg = $"Missing attribute [ClassComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
         return new InvalidOperationException(msg);
     }
+
+    internal static ClassComponent[] GetClassComponents(GameEntity entity) {
+        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
+        if (heap == null) {
+            return EmptyClassComponents;
+        }
+        return heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize].classComponents;
+    }
     
     internal static ClassComponent GetClassComponent(GameEntity entity, Type classType)
     {
-        foreach (var component in entity.classComponents) {
+        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
+        if (heap == null) {
+            return null;
+        }
+        var classComponents = heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize].classComponents;
+        foreach (var component in classComponents) {
             if (component.GetType() == classType) {
                 return component;
             }
         }
         return null;
+    }
+    
+    internal static void AppendClassComponent<T>(GameEntity entity, T component)
+        where T : ClassComponent
+    {
+        component.entity = entity;
+        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
+        if (heap == null) {
+            var classComponents = new ClassComponent[] { component };
+            entity.AddComponent(new Behaviors(classComponents));
+        } else {
+            ref var classComponents = ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize].classComponents;
+            var len                 = classComponents.Length;
+            Utils.Resize(ref classComponents, len + 1);
+            classComponents[len] = component;
+        }
     }
     
     internal static ClassComponent AddClassComponent(GameEntity entity, ClassComponent component, Type classType, int classIndex)
@@ -110,7 +132,14 @@ internal static class GameEntityUtils
             throw new InvalidOperationException("component already added to an entity");
         }
         component.entity    = entity;
-        var classes         = entity.classComponents;
+        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
+        if (heap == null) {
+            var classComponents = new [] { component };
+            entity.AddComponent(new Behaviors(classComponents));
+            return null;
+        }
+        ref var behaviors   = ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
+        var classes         = behaviors.classComponents;
         var len             = classes.Length;
         for (int n = 0; n < len; n++)
         {
@@ -122,20 +151,30 @@ internal static class GameEntityUtils
             }
         }
         // --- case: map does not contain a component Type
-        Utils.Resize(ref entity.classComponents, len + 1);
-        entity.classComponents[len] = component;
+        Utils.Resize(ref behaviors.classComponents, len + 1);
+        behaviors.classComponents[len] = component;
         return null;
     }
     
     internal static ClassComponent RemoveClassComponent(GameEntity entity, Type classType)
     {
-        var classes = entity.classComponents;
-        var len     = classes.Length;
+        var heap = (StructHeap<Behaviors>)entity.archetype.heapMap[BehaviorsIndex];
+        if (heap == null) {
+            return null;
+        }
+        ref var behaviors   = ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
+        var classes         = behaviors.classComponents;
+        var len             = classes.Length;
         for (int n = 0; n < len; n++)
         {
             var classComponent = classes[n];
             if (classComponent.GetType() == classType)
             {
+                if (len == 1) {
+                    classComponent.entity   = null;
+                    entity.RemoveComponent<Behaviors>();
+                    return classComponent;
+                }
                 var classComponents = new ClassComponent[len - 1];
                 for (int i = 0; i < n; i++) {
                     classComponents[i]     = classes[i];
@@ -143,8 +182,8 @@ internal static class GameEntityUtils
                 for (int i = n + 1; i < len; i++) {
                     classComponents[i - 1] = classes[i];
                 }
-                classComponent.entity   = null;
-                entity.classComponents  = classComponents;
+                classComponent.entity       = null;
+                behaviors.classComponents   = classComponents;
                 return classComponent;
             }
         }

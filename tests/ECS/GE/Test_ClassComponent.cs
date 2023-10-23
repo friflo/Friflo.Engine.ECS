@@ -26,7 +26,7 @@ public static class Test_ClassComponent
         NotNull(testRef1.Entity);
         AreSame(testRef1,       player.GetClassComponent<TestRefComponent1>());
         AreEqual(1,             player.ClassComponents.Length);
-        AreEqual("id: 1  [*TestRefComponent1]", player.ToString());
+        AreEqual("id: 1  [*TestRefComponent1, Behaviors]", player.ToString());
         AreEqual(1,             player.ClassComponents.Length);
         AreSame (testRef1,      player.ClassComponents[0]);
         
@@ -42,7 +42,7 @@ public static class Test_ClassComponent
         
         AreSame (testRef2,      player.GetClassComponent<TestRefComponent2>());
         AreEqual(2,             player.ClassComponents.Length);
-        AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
+        AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2, Behaviors]", player.ToString());
         
         var testRef3 = new TestRefComponent2();
         NotNull (player.AddClassComponent(testRef3));
@@ -50,7 +50,7 @@ public static class Test_ClassComponent
         NotNull (testRef3.Entity);
         AreSame (testRef3,      player.GetClassComponent<TestRefComponent2>());
         AreEqual(2,             player.ClassComponents.Length);
-        AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
+        AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2, Behaviors]", player.ToString());
         
         // IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
         
@@ -74,7 +74,7 @@ public static class Test_ClassComponent
         AreSame(testRef1, player.GetClassComponent<TestRefComponent1>());
         IsTrue(player.TryGetClassComponent<TestRefComponent1>(out var result));
         AreSame(testRef1, result);
-        AreEqual("id: 1  [*TestRefComponent1]", player.ToString());
+        AreEqual("id: 1  [*TestRefComponent1, Behaviors]", player.ToString());
         NotNull(testRef1.Entity);
         IsFalse(player.TryGetClassComponent<TestRefComponent2>(out _)); // classComponents.Length > 0
         
@@ -187,8 +187,8 @@ public static class Test_ClassComponent
         entity.AddComponent(new MyComponent1 { a = 1}); // class  component added via editor
         
         AreEqual(1, entity.ClassComponents.Length);
-        AreEqual(2, entity.Archetype.ComponentCount);
-        AreEqual("id: 1  [*TestComponent, Position, MyComponent1]", entity.ToString());
+        AreEqual(3, entity.Archetype.ComponentCount);
+        AreEqual("id: 1  [*TestComponent, Behaviors, Position, MyComponent1]", entity.ToString());
         AreSame(entity, test.Entity);
         test.Start();
         test.Update();

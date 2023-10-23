@@ -76,6 +76,16 @@ public static class Test_sizeof
         AreEqual("1, 2, 3", refPosition.ToString());
     }
     
+    [Test]
+    public static void Test_Behaviors_ToString()
+    {
+        var classComponents = new ClassComponent[] { new TestClassComponent() };
+        var behaviors       = new Behaviors(classComponents);
+        AreEqual("[TestClassComponent]", behaviors.ToString());
+    }
+    
+    class TestClassComponent : ClassComponent { }
+    
     // ---------------------------------------- Tests project types ------------------------------------------
     [Test]
     public static unsafe void Test_sizeof_ByteComponent() {
