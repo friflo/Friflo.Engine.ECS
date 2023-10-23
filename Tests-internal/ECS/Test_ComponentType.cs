@@ -32,9 +32,9 @@ public static class Test_ComponentType
     {
         ComponentType componentType = new TagType(typeof(string), 0);
         var e = Throws<InvalidOperationException>(() => {
-            componentType.ReadClassComponent(null, default, null);
+            componentType.ReadBehavior(null, default, null);
         });
-        AreEqual("operates only on ClassComponentType<>", e!.Message);
+        AreEqual("operates only on BehaviorType<>", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             componentType.CreateHeap();

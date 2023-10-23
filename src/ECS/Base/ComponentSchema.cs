@@ -24,7 +24,7 @@ public sealed class ComponentSchema
     public   ReadOnlySpan<ComponentType>                    Structs             => new (structs);
     /// <summary>return all class component types attributed with <see cref="BehaviorAttribute"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.classIndex"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.behaviorIndex"/> is equal to the array index<br/>
     /// <see cref="Classes"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Classes             => new (classes);
@@ -80,7 +80,7 @@ public sealed class ComponentSchema
         foreach (var classType in classList) {
             componentTypeByKey. Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
-            classes[classType.classIndex] = classType;
+            classes[classType.behaviorIndex] = classType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type,      tagType);
@@ -111,7 +111,7 @@ public sealed class ComponentSchema
     /// <summary>
     /// return <see cref="ComponentType"/> of a class attributed with <see cref="BehaviorAttribute"/> for the given type
     /// </summary>
-    public ComponentType GetClassComponentType<T>()
+    public ComponentType GetBehaviorType<T>()
         where T : Behavior
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);

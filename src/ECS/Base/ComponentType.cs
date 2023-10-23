@@ -23,7 +23,7 @@ public abstract class ComponentType
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Class"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
     /// </summary>
-    public   readonly   int             classIndex;     //  4
+    public   readonly   int             behaviorIndex;  //  4
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Structs"/>. Otherwise 0<br/>
     /// </summary>
@@ -51,21 +51,21 @@ public abstract class ComponentType
     internal virtual    StructHeap  CreateHeap          ()
         => throw new InvalidOperationException("operates only on StructComponentType<>");
     
-    internal virtual    void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException($"operates only on ClassComponentType<>");
+    internal virtual    void        ReadBehavior  (ObjectReader reader, JsonValue json, GameEntity entity)
+        => throw new InvalidOperationException($"operates only on BehaviorType<>");
     
     internal ComponentType(
         string          componentKey,
         string          tagName,
         Type            type,
         ComponentKind   kind,
-        int             classIndex,
+        int             behaviorIndex,
         int             structIndex,
         int             tagIndex)
     {
         this.componentKey   = componentKey;
         this.tagName        = tagName;
-        this.classIndex     = classIndex;
+        this.behaviorIndex  = behaviorIndex;
         this.structIndex    = structIndex;
         this.tagIndex       = tagIndex;
         this.kind           = kind;
@@ -92,26 +92,26 @@ internal sealed class StructComponentType<T> : ComponentType
     }
 }
 
-internal sealed class ClassComponentType<T> : ComponentType 
+internal sealed class BehaviorType<T> : ComponentType 
     where T : Behavior
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
     
-    internal ClassComponentType(string componentKey, int classIndex, TypeStore typeStore)
-        : base(componentKey, null, typeof(T), Class, classIndex, 0, 0)
+    internal BehaviorType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
+        : base(behaviorKey, null, typeof(T), Class, behaviorIndex, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
+    internal override void ReadBehavior(ObjectReader reader, JsonValue json, GameEntity entity) {
         var behavior = entity.GetBehavior<T>();
         if (behavior != null) { 
             reader.ReadToMapper(typeMapper, json, behavior, true);
             return;
         }
         behavior = reader.ReadMapper(typeMapper, json);
-        GameEntityUtils.AppendClassComponent(entity, behavior);
+        GameEntityUtils.AppendBehavior(entity, behavior);
     }
 }
 

@@ -9,7 +9,7 @@ using static NUnit.Framework.Assert;
 namespace Tests.ECS.GE;
 
 
-public static class Test_ClassComponent
+public static class Test_Behavior
 {
     private const long Count = 10; // 1_000_000_000L
     
@@ -52,15 +52,13 @@ public static class Test_ClassComponent
         AreEqual(2,             player.Behaviors.Length);
         AreEqual("id: 1  [*TestBehavior1, *TestBehavior2]", player.ToString());
         
-        // IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
-        
         for (long n = 0; n < Count; n++) {
             _ = player.GetBehavior<TestBehavior1>();
         }
     }
     
     [Test]
-    public static void Test_2_RemoveClassComponent() {
+    public static void Test_2_RemoveBehavior() {
         var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
@@ -88,7 +86,7 @@ public static class Test_ClassComponent
     }
     
     [Test]
-    public static void Test_3_RemoveClassComponent() {
+    public static void Test_3_RemoveBehavior() {
         var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
@@ -111,7 +109,7 @@ public static class Test_ClassComponent
         var e = Throws<InvalidOperationException>(() => {
             player.AddBehavior(testRef1); 
         });
-        AreEqual("Missing attribute [ClassComponent(\"<key>\")] on type: Tests.ECS.InvalidRefComponent", e!.Message);
+        AreEqual("Missing attribute [Behavior(\"<key>\")] on type: Tests.ECS.InvalidRefComponent", e!.Message);
         AreEqual(0, player.Behaviors.Length);
         
         var behavior = player.GetBehavior<InvalidRefComponent>();
@@ -132,7 +130,7 @@ public static class Test_ClassComponent
     }
     
     [Test]
-    public static void Test_GetClassComponent_Perf() {
+    public static void Test_GetBehavior_Perf() {
         var store   = new GameEntityStore();
         var player  = store.CreateEntity();
         player.AddBehavior(new TestBehavior1());

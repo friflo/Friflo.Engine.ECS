@@ -74,13 +74,13 @@ internal static class GameEntityUtils
         return components;
     }
     
-    // ---------------------------------- ClassComponent utils ----------------------------------
+    // ---------------------------------- Behavior utils ----------------------------------
     private  static readonly object[]   EmptyStructComponents   = Array.Empty<object>();
     private  static readonly Behavior[] EmptyBehaviors          = Array.Empty<Behavior>();
     internal const  int                 NoBehaviors             = -1;  
     
     private static Exception MissingAttributeException(Type type) {
-        var msg = $"Missing attribute [ClassComponent(\"<key>\")] on type: {type.Namespace}.{type.Name}";
+        var msg = $"Missing attribute [Behavior(\"<key>\")] on type: {type.Namespace}.{type.Name}";
         return new InvalidOperationException(msg);
     }
 
@@ -105,7 +105,7 @@ internal static class GameEntityUtils
         return null;
     }
     
-    internal static void AppendClassComponent<T>(GameEntity entity, T behavior)
+    internal static void AppendBehavior<T>(GameEntity entity, T behavior)
         where T : Behavior
     {
         behavior.entity    = entity;

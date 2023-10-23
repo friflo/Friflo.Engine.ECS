@@ -58,7 +58,7 @@ class TestBehavior3 : Behavior {
     public int  val3;
 }
 
-// test missing [ClassComponent()] attribute
+// test missing [Behavior()] attribute
 class InvalidRefComponent : Behavior { }
 
 

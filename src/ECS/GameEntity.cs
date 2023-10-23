@@ -257,7 +257,7 @@ public sealed class GameEntity
     /// <returns>the component previously added to the entity.</returns>
     public T AddBehavior<T>(T behavior) 
         where T : Behavior
-    => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.ClassIndex);
+    => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
     
     
     /// <returns>the component previously added to the entity.</returns>

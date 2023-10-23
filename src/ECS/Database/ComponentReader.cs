@@ -91,7 +91,7 @@ internal sealed class ComponentReader
             switch (type.kind) {
                 case Class:
                     // --- read class component
-                    component.type.ReadClassComponent(componentReader, json, entity);
+                    component.type.ReadBehavior(componentReader, json, entity);
                     break;
                 case Struct:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required

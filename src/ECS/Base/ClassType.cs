@@ -10,13 +10,13 @@ namespace Friflo.Fliox.Engine.ECS;
 internal static class ClassType<T>
     where T : Behavior
 {
-    internal static readonly    int     ClassIndex  = ClassUtils.NewClassIndex(typeof(T), out ClassKey);
-    internal static readonly    string  ClassKey;
+    internal static readonly    int     BehaviorIndex  = ClassUtils.NewClassIndex(typeof(T), out BehaviorKey);
+    internal static readonly    string  BehaviorKey;
 }
 
 internal static class ClassUtils
 {
-    private  static     int     _nextClassIndex     = 1;
+    private  static     int     _nextBehaviorIndex     = 1;
 
     internal const      int     MissingAttribute    = 0;
 
@@ -27,7 +27,7 @@ internal static class ClassUtils
             }
             var arg     = attr.ConstructorArguments;
             classKey    = (string) arg[0].Value;
-            return _nextClassIndex++;
+            return _nextBehaviorIndex++;
         }
         classKey = null;
         return MissingAttribute;

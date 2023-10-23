@@ -18,7 +18,7 @@ public static class Test_ComponentSchema
             var type = tags[n];
             AreEqual(n,                 type.tagIndex);
             AreEqual(0,                 type.structIndex);
-            AreEqual(0,                 type.classIndex);
+            AreEqual(0,                 type.behaviorIndex);
             AreEqual(ComponentKind.Tag, type.kind);
             IsNull(type.componentKey);
         }
@@ -47,14 +47,14 @@ public static class Test_ComponentSchema
             var type = structs[n];
             AreEqual(n, type.structIndex);
             AreEqual(0, type.tagIndex);
-            AreEqual(0, type.classIndex);
+            AreEqual(0, type.behaviorIndex);
             AreEqual(ComponentKind.Struct, type.kind);
             NotNull (type.componentKey);
         }
         IsNull(classes[0]);
         for (int n = 1; n < classes.Length; n++) {
             var type = classes[n];
-            AreEqual(n, type.classIndex);
+            AreEqual(n, type.behaviorIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.structIndex);
             AreEqual(ComponentKind.Class, type.kind);
@@ -71,7 +71,7 @@ public static class Test_ComponentSchema
         AreEqual("my1",                             myComponentType.componentKey);
         AreEqual("struct component: [MyComponent1]",  myComponentType.ToString());
         
-        var testComponentType = schema.GetClassComponentType<TestComponent>();
+        var testComponentType = schema.GetBehaviorType<TestComponent>();
         AreEqual("test",                            testComponentType.componentKey);
         AreEqual("class component: [*TestComponent]", testComponentType.ToString());
         
