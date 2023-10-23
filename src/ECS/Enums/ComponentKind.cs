@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public enum ComponentKind
 {
     /// <summary>Declare a <see cref="ComponentType"/> is a <b>struct</b> component</summary>
-    Struct      = 0,
+    Component   = 0,
     /// <summary>Declare a <see cref="ComponentType"/> is a <b>class</b> component</summary>
     Behavior    = 1,
     /// <summary>Declare a <see cref="ComponentType"/> is a entity <b>Tag</b></summary>

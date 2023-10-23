@@ -93,7 +93,7 @@ internal sealed class ComponentReader
                     // --- read class component
                     component.type.ReadBehavior(componentReader, json, entity);
                     break;
-                case Struct:
+                case Component:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
@@ -143,7 +143,7 @@ internal sealed class ComponentReader
             ref var component   = ref components[n];
             var type            = componentTypeByKey[component.key];
             component.type      = type;
-            if (type.kind != Struct) {
+            if (type.kind != Component) {
                 continue;
             }
             hasStructComponent = true;
@@ -161,7 +161,7 @@ internal sealed class ComponentReader
         structTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
-            if (component.type.kind == Struct) {
+            if (component.type.kind == Component) {
                 structTypes.Add(component.type);
             }
         }

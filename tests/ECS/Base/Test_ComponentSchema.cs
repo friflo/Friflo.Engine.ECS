@@ -48,7 +48,7 @@ public static class Test_ComponentSchema
             AreEqual(n, type.structIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.behaviorIndex);
-            AreEqual(ComponentKind.Struct, type.kind);
+            AreEqual(ComponentKind.Component, type.kind);
             NotNull (type.componentKey);
         }
         IsNull(behaviors[0]);

@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ComponentType
 {
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/> the key assigned in <see cref="ComponentAttribute"/><br/>
+    /// If <see cref="kind"/> == <see cref="Component"/> the key assigned in <see cref="ComponentAttribute"/><br/>
     /// If <see cref="kind"/> == <see cref="Behavior"/>  the key assigned in <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   string          componentKey;   //  8
@@ -25,7 +25,7 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   int             behaviorIndex;  //  4
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/> the index in <see cref="ComponentSchema.Components"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="ComponentSchema.Components"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             structIndex;    //  4
     /// <summary>
@@ -34,13 +34,13 @@ public abstract class ComponentType
     public   readonly   int             tagIndex;       //  4
     /// <returns>
     /// <see cref="Behavior"/> if the type is a <see cref="Behavior"/><br/>
-    /// <see cref="Struct"/> if the type is a <see cref="IComponent"/><br/>
+    /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
     public   readonly   ComponentKind   kind;           //  4
     
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a component attributed with <see cref="ComponentAttribute"/><br/>
+    /// If <see cref="kind"/> == <see cref="Component"/> the type of a component attributed with <see cref="ComponentAttribute"/><br/>
     /// If <see cref="kind"/> == <see cref="Behavior"/> the type of a behavior attributed with <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
@@ -83,7 +83,7 @@ internal sealed class StructComponentType<T> : ComponentType
     public  override    string          ToString() => $"component: [{typeof(T).Name}]";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, null, typeof(T), Struct, 0, structIndex, 0)
+        : base(componentKey, null, typeof(T), Component, 0, structIndex, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
