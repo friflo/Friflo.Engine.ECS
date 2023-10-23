@@ -116,7 +116,7 @@ public sealed class RawEntityStore : EntityStore
     }
     
     public ref T GetEntityComponent<T>(int id)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         ref var entity  = ref entities[id];
         var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructHeap<T>.StructIndex];
@@ -124,7 +124,7 @@ public sealed class RawEntityStore : EntityStore
     }
     
     public bool AddEntityComponent<T>(int id, in T component)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
@@ -134,7 +134,7 @@ public sealed class RawEntityStore : EntityStore
     }
     
     public bool RemoveEntityComponent<T>(int id)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];

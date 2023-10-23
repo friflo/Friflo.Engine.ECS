@@ -50,7 +50,7 @@ internal static class ComponentUtils
         foreach (var attr in type.CustomAttributes)
         {
             var attributeType = attr.AttributeType;
-            if (attributeType == typeof(StructComponentAttribute))
+            if (attributeType == typeof(ComponentAttribute))
             {
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateStructFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
@@ -71,7 +71,7 @@ internal static class ComponentUtils
     }
     
     internal static ComponentType CreateStructFactory<T>(TypeStore typeStore)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
         var structKey   = StructHeap<T>.StructKey;

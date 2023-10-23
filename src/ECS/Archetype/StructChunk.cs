@@ -13,7 +13,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate <see cref="StructHeap{T}.chunks"/> for collection.
 /// </remarks>
 internal readonly struct StructChunk<T>
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     // Note! Must not contain any other field. See <remarks>
     internal readonly   T[]     components;   // 8
@@ -26,7 +26,7 @@ internal readonly struct StructChunk<T>
 }
 
 public readonly struct Chunk<T>
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     public              Span<T> Values => new(values, 0, count);
 

@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public struct Ref<T>
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     /// <summary>
     /// Returns a mutable struct component value by reference.<br/>

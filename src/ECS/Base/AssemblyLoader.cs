@@ -117,7 +117,7 @@ internal sealed class AssemblyLoader
         {
             if (type.IsValueType) {
                 var attributeType = attr.AttributeType;
-                if (attributeType == typeof(StructComponentAttribute)) {
+                if (attributeType == typeof(ComponentAttribute)) {
                     componentTypes.Add(type);
                 }
             }

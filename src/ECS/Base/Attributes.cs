@@ -12,8 +12,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b><c>struct</c></b> components are the preferred when dealing with a large amount (> 1.000) of <see cref="GameEntity"/>'s. 
 /// </summary>
 [AttributeUsage(AttributeTargets.Struct)]
-public sealed class StructComponentAttribute : Attribute {
-    public StructComponentAttribute (string key) { }
+public sealed class ComponentAttribute : Attribute {
+    public ComponentAttribute (string key) { }
 }
 
 /// <summary>

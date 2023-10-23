@@ -121,7 +121,7 @@ public class ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T> : ArchetypeQuery
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     public new ArchetypeQuery<T> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -131,8 +131,8 @@ public sealed class ArchetypeQuery<T> : ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
 {
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
@@ -144,7 +144,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     }
     
     public ArchetypeQuery<T1, T2> ReadOnly<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
         if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
@@ -157,9 +157,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
-    where T3 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
 {
     public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -169,10 +169,10 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
-    where T3 : struct, IStructComponent
-    where T4 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent
 {
     public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -182,11 +182,11 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
-    where T3 : struct, IStructComponent
-    where T4 : struct, IStructComponent
-    where T5 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent
+    where T5 : struct, IComponent
 {
     public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     

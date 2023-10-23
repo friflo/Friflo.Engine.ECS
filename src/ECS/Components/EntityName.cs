@@ -10,8 +10,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-[StructComponent("name")]
-public struct EntityName : IStructComponent
+[Component("name")]
+public struct EntityName : IComponent
 {
                             public  string              Value   { readonly get => value; set => SetValue(value); }
     [Browse(Never)] public readonly ReadOnlySpan<byte>  Utf8    => new (utf8);

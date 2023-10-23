@@ -18,7 +18,7 @@ internal static class StructUtils
     
     internal static int NewStructIndex(Type type, out string structKey) {
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(StructComponentAttribute)) {
+            if (attr.AttributeType != typeof(ComponentAttribute)) {
                 continue;
             }
             var arg     = attr.ConstructorArguments;

@@ -175,13 +175,13 @@ public sealed class GameEntity
 
     // --------------------------------- struct component methods --------------------------------
 #region struct component methods
-    public  bool    HasComponent<T> () where T : struct, IStructComponent
+    public  bool    HasComponent<T> () where T : struct, IComponent
                         => archetype.heapMap[StructHeap<T>.StructIndex] != null;
 
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T   GetComponent<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         var heap = (StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex];
         return ref heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
@@ -189,7 +189,7 @@ public sealed class GameEntity
     
     /// <remarks>Executes in O(1)</remarks>
     public bool     TryGetComponent<T>(out T result)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         var heap = archetype.heapMap[StructHeap<T>.StructIndex];
         if (heap == null) {
@@ -203,7 +203,7 @@ public sealed class GameEntity
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         return archetype.store.AddComponent<T>(id, ref archetype, ref compIndex, default);
     }
@@ -211,7 +211,7 @@ public sealed class GameEntity
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         return archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
     }
@@ -219,7 +219,7 @@ public sealed class GameEntity
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool RemoveComponent<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         return archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     }

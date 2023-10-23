@@ -26,7 +26,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_ComponentAttribute()
     {
-        _ = new StructComponentAttribute("abc");
+        _ = new ComponentAttribute("abc");
         _ = new BehaviorAttribute("xyz");
         
         var type = typeof(Test_Archetype);

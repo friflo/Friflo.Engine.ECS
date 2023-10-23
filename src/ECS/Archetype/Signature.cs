@@ -32,7 +32,7 @@ public static class Signature
     /// </list> 
     /// </summary>
     public static Signature<T> Get<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes   = new SignatureIndexes(1,
@@ -50,8 +50,8 @@ public static class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2> Get<T1, T2>()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(2,
@@ -70,9 +70,9 @@ public static class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3> Get<T1, T2, T3>()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
-        where T3 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(3,
@@ -92,10 +92,10 @@ public static class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3, T4> Get<T1, T2, T3, T4>()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
-        where T3 : struct, IStructComponent
-        where T4 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(4,
@@ -116,11 +116,11 @@ public static class Signature
     /// </list> 
     /// </summary>
     public static Signature<T1, T2, T3, T4, T5> Get<T1, T2, T3, T4, T5>()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
-        where T3 : struct, IStructComponent
-        where T4 : struct, IStructComponent
-        where T5 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
     {
         var schema  = EntityStore.Static.ComponentSchema;
         var indexes = new SignatureIndexes(5,
@@ -139,7 +139,7 @@ public static class Signature
 #region generic Signature<> types
 
 public readonly struct Signature<T>
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
@@ -153,8 +153,8 @@ public readonly struct Signature<T>
 }
 
 public readonly struct Signature<T1, T2>
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
@@ -168,9 +168,9 @@ public readonly struct Signature<T1, T2>
 }
 
 public readonly struct Signature<T1, T2, T3>
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
-    where T3 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
@@ -185,10 +185,10 @@ public readonly struct Signature<T1, T2, T3>
 }
 
 public readonly struct Signature<T1, T2, T3, T4>
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
-    where T3 : struct, IStructComponent
-    where T4 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;
@@ -202,11 +202,11 @@ public readonly struct Signature<T1, T2, T3, T4>
 }
 
 public readonly struct Signature<T1, T2, T3, T4, T5>
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
-    where T3 : struct, IStructComponent
-    where T4 : struct, IStructComponent
-    where T5 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent
+    where T5 : struct, IComponent
 {
     public                              ArchetypeStructs    Structs     => new ArchetypeStructs(signatureIndexes);
     [Browse(Never)] public              int                 StructCount => signatureIndexes.length;

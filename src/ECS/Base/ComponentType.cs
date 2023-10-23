@@ -14,14 +14,14 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ComponentType
 {
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/> the key assigned in <see cref="StructComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Class"/>  the key assigned in <see cref="BehaviorAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Struct"/> the key assigned in <see cref="ComponentAttribute"/><br/>
+    /// If <see cref="kind"/> == <see cref="Behavior"/>  the key assigned in <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   string          componentKey;   //  8
     
     public   readonly   string          tagName;        //  8
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Class"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Behavior"/> the index in <see cref="ComponentSchema.Classes"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             behaviorIndex;  //  4
     /// <summary>
@@ -33,15 +33,15 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   int             tagIndex;       //  4
     /// <returns>
-    /// <see cref="Class"/> if the type is a <see cref="Behavior"/><br/>
-    /// <see cref="Struct"/> if the type is a <see cref="IStructComponent"/><br/>
+    /// <see cref="Behavior"/> if the type is a <see cref="Behavior"/><br/>
+    /// <see cref="Struct"/> if the type is a <see cref="IComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
     public   readonly   ComponentKind   kind;           //  4
     
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a struct component attributed with <see cref="StructComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Class"/> the type of a class  component attributed with <see cref="BehaviorAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a struct component attributed with <see cref="ComponentAttribute"/><br/>
+    /// If <see cref="kind"/> == <see cref="Behavior"/> the type of a class  component attributed with <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
     
@@ -77,7 +77,7 @@ public abstract class ComponentType
 }
 
 internal sealed class StructComponentType<T> : ComponentType 
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"struct component: [{typeof(T).Name}]";
@@ -99,7 +99,7 @@ internal sealed class BehaviorType<T> : ComponentType
     public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
     
     internal BehaviorType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
-        : base(behaviorKey, null, typeof(T), Class, behaviorIndex, 0, 0)
+        : base(behaviorKey, null, typeof(T), ComponentKind.Behavior, behaviorIndex, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }

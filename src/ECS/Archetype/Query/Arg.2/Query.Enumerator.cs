@@ -8,8 +8,8 @@ using static Friflo.Fliox.Engine.ECS.StructInfo;
 namespace Friflo.Fliox.Engine.ECS;
 
 public ref struct QueryEnumerator<T1, T2>
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
 {
     private readonly    T1[]                    copyT1;
     private readonly    T2[]                    copyT2;

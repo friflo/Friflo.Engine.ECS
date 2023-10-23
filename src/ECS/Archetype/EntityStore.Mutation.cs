@@ -92,7 +92,7 @@ public partial class EntityStore
         ref Archetype   archetype,  // possible mutation is not null
         ref int         compIndex,
         in  T           component)
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         var arch        = archetype;
         var structIndex = StructHeap<T>.StructIndex;

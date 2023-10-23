@@ -53,23 +53,23 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     
     // ----------------------------------------- structs getter -----------------------------------------
     public readonly bool    Has<T> ()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         return bitSet.Has(StructHeap<T>.StructIndex);
     }
     
     public readonly bool    Has<T1, T2> ()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
     {
         return bitSet.Has(StructHeap<T1>.StructIndex) &&
                bitSet.Has(StructHeap<T2>.StructIndex);
     }
 
     public readonly bool    Has<T1, T2, T3> ()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
-        where T3 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
     {
         return bitSet.Has(StructHeap<T1>.StructIndex) &&
                bitSet.Has(StructHeap<T2>.StructIndex) &&
@@ -96,7 +96,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
     
     public void Add<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         SetBit(StructHeap<T>.StructIndex);
     }
@@ -107,7 +107,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
     
     public void Remove<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         ClearBit(StructHeap<T>.StructIndex);
     }
@@ -119,7 +119,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     
     // ----------------------------------------- static methods -----------------------------------------    
     public static ArchetypeStructs Get<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         var structs = new ArchetypeStructs();
         structs.SetBit(StructHeap<T>.StructIndex);
@@ -127,8 +127,8 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
     }
     
     public static ArchetypeStructs Get<T1, T2>()
-        where T1 : struct, IStructComponent
-        where T2 : struct, IStructComponent
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
     {
         var structs = new ArchetypeStructs();
         structs.SetBit(StructHeap<T1>.StructIndex);

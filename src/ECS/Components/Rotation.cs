@@ -12,9 +12,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-[StructComponent("rot")]
+[Component("rot")]
 [StructLayout(LayoutKind.Explicit)]
-public struct  Rotation : IStructComponent
+public struct  Rotation : IComponent
 {
     [Browse(Never)]
     [Ignore]

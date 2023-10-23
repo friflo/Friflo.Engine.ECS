@@ -11,16 +11,16 @@ public sealed class CodeCoverageTestAttribute : Attribute { }
 
 // ------------------------------------------------ struct components
 [CodeCoverageTest]
-[StructComponent("my1")]
-public struct MyComponent1 : IStructComponent { public int a; }
+[Component("my1")]
+public struct MyComponent1 : IComponent { public int a; }
 
-[StructComponent("my2")]
-public struct MyComponent2 : IStructComponent { public int b; }
+[Component("my2")]
+public struct MyComponent2 : IComponent { public int b; }
 
 
 [CodeCoverageTest]
-[StructComponent("byte")]
-public struct ByteComponent : IStructComponent { public byte b; }
+[Component("byte")]
+public struct ByteComponent : IComponent { public byte b; }
 
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
 public static class EntityExtensions
@@ -30,7 +30,7 @@ public static class EntityExtensions
 }
 
 // test missing [StructComponent()] attribute
-struct MyInvalidComponent  : IStructComponent { public int b; }
+struct MyInvalidComponent : IComponent { public int b; }
 
 
 // ------------------------------------------------ tags

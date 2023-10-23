@@ -16,7 +16,7 @@ public sealed class ComponentSchema
 #region public properties
     /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
     public   ReadOnlySpan<Assembly>                         EngineDependants    => new (engineDependants);
-    /// <summary>return all struct component types attributed with <see cref="StructComponentAttribute"/></summary>
+    /// <summary>return all struct component types attributed with <see cref="ComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Structs"/>[0] is always null
@@ -91,7 +91,7 @@ public sealed class ComponentSchema
     
     /// <summary>
     /// return <see cref="ComponentType"/> of a component type attributed with
-    /// <see cref="StructComponentAttribute"/> or <see cref="BehaviorAttribute"/> for the given key
+    /// <see cref="ComponentAttribute"/> or <see cref="BehaviorAttribute"/> for the given key
     /// </summary>
     public ComponentType GetComponentTypeByKey(string key) {
         componentTypeByKey.TryGetValue(key, out var result);
@@ -99,10 +99,10 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="StructComponentAttribute"/> for the given key
+    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
     /// </summary>
     public ComponentType GetStructComponentType<T>()
-        where T : struct, IStructComponent
+        where T : struct, IComponent
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
         return result;

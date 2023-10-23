@@ -8,8 +8,8 @@ using static Friflo.Fliox.Engine.ECS.StructInfo;
 namespace Friflo.Fliox.Engine.ECS;
 
 public readonly struct QueryForEach<T1, T2>
-    where T1 : struct, IStructComponent
-    where T2 : struct, IStructComponent
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
 {
     private readonly    ArchetypeQuery<T1,T2>       query;
     private readonly    Action<Ref<T1>, Ref<T2>>    lambda;

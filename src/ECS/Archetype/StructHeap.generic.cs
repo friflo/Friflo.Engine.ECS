@@ -18,7 +18,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   for collection.
 /// </remarks>
 internal sealed class StructHeap<T> : StructHeap
-    where T : struct, IStructComponent
+    where T : struct, IComponent
 {
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
