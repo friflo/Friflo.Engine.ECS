@@ -43,27 +43,27 @@ public struct TestTag3 : IEntityTag { }
 
 // ------------------------------------------------ class components
 [CodeCoverageTest]
-[ClassComponent("testRef1")]
-class TestRefComponent1 : ClassComponent {
+[Behavior("testRef1")]
+class TestBehavior1 : Behavior {
     public int  val1;
 }
 
-[ClassComponent("testRef2")]
-class TestRefComponent2 : ClassComponent {
+[Behavior("testRef2")]
+class TestBehavior2 : Behavior {
     public int  val2;
 }
 
-[ClassComponent("testRef3")]
-class TestRefComponent3 : ClassComponent {
+[Behavior("testRef3")]
+class TestBehavior3 : Behavior {
     public int  val3;
 }
 
 // test missing [ClassComponent()] attribute
-class InvalidRefComponent : ClassComponent { }
+class InvalidRefComponent : Behavior { }
 
 
-[ClassComponent("test")]
-class TestComponent : ClassComponent
+[Behavior("test")]
+class TestComponent : Behavior
 {
     private int                      health;     // is serialized
     

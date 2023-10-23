@@ -8,7 +8,7 @@ using System;
 namespace Friflo.Fliox.Engine.ECS;
 
 internal static class ClassType<T>
-    where T : ClassComponent
+    where T : Behavior
 {
     internal static readonly    int     ClassIndex  = ClassUtils.NewClassIndex(typeof(T), out ClassKey);
     internal static readonly    string  ClassKey;
@@ -22,7 +22,7 @@ internal static class ClassUtils
 
     internal static int NewClassIndex(Type type, out string classKey) {
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(ClassComponentAttribute)) {
+            if (attr.AttributeType != typeof(BehaviorAttribute)) {
                 continue;
             }
             var arg     = attr.ConstructorArguments;

@@ -82,12 +82,12 @@ public static class Test_sizeof
         var behaviors       = new Behaviors();
         AreEqual("unused", behaviors.ToString());
         
-        var classComponents = new ClassComponent[] { new TestClassComponent() };
+        var classComponents = new Behavior[] { new TestBehavior() };
         behaviors       = new Behaviors(1, classComponents);
-        AreEqual("id: 1  [TestClassComponent]", behaviors.ToString());
+        AreEqual("id: 1  [TestBehavior]", behaviors.ToString());
     }
     
-    class TestClassComponent : ClassComponent { }
+    class TestBehavior : Behavior { }
     
     // ---------------------------------------- Tests project types ------------------------------------------
     [Test]

@@ -15,7 +15,7 @@ public abstract class ComponentType
 {
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Struct"/> the key assigned in <see cref="StructComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Class"/>  the key assigned in <see cref="ClassComponentAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Class"/>  the key assigned in <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   string          componentKey;   //  8
     
@@ -33,7 +33,7 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   int             tagIndex;       //  4
     /// <returns>
-    /// <see cref="Class"/> if the type is a <see cref="ClassComponent"/><br/>
+    /// <see cref="Class"/> if the type is a <see cref="Behavior"/><br/>
     /// <see cref="Struct"/> if the type is a <see cref="IStructComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
@@ -41,7 +41,7 @@ public abstract class ComponentType
     
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Struct"/>  the type of a struct component attributed with <see cref="StructComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Class"/> the type of a class  component attributed with <see cref="ClassComponentAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Class"/> the type of a class  component attributed with <see cref="BehaviorAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
     
@@ -52,7 +52,7 @@ public abstract class ComponentType
         => throw new InvalidOperationException("operates only on StructComponentType<>");
     
     internal virtual    void        ReadClassComponent  (ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException("operates only on ClassComponentType<>");
+        => throw new InvalidOperationException($"operates only on ClassComponentType<>");
     
     internal ComponentType(
         string          componentKey,
@@ -93,7 +93,7 @@ internal sealed class StructComponentType<T> : ComponentType
 }
 
 internal sealed class ClassComponentType<T> : ComponentType 
-    where T : ClassComponent
+    where T : Behavior
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"class component: [*{typeof(T).Name}]";
@@ -105,13 +105,13 @@ internal sealed class ClassComponentType<T> : ComponentType
     }
     
     internal override void ReadClassComponent(ObjectReader reader, JsonValue json, GameEntity entity) {
-        var classComponent = entity.GetClassComponent<T>();
-        if (classComponent != null) { 
-            reader.ReadToMapper(typeMapper, json, classComponent, true);
+        var behavior = entity.GetBehavior<T>();
+        if (behavior != null) { 
+            reader.ReadToMapper(typeMapper, json, behavior, true);
             return;
         }
-        classComponent = reader.ReadMapper(typeMapper, json);
-        GameEntityUtils.AppendClassComponent(entity, classComponent);
+        behavior = reader.ReadMapper(typeMapper, json);
+        GameEntityUtils.AppendClassComponent(entity, behavior);
     }
 }
 

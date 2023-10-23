@@ -21,41 +21,41 @@ public static class Test_ClassComponent
         AreSame(store,          player.Archetype.Store);
         
         // --- add class component
-        var testRef1 = new TestRefComponent1 { val1 = 1 };
-        IsNull(player.AddClassComponent(testRef1));
+        var testRef1 = new TestBehavior1 { val1 = 1 };
+        IsNull(player.AddBehavior(testRef1));
         NotNull(testRef1.Entity);
-        AreSame(testRef1,       player.GetClassComponent<TestRefComponent1>());
-        AreEqual(1,             player.ClassComponents.Length);
-        AreEqual("id: 1  [*TestRefComponent1]", player.ToString());
-        AreEqual(1,             player.ClassComponents.Length);
-        AreSame (testRef1,      player.ClassComponents[0]);
+        AreSame(testRef1,       player.GetBehavior<TestBehavior1>());
+        AreEqual(1,             player.Behaviors.Length);
+        AreEqual("id: 1  [*TestBehavior1]", player.ToString());
+        AreEqual(1,             player.Behaviors.Length);
+        AreSame (testRef1,      player.Behaviors[0]);
         
         var e = Throws<InvalidOperationException> (() => {
-            player.AddClassComponent(testRef1);
+            player.AddBehavior(testRef1);
         });
         AreEqual("component already added to an entity", e!.Message);
-        AreEqual(1,             player.ClassComponents.Length);
+        AreEqual(1,             player.Behaviors.Length);
         
-        var testRef2 = new TestRefComponent2 { val2 = 2 };
-        IsNull (player.AddClassComponent(testRef2));
+        var testRef2 = new TestBehavior2 { val2 = 2 };
+        IsNull (player.AddBehavior(testRef2));
         NotNull (testRef2.Entity);
         
-        AreSame (testRef2,      player.GetClassComponent<TestRefComponent2>());
-        AreEqual(2,             player.ClassComponents.Length);
-        AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
+        AreSame (testRef2,      player.GetBehavior<TestBehavior2>());
+        AreEqual(2,             player.Behaviors.Length);
+        AreEqual("id: 1  [*TestBehavior1, *TestBehavior2]", player.ToString());
         
-        var testRef3 = new TestRefComponent2();
-        NotNull (player.AddClassComponent(testRef3));
+        var testRef3 = new TestBehavior2();
+        NotNull (player.AddBehavior(testRef3));
         IsNull  (testRef2.Entity);
         NotNull (testRef3.Entity);
-        AreSame (testRef3,      player.GetClassComponent<TestRefComponent2>());
-        AreEqual(2,             player.ClassComponents.Length);
-        AreEqual("id: 1  [*TestRefComponent1, *TestRefComponent2]", player.ToString());
+        AreSame (testRef3,      player.GetBehavior<TestBehavior2>());
+        AreEqual(2,             player.Behaviors.Length);
+        AreEqual("id: 1  [*TestBehavior1, *TestBehavior2]", player.ToString());
         
         // IsTrue(ClassUtils.RegisteredClassComponentKeys.ContainsKey(typeof(TestRefComponent1)));
         
         for (long n = 0; n < Count; n++) {
-            _ = player.GetClassComponent<TestRefComponent1>();
+            _ = player.GetBehavior<TestBehavior1>();
         }
     }
     
@@ -64,27 +64,27 @@ public static class Test_ClassComponent
         var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
-        var testRef1 = new TestRefComponent1();
-        IsFalse(player.TryGetClassComponent<TestRefComponent1>(out _));
-        IsNull(player.RemoveClassComponent<TestRefComponent1>());
+        var testRef1 = new TestBehavior1();
+        IsFalse(player.TryGetBehavior<TestBehavior1>(out _));
+        IsNull(player.RemoveBehavior<TestBehavior1>());
         AreEqual("id: 1  []",                   player.ToString());
-        AreEqual("[*TestRefComponent1]",        testRef1.ToString());
+        AreEqual("[*TestBehavior1]",        testRef1.ToString());
         
-        player.AddClassComponent(testRef1);
-        AreSame(testRef1, player.GetClassComponent<TestRefComponent1>());
-        IsTrue(player.TryGetClassComponent<TestRefComponent1>(out var result));
+        player.AddBehavior(testRef1);
+        AreSame(testRef1, player.GetBehavior<TestBehavior1>());
+        IsTrue(player.TryGetBehavior<TestBehavior1>(out var result));
         AreSame(testRef1, result);
-        AreEqual("id: 1  [*TestRefComponent1]", player.ToString());
+        AreEqual("id: 1  [*TestBehavior1]", player.ToString());
         NotNull(testRef1.Entity);
-        IsFalse(player.TryGetClassComponent<TestRefComponent2>(out _)); // classComponents.Length > 0
+        IsFalse(player.TryGetBehavior<TestBehavior2>(out _)); // classComponents.Length > 0
         
-        NotNull(player.RemoveClassComponent<TestRefComponent1>());
-        IsNull(player.GetClassComponent<TestRefComponent1>());
-        IsFalse(player.TryGetClassComponent<TestRefComponent1>(out _));
+        NotNull(player.RemoveBehavior<TestBehavior1>());
+        IsNull(player.GetBehavior<TestBehavior1>());
+        IsFalse(player.TryGetBehavior<TestBehavior1>(out _));
         AreEqual("id: 1  []",                   player.ToString());
         IsNull(testRef1.Entity);
         
-        IsNull(player.RemoveClassComponent<TestRefComponent1>());
+        IsNull(player.RemoveBehavior<TestBehavior1>());
     }
     
     [Test]
@@ -92,14 +92,14 @@ public static class Test_ClassComponent
         var store   = new GameEntityStore();
         var player = store.CreateEntity();
         
-        IsNull (player.AddClassComponent(new TestRefComponent1 { val1 = 1 }));
-        IsNull (player.AddClassComponent(new TestRefComponent2 { val2 = 2 }));
-        IsNull (player.AddClassComponent(new TestRefComponent3 { val3 = 3 }));
-        NotNull(player.RemoveClassComponent<TestRefComponent2>());
+        IsNull (player.AddBehavior(new TestBehavior1 { val1 = 1 }));
+        IsNull (player.AddBehavior(new TestBehavior2 { val2 = 2 }));
+        IsNull (player.AddBehavior(new TestBehavior3 { val3 = 3 }));
+        NotNull(player.RemoveBehavior<TestBehavior2>());
         
-        NotNull(player.GetClassComponent<TestRefComponent1>());
-        IsNull (player.GetClassComponent<TestRefComponent2>());
-        NotNull(player.GetClassComponent<TestRefComponent3>());
+        NotNull(player.GetBehavior<TestBehavior1>());
+        IsNull (player.GetBehavior<TestBehavior2>());
+        NotNull(player.GetBehavior<TestBehavior3>());
     }
     
     [Test]
@@ -109,16 +109,16 @@ public static class Test_ClassComponent
         
         var testRef1 = new InvalidRefComponent();
         var e = Throws<InvalidOperationException>(() => {
-            player.AddClassComponent(testRef1); 
+            player.AddBehavior(testRef1); 
         });
         AreEqual("Missing attribute [ClassComponent(\"<key>\")] on type: Tests.ECS.InvalidRefComponent", e!.Message);
-        AreEqual(0, player.ClassComponents.Length);
+        AreEqual(0, player.Behaviors.Length);
         
-        var component = player.GetClassComponent<InvalidRefComponent>();
-        IsNull(component);
+        var behavior = player.GetBehavior<InvalidRefComponent>();
+        IsNull(behavior);
         
         // throws currently no exception
-        player.RemoveClassComponent<InvalidRefComponent>();
+        player.RemoveBehavior<InvalidRefComponent>();
     }
     
     [Test]
@@ -135,12 +135,12 @@ public static class Test_ClassComponent
     public static void Test_GetClassComponent_Perf() {
         var store   = new GameEntityStore();
         var player  = store.CreateEntity();
-        player.AddClassComponent(new TestRefComponent1());
-        NotNull(player.GetClassComponent<TestRefComponent1>());
+        player.AddBehavior(new TestBehavior1());
+        NotNull(player.GetBehavior<TestBehavior1>());
         
         const int count = 10; // 1_000_000_000 ~ 5.730 ms
         for (long n = 0; n < count; n++) {
-            player.GetClassComponent<TestRefComponent1>();
+            player.GetBehavior<TestBehavior1>();
         }
     }
     
@@ -152,18 +152,18 @@ public static class Test_ClassComponent
         
         const int count = 10; // 100_000_000 ~ 4.534 ms
         for (long n = 0; n < count; n++) {
-            var testRef1 = new TestRefComponent1();
-            player.AddClassComponent(testRef1);
-            player.RemoveClassComponent<TestRefComponent1>();
+            var testRef1 = new TestBehavior1();
+            player.AddBehavior(testRef1);
+            player.RemoveBehavior<TestBehavior1>();
         }
     }
     
-    [ClassComponent("empty")]
-    private class EmptyClassComponent : ClassComponent { }
+    [Behavior("empty")]
+    private class EmptyBehavior : Behavior { }
     
     [Test]
     public static void Test_Empty_Lifecycle_methods() {
-        var empty = new EmptyClassComponent();
+        var empty = new EmptyBehavior();
         empty.Start();
         empty.Update();
     }
@@ -182,11 +182,11 @@ public static class Test_ClassComponent
         var entity  = store.CreateEntity();
         
         var test    = new TestComponent();
-        entity.AddClassComponent(test);                 // struct component added via editor
+        entity.AddBehavior(test);                 // struct component added via editor
         entity.AddComponent(new Position { x = 1 });    // class  component added via editor
         entity.AddComponent(new MyComponent1 { a = 1}); // class  component added via editor
         
-        AreEqual(1, entity.ClassComponents.Length);
+        AreEqual(1, entity.Behaviors.Length);
         AreEqual(2, entity.Archetype.ComponentCount);
         AreEqual("id: 1  [*TestComponent, Position, MyComponent1]", entity.ToString());
         AreSame(entity, test.Entity);

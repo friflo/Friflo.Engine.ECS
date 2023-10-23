@@ -79,7 +79,7 @@ public static class Test_ComponentReader
         TestUtils.CreateGameEntityStore(out var database);
         var node    = new DatabaseEntity { pid = 10, components = default };
         var entity  = database.LoadEntity(node, out var error);
-        AreEqual(0, entity.ClassComponents.Length + entity.Archetype.ComponentCount);
+        AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
     
@@ -90,7 +90,7 @@ public static class Test_ComponentReader
         TestUtils.CreateGameEntityStore(out var database);
         var node    = new DatabaseEntity { pid = 10, components = new JsonValue("{}") };
         var entity  = database.LoadEntity(node, out var error);
-        AreEqual(0, entity.ClassComponents.Length + entity.Archetype.ComponentCount);
+        AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
     
@@ -100,7 +100,7 @@ public static class Test_ComponentReader
         TestUtils.CreateGameEntityStore(out var database);
         var node    = new DatabaseEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
         var entity  = database.LoadEntity(node, out _);
-        AreEqual(0, entity.ClassComponents.Length + entity.Archetype.ComponentCount);
+        AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
     }
     
@@ -228,16 +228,16 @@ public static class Test_ComponentReader
         var rootNode    = new DatabaseEntity { pid = 10, components = classComponents, children = new List<long> { 11 } };
 
         var root        = database.LoadEntity(rootNode, out _);
-        AreEqual(1,     root.ClassComponents.Length);
-        var comp1       = root.GetClassComponent<TestRefComponent1>();
-        AreEqual(2,     comp1.val1);
-        comp1.val1      = -1;
+        AreEqual(1,     root.Behaviors.Length);
+        var behavior1   = root.GetBehavior<TestBehavior1>();
+        AreEqual(2,     behavior1.val1);
+        behavior1.val1      = -1;
         
         // --- read same DatabaseEntity again
         database.LoadEntity(rootNode, out _);
-        var comp2       = root.GetClassComponent<TestRefComponent1>();
+        var comp2       = root.GetBehavior<TestBehavior1>();
         AreEqual(2,     comp2.val1);
-        AreSame(comp1, comp2);
+        AreSame(behavior1, comp2);
     }
     
     [Test]

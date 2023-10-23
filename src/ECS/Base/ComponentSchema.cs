@@ -22,7 +22,7 @@ public sealed class ComponentSchema
     /// <see cref="Structs"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Structs             => new (structs);
-    /// <summary>return all class component types attributed with <see cref="ClassComponentAttribute"/></summary>
+    /// <summary>return all class component types attributed with <see cref="BehaviorAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.classIndex"/> is equal to the array index<br/>
     /// <see cref="Classes"/>[0] is always null
@@ -91,7 +91,7 @@ public sealed class ComponentSchema
     
     /// <summary>
     /// return <see cref="ComponentType"/> of a component type attributed with
-    /// <see cref="StructComponentAttribute"/> or <see cref="ClassComponentAttribute"/> for the given key
+    /// <see cref="StructComponentAttribute"/> or <see cref="BehaviorAttribute"/> for the given key
     /// </summary>
     public ComponentType GetComponentTypeByKey(string key) {
         componentTypeByKey.TryGetValue(key, out var result);
@@ -109,10 +109,10 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a class attributed with <see cref="ClassComponentAttribute"/> for the given type
+    /// return <see cref="ComponentType"/> of a class attributed with <see cref="BehaviorAttribute"/> for the given type
     /// </summary>
     public ComponentType GetClassComponentType<T>()
-        where T : ClassComponent
+        where T : Behavior
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
         return result;

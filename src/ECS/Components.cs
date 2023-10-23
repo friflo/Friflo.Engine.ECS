@@ -21,7 +21,7 @@ public interface IStructComponent { }
 
 
 /// <summary>
-/// To enable adding <b>class</b> components to a <see cref="GameEntity"/> it need to extend <see cref="ClassComponent"/>.<br/>
+/// To enable adding <b>class</b> components to a <see cref="GameEntity"/> it need to extend <see cref="Behavior"/>.<br/>
 /// A <b>class</b> component is a reference type which contains data <b>and</b> behavior / methods.<br/> 
 /// A <see cref="GameEntity"/> can contain multiple class components but only one of each type.
 /// </summary>
@@ -31,7 +31,7 @@ public interface IStructComponent { }
 /// <br/>
 /// <i>Info:</i> Its functionality is similar to <c>MonoBehavior</c> added to <c>GameObject</c>'s in Unity
 /// </remarks>
-public abstract class ClassComponent
+public abstract class Behavior
 {
     // --- public
     /// <summary>The entity the component is added to. Otherwise null.</summary>

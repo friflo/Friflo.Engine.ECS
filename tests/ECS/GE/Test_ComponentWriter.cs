@@ -16,7 +16,7 @@ public static class Test_ComponentWriter
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
-        entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
+        entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
         var node = database.StoreEntity(entity);
         
@@ -56,7 +56,7 @@ public static class Test_ComponentWriter
         var store   = TestUtils.CreateGameEntityStore(out var database);
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
-        entity.AddClassComponent(new TestRefComponent1 { val1 = 10 });
+        entity.AddBehavior(new TestBehavior1 { val1 = 10 });
 
         int count = 10; // 2_000_000 ~ 1.935 ms
         DatabaseEntity node = null;

@@ -55,11 +55,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// <b>class components</b> · generic
 /// <list type="bullet">
-///     <item><see cref="ClassComponents"/></item>
-///     <item><see cref="GetClassComponent{T}"/></item>
-///     <item><see cref="TryGetClassComponent{T}"/></item>
-///     <item><see cref="AddClassComponent{T}"/></item>
-///     <item><see cref="RemoveClassComponent{T}"/></item>
+///     <item><see cref="Behaviors"/></item>
+///     <item><see cref="GetBehavior{T}"/></item>
+///     <item><see cref="TryGetBehavior{T}"/></item>
+///     <item><see cref="AddBehavior{T}"/></item>
+///     <item><see cref="RemoveBehavior{T}"/></item>
 /// </list>
 /// <b>tags</b>
 /// <list type="bullet">
@@ -229,41 +229,41 @@ public sealed class GameEntity
     /// It has poor performance as is creates an array and boxes all struct components. 
     /// </summary>
     /// <remarks>
-    /// To access <b>class</b>  components use <see cref="GetClassComponent{T}"/> or <see cref="ClassComponents"/><br/>
+    /// To access <b>class</b>  components use <see cref="GetBehavior{T}"/> or <see cref="Behaviors"/><br/>
     /// To access <b>struct</b> components use <see cref="GetComponent{T}"/>
     /// </remarks>
-    [Obsolete($"use either {nameof(GetClassComponent)}<T>() or {nameof(GetComponent)}<T>()")]
-    public  object[]                        Components_     => GameEntityUtils.GetComponentsDebug(this);
+    [Obsolete($"use either {nameof(GetBehavior)}<T>() or {nameof(GetComponent)}<T>()")]
+    public  object[]                     Components_     => GameEntityUtils.GetComponentsDebug(this);
     #endregion
     
-    // --------------------------------- class component methods ---------------------------------
+    // --------------------------------- behavior methods ---------------------------------
 #region class component methods
-    public      ReadOnlySpan<ClassComponent>   ClassComponents => new (GameEntityUtils.GetClassComponents(this));
+    public      ReadOnlySpan<Behavior>   Behaviors => new (GameEntityUtils.GetBehaviors(this));
 
     /// <returns>the entity component of Type <typeparamref name="T"/>. Otherwise null</returns>
-    public T    GetClassComponent<T>()
-        where T : ClassComponent
-    => (T)GameEntityUtils.GetClassComponent(this, typeof(T));
+    public T    GetBehavior<T>()
+        where T : Behavior
+    => (T)GameEntityUtils.GetBehavior(this, typeof(T));
     
     /// <returns>true if the entity has component of Type <typeparamref name="T"/>. Otherwise false</returns>
-    public bool TryGetClassComponent<T>(out T result)
-        where T : ClassComponent
+    public bool TryGetBehavior<T>(out T result)
+        where T : Behavior
     {
-        var component = GameEntityUtils.GetClassComponent(this, typeof(T));
+        var component = GameEntityUtils.GetBehavior(this, typeof(T));
         result = (T)component;
         return component != null;
     }
     
     /// <returns>the component previously added to the entity.</returns>
-    public T AddClassComponent<T>(T component) 
-        where T : ClassComponent
-    => (T)GameEntityUtils.AddClassComponent(this, component, typeof(T), ClassType<T>.ClassIndex);
+    public T AddBehavior<T>(T behavior) 
+        where T : Behavior
+    => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.ClassIndex);
     
     
     /// <returns>the component previously added to the entity.</returns>
-    public T RemoveClassComponent<T>()
-        where T : ClassComponent
-    => (T)GameEntityUtils.RemoveClassComponent(this, typeof(T));
+    public T RemoveBehavior<T>()
+        where T : Behavior
+    => (T)GameEntityUtils.RemoveBehavior(this, typeof(T));
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------

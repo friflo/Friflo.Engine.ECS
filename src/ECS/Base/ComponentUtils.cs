@@ -58,7 +58,7 @@ internal static class ComponentUtils
                 structs.Add(componentType);
                 return;
             }
-            if (attributeType == typeof(ClassComponentAttribute))
+            if (attributeType == typeof(BehaviorAttribute))
             {
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
@@ -79,7 +79,7 @@ internal static class ComponentUtils
     }
     
     internal static ComponentType CreateClassFactory<T>(TypeStore typeStore)
-        where T : ClassComponent
+        where T : Behavior
     {
         var classIndex  = ClassType<T>.ClassIndex;
         var classKey    = ClassType<T>.ClassKey;

@@ -47,7 +47,7 @@ internal sealed class ComponentWriter
             writer.MemberBytes(keyBytes, value);
         }
         // --- write class components
-        foreach (var component in entity.ClassComponents) {
+        foreach (var component in entity.Behaviors) {
             componentWriter.WriteObject(component, ref buffer);
             var classType   = componentTypeByType[component.GetType()];
             var keyBytes    = classType.componentKeyBytes;

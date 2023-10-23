@@ -22,6 +22,6 @@ public sealed class StructComponentAttribute : Attribute {
 /// while dealing with a small amount (&lt; 100) of <see cref="GameEntity"/>'s
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class ClassComponentAttribute : Attribute {
-    public ClassComponentAttribute (string key) { }
+public sealed class BehaviorAttribute : Attribute {
+    public BehaviorAttribute (string key) { }
 }

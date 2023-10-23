@@ -12,30 +12,30 @@ internal struct Behaviors
     internal readonly   int                 id;
     /// <summary>
     /// Invariant:<br/>
-    /// <see cref="id"/> == 0   :   <see cref="classComponents"/> == null<br/>
-    /// <see cref="id"/>  > 0   :   <see cref="classComponents"/> != null  <b>and</b> its Length > 0 
+    /// <see cref="id"/> == 0   :   <see cref="classes"/> == null<br/>
+    /// <see cref="id"/>  > 0   :   <see cref="classes"/> != null  <b>and</b> its Length > 0 
     /// </summary>
-    internal            ClassComponent[]    classComponents;
+    internal            Behavior[]          classes;
     
     public   override   string              ToString() => GetString();
 
-    internal Behaviors (int id, ClassComponent[] classComponents)
+    internal Behaviors (int id, Behavior[] classes)
     {
-        this.id                 = id;
-        this.classComponents    = classComponents;
+        this.id         = id;
+        this.classes    = classes;
     }
     
     private string GetString()
     {
-        if (classComponents == null) {
+        if (classes == null) {
             return "unused";
         }
         var sb = new StringBuilder();
         sb.Append("id: ");
         sb.Append(id);
         sb.Append("  [");
-        foreach (var component in classComponents) {
-            sb.Append(component.GetType().Name);
+        foreach (var behavior in classes) {
+            sb.Append(behavior.GetType().Name);
             sb.Append(", ");
         }
         sb.Length -= 2;
