@@ -74,7 +74,7 @@ public static class Test_Behavior
         AreSame(testRef1, result);
         AreEqual("id: 1  [*TestBehavior1]", player.ToString());
         NotNull(testRef1.Entity);
-        IsFalse(player.TryGetBehavior<TestBehavior2>(out _)); // classComponents.Length > 0
+        IsFalse(player.TryGetBehavior<TestBehavior2>(out _));
         
         NotNull(player.RemoveBehavior<TestBehavior1>());
         IsNull(player.GetBehavior<TestBehavior1>());

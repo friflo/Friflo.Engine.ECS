@@ -218,14 +218,14 @@ public static class Test_ComponentReader
         }
     }
     
-    private static readonly JsonValue classComponents = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
+    private static readonly JsonValue behaviors = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
     public static void Test_ComponentReader_read_class_components()
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DatabaseEntity { pid = 10, components = classComponents, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = behaviors, children = new List<long> { 11 } };
 
         var root        = database.LoadEntity(rootNode, out _);
         AreEqual(1,     root.Behaviors.Length);
@@ -245,7 +245,7 @@ public static class Test_ComponentReader
     {
         TestUtils.CreateGameEntityStore(out var database);
         
-        var rootNode    = new DatabaseEntity { pid = 10, components = classComponents, children = new List<long> { 11 } };
+        var rootNode    = new DatabaseEntity { pid = 10, components = behaviors, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {

@@ -82,8 +82,8 @@ public static class Test_sizeof
         var behaviors       = new Behaviors();
         AreEqual("unused", behaviors.ToString());
         
-        var classComponents = new Behavior[] { new TestBehavior() };
-        behaviors       = new Behaviors(1, classComponents);
+        var behaviorsArray  = new Behavior[] { new TestBehavior() };
+        behaviors           = new Behaviors(1, behaviorsArray);
         AreEqual("id: 1  [TestBehavior]", behaviors.ToString());
     }
     
