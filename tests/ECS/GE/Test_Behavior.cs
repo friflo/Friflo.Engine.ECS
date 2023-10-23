@@ -33,7 +33,7 @@ public static class Test_Behavior
         var e = Throws<InvalidOperationException> (() => {
             player.AddBehavior(testRef1);
         });
-        AreEqual("component already added to an entity", e!.Message);
+        AreEqual("behavior already added to an entity. current entity id: 1", e!.Message);
         AreEqual(1,             player.Behaviors.Length);
         
         var testRef2 = new TestBehavior2 { val2 = 2 };

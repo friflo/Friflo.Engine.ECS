@@ -38,7 +38,7 @@ public sealed class DatabaseEntity
     public  List<long>      children;   //  8   - can be null
     
     /// <summary>
-    /// Each key in <see cref="components"/> defines the type of a component or behavior. Its value is the component value.
+    /// Each key in <see cref="components"/> defines the type of a component or behavior. Its value is the component / behavior value.
     /// </summary>
     public  JsonValue       components; // 16   - can be null
     

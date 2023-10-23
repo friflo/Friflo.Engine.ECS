@@ -239,27 +239,27 @@ public sealed class GameEntity
 #region behavior methods
     public      ReadOnlySpan<Behavior>   Behaviors => new (GameEntityUtils.GetBehaviors(this));
 
-    /// <returns>the entity component of Type <typeparamref name="T"/>. Otherwise null</returns>
+    /// <returns>the <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
     public T    GetBehavior<T>()
         where T : Behavior
     => (T)GameEntityUtils.GetBehavior(this, typeof(T));
     
-    /// <returns>true if the entity has component of Type <typeparamref name="T"/>. Otherwise false</returns>
+    /// <returns>true if the entity has a <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
     public bool TryGetBehavior<T>(out T result)
         where T : Behavior
     {
-        var component = GameEntityUtils.GetBehavior(this, typeof(T));
-        result = (T)component;
-        return component != null;
+        var behavior = GameEntityUtils.GetBehavior(this, typeof(T));
+        result = (T)behavior;
+        return behavior != null;
     }
     
-    /// <returns>the component previously added to the entity.</returns>
+    /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
     public T AddBehavior<T>(T behavior) 
         where T : Behavior
     => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
     
     
-    /// <returns>the component previously added to the entity.</returns>
+    /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
     public T RemoveBehavior<T>()
         where T : Behavior
     => (T)GameEntityUtils.RemoveBehavior(this, typeof(T));

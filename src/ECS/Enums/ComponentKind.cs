@@ -10,11 +10,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 public enum ComponentKind
 {
-    /// <summary>Declare a <see cref="ComponentType"/> is a <b>struct</b> component</summary>
+    /// <summary>Declare a <see cref="ComponentType"/> is an <b><see cref="ECS.IComponent"/></b></summary>
     Component   = 0,
-    /// <summary>Declare a <see cref="ComponentType"/> is a <b>class</b> component</summary>
+    /// <summary>Declare a <see cref="ComponentType"/> is a <b><see cref="ECS.Behavior"/></b></summary>
     Behavior    = 1,
-    /// <summary>Declare a <see cref="ComponentType"/> is a entity <b>Tag</b></summary>
+    /// <summary>Declare a <see cref="ComponentType"/> is an <b><see cref="IEntityTag"/></b></summary>
     /// <remarks>A <b>Tag</b> is defined by struct definition without fields / properties extending <see cref="IEntityTag"/></remarks>
     Tag         = 2
 }

@@ -118,7 +118,7 @@ internal static class GameEntityUtils
             }
             store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior[] { behavior });
         } else {
-            // case: entity already has behaviors => add component to its behaviors
+            // case: entity already has behaviors => add behavior to its behaviors
             ref var classes = ref store.entityBehaviors[entity.behaviorIndex].classes;
             var len = classes.Length;
             Utils.Resize(ref classes, len + 1);
@@ -132,7 +132,7 @@ internal static class GameEntityUtils
             throw MissingAttributeException(behaviorType);
         }
         if (behavior.entity != null) {
-            throw new InvalidOperationException("component already added to an entity");
+            throw new InvalidOperationException($"behavior already added to an entity. current entity id: {behavior.entity.id}");
         }
         behavior.entity = entity;
         var store       = entity.archetype.gameEntityStore;
@@ -146,7 +146,7 @@ internal static class GameEntityUtils
             store.entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior [] { behavior });
             return null;
         }
-        // case: entity has already behaviors => add component to its behaviors
+        // case: entity has already behaviors => add behavior to its behaviors
         ref var entityBehavior  = ref store.entityBehaviors[entity.behaviorIndex];
         var classes             = entityBehavior.classes;
         var len                 = classes.Length;
@@ -159,7 +159,7 @@ internal static class GameEntityUtils
                 return behavior;
             }
         }
-        // --- case: map does not contain a component Type
+        // --- case: map does not contain a behavior of the given behaviorType
         Utils.Resize(ref entityBehavior.classes, len + 1);
         entityBehavior.classes[len] = behavior;
         return null;
