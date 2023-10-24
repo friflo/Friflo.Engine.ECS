@@ -17,8 +17,7 @@ public static class Test_Client
     private static GameDatabase CreateClientDatabase(GameEntityStore store) {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new GameClient(hub);
-        var sync    = new ClientSync(client);
-        return new GameDatabase(store, sync);
+        return new GameDatabase(store, client);
     }
     
     [Test]
@@ -55,7 +54,7 @@ public static class Test_Client
         AreEqual(2,     store.EntityCount);
 
         int n = 0; 
-        foreach (var entity in database.Sync.Entities) {
+        foreach (var entity in database.Local.Entities) {
             n++;
             NotNull(entity);
         }
@@ -76,7 +75,7 @@ public static class Test_Client
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
         var ge = database.StoreEntity(entity);
-        AreEqual(1, database.Sync.EntityCount);
+        AreEqual(1, database.Local.Count);
         
         AreEqual(10,    ge.pid);
         AreEqual(1,     ge.children.Count);
@@ -84,14 +83,14 @@ public static class Test_Client
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", ge.components.AsString());
         
         ge = database.StoreEntity(child);
-        AreEqual(2, database.Sync.EntityCount);
+        AreEqual(2, database.Local.Count);
         
         AreEqual(11,    ge.pid);
         IsNull  (ge.children);
         IsTrue  (ge.components.IsNull());
         
         int n = 0; 
-        foreach (var e in database.Sync.Entities) {
+        foreach (var e in database.Local) {
             n++;
             NotNull(e.Value);
         }

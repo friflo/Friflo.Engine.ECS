@@ -6,6 +6,7 @@ using System.Linq;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Database;
 using Friflo.Json.Fliox;
+using Friflo.Json.Fliox.Hub.Client;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
@@ -13,15 +14,15 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public sealed class GameDatabase
 {
-    public              IDatabaseSync       Sync => sync;
+    public              LocalEntities<long, DatabaseEntity> Local => local;
     
-    private readonly    GameEntityStore     store;
-    private readonly    IDatabaseSync       sync;
-    private readonly    EntityConverter     converter;
+    private readonly    GameEntityStore                     store;
+    private readonly    LocalEntities<long, DatabaseEntity> local;
+    private readonly    EntityConverter                     converter;
 
-    public GameDatabase (GameEntityStore store, IDatabaseSync sync) {
+    public GameDatabase (GameEntityStore store, GameClient client) {
         this.store  = store;
-        this.sync   = sync;
+        local       = client.entities.Local;
         converter   = new EntityConverter();
     }
         
@@ -38,9 +39,9 @@ public sealed class GameDatabase
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
         var pid = store.GetNodeById(entity.Id).Pid;
-        if (!sync.TryGetEntity(pid, out var dbEntity)) {
+        if (!local.TryGetEntity(pid, out var dbEntity)) {
             dbEntity = new DatabaseEntity { pid = pid };
-            sync.AddEntity(dbEntity);
+            local.Add(dbEntity);
         }
         converter.GameToDatabaseEntity(entity, dbEntity);
         return dbEntity;
@@ -53,7 +54,7 @@ public sealed class GameDatabase
     public GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
     {
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
-        if (!sync.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
+        if (!local.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
             storedEntity = new DatabaseEntity();
         }
         // --- copy all fields to eliminate side effects by mutations on the passed databaseEntity
