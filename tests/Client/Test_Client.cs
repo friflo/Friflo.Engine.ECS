@@ -26,11 +26,19 @@ public static class Test_Client
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var database    = CreateClientDatabase(store);
         
-        var rootNode    = new DatabaseEntity { pid = 10, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DatabaseEntity { pid = 11, components = Test_ComponentReader.childComponents };
+        var rootNode    = new DatabaseEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DatabaseEntity { pid = 11L, components = Test_ComponentReader.childComponents };
+        database.Entities.Add(rootNode);
+        database.Entities.Add(childNode);
+        int n = 0; 
+        foreach (var entity in database.Entities) {
+            n++;
+            NotNull(entity);
+        }
+        AreEqual(2, n);
         
-        var root        = database.LoadEntity(rootNode, out _);
-        var child       = database.LoadEntity(childNode, out _);
+        var root        = database.LoadEntity(10L, out _);
+        var child       = database.LoadEntity(11L, out _);
         Test_ComponentReader.AssertRootEntity(root);
         Test_ComponentReader.AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -40,7 +48,7 @@ public static class Test_Client
         // --- read root DatabaseEntity again
         root.Position   = default;
         root.Scale3     = default;
-        root            = database.LoadEntity(rootNode, out _);
+        root            = database.LoadEntity(10L, out _);
         Test_ComponentReader.AssertRootEntity(root);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -48,17 +56,12 @@ public static class Test_Client
         // --- read child DatabaseEntity again
         child.Position  = default;
         child.Scale3    = default;
-        child           = database.LoadEntity(childNode, out _);
+        child           = database.LoadEntity(11L, out _);
         Test_ComponentReader.AssertChildEntity(child);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
 
-        int n = 0; 
-        foreach (var entity in database.LocalEntities) {
-            n++;
-            NotNull(entity);
-        }
-        // AreEqual(2, n); // todo
+
     }
     
     [Test]
@@ -75,7 +78,7 @@ public static class Test_Client
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
         var ge = database.StoreEntity(entity);
-        AreEqual(1, database.LocalEntities.Count);
+        AreEqual(1, database.Entities.Count);
         
         AreEqual(10,    ge.pid);
         AreEqual(1,     ge.children.Count);
@@ -83,14 +86,14 @@ public static class Test_Client
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", ge.components.AsString());
         
         ge = database.StoreEntity(child);
-        AreEqual(2, database.LocalEntities.Count);
+        AreEqual(2, database.Entities.Count);
         
         AreEqual(11,    ge.pid);
         IsNull  (ge.children);
         IsTrue  (ge.components.IsNull());
         
         int n = 0; 
-        foreach (var e in database.LocalEntities) {
+        foreach (var e in database.Entities) {
             n++;
             NotNull(e.Value);
         }

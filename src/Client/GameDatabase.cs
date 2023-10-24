@@ -14,16 +14,16 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public sealed class GameDatabase
 {
-    public              LocalEntities<long, DatabaseEntity> LocalEntities => localEntities;
+    public              LocalEntities<long, DatabaseEntity> Entities => entities;
     
     private readonly    GameEntityStore                     store;
-    private readonly    LocalEntities<long, DatabaseEntity> localEntities;
+    private readonly    LocalEntities<long, DatabaseEntity> entities;
     private readonly    EntityConverter                     converter;
 
     public GameDatabase (GameEntityStore store, GameClient client) {
-        this.store      = store;
-        localEntities   = client.entities.Local;
-        converter       = new EntityConverter();
+        this.store  = store;
+        entities    = client.entities.Local;
+        converter   = new EntityConverter();
     }
         
     /// <summary>
@@ -39,9 +39,9 @@ public sealed class GameDatabase
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
         var pid = store.GetNodeById(entity.Id).Pid;
-        if (!localEntities.TryGetEntity(pid, out var dbEntity)) {
+        if (!entities.TryGetEntity(pid, out var dbEntity)) {
             dbEntity = new DatabaseEntity { pid = pid };
-            localEntities.Add(dbEntity);
+            entities.Add(dbEntity);
         }
         converter.GameToDatabaseEntity(entity, dbEntity);
         return dbEntity;
@@ -51,21 +51,13 @@ public sealed class GameDatabase
     /// Loads the given <see cref="DatabaseEntity"/> as a <see cref="GameEntity"/> from the <see cref="GameDatabase"/>
     /// </summary>
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
-    public GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
+    public GameEntity LoadEntity(long pid, out string error)
     {
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
-        if (!localEntities.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
-            storedEntity = new DatabaseEntity();
+        if (!entities.TryGetEntity(pid, out var databaseEntity)) {
+            error = $"entity not found. pid: {pid}";
+            return null;
         }
-        // --- copy all fields to eliminate side effects by mutations on the passed databaseEntity
-        storedEntity.pid        = databaseEntity.pid;
-        storedEntity.children   = databaseEntity.children?.ToList();
-        storedEntity.components = new JsonValue(databaseEntity.components);
-        storedEntity.tags       = databaseEntity.tags?.ToList();
-        storedEntity.sceneName  = databaseEntity.sceneName;
-        storedEntity.prefab     = databaseEntity.prefab;
-        storedEntity.modify     = databaseEntity.modify;
-        
-        return converter.DatabaseToGameEntity(storedEntity, store, out error);
+        return converter.DatabaseToGameEntity(databaseEntity, store, out error);
     }
 }
