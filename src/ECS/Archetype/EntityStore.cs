@@ -86,7 +86,7 @@ public abstract partial class EntityStore
     #endregion
 
 #region exceptions
-    internal static Exception InvalidStoreException(string parameterName) {
+    public static Exception InvalidStoreException(string parameterName) {
         return new ArgumentException("entity is owned by a different store", parameterName);
     }
         

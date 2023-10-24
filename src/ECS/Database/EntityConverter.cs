@@ -8,8 +8,8 @@ namespace Friflo.Fliox.Engine.ECS.Database;
 
 public class EntityConverter
 {
-    internal readonly   ComponentReader reader;
-    internal readonly   ComponentWriter writer;
+    private  readonly   ComponentReader reader;
+    private  readonly   ComponentWriter writer;
     
     public static readonly EntityConverter Default = new EntityConverter();
     
@@ -18,14 +18,15 @@ public class EntityConverter
         writer = new ComponentWriter();
     }
     
-    public DatabaseEntity GameToDatabaseEntity(GameEntity gameEntity)
+    public DatabaseEntity GameToDatabaseEntity(GameEntity gameEntity, DatabaseEntity databaseEntity = null)
     {
         if (gameEntity == null) {
             throw new ArgumentNullException(nameof(gameEntity));
         }
-        var store = gameEntity.archetype.gameEntityStore;
+        var store           = gameEntity.archetype.gameEntityStore;
         var pid             = store.GetNodeById(gameEntity.id).pid;
-        var databaseEntity  = new DatabaseEntity { pid = pid };
+        databaseEntity    ??= new DatabaseEntity();
+        databaseEntity.pid  = pid;
         store.GameToDatabaseEntity(gameEntity, databaseEntity, writer);
         return databaseEntity;
     }

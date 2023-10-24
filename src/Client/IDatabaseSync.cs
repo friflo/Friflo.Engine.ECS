@@ -2,8 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using Friflo.Fliox.Engine.ECS.Database;
 
-namespace Friflo.Fliox.Engine.ECS.Database;
+namespace Friflo.Fliox.Engine.Client;
 
 public interface IDatabaseSync
 {

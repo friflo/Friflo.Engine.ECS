@@ -3,10 +3,12 @@
 
 using System;
 using System.Linq;
+using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Database;
 using Friflo.Json.Fliox;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
-namespace Friflo.Fliox.Engine.ECS.Database;
+namespace Friflo.Fliox.Engine.Client;
 
 [CLSCompliant(true)]
 public sealed class GameDatabase
@@ -31,16 +33,16 @@ public sealed class GameDatabase
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
         }
-        var entityStore = entity.archetype.gameEntityStore;
+        var entityStore = entity.Store;
         if (entityStore != store) {
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
-        var pid = store.GetNodeById(entity.id).pid;
+        var pid = store.GetNodeById(entity.Id).Pid;
         if (!sync.TryGetEntity(pid, out var dbEntity)) {
             dbEntity = new DatabaseEntity { pid = pid };
             sync.AddEntity(dbEntity);
         }
-        entityStore.GameToDatabaseEntity(entity, dbEntity, converter.writer);
+        converter.GameToDatabaseEntity(entity, dbEntity);
         return dbEntity;
     }
     
@@ -63,6 +65,6 @@ public sealed class GameDatabase
         storedEntity.prefab     = databaseEntity.prefab;
         storedEntity.modify     = databaseEntity.modify;
         
-        return store.DatabaseToGameEntity(storedEntity, out error, converter.reader);
+        return converter.DatabaseToGameEntity(storedEntity, store, out error);
     }
 }
