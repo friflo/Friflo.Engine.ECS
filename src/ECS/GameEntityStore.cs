@@ -58,7 +58,9 @@ public sealed partial class GameEntityStore : EntityStore
     #endregion
     
 #region initialize
-    public GameEntityStore(PidType pidType = PidType.RandomPids)
+    public GameEntityStore() : this (PidType.RandomPids) { }
+    
+    public GameEntityStore(PidType pidType)
     {
         this.pidType    = pidType;
         nodes           = Array.Empty<EntityNode>();
