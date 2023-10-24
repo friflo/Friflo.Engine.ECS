@@ -159,7 +159,7 @@ public static class Test_ComponentReader
             var e = Throws<ArgumentException>(() => {
                 converter.DatabaseToGameEntity(childNode, store, out _);
             });
-            AreEqual("pid mus be in range [0, 2147483647]. was: {pid} (Parameter 'databaseEntity')", e!.Message);
+            AreEqual("pid mus be in range [1, 2147483647]. was: {pid} (Parameter 'databaseEntity')", e!.Message);
         }
     }
     

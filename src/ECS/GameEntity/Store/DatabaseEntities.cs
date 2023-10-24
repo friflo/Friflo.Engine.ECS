@@ -94,8 +94,8 @@ public partial class GameEntityStore
     private GameEntity CreateFromDbEntityUsePidAsId(DatabaseEntity databaseEntity)
     {
         var pid = databaseEntity.pid;
-        if (pid < 0 || pid > int.MaxValue) {
-            throw new ArgumentException("pid mus be in range [0, 2147483647]. was: {pid}", nameof(databaseEntity));
+        if (pid < Static.MinNodeId || pid > int.MaxValue) {
+            throw new ArgumentException("pid mus be in range [1, 2147483647]. was: {pid}", nameof(databaseEntity));
         }
         var id          = (int)pid;
         // --- use pid's as id's

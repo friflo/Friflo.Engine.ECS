@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Sync;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
@@ -11,10 +13,27 @@ namespace Tests.ECS.GE;
 
 public static class Test_GameDatabase
 {
+    private static DatabaseEntity CreateDbEntity(int id, int[] childIds = null)
+    {
+        List<long> children = null;
+        if (childIds != null) {
+            children = new List<long>(childIds.Length);
+            foreach (var childId in childIds) {
+                children.Add(childId);
+            }
+        }
+        var entity = new DatabaseEntity {
+            pid = id,
+            children = children
+        };
+        return entity;
+    }
+    
     [Test]
     public static void Test_GameDatabase_Load_single_entity() {
-        var store   = new GameEntityStore();
-        var entity2 = store.CreateFrom(2);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        var entity2 = converter.DatabaseToGameEntity(CreateDbEntity(2), store, out _);
         
         AreEqual(2, entity2.Id);
         AreEqual(0, entity2.ChildNodes.Length);
@@ -24,10 +43,11 @@ public static class Test_GameDatabase
     
     [Test]
     public static void Test_GameDatabase_Load_parent_child() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
 
         // --- create parent 5 first
-        var entity5 = store.CreateFrom(5, new [] { 8 });
+        var entity5 = converter.DatabaseToGameEntity(CreateDbEntity(5, new [] { 8 }), store, out _);
         AreEqual(5,                     entity5.Id);
         var ids     = entity5.ChildNodes.Ids;
         AreEqual(1,                     ids.Length);
@@ -39,7 +59,7 @@ public static class Test_GameDatabase
         AreEqual(1,                     store.EntityCount);
         
         // --- create child 8
-        var entity8 = store.CreateFrom(8);
+        var entity8 = converter.DatabaseToGameEntity(CreateDbEntity(8), store, out _);
         AreSame (entity8,               store.Nodes[8].Entity);
         AreEqual(Created,               store.Nodes[8].Flags);
         AreEqual(8,                     store.Nodes[8].Id);
@@ -53,10 +73,11 @@ public static class Test_GameDatabase
     
     [Test]
     public static void Test_GameDatabase_Load_child_parent() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         // --- create child 8 first
-        var entity8 = store.CreateFrom(8);
+        var entity8 = converter.DatabaseToGameEntity(CreateDbEntity(8), store, out _);
         AreSame (entity8,               store.Nodes[8].Entity);
         AreEqual(Created,               store.Nodes[8].Flags);      // diff_flags
         AreEqual(8,                     store.Nodes[8].Id);
@@ -64,7 +85,7 @@ public static class Test_GameDatabase
         AreEqual(1,                     store.EntityCount);
 
         // --- create parent 5
-        var entity5 = store.CreateFrom(5, new [] { 8 });
+        var entity5 = converter.DatabaseToGameEntity(CreateDbEntity(5, new [] { 8 }), store, out _);
         AreEqual(5,                     entity5.Id);
         var ids     = entity5.ChildNodes.Ids;
         AreEqual(1,                     ids.Length);
@@ -82,86 +103,90 @@ public static class Test_GameDatabase
     
     [Test]
     public static void Test_GameDatabase_Load_CreateFrom_assertions() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentException>(() => {
-                store.CreateFrom(0);    
+                converter.DatabaseToGameEntity(CreateDbEntity(0), store, out _);    
             });
-            AreEqual("invalid entity id <= 0. was: 0 (Parameter 'id')", e!.Message);
-        } {
-            store.CreateFrom(1);
-            var e = Throws<ArgumentException>(() => {
-                store.CreateFrom(1);    
-            });
-            AreEqual("id already in use in EntityStore. id: 1 (Parameter 'id')", e!.Message);
+            AreEqual("pid mus be in range [1, 2147483647]. was: {pid} (Parameter 'databaseEntity')", e!.Message);
         }
     }
     
     [Test]
     public static void Test_GameDatabase_Load_error_multiple_parents_1() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
-        store.CreateFrom(1, new [] { 2, 3 });
+        converter.DatabaseToGameEntity(CreateDbEntity(1, new [] { 2, 3 }), store, out _);
 
         var e = Throws<InvalidOperationException> (() => {
-            _ = store.CreateFrom(2, new [] { 3 });
+            _ = converter.DatabaseToGameEntity(CreateDbEntity(2, new [] { 3 }), store, out _);
         });
         AreEqual("child has already a parent. child: 3 current parent: 1, new parent: 2", e!.Message);
     }
 
     [Test]
     public static void Test_GameDatabase_Load_error_multiple_parents_2() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
-        store.CreateFrom(1, new [] { 2 });
+        converter.DatabaseToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
 
         var e = Throws<InvalidOperationException> (() => {
-            store.CreateFrom(3, new [] { 2 });
+            converter.DatabaseToGameEntity(CreateDbEntity(3, new [] { 2 }), store, out _);
         });
         AreEqual("child has already a parent. child: 2 current parent: 1, new parent: 3", e!.Message);
     }
     
     [Test]
     public static void Test_GameDatabase_Load_error_cycle_1() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var e = Throws<InvalidOperationException> (() => {
-            store.CreateFrom(1, new [] { 1 });
+            converter.DatabaseToGameEntity(CreateDbEntity(1, new [] { 1 }), store, out _);
         });
         AreEqual("self reference in entity: 1", e!.Message);
     }
     
     [Test]
     public static void Test_GameDatabase_Load_error_cycle_2() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
-        store.CreateFrom(1, new [] { 2 });
+        converter.DatabaseToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
         
         var e = Throws<InvalidOperationException> (() => {
-            store.CreateFrom(2, new [] { 1 });
+            converter.DatabaseToGameEntity(CreateDbEntity(2, new [] { 1 }), store, out _);
         });
         AreEqual("dependency cycle in entity children: 2 -> 1 -> 2", e!.Message);
     }
     
     [Test]
     public static void Test_GameDatabase_Load_error_cycle_3() {
-        var store   = new GameEntityStore();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
-        store.CreateFrom(1, new [] { 2 });
-        store.CreateFrom(2, new [] { 3 });
+        converter.DatabaseToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
+        converter.DatabaseToGameEntity(CreateDbEntity(2, new [] { 3 }), store, out _);
 
         var e = Throws<InvalidOperationException> (() => {
-            store.CreateFrom(3, new [] { 1 });
+            converter.DatabaseToGameEntity(CreateDbEntity(3, new [] { 1 }), store, out _);
         });
         AreEqual("dependency cycle in entity children: 3 -> 2 -> 1 -> 3", e!.Message);
     }
     
     [Test]
     public static void Test_GameDatabase_Load_Perf() {
-        var store       = new GameEntityStore();
-        int count       = 10; // 10_000_000 ~ 2.117 ms
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        int count       = 10; // 10_000_000 ~ 2.199 ms
+        var entity = new DatabaseEntity();
         for (int n = 1; n <= count; n++) {
-            _ = store.CreateFrom(n);
+            entity.pid = n;
+            _ = converter.DatabaseToGameEntity(entity, store, out _);
         }
         AreEqual(count, store.EntityCount);
         

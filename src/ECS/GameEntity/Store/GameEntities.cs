@@ -41,31 +41,6 @@ public partial class GameEntityStore
         return CreateEntityNode(id, pid);
     }
     
-    public GameEntity CreateFrom(int id, int[] childIds = null) {
-        if (id < Static.MinNodeId) {
-            throw InvalidEntityIdException(id, nameof(id));
-        }
-        if (id < nodes.Length && nodes[id].Is(Created)) {
-            throw IdAlreadyInUseException(id, nameof(id));
-        }
-        // --- ensure EntityNode's referenced by child ids are present in nodes[]
-        var maxId       = id;
-        var childCount  = 0;
-        if (childIds != null) {
-            childCount = childIds.Length;
-            for (int n = 0; n < childCount; n++) {
-                maxId = Math.Max(maxId, childIds[n]);   
-            }
-        }
-        EnsureNodesLength(maxId + 1);
-        var pid     = GeneratePid(id);
-        var entity  = CreateEntityNode(id, pid);
-        if (childIds != null) {
-            SetChildNodes(id, childIds, childCount);
-        }
-        return entity;
-    }
-    
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
     private void AssertIdInNodes(int id) {
         if (id < nodes.Length) {
