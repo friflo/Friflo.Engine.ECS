@@ -77,7 +77,7 @@ public sealed partial class GameEntityStore : EntityStore
     /// Instead use <see cref="EntityNode.Id"/> instead of <see cref="EntityNode.Pid"/> if possible
     /// as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
-    public  int             PidToId(int pid) => pid2Id != null ? pid2Id[pid] : pid;
+    public  int             PidToId(long pid) => pid2Id != null ? pid2Id[pid] : (int)pid;
     
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>

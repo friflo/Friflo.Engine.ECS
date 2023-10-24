@@ -22,8 +22,8 @@ public static class Test_GameDatabase
         var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
         var entity  = converter.DatabaseToGameEntity(node, store, out _);
         
-        AreEqual(10,    store.PidToId(10));
-        AreEqual(10,    store.GetNodeByPid(10).Pid);
+        AreEqual(10,    store.PidToId(10L));
+        AreEqual(10,    store.GetNodeByPid(10L).Pid);
         AreEqual(10,    entity.Id);
         AreEqual(1,     entity.ChildNodes.Length);
         AreEqual(1,     store.Nodes[10].ChildCount);
@@ -42,8 +42,8 @@ public static class Test_GameDatabase
         var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
         var entity  = converter.DatabaseToGameEntity(node, store, out _);
         
-        AreEqual(1,     store.PidToId(10));
-        AreEqual(1,     store.GetNodeByPid(10).Id);
+        AreEqual(1,     store.PidToId(10L));
+        AreEqual(1,     store.GetNodeByPid(10L).Id);
         AreEqual(1,     entity.Id);
         AreEqual(1,     entity.ChildNodes.Length);
         AreEqual(1,     store.Nodes[1].ChildCount);
