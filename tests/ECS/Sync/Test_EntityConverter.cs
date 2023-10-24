@@ -13,7 +13,7 @@ namespace Tests.ECS.Sync;
 
 public static class Test_EntityConverter
 {
-    private static DatabaseEntity CreateDbEntity(int id, int[] childIds = null)
+    private static DatabaseEntity CreateDbEntity(int id, int[] childIds)
     {
         List<long> children = null;
         if (childIds != null) {
@@ -33,7 +33,7 @@ public static class Test_EntityConverter
     public static void Test_EntityConverter_Load_single_entity() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
-        var entity2 = converter.DatabaseToGameEntity(CreateDbEntity(2), store, out _);
+        var entity2 = converter.DatabaseToGameEntity(new DatabaseEntity { pid = 2 }, store, out _);
         
         AreEqual(2, entity2.Id);
         AreEqual(0, entity2.ChildNodes.Length);
@@ -59,7 +59,7 @@ public static class Test_EntityConverter
         AreEqual(1,                     store.EntityCount);
         
         // --- create child 8
-        var entity8 = converter.DatabaseToGameEntity(CreateDbEntity(8), store, out _);
+        var entity8 = converter.DatabaseToGameEntity(new DatabaseEntity { pid = 8 }, store, out _);
         AreSame (entity8,               store.Nodes[8].Entity);
         AreEqual(Created,               store.Nodes[8].Flags);
         AreEqual(8,                     store.Nodes[8].Id);
@@ -77,7 +77,7 @@ public static class Test_EntityConverter
         var converter   = EntityConverter.Default;
         
         // --- create child 8 first
-        var entity8 = converter.DatabaseToGameEntity(CreateDbEntity(8), store, out _);
+        var entity8 = converter.DatabaseToGameEntity(new DatabaseEntity { pid = 8 }, store, out _);
         AreSame (entity8,               store.Nodes[8].Entity);
         AreEqual(Created,               store.Nodes[8].Flags);      // diff_flags
         AreEqual(8,                     store.Nodes[8].Id);
