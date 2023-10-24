@@ -97,6 +97,11 @@ public abstract partial class EntityStore
     internal static Exception IdAlreadyInUseException(int id, string parameterName) {
         return new ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
     }
+    
+    internal static Exception PidOutOfRangeException(long pid, string parameterName) {
+        var msg = $"pid must be in range [1, 2147483647] when using {nameof(PidType)}.{nameof(PidType.UsePidAsId)}. was: {pid}";
+        return new ArgumentException(msg, parameterName);
+    }
     #endregion
 
 }

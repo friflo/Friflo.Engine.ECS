@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
+// ReSharper disable MergeIntoLogicalPattern
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -95,7 +96,7 @@ public partial class GameEntityStore
     {
         var pid = databaseEntity.pid;
         if (pid < Static.MinNodeId || pid > int.MaxValue) {
-            throw new ArgumentException("pid mus be in range [1, 2147483647]. was: {pid}", nameof(databaseEntity));
+            throw PidOutOfRangeException(pid, $"{nameof(DatabaseEntity)}.{nameof(databaseEntity.pid)}");
         }
         var id          = (int)pid;
         // --- use pid's as id's
@@ -107,7 +108,11 @@ public partial class GameEntityStore
             childCount  = children.Count; 
             childIds    = new int[childCount];
             for (int n = 0; n < childCount; n++) {
-                childIds[n]= (int)children[n];
+                var childId = children[n];
+                if (childId < Static.MinNodeId || childId > int.MaxValue) {
+                    throw PidOutOfRangeException(childId, $"{nameof(DatabaseEntity)}.{nameof(databaseEntity.children)}");
+                }
+                childIds[n]= (int)childId;
             }
             foreach (var childId in childIds) {
                 maxPid = Math.Max(maxPid, childId);

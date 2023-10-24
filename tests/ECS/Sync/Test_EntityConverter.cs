@@ -107,9 +107,16 @@ public static class Test_EntityConverter
         var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentException>(() => {
-                converter.DatabaseToGameEntity(CreateDbEntity(0), store, out _);    
+                var entity = new DatabaseEntity { pid = 0 };
+                converter.DatabaseToGameEntity(entity, store, out _);    
             });
-            AreEqual("pid mus be in range [1, 2147483647]. was: {pid} (Parameter 'databaseEntity')", e!.Message);
+            AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 0 (Parameter 'DatabaseEntity.pid')", e!.Message);
+        } {
+            var e = Throws<ArgumentException>(() => {
+                var entity = new DatabaseEntity { pid = 1, children = new List<long> { 2147483647L + 1 }};
+                converter.DatabaseToGameEntity(entity, store, out _);    
+            });
+            AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 2147483648 (Parameter 'DatabaseEntity.children')", e!.Message);
         }
     }
     
