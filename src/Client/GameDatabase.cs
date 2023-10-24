@@ -27,7 +27,7 @@ public sealed class GameDatabase
     /// <summary>
     /// Stores the given <see cref="GameEntity"/> as a <see cref="DatabaseEntity"/> in the <see cref="GameDatabase"/>
     /// </summary>
-    public DatabaseEntity StoreGameEntity(GameEntity entity)
+    public DatabaseEntity AddGameEntity(GameEntity entity)
     {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
@@ -49,7 +49,7 @@ public sealed class GameDatabase
     /// Loads the entity with given <paramref name="pid"/> as a <see cref="GameEntity"/> from the <see cref="GameDatabase"/>
     /// </summary>
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
-    public GameEntity LoadGameEntity(long pid, out string error)
+    public GameEntity GetAsGameEntity(long pid, out string error)
     {
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
         if (!entities.TryGetEntity(pid, out var databaseEntity)) {
