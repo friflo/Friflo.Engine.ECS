@@ -93,7 +93,7 @@ public static class Test_Client
         int n = 0; 
         foreach (var e in database.Sync.Entities) {
             n++;
-            NotNull(entity);
+            NotNull(e.Value);
         }
         AreEqual(2, n);
     }
