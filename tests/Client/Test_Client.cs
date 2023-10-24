@@ -37,8 +37,8 @@ public static class Test_Client
         }
         AreEqual(2, n);
         
-        var root        = database.LoadEntity(10L, out _);
-        var child       = database.LoadEntity(11L, out _);
+        var root        = database.LoadGameEntity(10L, out _);
+        var child       = database.LoadGameEntity(11L, out _);
         Test_ComponentReader.AssertRootEntity(root);
         Test_ComponentReader.AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -48,7 +48,7 @@ public static class Test_Client
         // --- read root DatabaseEntity again
         root.Position   = default;
         root.Scale3     = default;
-        root            = database.LoadEntity(10L, out _);
+        root            = database.LoadGameEntity(10L, out _);
         Test_ComponentReader.AssertRootEntity(root);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -56,7 +56,7 @@ public static class Test_Client
         // --- read child DatabaseEntity again
         child.Position  = default;
         child.Scale3    = default;
-        child           = database.LoadEntity(11L, out _);
+        child           = database.LoadGameEntity(11L, out _);
         Test_ComponentReader.AssertChildEntity(child);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -77,7 +77,7 @@ public static class Test_Client
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
-        var ge = database.StoreEntity(entity);
+        var ge = database.StoreGameEntity(entity);
         AreEqual(1, database.Entities.Count);
         
         AreEqual(10,    ge.pid);
@@ -85,7 +85,7 @@ public static class Test_Client
         AreEqual(11,    ge.children[0]);
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", ge.components.AsString());
         
-        ge = database.StoreEntity(child);
+        ge = database.StoreGameEntity(child);
         AreEqual(2, database.Entities.Count);
         
         AreEqual(11,    ge.pid);

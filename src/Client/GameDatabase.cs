@@ -2,10 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Linq;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Database;
-using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -29,7 +27,7 @@ public sealed class GameDatabase
     /// <summary>
     /// Stores the given <see cref="GameEntity"/> as a <see cref="DatabaseEntity"/> in the <see cref="GameDatabase"/>
     /// </summary>
-    public DatabaseEntity StoreEntity(GameEntity entity)
+    public DatabaseEntity StoreGameEntity(GameEntity entity)
     {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
@@ -48,10 +46,10 @@ public sealed class GameDatabase
     }
     
     /// <summary>
-    /// Loads the given <see cref="DatabaseEntity"/> as a <see cref="GameEntity"/> from the <see cref="GameDatabase"/>
+    /// Loads the entity with given <paramref name="pid"/> as a <see cref="GameEntity"/> from the <see cref="GameDatabase"/>
     /// </summary>
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
-    public GameEntity LoadEntity(long pid, out string error)
+    public GameEntity LoadGameEntity(long pid, out string error)
     {
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
         if (!entities.TryGetEntity(pid, out var databaseEntity)) {
