@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Friflo.Json.Fliox;
 
@@ -11,12 +12,16 @@ namespace Friflo.Fliox.Engine.ECS.Database;
 [CLSCompliant(true)]
 public sealed class GameDatabase
 {
+    public              IDatabaseSync       Sync => sync;
+    
     private readonly    GameEntityStore     store;
     private readonly    IDatabaseSync       sync;
-    
+    private readonly    EntityConverter     converter;
+
     public GameDatabase (GameEntityStore store, IDatabaseSync sync) {
         this.store  = store;
         this.sync   = sync;
+        converter   = new EntityConverter();
     }
         
     /// <summary>
@@ -31,11 +36,12 @@ public sealed class GameDatabase
         if (entityStore != store) {
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
-        if (!sync.TryGetEntity(entity.id, out var dbEntity)) {
-            dbEntity = new DatabaseEntity { pid = entity.id };
+        var pid = store.GetNodeById(entity.id).pid;
+        if (!sync.TryGetEntity(pid, out var dbEntity)) {
+            dbEntity = new DatabaseEntity { pid = pid };
             sync.AddEntity(dbEntity);
         }
-        entityStore.StoreEntity(entity, dbEntity);
+        entityStore.GameEntityToDatabaseEntity(entity, dbEntity, converter.writer);
         return dbEntity;
     }
     
@@ -45,9 +51,6 @@ public sealed class GameDatabase
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
     public GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
     {
-        if (databaseEntity == null) {
-            throw new ArgumentNullException(nameof(databaseEntity));
-        }
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
         if (!sync.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
             storedEntity = new DatabaseEntity();
@@ -61,6 +64,6 @@ public sealed class GameDatabase
         storedEntity.prefab     = databaseEntity.prefab;
         storedEntity.modify     = databaseEntity.modify;
         
-        return store.LoadEntity(storedEntity, out error);
+        return store.DatabaseEntityToGameEntity(storedEntity, out error, converter.reader);
     }
 }

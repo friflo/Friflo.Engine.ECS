@@ -10,28 +10,25 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.GE;
 
-
-
 public static class Test_ComponentReader
 {
-
-    
-    private static readonly JsonValue rootComponents =
+    internal static readonly JsonValue rootComponents =
         new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 1, \"z\": 1 }, \"scl3\": { \"x\": 2, \"y\": 2, \"z\": 2 } }");
     
-    private static readonly JsonValue childComponents =
+    internal static readonly JsonValue childComponents =
         new JsonValue("{ \"pos\": { \"x\": 3, \"y\": 3, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 4, \"z\": 4 } }");
     
     [Test]
     public static void Test_ComponentReader_read_components()
     {
-        var store       = TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
         var childNode   = new DatabaseEntity { pid = 11, components = childComponents };
         
-        var root        = database.LoadEntity(rootNode, out _);
-        var child       = database.LoadEntity(childNode, out _);
+        var root        = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
+        var child       = converter.DatabaseEntityToGameEntity(childNode, store, out _);
         AssertRootEntity(root);
         AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -41,7 +38,7 @@ public static class Test_ComponentReader
         // --- read root DatabaseEntity again
         root.Position   = default;
         root.Scale3     = default;
-        root            = database.LoadEntity(rootNode, out _);
+        root            = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         AssertRootEntity(root);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -49,7 +46,7 @@ public static class Test_ComponentReader
         // --- read child DatabaseEntity again
         child.Position  = default;
         child.Scale3    = default;
-        child           = database.LoadEntity(childNode, out _);
+        child           = converter.DatabaseEntityToGameEntity(childNode, store, out _);
         AssertChildEntity(child);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -59,14 +56,16 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_change_archetype()
     {
-        var store       = TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
         var root        = store.CreateEntity(10);
         root.AddComponent(new Scale3(1, 2, 3));
         IsTrue  (root.HasScale3);
         IsFalse (root.HasPosition);
         
         var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents };
-        var rootResult  = database.LoadEntity(rootNode, out _);  // archetype changes
+        var rootResult  = converter.DatabaseEntityToGameEntity(rootNode, store, out _);  // archetype changes
         AreSame (root, rootResult);
         IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DatabaseEntity components
         IsTrue  (root.HasPosition);
@@ -76,9 +75,11 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components_null()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+
         var node    = new DatabaseEntity { pid = 10, components = default };
-        var entity  = database.LoadEntity(node, out var error);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out var error);
         AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
@@ -87,9 +88,11 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components_empty()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
         var node    = new DatabaseEntity { pid = 10, components = new JsonValue("{}") };
-        var entity  = database.LoadEntity(node, out var error);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out var error);
         AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
@@ -97,9 +100,11 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_tags()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
         var node    = new DatabaseEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
-        var entity  = database.LoadEntity(node, out _);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out _);
         AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
     }
@@ -107,10 +112,12 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_invalid_component()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
         var json    = new JsonValue("{ \"pos\": [] }");
         var node    = new DatabaseEntity { pid = 10, components = json };
-        var entity  = database.LoadEntity(node, out var error);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out var error);
         NotNull(entity);
         AreEqual("component must be an object. was ArrayStart. id: 10, component: 'pos'", error);
     }
@@ -118,14 +125,16 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_invalid_components()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
         var node    = new DatabaseEntity { pid = 10, components = new JsonValue("123") };
-        var entity  = database.LoadEntity(node, out var error);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out var error);
         NotNull(entity);
         AreEqual("expect 'components' == object or null. id: 10. was: ValueNumber", error);
         
         node        = new DatabaseEntity { pid = 10, components = new JsonValue("invalid") };
-        entity      = database.LoadEntity(node, out error);
+        entity      = converter.DatabaseEntityToGameEntity(node, store, out error);
         NotNull(entity);
         AreEqual("unexpected character while reading value. Found: i path: '(root)' at position: 1. id: 10", error);
     }
@@ -135,22 +144,26 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_DatabaseEntity_assertions()
     {
         {
-            TestUtils.CreateGameEntityStore(out var database);
+            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var converter   = EntityConverter.Default;
+        
             var e = Throws<ArgumentNullException>(() => {
-                database.LoadEntity(null, out _);
+                converter.DatabaseEntityToGameEntity(null, store, out _);
             });
             AreEqual("Value cannot be null. (Parameter 'databaseEntity')", e!.Message);
         } {
-            TestUtils.CreateGameEntityStore(out var database);
+            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var converter   = EntityConverter.Default;
+        
             var childNode   = new DatabaseEntity { pid = int.MaxValue + 1L };
             var e = Throws<ArgumentException>(() => {
-                database.LoadEntity(childNode, out _);
+                converter.DatabaseEntityToGameEntity(childNode, store, out _);
             });
             AreEqual("pid mus be in range [0, 2147483647]. was: {pid} (Parameter 'databaseEntity')", e!.Message);
         }
     }
     
-    private static void AssertRootEntity(GameEntity root) {
+    internal static void AssertRootEntity(GameEntity root) {
         AreEqual(10,    root.Id);
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
@@ -163,7 +176,7 @@ public static class Test_ComponentReader
         AreEqual(2f,    root.Scale3.z);
     }
     
-    private static void AssertChildEntity(GameEntity child) {
+    internal static void AssertChildEntity(GameEntity child) {
         AreEqual(11,    child.Id);
         AreEqual(0,     child.ChildCount);
         AreEqual(2,     child.Archetype.ComponentCount);
@@ -178,13 +191,14 @@ public static class Test_ComponentReader
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
     public static void Test_ComponentReader_read_components_Mem()
     {
-        var store       = TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
         var childNode   = new DatabaseEntity { pid = 11, components = childComponents };
         
-        var root        = database.LoadEntity(rootNode, out _);
-        var child       = database.LoadEntity(childNode, out _);
+        var root        = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
+        var child       = converter.DatabaseEntityToGameEntity(childNode, store, out _);
         AssertRootEntity(root);
         AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -195,7 +209,7 @@ public static class Test_ComponentReader
         root.Position   = default;
         root.Scale3     = default;
         var start       = Mem.GetAllocatedBytes();
-        root            = database.LoadEntity(rootNode, out _);
+        root            = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         Mem.AssertNoAlloc(start);
         AssertRootEntity(root);
         AssertChildEntity(child);
@@ -206,14 +220,15 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components_Perf()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var rootNode    = new DatabaseEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
         
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
         {
-            var root = database.LoadEntity(rootNode, out _);
+            var root = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
             root.DeleteEntity();
         }
     }
@@ -223,18 +238,19 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_behavior()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var rootNode    = new DatabaseEntity { pid = 10, components = behavior, children = new List<long> { 11 } };
 
-        var root        = database.LoadEntity(rootNode, out _);
+        var root        = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         AreEqual(1,     root.Behaviors.Length);
         var behavior1   = root.GetBehavior<TestBehavior1>();
         AreEqual(2,     behavior1.val1);
         behavior1.val1      = -1;
         
         // --- read same DatabaseEntity again
-        database.LoadEntity(rootNode, out _);
+        converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         var comp2       = root.GetBehavior<TestBehavior1>();
         AreEqual(2,     comp2.val1);
         AreSame(behavior1, comp2);
@@ -243,13 +259,14 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_behavior_Perf()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var rootNode    = new DatabaseEntity { pid = 10, components = behavior, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
-            database.LoadEntity(rootNode, out _);
+            converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         }
     }
     
@@ -260,11 +277,12 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_multiple_behaviors()
     {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         
         var rootNode    = new DatabaseEntity { pid = 10, components = behaviors };
 
-        var root        = database.LoadEntity(rootNode, out _);
+        var root        = converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         AreEqual(3,     root.Behaviors.Length);
         var behavior1   = root.GetBehavior<TestBehavior1>();
         AreEqual(11,    behavior1.val1);
@@ -278,7 +296,7 @@ public static class Test_ComponentReader
         behavior3.val3      = -1;
         
         // --- read same DatabaseEntity again
-        database.LoadEntity(rootNode, out _);
+        converter.DatabaseEntityToGameEntity(rootNode, store, out _);
         AreEqual(3,     root.Behaviors.Length);
         behavior1       = root.GetBehavior<TestBehavior1>();
         AreEqual(11,    behavior1.val1);

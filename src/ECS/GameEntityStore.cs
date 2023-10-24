@@ -83,11 +83,15 @@ public sealed partial class GameEntityStore : EntityStore
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
     /// Instead use <see cref="Nodes"/> if possible as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
-    public  ref EntityNode  GetNodeByPid(int pid) {
+    public  ref EntityNode  GetNodeByPid(long pid) {
         if (pid2Id != null) {
             return ref nodes[pid2Id[pid]];
         }
         return ref nodes[pid];
+    }
+    
+    public  ref EntityNode  GetNodeById(int id) {
+        return ref nodes[id];
     }
     #endregion
 }

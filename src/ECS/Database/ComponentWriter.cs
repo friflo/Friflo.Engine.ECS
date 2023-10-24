@@ -20,9 +20,7 @@ internal sealed class ComponentWriter
     private readonly    ComponentType[]                 structTypes;
     private readonly    Dictionary<Type, ComponentType> componentTypeByType;
     
-    internal static readonly ComponentWriter Instance = new ComponentWriter();
-    
-    private ComponentWriter() {
+    internal ComponentWriter() {
         buffer              = new Bytes(128);
         componentWriter     = new ObjectWriter(EntityStore.Static.TypeStore);
         var schema          = EntityStore.Static.ComponentSchema;

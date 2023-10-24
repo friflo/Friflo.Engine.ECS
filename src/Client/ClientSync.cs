@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Database;
 using Friflo.Json.Fliox.Hub.Client;
 
@@ -23,4 +24,6 @@ public sealed class ClientSync : IDatabaseSync
     public void AddEntity(DatabaseEntity databaseEntity) {
         entities.Add(databaseEntity);
     }
+
+    public IEnumerable<KeyValuePair<long, DatabaseEntity>> Entities => entities;
 }

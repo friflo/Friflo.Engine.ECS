@@ -16,9 +16,11 @@ public static class Test_GameDatabase
     [Test]
     public static void Test_GameDatabase_Load_DatabaseEntity_UsePidAsId()
     {
-        var store   = TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
         var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
-        var entity  = database.LoadEntity(node, out _);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out _);
         
         AreEqual(10,    store.PidToId(10));
         AreEqual(10,    store.GetNodeByPid(10).Pid);
@@ -34,9 +36,11 @@ public static class Test_GameDatabase
     
     [Test]
     public static void Test_GameDatabase_Load_DatabaseEntity_RandomPids() {
-        var store   = TestUtils.CreateGameEntityStore(out var database, PidType.RandomPids);
+        var store       = new GameEntityStore();
+        var converter   = EntityConverter.Default;
+        
         var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
-        var entity  = database.LoadEntity(node, out _);
+        var entity  = converter.DatabaseEntityToGameEntity(node, store, out _);
         
         AreEqual(1,     store.PidToId(10));
         AreEqual(1,     store.GetNodeByPid(10).Id);
@@ -197,24 +201,18 @@ public static class Test_GameDatabase
     
     [Test]
     public static void Test_GameDatabase_assertions() {
-        TestUtils.CreateGameEntityStore(out var database);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentNullException>(() => {
-                database.LoadEntity(null, out _);    
+                converter.DatabaseEntityToGameEntity(null, store, out _);    
             });
             AreEqual("Value cannot be null. (Parameter 'databaseEntity')", e!.Message);
         } {
             var e = Throws<ArgumentNullException>(() => {
-                database.StoreEntity(null);    
+                converter.GameEntityToDatabaseEntity(null);    
             });
-            AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
-        } {
-            var store2 = new GameEntityStore(PidType.UsePidAsId);
-            var entity = store2.CreateEntity();
-            var e = Throws<ArgumentException>(() => {
-                database.StoreEntity(entity);    
-            });
-            AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+            AreEqual("Value cannot be null. (Parameter 'gameEntity')", e!.Message);
         }
     }
     

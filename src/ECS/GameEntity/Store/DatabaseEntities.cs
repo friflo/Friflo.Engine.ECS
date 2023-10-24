@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class GameEntityStore
 {
     // ---------------------------------- GameEntity -> DatabaseEntity ----------------------------------
-    internal void StoreEntity(GameEntity entity, DatabaseEntity databaseEntity)
+    internal void GameEntityToDatabaseEntity(GameEntity entity, DatabaseEntity databaseEntity, ComponentWriter writer)
     {
         var id = entity.id;
         ref var node = ref nodes[id];
@@ -28,7 +28,7 @@ public partial class GameEntityStore
             }
         }
         // --- write components & behaviors
-        var jsonComponents = ComponentWriter.Instance.Write(entity);
+        var jsonComponents = writer.Write(entity);
         databaseEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
         // --- process tags
@@ -44,7 +44,7 @@ public partial class GameEntityStore
     }
     
     // ---------------------------------- DatabaseEntity -> GameEntity ----------------------------------
-    internal GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
+    internal GameEntity DatabaseEntityToGameEntity(DatabaseEntity databaseEntity, out string error, ComponentReader reader)
     {
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
@@ -52,7 +52,7 @@ public partial class GameEntityStore
         } else {
             entity = CreateFromDbEntityRandomPid (databaseEntity);
         }
-        error = ComponentReader.Instance.Read(databaseEntity, entity, this);
+        error = reader.Read(databaseEntity, entity, this);
         return entity;
     }
 

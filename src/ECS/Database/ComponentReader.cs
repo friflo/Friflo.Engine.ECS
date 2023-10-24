@@ -25,9 +25,8 @@ internal sealed class ComponentReader
     private             RawComponent[]                      components;
     private             int                                 componentCount;
     
-    internal static readonly ComponentReader Instance = new ComponentReader();
     
-    private ComponentReader() {
+    internal ComponentReader() {
         buffer              = new Bytes(128);
         components          = new RawComponent[1];
         componentReader     = new ObjectReader(EntityStore.Static.TypeStore);
