@@ -7,7 +7,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
-namespace Friflo.Fliox.Engine.ECS.Database;
+namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
 /// Create the <see cref="JsonValue"/> from all components and behaviors used at <see cref="DatabaseEntity.components"/>.<br/>

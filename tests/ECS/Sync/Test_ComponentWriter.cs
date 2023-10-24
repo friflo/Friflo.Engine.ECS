@@ -1,10 +1,10 @@
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Database;
+using Friflo.Fliox.Engine.ECS.Sync;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+namespace Tests.ECS.Sync;
 
 public static class Test_ComponentWriter
 {

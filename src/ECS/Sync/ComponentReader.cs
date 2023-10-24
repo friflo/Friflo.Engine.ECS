@@ -8,7 +8,7 @@ using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.ComponentKind;
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-namespace Friflo.Fliox.Engine.ECS.Database;
+namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
 /// Create all components / behaviors for an entity from <see cref="JsonValue"/> used as <see cref="DatabaseEntity.components"/>

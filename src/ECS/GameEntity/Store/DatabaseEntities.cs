@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS.Database;
+using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
 
 // ReSharper disable once CheckNamespace

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Database;
+using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+namespace Tests.ECS.Sync;
 
 public static class Test_ComponentReader
 {
@@ -304,6 +304,64 @@ public static class Test_ComponentReader
         AreEqual(22,    behavior2.val2);
         behavior3    = root.GetBehavior<TestBehavior3>();
         AreEqual(33,    behavior3.val3);
+    }
+    
+    [Test]
+    public static void Test_GameDatabase_Load_DatabaseEntity_UsePidAsId()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
+        var entity  = converter.DatabaseToGameEntity(node, store, out _);
+        
+        AreEqual(10,    store.PidToId(10L));
+        AreEqual(10,    store.GetNodeByPid(10L).Pid);
+        AreEqual(10,    entity.Id);
+        AreEqual(1,     entity.ChildNodes.Length);
+        AreEqual(1,     store.Nodes[10].ChildCount);
+        AreEqual(10,    store.Nodes[10].Pid);
+        AreEqual(20,    store.Nodes[10].ChildIds[0]);
+        AreEqual(10,    store.Nodes[20].ParentId);
+        AreEqual(20,    store.Nodes[20].Pid);
+        AreEqual(1,     store.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_GameDatabase_Load_DatabaseEntity_RandomPids() {
+        var store       = new GameEntityStore();
+        var converter   = EntityConverter.Default;
+        
+        var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
+        var entity  = converter.DatabaseToGameEntity(node, store, out _);
+        
+        AreEqual(1,     store.PidToId(10L));
+        AreEqual(1,     store.GetNodeByPid(10L).Id);
+        AreEqual(1,     entity.Id);
+        AreEqual(1,     entity.ChildNodes.Length);
+        AreEqual(1,     store.Nodes[1].ChildCount);
+        AreEqual(10,    store.Nodes[1].Pid);
+        AreEqual(2,     store.Nodes[1].ChildIds[0]);
+        AreEqual(1,     store.Nodes[2].ParentId);
+        AreEqual(20,    store.Nodes[2].Pid);
+        AreEqual(1,     store.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_GameDatabase_assertions() {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        {
+            var e = Throws<ArgumentNullException>(() => {
+                converter.DatabaseToGameEntity(null, store, out _);    
+            });
+            AreEqual("Value cannot be null. (Parameter 'databaseEntity')", e!.Message);
+        } {
+            var e = Throws<ArgumentNullException>(() => {
+                converter.GameToDatabaseEntity(null);    
+            });
+            AreEqual("Value cannot be null. (Parameter 'gameEntity')", e!.Message);
+        }
     }
 }
 
