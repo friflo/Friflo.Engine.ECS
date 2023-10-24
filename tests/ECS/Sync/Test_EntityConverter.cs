@@ -15,18 +15,11 @@ public static class Test_EntityConverter
 {
     private static DatabaseEntity CreateDbEntity(int id, int[] childIds)
     {
-        List<long> children = null;
-        if (childIds != null) {
-            children = new List<long>(childIds.Length);
-            foreach (var childId in childIds) {
-                children.Add(childId);
-            }
+        var children = new List<long>(childIds.Length);
+        foreach (var childId in childIds) {
+            children.Add(childId);
         }
-        var entity = new DatabaseEntity {
-            pid = id,
-            children = children
-        };
-        return entity;
+        return new DatabaseEntity { pid = id, children = children };
     }
     
     [Test]
