@@ -241,9 +241,6 @@ public static class Test_StructHeapRaw
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int n = 1; n < Count; n++) {
-                if (n == 16777218) {
-                    Console.WriteLine();
-                }
                 ref var component1 = ref store.GetEntityComponent<MyComponent1>(n);                
                 var x = component1.a;
                 if (x != n - 1)     Mem.FailAreEqual(x, n - 1);
