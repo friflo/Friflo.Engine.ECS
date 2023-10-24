@@ -9,9 +9,9 @@ using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+namespace Tests.ECS.Sync;
 
-public static class Test_GameDatabase
+public static class Test_EntityConverter
 {
     private static DatabaseEntity CreateDbEntity(int id, int[] childIds = null)
     {
@@ -30,7 +30,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_single_entity() {
+    public static void Test_EntityConverter_Load_single_entity() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         var entity2 = converter.DatabaseToGameEntity(CreateDbEntity(2), store, out _);
@@ -42,7 +42,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_parent_child() {
+    public static void Test_EntityConverter_Load_parent_child() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
 
@@ -72,7 +72,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_child_parent() {
+    public static void Test_EntityConverter_Load_child_parent() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
@@ -102,7 +102,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_CreateFrom_assertions() {
+    public static void Test_EntityConverter_Load_CreateFrom_assertions() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         {
@@ -114,7 +114,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_error_multiple_parents_1() {
+    public static void Test_EntityConverter_Load_error_multiple_parents_1() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
@@ -127,7 +127,7 @@ public static class Test_GameDatabase
     }
 
     [Test]
-    public static void Test_GameDatabase_Load_error_multiple_parents_2() {
+    public static void Test_EntityConverter_Load_error_multiple_parents_2() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
@@ -140,7 +140,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_error_cycle_1() {
+    public static void Test_EntityConverter_Load_error_cycle_1() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
@@ -151,7 +151,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_error_cycle_2() {
+    public static void Test_EntityConverter_Load_error_cycle_2() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
@@ -164,7 +164,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_error_cycle_3() {
+    public static void Test_EntityConverter_Load_error_cycle_3() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
@@ -178,7 +178,7 @@ public static class Test_GameDatabase
     }
     
     [Test]
-    public static void Test_GameDatabase_Load_Perf() {
+    public static void Test_EntityConverter_Load_Perf() {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
