@@ -66,6 +66,7 @@ public static class Test_Client
     public static void Test_Client_write_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
+        
         var database    = CreateClientDatabase(store);
 
         var entity  = store.CreateEntity(10);
@@ -74,11 +75,26 @@ public static class Test_Client
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
-        var node = database.StoreEntity(entity);
+        var ge = database.StoreEntity(entity);
+        AreEqual(1, database.Sync.EntityCount);
         
-        AreEqual(10,    node.pid);
-        AreEqual(1,     node.children.Count);
-        AreEqual(11,    node.children[0]);
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node.components.AsString());
+        AreEqual(10,    ge.pid);
+        AreEqual(1,     ge.children.Count);
+        AreEqual(11,    ge.children[0]);
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", ge.components.AsString());
+        
+        ge = database.StoreEntity(child);
+        AreEqual(2, database.Sync.EntityCount);
+        
+        AreEqual(11,    ge.pid);
+        IsNull  (ge.children);
+        IsTrue  (ge.components.IsNull());
+        
+        int n = 0; 
+        foreach (var e in database.Sync.Entities) {
+            n++;
+            NotNull(entity);
+        }
+        AreEqual(2, n);
     }
 }

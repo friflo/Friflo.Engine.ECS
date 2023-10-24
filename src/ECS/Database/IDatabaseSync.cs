@@ -9,5 +9,6 @@ public interface IDatabaseSync
 {
     bool                                            TryGetEntity (long pid, out DatabaseEntity databaseEntity);
     void                                            AddEntity    (DatabaseEntity databaseEntity);
+    int                                             EntityCount { get; }
     IEnumerable<KeyValuePair<long, DatabaseEntity>> Entities { get; }
 }

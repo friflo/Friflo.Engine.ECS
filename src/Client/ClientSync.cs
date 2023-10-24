@@ -25,5 +25,8 @@ public sealed class ClientSync : IDatabaseSync
         entities.Add(databaseEntity);
     }
 
+    public int EntityCount  => entities.Count;
+
+
     public IEnumerable<KeyValuePair<long, DatabaseEntity>> Entities => entities;
 }
