@@ -78,7 +78,7 @@ public sealed class ComponentSchema
             components[structType.structIndex] = structType;
         }
         foreach (var classType in classList) {
-            componentTypeByKey. Add(classType.componentKey, classType);
+            componentTypeByKey.Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
             behaviors[classType.behaviorIndex] = classType;
         }
@@ -90,18 +90,9 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a component type attributed with
-    /// <see cref="ComponentAttribute"/> or <see cref="BehaviorAttribute"/> for the given key
-    /// </summary>
-    public ComponentType GetComponentTypeByKey(string key) {
-        componentTypeByKey.TryGetValue(key, out var result);
-        return result;
-    }
-    
-    /// <summary>
     /// return <see cref="ComponentType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
     /// </summary>
-    public ComponentType GetStructComponentType<T>()
+    public ComponentType GetComponentType<T>()
         where T : struct, IComponent
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
@@ -115,6 +106,16 @@ public sealed class ComponentSchema
         where T : Behavior
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
+        return result;
+    }
+    
+    /// <summary>
+    /// return <see cref="ComponentType"/> of a class attributed with <see cref="BehaviorAttribute"/> for the given type
+    /// </summary>
+    public ComponentType GetTagType<T>()
+        where T : struct, IEntityTag
+    {
+        tagTypeByType.TryGetValue(typeof(T), out var result);
         return result;
     }
     

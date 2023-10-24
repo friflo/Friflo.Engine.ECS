@@ -26,6 +26,11 @@ public static class Test_ComponentSchema
         AreEqual(3,                     schema.TagTypeByType.Count);
         AreEqual(typeof(TestTag),       testTagType.type);
         AreEqual("tag: [#TestTag]",     testTagType.ToString());
+        
+        testTagType = schema.GetTagType<TestTag>();
+        AreEqual(3,                     schema.TagTypeByType.Count);
+        AreEqual(typeof(TestTag),       testTagType.type);
+        AreEqual("tag: [#TestTag]",     testTagType.ToString());
     }
     
     [Test]
@@ -61,13 +66,13 @@ public static class Test_ComponentSchema
             NotNull (type.componentKey);
         }
         
-        var posType = schema.GetComponentTypeByKey("pos");
+        var posType = schema.ComponentTypeByKey["pos"];
         AreEqual(typeof(Position), posType.type);
         
-        var testType = schema.GetComponentTypeByKey("test");
+        var testType = schema.ComponentTypeByKey["test"];
         AreEqual(typeof(TestComponent), testType.type);
         
-        var myComponentType = schema.GetStructComponentType<MyComponent1>();
+        var myComponentType = schema.GetComponentType<MyComponent1>();
         AreEqual("my1",                             myComponentType.componentKey);
         AreEqual("component: [MyComponent1]",       myComponentType.ToString());
         

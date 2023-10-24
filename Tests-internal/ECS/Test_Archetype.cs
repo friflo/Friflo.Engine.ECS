@@ -80,7 +80,7 @@ public static class Test_Archetype
             indexes.GetStructIndex(0);
         });
         var schema  = EntityStore.GetComponentSchema();
-        var posType = schema.GetStructComponentType<Position>();
+        var posType = schema.GetComponentType<Position>();
         
         indexes = new SignatureIndexes(1, posType.structIndex);
         AreEqual("StructIndexes: [Position]", indexes.ToString());
