@@ -5,7 +5,6 @@ using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox.Hub.Host;
 using NUnit.Framework;
 using Tests.ECS;
-using Tests.ECS.GE;
 using Tests.ECS.Sync;
 using static NUnit.Framework.Assert;
 

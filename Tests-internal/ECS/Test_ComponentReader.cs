@@ -13,9 +13,5 @@ public static class Test_ComponentReader
         Assert.AreEqual("test", rawComponent.ToString());
     }
     
-    [Test]
-    public static void Test_ComponentReader_DatabaseEntity() {
-        var databaseEntity = new DatabaseEntity { pid = 1234 };
-        Assert.AreEqual("pid: 1234", databaseEntity.ToString());
-    }
+
 }

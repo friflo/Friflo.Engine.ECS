@@ -73,5 +73,12 @@ public static class Test_ComponentWriter
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }
+    
+    [Test]
+    public static void Test_ComponentReader_DatabaseEntity()
+    {
+        var databaseEntity = new DatabaseEntity { pid = 1234 };
+        AreEqual("pid: 1234", databaseEntity.ToString());
+    }
 }
 
