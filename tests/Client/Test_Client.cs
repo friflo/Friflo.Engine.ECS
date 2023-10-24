@@ -54,7 +54,7 @@ public static class Test_Client
         AreEqual(2,     store.EntityCount);
 
         int n = 0; 
-        foreach (var entity in database.Local.Entities) {
+        foreach (var entity in database.LocalEntities) {
             n++;
             NotNull(entity);
         }
@@ -75,7 +75,7 @@ public static class Test_Client
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
         var ge = database.StoreEntity(entity);
-        AreEqual(1, database.Local.Count);
+        AreEqual(1, database.LocalEntities.Count);
         
         AreEqual(10,    ge.pid);
         AreEqual(1,     ge.children.Count);
@@ -83,14 +83,14 @@ public static class Test_Client
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", ge.components.AsString());
         
         ge = database.StoreEntity(child);
-        AreEqual(2, database.Local.Count);
+        AreEqual(2, database.LocalEntities.Count);
         
         AreEqual(11,    ge.pid);
         IsNull  (ge.children);
         IsTrue  (ge.components.IsNull());
         
         int n = 0; 
-        foreach (var e in database.Local) {
+        foreach (var e in database.LocalEntities) {
             n++;
             NotNull(e.Value);
         }

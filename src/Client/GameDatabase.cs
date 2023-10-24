@@ -14,16 +14,16 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public sealed class GameDatabase
 {
-    public              LocalEntities<long, DatabaseEntity> Local => local;
+    public              LocalEntities<long, DatabaseEntity> LocalEntities => localEntities;
     
     private readonly    GameEntityStore                     store;
-    private readonly    LocalEntities<long, DatabaseEntity> local;
+    private readonly    LocalEntities<long, DatabaseEntity> localEntities;
     private readonly    EntityConverter                     converter;
 
     public GameDatabase (GameEntityStore store, GameClient client) {
-        this.store  = store;
-        local       = client.entities.Local;
-        converter   = new EntityConverter();
+        this.store      = store;
+        localEntities   = client.entities.Local;
+        converter       = new EntityConverter();
     }
         
     /// <summary>
@@ -39,9 +39,9 @@ public sealed class GameDatabase
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
         var pid = store.GetNodeById(entity.Id).Pid;
-        if (!local.TryGetEntity(pid, out var dbEntity)) {
+        if (!localEntities.TryGetEntity(pid, out var dbEntity)) {
             dbEntity = new DatabaseEntity { pid = pid };
-            local.Add(dbEntity);
+            localEntities.Add(dbEntity);
         }
         converter.GameToDatabaseEntity(entity, dbEntity);
         return dbEntity;
@@ -54,7 +54,7 @@ public sealed class GameDatabase
     public GameEntity LoadEntity(DatabaseEntity databaseEntity, out string error)
     {
         // --- stored DatabaseEntity references have an identity - their reference and their pid   
-        if (!local.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
+        if (!localEntities.TryGetEntity(databaseEntity.pid, out var storedEntity)) {
             storedEntity = new DatabaseEntity();
         }
         // --- copy all fields to eliminate side effects by mutations on the passed databaseEntity
