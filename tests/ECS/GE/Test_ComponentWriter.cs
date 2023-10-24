@@ -20,7 +20,7 @@ public static class Test_ComponentWriter
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
-        var node = converter.GameEntityToDatabaseEntity(entity);
+        var node = converter.GameToDatabaseEntity(entity);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
@@ -35,7 +35,7 @@ public static class Test_ComponentWriter
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
-        var node    = converter.GameEntityToDatabaseEntity(entity);
+        var node    = converter.GameToDatabaseEntity(entity);
         
         AreEqual(10,    node.pid);
         IsNull  (node.children);
@@ -49,7 +49,7 @@ public static class Test_ComponentWriter
         
         var entity  = store.CreateEntity(10);
         entity.AddTag<TestTag>();
-        var node    = converter.GameEntityToDatabaseEntity(entity);
+        var node    = converter.GameToDatabaseEntity(entity);
         
         AreEqual(10,                node.pid);
         AreEqual(1,                 node.tags.Count);
@@ -69,7 +69,7 @@ public static class Test_ComponentWriter
         int count = 10; // 2_000_000 ~ 1.935 ms
         DatabaseEntity node = null;
         for (int n = 0; n < count; n++) {
-            node = converter.GameEntityToDatabaseEntity(entity);
+            node = converter.GameToDatabaseEntity(entity);
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }

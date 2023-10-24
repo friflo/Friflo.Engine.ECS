@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class GameEntityStore
 {
     // ---------------------------------- GameEntity -> DatabaseEntity ----------------------------------
-    internal void GameEntityToDatabaseEntity(GameEntity entity, DatabaseEntity databaseEntity, ComponentWriter writer)
+    internal void GameToDatabaseEntity(GameEntity entity, DatabaseEntity databaseEntity, ComponentWriter writer)
     {
         var id = entity.id;
         ref var node = ref nodes[id];
@@ -44,7 +44,7 @@ public partial class GameEntityStore
     }
     
     // ---------------------------------- DatabaseEntity -> GameEntity ----------------------------------
-    internal GameEntity DatabaseEntityToGameEntity(DatabaseEntity databaseEntity, out string error, ComponentReader reader)
+    internal GameEntity DatabaseToGameEntity(DatabaseEntity databaseEntity, out string error, ComponentReader reader)
     {
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {

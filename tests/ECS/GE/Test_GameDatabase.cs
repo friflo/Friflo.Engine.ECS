@@ -20,7 +20,7 @@ public static class Test_GameDatabase
         var converter   = EntityConverter.Default;
         
         var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
-        var entity  = converter.DatabaseEntityToGameEntity(node, store, out _);
+        var entity  = converter.DatabaseToGameEntity(node, store, out _);
         
         AreEqual(10,    store.PidToId(10));
         AreEqual(10,    store.GetNodeByPid(10).Pid);
@@ -40,7 +40,7 @@ public static class Test_GameDatabase
         var converter   = EntityConverter.Default;
         
         var node    = new DatabaseEntity{ pid = 10, children = new List<long> { 20 } };
-        var entity  = converter.DatabaseEntityToGameEntity(node, store, out _);
+        var entity  = converter.DatabaseToGameEntity(node, store, out _);
         
         AreEqual(1,     store.PidToId(10));
         AreEqual(1,     store.GetNodeByPid(10).Id);
@@ -205,12 +205,12 @@ public static class Test_GameDatabase
         var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentNullException>(() => {
-                converter.DatabaseEntityToGameEntity(null, store, out _);    
+                converter.DatabaseToGameEntity(null, store, out _);    
             });
             AreEqual("Value cannot be null. (Parameter 'databaseEntity')", e!.Message);
         } {
             var e = Throws<ArgumentNullException>(() => {
-                converter.GameEntityToDatabaseEntity(null);    
+                converter.GameToDatabaseEntity(null);    
             });
             AreEqual("Value cannot be null. (Parameter 'gameEntity')", e!.Message);
         }

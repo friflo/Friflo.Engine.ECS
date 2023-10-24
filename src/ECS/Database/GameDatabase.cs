@@ -41,7 +41,7 @@ public sealed class GameDatabase
             dbEntity = new DatabaseEntity { pid = pid };
             sync.AddEntity(dbEntity);
         }
-        entityStore.GameEntityToDatabaseEntity(entity, dbEntity, converter.writer);
+        entityStore.GameToDatabaseEntity(entity, dbEntity, converter.writer);
         return dbEntity;
     }
     
@@ -64,6 +64,6 @@ public sealed class GameDatabase
         storedEntity.prefab     = databaseEntity.prefab;
         storedEntity.modify     = databaseEntity.modify;
         
-        return store.DatabaseEntityToGameEntity(storedEntity, out error, converter.reader);
+        return store.DatabaseToGameEntity(storedEntity, out error, converter.reader);
     }
 }
