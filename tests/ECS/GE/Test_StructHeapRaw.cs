@@ -216,14 +216,14 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_Query_Perf()
     {
         var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var arch1   = store.GetArchetype(Signature.Get<MyComponent1, MyComponent2>());
          // 10_000_000
-        //      CreateEntity()              ~  498 ms
-        //      for GetEntityComponent<>()  ~   56 ms (good performance only, because archetypes remain unchanged after e 
-        //      foreach Query()             ~  145 ms
-        //      Query.ForEach()             ~  114 ms
-        //      foreach Query.Chunks        ~   10 ms
-        var query   = store.Query(Signature.Get<Position, Rotation>());
+        //      CreateEntity()              ~  390 ms
+        //      for GetEntityComponent<>()  ~   52 ms (good performance only, because archetypes remain unchanged after e 
+        //      foreach Query()             ~  144 ms
+        //      Query.ForEach()             ~   98 ms
+        //      foreach Query.Chunks        ~    6 ms
+        var query   = store.Query(Signature.Get<MyComponent1, MyComponent2>());
         foreach (var (position, rotation) in query) { }     // force one time allocation
         query.ForEach((position, rotation) => {}).Run();    // warmup
         foreach (var _ in query.Chunks) { }                 // warmup
@@ -233,7 +233,7 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             for (int n = 0; n < Count; n++) {
                 var id = store.CreateEntity(arch1);
-                store.GetEntityComponent<Position>(id).x = n;
+                store.GetEntityComponent<MyComponent1>(id).a = n;
             }
             Console.WriteLine($"CreateEntity() - raw. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
             Mem.AreEqual(Count, arch1.EntityCount);
@@ -241,8 +241,11 @@ public static class Test_StructHeapRaw
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int n = 1; n < Count; n++) {
-                ref var position = ref store.GetEntityComponent<Position>(n);                
-                var x = (int)position.x;
+                if (n == 16777218) {
+                    Console.WriteLine();
+                }
+                ref var component1 = ref store.GetEntityComponent<MyComponent1>(n);                
+                var x = component1.a;
                 if (x != n - 1)     Mem.FailAreEqual(x, n - 1);
             }
             Console.WriteLine($"for GetEntityComponent<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
@@ -251,8 +254,8 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
-            foreach (var (position, rotation) in query) {
-                var x = (int)position.Value.x;
+            foreach (var (component1, component2) in query) {
+                var x = component1.Value.a;
                 if (x != n)         Mem.FailAreEqual(x, n);
                 n++;
             }
@@ -264,8 +267,8 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
-            var forEach     = query.ForEach((position, rotation) => {
-                var x = (int)position.Value.x;
+            var forEach     = query.ForEach((component1, component2) => {
+                var x = component1.Value.a;
                 if (x != n)         Mem.FailAreEqual(x, n);
                 n++;
             });
@@ -278,9 +281,9 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
-            foreach (var (positionChunk, rotationChunk) in query.Chunks) {
-                foreach (var position in positionChunk.Values) {
-                    var x = (int)position.x;
+            foreach (var (component1Chunk, component2Chunk) in query.Chunks) {
+                foreach (var component1 in component1Chunk.Values) {
+                    var x = component1.a;
                     if (x !=n)      Mem.FailAreEqual(x, n);
                     n++;
                 }
