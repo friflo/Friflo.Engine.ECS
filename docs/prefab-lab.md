@@ -60,7 +60,7 @@ Prefabs are used in Edit & Play mode:
 Load and iterate all entities of the base scene using an `GameClient`.  
 Update `prefabs`, `mods` and `EntityNode.flags` while iterating.
 
-| `DataEntity`                             | `id` | flags        | action                                  | remarks
+| `DataEntity`                                 | `id` | flags        | action                                  | remarks
 | -------------------------------------------- | ---- | ------------ | --------------------------------------- | -----------
 | `modify` == null                             | 2, 5 |              |                                         | common case
 | `prefab` != null                             | 1    | `PrefabLink` | `prefabs[1].link = "player.scn:bb898e"` |
@@ -104,7 +104,7 @@ Add `GameObject` components / behaviors and set `EntityNode.flags`
 Iterate all `GameObject`'s in the `EntityStore` and update the scene using an `GameClient`.  
 Set `DataEntity.components`, `DataEntity.prefab` and `DataEntity.modify`
 
-| flags         | `id`    | `DataEntity.components`      | `prefab`        | `modify` | operation | remarks
+| flags         | `id`    | `DataEntity.components`          | `prefab`        | `modify` | operation | remarks
 | ------------- | ------- | -------------------------------- | --------------- | -------- | --------- | -------
 | 0             | 2, 5    | Add all `GameObject` components  |                 | null     | Upsert()  | common case
 | `PrefabLink`  | 1 (10)  |                                  | prefabs[1].link |          | Upsert()  |
