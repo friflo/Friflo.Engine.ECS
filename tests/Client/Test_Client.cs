@@ -14,7 +14,7 @@ namespace Tests.Client;
 
 public static class Test_Client
 {
-    private static GameDatabase CreateClientDatabase(GameEntityStore store) {
+    private static GameDatabase CreateGameDatabase(GameEntityStore store) {
         var hub     = new FlioxHub(new MemoryDatabase("test"));
         var client  = new GameClient(hub);
         return new GameDatabase(store, client);
@@ -24,7 +24,7 @@ public static class Test_Client
     public static void Test_Client_read_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
-        var database    = CreateClientDatabase(store);
+        var database    = CreateGameDatabase(store);
         
         var rootNode    = new DatabaseEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
         var childNode   = new DatabaseEntity { pid = 11L, components = Test_ComponentReader.childComponents };
@@ -69,7 +69,7 @@ public static class Test_Client
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         
-        var database    = CreateClientDatabase(store);
+        var database    = CreateGameDatabase(store);
 
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
