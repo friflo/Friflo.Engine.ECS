@@ -18,24 +18,24 @@ public class EntityConverter
         writer = new ComponentWriter();
     }
     
-    public DatabaseEntity GameToDatabaseEntity(GameEntity gameEntity, DatabaseEntity databaseEntity = null)
+    public DataEntity GameToDataEntity(GameEntity gameEntity, DataEntity dataEntity = null)
     {
         if (gameEntity == null) {
             throw new ArgumentNullException(nameof(gameEntity));
         }
-        var store           = gameEntity.archetype.gameEntityStore;
-        var pid             = store.GetNodeById(gameEntity.id).pid;
-        databaseEntity    ??= new DatabaseEntity();
-        databaseEntity.pid  = pid;
-        store.GameToDatabaseEntity(gameEntity, databaseEntity, writer);
-        return databaseEntity;
+        var store       = gameEntity.archetype.gameEntityStore;
+        var pid         = store.GetNodeById(gameEntity.id).pid;
+        dataEntity    ??= new DataEntity();
+        dataEntity.pid  = pid;
+        store.GameToDataEntity(gameEntity, dataEntity, writer);
+        return dataEntity;
     }
     
-    public GameEntity DatabaseToGameEntity(DatabaseEntity databaseEntity, GameEntityStore store, out string error)
+    public GameEntity DataToGameEntity(DataEntity dataEntity, GameEntityStore store, out string error)
     {
-        if (databaseEntity == null) {
-            throw new ArgumentNullException(nameof(databaseEntity));
+        if (dataEntity == null) {
+            throw new ArgumentNullException(nameof(dataEntity));
         }
-        return store.DatabaseToGameEntity(databaseEntity, out error, reader);
+        return store.DataToGameEntity(dataEntity, out error, reader);
     }
 }

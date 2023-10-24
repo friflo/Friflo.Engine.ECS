@@ -11,23 +11,23 @@ namespace Friflo.Fliox.Engine.Client.Attic;
 
 internal interface IDatabaseSync
 {
-    bool                                            TryGetEntity (long pid, out DatabaseEntity databaseEntity);
-    void                                            AddEntity    (DatabaseEntity databaseEntity);
-    int                                             Count     { get; }
-    IEnumerable<KeyValuePair<long, DatabaseEntity>> Entities        { get; }
+    bool                                        TryGetEntity (long pid, out DataEntity dataEntity);
+    void                                        AddEntity    (DataEntity dataEntity);
+    int                                         Count       { get; }
+    IEnumerable<KeyValuePair<long, DataEntity>> Entities    { get; }
 }
 
 [Obsolete] [ExcludeFromCodeCoverage]
 internal sealed class ClientSync : IDatabaseSync
 {
-    private readonly LocalEntities<long, DatabaseEntity>  entities;
+    private readonly LocalEntities<long, DataEntity>  entities;
     
     public ClientSync(GameClient client) {
         entities = client.entities.Local;
     }
         
-    public bool     TryGetEntity(long pid, out DatabaseEntity databaseEntity)   => entities.TryGetEntity(pid, out databaseEntity);
-    public void     AddEntity(DatabaseEntity databaseEntity)                    => entities.Add(databaseEntity);
-    public int      Count                                                       => entities.Count;
-    public IEnumerable<KeyValuePair<long, DatabaseEntity>> Entities             => entities;
+    public bool     TryGetEntity(long pid, out DataEntity dataEntity)   => entities.TryGetEntity(pid, out dataEntity);
+    public void     AddEntity(DataEntity dataEntity)                    => entities.Add(dataEntity);
+    public int      Count                                               => entities.Count;
+    public IEnumerable<KeyValuePair<long, DataEntity>> Entities         => entities;
 }

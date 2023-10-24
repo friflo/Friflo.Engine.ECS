@@ -69,7 +69,7 @@ This enables UI rendering is exactly the same on all platforms with a single cod
 
 Both `GameEntityStore` and `GameDatabase` are used to store game entities.  
 The `GameEntityStore` store `GameEntity`'s at runtime.  
-The `GameDatabase` store serialized `GameEntity`'s as `DatabaseEntity`' in databases or files and transfer them via a network.  
+The `GameDatabase` store serialized `GameEntity`'s as `DataEntity`'s in databases or files and transfer them via a network.  
 
 Using the `GameEntityStore` / `GameDatabase` enables instant synchronization of a game scene between multiple creators.  
 In this workflow the game scene is stored in a shared database without using a version control system like `Git`.  
@@ -94,7 +94,7 @@ The use case of sub scenes is to enhance the scene structure and minimize merge 
 
 ### `GameDatabase`
 
-The `GameDatabase` is used to convert `GameEntity` to `DatabaseEntity`s or vise versa so that they can be stored in 
+The `GameDatabase` is used to convert `GameEntity` to `DataEntity`s or vise versa so that they can be stored in 
 scene files or in a database.
 
 
@@ -189,7 +189,7 @@ This enables reading already serialized data after refactoring a **`Behavior`** 
 Entities are loaded using a `GameClient`
 
 ```csharp
-public sealed class DatabaseEntity
+public sealed class DataEntity
 {
     public  long            id;         // pid - permanent id
     public  List<long>      children;   // can be null
@@ -201,7 +201,7 @@ public sealed class DatabaseEntity
 
 public class GameClient : FlioxClient
 {
-    public  readonly    EntitySet <long, DatabaseEntity>   entities;
+    public  readonly    EntitySet <long, DataEntity>   entities;
     
     public GameClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
@@ -218,7 +218,7 @@ Remarks:
 
 - Entity `id`'s used in a scene are stable (permanent). So references to them are stable too.
 
-- Each entity must have only one parent so it must be included in only one `DatabaseEntity.children`.
+- Each entity must have only one parent so it must be included in only one `DataEntity.children`.
 
 - When creating new entities in a scene the engine creates random `id`'s by default using `PidType.RandomPids`.
 
@@ -238,10 +238,10 @@ Remarks:
 ### Loading entities
 
 Entities are loaded in batches of 10.000 entities using the `GameClient`.  
-If a batch has finished loading `DatabaseEntity`'s they are than added to the `EntityStore`
-by calling `GameDatabase.LoadEntity()` for each `DatabaseEntity`.
+If a batch has finished loading `DataEntity`'s they are than added to the `EntityStore`
+by calling `GameDatabase.LoadEntity()` for each `DataEntity`.
 
-The entity tree is build by utilizing the field `children` of a `DatabaseEntity`.  
+The entity tree is build by utilizing the field `children` of a `DataEntity`.  
 In case ids in `children` are inconsistent the errors can be ignored or cause a loading error.
 
 Possible inconsistencies:

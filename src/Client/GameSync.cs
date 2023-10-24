@@ -12,11 +12,11 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public sealed class GameSync
 {
-    public              LocalEntities<long, DatabaseEntity> Entities => entities;
+    public              LocalEntities<long, DataEntity> Entities => entities;
     
-    private readonly    GameEntityStore                     store;
-    private readonly    LocalEntities<long, DatabaseEntity> entities;
-    private readonly    EntityConverter                     converter;
+    private readonly    GameEntityStore                 store;
+    private readonly    LocalEntities<long, DataEntity> entities;
+    private readonly    EntityConverter                 converter;
 
     public GameSync (GameEntityStore store, GameClient client) {
         this.store  = store;
@@ -25,9 +25,9 @@ public sealed class GameSync
     }
         
     /// <summary>
-    /// Stores the given <see cref="GameEntity"/> as a <see cref="DatabaseEntity"/>
+    /// Stores the given <see cref="GameEntity"/> as a <see cref="DataEntity"/>
     /// </summary>
-    public DatabaseEntity AddGameEntity(GameEntity entity)
+    public DataEntity AddGameEntity(GameEntity entity)
     {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
@@ -37,12 +37,12 @@ public sealed class GameSync
             throw EntityStore.InvalidStoreException(nameof(entity));
         }
         var pid = store.GetNodeById(entity.Id).Pid;
-        if (!entities.TryGetEntity(pid, out var dbEntity)) {
-            dbEntity = new DatabaseEntity { pid = pid };
-            entities.Add(dbEntity);
+        if (!entities.TryGetEntity(pid, out var dataEntity)) {
+            dataEntity = new DataEntity { pid = pid };
+            entities.Add(dataEntity);
         }
-        converter.GameToDatabaseEntity(entity, dbEntity);
-        return dbEntity;
+        converter.GameToDataEntity(entity, dataEntity);
+        return dataEntity;
     }
     
     /// <summary>
@@ -51,11 +51,11 @@ public sealed class GameSync
     /// <returns>an <see cref="StoreOwnership.attached"/> entity</returns>
     public GameEntity GetGameEntity(long pid, out string error)
     {
-        // --- stored DatabaseEntity references have an identity - their reference and their pid   
-        if (!entities.TryGetEntity(pid, out var databaseEntity)) {
+        // --- stored DataEntity references have an identity - their reference and their pid   
+        if (!entities.TryGetEntity(pid, out var dataEntity)) {
             error = $"entity not found. pid: {pid}";
             return null;
         }
-        return converter.DatabaseToGameEntity(databaseEntity, store, out error);
+        return converter.DataToGameEntity(dataEntity, store, out error);
     }
 }

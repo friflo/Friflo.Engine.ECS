@@ -26,8 +26,8 @@ public static class Test_Client
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var sync    = CreateGameSync(store);
         
-        var rootNode    = new DatabaseEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DatabaseEntity { pid = 11L, components = Test_ComponentReader.childComponents };
+        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.childComponents };
         sync.Entities.Add(rootNode);
         sync.Entities.Add(childNode);
         int n = 0; 
@@ -45,7 +45,7 @@ public static class Test_Client
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
-        // --- read root DatabaseEntity again
+        // --- read root DataEntity again
         root.Position   = default;
         root.Scale3     = default;
         root            = sync.GetGameEntity(10L, out _);
@@ -53,7 +53,7 @@ public static class Test_Client
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
-        // --- read child DatabaseEntity again
+        // --- read child DataEntity again
         child.Position  = default;
         child.Scale3    = default;
         child           = sync.GetGameEntity(11L, out _);

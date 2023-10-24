@@ -10,19 +10,19 @@ using Friflo.Json.Fliox;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-// This file contains implementation specific for storing DatabaseEntity's.
-// Loading and storing DatabaseEntity's is implemented in GameEntityStore to enable declare all its fields private.
+// This file contains implementation specific for storing DataEntity's.
+// Loading and storing DataEntity's is implemented in GameEntityStore to enable declare all its fields private.
 public partial class GameEntityStore
 {
-    // ---------------------------------- GameEntity -> DatabaseEntity ----------------------------------
-    internal void GameToDatabaseEntity(GameEntity entity, DatabaseEntity databaseEntity, ComponentWriter writer)
+    // ---------------------------------- GameEntity -> DataEntity ----------------------------------
+    internal void GameToDataEntity(GameEntity entity, DataEntity dataEntity, ComponentWriter writer)
     {
         var id = entity.id;
         ref var node = ref nodes[id];
 
         // --- process child ids
         if (node.childCount > 0) {
-            var children = databaseEntity.children = new List<long>(node.childCount); 
+            var children = dataEntity.children = new List<long>(node.childCount); 
             foreach (var childId in node.ChildIds) {
                 var pid = nodes[childId].pid;
                 children.Add(pid);  
@@ -30,37 +30,37 @@ public partial class GameEntityStore
         }
         // --- write components & behaviors
         var jsonComponents = writer.Write(entity);
-        databaseEntity.components = new JsonValue(jsonComponents); // create array copy for now
+        dataEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
         // --- process tags
         var tagCount = entity.Tags.Count; 
         if (tagCount == 0) {
-            databaseEntity.tags = null;
+            dataEntity.tags = null;
         } else {
-            databaseEntity.tags = new List<string>(tagCount);
+            dataEntity.tags = new List<string>(tagCount);
             foreach(var tag in entity.Tags) {
-                databaseEntity.tags.Add(tag.tagName);
+                dataEntity.tags.Add(tag.tagName);
             }
         }
     }
     
-    // ---------------------------------- DatabaseEntity -> GameEntity ----------------------------------
-    internal GameEntity DatabaseToGameEntity(DatabaseEntity databaseEntity, out string error, ComponentReader reader)
+    // ---------------------------------- DataEntity -> GameEntity ----------------------------------
+    internal GameEntity DataToGameEntity(DataEntity dataEntity, out string error, ComponentReader reader)
     {
         GameEntity entity;
         if (pidType == PidType.UsePidAsId) {
-            entity = CreateFromDbEntityUsePidAsId(databaseEntity);
+            entity = CreateFromDataEntityUsePidAsId(dataEntity);
         } else {
-            entity = CreateFromDbEntityRandomPid (databaseEntity);
+            entity = CreateFromDataEntityRandomPid (dataEntity);
         }
-        error = reader.Read(databaseEntity, entity, this);
+        error = reader.Read(dataEntity, entity, this);
         return entity;
     }
 
-    private GameEntity CreateFromDbEntityRandomPid(DatabaseEntity databaseEntity)
+    private GameEntity CreateFromDataEntityRandomPid(DataEntity dataEntity)
     {
         // --- map pid to id
-        var pid     = databaseEntity.pid;
+        var pid     = dataEntity.pid;
         var pidMap  = pid2Id;
         if (!pidMap.TryGetValue(pid, out int id)) {
             id = sequenceId++;
@@ -68,7 +68,7 @@ public partial class GameEntityStore
         }
         // --- map children pid's to id's
         int[] childIds  = null;
-        var children    = databaseEntity.children;
+        var children    = dataEntity.children;
         var childCount  = 0;
         if (children != null) {
             childCount = children.Count;
@@ -92,16 +92,16 @@ public partial class GameEntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDbEntityUsePidAsId(DatabaseEntity databaseEntity)
+    private GameEntity CreateFromDataEntityUsePidAsId(DataEntity dataEntity)
     {
-        var pid = databaseEntity.pid;
+        var pid = dataEntity.pid;
         if (pid < Static.MinNodeId || pid > int.MaxValue) {
-            throw PidOutOfRangeException(pid, $"{nameof(DatabaseEntity)}.{nameof(databaseEntity.pid)}");
+            throw PidOutOfRangeException(pid, $"{nameof(DataEntity)}.{nameof(dataEntity.pid)}");
         }
         var id          = (int)pid;
         // --- use pid's as id's
         int[] childIds  = null;
-        var children    = databaseEntity.children;
+        var children    = dataEntity.children;
         var maxPid      = id;
         var childCount  = 0;
         if (children != null) {
@@ -110,7 +110,7 @@ public partial class GameEntityStore
             for (int n = 0; n < childCount; n++) {
                 var childId = children[n];
                 if (childId < Static.MinNodeId || childId > int.MaxValue) {
-                    throw PidOutOfRangeException(childId, $"{nameof(DatabaseEntity)}.{nameof(databaseEntity.children)}");
+                    throw PidOutOfRangeException(childId, $"{nameof(DataEntity)}.{nameof(dataEntity.children)}");
                 }
                 childIds[n]= (int)childId;
             }

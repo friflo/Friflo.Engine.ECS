@@ -10,10 +10,10 @@ using Friflo.Json.Fliox;
 namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
-/// A <see cref="DatabaseEntity"/> is used to serialize entities.
+/// A <see cref="DataEntity"/> is used to serialize entities.
 /// </summary>
 /// <remarks>
-/// When reading / writing <see cref="DatabaseEntity"/>'s in the editor a special MemoryDatabase" implementation is required.<br/>
+/// When reading / writing <see cref="DataEntity"/>'s in the editor a special MemoryDatabase" implementation is required.<br/>
 /// This implementation preserves the order of entities stored in a JSON file.<br/>
 /// Therefor it stores the order of each entity when loaded and apply this order when writing them back to the JSON file.<br/> 
 /// <br/>
@@ -22,7 +22,7 @@ namespace Friflo.Fliox.Engine.ECS.Sync;
 /// Even small changes will show a massive diff in version control. 
 /// </remarks>
 [CLSCompliant(true)]
-public sealed class DatabaseEntity
+public sealed class DataEntity
 {
     /// <summary>permanent id used to identify entities in a database</summary>
     [Key]

@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public class GameClient : FlioxClient
 {
-    public  readonly    EntitySet <long, DatabaseEntity>   entities;
+    public  readonly    EntitySet <long, DataEntity>   entities;
     
     public GameClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }

@@ -20,7 +20,7 @@ public static class Test_ComponentWriter
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
-        var node = converter.GameToDatabaseEntity(entity);
+        var node = converter.GameToDataEntity(entity);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
@@ -35,7 +35,7 @@ public static class Test_ComponentWriter
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
-        var node    = converter.GameToDatabaseEntity(entity);
+        var node    = converter.GameToDataEntity(entity);
         
         AreEqual(10,    node.pid);
         IsNull  (node.children);
@@ -49,7 +49,7 @@ public static class Test_ComponentWriter
         
         var entity  = store.CreateEntity(10);
         entity.AddTag<TestTag>();
-        var node    = converter.GameToDatabaseEntity(entity);
+        var node    = converter.GameToDataEntity(entity);
         
         AreEqual(10,                node.pid);
         AreEqual(1,                 node.tags.Count);
@@ -67,18 +67,18 @@ public static class Test_ComponentWriter
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
 
         int count = 10; // 2_000_000 ~ 1.935 ms
-        DatabaseEntity node = null;
+        DataEntity node = null;
         for (int n = 0; n < count; n++) {
-            node = converter.GameToDatabaseEntity(entity);
+            node = converter.GameToDataEntity(entity);
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }
     
     [Test]
-    public static void Test_ComponentReader_DatabaseEntity()
+    public static void Test_ComponentWriter_DataEntity()
     {
-        var databaseEntity = new DatabaseEntity { pid = 1234 };
-        AreEqual("pid: 1234", databaseEntity.ToString());
+        var dataEntity = new DataEntity { pid = 1234 };
+        AreEqual("pid: 1234", dataEntity.ToString());
     }
 }
 

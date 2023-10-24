@@ -11,7 +11,7 @@ using static Friflo.Fliox.Engine.ECS.ComponentKind;
 namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
-/// Create all components / behaviors for an entity from <see cref="JsonValue"/> used as <see cref="DatabaseEntity.components"/>
+/// Create all components / behaviors for an entity from <see cref="JsonValue"/> used as <see cref="DataEntity.components"/>
 /// </summary>
 internal sealed class ComponentReader
 {
@@ -37,26 +37,26 @@ internal sealed class ComponentReader
         searchKey           = new ArchetypeKey();
     }
     
-    internal string Read(DatabaseEntity databaseEntity, GameEntity entity, EntityStore store)
+    internal string Read(DataEntity dataEntity, GameEntity entity, EntityStore store)
     {
         componentCount      = 0;
-        var hasTags         = databaseEntity.tags?.Count > 0;
-        var hasComponents   = !databaseEntity.components.IsNull();
+        var hasTags         = dataEntity.tags?.Count > 0;
+        var hasComponents   = !dataEntity.components.IsNull();
         if (!hasComponents && !hasTags) {
             return null;
         }
-        var error = ReadRaw(databaseEntity, entity);
+        var error = ReadRaw(dataEntity, entity);
         if (error != null) {
             return error;
         }
-        SetEntityArchetype(databaseEntity, entity, store);
+        SetEntityArchetype(dataEntity, entity, store);
         ReadComponents(entity);
         return null;
     }
     
-    private string ReadRaw (DatabaseEntity databaseEntity, GameEntity entity)
+    private string ReadRaw (DataEntity dataEntity, GameEntity entity)
     {
-        parser.InitParser(databaseEntity.components);
+        parser.InitParser(dataEntity.components);
         var ev = parser.NextEvent();
         switch (ev)
         {
@@ -105,11 +105,11 @@ internal sealed class ComponentReader
     /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all components 
     /// within the current JSON payload.
     /// </summary>
-    private void SetEntityArchetype(DatabaseEntity databaseEntity, GameEntity entity, EntityStore store)
+    private void SetEntityArchetype(DataEntity dataEntity, GameEntity entity, EntityStore store)
     {
         searchKey.Clear();
         var hasStructComponent  = GetStructComponents(ref searchKey.structs);
-        var tags                = databaseEntity.tags;
+        var tags                = dataEntity.tags;
         var hasTags = tags?.Count > 0;
         if (!hasStructComponent && !hasTags) {
             return; // early out in absence of components and tags
