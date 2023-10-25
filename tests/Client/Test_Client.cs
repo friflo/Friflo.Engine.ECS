@@ -62,20 +62,23 @@ public static class Test_Client
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
         
-        sync.StoreGameEntities();
-        
-        AreEqual(2, store.EntityCount);
+        for (int n = 0; n < 2; n++)
+        {
+            sync.StoreGameEntities();
+            
+            AreEqual(2, store.EntityCount);
 
-        var data10 = client.entities.Local[10];
-        var data11 = client.entities.Local[11];
-        
-        AreEqual(10,    data10.pid);
-        AreEqual(1,     data10.children.Count);
-        AreEqual(11,    data10.children[0]);
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", data10.components.AsString());
-        
-        AreEqual(11,    data11.pid);
-        IsNull  (data11.children);
-        IsTrue  (data11.components.IsNull());
+            var data10 = client.entities.Local[10];
+            var data11 = client.entities.Local[11];
+            
+            AreEqual(10,    data10.pid);
+            AreEqual(1,     data10.children.Count);
+            AreEqual(11,    data10.children[0]);
+            AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", data10.components.AsString());
+            
+            AreEqual(11,    data11.pid);
+            IsNull  (data11.children);
+            IsTrue  (data11.components.IsNull());
+        }
     }
 }
