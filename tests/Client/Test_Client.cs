@@ -102,13 +102,17 @@ public static class Test_Client
             sync.StoreGameEntities();
             var stream = new MemoryStream();
             sync.WriteScene(stream);
-            stream.Flush();
-            var str = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+            var str = MemoryStreamAsString(stream);
             stream.Close();
             AreEqual("[]", str);
             
             AreEqual(0, store.EntityCount);
             AreEqual(0, client.entities.Local.Count);
         }
+    }
+    
+    private static string MemoryStreamAsString(MemoryStream stream) {
+        stream.Flush();
+        return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
 }
