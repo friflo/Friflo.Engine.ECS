@@ -3,12 +3,15 @@
 
 using System;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
 
+// ReSharper disable UseUtf8StringLiteral
 // ReSharper disable MergeIntoPattern
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
@@ -61,31 +64,35 @@ public sealed class GameSync
         client.SyncTasksSynchronous();
     }
     
-    public void WriteScene(Stream stream)
+    private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
+    private static readonly byte[] Comma       = Encoding.UTF8.GetBytes(",");
+    private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
+    
+    public async Task WriteSceneAsync(Stream stream)
     {
-        stream.WriteByte((byte)'[');
+        await stream.WriteAsync(ArrayStart);
         writer.SetPretty(true);
         var dataEntity  = new DataEntity();
         var nodeMax     = store.NodeMaxId;
         var isFirst     = true;
         for (int n = 1; n <= nodeMax; n++)
         {
-            ref var node    = ref store.GetNodeById(n);
-            var entity      = node.Entity;
+            var entity  = store.GetNodeById(n).Entity;
             if (entity == null) {
                 continue;
             }
             if (isFirst) {
                 isFirst = false;
             } else {
-                stream.WriteByte((byte)',');
+                await stream.WriteAsync(Comma);
             }
             converter.GameToDataEntity(entity, dataEntity, true);
             writer.InitSerializer();
             WriteDataEntity(dataEntity);
-            stream.Write(writer.json.AsSpan());
+            var memory = new ReadOnlyMemory<byte>(writer.json.buffer, 0, writer.json.end);
+            await stream.WriteAsync(memory);
         }
-        stream.WriteByte((byte)']');
+        await stream.WriteAsync(ArrayEnd);
     }
     
     private static readonly     Bytes   PidKey          = new Bytes("pid");

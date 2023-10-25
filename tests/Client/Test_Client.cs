@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
@@ -52,7 +53,7 @@ public static class Test_Client
     
 
     [Test]
-    public static void Test_Client_store_game_entities()
+    public static async Task Test_Client_store_game_entities()
     {
         var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
@@ -71,7 +72,7 @@ public static class Test_Client
             sync.StoreGameEntities();
             var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            sync.WriteScene(file);
+            await sync.WriteSceneAsync(file);
             file.Close();
             
             AreEqual(2, store.EntityCount);
@@ -91,7 +92,7 @@ public static class Test_Client
     }
     
     [Test]
-    public static void Test_Client_empty_scene()
+    public static async Task Test_Client_empty_scene()
     {
         var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
@@ -101,7 +102,7 @@ public static class Test_Client
         {
             sync.StoreGameEntities();
             var stream = new MemoryStream();
-            sync.WriteScene(stream);
+            await sync.WriteSceneAsync(stream);
             var str = MemoryStreamAsString(stream);
             stream.Close();
             AreEqual("[]", str);
