@@ -21,12 +21,19 @@ public partial class GameEntityStore
         ref var node = ref nodes[id];
 
         // --- process child ids
+        var children = dataEntity.children;
         if (node.childCount > 0) {
-            var children = dataEntity.children = new List<long>(node.childCount); 
+            if (children == null) {
+                children = dataEntity.children = new List<long>(node.childCount);
+            } else {
+                children.Clear();
+            }
             foreach (var childId in node.ChildIds) {
                 var pid = nodes[childId].pid;
                 children.Add(pid);  
             }
+        } else {
+            dataEntity.children?.Clear();
         }
         // --- write components & behaviors
         var jsonComponents = writer.Write(entity);

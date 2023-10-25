@@ -8,6 +8,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
 
+// ReSharper disable MergeIntoPattern
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
 
@@ -88,7 +89,7 @@ public sealed class GameSync
         writer.ObjectStart();
         writer.MemberLng(PidKey, dataEntity.pid);
         var children = dataEntity.children;
-        if (children != null)
+        if (children != null && children.Count > 0)
         {
             writer.MemberArrayStart(ChildrenKey);
             foreach (var child in children) {

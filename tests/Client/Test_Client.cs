@@ -21,7 +21,7 @@ public static class Test_Client
     }
     
     [Test]
-    public static void Test_Client_read_components()
+    public static void Test_Client_load_game_entities()
     {
         var client  = CreateClient();
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
@@ -49,7 +49,7 @@ public static class Test_Client
     
 
     [Test]
-    public static void Test_Client_write_components()
+    public static void Test_Client_store_game_entities()
     {
         var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
