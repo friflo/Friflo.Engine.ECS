@@ -14,22 +14,27 @@ namespace Tests.Client;
 
 public static class Test_Client
 {
-    private static GameSync CreateGameSync(GameEntityStore store) {
-        var hub     = new FlioxHub(new MemoryDatabase("test"));
-        var client  = new GameClient(hub);
-        return new GameSync(store, client);
+    private static FlioxHub CreateHub() {
+        return new FlioxHub(new MemoryDatabase("test"));
     }
     
     [Test]
     public static void Test_Client_read_components()
     {
+        var hub     = CreateHub();
+        var client  = new GameClient(hub);
         var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = CreateGameSync(store);
+        var sync    = new GameSync(store, client);
         
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
         var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.childComponents };
         sync.Entities.Add(rootNode);
         sync.Entities.Add(childNode);
+        
+        client.entities.Upsert(rootNode);
+        client.entities.Upsert(childNode);
+        client.SyncTasksSynchronous();
+        
         int n = 0; 
         foreach (var entity in sync.Entities) {
             n++;
@@ -67,8 +72,10 @@ public static class Test_Client
     [Test]
     public static void Test_Client_write_components()
     {
+        var hub     = CreateHub();
+        var client  = new GameClient(hub);
         var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = CreateGameSync(store);
+        var sync    = new GameSync(store, client);
 
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
