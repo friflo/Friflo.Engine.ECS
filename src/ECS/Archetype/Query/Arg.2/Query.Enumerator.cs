@@ -1,6 +1,8 @@
 // Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+#if COMP_ITER
+
 using System;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
 
@@ -89,3 +91,5 @@ public ref struct QueryEnumerator<T1, T2>
         return true;
     }
 }
+
+#endif

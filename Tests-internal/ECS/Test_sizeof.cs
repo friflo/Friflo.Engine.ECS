@@ -66,6 +66,7 @@ public static class Test_sizeof
         AreEqual(64, size);
     }
     
+#if COMP_ITER
     [Test]
     public static void Test_Ref_ToString()
     {
@@ -75,6 +76,7 @@ public static class Test_sizeof
         refPosition.pos = 0;
         AreEqual("1, 2, 3", refPosition.ToString());
     }
+#endif
     
     [Test]
     public static unsafe void Test_Behaviors_sizeof()

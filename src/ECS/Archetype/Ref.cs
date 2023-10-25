@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+#if COMP_ITER
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -33,3 +34,5 @@ public struct Ref<T>
 
     public  readonly override string  ToString() => Value.ToString();
 }
+
+#endif
