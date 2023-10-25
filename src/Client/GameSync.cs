@@ -104,7 +104,8 @@ public sealed class GameSync
             writer.MemberBytes(ComponentsKey, componentBytes);
         }
         var tags = dataEntity.tags;
-        if (tags != null) {
+        if (tags != null && tags.Count > 0)
+        {
             writer.MemberArrayStart(TagsKey);
             foreach (var tag in tags) {
                 writer.ElementStr(tag);   

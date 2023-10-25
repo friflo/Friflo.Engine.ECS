@@ -5,8 +5,9 @@ using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
-// ReSharper disable MergeIntoLogicalPattern
 
+// ReSharper disable MergeIntoLogicalPattern
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
@@ -40,13 +41,18 @@ public partial class GameEntityStore
         dataEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
         // --- process tags
-        var tagCount = entity.Tags.Count; 
+        var tagCount    = entity.Tags.Count;
         if (tagCount == 0) {
-            dataEntity.tags = null;
+            dataEntity.tags?.Clear();
         } else {
-            dataEntity.tags = new List<string>(tagCount);
+            var tags = dataEntity.tags;
+            if (tags == null) {
+                tags = dataEntity.tags = new List<string>(tagCount);
+            } else {
+                tags.Clear();
+            }
             foreach(var tag in entity.Tags) {
-                dataEntity.tags.Add(tag.tagName);
+                tags.Add(tag.tagName);
             }
         }
     }
