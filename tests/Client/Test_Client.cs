@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
@@ -6,6 +8,7 @@ using Friflo.Json.Fliox.Hub.Host;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.ECS.Sync;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable HeuristicUnreachableCode
@@ -66,7 +69,9 @@ public static class Test_Client
         for (int n = 0; n < 2; n++)
         {
             sync.StoreGameEntities();
-            var sceneFile = sync.WriteSceneFile();
+            var sceneFile   = sync.WriteSceneFile();
+            var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
+            WriteFile(fileName, sceneFile.AsReadOnlySpan());
             NotNull(sceneFile);
             
             AreEqual(2, store.EntityCount);
@@ -83,5 +88,12 @@ public static class Test_Client
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
         }
+    }
+    
+    private static void WriteFile(string fileName, ReadOnlySpan<byte> content)
+    {
+        var file = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
+        file.Write(content);
+        file.Close();
     }
 }
