@@ -20,12 +20,14 @@ public sealed class GameSync
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private             Utf8JsonWriter                  writer;
+    private             Bytes                           sceneBytes;
 
     public GameSync (GameEntityStore store, GameClient client) {
         this.store      = store;
         this.client     = client;
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
+        sceneBytes      = new Bytes(32);
     }
     
     public void LoadGameEntities()
@@ -52,7 +54,7 @@ public sealed class GameSync
             if (!localEntities.TryGetEntity(node.Id, out DataEntity dataEntity)) {
                 dataEntity = new DataEntity();
             }
-            dataEntity = converter.GameToDataEntity(entity, dataEntity);
+            dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
             client.entities.Upsert(dataEntity);
         }
         client.SyncTasksSynchronous();
@@ -60,11 +62,12 @@ public sealed class GameSync
     
     public JsonValue WriteSceneFile()
     {
-        writer.InitSerializer();
+        sceneBytes.Clear();
+        sceneBytes.AppendString("[");
         writer.SetPretty(true);
-        writer.ArrayStart(false);
         var dataEntity  = new DataEntity();
         var nodeMax     = store.NodeMaxId;
+        var isFirst     = true;
         for (int n = 1; n <= nodeMax; n++)
         {
             ref var node    = ref store.GetNodeById(n);
@@ -72,11 +75,18 @@ public sealed class GameSync
             if (entity == null) {
                 continue;
             }
-            converter.GameToDataEntity(entity, dataEntity);
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                sceneBytes.AppendString(",");
+            }
+            converter.GameToDataEntity(entity, dataEntity, true);
+            writer.InitSerializer();
             WriteDataEntity(dataEntity);
+            sceneBytes.AppendBytes(writer.json);
         }
-        writer.ArrayEnd();
-        return new JsonValue(writer.json);
+        sceneBytes.AppendString("]");
+        return new JsonValue(sceneBytes);
     }
     
     private static readonly     Bytes   PidKey          = new Bytes("pid");

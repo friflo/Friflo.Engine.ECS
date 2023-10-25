@@ -18,7 +18,7 @@ public class EntityConverter
         writer = new ComponentWriter();
     }
     
-    public DataEntity GameToDataEntity(GameEntity gameEntity, DataEntity dataEntity = null)
+    public DataEntity GameToDataEntity(GameEntity gameEntity, DataEntity dataEntity = null, bool pretty = false)
     {
         if (gameEntity == null) {
             throw new ArgumentNullException(nameof(gameEntity));
@@ -27,7 +27,7 @@ public class EntityConverter
         var pid         = store.GetNodeById(gameEntity.id).pid;
         dataEntity    ??= new DataEntity();
         dataEntity.pid  = pid;
-        store.GameToDataEntity(gameEntity, dataEntity, writer);
+        store.GameToDataEntity(gameEntity, dataEntity, writer, pretty);
         return dataEntity;
     }
     

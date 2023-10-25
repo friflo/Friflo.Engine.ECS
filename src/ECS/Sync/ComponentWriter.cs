@@ -28,13 +28,14 @@ internal sealed class ComponentWriter
         componentTypeByType = schema.componentTypeByType;
     }
     
-    internal JsonValue Write(GameEntity entity)
+    internal JsonValue Write(GameEntity entity, bool pretty)
     {
         var archetype = entity.archetype;
         if (entity.ComponentCount() == 0) {
             return default;
         }
         writer.InitSerializer();
+        writer.SetPretty(pretty);
         writer.ObjectStart();
         // --- write components
         var heaps           = archetype.Heaps;

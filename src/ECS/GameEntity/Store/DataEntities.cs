@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class GameEntityStore
 {
     // ---------------------------------- GameEntity -> DataEntity ----------------------------------
-    internal void GameToDataEntity(GameEntity entity, DataEntity dataEntity, ComponentWriter writer)
+    internal void GameToDataEntity(GameEntity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
         var id = entity.id;
         ref var node = ref nodes[id];
@@ -37,7 +37,7 @@ public partial class GameEntityStore
             dataEntity.children?.Clear();
         }
         // --- write components & behaviors
-        var jsonComponents = writer.Write(entity);
+        var jsonComponents = writer.Write(entity, pretty);
         dataEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
         // --- process tags
