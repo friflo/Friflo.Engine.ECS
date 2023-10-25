@@ -72,7 +72,6 @@ public static class Test_Client
             var sceneFile   = sync.WriteSceneFile();
             var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
             WriteFile(fileName, sceneFile.AsReadOnlySpan());
-            NotNull(sceneFile);
             
             AreEqual(2, store.EntityCount);
 
@@ -87,6 +86,24 @@ public static class Test_Client
             AreEqual(11,    data11.pid);
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
+        }
+    }
+    
+    [Test]
+    public static void Test_Client_empty_scene()
+    {
+        var client  = CreateClient();
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var sync    = new GameSync(store, client);
+
+        for (int n = 0; n < 2; n++)
+        {
+            sync.StoreGameEntities();
+            var sceneFile = sync.WriteSceneFile();
+            AreEqual("[]", sceneFile.AsString());
+            
+            AreEqual(0, store.EntityCount);
+            AreEqual(0, client.entities.Local.Count);
         }
     }
     
