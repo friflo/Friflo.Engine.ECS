@@ -148,13 +148,13 @@ Types:
 - `GameEntityStore` - the storage for all entities and their components.
 - `GameEntity`      - each instances contains the following properties
     - `id`          - type: `int` / id > 0
+    - `children`    - contains and array of child entity `id`'s.
     - `components`
         - **Archetype** components stored in `Archetype`'s.  
           These are value types (`struct`) having only data and **no** behavior (methods).
         - **Behavior** components.  
           Behavior components are reference types (`class`) and have behavior (methods).
     - `tags`        - list of tags assigned to an entity. Tags have no data.
-    - `children`    - contains and array of child entity `id`'s.
 - `Archetype`       - contains all entities with the same set of **struct** `IComponent` types.  
 The **struct** components of an `Archetype` are stored linear in memory to improve memory locality.  
 Each component is indexed from 0, ... , N.  
@@ -166,14 +166,14 @@ Serialized entity example
 ```javascript
 {
     "id": 11,
+    "children": [1,2,3],                    // can be null
     "components": {                         // can be null
         "name": "Root",                     // Archetype component
         "pos": { x: 1, y: 2, x: 3},         // Archetype component
         "rot": { x: 0, y: 0, x: 0, w: 0 },  // Archetype component
         "my1": { a: 1 }                     // Behavior component
     },
-    "tags":["PlayerTag"],                   // can be null
-    "children": [1,2,3]                     // can be null
+    "tags":["PlayerTag"]                    // can be null
 }
 ```
 
