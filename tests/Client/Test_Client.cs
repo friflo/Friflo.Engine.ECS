@@ -12,6 +12,7 @@ using Tests.ECS.Sync;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 namespace Tests.Client;
@@ -69,12 +70,18 @@ public static class Test_Client
         
         for (int n = 0; n < 2; n++)
         {
+            {
+                var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
+                var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+                sync.WriteScene(file);
+                file.Close();
+            } {
+                var fileName    = TestUtils.GetBasePath() + "assets/test_scene_async.json";
+                var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+                await sync.WriteSceneAsync(file);
+                file.Close();
+            }
             sync.StoreGameEntities();
-            var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
-            var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            await sync.WriteSceneAsync(file);
-            file.Close();
-            
             AreEqual(2, store.EntityCount);
 
             var data10 = client.entities.Local[10];
@@ -92,7 +99,7 @@ public static class Test_Client
     }
     
     [Test]
-    public static async Task Test_Client_empty_scene()
+    public static void Test_Client_empty_scene()
     {
         var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
@@ -102,7 +109,7 @@ public static class Test_Client
         {
             sync.StoreGameEntities();
             var stream = new MemoryStream();
-            await sync.WriteSceneAsync(stream);
+            sync.WriteScene(stream);
             var str = MemoryStreamAsString(stream);
             stream.Close();
             AreEqual("[]", str);

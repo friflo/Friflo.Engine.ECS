@@ -95,6 +95,32 @@ public sealed class GameSync
         await stream.WriteAsync(ArrayEnd);
     }
     
+    public void WriteScene(Stream stream)
+    {
+        stream.Write(ArrayStart);
+        writer.SetPretty(true);
+        var dataEntity  = new DataEntity();
+        var nodeMax     = store.NodeMaxId;
+        var isFirst     = true;
+        for (int n = 1; n <= nodeMax; n++)
+        {
+            var entity  = store.GetNodeById(n).Entity;
+            if (entity == null) {
+                continue;
+            }
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                stream.Write(Comma);
+            }
+            converter.GameToDataEntity(entity, dataEntity, true);
+            writer.InitSerializer();
+            WriteDataEntity(dataEntity);
+            stream.Write(writer.json.AsSpan());
+        }
+        stream.Write(ArrayEnd);
+    }
+    
     private static readonly     Bytes   PidKey          = new Bytes("pid");
     private static readonly     Bytes   ChildrenKey     = new Bytes("children");
     private static readonly     Bytes   ComponentsKey   = new Bytes("components");
@@ -110,7 +136,7 @@ public sealed class GameSync
         {
             writer.MemberArrayStart(ChildrenKey);
             foreach (var child in children) {
-                writer.ElementLng(child);   
+                writer.ElementLng(child);
             }
             writer.ArrayEnd();
         }
