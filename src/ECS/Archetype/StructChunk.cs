@@ -33,9 +33,14 @@ public readonly struct Chunk<T>
     private readonly    T[]     values;
     private readonly    int     count;
     
-    public Chunk(T[] values, int count) {
-        this.values = values;
+    public Chunk(T[] values, T[] copy, int count) {
         this.count  = count;
+        if (copy == null) {
+            this.values = values;
+        } else {
+            Array.Copy(values, copy, count);
+            this.values = copy;
+        }
     }
 }
 

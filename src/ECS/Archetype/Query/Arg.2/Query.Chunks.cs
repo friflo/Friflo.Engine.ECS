@@ -26,6 +26,8 @@ public ref struct ChunkEnumerator<T1, T2>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
 {
+    private readonly    T1[]                    copyT1;
+    private readonly    T2[]                    copyT2;
     private readonly    int                     structIndex1;
     private readonly    int                     structIndex2;
     
@@ -42,6 +44,8 @@ public ref struct ChunkEnumerator<T1, T2>
     
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2> query)
     {
+        copyT1          = query.copyT1;
+        copyT2          = query.copyT2;
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
         archetypes      = query.Archetypes;
@@ -80,8 +84,8 @@ public ref struct ChunkEnumerator<T1, T2>
         chunkEnd        = archetype.ChunkEnd;
         componentLen    = chunkEnd == 0 ? archetype.ChunkRest : ChunkSize;
     Next:
-        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, componentLen);
-        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, componentLen);
+        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen);
         chunkPos++;
         return true;  
     }

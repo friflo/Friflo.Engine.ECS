@@ -254,29 +254,34 @@ public static class Test_Query
     {
         var store   = new GameEntityStore();
         var entity2  = store.CreateEntity();
-        entity2.AddComponent(new Position(1,2,3));
-        entity2.AddComponent(new Rotation(4,5,6,7));
+        entity2.AddComponent(new Position(1, 1, 1));
+        entity2.AddComponent(new Rotation(4, 2, 2, 2));
         
         var entity3  = store.CreateEntity();
-        entity3.AddComponent(new Position(1,2,3));
-        entity3.AddComponent(new Rotation(8, 8, 8, 8));
+        entity3.AddComponent(new Position(1, 3, 3));
+        entity3.AddComponent(new Rotation(4, 4, 4, 4));
         entity3.AddComponent(new Scale3  (7, 7, 7));
         
         var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig); // .ReadOnly<Position>().ReadOnly<Rotation>(); todo
+        var query   = store.Query(sig).ReadOnly<Position>().ReadOnly<Rotation>();
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
 
         var chunkCount   = 0;
         AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
         var start = GetAllocatedBytes();
         foreach (var (position, rotation) in query.Chunks) {
-            AreEqual(3, position.Values[0].z);
-            rotation.Values[0].x = 42;
+            AreEqual(1, position.Values[0].x);
+            AreEqual(4, rotation.Values[0].x);
+            position.Values[0].x = 42;
+            rotation.Values[0].x = 43;
             chunkCount++;
         }
         AssertNoAlloc(start);
         AreEqual(2,  chunkCount);
-        AreEqual(42, entity2.Rotation.x);
+        AreEqual(1, entity2.Position.x);
+        AreEqual(4, entity2.Rotation.x);
+        AreEqual(1, entity3.Position.x);
+        AreEqual(4, entity3.Rotation.x);
     }
     
     // [Test]
