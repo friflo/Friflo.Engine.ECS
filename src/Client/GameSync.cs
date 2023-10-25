@@ -95,6 +95,7 @@ public sealed class GameSync
     private static readonly     Bytes   ChildrenKey     = new Bytes("children");
     private static readonly     Bytes   ComponentsKey   = new Bytes("components");
     private static readonly     Bytes   TagsKey         = new Bytes("tags");
+    private static readonly     Bytes   Indent          = new Bytes("    ");
     
     private void WriteDataEntity(DataEntity dataEntity)
     {
@@ -138,7 +139,7 @@ public sealed class GameSync
             }
             var line = span.Slice(start, n - start + 1);
             componentBuf.AppendBytesSpan(line);
-            componentBuf.AppendString("    ");
+            componentBuf.AppendBytes(Indent);
             start = n + 1;
         }
         var lastLine = span.Slice(start, span.Length - start);
