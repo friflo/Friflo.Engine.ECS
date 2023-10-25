@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.IO;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Burst;
@@ -20,7 +21,6 @@ public sealed class GameSync
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private             Utf8JsonWriter                  writer;
-    private             Bytes                           sceneBuf;
     private             Bytes                           componentBuf;
 
     public GameSync (GameEntityStore store, GameClient client) {
@@ -28,7 +28,6 @@ public sealed class GameSync
         this.client     = client;
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
-        sceneBuf        = new Bytes(32);
         componentBuf    = new Bytes(32);
     }
     
@@ -62,10 +61,9 @@ public sealed class GameSync
         client.SyncTasksSynchronous();
     }
     
-    public JsonValue WriteSceneFile()
+    public void WriteScene(Stream stream)
     {
-        sceneBuf.Clear();
-        sceneBuf.AppendString("[");
+        stream.WriteByte((byte)'[');
         writer.SetPretty(true);
         var dataEntity  = new DataEntity();
         var nodeMax     = store.NodeMaxId;
@@ -80,15 +78,14 @@ public sealed class GameSync
             if (isFirst) {
                 isFirst = false;
             } else {
-                sceneBuf.AppendString(",");
+                stream.WriteByte((byte)',');
             }
             converter.GameToDataEntity(entity, dataEntity, true);
             writer.InitSerializer();
             WriteDataEntity(dataEntity);
-            sceneBuf.AppendBytes(writer.json);
+            stream.Write(writer.json.AsSpan());
         }
-        sceneBuf.AppendString("]");
-        return new JsonValue(sceneBuf);
+        stream.WriteByte((byte)']');
     }
     
     private static readonly     Bytes   PidKey          = new Bytes("pid");

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
@@ -69,9 +69,10 @@ public static class Test_Client
         for (int n = 0; n < 2; n++)
         {
             sync.StoreGameEntities();
-            var sceneFile   = sync.WriteSceneFile();
             var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
-            WriteFile(fileName, sceneFile.AsReadOnlySpan());
+            var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+            sync.WriteScene(file);
+            file.Close();
             
             AreEqual(2, store.EntityCount);
 
@@ -99,18 +100,15 @@ public static class Test_Client
         for (int n = 0; n < 2; n++)
         {
             sync.StoreGameEntities();
-            var sceneFile = sync.WriteSceneFile();
-            AreEqual("[]", sceneFile.AsString());
+            var stream = new MemoryStream();
+            sync.WriteScene(stream);
+            stream.Flush();
+            var str = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+            stream.Close();
+            AreEqual("[]", str);
             
             AreEqual(0, store.EntityCount);
             AreEqual(0, client.entities.Local.Count);
         }
-    }
-    
-    private static void WriteFile(string fileName, ReadOnlySpan<byte> content)
-    {
-        var file = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-        file.Write(content);
-        file.Close();
     }
 }
