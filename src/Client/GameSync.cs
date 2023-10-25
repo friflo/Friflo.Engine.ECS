@@ -20,14 +20,16 @@ public sealed class GameSync
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private             Utf8JsonWriter                  writer;
-    private             Bytes                           sceneBytes;
+    private             Bytes                           sceneBuf;
+    private             Bytes                           componentBuf;
 
     public GameSync (GameEntityStore store, GameClient client) {
         this.store      = store;
         this.client     = client;
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
-        sceneBytes      = new Bytes(32);
+        sceneBuf        = new Bytes(32);
+        componentBuf    = new Bytes(32);
     }
     
     public void LoadGameEntities()
@@ -62,8 +64,8 @@ public sealed class GameSync
     
     public JsonValue WriteSceneFile()
     {
-        sceneBytes.Clear();
-        sceneBytes.AppendString("[");
+        sceneBuf.Clear();
+        sceneBuf.AppendString("[");
         writer.SetPretty(true);
         var dataEntity  = new DataEntity();
         var nodeMax     = store.NodeMaxId;
@@ -78,15 +80,15 @@ public sealed class GameSync
             if (isFirst) {
                 isFirst = false;
             } else {
-                sceneBytes.AppendString(",");
+                sceneBuf.AppendString(",");
             }
             converter.GameToDataEntity(entity, dataEntity, true);
             writer.InitSerializer();
             WriteDataEntity(dataEntity);
-            sceneBytes.AppendBytes(writer.json);
+            sceneBuf.AppendBytes(writer.json);
         }
-        sceneBytes.AppendString("]");
-        return new JsonValue(sceneBytes);
+        sceneBuf.AppendString("]");
+        return new JsonValue(sceneBuf);
     }
     
     private static readonly     Bytes   PidKey          = new Bytes("pid");
@@ -107,11 +109,10 @@ public sealed class GameSync
             }
             writer.ArrayEnd();
         }
-        var components = dataEntity.components;
-        if (!components.IsNull())
+        if (!dataEntity.components.IsNull())
         {
-            var componentBytes = new Bytes { buffer = components.MutableArray, end = components.Count };
-            writer.MemberBytes(ComponentsKey, componentBytes);
+            FormatComponents(dataEntity.components);
+            writer.MemberBytes(ComponentsKey, componentBuf);
         }
         var tags = dataEntity.tags;
         if (tags != null && tags.Count > 0)
@@ -123,5 +124,10 @@ public sealed class GameSync
             writer.ArrayEnd();
         }
         writer.ObjectEnd();
+    }
+    
+    private void FormatComponents(in JsonValue components){
+        componentBuf.Clear();
+        componentBuf.AppendBytesSpan(components.AsReadOnlySpan());
     }
 }
