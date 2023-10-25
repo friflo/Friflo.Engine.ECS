@@ -17,7 +17,7 @@ using Friflo.Json.Fliox.Hub.Client;
 namespace Friflo.Fliox.Engine.Client;
 
 [CLSCompliant(true)]
-public sealed class GameSync
+public sealed class GameDataSync
 {
     private readonly    GameEntityStore                 store;
     private readonly    GameClient                      client;
@@ -26,7 +26,7 @@ public sealed class GameSync
     private             Utf8JsonWriter                  writer;
     private             Bytes                           componentBuf;
 
-    public GameSync (GameEntityStore store, GameClient client) {
+    public GameDataSync (GameEntityStore store, GameClient client) {
         this.store      = store;
         this.client     = client;
         localEntities   = client.entities.Local;

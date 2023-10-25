@@ -65,13 +65,13 @@ This enables UI rendering is exactly the same on all platforms with a single cod
 <br/><br/>
 
 
-## `GameEntityStore` / `GameDatabase`
+## `GameEntityStore` / `GameDataSync`
 
-Both `GameEntityStore` and `GameDatabase` are used to store game entities.  
+Both `GameEntityStore` and `GameDataSync` are used to store game entities.  
 The `GameEntityStore` store `GameEntity`'s at runtime.  
-The `GameDatabase` store serialized `GameEntity`'s as `DataEntity`'s in databases or files and transfer them via a network.  
+A `GameDataSync` instance store serialized `GameEntity`'s as `DataEntity`'s in databases or scene files and transfer them via a network.  
 
-Using the `GameEntityStore` / `GameDatabase` enables instant synchronization of a game scene between multiple creators.  
+Using the `GameEntityStore` / `GameDataSync` enables instant synchronization of a game scene between multiple creators.  
 In this workflow the game scene is stored in a shared database without using a version control system like `Git`.  
 
 The common approach to store game scenes in scene files is also available.  
@@ -92,9 +92,9 @@ Game entities in this hierarchy can be declared as sub scene to persist them as 
 The use case of sub scenes is to enhance the scene structure and minimize merge conflicts when used by multiple creators.
 
 
-### `GameDatabase`
+### `GameDataSync`
 
-The `GameDatabase` is used to convert `GameEntity` to `DataEntity`s or vise versa so that they can be stored in 
+The `GameDataSync` is used to convert `GameEntity`'s to `DataEntity`'s or vise versa so that they can be stored in 
 scene files or in a database.
 
 
@@ -138,14 +138,14 @@ Many stages in the pipeline processing entity data benefits from this approach.
 
 
 
-Features of an `EntityStore`
+Features of an `GameEntityStore`
 - Store a map (container) of entities in linear memory.
 - Organize entities in a tree structure starting with a single root entity.
 - Store the components (e.g. `Position`) of entities with the same `Archetype` in linear memory.  
   Basically the **E** & **C** of an **ECS** architecture.
 
 Types:
-- `EntityStore`     - the storage for all entities and their components.
+- `GameEntityStore` - the storage for all entities and their components.
 - `GameEntity`      - each instances contains the following properties
     - `id`          - type: `int` / id > 0
     - `components`
@@ -235,11 +235,18 @@ Remarks:
   
   See: https://en.wikipedia.org/wiki/Birthday_problem
 
-### Loading entities
 
-Entities are loaded in batches of 10.000 entities using the `GameClient`.  
-If a batch has finished loading `DataEntity`'s they are than added to the `EntityStore`
-by calling `GameDatabase.LoadEntity()` for each `DataEntity`.
+### Loading / Storing game entities
+
+Entities are loaded using a `GameDataSync` instance created with a `GameEntityStore` and a `GameClient`.  
+There are two ways to load or save a game scene.
+
+1. Synchronize the entities of a `GameEntityStore` with a `SQL` or `Key/Value` database using
+   `GameDataSync.LoadGameEntities()` / `GameDataSync.StoreGameEntities()`.
+2. Load / Save a game scene as a `JSON` based file to disk using
+   `GameDataSync.ReadScene()` / `GameDataSync.WriteScene()`.
+
+In case of a database entities are loaded / stored in batches of 10.000 entities using a `GameClient`.  
 
 The entity tree is build by utilizing the field `children` of a `DataEntity`.  
 In case ids in `children` are inconsistent the errors can be ignored or cause a loading error.

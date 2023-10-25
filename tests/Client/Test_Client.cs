@@ -37,7 +37,7 @@ public static class Test_Client
         client.SyncTasksSynchronous();
         
         var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = new GameSync(store, client);
+        var sync    = new GameDataSync(store, client);
         
         for (int n = 0; n < 2; n++) {
             sync.LoadGameEntities();
@@ -58,7 +58,7 @@ public static class Test_Client
     {
         var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = new GameSync(store, client);
+        var sync    = new GameDataSync(store, client);
 
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
@@ -103,7 +103,7 @@ public static class Test_Client
     {
         var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = new GameSync(store, client);
+        var sync    = new GameDataSync(store, client);
 
         for (int n = 0; n < 2; n++)
         {
