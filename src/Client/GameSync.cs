@@ -126,8 +126,22 @@ public sealed class GameSync
         writer.ObjectEnd();
     }
     
-    private void FormatComponents(in JsonValue components){
+    private void FormatComponents(in JsonValue components)
+    {
         componentBuf.Clear();
-        componentBuf.AppendBytesSpan(components.AsReadOnlySpan());
+        var span    = components.AsReadOnlySpan();
+        var start   = 0;
+        int n       = 0;
+        for (; n < span.Length; n++) {
+            if (span[n] != '\n') {
+                continue;
+            }
+            var line = span.Slice(start, n - start + 1);
+            componentBuf.AppendBytesSpan(line);
+            componentBuf.AppendString("    ");
+            start = n + 1;
+        }
+        var lastLine = span.Slice(start, span.Length - start);
+        componentBuf.AppendBytesSpan(lastLine);
     }
 }
