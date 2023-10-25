@@ -10,6 +10,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+      <DefineConstants>TRACE,COMP_ITER</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

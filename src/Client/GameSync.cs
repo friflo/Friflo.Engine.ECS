@@ -12,18 +12,44 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public sealed class GameSync
 {
-    public              LocalEntities<long, DataEntity> Entities => entities;
-    
     private readonly    GameEntityStore                 store;
-    private readonly    LocalEntities<long, DataEntity> entities;
+    private readonly    GameClient                      client;
+    // private readonly    LocalEntities<long, DataEntity> entities;
     private readonly    EntityConverter                 converter;
 
     public GameSync (GameEntityStore store, GameClient client) {
         this.store  = store;
-        entities    = client.entities.Local;
+        this.client = client;
+        // entities    = client.entities.Local;
         converter   = new EntityConverter();
     }
+    
+    public void LoadGameEntities()
+    {
+        var query = client.entities.QueryAll();
+        client.SyncTasks().Wait(); // todo enable synchronous queries in MemoryDatabase
         
+        var dataEntities = query.Result;
+        foreach (var data in dataEntities) {
+            converter.DataToGameEntity(data, store, out _);
+        }
+    }
+    
+    public void StoreGameEntities()
+    {
+        foreach (var node in store.Nodes) {
+            var entity = node.Entity;
+            if (entity == null) {
+                continue;
+            }
+            var dataEntity = converter.GameToDataEntity(entity);
+            client.entities.Upsert(dataEntity);
+        }
+        client.SyncTasksSynchronous();
+    }
+    
+        
+    /*
     /// <summary>
     /// Stores the given <see cref="GameEntity"/> as a <see cref="DataEntity"/>
     /// </summary>
@@ -57,5 +83,5 @@ public sealed class GameSync
             return null;
         }
         return converter.DataToGameEntity(dataEntity, store, out error);
-    }
+    } */
 }

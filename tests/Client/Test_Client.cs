@@ -14,95 +14,68 @@ namespace Tests.Client;
 
 public static class Test_Client
 {
-    private static FlioxHub CreateHub() {
-        return new FlioxHub(new MemoryDatabase("test"));
+    private static GameClient CreateClient() {
+        var database    = new MemoryDatabase("test");
+        var hub         = new FlioxHub(database);
+        return new GameClient(hub);        
     }
     
     [Test]
     public static void Test_Client_read_components()
     {
-        var hub     = CreateHub();
-        var client  = new GameClient(hub);
-        var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = new GameSync(store, client);
-        
+        var client  = CreateClient();
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
         var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.childComponents };
-        sync.Entities.Add(rootNode);
-        sync.Entities.Add(childNode);
         
         client.entities.Upsert(rootNode);
         client.entities.Upsert(childNode);
         client.SyncTasksSynchronous();
         
-        int n = 0; 
-        foreach (var entity in sync.Entities) {
-            n++;
-            NotNull(entity);
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var sync    = new GameSync(store, client);
+        
+        for (int n = 0; n < 2; n++) {
+            sync.LoadGameEntities();
+            
+            var root        = store.GetNodeById(10).Entity;
+            var child       = store.GetNodeById(11).Entity;
+            Test_ComponentReader.AssertRootEntity(root);
+            Test_ComponentReader.AssertChildEntity(child);
+            var type = store.GetArchetype(Signature.Get<Position, Scale3>());
+            AreEqual(2,     type.EntityCount);
+            AreEqual(2,     store.EntityCount);
         }
-        AreEqual(2, n);
-        
-        var root        = sync.GetGameEntity(10L, out _);
-        var child       = sync.GetGameEntity(11L, out _);
-        Test_ComponentReader.AssertRootEntity(root);
-        Test_ComponentReader.AssertChildEntity(child);
-        var type = store.GetArchetype(Signature.Get<Position, Scale3>());
-        AreEqual(2,     type.EntityCount);
-        AreEqual(2,     store.EntityCount);
-        
-        // --- read root DataEntity again
-        root.Position   = default;
-        root.Scale3     = default;
-        root            = sync.GetGameEntity(10L, out _);
-        Test_ComponentReader.AssertRootEntity(root);
-        AreEqual(2,     type.EntityCount);
-        AreEqual(2,     store.EntityCount);
-        
-        // --- read child DataEntity again
-        child.Position  = default;
-        child.Scale3    = default;
-        child           = sync.GetGameEntity(11L, out _);
-        Test_ComponentReader.AssertChildEntity(child);
-        AreEqual(2,     type.EntityCount);
-        AreEqual(2,     store.EntityCount);
-
-
     }
     
+
     [Test]
     public static void Test_Client_write_components()
     {
-        var hub     = CreateHub();
-        var client  = new GameClient(hub);
+        var client  = CreateClient();
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var sync    = new GameSync(store, client);
 
         var entity  = store.CreateEntity(10);
-        var child   = store.CreateEntity(11);
-        entity.AddChild(child);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
         
-        var ge = sync.AddGameEntity(entity);
-        AreEqual(1, sync.Entities.Count);
+        var child   = store.CreateEntity(11);
+        entity.AddChild(child);
         
-        AreEqual(10,    ge.pid);
-        AreEqual(1,     ge.children.Count);
-        AreEqual(11,    ge.children[0]);
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", ge.components.AsString());
+        sync.StoreGameEntities();
         
-        ge = sync.AddGameEntity(child);
-        AreEqual(2, sync.Entities.Count);
+        AreEqual(2, store.EntityCount);
+
+        var data10 = client.entities.Local[10];
+        var data11 = client.entities.Local[11];
         
-        AreEqual(11,    ge.pid);
-        IsNull  (ge.children);
-        IsTrue  (ge.components.IsNull());
+        AreEqual(10,    data10.pid);
+        AreEqual(1,     data10.children.Count);
+        AreEqual(11,    data10.children[0]);
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", data10.components.AsString());
         
-        int n = 0; 
-        foreach (var e in sync.Entities) {
-            n++;
-            NotNull(e.Value);
-        }
-        AreEqual(2, n);
+        AreEqual(11,    data11.pid);
+        IsNull  (data11.children);
+        IsTrue  (data11.components.IsNull());
     }
 }
