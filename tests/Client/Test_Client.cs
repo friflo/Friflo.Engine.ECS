@@ -58,6 +58,7 @@ public static class Test_Client
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddBehavior(new TestBehavior1 { val1 = 10 });
+        entity.AddTag<TestTag>();
         
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
@@ -65,6 +66,8 @@ public static class Test_Client
         for (int n = 0; n < 2; n++)
         {
             sync.StoreGameEntities();
+            var sceneFile = sync.WriteSceneFile();
+            NotNull(sceneFile);
             
             AreEqual(2, store.EntityCount);
 
