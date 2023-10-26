@@ -32,7 +32,8 @@ public class GameDataSerializer
         converter       = new EntityConverter();
         componentBuf    = new Bytes(32);
     }
-    
+
+#region write scene
     public async Task WriteSceneAsync(Stream stream)
     {
         await stream.WriteAsync(ArrayStart);
@@ -140,4 +141,11 @@ public class GameDataSerializer
         var lastLine = span.Slice(start, span.Length - start);
         componentBuf.AppendBytesSpan(lastLine);
     }
+    #endregion
+    
+#region read scene
+    public void ReadScene(Stream stream) {
+        
+    }   
+    #endregion
 }

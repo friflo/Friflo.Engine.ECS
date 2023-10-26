@@ -34,18 +34,31 @@ public static class Test_Serializer
         
         // --- store game entities as scene sync
         {
-            var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
+            var fileName    = TestUtils.GetBasePath() + "assets/write_scene.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             serializer.WriteScene(file);
             file.Close();
         }
         // --- store game entities as scene async
         {
-            var fileName    = TestUtils.GetBasePath() + "assets/test_scene_async.json";
+            var fileName    = TestUtils.GetBasePath() + "assets/write_scene_async.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             await serializer.WriteSceneAsync(file);
             file.Close();
         }
+    }
+    
+    [Test]
+    public static void Test_Serializer_read_scene()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+
+        // --- load game entities as scene sync
+        var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
+        var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        serializer.ReadScene(file);
+        file.Close();
     }
     
     [Test]
