@@ -71,9 +71,10 @@ public static class Test_Client
     [Test]
     public static async Task Test_Client_store_game_entities()
     {
-        var client  = CreateClient();
-        var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = new GameDataSync(store, client);
+        var client      = CreateClient();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var sync        = new GameDataSync(store, client);
+        var serializer  = new GameDataSerializer(store);
 
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
@@ -88,14 +89,14 @@ public static class Test_Client
         {
             var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            sync.WriteScene(file);
+            serializer.WriteScene(file);
             file.Close();
         }
         // --- store game entities as scene async
         {
             var fileName    = TestUtils.GetBasePath() + "assets/test_scene_async.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            await sync.WriteSceneAsync(file);
+            await serializer.WriteSceneAsync(file);
             file.Close();
         }
         // --- store game entities with client sync
@@ -139,13 +140,14 @@ public static class Test_Client
     [Test]
     public static void Test_Client_empty_scene()
     {
-        var client  = CreateClient();
-        var store   = new GameEntityStore(PidType.UsePidAsId);
-        var sync    = new GameDataSync(store, client);
+        var client      = CreateClient();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var sync        = new GameDataSync(store, client);
+        var serializer  = new GameDataSerializer(store);
 
         sync.StoreGameEntities();
         var stream = new MemoryStream();
-        sync.WriteScene(stream);
+        serializer.WriteScene(stream);
         var str = MemoryStreamAsString(stream);
         stream.Close();
         AreEqual("[]", str);
