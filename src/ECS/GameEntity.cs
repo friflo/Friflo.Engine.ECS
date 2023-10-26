@@ -165,7 +165,7 @@ public sealed class GameEntity
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
     [Browse(Never)] internal            int                 compIndex;          //  4
     
-                    internal            int                 behaviorIndex;      //  4
+    [Browse(Never)] internal            int                 behaviorIndex;      //  4
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
