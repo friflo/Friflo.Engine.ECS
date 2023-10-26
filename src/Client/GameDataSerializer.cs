@@ -40,7 +40,6 @@ public class GameDataSerializer
 
 #region write scene
     private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
-    private static readonly byte[] Comma       = Encoding.UTF8.GetBytes(",");
     private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
 
     public async Task WriteSceneAsync(Stream stream)
@@ -56,13 +55,13 @@ public class GameDataSerializer
             if (entity == null) {
                 continue;
             }
+            converter.GameToDataEntity(entity, dataEntity, true);
+            writer.InitSerializer();
             if (isFirst) {
                 isFirst = false;
             } else {
-                await stream.WriteAsync(Comma);
+                writer.json.AppendChar(',');
             }
-            converter.GameToDataEntity(entity, dataEntity, true);
-            writer.InitSerializer();
             WriteDataEntity(dataEntity);
             var memory = new ReadOnlyMemory<byte>(writer.json.buffer, 0, writer.json.end);
             await stream.WriteAsync(memory);
@@ -83,13 +82,12 @@ public class GameDataSerializer
             if (entity == null) {
                 continue;
             }
-            if (isFirst) {
+            converter.GameToDataEntity(entity, dataEntity, true);
+            writer.InitSerializer();            if (isFirst) {
                 isFirst = false;
             } else {
-                stream.Write(Comma);
+                writer.json.AppendChar(',');
             }
-            converter.GameToDataEntity(entity, dataEntity, true);
-            writer.InitSerializer();
             WriteDataEntity(dataEntity);
             stream.Write(writer.json.AsSpan());
         }
