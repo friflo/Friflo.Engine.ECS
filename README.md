@@ -71,7 +71,7 @@
         CRUD(CRUD):::finished
     end
 
-    subgraph Engine[Engine / ECS];
+    subgraph ECS;
         EntityStore(EntityStore):::implemented
         Systems
 
@@ -83,8 +83,11 @@
             Behavior(Behavior):::implemented
         end
 
-        EntityStore  -.- Data-Structures
-        Systems      -.- Data-Structures
+        EntityStore  --- Data-Structures
+
+        Systems      -.- Entity
+        Systems      -.- Component
+        Systems      -.- Tag
     end
 
     Editor      -->Renderer
@@ -100,11 +103,11 @@
     Physics     -->Resource
     Misc        -->Resource
 
-    Renderer    -->Engine
-    Backend     -->Engine
-    Physics     -->Engine
+    Renderer    -->ECS
+    Backend     -->ECS
+    Physics     -->ECS
 
-    Netcode     -->Engine
+    Netcode     -->ECS
     Netcode     -->Storage
 ```
 
