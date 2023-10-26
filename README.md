@@ -22,6 +22,7 @@
 |                   |                           | [How to use and debug assembly unloadability in .NET](https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability)
 
 
+## Diagram Overview
 ```mermaid
   graph TD;
     classDef finished       stroke:#0b0,stroke-width:2px;
@@ -36,10 +37,10 @@
         Camera
     end
 
-    subgraph Backend;
+    subgraph Backend[Renderer Backend];
         OpenGL-ES
         Vulkan
-        Shaders
+        Shader
     end
 
     subgraph Physics;
@@ -51,19 +52,85 @@
         Events
     end
 
-
     subgraph Resource[Resource Management];
-        Scenes
+        Scenes:::implemented
         Textures
         Materials
         Meshes
         Animations
     end
 
-    subgraph Netcode;
+    subgraph Netcode[Netcode / ORM];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
+    end
+
+    subgraph Storage[Storage / Database];
+        SQL(SQL):::finished
+        CRUD(CRUD):::finished
+    end
+
+    subgraph Engine[Engine / ECS];
+        EntityStore(EntityStore):::implemented
+        Systems
+
+        subgraph Data-Structures;
+        direction TB;
+            Entity(Entity):::implemented
+            Component(Component):::implemented
+            Tag(Tag):::implemented
+            Behavior(Behavior):::implemented
+        end
+
+        EntityStore  -.- Data-Structures
+        Systems      -.- Data-Structures
+    end
+
+    Editor      -->Netcode
+    %% Editor      -->Storage
+    Editor      -->Renderer
+    Editor      -->Backend
+    Editor      -->Physics
+    Editor      -->Misc
+
+
+    Renderer    -->Resource
+    Backend     -->Resource
+    Physics     -->Resource
+    Misc        -->Resource
+
+    Renderer    -->Engine
+    Backend     -->Engine
+    Physics     -->Engine
+
+    Netcode     -->Engine
+    Storage     -->Engine
+    Resource    -->Storage
+```
+
+## Detailed Diagrams
+```mermaid
+  graph TD;
+    classDef finished       stroke:#0b0,stroke-width:2px;
+    classDef implemented    stroke:#00f,stroke-width:2px;
+
+
+    subgraph Netcode[Netcode / ORM];
+        Client(Client):::finished
+        Server(Server):::finished
+        WebUI(Web UI):::finished
+
+        subgraph Messages;
+            direction TB;
+            Request(Request):::finished
+            Response(Response):::finished
+            Event(Event):::finished
+        end
+
+        Client -.- Messages
+        Server -.- Messages
+        WebUI  -.- Messages
 
         subgraph Protocols;
             direction TB;
@@ -71,19 +138,15 @@
             WebSocket(WebSocket):::finished
             UDP(UDP):::finished
             WebRTC(WebRTC):::finished
+            In-Process(In-Process):::finished
         end
 
-        Client -.- Protocols
-        Server -.- Protocols
-        WebUI  -.- Protocols
+        Messages  -.- Protocols
     end
 
-
-
-    subgraph Storage;
+    subgraph Storage[Storage / Database];
         SQL(SQL):::finished
-        Key/Value(Key/Value):::finished
-
+        CRUD(CRUD):::finished
 
         subgraph SQL-DB;
             direction TB;
@@ -93,47 +156,15 @@
             SQL-Server(SQL Server):::finished
         end
 
-        SQL         -.- SQL-DB
-        Key/Value   -.- KV-DB
+        SQL     -.- SQL-DB
+        CRUD    -.- Key/Value-DB
 
-        subgraph KV-DB;
+        subgraph Key/Value-DB;
             direction TB;
             File-System(File-System):::finished
         end
-
     end
-
-
-    subgraph Engine[Engine / ECS];
-        EntityStore(EntityStore):::implemented
-        Systems
-
-        subgraph Data-Structures;
-        direction TB;
-            Entities(Entities):::implemented
-            Components(Components):::implemented
-            Tags(Tags):::implemented
-            Behaviors(Behaviors):::implemented
-        end
-
-
-        EntityStore  -.- Data-Structures
-        Systems      -.- Data-Structures
-    end
-
-    Editor      -->Netcode
-    Editor      -->Storage
-
-    Editor      -->Resource
-    Renderer    -->Resource
-    Backend     -->Resource
-    Physics     -->Resource
-    Misc        -->Resource
-
-    Netcode     -->Engine
-    Storage     -->Engine
-    Resource    -->Engine
-      
+    
 ```
 <br/><br/>
 
