@@ -25,7 +25,7 @@
 ```mermaid
   graph TD;
     subgraph Editor;
-        UI[Editor GUI];
+        Editor-UI;
     end
 
     subgraph Renderer;
@@ -50,11 +50,22 @@
 
 
     subgraph Resource[Resource Management];
+        Scenes
         Textures
         Materials
         Meshes
         Animations
-        Scenes
+    end
+
+    subgraph Netcode;
+        Client
+        Server
+    end
+
+    subgraph Storage;
+        SQL
+        Key/Value
+        File-System
     end
 
 
@@ -81,6 +92,8 @@
     Physics     -->Resource
     Misc        -->Resource
 
+    Netcode     -->Engine
+    Storage     -->Engine
     Resource    -->Engine
       
 ```
