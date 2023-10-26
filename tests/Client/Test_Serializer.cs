@@ -10,6 +10,8 @@ using Tests.ECS;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
@@ -49,22 +51,7 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static void Test_Serializer_read_scene()
-    {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
-
-        // --- load game entities as scene sync
-        var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
-        var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-        var entityCount = serializer.ReadScene(file, out string error);
-        IsNull(error);
-        AreEqual(2, entityCount);
-        file.Close();
-    }
-    
-    [Test]
-    public static void Test_Serializer_empty_scene()
+    public static void Test_Serializer_write_empty_scene()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
@@ -76,6 +63,37 @@ public static class Test_Serializer
         AreEqual("[]", str);
         
         AreEqual(0, store.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_Serializer_read_scene()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+
+        // --- load game entities as scene sync
+        var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
+        var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        var entityCount = serializer.ReadScene(file, out string error);
+        
+        IsNull(error);
+        AreEqual(2, entityCount);
+        AreEqual(2, store.EntityCount);
+        
+        var root        = store.GetNodeById(10).Entity;
+        AreEqual(11,    root.ChildIds[0]);
+        IsTrue  (new Position(1,2,3) == root.Position);
+        AreEqual(1,     root.Tags.Count);
+        IsTrue  (root.Tags.Has<TestTag>());
+        
+        var child       = store.GetNodeById(11).Entity;
+        AreEqual(0,     child.ChildCount);
+        AreEqual(0,     child.Components_.Length);
+        AreEqual(0,     child.Tags.Count);
+        
+        var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
+        AreEqual(1,     type.EntityCount);
+        file.Close();
     }
     
     [Test]
