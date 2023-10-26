@@ -7,7 +7,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal struct Behaviors
+public struct EntityBehaviors
 {
     internal readonly   int                 id;
     /// <summary>
@@ -19,7 +19,7 @@ internal struct Behaviors
     
     public   override   string              ToString() => GetString();
 
-    internal Behaviors (int id, Behavior[] classes)
+    internal EntityBehaviors (int id, Behavior[] classes)
     {
         this.id         = id;
         this.classes    = classes;

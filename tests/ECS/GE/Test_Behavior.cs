@@ -29,6 +29,7 @@ public static class Test_Behavior
         AreEqual("id: 1  [*TestBehavior1]", player.ToString());
         AreEqual(1,             player.Behaviors.Length);
         AreSame (testRef1,      player.Behaviors[0]);
+        AreEqual(1,             store.EntityBehaviors.Length);
         
         var e = Throws<InvalidOperationException> (() => {
             player.AddBehavior(testRef1);
@@ -43,6 +44,7 @@ public static class Test_Behavior
         AreSame (testRef2,      player.GetBehavior<TestBehavior2>());
         AreEqual(2,             player.Behaviors.Length);
         AreEqual("id: 1  [*TestBehavior1, *TestBehavior2]", player.ToString());
+        AreEqual(1,             store.EntityBehaviors.Length);
         
         var testRef3 = new TestBehavior2();
         NotNull (player.AddBehavior(testRef3));
@@ -116,11 +118,14 @@ public static class Test_Behavior
         IsNull  (entity2.AddBehavior(new TestBehavior2 { val2 = 2 }));
         AreEqual(1,                         entity1.Behaviors.Length);
         AreEqual(1,                         entity2.Behaviors.Length);
+        AreEqual(2,                         store.EntityBehaviors.Length);
         
         NotNull (entity1.RemoveBehavior<TestBehavior1>());
         AreEqual(0,                         entity1.Behaviors.Length);
+        AreEqual(1,                         store.EntityBehaviors.Length);
         NotNull (entity2.RemoveBehavior<TestBehavior2>());
         AreEqual(0,                         entity2.Behaviors.Length);
+        AreEqual(0,                         store.EntityBehaviors.Length);
         
         IsNull  (entity1.GetBehavior<TestBehavior1>());
         IsNull  (entity2.GetBehavior<TestBehavior2>());

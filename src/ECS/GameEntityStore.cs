@@ -40,8 +40,9 @@ public sealed partial class GameEntityStore : EntityStore
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
-                    public ReadOnlySpan<EntityNode>             Nodes       => new (nodes);
-                    public              GameEntity              StoreRoot   => storeRoot; // null if no graph origin set
+                    public ReadOnlySpan<EntityNode>             Nodes           => new (nodes);
+                    public              GameEntity              StoreRoot       => storeRoot; // null if no graph origin set
+                    public ReadOnlySpan<EntityBehaviors>        EntityBehaviors => new (entityBehaviors, 0, entityBehaviorCount);
     #endregion
     
 #region internal fields
@@ -52,9 +53,9 @@ public sealed partial class GameEntityStore : EntityStore
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
     [Browse(Never)] private             GameEntity              storeRoot;          //  8                   - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Behavior"/>'s to minimize iteration cost for <see cref="Behavior.Update"/>.</summary>
-                    private             Behaviors[]             entityBehaviors;    //  8
+    [Browse(Never)] private             EntityBehaviors[]       entityBehaviors;    //  8
     /// <summary>Count of entities with one or more <see cref="Behavior"/>'s</summary>
-                    private             int                     entityBehaviorCount;//  4                   - >= 0  and  <= entityBehaviors.Length
+    [Browse(Never)] private             int                     entityBehaviorCount;//  4                   - >= 0  and  <= entityBehaviors.Length
     #endregion
     
 #region initialize
@@ -69,7 +70,7 @@ public sealed partial class GameEntityStore : EntityStore
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
-        entityBehaviors = Array.Empty<Behaviors>();
+        entityBehaviors = Array.Empty<EntityBehaviors>();
     }
     #endregion
     

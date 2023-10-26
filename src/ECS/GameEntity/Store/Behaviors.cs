@@ -35,7 +35,7 @@ public partial class GameEntityStore
                 var newLength = Math.Max(1, 2 * lastIndex);
                 Utils.Resize(ref entityBehaviors, newLength);
             }
-            entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior[] { behavior });
+            entityBehaviors[lastIndex] = new EntityBehaviors(entity.id, new Behavior[] { behavior });
         } else {
             // case: entity already has behaviors => add behavior to its behaviors
             ref var classes = ref entityBehaviors[entity.behaviorIndex].classes;
@@ -56,7 +56,7 @@ public partial class GameEntityStore
                 var newLength = Math.Max(1, 2 * lastIndex);
                 Utils.Resize(ref entityBehaviors, newLength);
             }
-            entityBehaviors[lastIndex] = new Behaviors(entity.id, new Behavior [] { behavior });
+            entityBehaviors[lastIndex] = new EntityBehaviors(entity.id, new Behavior [] { behavior });
             return null;
         }
         // case: entity has already behaviors => add / replace behavior to / in behaviors
