@@ -22,6 +22,59 @@
 |                   |                           | [How to use and debug assembly unloadability in .NET](https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability)
 
 
+```mermaid
+  graph TD;
+    subgraph Editor;
+        UI[Editor GUI];
+    end
+
+    subgraph Renderer;
+        GUI
+        Camera
+    end
+
+    subgraph Backend;
+        OpenGL-ES
+        Vulkan
+        Shaders
+    end
+
+    subgraph Physics;
+        Collisions
+    end
+    
+    subgraph Misc;
+        Animations
+        Events
+    end
+
+
+    subgraph Resource[Resource Management];
+        Textures
+        Materials
+        Meshes
+        Animations
+        Scenes
+    end
+
+
+    subgraph Engine[Engine / ECS];
+       Entities
+       Components
+       Tags
+       Behaviors
+       Systems
+    end
+
+    Editor      -->Resource
+    Renderer    -->Resource
+    Backend     -->Resource
+    Physics     -->Resource
+    Misc        -->Resource
+
+    Resource    -->Engine
+      
+```
 <br/><br/>
 
 
