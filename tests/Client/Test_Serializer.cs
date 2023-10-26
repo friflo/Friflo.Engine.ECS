@@ -72,28 +72,31 @@ public static class Test_Serializer
         var serializer  = new GameDataSerializer(store);
 
         // --- load game entities as scene sync
-        var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
-        var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-        var entityCount = serializer.ReadScene(file, out string error);
-        
-        IsNull(error);
-        AreEqual(2, entityCount);
-        AreEqual(2, store.EntityCount);
-        
-        var root        = store.GetNodeById(10).Entity;
-        AreEqual(11,    root.ChildIds[0]);
-        IsTrue  (new Position(1,2,3) == root.Position);
-        AreEqual(1,     root.Tags.Count);
-        IsTrue  (root.Tags.Has<TestTag>());
-        
-        var child       = store.GetNodeById(11).Entity;
-        AreEqual(0,     child.ChildCount);
-        AreEqual(0,     child.Components_.Length);
-        AreEqual(0,     child.Tags.Count);
-        
-        var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
-        AreEqual(1,     type.EntityCount);
-        file.Close();
+        for (int n = 0; n < 2; n++)
+        {
+            var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
+            var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var entityCount = serializer.ReadScene(file, out string error);
+            file.Close();
+            
+            IsNull(error);
+            AreEqual(2, entityCount);
+            AreEqual(2, store.EntityCount);
+            
+            var root        = store.GetNodeById(10).Entity;
+            AreEqual(11,    root.ChildIds[0]);
+            IsTrue  (new Position(1,2,3) == root.Position);
+            AreEqual(1,     root.Tags.Count);
+            IsTrue  (root.Tags.Has<TestTag>());
+            
+            var child       = store.GetNodeById(11).Entity;
+            AreEqual(0,     child.ChildCount);
+            AreEqual(0,     child.Components_.Length);
+            AreEqual(0,     child.Tags.Count);
+            
+            var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
+            AreEqual(1,     type.EntityCount);
+        }
     }
     
     [Test]
@@ -118,6 +121,41 @@ public static class Test_Serializer
         var sizeKb = stream.Length / 1024;
         stream.Close();
         Console.WriteLine($"Write scene: entities: {count}, size: {sizeKb} kb, duration: {stopwatch.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_Serializer_read_scene_Perf()
+    {
+        int entityCount = 30; // todo use 1000 - requires fix/workaround for AppendInputSlice() in combination with Stream
+        var stream      = new MemoryStream();
+        // --- create JSON scene with GameDataSerializer
+        {
+            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var serializer  = new GameDataSerializer(store);
+
+            for (int n = 0; n < entityCount; n++) {
+                var entity  = store.CreateEntity();
+                entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
+                entity.AddTag<TestTag>();
+            }
+            AreEqual(entityCount, store.EntityCount);
+            serializer.WriteScene(stream);
+            var json = MemoryStreamAsString(stream);
+            AreEqual(3562, json.Length);
+        }
+        // --- read created JSON scene with GameDataSerializer
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        for (int n = 0; n < 1; n++)
+        {
+            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var serializer  = new GameDataSerializer(store);
+            stream.Position = 0;
+            serializer.ReadScene(stream, out _);
+            AreEqual(entityCount, store.EntityCount);
+        }
+        stream.Close();
+        Console.WriteLine($"Read scene: entities: {entityCount}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     private static string MemoryStreamAsString(MemoryStream stream) {
