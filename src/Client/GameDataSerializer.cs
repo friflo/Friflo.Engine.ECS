@@ -26,10 +26,7 @@ public class GameDataSerializer
     private             Bytes               componentBuf;
     private readonly    EntityConverter     converter;
     
-    private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
-    private static readonly byte[] Comma       = Encoding.UTF8.GetBytes(",");
-    private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
-    
+#region constructor
     public GameDataSerializer(GameEntityStore store) {
         this.store      = store;
         converter       = new EntityConverter();
@@ -39,8 +36,13 @@ public class GameDataSerializer
             tags            = new List<string>()
         };
     }
+    #endregion
 
 #region write scene
+    private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
+    private static readonly byte[] Comma       = Encoding.UTF8.GetBytes(",");
+    private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
+
     public async Task WriteSceneAsync(Stream stream)
     {
         await stream.WriteAsync(ArrayStart);
