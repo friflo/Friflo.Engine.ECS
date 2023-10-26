@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
@@ -9,7 +7,6 @@ using Friflo.Json.Fliox.Hub.Host;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.ECS.Sync;
-using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable MethodHasAsyncOverload
@@ -17,7 +14,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.Client;
 
-public static class Test_Client
+public static class Test_DataSync
 {
     private static GameClient CreateClient() {
         var database    = new MemoryDatabase("test");
@@ -26,7 +23,7 @@ public static class Test_Client
     }
     
     [Test]
-    public static async Task Test_Client_load_game_entities()
+    public static async Task Test_DataSync_load_game_entities()
     {
         var client  = CreateClient();
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
@@ -67,14 +64,12 @@ public static class Test_Client
         }
     }
     
-
     [Test]
-    public static async Task Test_Client_store_game_entities()
+    public static async Task Test_DataSync_store_game_entities()
     {
         var client      = CreateClient();
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var sync        = new GameDataSync(store, client);
-        var serializer  = new GameDataSerializer(store);
 
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
@@ -85,20 +80,6 @@ public static class Test_Client
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         
-        // --- store game entities as scene sync
-        {
-            var fileName    = TestUtils.GetBasePath() + "assets/test_scene.json";
-            var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            serializer.WriteScene(file);
-            file.Close();
-        }
-        // --- store game entities as scene async
-        {
-            var fileName    = TestUtils.GetBasePath() + "assets/test_scene_async.json";
-            var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            await serializer.WriteSceneAsync(file);
-            file.Close();
-        }
         // --- store game entities with client sync
         for (int n = 0; n < 2; n++)
         {
@@ -135,29 +116,5 @@ public static class Test_Client
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
         }
-    }
-    
-    [Test]
-    public static void Test_Client_empty_scene()
-    {
-        var client      = CreateClient();
-        var store       = new GameEntityStore(PidType.UsePidAsId);
-        var sync        = new GameDataSync(store, client);
-        var serializer  = new GameDataSerializer(store);
-
-        sync.StoreGameEntities();
-        var stream = new MemoryStream();
-        serializer.WriteScene(stream);
-        var str = MemoryStreamAsString(stream);
-        stream.Close();
-        AreEqual("[]", str);
-        
-        AreEqual(0, store.EntityCount);
-        AreEqual(0, client.entities.Local.Count);
-    }
-    
-    private static string MemoryStreamAsString(MemoryStream stream) {
-        stream.Flush();
-        return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
 }
