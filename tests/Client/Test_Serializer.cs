@@ -57,7 +57,9 @@ public static class Test_Serializer
         // --- load game entities as scene sync
         var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
         var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-        serializer.ReadScene(file);
+        var entityCount = serializer.ReadScene(file, out string error);
+        IsNull(error);
+        AreEqual(2, entityCount);
         file.Close();
     }
     
