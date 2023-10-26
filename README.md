@@ -63,6 +63,7 @@
     subgraph Netcode;
         Client(Client):::finished
         Server(Server):::finished
+        WebUI(Web UI):::finished
 
         subgraph Protocols;
             direction TB;
@@ -74,6 +75,7 @@
 
         Client -.- Protocols
         Server -.- Protocols
+        WebUI  -.- Protocols
     end
 
 
@@ -81,7 +83,24 @@
     subgraph Storage;
         SQL(SQL):::finished
         Key/Value(Key/Value):::finished
-        File-System(File-System):::finished
+
+
+        subgraph SQL-DB;
+            direction TB;
+            SQLite(SQLite):::finished
+            MySQL(MySQL):::finished
+            Postgres(Postgres):::finished
+            SQL-Server(SQL Server):::finished
+        end
+
+        SQL         -.- SQL-DB
+        Key/Value   -.- KV-DB
+
+        subgraph KV-DB;
+            direction TB;
+            File-System(File-System):::finished
+        end
+
     end
 
 
