@@ -36,6 +36,7 @@ public static class Test_DataSync
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var sync    = new GameDataSync(store, client);
         
+        // load game entities via client sync
         for (int n = 0; n < 2; n++) {
             sync.LoadGameEntities();
             
@@ -48,9 +49,12 @@ public static class Test_DataSync
             AreEqual(2,     store.EntityCount);
         }
         
+        // clear game entities in store
         store.GetNodeById(10).Entity.DeleteEntity();
         store.GetNodeById(11).Entity.DeleteEntity();
         AreEqual(0,     store.EntityCount);
+        
+        // load game entities via client async
         for (int n = 0; n < 2; n++) {
             await sync.LoadGameEntitiesAsync();
             
@@ -80,7 +84,7 @@ public static class Test_DataSync
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         
-        // --- store game entities with client sync
+        // --- store game entities via client sync
         for (int n = 0; n < 2; n++)
         {
             sync.StoreGameEntities();
@@ -97,7 +101,7 @@ public static class Test_DataSync
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
         }
-        // --- store game entities with client async
+        // --- store game entities via client async
         sync.ClearData();
         AreEqual(0, client.entities.Local.Count);
         for (int n = 0; n < 2; n++)
