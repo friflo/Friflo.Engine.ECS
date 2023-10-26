@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
@@ -59,6 +61,29 @@ public static class Test_Serializer
         AreEqual("[]", str);
         
         AreEqual(0, store.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_Serializer_write_scene_Perf()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+
+        int count = 10;  // 1_000_000 ~ 1.227 ms
+        for (int n = 0; n < count; n++) {
+        var entity  = store.CreateEntity();
+            entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
+            entity.AddTag<TestTag>();
+        }
+        
+        AreEqual(count, store.EntityCount);
+        
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var stream      = new MemoryStream();
+        serializer.WriteScene(stream);
+        stream.Close();
+        Console.WriteLine($"Write scene: entities: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     private static string MemoryStreamAsString(MemoryStream stream) {
