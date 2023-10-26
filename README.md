@@ -87,12 +87,12 @@
         Systems      -.- Data-Structures
     end
 
-    Editor      -->Netcode
-    %% Editor      -->Storage
     Editor      -->Renderer
     Editor      -->Backend
     Editor      -->Physics
     Editor      -->Misc
+
+    Resource    -->Netcode
 
 
     Renderer    -->Resource
@@ -105,8 +105,7 @@
     Physics     -->Engine
 
     Netcode     -->Engine
-    Storage     -->Engine
-    Resource    -->Storage
+    Netcode     -->Storage
 ```
 
 ## Detailed Diagrams
