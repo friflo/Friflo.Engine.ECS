@@ -24,6 +24,9 @@
 
 ```mermaid
   graph TD;
+    classDef finished       stroke:#0b0,stroke-width:2px;
+    classDef implemented    stroke:#00a,stroke-width:2px;
+
     subgraph Editor;
         Editor-UI;
     end
@@ -58,33 +61,49 @@
     end
 
     subgraph Netcode;
-        Client
-        Server
+        Client(Client):::finished
+        Server(Server):::finished
+
+        subgraph Protocols;
+            direction TB;
+            HTTP(HTTP):::finished
+            WebSocket(WebSocket):::finished
+            UDP(UDP):::finished
+            WebRTC(WebRTC):::finished
+        end
+
+        Client -.- Protocols
+        Server -.- Protocols
     end
 
+
+
     subgraph Storage;
-        SQL
-        Key/Value
-        File-System
+        SQL(SQL):::finished
+        Key/Value(Key/Value):::finished
+        File-System(File-System):::finished
     end
 
 
     subgraph Engine[Engine / ECS];
-       EntityStore
-       Entities
-       Components
-       Tags
-       Behaviors
-       Systems
+        EntityStore(EntityStore):::implemented
+        Systems
 
-       EntityStore  --- Entities
-       EntityStore  --- Components
-       EntityStore  --- Tags
-       EntityStore  --- Behaviors
+        subgraph Data-Structures;
+        direction TB;
+            Entities(Entities):::implemented
+            Components(Components):::implemented
+            Tags(Tags):::implemented
+            Behaviors(Behaviors):::implemented
+        end
 
-       Systems      -.- Components
-       Systems      -.- Tags
+
+        EntityStore  -.- Data-Structures
+        Systems      -.- Data-Structures
     end
+
+    Editor      -->Netcode
+    Editor      -->Storage
 
     Editor      -->Resource
     Renderer    -->Resource
