@@ -25,7 +25,7 @@
 ```mermaid
   graph TD;
     classDef finished       stroke:#0b0,stroke-width:2px;
-    classDef implemented    stroke:#00a,stroke-width:2px;
+    classDef implemented    stroke:#00f,stroke-width:2px;
 
     subgraph Editor;
         Editor-UI;
