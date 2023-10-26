@@ -59,11 +59,20 @@
 
 
     subgraph Engine[Engine / ECS];
+       EntityStore
        Entities
        Components
        Tags
        Behaviors
        Systems
+
+       EntityStore  --- Entities
+       EntityStore  --- Components
+       EntityStore  --- Tags
+       EntityStore  --- Behaviors
+
+       Systems      -.- Components
+       Systems      -.- Tags
     end
 
     Editor      -->Resource
