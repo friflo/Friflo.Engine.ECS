@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,18 +35,44 @@ public sealed class GameDataSync
         componentBuf    = new Bytes(32);
     }
     
+    public void ClearData() {
+        client.Reset();
+    }
+    
     public void LoadGameEntities()
     {
         var query = client.entities.QueryAll();
         client.SyncTasks().Wait(); // todo enable synchronous queries in MemoryDatabase
-        
-        var dataEntities = query.Result;
+        ConvertDataEntities(query.Result);
+    }
+    
+    public async Task LoadGameEntitiesAsync()
+    {
+        var query = client.entities.QueryAll();
+        await client.SyncTasks();
+        ConvertDataEntities(query.Result);
+    }
+    
+    private void ConvertDataEntities(List<DataEntity> dataEntities)
+    {
         foreach (var data in dataEntities) {
             converter.DataToGameEntity(data, store, out _);
         }
     }
     
     public void StoreGameEntities()
+    {
+        UpsertDataEntities();
+        client.SyncTasksSynchronous();
+    }
+    
+    public async Task StoreGameEntitiesAsync()
+    {
+        UpsertDataEntities();
+        await client.SyncTasks();
+    }
+    
+    private void UpsertDataEntities()
     {
         var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
@@ -61,7 +88,6 @@ public sealed class GameDataSync
             dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
             client.entities.Upsert(dataEntity);
         }
-        client.SyncTasksSynchronous();
     }
     
     private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
