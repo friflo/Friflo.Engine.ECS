@@ -82,8 +82,9 @@ public static class Test_Serializer
         stopwatch.Start();
         var stream      = new MemoryStream();
         serializer.WriteScene(stream);
+        var sizeKb = stream.Length / 1024;
         stream.Close();
-        Console.WriteLine($"Write scene: entities: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Write scene: entities: {count}, size: {sizeKb} kb, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     private static string MemoryStreamAsString(MemoryStream stream) {
