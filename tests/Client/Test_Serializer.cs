@@ -78,25 +78,46 @@ public static class Test_Serializer
             var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             var result      = serializer.ReadScene(file);
             file.Close();
-            
-            IsNull(result.error);
-            AreEqual(2, result.entityCount);
-            AreEqual(2, store.EntityCount);
-            
-            var root        = store.GetNodeById(10).Entity;
-            AreEqual(11,    root.ChildIds[0]);
-            IsTrue  (new Position(1,2,3) == root.Position);
-            AreEqual(1,     root.Tags.Count);
-            IsTrue  (root.Tags.Has<TestTag>());
-            
-            var child       = store.GetNodeById(11).Entity;
-            AreEqual(0,     child.ChildCount);
-            AreEqual(0,     child.Components_.Length);
-            AreEqual(0,     child.Tags.Count);
-            
-            var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
-            AreEqual(1,     type.EntityCount);
+            AssertReadSceneResult(result, store);
         }
+    }
+    
+    [Test]
+    public static async Task Test_Serializer_read_scene_async()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+
+        // --- load game entities as scene sync
+        for (int n = 0; n < 2; n++)
+        {
+            var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
+            var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var result      = await serializer.ReadSceneAsync(file);
+            file.Close();
+            AssertReadSceneResult(result, store);
+        }
+    }
+    
+    private static void AssertReadSceneResult(ReadSceneResult result, GameEntityStore store)
+    {
+        IsNull(result.error);
+        AreEqual(2, result.entityCount);
+        AreEqual(2, store.EntityCount);
+            
+        var root        = store.GetNodeById(10).Entity;
+        AreEqual(11,    root.ChildIds[0]);
+        IsTrue  (new Position(1,2,3) == root.Position);
+        AreEqual(1,     root.Tags.Count);
+        IsTrue  (root.Tags.Has<TestTag>());
+            
+        var child       = store.GetNodeById(11).Entity;
+        AreEqual(0,     child.ChildCount);
+        AreEqual(0,     child.Components_.Length);
+        AreEqual(0,     child.Tags.Count);
+            
+        var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
+        AreEqual(1,     type.EntityCount);
     }
     
     [Test]
