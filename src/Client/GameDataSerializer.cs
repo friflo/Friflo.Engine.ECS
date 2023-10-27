@@ -16,6 +16,17 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
 
+public readonly struct ReadSceneResult
+{
+    public readonly     int     entityCount;
+    public readonly     string  error;
+    
+    internal ReadSceneResult(int entityCount, string error) {
+        this.entityCount    = entityCount;
+        this.error          = error;
+    }
+}
+
 public class GameDataSerializer
 {
     private readonly    GameEntityStore     store;
@@ -28,6 +39,8 @@ public class GameDataSerializer
     // --- read specific fields
     private             Utf8JsonParser      parser;
     private             int                 readEntityCount;
+    private             MemoryStream        readStream;
+    private             byte[]              readBuffer;
     private readonly    DataEntity          readEntity;
     
 #region constructor
@@ -153,26 +166,74 @@ public class GameDataSerializer
     #endregion
     
 #region read scene
-    public int ReadScene(Stream stream, out string error)
+    public async Task<ReadSceneResult> ReadSceneAsync(Stream stream)
+    {
+        try {
+            if (stream is MemoryStream memoryStream) {
+                readStream = memoryStream;
+            } else {
+                readStream = new MemoryStream();
+                readStream.Position = 0;
+                readStream.SetLength(0);
+                readBuffer ??= new byte[16*1024];
+                int read;
+                while((read = await stream.ReadAsync(readBuffer)) > 0) {
+                    readStream.Write (readBuffer, 0, read);
+                }
+                readStream.Position = 0;
+            }
+            ReadSceneInternal(out var error);
+            return new ReadSceneResult(readEntityCount, error);
+        }
+        finally {
+            readStream = null;
+        }
+    }
+    
+    public ReadSceneResult ReadScene(Stream stream)
+    {
+        try {
+            if (stream is MemoryStream memoryStream) {
+                readStream = memoryStream;
+            } else {
+                readStream = new MemoryStream();
+                readStream.Position = 0;
+                readStream.SetLength(0);
+                readBuffer ??= new byte[16*1024];
+                int read;
+                while((read = stream.Read (readBuffer)) > 0) {
+                    readStream.Write (readBuffer, 0, read);
+                }
+                readStream.Position = 0;
+            }
+            ReadSceneInternal(out var error);
+            return new ReadSceneResult(readEntityCount, error);
+        }
+        finally {
+            readStream = null;
+        }
+    }
+
+    private void ReadSceneInternal(out string error)
     {
         readEntityCount = 0;
-        parser.InitParser(stream);
+        parser.InitParser(readStream);
         var ev = parser.NextEvent();
         switch (ev)
         {
             case JsonEvent.Error:
                 error = parser.error.GetMessage();
-                return readEntityCount;
+                return;
             case JsonEvent.ArrayStart:
                 ev = ReadEntities();
                 if (ev != JsonEvent.ArrayEnd) {
                     error = $"expect array end. was {ev}";
                 }
                 error = null;
-                return readEntityCount;
+                return;
             default:
                  error = $"expect array. was: {ev}";
-                 return readEntityCount;
+                 return;
         }
     }
     

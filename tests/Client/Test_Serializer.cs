@@ -76,11 +76,11 @@ public static class Test_Serializer
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
             var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            var entityCount = serializer.ReadScene(file, out string error);
+            var result      = serializer.ReadScene(file);
             file.Close();
             
-            IsNull(error);
-            AreEqual(2, entityCount);
+            IsNull(result.error);
+            AreEqual(2, result.entityCount);
             AreEqual(2, store.EntityCount);
             
             var root        = store.GetNodeById(10).Entity;
@@ -151,7 +151,9 @@ public static class Test_Serializer
             var store       = new GameEntityStore(PidType.UsePidAsId);
             var serializer  = new GameDataSerializer(store);
             stream.Position = 0;
-            serializer.ReadScene(stream, out _);
+            var result = serializer.ReadScene(stream);
+            IsNull  (result.error);
+            AreEqual(entityCount, result.entityCount);
             AreEqual(entityCount, store.EntityCount);
         }
         stream.Close();
