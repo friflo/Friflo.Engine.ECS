@@ -101,6 +101,7 @@ public static class Test_Serializer
     
     private static void AssertReadSceneResult(ReadSceneResult result, GameEntityStore store)
     {
+        AreEqual("entityCount: 2", result.ToString());
         IsNull(result.error);
         AreEqual(2, result.entityCount);
         AreEqual(2, store.EntityCount);

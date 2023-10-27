@@ -25,6 +25,19 @@ public readonly struct ReadSceneResult
         this.entityCount    = entityCount;
         this.error          = error;
     }
+
+    public override string ToString() => GetString();
+    
+    private string GetString() {
+        var sb = new StringBuilder();
+        sb.Append("entityCount: ");
+        sb.Append(entityCount);
+        if (error != null) {
+            sb.Append(" error: ");
+            sb.Append(error);
+        }
+        return sb.ToString();
+    }
 }
 
 public class GameDataSerializer
