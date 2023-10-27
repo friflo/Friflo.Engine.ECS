@@ -1,8 +1,5 @@
-﻿using System;
-using Friflo.Fliox.Engine.Client;
-using Friflo.Fliox.Engine.ECS;
+﻿using Friflo.Fliox.Engine.Client;
 using NUnit.Framework;
-using Tests.ECS;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer

@@ -25,9 +25,6 @@ public ref struct QueryEnumerator
         componentLen    = archetype.EntityCount - 1;
     }
     
-    /// <summary>
-    /// return each component using a <see cref="Ref{T}"/> to avoid struct copy and enable mutation in library
-    /// </summary>
     public readonly int Current   => entityIds[entityPos];
     
     // --- IEnumerator
