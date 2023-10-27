@@ -166,7 +166,7 @@ public class GameDataSerializer
     #endregion
     
 #region read scene
-    private void CreateReadStream() {
+    private void CreateReadBuffers() {
         readStream = new MemoryStream();
         readStream.Position = 0;
         readStream.SetLength(0);
@@ -179,7 +179,7 @@ public class GameDataSerializer
             if (stream is MemoryStream memoryStream) {
                 readStream = memoryStream;
             } else {
-                CreateReadStream();
+                CreateReadBuffers();
                 int read;
                 while((read = await stream.ReadAsync(readBuffer)) > 0) {
                     readStream.Write (readBuffer, 0, read);
@@ -199,7 +199,7 @@ public class GameDataSerializer
             if (stream is MemoryStream memoryStream) {
                 readStream = memoryStream;
             } else {
-                CreateReadStream();
+                CreateReadBuffers();
                 int read;
                 while((read = stream.Read (readBuffer)) > 0) {
                     readStream.Write(readBuffer, 0, read);
