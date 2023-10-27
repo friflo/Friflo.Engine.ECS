@@ -28,8 +28,9 @@
     classDef finished       stroke:#0b0,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
 
-    subgraph Editor;
-        Editor-UI;
+    subgraph Applications;
+        Editor;
+        Game;
     end
 
     subgraph Renderer;
@@ -76,13 +77,13 @@
         Systems
     end
 
-    Editor      -->Renderer
-    Editor      -->Backend
-    Editor      -->Physics
-    Editor      -->Misc
+    Applications    -->Renderer
+    Applications    -->Backend
+    Applications    -->Physics
+    Applications    -->Misc
+    Applications    -->ECS
 
     Resource    -->Netcode
-
 
     Renderer    -->Resource
     Backend     -->Resource
@@ -92,8 +93,8 @@
     Renderer    -->ECS
     Backend     -->ECS
     Physics     -->ECS
-
     Netcode     -->ECS
+
     Netcode     -->Storage
 ```
 
