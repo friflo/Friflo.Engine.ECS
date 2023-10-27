@@ -18,6 +18,7 @@ namespace Friflo.Fliox.Engine.Client;
 
 public class GameDataSerializer
 {
+#region private fields
     private readonly    GameEntityStore     store;
     private             Bytes               componentBuf;
     private readonly    EntityConverter     converter;
@@ -31,6 +32,7 @@ public class GameDataSerializer
     private             JsonValue           readJson;
     private             byte[]              readBuffer;
     private readonly    DataEntity          readEntity;
+    #endregion
     
 #region constructor
     public GameDataSerializer(GameEntityStore store) {
