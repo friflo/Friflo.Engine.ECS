@@ -311,11 +311,10 @@ public class GameDataSerializer
     
     private void ReadComponents()
     {
-        var start = parser.Position;
+        var start = parser.Position - 1;
         parser.SkipTree();
-        var end = parser.Position;
         componentBuf.Clear();
-        readEntity.components = new JsonValue(readJson.MutableArray, start - 1, end - start + 1);
+        readEntity.components = new JsonValue(readJson.MutableArray, start, parser.Position - start);
     }
     
     private JsonEvent ReadChildren()
