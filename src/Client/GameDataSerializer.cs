@@ -166,9 +166,14 @@ public class GameDataSerializer
     #endregion
     
 #region read scene
-    private MemoryStream CreateReadBuffers() {
+    private MemoryStream CreateReadBuffers(Stream stream) {
         readBuffer ??= new byte[16*1024];
-        return new MemoryStream();
+        int capacity = 0;
+        if (stream is FileStream fileStream) {
+            var fileInfo = new FileInfo(fileStream.Name);
+            capacity = (int)fileInfo.Length;
+        }
+        return new MemoryStream(capacity);
     }
 
     public async Task<ReadSceneResult> ReadSceneAsync(Stream stream)
@@ -176,7 +181,7 @@ public class GameDataSerializer
         if (stream is MemoryStream memoryStream) {
             return ReadSceneSync(memoryStream);
         }
-        var readStream = CreateReadBuffers();
+        var readStream = CreateReadBuffers(stream);
         int read;
         while((read = await stream.ReadAsync(readBuffer)) > 0) {
             readStream.Write (readBuffer, 0, read);
@@ -189,7 +194,7 @@ public class GameDataSerializer
         if (stream is MemoryStream memoryStream) {
             return ReadSceneSync(memoryStream);
         }
-        var readStream = CreateReadBuffers();
+        var readStream = CreateReadBuffers(stream);
         int read;
         while((read = stream.Read (readBuffer)) > 0) {
             readStream.Write(readBuffer, 0, read);
