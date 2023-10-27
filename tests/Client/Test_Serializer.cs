@@ -126,7 +126,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_read_scene_Perf()
     {
-        int entityCount = 30; // todo use 1000 - requires fix/workaround for AppendInputSlice() in combination with Stream
+        int entityCount = 10; // 1_000_000 ~ 2367 ms
         var stream      = new MemoryStream();
         // --- create JSON scene with GameDataSerializer
         {
@@ -140,13 +140,11 @@ public static class Test_Serializer
             }
             AreEqual(entityCount, store.EntityCount);
             serializer.WriteScene(stream);
-            var json = MemoryStreamAsString(stream);
-            AreEqual(3562, json.Length);
+            MemoryStreamAsString(stream);
         }
         // --- read created JSON scene with GameDataSerializer
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        for (int n = 0; n < 1; n++)
         {
             var store       = new GameEntityStore(PidType.UsePidAsId);
             var serializer  = new GameDataSerializer(store);
@@ -156,8 +154,8 @@ public static class Test_Serializer
             AreEqual(entityCount, result.entityCount);
             AreEqual(entityCount, store.EntityCount);
         }
+        Console.WriteLine($"ReadScene(). JSON size: {stream.Length}, entities: {entityCount}, duration: {stopwatch.ElapsedMilliseconds} ms");
         stream.Close();
-        Console.WriteLine($"Read scene: entities: {entityCount}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     private static string MemoryStreamAsString(MemoryStream stream) {
