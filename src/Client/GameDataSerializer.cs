@@ -4,12 +4,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
+
+[assembly: InternalsVisibleTo("Tests-internal")]
 
 // ReSharper disable UseUtf8StringLiteral
 // ReSharper disable MergeIntoPattern
