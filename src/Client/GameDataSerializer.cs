@@ -173,61 +173,53 @@ public class GameDataSerializer
 
     public async Task<ReadSceneResult> ReadSceneAsync(Stream stream)
     {
-        try {
-            if (stream is MemoryStream memoryStream) {
-                readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
-            } else {
-                var readStream = CreateReadBuffers();
-                int read;
-                while((read = await stream.ReadAsync(readBuffer)) > 0) {
-                    readStream.Write (readBuffer, 0, read);
-                }
-                readJson = new JsonValue(readStream.GetBuffer(), 0, (int)readStream.Length);
-            }
-            return ReadSceneSync();
+        if (stream is MemoryStream memoryStream) {
+            return ReadSceneSync(memoryStream);
         }
-        finally {
-            readJson = default;
+        var readStream = CreateReadBuffers();
+        int read;
+        while((read = await stream.ReadAsync(readBuffer)) > 0) {
+            readStream.Write (readBuffer, 0, read);
         }
+        return ReadSceneSync(readStream);
     }
     
     public ReadSceneResult ReadScene(Stream stream)
     {
+        if (stream is MemoryStream memoryStream) {
+            return ReadSceneSync(memoryStream);
+        }
+        var readStream = CreateReadBuffers();
+        int read;
+        while((read = stream.Read (readBuffer)) > 0) {
+            readStream.Write(readBuffer, 0, read);
+        }
+        return ReadSceneSync(readStream);
+    }
+
+    private ReadSceneResult ReadSceneSync(MemoryStream memoryStream)
+    {
         try {
-            if (stream is MemoryStream memoryStream) {
-                readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
-            } else {
-                var readStream = CreateReadBuffers();
-                int read;
-                while((read = stream.Read (readBuffer)) > 0) {
-                    readStream.Write(readBuffer, 0, read);
-                }
-                readJson = new JsonValue(readStream.GetBuffer(), 0, (int)readStream.Length);
+            readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
+            readEntityCount = 0;
+            parser.InitParser(readJson);
+            var ev = parser.NextEvent();
+            switch (ev)
+            {
+                case JsonEvent.Error:
+                    return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
+                case JsonEvent.ArrayStart:
+                    ev = ReadEntities();
+                    if (ev != JsonEvent.ArrayEnd) {
+                        return new ReadSceneResult(readEntityCount, $"expect array end. was {ev}");
+                    }
+                    return new ReadSceneResult(readEntityCount, null);
+                default:
+                    return new ReadSceneResult(readEntityCount, $"expect array. was: {ev}");
             }
-            return ReadSceneSync();
         }
         finally {
             readJson = default;
-        }
-    }
-
-    private ReadSceneResult ReadSceneSync()
-    {
-        readEntityCount = 0;
-        parser.InitParser(readJson);
-        var ev = parser.NextEvent();
-        switch (ev)
-        {
-            case JsonEvent.Error:
-                return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
-            case JsonEvent.ArrayStart:
-                ev = ReadEntities();
-                if (ev != JsonEvent.ArrayEnd) {
-                    return new ReadSceneResult(readEntityCount, $"expect array end. was {ev}");
-                }
-                return new ReadSceneResult(readEntityCount, null);
-            default:
-                return new ReadSceneResult(readEntityCount, $"expect array. was: {ev}");
         }
     }
     
