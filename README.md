@@ -74,20 +74,6 @@
     subgraph ECS;
         EntityStore(EntityStore):::implemented
         Systems
-
-        subgraph Data-Structures;
-        direction TB;
-            Entity(Entity):::implemented
-            Component(Component):::implemented
-            Tag(Tag):::implemented
-            Behavior(Behavior):::implemented
-        end
-
-        EntityStore  --- Data-Structures
-
-        Systems      -.- Entity
-        Systems      -.- Component
-        Systems      -.- Tag
     end
 
     Editor      -->Renderer
@@ -117,6 +103,24 @@
     classDef finished       stroke:#0b0,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
 
+    subgraph ECS;
+        EntityStore(EntityStore):::implemented
+        Systems
+
+        subgraph Data-Structures;
+        direction TB;
+            Entity(Entity):::implemented
+            Component(Component):::implemented
+            Tag(Tag):::implemented
+            Behavior(Behavior):::implemented
+        end
+
+        EntityStore  --- Data-Structures
+
+        Systems      -.- Entity
+        Systems      -.- Component
+        Systems      -.- Tag
+    end
 
     subgraph Netcode[Netcode / ORM];
         Client(Client):::finished
@@ -166,6 +170,9 @@
             File-System(File-System):::finished
         end
     end
+
+    Netcode --> ECS
+    Netcode --> Storage
     
 ```
 <br/><br/>
