@@ -126,7 +126,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_read_scene_Perf()
     {
-        int entityCount = 10; // 1_000_000 ~ 2367 ms
+        int entityCount = 1_000_000; // 1_000_000 ~ 2367 ms
         var stream      = new MemoryStream();
         // --- create JSON scene with GameDataSerializer
         {

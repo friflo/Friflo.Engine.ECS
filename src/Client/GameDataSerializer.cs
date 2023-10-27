@@ -39,7 +39,7 @@ public class GameDataSerializer
     // --- read specific fields
     private             Utf8JsonParser      parser;
     private             int                 readEntityCount;
-    private             MemoryStream        readStream;
+    private             JsonValue           readJson;
     private             byte[]              readBuffer;
     private readonly    DataEntity          readEntity;
     
@@ -166,30 +166,28 @@ public class GameDataSerializer
     #endregion
     
 #region read scene
-    private void CreateReadBuffers() {
-        readStream = new MemoryStream();
-        readStream.Position = 0;
-        readStream.SetLength(0);
+    private MemoryStream CreateReadBuffers() {
         readBuffer ??= new byte[16*1024];
+        return new MemoryStream();
     }
 
     public async Task<ReadSceneResult> ReadSceneAsync(Stream stream)
     {
         try {
             if (stream is MemoryStream memoryStream) {
-                readStream = memoryStream;
+                readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
             } else {
-                CreateReadBuffers();
+                var readStream = CreateReadBuffers();
                 int read;
                 while((read = await stream.ReadAsync(readBuffer)) > 0) {
                     readStream.Write (readBuffer, 0, read);
                 }
-                readStream.Position = 0;
+                readJson = new JsonValue(readStream.GetBuffer(), 0, (int)readStream.Length);
             }
             return ReadSceneSync();
         }
         finally {
-            readStream = null;
+            readJson = default;
         }
     }
     
@@ -197,26 +195,26 @@ public class GameDataSerializer
     {
         try {
             if (stream is MemoryStream memoryStream) {
-                readStream = memoryStream;
+                readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
             } else {
-                CreateReadBuffers();
+                var readStream = CreateReadBuffers();
                 int read;
                 while((read = stream.Read (readBuffer)) > 0) {
                     readStream.Write(readBuffer, 0, read);
                 }
-                readStream.Position = 0;
+                readJson = new JsonValue(readStream.GetBuffer(), 0, (int)readStream.Length);
             }
             return ReadSceneSync();
         }
         finally {
-            readStream = null;
+            readJson = default;
         }
     }
 
     private ReadSceneResult ReadSceneSync()
     {
         readEntityCount = 0;
-        parser.InitParser(readStream);
+        parser.InitParser(readJson);
         var ev = parser.NextEvent();
         switch (ev)
         {
@@ -307,7 +305,7 @@ public class GameDataSerializer
         parser.SkipTree();
         var end = parser.Position;
         componentBuf.Clear();
-        readEntity.components = new JsonValue(readStream.GetBuffer(), start - 1, end - start + 1);
+        readEntity.components = new JsonValue(readJson.MutableArray, start - 1, end - start + 1);
     }
     
     private JsonEvent ReadChildren()
