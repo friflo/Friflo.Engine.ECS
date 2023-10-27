@@ -28,10 +28,14 @@
     classDef finished       stroke:#0b0,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
 
-    subgraph Applications;
+    subgraph Applications[Applications / Extensions];
         Editor;
         Game;
+        Extensions;
     end
+
+    Editor  -.-Extensions;
+    Game    -.-Extensions;
 
     subgraph Renderer;
         GUI
