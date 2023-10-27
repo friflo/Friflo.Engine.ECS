@@ -16,30 +16,6 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
 
-public readonly struct ReadSceneResult
-{
-    public readonly     int     entityCount;
-    public readonly     string  error;
-    
-    internal ReadSceneResult(int entityCount, string error) {
-        this.entityCount    = entityCount;
-        this.error          = error;
-    }
-
-    public override string ToString() => GetString();
-    
-    private string GetString() {
-        var sb = new StringBuilder();
-        sb.Append("entityCount: ");
-        sb.Append(entityCount);
-        if (error != null) {
-            sb.Append(" error: ");
-            sb.Append(error);
-        }
-        return sb.ToString();
-    }
-}
-
 public class GameDataSerializer
 {
     private readonly    GameEntityStore     store;
