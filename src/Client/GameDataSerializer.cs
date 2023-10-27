@@ -19,12 +19,16 @@ namespace Friflo.Fliox.Engine.Client;
 public class GameDataSerializer
 {
     private readonly    GameEntityStore     store;
+    private             Bytes               componentBuf;
+    private readonly    EntityConverter     converter;
+    // --- write specific fields
     private             Utf8JsonWriter      writer;
+    private             bool                isFirst;
+    private readonly    DataEntity          writeEntity;
+    // --- read specific fields
     private             Utf8JsonParser      parser;
     private             int                 readEntityCount;
     private readonly    DataEntity          readEntity;
-    private             Bytes               componentBuf;
-    private readonly    EntityConverter     converter;
     
 #region constructor
     public GameDataSerializer(GameEntityStore store) {
@@ -35,6 +39,7 @@ public class GameDataSerializer
             children        = new List<long>(),
             tags            = new List<string>()
         };
+        writeEntity      = new DataEntity();
     }
     #endregion
 
@@ -46,23 +51,15 @@ public class GameDataSerializer
     {
         await stream.WriteAsync(ArrayStart);
         writer.SetPretty(true);
-        var dataEntity  = new DataEntity();
-        var nodeMax     = store.NodeMaxId;
-        var isFirst     = true;
+        isFirst     = true;
+        var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
             var entity  = store.GetNodeById(n).Entity;
             if (entity == null) {
                 continue;
             }
-            converter.GameToDataEntity(entity, dataEntity, true);
-            writer.InitSerializer();
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                writer.json.AppendChar(',');
-            }
-            WriteDataEntity(dataEntity);
+            WriteEntity(entity);
             var memory = new ReadOnlyMemory<byte>(writer.json.buffer, 0, writer.json.end);
             await stream.WriteAsync(memory);
         }
@@ -73,25 +70,30 @@ public class GameDataSerializer
     {
         stream.Write(ArrayStart);
         writer.SetPretty(true);
-        var dataEntity  = new DataEntity();
-        var nodeMax     = store.NodeMaxId;
-        var isFirst     = true;
+        isFirst     = true;
+        var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
             var entity  = store.GetNodeById(n).Entity;
             if (entity == null) {
                 continue;
             }
-            converter.GameToDataEntity(entity, dataEntity, true);
-            writer.InitSerializer();            if (isFirst) {
-                isFirst = false;
-            } else {
-                writer.json.AppendChar(',');
-            }
-            WriteDataEntity(dataEntity);
+            WriteEntity(entity);
             stream.Write(writer.json.AsSpan());
         }
         stream.Write(ArrayEnd);
+    }
+    
+    private void WriteEntity(GameEntity entity)
+    {
+        writer.InitSerializer();
+        if (isFirst) {
+            isFirst = false;
+        } else {
+            writer.json.AppendChar(',');
+        }
+        converter.GameToDataEntity(entity, writeEntity, true);
+        WriteDataEntity(writeEntity);
     }
     
     private static readonly     Bytes   PidKey          = new Bytes("pid");
