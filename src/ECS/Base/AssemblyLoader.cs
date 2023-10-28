@@ -71,13 +71,13 @@ internal sealed class AssemblyLoader
             if (!loadedAssemblies.Add(name)) {
                 continue;
             }
-            Assembly referencedAssembly = null; 
+            Assembly referencedAssembly; 
             try {
                 referencedAssembly = Assembly.Load(name);
                 // Console.WriteLine(name);
             }
-            catch (Exception exception) {
-                Console.WriteLine($"Failed loading Assembly: {name}, error: {exception.Message}");
+            catch (Exception) {
+                Console.WriteLine($"Failed loading Assembly: {referencedAssemblyName.Name}");
                 continue;
             }
             CheckAssembly(referencedAssembly);
