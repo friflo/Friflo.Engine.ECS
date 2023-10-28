@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -71,29 +72,41 @@ internal sealed class AssemblyLoader
             if (!loadedAssemblies.Add(name)) {
                 continue;
             }
-            Assembly referencedAssembly; 
-            try {
-                referencedAssembly = Assembly.Load(name);
-                // Console.WriteLine(name);
-            }
-            catch (Exception) {
-                // Assembly.Load() fails for assemblies loaded when debugging. These are:
-                //      System.Security.Permissions
-                //      System.Threading.AccessControl
-                //      System.CodeDom
-                //      Microsoft.Win32.SystemEvents
-                //      System.Configuration.ConfigurationManager
-                //      System.Diagnostics.PerformanceCounter
-                //      System.Diagnostics.EventLog
-                //      System.IO.Ports
-                //      System.Windows.Extensions
-                Console.WriteLine($"Failed loading Assembly: {referencedAssemblyName.Name}");
+            var referencedAssembly = LoadAssembly(referencedAssemblyName);
+            if (referencedAssembly == null) {
                 continue;
             }
             CheckAssembly(referencedAssembly);
         }
     }
-    
+
+    /// <summary>
+    /// <see cref="Assembly.Load(string)"/> fails for assemblies loaded when debugging. These are:
+    /// <code>
+    ///     System.Security.Permissions
+    ///     System.Threading.AccessControl
+    ///     System.CodeDom
+    ///     Microsoft.Win32.SystemEvents
+    ///     System.Configuration.ConfigurationManager
+    ///     System.Diagnostics.PerformanceCounter
+    ///     System.Diagnostics.EventLog
+    ///     System.IO.Ports
+    ///     System.Windows.Extensions
+    /// </code>
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    private static Assembly LoadAssembly(AssemblyName assemblyName)
+    {
+        try {
+            var assembly = Assembly.Load(assemblyName.FullName);
+            // Console.WriteLine(name);
+            return assembly;
+        }
+        catch (Exception) {
+            Console.WriteLine($"Failed loading Assembly: {assemblyName.Name}");
+        }
+        return null;
+    }
 
     // Note!: Used for debugging: Do not remove
     /* 
