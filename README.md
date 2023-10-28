@@ -29,9 +29,9 @@
     classDef implemented    stroke:#00f,stroke-width:2px;
 
     subgraph Applications[Applications / Extensions];
-        Editor;
-        Game;
-        Extensions;
+        Editor(Editor<br/>GUI);
+        Game(Game<br/>Resources / C# Scripts);
+        Extensions(Extensions<br/>Resources / C# Scripts);
     end
 
     Editor  -.-Extensions;
