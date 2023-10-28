@@ -77,6 +77,16 @@ internal sealed class AssemblyLoader
                 // Console.WriteLine(name);
             }
             catch (Exception) {
+                // Assembly.Load() fails for assemblies loaded when debugging. These are:
+                //      System.Security.Permissions
+                //      System.Threading.AccessControl
+                //      System.CodeDom
+                //      Microsoft.Win32.SystemEvents
+                //      System.Configuration.ConfigurationManager
+                //      System.Diagnostics.PerformanceCounter
+                //      System.Diagnostics.EventLog
+                //      System.IO.Ports
+                //      System.Windows.Extensions
                 Console.WriteLine($"Failed loading Assembly: {referencedAssemblyName.Name}");
                 continue;
             }
