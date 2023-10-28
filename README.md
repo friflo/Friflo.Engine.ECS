@@ -30,8 +30,8 @@
 
     subgraph Applications[Applications / Extensions];
         Editor(Editor<br/>GUI);
-        Game(Game<br/>Resources / C# Scripts);
-        Extensions(Extensions<br/>Resources / C# Scripts);
+        Game(Game<br/>Assets / C# Scripts);
+        Extensions(Extensions<br/>Assets / C# Scripts);
     end
 
     Editor  -.-Extensions;
@@ -57,7 +57,7 @@
         Events
     end
 
-    subgraph Resource[Resource Management];
+    subgraph Assets[Asset Management];
         Scenes:::implemented
         Textures
         Materials
@@ -87,12 +87,12 @@
     Applications    -->Misc
     Applications    -->ECS
 
-    Resource    -->Netcode
+    Assets      -->Netcode
 
-    Renderer    -->Resource
-    Backend     -->Resource
-    Physics     -->Resource
-    Misc        -->Resource
+    Renderer    -->Assets
+    Backend     -->Assets
+    Physics     -->Assets
+    Misc        -->Assets
 
     Renderer    -->ECS
     Backend     -->ECS
