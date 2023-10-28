@@ -70,7 +70,7 @@
         Netcode;
     end
 
-    subgraph ORM[ORM];
+    subgraph ORM[ORM / Messaging];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
@@ -132,7 +132,7 @@
         Systems      -.- Tag
     end
 
-    subgraph ORM;
+    subgraph ORM[ORM / Messaging];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
