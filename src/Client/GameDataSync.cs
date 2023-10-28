@@ -86,6 +86,13 @@ public sealed class GameDataSync
         client.entities.SubscribeChanges(Change.All, (changes, context) =>
         {
             Console.WriteLine($"Changes: {changes}");
+            foreach (var upsert in changes.Upserts) {
+                converter.DataToGameEntity(upsert.entity, store, out _);
+            }
+            foreach (var delete in changes.Deletes) {
+                ref var node = ref store.GetNodeByPid(delete.key);
+                node.Entity.DeleteEntity();
+            }
         });
         client.SyncTasksSynchronous();
     }
