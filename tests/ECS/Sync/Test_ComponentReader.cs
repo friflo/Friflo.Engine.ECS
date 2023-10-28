@@ -7,15 +7,18 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
-// ReSharper disable InconsistentNaming
 namespace Tests.ECS.Sync;
 
+// ReSharper disable once InconsistentNaming
 public static class Test_ComponentReader
 {
-    internal static readonly JsonValue rootComponents =
+    /// <summary>
+    /// Need to create <see cref="JsonValue"/> instances. They can be modified in <see cref="Friflo.Json.Fliox.JsonValue.Copy"/>
+    /// </summary>
+    internal static JsonValue RootComponents =>
         new JsonValue("{ \"pos\": { \"x\": 1, \"y\": 1, \"z\": 1 }, \"scl3\": { \"x\": 2, \"y\": 2, \"z\": 2 } }");
     
-    internal static readonly JsonValue childComponents =
+    internal static JsonValue ChildComponents =>
         new JsonValue("{ \"pos\": { \"x\": 3, \"y\": 3, \"z\": 3 }, \"scl3\": { \"x\": 4, \"y\": 4, \"z\": 4 } }");
     
     [Test]
@@ -24,8 +27,8 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataEntity { pid = 11, components = childComponents };
+        var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11, components = ChildComponents };
         
         var root        = converter.DataToGameEntity(rootNode, store, out _);
         var child       = converter.DataToGameEntity(childNode, store, out _);
@@ -64,7 +67,7 @@ public static class Test_ComponentReader
         IsTrue  (root.HasScale3);
         IsFalse (root.HasPosition);
         
-        var rootNode    = new DataEntity { pid = 10, components = rootComponents };
+        var rootNode    = new DataEntity { pid = 10, components = RootComponents };
         var rootResult  = converter.DataToGameEntity(rootNode, store, out _);  // archetype changes
         AreSame (root, rootResult);
         IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DataEntity components
@@ -194,8 +197,8 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataEntity { pid = 11, components = childComponents };
+        var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11, components = ChildComponents };
         
         var root        = converter.DataToGameEntity(rootNode, store, out _);
         var child       = converter.DataToGameEntity(childNode, store, out _);
@@ -223,7 +226,7 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = rootComponents, children = new List<long> { 11 } };
+        var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
         
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)

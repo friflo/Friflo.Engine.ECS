@@ -28,8 +28,8 @@ public static class Test_DataSync
     public static async Task Test_DataSync_load_game_entities()
     {
         var client  = CreateClient();
-        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.childComponents };
+        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.ChildComponents };
         
         client.entities.Upsert(rootNode);
         client.entities.Upsert(childNode);
@@ -140,8 +140,8 @@ public static class Test_DataSync
         client.SetEventProcessor(processor);
         sync.SetupSubscriptions();
         
-        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.childComponents };
+        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.ChildComponents };
         
         client.entities.Upsert(rootNode);
         client.entities.Upsert(childNode);
