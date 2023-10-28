@@ -80,4 +80,13 @@ public sealed class GameDataSync
             client.entities.Upsert(dataEntity);
         }
     }
+    
+    public void SetupSubscriptions()
+    {
+        client.entities.SubscribeChanges(Change.All, (changes, context) =>
+        {
+            Console.WriteLine($"Changes: {changes}");
+        });
+        client.SyncTasksSynchronous();
+    }
 }
