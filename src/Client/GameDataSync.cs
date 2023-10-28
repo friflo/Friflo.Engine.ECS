@@ -8,11 +8,14 @@ using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox.Hub.Client;
 
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
 
 [CLSCompliant(true)]
 public sealed class GameDataSync
 {
+    public              GameEntityStore                 Store => store;
+    
     private readonly    GameEntityStore                 store;
     private readonly    GameClient                      client;
     private readonly    LocalEntities<long, DataEntity> localEntities;

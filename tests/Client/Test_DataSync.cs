@@ -37,6 +37,7 @@ public static class Test_DataSync
         
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var sync    = new GameDataSync(store, client);
+        AreSame(store, sync.Store); // ensure API available
         
         // load game entities via client sync
         for (int n = 0; n < 2; n++) {

@@ -25,6 +25,7 @@ public static class Program
         client.SetEventProcessor(processor);
         sync.SetupSubscriptions();
         
+        AddSampleEntities(sync);
         RunServer(hub);
         
         // simple event/game loop 
@@ -32,6 +33,18 @@ public static class Program
             processor.ProcessEvents();
             Thread.Sleep(10);
         }
+    }
+    
+    private static void  AddSampleEntities(GameDataSync sync)
+    {
+        var store   = sync.Store;
+        var root    = store.CreateEntity(1);
+        root.AddComponent(new Position(1, 1, 1));
+        root.AddComponent(new EntityName("root"));
+        var child   = store.CreateEntity(2);
+        child.AddComponent(new Position(2, 2, 2));
+        root.AddChild(child);
+        sync.StoreGameEntities();
     }
     
     private static void RunServer(FlioxHub hub)
