@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class AssemblyLoader
 {
     private readonly    HashSet<Assembly>   checkedAssemblies   = new HashSet<Assembly>();
-    private readonly    HashSet<Assembly>   dependencies        = new HashSet<Assembly>();
+    private readonly    HashSet<Assembly>   engineDependants    = new HashSet<Assembly>();
     private readonly    SortedSet<string>   loadedAssemblies    = new SortedSet<string>();
 
     private readonly    string              engineFullName;
@@ -25,11 +25,11 @@ internal sealed class AssemblyLoader
     {
         var engineAssembly = typeof(Utils).Assembly;
         engineFullName  = engineAssembly.FullName;
-        dependencies.Add(engineAssembly);
+        engineDependants.Add(engineAssembly);
     }
 
     public override string ToString() {
-        return $"Assemblies loaded: {loadedAssemblies.Count}, dependencies: {dependencies.Count}, duration: {duration} ms";
+        return $"Assemblies loaded: {loadedAssemblies.Count}, engine-dependants: {engineDependants.Count}, duration: {duration} ms";
     }
 
     // --------------------------- query all component, behavior and tag types ---------------------------
@@ -52,7 +52,7 @@ internal sealed class AssemblyLoader
         var asm1 = Assembly.Load(thread[1]);
         var asm2 = Assembly.Load(thread[2]);
         */ 
-        return dependencies.ToArray();
+        return engineDependants.ToArray();
     }
     
     private void CheckAssembly(Assembly assembly)
@@ -66,7 +66,7 @@ internal sealed class AssemblyLoader
         foreach (var referencedAssemblyName in referencedAssemblies)
         {
             if (referencedAssemblyName.FullName == engineFullName) {
-                dependencies.Add(assembly);
+                engineDependants.Add(assembly);
             }
             var name = referencedAssemblyName.FullName;
             if (!loadedAssemblies.Add(name)) {
