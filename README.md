@@ -22,7 +22,7 @@
 |                   |                           | [How to use and debug assembly unloadability in .NET](https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability)
 
 
-## Diagram Overview
+## Engine Architecture · dependencies
 ```mermaid
   graph TD;
     classDef finished       stroke:#0b0,stroke-width:2px;
@@ -65,15 +65,15 @@
         Animations
     end
 
-    subgraph Netcode[Netcode / ORM];
+    subgraph ECS-Client[ECS Client];
+        Sync(Entity Sync):::implemented;
+        Netcode;
+    end
+
+    subgraph ORM[ORM];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
-    end
-
-    subgraph Storage[Storage / Database];
-        SQL(SQL):::finished
-        CRUD(CRUD):::finished
     end
 
     subgraph ECS;
@@ -87,26 +87,31 @@
     Applications    -->Misc
     Applications    -->ECS
 
-    Assets      -->Netcode
+    Renderer    -->ECS
+    Backend     -->ECS
+    Physics     -->ECS
 
     Renderer    -->Assets
     Backend     -->Assets
     Physics     -->Assets
     Misc        -->Assets
 
-    Renderer    -->ECS
-    Backend     -->ECS
-    Physics     -->ECS
-    Netcode     -->ECS
+    Assets      -->ECS-Client
 
-    Netcode     -->Storage
+    ECS-Client  -->ECS
+    ECS-Client  -->ORM
 ```
 
-## Detailed Diagrams
+## ECS Client · dependencies
 ```mermaid
   graph TD;
     classDef finished       stroke:#0b0,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
+
+    subgraph ECS-Client[ECS Client];
+        Sync(Entity Sync):::implemented;
+        Netcode;
+    end
 
     subgraph ECS;
         EntityStore(EntityStore):::implemented
@@ -127,7 +132,7 @@
         Systems      -.- Tag
     end
 
-    subgraph Netcode[Netcode / ORM];
+    subgraph ORM;
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
@@ -176,8 +181,9 @@
         end
     end
 
-    Netcode --> ECS
-    Netcode --> Storage
+    ECS-Client  --> ECS
+    ECS-Client  --> ORM
+    ORM         --> Storage
     
 ```
 <br/><br/>
