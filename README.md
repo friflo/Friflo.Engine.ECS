@@ -162,7 +162,7 @@
 
     subgraph Storage[Storage / Database];
         SQL(SQL):::finished
-        CRUD(CRUD):::finished
+        CRUD(CRUD + Query):::finished
 
         subgraph SQL-DB;
             direction TB;
@@ -178,6 +178,7 @@
         subgraph Key/Value-DB;
             direction TB;
             File-System(File-System):::finished
+            In-Memory(In-Memory):::finished
         end
     end
 
