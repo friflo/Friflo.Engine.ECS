@@ -65,7 +65,7 @@
         Animations
     end
 
-    subgraph ECS-Client[ECS Client];
+    subgraph Engine-Client[Engine Client];
         Sync(Entity Sync):::implemented;
         Netcode;
     end
@@ -87,19 +87,19 @@
     Applications    -->Misc
     Applications    -->ECS
 
-    Renderer    -->ECS
-    Backend     -->ECS
-    Physics     -->ECS
+    Renderer        -->ECS
+    Backend         -->ECS
+    Physics         -->ECS
 
-    Renderer    -->Assets
-    Backend     -->Assets
-    Physics     -->Assets
-    Misc        -->Assets
+    Renderer        -->Assets
+    Backend         -->Assets
+    Physics         -->Assets
+    Misc            -->Assets
 
-    Assets      -->ECS-Client
+    Assets          -->Engine-Client
 
-    ECS-Client  -->ECS
-    ECS-Client  -->ORM
+    Engine-Client  -->ECS
+    Engine-Client  -->ORM
 ```
 
 ## ECS Client · dependencies
@@ -108,7 +108,7 @@
     classDef finished       stroke:#0b0,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
 
-    subgraph ECS-Client[ECS Client];
+    subgraph Engine-Client[Engine Client];
         Sync(Entity Sync):::implemented;
         Netcode;
     end
@@ -181,9 +181,9 @@
         end
     end
 
-    ECS-Client  --> ECS
-    ECS-Client  --> ORM
-    ORM         --> Storage
+    Engine-Client   --> ECS
+    Engine-Client   --> ORM
+    ORM             --> Storage
     
 ```
 <br/><br/>
