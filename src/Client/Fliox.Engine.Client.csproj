@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Json\Fliox.Hub\Friflo.Json.Fliox.Hub.csproj" />
-    <ProjectReference Include="..\ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\ECS\Fliox.Engine.ECS.csproj" />
   </ItemGroup>
 
 </Project>

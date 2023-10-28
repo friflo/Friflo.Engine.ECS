@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "tests\Tests.csproj", "{BED5A529-859C-4456-A971-A9D047E7F4C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Engine.ECS", "src\ECS\Fliox.Engine.ECS.csproj", "{1CBCE512-8DE1-4085-83D2-02FF41B8F02D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-internal", "Tests-internal\Tests-internal.csproj", "{83F71521-B976-4EDD-B17D-B8FAAB667ECE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Engine.Client", "src\Client\Fliox.Engine.Client.csproj", "{5A92A4D9-2AC0-44A2-8330-F33E08FFF545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.ECS", "src\ECS\Engine.ECS.csproj", "{1CBCE512-8DE1-4085-83D2-02FF41B8F02D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Client", "src\Client\Engine.Client.csproj", "{5A92A4D9-2AC0-44A2-8330-F33E08FFF545}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{F7F9752D-A4D2-4352-941A-411A15CA7FFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Editor", "Fliox.Editor\Fliox.Editor.csproj", "{F7F9752D-A4D2-4352-941A-411A15CA7FFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox", "..\Json\Fliox\Friflo.Json.Fliox.csproj", "{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}"
 EndProject
@@ -23,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox.Hub", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox.Hub.Explorer", "..\Json\Fliox.Hub.Explorer\Friflo.Json.Fliox.Hub.Explorer.csproj", "{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Tests", "Tests\Fliox.Tests.csproj", "{D0B9678A-50BC-451C-A556-3973807B5BC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Tests-internal", "Tests-internal\Fliox.Tests-internal.csproj", "{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,14 +32,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BED5A529-859C-4456-A971-A9D047E7F4C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BED5A529-859C-4456-A971-A9D047E7F4C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BED5A529-859C-4456-A971-A9D047E7F4C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BED5A529-859C-4456-A971-A9D047E7F4C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83F71521-B976-4EDD-B17D-B8FAAB667ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83F71521-B976-4EDD-B17D-B8FAAB667ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83F71521-B976-4EDD-B17D-B8FAAB667ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83F71521-B976-4EDD-B17D-B8FAAB667ECE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1CBCE512-8DE1-4085-83D2-02FF41B8F02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1CBCE512-8DE1-4085-83D2-02FF41B8F02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CBCE512-8DE1-4085-83D2-02FF41B8F02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,5 +64,13 @@ Global
 		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B9678A-50BC-451C-A556-3973807B5BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B9678A-50BC-451C-A556-3973807B5BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B9678A-50BC-451C-A556-3973807B5BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B9678A-50BC-451C-A556-3973807B5BC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

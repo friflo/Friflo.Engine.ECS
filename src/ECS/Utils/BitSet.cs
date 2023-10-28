@@ -8,6 +8,7 @@ using System.Runtime.Intrinsics;
 using System.Text;
 
 [assembly: InternalsVisibleTo("Tests-internal")]
+[assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace

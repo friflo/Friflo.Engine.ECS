@@ -13,6 +13,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 
 [assembly: InternalsVisibleTo("Tests-internal")]
+[assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
 // ReSharper disable UseUtf8StringLiteral
 // ReSharper disable MergeIntoPattern
