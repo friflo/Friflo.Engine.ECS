@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
+using Friflo.Json.Fliox.Hub.Host.Event;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.ECS.Sync;
@@ -19,7 +21,7 @@ public static class Test_DataSync
     private static GameClient CreateClient() {
         var database    = new MemoryDatabase("test");
         var hub         = new FlioxHub(database);
-        return new GameClient(hub);        
+        return new GameClient(hub);
     }
     
     [Test]
@@ -120,5 +122,42 @@ public static class Test_DataSync
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
         }
+    }
+    
+    /// <summary>Cover <see cref="GameDataSync.SetupSubscriptions"/></summary>
+    [Test]
+    public static void Test_DataSync_subscriptions()
+    {
+        var schema          = DatabaseSchema.Create<GameClient>();
+        var database        = new MemoryDatabase("test", schema);
+        var hub             = new FlioxHub(database);
+        hub.UsePubSub();    // need currently called before SetupSubscriptions()
+        hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
+        var client          = new GameClient(hub);
+        var store           = new GameEntityStore(PidType.UsePidAsId);
+        var sync            = new GameDataSync(store, client);
+        var processor       = new EventProcessorQueue();
+        client.SetEventProcessor(processor);
+        sync.SetupSubscriptions();
+        
+        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.rootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.childComponents };
+        
+        client.entities.Upsert(rootNode);
+        client.entities.Upsert(childNode);
+        client.SyncTasksSynchronous();
+        processor.ProcessEvents();
+        
+        AreEqual(2, store.EntityCount);
+        var root        = store.GetNodeById(10).Entity;
+        var child       = store.GetNodeById(11).Entity;
+        Test_ComponentReader.AssertRootEntity(root);
+        Test_ComponentReader.AssertChildEntity(child);
+        
+        client.entities.Delete(10L);
+        client.entities.Delete(11L);
+        client.SyncTasksSynchronous();
+        processor.ProcessEvents();
+        AreEqual(0, store.EntityCount);
     }
 }

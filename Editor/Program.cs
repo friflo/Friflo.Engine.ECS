@@ -18,8 +18,8 @@ public static class Program
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
-        var store       = new GameEntityStore(PidType.UsePidAsId);
         var client      = new GameClient(hub);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
         var sync        = new GameDataSync(store, client);
         var processor   = new EventProcessorQueue();
         client.SetEventProcessor(processor);
