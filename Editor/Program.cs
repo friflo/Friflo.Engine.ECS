@@ -23,7 +23,7 @@ public static class Program
     private static void RunServer()
     {
         var schema      = DatabaseSchema.Create<GameClient>();
-        var database    = new MemoryDatabase("game", schema);
+        var database    = new MemoryDatabase("game", schema) { Pretty = false };
         var hub         = new FlioxHub(database);
         hub.Info.Set ("Editor", "dev", "https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine", "rgb(91,21,196)"); // optional
         hub.UseClusterDB(); // required by HubExplorer

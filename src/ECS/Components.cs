@@ -6,14 +6,25 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// Used to create entity <b>Tag</b>'s by defining a struct without fields or properties extending <see cref="IEntityTag"/>
+/// Used to create entity <b>Tag</b>'s by declaring a struct without fields or properties extending <see cref="IEntityTag"/>
 /// </summary>
 public interface IEntityTag { }
 
 
 /// <summary>
-/// To enable adding components to a <see cref="GameEntity"/> it need to extend <see cref="IComponent"/>.<br/>
-/// A <b>Component</b> is a value type which only contains data <b>but no</b> behavior / methods.<br/>
-/// A <see cref="GameEntity"/> can contain multiple components but only one of each type.
+/// To enable adding components to a <see cref="GameEntity"/> it need to implement <see cref="IComponent"/>.<br/>
+/// <br/> 
+/// <see cref="IComponent"/> types are <b><c>struct</c></b>'s which only contains data <b>but no</b> behavior / methods.<br/>
+/// A <see cref="GameEntity"/> can contain multiple components but only one of each type.<br/>
 /// </summary>
+/// <remarks>
+/// Common game specific <see cref="IComponent"/> types defined by the Engine:
+/// <list type="bullet">
+///     <item><see cref="EntityName"/></item>
+///     <item><see cref="Position"/></item>
+///     <item><see cref="Rotation"/></item>
+///     <item><see cref="Scale3"/></item>
+///     <item><see cref="Transform"/></item>
+/// </list>
+/// </remarks>
 public interface IComponent { }
