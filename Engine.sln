@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.ECS", "src\ECS\Engin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Client", "src\Client\Engine.Client.csproj", "{1C33A81E-E654-40DC-94A5-27A8765E65B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Fliox.Editor\Editor.csproj", "{2B2AD208-91AD-44AB-83F3-69859D587403}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C224813F-2372-4879-B661-5F00FD947938}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-internal", "Tests-internal\Tests-internal.csproj", "{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,10 +30,6 @@ Global
 		{1C33A81E-E654-40DC-94A5-27A8765E65B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C33A81E-E654-40DC-94A5-27A8765E65B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C33A81E-E654-40DC-94A5-27A8765E65B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B2AD208-91AD-44AB-83F3-69859D587403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B2AD208-91AD-44AB-83F3-69859D587403}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B2AD208-91AD-44AB-83F3-69859D587403}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B2AD208-91AD-44AB-83F3-69859D587403}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C224813F-2372-4879-B661-5F00FD947938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C224813F-2372-4879-B661-5F00FD947938}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C224813F-2372-4879-B661-5F00FD947938}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -42,5 +38,9 @@ Global
 		{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

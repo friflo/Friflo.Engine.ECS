@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Engine.ECS", "src\ECS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Engine.Client", "src\Client\Fliox.Engine.Client.csproj", "{5A92A4D9-2AC0-44A2-8330-F33E08FFF545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Editor", "Fliox.Editor\Fliox.Editor.csproj", "{F7F9752D-A4D2-4352-941A-411A15CA7FFF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox", "..\Json\Fliox\Friflo.Json.Fliox.csproj", "{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Burst", "..\Json\Burst\Friflo.Json.Burst.csproj", "{E04FDBDA-B2BD-4C08-ABCB-8983164A5978}"
@@ -22,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Tests", "Tests\Fliox.Tests.csproj", "{D0B9678A-50BC-451C-A556-3973807B5BC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Tests-internal", "Tests-internal\Fliox.Tests-internal.csproj", "{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fliox.Editor", "Editor\Fliox.Editor.csproj", "{484AF2EC-BED3-4553-A9FF-8A3DD5ED4615}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,10 +40,6 @@ Global
 		{5A92A4D9-2AC0-44A2-8330-F33E08FFF545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A92A4D9-2AC0-44A2-8330-F33E08FFF545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A92A4D9-2AC0-44A2-8330-F33E08FFF545}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,5 +68,9 @@ Global
 		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF6C9BF3-70FC-40F7-9408-59D73B9A8A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484AF2EC-BED3-4553-A9FF-8A3DD5ED4615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484AF2EC-BED3-4553-A9FF-8A3DD5ED4615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484AF2EC-BED3-4553-A9FF-8A3DD5ED4615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484AF2EC-BED3-4553-A9FF-8A3DD5ED4615}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
