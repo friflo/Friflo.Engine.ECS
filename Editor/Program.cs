@@ -35,18 +35,6 @@ public static class Program
         }
     }
     
-    private static void  AddSampleEntities(GameDataSync sync)
-    {
-        var store   = sync.Store;
-        var root    = store.CreateEntity(1);
-        root.AddComponent(new Position(1, 1, 1));
-        root.AddComponent(new EntityName("root"));
-        var child   = store.CreateEntity(2);
-        child.AddComponent(new Position(2, 2, 2));
-        root.AddChild(child);
-        sync.StoreGameEntities();
-    }
-    
     private static void RunServer(FlioxHub hub)
     {
         hub.Info.Set ("Editor", "dev", "https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine", "rgb(91,21,196)"); // optional
@@ -60,6 +48,18 @@ public static class Program
             HttpServer.RunHost("http://localhost:5000/", httpHost); // http://localhost:5000/fliox/
         });
         thread.Start();
+    }
+        
+    private static void  AddSampleEntities(GameDataSync sync)
+    {
+        var store   = sync.Store;
+        var root    = store.CreateEntity(1);
+        root.AddComponent(new Position(1, 1, 1));
+        root.AddComponent(new EntityName("root"));
+        var child   = store.CreateEntity(2);
+        child.AddComponent(new Position(2, 2, 2));
+        root.AddChild(child);
+        sync.StoreGameEntities();
     }
 }
 
