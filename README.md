@@ -34,8 +34,8 @@
         Extensions(Extensions<br/>Assets / C# Scripts - dll);
     end
 
-    Editor  -.-Extensions;
-    Game    -.-Extensions;
+    Editor  -.->Extensions;
+    Game    -.->Extensions;
 
     subgraph Renderer;
         GUI
@@ -137,7 +137,7 @@
         Server(Server):::finished
         WebUI(Web UI):::finished
 
-        subgraph Messages;
+        subgraph Messages[Messages - Bulk / Batch];
             direction TB;
             Request(Request):::finished
             Response(Response):::finished
