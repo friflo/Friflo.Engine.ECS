@@ -84,8 +84,7 @@ internal sealed class ComponentReader
         {
             var component = components[n];
             buffer.Clear();
-            parser.AppendInputSlice(ref buffer, component.start - 1, component.end);
-            var json = new JsonValue(buffer);
+            var json = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
             var type = component.type;
             switch (type.kind) {
                 case ComponentKind.Behavior:

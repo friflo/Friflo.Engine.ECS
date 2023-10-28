@@ -19,10 +19,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Json\Fliox.Hub.Explorer\Friflo.Json.Fliox.Hub.Explorer.csproj" />
       <ProjectReference Include="..\src\Client\Engine.Client.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="0.47.0" />
     </ItemGroup>
 </Project>

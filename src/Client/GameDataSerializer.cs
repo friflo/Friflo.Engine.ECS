@@ -112,11 +112,11 @@ public class GameDataSerializer
     private void WriteDataEntity(DataEntity dataEntity)
     {
         writer.ObjectStart();
-        writer.MemberLng(PidKey, dataEntity.pid);
+        writer.MemberLng(PidKey.AsSpan(), dataEntity.pid);
         var children = dataEntity.children;
         if (children != null && children.Count > 0)
         {
-            writer.MemberArrayStart(ChildrenKey);
+            writer.MemberArrayStart(ChildrenKey.AsSpan());
             foreach (var child in children) {
                 writer.ElementLng(child);
             }
@@ -125,12 +125,12 @@ public class GameDataSerializer
         if (!dataEntity.components.IsNull())
         {
             FormatComponents(dataEntity.components);
-            writer.MemberBytes(ComponentsKey, componentBuf);
+            writer.MemberBytes(ComponentsKey.AsSpan(), componentBuf);
         }
         var tags = dataEntity.tags;
         if (tags != null && tags.Count > 0)
         {
-            writer.MemberArrayStart(TagsKey);
+            writer.MemberArrayStart(TagsKey.AsSpan());
             foreach (var tag in tags) {
                 writer.ElementStr(tag);   
             }

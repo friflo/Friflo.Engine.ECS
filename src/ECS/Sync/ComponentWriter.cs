@@ -43,14 +43,14 @@ internal sealed class ComponentWriter
             var heap        = heaps[n];
             var value       = heap.Write(componentWriter, entity.compIndex);
             var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
-            writer.MemberBytes(keyBytes, value);
+            writer.MemberBytes(keyBytes.AsSpan(), value);
         }
         // --- write behaviors
         foreach (var behavior in entity.Behaviors) {
             componentWriter.WriteObject(behavior, ref buffer);
             var classType   = componentTypeByType[behavior.GetType()];
             var keyBytes    = classType.componentKeyBytes;
-            writer.MemberBytes(keyBytes, buffer);
+            writer.MemberBytes(keyBytes.AsSpan(), buffer);
         }
         writer.ObjectEnd();
         return new JsonValue(writer.json);

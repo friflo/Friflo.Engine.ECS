@@ -13,6 +13,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Client", "src\Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{F7F9752D-A4D2-4352-941A-411A15CA7FFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox", "..\Json\Fliox\Friflo.Json.Fliox.csproj", "{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Burst", "..\Json\Burst\Friflo.Json.Burst.csproj", "{E04FDBDA-B2BD-4C08-ABCB-8983164A5978}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox.Annotation", "..\Json\Fliox.Annotation\Friflo.Json.Fliox.Annotation.csproj", "{0861F639-8FF8-482F-B515-CF3C014015DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox.Hub", "..\Json\Fliox.Hub\Friflo.Json.Fliox.Hub.csproj", "{AEDFB429-7E89-4811-A0F4-8A053FC076EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friflo.Json.Fliox.Hub.Explorer", "..\Json\Fliox.Hub.Explorer\Friflo.Json.Fliox.Hub.Explorer.csproj", "{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +52,25 @@ Global
 		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F9752D-A4D2-4352-941A-411A15CA7FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF0BDA21-0EBB-4FE1-A540-A42F1BDDF25A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04FDBDA-B2BD-4C08-ABCB-8983164A5978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04FDBDA-B2BD-4C08-ABCB-8983164A5978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04FDBDA-B2BD-4C08-ABCB-8983164A5978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04FDBDA-B2BD-4C08-ABCB-8983164A5978}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0861F639-8FF8-482F-B515-CF3C014015DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0861F639-8FF8-482F-B515-CF3C014015DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0861F639-8FF8-482F-B515-CF3C014015DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0861F639-8FF8-482F-B515-CF3C014015DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEDFB429-7E89-4811-A0F4-8A053FC076EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEDFB429-7E89-4811-A0F4-8A053FC076EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEDFB429-7E89-4811-A0F4-8A053FC076EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEDFB429-7E89-4811-A0F4-8A053FC076EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D17B47E-F177-4766-B2AA-4F3EE2BECFEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
