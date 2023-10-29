@@ -37,6 +37,7 @@ internal sealed class ComponentWriter
         if (entity.ComponentCount() == 0) {
             return default;
         }
+        var componentCount = 0;
         writer.InitSerializer();
         writer.SetPretty(pretty);
         writer.ObjectStart();
@@ -46,17 +47,22 @@ internal sealed class ComponentWriter
             var heap        = heaps[n];
             if (heap.structIndex == unresolvedIndex) {
                 var unresolved = entity.GetComponent<Unresolved>();
-                foreach (var component in unresolved.components) {
-                    var key     = Encoding.UTF8.GetBytes(component.Key); // todo remove byte[] allocation
-                    var raw     = component.Value;
-                    var data    = new Bytes { buffer = raw.MutableArray, start = raw.start, end = raw.start + raw.Count };
-                    writer.MemberBytes(key, data);
+                var components = unresolved.components;
+                if (components != null) {
+                    foreach (var component in components) {
+                        var key     = Encoding.UTF8.GetBytes(component.Key); // todo remove byte[] allocation
+                        var raw     = component.Value;
+                        var data    = new Bytes { buffer = raw.MutableArray, start = raw.start, end = raw.start + raw.Count };
+                        writer.MemberBytes(key, data);
+                        componentCount++;
+                    }
                 }
                 continue;
             }
             var value       = heap.Write(componentWriter, entity.compIndex);
             var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
             writer.MemberBytes(keyBytes.AsSpan(), value);
+            componentCount++;
         }
         // --- write behaviors
         foreach (var behavior in entity.Behaviors) {
@@ -64,6 +70,10 @@ internal sealed class ComponentWriter
             var classType   = componentTypeByType[behavior.GetType()];
             var keyBytes    = classType.componentKeyBytes;
             writer.MemberBytes(keyBytes.AsSpan(), buffer);
+            componentCount++;
+        }
+        if (componentCount == 0) {
+            return default;
         }
         writer.ObjectEnd();
         return new JsonValue(writer.json);

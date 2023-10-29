@@ -3,12 +3,34 @@
 
 using System.Collections.Generic;
 using System.Text;
+using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+/// <summary>
+/// A <see cref="Unresolved"/> component is added to a <see cref="GameEntity"/> by <see cref="EntityConverter.DataToGameEntity"/> if:<br/>
+/// - a component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Behavior"/><br/>
+/// - a tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/><br/>
+/// </summary>
+/// <remarks>
+/// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="GameEntity"/> and vice versa<br/>
+/// for unresolved <see cref="IEntityTag"/>'s, <see cref="IComponent"/>'s and <see cref="Behavior"/>'s.<br/>
+/// <br/>
+/// This prevents data loss of tags or components when storing a scene with entities containing unresolved tag or component types.<br/>
+/// The reason for unresolved tag or component types can be:<br/>
+/// <list type="bullet">
+///   <item>
+///     Missed to merge C# code containing an <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Behavior"/> type definition.
+///   </item>
+///   <item>
+///     Intentionally when creating a scene with external tools without the need to wait for the implementation of new<br/>
+///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Behavior"/> type definitions
+///   </item>
+/// </list>
+/// </remarks>
 [Component("unresolved")]
 public struct Unresolved : IComponent
 {

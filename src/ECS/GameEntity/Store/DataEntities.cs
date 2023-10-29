@@ -42,10 +42,10 @@ public partial class GameEntityStore
         
         // --- process tags
         var tagCount    = entity.Tags.Count;
+        var tags        = dataEntity.tags;
         if (tagCount == 0) {
-            dataEntity.tags?.Clear();
+            tags?.Clear();
         } else {
-            var tags = dataEntity.tags;
             if (tags == null) {
                 tags = dataEntity.tags = new List<string>(tagCount);
             } else {
@@ -53,6 +53,16 @@ public partial class GameEntityStore
             }
             foreach(var tag in entity.Tags) {
                 tags.Add(tag.tagName);
+            }
+        }
+        if (!entity.TryGetComponent<Unresolved>(out var unresolved)) {
+            return;
+        }
+        var unresolvedTags = unresolved.tags;
+        if (unresolvedTags != null) {
+            tags ??= dataEntity.tags = new List<string>(unresolvedTags.Count);
+            foreach (var tag in unresolvedTags) {
+                tags.Add(tag);        
             }
         }
     }
