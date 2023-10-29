@@ -49,6 +49,7 @@ public sealed class ComponentSchema
     [Browse(Never)] internal readonly   ComponentType[]                     components;
     [Browse(Never)] private  readonly   ComponentType[]                     behaviors;
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
+    [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
     [Browse(Never)] internal readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   tagTypeByName;
@@ -77,6 +78,7 @@ public sealed class ComponentSchema
             componentTypeByType.Add(structType.type,         structType);
             components[structType.structIndex] = structType;
         }
+        unresolvedType = components[StructHeap<Unresolved>.StructIndex];
         foreach (var classType in classList) {
             componentTypeByKey.Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);

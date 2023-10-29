@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
-using static Friflo.Fliox.Engine.ECS.ComponentKind;
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Engine.ECS.Sync;
@@ -18,6 +17,7 @@ internal sealed class ComponentReader
     private readonly    ObjectReader                        componentReader;
     private readonly    Dictionary<string, ComponentType>   componentTypeByKey;
     private readonly    Dictionary<string, ComponentType>   tagTypeByName;
+    private readonly    ComponentType                       unresolvedType;
     private readonly    List<ComponentType>                 structTypes;
     private readonly    ArchetypeKey                        searchKey;
     private             Utf8JsonParser                      parser;
@@ -31,6 +31,7 @@ internal sealed class ComponentReader
         components          = new RawComponent[1];
         componentReader     = new ObjectReader(EntityStore.Static.TypeStore);
         var schema          = EntityStore.Static.ComponentSchema;
+        unresolvedType      = schema.unresolvedType;
         componentTypeByKey  = schema.componentTypeByKey;
         tagTypeByName       = schema.tagTypeByName;
         structTypes         = new List<ComponentType>();
@@ -86,12 +87,18 @@ internal sealed class ComponentReader
             buffer.Clear();
             var json = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
             var type = component.type;
+            if (type == unresolvedType) {
+                ref var unresolved = ref entity.GetComponent<Unresolved>();
+                unresolved.components ??= new Dictionary<string, JsonValue>();
+                unresolved.components[component.key] = json;
+                continue;
+            }
             switch (type.kind) {
                 case ComponentKind.Behavior:
                     // --- read behavior
                     component.type.ReadBehavior(componentReader, json, entity);
                     break;
-                case Component:
+                case ComponentKind.Component:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
@@ -139,13 +146,19 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
-            var type            = componentTypeByKey[component.key];
-            component.type      = type;
-            if (type.kind != Component) {
+            componentTypeByKey.TryGetValue(component.key, out var type);
+            if (type == null) {
+                // case: unresolved component
+                hasStructComponent = true;
+                structs.SetBit(unresolvedType.structIndex);
+                component.type = unresolvedType;
                 continue;
             }
-            hasStructComponent = true;
-            structs.SetBit(type.structIndex);
+            component.type = type;
+            if (type.kind == ComponentKind.Component) {
+                hasStructComponent = true;
+                structs.SetBit(type.structIndex);
+            }                
         }
         return hasStructComponent;
     }
@@ -159,7 +172,7 @@ internal sealed class ComponentReader
         structTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
-            if (component.type.kind == Component) {
+            if (component.type.kind == ComponentKind.Component) {
                 structTypes.Add(component.type);
             }
         }
