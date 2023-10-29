@@ -27,9 +27,10 @@
   graph TD;
     classDef finished       stroke:#0b0,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
+    classDef wip            stroke:#f0f,stroke-width:2px;
 
     subgraph Applications[Applications / Extensions];
-        Editor(Editor<br/>GUI / C# - exe);
+        Editor(Editor<br/>GUI / C# - exe):::wip;
         Game(Game<br/>Assets / C# Scripts - exe);
         Extensions(Extensions<br/>Assets / C# Scripts - dll);
     end
@@ -117,7 +118,7 @@
         EntityStore(EntityStore):::implemented
         Systems
 
-        subgraph Data-Structures;
+        subgraph ECS-Types[Types];
         direction TB;
             Entity(Entity):::implemented
             Component(Component):::implemented
@@ -125,7 +126,7 @@
             Behavior(Behavior):::implemented
         end
 
-        EntityStore  --- Data-Structures
+        EntityStore  --- ECS-Types
 
         Systems      -.- Entity
         Systems      -.- Component
