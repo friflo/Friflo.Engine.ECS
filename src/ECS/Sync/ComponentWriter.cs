@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -19,6 +20,7 @@ internal sealed class ComponentWriter
     private             Bytes                           buffer;
     private readonly    ComponentType[]                 structTypes;
     private readonly    Dictionary<Type, ComponentType> componentTypeByType;
+    private readonly    int                             unresolvedIndex;
     
     internal ComponentWriter() {
         buffer              = new Bytes(128);
@@ -26,6 +28,7 @@ internal sealed class ComponentWriter
         var schema          = EntityStore.Static.ComponentSchema;
         structTypes         = schema.components;
         componentTypeByType = schema.componentTypeByType;
+        unresolvedIndex     = schema.unresolvedType.structIndex;
     }
     
     internal JsonValue Write(GameEntity entity, bool pretty)
@@ -41,6 +44,16 @@ internal sealed class ComponentWriter
         var heaps           = archetype.Heaps;
         for (int n = 0; n < heaps.Length; n++) {
             var heap        = heaps[n];
+            if (heap.structIndex == unresolvedIndex) {
+                var unresolved = entity.GetComponent<Unresolved>();
+                foreach (var component in unresolved.components) {
+                    var key     = Encoding.UTF8.GetBytes(component.Key); // todo remove byte[] allocation
+                    var raw     = component.Value;
+                    var data    = new Bytes { buffer = raw.MutableArray, start = raw.start, end = raw.start + raw.Count };
+                    writer.MemberBytes(key, data);
+                }
+                continue;
+            }
             var value       = heap.Write(componentWriter, entity.compIndex);
             var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
             writer.MemberBytes(keyBytes.AsSpan(), value);

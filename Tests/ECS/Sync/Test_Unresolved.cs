@@ -18,17 +18,20 @@ public static class Test_Unresolved
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var dataEntity  = new DataEntity { pid = 1, components = UnresolvedComponents };
+        var sourceEntity = new DataEntity { pid = 1, components = UnresolvedComponents };
         
         for (int n = 0; n < 2; n++)
         {
-            var gameEntity  = converter.DataToGameEntity(dataEntity, store, out _);
+            var gameEntity  = converter.DataToGameEntity(sourceEntity, store, out _);
             var unresolved  = gameEntity.GetComponent<Unresolved>();
             
             AreEqual(1,                 unresolved.components.Count);
             AreEqual("{ \"foo\":1 }",   unresolved.components["xxx"].ToString());
             
             AreEqual("unresolved components: 'xxx'", unresolved.ToString());
+            
+            var targetEntity = converter.GameToDataEntity(gameEntity);
+            AreEqual("{\"xxx\":{ \"foo\":1 }}", targetEntity.components.ToString());
         }
     }
     
