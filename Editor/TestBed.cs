@@ -8,6 +8,8 @@ public struct  TestComponent : IComponent
     public string name;
 }
 
+public struct TestTag : IEntityTag { }
+
 
 [Behavior("TestBehavior")]
 public class TestBehavior : Behavior

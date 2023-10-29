@@ -20,6 +20,7 @@ internal sealed class ComponentReader
     private readonly    ComponentType                       unresolvedType;
     private readonly    List<ComponentType>                 structTypes;
     private readonly    ArchetypeKey                        searchKey;
+    private readonly    List<string>                        unresolvedTags;
     private             Utf8JsonParser                      parser;
     private             Bytes                               buffer;
     private             RawComponent[]                      components;
@@ -36,6 +37,7 @@ internal sealed class ComponentReader
         tagTypeByName       = schema.tagTypeByName;
         structTypes         = new List<ComponentType>();
         searchKey           = new ArchetypeKey();
+        unresolvedTags      = new List<string>();
     }
     
     internal string Read(DataEntity dataEntity, GameEntity entity, EntityStore store)
@@ -116,12 +118,13 @@ internal sealed class ComponentReader
         searchKey.Clear();
         var hasStructComponent  = GetStructComponents(ref searchKey.structs);
         var tags                = dataEntity.tags;
-        var hasTags = tags?.Count > 0;
+        var hasTags             = tags?.Count > 0;
         if (!hasStructComponent && !hasTags) {
             return; // early out in absence of components and tags
         }
+        unresolvedTags.Clear();
         if (hasTags) {
-            AddTags(tags, ref searchKey.tags);
+            AddTags(tags, searchKey);
         }
         searchKey.CalculateHashCode();
         // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
@@ -136,6 +139,13 @@ internal sealed class ComponentReader
             entity.compIndex = newArchetype.AddEntity(entity.id);
         } else {
             entity.compIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
+        }
+        if (unresolvedTags.Count > 0) {
+            ref var unresolved = ref entity.GetComponent<Unresolved>();
+            unresolved.tags ??= new HashSet<string>();
+            foreach (var tag in unresolvedTags) {
+                unresolved.tags.Add(tag);
+            }
         }
     }
     
@@ -176,6 +186,9 @@ internal sealed class ComponentReader
                 structTypes.Add(component.type);
             }
         }
+        if (unresolvedTags.Count > 0) {
+            structTypes.Add(unresolvedType);
+        }
         var newArchetype = Archetype.CreateWithStructTypes(config, structTypes, searchKey.tags);
         store.AddArchetype(newArchetype);
         return newArchetype;
@@ -207,11 +220,15 @@ internal sealed class ComponentReader
         }
     }
     
-    private void AddTags(List<string> tagList, ref Tags tags)
+    private void AddTags(List<string> tagList, ArchetypeKey archetypeKey)
     {
         foreach (var tag in tagList) {
-            var tagType = tagTypeByName[tag];
-            tags.SetBit(tagType.tagIndex);
+            if (!tagTypeByName.TryGetValue(tag, out var tagType)) {
+                archetypeKey.structs.SetBit(unresolvedType.structIndex);
+                unresolvedTags.Add(tag);
+                continue;
+            }
+            archetypeKey.tags.SetBit(tagType.tagIndex);
         }
     }
 }

@@ -20,9 +20,9 @@ public struct Unresolved : IComponent
     private string GetString()
     {
         var sb = new StringBuilder();
-        sb.Append("unresolved ");
+        sb.Append("unresolved");
         if (components != null) {
-            sb.Append("components: ");
+            sb.Append(" components: ");
             foreach (var pair in components) {
                 sb.Append('\'');
                 sb.Append(pair.Key);
@@ -31,9 +31,9 @@ public struct Unresolved : IComponent
             sb.Length -= 2;
         }
         if (tags != null) {
-            sb.Append("tags: ");
+            sb.Append(" tags: ");
             foreach (var tag in tags) {
-                sb.Append("', ");
+                sb.Append('\'');
                 sb.Append(tag);
                 sb.Append("', ");
             }
