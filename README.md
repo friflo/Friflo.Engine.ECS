@@ -25,7 +25,7 @@
 ## Engine Architecture · dependencies
 ```mermaid
   graph TD;
-    classDef finished       stroke:#0b0,stroke-width:2px;
+    classDef finished       stroke:#090,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
     classDef wip            stroke:#f0f,stroke-width:2px;
 
@@ -106,7 +106,7 @@
 ## ECS Client · dependencies
 ```mermaid
   graph TD;
-    classDef finished       stroke:#0b0,stroke-width:2px;
+    classDef finished       stroke:#090,stroke-width:2px;
     classDef implemented    stroke:#00f,stroke-width:2px;
 
     subgraph Engine-Client[Engine Client];
