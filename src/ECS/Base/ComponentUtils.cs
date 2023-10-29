@@ -17,20 +17,23 @@ internal static class ComponentUtils
         var assemblies      = assemblyLoader.GetEngineDependants();
         Console.WriteLine(assemblyLoader);
         
-        var types           = new List<Type>();
+        var structs     = new List<ComponentType>();
+        var classes     = new List<ComponentType>();
+        var tags        = new List<ComponentType>();
+        var dependants  = new List<EngineDependant>();
         foreach (var assembly in assemblies) {
-            AssemblyLoader.AddComponentTypes(types, assembly);
+            var types           = AssemblyLoader.AddComponentTypes(assembly);
+            var componentTypes  = new List<ComponentType>();
+            foreach (var type in types) {
+                var componentType = RegisterComponentType(type, structs, classes, tags, typeStore);
+                componentTypes.Add(componentType);
+            }
+            dependants.Add(new EngineDependant (assembly, componentTypes));
         }
-        var structs         = new List<ComponentType>(types.Count);
-        var classes         = new List<ComponentType>(types.Count);
-        var tags            = new List<ComponentType>(types.Count);
-        foreach (var type in types) {
-            RegisterComponentType(type, structs, classes, tags, typeStore);
-        }
-        return new ComponentSchema(assemblies, structs, classes, tags);
+        return new ComponentSchema(dependants, structs, classes, tags);
     }
     
-    internal static void RegisterComponentType(
+    internal static ComponentType RegisterComponentType(
         Type                type,
         List<ComponentType> structs,
         List<ComponentType> classes,
@@ -44,7 +47,7 @@ internal static class ComponentUtils
             var genericMethod   = method!.MakeGenericMethod(type);
             var componentType   = (ComponentType)genericMethod.Invoke(null, null);
             tags.Add(componentType);
-            return;
+            return componentType;
         }
         var createParams            = new object[] { typeStore };
         foreach (var attr in type.CustomAttributes)
@@ -56,7 +59,7 @@ internal static class ComponentUtils
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 structs.Add(componentType);
-                return;
+                return componentType;
             }
             if (attributeType == typeof(BehaviorAttribute))
             {
@@ -64,7 +67,7 @@ internal static class ComponentUtils
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 classes.Add(componentType);
-                return;
+                return componentType;
             }
         }
         throw new InvalidOperationException($"missing expected attribute. Type: {type}");

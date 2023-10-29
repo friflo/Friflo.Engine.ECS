@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable UnusedMember.Local
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -134,8 +135,9 @@ internal sealed class AssemblyLoader
         toLoad.ForEach(path => loadedAssemblies.Add(domain.Load(AssemblyName.GetAssemblyName(path))));        
     } */
    
-    internal static void AddComponentTypes(List<Type> componentTypes, Assembly assembly)
+    internal static List<Type> AddComponentTypes(Assembly assembly)
     {
+        var componentTypes = new List<Type>();
         var types = assembly.GetTypes();
         foreach (var type in types)
         {
@@ -153,6 +155,7 @@ internal sealed class AssemblyLoader
             }
             AddComponentType(componentTypes, type);
         }
+        return componentTypes;
     }
     
     private static void AddComponentType(List<Type> componentTypes, Type type)

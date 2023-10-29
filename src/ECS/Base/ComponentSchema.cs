@@ -7,6 +7,7 @@ using System.Reflection;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
@@ -15,7 +16,7 @@ public sealed class ComponentSchema
 {
 #region public properties
     /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
-    public   ReadOnlySpan<Assembly>                         EngineDependants    => new (engineDependants);
+    public   ReadOnlySpan<EngineDependant>                  EngineDependants    => new (engineDependants);
     /// <summary>return all component types attributed with <see cref="ComponentAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
@@ -44,7 +45,7 @@ public sealed class ComponentSchema
     #endregion
     
 #region private fields
-    [Browse(Never)] private  readonly   Assembly[]                          engineDependants;
+    [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] internal readonly   ComponentType[]                     components;
     [Browse(Never)] private  readonly   ComponentType[]                     behaviors;
@@ -58,12 +59,12 @@ public sealed class ComponentSchema
     
 #region internal methods
     internal ComponentSchema(
-        Assembly[]          engineDependants,
-        List<ComponentType> structList,
-        List<ComponentType> classList,
-        List<ComponentType> tagList)
+        List<EngineDependant>   dependants,
+        List<ComponentType>     structList,
+        List<ComponentType>     classList,
+        List<ComponentType>     tagList)
     {
-        this.engineDependants   = engineDependants;
+        engineDependants        = dependants.ToArray();
         int count               = structList.Count + classList.Count;
         componentTypeByKey      = new Dictionary<string, ComponentType>(count);
         componentTypeByType     = new Dictionary<Type,   ComponentType>(count);
@@ -150,4 +151,21 @@ public sealed class ComponentSchema
         return $"components: {components.Length - 1}  behaviors: {behaviors.Length - 1}  entity tags: {tags.Length - 1}";
     } 
     #endregion
+}
+
+    
+public readonly struct EngineDependant
+{
+                    public  ReadOnlySpan<ComponentType> Types       => new (types);
+                    public              Assembly        Assembly    => assembly;
+    
+    [Browse(Never)] private readonly    Assembly        assembly;
+    [Browse(Never)] private readonly    ComponentType[] types;
+
+    public override     string          ToString()  => assembly.ManifestModule.Name;
+
+    internal EngineDependant(Assembly assembly, List<ComponentType> types) {
+        this.assembly   = assembly;
+        this.types      = types.ToArray();
+    }
 }
