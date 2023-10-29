@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 // ReSharper disable UnusedMember.Local
 // ReSharper disable once CheckNamespace
@@ -29,7 +30,20 @@ internal sealed class AssemblyLoader
     }
 
     public override string ToString() {
-        return $"Assemblies loaded: {loadedAssemblies.Count}, engine-dependants: {engineDependants.Count}, duration: {duration} ms";
+        var sb = new StringBuilder();
+        sb.Append("Assemblies loaded: ");
+        sb.Append(loadedAssemblies.Count);
+        sb.Append(", duration: ");
+        sb.Append(duration);
+        sb.Append(" ms");
+        sb.Append(", engine-dependants: [");
+        foreach (var assembly in engineDependants) {
+            sb.Append(assembly.ManifestModule.Name);
+            sb.Append(", ");
+        }
+        sb.Length -= 2;
+        sb.Append(']');
+        return sb.ToString();
     }
 
     // --------------------------- query all component, behavior and tag types ---------------------------
