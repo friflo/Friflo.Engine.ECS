@@ -15,30 +15,37 @@ internal static class ComponentUtils
     {
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
+        
+        var dependants  = assemblyLoader.dependants;
+        foreach (var assembly in assemblies) {
+            var types           = AssemblyLoader.GetComponentTypes(assembly);
+            var componentTypes  = new List<ComponentType>();
+            foreach (var type in types) {
+                var componentType = CreateComponentType(type, typeStore);
+                componentTypes.Add(componentType);
+            }
+            dependants.Add(new EngineDependant (assembly, componentTypes));
+        }
         Console.WriteLine(assemblyLoader);
         
         var structs     = new List<ComponentType>();
         var classes     = new List<ComponentType>();
         var tags        = new List<ComponentType>();
-        var dependants  = new List<EngineDependant>();
-        foreach (var assembly in assemblies) {
-            var types           = AssemblyLoader.AddComponentTypes(assembly);
-            var componentTypes  = new List<ComponentType>();
-            foreach (var type in types) {
-                var componentType = RegisterComponentType(type, structs, classes, tags, typeStore);
-                componentTypes.Add(componentType);
+        foreach (var dependant in dependants)
+        {
+            foreach (var type in dependant.Types)
+            {
+                switch (type.kind) {
+                    case ComponentKind.Behavior:    classes.Add(type);  break;
+                    case ComponentKind.Component:   structs.Add(type);  break;
+                    case ComponentKind.Tag:         tags.Add(type);     break;
+                }
             }
-            dependants.Add(new EngineDependant (assembly, componentTypes));
         }
         return new ComponentSchema(dependants, structs, classes, tags);
     }
     
-    internal static ComponentType RegisterComponentType(
-        Type                type,
-        List<ComponentType> structs,
-        List<ComponentType> classes,
-        List<ComponentType> tags,
-        TypeStore           typeStore)
+    internal static ComponentType CreateComponentType(Type type, TypeStore typeStore)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
@@ -46,10 +53,9 @@ internal static class ComponentUtils
             var method          = typeof(ComponentUtils).GetMethod(nameof(CreateTagType), flags);
             var genericMethod   = method!.MakeGenericMethod(type);
             var componentType   = (ComponentType)genericMethod.Invoke(null, null);
-            tags.Add(componentType);
             return componentType;
         }
-        var createParams            = new object[] { typeStore };
+        var createParams = new object[] { typeStore };
         foreach (var attr in type.CustomAttributes)
         {
             var attributeType = attr.AttributeType;
@@ -58,7 +64,6 @@ internal static class ComponentUtils
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateStructFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
-                structs.Add(componentType);
                 return componentType;
             }
             if (attributeType == typeof(BehaviorAttribute))
@@ -66,7 +71,6 @@ internal static class ComponentUtils
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
-                classes.Add(componentType);
                 return componentType;
             }
         }

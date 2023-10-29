@@ -16,12 +16,13 @@ namespace Friflo.Fliox.Engine.ECS;
 
 internal sealed class AssemblyLoader
 {
-    private readonly    HashSet<Assembly>   checkedAssemblies   = new HashSet<Assembly>();
-    private readonly    HashSet<Assembly>   engineDependants    = new HashSet<Assembly>();
-    private readonly    SortedSet<string>   loadedAssemblies    = new SortedSet<string>();
+    private  readonly   HashSet<Assembly>       checkedAssemblies   = new HashSet<Assembly>();
+    private  readonly   HashSet<Assembly>       engineDependants    = new HashSet<Assembly>();
+    private  readonly   SortedSet<string>       loadedAssemblies    = new SortedSet<string>();
+    internal readonly   List<EngineDependant>   dependants          = new List<EngineDependant>();
 
-    private readonly    string              engineFullName;
-    private             long                duration;
+    private  readonly   string                  engineFullName;
+    private             long                    duration;
     
     internal AssemblyLoader()
     {
@@ -38,11 +39,13 @@ internal sealed class AssemblyLoader
         sb.Append(duration);
         sb.Append(" ms");
         sb.Append(", engine-dependants: [");
-        foreach (var assembly in engineDependants) {
-            sb.Append(assembly.ManifestModule.Name);
-            sb.Append(", ");
+        foreach (var dependant in dependants) {
+            sb.Append(dependant.Assembly.ManifestModule.Name);
+            sb.Append(" (");
+            sb.Append(dependant.Types.Length);
+            sb.Append("),  ");
         }
-        sb.Length -= 2;
+        sb.Length -= 3;
         sb.Append(']');
         return sb.ToString();
     }
@@ -135,7 +138,7 @@ internal sealed class AssemblyLoader
         toLoad.ForEach(path => loadedAssemblies.Add(domain.Load(AssemblyName.GetAssemblyName(path))));        
     } */
    
-    internal static List<Type> AddComponentTypes(Assembly assembly)
+    internal static List<Type> GetComponentTypes(Assembly assembly)
     {
         var componentTypes = new List<Type>();
         var types = assembly.GetTypes();

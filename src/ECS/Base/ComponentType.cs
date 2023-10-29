@@ -80,7 +80,7 @@ internal sealed class StructComponentType<T> : ComponentType
     where T : struct, IComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"component: [{typeof(T).Name}]";
+    public  override    string          ToString() => $"component: '{componentKey}' [{typeof(T).Name}]";
 
     internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
         : base(componentKey, null, typeof(T), Component, 0, structIndex, 0)
@@ -96,7 +96,7 @@ internal sealed class BehaviorType<T> : ComponentType
     where T : Behavior
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"behavior: [*{typeof(T).Name}]";
+    public  override    string          ToString() => $"behavior: '{componentKey}' [*{typeof(T).Name}]";
     
     internal BehaviorType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
         : base(behaviorKey, null, typeof(T), ComponentKind.Behavior, behaviorIndex, 0, 0)

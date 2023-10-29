@@ -46,7 +46,7 @@ public static class Test_ComponentType
     public static void Test_ComponentType_MissingAttribute()
     {
         var e = Throws<InvalidOperationException>(() => {
-            ComponentUtils.RegisterComponentType(typeof(string), null, null, null, null);
+            ComponentUtils.CreateComponentType(typeof(string), null);
         });
         AreEqual("missing expected attribute. Type: System.String", e!.Message);
     }

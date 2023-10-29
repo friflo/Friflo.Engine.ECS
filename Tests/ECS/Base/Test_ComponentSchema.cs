@@ -73,12 +73,12 @@ public static class Test_ComponentSchema
         AreEqual(typeof(TestComponent), testType.type);
         
         var myComponentType = schema.GetComponentType<MyComponent1>();
-        AreEqual("my1",                             myComponentType.componentKey);
-        AreEqual("component: [MyComponent1]",       myComponentType.ToString());
+        AreEqual("my1",                                 myComponentType.componentKey);
+        AreEqual("component: 'my1' [MyComponent1]",     myComponentType.ToString());
         
         var testComponentType = schema.GetBehaviorType<TestComponent>();
-        AreEqual("test",                            testComponentType.componentKey);
-        AreEqual("behavior: [*TestComponent]",      testComponentType.ToString());
+        AreEqual("test",                                testComponentType.componentKey);
+        AreEqual("behavior: 'test' [*TestComponent]",   testComponentType.ToString());
         
         AreEqual(typeof(Position),  schema.ComponentTypeByKey["pos"].type);
         AreEqual("test",            schema.ComponentTypeByType[typeof(TestComponent)].componentKey);
