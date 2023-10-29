@@ -30,7 +30,7 @@ internal static class GameEntityUtils
             return sb.ToString();
         }
         if (entity.HasName) {
-            var name = entity.Name.Value;
+            var name = entity.Name.value;
             if (name != null) {
                 sb.Append("  \"");
                 sb.Append(name);

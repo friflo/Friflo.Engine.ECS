@@ -101,6 +101,19 @@ public static class Test_ComponentReader
     }
     
     [Test]
+    public static void Test_ComponentReader_read_EntityName()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var node    = new DataEntity { pid = 10, components = new JsonValue("{\"name\":{\"value\":\"test\"}}") };
+        var entity  = converter.DataToGameEntity(node, store, out var error);
+        
+        AreEqual("test", entity.GetComponent<EntityName>().value);
+        IsNull  (error);
+    }
+    
+    [Test]
     public static void Test_ComponentReader_read_tags()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
@@ -236,7 +249,7 @@ public static class Test_ComponentReader
         }
     }
     
-    private static readonly JsonValue behavior = new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
+    private static JsonValue Behavior => new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
     public static void Test_ComponentReader_read_behavior()
@@ -244,7 +257,7 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = behavior, children = new List<long> { 11 } };
+        var rootNode    = new DataEntity { pid = 10, components = Behavior, children = new List<long> { 11 } };
 
         var root        = converter.DataToGameEntity(rootNode, store, out _);
         AreEqual(1,     root.Behaviors.Length);
@@ -265,7 +278,7 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = behavior, children = new List<long> { 11 } };
+        var rootNode    = new DataEntity { pid = 10, components = Behavior, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
@@ -273,7 +286,7 @@ public static class Test_ComponentReader
         }
     }
     
-    private static readonly JsonValue behaviors = new JsonValue(
+    private static JsonValue Behaviors => new JsonValue(
         "{ \"testRef1\": { \"val1\": 11 }, \"testRef2\": { \"val2\": 22 }, \"testRef3\": { \"val3\": 33 } }");
     
     /// <summary>Cover <see cref="GameEntityStore.AppendBehavior"/></summary>
@@ -283,7 +296,7 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = behaviors };
+        var rootNode    = new DataEntity { pid = 10, components = Behaviors };
 
         var root        = converter.DataToGameEntity(rootNode, store, out _);
         AreEqual(3,     root.Behaviors.Length);

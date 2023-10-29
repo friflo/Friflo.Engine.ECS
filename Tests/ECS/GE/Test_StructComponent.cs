@@ -388,15 +388,15 @@ public static class Test_StructComponent
         AreEqual("id: 1  []",           entity.ToString());
         
         entity.AddComponent(new EntityName("Hello"));
-        AreEqual("Name: \"Hello\"",     entity.GetComponent<EntityName>().ToString());
+        AreEqual("EntityName: 'Hello'", entity.GetComponent<EntityName>().ToString());
         IsTrue(entity.HasName);
         IsTrue(entity.HasComponent<EntityName>());
         AreEqual("id: 1  \"Hello\"",    entity.ToString());
         
-        AreEqual("Hello",               entity.Name.Value);
+        AreEqual("Hello",               entity.Name.value);
         AreEqual("Hello",               Encoding.UTF8.GetString(entity.Name.Utf8));
         
-        entity.Name.Value = null;
+        entity.Name.value = null;
         AreEqual("id: 1  [EntityName]", entity.ToString());
     }
     

@@ -29,6 +29,19 @@ public static class Test_ComponentWriter
     }
     
     [Test]
+    public static void Test_ComponentWriter_write_EntityName()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var gameEntity  = store.CreateEntity();
+        gameEntity.AddComponent(new EntityName("test"));
+        var dataEntity = converter.GameToDataEntity(gameEntity);
+        
+        AreEqual("{\"name\":{\"value\":\"test\"}}", dataEntity.components.AsString());
+    }
+    
+    [Test]
     public static void Test_ComponentWriter_write_empty_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
