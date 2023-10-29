@@ -12,14 +12,28 @@ namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// A <see cref="Unresolved"/> component is added to a <see cref="GameEntity"/> by <see cref="EntityConverter.DataToGameEntity"/> if:<br/>
-/// - a component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Behavior"/><br/>
-/// - a tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/><br/>
+/// <list type="bullet">
+///   <item>
+///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Behavior"/>. 
+///   </item>
+///   <item>
+///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/>.
+///   </item>
+/// </list>
 /// </summary>
 /// <remarks>
 /// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="GameEntity"/> and vice versa<br/>
 /// for unresolved <see cref="IEntityTag"/>'s, <see cref="IComponent"/>'s and <see cref="Behavior"/>'s.<br/>
 /// <br/>
-/// This prevents data loss of tags or components when storing a scene with entities containing unresolved tag or component types.<br/>
+/// Having support <see cref="Unresolved"/> component or tag types:
+/// <list type="bullet">
+///   <item>
+///     Ensures the ability to use a scene containing unresolved types without being blocked by a missing fix.
+///   </item>
+///   <item>
+///     Prevents data loss of tags or components when storing a scene with entities containing unresolved tag or component types.
+///   </item>
+/// </list>
 /// The reason for unresolved tag or component types can be:<br/>
 /// <list type="bullet">
 ///   <item>
