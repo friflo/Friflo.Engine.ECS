@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Launch Editor",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/ComponentTest/bin/Debug/net7.0/ComponentTest.dll",
+            "program": "${workspaceFolder}/Editor/bin/Debug/net7.0/Editor.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/ComponentTest",
+            "cwd": "${workspaceFolder}/Editor",
             "console": "internalConsole",
             "stopAtEntry": false
         },

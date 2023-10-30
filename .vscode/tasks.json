@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/ComponentTest.sln",
+                "${workspaceFolder}/Engine.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/ComponentTest.sln",
+                "${workspaceFolder}/Engine.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/ComponentTest.sln"
+                "${workspaceFolder}/Engine.sln"
             ],
             "problemMatcher": "$msCompile"
         }
