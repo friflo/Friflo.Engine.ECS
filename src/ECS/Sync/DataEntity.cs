@@ -26,7 +26,7 @@ public sealed class DataEntity
 {
     /// <summary>permanent id used to identify entities in a database</summary>
     [Key]
-    // [Serialize         ("id")] 
+    [Serialize            ("id")] 
     public  long            pid;        //  8
     
     /// <remarks>

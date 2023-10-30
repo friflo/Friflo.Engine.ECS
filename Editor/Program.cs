@@ -38,7 +38,7 @@ public static class Program
         }
     }
     
-    private static readonly bool UseFileDb = false;
+    private static readonly bool UseFileDb = true;
     
     private static EntityDatabase CreateDatabase(DatabaseSchema schema) {
         if (UseFileDb) {
