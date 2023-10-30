@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    <!-- create a copy of this project named: Fliox.Editor.csproj
+         used by: /Engine.Fliox/Fliox.Engine.sln -->
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
