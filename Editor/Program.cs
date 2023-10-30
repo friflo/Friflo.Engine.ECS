@@ -23,7 +23,7 @@ public static class Program
         var sync        = new GameDataSync(store, client);
         var processor   = new EventProcessorQueue();
         client.SetEventProcessor(processor);
-        sync.SetupSubscriptions();
+        sync.SubscribeDatabaseChanges();
         
         AddSampleEntities(sync);
         RunServer(hub);

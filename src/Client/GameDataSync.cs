@@ -84,7 +84,7 @@ public sealed class GameDataSync
         }
     }
     
-    public void SetupSubscriptions()
+    public void SubscribeDatabaseChanges()
     {
         client.entities.SubscribeChanges(Change.All, (changes, context) =>
         {

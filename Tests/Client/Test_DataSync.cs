@@ -125,7 +125,7 @@ public static class Test_DataSync
         }
     }
     
-    /// <summary>Cover <see cref="GameDataSync.SetupSubscriptions"/></summary>
+    /// <summary>Cover <see cref="GameDataSync.SubscribeDatabaseChanges"/></summary>
     [Test]
     public static void Test_DataSync_subscriptions()
     {
@@ -139,7 +139,7 @@ public static class Test_DataSync
         var sync            = new GameDataSync(store, client);
         var processor       = new EventProcessorQueue();
         client.SetEventProcessor(processor);
-        sync.SetupSubscriptions();
+        sync.SubscribeDatabaseChanges();
         
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
         var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.ChildComponents };
