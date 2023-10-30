@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Hub.Client;
@@ -11,10 +13,11 @@ namespace Friflo.Fliox.Editor;
 
 public static class Program
 {
-    public static void Main(string[] args) {
-        var schema          = DatabaseSchema.Create<GameClient>();
-        var database        = new MemoryDatabase("game", schema) { Pretty = false };
-        var hub             = new FlioxHub(database);
+    public static async Task Main(string[] args)
+    {
+        var schema      = DatabaseSchema.Create<GameClient>();
+        var database    = CreateDatabase(schema);
+        var hub         = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
@@ -23,9 +26,9 @@ public static class Program
         var sync        = new GameDataSync(store, client);
         var processor   = new EventProcessorQueue();
         client.SetEventProcessor(processor);
-        sync.SubscribeDatabaseChanges();
+        await sync.SubscribeDatabaseChangesAsync();
         
-        AddSampleEntities(sync);
+        await AddSampleEntities(sync);
         RunServer(hub);
         
         // simple event/game loop 
@@ -33,6 +36,16 @@ public static class Program
             processor.ProcessEvents();
             Thread.Sleep(10);
         }
+    }
+    
+    private static readonly bool UseFileDb = false;
+    
+    private static EntityDatabase CreateDatabase(DatabaseSchema schema) {
+        if (UseFileDb) {
+            var directory = Directory.GetCurrentDirectory() + "/DB";
+            return new FileDatabase("game", directory, schema) { Pretty = false };
+        }
+        return new MemoryDatabase("game", schema) { Pretty = false };
     }
     
     private static void RunServer(FlioxHub hub)
@@ -50,7 +63,7 @@ public static class Program
         thread.Start();
     }
         
-    private static void  AddSampleEntities(GameDataSync sync)
+    private static async Task AddSampleEntities(GameDataSync sync)
     {
         var store   = sync.Store;
         var root    = store.CreateEntity(1);
@@ -59,7 +72,7 @@ public static class Program
         var child   = store.CreateEntity(2);
         child.AddComponent(new Position(2, 2, 2));
         root.AddChild(child);
-        sync.StoreGameEntities();
+        await sync.StoreGameEntitiesAsync();
     }
 }
 

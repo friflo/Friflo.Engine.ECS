@@ -27,6 +27,7 @@ public sealed class GameDataSync
         this.client     = client;
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
+        client.entities.WritePretty = true;
     }
     
     public void ClearData() {
@@ -88,6 +89,12 @@ public sealed class GameDataSync
     {
         client.entities.SubscribeChanges(Change.All, EntitiesChangeHandler);
         client.SyncTasksSynchronous();
+    }
+    
+    public async Task SubscribeDatabaseChangesAsync()
+    {
+        client.entities.SubscribeChanges(Change.All, EntitiesChangeHandler);
+        await client.SyncTasks();
     }
     
     private void EntitiesChangeHandler(Changes<long, DataEntity> changes, EventContext context)
