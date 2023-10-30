@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
@@ -40,23 +41,42 @@ public static class Test_Unresolved
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
-        
-        var sourceEntity = new DataEntity { pid = 1, tags = new List<string>{"yyy"} };
+        var source1     = new DataEntity { pid = 1, tags = new List<string>{"yyy1"} };
         
         for (int n = 0; n < 2; n++)
         {
-            var gameEntity  = converter.DataToGameEntity(sourceEntity, store, out _);
+            var gameEntity  = converter.DataToGameEntity(source1, store, out _);
             var unresolved  = gameEntity.GetComponent<Unresolved>();
             
-            AreEqual(1, unresolved.tags.Count);
-            IsTrue  (unresolved.tags.Contains("yyy"));
+            AreEqual(1, unresolved.tags.Length);
+            IsTrue  (unresolved.tags.Contains("yyy1"));
             
-            AreEqual("unresolved tags: 'yyy'", unresolved.ToString());
+            AreEqual("unresolved tags: 'yyy1'", unresolved.ToString());
             
             var targetEntity = converter.GameToDataEntity(gameEntity);
             
             AreEqual(1, targetEntity.tags.Count);
-            IsTrue  (targetEntity.tags.Contains("yyy"));
+            IsTrue  (targetEntity.tags.Contains("yyy1"));
+            IsTrue  (targetEntity.components.IsNull()); // Unresolved component is not serialized.
+        }
+        
+        var source2     = new DataEntity { pid = 1, tags = new List<string>{"yyy2"} };
+        for (int n = 0; n < 2; n++)
+        {
+            var gameEntity  = converter.DataToGameEntity(source2, store, out _);
+            var unresolved  = gameEntity.GetComponent<Unresolved>();
+            
+            AreEqual(2, unresolved.tags.Length);
+            IsTrue  (unresolved.tags.Contains("yyy1"));
+            IsTrue  (unresolved.tags.Contains("yyy2"));
+            
+            AreEqual("unresolved tags: 'yyy1', 'yyy2'", unresolved.ToString());
+            
+            var targetEntity = converter.GameToDataEntity(gameEntity);
+            
+            AreEqual(2, targetEntity.tags.Count);
+            IsTrue  (targetEntity.tags.Contains("yyy1"));
+            IsTrue  (targetEntity.tags.Contains("yyy2"));
             IsTrue  (targetEntity.components.IsNull()); // Unresolved component is not serialized.
         }
     }

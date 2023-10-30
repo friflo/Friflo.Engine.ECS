@@ -20,7 +20,8 @@ internal sealed class ComponentReader
     private readonly    ComponentType                       unresolvedType;
     private readonly    List<ComponentType>                 structTypes;
     private readonly    ArchetypeKey                        searchKey;
-    private readonly    List<string>                        unresolvedTags;
+    private readonly    HashSet<string>                     unresolvedTags;
+    private readonly    HashSet<string>                     unresolvedTagBuffer;
     private             Utf8JsonParser                      parser;
     private             Bytes                               buffer;
     private             RawComponent[]                      components;
@@ -37,7 +38,8 @@ internal sealed class ComponentReader
         tagTypeByName       = schema.tagTypeByName;
         structTypes         = new List<ComponentType>();
         searchKey           = new ArchetypeKey();
-        unresolvedTags      = new List<string>();
+        unresolvedTags      = new HashSet<string>();
+        unresolvedTagBuffer = new HashSet<string>();
     }
     
     internal string Read(DataEntity dataEntity, GameEntity entity, EntityStore store)
@@ -131,21 +133,46 @@ internal sealed class ComponentReader
         var newArchetype = FindArchetype(searchKey, store);
         
         var curArchetype = entity.archetype;
-        if (curArchetype == newArchetype) {
-            return;
-        }
-        entity.archetype = newArchetype;
-        if (curArchetype == store.defaultArchetype) {
-            entity.compIndex = newArchetype.AddEntity(entity.id);
-        } else {
-            entity.compIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
+        if (curArchetype != newArchetype)
+        {
+            entity.archetype = newArchetype;
+            if (curArchetype == store.defaultArchetype) {
+                entity.compIndex = newArchetype.AddEntity(entity.id);
+            } else {
+                entity.compIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
+            }
         }
         if (unresolvedTags.Count > 0) {
-            ref var unresolved = ref entity.GetComponent<Unresolved>();
-            unresolved.tags ??= new HashSet<string>();
+            AddUnresolvedTags(entity);
+        }
+    }
+    
+    private void AddUnresolvedTags(GameEntity entity)
+    {
+        ref var unresolved = ref entity.GetComponent<Unresolved>();
+        var tags = unresolved.tags;
+        if (tags == null) {
+            tags = unresolved.tags = new string[unresolvedTags.Count];
+            int n = 0;
             foreach (var tag in unresolvedTags) {
-                unresolved.tags.Add(tag);
+                tags[n++] = tag;
             }
+            return;
+        }
+        var tagBuffer = unresolvedTagBuffer;
+        tagBuffer.Clear();
+        foreach (var tag in tags) {
+            tagBuffer.Add(tag);   
+        }
+        foreach (var tag in unresolvedTags) {
+            tagBuffer.Add(tag);   
+        }
+        if (tags.Length != tagBuffer.Count) {
+            tags = unresolved.tags = new string[tagBuffer.Count];
+        }
+        int i = 0;
+        foreach (var tag in tagBuffer) {
+            tags[i++] = tag;
         }
     }
     

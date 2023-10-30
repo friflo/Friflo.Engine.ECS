@@ -49,7 +49,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public struct Unresolved : IComponent
 {
     public          Dictionary<string, JsonValue>   components;
-    public          HashSet<string>                 tags;
+    public          string[]                        tags;
     
     public override string                          ToString() => GetString(); 
     

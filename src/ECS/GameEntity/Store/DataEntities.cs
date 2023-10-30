@@ -60,7 +60,7 @@ public partial class GameEntityStore
         }
         var unresolvedTags = unresolved.tags;
         if (unresolvedTags != null) {
-            tags ??= dataEntity.tags = new List<string>(unresolvedTags.Count);
+            tags ??= dataEntity.tags = new List<string>(unresolvedTags.Length);
             foreach (var tag in unresolvedTags) {
                 tags.Add(tag);        
             }
