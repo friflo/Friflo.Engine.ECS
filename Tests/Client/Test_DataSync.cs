@@ -98,7 +98,7 @@ public static class Test_DataSync
             AreEqual(10,    data10.pid);
             AreEqual(1,     data10.children.Count);
             AreEqual(11,    data10.children[0]);
-            AreEqual("{\n    \"pos\": {\"x\":1,\"y\":2,\"z\":3},\n    \"testRef1\": {\"val1\":10}\n}", data10.components.AsString());
+            AreEqual("{\n        \"pos\": {\"x\":1,\"y\":2,\"z\":3},\n        \"testRef1\": {\"val1\":10}\n    }", data10.components.AsString());
             
             AreEqual(11,    data11.pid);
             IsNull  (data11.children);
@@ -117,7 +117,7 @@ public static class Test_DataSync
             AreEqual(10,    data10.pid);
             AreEqual(1,     data10.children.Count);
             AreEqual(11,    data10.children[0]);
-            AreEqual("{\n    \"pos\": {\"x\":1,\"y\":2,\"z\":3},\n    \"testRef1\": {\"val1\":10}\n}", data10.components.AsString());
+            AreEqual("{\n        \"pos\": {\"x\":1,\"y\":2,\"z\":3},\n        \"testRef1\": {\"val1\":10}\n    }", data10.components.AsString());
             
             AreEqual(11,    data11.pid);
             IsNull  (data11.children);

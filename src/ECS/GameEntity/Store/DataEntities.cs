@@ -38,6 +38,10 @@ public partial class GameEntityStore
         }
         // --- write components & behaviors
         var jsonComponents = writer.Write(entity, pretty);
+        if (!jsonComponents.IsNull()) {
+            JsonUtils.FormatComponents(jsonComponents, ref writer.buffer);
+            jsonComponents = new JsonValue(writer.buffer);
+        }
         dataEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
         // --- process tags

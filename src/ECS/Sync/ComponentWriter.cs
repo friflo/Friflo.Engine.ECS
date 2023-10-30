@@ -15,12 +15,12 @@ namespace Friflo.Fliox.Engine.ECS.Sync;
 /// </summary>
 internal sealed class ComponentWriter
 {
-    private readonly    ObjectWriter                    componentWriter;
+    private  readonly   ObjectWriter                    componentWriter;
     private             Utf8JsonWriter                  writer;
-    private             Bytes                           buffer;
-    private readonly    ComponentType[]                 structTypes;
-    private readonly    Dictionary<Type, ComponentType> componentTypeByType;
-    private readonly    int                             unresolvedIndex;
+    internal            Bytes                           buffer;
+    private  readonly   ComponentType[]                 structTypes;
+    private  readonly   Dictionary<Type, ComponentType> componentTypeByType;
+    private  readonly   int                             unresolvedIndex;
     
     internal ComponentWriter() {
         buffer              = new Bytes(128);
