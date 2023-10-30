@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -69,8 +68,10 @@ internal sealed class AssemblyLoader
         var asm0 = Assembly.Load(thread[0]);
         var asm1 = Assembly.Load(thread[1]);
         var asm2 = Assembly.Load(thread[2]);
-        */ 
-        return engineDependants.ToArray();
+        */
+        var result = new Assembly[engineDependants.Count];
+        engineDependants.CopyTo(result);
+        return result;
     }
     
     private void CheckAssembly(Assembly assembly)
