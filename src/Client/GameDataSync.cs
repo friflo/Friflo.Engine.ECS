@@ -86,11 +86,11 @@ public sealed class GameDataSync
     
     public void SubscribeDatabaseChanges()
     {
-        client.entities.SubscribeChanges(Change.All, EntitiesChangesHandler);
+        client.entities.SubscribeChanges(Change.All, EntitiesChangeHandler);
         client.SyncTasksSynchronous();
     }
     
-    private void EntitiesChangesHandler(Changes<long, DataEntity> changes, EventContext context)
+    private void EntitiesChangeHandler(Changes<long, DataEntity> changes, EventContext context)
     {
         Console.WriteLine($"Changes: {changes}");
         foreach (var upsert in changes.Upserts) {
