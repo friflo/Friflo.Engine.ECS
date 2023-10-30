@@ -10,13 +10,13 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="Unresolved"/> component is added to a <see cref="GameEntity"/> by <see cref="EntityConverter.DataToGameEntity"/> if:<br/>
+/// An <see cref="Unresolved"/> component is added to a <see cref="GameEntity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataToGameEntity"/> if:<br/>
 /// <list type="bullet">
 ///   <item>
-///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Behavior"/>. 
+///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Behavior"/> type. 
 ///   </item>
 ///   <item>
-///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/>.
+///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/> type.
 ///   </item>
 /// </list>
 /// </summary>
