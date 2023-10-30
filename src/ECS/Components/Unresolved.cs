@@ -59,18 +59,18 @@ public struct Unresolved : IComponent
         if (components != null) {
             sb.Append(" components: ");
             foreach (var component in components) {
-                sb.Append('\'');
+                sb.Append('\"');
                 sb.Append(component.key);
-                sb.Append("', ");
+                sb.Append("\", ");
             }
             sb.Length -= 2;
         }
         if (tags != null) {
             sb.Append(" tags: ");
             foreach (var tag in tags) {
-                sb.Append('\'');
+                sb.Append('\"');
                 sb.Append(tag);
-                sb.Append("', ");
+                sb.Append("\", ");
             }
             sb.Length -= 2;
         }
@@ -83,7 +83,7 @@ public readonly struct UnresolvedComponent
     public readonly     string      key;
     public readonly     JsonValue   value;
 
-    public override string ToString() => $"'{key}': {value.ToString()}";
+    public override string ToString() => $"\"{key}\": {value.ToString()}";
     
     internal UnresolvedComponent(string key, in JsonValue value) {
         this.key    = key;
