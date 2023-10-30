@@ -11,28 +11,39 @@ namespace Tests.ECS.Sync;
 
 public static class Test_Unresolved
 {
-    private static JsonValue UnresolvedComponents => new JsonValue("{ \"xxx\": { \"foo\":1 }}");
-    
     [Test]
     public static void Test_Unresolved_components()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
-        
-        var sourceEntity = new DataEntity { pid = 1, components = UnresolvedComponents };
+        var source1     = new DataEntity { pid = 1, components = new JsonValue("{ \"xxx1\": { \"foo1\":1 }}") };
         
         for (int n = 0; n < 2; n++)
         {
-            var gameEntity  = converter.DataToGameEntity(sourceEntity, store, out _);
+            var gameEntity  = converter.DataToGameEntity(source1, store, out _);
             var unresolved  = gameEntity.GetComponent<Unresolved>();
             
-            AreEqual(1,                 unresolved.components.Count);
-            AreEqual("{ \"foo\":1 }",   unresolved.components["xxx"].ToString());
+            AreEqual(1,                                 unresolved.components.Length);
+            AreEqual("'xxx1': { \"foo1\":1 }",          unresolved.components[0].ToString());
             
-            AreEqual("unresolved components: 'xxx'", unresolved.ToString());
+            AreEqual("unresolved components: 'xxx1'",   unresolved.ToString());
             
             var targetEntity = converter.GameToDataEntity(gameEntity);
-            AreEqual("{\"xxx\":{ \"foo\":1 }}", targetEntity.components.ToString());
+            AreEqual("{\"xxx1\":{ \"foo1\":1 }}",        targetEntity.components.ToString());
+        }
+        
+        var source2     = new DataEntity { pid = 1, components = new JsonValue("{ \"xxx2\": { \"foo2\":2 }}") };
+        for (int n = 0; n < 2; n++)
+        {
+            var gameEntity  = converter.DataToGameEntity(source2, store, out _);
+            var unresolved  = gameEntity.GetComponent<Unresolved>();
+            AreEqual(2,                                         unresolved.components.Length);
+            AreEqual("'xxx1': { \"foo1\":1 }",                  unresolved.components[0].ToString());
+            AreEqual("'xxx2': { \"foo2\":2 }",                  unresolved.components[1].ToString());
+            AreEqual("unresolved components: 'xxx1', 'xxx2'",   unresolved.ToString());
+            
+            var targetEntity = converter.GameToDataEntity(gameEntity);
+            AreEqual("{\"xxx1\":{ \"foo1\":1 },\"xxx2\":{ \"foo2\":2 }}", targetEntity.components.ToString());
         }
     }
     

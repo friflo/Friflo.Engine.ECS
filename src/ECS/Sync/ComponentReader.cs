@@ -6,6 +6,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Engine.ECS.Sync;
 
@@ -14,32 +15,36 @@ namespace Friflo.Fliox.Engine.ECS.Sync;
 /// </summary>
 internal sealed class ComponentReader
 {
-    private readonly    ObjectReader                        componentReader;
-    private readonly    Dictionary<string, ComponentType>   componentTypeByKey;
-    private readonly    Dictionary<string, ComponentType>   tagTypeByName;
-    private readonly    ComponentType                       unresolvedType;
-    private readonly    List<ComponentType>                 structTypes;
-    private readonly    ArchetypeKey                        searchKey;
-    private readonly    HashSet<string>                     unresolvedTags;
-    private readonly    HashSet<string>                     unresolvedTagBuffer;
-    private             Utf8JsonParser                      parser;
-    private             Bytes                               buffer;
-    private             RawComponent[]                      components;
-    private             int                                 componentCount;
+    private readonly    ObjectReader                            componentReader;
+    private readonly    Dictionary<string, ComponentType>       componentTypeByKey;
+    private readonly    Dictionary<string, ComponentType>       tagTypeByName;
+    private readonly    ComponentType                           unresolvedType;
+    private readonly    List<ComponentType>                     structTypes;
+    private readonly    ArchetypeKey                            searchKey;
+    private readonly    HashSet<string>                         unresolvedTags;
+    private readonly    HashSet<string>                         unresolvedTagBuffer;
+    private readonly    List<UnresolvedComponent>               unresolvedComponentList;
+    private readonly    Dictionary<string, UnresolvedComponent> unresolvedComponentMap;
+    private             Utf8JsonParser                          parser;
+    private             Bytes                                   buffer;
+    private             RawComponent[]                          components;
+    private             int                                     componentCount;
     
     
     internal ComponentReader() {
-        buffer              = new Bytes(128);
-        components          = new RawComponent[1];
-        componentReader     = new ObjectReader(EntityStore.Static.TypeStore);
-        var schema          = EntityStore.Static.ComponentSchema;
-        unresolvedType      = schema.unresolvedType;
-        componentTypeByKey  = schema.componentTypeByKey;
-        tagTypeByName       = schema.tagTypeByName;
-        structTypes         = new List<ComponentType>();
-        searchKey           = new ArchetypeKey();
-        unresolvedTags      = new HashSet<string>();
-        unresolvedTagBuffer = new HashSet<string>();
+        buffer                  = new Bytes(128);
+        components              = new RawComponent[1];
+        componentReader         = new ObjectReader(EntityStore.Static.TypeStore);
+        var schema              = EntityStore.Static.ComponentSchema;
+        unresolvedType          = schema.unresolvedType;
+        componentTypeByKey      = schema.componentTypeByKey;
+        tagTypeByName           = schema.tagTypeByName;
+        structTypes             = new List<ComponentType>();
+        searchKey               = new ArchetypeKey();
+        unresolvedTags          = new HashSet<string>();
+        unresolvedTagBuffer     = new HashSet<string>();
+        unresolvedComponentList = new List<UnresolvedComponent>();
+        unresolvedComponentMap  = new Dictionary<string, UnresolvedComponent>();
     }
     
     internal string Read(DataEntity dataEntity, GameEntity entity, EntityStore store)
@@ -85,6 +90,7 @@ internal sealed class ComponentReader
     
     private void ReadComponents(GameEntity entity)
     {
+        unresolvedComponentList.Clear();
         for (int n = 0; n < componentCount; n++)
         {
             var component = components[n];
@@ -92,9 +98,7 @@ internal sealed class ComponentReader
             var json = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
             var type = component.type;
             if (type == unresolvedType) {
-                ref var unresolved = ref entity.GetComponent<Unresolved>();
-                unresolved.components ??= new Dictionary<string, JsonValue>();
-                unresolved.components[component.key] = json;
+                unresolvedComponentList.Add(new UnresolvedComponent(component.key, json));
                 continue;
             }
             switch (type.kind) {
@@ -108,6 +112,36 @@ internal sealed class ComponentReader
                     heap.Read(componentReader, entity.compIndex, json);
                     break;
             }
+        }
+        if (unresolvedComponentList.Count > 0 ) {
+            AddUnresolvedComponents(entity);
+        }
+    }
+    
+    private void AddUnresolvedComponents(GameEntity entity)
+    {
+        ref var unresolved          = ref entity.GetComponent<Unresolved>();
+        var componentList           = unresolvedComponentList;
+        var unresolvedComponents    = unresolved.components;
+        if (unresolvedComponents == null) {
+            unresolved.components = new UnresolvedComponent[componentList.Count];
+            componentList.CopyTo(unresolved.components);
+            return;
+        }
+        var map = unresolvedComponentMap;
+        map.Clear();
+        foreach (var component in unresolvedComponents) {
+            map[component.key] = component;
+        }
+        foreach (var component in componentList) {
+            map[component.key] = component;
+        }
+        if (unresolvedComponents.Length != map.Count) {
+            unresolvedComponents = unresolved.components= new UnresolvedComponent[map.Count];
+        }
+        int n = 0;
+        foreach (var pair in map) {
+            unresolvedComponents[n++] = pair.Value;
         }
     }
     

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
 using System.Text;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
@@ -48,10 +47,10 @@ namespace Friflo.Fliox.Engine.ECS;
 [Component("unresolved")]
 public struct Unresolved : IComponent
 {
-    public          Dictionary<string, JsonValue>   components;
-    public          string[]                        tags;
+    public          UnresolvedComponent[]   components;
+    public          string[]                tags;
     
-    public override string                          ToString() => GetString(); 
+    public override string                  ToString() => GetString(); 
     
     private string GetString()
     {
@@ -59,9 +58,9 @@ public struct Unresolved : IComponent
         sb.Append("unresolved");
         if (components != null) {
             sb.Append(" components: ");
-            foreach (var pair in components) {
+            foreach (var component in components) {
                 sb.Append('\'');
-                sb.Append(pair.Key);
+                sb.Append(component.key);
                 sb.Append("', ");
             }
             sb.Length -= 2;
@@ -76,5 +75,18 @@ public struct Unresolved : IComponent
             sb.Length -= 2;
         }
         return sb.ToString();
+    }
+}
+
+public readonly struct UnresolvedComponent
+{
+    public readonly     string      key;
+    public readonly     JsonValue   value;
+
+    public override string ToString() => $"'{key}': {value.ToString()}";
+    
+    internal UnresolvedComponent(string key, in JsonValue value) {
+        this.key    = key;
+        this.value  = new JsonValue(value); // create a copy
     }
 }

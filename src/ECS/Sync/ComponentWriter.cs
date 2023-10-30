@@ -42,21 +42,11 @@ internal sealed class ComponentWriter
         writer.SetPretty(pretty);
         writer.ObjectStart();
         // --- write components
-        var heaps           = archetype.Heaps;
+        var heaps = archetype.Heaps;
         for (int n = 0; n < heaps.Length; n++) {
-            var heap        = heaps[n];
+            var heap = heaps[n];
             if (heap.structIndex == unresolvedIndex) {
-                var unresolved = entity.GetComponent<Unresolved>();
-                var components = unresolved.components;
-                if (components != null) {
-                    foreach (var component in components) {
-                        var key     = Encoding.UTF8.GetBytes(component.Key); // todo remove byte[] allocation
-                        var raw     = component.Value;
-                        var data    = new Bytes { buffer = raw.MutableArray, start = raw.start, end = raw.start + raw.Count };
-                        writer.MemberBytes(key, data);
-                        componentCount++;
-                    }
-                }
+                componentCount += WriteUnresolvedComponents(entity);
                 continue;
             }
             var value       = heap.Write(componentWriter, entity.compIndex);
@@ -77,5 +67,24 @@ internal sealed class ComponentWriter
         }
         writer.ObjectEnd();
         return new JsonValue(writer.json);
+    }
+    
+    private int WriteUnresolvedComponents(GameEntity entity)
+    {
+        var unresolved = entity.GetComponent<Unresolved>();
+        var components = unresolved.components;
+        if (components == null) {
+            return 0;
+        }
+        int count = 0;
+        foreach (var component in components)
+        {
+            var key     = Encoding.UTF8.GetBytes(component.key); // todo remove byte[] allocation
+            var raw     = component.value;
+            var data    = new Bytes { buffer = raw.MutableArray, start = raw.start, end = raw.start + raw.Count };
+            writer.MemberBytes(key, data);
+            count++;
+        }
+        return count;
     }
 }
