@@ -108,7 +108,6 @@ public class GameDataSerializer
     private static readonly     Bytes   ChildrenKey     = new Bytes("children");
     private static readonly     Bytes   ComponentsKey   = new Bytes("components");
     private static readonly     Bytes   TagsKey         = new Bytes("tags");
-    private static readonly     Bytes   Indent          = new Bytes("    ");
     
     private void WriteDataEntity(DataEntity dataEntity)
     {
@@ -125,7 +124,7 @@ public class GameDataSerializer
         }
         if (!dataEntity.components.IsNull())
         {
-            FormatComponents(dataEntity.components);
+            JsonUtils.FormatComponents(dataEntity.components, ref componentBuf);
             writer.MemberBytes(ComponentsKey.AsSpan(), componentBuf);
         }
         var tags = dataEntity.tags;
@@ -140,24 +139,7 @@ public class GameDataSerializer
         writer.ObjectEnd();
     }
     
-    private void FormatComponents(in JsonValue components)
-    {
-        componentBuf.Clear();
-        var span    = components.AsReadOnlySpan();
-        var start   = 0;
-        int n       = 0;
-        for (; n < span.Length; n++) {
-            if (span[n] != '\n') {
-                continue;
-            }
-            var line = span.Slice(start, n - start + 1);
-            componentBuf.AppendBytesSpan(line);
-            componentBuf.AppendBytes(Indent);
-            start = n + 1;
-        }
-        var lastLine = span.Slice(start, span.Length - start);
-        componentBuf.AppendBytesSpan(lastLine);
-    }
+
     #endregion
     
 #region read scene
