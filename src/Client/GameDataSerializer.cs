@@ -104,7 +104,7 @@ public class GameDataSerializer
         WriteDataEntity(writeEntity);
     }
     
-    private static readonly     Bytes   PidKey          = new Bytes("pid");
+    private static readonly     Bytes   IdKey           = new Bytes("id");
     private static readonly     Bytes   ChildrenKey     = new Bytes("children");
     private static readonly     Bytes   ComponentsKey   = new Bytes("components");
     private static readonly     Bytes   TagsKey         = new Bytes("tags");
@@ -113,7 +113,7 @@ public class GameDataSerializer
     private void WriteDataEntity(DataEntity dataEntity)
     {
         writer.ObjectStart();
-        writer.MemberLng(PidKey.AsSpan(), dataEntity.pid);
+        writer.MemberLng(IdKey.AsSpan(), dataEntity.pid);
         var children = dataEntity.children;
         if (children != null && children.Count > 0)
         {
@@ -247,7 +247,7 @@ public class GameDataSerializer
         }
     }
     
-    private static readonly Bytes   Pid         = new Bytes("pid");
+    private static readonly Bytes   Id         = new Bytes("id");
     private static readonly Bytes   Children    = new Bytes("children");
     private static readonly Bytes   Components  = new Bytes("components");
     private static readonly Bytes   Tags        = new Bytes("tags");
@@ -257,27 +257,27 @@ public class GameDataSerializer
         while (true) {
             var ev = parser.NextEvent();
             switch (ev) {
-                case JsonEvent.ValueNumber: // pid
-                    if (parser.key.IsEqual(Pid)) {
+                case JsonEvent.ValueNumber:
+                    if (parser.key.IsEqual(Id)) {           // "id"
                         readEntity.pid = parser.ValueAsLong(out _);
                     }
                     continue;
                 case JsonEvent.ValueString:
                 case JsonEvent.ValueNull:
                     continue;
-                case JsonEvent.ArrayStart:  // children | tags
-                    if (parser.key.IsEqual(Children)) {
+                case JsonEvent.ArrayStart:
+                    if (parser.key.IsEqual(Children)) {     // "children"
                         ReadChildren();
                         continue;
                     }
-                    if (parser.key.IsEqual(Tags)) {
+                    if (parser.key.IsEqual(Tags)) {         // "tags"
                         ReadTags();
                         continue;
                     }
                     parser.SkipTree();
                     continue;
-                case JsonEvent.ObjectStart:  // components
-                    if (parser.key.IsEqual(Components)) {
+                case JsonEvent.ObjectStart:  
+                    if (parser.key.IsEqual(Components)) {   // "components"
                         ReadComponents();
                         continue;
                     }
