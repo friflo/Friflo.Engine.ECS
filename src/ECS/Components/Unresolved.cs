@@ -22,7 +22,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 /// <remarks>
 /// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="GameEntity"/> and vice versa<br/>
-/// for unresolved <see cref="IEntityTag"/>'s, <see cref="IComponent"/>'s and <see cref="Behavior"/>'s.<br/>
+/// with components or tags that cannot be resolved to <see cref="IEntityTag"/>, <see cref="IComponent"/> and <see cref="Behavior"/> types.<br/>
 /// <br/>
 /// Having support <see cref="Unresolved"/> component or tag types:
 /// <list type="bullet">
@@ -40,7 +40,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   </item>
 ///   <item>
 ///     Intentionally when creating a scene with external tools without the need to wait for the implementation of new<br/>
-///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Behavior"/> type definitions
+///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Behavior"/> type definitions.
 ///   </item>
 /// </list>
 /// </remarks>
