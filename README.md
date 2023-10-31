@@ -117,6 +117,8 @@
     subgraph ECS;
         EntityStore(EntityStore):::implemented
         Systems
+        Queries(Queries):::implemented
+        Archetypes(Archetypes):::implemented
 
         subgraph ECS-Types[Types];
         direction TB;
@@ -126,11 +128,11 @@
             Behavior([Behavior]):::implemented
         end
 
-        EntityStore  --- ECS-Types
+        EntityStore  -.- ECS-Types
+        Systems      -.- ECS-Types
+        Queries      -.- ECS-Types
+        Archetypes   -.- ECS-Types
 
-        Systems      -.- Entity
-        Systems      -.- Component
-        Systems      -.- Tag
     end
 
     subgraph ORM[ORM / Messaging];
