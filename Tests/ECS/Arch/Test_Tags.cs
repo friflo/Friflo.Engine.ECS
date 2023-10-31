@@ -151,8 +151,8 @@ public static class Test_Tags
         var query1 = store.Query(sig).AllTags(Tags.Get<TestTag>());
         var query2 = store.Query(sig).AllTags(Tags.Get<TestTag, TestTag2>());
         
-        AreEqual("Query: [Position, #TestTag]",             query1.ToString());
-        AreEqual("Query: [Position, #TestTag, #TestTag2]",  query2.ToString());
+        AreEqual("Query: [Position, #TestTag]  EntityCount: 0",             query1.ToString());
+        AreEqual("Query: [Position, #TestTag, #TestTag2]  EntityCount: 0",  query2.ToString());
     }
     
     [Test]
@@ -241,7 +241,7 @@ public static class Test_Tags
         AreEqual(1,                                 archTestTagAll.EntityCount);
         {
             var query  = store.Query().AllTags(Tags.Get<TestTag>());
-            AreEqual("Query: [#TestTag]", query.ToString());
+            AreEqual("Query: [#TestTag]  EntityCount: 2", query.ToString());
             int count   = 0;
             foreach (var id in query) {
                 switch (count) {
@@ -253,7 +253,7 @@ public static class Test_Tags
             AreEqual(2, count);
         } {
             var query  = store.Query().AllTags(Tags.Get<TestTag2>());
-            AreEqual("Query: [#TestTag2]", query.ToString());
+            AreEqual("Query: [#TestTag2]  EntityCount: 1", query.ToString());
             int count   = 0;
             foreach (var id in query) {
                 count++;
@@ -262,7 +262,7 @@ public static class Test_Tags
             AreEqual(1, count);
         } { 
             var query = store.Query().AllTags(Tags.Get<TestTag, TestTag2>());
-            AreEqual("Query: [#TestTag, #TestTag2]", query.ToString());
+            AreEqual("Query: [#TestTag, #TestTag2]  EntityCount: 1", query.ToString());
             int count   = 0;
             foreach (var id in query) {
                 count++;

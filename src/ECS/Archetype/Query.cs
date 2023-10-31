@@ -126,6 +126,8 @@ public class ArchetypeQuery
             sb.Length -= 2;
             sb.Append(']');
         }
+        sb.Append("  EntityCount: ");
+        sb.Append(EntityCount);
         return sb.ToString();
     }
     #endregion
