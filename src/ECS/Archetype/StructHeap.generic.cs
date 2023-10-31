@@ -87,7 +87,7 @@ internal sealed class StructHeap<T> : StructHeap
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override object GetComponentDebug (int compIndex) {
+    internal override IComponent GetComponentDebug (int compIndex) {
         return chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     }
     

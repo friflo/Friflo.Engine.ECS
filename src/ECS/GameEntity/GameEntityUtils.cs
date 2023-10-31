@@ -58,14 +58,14 @@ internal static class GameEntityUtils
         return sb.ToString();
     }
     
-    internal static object[] GetComponentsDebug(GameEntity entity)
+    internal static IComponent[] GetComponentsDebug(GameEntity entity)
     {
         var archetype   = entity.archetype;
         var count       = archetype.ComponentCount;
         if (count == 0) {
-            return EmptyStructComponents;
+            return EmptyComponents;
         }
-        var components  = new object[count];
+        var components  = new IComponent[count];
         // --- add components
         var heaps       = archetype.Heaps;
         for (int n = 0; n < count; n++) {
@@ -75,9 +75,9 @@ internal static class GameEntityUtils
     }
     
     // ---------------------------------- Behavior utils ----------------------------------
-    private  static readonly object[]   EmptyStructComponents   = Array.Empty<object>();
-    private  static readonly Behavior[] EmptyBehaviors          = Array.Empty<Behavior>();
-    internal const  int                 NoBehaviors             = -1;  
+    private  static readonly IComponent[]   EmptyComponents = Array.Empty<IComponent>();
+    private  static readonly Behavior[]     EmptyBehaviors  = Array.Empty<Behavior>();
+    internal const  int                     NoBehaviors     = -1;  
     
     private  static Exception MissingAttributeException(Type type) {
         var msg = $"Missing attribute [Behavior(\"<key>\")] on type: {type.Namespace}.{type.Name}";

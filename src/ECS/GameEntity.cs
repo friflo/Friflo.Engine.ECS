@@ -221,12 +221,12 @@ public sealed class GameEntity
     /// To access a component use <see cref="GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(GetComponent)}<T>() to access a component")]
-    public  object[]                     Components_     => GameEntityUtils.GetComponentsDebug(this);
+    public      IComponent[]            Components_         => GameEntityUtils.GetComponentsDebug(this);
     #endregion
     
     // ------------------------------------ behavior methods -------------------------------------
 #region behavior methods
-    public      ReadOnlySpan<Behavior>   Behaviors          => new (GameEntityUtils.GetBehaviors(this));
+    public      ReadOnlySpan<Behavior>  Behaviors           => new (GameEntityUtils.GetBehaviors(this));
 
     /// <returns>the <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
     public T    GetBehavior<T>()        where T : Behavior  => (T)GameEntityUtils.GetBehavior(this, typeof(T));

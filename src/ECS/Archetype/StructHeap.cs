@@ -33,7 +33,7 @@ internal abstract class StructHeap
     internal  abstract  void        SetChunkCapacity    (int newChunkCount, int chunkCount, int newChunkLength, int chunkLength);
     internal  abstract  void        MoveComponent       (int from, int to);
     internal  abstract  void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
-    internal  abstract  object      GetComponentDebug   (int compIndex);
+    internal  abstract  IComponent  GetComponentDebug   (int compIndex);
     internal  abstract  Bytes       Write               (ObjectWriter writer, int compIndex);
     internal  abstract  void        Read                (ObjectReader reader, int compIndex, JsonValue json);
 
