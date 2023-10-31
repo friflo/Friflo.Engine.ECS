@@ -23,8 +23,8 @@ public sealed class GameDataSync
 
 
     public GameDataSync (GameEntityStore store, GameClient client) {
-        this.store      = store;
-        this.client     = client;
+        this.store      = store     ?? throw new ArgumentNullException(nameof(store));
+        this.client     = client    ?? throw new ArgumentNullException(nameof(client));
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
         client.entities.WritePretty = true;

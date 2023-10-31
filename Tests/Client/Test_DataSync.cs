@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
@@ -123,6 +124,21 @@ public static class Test_DataSync
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
         }
+    }
+    
+    [Test]
+    public static void Test_DataSync_constructor_params()
+    {
+        var e = Throws<ArgumentNullException>(() => {
+            _ = new GameDataSync(null, null);
+        });
+        AreEqual("Value cannot be null. (Parameter 'store')", e!.Message);
+        
+        var store = new GameEntityStore();
+        e = Throws<ArgumentNullException>(() => {
+            _ = new GameDataSync(store, null);
+        });
+        AreEqual("Value cannot be null. (Parameter 'client')", e!.Message);
     }
     
     /// <summary>Cover <see cref="GameDataSync.SubscribeDatabaseChanges"/></summary>
