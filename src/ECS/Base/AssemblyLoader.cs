@@ -91,12 +91,18 @@ internal sealed class AssemblyLoader
             if (!loadedAssemblies.Add(name)) {
                 continue;
             }
-            var referencedAssembly = LoadAssembly(referencedAssemblyName);
-            if (referencedAssembly == null) {
-                continue;
-            }
-            CheckAssembly(referencedAssembly);
+            CheckReferencedAssembly(referencedAssemblyName);
         }
+    }
+    
+    [ExcludeFromCodeCoverage] // running tests without debugging load all assemblies successful
+    private void CheckReferencedAssembly(AssemblyName assemblyName)
+    {
+        var referencedAssembly = LoadAssembly(assemblyName);
+        if (referencedAssembly == null) {
+            return; // case not reached in unit tests. Can be reached when using a debugger
+        }
+        CheckAssembly(referencedAssembly);
     }
 
     /// <summary>
