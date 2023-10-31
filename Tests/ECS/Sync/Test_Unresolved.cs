@@ -17,7 +17,8 @@ public static class Test_Unresolved
         var store           = new GameEntityStore(PidType.UsePidAsId);
         var converter       = EntityConverter.Default;
         var source1         = new DataEntity { pid = 1, components = new JsonValue("{ \"xxx1\": { \"foo1\":1 }}") };
-        var unresolvedTypes = store.GetArchetype(Signature.Get<Unresolved>());
+        var unresolvedSig   = Signature.Get<Unresolved>();
+
         
         for (int n = 0; n < 2; n++)
         {
@@ -27,6 +28,8 @@ public static class Test_Unresolved
             AreEqual(1,                                         unresolved.components.Length);
             AreEqual("\"xxx1\": { \"foo1\":1 }",                unresolved.components[0].ToString());
             AreEqual("unresolved components: \"xxx1\"",         unresolved.ToString());
+            
+            var unresolvedTypes = store.GetArchetype(unresolvedSig);
             AreEqual(1,                                         unresolvedTypes.EntityCount);
             
             var targetEntity = converter.GameToDataEntity(gameEntity);
@@ -42,7 +45,9 @@ public static class Test_Unresolved
             AreEqual("\"xxx1\": { \"foo1\":1 }",                    unresolved.components[0].ToString());
             AreEqual("\"xxx2\": { \"foo2\":2 }",                    unresolved.components[1].ToString());
             AreEqual("unresolved components: \"xxx1\", \"xxx2\"",   unresolved.ToString());
-                AreEqual(1,                                         unresolvedTypes.EntityCount);
+            
+            var unresolvedTypes = store.GetArchetype(unresolvedSig);
+            AreEqual(1,                                             unresolvedTypes.EntityCount);
             
             var targetEntity = converter.GameToDataEntity(gameEntity);
             AreEqual("{\"xxx1\":{ \"foo1\":1 },\"xxx2\":{ \"foo2\":2 }}", targetEntity.components.ToString());
@@ -55,7 +60,7 @@ public static class Test_Unresolved
         var store           = new GameEntityStore(PidType.UsePidAsId);
         var converter       = EntityConverter.Default;
         var source1         = new DataEntity { pid = 1, tags = new List<string>{"yyy1"} };
-        var unresolvedTypes = store.GetArchetype(Signature.Get<Unresolved>());
+        var unresolvedSig   = Signature.Get<Unresolved>();
         
         for (int n = 0; n < 2; n++)
         {
@@ -65,6 +70,8 @@ public static class Test_Unresolved
             AreEqual(1,                                 unresolved.tags.Length);
             IsTrue  (unresolved.tags.Contains("yyy1"));
             AreEqual("unresolved tags: \"yyy1\"",       unresolved.ToString());
+            
+            var unresolvedTypes = store.GetArchetype(unresolvedSig);
             AreEqual(1,                                 unresolvedTypes.EntityCount);
             
             var targetEntity = converter.GameToDataEntity(gameEntity);
@@ -83,6 +90,8 @@ public static class Test_Unresolved
             IsTrue  (unresolved.tags.Contains("yyy1"));
             IsTrue  (unresolved.tags.Contains("yyy2"));
             AreEqual("unresolved tags: \"yyy1\", \"yyy2\"", unresolved.ToString());
+            
+            var unresolvedTypes = store.GetArchetype(unresolvedSig);
             AreEqual(1,                                     unresolvedTypes.EntityCount);
             
             var targetEntity = converter.GameToDataEntity(gameEntity);
