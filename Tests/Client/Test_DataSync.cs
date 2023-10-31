@@ -141,9 +141,7 @@ public static class Test_DataSync
         AreEqual("Value cannot be null. (Parameter 'client')", e!.Message);
     }
     
-    /// <summary>Cover <see cref="GameDataSync.SubscribeDatabaseChanges"/></summary>
-    [Test]
-    public static void Test_DataSync_subscriptions()
+    private static GameClient Prepare_SubscribeDatabaseChanges(out GameDataSync sync, out EventProcessorQueue processor)
     {
         var schema          = DatabaseSchema.Create<GameClient>();
         var database        = new MemoryDatabase("test", schema);
@@ -152,9 +150,18 @@ public static class Test_DataSync
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         var client          = new GameClient(hub);
         var store           = new GameEntityStore(PidType.UsePidAsId);
-        var sync            = new GameDataSync(store, client);
-        var processor       = new EventProcessorQueue();
+        sync                = new GameDataSync(store, client);
+        processor           = new EventProcessorQueue();
         client.SetEventProcessor(processor);
+        return client;
+    }
+    
+    /// <summary>Cover <see cref="GameDataSync.SubscribeDatabaseChanges"/></summary>
+    [Test]
+    public static void Test_DataSync_SubscribeDatabaseChanges()
+    {
+        var client  = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
+        var store   = sync.Store;
         sync.SubscribeDatabaseChanges();
         
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
@@ -174,6 +181,35 @@ public static class Test_DataSync
         client.entities.Delete(10L);
         client.entities.Delete(11L);
         client.SyncTasksSynchronous();
+        processor.ProcessEvents();
+        AreEqual(0, store.EntityCount);
+    }
+    
+    /// <summary>Cover <see cref="GameDataSync.SubscribeDatabaseChangesAsync"/></summary>
+    [Test]
+    public static async Task Test_DataSync_SubscribeDatabaseChangesAsync()
+    {
+        var client  = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
+        var store   = sync.Store;
+        await sync.SubscribeDatabaseChangesAsync();
+        
+        var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
+        var childNode   = new DataEntity { pid = 11L, components = Test_ComponentReader.ChildComponents };
+        
+        client.entities.Upsert(rootNode);
+        client.entities.Upsert(childNode);
+        await client.SyncTasks();
+        processor.ProcessEvents();
+        
+        AreEqual(2, store.EntityCount);
+        var root        = store.GetNodeById(10).Entity;
+        var child       = store.GetNodeById(11).Entity;
+        Test_ComponentReader.AssertRootEntity(root);
+        Test_ComponentReader.AssertChildEntity(child);
+        
+        client.entities.Delete(10L);
+        client.entities.Delete(11L);
+        await client.SyncTasks();
         processor.ProcessEvents();
         AreEqual(0, store.EntityCount);
     }
