@@ -192,12 +192,12 @@ public class GameDataSerializer
                     return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
                 case JsonEvent.ArrayStart:
                     ev = ReadEntities();
-                    if (ev != JsonEvent.ArrayEnd) {
-                        return new ReadSceneResult(readEntityCount, $"expect array end. was {ev}");
+                    if (ev == JsonEvent.Error) {
+                        return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
                     }
                     return new ReadSceneResult(readEntityCount, null);
                 default:
-                    return new ReadSceneResult(readEntityCount, $"expect array. was: {ev}");
+                    return new ReadSceneResult(readEntityCount, $"expect array. was: {ev} at position: {parser.Position}");
             }
         }
         finally {

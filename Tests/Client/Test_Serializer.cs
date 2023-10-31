@@ -185,6 +185,14 @@ public static class Test_Serializer
         stream.Flush();
         return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
+    
+    private static Stream StringAsStream(string json) {
+        var bytes = Encoding.UTF8.GetBytes(json);
+        var stream = new MemoryStream(bytes.Length);
+        stream.Write(bytes);
+        stream.Position = 0;
+        return stream;
+    }
     #endregion
     
 #region read coverage
@@ -212,6 +220,26 @@ public static class Test_Serializer
         stream.Position = 0;
         var result = await serializer.ReadSceneAsync(stream);
         IsNull(result.error);
+    }
+    
+    /// <summary>Cover <see cref="GameDataSerializer.ReadSceneSync"/></summary>
+    [Test]
+    public static void Test_Serializer_ReadScene_errors()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        
+        var stream      = StringAsStream("xxx");
+        var result      = serializer.ReadScene(stream);
+        AreEqual("unexpected character while reading value. Found: x path: '(root)' at position: 1", result.error);
+        
+        stream          = StringAsStream("{}");
+        result          = serializer.ReadScene(stream);
+        AreEqual("expect array. was: ObjectStart at position: 1", result.error);
+        
+        stream          = StringAsStream("[}");
+        result          = serializer.ReadScene(stream);
+        AreEqual("unexpected character while reading value. Found: } path: '[0]' at position: 2", result.error);
     }
     #endregion
 }
