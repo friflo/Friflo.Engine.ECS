@@ -26,7 +26,9 @@ public class ArchetypeQuery
     
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
                     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypes();
+                    public override     string              ToString()  => GetString();
     #endregion
+
 #region private / internal fields
     // --- non blittable types
                     private  readonly   EntityStore         store;              //  8
@@ -37,7 +39,6 @@ public class ArchetypeQuery
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
                     
-                    public override     string              ToString() => GetString();
     #endregion
 
 #region methods
