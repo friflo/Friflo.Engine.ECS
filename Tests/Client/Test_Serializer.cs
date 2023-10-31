@@ -200,5 +200,18 @@ public static class Test_Serializer
         file.Close();
         AssertReadSceneResult(result, store);
     }
+    
+    /// <summary>Cover <see cref="GameDataSerializer.ReadSceneAsync"/></summary>
+    [Test]
+    public static async Task Test_Serializer_ReadSceneAsync_MemoryStream()
+    {
+        var stream      = new MemoryStream();
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        serializer.WriteScene(stream);
+        stream.Position = 0;
+        var result = await serializer.ReadSceneAsync(stream);
+        IsNull(result.error);
+    }
     #endregion
 }
