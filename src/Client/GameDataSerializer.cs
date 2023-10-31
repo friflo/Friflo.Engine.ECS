@@ -244,8 +244,9 @@ public class GameDataSerializer
                         readEntity.pid = parser.ValueAsLong(out _);
                     }
                     continue;
-                case JsonEvent.ValueString:
                 case JsonEvent.ValueNull:
+                case JsonEvent.ValueBool:
+                case JsonEvent.ValueString:
                     continue;
                 case JsonEvent.ArrayStart:
                     if (parser.key.IsEqual(Children)) {     // "children"

@@ -19,6 +19,7 @@ namespace Tests.Client;
 
 public static class Test_Serializer
 {
+#region Happy path
     [Test]
     public static async Task Test_Serializer_write_scene()
     {
@@ -184,4 +185,20 @@ public static class Test_Serializer
         stream.Flush();
         return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
+    #endregion
+    
+#region read coverage
+    /// <summary>Cover <see cref="GameDataSerializer.ReadEntity"/></summary>
+    [Test]
+    public static void Test_Serializer_read_unknown_JSON_members()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        var fileName    = TestUtils.GetBasePath() + "assets/read_unknown_members.json";
+        var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        var result      = serializer.ReadScene(file);
+        file.Close();
+        AssertReadSceneResult(result, store);
+    }
+    #endregion
 }
