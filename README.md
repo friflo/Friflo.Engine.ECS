@@ -59,7 +59,7 @@
     end
 
     subgraph Assets[Asset Management];
-        Scenes:::implemented
+        Scenes(Scenes):::implemented
         Textures
         Materials
         Meshes
@@ -120,10 +120,10 @@
 
         subgraph ECS-Types[Types];
         direction TB;
-            Entity(Entity):::implemented
-            Component(Component):::implemented
-            Tag(Tag):::implemented
-            Behavior(Behavior):::implemented
+            Entity([Entity]):::implemented
+            Component([Component]):::implemented
+            Tag([Tag]):::implemented
+            Behavior([Behavior]):::implemented
         end
 
         EntityStore  --- ECS-Types
@@ -140,9 +140,9 @@
 
         subgraph Messages[Messages - Bulk / Batch];
             direction TB;
-            Request(Request):::finished
-            Response(Response):::finished
-            Event(Event):::finished
+            Request([Request]):::finished
+            Response([Response]):::finished
+            Event([Event]):::finished
         end
 
         Client -.- Messages
@@ -167,10 +167,10 @@
 
         subgraph SQL-DB;
             direction TB;
-            SQLite(SQLite):::finished
-            MySQL(MySQL):::finished
-            Postgres(Postgres):::finished
-            SQL-Server(SQL Server):::finished
+            SQLite[(SQLite)]:::finished
+            MySQL[(MySQL)]:::finished
+            Postgres[(Postgres)]:::finished
+            SQL-Server[(SQL Server)]:::finished
         end
 
         SQL     -.- SQL-DB
@@ -178,8 +178,8 @@
 
         subgraph Key/Value-DB;
             direction TB;
-            File-System(File-System):::finished
-            In-Memory(In-Memory):::finished
+            File-System[(File-System)]:::finished
+            In-Memory[(In-Memory)]:::finished
         end
     end
 
