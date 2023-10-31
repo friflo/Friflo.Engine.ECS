@@ -106,8 +106,9 @@
 ## ECS Client · dependencies
 ```mermaid
   graph TD;
-    classDef finished       stroke:#090,stroke-width:2px;
-    classDef implemented    stroke:#00f,stroke-width:2px;
+    classDef finished           stroke:#090,stroke-width:2px;
+    classDef implemented        stroke:#00f,stroke-width:2px;
+    classDef implementedDotted  stroke:#00f,stroke-width:2px,stroke-dasharray: 5 5;
 
     subgraph Engine-Client[Engine Client];
         Sync(Entity Sync):::implemented;
@@ -125,7 +126,7 @@
             Entity([Entity]):::implemented
             Component([Component]):::implemented
             Tag([Tag]):::implemented
-            Behavior([Behavior]):::implemented
+            Behavior([Behavior]):::implementedDotted
         end
 
         EntityStore  -.- ECS-Types
