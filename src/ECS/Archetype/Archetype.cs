@@ -244,6 +244,17 @@ public sealed class Archetype
         memory.capacity         = newChunkCount * ChunkSize;        // 512, 1024, 1536, 2048, ...
         memory.shrinkThreshold  = memory.capacity - ChunkSize * 2;  // -512, 0, 512, 1024, ...
     }
+    #endregion
+    
+#region internal methods
+    internal static int GetEntityCount(ReadOnlySpan<Archetype> archetypes)
+    {
+        int count = 0;
+        foreach (var archetype in archetypes) {
+            count += archetype.entityCount;
+        }
+        return count;
+    }
     
     private string GetString() {
         var sb          = new StringBuilder();

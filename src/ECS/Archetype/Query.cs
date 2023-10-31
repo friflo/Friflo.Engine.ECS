@@ -22,7 +22,7 @@ public class ArchetypeQuery
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
     /// Typically there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
-                    public              int                 EntityCount => GetEntityCount(GetArchetypes());
+                    public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypes());
     
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
                     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypes();
@@ -62,15 +62,6 @@ public class ArchetypeQuery
     internal void SetRequiredTags(in Tags tags) {
         requiredTags        = tags;
         lastArchetypeCount  = 1;
-    }
-    
-    private static int GetEntityCount(ReadOnlySpan<Archetype> archetypes)
-    {
-        int count = 0;
-        foreach (var archetype in archetypes) {
-            count += archetype.EntityCount;
-        }
-        return count;
     }
     
     // private  readonly    List<ArchetypeQuery>    queries;            // only for debugging
