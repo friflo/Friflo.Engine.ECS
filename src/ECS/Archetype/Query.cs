@@ -22,7 +22,7 @@ public class ArchetypeQuery
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
     /// Typically there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
-                    public              int                 EntityCount => GetEntityCount();
+                    public              int                 EntityCount => GetEntityCount(GetArchetypes());
     
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
                     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypes();
@@ -64,10 +64,19 @@ public class ArchetypeQuery
         lastArchetypeCount  = 1;
     }
     
+    private static int GetEntityCount(ReadOnlySpan<Archetype> archetypes)
+    {
+        int count = 0;
+        foreach (var archetype in archetypes) {
+            count += archetype.EntityCount;
+        }
+        return count;
+    }
+    
     // private  readonly    List<ArchetypeQuery>    queries;            // only for debugging
     // internal void        AddQuery(ArchetypeQuery query) { queries.Add(query); }
     
-    private ReadOnlySpan<Archetype> GetArchetypes()
+    internal ReadOnlySpan<Archetype> GetArchetypes()
     {
         if (store.ArchetypeCount == lastArchetypeCount) {
             return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
@@ -100,15 +109,7 @@ public class ArchetypeQuery
         return new ReadOnlySpan<Archetype>(nextArchetypes, 0, nextCount);
     }
     
-    private int GetEntityCount()
-    {
-        int count = 0;
-        var archs = Archetypes;
-        foreach (var archetype in archs) {
-            count += archetype.EntityCount;
-        }
-        return count;
-    }
+
 
     private string GetString() {
         var sb          = new StringBuilder();

@@ -17,7 +17,7 @@ public ref struct QueryEnumerator
     
     internal QueryEnumerator(ArchetypeQuery query)
     {
-        archetypes      = query.Archetypes;
+        archetypes      = query.GetArchetypes();
         archetypePos    = 0;
         var archetype   = archetypes[0];
         entityIds       = archetype.entityIds;

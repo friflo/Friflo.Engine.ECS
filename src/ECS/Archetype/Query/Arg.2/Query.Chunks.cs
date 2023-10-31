@@ -48,7 +48,7 @@ public ref struct ChunkEnumerator<T1, T2>
         copyT2          = query.copyT2;
         structIndex1    = query.signatureIndexes.T1;
         structIndex2    = query.signatureIndexes.T2;
-        archetypes      = query.Archetypes;
+        archetypes      = query.GetArchetypes();
         archetypePos    = 0;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
