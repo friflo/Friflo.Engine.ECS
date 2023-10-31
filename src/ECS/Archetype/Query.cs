@@ -17,6 +17,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 public class ArchetypeQuery
 {
+#region public properties
+    /// <remarks>Amortized execution time O(1) - as the number of iterated <see cref="Archetypes"/> is limited</remarks>
+                    public              int                 EntityCount => GetEntityCount();    
+    #endregion
 #region private / internal fields
     // --- non blittable types
                     private  readonly   EntityStore         store;              //  8
@@ -90,6 +94,16 @@ public class ArchetypeQuery
             lastArchetypeCount  = newStoreLength;   // using old lastArchetypeCount result only in a redundant update   => OK
             return new ReadOnlySpan<Archetype>(nextArchetypes, 0, nextCount);
         }
+    }
+    
+    private int GetEntityCount()
+    {
+        int count = 0;
+        var archs = Archetypes;
+        foreach (var archetype in archs) {
+            count += archetype.EntityCount;
+        }
+        return count;
     }
 
     private string GetString() {
