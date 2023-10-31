@@ -18,7 +18,10 @@ namespace Friflo.Fliox.Engine.ECS;
 public class ArchetypeQuery
 {
 #region public properties
-    /// <remarks>Amortized execution time O(1) - as the number of iterated <see cref="Archetypes"/> is limited</remarks>
+    /// <remarks>
+    /// Execution time O(matching <see cref="Archetypes"/>).<br/>
+    /// Typically there are only a few matching <see cref="Archetypes"/>.
+    /// </remarks>
                     public              int                 EntityCount => GetEntityCount();    
     #endregion
 #region private / internal fields
