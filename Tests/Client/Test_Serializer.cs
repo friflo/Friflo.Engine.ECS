@@ -224,7 +224,7 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="GameDataSerializer.ReadSceneSync"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_errors()
+    public static void Test_Serializer_ReadScene_ReadSceneSync_errors()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
@@ -240,6 +240,54 @@ public static class Test_Serializer
         stream          = StringAsStream("[}");
         result          = serializer.ReadScene(stream);
         AreEqual("unexpected character while reading value. Found: } path: '[0]' at position: 2", result.error);
+    }
+    
+    /// <summary>Cover <see cref="GameDataSerializer.ReadEntity"/></summary>
+    [Test]
+    public static void Test_Serializer_ReadScene_ReadEntity_errors()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        
+        var stream      = StringAsStream("[{ xxx");
+        var result      = serializer.ReadScene(stream);
+        AreEqual("unexpected character > expect key. Found: x path: '[0]' at position: 4", result.error);
+    }
+    
+    /// <summary>Cover <see cref="GameDataSerializer.ReadEntities"/></summary>
+    [Test]
+    public static void Test_Serializer_ReadScene_ReadEntities_errors()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        
+        var stream      = StringAsStream("[1]");
+        var result      = serializer.ReadScene(stream);
+        AreEqual("expect object entity. was: ValueNumber at Position: 2 path: '[0]' at position: 2", result.error);
+    }
+    
+    /// <summary>Cover <see cref="GameDataSerializer.ReadChildren"/></summary>
+    [Test]
+    public static void Test_Serializer_ReadScene_ReadChildren_errors()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        
+        var stream      = StringAsStream("[ {\"children\":[true] } }");
+        var result      = serializer.ReadScene(stream);
+        AreEqual("expect child id number. was: ValueBool at Position: 19 path: '[0].children[0]' at position: 19", result.error);
+    }
+    
+    /// <summary>Cover <see cref="GameDataSerializer.ReadTags"/></summary>
+    [Test]
+    public static void Test_Serializer_ReadScene_ReadTags_errors()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var serializer  = new GameDataSerializer(store);
+        
+        var stream      = StringAsStream("[ {\"tags\":[1] } }");
+        var result      = serializer.ReadScene(stream);
+        AreEqual("expect tag string. was: ValueNumber at Position: 12 path: '[0].tags[0]' at position: 12", result.error);
     }
     #endregion
 }

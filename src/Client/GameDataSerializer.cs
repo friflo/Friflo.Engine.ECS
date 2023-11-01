@@ -188,14 +188,14 @@ public class GameDataSerializer
             var ev = parser.NextEvent();
             switch (ev)
             {
-                case JsonEvent.Error:
-                    return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
                 case JsonEvent.ArrayStart:
                     ev = ReadEntities();
                     if (ev == JsonEvent.Error) {
                         return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
                     }
                     return new ReadSceneResult(readEntityCount, null);
+                case JsonEvent.Error:
+                    return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
                 default:
                     return new ReadSceneResult(readEntityCount, $"expect array. was: {ev} at position: {parser.Position}");
             }
@@ -217,19 +217,22 @@ public class GameDataSerializer
                     readEntity.components = default;
                     readEntity.tags.Clear();
                     ev = ReadEntity();
-                    converter.DataToGameEntity(readEntity, store, out _);
-                    readEntityCount++;
                     if (ev != JsonEvent.ObjectEnd) {
                         return ev;
                     }
+                    converter.DataToGameEntity(readEntity, store, out _);
+                    readEntityCount++;
                     break;
-                default:
+                case JsonEvent.ArrayEnd:
+                case JsonEvent.Error:
                     return ev;
+                default:
+                    return ReadError($"expect object entity. was: {ev}");
             }
         }
     }
     
-    private static readonly Bytes   Id         = new Bytes("id");
+    private static readonly Bytes   Id          = new Bytes("id");
     private static readonly Bytes   Children    = new Bytes("children");
     private static readonly Bytes   Components  = new Bytes("components");
     private static readonly Bytes   Tags        = new Bytes("tags");
@@ -250,11 +253,17 @@ public class GameDataSerializer
                     continue;
                 case JsonEvent.ArrayStart:
                     if (parser.key.IsEqual(Children)) {     // "children"
-                        ReadChildren();
+                        ev = ReadChildren();
+                        if (ev == JsonEvent.Error) {
+                            return ev;
+                        }
                         continue;
                     }
                     if (parser.key.IsEqual(Tags)) {         // "tags"
-                        ReadTags();
+                        ev = ReadTags();
+                        if (ev == JsonEvent.Error) {
+                            return ev;
+                        }
                         continue;
                     }
                     parser.SkipTree();
@@ -291,8 +300,11 @@ public class GameDataSerializer
                     var childId = parser.ValueAsLong(out _);
                     readEntity.children.Add(childId);
                     continue;
-                default:
+                case JsonEvent.ArrayEnd:
+                case JsonEvent.Error:
                     return ev;
+                default:
+                    return ReadError($"expect child id number. was: {ev}");
             }
         }
     }
@@ -306,10 +318,19 @@ public class GameDataSerializer
                     var tag = parser.value.AsString();
                     readEntity.tags.Add(tag);
                     continue;
-                default:
+                case JsonEvent.ArrayEnd:
+                case JsonEvent.Error:
                     return ev;
+                default:
+                    return ReadError($"expect tag string. was: {ev}");
             }
         }
+    }
+    
+    private JsonEvent ReadError(string message)
+    {
+        parser.ErrorMsg("GameDataSerializer", $"{message} at Position: {parser.Position}");
+        return JsonEvent.Error;
     }
     #endregion
 }
