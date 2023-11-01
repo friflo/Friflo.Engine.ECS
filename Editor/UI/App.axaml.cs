@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace Friflo.Fliox.Editor.Avalonia;
+namespace Friflo.Fliox.Editor.UI;
 
 public partial class App : Application
 {
