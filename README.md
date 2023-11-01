@@ -30,7 +30,7 @@
     classDef wip            stroke:#f0f,stroke-width:2px;
 
     subgraph Applications[Applications / Extensions];
-        Editor(Editor<br/>GUI / C# - exe):::wip;
+        Editor(Editor<br/>Avalonia UI / C# - exe):::wip;
         Game(Game<br/>Assets / C# Scripts - exe);
         Extensions(Extensions<br/>Assets / C# Scripts - dll);
     end
@@ -43,10 +43,8 @@
         Camera
     end
 
-    subgraph Backend[Renderer Backend];
-        OpenGL-ES
-        Vulkan
-        Shader
+    subgraph Backend[<a href='#renderer-backend'>Renderer Backend</a>];
+        Bindings[3D Bindings - Silk.NET];
     end
 
     subgraph Physics;
@@ -66,18 +64,18 @@
         Animations
     end
 
-    subgraph Engine-Client[Engine Client];
+    subgraph Engine-Client[<a href='#ecs-client'>Engine Client</a>];
         Sync(Entity Sync):::implemented;
         Netcode;
     end
 
-    subgraph ORM[ORM / Messaging];
+    subgraph ORM[<a href='#ecs-client'>ORM / Messaging</a>];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
     end
 
-    subgraph ECS;
+    subgraph ECS[<a href='#ecs-client'>ECS</a>];
         EntityStore(EntityStore):::implemented
         Systems
     end
@@ -103,7 +101,7 @@
     Engine-Client  -->ORM
 ```
 
-## ECS Client · dependencies
+## ECS Client
 ```mermaid
   graph TD;
     classDef finished           stroke:#090,stroke-width:2px;
@@ -190,6 +188,26 @@
     Engine-Client   --> ORM
     ORM             --> Storage
     
+```
+
+## Renderer Backend
+```mermaid
+    graph TD;
+    subgraph Backend[Renderer Backend];
+        Silk.NET;
+
+        subgraph Bindings[3D Bindings];
+            direction TB;
+            OpenGL
+            Vulkan
+            DirectX
+        end
+    end
+
+    Silk.NET    -.-OpenGL;
+    Silk.NET    -.-Vulkan;
+    Silk.NET    -.-DirectX
+
 ```
 <br/><br/>
 
