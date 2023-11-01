@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Friflo.Fliox.Editor;
+﻿namespace Friflo.Fliox.Editor;
 
 public static class Program
 {

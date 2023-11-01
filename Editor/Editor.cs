@@ -19,7 +19,7 @@ public class Editor
     public async Task Init(string[] args)
     {
         var schema      = DatabaseSchema.Create<GameClient>();
-        var database    = CreateDatabase(schema);
+        var database    = CreateDatabase(schema, "file-system");
         var hub         = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
@@ -64,10 +64,9 @@ public class Editor
         thread.Start();
     }
     
-    private static readonly bool UseFileDb = true;
-    
-    private static EntityDatabase CreateDatabase(DatabaseSchema schema) {
-        if (UseFileDb) {
+    private static EntityDatabase CreateDatabase(DatabaseSchema schema, string provider)
+    {
+        if (provider == "file-system") {
             var directory = Directory.GetCurrentDirectory() + "/DB";
             return new FileDatabase("game", directory, schema) { Pretty = false };
         }
