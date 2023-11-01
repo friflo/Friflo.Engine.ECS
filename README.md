@@ -43,7 +43,7 @@
         Camera
     end
 
-    subgraph Backend[<a href='./README.md#renderer-backend'>Renderer Backend</a>];
+    subgraph Backend[Renderer Backend];
         Bindings[3D Bindings - Silk.NET];
     end
 
@@ -64,18 +64,18 @@
         Animations
     end
 
-    subgraph Engine-Client[<a href='./README.md#ecs-client'>Engine Client</a>];
+    subgraph Engine-Client[Engine Client];
         Sync(Entity Sync):::implemented;
         Netcode;
     end
 
-    subgraph ORM[<a href='./README.md#ecs-client'>ORM / Messaging</a>];
+    subgraph ORM[ORM / Messaging];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
     end
 
-    subgraph ECS[<a href='./README.md#ecs-client'>ECS</a>];
+    subgraph ECS[ECS];
         EntityStore(EntityStore):::implemented
         Systems
     end
@@ -101,7 +101,7 @@
     Engine-Client  -->ORM
 ```
 
-## ECS Client
+## Engine Client
 ```mermaid
   graph TD;
     classDef finished           stroke:#090,stroke-width:2px;
