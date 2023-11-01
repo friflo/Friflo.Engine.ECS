@@ -224,7 +224,7 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="GameDataSerializer.ReadSceneSync"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_ReadSceneSync_errors()
+    public static void Test_Serializer_ReadScene_error_ReadSceneSync()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
@@ -244,7 +244,7 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="GameDataSerializer.ReadEntity"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_ReadEntity_errors()
+    public static void Test_Serializer_ReadScene_error_ReadEntity()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
@@ -256,7 +256,7 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="GameDataSerializer.ReadEntities"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_ReadEntities_errors()
+    public static void Test_Serializer_ReadScene_error_ReadEntities()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
@@ -268,7 +268,7 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="GameDataSerializer.ReadChildren"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_ReadChildren_errors()
+    public static void Test_Serializer_ReadScene_error_ReadChildren()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
@@ -280,7 +280,7 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="GameDataSerializer.ReadTags"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_ReadTags_errors()
+    public static void Test_Serializer_ReadScene_error_ReadTags()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
