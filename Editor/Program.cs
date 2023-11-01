@@ -1,6 +1,6 @@
 ﻿using System;
 using Avalonia;
-using GetStartedApp;
+using Friflo.Fliox.Editor.Avalonia;
 
 namespace Friflo.Fliox.Editor;
 

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace GetStartedApp;
+namespace Friflo.Fliox.Editor.Avalonia;
 
 public partial class MainWindow : Window
 {
