@@ -329,7 +329,7 @@ public class GameDataSerializer
     
     private JsonEvent ReadError(string message)
     {
-        parser.ErrorMsg("GameDataSerializer", $"{message} at Position: {parser.Position}");
+        parser.ErrorMsg("GameDataSerializer", $"{message} at position: {parser.Position}");
         return JsonEvent.Error;
     }
     #endregion
