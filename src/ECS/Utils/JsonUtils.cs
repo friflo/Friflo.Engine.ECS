@@ -29,4 +29,13 @@ public static class JsonUtils
         var lastLine = span.Slice(start, span.Length - start);
         componentBuf.AppendBytesSpan(lastLine);
     }
+    
+    public static Bytes JsonValueToBytes (in JsonValue json)
+    {
+        return new Bytes {
+            buffer  = json.MutableArray,
+            start   = json.start,
+            end     = json.start + json.Count
+        };
+    }
 }

@@ -80,8 +80,7 @@ internal sealed class ComponentWriter
         foreach (var component in components)
         {
             var key     = Encoding.UTF8.GetBytes(component.key); // todo remove byte[] allocation
-            var raw     = component.value;
-            var data    = new Bytes { buffer = raw.MutableArray, start = raw.start, end = raw.start + raw.Count };
+            var data    = JsonUtils.JsonValueToBytes(component.value);
             writer.MemberBytes(key, data);
             count++;
         }

@@ -124,8 +124,10 @@ public class GameDataSerializer
         }
         if (!dataEntity.components.IsNull())
         {
-            JsonUtils.FormatComponents(dataEntity.components, ref componentBuf);
-            writer.MemberBytes(ComponentsKey.AsSpan(), componentBuf);
+            // JsonUtils.FormatComponents(dataEntity.components, ref componentBuf);
+            // writer.MemberBytes(ComponentsKey.AsSpan(), componentBuf);
+            var componentBytes = JsonUtils.JsonValueToBytes(dataEntity.components);
+            writer.MemberBytes(ComponentsKey.AsSpan(), componentBytes);
         }
         var tags = dataEntity.tags;
         if (tags != null && tags.Count > 0)
