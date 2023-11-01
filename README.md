@@ -43,7 +43,7 @@
         Camera
     end
 
-    subgraph Backend[<a href='README.md#renderer-backend'>Renderer Backend</a>];
+    subgraph Backend[<a href='./README.md#renderer-backend'>Renderer Backend</a>];
         Bindings[3D Bindings - Silk.NET];
     end
 
@@ -64,18 +64,18 @@
         Animations
     end
 
-    subgraph Engine-Client[<a href='README.md#ecs-client'>Engine Client</a>];
+    subgraph Engine-Client[<a href='./README.md#ecs-client'>Engine Client</a>];
         Sync(Entity Sync):::implemented;
         Netcode;
     end
 
-    subgraph ORM[<a href='README.md#ecs-client'>ORM / Messaging</a>];
+    subgraph ORM[<a href='./README.md#ecs-client'>ORM / Messaging</a>];
         Client(Client):::finished
         Server(Server):::finished
         WebUI(Web UI):::finished
     end
 
-    subgraph ECS[<a href='README.md#ecs-client'>ECS</a>];
+    subgraph ECS[<a href='./README.md#ecs-client'>ECS</a>];
         EntityStore(EntityStore):::implemented
         Systems
     end
