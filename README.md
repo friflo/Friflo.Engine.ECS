@@ -22,7 +22,10 @@
 |                   |                           | [How to use and debug assembly unloadability in .NET](https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability)
 
 
-## Engine Architecture · dependencies
+## Engine Architecture
+
+The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *depends on* `ECS`
+
 ```mermaid
   graph TD;
     classDef finished       stroke:#090,stroke-width:2px;
