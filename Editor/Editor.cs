@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Hub.Client;
@@ -14,7 +15,8 @@ namespace Friflo.Fliox.Editor;
 public class Editor
 {
     private readonly    ManualResetEvent    signalEvent = new ManualResetEvent(false);
-    private             EventProcessorQueue processor; 
+    private             EventProcessorQueue processor;
+    private             HttpServer          server;
 
     public async Task Init(string[] args)
     {
@@ -31,8 +33,12 @@ public class Editor
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
-        await AddSampleEntities(sync);
-        RunServer(hub);
+        // await AddSampleEntities(sync);
+        server = RunServer(hub);
+    }
+    
+    internal void Shutdown() {
+        server.Stop();
     }
     
     internal void Run()
@@ -45,11 +51,15 @@ public class Editor
         }
     }
     
-    private void ReceivedEvent () {
-        signalEvent.Set();
+    private void ProcessEvents() {
+        processor.ProcessEvents();
     }
     
-    private static void RunServer(FlioxHub hub)
+    private void ReceivedEvent () {
+        Dispatcher.UIThread.Post(ProcessEvents);
+    }
+    
+    private static HttpServer RunServer(FlioxHub hub)
     {
         hub.Info.Set ("Editor", "dev", "https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine", "rgb(91,21,196)"); // optional
         hub.UseClusterDB(); // required by HubExplorer
@@ -58,10 +68,14 @@ public class Editor
         var httpHost    = new HttpHost(hub, "/fliox/");
         httpHost.UseStaticFiles(HubExplorer.Path); // nuget: https://www.nuget.org/packages/Friflo.Json.Fliox.Hub.Explorer
     
+        var server = new HttpServer ("http://localhost:5000/", httpHost);  // http://localhost:5000/fliox/
         var thread = new Thread(_ => {
-            HttpServer.RunHost("http://localhost:5000/", httpHost); // http://localhost:5000/fliox/
+            // HttpServer.RunHost("http://localhost:5000/", httpHost); // http://localhost:5000/fliox/
+            server.Start();
+            server.Run();
         });
         thread.Start();
+        return server;
     }
     
     private static EntityDatabase CreateDatabase(DatabaseSchema schema, string provider)
