@@ -78,7 +78,8 @@ namespace Friflo.Fliox.Editor.OpenGL
         {
             var options = WindowOptions.Default;
             options.Size = new Vector2D<int>(800, 600);
-            options.Title = "LearnOpenGL with Silk.NET";
+            options.Title = "Editor - OpenGL";
+            options.WindowBorder = WindowBorder.Hidden;
             window = Window.Create(options);
 
             window.Load += OnLoad;
@@ -88,22 +89,33 @@ namespace Friflo.Fliox.Editor.OpenGL
             return window;
         }
         
-        /// <summary>Copy of <see cref="Silk.NET.Windowing.WindowExtensions.Run"/> </summary>
-        public static void RunEventLoop(IView view)
+        public class EventLoop
         {
-            view.Initialize();
-            view.Run((Action) (() =>
+            internal bool stop;
+            
+            /// <summary>Copy of <see cref="Silk.NET.Windowing.WindowExtensions.Run"/> </summary>
+            public void RunEventLoop(IView view)
             {
+                view.Initialize();
+                view.Run((Action) (() =>
+                {
+                    if (stop) {
+                        if (!view.IsClosing) {
+                            view.Close();
+                        }
+                    }
+                    view.DoEvents();
+                    if (!view.IsClosing)
+                        view.DoUpdate();
+                    if (view.IsClosing)
+                        return;
+                    view.DoRender();
+                }));
                 view.DoEvents();
-                if (!view.IsClosing)
-                    view.DoUpdate();
-                if (view.IsClosing)
-                    return;
-                view.DoRender();
-            }));
-            view.DoEvents();
-            view.Reset();
+                view.Reset();
+            }
         }
+
 
 
         private static unsafe void OnLoad()

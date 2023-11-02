@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using Avalonia;
 using Friflo.Fliox.Editor.OpenGL;
 using Friflo.Fliox.Editor.UI;
+using Silk.NET.Maths;
 
 namespace Friflo.Fliox.Editor;
 
@@ -10,9 +12,17 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        var window = OpenGLTest.Init(args);
-        OpenGLTest.RunEventLoop(window);
-        window.Dispose();
+        var graphicsClosed      = new ManualResetEvent(false);
+        var graphicsWindow      = OpenGLTest.Init(args);
+        graphicsWindow.Position = new Vector2D<int>(1500, 500);
+        graphicsWindow.Size     = new Vector2D<int>(1000, 1000);
+        var loop                = new OpenGLTest.EventLoop();
+        var thread = new Thread(() => {
+            loop.RunEventLoop(graphicsWindow);
+            graphicsWindow.Dispose();
+            graphicsClosed.Set();
+        });
+        thread.Start();
         
         var editor = new Editor();
         editor.Init(args).Wait();
@@ -22,7 +32,10 @@ public static class Program
         // yet and stuff might break.
         AppBuilder builder = BuildAvaloniaApp();
         builder.StartWithClassicDesktopLifetime(args);
-        
+
+        loop.stop = true;
+        graphicsClosed.WaitOne();
+
         // editor.Run();
         editor.Shutdown();
     }
