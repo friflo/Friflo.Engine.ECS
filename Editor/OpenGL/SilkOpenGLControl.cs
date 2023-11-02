@@ -5,9 +5,10 @@ using Avalonia.OpenGL.Controls;
 using Avalonia.Threading;
 using Silk.NET.OpenGL;
 
-namespace Tutorial
+// ReSharper disable InconsistentNaming
+namespace Friflo.Fliox.Editor.OpenGL
 {
-    public class SilkNetExample : OpenGlControlBase
+    public class SilkOpenGLControl : OpenGlControlBase
     {
         private GL Gl;
         private BufferObject<float> Vbo;

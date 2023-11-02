@@ -1,8 +1,8 @@
-using AvaloniaSilkExample.Gl;
-using Silk.NET.OpenGL;
 using System;
+using Silk.NET.OpenGL;
 
-namespace Tutorial
+// ReSharper disable InconsistentNaming
+namespace Friflo.Fliox.Editor.OpenGL
 {
     public class BufferObject<TDataType> : IDisposable
         where TDataType : unmanaged
