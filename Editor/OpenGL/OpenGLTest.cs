@@ -1,5 +1,4 @@
 using System;
-using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
@@ -120,11 +119,11 @@ namespace Friflo.Fliox.Editor.OpenGL
 
         private static unsafe void OnLoad()
         {
-            IInputContext input = window.CreateInput();
+            /* IInputContext input = window.CreateInput();
             for (int i = 0; i < input.Keyboards.Count; i++)
             {
                 input.Keyboards[i].KeyDown += KeyDown;
-            }
+            }*/
 
             //Getting the opengl api for drawing to the screen.
             Gl = GL.GetApi(window);
@@ -224,12 +223,13 @@ namespace Friflo.Fliox.Editor.OpenGL
             Gl.DeleteProgram(Shader);
         }
 
+        /*
         private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
         {
             if (arg2 == Key.Escape)
             {
                 window.Close();
             }
-        }
+        } */
     }
 }
