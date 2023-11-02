@@ -64,7 +64,7 @@ namespace Tutorial
 
         protected override unsafe void OnOpenGlRender(GlInterface gl, int fb)
         {
-            Gl.ClearColor(Color.Firebrick);
+            Gl.ClearColor(Color.DarkGray);
             Gl.Clear((uint)(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
             Gl.Enable(EnableCap.DepthTest);
             Gl.Viewport(0,0, (uint)Bounds.Width, (uint)Bounds.Height);
