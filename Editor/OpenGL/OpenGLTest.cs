@@ -4,9 +4,10 @@ using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
+// ReSharper disable InconsistentNaming
 namespace Friflo.Fliox.Editor.OpenGL
 {
-    class OpenGLTest
+    internal static class OpenGLTest
     {
         private static IWindow window;
         private static GL Gl;
