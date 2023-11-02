@@ -2,7 +2,8 @@ using System;
 using System.IO;
 using Silk.NET.OpenGL;
 
-namespace Tutorial
+// ReSharper disable InconsistentNaming
+namespace Friflo.Fliox.Editor.OpenGL
 {
     public class Shader : IDisposable
     {

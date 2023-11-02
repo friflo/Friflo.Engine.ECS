@@ -1,9 +1,9 @@
-using Silk.NET.OpenGL;
 using System;
+using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Tutorial
+namespace Friflo.Fliox.Editor.OpenGL
 {
     public class Texture : IDisposable
     {
