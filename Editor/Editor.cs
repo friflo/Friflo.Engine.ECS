@@ -18,7 +18,7 @@ public class Editor
     private             EventProcessorQueue processor;
     private             HttpServer          server;
 
-    public async Task Init(string[] args)
+    public async Task Init()
     {
         var schema      = DatabaseSchema.Create<GameClient>();
         var database    = CreateDatabase(schema, "file-system");
@@ -33,12 +33,12 @@ public class Editor
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
-        // await AddSampleEntities(sync);
+        await AddSampleEntities(sync);
         server = RunServer(hub);
     }
     
     internal void Shutdown() {
-        server.Stop();
+        server?.Stop();
     }
     
     internal void Run()

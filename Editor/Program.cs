@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Avalonia;
 using Friflo.Fliox.Editor.UI;
 
@@ -6,9 +7,14 @@ namespace Friflo.Fliox.Editor;
 
 public static class Program
 {
+    internal static Stopwatch startTime;
+    
+    
     [STAThread]
     public static void Main(string[] args)
     {
+        startTime = new Stopwatch();
+        startTime.Start();
         /*
         var graphicsClosed      = new ManualResetEvent(false);
         var graphicsWindow      = OpenGLTest.Init(args);
@@ -23,22 +29,22 @@ public static class Program
         });
         thread.Start();
         */
-
         
-        var editor = new Editor();
-        editor.Init(args).Wait();
+        // var editor = new Editor();
+        // editor.Init(args).Wait();
         
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
         AppBuilder builder = BuildAvaloniaApp();
+        
         builder.StartWithClassicDesktopLifetime(args);
 
         // loop.Stop();
         // graphicsClosed.WaitOne();
 
         // editor.Run();
-        editor.Shutdown();
+        // editor.Shutdown();
     }
     
     // Avalonia configuration, don't remove; also used by visual designer.

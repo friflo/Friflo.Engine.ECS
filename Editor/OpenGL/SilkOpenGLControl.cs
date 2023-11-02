@@ -10,6 +10,8 @@ namespace Friflo.Fliox.Editor.OpenGL
 {
     public class SilkOpenGLControl : OpenGlControlBase
     {
+        internal Action OpenGlReady;
+            
         private GL Gl;
         private BufferObject<float> Vbo;
         private BufferObject<uint> Ebo;
@@ -36,7 +38,7 @@ namespace Friflo.Fliox.Editor.OpenGL
         protected override void OnOpenGlInit(GlInterface gl)
         {
             base.OnOpenGlInit(gl);
-            
+            Console.WriteLine($"--- SilkOpenGLControl.OnOpenGlInit() - startup {Program.startTime.ElapsedMilliseconds} ms");
             Gl = GL.GetApi(gl.GetProcAddress);
             
 
@@ -50,7 +52,7 @@ namespace Friflo.Fliox.Editor.OpenGL
             Vao.VertexAttributePointer(1, 4, VertexAttribPointerType.Float, 7, 3);
 
             Shader = new Shader(Gl, "OpenGL/Shader/shader.vert", "OpenGL/Shader/shader.frag");
-
+            Dispatcher.UIThread.Post(OpenGlReady, DispatcherPriority.ApplicationIdle);
         }
        
 

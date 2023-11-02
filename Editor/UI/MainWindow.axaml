@@ -13,6 +13,6 @@
                 <Rectangle Fill="#eee" Height="100" DockPanel.Dock="Bottom"/>
                 <ui:TestPanel            Width="200"    DockPanel.Dock="Left"/>
                 <Rectangle Fill="#ddd" Width="200"   DockPanel.Dock="Right"/>
-                <openGl:SilkOpenGLControl/>
+                <openGl:SilkOpenGLControl Name="OpenGLControl"/>
         </DockPanel>
 </Window>
