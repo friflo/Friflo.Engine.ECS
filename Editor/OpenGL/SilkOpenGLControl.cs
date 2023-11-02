@@ -49,7 +49,7 @@ namespace Friflo.Fliox.Editor.OpenGL
             Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 7, 0);
             Vao.VertexAttributePointer(1, 4, VertexAttribPointerType.Float, 7, 3);
 
-            Shader = new Shader(Gl, "shader.vert", "shader.frag");
+            Shader = new Shader(Gl, "OpenGL/Shader/shader.vert", "OpenGL/Shader/shader.frag");
 
         }
        
