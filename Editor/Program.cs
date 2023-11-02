@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using Friflo.Fliox.Editor.OpenGL;
 using Friflo.Fliox.Editor.UI;
 
 namespace Friflo.Fliox.Editor;
@@ -9,6 +10,8 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        OpenGLTest.MainOpenGL(args);
+        
         var editor = new Editor();
         editor.Init(args).Wait();
         
