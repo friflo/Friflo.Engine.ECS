@@ -4,12 +4,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Friflo.Fliox.Editor.UI.MainWindow"
+        Background="Transparent"
         Title="Fliox Editor">
         <DockPanel >
                 <Rectangle Fill="#fcc" Height="100" DockPanel.Dock="Top"/>
                 <Rectangle Fill="#ccf"  Width="100" DockPanel.Dock="Left"/>
                 <Rectangle Fill="#cfc" Height="100" DockPanel.Dock="Bottom"/>
                 <Rectangle Fill="#ffc" Width="100" DockPanel.Dock="Right"/>
-                <Rectangle Fill="Gray" />
+                <Rectangle Fill="Transparent" />
         </DockPanel>
 </Window>
