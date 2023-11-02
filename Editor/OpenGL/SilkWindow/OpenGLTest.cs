@@ -90,7 +90,11 @@ namespace Friflo.Fliox.Editor.OpenGL.SilkWindow
         
         public class EventLoop
         {
-            internal bool stop;
+            private bool stop;
+            
+            public void Stop() {
+                stop = true;
+            }
             
             /// <summary>Copy of <see cref="Silk.NET.Windowing.WindowExtensions.Run"/> </summary>
             public void RunEventLoop(IView view)

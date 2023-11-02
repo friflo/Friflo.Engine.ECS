@@ -34,8 +34,8 @@ public static class Program
         AppBuilder builder = BuildAvaloniaApp();
         builder.StartWithClassicDesktopLifetime(args);
 
-        //loop.stop = true;
-        //graphicsClosed.WaitOne();
+        // loop.Stop();
+        // graphicsClosed.WaitOne();
 
         // editor.Run();
         editor.Shutdown();

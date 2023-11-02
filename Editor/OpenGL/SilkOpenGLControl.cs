@@ -77,7 +77,7 @@ namespace Friflo.Fliox.Editor.OpenGL
             Shader.SetUniform("uBlue", (float) Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
 
             Gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
-            Dispatcher.UIThread.Post(InvalidateVisual, DispatcherPriority.Background);
+            Dispatcher.UIThread.Post(RequestNextFrameRendering, DispatcherPriority.Background);
         }
     }
 }
