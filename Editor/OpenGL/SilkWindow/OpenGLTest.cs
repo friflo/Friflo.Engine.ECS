@@ -4,7 +4,7 @@ using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
 // ReSharper disable InconsistentNaming
-namespace Friflo.Fliox.Editor.OpenGLWindow
+namespace Friflo.Fliox.Editor.OpenGL.SilkWindow
 {
     internal static class OpenGLTest
     {
