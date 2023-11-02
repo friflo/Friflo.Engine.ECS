@@ -15,6 +15,7 @@
         "**/.obj": true,
 		"**/.bin": true,
 		"**/*.meta": true,
+        "**/*.csproj.xml": true,
         
         // root files / folders
         "package-lock.json": true,

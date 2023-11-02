@@ -45,4 +45,8 @@
       <PackageReference Include="Silk.NET.Windowing" Version="2.18.0" />
       <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="**/*.csproj.xml" />
+    </ItemGroup>
 </Project>
