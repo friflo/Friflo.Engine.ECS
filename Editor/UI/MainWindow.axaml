@@ -3,15 +3,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="clr-namespace:Friflo.Fliox.Editor.UI"
+        xmlns:tutorial="clr-namespace:Tutorial"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Friflo.Fliox.Editor.UI.MainWindow"
         Background="Transparent"
         Title="Fliox Editor">
         <DockPanel >
-                <Rectangle Fill="#fcc" Height="100" DockPanel.Dock="Top"/>
-                <ui:TestPanel Width="200" DockPanel.Dock="Left"/>
-                <Rectangle Fill="#cfc" Height="100" DockPanel.Dock="Bottom"/>
-                <Rectangle Fill="#ffc" Width="100" DockPanel.Dock="Right"/>
-                <Rectangle Fill="Transparent" />
+                <Rectangle Fill="#eee" Height="100" DockPanel.Dock="Top"/>
+                <Rectangle Fill="#eee" Height="100" DockPanel.Dock="Bottom"/>
+                <ui:TestPanel            Width="200"    DockPanel.Dock="Left"/>
+                <Rectangle Fill="#ddd" Width="200"   DockPanel.Dock="Right"/>
+                <tutorial:SilkNetExample/>
         </DockPanel>
 </Window>
