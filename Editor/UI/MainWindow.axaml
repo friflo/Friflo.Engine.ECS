@@ -9,7 +9,7 @@
         Background="Transparent"
         Title="Fliox Editor">
         <DockPanel >
-                <Rectangle Fill="#eee" Height="100" DockPanel.Dock="Top"/>
+                <Rectangle Fill="#eee" Height="30" DockPanel.Dock="Top"/>
                 <Rectangle Fill="#eee" Height="100" DockPanel.Dock="Bottom"/>
                 <ui:TestPanel            Width="200"    DockPanel.Dock="Left"/>
                 <Rectangle Fill="#ddd" Width="200"   DockPanel.Dock="Right"/>
