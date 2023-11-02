@@ -10,7 +10,9 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        OpenGLTest.MainOpenGL(args);
+        var window = OpenGLTest.Init(args);
+        OpenGLTest.RunEventLoop(window);
+        window.Dispose();
         
         var editor = new Editor();
         editor.Init(args).Wait();
