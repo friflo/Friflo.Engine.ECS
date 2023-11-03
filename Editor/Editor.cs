@@ -40,8 +40,9 @@ public class Editor
         store           = new GameEntityStore(PidType.UsePidAsId);
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
         isReady = true;
-        OnReady?.Invoke();
-        
+        EditorUtils.Post(() => {
+            OnReady?.Invoke();
+        });
         // --- add client and database
         var schema      = DatabaseSchema.Create<GameClient>();
         var database    = CreateDatabase(schema, "file-system");
