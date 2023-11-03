@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Hub.Client;
@@ -10,7 +9,14 @@ using Friflo.Json.Fliox.Hub.Host;
 using Friflo.Json.Fliox.Hub.Host.Event;
 using Friflo.Json.Fliox.Hub.Remote;
 
+// Note: Must not using imports Avalonia namespaces 
+
 namespace Friflo.Fliox.Editor;
+
+public interface IEditorControl
+{
+    Editor Editor { get; }
+}
 
 public class Editor
 {
@@ -63,7 +69,7 @@ public class Editor
     }
     
     private void ReceivedEvent () {
-        Dispatcher.UIThread.Post(ProcessEvents);
+        EditorUtils.Post(ProcessEvents);
     }
     
     private static HttpServer RunServer(FlioxHub hub)

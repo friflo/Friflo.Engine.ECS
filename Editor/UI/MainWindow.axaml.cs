@@ -4,33 +4,33 @@ using Avalonia.Controls;
 
 namespace Friflo.Fliox.Editor.UI;
 
-public partial class MainWindow : Window
+public partial class MainWindow : Window, IEditorControl
 {
-    private readonly Editor editor;
-    
+    public Editor Editor { get; }
+
     public MainWindow()
     {
-        editor = new Editor();
+        Editor = new Editor();
         InitializeComponent();
-        OpenGLControl.OpenGlReady = OpenGlReady;
+        OpenGlControl.OpenGlReady = OpenGlReady;
     }
 
     // ReSharper disable once RedundantOverriddenMember
-    /// <summary>Is the last call into user code before the event loop is enetered</summary>
+    /// <summary>Is the last call into user code before the event loop is entered</summary>
     public override void Show() {
         base.Show();
         // Console.WriteLine($"--- MainWindow.Show() - startup {Program.startTime.ElapsedMilliseconds} ms");
     }
 
     protected override void OnClosed(EventArgs e) {
-        editor?.Shutdown();
+        Editor?.Shutdown();
         base.OnClosed(e);
     }
 
     private void OpenGlReady()
     {
         Task.Run(async () => {
-            await editor.Init();
+            await Editor.Init();
             Console.WriteLine($"--- MainWindow.OpenGlReady() - Editor.Init() {Program.startTime.ElapsedMilliseconds} ms");
         });
         Console.WriteLine($"--- MainWindow.OpenGlReady() {Program.startTime.ElapsedMilliseconds} ms");
