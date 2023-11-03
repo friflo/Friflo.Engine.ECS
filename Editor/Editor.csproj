@@ -49,4 +49,23 @@
     <ItemGroup>
       <None Remove="**/*.csproj.xml" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="UI\Main\App.axaml.cs">
+        <DependentUpon>App.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Main\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Panels\ExplorerPanel.axaml.cs">
+        <DependentUpon>ExplorerPanel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Panels\TestPanel.axaml.cs">
+        <DependentUpon>TestPanel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

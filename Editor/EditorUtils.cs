@@ -21,6 +21,9 @@ public static class EditorExtensions
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
             return mainWindow.Editor;
         }
+        if (Avalonia.Controls.Design.IsDesignMode) {
+            return null;
+        }
         throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(MainWindow)} as visual root");
     } 
 }
