@@ -22,9 +22,7 @@ public static class EditorExtensions
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
             var editor = mainWindow.Editor;
-            if (onReady != null) {
-                editor.onReady += onReady;
-            }
+            editor.HandleOnReady(onReady);
             return editor;
         }
         if (EditorUtils.IsDesignMode) {
