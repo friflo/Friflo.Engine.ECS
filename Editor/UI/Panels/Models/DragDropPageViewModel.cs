@@ -1,21 +1,19 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Friflo.Fliox.Editor.UI.Models;
-using ReactiveUI;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Models
 {
     // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/DragDropPageViewModel.cs
-    internal class DragDropPageViewModel : ReactiveObject
+    internal class DragDropPageViewModel
     {
-        private ObservableCollection<DragDropItem> _data;
+        private readonly ObservableCollection<DragDropItem> data;
 
         internal DragDropPageViewModel()
         {
-            _data = DragDropItem.CreateRandomItems();
-            var source = new HierarchicalTreeDataGridSource<DragDropItem>(_data)
+            data = DragDropItem.CreateRandomItems();
+            var source = new HierarchicalTreeDataGridSource<DragDropItem>(data)
             {
                 Columns =
                 {
@@ -27,12 +25,12 @@ namespace Friflo.Fliox.Editor.UI.Models
                         x => x.Children),
                     new CheckBoxColumn<DragDropItem>(
                         "Allow Drag",
-                        x => x.AllowDrag,
-                        (o, x) => o.AllowDrag = x),
+                        x => x.allowDrag,
+                        (o, x) => o.allowDrag = x),
                     new CheckBoxColumn<DragDropItem>(
                         "Allow Drop",
-                        x => x.AllowDrop,
-                        (o, x) => o.AllowDrop = x),
+                        x => x.allowDrop,
+                        (o, x) => o.allowDrop = x),
                 }
             };
 
