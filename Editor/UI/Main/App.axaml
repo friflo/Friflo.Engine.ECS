@@ -8,4 +8,18 @@
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
     </Application.Styles>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key='Light'>
+                    <SolidColorBrush x:Key='PanelBackground1'>#ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBackground2'>#f4f4f4</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key='Dark'>
+                    <SolidColorBrush x:Key='PanelBackground1'>#303030</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBackground2'>#282828</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

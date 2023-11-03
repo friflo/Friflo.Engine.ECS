@@ -9,10 +9,10 @@
         Background="Transparent"
         Title="Fliox Editor">
     <DockPanel>
-        <Rectangle Height="30" DockPanel.Dock="Top" Fill="#eee" />
-        <Rectangle Height="100" DockPanel.Dock="Bottom" Fill="#eee" />
-        <ui:ExplorerPanel Width="300" DockPanel.Dock="Left" />
-        <ui:TestPanel Width="300" DockPanel.Dock="Right" />
+        <Rectangle Height="30"  DockPanel.Dock="Top"    Fill="{DynamicResource PanelBackground2}" />
+        <Rectangle Height="100" DockPanel.Dock="Bottom" Fill="{DynamicResource PanelBackground2}" />
+        <ui:ExplorerPanel   Width="300" DockPanel.Dock="Left" />
+        <ui:TestPanel       Width="300" DockPanel.Dock="Right" />
         <openGl:SilkOpenGLControl Name="OpenGlControl" />
     </DockPanel>
 </Window>
