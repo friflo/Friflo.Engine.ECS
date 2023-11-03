@@ -6,7 +6,7 @@
         xmlns:openGl="clr-namespace:Friflo.Fliox.Editor.OpenGL"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
         x:Class="Friflo.Fliox.Editor.UI.MainWindow"
-        Background="Transparent"
+        Background="DarkGray"
         Title="Fliox Editor">
     <DockPanel>
         <Rectangle Height="30"  DockPanel.Dock="Top"    Fill="{DynamicResource PanelBackground2}" />
