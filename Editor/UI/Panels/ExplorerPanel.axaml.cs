@@ -17,6 +17,8 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         Editor = this.GetEditor();
+        Editor.OnReady += () => {
+        };
     }
 
     public void OnButtonClick(object sender, RoutedEventArgs routedEventArgs)

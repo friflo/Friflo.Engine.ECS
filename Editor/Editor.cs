@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
@@ -21,7 +22,9 @@ public interface IEditorControl
 public class Editor
 {
 #region public properties
-    public              GameEntityStore     Store => store; 
+    public              GameEntityStore    Store    => store;
+    public              event Action       OnReady;
+
     #endregion
 
 #region private fields
@@ -33,6 +36,12 @@ public class Editor
 
     public async Task Init()
     {
+        store           = new GameEntityStore(PidType.UsePidAsId);
+        Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
+
+        OnReady?.Invoke();
+        
+        // --- add client and database
         var schema      = DatabaseSchema.Create<GameClient>();
         var database    = CreateDatabase(schema, "file-system");
         var hub         = new FlioxHub(database);
@@ -40,13 +49,14 @@ public class Editor
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
         var client      = new GameClient(hub);
-        store           = new GameEntityStore(PidType.UsePidAsId);
         var sync        = new GameDataSync(store, client);
         processor       = new EventProcessorQueue(ReceivedEvent);
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
         await AddSampleEntities(sync);
+        
+        // --- run server
         server = RunServer(hub);
     }
     
