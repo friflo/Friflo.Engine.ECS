@@ -14,9 +14,16 @@ namespace Friflo.Fliox.Editor;
 
 public class Editor
 {
+#region public properties
+    public              GameEntityStore     Store => store; 
+    #endregion
+
+#region private fields
+    private             GameEntityStore     store;
     private readonly    ManualResetEvent    signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue processor;
     private             HttpServer          server;
+    #endregion
 
     public async Task Init()
     {
@@ -27,7 +34,7 @@ public class Editor
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
         var client      = new GameClient(hub);
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        store           = new GameEntityStore(PidType.UsePidAsId);
         var sync        = new GameDataSync(store, client);
         processor       = new EventProcessorQueue(ReceivedEvent);
         client.SetEventProcessor(processor);
