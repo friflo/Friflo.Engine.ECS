@@ -8,6 +8,8 @@ namespace Friflo.Fliox.Editor;
 
 public static class EditorUtils
 {
+    public static bool IsDesignMode => Avalonia.Controls.Design.IsDesignMode;
+    
     public static void Post(Action action)
     {
         Dispatcher.UIThread.Post(action);
@@ -16,12 +18,16 @@ public static class EditorUtils
 
 public static class EditorExtensions
 {
-    public static Editor GetEditor(this Visual visual)
+    public static Editor GetEditor(this Visual visual, Action onReady = null)
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
-            return mainWindow.Editor;
+            var editor = mainWindow.Editor;
+            if (onReady != null) {
+                editor.onReady += onReady;
+            }
+            return editor;
         }
-        if (Avalonia.Controls.Design.IsDesignMode) {
+        if (EditorUtils.IsDesignMode) {
             return null;
         }
         throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(MainWindow)} as visual root");

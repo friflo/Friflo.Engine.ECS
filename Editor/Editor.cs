@@ -23,12 +23,12 @@ public class Editor
 {
 #region public properties
     public              GameEntityStore    Store    => store;
-    public              event Action       OnReady;
 
     #endregion
 
 #region private fields
     private             GameEntityStore     store;
+    internal            event Action        onReady;
     private readonly    ManualResetEvent    signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue processor;
     private             HttpServer          server;
@@ -39,7 +39,7 @@ public class Editor
         store           = new GameEntityStore(PidType.UsePidAsId);
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
 
-        OnReady?.Invoke();
+        onReady?.Invoke();
         
         // --- add client and database
         var schema      = DatabaseSchema.Create<GameClient>();

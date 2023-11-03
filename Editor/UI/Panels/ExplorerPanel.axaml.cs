@@ -16,9 +16,9 @@ public partial class ExplorerPanel : UserControl, IEditorControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor();
-        Editor.OnReady += () => {
-        };
+        Editor = this.GetEditor(() => {
+            if (Editor.Store == null) throw new InvalidOperationException("expect Store is present");
+        });
     }
 
     public void OnButtonClick(object sender, RoutedEventArgs routedEventArgs)
