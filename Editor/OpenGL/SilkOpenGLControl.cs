@@ -38,7 +38,7 @@ namespace Friflo.Fliox.Editor.OpenGL
         protected override void OnOpenGlInit(GlInterface gl)
         {
             base.OnOpenGlInit(gl);
-            Console.WriteLine($"--- SilkOpenGLControl.OnOpenGlInit() - startup {Program.startTime.ElapsedMilliseconds} ms");
+            // Console.WriteLine($"--- SilkOpenGLControl.OnOpenGlInit() - startup {Program.startTime.ElapsedMilliseconds} ms");
             Gl = GL.GetApi(gl.GetProcAddress);
             
 

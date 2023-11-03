@@ -1,4 +1,3 @@
-using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -17,7 +16,7 @@ public class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.Startup += (_, _) => {
-                Console.WriteLine($"--- ApplicationLifetime - startup {Program.startTime.ElapsedMilliseconds} ms");
+                // Console.WriteLine($"--- ApplicationLifetime - startup {Program.startTime.ElapsedMilliseconds} ms");
             };
             desktop.MainWindow = new MainWindow();
         }
