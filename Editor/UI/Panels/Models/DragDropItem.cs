@@ -14,13 +14,9 @@ namespace Friflo.Fliox.Editor.UI.Models
 
 
         public DragDropItem(string name) => Name = name;
-        public string Name { get; }
+        public string   Name { get; }
 
-        public bool allowDrag;
-
-        public bool allowDrop;
-
-
+        public bool     flag;
 
         public ObservableCollection<DragDropItem> Children => children ??= CreateRandomItems();
 

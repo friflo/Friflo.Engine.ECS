@@ -24,13 +24,9 @@ namespace Friflo.Fliox.Editor.UI.Models
                             GridLength.Star),
                         x => x.Children),
                     new CheckBoxColumn<DragDropItem>(
-                        "Allow Drag",
-                        x => x.allowDrag,
-                        (o, x) => o.allowDrag = x),
-                    new CheckBoxColumn<DragDropItem>(
-                        "Allow Drop",
-                        x => x.allowDrop,
-                        (o, x) => o.allowDrop = x),
+                        "Flag",
+                        x => x.flag,
+                        (o, x) => o.flag = x)
                 }
             };
 
