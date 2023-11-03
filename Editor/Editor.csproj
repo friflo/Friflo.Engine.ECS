@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Bogus" Version="34.0.2" />
       <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="0.49.0" />
     </ItemGroup>
 
@@ -36,6 +37,8 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.5" />
+        <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.1" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     </ItemGroup>
