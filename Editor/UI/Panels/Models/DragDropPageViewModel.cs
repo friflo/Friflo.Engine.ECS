@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 
@@ -8,12 +7,10 @@ namespace Friflo.Fliox.Editor.UI.Models
     // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/DragDropPageViewModel.cs
     internal class DragDropPageViewModel
     {
-        private readonly ObservableCollection<DragDropItem> data;
-
         internal DragDropPageViewModel()
         {
-            data = DragDropItem.CreateRandomItems();
-            var source = new HierarchicalTreeDataGridSource<DragDropItem>(data)
+            var data    = DragDropItem.CreateRandomItems();
+            var source  = new HierarchicalTreeDataGridSource<DragDropItem>(data)
             {
                 Columns =
                 {
