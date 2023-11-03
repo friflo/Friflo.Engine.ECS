@@ -28,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Bogus" Version="34.0.2" />
       <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="0.49.0" />
     </ItemGroup>
 

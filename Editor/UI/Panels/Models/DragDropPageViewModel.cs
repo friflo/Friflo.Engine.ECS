@@ -22,7 +22,7 @@ namespace Friflo.Fliox.Editor.UI.Models
                             "Name",
                             x => x.Name,
                             GridLength.Star),
-                        x => x.Children),
+                        x => x.children),
                     new CheckBoxColumn<DragDropItem>(
                         "Flag",
                         x => x.flag,
