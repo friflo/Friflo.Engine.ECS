@@ -18,9 +18,9 @@ public sealed partial class GameEntity :
     IList,
     IReadOnlyList<GameEntity>,
     INotifyCollectionChanged
- // INotifyPropertyChanged
+ // INotifyPropertyChanged                                              not required. Implemented by ObservableCollection{T}
 {
- // public  event       PropertyChangedEventHandler PropertyChanged; not required
+ // public  event       PropertyChangedEventHandler PropertyChanged;    not required. Implemented by ObservableCollection{T}
     
     // ReSharper disable once InconsistentNaming
     private             List<GameEntity>            collection => null; // todo remove
