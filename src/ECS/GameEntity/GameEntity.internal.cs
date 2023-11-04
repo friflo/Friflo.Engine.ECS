@@ -18,8 +18,8 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     private readonly    List<GameEntity>                    collection; // todo remove
     
 #region private methods
-    private void OnCollectionChanged(Op action, object item, int index) {
-        var args = new NotifyCollectionChangedEventArgs(action, item, index);
+    private void OnCollectionChanged(Op action, object entity, int index) {
+        var args = new NotifyCollectionChangedEventArgs(action, entity, index);
         collectionChanged?.Invoke(this, args);
     }
     
@@ -35,6 +35,24 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     private void ClearChildEntities() {
         throw new NotImplementedException();
         OnCollectionChanged(Op.Reset, null, -1);
+    }
+    
+    private void RemoveChildEntityAt(int index) {
+        var entity = collection[index];
+        collection.RemoveAt(index);
+        OnCollectionChanged(Op.Remove, entity, index);
+    }
+    
+    private void InsertChildEntityAt(int index, GameEntity entity) {
+        collection.Insert(index, entity);
+        OnCollectionChanged(Op.Add, entity, index);
+    }
+    
+    private void ReplaceChildEntityAt(int index, GameEntity entity) {
+        var oldItem         = collection[index];
+        collection[index]   = entity;
+        var args            = new Args(Op.Replace, entity, oldItem, index);
+        OnCollectionChanged(args);
     }
     
     private int GetChildIndex(GameEntity entity) {
@@ -72,17 +90,17 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     #endregion
 
 #region ICollection<>
-    void ICollection<GameEntity>.Add(GameEntity item) {
-        AddChild(item);
-        OnCollectionChanged(Op.Add, item, ChildCount - 1);
+    void ICollection<GameEntity>.Add(GameEntity entity) {
+        AddChild(entity);
+        OnCollectionChanged(Op.Add, entity, ChildCount - 1);
     }
 
     void ICollection<GameEntity>.Clear() {
         ClearChildEntities();
     }
 
-    bool ICollection<GameEntity>.Contains(GameEntity item) {
-        return GetChildIndex(item) != - 1;
+    bool ICollection<GameEntity>.Contains(GameEntity entity) {
+        return GetChildIndex(entity) != - 1;
     }
 
     void ICollection<GameEntity>.CopyTo(GameEntity[] array, int arrayIndex) {
@@ -90,7 +108,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
         throw new NotImplementedException();
     }
 
-    bool ICollection<GameEntity>.Remove(GameEntity item) {
+    bool ICollection<GameEntity>.Remove(GameEntity entity) {
         throw new NotImplementedException();
     }
 
@@ -100,29 +118,21 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     #endregion
 
 #region IList<>
-    int IList<GameEntity>.IndexOf(GameEntity item) {
-        return GetChildIndex(item);
+    int IList<GameEntity>.IndexOf(GameEntity entity) {
+        return GetChildIndex(entity);
     }
 
-    void IList<GameEntity>.Insert(int index, GameEntity item) {
-        collection.Insert(index, item);
-        OnCollectionChanged(Op.Add, item, index);
+    void IList<GameEntity>.Insert(int index, GameEntity entity) {
+        InsertChildEntityAt(index, entity);
     }
 
     void IList<GameEntity>.RemoveAt(int index) {
-        var item = collection[index];
-        collection.RemoveAt(index);
-        OnCollectionChanged(Op.Remove, item, index);
+        RemoveChildEntityAt(index);
     }
 
     GameEntity IList<GameEntity>.this[int index] {
         get => GetChildByIndex(index);
-        set {
-            var oldItem         = collection[index];
-            collection[index]   = value;
-            var args            = new Args(Op.Replace, value, oldItem, index);
-            OnCollectionChanged(args);
-        }
+        set => ReplaceChildEntityAt(index, value);
     }
 
     #endregion
@@ -139,9 +149,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
     
     void IList.RemoveAt(int index) {
-        var item = collection[index];
-        collection.RemoveAt(index);
-        OnCollectionChanged(Op.Remove, item, index);
+        RemoveChildEntityAt(index);
     }
     
     int IList.Add(object value) {
@@ -153,12 +161,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
 
     object IList.this[int index] {
         get => GetChildByIndex(index);
-        set {
-            var oldItem         = collection[index];
-            collection[index]   = (GameEntity)value;
-            var args = new Args(Op.Replace, value, oldItem, index);
-            OnCollectionChanged(args);
-        }
+        set => ReplaceChildEntityAt(index, (GameEntity)value);
     }
 
     bool IList.Contains(object value) {
@@ -169,14 +172,13 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
         return GetChildIndex((GameEntity)value);
     }
 
-    void IList.Insert(int index, object value) {
-        collection.Insert(index, (GameEntity)value);
-        OnCollectionChanged(Op.Add, value, index);
+    void IList.Insert(int index, object entity) {
+        InsertChildEntityAt(index, (GameEntity)entity);
     }
 
     void IList.Remove(object value) {
-        collection.Remove((GameEntity)value);
-        throw new NotImplementedException();
+        int index = GetChildIndex((GameEntity)value);
+        RemoveChildEntityAt(index);
     }
     
     bool    IList.IsFixedSize           => false;
