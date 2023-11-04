@@ -34,7 +34,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         col.Insert(1, null);
     }
     
-    private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index) {
+    private void OnCollectionChanged(Op action, object item, int index) {
         var args = new NotifyCollectionChangedEventArgs(action, item, index);
         CollectionChanged?.Invoke(this, args);
     }
@@ -103,7 +103,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         set {
             var oldItem         = collection[index];
             collection[index]   = (T)value;
-            var args = new Args(NotifyCollectionChangedAction.Replace, value, oldItem, index);
+            var args = new Args(Op.Replace, value, oldItem, index);
             OnCollectionChanged(args);
         }
     }
@@ -164,7 +164,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         set {
             var oldItem         = collection[index];
             collection[index]   = value;
-            var args            = new Args(NotifyCollectionChangedAction.Replace, value, oldItem, index);
+            var args            = new Args(Op.Replace, value, oldItem, index);
             OnCollectionChanged(args);
         }
     }
