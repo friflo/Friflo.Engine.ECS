@@ -11,6 +11,8 @@ using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+// Implements same interfaces as System.Collections.ObjectModel.ObservableCollection{T} to enable
+// using GameEntity's in UI controls typically using an ObservableCollection{T}.
 public sealed partial class GameEntity :
     IList<GameEntity>,
     IList,
