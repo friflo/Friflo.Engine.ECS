@@ -25,16 +25,23 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         collection = new Collection<T>();
     }
     
-    public IEnumerator<T> GetEnumerator() {
+    // --- public methods
+    public void Add(T item) {
+        collection.Add(item);
+        var index   = collection.Count - 1;
+        OnCollectionChanged(Op.Add, item, index);
+    }
+    
+    // --- private methods
+    IEnumerator<T> IEnumerable<T>.GetEnumerator() {
         return collection.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator() {
-        return GetEnumerator();
+        return collection.GetEnumerator();
     }
 
-    public void Add(T item) {
-        
+    void ICollection<T>.Add(T item) {
         collection.Add(item);
         var index   = collection.Count - 1;
         OnCollectionChanged(Op.Add, item, index);
@@ -45,16 +52,16 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         OnCollectionChanged(Op.Reset, null, -1);
     }
 
-    public bool Contains(T item) {
+    bool ICollection<T>.Contains(T item) {
         return collection.Contains(item);
     }
 
-    public void CopyTo(T[] array, int arrayIndex) {
+    void ICollection<T>.CopyTo(T[] array, int arrayIndex) {
         collection.CopyTo(array, arrayIndex);
         throw new NotImplementedException();
     }
 
-    public bool Remove(T item) {
+    bool ICollection<T>.Remove(T item) {
         throw new NotImplementedException();
         return collection.Remove(item);
     }
@@ -63,11 +70,11 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     bool ICollection<T>.IsReadOnly => false;
 
-    public int IndexOf(T item) {
+    int IList<T>.IndexOf(T item) {
         return collection.IndexOf(item);
     }
 
-    public void Insert(int index, T item) {
+    void IList<T>.Insert(int index, T item) {
         collection.Insert(index, item);
         OnCollectionChanged(Op.Add, item, index);
     }
@@ -82,7 +89,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         OnCollectionChanged(Op.Remove, item, index);
     }
 
-    public T this[int index] {
+    T IList<T>.this[int index] {
         get => collection[index];
         set {
             var oldItem         = collection[index];
@@ -91,6 +98,8 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
             OnCollectionChanged(args);
         }
     }
+    
+    T IReadOnlyList<T>.this[int index] => collection[index];
 
     int IReadOnlyCollection<T>.Count => collection.Count;
     
@@ -115,7 +124,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         OnCollectionChanged(Op.Remove, item, index);
     }
     
-    public int Add(object value) {
+    int IList.Add(object value) {
         collection.Add((T)value);
         var index   = collection.Count - 1;
         OnCollectionChanged(Op.Add, value, index);
@@ -132,31 +141,33 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         }
     }
     
-    public bool Contains(object value) {
+    bool IList.Contains(object value) {
         return collection.Contains((T)value);
     }
 
-    public int IndexOf(object value) {
+    int IList.IndexOf(object value) {
         return collection.IndexOf((T)value);
     }
 
-    public void Insert(int index, object value) {
+    void IList.Insert(int index, object value) {
         collection.Insert(index, (T)value);
         OnCollectionChanged(Op.Add, value, index);
     }
 
-    public void Remove(object value) {
+    void IList.Remove(object value) {
         collection.Remove((T)value);
         throw new NotImplementedException();
     }
     
-    public void CopyTo(Array array, int index) {
+    void ICollection.CopyTo(Array array, int index) {
         throw new NotImplementedException();
     }
     
-    public  bool    IsFixedSize         => false;
-            bool    IList.IsReadOnly    => false;    
-            int     ICollection.Count   => collection.Count;
-    public  bool    IsSynchronized      => false;
-    public  object  SyncRoot            => collection;
+    bool    IList.IsFixedSize           => false;
+    bool    IList.IsReadOnly            => false;    
+    int     ICollection.Count           => collection.Count;
+    bool    ICollection.IsSynchronized  => false;
+    object  ICollection.SyncRoot        => collection;
 }
+
+
