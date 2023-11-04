@@ -18,7 +18,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     public  event       NotifyCollectionChangedEventHandler CollectionChanged;
     public  event       PropertyChangedEventHandler         PropertyChanged;
     #endregion
-    private readonly    List<GameEntity>                    collection;
+    private readonly    List<GameEntity>                    collection; // todo remove
     
 #region private methods
     private void OnCollectionChanged(Op action, object item, int index) {
@@ -29,23 +29,27 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     private void OnCollectionChanged(Args args) {
         CollectionChanged?.Invoke(this, args);
     }
+    
+    private GameEntity GetChildByIndex(int index) {
+        var childIds = archetype.gameEntityStore.GetNodeById(id).childIds;
+        return archetype.gameEntityStore.GetNodeById(childIds[index]).entity;
+    }
     #endregion
     
 #region IEnumerable<>
     IEnumerator<GameEntity> IEnumerable<GameEntity>.GetEnumerator() {
-        return collection.GetEnumerator();
+        return ChildNodes.GetChildEntityEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator() {
-        return collection.GetEnumerator();
+        return ChildNodes.GetChildEntityEnumerator();
     }
     #endregion
 
 #region ICollection<>
     void ICollection<GameEntity>.Add(GameEntity item) {
-        collection.Add(item);
-        var index   = collection.Count - 1;
-        OnCollectionChanged(Op.Add, item, index);
+        AddChild(item);
+        OnCollectionChanged(Op.Add, item, ChildCount - 1);
     }
 
     void ICollection<GameEntity>.Clear() {
@@ -66,7 +70,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
         throw new NotImplementedException();
     }
 
-    int ICollection<GameEntity>.Count => collection.Count;
+    int ICollection<GameEntity>.Count => ChildCount;
 
     bool ICollection<GameEntity>.IsReadOnly => false;
     #endregion
@@ -88,7 +92,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
 
     GameEntity IList<GameEntity>.this[int index] {
-        get => collection[index];
+        get => GetChildByIndex(index);
         set {
             var oldItem         = collection[index];
             collection[index]   = value;
@@ -96,11 +100,12 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
             OnCollectionChanged(args);
         }
     }
+
     #endregion
     
 #region IReadOnlyCollection<>
-    GameEntity  IReadOnlyList<GameEntity>.this[int index]   => collection[index];
-    int         IReadOnlyCollection<GameEntity>.Count       => collection.Count;
+    GameEntity  IReadOnlyList<GameEntity>.this[int index]   => GetChildByIndex(index);
+    int         IReadOnlyCollection<GameEntity>.Count       => ChildCount;
     #endregion
     
     // --------------------------------------- crab interface :) ---------------------------------------
@@ -117,14 +122,14 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
     
     int IList.Add(object value) {
-        collection.Add((GameEntity)value);
-        var index   = collection.Count - 1;
+        AddChild((GameEntity)value);
+        var index   = ChildCount - 1;
         OnCollectionChanged(Op.Add, value, index);
         return index;
     }
 
     object IList.this[int index] {
-        get => collection[index];
+        get => GetChildByIndex(index);
         set {
             var oldItem         = collection[index];
             collection[index]   = (GameEntity)value;
@@ -132,7 +137,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
             OnCollectionChanged(args);
         }
     }
-    
+
     bool IList.Contains(object value) {
         return collection.Contains((GameEntity)value);
     }
@@ -156,9 +161,9 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     #endregion
     
 #region ICollection
-    int     ICollection.Count           => collection.Count;
+    int     ICollection.Count           => ChildCount;
     bool    ICollection.IsSynchronized  => false;
-    object  ICollection.SyncRoot        => collection;
+    object  ICollection.SyncRoot        => this;
     
     void ICollection.CopyTo(Array array, int index) {
         throw new NotImplementedException();
