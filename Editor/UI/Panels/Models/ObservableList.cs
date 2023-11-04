@@ -14,15 +14,15 @@ namespace Friflo.Fliox.Editor.UI.Models;
 /// <summary>Implement interfaces of <see cref="ObservableCollection{T}"/></summary>
 // ObservableCollection : Collection<T>,                            INotifyCollectionChanged, INotifyPropertyChanged
 // Collection<T>               : IList<T>, IList, IReadOnlyList<T>
-public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyCollectionChanged, INotifyPropertyChanged
+public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyCollectionChanged //, INotifyPropertyChanged
 {
     public  event       NotifyCollectionChangedEventHandler CollectionChanged;
-    public  event       PropertyChangedEventHandler         PropertyChanged;
-    private readonly    Collection<T>                       collection;
+//  public  event       PropertyChangedEventHandler         PropertyChanged;
+    private readonly    List<T>                             collection;
     
     // ReSharper disable once ConvertConstructorToMemberInitializers
     public ObservableList() {
-        collection = new Collection<T>();
+        collection = new List<T>();
     }
     
     // --- public methods

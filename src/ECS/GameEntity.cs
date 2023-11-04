@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Specialized;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
@@ -156,16 +157,18 @@ public sealed partial class GameEntity
     #endregion
     
 #region internal fields
-    [Browse(Never)] internal readonly   int                 id;                 //  4
+    [Browse(Never)] internal readonly   int                     id;                 //  4
     
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal            Archetype           archetype;          //  8 - null if detached. See property Archetype
+    [Browse(Never)] internal            Archetype               archetype;          //  8 - null if detached. See property Archetype
 
     /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal            int                 compIndex;          //  4
+    [Browse(Never)] internal            int                     compIndex;          //  4
     
-    [Browse(Never)] internal            int                 behaviorIndex;      //  4
+    [Browse(Never)] internal            int                     behaviorIndex;      //  4
+    
+    [Browse(Never)] private NotifyCollectionChangedEventHandler collectionChanged;  //  8
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864

@@ -5,29 +5,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
 using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<GameEntity>, INotifyCollectionChanged, INotifyPropertyChanged
+public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<GameEntity>, INotifyCollectionChanged //, INotifyPropertyChanged
 {
-#region event handler
-    public  event       NotifyCollectionChangedEventHandler CollectionChanged;
-    public  event       PropertyChangedEventHandler         PropertyChanged;
-    #endregion
+//  public  event       PropertyChangedEventHandler         PropertyChanged; not required
+
+    event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
+    {
+        add     => collectionChanged += value;
+        remove  => collectionChanged -= value;
+    }
+    
     private readonly    List<GameEntity>                    collection; // todo remove
     
 #region private methods
     private void OnCollectionChanged(Op action, object item, int index) {
         var args = new NotifyCollectionChangedEventArgs(action, item, index);
-        CollectionChanged?.Invoke(this, args);
+        collectionChanged?.Invoke(this, args);
     }
     
     private void OnCollectionChanged(Args args) {
-        CollectionChanged?.Invoke(this, args);
+        collectionChanged?.Invoke(this, args);
     }
     
     private GameEntity GetChildByIndex(int index) {
