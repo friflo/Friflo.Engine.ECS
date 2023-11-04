@@ -33,6 +33,16 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
     }
     
     // --- private methods
+    private void OnCollectionChanged(Op action, object item, int index) {
+        var args = new NotifyCollectionChangedEventArgs(action, item, index);
+        CollectionChanged?.Invoke(this, args);
+    }
+    
+    private void OnCollectionChanged(Args args) {
+        CollectionChanged?.Invoke(this, args);
+    }
+    
+    // --- private implementations
     IEnumerator<T> IEnumerable<T>.GetEnumerator() {
         return collection.GetEnumerator();
     }
@@ -102,16 +112,6 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
     T IReadOnlyList<T>.this[int index] => collection[index];
 
     int IReadOnlyCollection<T>.Count => collection.Count;
-    
-    // --- private methods
-    private void OnCollectionChanged(Op action, object item, int index) {
-        var args = new NotifyCollectionChangedEventArgs(action, item, index);
-        CollectionChanged?.Invoke(this, args);
-    }
-    
-    private void OnCollectionChanged(Args args) {
-        CollectionChanged?.Invoke(this, args);
-    }
     
     // --------------------------------------- IList crab :) ---------------------------------------
     void IList.Clear()  {

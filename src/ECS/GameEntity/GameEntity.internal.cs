@@ -14,20 +14,24 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<GameEntity>, INotifyCollectionChanged, INotifyPropertyChanged
 {
+#region event handler
     public  event       NotifyCollectionChangedEventHandler CollectionChanged;
     public  event       PropertyChangedEventHandler         PropertyChanged;
+    #endregion
     private readonly    List<GameEntity>                    collection;
     
-    // ReSharper disable once ConvertConstructorToMemberInitializers
-    
-    // --- public methods
-    public void Add(GameEntity item) {
-        collection.Add(item);
-        var index   = collection.Count - 1;
-        OnCollectionChanged(Op.Add, item, index);
+#region private methods
+    private void OnCollectionChanged(Op action, object item, int index) {
+        var args = new NotifyCollectionChangedEventArgs(action, item, index);
+        CollectionChanged?.Invoke(this, args);
     }
     
-    // --- private methods
+    private void OnCollectionChanged(Args args) {
+        CollectionChanged?.Invoke(this, args);
+    }
+    #endregion
+    
+#region IEnumerable<>
     IEnumerator<GameEntity> IEnumerable<GameEntity>.GetEnumerator() {
         return collection.GetEnumerator();
     }
@@ -35,7 +39,9 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     IEnumerator IEnumerable.GetEnumerator() {
         return collection.GetEnumerator();
     }
+    #endregion
 
+#region ICollection<>
     void ICollection<GameEntity>.Add(GameEntity item) {
         collection.Add(item);
         var index   = collection.Count - 1;
@@ -63,7 +69,9 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     int ICollection<GameEntity>.Count => collection.Count;
 
     bool ICollection<GameEntity>.IsReadOnly => false;
+    #endregion
 
+#region IList<>
     int IList<GameEntity>.IndexOf(GameEntity item) {
         return collection.IndexOf(item);
     }
@@ -88,26 +96,20 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
             OnCollectionChanged(args);
         }
     }
+    #endregion
     
-    GameEntity IReadOnlyList<GameEntity>.this[int index] => collection[index];
-
-    int IReadOnlyCollection<GameEntity>.Count => collection.Count;
+#region IReadOnlyCollection<>
+    GameEntity  IReadOnlyList<GameEntity>.this[int index]   => collection[index];
+    int         IReadOnlyCollection<GameEntity>.Count       => collection.Count;
+    #endregion
     
-    // --- private methods
-    private void OnCollectionChanged(Op action, object item, int index) {
-        var args = new NotifyCollectionChangedEventArgs(action, item, index);
-        CollectionChanged?.Invoke(this, args);
-    }
-    
-    private void OnCollectionChanged(Args args) {
-        CollectionChanged?.Invoke(this, args);
-    }
-    
-    // --------------------------------------- IList crab :) ---------------------------------------
+    // --------------------------------------- crab interface :) ---------------------------------------
+#region IList
     void IList.Clear()  {
         collection.Clear();
         OnCollectionChanged(Op.Reset, null, -1);
     }
+    
     void IList.RemoveAt(int index) {
         var item = collection[index];
         collection.RemoveAt(index);
@@ -149,13 +151,17 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
         throw new NotImplementedException();
     }
     
-    void ICollection.CopyTo(Array array, int index) {
-        throw new NotImplementedException();
-    }
-    
     bool    IList.IsFixedSize           => false;
-    bool    IList.IsReadOnly            => false;    
+    bool    IList.IsReadOnly            => false;
+    #endregion
+    
+#region ICollection
     int     ICollection.Count           => collection.Count;
     bool    ICollection.IsSynchronized  => false;
     object  ICollection.SyncRoot        => collection;
+    
+    void ICollection.CopyTo(Array array, int index) {
+        throw new NotImplementedException();
+    }
+    #endregion
 }
