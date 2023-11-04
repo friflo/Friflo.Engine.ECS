@@ -10,22 +10,13 @@ namespace Friflo.Fliox.Editor.UI.Models
         internal DragDropPageViewModel()
         {
             var data    = DragDropItem.CreateRandomItems();
-            var source  = new HierarchicalTreeDataGridSource<DragDropItem>(data)
-            {
-                Columns =
-                {
-                    new HierarchicalExpanderColumn<DragDropItem>(
-                        new TextColumn<DragDropItem, string>(
-                            "Name",
-                            x => x.Name,
-                            GridLength.Star),
-                        x => x.children),
-                    new CheckBoxColumn<DragDropItem>(
-                        "Flag",
-                        x => x.flag,
-                        (o, x) => o.flag = x)
-                }
-            };
+            var source  = new HierarchicalTreeDataGridSource<DragDropItem>(data);
+            
+            source.Columns.Add(new HierarchicalExpanderColumn<DragDropItem>(
+                new TextColumn<DragDropItem, string>("Name", x => x.Name, GridLength.Star), x => x.children));
+            
+            source.Columns.Add(new CheckBoxColumn<DragDropItem>(
+                "Flag", x => x.flag, (o, x) => o.flag = x));
 
             source.RowSelection!.SingleSelect = false;
             Source = source;

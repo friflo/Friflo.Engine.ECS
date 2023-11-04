@@ -14,6 +14,9 @@ namespace Friflo.Fliox.Editor.UI.Models
         public DragDropItem(string name) {
             Name        = name;
             children    = new ObservableCollection<DragDropItem>();
+            children.CollectionChanged += (sender, args) => {
+                _ = 1;  
+            };
         }
 
         public static ObservableCollection<DragDropItem> CreateRandomItems()
@@ -21,7 +24,11 @@ namespace Friflo.Fliox.Editor.UI.Models
             var root = new DragDropItem ("root");
             root.children.Add(new DragDropItem("child 1"));
             root.children.Add(new DragDropItem("child 2"));
-            return new ObservableCollection<DragDropItem> { root };
+            var result = new ObservableCollection<DragDropItem> { root };
+            result.CollectionChanged += (sender, args) => {
+                _ = 2;
+            };
+            return result;
         }
     }
 }
