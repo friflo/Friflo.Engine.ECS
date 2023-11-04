@@ -34,8 +34,28 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
         var childIds = archetype.gameEntityStore.GetNodeById(id).childIds;
         return archetype.gameEntityStore.GetNodeById(childIds[index]).entity;
     }
+    
+    private void ClearChildEntities() {
+        throw new NotImplementedException();
+        OnCollectionChanged(Op.Reset, null, -1);
+    }
+    
+    private int GetChildIndex(GameEntity entity) {
+        var store       = archetype.gameEntityStore;
+        var childIds    = store.GetNodeById(id).childIds;
+        var count       = ChildCount;
+        var searchId    = entity.id;
+        for (int n = 0; n < count; n++) {
+            if (searchId != childIds[n]) {
+                continue;
+            }
+            return n;
+        }
+        return -1;
+    }
     #endregion
     
+// ----------------------------------- interface implementations -----------------------------------
 #region IEnumerable<>
     IEnumerator<GameEntity> IEnumerable<GameEntity>.GetEnumerator() {
         return ChildNodes.GetChildEntityEnumerator();
@@ -53,12 +73,11 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
 
     void ICollection<GameEntity>.Clear() {
-        collection.Clear();
-        OnCollectionChanged(Op.Reset, null, -1);
+        ClearChildEntities();
     }
 
     bool ICollection<GameEntity>.Contains(GameEntity item) {
-        return collection.Contains(item);
+        return GetChildIndex(item) != - 1;
     }
 
     void ICollection<GameEntity>.CopyTo(GameEntity[] array, int arrayIndex) {
@@ -77,7 +96,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
 
 #region IList<>
     int IList<GameEntity>.IndexOf(GameEntity item) {
-        return collection.IndexOf(item);
+        return GetChildIndex(item);
     }
 
     void IList<GameEntity>.Insert(int index, GameEntity item) {
@@ -111,8 +130,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     // --------------------------------------- crab interface :) ---------------------------------------
 #region IList
     void IList.Clear()  {
-        collection.Clear();
-        OnCollectionChanged(Op.Reset, null, -1);
+        ClearChildEntities();
     }
     
     void IList.RemoveAt(int index) {
@@ -139,11 +157,11 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
 
     bool IList.Contains(object value) {
-        return collection.Contains((GameEntity)value);
+        return GetChildIndex((GameEntity)value) != -1;
     }
 
     int IList.IndexOf(object value) {
-        return collection.IndexOf((GameEntity)value);
+        return GetChildIndex((GameEntity)value);
     }
 
     void IList.Insert(int index, object value) {
