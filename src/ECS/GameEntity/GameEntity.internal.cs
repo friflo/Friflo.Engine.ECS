@@ -27,12 +27,11 @@ public sealed partial class GameEntity :
     
 #region private methods
     private void OnCollectionChanged(Op action, object entity, int index) {
+        if (collectionChanged == null) {
+            return;
+        }
         var args = new NotifyCollectionChangedEventArgs(action, entity, index);
-        collectionChanged?.Invoke(this, args);
-    }
-    
-    private void OnCollectionChanged(Args args) {
-        collectionChanged?.Invoke(this, args);
+        collectionChanged.Invoke(this, args);
     }
     
     private GameEntity GetChildByIndex(int index) {
@@ -57,10 +56,14 @@ public sealed partial class GameEntity :
     }
     
     private void ReplaceChildEntityAt(int index, GameEntity entity) {
+        if (collectionChanged == null) {
+            collection[index] = entity;
+            return;
+        }
         var oldItem         = collection[index];
         collection[index]   = entity;
         var args            = new Args(Op.Replace, entity, oldItem, index);
-        OnCollectionChanged(args);
+        collectionChanged.Invoke(this, args);
     }
     
     private int GetChildIndex(GameEntity entity)
