@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
+using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Models;
@@ -37,18 +39,26 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
     }
 
     public void Add(T item) {
+        
         collection.Add(item);
+        var index   = collection.Count - 1;
+        var args    = new Args(Op.Add, index);
+        CollectionChanged?.Invoke(this, args);
     }
 
     public int Add(object value) {
         collection.Add((T)value);
-        return collection.Count - 1;
+        var index   = collection.Count - 1;
+        var args    = new Args(Op.Add, index);
+        CollectionChanged?.Invoke(this, args);
+        return index;
     }
 
     void IList.Clear()  {
         collection.Clear();
+        var args = new Args(Op.Reset);
+        CollectionChanged?.Invoke(this, args);
     }
-    
 
     public bool Contains(object value) {
         return collection.Contains((T)value);
@@ -60,14 +70,19 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     public void Insert(int index, object value) {
         collection.Insert(index, (T)value);
+        var args    = new Args(Op.Add, index);
+        CollectionChanged?.Invoke(this, args);
     }
 
     public void Remove(object value) {
         collection.Remove((T)value);
+        throw new NotImplementedException();
     }
 
     void IList.RemoveAt(int index) {
         collection.RemoveAt(index);
+        var args    = new Args(Op.Remove, index);
+        CollectionChanged?.Invoke(this, args);
     }
 
     public bool IsFixedSize => false;
@@ -81,6 +96,8 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     void ICollection<T>.Clear() {
         collection.Clear();
+        var args = new Args(Op.Reset);
+        CollectionChanged?.Invoke(this, args);
     }
 
     public bool Contains(T item) {
@@ -89,9 +106,11 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     public void CopyTo(T[] array, int arrayIndex) {
         collection.CopyTo(array, arrayIndex);
+        throw new NotImplementedException();
     }
 
     public bool Remove(T item) {
+        throw new NotImplementedException();
         return collection.Remove(item);
     }
 
@@ -114,10 +133,14 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     public void Insert(int index, T item) {
         collection.Insert(index, item);
+        var args    = new Args(Op.Add, index);
+        CollectionChanged?.Invoke(this, args);
     }
 
     void IList<T>.RemoveAt(int index) {
         collection.RemoveAt(index);
+        var args    = new Args(Op.Remove, index);
+        CollectionChanged?.Invoke(this, args);
     }
 
     public T this[int index] {
