@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
-using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Models;
@@ -29,6 +28,15 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
             _ = 2;  
         };
     }
+    static void Test() {
+        var col = new ObservableCollection<object>();
+        col.Insert(1, null);
+    }
+    
+    private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index) {
+        var args = new NotifyCollectionChangedEventArgs(action, item, index);
+        CollectionChanged?.Invoke(this, args);
+    }
 
     public IEnumerator<T> GetEnumerator() {
         return collection.GetEnumerator();
@@ -42,22 +50,19 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         
         collection.Add(item);
         var index   = collection.Count - 1;
-        var args    = new Args(Op.Add, index);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Add, item, index);
     }
 
     public int Add(object value) {
         collection.Add((T)value);
         var index   = collection.Count - 1;
-        var args    = new Args(Op.Add, index);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Add, value, index);
         return index;
     }
 
     void IList.Clear()  {
         collection.Clear();
-        var args = new Args(Op.Reset);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Reset, null, 0);
     }
 
     public bool Contains(object value) {
@@ -70,8 +75,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     public void Insert(int index, object value) {
         collection.Insert(index, (T)value);
-        var args    = new Args(Op.Add, index);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Add, value, index);
     }
 
     public void Remove(object value) {
@@ -80,9 +84,9 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
     }
 
     void IList.RemoveAt(int index) {
+        var item = collection[index];
         collection.RemoveAt(index);
-        var args    = new Args(Op.Remove, index);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Remove, item, index);
     }
 
     public bool IsFixedSize => false;
@@ -96,8 +100,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     void ICollection<T>.Clear() {
         collection.Clear();
-        var args = new Args(Op.Reset);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Reset, null, 0);
     }
 
     public bool Contains(T item) {
@@ -133,14 +136,17 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     public void Insert(int index, T item) {
         collection.Insert(index, item);
-        var args    = new Args(Op.Add, index);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Add, item, index);
     }
 
+    /// <summary>
+    /// <see cref="ObservableCollection{T}.RemoveAt"/>
+    /// </summary>
+    /// <param name="index"></param>
     void IList<T>.RemoveAt(int index) {
+        var item = collection[index];
         collection.RemoveAt(index);
-        var args    = new Args(Op.Remove, index);
-        CollectionChanged?.Invoke(this, args);
+        OnCollectionChanged(Op.Remove, item, index);
     }
 
     public T this[int index] {
