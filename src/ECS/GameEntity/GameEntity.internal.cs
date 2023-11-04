@@ -63,9 +63,9 @@ public sealed partial class GameEntity :
         OnCollectionChanged(args);
     }
     
-    private int GetChildIndex(GameEntity entity) {
-        var store       = archetype.gameEntityStore;
-        var childIds    = store.GetNodeById(id).childIds;
+    private int GetChildIndex(GameEntity entity)
+    {
+        var childIds    = archetype.gameEntityStore.GetNodeById(id).childIds;
         var count       = ChildCount;
         var searchId    = entity.id;
         for (int n = 0; n < count; n++) {
