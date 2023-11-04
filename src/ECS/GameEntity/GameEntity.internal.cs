@@ -14,12 +14,6 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<GameEntity>, INotifyCollectionChanged //, INotifyPropertyChanged
 {
 //  public  event       PropertyChangedEventHandler         PropertyChanged; not required
-
-    event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
-    {
-        add     => collectionChanged += value;
-        remove  => collectionChanged -= value;
-    }
     
     private readonly    List<GameEntity>                    collection; // todo remove
     
@@ -59,6 +53,14 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     #endregion
     
 // ----------------------------------- interface implementations -----------------------------------
+#region INotifyCollectionChanged
+    event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
+    {
+        add     => collectionChanged += value;
+        remove  => collectionChanged -= value;
+    }
+    #endregion
+    
 #region IEnumerable<>
     IEnumerator<GameEntity> IEnumerable<GameEntity>.GetEnumerator() {
         return ChildNodes.GetChildEntityEnumerator();
@@ -186,7 +188,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     bool    ICollection.IsSynchronized  => false;
     object  ICollection.SyncRoot        => this;
     
-    void ICollection.CopyTo(Array array, int index) {
+    void    ICollection.CopyTo(Array array, int index) {
         throw new NotImplementedException();
     }
     #endregion
