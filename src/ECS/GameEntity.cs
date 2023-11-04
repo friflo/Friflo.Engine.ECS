@@ -168,7 +168,7 @@ public sealed partial class GameEntity
     
     [Browse(Never)] internal            int                     behaviorIndex;      //  4
     
-    [Browse(Never)] private NotifyCollectionChangedEventHandler collectionChanged;  //  8
+    [Browse(Never)] private NotifyCollectionChangedEventHandler collectionChanged;  //  8  not nice having this for every GameEntity - check alternative
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
