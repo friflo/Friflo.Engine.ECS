@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
+using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Models;
@@ -37,6 +38,10 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
         var args = new NotifyCollectionChangedEventArgs(action, item, index);
         CollectionChanged?.Invoke(this, args);
     }
+    
+    private void OnCollectionChanged(Args args) {
+        CollectionChanged?.Invoke(this, args);
+    }
 
     public IEnumerator<T> GetEnumerator() {
         return collection.GetEnumerator();
@@ -62,7 +67,7 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     void IList.Clear()  {
         collection.Clear();
-        OnCollectionChanged(Op.Reset, null, 0);
+        OnCollectionChanged(Op.Reset, null, -1);
     }
 
     public bool Contains(object value) {
@@ -95,12 +100,17 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     object IList.this[int index] {
         get => collection[index];
-        set => collection[index] = (T)value;
+        set {
+            var oldItem         = collection[index];
+            collection[index]   = (T)value;
+            var args = new Args(NotifyCollectionChangedAction.Replace, value, oldItem, index);
+            OnCollectionChanged(args);
+        }
     }
 
     void ICollection<T>.Clear() {
         collection.Clear();
-        OnCollectionChanged(Op.Reset, null, 0);
+        OnCollectionChanged(Op.Reset, null, -1);
     }
 
     public bool Contains(T item) {
@@ -151,7 +161,12 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     public T this[int index] {
         get => collection[index];
-        set => collection[index] = value;
+        set {
+            var oldItem         = collection[index];
+            collection[index]   = value;
+            var args            = new Args(NotifyCollectionChangedAction.Replace, value, oldItem, index);
+            OnCollectionChanged(args);
+        }
     }
 
     int IReadOnlyCollection<T>.Count => collection.Count;
