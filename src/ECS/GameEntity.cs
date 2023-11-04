@@ -88,7 +88,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
-public sealed class GameEntity
+public sealed partial class GameEntity
 {
 #region public properties
     /// <summary>Unique entity id.<br/>
