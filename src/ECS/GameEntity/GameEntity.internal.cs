@@ -52,7 +52,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
     #endregion
     
-// ----------------------------------- interface implementations -----------------------------------
+// -------------------------------------- interface implementations --------------------------------------
 #region INotifyCollectionChanged
     event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
     {
@@ -132,7 +132,7 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     int         IReadOnlyCollection<GameEntity>.Count       => ChildCount;
     #endregion
     
-    // --------------------------------------- crab interface :) ---------------------------------------
+// ---------------------------------- crab interface implementations :) ----------------------------------
 #region IList
     void IList.Clear()  {
         ClearChildEntities();
