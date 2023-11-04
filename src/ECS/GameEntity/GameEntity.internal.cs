@@ -11,11 +11,17 @@ using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<GameEntity>, INotifyCollectionChanged //, INotifyPropertyChanged
+public sealed partial class GameEntity :
+    IList<GameEntity>,
+    IList,
+    IReadOnlyList<GameEntity>,
+    INotifyCollectionChanged
+ // INotifyPropertyChanged
 {
-//  public  event       PropertyChangedEventHandler         PropertyChanged; not required
+ // public  event       PropertyChangedEventHandler PropertyChanged; not required
     
-    private readonly    List<GameEntity>                    collection; // todo remove
+    // ReSharper disable once InconsistentNaming
+    private             List<GameEntity>            collection => null; // todo remove
     
 #region private methods
     private void OnCollectionChanged(Op action, object entity, int index) {
@@ -104,12 +110,17 @@ public sealed partial class GameEntity: IList<GameEntity>, IList, IReadOnlyList<
     }
 
     void ICollection<GameEntity>.CopyTo(GameEntity[] array, int arrayIndex) {
-        collection.CopyTo(array, arrayIndex);
+        // collection.CopyTo(array, arrayIndex);
         throw new NotImplementedException();
     }
 
     bool ICollection<GameEntity>.Remove(GameEntity entity) {
-        throw new NotImplementedException();
+        int index = GetChildIndex(entity);
+        if (index == -1) {
+            return false;
+        }
+        RemoveChildEntityAt(index);
+        return true;
     }
 
     int ICollection<GameEntity>.Count => ChildCount;
