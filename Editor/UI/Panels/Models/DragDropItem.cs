@@ -25,6 +25,8 @@ namespace Friflo.Fliox.Editor.UI.Models
             var root = new DragDropItem ("root");
             root.children.Add(new DragDropItem("child 1"));
             root.children.Add(new DragDropItem("child 2"));
+            root.children.Add(new DragDropItem("child 3"));
+            root.children.Add(new DragDropItem("child 4"));
             var result = CreateObservable();
             result.Add(root);
             result.CollectionChanged += (sender, args) => {
