@@ -145,14 +145,14 @@ public partial class GameEntityStore
         var childIds    = parent.childIds;
         int curIndex    = GetChildIndex(childIds, parent.childCount, childNode.id);
         if (newIndex < curIndex) {
-            // case: move forward   [--, --, --, id]
-            //                      [id, --, --, --]
+            // case: move forward   curIndex: [--, --, --, id]
+            //                      newIndex: [id, --, --, --]
             for (int n = curIndex; n > newIndex; n--) {
                 childIds[n] = childIds[n - 1];
             }
         } else {
-            // case: move backward  [id, --, --, --]
-            //                      [--, --, --, --]
+            // case: move backward  curIndex: [id, --, --, --]
+            //                      newIndex: [--, --, --, id]
             for (int n = newIndex; n < curIndex; n--) {
                 childIds[n] = childIds[n + 1];
             }
