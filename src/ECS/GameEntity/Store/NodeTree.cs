@@ -124,9 +124,9 @@ public partial class GameEntityStore
     
     private void RemoveChildNode (int entity, int childEntity)
     {
-        ref var node    = ref nodes[entity];
-        var childNodes  = node.childIds;
-        int len         = node.childCount;
+        ref var parent  = ref nodes[entity];
+        var childNodes  = parent.childIds;
+        int len         = parent.childCount;
         for (int n = 0; n < len; n++) {
             if (childEntity != childNodes[n]) {
                 continue;
@@ -136,13 +136,12 @@ public partial class GameEntityStore
             }
             break;
         }
-        node.childCount--;
+        parent.childCount--;
     }
     
     private void MoveChildNode(ref EntityNode childNode, int newIndex)
     {
-        var localNodes  = nodes;
-        ref var parent  = ref localNodes[childNode.parentId];
+        ref var parent  = ref nodes[childNode.parentId];
         var childIds    = parent.childIds;
         int curIndex    = GetChildIndex(childIds, parent.childCount, childNode.id);
         if (newIndex < curIndex) {
