@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Editor.UI.Models
     {
         internal DragDropPageViewModel()
         {
-            var data    = DragDropItem.CreateRandomItems();
+            var data    = DragDropItem.Root;
             var source  = new HierarchicalTreeDataGridSource<DragDropItem>(data);
             
             source.Columns.Add(new HierarchicalExpanderColumn<DragDropItem>(

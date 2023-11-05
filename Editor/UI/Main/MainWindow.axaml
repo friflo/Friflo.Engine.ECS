@@ -14,7 +14,7 @@
         <Rectangle        Height="6"    DockPanel.Dock="Bottom" Fill="{DynamicResource PanelBackground2}"/>
         <ui:ExplorerPanel Width="300"   DockPanel.Dock="Left" />
         <Rectangle        Width="6"     DockPanel.Dock="Left"   Fill="{DynamicResource PanelBackground2}"/>
-        <ui:TestPanel     Width="300"   DockPanel.Dock="Right" />
+        <ui:ExplorerPanel Width="300"   DockPanel.Dock="Right" />
         <Rectangle        Width="6"     DockPanel.Dock="Right"  Fill="{DynamicResource PanelBackground2}"/>
         <openGl:SilkOpenGLControl Name="OpenGlControl" />
     </DockPanel>
