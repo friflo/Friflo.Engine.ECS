@@ -64,17 +64,51 @@ public partial class GameEntityStore
         childNode.parentId = id;
         
         // --- add entity with given id as child to this entity
-        ref var node    = ref localNodes[id];
-        int index       = node.childCount;
-        if (node.childIds == null) {
-            node.childIds = new int[4];
-        } else if (index == node.childIds.Length) {
-            var newLen = Math.Max(4, 2 * node.childIds.Length);
-            Utils.Resize(ref node.childIds, newLen); 
+        ref var parent  = ref localNodes[id];
+        int index       = parent.childCount;
+        if (parent.childIds == null) {
+            parent.childIds = new int[4];
+        } else if (index == parent.childIds.Length) {
+            var newLen = Math.Max(4, 2 * parent.childIds.Length);
+            Utils.Resize(ref parent.childIds, newLen); 
         }
-        node.childIds[index] = childId;
-        node.childCount++;
-        SetTreeFlags(localNodes, childId, node.flags & TreeNode);
+        parent.childIds[index] = childId;
+        parent.childCount++;
+        SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
+    }
+    
+    internal void InsertChild (int id, int index, int childId)
+    {
+        var localNodes = nodes;
+        // update child node parent
+        ref var childNode = ref localNodes[childId];
+        if (HasParent(childNode.parentId)) {
+            if (childNode.parentId != id) {
+                // --- remove child from current parent if child of a different parent
+                RemoveChildNode(childNode.parentId, childId);
+            }
+            // case: entity with given id is already a child of this entity => move child
+            MoveChildNode(ref childNode, index);
+            return;
+        }
+        // --- insert entity with given id as child to its parent
+        ref var parent = ref localNodes[id];
+        if (index > parent.childCount) {
+            throw new IndexOutOfRangeException();
+        }
+        if (parent.childIds == null) {
+            parent.childIds = new int[4];
+        } else if (index == parent.childIds.Length) {
+            var newLen = Math.Max(4, 2 * parent.childIds.Length);
+            Utils.Resize(ref parent.childIds, newLen); 
+        }
+        var childIds = parent.childIds;
+        for (int n = parent.childCount; n > index; n++) {
+            childIds[n] = childIds[n - 1];    
+        }
+        childIds[index] = childId;
+        parent.childCount++;
+        SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
     }
     
     internal void RemoveChild (int id, int childId)
@@ -103,6 +137,39 @@ public partial class GameEntityStore
             break;
         }
         node.childCount--;
+    }
+    
+    private void MoveChildNode(ref EntityNode childNode, int newIndex)
+    {
+        var localNodes  = nodes;
+        ref var parent  = ref localNodes[childNode.parentId];
+        var childIds    = parent.childIds;
+        int curIndex    = GetChildIndex(childIds, parent.childCount, childNode.id);
+        if (newIndex < curIndex) {
+            // case: move forward   [--, --, --, id]
+            //                      [id, --, --, --]
+            for (int n = curIndex; n > newIndex; n--) {
+                childIds[n] = childIds[n - 1];
+            }
+        } else {
+            // case: move backward  [id, --, --, --]
+            //                      [--, --, --, --]
+            for (int n = newIndex; n < curIndex; n--) {
+                childIds[n] = childIds[n + 1];
+            }
+        }
+        childIds[newIndex] = childNode.id;
+    }
+    
+    private static int GetChildIndex(int[] childIds, int childCount, int id)
+    {
+        for (int n = 0; n < childCount; n++) {
+            if (childIds[n] != id) {
+                continue;
+            }
+            return n;
+        }
+        throw new InvalidOperationException("id not found in childIds");
     }
     
     private void SetChildNodes(int id, int[] childIds, int childCount)

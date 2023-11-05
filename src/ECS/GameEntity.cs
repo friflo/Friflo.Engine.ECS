@@ -276,6 +276,16 @@ public sealed partial class GameEntity
     }
     
     /// <remarks>
+    /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
+    /// The subtree structure of the added entity remains unchanged<br/>
+    /// </remarks>
+    public void InsertChild(int index, GameEntity entity) {
+        var store = archetype.gameEntityStore;
+        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
+        store.InsertChild(id, index, entity.id);
+    }
+    
+    /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
