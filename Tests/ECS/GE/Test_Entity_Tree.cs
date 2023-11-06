@@ -52,9 +52,6 @@ public static class Test_Entity_Tree
         var child = store.CreateEntity(4);
         AreEqual(4,         child.Id);
         child.AddComponent(new EntityName("child"));
-        store.SetChildNodesChangedHandler((object _, in ChildNodesChangedArgs args) => {
-            AreEqual("entity: 10 - Add ChildNodes[0] = 11", args.ToString());
-        });
         SetHandler(store, args => AreEqual("entity: 1 - Add ChildNodes[0] = 4", args.ToString()));
         root.AddChild(child);
         
@@ -73,7 +70,7 @@ public static class Test_Entity_Tree
         AreEqual(1,         count);
         
         // -- add same child again
-        root.AddChild(child);
+        root.AddChild(child);       // event handler is not called
         AreEqual(1,                                 childNodes.Ids.Length);
         var rootNode = store.Nodes[1];
         AreEqual(1,                                 rootNode.ChildCount);
@@ -89,6 +86,85 @@ public static class Test_Entity_Tree
 #pragma warning disable CS0618 // Type or member is obsolete
         AreEqual(1,                                 childNodes.Entities_.Length);
 #pragma warning restore CS0618 // Type or member is obsolete
+    }
+    
+    [Test]
+    public static void Test_InsertChild() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        root.AddComponent(new EntityName("root"));
+       
+        IsNull  (root.Parent);
+        AreEqual(0,         root.ChildNodes.Ids.Length);
+        AreEqual(0,         root.ChildCount);
+        AreEqual(attached,  root.StoreOwnership);
+        foreach (ref var _ in root.ChildNodes) {
+            Fail("expect empty child nodes");
+        }
+        var child4 = store.CreateEntity(4);
+        {
+            // -- insert new child (id: 4)
+            AreEqual(4,         child4.Id);
+            SetHandler(store, args => AreEqual("entity: 1 - Add ChildNodes[0] = 4", args.ToString()));
+            root.InsertChild(0, child4);
+            
+            AreSame (root,      child4.Parent);
+            AreEqual(attached,  child4.StoreOwnership);
+            var childNodes =    root.ChildNodes;
+            AreEqual(1,         childNodes.Ids.Length);
+            AreEqual(4,         childNodes.Ids[0]);
+            AreEqual(1,         root.ChildCount);
+            AreSame (child4,    childNodes[0]);
+            int count = 0;
+            foreach (ref var node in childNodes) {
+                count++;
+                AreSame(child4, node.Entity);
+            }
+            AreEqual(1,         count);
+            
+            // --- insert same child (id: 4) at same index again
+            root.InsertChild(0, child4);     // event handler is not called
+            AreEqual(1,                                 childNodes.Ids.Length);
+            var rootNode = store.Nodes[1];
+            AreEqual(1,                                 rootNode.ChildCount);
+            AreEqual(1,                                 rootNode.ChildIds.Length);
+            AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
+            AreSame (child4,                             childNodes[0]);
+        }
+        var child5 = store.CreateEntity(5);
+        {
+            // --- insert new child (id: 5) at index 0
+            AreEqual(5,         child5.Id);
+            SetHandler(store, args => AreEqual("entity: 1 - Add ChildNodes[0] = 5", args.ToString()));
+            root.InsertChild(0, child5);
+            
+            AreSame (root,      child5.Parent);
+            AreEqual(attached,  child5.StoreOwnership);
+            var childNodes =    root.ChildNodes;
+            AreEqual(2,         childNodes.Ids.Length);
+            AreEqual(5,         childNodes.Ids[0]);
+            AreEqual(4,         childNodes.Ids[1]);
+            AreEqual(2,         root.ChildCount);
+            AreSame (child5,    childNodes[0]);
+            AreSame (child4,    childNodes[1]);
+            var count = 0;
+            foreach (ref var node in childNodes) {
+                switch(count++) {
+                    case 0:     AreSame(child5, node.Entity);   break;
+                    case 1:     AreSame(child4, node.Entity);   break;
+                    default:    Fail("unexpected");             return;
+                }
+            }
+            AreEqual(2,         count);
+        }
+        // --- copy child GameEntity's to array
+        {
+            var childNodes =    root.ChildNodes;
+            var array = new GameEntity[childNodes.Length];
+            childNodes.ToArray(array);
+            AreSame(child5, array[0]);
+            AreSame(child4, array[1]);
+        }
     }
     
     /// <summary>code coverage for <see cref="GameEntityStore.SetTreeFlags"/></summary>
@@ -148,7 +224,7 @@ public static class Test_Entity_Tree
         IsNull  (child.Parent);
         
         // --- remove same child again
-        root.RemoveChild(child);    // event handler not called
+        root.RemoveChild(child);        // event handler is not called
         
         AreEqual(0,         root.ChildCount);
         IsNull  (child.Parent);

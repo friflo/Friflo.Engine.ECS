@@ -313,17 +313,7 @@ public sealed class GameEntity
         return ref store.GetNodeById(childIds[index]);
     }
     
-    public int GetChildIndex(int childId)
-    {
-        var childIds    = archetype.gameEntityStore.GetNodeById(id).childIds;
-        var count       = ChildCount;
-        for (int n = 0; n < count; n++) {
-            if (childId != childIds[n]) {
-                continue;
-            }
-            return n;
-        }
-        return -1;
-    }
+    public int GetChildIndex(int childId) => archetype.gameEntityStore.GetChildIndex(id, childId);
+    
     #endregion
 }
