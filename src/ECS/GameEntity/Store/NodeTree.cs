@@ -50,16 +50,18 @@ public partial class GameEntityStore
     
     internal void AddChild (int id, int childId)
     {
-        var localNodes = nodes;
+        var localNodes      = nodes;
         // update child node parent
-        ref var childNode = ref localNodes[childId];
-        if (HasParent(childNode.parentId)) {
-            if (childNode.parentId == id) {
+        ref var childNode   = ref localNodes[childId];
+        var curIndex        = -1;
+        var curParentId     = childNode.parentId;
+        if (HasParent(curParentId)) {
+            if (curParentId == id) {
                 // case: entity with given id is already a child of this entity
                 return;
             }
             // --- remove child from current parent
-            RemoveChildNode(childNode.parentId, childId);
+            curIndex = RemoveChildNode(curParentId, childId);
         }
         childNode.parentId = id;
         
@@ -75,6 +77,11 @@ public partial class GameEntityStore
         parent.childIds[index] = childId;
         parent.childCount++;
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
+        
+        if (curIndex != - 1) {
+            OnRemoveChildNode(curParentId, childId, curIndex);
+        }
+        OnAddChildNode(id, childId, index);
     }
     
     internal void InsertChild (int id, int index, int childId)
@@ -82,13 +89,21 @@ public partial class GameEntityStore
         var localNodes = nodes;
         // update child node parent
         ref var childNode = ref localNodes[childId];
-        if (HasParent(childNode.parentId)) {
+        if (HasParent(childNode.parentId))
+        {
             if (childNode.parentId != id) {
-                // --- remove child from current parent if child of a different parent
-                RemoveChildNode(childNode.parentId, childId);
+                // --- case: child has a different parent => remove node from current parent
+                int curIndex = RemoveChildNode(childNode.parentId, childId);
+                MoveChildNode(ref childNode, index);
+                
+                OnRemoveChildNode(childNode.parentId, childId, curIndex);
+                OnAddChildNode(id, childId, index);
+                return;
             }
             // case: entity with given id is already a child of this entity => move child
             MoveChildNode(ref childNode, index);
+            
+            OnAddChildNode(id, childId, index);
             return;
         }
         // --- insert entity with given id as child to its parent
@@ -109,6 +124,8 @@ public partial class GameEntityStore
         childIds[index] = childId;
         parent.childCount++;
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
+        
+        OnAddChildNode(id, childId, index);
     }
     
     internal bool RemoveChild (int id, int childId)
@@ -117,27 +134,32 @@ public partial class GameEntityStore
         if (id != childNode.parentId) {
             return false;
         }
-        childNode.parentId = Static.NoParentId;
-        RemoveChildNode(id, childId);
+        childNode.parentId  = Static.NoParentId;
+        var curIndex        = RemoveChildNode(id, childId);
         ClearTreeFlags(nodes, childId, TreeNode);
+        
+        OnRemoveChildNode(id, childId, curIndex);
         return true;
     }
     
-    private void RemoveChildNode (int entity, int childEntity)
+    private int RemoveChildNode (int entity, int childEntity)
     {
         ref var parent  = ref nodes[entity];
         var childNodes  = parent.childIds;
         int len         = parent.childCount;
+        int childIndex  = -1;
         for (int n = 0; n < len; n++) {
             if (childEntity != childNodes[n]) {
                 continue;
             }
+            childIndex = n;
             for (int i = n + 1; i < len; i++) {
                 childNodes[i - 1] = childNodes[i];
             }
             break;
         }
         parent.childCount--;
+        return childIndex;
     }
     
     private void MoveChildNode(ref EntityNode childNode, int newIndex)
@@ -333,21 +355,21 @@ public partial class GameEntityStore
         remove  => collectionChanged -= value;
     }
 
-    private void OnAddChildNode(int parentId, int childId, int index)
+    private void OnAddChildNode(int parentId, int childId, int childIndex)
     {
         if (collectionChanged == null) {
             return;
         }
-        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Add, parentId, childId, index);
+        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Add, parentId, childId, childIndex);
         collectionChanged(this, args);
     }
     
-    private void OnRemoveChildNode(int parentId, int childId, int index)
+    private void OnRemoveChildNode(int parentId, int childId, int childIndex)
     {
         if (collectionChanged == null) {
             return;
         }
-        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Remove, parentId, childId, index);
+        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Remove, parentId, childId, childIndex);
         collectionChanged(this, args);
     }
     

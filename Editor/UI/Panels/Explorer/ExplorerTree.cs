@@ -24,7 +24,7 @@ public class ExplorerTree
         }
         var action          = (NotifyCollectionChangedAction)args.action;
         object child        = items[args.childId];
-        var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.index);
+        var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
         collectionChanged(sender, collectionArgs);
     }
 }

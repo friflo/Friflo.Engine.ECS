@@ -12,17 +12,17 @@ public readonly struct NotifyChildNodesChangedEventArgs
     public readonly NotifyChildNodesChangedAction  action;
     public readonly int                            parentId;
     public readonly int                            childId;
-    public readonly int                            index;
+    public readonly int                            childIndex;
     
     internal NotifyChildNodesChangedEventArgs(
         NotifyChildNodesChangedAction  action,
         int                            parentId,
         int                            childId,
-        int                            index)
+        int                            childIndex)
     {
         this.action     = action;
         this.parentId   = parentId;
         this.childId    = childId;
-        this.index      = index;
+        this.childIndex = childIndex;
     }
 }
