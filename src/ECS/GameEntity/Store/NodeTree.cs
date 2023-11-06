@@ -79,31 +79,34 @@ public partial class GameEntityStore
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
         if (curIndex != - 1) {
-            OnRemoveChildNode(curParentId, childId, curIndex);
+            OnChildNodeRemove(curParentId, childId, curIndex);
         }
-        OnAddChildNode(id, childId, index);
+        OnChildNodeAdd(id, childId, index);
     }
     
     internal void InsertChild (int id, int index, int childId)
     {
-        var localNodes = nodes;
+        var localNodes      = nodes;
         // update child node parent
-        ref var childNode = ref localNodes[childId];
-        if (HasParent(childNode.parentId))
+        ref var childNode   = ref localNodes[childId];
+        var curParentId     = childNode.parentId;
+        if (HasParent(curParentId))
         {
-            if (childNode.parentId != id) {
+            int curIndex;
+            if (curParentId != id) {
                 // --- case: child has a different parent => remove node from current parent
-                int curIndex = RemoveChildNode(childNode.parentId, childId);
+                curIndex = RemoveChildNode(curParentId, childId);
                 MoveChildNode(ref childNode, index);
                 
-                OnRemoveChildNode(childNode.parentId, childId, curIndex);
-                OnAddChildNode(id, childId, index);
+                OnChildNodeRemove(curParentId, childId, curIndex);
+                OnChildNodeAdd   (id,          childId, index);
                 return;
             }
             // case: entity with given id is already a child of this entity => move child
-            MoveChildNode(ref childNode, index);
+            curIndex = MoveChildNode(ref childNode, index);
             
-            OnAddChildNode(id, childId, index);
+            OnChildNodeRemove(id, childId, curIndex);
+            OnChildNodeAdd   (id, childId, index);
             return;
         }
         // --- insert entity with given id as child to its parent
@@ -125,7 +128,7 @@ public partial class GameEntityStore
         parent.childCount++;
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
-        OnAddChildNode(id, childId, index);
+        OnChildNodeAdd(id, childId, index);
     }
     
     internal bool RemoveChild (int id, int childId)
@@ -138,7 +141,7 @@ public partial class GameEntityStore
         var curIndex        = RemoveChildNode(id, childId);
         ClearTreeFlags(nodes, childId, TreeNode);
         
-        OnRemoveChildNode(id, childId, curIndex);
+        OnChildNodeRemove(id, childId, curIndex);
         return true;
     }
     
@@ -162,7 +165,7 @@ public partial class GameEntityStore
         return childIndex;
     }
     
-    private void MoveChildNode(ref EntityNode childNode, int newIndex)
+    private int MoveChildNode(ref EntityNode childNode, int newIndex)
     {
         ref var parent  = ref nodes[childNode.parentId];
         var childIds    = parent.childIds;
@@ -181,6 +184,7 @@ public partial class GameEntityStore
             }
         }
         childIds[newIndex] = childNode.id;
+        return curIndex;
     }
     
     private static int GetChildIndex(int[] childIds, int childCount, int id)
@@ -355,7 +359,7 @@ public partial class GameEntityStore
         remove  => childNodesChanged -= value;
     }
 
-    private void OnAddChildNode(int parentId, int childId, int childIndex)
+    private void OnChildNodeAdd(int parentId, int childId, int childIndex)
     {
         if (childNodesChanged == null) {
             return;
@@ -364,7 +368,7 @@ public partial class GameEntityStore
         childNodesChanged(this, args);
     }
     
-    private void OnRemoveChildNode(int parentId, int childId, int childIndex)
+    private void OnChildNodeRemove(int parentId, int childId, int childIndex)
     {
         if (childNodesChanged == null) {
             return;
