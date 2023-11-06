@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Specialized;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
@@ -89,7 +88,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
-public sealed partial class GameEntity
+public sealed class GameEntity
 {
 #region public properties
     /// <summary>Unique entity id.<br/>
@@ -167,8 +166,6 @@ public sealed partial class GameEntity
     [Browse(Never)] internal            int                     compIndex;          //  4
     
     [Browse(Never)] internal            int                     behaviorIndex;      //  4
-    
-    [Browse(Never)] private NotifyCollectionChangedEventHandler collectionChanged;  //  8  not nice having this for every GameEntity - check alternative
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
