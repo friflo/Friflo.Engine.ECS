@@ -233,7 +233,8 @@ public static class Test_Entity_Tree
     }
     
     [Test]
-    public static void Test_DeleteEntity() {
+    public static void Test_DeleteEntity()
+    {
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
@@ -260,6 +261,7 @@ public static class Test_Entity_Tree
         
         
         var start = Mem.GetAllocatedBytes();
+        store.SetChildNodesChangedHandler(null);
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.EntityCount);
@@ -304,6 +306,7 @@ public static class Test_Entity_Tree
         root.AddChild(child4);
         AreEqual(3, root.ChildCount);
         
+        SetHandler(store, args => AreEqual("entity: 1 - Remove ChildNodes[1] = 3", args.ToString()));
         child3.DeleteEntity();
         AreEqual(2, root.ChildCount);
         AreEqual(2, root.ChildNodes[0].Id);

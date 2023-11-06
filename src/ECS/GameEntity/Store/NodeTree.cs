@@ -130,21 +130,20 @@ public partial class GameEntityStore
     
     private static int RemoveChildNode (ref EntityNode parent, int childId)
     {
-        var childNodes  = parent.childIds;
-        int len         = parent.childCount;
-        int childIndex  = -1;
-        for (int n = 0; n < len; n++) {
-            if (childId != childNodes[n]) {
+        var childIds    = parent.childIds;
+        int count       = parent.childCount;
+        for (int n = 0; n < count; n++) {
+            if (childId != childIds[n]) {
                 continue;
             }
-            childIndex = n;
-            for (int i = n + 1; i < len; i++) {
-                childNodes[i - 1] = childNodes[i];
+            for (int i = n + 1; i < count; i++) {
+                childIds[i - 1] = childIds[i];
             }
-            break;
+            parent.childCount   = --count;
+            childIds[count]     = 0;  // clear last child id for debug clarity. not necessary because of childCount--
+            return n;
         }
-        parent.childCount--;
-        return childIndex;
+        throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parent.id}, child id: {childId}");
     }
     
     private static void InsertChildNode (ref EntityNode parent, int childId, int childIndex)
@@ -269,20 +268,8 @@ public partial class GameEntityStore
             return;
         }
         ref var parent  = ref localNodes[parentId];
-        var childIds    = parent.childIds;
-        var count       = parent.childCount;
-        for (int n = count - 1; n >= 0; n--) {
-            if (childIds[n] != id) {
-                continue;
-            }
-            parent.childCount--;
-            for (var i = n + 1; i < count; i++) {
-                childIds[i - 1] = childIds[i];
-            }
-            childIds[n + 1] = 0; // clear last child id for debug clarity. not necessary because of nodeCount--
-            return;
-        }
-        throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {id}");
+        int curIndex    = RemoveChildNode(ref parent, id);
+        OnChildNodeRemove(parentId, id, curIndex);
     }
     
     private static void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {
