@@ -5,25 +5,41 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Friflo.Fliox.Engine.ECS;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
 using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 // Implements same interfaces as System.Collections.ObjectModel.ObservableCollection{T} to enable
-// using GameEntity's in UI controls typically using an ObservableCollection{T}.
-public sealed partial class GameEntity :
-    IList<GameEntity>,
+// using ExplorerItem's in UI controls typically using an ObservableCollection{T}.
+public sealed class ExplorerItem :
+    IList<ExplorerItem>,
     IList,
-    IReadOnlyList<GameEntity>,
+    IReadOnlyList<ExplorerItem>,
     INotifyCollectionChanged
  // INotifyPropertyChanged                                              not required. Implemented by ObservableCollection{T}
 {
+#region internal fields
+    private  readonly   int                         id;
+    internal readonly   GameEntity                  entity;
+    internal readonly   ExplorerTree                tree;
+     
+    private    NotifyCollectionChangedEventHandler  collectionChanged;
  // public  event       PropertyChangedEventHandler PropertyChanged;    not required. Implemented by ObservableCollection{T}
-    
     // ReSharper disable once InconsistentNaming
-    private             List<GameEntity>            collection => null; // todo remove
+    private             List<ExplorerItem>          collection => null; // todo remove
+    private             int                         ChildCount => entity.ChildCount;
+    #endregion
+
+#region constructor
+    internal ExplorerItem (ExplorerTree tree, GameEntity entity) {
+        this.tree   = tree;
+        this.entity = entity;
+        id          = entity.Id;
+    }
+    #endregion
     
 #region private methods
     private void OnCollectionChanged(Op action, object entity, int index) {
@@ -34,9 +50,9 @@ public sealed partial class GameEntity :
         collectionChanged.Invoke(this, args);
     }
     
-    private GameEntity GetChildByIndex(int index) {
-        var childIds = archetype.gameEntityStore.GetNodeById(id).childIds;
-        return archetype.gameEntityStore.GetNodeById(childIds[index]).entity;
+    private ExplorerItem GetChildByIndex(int index) {
+        int childId = entity.GetChildByIndex(index);
+        return tree.items[childId];
     }
     
     private void ClearChildEntities() {
@@ -45,17 +61,23 @@ public sealed partial class GameEntity :
     }
     
     private void RemoveChildEntityAt(int index) {
-        var entity = collection[index];
+        var childEntity = collection[index];
         collection.RemoveAt(index);
-        OnCollectionChanged(Op.Remove, entity, index);
+        OnCollectionChanged(Op.Remove, childEntity, index);
     }
     
-    private void InsertChildEntityAt(int index, GameEntity entity) {
+    private void AddChildEntity(ExplorerItem entity) {
+        var index = ChildCount;
         collection.Insert(index, entity);
         OnCollectionChanged(Op.Add, entity, index);
     }
     
-    private void ReplaceChildEntityAt(int index, GameEntity entity) {
+    private void InsertChildEntityAt(int index, ExplorerItem entity) {
+        collection.Insert(index, entity);
+        OnCollectionChanged(Op.Add, entity, index);
+    }
+    
+    private void ReplaceChildEntityAt(int index, ExplorerItem entity) {
         if (collectionChanged == null) {
             collection[index] = entity;
             return;
@@ -66,22 +88,22 @@ public sealed partial class GameEntity :
         collectionChanged.Invoke(this, args);
     }
     
-    private int GetChildIndex(GameEntity entity)
-    {
-        var childIds    = archetype.gameEntityStore.GetNodeById(id).childIds;
-        var count       = ChildCount;
-        var searchId    = entity.id;
-        for (int n = 0; n < count; n++) {
-            if (searchId != childIds[n]) {
-                continue;
-            }
-            return n;
-        }
-        return -1;
+    private int GetChildIndex(ExplorerItem item) {
+        return entity.GetChildIndex(item.entity.Id);
     }
     #endregion
     
 // -------------------------------------- interface implementations --------------------------------------
+#region object
+    public override int GetHashCode() {
+        return id;
+    }
+
+    public override bool Equals(object obj) {
+        return ReferenceEquals(this, obj);
+    }
+    #endregion
+
 #region INotifyCollectionChanged
     event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
     {
@@ -91,35 +113,34 @@ public sealed partial class GameEntity :
     #endregion
     
 #region IEnumerable<>
-    IEnumerator<GameEntity> IEnumerable<GameEntity>.GetEnumerator() {
-        return ChildNodes.GetChildEntityEnumerator();
+    IEnumerator<ExplorerItem> IEnumerable<ExplorerItem>.GetEnumerator() {
+        return new ExplorerItemEnumerator(this);
     }
 
     IEnumerator IEnumerable.GetEnumerator() {
-        return ChildNodes.GetChildEntityEnumerator();
+        return new ExplorerItemEnumerator(this);
     }
     #endregion
 
 #region ICollection<>
-    void ICollection<GameEntity>.Add(GameEntity entity) {
-        AddChild(entity);
-        OnCollectionChanged(Op.Add, entity, ChildCount - 1);
+    void ICollection<ExplorerItem>.Add(ExplorerItem entity) {
+        AddChildEntity(entity);
     }
 
-    void ICollection<GameEntity>.Clear() {
+    void ICollection<ExplorerItem>.Clear() {
         ClearChildEntities();
     }
 
-    bool ICollection<GameEntity>.Contains(GameEntity entity) {
+    bool ICollection<ExplorerItem>.Contains(ExplorerItem entity) {
         return GetChildIndex(entity) != - 1;
     }
 
-    void ICollection<GameEntity>.CopyTo(GameEntity[] array, int arrayIndex) {
+    void ICollection<ExplorerItem>.CopyTo(ExplorerItem[] array, int arrayIndex) {
         // collection.CopyTo(array, arrayIndex);
         throw new NotImplementedException();
     }
 
-    bool ICollection<GameEntity>.Remove(GameEntity entity) {
+    bool ICollection<ExplorerItem>.Remove(ExplorerItem entity) {
         int index = GetChildIndex(entity);
         if (index == -1) {
             return false;
@@ -128,25 +149,25 @@ public sealed partial class GameEntity :
         return true;
     }
 
-    int ICollection<GameEntity>.Count => ChildCount;
+    int ICollection<ExplorerItem>.Count => ChildCount;
 
-    bool ICollection<GameEntity>.IsReadOnly => false;
+    bool ICollection<ExplorerItem>.IsReadOnly => false;
     #endregion
 
 #region IList<>
-    int IList<GameEntity>.IndexOf(GameEntity entity) {
+    int IList<ExplorerItem>.IndexOf(ExplorerItem entity) {
         return GetChildIndex(entity);
     }
 
-    void IList<GameEntity>.Insert(int index, GameEntity entity) {
+    void IList<ExplorerItem>.Insert(int index, ExplorerItem entity) {
         InsertChildEntityAt(index, entity);
     }
 
-    void IList<GameEntity>.RemoveAt(int index) {
+    void IList<ExplorerItem>.RemoveAt(int index) {
         RemoveChildEntityAt(index);
     }
 
-    GameEntity IList<GameEntity>.this[int index] {
+    ExplorerItem IList<ExplorerItem>.this[int index] {
         get => GetChildByIndex(index);
         set => ReplaceChildEntityAt(index, value);
     }
@@ -154,8 +175,8 @@ public sealed partial class GameEntity :
     #endregion
     
 #region IReadOnlyCollection<>
-    GameEntity  IReadOnlyList<GameEntity>.this[int index]   => GetChildByIndex(index);
-    int         IReadOnlyCollection<GameEntity>.Count       => ChildCount;
+    ExplorerItem  IReadOnlyList<ExplorerItem>.this[int index]   => GetChildByIndex(index);
+    int         IReadOnlyCollection<ExplorerItem>.Count       => ChildCount;
     #endregion
     
 // ---------------------------------- crab interface implementations :) ----------------------------------
@@ -169,7 +190,7 @@ public sealed partial class GameEntity :
     }
     
     int IList.Add(object value) {
-        AddChild((GameEntity)value);
+        AddChildEntity((ExplorerItem)value);
         var index   = ChildCount - 1;
         OnCollectionChanged(Op.Add, value, index);
         return index;
@@ -177,23 +198,23 @@ public sealed partial class GameEntity :
 
     object IList.this[int index] {
         get => GetChildByIndex(index);
-        set => ReplaceChildEntityAt(index, (GameEntity)value);
+        set => ReplaceChildEntityAt(index, (ExplorerItem)value);
     }
 
     bool IList.Contains(object value) {
-        return GetChildIndex((GameEntity)value) != -1;
+        return GetChildIndex((ExplorerItem)value) != -1;
     }
 
     int IList.IndexOf(object value) {
-        return GetChildIndex((GameEntity)value);
+        return GetChildIndex((ExplorerItem)value);
     }
 
     void IList.Insert(int index, object entity) {
-        InsertChildEntityAt(index, (GameEntity)entity);
+        InsertChildEntityAt(index, (ExplorerItem)entity);
     }
 
     void IList.Remove(object value) {
-        int index = GetChildIndex((GameEntity)value);
+        int index = GetChildIndex((ExplorerItem)value);
         RemoveChildEntityAt(index);
     }
     

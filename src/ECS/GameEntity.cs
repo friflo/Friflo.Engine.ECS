@@ -309,5 +309,23 @@ public sealed partial class GameEntity
         }
         archetype = null;
     }
+    
+    public int GetChildByIndex(int index) {
+        var childIds = archetype.gameEntityStore.GetNodeById(id).childIds;
+        return archetype.gameEntityStore.GetNodeById(childIds[index]).id;
+    }
+    
+    public int GetChildIndex(int childId)
+    {
+        var childIds    = archetype.gameEntityStore.GetNodeById(id).childIds;
+        var count       = ChildCount;
+        for (int n = 0; n < count; n++) {
+            if (childId != childIds[n]) {
+                continue;
+            }
+            return n;
+        }
+        return -1;
+    }
     #endregion
 }

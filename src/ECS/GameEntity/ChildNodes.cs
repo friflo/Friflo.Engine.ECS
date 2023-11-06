@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -59,8 +57,6 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
         return childEntities;
     }
     
-    internal IEnumerator<GameEntity> GetChildEntityEnumerator()  => new ChildEntityEnumerator(this);
-    
     /* // intentionally not implemented to avoid boxing. See comment above     
     public IEnumerator<GameEntity> GetEnumerator()  => throw new System.InvalidOperationException();
     IEnumerator IEnumerable.GetEnumerator()         => throw new System.InvalidOperationException();
@@ -99,30 +95,4 @@ public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented
     public void Dispose() { }
 }
 
-internal class ChildEntityEnumerator : IEnumerator<GameEntity>
-{
-    private             int         index;      //  4
-    private readonly    ChildNodes  childNodes; // 20
-    
-    internal ChildEntityEnumerator(in ChildNodes childNodes) {
-        this.childNodes = childNodes;
-    }
-    
-    public  GameEntity Current  => childNodes.nodes[childNodes.childIds[index - 1]].entity;
-    object  IEnumerator.Current => Current;
-    
-    // --- IEnumerator
-    public bool MoveNext() {
-        if (index < childNodes.childLength) {
-            index++;
-            return true;
-        }
-        return false;  
-    }
 
-    public void Reset() {
-        index = 0;
-    }
-
-    public void Dispose() { }
-}
