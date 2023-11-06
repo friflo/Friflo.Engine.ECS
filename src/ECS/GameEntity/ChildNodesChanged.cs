@@ -13,7 +13,9 @@ public readonly struct ChildNodesChangedArgs
     public readonly int                     parentId;
     public readonly int                     childId;
     public readonly int                     childIndex;
-    
+
+    public override string                  ToString() => $"entity: {parentId} - {action} ChildNodes[{childIndex}] = {childId}";
+
     internal ChildNodesChangedArgs(
         ChildNodesChangedAction action,
         int                     parentId,

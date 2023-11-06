@@ -85,6 +85,9 @@ public static class Test_DataSync
         entity.AddTag<TestTag>();
         
         var child   = store.CreateEntity(11);
+        store.SetChildNodesChangedHandler((object _, in ChildNodesChangedArgs args) => {
+            AreEqual("entity: 10 - Add ChildNodes[0] = 11", args.ToString());
+        });
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         

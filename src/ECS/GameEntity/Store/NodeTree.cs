@@ -325,7 +325,11 @@ public partial class GameEntityStore
         
     private         ChildNodesChangedHandler    childNodesChanged;
     
-    public  event   ChildNodesChangedHandler    ChildNodesChanged
+    public void     SetChildNodesChangedHandler (ChildNodesChangedHandler handler) {
+        childNodesChanged = handler;
+    }
+    
+    public   event  ChildNodesChangedHandler    ChildNodesChanged
     {
         add     => childNodesChanged += value;
         remove  => childNodesChanged -= value;
