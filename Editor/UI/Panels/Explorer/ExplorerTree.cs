@@ -18,8 +18,9 @@ public class ExplorerTree
     private void ChildNodesChangedHandler(object sender, in NotifyChildNodesChangedEventArgs args)
     {
         var action          = (NotifyCollectionChangedAction)args.action;
-        var item            = items[args.entityId];
-        var collectionArgs  = new NotifyCollectionChangedEventArgs(action, (object)item, args.index);
-        item.collectionChanged(sender, collectionArgs);
+        object child        = items[args.childId];
+        var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.index);
+        var parent          = items[args.parentId];
+        parent.collectionChanged(sender, collectionArgs);
     }
 }

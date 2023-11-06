@@ -10,16 +10,19 @@ public delegate void   NotifyChildNodesChangedEventHandler(object sender, in Not
 public readonly struct NotifyChildNodesChangedEventArgs
 {
     public readonly NotifyChildNodesChangedAction  action;
-    public readonly int                            entityId;
+    public readonly int                            parentId;
+    public readonly int                            childId;
     public readonly int                            index;
     
     internal NotifyChildNodesChangedEventArgs(
         NotifyChildNodesChangedAction  action,
-        int                            entityId,
+        int                            parentId,
+        int                            childId,
         int                            index)
     {
         this.action     = action;
-        this.entityId   = entityId;
+        this.parentId   = parentId;
+        this.childId    = childId;
         this.index      = index;
     }
 }

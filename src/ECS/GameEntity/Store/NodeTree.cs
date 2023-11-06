@@ -333,20 +333,22 @@ public partial class GameEntityStore
         remove  => collectionChanged -= value;
     }
 
-    private void OnAddChildNode(int entityId, int index) {
+    private void OnAddChildNode(int parentId, int childId, int index)
+    {
         if (collectionChanged == null) {
             return;
         }
-        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Add, entityId, index);
-        collectionChanged(null, args);
+        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Add, parentId, childId, index);
+        collectionChanged(this, args);
     }
     
-    private void OnRemoveChildNode(int entityId, int index) {
+    private void OnRemoveChildNode(int parentId, int childId, int index)
+    {
         if (collectionChanged == null) {
             return;
         }
-        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Remove, entityId, index);
-        collectionChanged(null, args);
+        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Remove, parentId, childId, index);
+        collectionChanged(this, args);
     }
     
     
