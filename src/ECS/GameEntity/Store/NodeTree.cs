@@ -80,8 +80,7 @@ public partial class GameEntityStore
     {
         var localNodes      = nodes;
         // update child node parent
-        ref var childNode   = ref localNodes[childId];
-        var curParentId     = childNode.parentId;
+        var curParentId     = localNodes[childId].parentId;
         if (HasParent(curParentId))
         {
             int curIndex;
@@ -267,8 +266,7 @@ public partial class GameEntityStore
         if (!HasParent(parentId)) {
             return;
         }
-        ref var parent  = ref localNodes[parentId];
-        int curIndex    = RemoveChildNode(ref parent, id);
+        int curIndex    = RemoveChildNode(ref localNodes[parentId], id);
         OnChildNodeRemove(parentId, id, curIndex);
     }
     
