@@ -323,6 +323,33 @@ public partial class GameEntityStore
         SetTreeFlags(nodes, id, TreeNode);
     }
     
+    // ---------------------------------- child nodes change notification ----------------------------------
+        
+    private         NotifyChildNodesChangedEventHandler collectionChanged;
+    
+    public  event   NotifyChildNodesChangedEventHandler CollectionChanged
+    {
+        add     => collectionChanged += value;
+        remove  => collectionChanged -= value;
+    }
+
+    private void OnAddChildNode(int entityId, int index) {
+        if (collectionChanged == null) {
+            return;
+        }
+        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Add, entityId, index);
+        collectionChanged(null, args);
+    }
+    
+    private void OnRemoveChildNode(int entityId, int index) {
+        if (collectionChanged == null) {
+            return;
+        }
+        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Remove, entityId, index);
+        collectionChanged(null, args);
+    }
+    
+    
     // ------------------------------------- GameEntity access -------------------------------------
     internal TreeMembership  GetTreeMembership(int id) {
         return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
