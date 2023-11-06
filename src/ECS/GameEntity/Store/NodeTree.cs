@@ -67,7 +67,7 @@ public partial class GameEntityStore
         ref var parent      = ref localNodes[id];
         int index           = parent.childCount;
         childNode.parentId  = id;
-        EnsureChildNodesCapacity(ref parent, index);
+        EnsureChildIdsCapacity(ref parent, index);
         parent.childIds[index] = childId;
         parent.childCount++;
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
@@ -111,7 +111,7 @@ public partial class GameEntityStore
             throw new IndexOutOfRangeException();
         }
         childNode.parentId  = id;
-        EnsureChildNodesCapacity(ref parent, childIndex);
+        EnsureChildIdsCapacity(ref parent, childIndex);
         InsertChildNode(ref parent, childId, childIndex);
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
@@ -176,7 +176,7 @@ public partial class GameEntityStore
         parent.childCount++;
     }
     
-    private static void EnsureChildNodesCapacity(ref EntityNode parent, int index)
+    private static void EnsureChildIdsCapacity(ref EntityNode parent, int index)
     {
         if (parent.childIds == null) {
             parent.childIds = new int[4];
