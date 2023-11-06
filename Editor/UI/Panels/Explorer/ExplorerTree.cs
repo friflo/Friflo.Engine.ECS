@@ -17,10 +17,14 @@ public class ExplorerTree
     
     private void ChildNodesChangedHandler(object sender, in NotifyChildNodesChangedEventArgs args)
     {
+        var parent              = items[args.parentId];
+        var collectionChanged   = parent.CollectionChanged;
+        if (collectionChanged == null) {
+            return;
+        }
         var action          = (NotifyCollectionChangedAction)args.action;
         object child        = items[args.childId];
         var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.index);
-        var parent          = items[args.parentId];
-        parent.collectionChanged(sender, collectionArgs);
+        collectionChanged(sender, collectionArgs);
     }
 }

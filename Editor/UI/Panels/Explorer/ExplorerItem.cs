@@ -9,6 +9,7 @@ using Friflo.Fliox.Engine.ECS;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
 using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Explorer;
@@ -20,16 +21,18 @@ public sealed class ExplorerItem :
     IList,
     IReadOnlyList<ExplorerItem>,
     INotifyCollectionChanged
- // INotifyPropertyChanged                                              not required. Implemented by ObservableCollection{T}
+ // INotifyPropertyChanged                                                      not required. Implemented by ObservableCollection{T}
 {
+#region internal properties
+    private             int                                 ChildCount          => entity.ChildCount;
+    internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;    
+    #endregion
+    
 #region internal fields
-    internal readonly   GameEntity                  entity;
-    internal readonly   ExplorerTree                tree;
-     
-    internal   NotifyCollectionChangedEventHandler  collectionChanged;
- // public  event       PropertyChangedEventHandler PropertyChanged;    not required. Implemented by ObservableCollection{T}
-
-    private             int                         ChildCount => entity.ChildCount;
+    internal readonly   GameEntity                          entity;
+    internal readonly   ExplorerTree                        tree;
+    private             NotifyCollectionChangedEventHandler collectionChanged;
+ // public  event       PropertyChangedEventHandler         PropertyChanged;    not required. Implemented by ObservableCollection{T}
     #endregion
 
 #region constructor
