@@ -15,7 +15,7 @@ public class ExplorerTree
         store.CollectionChanged += ChildNodesChangedHandler;
     }
     
-    private void ChildNodesChangedHandler(object sender, in NotifyChildNodesChangedEventArgs args)
+    private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
     {
         var parent              = items[args.parentId];
         var collectionChanged   = parent.CollectionChanged;

@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public enum NotifyChildNodesChangedAction
+public enum ChildNodesChangedAction
 {
     Add     = NotifyCollectionChangedAction.Add,
     Remove  = NotifyCollectionChangedAction.Remove,

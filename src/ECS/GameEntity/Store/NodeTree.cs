@@ -347,9 +347,9 @@ public partial class GameEntityStore
     
     // ---------------------------------- child nodes change notification ----------------------------------
         
-    private         NotifyChildNodesChangedEventHandler collectionChanged;
+    private         ChildNodesChangedHandler collectionChanged;
     
-    public  event   NotifyChildNodesChangedEventHandler CollectionChanged
+    public  event   ChildNodesChangedHandler CollectionChanged
     {
         add     => collectionChanged += value;
         remove  => collectionChanged -= value;
@@ -360,7 +360,7 @@ public partial class GameEntityStore
         if (collectionChanged == null) {
             return;
         }
-        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Add, parentId, childId, childIndex);
+        var args = new ChildNodesChangedArgs(ChildNodesChangedAction.Add, parentId, childId, childIndex);
         collectionChanged(this, args);
     }
     
@@ -369,7 +369,7 @@ public partial class GameEntityStore
         if (collectionChanged == null) {
             return;
         }
-        var args = new NotifyChildNodesChangedEventArgs(NotifyChildNodesChangedAction.Remove, parentId, childId, childIndex);
+        var args = new ChildNodesChangedArgs(ChildNodesChangedAction.Remove, parentId, childId, childIndex);
         collectionChanged(this, args);
     }
     
