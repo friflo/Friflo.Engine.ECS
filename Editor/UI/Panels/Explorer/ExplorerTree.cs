@@ -11,8 +11,8 @@ public class ExplorerTree
     
     public ExplorerTree (GameEntityStore store)
     {
-        items = new Dictionary<int, ExplorerItem>();
-        store.CollectionChanged += ChildNodesChangedHandler;
+        items                    = new Dictionary<int, ExplorerItem>();
+        store.ChildNodesChanged += ChildNodesChangedHandler;
     }
     
     private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)

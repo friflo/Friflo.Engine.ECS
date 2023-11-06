@@ -347,30 +347,30 @@ public partial class GameEntityStore
     
     // ---------------------------------- child nodes change notification ----------------------------------
         
-    private         ChildNodesChangedHandler collectionChanged;
+    private         ChildNodesChangedHandler    childNodesChanged;
     
-    public  event   ChildNodesChangedHandler CollectionChanged
+    public  event   ChildNodesChangedHandler    ChildNodesChanged
     {
-        add     => collectionChanged += value;
-        remove  => collectionChanged -= value;
+        add     => childNodesChanged += value;
+        remove  => childNodesChanged -= value;
     }
 
     private void OnAddChildNode(int parentId, int childId, int childIndex)
     {
-        if (collectionChanged == null) {
+        if (childNodesChanged == null) {
             return;
         }
         var args = new ChildNodesChangedArgs(ChildNodesChangedAction.Add, parentId, childId, childIndex);
-        collectionChanged(this, args);
+        childNodesChanged(this, args);
     }
     
     private void OnRemoveChildNode(int parentId, int childId, int childIndex)
     {
-        if (collectionChanged == null) {
+        if (childNodesChanged == null) {
             return;
         }
         var args = new ChildNodesChangedArgs(ChildNodesChangedAction.Remove, parentId, childId, childIndex);
-        collectionChanged(this, args);
+        childNodesChanged(this, args);
     }
     
     
