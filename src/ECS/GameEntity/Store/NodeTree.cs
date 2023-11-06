@@ -133,6 +133,11 @@ public partial class GameEntityStore
         return true;
     }
     
+    internal ref readonly EntityNode GetChildNodeByIndex(int parentId, int childIndex) {
+        var childIds = nodes[parentId].childIds;
+        return ref nodes[childIds[childIndex]];
+    }
+    
     internal int GetChildIndex(int parentId, int childId) => GetChildIndex(ref nodes[parentId], childId);
     
     private static int GetChildIndex(ref EntityNode parent, int childId)

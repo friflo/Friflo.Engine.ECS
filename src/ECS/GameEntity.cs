@@ -307,13 +307,9 @@ public sealed class GameEntity
         archetype = null;
     }
     
-    public ref readonly EntityNode GetChildNodeByIndex(int index) {
-        var store       = archetype.gameEntityStore;
-        var childIds    = store.GetNodeById(id).childIds;
-        return ref store.GetNodeById(childIds[index]);
-    }
+    public ref readonly EntityNode GetChildNodeByIndex(int index) => ref archetype.gameEntityStore.GetChildNodeByIndex(id, index);
     
-    public int GetChildIndex(int childId) => archetype.gameEntityStore.GetChildIndex(id, childId);
+    public int GetChildIndex(int childId)                         => archetype.gameEntityStore.GetChildIndex(id, childId);
     
     #endregion
 }
