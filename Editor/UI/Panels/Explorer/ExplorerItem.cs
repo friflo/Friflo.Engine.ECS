@@ -23,11 +23,10 @@ public sealed class ExplorerItem :
  // INotifyPropertyChanged                                              not required. Implemented by ObservableCollection{T}
 {
 #region internal fields
-    private  readonly   int                         id;
     internal readonly   GameEntity                  entity;
     internal readonly   ExplorerTree                tree;
      
-    private    NotifyCollectionChangedEventHandler  collectionChanged;
+    internal   NotifyCollectionChangedEventHandler  collectionChanged;
  // public  event       PropertyChangedEventHandler PropertyChanged;    not required. Implemented by ObservableCollection{T}
 
     private             int                         ChildCount => entity.ChildCount;
@@ -37,19 +36,10 @@ public sealed class ExplorerItem :
     internal ExplorerItem (ExplorerTree tree, GameEntity entity) {
         this.tree   = tree;
         this.entity = entity;
-        id          = entity.Id;
     }
     #endregion
     
 #region private methods
-    private void OnCollectionChanged(Op action, object entity, int index) {
-        if (collectionChanged == null) {
-            return;
-        }
-        var args = new NotifyCollectionChangedEventArgs(action, entity, index);
-        collectionChanged.Invoke(this, args);
-    }
-    
     private ExplorerItem GetChildByIndex(int index) {
         int childId = entity.GetChildNodeByIndex(index).Id;
         return tree.items[childId];
@@ -75,16 +65,6 @@ public sealed class ExplorerItem :
     #endregion
     
 // -------------------------------------- interface implementations --------------------------------------
-#region object
-    public override int GetHashCode() {
-        return id;
-    }
-
-    public override bool Equals(object obj) {
-        return ReferenceEquals(this, obj);
-    }
-    #endregion
-
 #region INotifyCollectionChanged
     event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
     {
