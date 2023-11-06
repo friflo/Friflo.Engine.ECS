@@ -279,7 +279,7 @@ public sealed class GameEntity
     public void InsertChild(int index, GameEntity entity) {
         var store = archetype.gameEntityStore;
         if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
-        store.InsertChild(id, index, entity.id);
+        store.InsertChild(id, entity.id, index);
     }
     
     /// <remarks>
