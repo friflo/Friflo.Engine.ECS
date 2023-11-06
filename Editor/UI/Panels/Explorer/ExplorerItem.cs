@@ -50,7 +50,7 @@ public sealed class ExplorerItem :
     }
     
     private ExplorerItem GetChildByIndex(int index) {
-        int childId = entity.GetChildByIndex(index);
+        int childId = entity.GetChildNodeByIndex(index).Id;
         return tree.items[childId];
     }
     

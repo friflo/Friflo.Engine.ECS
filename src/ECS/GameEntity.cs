@@ -310,9 +310,10 @@ public sealed partial class GameEntity
         archetype = null;
     }
     
-    public int GetChildByIndex(int index) {
-        var childIds = archetype.gameEntityStore.GetNodeById(id).childIds;
-        return archetype.gameEntityStore.GetNodeById(childIds[index]).id;
+    public ref readonly EntityNode GetChildNodeByIndex(int index) {
+        var store       = archetype.gameEntityStore;
+        var childIds    = store.GetNodeById(id).childIds;
+        return ref store.GetNodeById(childIds[index]);
     }
     
     public int GetChildIndex(int childId)
