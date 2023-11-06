@@ -1,26 +1,50 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Text;
 
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Models
 {
+    public class MyObservableCollection<T> : ObservableCollection<T>
+    {
+        public void AddPropertyChangedHandler() {
+            PropertyChanged += (sender, args) => {
+                var sb = new StringBuilder();
+                sb.Append("PropertyChanged: ");
+                var name = args.PropertyName;
+                sb.Append(name);
+                sb.Append(" = ");
+                switch (name) {
+                    case "Count":   sb.Append(Count); break;
+                    case "Item[]":  sb.Append(Count); break;
+                }
+                Console.WriteLine(sb.ToString());
+            }; 
+        }
+    }
+    
     // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/Models/DragDropItem.cs
     public class DragDropItem 
     {
         /// <summary> use either:
-        /// <see cref="ObservableList{T}"/>       or
+        /// <see cref="ObservableList{T}"/>
         /// <see cref="ObservableCollection{T}"/>
+        /// <see cref="MyObservableCollection{T}"/>
         /// </summary>
-        public  readonly        ObservableList<DragDropItem>        children;   // Must always be present. Drop on an item with children == null result in COMException.
+        public  readonly        MyObservableCollection<DragDropItem>        children;   // Must always be present. Drop on an item with children == null result in COMException.
         public                  string                              Name { get; }
         public                  bool                                flag;
 
-        private static          ObservableList<DragDropItem> CreateObservable() => new ObservableList<DragDropItem>();
+        private static          MyObservableCollection<DragDropItem> CreateObservable() {
+            var collection = new MyObservableCollection<DragDropItem>();
+            collection.AddPropertyChangedHandler();
+            return collection;
+        }
+
+        public  static readonly MyObservableCollection<DragDropItem> Root = CreateRandomItems();
         
-        public  static readonly ObservableList<DragDropItem> Root = CreateRandomItems();
-        
-        private static          ObservableList<DragDropItem> CreateRandomItems()
+        private static          MyObservableCollection<DragDropItem> CreateRandomItems()
         {
             var root = new DragDropItem ("root");
             root.children.Add(new DragDropItem("child 1"));
