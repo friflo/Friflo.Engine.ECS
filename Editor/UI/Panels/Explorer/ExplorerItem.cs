@@ -66,25 +66,25 @@ public sealed class ExplorerItem :
         OnCollectionChanged(Op.Remove, childEntity, index);
     }
     
-    private void AddChildEntity(ExplorerItem entity) {
+    private void AddChildEntity(ExplorerItem item) {
         var index = ChildCount;
-        collection.Insert(index, entity);
-        OnCollectionChanged(Op.Add, entity, index);
+        collection.Insert(index, item);
+        OnCollectionChanged(Op.Add, item, index);
     }
     
-    private void InsertChildEntityAt(int index, ExplorerItem entity) {
-        collection.Insert(index, entity);
-        OnCollectionChanged(Op.Add, entity, index);
+    private void InsertChildEntityAt(int index, ExplorerItem item) {
+        collection.Insert(index, item);
+        OnCollectionChanged(Op.Add, item, index);
     }
     
-    private void ReplaceChildEntityAt(int index, ExplorerItem entity) {
+    private void ReplaceChildEntityAt(int index, ExplorerItem item) {
         if (collectionChanged == null) {
-            collection[index] = entity;
+            collection[index] = item;
             return;
         }
         var oldItem         = collection[index];
-        collection[index]   = entity;
-        var args            = new Args(Op.Replace, entity, oldItem, index);
+        collection[index]   = item;
+        var args            = new Args(Op.Replace, item, oldItem, index);
         collectionChanged.Invoke(this, args);
     }
     
@@ -123,16 +123,16 @@ public sealed class ExplorerItem :
     #endregion
 
 #region ICollection<>
-    void ICollection<ExplorerItem>.Add(ExplorerItem entity) {
-        AddChildEntity(entity);
+    void ICollection<ExplorerItem>.Add(ExplorerItem item) {
+        AddChildEntity(item);
     }
 
     void ICollection<ExplorerItem>.Clear() {
         ClearChildEntities();
     }
 
-    bool ICollection<ExplorerItem>.Contains(ExplorerItem entity) {
-        return GetChildIndex(entity) != - 1;
+    bool ICollection<ExplorerItem>.Contains(ExplorerItem item) {
+        return GetChildIndex(item) != - 1;
     }
 
     void ICollection<ExplorerItem>.CopyTo(ExplorerItem[] array, int arrayIndex) {
@@ -140,8 +140,8 @@ public sealed class ExplorerItem :
         throw new NotImplementedException();
     }
 
-    bool ICollection<ExplorerItem>.Remove(ExplorerItem entity) {
-        int index = GetChildIndex(entity);
+    bool ICollection<ExplorerItem>.Remove(ExplorerItem item) {
+        int index = GetChildIndex(item);
         if (index == -1) {
             return false;
         }
@@ -155,12 +155,12 @@ public sealed class ExplorerItem :
     #endregion
 
 #region IList<>
-    int IList<ExplorerItem>.IndexOf(ExplorerItem entity) {
-        return GetChildIndex(entity);
+    int IList<ExplorerItem>.IndexOf(ExplorerItem item) {
+        return GetChildIndex(item);
     }
 
-    void IList<ExplorerItem>.Insert(int index, ExplorerItem entity) {
-        InsertChildEntityAt(index, entity);
+    void IList<ExplorerItem>.Insert(int index, ExplorerItem item) {
+        InsertChildEntityAt(index, item);
     }
 
     void IList<ExplorerItem>.RemoveAt(int index) {
@@ -209,8 +209,8 @@ public sealed class ExplorerItem :
         return GetChildIndex((ExplorerItem)value);
     }
 
-    void IList.Insert(int index, object entity) {
-        InsertChildEntityAt(index, (ExplorerItem)entity);
+    void IList.Insert(int index, object item) {
+        InsertChildEntityAt(index, (ExplorerItem)item);
     }
 
     void IList.Remove(object value) {
