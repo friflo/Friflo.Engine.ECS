@@ -28,8 +28,7 @@ public sealed class ExplorerItem :
      
     private    NotifyCollectionChangedEventHandler  collectionChanged;
  // public  event       PropertyChangedEventHandler PropertyChanged;    not required. Implemented by ObservableCollection{T}
-    // ReSharper disable once InconsistentNaming
-    private             List<ExplorerItem>          collection => null; // todo remove
+
     private             int                         ChildCount => entity.ChildCount;
     #endregion
 
@@ -57,35 +56,16 @@ public sealed class ExplorerItem :
     
     private void ClearChildEntities() {
         throw new NotImplementedException();
-        OnCollectionChanged(Op.Reset, null, -1);
     }
     
     private void RemoveChildEntityAt(int index) {
-        var childEntity = collection[index];
-        collection.RemoveAt(index);
-        OnCollectionChanged(Op.Remove, childEntity, index);
-    }
-    
-    private void AddChildEntity(ExplorerItem item) {
-        var index = ChildCount;
-        collection.Insert(index, item);
-        OnCollectionChanged(Op.Add, item, index);
-    }
-    
-    private void InsertChildEntityAt(int index, ExplorerItem item) {
-        collection.Insert(index, item);
-        OnCollectionChanged(Op.Add, item, index);
+        var childId = entity.GetChildIndex(index);
+        var child   = entity.Store.GetNodeById(childId).Entity;
+        entity.RemoveChild(child);
     }
     
     private void ReplaceChildEntityAt(int index, ExplorerItem item) {
-        if (collectionChanged == null) {
-            collection[index] = item;
-            return;
-        }
-        var oldItem         = collection[index];
-        collection[index]   = item;
-        var args            = new Args(Op.Replace, item, oldItem, index);
-        collectionChanged.Invoke(this, args);
+        throw new NotImplementedException();
     }
     
     private int GetChildIndex(ExplorerItem item) {
@@ -124,7 +104,7 @@ public sealed class ExplorerItem :
 
 #region ICollection<>
     void ICollection<ExplorerItem>.Add(ExplorerItem item) {
-        AddChildEntity(item);
+        entity.AddChild(item.entity);
     }
 
     void ICollection<ExplorerItem>.Clear() {
@@ -141,12 +121,7 @@ public sealed class ExplorerItem :
     }
 
     bool ICollection<ExplorerItem>.Remove(ExplorerItem item) {
-        int index = GetChildIndex(item);
-        if (index == -1) {
-            return false;
-        }
-        RemoveChildEntityAt(index);
-        return true;
+        return entity.RemoveChild(item.entity);
     }
 
     int ICollection<ExplorerItem>.Count => ChildCount;
@@ -160,7 +135,7 @@ public sealed class ExplorerItem :
     }
 
     void IList<ExplorerItem>.Insert(int index, ExplorerItem item) {
-        InsertChildEntityAt(index, item);
+        entity.InsertChild(index, item.entity);
     }
 
     void IList<ExplorerItem>.RemoveAt(int index) {
@@ -190,10 +165,9 @@ public sealed class ExplorerItem :
     }
     
     int IList.Add(object value) {
-        AddChildEntity((ExplorerItem)value);
-        var index   = ChildCount - 1;
-        OnCollectionChanged(Op.Add, value, index);
-        return index;
+        var childEntity = ((ExplorerItem)value).entity;
+        entity.AddChild(childEntity);
+        return ChildCount - 1;
     }
 
     object IList.this[int index] {
@@ -210,7 +184,8 @@ public sealed class ExplorerItem :
     }
 
     void IList.Insert(int index, object item) {
-        InsertChildEntityAt(index, (ExplorerItem)item);
+        var childEntity = ((ExplorerItem)item).entity; 
+        childEntity.InsertChild(index, childEntity);
     }
 
     void IList.Remove(object value) {

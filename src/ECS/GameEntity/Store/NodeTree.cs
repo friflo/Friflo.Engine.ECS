@@ -111,15 +111,16 @@ public partial class GameEntityStore
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
     }
     
-    internal void RemoveChild (int id, int childId)
+    internal bool RemoveChild (int id, int childId)
     {
         ref var childNode = ref nodes[childId];
         if (id != childNode.parentId) {
-            return;
+            return false;
         }
         childNode.parentId = Static.NoParentId;
         RemoveChildNode(id, childId);
         ClearTreeFlags(nodes, childId, TreeNode);
+        return true;
     }
     
     private void RemoveChildNode (int entity, int childEntity)

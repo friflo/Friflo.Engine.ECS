@@ -289,10 +289,10 @@ public sealed partial class GameEntity
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
-    public void RemoveChild(GameEntity entity) {
+    public bool RemoveChild(GameEntity entity) {
         var store = archetype.gameEntityStore;
         if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
-        store.RemoveChild(id, entity.id);
+        return store.RemoveChild(id, entity.id);
     }
     
     /// <summary>
