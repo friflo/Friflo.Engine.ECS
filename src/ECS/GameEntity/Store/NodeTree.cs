@@ -49,7 +49,7 @@ public partial class GameEntityStore
     
     private static bool HasParent(int id)  =>   id >= Static.MinNodeId;
     
-    internal void AddChild (int parentId, int childId)
+    internal int AddChild (int parentId, int childId)
     {
         var localNodes      = nodes;
         ref var childNode   = ref localNodes[childId];
@@ -57,7 +57,7 @@ public partial class GameEntityStore
         if (HasParent(curParentId)) {
             if (curParentId == parentId) {
                 // case: entity with given id is already a child of this entity
-                return;
+                return -1;
             }
             // --- remove child from current parent
             int curIndex = RemoveChildNode(ref localNodes[curParentId], childId);
@@ -73,6 +73,7 @@ public partial class GameEntityStore
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
         OnChildNodeAdd(parentId, childId, index);
+        return index;
     }
     
     internal void InsertChild (int parentId, int childId, int childIndex)

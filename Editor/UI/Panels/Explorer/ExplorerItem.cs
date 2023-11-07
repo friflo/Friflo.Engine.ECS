@@ -150,8 +150,7 @@ public sealed class ExplorerItem :
     
     int IList.Add(object value) {
         var childEntity = ((ExplorerItem)value).entity;
-        entity.AddChild(childEntity);
-        return ChildCount - 1;
+        return entity.AddChild(childEntity);
     }
 
     object IList.this[int index] {

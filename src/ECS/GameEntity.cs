@@ -266,10 +266,10 @@ public sealed class GameEntity
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
-    public void AddChild(GameEntity entity) {
+    public int AddChild(GameEntity entity) {
         var store = archetype.gameEntityStore;
         if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
-        store.AddChild(id, entity.id);
+        return store.AddChild(id, entity.id);
     }
     
     /// <remarks>
