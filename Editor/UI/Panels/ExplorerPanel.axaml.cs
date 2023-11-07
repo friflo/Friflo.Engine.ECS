@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Editor.UI.Explorer.Lab;
+using Friflo.Fliox.Editor.UI.Explorer;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 

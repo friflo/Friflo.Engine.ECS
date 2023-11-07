@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
              Background="{DynamicResource PanelBackground1}"
              x:Class="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
-             xmlns:vm="using:Friflo.Fliox.Editor.UI.Explorer.Lab"
+             xmlns:vm="using:Friflo.Fliox.Editor.UI.Explorer"
              x:DataType="vm:ExplorerPanelViewModel">
         <StackPanel Orientation="Vertical" Spacing="8">
             <TreeDataGrid Name="DragDrop"
