@@ -189,9 +189,11 @@ public static class Test_Entity_Tree
                 default:    Fail("unexpected"); return;
             }
         });
+        AreEqual(new [] { 2, 3 }, root.ChildIds.ToArray());
         AreEqual(1, root.GetChildIndex(child3.Id));
         root.InsertChild(0, child3);    // move child3 within root. index: 1 -> 0
         AreEqual(0, root.GetChildIndex(child3.Id));
+        AreEqual(new [] { 3, 2 }, root.ChildIds.ToArray());
         
         SetHandlerSeq(store, (args, seq) => {
             switch (seq) {
@@ -200,8 +202,12 @@ public static class Test_Entity_Tree
                 default:    Fail("unexpected"); return;
             }
         });
-        
         root.InsertChild(0, subChild4);    // change subChild4 parent: child2 -> root
+        AreEqual(new [] { 4, 3, 2 }, root.ChildIds.ToArray());
+        
+        Throws<IndexOutOfRangeException>(() => {
+            root.InsertChild(100, subChild4);
+        });
     }
     
     /// <summary>code coverage for <see cref="GameEntityStore.SetTreeFlags"/></summary>

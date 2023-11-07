@@ -77,7 +77,11 @@ public partial class GameEntityStore
     
     internal void InsertChild (int parentId, int childId, int childIndex)
     {
-        var localNodes      = nodes;
+        var localNodes  = nodes;
+        ref var parent  = ref localNodes[parentId];
+        if (childIndex > parent.childCount) {
+            throw new IndexOutOfRangeException();
+        }
         // update child node parent
         ref var childNode   = ref localNodes[childId];
         var curParentId     = childNode.parentId;
@@ -106,10 +110,6 @@ public partial class GameEntityStore
         }
     InsertNode:
         // --- insert entity with given id as child to its parent
-        ref var parent      = ref localNodes[parentId];
-        if (childIndex > parent.childCount) {
-            throw new IndexOutOfRangeException();
-        }
         childNode.parentId  = parentId;
         EnsureChildIdsCapacity(ref parent, childIndex);
         InsertChildNode(ref parent, childId, childIndex);
