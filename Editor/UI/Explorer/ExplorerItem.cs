@@ -24,6 +24,7 @@ public sealed class ExplorerItem :
 {
 #region internal properties
     internal            string                              Name                => entity.Name.value;
+    public              bool                                flag;
     private             int                                 ChildCount          => entity.ChildCount;
     internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;    
     #endregion

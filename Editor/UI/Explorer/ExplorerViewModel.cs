@@ -16,9 +16,10 @@ internal class ExplorerViewModel
         var source      = new HierarchicalTreeDataGridSource<ExplorerItem>(rootItem);
         
         source.Columns.Add(new HierarchicalExpanderColumn<ExplorerItem>(
-            new TextColumn<ExplorerItem, string>("Name", item => item.Name, GridLength.Star), x => x));
+            new TextColumn<ExplorerItem, string>("Name", item => item.Name, GridLength.Star), item => item));
         
-        // source.Columns.Add(new CheckBoxColumn<DragDropItem>("Flag", x => x.flag, (o, x) => o.flag = x));
+        source.Columns.Add(
+            new CheckBoxColumn<ExplorerItem>("Flag", item => item.flag, (item, value) => item.flag = value));
 
         source.RowSelection!.SingleSelect = false;
         return source;
@@ -36,8 +37,8 @@ internal class ExplorerViewModel
         source.Columns.Add(new HierarchicalExpanderColumn<DragDropItem>(
             new TextColumn<DragDropItem, string>("Name", x => x.Name, GridLength.Star), x => x.children));
         
-        source.Columns.Add(new CheckBoxColumn<DragDropItem>(
-            "Flag", x => x.flag, (o, x) => o.flag = x));
+        source.Columns.Add(
+            new CheckBoxColumn<DragDropItem>("Flag", item => item.flag, (item, value) => item.flag = value));
 
         source.RowSelection!.SingleSelect = false;
         return source;
