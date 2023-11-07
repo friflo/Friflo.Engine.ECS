@@ -3,10 +3,10 @@ using Friflo.Fliox.Editor.UI.Explorer.Lab;
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/MainWindowViewModel.cs
-internal class ExplorerPanelViewModel
+internal class MainWindowViewModel
 {
-    private DragDropPageViewModel   dragDrop;
+    private ExplorerViewModel   dragDrop;
 
-    internal DragDropPageViewModel  DragDrop => dragDrop ??= new DragDropPageViewModel();
+    internal ExplorerViewModel  DragDrop => dragDrop ??= new ExplorerViewModel();
 }
 

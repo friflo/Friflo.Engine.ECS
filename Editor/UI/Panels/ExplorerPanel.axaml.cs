@@ -12,7 +12,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     public ExplorerPanel()
     {
         InitializeComponent();
-        DataContext = new ExplorerPanelViewModel();
+        DataContext = new MainWindowViewModel();
     }
 
     protected override void OnLoaded(RoutedEventArgs e) {

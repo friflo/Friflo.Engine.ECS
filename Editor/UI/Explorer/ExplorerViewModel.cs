@@ -1,12 +1,13 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Friflo.Fliox.Editor.UI.Explorer.Lab;
 
-namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/DragDropPageViewModel.cs
-internal class DragDropPageViewModel
+internal class ExplorerViewModel
 {
-    internal DragDropPageViewModel()
+    internal ExplorerViewModel()
     {
         var data    = DragDropItem.Root;
         var source  = new HierarchicalTreeDataGridSource<DragDropItem>(data);
