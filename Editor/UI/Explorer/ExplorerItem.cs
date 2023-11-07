@@ -45,7 +45,9 @@ public sealed class ExplorerItem :
     
     internal static ExplorerItem CreateExplorerItems(ExplorerTree tree, GameEntity entity)
     {
-        var                 item = new ExplorerItem(tree, entity);
+        var item = new ExplorerItem(tree, entity);
+        tree.items.Add(entity.Id, item);
+        
         IList<ExplorerItem> list = item;
         foreach (var node in entity.ChildNodes) {
             var childItem = CreateExplorerItems(tree, node.Entity);
