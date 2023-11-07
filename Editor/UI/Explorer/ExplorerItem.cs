@@ -6,8 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
-using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
-using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException

@@ -4,8 +4,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
-using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
-using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
