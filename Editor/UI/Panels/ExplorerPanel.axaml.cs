@@ -1,11 +1,9 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Editor.UI.Models;
+using Friflo.Fliox.Editor.UI.Explorer.Lab;
 
-
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI;
+namespace Friflo.Fliox.Editor.UI.Panels;
 
 public partial class ExplorerPanel : UserControl, IEditorControl
 {

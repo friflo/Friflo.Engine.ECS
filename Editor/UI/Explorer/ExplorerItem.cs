@@ -11,7 +11,6 @@ using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException
-// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
 // Implements same interfaces as System.Collections.ObjectModel.ObservableCollection{T} to enable

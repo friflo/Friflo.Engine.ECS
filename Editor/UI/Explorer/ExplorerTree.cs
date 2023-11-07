@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
 
-// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public class ExplorerTree

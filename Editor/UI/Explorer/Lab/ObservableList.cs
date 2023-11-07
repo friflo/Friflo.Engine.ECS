@@ -6,9 +6,7 @@ using System.Collections.Specialized;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
 using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI.Models;
-
+namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
 
 /// <summary>Implement interfaces of <see cref="ObservableCollection{T}"/></summary>
 // ObservableCollection : Collection<T>,                            INotifyCollectionChanged, INotifyPropertyChanged
