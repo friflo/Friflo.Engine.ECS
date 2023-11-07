@@ -23,6 +23,7 @@ public sealed class ExplorerItem :
  // INotifyPropertyChanged                                                      not required. Implemented by ObservableCollection{T}
 {
 #region internal properties
+    internal            string                              Name                => entity.Name.value;
     private             int                                 ChildCount          => entity.ChildCount;
     internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;    
     #endregion

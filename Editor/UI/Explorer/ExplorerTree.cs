@@ -46,13 +46,20 @@ public class ExplorerTree
     private static GameEntityStore CreateTestStore()
     {
         var store   = new GameEntityStore();
-        var root = store.CreateEntity();
-        root.AddChild(store.CreateEntity());
-        root.AddChild(store.CreateEntity());
-        root.AddChild(store.CreateEntity());
-        root.AddChild(store.CreateEntity());
+        var root =    CreateEntity(store, "root");
+        root.AddChild(CreateEntity(store, "child 1"));
+        root.AddChild(CreateEntity(store, "child 2"));
+        root.AddChild(CreateEntity(store, "child 3"));
+        root.AddChild(CreateEntity(store, "child 4"));
+        root.AddChild(CreateEntity(store, "child 5"));
         store.SetStoreRoot(root);
-        
         return store;
+    }
+    
+    private static GameEntity CreateEntity(GameEntityStore store, string name)
+    {
+        var entity = store.CreateEntity();
+        entity.AddComponent(new EntityName(name));
+        return entity;
     }
 }
