@@ -11,8 +11,10 @@ using Friflo.Fliox.Engine.ECS;
 // ReSharper disable PossibleNullReferenceException
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
-// Implements same interfaces as System.Collections.ObjectModel.ObservableCollection{T} to enable
-// using ExplorerItem's in UI controls typically using an ObservableCollection{T}.
+/// <summary>
+/// Implements same interfaces as <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/> to act as a replacement
+/// for <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/> with generic type <see cref="ExplorerItem"/>.
+/// </summary>
 public sealed class ExplorerItem :
     IList<ExplorerItem>,
     IList,
