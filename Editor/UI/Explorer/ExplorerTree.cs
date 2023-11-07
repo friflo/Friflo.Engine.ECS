@@ -39,7 +39,7 @@ public class ExplorerTree
                 break;
         } */
         var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
-        collectionChanged(this, collectionArgs);
+        collectionChanged(parent, collectionArgs);
     }
     
     internal ExplorerItem CreateExplorerItems(GameEntityStore store)

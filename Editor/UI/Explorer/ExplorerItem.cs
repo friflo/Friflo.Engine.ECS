@@ -71,7 +71,7 @@ public sealed class ExplorerItem :
     }
     
     private void RemoveChildEntityAt(int index) {
-        var child = entity.GetChildNodeByIndex(index).Entity;
+        var child = entity.GetChildNodeByIndex(index).Entity;   // called by TreeDataGrid 
         entity.RemoveChild(child);  // todo add GameEntity.RemoveChild(int index)
     }
     
@@ -140,7 +140,7 @@ public sealed class ExplorerItem :
     }
 
     void IList<ExplorerItem>.Insert(int index, ExplorerItem item) {
-        entity.InsertChild(index, item.entity);
+        entity.InsertChild(index, item.entity);         // called by TreeDataGrid
     }
 
     void IList<ExplorerItem>.RemoveAt(int index) {
