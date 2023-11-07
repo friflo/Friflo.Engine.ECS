@@ -6,7 +6,7 @@ namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public class ExplorerTree
 {
-    internal readonly Dictionary<int, ExplorerItem> items;
+    internal readonly   Dictionary<int, ExplorerItem>   items;
     
     public ExplorerTree (GameEntityStore store)
     {
@@ -25,5 +25,34 @@ public class ExplorerTree
         object child        = items[args.childId];
         var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
         collectionChanged(sender, collectionArgs);
+    }
+    
+    internal ExplorerItem CreateExplorerItems(GameEntityStore store) {
+        var root = store.StoreRoot;
+        return CreateExplorerItems(root);
+    }
+    
+    private ExplorerItem CreateExplorerItems(GameEntity entity)
+    {
+        var item = new ExplorerItem(this, entity);    
+        foreach (var node in entity.ChildNodes) {
+            CreateExplorerItems(node.Entity);
+        }
+        return item;
+    }
+    
+    internal static readonly GameEntityStore TestStore = CreateTestStore(); 
+    
+    private static GameEntityStore CreateTestStore()
+    {
+        var store   = new GameEntityStore();
+        var root = store.CreateEntity();
+        root.AddChild(store.CreateEntity());
+        root.AddChild(store.CreateEntity());
+        root.AddChild(store.CreateEntity());
+        root.AddChild(store.CreateEntity());
+        store.SetStoreRoot(root);
+        
+        return store;
     }
 }
