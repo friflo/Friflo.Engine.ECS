@@ -47,15 +47,17 @@ public sealed partial class GameEntityStore : EntityStore
     
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
-    [Browse(Never)] private             EntityNode[]            nodes;              //  8 + all nodes       - acts also id2pid
-    [Browse(Never)] private  readonly   PidType                 pidType;            //  4                   - pid != id  /  pid == id
-    [Browse(Never)] private             Random                  randPid;            //  8                   - null if using pid == id
-                    private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id>     - null if using pid == id
-    [Browse(Never)] private             GameEntity              storeRoot;          //  8                   - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] private             EntityNode[]            nodes;                  //  8 + all nodes   - acts also id2pid
+    [Browse(Never)] private  readonly   PidType                 pidType;                //  4               - pid != id  /  pid == id
+    [Browse(Never)] private             Random                  randPid;                //  8               - null if using pid == id
+                    private  readonly   Dictionary<long, int>   pid2Id;                 //  8 + Map<pid,id> - null if using pid == id
+    [Browse(Never)] private             GameEntity              storeRoot;              //  8               - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Behavior"/>'s to minimize iteration cost for <see cref="Behavior.Update"/>.</summary>
-    [Browse(Never)] private             EntityBehaviors[]       entityBehaviors;    //  8
+    [Browse(Never)] private             EntityBehaviors[]       entityBehaviors;        //  8
     /// <summary>Count of entities with one or more <see cref="Behavior"/>'s</summary>
-    [Browse(Never)] private             int                     entityBehaviorCount;//  4                   - >= 0  and  <= entityBehaviors.Length
+    [Browse(Never)] private             int                     entityBehaviorCount;    //  4               - >= 0  and  <= entityBehaviors.Length
+    
+    [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;      //  8               - fire events on add, insert, remove or delete a GameEntity 
     #endregion
     
 #region initialize

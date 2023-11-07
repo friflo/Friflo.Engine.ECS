@@ -394,7 +394,7 @@ public static class Test_Entity_Tree
         
         
         var start = Mem.GetAllocatedBytes();
-        store.SetChildNodesChangedHandler(null);
+        store.ChildNodesChangedHandler = null;
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.EntityCount);
@@ -487,6 +487,7 @@ public static class Test_Entity_Tree
             eventCount++;
         };
         store.ChildNodesChanged += handler;
+        AreSame(store.ChildNodesChangedHandler, handler);
         root.AddChild(child2);
         AreEqual(1, eventCount);
         
@@ -640,19 +641,19 @@ public static class Test_Entity_Tree
     private static Events SetHandler(GameEntityStore store, Action<ChildNodesChangedArgs> action)
     {
         var events = new Events();
-        store.SetChildNodesChangedHandler((object _, in ChildNodesChangedArgs args) => {
+        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
             events.seq++;
             action(args);
-        });
+        };
         return events;
     }
     
     private static Events SetHandlerSeq(GameEntityStore store, Action<ChildNodesChangedArgs, int> action)
     {
         var events = new Events();
-        store.SetChildNodesChangedHandler((object _, in ChildNodesChangedArgs args) => {
+        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
             action(args, events.seq++);
-        });
+        };
         return events;
     }
 }

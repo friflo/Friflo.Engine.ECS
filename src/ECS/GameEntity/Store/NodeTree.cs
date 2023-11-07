@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -333,14 +334,22 @@ public partial class GameEntityStore
     }
     
     // ---------------------------------- child nodes change notification ----------------------------------
-        
-    private         ChildNodesChangedHandler    childNodesChanged;
+    /// <summary>
+    /// Set a single <see cref="ChildNodesChangedHandler"/> to get events listed at <see cref="ChildNodesChanged"/>.<br/>
+    /// Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.<br/>
+    /// </summary>
+    public ChildNodesChangedHandler ChildNodesChangedHandler { get => childNodesChanged; set => childNodesChanged = value; }
     
-    public void     SetChildNodesChangedHandler (ChildNodesChangedHandler handler) {
-        childNodesChanged = handler;
-    }
-    
-    public   event  ChildNodesChangedHandler    ChildNodesChanged
+    /// <summary>
+    /// A <see cref="ECS.ChildNodesChangedHandler"/> added to a <see cref="GameEntityStore"/> get events on
+    /// <list type="bullet">
+    ///   <item><see cref="GameEntity.AddChild"/></item>
+    ///   <item><see cref="GameEntity.InsertChild"/></item>
+    ///   <item><see cref="GameEntity.RemoveChild"/></item>
+    ///   <item><see cref="GameEntity.DeleteEntity"/></item>
+    /// </list>
+    /// </summary>
+    public event ChildNodesChangedHandler ChildNodesChanged
     {
         add     => childNodesChanged += value;
         remove  => childNodesChanged -= value;
