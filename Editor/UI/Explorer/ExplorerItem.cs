@@ -70,9 +70,8 @@ public sealed class ExplorerItem :
     }
     
     private void RemoveChildEntityAt(int index) {
-        var childId = entity.GetChildIndex(index);
-        var child   = entity.Store.GetNodeById(childId).Entity;
-        entity.RemoveChild(child);
+        var child = entity.GetChildNodeByIndex(index).Entity;
+        entity.RemoveChild(child);  // todo add GameEntity.RemoveChild(int index)
     }
     
     private void ReplaceChildEntityAt(int index, ExplorerItem item) {
