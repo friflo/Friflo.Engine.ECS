@@ -88,7 +88,7 @@ public static class Test_Entity_Tree
 #pragma warning restore CS0618 // Type or member is obsolete
     }
     
-    [Test]
+[Test]
     public static void Test_InsertChild() {
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
@@ -165,6 +165,43 @@ public static class Test_Entity_Tree
             AreSame(child5, array[0]);
             AreSame(child4, array[1]);
         }
+    }
+    
+    /// <summary>Cover <see cref="GameEntityStore.InsertChild"/></summary>
+    [Test]
+    public static void Test_InsertChild_cover() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        root.AddComponent(new EntityName("root"));
+       
+        var child2      = store.CreateEntity(2);
+        var child3      = store.CreateEntity(3);
+        var subChild4   = store.CreateEntity(4);
+        
+        root.AddChild(child2);
+        root.AddChild(child3);
+        child2.AddChild(subChild4);
+        
+        SetHandlerSeq(store, (args, seq) => {
+            switch (seq) {
+                case 0:     AreEqual("entity: 1 - Remove ChildIds[1] = 3",    args.ToString()); return;
+                case 1:     AreEqual("entity: 1 - Add ChildIds[0] = 3",       args.ToString()); return;
+                default:    Fail("unexpected"); return;
+            }
+        });
+        AreEqual(1, root.GetChildIndex(child3.Id));
+        root.InsertChild(0, child3);    // move child3 within root. index: 1 -> 0
+        AreEqual(0, root.GetChildIndex(child3.Id));
+        
+        SetHandlerSeq(store, (args, seq) => {
+            switch (seq) {
+                case 0:     AreEqual("entity: 2 - Remove ChildIds[0] = 4",    args.ToString()); return;
+                case 1:     AreEqual("entity: 1 - Add ChildIds[0] = 4",       args.ToString()); return;
+                default:    Fail("unexpected"); return;
+            }
+        });
+        
+        root.InsertChild(0, subChild4);    // change subChild4 parent: child2 -> root
     }
     
     /// <summary>code coverage for <see cref="GameEntityStore.SetTreeFlags"/></summary>
