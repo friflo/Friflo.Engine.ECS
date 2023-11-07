@@ -25,6 +25,7 @@ public sealed class ExplorerItem :
 #region internal properties
     internal            string                              Name                => entity.Name.value;
     public              bool                                flag;
+    public              GameEntity                          Entity              => entity;
     internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;
 
     public   override   string                              ToString()          => entity.ToString();
@@ -116,8 +117,12 @@ public sealed class ExplorerItem :
     }
 
     void ICollection<ExplorerItem>.CopyTo(ExplorerItem[] array, int arrayIndex) {
-        // collection.CopyTo(array, arrayIndex);
-        throw new NotImplementedException();
+        var childIds = entity.ChildIds;
+        for (int n = 0; n < childIds.Length; n++)
+        {
+            int id                  = childIds[n];
+            array[n + arrayIndex]   = tree.items[id];            
+        }
     }
 
     bool ICollection<ExplorerItem>.Remove(ExplorerItem item) {
@@ -201,8 +206,15 @@ public sealed class ExplorerItem :
     bool    ICollection.IsSynchronized  => false;
     object  ICollection.SyncRoot        => this;
     
-    void    ICollection.CopyTo(Array array, int index) {
-        throw new NotImplementedException();
+    void    ICollection.CopyTo(Array array, int index)
+    {
+        var childIds = entity.ChildIds;
+        for (int n = 0; n < childIds.Length; n++)
+        {
+            int id      = childIds[n];
+            var item    = tree.items[id];
+            array.SetValue(item, n + index);
+        }
     }
     #endregion
 }
