@@ -13,7 +13,12 @@ namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
 // Collection<T>               : IList<T>, IList, IReadOnlyList<T>
 public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyCollectionChanged //, INotifyPropertyChanged
 {
-    public  event       NotifyCollectionChangedEventHandler CollectionChanged;
+    private             NotifyCollectionChangedEventHandler collectionChanged;
+    
+    public  event       NotifyCollectionChangedEventHandler CollectionChanged {
+        add     => collectionChanged += value;
+        remove  => collectionChanged -= value;
+    }
 //  public  event       PropertyChangedEventHandler         PropertyChanged;
     private readonly    List<T>                             collection;
     
@@ -32,11 +37,11 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
     // --- private methods
     private void OnCollectionChanged(Op action, object item, int index) {
         var args = new NotifyCollectionChangedEventArgs(action, item, index);
-        CollectionChanged?.Invoke(this, args);
+        collectionChanged?.Invoke(this, args);
     }
     
     private void OnCollectionChanged(Args args) {
-        CollectionChanged?.Invoke(this, args);
+        collectionChanged?.Invoke(this, args);
     }
     
     // --- private implementations

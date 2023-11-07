@@ -11,19 +11,21 @@ public class DragDropItem
     /// <see cref="ObservableCollection{T}"/>
     /// <see cref="MyObservableCollection{T}"/>
     /// </summary>
-    public  readonly        MyObservableCollection<DragDropItem>        children;   // Must always be present. Drop on an item with children == null result in COMException.
+    public  readonly        ObservableList<DragDropItem>        children;   // Must always be present. Drop on an item with children == null result in COMException.
     public                  string                              Name { get; }
     public                  bool                                flag;
 
-    private static          MyObservableCollection<DragDropItem> CreateObservable() {
-        var collection = new MyObservableCollection<DragDropItem>();
-        collection.AddPropertyChangedHandler();
-        return collection;
+    private static          ObservableList<DragDropItem>            CreateObservable() => new ObservableList<DragDropItem>();
+    private static          MyObservableCollection<DragDropItem>    CreateObservable_XXX() {
+        var myCollection = new MyObservableCollection<DragDropItem>();
+        myCollection.AddPropertyChangedHandler();
+        return myCollection;
     }
-
-    public  static readonly MyObservableCollection<DragDropItem> Root = CreateRandomItems();
     
-    private static          MyObservableCollection<DragDropItem> CreateRandomItems()
+
+    public  static readonly ObservableList<DragDropItem> Root = CreateRandomItems();
+    
+    private static          ObservableList<DragDropItem> CreateRandomItems()
     {
         var root = new DragDropItem ("root");
         root.children.Add(new DragDropItem("child 1"));
