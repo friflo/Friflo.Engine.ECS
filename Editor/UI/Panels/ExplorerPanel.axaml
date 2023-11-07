@@ -9,7 +9,7 @@
              x:DataType="vm:MainWindowViewModel">
         <StackPanel Orientation="Vertical" Spacing="8">
             <TreeDataGrid Name="DragDrop"
-                          Source="{Binding DragDrop.Source}"
+                          Source="{Binding DragDrop.DragDropSource}"
                           AutoDragDropRows="True"/>
         </StackPanel>
 </UserControl>

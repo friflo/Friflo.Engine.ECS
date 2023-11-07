@@ -7,7 +7,8 @@ namespace Friflo.Fliox.Editor.UI.Explorer;
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/DragDropPageViewModel.cs
 internal class ExplorerViewModel
 {
-    internal ExplorerViewModel()
+    /// Example showing the creation of a simple data source.
+    private static ITreeDataGridSource<DragDropItem> CreateDragDropSource()
     {
         var data    = DragDropItem.Root;
         var source  = new HierarchicalTreeDataGridSource<DragDropItem>(data);
@@ -19,9 +20,9 @@ internal class ExplorerViewModel
             "Flag", x => x.flag, (o, x) => o.flag = x));
 
         source.RowSelection!.SingleSelect = false;
-        Source = source;
+        return source;
     }
 
-    internal ITreeDataGridSource<DragDropItem> Source { get; }
+    internal ITreeDataGridSource<DragDropItem> DragDropSource => CreateDragDropSource();
 }
 
