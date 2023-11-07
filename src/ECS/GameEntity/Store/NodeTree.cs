@@ -22,7 +22,7 @@ public partial class GameEntityStore
         var newLength = Math.Max(length, 2 * curLength);
         Utils.Resize(ref nodes, newLength);
         var localNodes = nodes;
-        for (int n = curLength; n < length; n++) {
+        for (int n = curLength; n < newLength; n++) {
             localNodes[n] = new EntityNode (n);
         }
     }
