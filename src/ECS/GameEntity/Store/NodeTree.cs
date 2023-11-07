@@ -335,7 +335,7 @@ public partial class GameEntityStore
     
     // ---------------------------------- child nodes change notification ----------------------------------
     /// <summary>
-    /// Set a single <see cref="ChildNodesChangedHandler"/> to get events listed at <see cref="ChildNodesChanged"/>.<br/>
+    /// Set or clear a <see cref="ChildNodesChangedHandler"/> to get events listed at <see cref="ChildNodesChanged"/>.<br/>
     /// Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.<br/>
     /// </summary>
     public ChildNodesChangedHandler ChildNodesChangedHandler { get => childNodesChanged; set => childNodesChanged = value; }
