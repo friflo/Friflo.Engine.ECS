@@ -26,7 +26,10 @@ public sealed class ExplorerItem :
     internal            string                              Name                => entity.Name.value;
     public              bool                                flag;
     private             int                                 ChildCount          => entity.ChildCount;
-    internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;    
+    internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;
+
+    public   override   string                              ToString()          => entity.ToString();
+
     #endregion
     
 #region internal fields
@@ -48,8 +51,9 @@ public sealed class ExplorerItem :
         var item = new ExplorerItem(tree, entity);
         tree.items.Add(entity.Id, item);
         
-        IList<ExplorerItem> list = item;
-        foreach (var node in entity.ChildNodes) {
+        IList<ExplorerItem> list    = item;
+        var childNodes              = entity.ChildNodes;
+        foreach (var node in childNodes) {
             var childItem = CreateExplorerItems(tree, node.Entity);
             list.Add(childItem);
         }
