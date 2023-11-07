@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Editor.UI.Models
     public class MyObservableCollection<T> : ObservableCollection<T>
     {
         public void AddPropertyChangedHandler() {
-            PropertyChanged += (sender, args) => {
+            PropertyChanged += (_, args) => {
                 var sb = new StringBuilder();
                 sb.Append("PropertyChanged: ");
                 var name = args.PropertyName;
@@ -53,7 +53,7 @@ namespace Friflo.Fliox.Editor.UI.Models
             root.children.Add(new DragDropItem("child 4"));
             var result = CreateObservable();
             result.Add(root);
-            result.CollectionChanged += (sender, args) => {
+            result.CollectionChanged += (_, args) => {
                 Console.WriteLine($"--- {args.Action}");
             };
             return result;
@@ -62,7 +62,7 @@ namespace Friflo.Fliox.Editor.UI.Models
         public DragDropItem(string name) {
             Name        = name;
             children    = CreateObservable();
-            children.CollectionChanged += (sender, args) => {
+            children.CollectionChanged += (_, args) => {
                 Console.WriteLine($"--- {args.Action}");
             };
         }

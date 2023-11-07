@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
 using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
@@ -73,7 +72,6 @@ public class ObservableList<T> : IList<T>, IList, IReadOnlyList<T>, INotifyColle
 
     bool ICollection<T>.Remove(T item) {
         throw new NotImplementedException();
-        return collection.Remove(item);
     }
 
     int ICollection<T>.Count => collection.Count;

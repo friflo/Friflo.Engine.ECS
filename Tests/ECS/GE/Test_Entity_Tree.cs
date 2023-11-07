@@ -482,7 +482,7 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("root"));
         int eventCount = 0;
         
-        ChildNodesChangedHandler handler = (object sender, in ChildNodesChangedArgs args) => {
+        ChildNodesChangedHandler handler = (object _, in ChildNodesChangedArgs args) => {
             AreEqual("entity: 1 - Add ChildIds[0] = 2", args.ToString());
             eventCount++;
         };
