@@ -521,8 +521,14 @@ public static class Test_Entity_Tree
             entity1.AddChild(entity2);
         });
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+        
         e = Throws<ArgumentException>(() => {
             entity1.RemoveChild(entity2);
+        });
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+        
+        e = Throws<ArgumentException>(() => {
+            entity1.InsertChild(0, entity2);
         });
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
     }
