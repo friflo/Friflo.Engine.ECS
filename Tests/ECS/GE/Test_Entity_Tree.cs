@@ -453,7 +453,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Cover <see cref="GameEntity.GetChildNodeByIndex"/></summary>
     [Test]
-    public static void Test_GetChildNodeByIndex() {
+    public static void Test_GameEntity_GetChildNodeByIndex() {
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
@@ -464,9 +464,17 @@ public static class Test_Entity_Tree
         AreSame(child2, root.GetChildNodeByIndex(0).Entity);
     }
     
+    /// <summary>Cover <see cref="GameEntity.GetChildIndex"/></summary>
+    [Test]
+    public static void Test_GameEntity_GetChildIndex() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        AreEqual(-1, root.GetChildIndex(123));
+    }
+    
     /// <summary>Cover <see cref="GameEntityStore.ChildNodesChanged"/></summary>
     [Test]
-    public static void Test_ChildNodesChanged() {
+    public static void Test_GameEntityStore_ChildNodesChanged() {
         var store   = new GameEntityStore();
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
