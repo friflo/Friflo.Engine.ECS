@@ -7,6 +7,7 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
+// ReSharper disable ConvertToLocalFunction
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.GE;
@@ -448,6 +449,42 @@ public static class Test_Entity_Tree
         AreEqual(2, childIds.Length);
         AreEqual(2, childIds[0]);
         AreEqual(4, childIds[1]);
+    }
+    
+    /// <summary>Cover <see cref="GameEntity.GetChildNodeByIndex"/></summary>
+    [Test]
+    public static void Test_GetChildNodeByIndex() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        root.AddComponent(new EntityName("root"));
+       
+        var child2      = store.CreateEntity(2);
+        root.AddChild(child2);
+        
+        AreSame(child2, root.GetChildNodeByIndex(0).Entity);
+    }
+    
+    /// <summary>Cover <see cref="GameEntityStore.ChildNodesChanged"/></summary>
+    [Test]
+    public static void Test_ChildNodesChanged() {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        root.AddComponent(new EntityName("root"));
+        int eventCount = 0;
+        
+        ChildNodesChangedHandler handler = (object sender, in ChildNodesChangedArgs args) => {
+            AreEqual("entity: 1 - Add ChildIds[0] = 2", args.ToString());
+            eventCount++;
+        };
+        store.ChildNodesChanged += handler;
+        root.AddChild(child2);
+        AreEqual(1, eventCount);
+        
+        store.ChildNodesChanged -= handler;
+        root.AddChild(child3);
+        AreEqual(1, eventCount); // no event fired
     }
     
     [Test]
