@@ -75,7 +75,7 @@ public sealed class ExplorerItem :
         entity.RemoveChild(child);  // todo add GameEntity.RemoveChild(int index)
     }
     
-    private void ReplaceChildEntityAt(int index, ExplorerItem item) {
+    private void ReplaceChildEntityAt(int _, ExplorerItem __) {
         throw new NotImplementedException();
     }
     
@@ -105,7 +105,7 @@ public sealed class ExplorerItem :
 
 #region ICollection<>
     void ICollection<ExplorerItem>.Add(ExplorerItem item) {
-        entity.AddChild(item.entity);   // called by TreeDataGrid
+        entity.AddChild(item.entity);                           // called by TreeDataGrid
     }
 
     void ICollection<ExplorerItem>.Clear() {
@@ -140,15 +140,15 @@ public sealed class ExplorerItem :
     }
 
     void IList<ExplorerItem>.Insert(int index, ExplorerItem item) {
-        entity.InsertChild(index, item.entity);         // called by TreeDataGrid
+        entity.InsertChild(index, item.entity);                 // called by TreeDataGrid (DRAG)
     }
 
     void IList<ExplorerItem>.RemoveAt(int index) {
-        RemoveChildEntityAt(index);                     // called by TreeDataGrid
+        RemoveChildEntityAt(index);                             // called by TreeDataGrid (DRAG)
     }
 
     ExplorerItem IList<ExplorerItem>.this[int index] {
-        get => GetChildByIndex(index);                  // called by TreeDataGrid
+        get => GetChildByIndex(index);                          // called by TreeDataGrid
         set => ReplaceChildEntityAt(index, value);
     }
 
@@ -175,7 +175,7 @@ public sealed class ExplorerItem :
     }
 
     object IList.this[int index] {
-        get => GetChildByIndex(index);                              // called by TreeDataGrid
+        get => GetChildByIndex(index);                          // called by TreeDataGrid
         set => ReplaceChildEntityAt(index, (ExplorerItem)value);
     }
 
