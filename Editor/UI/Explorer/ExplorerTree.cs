@@ -27,18 +27,10 @@ public class ExplorerTree
         collectionChanged(sender, collectionArgs);
     }
     
-    internal ExplorerItem CreateExplorerItems(GameEntityStore store) {
-        var root = store.StoreRoot;
-        return CreateExplorerItems(root);
-    }
-    
-    private ExplorerItem CreateExplorerItems(GameEntity entity)
+    internal ExplorerItem CreateExplorerItems(GameEntityStore store)
     {
-        var item = new ExplorerItem(this, entity);    
-        foreach (var node in entity.ChildNodes) {
-            CreateExplorerItems(node.Entity);
-        }
-        return item;
+        var root = store.StoreRoot;
+        return ExplorerItem.CreateExplorerItems(this, root);
     }
     
     internal static readonly GameEntityStore TestStore = CreateTestStore(); 

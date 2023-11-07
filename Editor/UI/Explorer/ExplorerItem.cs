@@ -37,11 +37,22 @@ public sealed class ExplorerItem :
     #endregion
 
 #region constructor
-    internal ExplorerItem (ExplorerTree tree, GameEntity entity) {
+    private ExplorerItem (ExplorerTree tree, GameEntity entity) {
         this.tree   = tree;
         this.entity = entity;
     }
     #endregion
+    
+    internal static ExplorerItem CreateExplorerItems(ExplorerTree tree, GameEntity entity)
+    {
+        var                 item = new ExplorerItem(tree, entity);
+        IList<ExplorerItem> list = item;
+        foreach (var node in entity.ChildNodes) {
+            var childItem = CreateExplorerItems(tree, node.Entity);
+            list.Add(childItem);
+        }
+        return item;
+    }
     
 #region private methods
     private ExplorerItem GetChildByIndex(int index) {
