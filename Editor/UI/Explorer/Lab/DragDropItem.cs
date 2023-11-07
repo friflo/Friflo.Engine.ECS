@@ -1,26 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
-
-public class MyObservableCollection<T> : ObservableCollection<T>
-{
-    public void AddPropertyChangedHandler() {
-        PropertyChanged += (_, args) => {
-            var sb = new StringBuilder();
-            sb.Append("PropertyChanged: ");
-            var name = args.PropertyName;
-            sb.Append(name);
-            sb.Append(" = ");
-            switch (name) {
-                case "Count":   sb.Append(Count); break;
-                case "Item[]":  sb.Append(Count); break;
-            }
-            Console.WriteLine(sb.ToString());
-        }; 
-    }
-}
 
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/Models/DragDropItem.cs
 public class DragDropItem 
