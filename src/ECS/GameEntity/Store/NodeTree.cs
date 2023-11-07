@@ -52,7 +52,6 @@ public partial class GameEntityStore
     internal void AddChild (int parentId, int childId)
     {
         var localNodes      = nodes;
-        // update child node parent
         ref var childNode   = ref localNodes[childId];
         var curParentId     = childNode.parentId;
         if (HasParent(curParentId)) {
@@ -83,7 +82,6 @@ public partial class GameEntityStore
         if (childIndex > parent.childCount) {
             throw new IndexOutOfRangeException();
         }
-        // update child node parent
         ref var childNode   = ref localNodes[childId];
         var curParentId     = childNode.parentId;
         if (HasParent(curParentId))
@@ -97,7 +95,7 @@ public partial class GameEntityStore
                 goto InsertNode;
             }
             // case: entity with given id is already a child of this entity => move child
-            curIndex = GetChildIndex(ref curParent, childId);
+            curIndex = GetChildIndex(curParent, childId);
             if (curIndex == childIndex) {
                 // case: child entity is already at the requested childIndex
                 return;
@@ -116,7 +114,7 @@ public partial class GameEntityStore
         InsertChildNode(ref parent, childId, childIndex);
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
-        OnChildNodeAdd(parentId,          childId, childIndex);
+        OnChildNodeAdd(parentId,    childId, childIndex);
     }
     
     internal bool RemoveChild (int parentId, int childId)
@@ -139,9 +137,9 @@ public partial class GameEntityStore
         return ref nodes[childIds[childIndex]];
     }
     
-    internal int GetChildIndex(int parentId, int childId) => GetChildIndex(ref nodes[parentId], childId);
+    internal int GetChildIndex(int parentId, int childId) => GetChildIndex(nodes[parentId], childId);
     
-    private static int GetChildIndex(ref EntityNode parent, int childId)
+    private static int GetChildIndex(in EntityNode parent, int childId)
     {
         var childIds    = parent.childIds;
         int count       = parent.childCount;
@@ -174,7 +172,7 @@ public partial class GameEntityStore
     
     private static void InsertChildNode (ref EntityNode parent, int childId, int childIndex)
     {
-        var childNodes  = parent.childIds;
+        var childNodes = parent.childIds;
         for (int n = parent.childCount; n > childIndex; n--) {
             childNodes[n] = childNodes[n - 1];
         }
@@ -293,7 +291,7 @@ public partial class GameEntityStore
         if (!HasParent(parentId)) {
             return;
         }
-        int curIndex    = RemoveChildNode(ref localNodes[parentId], id);
+        int curIndex = RemoveChildNode(ref localNodes[parentId], id);
         OnChildNodeRemove(parentId, id, curIndex);
     }
     
