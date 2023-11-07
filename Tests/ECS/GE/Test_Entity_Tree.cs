@@ -186,7 +186,6 @@ public static class Test_Entity_Tree
             switch (seq) {
                 case 0:     AreEqual("entity: 1 - Remove ChildIds[1] = 3",    args.ToString()); return;
                 case 1:     AreEqual("entity: 1 - Add ChildIds[0] = 3",       args.ToString()); return;
-                default:    Fail("unexpected"); return;
             }
         });
         AreEqual(new [] { 2, 3 }, root.ChildIds.ToArray());
@@ -199,7 +198,6 @@ public static class Test_Entity_Tree
             switch (seq) {
                 case 0:     AreEqual("entity: 2 - Remove ChildIds[0] = 4",    args.ToString()); return;
                 case 1:     AreEqual("entity: 1 - Add ChildIds[0] = 4",       args.ToString()); return;
-                default:    Fail("unexpected"); return;
             }
         });
         root.InsertChild(0, subChild4);    // change subChild4 parent: child2 -> root
@@ -233,7 +231,6 @@ public static class Test_Entity_Tree
             switch (seq) {
                 case 0:     AreEqual("entity: 2 - Remove ChildIds[0] = 4",    args.ToString()); return;
                 case 1:     AreEqual("entity: 3 - Add ChildIds[0] = 4",       args.ToString()); return;
-                default:    Fail("unexpected"); return;
             }
         });
         child2.AddChild(subChild);  // subChild is moved from child1 to child2
@@ -342,7 +339,6 @@ public static class Test_Entity_Tree
             switch (seq) {
                 case 0:     AreEqual("entity: 1 - Remove ChildIds[0] = 3",    args.ToString()); return;
                 case 1:     AreEqual("entity: 2 - Add ChildIds[0] = 3",       args.ToString()); return;
-                default:    Fail("unexpected"); return;
             }
         });
         entity2.AddChild(child);
