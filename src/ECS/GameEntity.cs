@@ -83,8 +83,11 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="ChildIds"/></item>
 ///     <item><see cref="ChildCount"/></item>
 ///     <item><see cref="AddChild"/></item>
+///     <item><see cref="InsertChild"/></item>
 ///     <item><see cref="RemoveChild"/></item>
 ///     <item><see cref="DeleteEntity"/></item>
+///     <item><see cref="GetChildIndex"/></item>
+///     <item><see cref="GetChildNodeByIndex"/></item>
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
@@ -306,10 +309,10 @@ public sealed class GameEntity
         }
         archetype = null;
     }
-    
-    public ref readonly EntityNode  GetChildNodeByIndex(int index)  => ref archetype.gameEntityStore.GetChildNodeByIndex(id, index);
-    
+
     public              int         GetChildIndex(int childId)      => archetype.gameEntityStore.GetChildIndex(id, childId);
+
+    public ref readonly EntityNode  GetChildNodeByIndex(int index)  => ref archetype.gameEntityStore.GetChildNodeByIndex(id, index);
     
     #endregion
 }
