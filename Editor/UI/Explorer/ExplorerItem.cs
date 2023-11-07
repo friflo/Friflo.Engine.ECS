@@ -24,6 +24,7 @@ public sealed class ExplorerItem :
 {
 #region internal properties
     internal            string                              Name                => entity.Name.value;
+    internal            int                                 Id                  => entity.Id;
     public              bool                                flag;
     public              GameEntity                          Entity              => entity;
     internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;

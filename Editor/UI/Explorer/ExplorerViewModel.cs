@@ -16,11 +16,14 @@ internal class ExplorerViewModel
         
         var source      = new HierarchicalTreeDataGridSource<ExplorerItem>(rootItem);
         
-        source.Columns.Add(new HierarchicalExpanderColumn<ExplorerItem>(
-            new TextColumn<ExplorerItem, string>("Name", item => item.Name, GridLength.Star), item => item));
+        var nameCol = new TextColumn<ExplorerItem, string>("name", item => item.Name, GridLength.Star);
+        source.Columns.Add(new HierarchicalExpanderColumn<ExplorerItem>(nameCol, item => item));
         
-        source.Columns.Add(
-            new CheckBoxColumn<ExplorerItem>("Flag", item => item.flag, (item, value) => item.flag = value));
+        var idCol   = new TextColumn<ExplorerItem, int>   ("id",   item => item.Id,   GridLength.Auto);
+        source.Columns.Add(idCol);
+        
+        var flagCol = new CheckBoxColumn<ExplorerItem>    ("flag", item => item.flag, (item, value) => item.flag = value);
+        source.Columns.Add(flagCol);
 
         source.RowSelection!.SingleSelect = false;
         return source;
