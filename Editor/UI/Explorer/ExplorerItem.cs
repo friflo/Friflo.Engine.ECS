@@ -25,7 +25,6 @@ public sealed class ExplorerItem :
 #region internal properties
     internal            string                              Name                => entity.Name.value;
     public              bool                                flag;
-    private             int                                 ChildCount          => entity.ChildCount;
     internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;
 
     public   override   string                              ToString()          => entity.ToString();
@@ -106,7 +105,7 @@ public sealed class ExplorerItem :
 
 #region ICollection<>
     void ICollection<ExplorerItem>.Add(ExplorerItem item) {
-        entity.AddChild(item.entity);
+        entity.AddChild(item.entity);   // called by TreeDataGrid
     }
 
     void ICollection<ExplorerItem>.Clear() {
@@ -126,7 +125,7 @@ public sealed class ExplorerItem :
         return entity.RemoveChild(item.entity);
     }
 
-    int ICollection<ExplorerItem>.Count => ChildCount;
+    int ICollection<ExplorerItem>.Count => entity.ChildCount;   // called by TreeDataGrid
 
     bool ICollection<ExplorerItem>.IsReadOnly => false;
     #endregion
@@ -141,19 +140,19 @@ public sealed class ExplorerItem :
     }
 
     void IList<ExplorerItem>.RemoveAt(int index) {
-        RemoveChildEntityAt(index);
+        RemoveChildEntityAt(index);                     // called by TreeDataGrid
     }
 
     ExplorerItem IList<ExplorerItem>.this[int index] {
-        get => GetChildByIndex(index);
+        get => GetChildByIndex(index);                  // called by TreeDataGrid
         set => ReplaceChildEntityAt(index, value);
     }
 
     #endregion
     
 #region IReadOnlyCollection<>
-    ExplorerItem  IReadOnlyList<ExplorerItem>.this[int index]   => GetChildByIndex(index);
-    int         IReadOnlyCollection<ExplorerItem>.Count       => ChildCount;
+    ExplorerItem    IReadOnlyList<ExplorerItem>.this[int index]   => GetChildByIndex(index);    // called by TreeDataGrid
+    int             IReadOnlyCollection<ExplorerItem>.Count       => entity.ChildCount;         // called by TreeDataGrid
     #endregion
     
 // ---------------------------------- crab interface implementations :) ----------------------------------
@@ -172,7 +171,7 @@ public sealed class ExplorerItem :
     }
 
     object IList.this[int index] {
-        get => GetChildByIndex(index);
+        get => GetChildByIndex(index);                              // called by TreeDataGrid
         set => ReplaceChildEntityAt(index, (ExplorerItem)value);
     }
 
@@ -199,7 +198,7 @@ public sealed class ExplorerItem :
     #endregion
     
 #region ICollection
-    int     ICollection.Count           => ChildCount;
+    int     ICollection.Count           => entity.ChildCount;   // called by TreeDataGrid
     bool    ICollection.IsSynchronized  => false;
     object  ICollection.SyncRoot        => this;
     
