@@ -117,10 +117,14 @@ public sealed class GameDataSync
         }
     }
     
-    public async void UpsertDataEntityAsync(int entityId)
+    public void UpsertDataEntity(int entityId)
     {
         var entity = store.GetNodeById(entityId).Entity;
         UpsertDataEntity(entity);
+    }
+    
+    public async Task SyncChangesAsync()
+    {
         await client.SyncTasks();
     }
     

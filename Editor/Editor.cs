@@ -63,7 +63,6 @@ public class Editor
         
         await AddSampleEntities(sync);
 
-        // todo accumulate tasks and SyncTasks() at once 
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
         // --- run server
@@ -75,12 +74,29 @@ public class Editor
     {
         switch (args.action) {
             case ChildNodesChangedAction.Add:
-                sync.UpsertDataEntityAsync(args.parentId);
+                sync.UpsertDataEntity(args.parentId);
+                PostSyncChanges();
                 break;
             case ChildNodesChangedAction.Remove:
-                sync.UpsertDataEntityAsync(args.parentId);
+                sync.UpsertDataEntity(args.parentId);
+                PostSyncChanges();
                 break;
         }
+    }
+    
+    private bool syncChangesPending;
+    
+    /// Accumulate change tasks and SyncTasks() at once.
+    private void PostSyncChanges() {
+        if (syncChangesPending) {
+            return;
+        }
+        syncChangesPending = false;
+        EditorUtils.Post(SyncChangesAsync);
+    }
+    
+    private async void SyncChangesAsync() {
+        await sync.SyncChangesAsync();
     }
     
     internal void Shutdown() {
