@@ -10,7 +10,7 @@ public enum ChildNodesChangedAction
 {
     Add     = NotifyCollectionChangedAction.Add,
     Remove  = NotifyCollectionChangedAction.Remove,
-    Replace = NotifyCollectionChangedAction.Replace,
-    Move    = NotifyCollectionChangedAction.Move,
-    Reset   = NotifyCollectionChangedAction.Reset,
+//  Replace = NotifyCollectionChangedAction.Replace,
+//  Move    = NotifyCollectionChangedAction.Move,
+//  Reset   = NotifyCollectionChangedAction.Reset,
 }

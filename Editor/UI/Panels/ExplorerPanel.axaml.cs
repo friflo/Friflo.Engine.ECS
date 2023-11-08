@@ -29,9 +29,8 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     private void SetupExplorer()
     {
         if (Editor.Store == null) throw new InvalidOperationException("expect Store is present");
+        // return;
         var source      = (HierarchicalTreeDataGridSource<ExplorerItem>)DragDrop.Source!;
-        
-        // --- set 
         var store       = Editor.Store;
         var tree        = new ExplorerTree(store);
         var rootItem    = tree.CreateExplorerItems(store);

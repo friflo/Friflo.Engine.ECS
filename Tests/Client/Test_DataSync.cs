@@ -144,7 +144,7 @@ public static class Test_DataSync
         AreEqual("Value cannot be null. (Parameter 'client')", e!.Message);
     }
     
-    private static GameClient Prepare_SubscribeDatabaseChanges(out GameDataSync sync, out EventProcessorQueue processor)
+    private static FlioxHub Prepare_SubscribeDatabaseChanges(out GameDataSync sync, out EventProcessorQueue processor)
     {
         var schema          = DatabaseSchema.Create<GameClient>();
         var database        = new MemoryDatabase("test", schema);
@@ -156,14 +156,15 @@ public static class Test_DataSync
         sync                = new GameDataSync(store, client);
         processor           = new EventProcessorQueue();
         client.SetEventProcessor(processor);
-        return client;
+        return hub;
     }
     
     /// <summary>Cover <see cref="GameDataSync.SubscribeDatabaseChanges"/></summary>
     [Test]
     public static void Test_DataSync_SubscribeDatabaseChanges()
     {
-        var client  = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
+        var hub     = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
+        var client  = new GameClient(hub);
         var store   = sync.Store;
         sync.SubscribeDatabaseChanges();
         
@@ -192,7 +193,8 @@ public static class Test_DataSync
     [Test]
     public static async Task Test_DataSync_SubscribeDatabaseChangesAsync()
     {
-        var client  = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
+        var hub     = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
+        var client  = new GameClient(hub);
         var store   = sync.Store;
         await sync.SubscribeDatabaseChangesAsync();
         

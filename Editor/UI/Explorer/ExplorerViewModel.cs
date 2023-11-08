@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Friflo.Fliox.Editor.UI.Explorer.Lab;
@@ -13,8 +14,10 @@ internal class ExplorerViewModel
         var store       = ExplorerTree.CreateDefaultStore();
         var tree        = new ExplorerTree(store);
         var rootItem    = tree.CreateExplorerItems(store);
+        var items       = new [] { rootItem } as IEnumerable<ExplorerItem>;
+        // items           = Array.Empty<ExplorerItem>();
         
-        var source  = new HierarchicalTreeDataGridSource<ExplorerItem>(rootItem);
+        var source  = new HierarchicalTreeDataGridSource<ExplorerItem>(items);
         
         var nameCol = new TextColumn<ExplorerItem, string>("name", item => item.Name, GridLength.Star);
         source.Columns.Add(new HierarchicalExpanderColumn<ExplorerItem>(nameCol, item => item));

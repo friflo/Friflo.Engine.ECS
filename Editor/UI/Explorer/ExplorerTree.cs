@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
 
@@ -20,7 +21,7 @@ public class ExplorerTree
     {
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
-        root.AddComponent(new EntityName("root"));
+        root.AddComponent(new EntityName("root - default"));
         store.SetStoreRoot(root);
         return store;
     }
@@ -28,7 +29,7 @@ public class ExplorerTree
     private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
     {
         var parent              = items[args.parentId];
-        // Console.WriteLine($"event: {args}       parent: {parent}");
+        Console.WriteLine($"event: {args}       parent: {parent}");
         var collectionChanged   = parent.CollectionChanged;
         if (collectionChanged == null) {
             return;

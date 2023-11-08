@@ -28,6 +28,7 @@ public class Editor
 
 #region private fields
     private             GameEntityStore     store;
+    private             GameDataSync        sync;
     private             event Action        OnReady;
     private             bool                isReady;
     private readonly    ManualResetEvent    signalEvent = new ManualResetEvent(false);
@@ -55,15 +56,31 @@ public class Editor
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
         var client      = new GameClient(hub);
-        var sync        = new GameDataSync(store, client);
+        sync            = new GameDataSync(store, client);
         processor       = new EventProcessorQueue(ReceivedEvent);
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
         await AddSampleEntities(sync);
+
+        // todo 
+        store.ChildNodesChanged += ChildNodesChangedHandler;
         
         // --- run server
         server = RunServer(hub);
+    }
+    
+    /// <summary>SYNC: <see cref="GameEntity"/> -> <see cref="GameDataSync"/></summary>
+    private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
+    {
+        switch (args.action) {
+            case ChildNodesChangedAction.Add:
+                sync.UpsertDataEntityAsync(args.parentId);
+                break;
+            case ChildNodesChangedAction.Remove:
+                sync.UpsertDataEntityAsync(args.parentId);
+                break;
+        }
     }
     
     internal void Shutdown() {
@@ -133,22 +150,22 @@ public class Editor
         var root    = store.StoreRoot;
         root.AddComponent(new Position(1, 1, 1));
         root.AddComponent(new EntityName("root"));
-        var child2   = store.CreateEntity(2);
-        child2.AddComponent(new Position(2, 2, 2));
-        child2.AddComponent(new EntityName("child 2"));
-        root.AddChild(child2);
-        root.AddChild(CreateEntity(store, "child 3"));
-        root.AddChild(CreateEntity(store, "child 4"));
-        root.AddChild(CreateEntity(store, "child 5"));
-        root.AddChild(CreateEntity(store, "child 6"));
+        var child   = CreateEntity(store, 2);
+        child.AddComponent(new Position(2, 2, 2));
+
+        root.AddChild(child);
+        root.AddChild(CreateEntity(store, 3));
+        root.AddChild(CreateEntity(store, 4));
+        root.AddChild(CreateEntity(store, 5));
+        root.AddChild(CreateEntity(store, 6));
         
         await sync.StoreGameEntitiesAsync();
     }
     
-    private static GameEntity CreateEntity(GameEntityStore store, string name)
+    private static GameEntity CreateEntity(GameEntityStore store, int id)
     {
         var entity = store.CreateEntity();
-        entity.AddComponent(new EntityName(name));
+        entity.AddComponent(new EntityName("child-" + id));
         return entity;
     }
 }

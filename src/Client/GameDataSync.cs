@@ -72,17 +72,22 @@ public sealed class GameDataSync
         var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
-            ref var node    = ref store.GetNodeById(n);
-            var entity      = node.Entity;
-            if (entity == null) {
-                continue;
-            }
-            if (!localEntities.TryGetEntity(node.Id, out DataEntity dataEntity)) {
-                dataEntity = new DataEntity();
-            }
-            dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
-            client.entities.Upsert(dataEntity);
+            ref var node = ref store.GetNodeById(n);
+            UpsertDataEntity(node);
         }
+    }
+    
+    private void UpsertDataEntity(in EntityNode node)
+    {
+        var entity      = node.Entity;
+        if (entity == null) {
+            return;
+        }
+        if (!localEntities.TryGetEntity(node.Id, out DataEntity dataEntity)) {
+            dataEntity = new DataEntity();
+        }
+        dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
+        client.entities.Upsert(dataEntity);
     }
     
     public void SubscribeDatabaseChanges()
@@ -97,9 +102,13 @@ public sealed class GameDataSync
         await client.SyncTasks();
     }
     
+    /// <summary>SYNC: <see cref="DataEntity"/> -> <see cref="GameEntityStore"/></summary>
     private void EntitiesChangeHandler(Changes<long, DataEntity> changes, EventContext context)
     {
         Console.WriteLine($"Changes: {changes}");
+        if (context.IsOrigin) {
+            return;
+        }
         foreach (var upsert in changes.Upserts) {
             converter.DataToGameEntity(upsert.entity, store, out _);
         }
@@ -108,4 +117,18 @@ public sealed class GameDataSync
             node.Entity.DeleteEntity();
         }
     }
+    
+    public async void UpsertDataEntityAsync(int entityId)
+    {
+        var node = store.GetNodeById(entityId);
+        UpsertDataEntity(node);
+        await client.SyncTasks();
+    }
+    
+    /* public void DeleteDataEntityAsync(int entityId)
+    {
+        ref var node = ref store.GetNodeById(entityId);
+        DeleteDataEntity(node);
+        client.SyncTasks();
+    } */
 }
