@@ -8,6 +8,8 @@ using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox.Hub.Client;
 
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
 
@@ -20,6 +22,7 @@ public sealed class GameDataSync
     private readonly    GameClient                      client;
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
+    private readonly    HashSet<int>                    upsertEntityIds;
 
 
     public GameDataSync (GameEntityStore store, GameClient client) {
@@ -27,6 +30,7 @@ public sealed class GameDataSync
         this.client     = client    ?? throw new ArgumentNullException(nameof(client));
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
+        upsertEntityIds = new HashSet<int>();
         client.entities.WritePretty = true;
     }
     
@@ -119,12 +123,17 @@ public sealed class GameDataSync
     
     public void UpsertDataEntity(int entityId)
     {
-        var entity = store.GetNodeById(entityId).Entity;
-        UpsertDataEntity(entity);
+        upsertEntityIds.Add(entityId);
     }
-    
+
+    /// <summary>Sync accumulated entity changes</summary>
     public async Task SyncChangesAsync()
     {
+        foreach (var id in upsertEntityIds) {
+            var entity = store.GetNodeById(id).Entity;
+            UpsertDataEntity(entity);
+        }
+        upsertEntityIds.Clear();
         await client.SyncTasks();
     }
     
