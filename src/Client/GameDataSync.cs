@@ -22,7 +22,7 @@ public sealed class GameDataSync
     private readonly    GameClient                      client;
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
-    private readonly    HashSet<int>                    upsertEntityIds;
+    private readonly    Dictionary<int, EntityChange>   entityChanges;
 
 
     public GameDataSync (GameEntityStore store, GameClient client) {
@@ -30,7 +30,7 @@ public sealed class GameDataSync
         this.client     = client    ?? throw new ArgumentNullException(nameof(client));
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
-        upsertEntityIds = new HashSet<int>();
+        entityChanges   = new Dictionary<int, EntityChange>();
         client.entities.WritePretty = true;
     }
     
@@ -123,24 +123,38 @@ public sealed class GameDataSync
     
     public void UpsertDataEntity(int entityId)
     {
-        upsertEntityIds.Add(entityId);
+        entityChanges[entityId] = EntityChange.Upsert;
+    }
+    
+    public void DeleteDataEntity(int entityId)
+    {
+        entityChanges[entityId] = EntityChange.Delete;
     }
 
     /// <summary>Sync accumulated entity changes</summary>
     public async Task SyncChangesAsync()
     {
-        foreach (var id in upsertEntityIds) {
-            var entity = store.GetNodeById(id).Entity;
-            UpsertDataEntity(entity);
+        foreach (var pair in entityChanges)
+        {
+            var id = pair.Key;
+            switch (pair.Value) {
+                case EntityChange.Upsert:
+                    var entity = store.GetNodeById(id).Entity;
+                    UpsertDataEntity(entity);
+                    continue;
+                case EntityChange.Delete:
+                    client.entities.Delete(id);
+                    continue;
+            }
         }
-        upsertEntityIds.Clear();
+        entityChanges.Clear();
+
         await client.SyncTasks();
     }
-    
-    /* public void DeleteDataEntityAsync(int entityId)
-    {
-        ref var node = ref store.GetNodeById(entityId);
-        DeleteDataEntity(node);
-        client.SyncTasks();
-    } */
+}
+
+internal enum EntityChange
+{
+    Upsert  = 0,
+    Delete  = 1,
 }

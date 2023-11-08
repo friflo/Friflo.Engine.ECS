@@ -12,6 +12,7 @@ using Friflo.Json.Fliox.Hub.Remote;
 
 // Note: Must not using imports Avalonia namespaces 
 
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Editor;
 
 public interface IEditorControl
@@ -72,7 +73,9 @@ public class Editor
     /// <summary>SYNC: <see cref="GameEntity"/> -> <see cref="GameDataSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
-        switch (args.action) {
+        EditorUtils.AssertUIThread();
+        switch (args.action)
+        {
             case ChildNodesChangedAction.Add:
                 sync.UpsertDataEntity(args.parentId);
                 PostSyncChanges();
@@ -96,6 +99,7 @@ public class Editor
     }
     
     private async void SyncChangesAsync() {
+        EditorUtils.AssertUIThread();
         await sync.SyncChangesAsync();
     }
     

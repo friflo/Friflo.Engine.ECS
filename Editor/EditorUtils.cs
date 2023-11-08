@@ -11,6 +11,11 @@ public static class EditorUtils
 {
     public static bool IsDesignMode => Avalonia.Controls.Design.IsDesignMode;
     
+    public static void AssertUIThread()
+    {
+        Dispatcher.UIThread.VerifyAccess();
+    }
+
     public static void Post(Action action)
     {
         Dispatcher.UIThread.Post(action);
