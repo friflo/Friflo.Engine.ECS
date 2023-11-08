@@ -7,7 +7,7 @@ namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public class ExplorerTree
 {
-    private  readonly   GameEntityStore store;
+    internal readonly   GameEntityStore                 store;
     internal readonly   Dictionary<int, ExplorerItem>   items;
     
     public ExplorerTree (GameEntityStore store)

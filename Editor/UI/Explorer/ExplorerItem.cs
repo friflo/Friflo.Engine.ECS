@@ -28,6 +28,8 @@ public sealed class ExplorerItem :
     public              bool                                flag;
     public              GameEntity                          Entity              => entity;
     internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;
+    internal            bool                                AllowDrag           => !IsRootItem();
+    internal            bool                                IsRoot              => IsRootItem();
 
     public   override   string                              ToString()          => entity.ToString();
 
@@ -46,6 +48,10 @@ public sealed class ExplorerItem :
         this.entity = entity;
     }
     #endregion
+
+    private bool IsRootItem() {
+        return tree.store.StoreRoot == entity;
+    }
     
     internal static ExplorerItem CreateExplorerItems(ExplorerTree tree, GameEntity entity)
     {

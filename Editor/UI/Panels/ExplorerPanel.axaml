@@ -8,8 +8,13 @@
              xmlns:vm="using:Friflo.Fliox.Editor.UI.Explorer"
              x:DataType="vm:MainWindowViewModel">
         <StackPanel Orientation="Vertical" Spacing="8">
-            <TreeDataGrid Name="DragDrop"
+            <!-- <TreeDataGrid Name="DragDrop"
                           Source="{Binding DragDrop.DragDropSource}"
+                          AutoDragDropRows="True"/> -->
+            <TreeDataGrid Name="DragDrop"
+                          Source="{Binding DragDrop.ExplorerItemSource}"
+                          RowDragStarted="DragDrop_OnRowDragStarted"
+                          RowDragOver="DragDrop_OnRowDragOver"
                           AutoDragDropRows="True"/>
         </StackPanel>
 </UserControl>
