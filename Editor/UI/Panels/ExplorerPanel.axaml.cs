@@ -23,9 +23,19 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         Editor = this.GetEditor(SetupExplorer);
     }
     
+    /// <summary>
+    /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
+    /// </summary>
     private void SetupExplorer()
     {
         if (Editor.Store == null) throw new InvalidOperationException("expect Store is present");
+        var source      = (HierarchicalTreeDataGridSource<ExplorerItem>)DragDrop.Source!;
+        
+        // --- set 
+        var store       = Editor.Store;
+        var tree        = new ExplorerTree(store);
+        var rootItem    = tree.CreateExplorerItems(store);
+        source.Items    = new []{ rootItem };
     }
 
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)

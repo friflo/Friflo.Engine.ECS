@@ -37,7 +37,11 @@ public class Editor
 
     public async Task Init()
     {
-        store           = new GameEntityStore(PidType.UsePidAsId);
+        store       = new GameEntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity();
+        root.AddComponent(new EntityName("Editor Root"));
+        store.SetStoreRoot(root);
+        
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
         isReady = true;
         EditorUtils.Post(() => {
@@ -126,12 +130,25 @@ public class Editor
     private static async Task AddSampleEntities(GameDataSync sync)
     {
         var store   = sync.Store;
-        var root    = store.CreateEntity(1);
+        var root    = store.StoreRoot;
         root.AddComponent(new Position(1, 1, 1));
         root.AddComponent(new EntityName("root"));
-        var child   = store.CreateEntity(2);
-        child.AddComponent(new Position(2, 2, 2));
-        root.AddChild(child);
+        var child2   = store.CreateEntity(2);
+        child2.AddComponent(new Position(2, 2, 2));
+        child2.AddComponent(new EntityName("child 2"));
+        root.AddChild(child2);
+        root.AddChild(CreateEntity(store, "child 3"));
+        root.AddChild(CreateEntity(store, "child 4"));
+        root.AddChild(CreateEntity(store, "child 5"));
+        root.AddChild(CreateEntity(store, "child 6"));
+        
         await sync.StoreGameEntitiesAsync();
+    }
+    
+    private static GameEntity CreateEntity(GameEntityStore store, string name)
+    {
+        var entity = store.CreateEntity();
+        entity.AddComponent(new EntityName(name));
+        return entity;
     }
 }

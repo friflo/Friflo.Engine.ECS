@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -13,6 +14,11 @@ public static class EditorUtils
     public static void Post(Action action)
     {
         Dispatcher.UIThread.Post(action);
+    }
+    
+    public static async Task InvokeAsync(Func<Task> action)
+    {
+        await Dispatcher.UIThread.InvokeAsync(action);
     }
 }
 

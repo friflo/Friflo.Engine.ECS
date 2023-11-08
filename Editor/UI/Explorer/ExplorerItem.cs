@@ -43,7 +43,7 @@ public sealed class ExplorerItem :
     #endregion
 
 #region constructor
-    private ExplorerItem (ExplorerTree tree, GameEntity entity) {
+    internal ExplorerItem (ExplorerTree tree, GameEntity entity) {
         this.tree   = tree;
         this.entity = entity;
     }
@@ -53,7 +53,7 @@ public sealed class ExplorerItem :
         return tree.store.StoreRoot == entity;
     }
     
-    internal static ExplorerItem CreateExplorerItems(ExplorerTree tree, GameEntity entity)
+    internal static ExplorerItem CreateExplorerItemHierarchy(ExplorerTree tree, GameEntity entity)
     {
         var item = new ExplorerItem(tree, entity);
         tree.items.Add(entity.Id, item);
@@ -61,7 +61,7 @@ public sealed class ExplorerItem :
         IList<ExplorerItem> list    = item;
         var childNodes              = entity.ChildNodes;
         foreach (var node in childNodes) {
-            var childItem = CreateExplorerItems(tree, node.Entity);
+            var childItem = CreateExplorerItemHierarchy(tree, node.Entity);
             list.Add(childItem);
         }
         return item;

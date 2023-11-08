@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 
 // ReSharper disable once CheckNamespace
@@ -28,12 +27,14 @@ public partial class MainWindow : Window, IEditorControl
         base.OnClosed(e);
     }
 
-    private void OpenGlReady()
+    private async void OpenGlReady()
     {
-        Task.Run(async () => {
+        /* Task.Run(async () => {
             await Editor.Init();
             Console.WriteLine($"--- MainWindow.OpenGlReady() - Editor.Init() {Program.startTime.ElapsedMilliseconds} ms");
-        });
+        }); */
+        await Editor.Init();
+
         Console.WriteLine($"--- MainWindow.OpenGlReady() {Program.startTime.ElapsedMilliseconds} ms");
     }
 

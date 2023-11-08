@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
 
@@ -14,32 +13,41 @@ public class ExplorerTree
     {
         this.store                  = store;
         items                       = new Dictionary<int, ExplorerItem>();
-        // store.ChildNodesChanged    += ChildNodesChangedHandler;
+        store.ChildNodesChanged    += ChildNodesChangedHandler;
     }
     
-    // todo init in constructor?
-    public void Init() {
-        store.ChildNodesChanged += ChildNodesChangedHandler;
+    internal static GameEntityStore CreateDefaultStore()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity();
+        root.AddComponent(new EntityName("root"));
+        store.SetStoreRoot(root);
+        return store;
     }
     
     private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
     {
         var parent              = items[args.parentId];
-        Console.WriteLine($"event: {args}       parent: {parent}");
+        // Console.WriteLine($"event: {args}       parent: {parent}");
         var collectionChanged   = parent.CollectionChanged;
         if (collectionChanged == null) {
             return;
         }
         var action          = (NotifyCollectionChangedAction)args.action;
-        object child        = items[args.childId];
-        /* switch (args.action) {
-            case ChildNodesChangedAction.Add:
-                // todo
-                break;
-            case ChildNodesChangedAction.Remove:
-                items.Remove(args.childId);
-                break;
-        } */
+        if (!items.TryGetValue(args.childId, out var explorerItem))
+        {
+            switch (args.action) {
+                case ChildNodesChangedAction.Add:
+                    var entity = store.GetNodeById(args.childId).Entity;
+                    explorerItem = new ExplorerItem(this, entity);
+                    items.Add(args.childId, explorerItem);
+                    break;
+                case ChildNodesChangedAction.Remove:
+                    items.Remove(args.childId);
+                    break;
+            }
+        }
+        object child        = explorerItem;
         var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
         // NOTE:
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called
@@ -50,7 +58,7 @@ public class ExplorerTree
     internal ExplorerItem CreateExplorerItems(GameEntityStore store)
     {
         var root = store.StoreRoot;
-        return ExplorerItem.CreateExplorerItems(this, root);
+        return ExplorerItem.CreateExplorerItemHierarchy(this, root);
     }
     
     internal static readonly GameEntityStore TestStore = CreateTestStore(); 

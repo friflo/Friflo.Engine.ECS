@@ -9,12 +9,12 @@ internal class ExplorerViewModel
 {
     private static ITreeDataGridSource<ExplorerItem> CreateExplorerItemSource()
     {
-        var store       = ExplorerTree.TestStore;
+        // var store       = ExplorerTree.TestStore;
+        var store       = ExplorerTree.CreateDefaultStore();
         var tree        = new ExplorerTree(store);
         var rootItem    = tree.CreateExplorerItems(store);
-        tree.Init();
         
-        var source      = new HierarchicalTreeDataGridSource<ExplorerItem>(rootItem);
+        var source  = new HierarchicalTreeDataGridSource<ExplorerItem>(rootItem);
         
         var nameCol = new TextColumn<ExplorerItem, string>("name", item => item.Name, GridLength.Star);
         source.Columns.Add(new HierarchicalExpanderColumn<ExplorerItem>(nameCol, item => item));
