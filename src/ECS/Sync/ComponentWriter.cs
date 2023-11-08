@@ -55,7 +55,7 @@ internal sealed class ComponentWriter
             componentCount++;
         }
         // --- write behaviors
-        foreach (var behavior in entity.Behaviors) {
+        foreach (var behavior in entity.Scripts) {
             componentWriter.WriteObject(behavior, ref buffer);
             var classType   = componentTypeByType[behavior.GetType()];
             var keyBytes    = classType.componentKeyBytes;

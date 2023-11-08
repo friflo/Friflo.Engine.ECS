@@ -23,12 +23,12 @@ public sealed class ComponentSchema
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                    Components          => new (components);
-    /// <summary>return all <see cref="Behavior"/> types attributed with <see cref="BehaviorAttribute"/></summary>
+    /// <summary>return all <see cref="Script"/> types attributed with <see cref="ScriptAttribute"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.behaviorIndex"/> is equal to the array index<br/>
-    /// <see cref="Behaviors"/>[0] is always null
+    /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Behaviors           => new (behaviors);
+    public   ReadOnlySpan<ComponentType>                    Scripts             => new (behaviors);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.tagIndex"/> is equal to the array index<br/>
@@ -103,17 +103,17 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a class attributed with <see cref="BehaviorAttribute"/> for the given type
+    /// return <see cref="ComponentType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
-    public ComponentType GetBehaviorType<T>()
-        where T : Behavior
+    public ComponentType GetScriptType<T>()
+        where T : Script
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
         return result;
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a class attributed with <see cref="BehaviorAttribute"/> for the given type
+    /// return <see cref="ComponentType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
     public ComponentType GetTagType<T>()
         where T : struct, IEntityTag

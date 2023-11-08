@@ -15,13 +15,13 @@ public abstract class ComponentType
 {
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the key assigned in <see cref="ComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Behavior"/>  the key assigned in <see cref="BehaviorAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Script"/>  the key assigned in <see cref="ScriptAttribute"/>
     /// </summary>
     public   readonly   string          componentKey;   //  8
     
     public   readonly   string          tagName;        //  8
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Behavior"/> the index in <see cref="ComponentSchema.Behaviors"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Script"/> the index in <see cref="ComponentSchema.Scripts"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             behaviorIndex;  //  4
     /// <summary>
@@ -33,7 +33,7 @@ public abstract class ComponentType
     /// </summary>
     public   readonly   int             tagIndex;       //  4
     /// <returns>
-    /// <see cref="Behavior"/> if the type is a <see cref="Behavior"/><br/>
+    /// <see cref="Script"/> if the type is a <see cref="Script"/><br/>
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
@@ -41,7 +41,7 @@ public abstract class ComponentType
     
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the type of a component attributed with <see cref="ComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Behavior"/> the type of a behavior attributed with <see cref="BehaviorAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Script"/> the type of a behavior attributed with <see cref="ScriptAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
     
@@ -51,8 +51,8 @@ public abstract class ComponentType
     internal virtual    StructHeap  CreateHeap          ()
         => throw new InvalidOperationException("operates only on StructComponentType<>");
     
-    internal virtual    void        ReadBehavior  (ObjectReader reader, JsonValue json, GameEntity entity)
-        => throw new InvalidOperationException($"operates only on BehaviorType<>");
+    internal virtual    void        ReadScript  (ObjectReader reader, JsonValue json, GameEntity entity)
+        => throw new InvalidOperationException($"operates only on ScriptType<>");
     
     internal ComponentType(
         string          componentKey,
@@ -92,26 +92,26 @@ internal sealed class StructComponentType<T> : ComponentType
     }
 }
 
-internal sealed class BehaviorType<T> : ComponentType 
-    where T : Behavior
+internal sealed class ScriptType<T> : ComponentType 
+    where T : Script
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"behavior: '{componentKey}' [*{typeof(T).Name}]";
     
-    internal BehaviorType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
-        : base(behaviorKey, null, typeof(T), ComponentKind.Behavior, behaviorIndex, 0, 0)
+    internal ScriptType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
+        : base(behaviorKey, null, typeof(T), ComponentKind.Script, behaviorIndex, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override void ReadBehavior(ObjectReader reader, JsonValue json, GameEntity entity) {
-        var behavior = entity.GetBehavior<T>();
+    internal override void ReadScript(ObjectReader reader, JsonValue json, GameEntity entity) {
+        var behavior = entity.GetScript<T>();
         if (behavior != null) { 
             reader.ReadToMapper(typeMapper, json, behavior, true);
             return;
         }
         behavior = reader.ReadMapper(typeMapper, json);
-        entity.archetype.gameEntityStore.AppendBehavior(entity, behavior);
+        entity.archetype.gameEntityStore.AppendScript(entity, behavior);
     }
 }
 

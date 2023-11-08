@@ -8,26 +8,26 @@ using System;
 namespace Friflo.Fliox.Engine.ECS;
 
 internal static class ClassType<T>
-    where T : Behavior
+    where T : Script
 {
-    internal static readonly    int     BehaviorIndex  = ClassUtils.NewClassIndex(typeof(T), out BehaviorKey);
-    internal static readonly    string  BehaviorKey;
+    internal static readonly    int     ScriptIndex  = ClassUtils.NewClassIndex(typeof(T), out ScriptKey);
+    internal static readonly    string  ScriptKey;
 }
 
 internal static class ClassUtils
 {
-    private  static     int     _nextBehaviorIndex     = 1;
+    private  static     int     _nextScriptIndex     = 1;
 
     internal const      int     MissingAttribute    = 0;
 
     internal static int NewClassIndex(Type type, out string classKey) {
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(BehaviorAttribute)) {
+            if (attr.AttributeType != typeof(ScriptAttribute)) {
                 continue;
             }
             var arg     = attr.ConstructorArguments;
             classKey    = (string) arg[0].Value;
-            return _nextBehaviorIndex++;
+            return _nextScriptIndex++;
         }
         classKey = null;
         return MissingAttribute;

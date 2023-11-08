@@ -43,27 +43,27 @@ public struct TestTag3 : IEntityTag { }
 
 // ------------------------------------------------ behaviors
 [CodeCoverageTest]
-[Behavior("testRef1")]
-class TestBehavior1 : Behavior {
+[Script("testRef1")]
+class TestScript1 : Script {
     public int  val1;
 }
 
-[Behavior("testRef2")]
-class TestBehavior2 : Behavior {
+[Script("testRef2")]
+class TestScript2 : Script {
     public int  val2;
 }
 
-[Behavior("testRef3")]
-class TestBehavior3 : Behavior {
+[Script("testRef3")]
+class TestScript3 : Script {
     public int  val3;
 }
 
-// test missing [Behavior()] attribute
-class InvalidRefComponent : Behavior { }
+// test missing [Script()] attribute
+class InvalidRefComponent : Script { }
 
 
-[Behavior("test")]
-class TestComponent : Behavior
+[Script("test")]
+class TestComponent : Script
 {
     private int                      health;     // is serialized
     

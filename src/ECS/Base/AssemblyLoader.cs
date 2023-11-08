@@ -180,7 +180,7 @@ internal sealed class AssemblyLoader
             }
             if (type.IsClass) {
                 var attributeType = attr.AttributeType;
-                if (attributeType == typeof(BehaviorAttribute))
+                if (attributeType == typeof(ScriptAttribute))
                 {
                     componentTypes.Add(type);
                 }

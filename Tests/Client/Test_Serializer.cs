@@ -28,7 +28,7 @@ public static class Test_Serializer
 
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
-        entity.AddBehavior(new TestBehavior1 { val1 = 10 });
+        entity.AddScript(new TestScript1 { val1 = 10 });
         entity.AddTag<TestTag>();
         
         var child   = store.CreateEntity(11);

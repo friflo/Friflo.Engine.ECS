@@ -17,11 +17,11 @@ public sealed class ComponentAttribute : Attribute {
 }
 
 /// <summary>
-/// Annotated classes a can be added as <see cref="Behavior"/>'s to <see cref="GameEntity"/>'s using the specified key name.<br/>
-/// <b><see cref="Behavior"/></b>'s can be used if <b>OPP</b> programming approach is preferred
+/// Annotated classes a can be added as <see cref="Script"/>'s to <see cref="GameEntity"/>'s using the specified key name.<br/>
+/// <b><see cref="Script"/></b>'s can be used if <b>OPP</b> programming approach is preferred
 /// while dealing with a small amount (&lt; 100) of <see cref="GameEntity"/>'s
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class BehaviorAttribute : Attribute {
-    public BehaviorAttribute (string key) { }
+public sealed class ScriptAttribute : Attribute {
+    public ScriptAttribute (string key) { }
 }

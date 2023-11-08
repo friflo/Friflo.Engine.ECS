@@ -11,8 +11,8 @@ public struct  TestComponent : IComponent
 public struct TestTag : IEntityTag { }
 
 
-[Behavior("TestBehavior")]
-public class TestBehavior : Behavior
+[Script("TestScript")]
+public class TestScript : Script
 {
     public string name;
 }

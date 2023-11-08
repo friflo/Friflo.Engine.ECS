@@ -42,7 +42,7 @@ public sealed partial class GameEntityStore : EntityStore
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
                     public ReadOnlySpan<EntityNode>             Nodes           => new (nodes);
                     public              GameEntity              StoreRoot       => storeRoot; // null if no graph origin set
-                    public ReadOnlySpan<EntityBehaviors>        EntityBehaviors => new (entityBehaviors, 0, entityBehaviorCount);
+                    public ReadOnlySpan<EntityScripts>          EntityScripts   => new (entityScripts, 0, entityScriptCount);
     #endregion
     
 #region internal fields
@@ -52,10 +52,10 @@ public sealed partial class GameEntityStore : EntityStore
     [Browse(Never)] private             Random                  randPid;                //  8               - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;                 //  8 + Map<pid,id> - null if using pid == id
     [Browse(Never)] private             GameEntity              storeRoot;              //  8               - origin of the tree graph. null if no origin assigned
-    /// <summary>Contains implicit all entities with one or more <see cref="Behavior"/>'s to minimize iteration cost for <see cref="Behavior.Update"/>.</summary>
-    [Browse(Never)] private             EntityBehaviors[]       entityBehaviors;        //  8
-    /// <summary>Count of entities with one or more <see cref="Behavior"/>'s</summary>
-    [Browse(Never)] private             int                     entityBehaviorCount;    //  4               - >= 0  and  <= entityBehaviors.Length
+    /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
+    [Browse(Never)] private             EntityScripts[]         entityScripts;        //  8
+    /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
+    [Browse(Never)] private             int                     entityScriptCount;    //  4               - >= 0  and  <= entityScripts.Length
     
     [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;      //  8               - fire events on add, insert, remove or delete a GameEntity 
     #endregion
@@ -72,7 +72,7 @@ public sealed partial class GameEntityStore : EntityStore
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
-        entityBehaviors = Array.Empty<EntityBehaviors>();
+        entityScripts = Array.Empty<EntityScripts>();
     }
     #endregion
     

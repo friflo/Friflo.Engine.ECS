@@ -102,9 +102,9 @@ internal sealed class ComponentReader
                 continue;
             }
             switch (type.kind) {
-                case ComponentKind.Behavior:
+                case ComponentKind.Script:
                     // --- read behavior
-                    component.type.ReadBehavior(componentReader, json, entity);
+                    component.type.ReadScript(componentReader, json, entity);
                     break;
                 case ComponentKind.Component:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required

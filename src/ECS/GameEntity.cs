@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// A <see cref="GameEntity"/> represent any kind of object in a game scene.<br/>
 /// Every <see cref="GameEntity"/> has an <see cref="Id"/> and is a container of
-/// <see cref="ECS.IComponent"/>'s, <see cref="ECS.Behavior"/>'s and <see cref="ECS.Tags"/><br/>
+/// <see cref="ECS.IComponent"/>'s, <see cref="ECS.Script"/>'s and <see cref="ECS.Tags"/><br/>
 /// <br/>
 /// It is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
@@ -25,8 +25,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
 /// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
-/// <see cref="ECS.Behavior"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (behavior) and data to an entity.<br/>
-/// <see cref="ECS.Behavior"/>'s are added or removed with <see cref="AddBehavior{T}"/> / <see cref="RemoveBehavior{T}"/>.<br/>
+/// <see cref="ECS.Script"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (behavior) and data to an entity.<br/>
+/// <see cref="ECS.Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
 /// <br/>
 /// <see cref="Tags"/> can be added to a <see cref="GameEntity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
@@ -62,11 +62,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// <b>behaviors</b> · generic
 /// <list type="bullet">
-///     <item><see cref="Behaviors"/></item>
-///     <item><see cref="GetBehavior{T}"/></item>
-///     <item><see cref="TryGetBehavior{T}"/></item>
-///     <item><see cref="AddBehavior{T}"/></item>
-///     <item><see cref="RemoveBehavior{T}"/></item>
+///     <item><see cref="Scripts"/></item>
+///     <item><see cref="GetScript{T}"/></item>
+///     <item><see cref="TryGetScript{T}"/></item>
+///     <item><see cref="AddScript{T}"/></item>
+///     <item><see cref="RemoveScript{T}"/></item>
 /// </list>
 /// <b>tags</b>
 /// <list type="bullet">
@@ -179,7 +179,7 @@ public sealed class GameEntity
     internal GameEntity(int id, Archetype archetype) {
         this.id         = id;
         this.archetype  = archetype;
-        behaviorIndex   = GameEntityUtils.NoBehaviors;
+        behaviorIndex   = GameEntityUtils.NoScripts;
     }
     #endregion
 
@@ -229,22 +229,22 @@ public sealed class GameEntity
     
     // ------------------------------------ behavior methods -------------------------------------
 #region behavior methods
-    public      ReadOnlySpan<Behavior>  Behaviors           => new (GameEntityUtils.GetBehaviors(this));
+    public      ReadOnlySpan<Script>  Scripts           => new (GameEntityUtils.GetScripts(this));
 
-    /// <returns>the <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
-    public T    GetBehavior<T>()        where T : Behavior  => (T)GameEntityUtils.GetBehavior(this, typeof(T));
+    /// <returns>the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
+    public T    GetScript<T>()        where T : Script  => (T)GameEntityUtils.GetScript(this, typeof(T));
     
-    /// <returns>true if the entity has a <see cref="Behavior"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
-    public bool TryGetBehavior<T>(out T result)
-        where T : Behavior
+    /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
+    public bool TryGetScript<T>(out T result)
+        where T : Script
     {
-        result = (T)GameEntityUtils.GetBehavior(this, typeof(T));
+        result = (T)GameEntityUtils.GetScript(this, typeof(T));
         return result != null;
     }
-    /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
-    public T AddBehavior<T>(T behavior) where T : Behavior  => (T)GameEntityUtils.AddBehavior(this, behavior, typeof(T), ClassType<T>.BehaviorIndex);
-    /// <returns>the <see cref="Behavior"/> previously added to the entity.</returns>
-    public T RemoveBehavior<T>()        where T : Behavior  => (T)GameEntityUtils.RemoveBehavior(this, typeof(T));
+    /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
+    public T AddScript<T>(T behavior) where T : Script  => (T)GameEntityUtils.AddScript(this, behavior, typeof(T), ClassType<T>.ScriptIndex);
+    /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
+    public T RemoveScript<T>()        where T : Script  => (T)GameEntityUtils.RemoveScript(this, typeof(T));
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------

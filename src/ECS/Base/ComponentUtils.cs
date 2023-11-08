@@ -36,7 +36,7 @@ internal static class ComponentUtils
             foreach (var type in dependant.Types)
             {
                 switch (type.kind) {
-                    case ComponentKind.Behavior:    classes.Add(type);  break;
+                    case ComponentKind.Script:    classes.Add(type);  break;
                     case ComponentKind.Component:   structs.Add(type);  break;
                     case ComponentKind.Tag:         tags.Add(type);     break;
                 }
@@ -66,7 +66,7 @@ internal static class ComponentUtils
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
-            if (attributeType == typeof(BehaviorAttribute))
+            if (attributeType == typeof(ScriptAttribute))
             {
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
@@ -86,11 +86,11 @@ internal static class ComponentUtils
     }
     
     internal static ComponentType CreateClassFactory<T>(TypeStore typeStore)
-        where T : Behavior
+        where T : Script
     {
-        var behaviorIndex   = ClassType<T>.BehaviorIndex;
-        var behaviorKey     = ClassType<T>.BehaviorKey;
-        return new BehaviorType<T>(behaviorKey, behaviorIndex, typeStore);
+        var behaviorIndex   = ClassType<T>.ScriptIndex;
+        var behaviorKey     = ClassType<T>.ScriptKey;
+        return new ScriptType<T>(behaviorKey, behaviorIndex, typeStore);
     }
     
     internal static ComponentType CreateTagType<T>()

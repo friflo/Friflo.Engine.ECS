@@ -13,7 +13,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// An <see cref="Unresolved"/> component is added to a <see cref="GameEntity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataToGameEntity"/> if:<br/>
 /// <list type="bullet">
 ///   <item>
-///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Behavior"/> type. 
+///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Script"/> type. 
 ///   </item>
 ///   <item>
 ///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/> type.
@@ -22,7 +22,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 /// <remarks>
 /// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="GameEntity"/> and vice versa<br/>
-/// with components or tags that cannot be resolved to <see cref="IEntityTag"/>, <see cref="IComponent"/> and <see cref="Behavior"/> types.<br/>
+/// with components or tags that cannot be resolved to <see cref="IEntityTag"/>, <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
 /// <br/>
 /// Having support <see cref="Unresolved"/> component or tag types:
 /// <list type="bullet">
@@ -36,11 +36,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// The reason for unresolved tag or component types can be:<br/>
 /// <list type="bullet">
 ///   <item>
-///     Missed to merge C# code containing an <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Behavior"/> type definition.
+///     Missed to merge C# code containing an <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definition.
 ///   </item>
 ///   <item>
 ///     Intentionally when creating a scene with external tools without the need to wait for the implementation of new<br/>
-///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Behavior"/> type definitions.
+///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definitions.
 ///   </item>
 /// </list>
 /// </remarks>

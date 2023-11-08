@@ -8,17 +8,17 @@ namespace Friflo.Fliox.Engine.ECS;
 
 
 /// <summary>
-/// To enable adding <b>behaviors</b> to a <see cref="GameEntity"/> it need to extend <see cref="Behavior"/>.<br/>
-/// A <b><see cref="Behavior"/></b> is a reference type (a class) which contains data <b>and</b> behavior / methods.<br/> 
-/// A <see cref="GameEntity"/> can contain multiple <see cref="Behavior"/>'s but only one of each type.
+/// To enable adding <b>behaviors</b> to a <see cref="GameEntity"/> it need to extend <see cref="Script"/>.<br/>
+/// A <b><see cref="Script"/></b> is a reference type (a class) which contains data <b>and</b> behavior / methods.<br/> 
+/// A <see cref="GameEntity"/> can contain multiple <see cref="Script"/>'s but only one of each type.
 /// </summary>
 /// <remarks>
-/// <see cref="Behavior"/>'s can be used if <b>OPP</b> programming approach is preferred
+/// <see cref="Script"/>'s can be used if <b>OPP</b> programming approach is preferred
 /// while dealing with a small amount (&lt; 100) of <see cref="GameEntity"/>'s.<br/>
 /// <br/>
-/// <i>Info:</i> Its functionality is similar to <c>MonoBehavior</c> added to <c>GameObject</c>'s in Unity
+/// <i>Info:</i> Its functionality is similar to <c>MonoScript</c> added to <c>GameObject</c>'s in Unity
 /// </remarks>
-public abstract class Behavior
+public abstract class Script
 {
     // --- public
     /// <summary>The entity the component is added to. Otherwise null.</summary>

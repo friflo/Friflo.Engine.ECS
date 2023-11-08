@@ -79,20 +79,20 @@ public static class Test_sizeof
 #endif
     
     [Test]
-    public static unsafe void Test_Behaviors_sizeof()
+    public static unsafe void Test_Scripts_sizeof()
     {
-        var size = sizeof(EntityBehaviors);
+        var size = sizeof(EntityScripts);
         AreEqual(16, size);
         
-        var behaviors       = new EntityBehaviors();
+        var behaviors       = new EntityScripts();
         AreEqual("unused", behaviors.ToString());
         
-        var behaviorsArray  = new Behavior[] { new TestBehavior() };
-        behaviors           = new EntityBehaviors(1, behaviorsArray);
-        AreEqual("id: 1  [*TestBehavior]", behaviors.ToString());
+        var behaviorsArray  = new Script[] { new TestScript() };
+        behaviors           = new EntityScripts(1, behaviorsArray);
+        AreEqual("id: 1  [*TestScript]", behaviors.ToString());
     }
     
-    class TestBehavior : Behavior { }
+    class TestScript : Script { }
     
     // ---------------------------------------- Tests project types ------------------------------------------
     [Test]

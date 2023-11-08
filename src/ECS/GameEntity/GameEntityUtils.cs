@@ -13,7 +13,7 @@ namespace Friflo.Fliox.Engine.ECS;
 internal static class GameEntityExtensions
 {
     internal static int ComponentCount (this GameEntity entity) {
-        return entity.archetype.structCount + entity.Behaviors.Length;
+        return entity.archetype.structCount + entity.Scripts.Length;
     }
 }
     
@@ -42,7 +42,7 @@ internal static class GameEntityUtils
             sb.Append("  []");
         } else {
             sb.Append("  [");
-            var behaviors = GetBehaviors(entity);
+            var behaviors = GetScripts(entity);
             foreach (var behavior in behaviors) {
                 sb.Append('*');
                 sb.Append(behavior.GetType().Name);
@@ -74,32 +74,32 @@ internal static class GameEntityUtils
         return components;
     }
     
-    // ---------------------------------- Behavior utils ----------------------------------
+    // ---------------------------------- Script utils ----------------------------------
     private  static readonly IComponent[]   EmptyComponents = Array.Empty<IComponent>();
-    private  static readonly Behavior[]     EmptyBehaviors  = Array.Empty<Behavior>();
-    internal const  int                     NoBehaviors     = -1;  
+    private  static readonly Script[]       EmptyScripts  = Array.Empty<Script>();
+    internal const  int                     NoScripts     = -1;  
     
     private  static Exception MissingAttributeException(Type type) {
-        var msg = $"Missing attribute [Behavior(\"<key>\")] on type: {type.Namespace}.{type.Name}";
+        var msg = $"Missing attribute [Script(\"<key>\")] on type: {type.Namespace}.{type.Name}";
         return new InvalidOperationException(msg);
     }
 
-    internal static Behavior[] GetBehaviors(GameEntity entity) {
-        if (entity.behaviorIndex == NoBehaviors) {
-            return EmptyBehaviors;
+    internal static Script[] GetScripts(GameEntity entity) {
+        if (entity.behaviorIndex == NoScripts) {
+            return EmptyScripts;
         }
-        return entity.archetype.gameEntityStore.GetBehaviors(entity);
+        return entity.archetype.gameEntityStore.GetScripts(entity);
     }
     
-    internal static Behavior GetBehavior(GameEntity entity, Type behaviorType)
+    internal static Script GetScript(GameEntity entity, Type behaviorType)
     {
-        if (entity.behaviorIndex == NoBehaviors) {
+        if (entity.behaviorIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.gameEntityStore.GetBehavior(entity, behaviorType);
+        return entity.archetype.gameEntityStore.GetScript(entity, behaviorType);
     }
     
-    internal static Behavior AddBehavior(GameEntity entity, Behavior behavior, Type behaviorType, int classIndex)
+    internal static Script AddScript(GameEntity entity, Script behavior, Type behaviorType, int classIndex)
     {
         if (classIndex == ClassUtils.MissingAttribute) {
             throw MissingAttributeException(behaviorType);
@@ -107,13 +107,13 @@ internal static class GameEntityUtils
         if (behavior.entity != null) {
             throw new InvalidOperationException($"behavior already added to an entity. current entity id: {behavior.entity.id}");
         }
-        return entity.archetype.gameEntityStore.AddBehavior(entity, behavior, behaviorType);
+        return entity.archetype.gameEntityStore.AddScript(entity, behavior, behaviorType);
     }
     
-    internal static Behavior RemoveBehavior(GameEntity entity, Type behaviorType) {
-        if (entity.behaviorIndex == NoBehaviors) {
+    internal static Script RemoveScript(GameEntity entity, Type behaviorType) {
+        if (entity.behaviorIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.gameEntityStore.RemoveBehavior(entity, behaviorType);
+        return entity.archetype.gameEntityStore.RemoveScript(entity, behaviorType);
     }
 }

@@ -83,7 +83,7 @@ public static class Test_ComponentReader
 
         var node    = new DataEntity { pid = 10, components = default };
         var entity  = converter.DataToGameEntity(node, store, out var error);
-        AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
+        AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
     
@@ -96,7 +96,7 @@ public static class Test_ComponentReader
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("{}") };
         var entity  = converter.DataToGameEntity(node, store, out var error);
-        AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
+        AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
     
@@ -121,7 +121,7 @@ public static class Test_ComponentReader
         
         var node    = new DataEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
         var entity  = converter.DataToGameEntity(node, store, out _);
-        AreEqual(0, entity.Behaviors.Length + entity.Archetype.ComponentCount);
+        AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
     }
     
@@ -249,7 +249,7 @@ public static class Test_ComponentReader
         }
     }
     
-    private static JsonValue Behavior => new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
+    private static JsonValue Script => new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
     public static void Test_ComponentReader_read_behavior()
@@ -257,17 +257,17 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = Behavior, children = new List<long> { 11 } };
+        var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
 
         var root        = converter.DataToGameEntity(rootNode, store, out _);
-        AreEqual(1,     root.Behaviors.Length);
-        var behavior1   = root.GetBehavior<TestBehavior1>();
+        AreEqual(1,     root.Scripts.Length);
+        var behavior1   = root.GetScript<TestScript1>();
         AreEqual(2,     behavior1.val1);
         behavior1.val1      = -1;
         
         // --- read same DataEntity again
         converter.DataToGameEntity(rootNode, store, out _);
-        var comp2       = root.GetBehavior<TestBehavior1>();
+        var comp2       = root.GetScript<TestScript1>();
         AreEqual(2,     comp2.val1);
         AreSame(behavior1, comp2);
     }
@@ -278,7 +278,7 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = Behavior, children = new List<long> { 11 } };
+        var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
@@ -286,25 +286,25 @@ public static class Test_ComponentReader
         }
     }
     
-    private static JsonValue Behaviors => new JsonValue(
+    private static JsonValue Scripts => new JsonValue(
         "{ \"testRef1\": { \"val1\": 11 }, \"testRef2\": { \"val2\": 22 }, \"testRef3\": { \"val3\": 33 } }");
     
-    /// <summary>Cover <see cref="GameEntityStore.AppendBehavior"/></summary>
+    /// <summary>Cover <see cref="GameEntityStore.AppendScript"/></summary>
     [Test]
     public static void Test_ComponentReader_read_multiple_behaviors()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = Behaviors };
+        var rootNode    = new DataEntity { pid = 10, components = Scripts };
 
         var root        = converter.DataToGameEntity(rootNode, store, out _);
-        AreEqual(3,     root.Behaviors.Length);
-        var behavior1   = root.GetBehavior<TestBehavior1>();
+        AreEqual(3,     root.Scripts.Length);
+        var behavior1   = root.GetScript<TestScript1>();
         AreEqual(11,    behavior1.val1);
-        var behavior2   = root.GetBehavior<TestBehavior2>();
+        var behavior2   = root.GetScript<TestScript2>();
         AreEqual(22,    behavior2.val2);
-        var behavior3   = root.GetBehavior<TestBehavior3>();
+        var behavior3   = root.GetScript<TestScript3>();
         AreEqual(33,    behavior3.val3);
         
         behavior1.val1      = -1;
@@ -313,12 +313,12 @@ public static class Test_ComponentReader
         
         // --- read same DataEntity again
         converter.DataToGameEntity(rootNode, store, out _);
-        AreEqual(3,     root.Behaviors.Length);
-        behavior1       = root.GetBehavior<TestBehavior1>();
+        AreEqual(3,     root.Scripts.Length);
+        behavior1       = root.GetScript<TestScript1>();
         AreEqual(11,    behavior1.val1);
-        behavior2       = root.GetBehavior<TestBehavior2>();
+        behavior2       = root.GetScript<TestScript2>();
         AreEqual(22,    behavior2.val2);
-        behavior3    = root.GetBehavior<TestBehavior3>();
+        behavior3    = root.GetScript<TestScript3>();
         AreEqual(33,    behavior3.val3);
     }
     

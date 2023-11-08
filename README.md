@@ -127,7 +127,7 @@ The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *dep
             Entity([Entity]):::implemented
             Component([Component]):::implemented
             Tag([Tag]):::implemented
-            Behavior([Behavior]):::implementedDotted
+            Script([Script]):::implementedDotted
         end
 
         EntityStore  -.- ECS-Types
@@ -342,8 +342,8 @@ Types:
     - `components`
         - **Archetype** components stored in `Archetype`'s.  
           These are value types (`struct`) having only data and **no** behavior (methods).
-        - **Behavior** components.  
-          Behavior components are reference types (`class`) and have behavior (methods).
+        - **Script** components.  
+          Script components are reference types (`class`) and have behavior (methods).
     - `tags`        - list of tags assigned to an entity. Tags have no data.
 - `Archetype`       - contains all entities with the same set of **struct** `IComponent` types.  
 The **struct** components of an `Archetype` are stored linear in memory to improve memory locality.  
@@ -361,7 +361,7 @@ Serialized entity example
         "name": "Root",                     // Archetype component
         "pos": { x: 1, y: 2, x: 3},         // Archetype component
         "rot": { x: 0, y: 0, x: 0, w: 0 },  // Archetype component
-        "my1": { a: 1 }                     // Behavior component
+        "my1": { a: 1 }                     // Script component
     },
     "tags":["PlayerTag"]                    // can be null
 }
@@ -369,9 +369,9 @@ Serialized entity example
 
 Note:  
 Both component types are serialized into the same `components` array.  
-The engines uses the registered **`IComponent`** or **`Behavior`** type for serialization.
+The engines uses the registered **`IComponent`** or **`Script`** type for serialization.
 
-This enables reading already serialized data after refactoring a **`Behavior`** to a **`struct`** `IComponent` or vice versa.
+This enables reading already serialized data after refactoring a **`Script`** to a **`struct`** `IComponent` or vice versa.
 
 
 ### Entity serialization model

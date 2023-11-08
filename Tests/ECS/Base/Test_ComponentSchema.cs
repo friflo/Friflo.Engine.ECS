@@ -38,7 +38,7 @@ public static class Test_ComponentSchema
     {
         var schema      = EntityStore.GetComponentSchema();
         var components  = schema.Components;
-        var behaviors   = schema.Behaviors;
+        var behaviors   = schema.Scripts;
         
         AreEqual("components: 9  behaviors: 5  entity tags: 3", schema.ToString());
         AreEqual(10,     components.Length);
@@ -62,7 +62,7 @@ public static class Test_ComponentSchema
             AreEqual(n, type.behaviorIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.structIndex);
-            AreEqual(ComponentKind.Behavior, type.kind);
+            AreEqual(ComponentKind.Script, type.kind);
             NotNull (type.componentKey);
         }
         
@@ -76,7 +76,7 @@ public static class Test_ComponentSchema
         AreEqual("my1",                                 myComponentType.componentKey);
         AreEqual("component: 'my1' [MyComponent1]",     myComponentType.ToString());
         
-        var testComponentType = schema.GetBehaviorType<TestComponent>();
+        var testComponentType = schema.GetScriptType<TestComponent>();
         AreEqual("test",                                testComponentType.componentKey);
         AreEqual("behavior: 'test' [*TestComponent]",   testComponentType.ToString());
         
