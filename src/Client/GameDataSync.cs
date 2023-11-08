@@ -72,18 +72,17 @@ public sealed class GameDataSync
         var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
-            ref var node = ref store.GetNodeById(n);
-            UpsertDataEntity(node);
+            var entity = store.GetNodeById(n).Entity;
+            UpsertDataEntity(entity);
         }
     }
     
-    private void UpsertDataEntity(in EntityNode node)
+    private void UpsertDataEntity(GameEntity entity)
     {
-        var entity      = node.Entity;
         if (entity == null) {
             return;
         }
-        if (!localEntities.TryGetEntity(node.Id, out DataEntity dataEntity)) {
+        if (!localEntities.TryGetEntity(entity.Id, out DataEntity dataEntity)) {
             dataEntity = new DataEntity();
         }
         dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
@@ -120,8 +119,8 @@ public sealed class GameDataSync
     
     public async void UpsertDataEntityAsync(int entityId)
     {
-        var node = store.GetNodeById(entityId);
-        UpsertDataEntity(node);
+        var entity = store.GetNodeById(entityId).Entity;
+        UpsertDataEntity(entity);
         await client.SyncTasks();
     }
     

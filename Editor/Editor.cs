@@ -63,7 +63,7 @@ public class Editor
         
         await AddSampleEntities(sync);
 
-        // todo 
+        // todo accumulate tasks and SyncTasks() at once 
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
         // --- run server
