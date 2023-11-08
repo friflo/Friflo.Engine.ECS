@@ -16,6 +16,7 @@ public class DragDropItem
     public                  bool                                flag;
 
     private static          ObservableList<DragDropItem>            CreateObservable() => new ObservableList<DragDropItem>();
+    // ReSharper disable once UnusedMember.Local
     private static          MyObservableCollection<DragDropItem>    CreateObservable_XXX() {
         var myCollection = new MyObservableCollection<DragDropItem>();
         myCollection.AddPropertyChangedHandler();

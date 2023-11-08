@@ -82,7 +82,8 @@ public sealed class ExplorerItem :
         entity.RemoveChild(child);  // todo add GameEntity.RemoveChild(int index)
     }
     
-    private void ReplaceChildEntityAt(int _, ExplorerItem __) {
+    // ReSharper disable twice UnusedParameter.Local
+    private void ReplaceChildEntityAt(int index, ExplorerItem item) {
         throw new NotImplementedException();
     }
     
