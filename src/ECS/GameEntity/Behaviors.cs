@@ -34,9 +34,9 @@ public struct EntityScripts
         sb.Append("id: ");
         sb.Append(id);
         sb.Append("  [");
-        foreach (var behavior in classes) {
+        foreach (var script in classes) {
             sb.Append('*');
-            sb.Append(behavior.GetType().Name);
+            sb.Append(script.GetType().Name);
             sb.Append(", ");
         }
         sb.Length -= 2;

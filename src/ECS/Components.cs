@@ -14,7 +14,7 @@ public interface IEntityTag { }
 /// <summary>
 /// To enable adding components to a <see cref="GameEntity"/> it need to implement <see cref="IComponent"/>.<br/>
 /// <br/> 
-/// <see cref="IComponent"/> types are <b><c>struct</c></b>'s which only contains data <b>but no</b> behavior / methods.<br/>
+/// <see cref="IComponent"/> types are <b><c>struct</c></b>'s which only contains data <b>but no</b> script / methods.<br/>
 /// A <see cref="GameEntity"/> can contain multiple components but only one of each type.<br/>
 /// </summary>
 /// <remarks>

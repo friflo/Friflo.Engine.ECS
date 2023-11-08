@@ -42,10 +42,10 @@ internal static class GameEntityUtils
             sb.Append("  []");
         } else {
             sb.Append("  [");
-            var behaviors = GetScripts(entity);
-            foreach (var behavior in behaviors) {
+            var scripts = GetScripts(entity);
+            foreach (var script in scripts) {
                 sb.Append('*');
-                sb.Append(behavior.GetType().Name);
+                sb.Append(script.GetType().Name);
                 sb.Append(", ");
             }
             foreach (var heap in archetype.Heaps) {
@@ -85,35 +85,35 @@ internal static class GameEntityUtils
     }
 
     internal static Script[] GetScripts(GameEntity entity) {
-        if (entity.behaviorIndex == NoScripts) {
+        if (entity.scriptIndex == NoScripts) {
             return EmptyScripts;
         }
         return entity.archetype.gameEntityStore.GetScripts(entity);
     }
     
-    internal static Script GetScript(GameEntity entity, Type behaviorType)
+    internal static Script GetScript(GameEntity entity, Type scriptType)
     {
-        if (entity.behaviorIndex == NoScripts) {
+        if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.gameEntityStore.GetScript(entity, behaviorType);
+        return entity.archetype.gameEntityStore.GetScript(entity, scriptType);
     }
     
-    internal static Script AddScript(GameEntity entity, Script behavior, Type behaviorType, int classIndex)
+    internal static Script AddScript(GameEntity entity, Script script, Type scriptType, int classIndex)
     {
         if (classIndex == ClassUtils.MissingAttribute) {
-            throw MissingAttributeException(behaviorType);
+            throw MissingAttributeException(scriptType);
         }
-        if (behavior.entity != null) {
-            throw new InvalidOperationException($"behavior already added to an entity. current entity id: {behavior.entity.id}");
+        if (script.entity != null) {
+            throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }
-        return entity.archetype.gameEntityStore.AddScript(entity, behavior, behaviorType);
+        return entity.archetype.gameEntityStore.AddScript(entity, script, scriptType);
     }
     
-    internal static Script RemoveScript(GameEntity entity, Type behaviorType) {
-        if (entity.behaviorIndex == NoScripts) {
+    internal static Script RemoveScript(GameEntity entity, Type scriptType) {
+        if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.gameEntityStore.RemoveScript(entity, behaviorType);
+        return entity.archetype.gameEntityStore.RemoveScript(entity, scriptType);
     }
 }

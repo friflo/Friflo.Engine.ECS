@@ -49,7 +49,7 @@ internal sealed class AssemblyLoader
         return sb.ToString();
     }
 
-    // --------------------------- query all component, behavior and tag types ---------------------------
+    // --------------------------- query all component, script and tag types ---------------------------
     internal Assembly[] GetEngineDependants()
     {
         var stopwatch = new Stopwatch(); 

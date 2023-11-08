@@ -36,7 +36,7 @@ public partial class GameEntityStore
         } else {
             dataEntity.children?.Clear();
         }
-        // --- write components & behaviors
+        // --- write components & scripts
         var jsonComponents = writer.Write(entity, pretty);
         if (!jsonComponents.IsNull()) {
             JsonUtils.FormatComponents(jsonComponents, ref writer.buffer);

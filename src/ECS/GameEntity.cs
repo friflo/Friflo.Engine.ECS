@@ -25,7 +25,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
 /// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
-/// <see cref="ECS.Script"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (behavior) and data to an entity.<br/>
+/// <see cref="ECS.Script"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (script) and data to an entity.<br/>
 /// <see cref="ECS.Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
 /// <br/>
 /// <see cref="Tags"/> can be added to a <see cref="GameEntity"/> to enable filtering entities in queries.<br/>
@@ -60,7 +60,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="HasRotation"/></item>
 ///     <item><see cref="HasScale3"/></item>
 /// </list>
-/// <b>behaviors</b> · generic
+/// <b>scripts</b> · generic
 /// <list type="bullet">
 ///     <item><see cref="Scripts"/></item>
 ///     <item><see cref="GetScript{T}"/></item>
@@ -168,7 +168,7 @@ public sealed class GameEntity
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
     [Browse(Never)] internal            int                     compIndex;          //  4
     
-    [Browse(Never)] internal            int                     behaviorIndex;      //  4
+    [Browse(Never)] internal            int                     scriptIndex;      //  4
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
@@ -179,7 +179,7 @@ public sealed class GameEntity
     internal GameEntity(int id, Archetype archetype) {
         this.id         = id;
         this.archetype  = archetype;
-        behaviorIndex   = GameEntityUtils.NoScripts;
+        scriptIndex     = GameEntityUtils.NoScripts;
     }
     #endregion
 
@@ -227,8 +227,8 @@ public sealed class GameEntity
     public      IComponent[]            Components_         => GameEntityUtils.GetComponentsDebug(this);
     #endregion
     
-    // ------------------------------------ behavior methods -------------------------------------
-#region behavior methods
+    // ------------------------------------ script methods -------------------------------------
+#region script methods
     public      ReadOnlySpan<Script>  Scripts           => new (GameEntityUtils.GetScripts(this));
 
     /// <returns>the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
@@ -242,7 +242,7 @@ public sealed class GameEntity
         return result != null;
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    public T AddScript<T>(T behavior) where T : Script  => (T)GameEntityUtils.AddScript(this, behavior, typeof(T), ClassType<T>.ScriptIndex);
+    public T AddScript<T>(T script)   where T : Script  => (T)GameEntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     public T RemoveScript<T>()        where T : Script  => (T)GameEntityUtils.RemoveScript(this, typeof(T));
     #endregion

@@ -52,7 +52,7 @@ public static class Mem
     }
     
     /// <summary>
-    /// Similar behavior as <see cref="Assert.AreEqual(object, object)"/> but without memory allocation.<br/>
+    /// Similar script as <see cref="Assert.AreEqual(object, object)"/> but without memory allocation.<br/>
     /// It also requires both parameters are of the same type.
     /// </summary>
     public static void AreEqual<T>(T expect, T actual) where T : IEquatable<T> {
@@ -64,7 +64,7 @@ public static class Mem
     }
     
     /// <summary>
-    /// Similar behavior as <see cref="Assert.AreSame(object?,object?)"/> but without memory allocation.<br/>
+    /// Similar script as <see cref="Assert.AreSame(object?,object?)"/> but without memory allocation.<br/>
     /// </summary>
     public static void AreSame(object expect, object actual) {
         if (expect.Equals(actual)) {
@@ -75,7 +75,7 @@ public static class Mem
     }
     
     /// <summary>
-    /// Similar behavior as <see cref="Assert.IsTrue(System.Nullable{bool})"/> but without memory allocation.<br/>
+    /// Similar script as <see cref="Assert.IsTrue(System.Nullable{bool})"/> but without memory allocation.<br/>
     /// </summary>
     public static void IsTrue(bool value) {
         if (value) {

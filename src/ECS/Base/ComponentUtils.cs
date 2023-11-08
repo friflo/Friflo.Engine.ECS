@@ -88,9 +88,9 @@ internal static class ComponentUtils
     internal static ComponentType CreateClassFactory<T>(TypeStore typeStore)
         where T : Script
     {
-        var behaviorIndex   = ClassType<T>.ScriptIndex;
-        var behaviorKey     = ClassType<T>.ScriptKey;
-        return new ScriptType<T>(behaviorKey, behaviorIndex, typeStore);
+        var scriptIndex   = ClassType<T>.ScriptIndex;
+        var scriptKey     = ClassType<T>.ScriptKey;
+        return new ScriptType<T>(scriptKey, scriptIndex, typeStore);
     }
     
     internal static ComponentType CreateTagType<T>()

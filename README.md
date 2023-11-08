@@ -270,7 +270,7 @@ It is the preferred use case when sharing demos or assets via a GitHub project o
 
 ### `GameEntityStore`
 
-The `GameEntityStore` is used almost without exception when scripting game logic / behavior with **C#**.  
+The `GameEntityStore` is used almost without exception when scripting game logic / script with **C#**.  
 It stores game entities at runtime by using an ECS data structure.  
 Its focus is simplicity and performance.  
 
@@ -341,9 +341,9 @@ Types:
     - `children`    - contains and array of child entity `id`'s.
     - `components`
         - **Archetype** components stored in `Archetype`'s.  
-          These are value types (`struct`) having only data and **no** behavior (methods).
+          These are value types (`struct`) having only data and **no** script (methods).
         - **Script** components.  
-          Script components are reference types (`class`) and have behavior (methods).
+          Script components are reference types (`class`) and have script (methods).
     - `tags`        - list of tags assigned to an entity. Tags have no data.
 - `Archetype`       - contains all entities with the same set of **struct** `IComponent` types.  
 The **struct** components of an `Archetype` are stored linear in memory to improve memory locality.  

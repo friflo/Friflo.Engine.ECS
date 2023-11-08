@@ -11,7 +11,7 @@ using Friflo.Json.Fliox.Mapper;
 namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
-/// Create the <see cref="JsonValue"/> from all components and behaviors used at <see cref="DataEntity.components"/>.<br/>
+/// Create the <see cref="JsonValue"/> from all components and scripts used at <see cref="DataEntity.components"/>.<br/>
 /// </summary>
 internal sealed class ComponentWriter
 {
@@ -54,10 +54,10 @@ internal sealed class ComponentWriter
             writer.MemberBytes(keyBytes.AsSpan(), value);
             componentCount++;
         }
-        // --- write behaviors
-        foreach (var behavior in entity.Scripts) {
-            componentWriter.WriteObject(behavior, ref buffer);
-            var classType   = componentTypeByType[behavior.GetType()];
+        // --- write scripts
+        foreach (var script in entity.Scripts) {
+            componentWriter.WriteObject(script, ref buffer);
+            var classType   = componentTypeByType[script.GetType()];
             var keyBytes    = classType.componentKeyBytes;
             writer.MemberBytes(keyBytes.AsSpan(), buffer);
             componentCount++;

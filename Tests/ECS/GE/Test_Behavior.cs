@@ -20,7 +20,7 @@ public static class Test_Script
         AreEqual("id: 1  []",   player.ToString());
         AreSame(store,          player.Archetype.Store);
         
-        // --- add behavior
+        // --- add script
         var testRef1 = new TestScript1 { val1 = 1 };
         IsNull(player.AddScript(testRef1));
         NotNull(testRef1.Entity);
@@ -34,7 +34,7 @@ public static class Test_Script
         var e = Throws<InvalidOperationException> (() => {
             player.AddScript(testRef1);
         });
-        AreEqual("behavior already added to an entity. current entity id: 1", e!.Message);
+        AreEqual("script already added to an entity. current entity id: 1", e!.Message);
         AreEqual(1,             player.Scripts.Length);
         
         var testRef2 = new TestScript2 { val2 = 2 };
@@ -107,9 +107,9 @@ public static class Test_Script
         NotNull(player.GetScript<TestScript3>());
     }
     
-    /// <summary>Cover move last behavior in <see cref="GameEntityStore.RemoveScript"/> </summary>
+    /// <summary>Cover move last script in <see cref="GameEntityStore.RemoveScript"/> </summary>
     [Test]
-    public static void Test_3_cover_move_last_behavior() {
+    public static void Test_3_cover_move_last_script() {
         var store   = new GameEntityStore();
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
@@ -133,7 +133,7 @@ public static class Test_Script
     
     /// <summary>Cover <see cref="GameEntityUtils.RemoveScript"/></summary>
     [Test]
-    public static void Test_3_cover_remove_non_added_behavior() {
+    public static void Test_3_cover_remove_non_added_script() {
         var store   = new GameEntityStore();
         var entity  = store.CreateEntity();
         
@@ -156,8 +156,8 @@ public static class Test_Script
         AreEqual("Missing attribute [Script(\"<key>\")] on type: Tests.ECS.InvalidRefComponent", e!.Message);
         AreEqual(0, player.Scripts.Length);
         
-        var behavior = player.GetScript<InvalidRefComponent>();
-        IsNull  (behavior);
+        var script = player.GetScript<InvalidRefComponent>();
+        IsNull  (script);
         
         // throws currently no exception
         player.RemoveScript<InvalidRefComponent>();
@@ -226,8 +226,8 @@ public static class Test_Script
         
         var test    = new TestComponent();
         entity.AddScript(test);                         // component added via editor
-        entity.AddComponent(new Position { x = 1 });    // behavior added via editor
-        entity.AddComponent(new MyComponent1 { a = 1}); // behavior added via editor
+        entity.AddComponent(new Position { x = 1 });    // script added via editor
+        entity.AddComponent(new MyComponent1 { a = 1}); // script added via editor
         
         AreEqual(1, entity.Scripts.Length);
         AreEqual(2, entity.Archetype.ComponentCount);

@@ -84,12 +84,12 @@ public static class Test_sizeof
         var size = sizeof(EntityScripts);
         AreEqual(16, size);
         
-        var behaviors       = new EntityScripts();
-        AreEqual("unused", behaviors.ToString());
+        var scripts       = new EntityScripts();
+        AreEqual("unused", scripts.ToString());
         
-        var behaviorsArray  = new Script[] { new TestScript() };
-        behaviors           = new EntityScripts(1, behaviorsArray);
-        AreEqual("id: 1  [*TestScript]", behaviors.ToString());
+        var scriptsArray  = new Script[] { new TestScript() };
+        scripts           = new EntityScripts(1, scriptsArray);
+        AreEqual("id: 1  [*TestScript]", scripts.ToString());
     }
     
     class TestScript : Script { }

@@ -18,7 +18,7 @@ public static class Test_ComponentSchema
             var type = tags[n];
             AreEqual(n,                 type.tagIndex);
             AreEqual(0,                 type.structIndex);
-            AreEqual(0,                 type.behaviorIndex);
+            AreEqual(0,                 type.scriptIndex);
             AreEqual(ComponentKind.Tag, type.kind);
             IsNull(type.componentKey);
         }
@@ -38,11 +38,11 @@ public static class Test_ComponentSchema
     {
         var schema      = EntityStore.GetComponentSchema();
         var components  = schema.Components;
-        var behaviors   = schema.Scripts;
+        var scripts   = schema.Scripts;
         
-        AreEqual("components: 9  behaviors: 5  entity tags: 3", schema.ToString());
+        AreEqual("components: 9  scripts: 5  entity tags: 3", schema.ToString());
         AreEqual(10,     components.Length);
-        AreEqual( 6,     behaviors.Length);
+        AreEqual( 6,     scripts.Length);
         
         AreEqual(14,    schema.ComponentTypeByKey.Count);
         AreEqual(14,    schema.ComponentTypeByType.Count);
@@ -52,14 +52,14 @@ public static class Test_ComponentSchema
             var type = components[n];
             AreEqual(n, type.structIndex);
             AreEqual(0, type.tagIndex);
-            AreEqual(0, type.behaviorIndex);
+            AreEqual(0, type.scriptIndex);
             AreEqual(ComponentKind.Component, type.kind);
             NotNull (type.componentKey);
         }
-        IsNull(behaviors[0]);
-        for (int n = 1; n < behaviors.Length; n++) {
-            var type = behaviors[n];
-            AreEqual(n, type.behaviorIndex);
+        IsNull(scripts[0]);
+        for (int n = 1; n < scripts.Length; n++) {
+            var type = scripts[n];
+            AreEqual(n, type.scriptIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.structIndex);
             AreEqual(ComponentKind.Script, type.kind);
@@ -78,7 +78,7 @@ public static class Test_ComponentSchema
         
         var testComponentType = schema.GetScriptType<TestComponent>();
         AreEqual("test",                                testComponentType.componentKey);
-        AreEqual("behavior: 'test' [*TestComponent]",   testComponentType.ToString());
+        AreEqual("script: 'test' [*TestComponent]",     testComponentType.ToString());
         
         AreEqual(typeof(Position),  schema.ComponentTypeByKey["pos"].type);
         AreEqual("test",            schema.ComponentTypeByType[typeof(TestComponent)].componentKey);

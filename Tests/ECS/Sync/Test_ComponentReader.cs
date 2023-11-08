@@ -70,7 +70,7 @@ public static class Test_ComponentReader
         var rootNode    = new DataEntity { pid = 10, components = RootComponents };
         var rootResult  = converter.DataToGameEntity(rootNode, store, out _);  // archetype changes
         AreSame (root, rootResult);
-        IsTrue  (root.HasScale3);   // could change behavior and remove all components not present in DataEntity components
+        IsTrue  (root.HasScale3);   // could change script and remove all components not present in DataEntity components
         IsTrue  (root.HasPosition);
     }
     
@@ -252,7 +252,7 @@ public static class Test_ComponentReader
     private static JsonValue Script => new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
     
     [Test]
-    public static void Test_ComponentReader_read_behavior()
+    public static void Test_ComponentReader_read_script()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
@@ -261,19 +261,19 @@ public static class Test_ComponentReader
 
         var root        = converter.DataToGameEntity(rootNode, store, out _);
         AreEqual(1,     root.Scripts.Length);
-        var behavior1   = root.GetScript<TestScript1>();
-        AreEqual(2,     behavior1.val1);
-        behavior1.val1      = -1;
+        var script1     = root.GetScript<TestScript1>();
+        AreEqual(2,     script1.val1);
+        script1.val1      = -1;
         
         // --- read same DataEntity again
         converter.DataToGameEntity(rootNode, store, out _);
         var comp2       = root.GetScript<TestScript1>();
         AreEqual(2,     comp2.val1);
-        AreSame(behavior1, comp2);
+        AreSame(script1, comp2);
     }
     
     [Test]
-    public static void Test_ComponentReader_read_behavior_Perf()
+    public static void Test_ComponentReader_read_script_Perf()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
@@ -291,7 +291,7 @@ public static class Test_ComponentReader
     
     /// <summary>Cover <see cref="GameEntityStore.AppendScript"/></summary>
     [Test]
-    public static void Test_ComponentReader_read_multiple_behaviors()
+    public static void Test_ComponentReader_read_multiple_scripts()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
@@ -300,26 +300,26 @@ public static class Test_ComponentReader
 
         var root        = converter.DataToGameEntity(rootNode, store, out _);
         AreEqual(3,     root.Scripts.Length);
-        var behavior1   = root.GetScript<TestScript1>();
-        AreEqual(11,    behavior1.val1);
-        var behavior2   = root.GetScript<TestScript2>();
-        AreEqual(22,    behavior2.val2);
-        var behavior3   = root.GetScript<TestScript3>();
-        AreEqual(33,    behavior3.val3);
+        var script1   = root.GetScript<TestScript1>();
+        AreEqual(11,    script1.val1);
+        var script2   = root.GetScript<TestScript2>();
+        AreEqual(22,    script2.val2);
+        var script3   = root.GetScript<TestScript3>();
+        AreEqual(33,    script3.val3);
         
-        behavior1.val1      = -1;
-        behavior2.val2      = -1;
-        behavior3.val3      = -1;
+        script1.val1      = -1;
+        script2.val2      = -1;
+        script3.val3      = -1;
         
         // --- read same DataEntity again
         converter.DataToGameEntity(rootNode, store, out _);
         AreEqual(3,     root.Scripts.Length);
-        behavior1       = root.GetScript<TestScript1>();
-        AreEqual(11,    behavior1.val1);
-        behavior2       = root.GetScript<TestScript2>();
-        AreEqual(22,    behavior2.val2);
-        behavior3    = root.GetScript<TestScript3>();
-        AreEqual(33,    behavior3.val3);
+        script1       = root.GetScript<TestScript1>();
+        AreEqual(11,    script1.val1);
+        script2       = root.GetScript<TestScript2>();
+        AreEqual(22,    script2.val2);
+        script3    = root.GetScript<TestScript3>();
+        AreEqual(33,    script3.val3);
     }
     
     [Test]

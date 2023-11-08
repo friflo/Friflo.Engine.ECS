@@ -41,7 +41,7 @@ public struct TestTag2 : IEntityTag { }
 public struct TestTag3 : IEntityTag { }
 
 
-// ------------------------------------------------ behaviors
+// ------------------------------------------------ scripts
 [CodeCoverageTest]
 [Script("testRef1")]
 class TestScript1 : Script {

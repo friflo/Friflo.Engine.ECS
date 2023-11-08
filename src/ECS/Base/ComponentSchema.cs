@@ -25,10 +25,10 @@ public sealed class ComponentSchema
     public   ReadOnlySpan<ComponentType>                    Components          => new (components);
     /// <summary>return all <see cref="Script"/> types attributed with <see cref="ScriptAttribute"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.behaviorIndex"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.scriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Scripts             => new (behaviors);
+    public   ReadOnlySpan<ComponentType>                    Scripts             => new (scripts);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.tagIndex"/> is equal to the array index<br/>
@@ -48,7 +48,7 @@ public sealed class ComponentSchema
     [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] internal readonly   ComponentType[]                     components;
-    [Browse(Never)] private  readonly   ComponentType[]                     behaviors;
+    [Browse(Never)] private  readonly   ComponentType[]                     scripts;
     [Browse(Never)] private  readonly   ComponentType[]                     tags;
     [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
     [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
@@ -72,7 +72,7 @@ public sealed class ComponentSchema
         tagTypeByType           = new Dictionary<Type,   ComponentType>(count);
         maxStructIndex          = structList.Count + 1;
         components              = new ComponentType[maxStructIndex];
-        behaviors               = new ComponentType[classList.Count + 1];
+        scripts               = new ComponentType[classList.Count + 1];
         tags                    = new ComponentType[tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
@@ -83,7 +83,7 @@ public sealed class ComponentSchema
         foreach (var classType in classList) {
             componentTypeByKey.Add(classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
-            behaviors[classType.behaviorIndex] = classType;
+            scripts[classType.scriptIndex] = classType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type,      tagType);
@@ -148,7 +148,7 @@ public sealed class ComponentSchema
     }
     
     private string GetString() {
-        return $"components: {components.Length - 1}  behaviors: {behaviors.Length - 1}  entity tags: {tags.Length - 1}";
+        return $"components: {components.Length - 1}  scripts: {scripts.Length - 1}  entity tags: {tags.Length - 1}";
     } 
     #endregion
 }

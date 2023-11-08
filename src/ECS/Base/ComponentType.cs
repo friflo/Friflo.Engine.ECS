@@ -23,7 +23,7 @@ public abstract class ComponentType
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Script"/> the index in <see cref="ComponentSchema.Scripts"/>. Otherwise 0<br/>
     /// </summary>
-    public   readonly   int             behaviorIndex;  //  4
+    public   readonly   int             scriptIndex;  //  4
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="ComponentSchema.Components"/>. Otherwise 0<br/>
     /// </summary>
@@ -41,7 +41,7 @@ public abstract class ComponentType
     
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the type of a component attributed with <see cref="ComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Script"/> the type of a behavior attributed with <see cref="ScriptAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Script"/> the type of a script attributed with <see cref="ScriptAttribute"/>
     /// </summary>
     public   readonly   Type            type;           //  8
     
@@ -59,13 +59,13 @@ public abstract class ComponentType
         string          tagName,
         Type            type,
         ComponentKind   kind,
-        int             behaviorIndex,
+        int             scriptIndex,
         int             structIndex,
         int             tagIndex)
     {
         this.componentKey   = componentKey;
         this.tagName        = tagName;
-        this.behaviorIndex  = behaviorIndex;
+        this.scriptIndex  = scriptIndex;
         this.structIndex    = structIndex;
         this.tagIndex       = tagIndex;
         this.kind           = kind;
@@ -96,22 +96,22 @@ internal sealed class ScriptType<T> : ComponentType
     where T : Script
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"behavior: '{componentKey}' [*{typeof(T).Name}]";
+    public  override    string          ToString() => $"script: '{componentKey}' [*{typeof(T).Name}]";
     
-    internal ScriptType(string behaviorKey, int behaviorIndex, TypeStore typeStore)
-        : base(behaviorKey, null, typeof(T), ComponentKind.Script, behaviorIndex, 0, 0)
+    internal ScriptType(string scriptKey, int scriptIndex, TypeStore typeStore)
+        : base(scriptKey, null, typeof(T), ComponentKind.Script, scriptIndex, 0, 0)
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
     internal override void ReadScript(ObjectReader reader, JsonValue json, GameEntity entity) {
-        var behavior = entity.GetScript<T>();
-        if (behavior != null) { 
-            reader.ReadToMapper(typeMapper, json, behavior, true);
+        var script = entity.GetScript<T>();
+        if (script != null) { 
+            reader.ReadToMapper(typeMapper, json, script, true);
             return;
         }
-        behavior = reader.ReadMapper(typeMapper, json);
-        entity.archetype.gameEntityStore.AppendScript(entity, behavior);
+        script = reader.ReadMapper(typeMapper, json);
+        entity.archetype.gameEntityStore.AppendScript(entity, script);
     }
 }
 

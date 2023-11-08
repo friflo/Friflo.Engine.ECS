@@ -11,7 +11,7 @@ using Friflo.Json.Fliox.Mapper;
 namespace Friflo.Fliox.Engine.ECS.Sync;
 
 /// <summary>
-/// Create all components / behaviors for an entity from <see cref="JsonValue"/> used as <see cref="DataEntity.components"/>
+/// Create all components / scripts for an entity from <see cref="JsonValue"/> used as <see cref="DataEntity.components"/>
 /// </summary>
 internal sealed class ComponentReader
 {
@@ -103,7 +103,7 @@ internal sealed class ComponentReader
             }
             switch (type.kind) {
                 case ComponentKind.Script:
-                    // --- read behavior
+                    // --- read script
                     component.type.ReadScript(componentReader, json, entity);
                     break;
                 case ComponentKind.Component:
