@@ -8,6 +8,8 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToAutoPropertyWhenPossible
+
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -40,9 +42,12 @@ public sealed partial class GameEntityStore : EntityStore
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
-                    public ReadOnlySpan<EntityNode>             Nodes           => new (nodes);
-                    public              GameEntity              StoreRoot       => storeRoot; // null if no graph origin set
-                    public ReadOnlySpan<EntityScripts>          EntityScripts   => new (entityScripts, 0, entityScriptCount);
+    public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
+    public              GameEntity                  StoreRoot           => storeRoot; // null if no graph origin set
+    public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
+    /// <summary>Set or clear a <see cref="ChildNodesChangedHandler"/> to get events listed at <see cref="ChildNodesChanged"/>.</summary>
+    /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
+    public              ChildNodesChangedHandler    ChildNodesChangedHandler { get => childNodesChanged; set => childNodesChanged = value; }
     #endregion
     
 #region internal fields
