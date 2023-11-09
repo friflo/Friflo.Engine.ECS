@@ -18,10 +18,7 @@ public partial class GameEntityStore
     // ---------------------------------- GameEntity -> DataEntity ----------------------------------
     internal void GameToDataEntity(GameEntity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
-        var id = entity.id;
-        ref var node = ref nodes[id];
-
-        ProcessChildren(dataEntity, node);
+        ProcessChildren(dataEntity, nodes[entity.id]);
         
         // --- write components & scripts
         var jsonComponents = writer.Write(entity, pretty);
@@ -36,8 +33,8 @@ public partial class GameEntityStore
 
     private static void ProcessTags(GameEntity entity, DataEntity dataEntity)
     {
-        var tagCount = entity.Tags.Count;
-        var tags = dataEntity.tags;
+        var tagCount    = entity.Tags.Count;
+        var tags        = dataEntity.tags;
         if (tagCount == 0) {
             tags?.Clear();
         } else {
