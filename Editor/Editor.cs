@@ -39,6 +39,7 @@ public class Editor
 
     public async Task Init()
     {
+        EditorUtils.AssertUIThread();
         store       = new GameEntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Editor Root"));
@@ -66,6 +67,7 @@ public class Editor
 
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
+        EditorUtils.AssertUIThread();
         // --- run server
         server = RunServer(hub);
     }
@@ -130,6 +132,7 @@ public class Editor
     }
     
     private void ProcessEvents() {
+        EditorUtils.AssertUIThread();
         processor.ProcessEvents();
     }
     
