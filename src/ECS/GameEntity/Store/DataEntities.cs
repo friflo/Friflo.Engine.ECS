@@ -21,21 +21,8 @@ public partial class GameEntityStore
         var id = entity.id;
         ref var node = ref nodes[id];
 
-        // --- process child ids
-        var children = dataEntity.children;
-        if (node.childCount > 0) {
-            if (children == null) {
-                children = dataEntity.children = new List<long>(node.childCount);
-            } else {
-                children.Clear();
-            }
-            foreach (var childId in node.ChildIds) {
-                var pid = nodes[childId].pid;
-                children.Add(pid);  
-            }
-        } else {
-            dataEntity.children?.Clear();
-        }
+        ProcessChildren(dataEntity, node);
+        
         // --- write components & scripts
         var jsonComponents = writer.Write(entity, pretty);
         if (!jsonComponents.IsNull()) {
@@ -44,9 +31,13 @@ public partial class GameEntityStore
         }
         dataEntity.components = new JsonValue(jsonComponents); // create array copy for now
         
-        // --- process tags
-        var tagCount    = entity.Tags.Count;
-        var tags        = dataEntity.tags;
+        ProcessTags(entity, dataEntity);
+    }
+
+    private static void ProcessTags(GameEntity entity, DataEntity dataEntity)
+    {
+        var tagCount = entity.Tags.Count;
+        var tags = dataEntity.tags;
         if (tagCount == 0) {
             tags?.Clear();
         } else {
@@ -55,7 +46,7 @@ public partial class GameEntityStore
             } else {
                 tags.Clear();
             }
-            foreach(var tag in entity.Tags) {
+            foreach (var tag in entity.Tags) {
                 tags.Add(tag.tagName);
             }
         }
@@ -66,11 +57,29 @@ public partial class GameEntityStore
         if (unresolvedTags != null) {
             tags ??= dataEntity.tags = new List<string>(unresolvedTags.Length);
             foreach (var tag in unresolvedTags) {
-                tags.Add(tag);        
+                tags.Add(tag);
             }
         }
     }
-    
+
+    private void ProcessChildren(DataEntity dataEntity, EntityNode node)
+    {
+        var children = dataEntity.children;
+        if (node.childCount > 0) {
+            if (children == null) {
+                children = dataEntity.children = new List<long>(node.childCount);
+            } else {
+                children.Clear();
+            }
+            foreach (var childId in node.ChildIds) {
+                var pid = nodes[childId].pid;
+                children.Add(pid);
+            }
+        } else {
+            dataEntity.children?.Clear();
+        }
+    }
+
     // ---------------------------------- DataEntity -> GameEntity ----------------------------------
     internal GameEntity DataToGameEntity(DataEntity dataEntity, out string error, ComponentReader reader)
     {
