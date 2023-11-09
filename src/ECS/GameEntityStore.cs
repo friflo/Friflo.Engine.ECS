@@ -57,7 +57,9 @@ public sealed partial class GameEntityStore : EntityStore
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
     [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
     
-    [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete a GameEntity 
+    [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete a GameEntity
+    [Browse(Never)] private readonly    List<int>               childIdBuffer;      //  8
+    
     #endregion
     
 #region initialize
@@ -72,7 +74,8 @@ public sealed partial class GameEntityStore : EntityStore
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
-        entityScripts = Array.Empty<EntityScripts>();
+        entityScripts   = Array.Empty<EntityScripts>();
+        childIdBuffer   = new List<int>();
     }
     #endregion
     

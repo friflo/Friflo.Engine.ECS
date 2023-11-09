@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
@@ -189,22 +190,22 @@ public partial class GameEntityStore
         }
         if (index == parent.childIds.Length) {
             var newLen = Math.Max(4, 2 * parent.childIds.Length);
-            Utils.Resize(ref parent.childIds, newLen); 
+            Utils.Resize(ref parent.childIds, newLen);
         }
     }
     
-    private void SetChildNodes(int parentId, int[] childIds, int childCount)
+    private void SetChildNodes(int parentId, List<int> childIds)
     {
         var localNodes  = nodes;
         // --- add child ids to EntityNode
         ref var node    = ref localNodes[parentId];
-        node.childIds   = childIds;
-        node.childCount = childCount;
+        var ids         = node.childIds     = childIds.ToArray();
+        var count       = node.childCount   = childIds.Count;
         
         // --- set the parentId on child nodes
-        for (int n = 0; n < childCount; n++)
+        for (int n = 0; n < count; n++)
         {
-            var childId     = childIds[n];
+            var childId     = ids[n];
             ref var child   = ref localNodes[childId];
             if (child.parentId < Static.MinNodeId)
             {

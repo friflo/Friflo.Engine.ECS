@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Sync;
 using Friflo.Json.Fliox;
 
+// ReSharper disable InlineTemporaryVariable
+// ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable MergeIntoLogicalPattern
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
@@ -104,27 +106,26 @@ public partial class GameEntityStore
             pidMap.Add(pid, id);
         }
         // --- map children pid's to id's
-        int[] childIds  = null;
-        var children    = dataEntity.children;
-        var childCount  = 0;
+        var ids = childIdBuffer;
+        ids.Clear();
+        var children = dataEntity.children;
         if (children != null) {
-            childCount = children.Count;
-            childIds = new int[childCount];
+            var childCount = children.Count;
             for (int n = 0; n < childCount; n++) {
                 var childPid = children[n];
                 if (!pidMap.TryGetValue(childPid, out int childId)) {
                     childId = sequenceId++;
                     pidMap.Add(childPid, childId);
                 }
-                childIds[n] = childId;
+                ids.Add(childId);
             }
         }
         EnsureNodesLength(sequenceId);
         var entity  = CreateEntityNode(id, pid);
 
-        if (childIds != null) {
-            UpdateEntityNodes(childIds, children);
-            SetChildNodes(id, childIds, childCount);
+        if (ids.Count > 0) {
+            UpdateEntityNodes(ids, children);
+            SetChildNodes(id, ids);
         }
         return entity;
     }
@@ -137,39 +138,39 @@ public partial class GameEntityStore
         }
         var id          = (int)pid;
         // --- use pid's as id's
-        int[] childIds  = null;
-        var children    = dataEntity.children;
+        var ids = childIdBuffer;
+        ids.Clear();
         var maxPid      = id;
-        var childCount  = 0;
+        var children    = dataEntity.children;
         if (children != null) {
-            childCount  = children.Count; 
-            childIds    = new int[childCount];
+            var childCount  = children.Count; 
             for (int n = 0; n < childCount; n++) {
                 var childId = children[n];
                 if (childId < Static.MinNodeId || childId > int.MaxValue) {
                     throw PidOutOfRangeException(childId, $"{nameof(DataEntity)}.{nameof(dataEntity.children)}");
                 }
-                childIds[n]= (int)childId;
+                ids.Add((int)childId);
             }
-            foreach (var childId in childIds) {
+            foreach (var childId in ids) {
                 maxPid = Math.Max(maxPid, childId);
             }
         }
         EnsureNodesLength(maxPid + 1);
         var entity  = CreateEntityNode(id, id);
         
-        if (childIds != null) {
-            UpdateEntityNodes(childIds, children);
-            SetChildNodes(id, childIds, childCount);
+        if (ids.Count > 0) {
+            UpdateEntityNodes(ids, children);
+            SetChildNodes(id, ids);
         }
         return entity;
     }
     
     /// update EntityNode.pid of the child nodes
-    private void UpdateEntityNodes(int[] childIds, List<long> children)
+    private void UpdateEntityNodes(List<int> childIds, List<long> children)
     {
-        var localNodes = nodes;
-        for (int n = 0; n < childIds.Length; n++) {
+        var localNodes  = nodes;
+        var count       = childIds.Count;
+        for (int n = 0; n < count; n++) {
             var childId             = childIds[n];
             localNodes[childId].pid = children[n];
         }
