@@ -196,9 +196,8 @@ public partial class GameEntityStore
     
     private void SetChildNodes(int parentId, List<int> childIds)
     {
-        var localNodes  = nodes;
         // --- add child ids to EntityNode
-        ref var node    = ref localNodes[parentId];
+        ref var node    = ref nodes[parentId];
         var     count   = childIds.Count;
         int[]   ids;
         if (count <= node.childCount) {
@@ -209,13 +208,17 @@ public partial class GameEntityStore
         }
         node.childCount   = count;
         
-        // --- set the parentId on child nodes
+        SetChildParents(ids, count, parentId);
+    }
+
+    private void SetChildParents(int[] ids, int count, int parentId)
+    {
+        var localNodes = nodes;
         for (int n = 0; n < count; n++)
         {
             var childId     = ids[n];
             ref var child   = ref localNodes[childId];
-            if (child.parentId < Static.MinNodeId)
-            {
+            if (child.parentId < Static.MinNodeId) {
                 child.parentId = parentId;
                 if (HasCycle(parentId, childId, out var exception)) {
                     throw exception;
@@ -229,7 +232,7 @@ public partial class GameEntityStore
             throw EntityAlreadyHasParent(childId, child.parentId, parentId);
         }
     }
-    
+
     private static Exception EntityAlreadyHasParent(int child, int curParent, int newParent) {
         var msg = $"child has already a parent. child: {child} current parent: {curParent}, new parent: {newParent}";
         return new InvalidOperationException(msg);
