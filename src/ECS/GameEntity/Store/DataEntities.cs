@@ -62,7 +62,7 @@ public partial class GameEntityStore
         }
     }
 
-    private void ProcessChildren(DataEntity dataEntity, EntityNode node)
+    private void ProcessChildren(DataEntity dataEntity, in EntityNode node)
     {
         var children = dataEntity.children;
         if (node.childCount > 0) {
