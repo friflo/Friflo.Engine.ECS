@@ -94,11 +94,12 @@ public class Editor
         if (syncChangesPending) {
             return;
         }
-        syncChangesPending = false;
+        syncChangesPending = true;
         EditorUtils.Post(SyncChangesAsync);
     }
     
     private async void SyncChangesAsync() {
+        syncChangesPending = false;
         EditorUtils.AssertUIThread();
         await sync.SyncChangesAsync();
     }
