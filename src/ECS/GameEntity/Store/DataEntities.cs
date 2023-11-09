@@ -15,7 +15,8 @@ namespace Friflo.Fliox.Engine.ECS;
 // Loading and storing DataEntity's is implemented in GameEntityStore to enable declare all its fields private.
 public partial class GameEntityStore
 {
-    // ---------------------------------- GameEntity -> DataEntity ----------------------------------
+// --------------------------------------- GameEntity -> DataEntity ---------------------------------------
+#region GameEntity -> DataEntity
     internal void GameToDataEntity(GameEntity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
         ProcessChildren(dataEntity, nodes[entity.id]);
@@ -76,8 +77,11 @@ public partial class GameEntityStore
             dataEntity.children?.Clear();
         }
     }
+    #endregion
+    
+// --------------------------------------- DataEntity -> GameEntity ---------------------------------------
+#region DataEntity -> GameEntity
 
-    // ---------------------------------- DataEntity -> GameEntity ----------------------------------
     internal GameEntity DataToGameEntity(DataEntity dataEntity, out string error, ComponentReader reader)
     {
         GameEntity entity;
@@ -170,4 +174,5 @@ public partial class GameEntityStore
             localNodes[childId].pid = children[n];
         }
     }
+    #endregion
 }
