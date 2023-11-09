@@ -29,20 +29,20 @@ internal static class ComponentUtils
         Console.WriteLine(assemblyLoader);
         
         var structs     = new List<ComponentType>();
-        var classes     = new List<ComponentType>();
+        var scripts     = new List<ComponentType>();
         var tags        = new List<ComponentType>();
         foreach (var dependant in dependants)
         {
             foreach (var type in dependant.Types)
             {
                 switch (type.kind) {
-                    case ComponentKind.Script:    classes.Add(type);  break;
+                    case ComponentKind.Script:      scripts.Add(type);  break;
                     case ComponentKind.Component:   structs.Add(type);  break;
                     case ComponentKind.Tag:         tags.Add(type);     break;
                 }
             }
         }
-        return new ComponentSchema(dependants, structs, classes, tags);
+        return new ComponentSchema(dependants, structs, scripts, tags);
     }
     
     internal static ComponentType CreateComponentType(Type type, TypeStore typeStore)

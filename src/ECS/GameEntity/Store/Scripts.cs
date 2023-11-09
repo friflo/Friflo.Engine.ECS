@@ -11,13 +11,13 @@ public partial class GameEntityStore
 {
     // --------------------------------- script methods ---------------------------------
     internal Script[] GetScripts(GameEntity entity) {
-        return entityScripts[entity.scriptIndex].classes;
+        return entityScripts[entity.scriptIndex].scripts;
     }
     
     internal Script GetScript(GameEntity entity, Type scriptType)
     {
-        var classes = entityScripts[entity.scriptIndex].classes;
-        foreach (var script in classes) {
+        var scripts = entityScripts[entity.scriptIndex].scripts;
+        foreach (var script in scripts) {
             if (script.GetType() == scriptType) {
                 return script;
             }
@@ -38,10 +38,10 @@ public partial class GameEntityStore
             entityScripts[lastIndex] = new EntityScripts(entity.id, new Script[] { script });
         } else {
             // case: entity already has scripts => add script to its scripts
-            ref var classes = ref entityScripts[entity.scriptIndex].classes;
-            var len = classes.Length;
-            Utils.Resize(ref classes, len + 1);
-            classes[len] = script;
+            ref var scripts = ref entityScripts[entity.scriptIndex].scripts;
+            var len = scripts.Length;
+            Utils.Resize(ref scripts, len + 1);
+            scripts[len] = script;
         }
     }
     
@@ -61,32 +61,32 @@ public partial class GameEntityStore
         }
         // case: entity has already scripts => add / replace script to / in scripts
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
-        var classes             = entityScript.classes;
-        var len                 = classes.Length;
+        var scripts             = entityScript.scripts;
+        var len                 = scripts.Length;
         for (int n = 0; n < len; n++)
         {
-            var current = classes[n]; 
+            var current = scripts[n]; 
             if (current.GetType() == scriptType) {
                 // case: scripts contains a script of the given scriptType => replace current script
-                classes[n] = script;
+                scripts[n] = script;
                 current.entity = null;
                 return script;
             }
         }
         // --- case: scripts does not contain a script of the given scriptType => add script
-        Utils.Resize(ref entityScript.classes, len + 1);
-        entityScript.classes[len] = script;
+        Utils.Resize(ref entityScript.scripts, len + 1);
+        entityScript.scripts[len] = script;
         return null;
     }
     
     internal Script RemoveScript(GameEntity entity, Type scriptType)
     {
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
-        var classes             = entityScript.classes;
-        var len                 = classes.Length;
+        var scripts             = entityScript.scripts;
+        var len                 = scripts.Length;
         for (int n = 0; n < len; n++)
         {
-            var script = classes[n];
+            var script = scripts[n];
             if (script.GetType() != scriptType) {
                 continue;
             }
@@ -107,14 +107,14 @@ public partial class GameEntityStore
                 return script;
             }
             // case: entity has two or more scripts. Remove the given one from its scripts
-            var scripts = new Script[len - 1];
+            var newScripts = new Script[len - 1];
             for (int i = 0; i < n; i++) {
-                scripts[i]     = classes[i];
+                newScripts[i]     = scripts[i];
             }
             for (int i = n + 1; i < len; i++) {
-                scripts[i - 1] = classes[i];
+                newScripts[i - 1] = scripts[i];
             }
-            entityScript.classes = scripts;
+            entityScript.scripts = newScripts;
             return script;
         }
         return null;
