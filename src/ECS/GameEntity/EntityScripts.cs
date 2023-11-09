@@ -9,15 +9,15 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public struct EntityScripts
 {
-    internal readonly   int                 id;
+    internal readonly   int         id;         //  4   - entity containing the scripts
     /// <summary>
     /// Invariant:<br/>
     /// <see cref="id"/> == 0   :   <see cref="scripts"/> == null<br/>
     /// <see cref="id"/>  > 0   :   <see cref="scripts"/> != null  <b>and</b> its Length > 0 
     /// </summary>
-    internal            Script[]            scripts;
+    internal            Script[]    scripts;    //  8   - scripts contained by an entity
     
-    public   override   string              ToString() => GetString();
+    public   override   string      ToString() => GetString();
 
     internal EntityScripts (int id, Script[] scripts)
     {
