@@ -23,6 +23,8 @@ public sealed class GameDataSync
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private readonly    Dictionary<int, EntityChange>   entityChanges;
+    private readonly    List<DataEntity>                upsertBuffer;
+    private readonly    List<long>                      deleteBuffer;
 
 
     public GameDataSync (GameEntityStore store, GameClient client) {
@@ -31,6 +33,8 @@ public sealed class GameDataSync
         localEntities   = client.entities.Local;
         converter       = new EntityConverter();
         entityChanges   = new Dictionary<int, EntityChange>();
+        upsertBuffer    = new List<DataEntity>();
+        deleteBuffer    = new List<long>();
         client.entities.WritePretty = true;
     }
     
@@ -77,11 +81,12 @@ public sealed class GameDataSync
         for (int n = 1; n <= nodeMax; n++)
         {
             var entity = store.GetNodeById(n).Entity;
-            UpsertDataEntity(entity);
+            AddDataEntityUpsert(entity);
         }
+        CreateChangeTasks();
     }
     
-    private void UpsertDataEntity(GameEntity entity)
+    private void AddDataEntityUpsert(GameEntity entity)
     {
         if (entity == null) {
             return;
@@ -90,7 +95,23 @@ public sealed class GameDataSync
             dataEntity = new DataEntity();
         }
         dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
-        client.entities.Upsert(dataEntity);
+        upsertBuffer.Add(dataEntity);
+    }
+    
+    /// <summary>
+    /// Creates an upsert task containing all <see cref="DataEntity"/>'s if needed.<br/>
+    /// Creates a delete task containing all deleted <see cref="DataEntity"/>'s if needed.
+    /// </summary>
+    private void CreateChangeTasks()
+    {
+        if (upsertBuffer.Count > 0) {
+            client.entities.UpsertRange(upsertBuffer);
+            upsertBuffer.Clear();
+        }
+        if (deleteBuffer.Count > 0) {
+            client.entities.DeleteRange(deleteBuffer);
+            deleteBuffer.Clear();
+        }
     }
     
     public void SubscribeDatabaseChanges()
@@ -136,19 +157,20 @@ public sealed class GameDataSync
     {
         foreach (var pair in entityChanges)
         {
-            var id = pair.Key;
+            var id      = pair.Key;
             switch (pair.Value) {
                 case EntityChange.Upsert:
                     var entity = store.GetNodeById(id).Entity;
-                    UpsertDataEntity(entity);
+                    AddDataEntityUpsert(entity);
                     continue;
                 case EntityChange.Delete:
-                    client.entities.Delete(id);
+                    var pid = store.GetNodeById(id).Pid;
+                    deleteBuffer.Add(pid);
                     continue;
             }
         }
         entityChanges.Clear();
-
+        CreateChangeTasks();
         await client.SyncTasks();
     }
 }
