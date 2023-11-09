@@ -199,8 +199,15 @@ public partial class GameEntityStore
         var localNodes  = nodes;
         // --- add child ids to EntityNode
         ref var node    = ref localNodes[parentId];
-        var ids         = node.childIds     = childIds.ToArray();
-        var count       = node.childCount   = childIds.Count;
+        var     count   = childIds.Count;
+        int[]   ids;
+        if (count <= node.childCount) {
+            ids = node.childIds;
+            childIds.CopyTo(ids, 0);
+        } else {
+            ids = node.childIds = childIds.ToArray();
+        }
+        node.childCount   = count;
         
         // --- set the parentId on child nodes
         for (int n = 0; n < count; n++)
