@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
@@ -189,13 +188,13 @@ public partial class GameEntityStore
             parent.childIds = new int[4];
             return;
         }
-        if (index == parent.childIds.Length) {
+        if (index == parent.childIds.Length) { 
             var newLen = Math.Max(4, 2 * parent.childIds.Length);
             Utils.Resize(ref parent.childIds, newLen);
         }
     }
     
-    private void SetChildNodes(int parentId, List<int> newChildIds)
+    private void SetChildNodes(int parentId, ReadOnlySpan<int> newChildIds)
     {
         if (false) { // childNodesChanged != null) {
             // case: childNodesChanged handler exists       => assign new child ids one by one to send events
@@ -203,15 +202,15 @@ public partial class GameEntityStore
             return;
         }
         // case: no registered childNodesChanged handlers   => assign new child ids at once
-        if (newChildIds.Count == 0) { // todo fix
+        if (newChildIds.Length == 0) { // todo fix
             return;
         }
         ref var node        = ref nodes[parentId];
-        var     newCount    = newChildIds.Count;
+        var     newCount    = newChildIds.Length;
         int[]   childIds;
         if (newCount <= node.childCount) {
             childIds = node.childIds;
-            newChildIds.CopyTo(childIds, 0);
+            newChildIds.CopyTo(childIds);
         } else {
             childIds = node.childIds = newChildIds.ToArray();
         }
@@ -219,10 +218,10 @@ public partial class GameEntityStore
         SetChildParents(childIds, newCount, parentId);
     }
     
-    private void SetChildNodesWithEvents(int parentId, List<int> newChildIds)
+    private void SetChildNodesWithEvents(int parentId, ReadOnlySpan<int> newChildIds)
     {
         ref var node    = ref nodes[parentId];
-        var newCount    = newChildIds.Count;
+        var newCount    = newChildIds.Length;
         var childIds    = node.childIds;
         if (newCount > childIds.Length) {
             Utils.Resize(ref node.childIds, newCount);
@@ -255,7 +254,7 @@ public partial class GameEntityStore
     }
 
     // --- 1.
-    private void ChildIds_RemoveMissingIds(List<int> newChildIds, ref EntityNode node)
+    private void ChildIds_RemoveMissingIds(ReadOnlySpan<int> newChildIds, ref EntityNode node)
     {
         var childIds = node.childIds;
         var newIdSet = idBufferSet;
@@ -279,7 +278,7 @@ public partial class GameEntityStore
     }
 
     // --- 2.
-    private void ChildIds_InsertNewIds(List<int> newChildIds, ref EntityNode node)
+    private void ChildIds_InsertNewIds(ReadOnlySpan<int> newChildIds, ref EntityNode node)
     {
         var childIds = node.childIds;
         var curIdSet = idBufferSet;
@@ -287,7 +286,7 @@ public partial class GameEntityStore
         for (int n = 0; n < node.childCount; n++) {
             curIdSet.Add(childIds[n]);
         }
-        var newCount = newChildIds.Count;
+        var newCount = newChildIds.Length;
         for (int index = 0; index < newCount; index++)
         {
             var id = newChildIds[index];
@@ -306,9 +305,9 @@ public partial class GameEntityStore
     }
 
     // --- 3.1
-    private static void ChildIds_GetRange(int[] childIds, List<int> newChildIds, out int first, out int last)
+    private static void ChildIds_GetRange(int[] childIds, ReadOnlySpan<int> newChildIds, out int first, out int last)
     {
-        var count = newChildIds.Count;
+        var count = newChildIds.Length;
         first = 0;
         for (; first < count; first++) {
             var id = newChildIds[first];
@@ -347,7 +346,7 @@ public partial class GameEntityStore
     }
     
     // --- 3.3
-    private void ChildIds_InsertRange(ref EntityNode node, int first, int last, List<int> newChildIds)
+    private void ChildIds_InsertRange(ref EntityNode node, int first, int last, ReadOnlySpan<int> newChildIds)
     {
         var childIds = node.childIds;
         for (int index = first; index <= last; index++)
