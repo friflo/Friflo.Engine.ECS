@@ -226,9 +226,9 @@ public partial class GameEntityStore
             Utils.Resize(ref node.childIds, newCount);
             childIds = node.childIds;
         }
-        // --- 1. Remove ids missing in new child ids.  e.g.            cur ids [2, 3, 4]
-        //                                                              new ids [6, 4, 2]  => remove: 3
-        //                                                              result  [2, 4]
+        // --- 1. Remove ids missing in new child ids.  e.g.            cur ids [2, 3, 4, 5]
+        //                                                              new ids [6, 4, 2, 5]  => remove: 3
+        //                                                              result  [2, 4, 5]
         var newIdSet = idBufferSet;
         newIdSet.Clear();
         foreach (var id in newChildIds) {
@@ -240,14 +240,14 @@ public partial class GameEntityStore
                 continue;
             }
             for (int i = index + 1; i < curCount; i++) {
-                childIds[i - 1] = childIds[i];   
+                childIds[i - 1] = childIds[i];
             }
             node.childCount = --curCount;
             OnChildNodeRemove(parentId, id, index);
         }
-        // --- 2. Add new ids at their specified order. e.g.            cur ids [2, 4]
-        //                                                              new ids [6, 4, 2]  => add: 6
-        //                                                              result  [6, 2, 4]  childCount is now final
+        // --- 2. Add new ids at their specified order. e.g.            cur ids [2, 4, 5]
+        //                                                              new ids [6, 4, 2, 5]  => add: 6
+        //                                                              result  [6, 2, 4, 5]  childCount = newCount
         var curIdSet = idBufferSet;
         curIdSet.Clear();
         foreach (var id in childIds) {
@@ -268,19 +268,19 @@ public partial class GameEntityStore
             node.childCount = ++curCount;
             OnChildNodeAdd(parentId, id, index);
         }
-        // --- 3. Move existing ids to their specified position. e.g.   cur ids [6, 2, 4]
-        //                                                              new ids [6, 4, 2]   => move: 4, 2
-        //                                                              result  [6, 4, 2]   finished
-        
-        
+        // --- 3. Establish specified id order. e.g.                    cur ids [6, 2, 4, 5]
+        //                                                              new ids [6, 4, 2, 5]
+        //     3.1          get range where positions are different =>  range   [6, x, x, 5]
+        //     3.2          remove range                            =>  temp    [6, 5]
+        //     3.3          add range in order                      =>  result  [6, 4, 2, 5]   finished
         for (int index = 0; index < newCount; index++)
         {
             var id = newChildIds[index];
-            if (curIdSet.Contains(id)) {
-                // case: child ids contains id already
+            if (childIds[index] == id) {
+                // case: id is already at specified position
                 continue;
             }
-            // case: child ids does not contain id      => insert at specified position
+            // case: id is not at specified position => move
             for (int n = curCount; n > index; n--) {
                 childIds[n + 1] = childIds[n];
             }
@@ -288,9 +288,6 @@ public partial class GameEntityStore
             node.childCount = ++curCount;
             OnChildNodeAdd(parentId, id, index);
         }
-        
-        
-        
         SetChildParents(childIds, newCount, parentId);
     }
 
