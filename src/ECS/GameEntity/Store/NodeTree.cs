@@ -198,11 +198,11 @@ public partial class GameEntityStore
     private void SetChildNodes(int parentId, List<int> newChildIds)
     {
         if (false) { // childNodesChanged != null) {
-            // case: ChildNodesChangedHandler exists        => assign new child ids one by one to send events
+            // case: childNodesChanged handler exists       => assign new child ids one by one to send events
             SetChildNodesWithEvents(parentId, newChildIds);
             return;
         }
-        // case: no registered ChildNodesChangedHandler     => assign new child ids at once 
+        // case: no registered childNodesChanged handlers   => assign new child ids at once 
         ref var node        = ref nodes[parentId];
         var     newCount    = newChildIds.Count;
         int[]   childIds;
@@ -256,6 +256,7 @@ public partial class GameEntityStore
                 childIds[n - 1] = childIds[n];
             }
             --node.childCount;
+            childIds[node.childCount] = 0; // not necessary but simplify debugging
             OnChildNodeRemove(parentId, removedId, index);
         }
         
@@ -291,7 +292,8 @@ public partial class GameEntityStore
                 childIds[i - 1] = childIds[i];
             }
             --node.childCount;
-            OnChildNodeRemove(node.parentId, id, index);
+            childIds[node.childCount] = 0; // not necessary but simplify debugging
+            OnChildNodeRemove(node.id, id, index);
         }
     }
 
@@ -305,7 +307,8 @@ public partial class GameEntityStore
             curIdSet.Add(id);
         }
         var newCount = newChildIds.Count;
-        for (int index = 0; index < newCount; index++) {
+        for (int index = 0; index < newCount; index++)
+        {
             var id = newChildIds[index];
             if (curIdSet.Contains(id)) {
                 // case: child ids contains id already
@@ -317,7 +320,7 @@ public partial class GameEntityStore
             }
             childIds[index] = id;
             ++node.childCount;
-            OnChildNodeAdd(node.parentId, id, index);
+            OnChildNodeAdd(node.id, id, index);
         }
     }
 
