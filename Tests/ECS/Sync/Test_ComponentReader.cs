@@ -87,6 +87,44 @@ public static class Test_ComponentReader
         IsNull  (error);
     }
     
+    [Test]
+    public static void Test_ComponentReader_read_children()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        ComponentReader_read_children(store);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_read_children_events()
+    {
+        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var events  = Events.SetHandlerSeq(store, (args, seq) => {
+            _ = 1;
+        });
+        ComponentReader_read_children(store);
+        AreEqual(10, events.seq);
+    }
+
+    private static void ComponentReader_read_children(GameEntityStore store)
+    {
+        var converter   = EntityConverter.Default;
+
+        var dataRoot    = new DataEntity { pid = 1, children = new List<long> { 2, 3, 4, 5 } };
+        var root        = converter.DataToGameEntity(dataRoot, store, out _);
+        
+        AreEqual(new [] { 2, 3, 4, 5 }, root.ChildIds.ToArray());
+        for (int n = 2; n <= 6; n++) {
+            converter.DataToGameEntity(new DataEntity { pid = n }, store, out _);
+        }
+        AreEqual(6,     store.EntityCount);
+        
+        dataRoot    = new DataEntity { pid = 1, children = new List<long> { 6, 4, 2, 5 } };
+        root        = converter.DataToGameEntity(dataRoot, store, out _);
+        
+        AreEqual(new [] { 6, 4, 2, 5 }, root.ChildIds.ToArray());
+        AreEqual(6,     store.EntityCount);
+    }
+    
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
     [Test]
     public static void Test_ComponentReader_read_components_empty()

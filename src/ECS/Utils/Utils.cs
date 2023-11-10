@@ -19,7 +19,9 @@ internal static class Utils
 {
     internal static void Resize<T>(ref T[] array, int len) {
         var newArray = new T[len];
-        Array.Copy(array, newArray, array.Length);
+        if (array != null) {
+            Array.Copy(array, newArray, array.Length);
+        }
         array = newArray;
     }
 }

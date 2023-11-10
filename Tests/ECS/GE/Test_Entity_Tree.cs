@@ -6,6 +6,7 @@ using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static Tests.Utils.Events;
 
 // ReSharper disable ConvertToLocalFunction
 // ReSharper disable HeuristicUnreachableCode
@@ -671,29 +672,7 @@ public static class Test_Entity_Tree
             rand.Next();
         }
     }
-    
-    private static Events SetHandler(GameEntityStore store, Action<ChildNodesChangedArgs> action)
-    {
-        var events = new Events();
-        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
-            events.seq++;
-            action(args);
-        };
-        return events;
-    }
-    
-    private static Events SetHandlerSeq(GameEntityStore store, Action<ChildNodesChangedArgs, int> action)
-    {
-        var events = new Events();
-        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
-            action(args, events.seq++);
-        };
-        return events;
-    }
 }
 
-internal class Events
-{
-    internal int seq;
-}
+
 

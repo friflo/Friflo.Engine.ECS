@@ -196,7 +196,7 @@ public partial class GameEntityStore
     
     private void SetChildNodes(int parentId, ReadOnlySpan<int> newChildIds)
     {
-        if (false) { // childNodesChanged != null) {
+        if (childNodesChanged != null) {
             // case: childNodesChanged handler exists       => assign new child ids one by one to send events
             SetChildNodesWithEvents(parentId, newChildIds);
             return;
@@ -223,7 +223,7 @@ public partial class GameEntityStore
         ref var node    = ref nodes[parentId];
         var newCount    = newIds.Length;
         var childIds    = node.childIds;
-        if (newCount > childIds.Length) {
+        if (childIds == null || newCount > childIds.Length) {
             Utils.Resize(ref node.childIds, newCount);
             childIds = node.childIds;
         }
