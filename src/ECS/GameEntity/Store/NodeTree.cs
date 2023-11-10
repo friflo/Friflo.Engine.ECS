@@ -220,76 +220,104 @@ public partial class GameEntityStore
     {
         ref var node    = ref nodes[parentId];
         var newCount    = newChildIds.Count;
-        var curCount    = node.childCount;
         var childIds    = node.childIds;
         if (newCount > childIds.Length) {
             Utils.Resize(ref node.childIds, newCount);
             childIds = node.childIds;
         }
-        // --- 1. Remove ids missing in new child ids.  e.g.            cur ids [2, 3, 4, 5]
+        // --- 1. Remove missing ids in new child ids.  e.g.            cur ids [2, 3, 4, 5]
         //                                                              new ids [6, 4, 2, 5]  => remove: 3
         //                                                              result  [2, 4, 5]
+        RemoveMissingIds(newChildIds, ref node);
+        
+        // --- 2. Insert new ids at their specified position. e.g.      cur ids [2, 4, 5]
+        //                                                              new ids [6, 4, 2, 5]  => insert: 6
+        //                                                              result  [6, 2, 4, 5]  childCount = newCount
+        InsertNewIds    (newChildIds, ref node);
+        
+        // --- 3. Establish specified id order. e.g.                    cur ids [6, 2, 4, 5]
+        //                                                              new ids [6, 4, 2, 5]
+        // 3.1  get range (first,last) where positions are different => range   [6, x, x, 5]
+        // 3.2  remove range                                         => temp    [6, 5]
+        // 3.3  add range in order                                   => result  [6, 4, 2, 5]   finished
+        
+        // --- 3.1
+        GetRange(childIds, newCount, newChildIds);
+        
+        SetChildParents(childIds, newCount, parentId);
+    }
+    
+    // --- 1.
+    private void RemoveMissingIds(List<int> newChildIds, ref EntityNode node)
+    {
+        var childIds = node.childIds;
         var newIdSet = idBufferSet;
         newIdSet.Clear();
         foreach (var id in newChildIds) {
             newIdSet.Add(id);
         }
-        for (int index = curCount - 1; index >= 0; index--) {
+        for (int index = node.childCount - 1; index >= 0; index--) {
             var id = childIds[index];
             if (newIdSet.Contains(id)) {
                 continue;
             }
-            for (int i = index + 1; i < curCount; i++) {
+            for (int i = index + 1; i < node.childCount; i++) {
                 childIds[i - 1] = childIds[i];
             }
-            node.childCount = --curCount;
-            OnChildNodeRemove(parentId, id, index);
+            --node.childCount;
+            OnChildNodeRemove(node.parentId, id, index);
         }
-        // --- 2. Add new ids at their specified order. e.g.            cur ids [2, 4, 5]
-        //                                                              new ids [6, 4, 2, 5]  => add: 6
-        //                                                              result  [6, 2, 4, 5]  childCount = newCount
+    }
+
+    // --- 2.
+    private void InsertNewIds(List<int> newChildIds, ref EntityNode node)
+    {
+        var childIds = node.childIds;
         var curIdSet = idBufferSet;
         curIdSet.Clear();
         foreach (var id in childIds) {
             curIdSet.Add(id);
         }
-        for (int index = 0; index < newCount; index++)
-        {
+        var newCount = newChildIds.Count;
+        for (int index = 0; index < newCount; index++) {
             var id = newChildIds[index];
             if (curIdSet.Contains(id)) {
                 // case: child ids contains id already
                 continue;
             }
             // case: child ids does not contain id      => insert at specified position
-            for (int n = curCount; n > index; n--) {
+            for (int n = node.childCount; n > index; n--) {
                 childIds[n + 1] = childIds[n];
             }
             childIds[index] = id;
-            node.childCount = ++curCount;
-            OnChildNodeAdd(parentId, id, index);
+            ++node.childCount;
+            OnChildNodeAdd(node.parentId, id, index);
         }
-        // --- 3. Establish specified id order. e.g.                    cur ids [6, 2, 4, 5]
-        //                                                              new ids [6, 4, 2, 5]
-        //     3.1          get range where positions are different =>  range   [6, x, x, 5]
-        //     3.2          remove range                            =>  temp    [6, 5]
-        //     3.3          add range in order                      =>  result  [6, 4, 2, 5]   finished
-        for (int index = 0; index < newCount; index++)
-        {
-            var id = newChildIds[index];
-            if (childIds[index] == id) {
+    }
+
+    // --- 3.1
+    private static void GetRange(int[] childIds, int newCount, List<int> newChildIds)
+    {
+        int first = 0;
+        for (; first < newCount; first++) {
+            var id = newChildIds[first];
+            if (childIds[first] == id) {
                 // case: id is already at specified position
                 continue;
             }
-            // case: id is not at specified position => move
-            for (int n = curCount; n > index; n--) {
-                childIds[n + 1] = childIds[n];
-            }
-            childIds[index] = id;
-            node.childCount = ++curCount;
-            OnChildNodeAdd(parentId, id, index);
+            break;
         }
-        SetChildParents(childIds, newCount, parentId);
+        int last = newCount - 1;
+        for (; last > first; last--) {
+            var id = newChildIds[last];
+            if (childIds[last] == id) {
+                // case: id is already at specified position
+                continue;
+            }
+            break;
+        }
     }
+
 
     private void SetChildParents(int[] ids, int count, int parentId)
     {
