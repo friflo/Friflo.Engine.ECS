@@ -106,7 +106,7 @@ public partial class GameEntityStore
             pidMap.Add(pid, id);
         }
         // --- map children pid's to id's
-        var ids = childIdBuffer;
+        var ids = idBuffer;
         ids.Clear();
         var children = dataEntity.children;
         if (children != null) {
@@ -138,7 +138,7 @@ public partial class GameEntityStore
         }
         var id          = (int)pid;
         // --- use pid's as id's
-        var ids = childIdBuffer;
+        var ids = idBuffer;
         ids.Clear();
         var maxPid      = id;
         var children    = dataEntity.children;
