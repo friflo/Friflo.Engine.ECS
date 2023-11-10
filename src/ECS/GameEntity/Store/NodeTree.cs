@@ -251,23 +251,24 @@ public partial class GameEntityStore
         // --- 3.2  remove range
         for (int index = last; index >= first; index--)
         {
+            int removedId = childIds[index];
             for (int n = index + 1; n < node.childCount; n++) {
                 childIds[n - 1] = childIds[n];
             }
             --node.childCount;
-            OnChildNodeRemove(parentId, childIds[index], index);
+            OnChildNodeRemove(parentId, removedId, index);
         }
         
         // --- 3.3  insert range in order
         for (int index = first; index <= last; index++)
         {
-            for (int n = node.childCount - 1; n > index; n--) {
+            for (int n = node.childCount; n > index; n--) {
                 childIds[n] = childIds[n - 1];
             }
-            var id          = newChildIds[index];
-            childIds[index] = id;
+            var addedId     = newChildIds[index];
+            childIds[index] = addedId;
             ++node.childCount;
-            OnChildNodeAdd(parentId, id, index);
+            OnChildNodeAdd(parentId, addedId, index);
         }
         SetChildParents(childIds, newCount, parentId);
     }
@@ -312,7 +313,7 @@ public partial class GameEntityStore
             }
             // case: child ids does not contain id      => insert at specified position
             for (int n = node.childCount; n > index; n--) {
-                childIds[n + 1] = childIds[n];
+                childIds[n] = childIds[n - 1];
             }
             childIds[index] = id;
             ++node.childCount;
