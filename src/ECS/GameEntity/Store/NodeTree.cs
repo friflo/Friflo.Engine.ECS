@@ -240,8 +240,8 @@ public partial class GameEntityStore
         // --- 3. Establish specified id order.                 E.g.    cur ids [6, 2, 4, 5]
         //                                                             *newIds  [6, 4, 2, 5]
         // 3.1  get range (first,last) where positions are different => range   [6, x, x, 5]
-        // 3.2  remove range                                         =>         [6, 4, 2, 5]    => remove 2
-        //                                                                      [6, 4, 5]       => remove 4
+        // 3.2  remove range                                         =>         [6, 2, 4, 5]    => remove 4
+        //                                                                      [6, 2, 5]       => remove 2
         //                                                              result  [6, 5]
         // 3.3  insert range in specified order                      =>         [6, 5]          => insert 4
         //                                                                      [6, 4, 5]       => insert 2
