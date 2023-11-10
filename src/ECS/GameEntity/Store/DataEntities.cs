@@ -125,8 +125,8 @@ public partial class GameEntityStore
 
         if (ids.Count > 0) {
             UpdateEntityNodes(ids, children);
-            SetChildNodes(id, ids);
         }
+        SetChildNodes(id, ids);
         return entity;
     }
     
@@ -160,8 +160,8 @@ public partial class GameEntityStore
         
         if (ids.Count > 0) {
             UpdateEntityNodes(ids, children);
-            SetChildNodes(id, ids);
         }
+        SetChildNodes(id, ids);
         return entity;
     }
     

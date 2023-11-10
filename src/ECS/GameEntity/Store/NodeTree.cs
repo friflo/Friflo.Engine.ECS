@@ -202,7 +202,10 @@ public partial class GameEntityStore
             SetChildNodesWithEvents(parentId, newChildIds);
             return;
         }
-        // case: no registered childNodesChanged handlers   => assign new child ids at once 
+        // case: no registered childNodesChanged handlers   => assign new child ids at once
+        if (newChildIds.Count == 0) { // todo fix
+            return;
+        }
         ref var node        = ref nodes[parentId];
         var     newCount    = newChildIds.Count;
         int[]   childIds;
@@ -303,8 +306,8 @@ public partial class GameEntityStore
         var childIds = node.childIds;
         var curIdSet = idBufferSet;
         curIdSet.Clear();
-        foreach (var id in childIds) {
-            curIdSet.Add(id);
+        for (int n = 0; n < node.childCount; n++) {
+            curIdSet.Add(childIds[n]);
         }
         var newCount = newChildIds.Count;
         for (int index = 0; index < newCount; index++)
