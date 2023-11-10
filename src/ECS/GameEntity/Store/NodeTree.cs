@@ -231,12 +231,12 @@ public partial class GameEntityStore
         // --- 1. Remove missing ids in new child ids.          E.g.    cur ids [2, 3, 4, 5]
         //                                                              *target [6, 4, 2, 5]    => remove: 3
         //                                                              result  [2, 4, 5]
-        RemoveMissingIds(newChildIds, ref node);
+        ChildIds_RemoveMissingIds(newChildIds, ref node);
         
         // --- 2. Insert new ids at their specified position.   E.g.    cur ids [2, 4, 5]
         //                                                              *target [6, 4, 2, 5]    => insert: 6
         //                                                              result  [6, 2, 4, 5]    childCount = newCount
-        InsertNewIds    (newChildIds, ref node);
+        ChildIds_InsertNewIds    (newChildIds, ref node);
         
         // --- 3. Establish specified id order.                 E.g.    cur ids [6, 2, 4, 5]
         //                                                              *target [6, 4, 2, 5]
@@ -247,38 +247,15 @@ public partial class GameEntityStore
         // 3.3  insert range in specified order                      =>         [6, 5]          => insert 4
         //                                                                      [6, 4, 5]       => insert 2
         //                                                              result  [6, 4, 2, 5]    finished
+        ChildIds_GetRange(childIds, newChildIds, out int first, out int last);
+        ChildIds_RemoveRange(ref node, first, last);
+        ChildIds_InsertRange(ref node, first, last, newChildIds);
         
-        // --- 3.1  get range
-        GetRange(childIds, newChildIds, out int first, out int last);
-        
-        // --- 3.2  remove range
-        for (int index = last; index >= first; index--)
-        {
-            int removedId = childIds[index];
-            for (int n = index + 1; n < node.childCount; n++) {
-                childIds[n - 1] = childIds[n];
-            }
-            --node.childCount;
-            childIds[node.childCount] = 0; // not necessary but simplify debugging
-            OnChildNodeRemove(parentId, removedId, index);
-        }
-        
-        // --- 3.3  insert range in order
-        for (int index = first; index <= last; index++)
-        {
-            for (int n = node.childCount; n > index; n--) {
-                childIds[n] = childIds[n - 1];
-            }
-            var addedId     = newChildIds[index];
-            childIds[index] = addedId;
-            ++node.childCount;
-            OnChildNodeAdd(parentId, addedId, index);
-        }
         SetChildParents(childIds, newCount, parentId);
     }
-    
+
     // --- 1.
-    private void RemoveMissingIds(List<int> newChildIds, ref EntityNode node)
+    private void ChildIds_RemoveMissingIds(List<int> newChildIds, ref EntityNode node)
     {
         var childIds = node.childIds;
         var newIdSet = idBufferSet;
@@ -301,7 +278,7 @@ public partial class GameEntityStore
     }
 
     // --- 2.
-    private void InsertNewIds(List<int> newChildIds, ref EntityNode node)
+    private void ChildIds_InsertNewIds(List<int> newChildIds, ref EntityNode node)
     {
         var childIds = node.childIds;
         var curIdSet = idBufferSet;
@@ -328,7 +305,7 @@ public partial class GameEntityStore
     }
 
     // --- 3.1
-    private static void GetRange(int[] childIds, List<int> newChildIds, out int first, out int last)
+    private static void ChildIds_GetRange(int[] childIds, List<int> newChildIds, out int first, out int last)
     {
         var count = newChildIds.Count;
         first = 0;
@@ -348,6 +325,38 @@ public partial class GameEntityStore
                 continue;
             }
             break;
+        }
+    }
+    
+    // --- 3.2
+    private void ChildIds_RemoveRange(ref EntityNode node, int first, int last)
+    {
+        var childIds = node.childIds;
+        for (int index = last; index >= first; index--)
+        {
+            int removedId = childIds[index];
+            for (int n = index + 1; n < node.childCount; n++) {
+                childIds[n - 1] = childIds[n];
+            }
+            --node.childCount;
+            childIds[node.childCount] = 0; // not necessary but simplify debugging
+            OnChildNodeRemove(node.id, removedId, index);
+        }
+    }
+    
+    // --- 3.3
+    private void ChildIds_InsertRange(ref EntityNode node, int first, int last, List<int> newChildIds)
+    {
+        var childIds = node.childIds;
+        for (int index = first; index <= last; index++)
+        {
+            for (int n = node.childCount; n > index; n--) {
+                childIds[n] = childIds[n - 1];
+            }
+            var addedId     = newChildIds[index];
+            childIds[index] = addedId;
+            ++node.childCount;
+            OnChildNodeAdd(node.id, addedId, index);
         }
     }
 

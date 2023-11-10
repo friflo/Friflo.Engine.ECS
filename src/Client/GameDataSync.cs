@@ -129,7 +129,7 @@ public sealed class GameDataSync
     /// <summary>SYNC: <see cref="DataEntity"/> -> <see cref="GameEntityStore"/></summary>
     private void EntitiesChangeHandler(Changes<long, DataEntity> changes, EventContext context)
     {
-        Console.WriteLine($"Changes: {changes}");
+        // Console.WriteLine($"Changes: {changes}");
         if (context.IsOrigin) {
             return;
         }
