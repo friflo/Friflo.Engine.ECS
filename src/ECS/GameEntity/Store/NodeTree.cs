@@ -225,25 +225,50 @@ public partial class GameEntityStore
             Utils.Resize(ref node.childIds, newCount);
             childIds = node.childIds;
         }
-        // --- 1. Remove missing ids in new child ids.  e.g.            cur ids [2, 3, 4, 5]
-        //                                                              new ids [6, 4, 2, 5]  => remove: 3
+        // --- 1. Remove missing ids in new child ids.          E.g.    cur ids [2, 3, 4, 5]
+        //                                                              *target [6, 4, 2, 5]    => remove: 3
         //                                                              result  [2, 4, 5]
         RemoveMissingIds(newChildIds, ref node);
         
-        // --- 2. Insert new ids at their specified position. e.g.      cur ids [2, 4, 5]
-        //                                                              new ids [6, 4, 2, 5]  => insert: 6
-        //                                                              result  [6, 2, 4, 5]  childCount = newCount
+        // --- 2. Insert new ids at their specified position.   E.g.    cur ids [2, 4, 5]
+        //                                                              *target [6, 4, 2, 5]    => insert: 6
+        //                                                              result  [6, 2, 4, 5]    childCount = newCount
         InsertNewIds    (newChildIds, ref node);
         
-        // --- 3. Establish specified id order. e.g.                    cur ids [6, 2, 4, 5]
-        //                                                              new ids [6, 4, 2, 5]
+        // --- 3. Establish specified id order.                 E.g.    cur ids [6, 2, 4, 5]
+        //                                                              *target [6, 4, 2, 5]
         // 3.1  get range (first,last) where positions are different => range   [6, x, x, 5]
-        // 3.2  remove range                                         => temp    [6, 5]
-        // 3.3  add range in order                                   => result  [6, 4, 2, 5]   finished
+        // 3.2  remove range                                         =>         [6, 4, 2, 5]    => remove 2
+        //                                                                      [6, 4, 5]       => remove 4
+        //                                                              result  [6, 5]
+        // 3.3  insert range in specified order                      =>         [6, 5]          => insert 4
+        //                                                                      [6, 4, 5]       => insert 2
+        //                                                              result  [6, 4, 2, 5]    finished
         
-        // --- 3.1
-        GetRange(childIds, newCount, newChildIds);
+        // --- 3.1  get range
+        GetRange(childIds, newChildIds, out int first, out int last);
         
+        // --- 3.2  remove range
+        for (int index = last; index >= first; index--)
+        {
+            for (int n = index + 1; n < node.childCount; n++) {
+                childIds[n - 1] = childIds[n];
+            }
+            --node.childCount;
+            OnChildNodeRemove(parentId, childIds[index], index);
+        }
+        
+        // --- 3.3  insert range in order
+        for (int index = first; index <= last; index++)
+        {
+            for (int n = node.childCount - 1; n > index; n--) {
+                childIds[n] = childIds[n - 1];
+            }
+            var id          = newChildIds[index];
+            childIds[index] = id;
+            ++node.childCount;
+            OnChildNodeAdd(parentId, id, index);
+        }
         SetChildParents(childIds, newCount, parentId);
     }
     
@@ -296,10 +321,11 @@ public partial class GameEntityStore
     }
 
     // --- 3.1
-    private static void GetRange(int[] childIds, int newCount, List<int> newChildIds)
+    private static void GetRange(int[] childIds, List<int> newChildIds, out int first, out int last)
     {
-        int first = 0;
-        for (; first < newCount; first++) {
+        var count = newChildIds.Count;
+        first = 0;
+        for (; first < count; first++) {
             var id = newChildIds[first];
             if (childIds[first] == id) {
                 // case: id is already at specified position
@@ -307,7 +333,7 @@ public partial class GameEntityStore
             }
             break;
         }
-        int last = newCount - 1;
+        last = count - 1;
         for (; last > first; last--) {
             var id = newChildIds[last];
             if (childIds[last] == id) {
