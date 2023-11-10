@@ -218,48 +218,48 @@ public partial class GameEntityStore
         SetChildParents(childIds, newCount, parentId);
     }
     
-    private void SetChildNodesWithEvents(int parentId, ReadOnlySpan<int> newChildIds)
+    private void SetChildNodesWithEvents(int parentId, ReadOnlySpan<int> newIds)
     {
         ref var node    = ref nodes[parentId];
-        var newCount    = newChildIds.Length;
+        var newCount    = newIds.Length;
         var childIds    = node.childIds;
         if (newCount > childIds.Length) {
             Utils.Resize(ref node.childIds, newCount);
             childIds = node.childIds;
         }
         // --- 1. Remove missing ids in new child ids.          E.g.    cur ids [2, 3, 4, 5]
-        //                                                             *target  [6, 4, 2, 5]    => remove: 3
+        //                                                             *newIds  [6, 4, 2, 5]    => remove: 3
         //                                                              result  [2, 4, 5]
-        ChildIds_RemoveMissingIds(newChildIds, ref node);
+        ChildIds_RemoveMissingIds(newIds, ref node);
         
         // --- 2. Insert new ids at their specified position.   E.g.    cur ids [2, 4, 5]
-        //                                                             *target  [6, 4, 2, 5]    => insert: 6
+        //                                                             *newIds  [6, 4, 2, 5]    => insert: 6
         //                                                              result  [6, 2, 4, 5]    childCount = newCount
-        ChildIds_InsertNewIds    (newChildIds, ref node);
+        ChildIds_InsertNewIds    (newIds, ref node);
         
         // --- 3. Establish specified id order.                 E.g.    cur ids [6, 2, 4, 5]
-        //                                                             *target  [6, 4, 2, 5]
+        //                                                             *newIds  [6, 4, 2, 5]
         // 3.1  get range (first,last) where positions are different => range   [6, x, x, 5]
         // 3.2  remove range                                         =>         [6, 4, 2, 5]    => remove 2
         //                                                                      [6, 4, 5]       => remove 4
         //                                                              result  [6, 5]
         // 3.3  insert range in specified order                      =>         [6, 5]          => insert 4
         //                                                                      [6, 4, 5]       => insert 2
-        //                                                             *target  [6, 4, 2, 5]    finished
-        ChildIds_GetRange(childIds, newChildIds, out int first, out int last);
+        //                                                             childIds [6, 4, 2, 5]    finished
+        ChildIds_GetRange(childIds, newIds, out int first, out int last);
         ChildIds_RemoveRange(ref node, first, last);
-        ChildIds_InsertRange(ref node, first, last, newChildIds);
+        ChildIds_InsertRange(ref node, first, last, newIds);
         
         SetChildParents(childIds, newCount, parentId);
     }
 
     // --- 1.
-    private void ChildIds_RemoveMissingIds(ReadOnlySpan<int> newChildIds, ref EntityNode node)
+    private void ChildIds_RemoveMissingIds(ReadOnlySpan<int> newIds, ref EntityNode node)
     {
         var childIds = node.childIds;
         var newIdSet = idBufferSet;
         newIdSet.Clear();
-        foreach (var id in newChildIds) {
+        foreach (var id in newIds) {
             newIdSet.Add(id);
         }
         for (int index = node.childCount - 1; index >= 0; index--) {
@@ -278,7 +278,7 @@ public partial class GameEntityStore
     }
 
     // --- 2.
-    private void ChildIds_InsertNewIds(ReadOnlySpan<int> newChildIds, ref EntityNode node)
+    private void ChildIds_InsertNewIds(ReadOnlySpan<int> newIds, ref EntityNode node)
     {
         var childIds = node.childIds;
         var curIdSet = idBufferSet;
@@ -286,10 +286,10 @@ public partial class GameEntityStore
         for (int n = 0; n < node.childCount; n++) {
             curIdSet.Add(childIds[n]);
         }
-        var newCount = newChildIds.Length;
+        var newCount = newIds.Length;
         for (int index = 0; index < newCount; index++)
         {
-            var id = newChildIds[index];
+            var id = newIds[index];
             if (curIdSet.Contains(id)) {
                 // case: child ids contains id already
                 continue;
@@ -305,12 +305,12 @@ public partial class GameEntityStore
     }
 
     // --- 3.1
-    private static void ChildIds_GetRange(int[] childIds, ReadOnlySpan<int> newChildIds, out int first, out int last)
+    private static void ChildIds_GetRange(int[] childIds, ReadOnlySpan<int> newIds, out int first, out int last)
     {
-        var count = newChildIds.Length;
+        var count = newIds.Length;
         first = 0;
         for (; first < count; first++) {
-            var id = newChildIds[first];
+            var id = newIds[first];
             if (childIds[first] == id) {
                 // case: id is already at specified position
                 continue;
@@ -319,7 +319,7 @@ public partial class GameEntityStore
         }
         last = count - 1;
         for (; last > first; last--) {
-            var id = newChildIds[last];
+            var id = newIds[last];
             if (childIds[last] == id) {
                 // case: id is already at specified position
                 continue;
@@ -346,7 +346,7 @@ public partial class GameEntityStore
     }
     
     // --- 3.3
-    private void ChildIds_InsertRange(ref EntityNode node, int first, int last, ReadOnlySpan<int> newChildIds)
+    private void ChildIds_InsertRange(ref EntityNode node, int first, int last, ReadOnlySpan<int> newIds)
     {
         var childIds = node.childIds;
         for (int index = first; index <= last; index++)
@@ -354,7 +354,7 @@ public partial class GameEntityStore
             for (int n = node.childCount; n > index; n--) {
                 childIds[n] = childIds[n - 1];
             }
-            var addedId     = newChildIds[index];
+            var addedId     = newIds[index];
             childIds[index] = addedId;
             ++node.childCount;
             OnChildNodeAdd(node.id, addedId, index);
