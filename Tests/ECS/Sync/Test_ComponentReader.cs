@@ -99,7 +99,21 @@ public static class Test_ComponentReader
     {
         var store   = new GameEntityStore(PidType.UsePidAsId);
         var events  = Events.SetHandlerSeq(store, (args, seq) => {
-            _ = 1;
+            switch (seq) {
+                // --- initial children: [2, 3, 4, 5]
+                case 0:     AreEqual("entity: 1 - Add ChildIds[0] = 2",     args.ToString());   return;
+                case 1:     AreEqual("entity: 1 - Add ChildIds[1] = 3",     args.ToString());   return;
+                case 2:     AreEqual("entity: 1 - Add ChildIds[2] = 4",     args.ToString());   return;
+                case 3:     AreEqual("entity: 1 - Add ChildIds[3] = 5",     args.ToString());   return;
+                // --- changed children: [6, 4, 2, 5]
+                case 4:     AreEqual("entity: 1 - Remove ChildIds[1] = 3",  args.ToString());   return;
+                case 5:     AreEqual("entity: 1 - Add ChildIds[0] = 6",     args.ToString());   return;
+                case 6:     AreEqual("entity: 1 - Remove ChildIds[2] = 4",  args.ToString());   return;
+                case 7:     AreEqual("entity: 1 - Remove ChildIds[1] = 2",  args.ToString());   return;
+                case 8:     AreEqual("entity: 1 - Add ChildIds[1] = 4",     args.ToString());   return;
+                case 9:     AreEqual("entity: 1 - Add ChildIds[2] = 2",     args.ToString());   return;
+                default:    Fail($"unexpected seq: {seq}");                                     return;
+            }
         });
         ComponentReader_read_children(store);
         AreEqual(10, events.seq);
