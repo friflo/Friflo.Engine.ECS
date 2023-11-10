@@ -272,7 +272,8 @@ public partial class GameEntityStore
                 childIds[i - 1] = childIds[i];
             }
             --node.childCount;
-            childIds[node.childCount] = 0; // not necessary but simplify debugging
+            childIds[node.childCount]   = 0; // not necessary but simplify debugging
+            nodes[id].parentId          = Static.NoParentId;
             OnChildNodeRemove(node.id, id, index);
         }
     }
@@ -331,7 +332,7 @@ public partial class GameEntityStore
     // --- 3.2
     private void ChildIds_RemoveRange(ref EntityNode node, int first, int last)
     {
-        var childIds = node.childIds;
+        var childIds    = node.childIds;
         for (int index = last; index >= first; index--)
         {
             int removedId = childIds[index];
@@ -339,7 +340,8 @@ public partial class GameEntityStore
                 childIds[n - 1] = childIds[n];
             }
             --node.childCount;
-            childIds[node.childCount] = 0; // not necessary but simplify debugging
+            childIds[node.childCount]   = 0; // not necessary but simplify debugging
+            nodes[removedId].parentId   = Static.NoParentId;
             OnChildNodeRemove(node.id, removedId, index);
         }
     }
