@@ -96,7 +96,7 @@ public partial class GameEntityStore
         error = reader.Read(dataEntity, entity, this);
         return entity;
     }
-
+    
     private GameEntity CreateFromDataEntityRandomPid(DataEntity dataEntity)
     {
         // --- map pid to id
@@ -109,10 +109,8 @@ public partial class GameEntityStore
         // --- map children pid's to id's
         var children    = CollectionsMarshal.AsSpan(dataEntity.children);
         var childCount  = children.Length;
-        if (idBuffer.Length < childCount) {
-            Utils.Resize(ref idBuffer, childCount);
-        }
-        Span<int> ids = new (idBuffer, 0, childCount);
+        EnsureIdBufferCapacity(childCount);
+        Span<int> ids   = new (idBuffer, 0, childCount);
         for (int n = 0; n < childCount; n++)
         {
             var childPid = children[n];
@@ -143,9 +141,7 @@ public partial class GameEntityStore
         var maxPid      = id;
         var children    = CollectionsMarshal.AsSpan(dataEntity.children);
         var childCount  = children.Length; 
-        if (idBuffer.Length < childCount) {
-            Utils.Resize(ref idBuffer, childCount);
-        }
+        EnsureIdBufferCapacity(childCount);
         Span<int> ids   = new (idBuffer, 0, childCount);
         for (int n = 0; n < childCount; n++)
         {
@@ -166,6 +162,13 @@ public partial class GameEntityStore
         }
         SetChildNodes(id, ids);
         return entity;
+    }
+    
+    private void EnsureIdBufferCapacity(int count) {
+        if (idBuffer.Length >= count) {
+            return;
+        }
+        Utils.Resize(ref idBuffer, Math.Max(2 * idBuffer.Length, count));
     }
     
     /// update EntityNode.pid of the child nodes

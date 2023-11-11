@@ -380,18 +380,26 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var node    = new DataEntity{ pid = 10, children = new List<long> { 20 } };
+        var children    = new List<long>();
+        for (int n = 0; n < 100; n++) {
+            children.Add(n + 20);
+        }
+        var node    = new DataEntity{ pid = 10, children = children };
         var entity  = converter.DataToGameEntity(node, store, out _);
         
         AreEqual(10,    store.PidToId(10L));
         AreEqual(10,    store.GetNodeByPid(10L).Pid);
         AreEqual(10,    entity.Id);
-        AreEqual(1,     entity.ChildNodes.Length);
-        AreEqual(1,     store.Nodes[10].ChildCount);
-        AreEqual(10,    store.Nodes[10].Pid);
-        AreEqual(20,    store.Nodes[10].ChildIds[0]);
-        AreEqual(10,    store.Nodes[20].ParentId);
-        AreEqual(20,    store.Nodes[20].Pid);
+        AreEqual(100,   entity.ChildNodes.Length);
+        var nodes = store.Nodes;
+        AreEqual(100,   nodes[10].ChildCount);
+        AreEqual(10,    nodes[10].Pid);
+        AreEqual(10,    nodes[20].ParentId);
+        AreEqual(20,    nodes[20].Pid);
+        var childIds = nodes[10].ChildIds;
+        for (int n = 0; n < 100; n++) {
+            AreEqual(n + 20, childIds[n]);
+        }
         AreEqual(1,     store.EntityCount);
     }
     
@@ -400,18 +408,26 @@ public static class Test_ComponentReader
         var store       = new GameEntityStore();
         var converter   = EntityConverter.Default;
         
-        var node    = new DataEntity{ pid = 10, children = new List<long> { 20 } };
-        var entity  = converter.DataToGameEntity(node, store, out _);
+        var children    = new List<long>();
+        for (int n = 0; n < 100; n++) {
+            children.Add(n + 20);
+        }
+        var node        = new DataEntity{ pid = 10, children = children };
+        var entity      = converter.DataToGameEntity(node, store, out _);
         
         AreEqual(1,     store.PidToId(10L));
         AreEqual(1,     store.GetNodeByPid(10L).Id);
         AreEqual(1,     entity.Id);
-        AreEqual(1,     entity.ChildNodes.Length);
-        AreEqual(1,     store.Nodes[1].ChildCount);
-        AreEqual(10,    store.Nodes[1].Pid);
-        AreEqual(2,     store.Nodes[1].ChildIds[0]);
-        AreEqual(1,     store.Nodes[2].ParentId);
-        AreEqual(20,    store.Nodes[2].Pid);
+        AreEqual(100,   entity.ChildNodes.Length);
+        AreEqual(100,   store.Nodes[1].ChildCount);
+        var nodes = store.Nodes;
+        AreEqual(10,    nodes[1].Pid);
+        AreEqual(1,     nodes[2].ParentId);
+        AreEqual(20,    nodes[2].Pid);
+        var childIds = nodes[1].ChildIds;
+        for (int n = 0; n < 100; n++) {
+            AreEqual(n + 2, childIds[n]);
+        }
         AreEqual(1,     store.EntityCount);
     }
     
