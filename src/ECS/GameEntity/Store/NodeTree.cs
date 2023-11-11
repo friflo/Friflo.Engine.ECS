@@ -496,13 +496,7 @@ public partial class GameEntityStore
     
     // ---------------------------------- child nodes change notification ----------------------------------
     /// <summary>
-    /// A <see cref="ECS.ChildNodesChangedHandler"/> added to a <see cref="GameEntityStore"/> get events on
-    /// <list type="bullet">
-    ///   <item><see cref="GameEntity.AddChild"/></item>
-    ///   <item><see cref="GameEntity.InsertChild"/></item>
-    ///   <item><see cref="GameEntity.RemoveChild"/></item>
-    ///   <item><see cref="GameEntity.DeleteEntity"/></item>
-    /// </list>
+    /// Add / remove <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="GameEntity"/>'s.
     /// </summary>
     public event ChildNodesChangedHandler ChildNodesChanged
     {

@@ -4,7 +4,15 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-
+/// <summary>
+/// A <see cref="ChildNodesChangedHandler"/> added to <see cref="GameEntityStore.ChildNodesChanged"/> get events on
+/// <list type="bullet">
+///   <item><see cref="GameEntity.AddChild"/></item>
+///   <item><see cref="GameEntity.InsertChild"/></item>
+///   <item><see cref="GameEntity.RemoveChild"/></item>
+///   <item><see cref="GameEntity.DeleteEntity"/></item>
+/// </list>
+/// </summary>
 public delegate void   ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs e);
 
 public readonly struct ChildNodesChangedArgs

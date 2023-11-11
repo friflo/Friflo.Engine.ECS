@@ -45,7 +45,7 @@ public sealed partial class GameEntityStore : EntityStore
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
     public              GameEntity                  StoreRoot           => storeRoot; // null if no graph origin set
     public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
-    /// <summary>Set or clear a <see cref="ChildNodesChangedHandler"/> to get events listed at <see cref="ChildNodesChanged"/>.</summary>
+    /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="GameEntity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
     public              ChildNodesChangedHandler    ChildNodesChangedHandler { get => childNodesChanged; set => childNodesChanged = value; }
     #endregion
