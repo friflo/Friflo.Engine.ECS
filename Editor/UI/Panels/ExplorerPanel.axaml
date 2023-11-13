@@ -7,7 +7,7 @@
              x:Class="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
              xmlns:vm="using:Friflo.Fliox.Editor.UI.Explorer"
              x:DataType="vm:MainWindowViewModel">
-        <DockPanel>
+        <DockPanel Name="DockPanel">
             <!-- <TreeDataGrid Name="DragDrop"
                           Source="{Binding DragDrop.DragDropSource}"
                           AutoDragDropRows="True"/> -->
