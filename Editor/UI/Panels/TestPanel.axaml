@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
              Background="{DynamicResource PanelBackground1}"
              x:Class="Friflo.Fliox.Editor.UI.Panels.TestPanel">
-    <StackPanel Orientation="Vertical" Spacing="8">
+    <DockPanel>
         <Button Click="OnButtonClick">Test</Button>
-    </StackPanel>
+    </DockPanel>
 </UserControl>
