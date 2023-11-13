@@ -29,7 +29,7 @@ public class ExplorerTree
     
     private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
     {
-        var parent              = items[args.parentId];
+        var parent              = GetItemById(args.parentId);
         // Console.WriteLine($"ExplorerTree event: {args}       parent: {parent}");
         var collectionChanged   = parent.CollectionChanged;
         if (collectionChanged == null) {

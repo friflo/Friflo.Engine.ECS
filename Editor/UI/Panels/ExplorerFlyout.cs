@@ -7,16 +7,15 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public class ExplorerFlyout : MenuFlyout
 {
-    ExplorerPanel explorer;
+    private readonly ExplorerPanel explorer;
     
     public ExplorerFlyout(ExplorerPanel explorer)
     {
         this.explorer = explorer;
-        var menuItem1 = new MenuItem();
-        menuItem1.Header ="Standard";
+        var menuItem1 = new MenuItem {
+            Header = "Standard"
+        };
         Items.Add(menuItem1);
-
-
         base.OnOpened();
     }
 
@@ -42,8 +41,7 @@ public class ExplorerFlyout : MenuFlyout
     private void AddMenuItems(ExplorerItem item)
     {
         // --- Delete entity
-        var deleteMenu  = new MenuItem();
-        deleteMenu.Header = "Delete entity";
+        var deleteMenu  = new MenuItem { Header = "Delete entity" };
         deleteMenu.Click += (_, _) => {
             Console.WriteLine($"Delete: {item.Name ?? $"entity {item.Id}"}");
             item.Entity.DeleteEntity();
@@ -51,8 +49,7 @@ public class ExplorerFlyout : MenuFlyout
         Items.Add(deleteMenu);
 
         // --- New entity
-        var newMenu  = new MenuItem();
-        newMenu.Header = "New entity";
+        var newMenu  = new MenuItem { Header = "New entity" };
         newMenu.Click += (_, _) => {
             Console.WriteLine($"New: {item.Name ?? $"entity {item.Id}"}");
             var newEntity = item.Entity.Store.CreateEntity();
