@@ -46,7 +46,7 @@ public class ExplorerFlyout : MenuFlyout
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = !isRootItem };
         if (!isRootItem) {
             deleteMenu.Click += (_, _) => {
-                Console.WriteLine($"Delete: {item.Name ?? $"entity {item.Id}"}");
+                Console.WriteLine($"Delete entity id: {item.Id}");
                 entity.DeleteEntity();
             };
         }
@@ -55,8 +55,8 @@ public class ExplorerFlyout : MenuFlyout
         // --- New entity
         var newMenu  = new MenuItem { Header = "New entity" };
         newMenu.Click += (_, _) => {
-            Console.WriteLine($"New: {item.Name ?? $"entity {item.Id}"}");
             var newEntity = entity.Store.CreateEntity();
+            Console.WriteLine($"parent id: {entity.Id} - New child id: {newEntity.Id}");
             newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
             entity.AddChild(newEntity);
         };
