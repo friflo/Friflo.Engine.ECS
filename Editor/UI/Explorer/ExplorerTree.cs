@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 
 namespace Friflo.Fliox.Editor.UI.Explorer;
@@ -8,7 +9,7 @@ namespace Friflo.Fliox.Editor.UI.Explorer;
 public class ExplorerTree
 {
     internal readonly   GameEntityStore                 store;
-    internal readonly   Dictionary<int, ExplorerItem>   items;
+    internal readonly   Dictionary<int, ExplorerItem>   items; // todo make private
     
     public ExplorerTree (GameEntityStore store)
     {
@@ -57,6 +58,20 @@ public class ExplorerTree
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called
         // below to check if the change event (Add / Remove) is caused by the containing Control or other code.  
         collectionChanged(parent, collectionArgs);
+    }
+    
+    /// <summary>Get <see cref="ExplorerItem"/> by id</summary>
+    /// <remarks>
+    /// <see cref="TreeDataGridItemsSourceView"/> create items on demand => create <see cref="ExplorerItem"/> if not present. 
+    /// </remarks>
+    internal ExplorerItem GetItemById(int id)
+    {
+        if (!items.TryGetValue(id, out var explorerItem)) {
+            var entity = store.GetNodeById(id).Entity;
+            explorerItem = new ExplorerItem(this, entity);
+            items.Add(id, explorerItem);
+        }
+        return explorerItem;
     }
     
     internal ExplorerItem CreateExplorerItems(GameEntityStore store)

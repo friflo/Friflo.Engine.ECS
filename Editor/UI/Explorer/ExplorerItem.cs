@@ -71,7 +71,7 @@ public sealed class ExplorerItem :
     private ExplorerItem GetChildByIndex(int index) {
         int childId = entity.GetChildNodeByIndex(index).Id;
         // Console.WriteLine($"GetChildByIndex {entity.Id} {index} - child {childId}");
-        return tree.items[childId];
+        return tree.GetItemById(childId);
     }
     
     private void ClearChildEntities() {
@@ -130,7 +130,7 @@ public sealed class ExplorerItem :
         for (int n = 0; n < childIds.Length; n++)
         {
             int id                  = childIds[n];
-            array[n + arrayIndex]   = tree.items[id];            
+            array[n + arrayIndex]   = tree.GetItemById(id);            
         }
     }
 
@@ -221,7 +221,7 @@ public sealed class ExplorerItem :
         for (int n = 0; n < childIds.Length; n++)
         {
             int id      = childIds[n];
-            var item    = tree.items[id];
+            var item    = tree.GetItemById(id);
             array.SetValue(item, n + index);
         }
     }
