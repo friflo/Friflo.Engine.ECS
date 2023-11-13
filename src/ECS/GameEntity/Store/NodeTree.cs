@@ -68,9 +68,9 @@ public partial class GameEntityStore
         ref var parent      = ref localNodes[parentId];
         int index           = parent.childCount;
         childNode.parentId  = parentId;
-        EnsureChildIdsCapacity(ref parent, index);
-        parent.childIds[index] = childId;
         parent.childCount++;
+        EnsureChildIdsCapacity(ref parent,  parent.childCount);
+        parent.childIds[index] = childId;
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
         OnChildNodeAdd(parentId, childId, index);
@@ -112,7 +112,6 @@ public partial class GameEntityStore
     InsertNode:
         // --- insert entity with given id as child to its parent
         childNode.parentId  = parentId;
-        EnsureChildIdsCapacity(ref parent, childIndex);
         InsertChildNode(ref parent, childId, childIndex);
         SetTreeFlags(localNodes, childId, parent.flags & TreeNode);
         
@@ -174,6 +173,7 @@ public partial class GameEntityStore
     
     private static void InsertChildNode (ref EntityNode parent, int childId, int childIndex)
     {
+        EnsureChildIdsCapacity(ref parent, parent.childCount + 1);
         var childNodes = parent.childIds;
         for (int n = parent.childCount; n > childIndex; n--) {
             childNodes[n] = childNodes[n - 1];
@@ -182,14 +182,14 @@ public partial class GameEntityStore
         parent.childCount++;
     }
     
-    private static void EnsureChildIdsCapacity(ref EntityNode parent, int index)
+    private static void EnsureChildIdsCapacity(ref EntityNode parent, int length)
     {
         if (parent.childIds == null) {
-            parent.childIds = new int[4];
+            parent.childIds = new int[Math.Max(4, length)];
             return;
         }
-        if (index == parent.childIds.Length) { 
-            var newLen = Math.Max(4, 2 * parent.childIds.Length);
+        if (length > parent.childIds.Length) { 
+            var newLen = Math.Max(2 * parent.childIds.Length, length);
             Utils.Resize(ref parent.childIds, newLen);
         }
     }

@@ -189,6 +189,26 @@ public static class Test_Entity_Tree
         }
     }
     
+    /// <summary>Cover <see cref="GameEntityStore.EnsureChildIdsCapacity"/></summary>
+    [Test]
+    public static void Test_InsertChild_EnsureChildIdsCapacity()
+    {
+        var store   = new GameEntityStore();
+        var root    = store.CreateEntity(1);
+        var events = SetHandlerSeq(store, (args, seq) => {
+            AreEqual(1,                             args.parentId);
+            AreEqual(seq,                           args.childIndex);
+            AreEqual(seq + 2,                       args.childId);
+            AreEqual(ChildNodesChangedAction.Add,   args.action);
+            AreEqual(seq + 1,                       root.ChildCount);
+        });
+        for (int n = 0; n < 100; n++) {
+            var child = store.CreateEntity(n + 2);
+            root.InsertChild(n, child);
+        }
+        AreEqual(100, events.seq);
+    }
+    
     /// <summary>Cover <see cref="GameEntityStore.InsertChild"/></summary>
     [Test]
     public static void Test_InsertChild_cover()

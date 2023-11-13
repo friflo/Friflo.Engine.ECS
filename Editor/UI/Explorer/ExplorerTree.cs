@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
 
@@ -48,6 +49,9 @@ public class ExplorerTree
             }
         }
         object child        = explorerItem;
+        if (child == null) {
+            throw new NullReferenceException("explorerItem");
+        }        
         var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
         // NOTE:
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called

@@ -182,6 +182,7 @@ public class Editor
         root.AddChild(CreateEntity(store, 4));
         root.AddChild(CreateEntity(store, 5));
         root.AddChild(CreateEntity(store, 6));
+        root.AddChild(CreateEntity(store, 7));
         
         await sync.StoreGameEntitiesAsync();
     }

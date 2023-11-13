@@ -44,8 +44,8 @@ public sealed class ExplorerItem :
 
 #region constructor
     internal ExplorerItem (ExplorerTree tree, GameEntity entity) {
-        this.tree   = tree;
-        this.entity = entity;
+        this.tree   = tree      ?? throw new ArgumentNullException(nameof(tree));
+        this.entity = entity    ?? throw new ArgumentNullException(nameof(entity));
     }
     #endregion
 
@@ -70,6 +70,7 @@ public sealed class ExplorerItem :
 #region private methods
     private ExplorerItem GetChildByIndex(int index) {
         int childId = entity.GetChildNodeByIndex(index).Id;
+        // Console.WriteLine($"GetChildByIndex {entity.Id} {index} - child {childId}");
         return tree.items[childId];
     }
     
