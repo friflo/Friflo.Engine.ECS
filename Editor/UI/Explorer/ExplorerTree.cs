@@ -45,7 +45,11 @@ public class ExplorerTree
                     items.Add(args.childId, explorerItem);
                     break;
                 case ChildNodesChangedAction.Remove:
-                    items.Remove(args.childId);
+                    Console.WriteLine("ChildNodesChangedHandler - ChildNodesChangedAction.Remove");
+                    if (items.TryGetValue(args.childId, out var removedItem)) {
+                        items.Remove(args.childId);
+                        removedItem.ClearCollectionChanged();
+                    }
                     break;
             }
         }

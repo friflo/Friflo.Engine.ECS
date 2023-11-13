@@ -41,20 +41,24 @@ public class ExplorerFlyout : MenuFlyout
     private void AddMenuItems(ExplorerItem item)
     {
         // --- Delete entity
-        var deleteMenu  = new MenuItem { Header = "Delete entity" };
-        deleteMenu.Click += (_, _) => {
-            Console.WriteLine($"Delete: {item.Name ?? $"entity {item.Id}"}");
-            item.Entity.DeleteEntity();
-        };
+        var entity      = item.Entity;
+        bool isRootItem = entity.Store.StoreRoot == entity;
+        var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = !isRootItem };
+        if (!isRootItem) {
+            deleteMenu.Click += (_, _) => {
+                Console.WriteLine($"Delete: {item.Name ?? $"entity {item.Id}"}");
+                entity.DeleteEntity();
+            };
+        }
         Items.Add(deleteMenu);
 
         // --- New entity
         var newMenu  = new MenuItem { Header = "New entity" };
         newMenu.Click += (_, _) => {
             Console.WriteLine($"New: {item.Name ?? $"entity {item.Id}"}");
-            var newEntity = item.Entity.Store.CreateEntity();
+            var newEntity = entity.Store.CreateEntity();
             newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
-            item.Entity.AddChild(newEntity);
+            entity.AddChild(newEntity);
         };
         Items.Add(newMenu);
     }
