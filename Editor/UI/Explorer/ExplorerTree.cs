@@ -8,14 +8,23 @@ namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public class ExplorerTree
 {
-    internal readonly   GameEntityStore                 store;
-    internal readonly   Dictionary<int, ExplorerItem>   items; // todo make private
+    private  readonly   GameEntityStore                 store;
+    internal readonly   ExplorerItem                    rootItem;
+    private  readonly   Dictionary<int, ExplorerItem>   items; // todo make private
     
-    public ExplorerTree (GameEntityStore store)
+    public ExplorerTree (GameEntity rootEntity)
     {
-        this.store                  = store;
+        store                       = rootEntity.Store;
         items                       = new Dictionary<int, ExplorerItem>();
         store.ChildNodesChanged    += ChildNodesChangedHandler;
+        rootItem                    = CreateExplorerItem(rootEntity);
+    }
+    
+    private ExplorerItem CreateExplorerItem(GameEntity entity)
+    {
+        var item = new ExplorerItem(this, entity);
+        items.Add(entity.Id, item);
+        return item;
     }
     
     internal static GameEntityStore CreateDefaultStore()
@@ -76,12 +85,6 @@ public class ExplorerTree
             items.Add(id, explorerItem);
         }
         return explorerItem;
-    }
-    
-    internal ExplorerItem CreateExplorerItems(GameEntityStore store)
-    {
-        var root = store.StoreRoot;
-        return ExplorerItem.CreateExplorerItemHierarchy(this, root);
     }
     
     internal static readonly GameEntityStore TestStore = CreateTestStore(); 

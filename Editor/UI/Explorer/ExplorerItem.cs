@@ -50,21 +50,7 @@ public sealed class ExplorerItem :
     #endregion
 
     private bool IsRootItem() {
-        return tree.store.StoreRoot == entity;
-    }
-    
-    internal static ExplorerItem CreateExplorerItemHierarchy(ExplorerTree tree, GameEntity entity)
-    {
-        var item = new ExplorerItem(tree, entity);
-        tree.items.Add(entity.Id, item);
-        
-        IList<ExplorerItem> list    = item;
-        var childNodes              = entity.ChildNodes;
-        foreach (var node in childNodes) {
-            var childItem = CreateExplorerItemHierarchy(tree, node.Entity);
-            list.Add(childItem);
-        }
-        return item;
+        return tree.rootItem.entity == entity;
     }
     
 #region private methods

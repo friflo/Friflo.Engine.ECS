@@ -12,9 +12,9 @@ internal class ExplorerViewModel
     {
         // var store       = ExplorerTree.TestStore;
         var store       = ExplorerTree.CreateDefaultStore();
-        var tree        = new ExplorerTree(store);
-        var rootItem    = tree.CreateExplorerItems(store);
-        var items       = new [] { rootItem } as IEnumerable<ExplorerItem>;
+        var rootEntity  = store.StoreRoot;
+        var tree        = new ExplorerTree(rootEntity);
+        var items       = new [] { tree.rootItem } as IEnumerable<ExplorerItem>;
         // items           = Array.Empty<ExplorerItem>();
         
         var source  = new HierarchicalTreeDataGridSource<ExplorerItem>(items);

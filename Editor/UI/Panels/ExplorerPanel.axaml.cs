@@ -15,7 +15,8 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     public ExplorerPanel()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel();
+        var viewModel = new MainWindowViewModel();
+        DataContext = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(this);
     }
 
@@ -32,10 +33,9 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         if (Editor.Store == null) throw new InvalidOperationException("expect Store is present");
         // return;
         var source      = (HierarchicalTreeDataGridSource<ExplorerItem>)DragDrop.Source!;
-        var store       = Editor.Store;
-        var tree        = new ExplorerTree(store);
-        var rootItem    = tree.CreateExplorerItems(store);
-        source.Items    = new []{ rootItem };
+        var rootEntity  = Editor.Store.StoreRoot;
+        var tree        = new ExplorerTree(rootEntity);
+        source.Items    = new []{ tree.rootItem };
     }
 
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
