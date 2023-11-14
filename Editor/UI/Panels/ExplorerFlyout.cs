@@ -5,6 +5,8 @@ using Avalonia.Controls;
 using Friflo.Fliox.Editor.UI.Explorer;
 using Friflo.Fliox.Engine.ECS;
 
+// ReSharper disable ParameterTypeCanBeEnumerable.Local
+// ReSharper disable SuggestBaseTypeForParameter
 namespace Friflo.Fliox.Editor.UI.Panels;
 
 public class ExplorerFlyout : MenuFlyout
@@ -43,10 +45,15 @@ public class ExplorerFlyout : MenuFlyout
     private void AddMenuItems(IReadOnlyList<ExplorerItem> selectedItems)
     {
         var items       = selectedItems.ToArray();
+        DeleteEntity(items);
+        NewEntity   (items);
+    }
+    
+    private void DeleteEntity(ExplorerItem[] items)
+    {
         var rootItem    = explorer.RootItem;
-        // --- Delete entity
-        bool isRootItem = items.Length == 1 && items[0] == rootItem;
-        bool canDelete  = isRootItem ? items.Length > 1 : items.Length > 0;
+        var isRootItem  = items.Length == 1 && items[0] == rootItem;
+        var canDelete   = isRootItem ? items.Length > 1 : items.Length > 0;
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
         if (canDelete) {
             deleteMenu.Click += (_, _) => {
@@ -65,8 +72,10 @@ public class ExplorerFlyout : MenuFlyout
             };
         }
         Items.Add(deleteMenu);
-
-        // --- New entity
+    }
+    
+    private void NewEntity(ExplorerItem[] items)
+    {
         var newMenu  = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
         if (items.Length > 0) {
             newMenu.Click += (_, _) => {
