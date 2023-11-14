@@ -58,9 +58,8 @@ public class ExplorerTree
         switch (args.action) {
             case ChildNodesChangedAction.Add:
                 if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
-                    var entity = store.GetNodeById(args.childId).Entity;
-                    explorerItem = new ExplorerItem(this, entity);
-                    treeItems.Add(args.childId, explorerItem);
+                    var entity      = store.GetNodeById(args.childId).Entity;
+                    explorerItem    = CreateExplorerItem(entity);
                 }
                 break;
             case ChildNodesChangedAction.Remove:
@@ -90,9 +89,8 @@ public class ExplorerTree
     internal ExplorerItem GetItemById(int id)
     {
         if (!items.TryGetValue(id, out var explorerItem)) {
-            var entity = store.GetNodeById(id).Entity;
-            explorerItem = new ExplorerItem(this, entity);
-            items.Add(id, explorerItem);
+            var entity      = store.GetNodeById(id).Entity;
+            explorerItem    = CreateExplorerItem(entity);
         }
         return explorerItem;
     }
