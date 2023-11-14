@@ -56,7 +56,11 @@ public static class Program
             // .With(new Win32PlatformOptions { UseWgl = true })  used in Avalonia-Silk.NET-Example
             // https://github.com/kekekeks/Avalonia-Silk.NET-Example/blob/cbf69a79e20e340084f17ef04867411fe9a3876b/AvaloniaSilkExample/Program.cs#L21
             // was removed in Avalonia: SHA-1: 29d3c7670be216f704f001ee6e28efc0adbe2e83   - Restructure Win32PlatformOptions options
-            .With(new Win32PlatformOptions { RenderingMode = new [] { Win32RenderingMode.Wgl }})
+            .With(new Win32PlatformOptions {
+                RenderingMode = new [] { Win32RenderingMode.Wgl },
+                OverlayPopups = true    // Enable transparent rounded corners for MenuFlyout. Otherwise use style: editorMenuFlyout 
+            })
+            .With(new MacOSPlatformOptions())
             .WithInterFont()
             .LogToTrace();
     }

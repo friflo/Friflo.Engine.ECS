@@ -9,9 +9,9 @@
         <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
         <!-- Set global styles https://docs.avaloniaui.net/docs/styling/styles -->
         <Style Selector="MenuFlyoutPresenter.editorMenuFlyout">
-            <!-- <Setter Property="Background" Value="#aaaaff" /> -->
-            <!-- Workaround for non transparent rounded corners -->
-            <Setter Property="CornerRadius" Value="0" />
+            <!-- <Setter Property="Background" Value="Red" /> -->
+            <!-- Workaround for non transparent rounded corners. Required if OverlayPopups = false -->
+            <!-- <Setter Property="CornerRadius" Value="0" /> -->
         </Style>
     </Application.Styles>
     <Application.Resources>
