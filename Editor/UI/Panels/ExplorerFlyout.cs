@@ -14,6 +14,7 @@ public class ExplorerFlyout : MenuFlyout
     internal ExplorerFlyout(ExplorerPanel explorer)
     {
         this.explorer   = explorer;
+        this.FlyoutPresenterClasses.Add("editorMenuFlyout");
         var menuItem1 = new MenuItem {
             Header = "Standard"
         };

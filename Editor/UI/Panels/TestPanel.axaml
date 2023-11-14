@@ -7,5 +7,12 @@
              x:Class="Friflo.Fliox.Editor.UI.Panels.TestPanel">
     <DockPanel>
         <Button Click="OnButtonClick">Test</Button>
+        <Button Content="Click me">
+            <Button.Flyout>
+                <Flyout>
+                    <TextBlock Text="Flyout Content!" />
+                </Flyout>
+            </Button.Flyout>
+        </Button>
     </DockPanel>
 </UserControl>
