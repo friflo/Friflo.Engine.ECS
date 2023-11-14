@@ -53,8 +53,9 @@ public class ExplorerFlyout : MenuFlyout
                     if (entity.TreeMembership != TreeMembership.treeNode) {
                         continue;
                     }
-                    Console.WriteLine($"Remove entity id: {entity.Id}");
-                    entity.Parent.RemoveChild(entity);
+                    var parent = entity.Parent;
+                    Console.WriteLine($"parent id: {parent.Id} - Remove child id: {entity.Id}");
+                    parent.RemoveChild(entity);
                 }
             };
         }
@@ -65,7 +66,7 @@ public class ExplorerFlyout : MenuFlyout
         if (firstEntity != null) {
             newMenu.Click += (_, _) => {
                 var newEntity =  firstEntity.Store.CreateEntity();
-                Console.WriteLine($"parent id: { firstEntity.Id} - New child id: {newEntity.Id}");
+                Console.WriteLine($"parent id: {firstEntity.Id} - New child id: {newEntity.Id}");
                 newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
                 firstEntity.AddChild(newEntity);
             };
