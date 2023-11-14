@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
+// ReSharper disable InlineTemporaryVariable
 
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
@@ -10,10 +11,16 @@ public class ExplorerTree
 {
     private  readonly   GameEntityStore                 store;
     internal readonly   ExplorerItem                    rootItem;
-    private  readonly   Dictionary<int, ExplorerItem>   items; // todo make private
+    private  readonly   Dictionary<int, ExplorerItem>   items;
+    private  readonly   string                          debugName;
+    
+    public   override   string                          ToString() => debugName;
+
+    private static      int                             _treeCount;
     
     public ExplorerTree (GameEntity rootEntity)
     {
+        debugName                   = $"tree-{_treeCount++}";
         store                       = rootEntity.Store;
         items                       = new Dictionary<int, ExplorerItem>();
         store.ChildNodesChanged    += ChildNodesChangedHandler;
@@ -38,34 +45,37 @@ public class ExplorerTree
     
     private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
     {
-        var parent              = GetItemById(args.parentId);
+        var treeItems = items;
+        if (!treeItems.TryGetValue(args.parentId, out var parent)) {
+            return;
+        }
         // Console.WriteLine($"ExplorerTree event: {args}       parent: {parent}");
-        var collectionChanged   = parent.CollectionChanged;
+        var collectionChanged = parent.CollectionChanged;
         if (collectionChanged == null) {
             return;
         }
-        var action          = (NotifyCollectionChangedAction)args.action;
-        if (!items.TryGetValue(args.childId, out var explorerItem))
-        {
-            switch (args.action) {
-                case ChildNodesChangedAction.Add:
+        ExplorerItem explorerItem;
+        switch (args.action) {
+            case ChildNodesChangedAction.Add:
+                if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
                     var entity = store.GetNodeById(args.childId).Entity;
                     explorerItem = new ExplorerItem(this, entity);
-                    items.Add(args.childId, explorerItem);
-                    break;
-                case ChildNodesChangedAction.Remove:
-                    Console.WriteLine("ChildNodesChangedHandler - ChildNodesChangedAction.Remove");
-                    if (items.TryGetValue(args.childId, out var removedItem)) {
-                        items.Remove(args.childId);
-                        removedItem.ClearCollectionChanged();
-                    }
-                    break;
-            }
+                    treeItems.Add(args.childId, explorerItem);
+                }
+                break;
+            case ChildNodesChangedAction.Remove:
+                if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
+                    return;
+                }
+                treeItems.Remove(args.childId);
+                explorerItem.ClearCollectionChanged();
+                break;
+            default:
+                throw new InvalidOperationException($"unexpected case: {args.action}");
         }
-        object child        = explorerItem;
-        if (child == null) {
-            throw new NullReferenceException("explorerItem");
-        }        
+        object child        = explorerItem ?? throw new NullReferenceException("explorerItem");
+        var action          = (NotifyCollectionChangedAction)args.action;
+        
         var collectionArgs  = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
         // NOTE:
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called
