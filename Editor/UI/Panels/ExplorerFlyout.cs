@@ -3,6 +3,8 @@ using System.Linq;
 using Avalonia.Controls;
 using Friflo.Fliox.Editor.UI.Explorer;
 
+// ReSharper disable ParameterTypeCanBeEnumerable.Local
+// ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable SuggestBaseTypeForParameter
 namespace Friflo.Fliox.Editor.UI.Panels;
 
@@ -27,7 +29,10 @@ public class ExplorerFlyout : MenuFlyout
         if (selection != null) {
             // var firstSelected   = (ExplorerItem)selection.SelectedItem;
             var items           = (IReadOnlyList<ExplorerItem>)selection.SelectedItems;
-            AddMenuItems(items);
+            var indexes         = selection.SelectedIndexes;
+            var rootItem        = explorer.RootItem;
+            var moveSelection   = MoveSelection.Create(indexes);
+            AddMenuItems(items, moveSelection, rootItem);
         }
         base.OnOpened();
     }
@@ -40,16 +45,20 @@ public class ExplorerFlyout : MenuFlyout
     }
     
     // ----------------------------------- add menu commands -----------------------------------
-    private void AddMenuItems(IReadOnlyList<ExplorerItem> selectedItems)
+    private void AddMenuItems(
+        IReadOnlyList<ExplorerItem> selectedItems,
+        MoveSelection               moveSelection,
+        ExplorerItem                rootItem)
     {
         var items       = selectedItems.ToArray();
-        DeleteEntity(items);
-        NewEntity   (items);
+        DeleteEntity    (items, rootItem);
+        NewEntity       (items);
+        MoveEntityUp    (items, moveSelection);
+        MoveEntityDown  (items, moveSelection);
     }
     
-    private void DeleteEntity(ExplorerItem[] items)
+    private void DeleteEntity(ExplorerItem[] items, ExplorerItem rootItem)
     {
-        var rootItem    = explorer.RootItem;
         var isRootItem  = items.Length == 1 && items[0] == rootItem;
         var canDelete   = isRootItem ? items.Length > 1 : items.Length > 0;
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
@@ -66,5 +75,74 @@ public class ExplorerFlyout : MenuFlyout
             newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items);
         }
         Items.Add(newMenu);
+    }
+    
+    private void MoveEntityUp(ExplorerItem[] items, MoveSelection moveSelection)
+    {
+        if (moveSelection == null) {
+            return;
+        }
+        var newMenu  = new MenuItem { Header = "Move up" };
+        newMenu.Click += (_, _) => {
+            var indexes = ExplorerCommands.MoveItemsUp(items, 1);
+            SelectItems(moveSelection, indexes);
+        };
+        Items.Add(newMenu);
+    }
+    
+    private void MoveEntityDown(ExplorerItem[] items, MoveSelection moveSelection)
+    {
+        if (moveSelection == null) {
+            return;
+        }
+        var newMenu  = new MenuItem { Header = "Move down" };
+        newMenu.Click += (_, _) => {
+            var indexes = ExplorerCommands.MoveItemsDown(items, 1);
+            SelectItems(moveSelection, indexes);
+        };
+        Items.Add(newMenu);
+    }
+    
+    private void SelectItems(MoveSelection moveSelection, int[] indexes)
+    {
+        var parent      = moveSelection.parent;
+        var selection   = explorer.DragDrop.RowSelection!;
+        selection.BeginBatchUpdate();
+        foreach (var index in indexes) {
+            var child = parent.Append(index);
+            selection.Select(child);
+        }
+        selection.EndBatchUpdate();
+    }
+}
+
+internal class MoveSelection
+{
+    internal            IndexPath   parent;
+
+    public   override   string      ToString() => parent.ToString();
+
+    private MoveSelection(in IndexPath parent) {
+        this.parent = parent;
+    }
+    
+    internal static MoveSelection Create(IReadOnlyList<IndexPath> indexes)
+    {
+        if (indexes.Count == 0) {
+            return null;
+        }
+        var first   = indexes[0];
+        if (first == new IndexPath(0)) {
+            return null;
+        }
+        var parent  = indexes[0].Slice(0, first.Count - 1);
+        for (int n = 1; n < indexes.Count; n++)
+        {
+            var index = indexes[n];
+            if(!parent.IsParentOf(index)) {
+                return null;
+            }
+        }
+        return new MoveSelection(parent);
     }
 }
