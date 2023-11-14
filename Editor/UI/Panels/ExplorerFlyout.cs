@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Friflo.Fliox.Editor.UI.Explorer;
-using Friflo.Fliox.Engine.ECS;
 
-// ReSharper disable ParameterTypeCanBeEnumerable.Local
 // ReSharper disable SuggestBaseTypeForParameter
 namespace Friflo.Fliox.Editor.UI.Panels;
 
@@ -42,6 +39,7 @@ public class ExplorerFlyout : MenuFlyout
         base.OnClosed();
     }
     
+    // ----------------------------------- add menu commands -----------------------------------
     private void AddMenuItems(IReadOnlyList<ExplorerItem> selectedItems)
     {
         var items       = selectedItems.ToArray();
@@ -56,20 +54,7 @@ public class ExplorerFlyout : MenuFlyout
         var canDelete   = isRootItem ? items.Length > 1 : items.Length > 0;
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
         if (canDelete) {
-            deleteMenu.Click += (_, _) => {
-                foreach (var item in items) {
-                    var entity = item.Entity; 
-                    if (entity.TreeMembership != TreeMembership.treeNode) {
-                        continue;
-                    }
-                    if (rootItem == item) {
-                        continue;
-                    }
-                    var parent = entity.Parent;
-                    Console.WriteLine($"parent id: {parent.Id} - Remove child id: {entity.Id}");
-                    parent.RemoveChild(entity);
-                }
-            };
+            deleteMenu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem);
         }
         Items.Add(deleteMenu);
     }
@@ -78,15 +63,7 @@ public class ExplorerFlyout : MenuFlyout
     {
         var newMenu  = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
         if (items.Length > 0) {
-            newMenu.Click += (_, _) => {
-                foreach (var item in items) {
-                    var entity      = item.entity;
-                    var newEntity   =  entity.Store.CreateEntity();
-                    Console.WriteLine($"parent id: {entity.Id} - New child id: {newEntity.Id}");
-                    newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
-                    entity.AddChild(newEntity);
-                }
-            };
+            newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items);
         }
         Items.Add(newMenu);
     }
