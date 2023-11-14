@@ -340,10 +340,10 @@ Types:
     - `id`          - type: `int` / id > 0
     - `children`    - contains and array of child entity `id`'s.
     - `components`
-        - **Archetype** components stored in `Archetype`'s.  
-          These are value types (`struct`) having only data and **no** script (methods).
-        - **Script** components.  
-          Script components are reference types (`class`) and have script (methods).
+        - **Component**'s stored in `Archetype`'s.  
+          These are value types - `struct`'s implementing `IComponent` - containing only data and **no** methods.
+        - **Script**'s components.  
+          Script components are reference types - `class`'es extending `Script` - and **have** methods.
     - `tags`        - list of tags assigned to an entity. Tags have no data.
 - `Archetype`       - contains all entities with the same set of **struct** `IComponent` types.  
 The **struct** components of an `Archetype` are stored linear in memory to improve memory locality.  
@@ -358,10 +358,10 @@ Serialized entity example
     "id": 11,
     "children": [1,2,3],                    // can be null
     "components": {                         // can be null
-        "name": "Root",                     // Archetype component
-        "pos": { x: 1, y: 2, x: 3},         // Archetype component
-        "rot": { x: 0, y: 0, x: 0, w: 0 },  // Archetype component
-        "my1": { a: 1 }                     // Script component
+        "name": "Root",                     // IComponent
+        "pos": { x: 1, y: 2, x: 3},         // IComponent
+        "rot": { x: 0, y: 0, x: 0, w: 0 },  // IComponent
+        "my1": { a: 1 }                     // Script
     },
     "tags":["PlayerTag"]                    // can be null
 }
@@ -371,7 +371,7 @@ Note:
 Both component types are serialized into the same `components` array.  
 The engines uses the registered **`IComponent`** or **`Script`** type for serialization.
 
-This enables reading already serialized data after refactoring a **`Script`** to a **`struct`** `IComponent` or vice versa.
+This enables reading already serialized data after refactoring a **`Script`** to an **`IComponent`** or vice versa.
 
 
 ### Entity serialization model
