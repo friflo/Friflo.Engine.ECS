@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public class ExplorerFlyout : MenuFlyout
 {
-    private readonly ExplorerPanel      explorer;
+    private readonly    ExplorerPanel       explorer;
     
     internal ExplorerFlyout(ExplorerPanel explorer)
     {
@@ -20,7 +20,7 @@ public class ExplorerFlyout : MenuFlyout
         Items.Add(menuItem1);
         base.OnOpened();
     }
-
+    
     protected override void OnOpened() {
 
         var selection   = explorer.DragDrop.RowSelection;
@@ -42,7 +42,8 @@ public class ExplorerFlyout : MenuFlyout
     private void AddMenuItems(ExplorerItem firstSelected, IReadOnlyList<ExplorerItem> selectedItems)
     {
         var firstEntity = firstSelected?.Entity;
-        var items = selectedItems.ToArray();
+        var items       = selectedItems.ToArray();
+        var rootItem    = explorer.RootItem;
         // --- Delete entity
         bool isRootItem     = items.Length == 1 && items[0].Entity.Store.StoreRoot ==  items[0].Entity;
         var deleteMenu      = new MenuItem { Header = "Delete entity", IsEnabled = !isRootItem };
@@ -51,6 +52,9 @@ public class ExplorerFlyout : MenuFlyout
                 foreach (var item in items) {
                     var entity = item.Entity; 
                     if (entity.TreeMembership != TreeMembership.treeNode) {
+                        continue;
+                    }
+                    if (rootItem == item) {
                         continue;
                     }
                     var parent = entity.Parent;

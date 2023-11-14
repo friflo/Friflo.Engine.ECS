@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -10,7 +11,8 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public partial class ExplorerPanel : UserControl, IEditorControl
 {
-    public Editor Editor { get; private set; }
+    public  Editor          Editor      { get; private set; }
+    public  ExplorerItem    RootItem    => GetRootItem();
     
     public ExplorerPanel()
     {
@@ -18,6 +20,11 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         var viewModel = new MainWindowViewModel();
         DataContext = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(this);
+    }
+    
+    private ExplorerItem GetRootItem() {
+        var source = (HierarchicalTreeDataGridSource<ExplorerItem>)DragDrop.Source!;
+        return source.Items.First();
     }
 
     protected override void OnLoaded(RoutedEventArgs e) {
