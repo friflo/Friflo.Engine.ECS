@@ -82,7 +82,8 @@ public class ExplorerFlyout : MenuFlyout
         if (moveSelection == null) {
             return;
         }
-        var newMenu  = new MenuItem { Header = "Move up" };
+        var canMove = items.Length > 1 || moveSelection.indexes[0].Last() > 0;
+        var newMenu = new MenuItem { Header = "Move up", IsEnabled = canMove };
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(items, 1);
             SelectItems(moveSelection, indexes);
@@ -95,7 +96,14 @@ public class ExplorerFlyout : MenuFlyout
         if (moveSelection == null) {
             return;
         }
-        var newMenu  = new MenuItem { Header = "Move down" };
+        var canMove = true;
+        if (items.Length == 1) {
+            var entity  = items.Last().entity;
+            var parent  = entity.Parent;
+            var index   = parent.GetChildIndex(entity.Id);
+            canMove     = index < parent.ChildCount - 1;
+        }
+        var newMenu = new MenuItem { Header = "Move down", IsEnabled = canMove };
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(items, 1);
             SelectItems(moveSelection, indexes);
@@ -118,12 +126,14 @@ public class ExplorerFlyout : MenuFlyout
 
 internal class MoveSelection
 {
-    internal            IndexPath   parent;
+    internal            IndexPath                   parent;
+    internal readonly   IReadOnlyList<IndexPath>    indexes;
 
     public   override   string      ToString() => parent.ToString();
 
-    private MoveSelection(in IndexPath parent) {
-        this.parent = parent;
+    private MoveSelection(in IndexPath parent, IReadOnlyList<IndexPath> indexes) {
+        this.parent     = parent;
+        this.indexes    = indexes;
     }
     
     internal static MoveSelection Create(IReadOnlyList<IndexPath> indexes)
@@ -143,6 +153,6 @@ internal class MoveSelection
                 return null;
             }
         }
-        return new MoveSelection(parent);
+        return new MoveSelection(parent, indexes);
     }
 }
