@@ -26,9 +26,9 @@ public class ExplorerFlyout : MenuFlyout
 
         var selection   = explorer.DragDrop.RowSelection;
         if (selection != null) {
-            var firstSelected   = (ExplorerItem)selection.SelectedItem;
+            // var firstSelected   = (ExplorerItem)selection.SelectedItem;
             var items           = (IReadOnlyList<ExplorerItem>)selection.SelectedItems;
-            AddMenuItems(firstSelected, items);
+            AddMenuItems(items);
         }
         base.OnOpened();
     }
@@ -40,15 +40,15 @@ public class ExplorerFlyout : MenuFlyout
         base.OnClosed();
     }
     
-    private void AddMenuItems(ExplorerItem firstSelected, IReadOnlyList<ExplorerItem> selectedItems)
+    private void AddMenuItems(IReadOnlyList<ExplorerItem> selectedItems)
     {
-        var firstEntity = firstSelected?.Entity;
         var items       = selectedItems.ToArray();
         var rootItem    = explorer.RootItem;
         // --- Delete entity
-        bool isRootItem     = items.Length == 1 && items[0].Entity.Store.StoreRoot ==  items[0].Entity;
-        var deleteMenu      = new MenuItem { Header = "Delete entity", IsEnabled = !isRootItem };
-        if (!isRootItem) {
+        bool isRootItem = items.Length == 1 && items[0] == rootItem;
+        bool canDelete  = isRootItem ? items.Length > 1 : items.Length > 0;
+        var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
+        if (canDelete) {
             deleteMenu.Click += (_, _) => {
                 foreach (var item in items) {
                     var entity = item.Entity; 
@@ -67,13 +67,16 @@ public class ExplorerFlyout : MenuFlyout
         Items.Add(deleteMenu);
 
         // --- New entity
-        var newMenu  = new MenuItem { Header = "New entity", IsEnabled = firstEntity != null };
-        if (firstEntity != null) {
+        var newMenu  = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
+        if (items.Length > 0) {
             newMenu.Click += (_, _) => {
-                var newEntity =  firstEntity.Store.CreateEntity();
-                Console.WriteLine($"parent id: {firstEntity.Id} - New child id: {newEntity.Id}");
-                newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
-                firstEntity.AddChild(newEntity);
+                foreach (var item in items) {
+                    var entity      = item.entity;
+                    var newEntity   =  entity.Store.CreateEntity();
+                    Console.WriteLine($"parent id: {entity.Id} - New child id: {newEntity.Id}");
+                    newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
+                    entity.AddChild(newEntity);
+                }
             };
         }
         Items.Add(newMenu);
