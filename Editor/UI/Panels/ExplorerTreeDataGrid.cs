@@ -5,7 +5,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.UI.Explorer;
 
-
+// ReSharper disable ParameterTypeCanBeEnumerable.Global
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+// ReSharper disable UseIndexFromEndExpression
 namespace Friflo.Fliox.Editor.UI.Panels;
 
 /// <summary>

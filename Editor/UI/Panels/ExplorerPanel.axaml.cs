@@ -4,10 +4,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Explorer;
 
-// ReSharper disable ReplaceSliceWithRangeIndexer
-// ReSharper disable UseIndexFromEndExpression
-// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-// ReSharper disable MergeIntoPattern
 // ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Panels;
 
