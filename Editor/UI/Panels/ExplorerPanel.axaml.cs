@@ -19,9 +19,15 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     public ExplorerPanel()
     {
         InitializeComponent();
-        var viewModel = new MainWindowViewModel();
-        DataContext = viewModel;
+        var viewModel           = new MainWindowViewModel();
+        DataContext             = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(this);
+        DragDrop.Focusable      = true;
+    }
+    
+    internal void FocusPanel()
+    {
+        DragDrop.Focus();
     }
 
     private ExplorerItem GetRootItem() {
@@ -57,18 +63,18 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         switch (e.Key)
         {
             case Key.Delete:
-                ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem);
+                ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem, this);
                 return true;
             case Key.N:
                 if (e.KeyModifiers == KeyModifiers.Control) {
-                    ExplorerCommands.CreateItems(GetSelectedItems());
+                    ExplorerCommands.CreateItems(GetSelectedItems(), this);
                     return true;
                 }
                 return false;
             case Key.Up:
                 if (e.KeyModifiers == KeyModifiers.Control) {
                     if (GetMoveSelection(out var moveSelection)) {
-                        var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1);
+                        var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
                         SelectItems(moveSelection, indexes);
                     }
                     return true;
@@ -77,7 +83,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
             case Key.Down:
                 if (e.KeyModifiers == KeyModifiers.Control) {
                     if (GetMoveSelection(out var moveSelection)) {
-                        var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1);
+                        var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
                         SelectItems(moveSelection, indexes);
                     }
                     return true;

@@ -64,7 +64,7 @@ public class ExplorerFlyout : MenuFlyout
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
         deleteMenu.InputGesture= new KeyGesture(Key.Delete);
         if (canDelete) {
-            deleteMenu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem);
+            deleteMenu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem, explorer);
         }
         Items.Add(deleteMenu);
     }
@@ -74,7 +74,7 @@ public class ExplorerFlyout : MenuFlyout
         var newMenu  = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
         newMenu.InputGesture= new KeyGesture(Key.N, KeyModifiers.Control);
         if (items.Length > 0) {
-            newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items);
+            newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items, explorer);
         }
         Items.Add(newMenu);
     }
@@ -88,7 +88,7 @@ public class ExplorerFlyout : MenuFlyout
         var newMenu = new MenuItem { Header = "Move up", IsEnabled = canMove };
         newMenu.InputGesture= new KeyGesture(Key.Up, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
-            var indexes = ExplorerCommands.MoveItemsUp(items, 1);
+            var indexes = ExplorerCommands.MoveItemsUp(items, 1, explorer);
             explorer.SelectItems(moveSelection, indexes);
         };
         Items.Add(newMenu);
@@ -109,7 +109,7 @@ public class ExplorerFlyout : MenuFlyout
         var newMenu = new MenuItem { Header = "Move down", IsEnabled = canMove };
         newMenu.InputGesture= new KeyGesture(Key.Down, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
-            var indexes = ExplorerCommands.MoveItemsDown(items, 1);
+            var indexes = ExplorerCommands.MoveItemsDown(items, 1, explorer);
             explorer.SelectItems(moveSelection, indexes);
         };
         Items.Add(newMenu);
