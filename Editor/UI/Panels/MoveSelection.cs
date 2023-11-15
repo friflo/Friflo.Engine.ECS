@@ -40,4 +40,15 @@ internal class MoveSelection
         }
         return new MoveSelection(parent, indexes);
     }
+    
+    internal static MoveSelection Create(in IndexPath parent, int[] indexes)
+    {
+        var indexPaths = new IndexPath[indexes.Length];
+        for (int n = 0; n < indexes.Length; n++)
+        {
+            var child = parent.Append(indexes[n]);
+            indexPaths[n] = child;
+        }
+        return new MoveSelection(parent, indexPaths);
+    }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Explorer;
@@ -24,6 +25,31 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         DataContext             = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(this);
         DragDrop.Focusable      = true;
+        DragDrop.RowDrop += (sender, args) => {
+            dropTargetRow   = args.TargetRow;
+            var items       = DragDrop.RowSelection!.SelectedItems;
+            droppedItems    = new ExplorerItem[items.Count];
+            for (int n = 0; n < items.Count; n++) {
+                droppedItems[n] = (ExplorerItem)items[n];
+            }
+            EditorUtils.Post(RowDropped);
+        }; 
+    }
+    private TreeDataGridRow dropTargetRow;
+    private ExplorerItem[]  droppedItems;
+    
+    private void RowDropped()
+    {
+        var dropTarget  = (ExplorerItem)dropTargetRow.Model!;
+        var indexes     = new int[droppedItems.Length];
+        int n           = 0;
+        foreach (var item in dropTarget) {
+            var entity      = item.Entity;
+            indexes[n++]    = entity.Parent.GetChildIndex(entity.Id);
+        }
+        var targetModel = DragDrop.Rows!.RowIndexToModelIndex(dropTargetRow.RowIndex);
+        var selection   = MoveSelection.Create(targetModel, indexes);
+        SelectItems(selection, indexes, SelectionView.First);
     }
     
     internal void FocusPanel()
