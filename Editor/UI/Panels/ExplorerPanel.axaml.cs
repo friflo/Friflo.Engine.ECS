@@ -28,6 +28,10 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         DragDrop.RowDrop       += RowDrop;
     }
     
+    /// <summary>
+    /// The only purpose of <see cref="RowDrop"/> and <see cref="RowDropped"/> is to select the
+    /// <see cref="RowDropContext.droppedItems"/> after drag/drop is finished.
+    /// </summary>
     private void RowDrop(object sender, TreeDataGridRowDragEventArgs args)
     {
         var cx = new RowDropContext();
