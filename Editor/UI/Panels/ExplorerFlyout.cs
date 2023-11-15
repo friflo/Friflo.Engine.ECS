@@ -11,11 +11,11 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public class ExplorerFlyout : MenuFlyout
 {
-    private readonly    ExplorerPanel       explorer;
+    private readonly    ExplorerTreeDataGrid       grid;
     
     internal ExplorerFlyout(ExplorerPanel explorer)
     {
-        this.explorer   = explorer;
+        this.grid   = explorer.DragDrop;
         this.FlyoutPresenterClasses.Add("editorMenuFlyout");
         var menuItem1 = new MenuItem {
             Header = "Standard"
@@ -26,12 +26,12 @@ public class ExplorerFlyout : MenuFlyout
     
     protected override void OnOpened() {
 
-        var selection   = explorer.DragDrop.RowSelection;
+        var selection   = grid.RowSelection;
         if (selection != null) {
             // var firstSelected   = (ExplorerItem)selection.SelectedItem;
-            var selectedItems   = explorer.GetSelectedItems();
-            var rootItem        = explorer.RootItem;
-            explorer.GetMoveSelection(out var moveSelection);
+            var selectedItems   = grid.GetSelectedItems();
+            var rootItem        = grid.RootItem;
+            grid.GetMoveSelection(out var moveSelection);
             AddMenuItems(selectedItems, moveSelection, rootItem);
         }
         base.OnOpened();
@@ -63,7 +63,7 @@ public class ExplorerFlyout : MenuFlyout
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
         deleteMenu.InputGesture= new KeyGesture(Key.Delete);
         if (canDelete) {
-            deleteMenu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem, explorer);
+            deleteMenu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem, grid);
         }
         Items.Add(deleteMenu);
     }
@@ -73,7 +73,7 @@ public class ExplorerFlyout : MenuFlyout
         var newMenu  = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
         newMenu.InputGesture= new KeyGesture(Key.N, KeyModifiers.Control);
         if (items.Length > 0) {
-            newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items, explorer);
+            newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items, grid);
         }
         Items.Add(newMenu);
     }
@@ -87,8 +87,8 @@ public class ExplorerFlyout : MenuFlyout
         var newMenu = new MenuItem { Header = "Move up", IsEnabled = canMove };
         newMenu.InputGesture= new KeyGesture(Key.Up, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
-            var indexes = ExplorerCommands.MoveItemsUp(items, 1, explorer);
-            explorer.SelectItems(moveSelection, indexes, SelectionView.First);
+            var indexes = ExplorerCommands.MoveItemsUp(items, 1, grid);
+            grid.SelectItems(moveSelection, indexes, SelectionView.First);
         };
         Items.Add(newMenu);
     }
@@ -108,8 +108,8 @@ public class ExplorerFlyout : MenuFlyout
         var newMenu = new MenuItem { Header = "Move down", IsEnabled = canMove };
         newMenu.InputGesture= new KeyGesture(Key.Down, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
-            var indexes = ExplorerCommands.MoveItemsDown(items, 1, explorer);
-            explorer.SelectItems(moveSelection, indexes, SelectionView.Last);
+            var indexes = ExplorerCommands.MoveItemsDown(items, 1, grid);
+            grid.SelectItems(moveSelection, indexes, SelectionView.Last);
         };
         Items.Add(newMenu);
     }

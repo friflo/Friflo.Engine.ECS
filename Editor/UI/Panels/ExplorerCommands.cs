@@ -8,7 +8,7 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public static class ExplorerCommands
 {
-    internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerPanel panel)
+    internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid panel)
     {
         foreach (var item in items) {
             var entity = item.Entity; 
@@ -25,7 +25,7 @@ public static class ExplorerCommands
         panel.FocusPanel();
     }
     
-    internal static void CreateItems(ExplorerItem[] items, ExplorerPanel panel)
+    internal static void CreateItems(ExplorerItem[] items, ExplorerTreeDataGrid panel)
     {
         foreach (var item in items) {
             var parent      = item.entity;
@@ -37,7 +37,7 @@ public static class ExplorerCommands
         panel.FocusPanel();
     }
     
-    internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerPanel panel)
+    internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid panel)
     {
         var indexes = new List<int>(items.Length);
         foreach (var item in items)
@@ -57,7 +57,7 @@ public static class ExplorerCommands
         return indexes.ToArray();
     }
     
-    internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerPanel panel)
+    internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid panel)
     {
         var indexes = new List<int>(items.Length);
         for (int n = items.Length - 1; n >= 0; n--)
