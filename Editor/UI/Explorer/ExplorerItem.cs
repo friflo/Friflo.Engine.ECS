@@ -23,7 +23,7 @@ public sealed class ExplorerItem :
  // INotifyPropertyChanged                                                      not required. Implemented by ObservableCollection{T}
 {
 #region internal properties
-    internal            string                              Name                => entity.Name.value;
+    internal            string                              Name { get => GetName(entity); set => SetName(entity, value); }
     internal            int                                 Id                  => entity.Id;
     public              bool                                flag;
     public              GameEntity                          Entity              => entity;
@@ -54,6 +54,21 @@ public sealed class ExplorerItem :
     }
     
 #region private methods
+    private static string GetName(GameEntity entity) {
+        if (entity.HasName) {
+            return entity.Name.value;
+        }
+        return "---";
+    }
+    
+    private static void SetName(GameEntity entity, string value) {
+        if (string.IsNullOrEmpty(value)) {
+            entity.RemoveComponent<EntityName>();
+            return;
+        }
+        entity.AddComponent(new EntityName(value));
+    }
+    
     private ExplorerItem GetChildByIndex(int index) {
         int childId = entity.GetChildNodeByIndex(index).Id;
         // Console.WriteLine($"GetChildByIndex {entity.Id} {index} - child {childId}");

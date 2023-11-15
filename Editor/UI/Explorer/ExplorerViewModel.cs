@@ -19,7 +19,7 @@ internal class ExplorerViewModel
         
         var source  = new HierarchicalTreeDataGridSource<ExplorerItem>(items);
         
-        var nameCol = new TextColumn<ExplorerItem, string>("name", item => item.Name, GridLength.Star);
+        var nameCol = new TextColumn<ExplorerItem, string>("name", item => item.Name, (item, value) => item.Name = value, GridLength.Star);
         source.Columns.Add(new HierarchicalExpanderColumn<ExplorerItem>(nameCol, item => item));
         
         var idCol   = new TextColumn<ExplorerItem, int>   ("id",   item => item.Id,   GridLength.Auto);
