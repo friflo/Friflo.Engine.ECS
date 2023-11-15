@@ -10,6 +10,7 @@ public static class ExplorerCommands
 {
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
     {
+        var next = grid.GetSelectionPath();
         foreach (var item in items) {
             var entity = item.Entity; 
             if (entity.TreeMembership != TreeMembership.treeNode) {
@@ -22,6 +23,7 @@ public static class ExplorerCommands
             Console.WriteLine($"parent id: {parent.Id} - Remove child id: {entity.Id}");
             parent.RemoveChild(entity);
         }
+        grid.SetSelectionPath(next);
         grid.FocusPanel();
     }
     

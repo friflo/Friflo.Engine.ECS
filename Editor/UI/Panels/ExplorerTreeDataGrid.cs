@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.UI.Explorer;
 
+// ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable UseIndexFromEndExpression
@@ -153,6 +154,20 @@ public class ExplorerTreeDataGrid : TreeDataGrid
             default:
                 return false;
         }
+    }
+    
+    internal IndexPath GetSelectionPath()
+    {
+        return RowSelection!.SelectedIndexes[0];
+    }
+    
+    internal void SetSelectionPath(IndexPath path)
+    {
+        var rowIndex = Rows!.ModelIndexToRowIndex(path);
+        if (rowIndex == -1) {
+            path = path.Slice(0, path.Count - 1);
+        }
+        RowSelection!.SelectedIndex = path;
     }
 
     protected override void OnKeyDown(KeyEventArgs e) {
