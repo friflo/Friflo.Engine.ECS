@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI.Explorer;
 
 // ReSharper disable ReplaceSliceWithRangeIndexer
@@ -27,6 +30,31 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     public ExplorerTreeDataGrid() {
         Focusable   = true; // required to obtain focus when moving items with: Ctrl + Up / Down
         RowDrop    += RowDropHandler;
+        GotFocus   += (_, args) => {
+            // Workaround:  Focus TreeDataGridTextCell if navigating with up/down keys.
+            //              Otherwise it parent TreeDataGridExpanderCell is focus and F2 (rename) does not work.
+            if (args.Source is TreeDataGridExpanderCell expanderCell) {
+                var textCell = FindControl<TreeDataGridTextCell>(expanderCell);
+                textCell?.Focus();
+            }
+        };
+    }
+    
+    private static Control FindControl<T>(Visual control) where T : Control
+    {
+        foreach (var child in control.GetVisualChildren()) {
+            if (child is not Control childControl) {
+                continue;
+            }
+            if (childControl is T) {
+                return childControl;
+            }
+            var sub = FindControl<T>(childControl);
+            if (sub != null) {
+                return sub;
+            }
+        }
+        return null;
     }
     
     internal void FocusPanel() {
