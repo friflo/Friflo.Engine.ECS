@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.UI.Explorer;
@@ -17,10 +18,10 @@ public class ExplorerFlyout : MenuFlyout
     {
         grid   = explorer.Grid;
         FlyoutPresenterClasses.Add("editorMenuFlyout");
-        var menuItem1 = new MenuItem {
-            Header = "Standard"
-        };
-        Items.Add(menuItem1);
+        var menu    = new MenuItem { Header = "Test" };
+        menu.Click += (_, _) => { Console.WriteLine("Explorer - Test"); };
+        Items.Add(menu);
+        Items.Add(new Separator());
         base.OnOpened();
     }
     
@@ -38,7 +39,7 @@ public class ExplorerFlyout : MenuFlyout
     }
 
     protected override void OnClosed() {
-        for (int n = Items.Count - 1; n >= 1; n--) {
+        for (int n = Items.Count - 1; n >= 2; n--) {
             Items.RemoveAt(n);
         }
         base.OnClosed();
@@ -52,8 +53,11 @@ public class ExplorerFlyout : MenuFlyout
     {
         DeleteEntity    (selectedItems, rootItem);
         NewEntity       (selectedItems);
-        MoveEntityUp    (selectedItems, moveSelection);
-        MoveEntityDown  (selectedItems, moveSelection);
+        if (moveSelection != null) {
+            Items.Add(new Separator());
+            MoveEntityUp    (selectedItems, moveSelection);
+            MoveEntityDown  (selectedItems, moveSelection);
+        }
     }
     
     private void DeleteEntity(ExplorerItem[] items, ExplorerItem rootItem)
@@ -80,9 +84,6 @@ public class ExplorerFlyout : MenuFlyout
     
     private void MoveEntityUp(ExplorerItem[] items, MoveSelection moveSelection)
     {
-        if (moveSelection == null) {
-            return;
-        }
         var canMove         = items.Length > 1 || moveSelection.indexes[0].Last() > 0;
         var menu            = new MenuItem { Header = "Move up", IsEnabled = canMove };
         menu.InputGesture   = new KeyGesture(Key.Up, KeyModifiers.Control);
@@ -95,9 +96,6 @@ public class ExplorerFlyout : MenuFlyout
     
     private void MoveEntityDown(ExplorerItem[] items, MoveSelection moveSelection)
     {
-        if (moveSelection == null) {
-            return;
-        }
         var canMove = true;
         if (items.Length == 1) {
             var entity  = items.Last().entity;
