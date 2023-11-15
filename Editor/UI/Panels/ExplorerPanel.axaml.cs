@@ -34,6 +34,24 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         return items.ToArray();
     }
     
+    internal bool GetMoveSelection(out MoveSelection moveSelection) {
+        var indexes = DragDrop.RowSelection!.SelectedIndexes;
+        moveSelection = MoveSelection.Create(indexes);
+        return moveSelection != null;
+    }
+    
+    internal void SelectItems(MoveSelection moveSelection, int[] indexes)
+    {
+        var parent      = moveSelection.parent;
+        var selection   = DragDrop.RowSelection!;
+        selection.BeginBatchUpdate();
+        foreach (var index in indexes) {
+            var child = parent.Append(index);
+            selection.Select(child);
+        }
+        selection.EndBatchUpdate();
+    }
+    
     private bool HandleKeyDown(KeyEventArgs e)
     {
         switch (e.Key)
@@ -49,13 +67,19 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 return false;
             case Key.Up:
                 if (e.KeyModifiers == KeyModifiers.Control) {
-                    ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1);
+                    if (GetMoveSelection(out var moveSelection)) {
+                        var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1);
+                        SelectItems(moveSelection, indexes);
+                    }
                     return true;
                 }
                 return false;
             case Key.Down:
                 if (e.KeyModifiers == KeyModifiers.Control) {
-                    ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1);
+                    if (GetMoveSelection(out var moveSelection)) {
+                        var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1);
+                        SelectItems(moveSelection, indexes);
+                    }
                     return true;
                 }
                 return false;

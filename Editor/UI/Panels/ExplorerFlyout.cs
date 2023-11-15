@@ -31,9 +31,8 @@ public class ExplorerFlyout : MenuFlyout
         if (selection != null) {
             // var firstSelected   = (ExplorerItem)selection.SelectedItem;
             var selectedItems   = explorer.GetSelectedItems();
-            var indexes         = selection.SelectedIndexes;
             var rootItem        = explorer.RootItem;
-            var moveSelection   = MoveSelection.Create(indexes);
+            explorer.GetMoveSelection(out var moveSelection);
             AddMenuItems(selectedItems, moveSelection, rootItem);
         }
         base.OnOpened();
@@ -90,7 +89,7 @@ public class ExplorerFlyout : MenuFlyout
         newMenu.InputGesture= new KeyGesture(Key.Up, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(items, 1);
-            SelectItems(moveSelection, indexes);
+            explorer.SelectItems(moveSelection, indexes);
         };
         Items.Add(newMenu);
     }
@@ -111,21 +110,9 @@ public class ExplorerFlyout : MenuFlyout
         newMenu.InputGesture= new KeyGesture(Key.Down, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(items, 1);
-            SelectItems(moveSelection, indexes);
+            explorer.SelectItems(moveSelection, indexes);
         };
         Items.Add(newMenu);
-    }
-    
-    private void SelectItems(MoveSelection moveSelection, int[] indexes)
-    {
-        var parent      = moveSelection.parent;
-        var selection   = explorer.DragDrop.RowSelection!;
-        selection.BeginBatchUpdate();
-        foreach (var index in indexes) {
-            var child = parent.Append(index);
-            selection.Select(child);
-        }
-        selection.EndBatchUpdate();
     }
 }
 
