@@ -21,11 +21,59 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     // https://stackoverflow.com/questions/71815213/how-can-i-show-my-own-control-in-avalonia
     protected override Type StyleKeyOverride => typeof(TreeDataGrid);
     
-    internal void FocusPanel()
-    {
+    public ExplorerTreeDataGrid() {
+        Focusable   = true; // required to obtain focus when moving items with: Ctrl + Up / Down
+        RowDrop    += RowDropHandler;
+    }
+    
+    internal void FocusPanel() {
         Focus();
     }
-
+    
+    /// <summary>
+    /// The only purpose of <see cref="RowDropHandler"/> and <see cref="RowDropped"/> is to select the
+    /// <see cref="RowDropContext.droppedItems"/> after drag/drop is finished.
+    /// </summary>
+    private void RowDropHandler(object sender, TreeDataGridRowDragEventArgs args)
+    {
+        var cx = new RowDropContext();
+        switch (args.Position)
+        {
+            case TreeDataGridRowDropPosition.Inside:
+                cx.targetRow    = args.TargetRow;
+                break;
+            case TreeDataGridRowDropPosition.Before:
+            case TreeDataGridRowDropPosition.After:
+                var rows        = Rows!;
+                var model       = rows.RowIndexToModelIndex(args.TargetRow.RowIndex);
+                model           = model.Slice(0, model.Count - 1); // get parent IndexPath
+                var rowIndex    = rows.ModelIndexToRowIndex(model);
+                cx.targetRow    = TryGetRow(rowIndex);
+                break;
+            default:
+                throw new InvalidOperationException("unexpected");
+        }
+        var items           = RowSelection!.SelectedItems;
+        var droppedItems    = cx.droppedItems = new ExplorerItem[items.Count];
+        for (int n = 0; n < items.Count; n++) {
+            droppedItems[n] = (ExplorerItem)items[n];
+        }
+        EditorUtils.Post(() => RowDropped(cx));
+    }
+    
+    private void RowDropped(RowDropContext cx)
+    {
+        var indexes     = new int[cx.droppedItems.Length];
+        int n           = 0;
+        foreach (var item in cx.droppedItems) {
+            var entity      = item.Entity;
+            indexes[n++]    = entity.Parent.GetChildIndex(entity.Id);
+        }
+        var targetModel = Rows!.RowIndexToModelIndex(cx.targetRow.RowIndex);
+        var selection   = MoveSelection.Create(targetModel, indexes);
+        SelectItems(selection, indexes, SelectionView.First);
+    }
+    
     private ExplorerItem GetRootItem() {
         var source = (HierarchicalTreeDataGridSource<ExplorerItem>)Source!;
         return source.Items.First();
