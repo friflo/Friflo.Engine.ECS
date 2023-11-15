@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Explorer;
 
+// ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable UseIndexFromEndExpression
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable MergeIntoPattern
@@ -29,8 +30,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     
     private void RowDrop(object sender, TreeDataGridRowDragEventArgs args)
     {
-        var rows    = DragDrop.Rows!;
-        var cx      = new RowDropContext();
+        var cx = new RowDropContext();
         switch (args.Position)
         {
             case TreeDataGridRowDropPosition.Inside:
@@ -38,8 +38,9 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 break;
             case TreeDataGridRowDropPosition.Before:
             case TreeDataGridRowDropPosition.After:
+                var rows        = DragDrop.Rows!;
                 var model       = rows.RowIndexToModelIndex(args.TargetRow.RowIndex);
-                model           = model.Slice(0, model.Count - 1);
+                model           = model.Slice(0, model.Count - 1); // get parent IndexPath
                 var rowIndex    = rows.ModelIndexToRowIndex(model);
                 cx.targetRow    = DragDrop.TryGetRow(rowIndex);
                 break;
