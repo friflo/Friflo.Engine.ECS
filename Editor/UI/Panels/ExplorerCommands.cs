@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using Friflo.Fliox.Editor.UI.Explorer;
 using Friflo.Fliox.Engine.ECS;
 
+// ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 namespace Friflo.Fliox.Editor.UI.Panels;
 
 public static class ExplorerCommands
 {
+    private static void Log(Func<string> message) {
+        return;
+#pragma warning disable CS0162 // Unreachable code detected
+        var msg = message();
+        Console.WriteLine(msg);
+#pragma warning restore CS0162 // Unreachable code detected
+    }
+    
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
     {
         var next = grid.GetSelectionPath();
@@ -20,7 +29,7 @@ public static class ExplorerCommands
                 continue;
             }
             var parent = entity.Parent;
-            Console.WriteLine($"parent id: {parent.Id} - Remove child id: {entity.Id}");
+            Log(() => $"parent id: {parent.Id} - Remove child id: {entity.Id}");
             parent.RemoveChild(entity);
         }
         grid.SetSelectionPath(next);
@@ -32,7 +41,7 @@ public static class ExplorerCommands
         foreach (var item in items) {
             var parent      = item.entity;
             var newEntity   = parent.Store.CreateEntity();
-            Console.WriteLine($"parent id: {parent.Id} - New child id: {newEntity.Id}");
+            Log(() => $"parent id: {parent.Id} - CreateEntity id: {newEntity.Id}");
             newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
             parent.AddChild(newEntity);
         }
@@ -52,7 +61,7 @@ public static class ExplorerCommands
                 continue;
             }
             indexes.Add(newIndex);
-            Console.WriteLine($"parent id: {parent.Id} - Move child id: {entity.Id}");
+            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
             parent.InsertChild(newIndex, entity);
         }
         grid.FocusPanel();
@@ -73,7 +82,7 @@ public static class ExplorerCommands
                 continue;
             }
             indexes.Add(newIndex);
-            Console.WriteLine($"parent id: {parent.Id} - Move child id: {entity.Id}");
+            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
             parent.InsertChild(newIndex, entity);
         }
         grid.FocusPanel();
