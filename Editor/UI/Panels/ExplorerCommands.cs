@@ -8,7 +8,7 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public static class ExplorerCommands
 {
-    internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid panel)
+    internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
     {
         foreach (var item in items) {
             var entity = item.Entity; 
@@ -22,10 +22,10 @@ public static class ExplorerCommands
             Console.WriteLine($"parent id: {parent.Id} - Remove child id: {entity.Id}");
             parent.RemoveChild(entity);
         }
-        panel.FocusPanel();
+        grid.FocusPanel();
     }
     
-    internal static void CreateItems(ExplorerItem[] items, ExplorerTreeDataGrid panel)
+    internal static void CreateItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         foreach (var item in items) {
             var parent      = item.entity;
@@ -34,10 +34,10 @@ public static class ExplorerCommands
             newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
             parent.AddChild(newEntity);
         }
-        panel.FocusPanel();
+        grid.FocusPanel();
     }
     
-    internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid panel)
+    internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes = new List<int>(items.Length);
         foreach (var item in items)
@@ -53,11 +53,11 @@ public static class ExplorerCommands
             Console.WriteLine($"parent id: {parent.Id} - Move child id: {entity.Id}");
             parent.InsertChild(newIndex, entity);
         }
-        panel.FocusPanel();
+        grid.FocusPanel();
         return indexes.ToArray();
     }
     
-    internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid panel)
+    internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes = new List<int>(items.Length);
         for (int n = items.Length - 1; n >= 0; n--)
@@ -74,7 +74,7 @@ public static class ExplorerCommands
             Console.WriteLine($"parent id: {parent.Id} - Move child id: {entity.Id}");
             parent.InsertChild(newIndex, entity);
         }
-        panel.FocusPanel();
+        grid.FocusPanel();
         return indexes.ToArray();
     }
 }

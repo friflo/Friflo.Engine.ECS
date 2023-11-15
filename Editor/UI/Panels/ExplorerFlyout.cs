@@ -15,8 +15,8 @@ public class ExplorerFlyout : MenuFlyout
     
     internal ExplorerFlyout(ExplorerPanel explorer)
     {
-        this.grid   = explorer.DragDrop;
-        this.FlyoutPresenterClasses.Add("editorMenuFlyout");
+        grid   = explorer.Grid;
+        FlyoutPresenterClasses.Add("editorMenuFlyout");
         var menuItem1 = new MenuItem {
             Header = "Standard"
         };

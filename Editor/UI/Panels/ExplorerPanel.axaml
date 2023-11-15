@@ -12,7 +12,7 @@
             <!-- <TreeDataGrid Name="DragDrop"
                           Source="{Binding DragDrop.DragDropSource}"
                           AutoDragDropRows="True"/> -->
-            <panels:ExplorerTreeDataGrid Name="DragDrop"
+            <panels:ExplorerTreeDataGrid Name="Grid"
                                   Source="{Binding DragDrop.ExplorerItemSource}"
                                   RowDragStarted="DragDrop_OnRowDragStarted"
                                   RowDragOver="DragDrop_OnRowDragOver"

@@ -16,11 +16,8 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 /// </summary>
 public class ExplorerTreeDataGrid : TreeDataGrid
 {
-    
     public  ExplorerItem    RootItem    => GetRootItem();
-    
-    public ExplorerTreeDataGrid() { }
-        
+       
     // https://stackoverflow.com/questions/71815213/how-can-i-show-my-own-control-in-avalonia
     protected override Type StyleKeyOverride => typeof(TreeDataGrid);
     
@@ -73,19 +70,20 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     
     private bool HandleKeyDown(KeyEventArgs e)
     {
+        var ctrlKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
         switch (e.Key)
         {
             case Key.Delete:
                 ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem, this);
                 return true;
             case Key.N:
-                if (e.KeyModifiers == KeyModifiers.Meta) {
+                if (e.KeyModifiers == ctrlKey) {
                     ExplorerCommands.CreateItems(GetSelectedItems(), this);
                     return true;
                 }
                 return false;
             case Key.Up:
-                if (e.KeyModifiers == KeyModifiers.Meta) {
+                if (e.KeyModifiers == ctrlKey) {
                     if (GetMoveSelection(out var moveSelection)) {
                         var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
                         SelectItems(moveSelection, indexes, SelectionView.First);
@@ -94,7 +92,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 return false;
             case Key.Down:
-                if (e.KeyModifiers == KeyModifiers.Meta) {
+                if (e.KeyModifiers == ctrlKey) {
                     if (GetMoveSelection(out var moveSelection)) {
                         var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
                         SelectItems(moveSelection, indexes, SelectionView.Last);
@@ -108,7 +106,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     }
 
     protected override void OnKeyDown(KeyEventArgs e) {
-        Console.WriteLine($"ExplorerTreeDataGrid - OnKeyDown: {e.Key} {e.KeyModifiers}");
+        // Console.WriteLine($"ExplorerTreeDataGrid - OnKeyDown: {e.Key} {e.KeyModifiers}");
         e.Handled = HandleKeyDown(e);
         base.OnKeyDown(e);
     }

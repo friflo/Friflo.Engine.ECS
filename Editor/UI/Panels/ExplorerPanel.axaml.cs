@@ -22,8 +22,8 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         var viewModel           = new MainWindowViewModel();
         DataContext             = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(this);
-        DragDrop.Focusable      = true;
-        DragDrop.RowDrop       += RowDrop;
+        Grid.Focusable          = true;
+        Grid.RowDrop           += RowDrop;
     }
     
     /// <summary>
@@ -40,16 +40,16 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 break;
             case TreeDataGridRowDropPosition.Before:
             case TreeDataGridRowDropPosition.After:
-                var rows        = DragDrop.Rows!;
+                var rows        = Grid.Rows!;
                 var model       = rows.RowIndexToModelIndex(args.TargetRow.RowIndex);
                 model           = model.Slice(0, model.Count - 1); // get parent IndexPath
                 var rowIndex    = rows.ModelIndexToRowIndex(model);
-                cx.targetRow    = DragDrop.TryGetRow(rowIndex);
+                cx.targetRow    = Grid.TryGetRow(rowIndex);
                 break;
             default:
                 throw new InvalidOperationException("unexpected");
         }
-        var items           = DragDrop.RowSelection!.SelectedItems;
+        var items           = Grid.RowSelection!.SelectedItems;
         var droppedItems    = cx.droppedItems = new ExplorerItem[items.Count];
         for (int n = 0; n < items.Count; n++) {
             droppedItems[n] = (ExplorerItem)items[n];
@@ -65,9 +65,9 @@ public partial class ExplorerPanel : UserControl, IEditorControl
             var entity      = item.Entity;
             indexes[n++]    = entity.Parent.GetChildIndex(entity.Id);
         }
-        var targetModel = DragDrop.Rows!.RowIndexToModelIndex(cx.targetRow.RowIndex);
+        var targetModel = Grid.Rows!.RowIndexToModelIndex(cx.targetRow.RowIndex);
         var selection   = MoveSelection.Create(targetModel, indexes);
-        DragDrop.SelectItems(selection, indexes, SelectionView.First);
+        Grid.SelectItems(selection, indexes, SelectionView.First);
     }
 
     protected override void OnLoaded(RoutedEventArgs e) {
@@ -82,7 +82,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
     {
         if (Editor.Store == null) throw new InvalidOperationException("expect Store is present");
         // return;
-        var source      = (HierarchicalTreeDataGridSource<ExplorerItem>)DragDrop.Source!;
+        var source      = (HierarchicalTreeDataGridSource<ExplorerItem>)Grid.Source!;
         var rootEntity  = Editor.Store.StoreRoot;
         var tree        = new ExplorerTree(rootEntity);
         source.Items    = new []{ tree.rootItem };
