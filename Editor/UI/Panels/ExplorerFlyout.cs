@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Friflo.Fliox.Editor.UI.Explorer;
 
+// ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable SuggestBaseTypeForParameter
@@ -28,11 +30,11 @@ public class ExplorerFlyout : MenuFlyout
         var selection   = explorer.DragDrop.RowSelection;
         if (selection != null) {
             // var firstSelected   = (ExplorerItem)selection.SelectedItem;
-            var items           = (IReadOnlyList<ExplorerItem>)selection.SelectedItems;
+            var selectedItems   = explorer.GetSelectedItems();
             var indexes         = selection.SelectedIndexes;
             var rootItem        = explorer.RootItem;
             var moveSelection   = MoveSelection.Create(indexes);
-            AddMenuItems(items, moveSelection, rootItem);
+            AddMenuItems(selectedItems, moveSelection, rootItem);
         }
         base.OnOpened();
     }
@@ -46,15 +48,14 @@ public class ExplorerFlyout : MenuFlyout
     
     // ----------------------------------- add menu commands -----------------------------------
     private void AddMenuItems(
-        IReadOnlyList<ExplorerItem> selectedItems,
-        MoveSelection               moveSelection,
-        ExplorerItem                rootItem)
+        ExplorerItem[]  selectedItems,
+        MoveSelection   moveSelection,
+        ExplorerItem    rootItem)
     {
-        var items       = selectedItems.ToArray();
-        DeleteEntity    (items, rootItem);
-        NewEntity       (items);
-        MoveEntityUp    (items, moveSelection);
-        MoveEntityDown  (items, moveSelection);
+        DeleteEntity    (selectedItems, rootItem);
+        NewEntity       (selectedItems);
+        MoveEntityUp    (selectedItems, moveSelection);
+        MoveEntityDown  (selectedItems, moveSelection);
     }
     
     private void DeleteEntity(ExplorerItem[] items, ExplorerItem rootItem)
@@ -62,6 +63,7 @@ public class ExplorerFlyout : MenuFlyout
         var isRootItem  = items.Length == 1 && items[0] == rootItem;
         var canDelete   = isRootItem ? items.Length > 1 : items.Length > 0;
         var deleteMenu  = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
+        deleteMenu.InputGesture= new KeyGesture(Key.Delete);
         if (canDelete) {
             deleteMenu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem);
         }
@@ -71,6 +73,7 @@ public class ExplorerFlyout : MenuFlyout
     private void NewEntity(ExplorerItem[] items)
     {
         var newMenu  = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
+        newMenu.InputGesture= new KeyGesture(Key.N, KeyModifiers.Control);
         if (items.Length > 0) {
             newMenu.Click += (_, _) => ExplorerCommands.CreateItems(items);
         }
@@ -84,6 +87,7 @@ public class ExplorerFlyout : MenuFlyout
         }
         var canMove = items.Length > 1 || moveSelection.indexes[0].Last() > 0;
         var newMenu = new MenuItem { Header = "Move up", IsEnabled = canMove };
+        newMenu.InputGesture= new KeyGesture(Key.Up, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(items, 1);
             SelectItems(moveSelection, indexes);
@@ -104,6 +108,7 @@ public class ExplorerFlyout : MenuFlyout
             canMove     = index < parent.ChildCount - 1;
         }
         var newMenu = new MenuItem { Header = "Move down", IsEnabled = canMove };
+        newMenu.InputGesture= new KeyGesture(Key.Down, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(items, 1);
             SelectItems(moveSelection, indexes);
