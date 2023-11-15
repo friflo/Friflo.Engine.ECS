@@ -51,13 +51,14 @@ public static class ExplorerCommands
     internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes = new List<int>(items.Length);
+        var pos     = 0;
         foreach (var item in items)
         {
             var entity      = item.entity;
             var parent      = entity.Parent;
             int index       = parent.GetChildIndex(entity.Id);
             int newIndex    = index - shift;
-            if (newIndex < 0) {
+            if (newIndex < pos++) {
                 continue;
             }
             indexes.Add(newIndex);
@@ -71,6 +72,7 @@ public static class ExplorerCommands
     internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes = new List<int>(items.Length);
+        var pos     = 0;
         for (int n = items.Length - 1; n >= 0; n--)
         {
             var item        = items[n]; 
@@ -78,7 +80,7 @@ public static class ExplorerCommands
             var parent      = entity.Parent;
             int index       = parent.GetChildIndex(entity.Id);
             int newIndex    = index + shift;
-            if (newIndex >= parent.ChildCount) {
+            if (newIndex >= parent.ChildCount - pos++) {
                 continue;
             }
             indexes.Add(newIndex);
