@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Explorer;
@@ -25,29 +24,45 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         DataContext             = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(this);
         DragDrop.Focusable      = true;
-        DragDrop.RowDrop += (sender, args) => {
-            dropTargetRow   = args.TargetRow;
-            var items       = DragDrop.RowSelection!.SelectedItems;
-            droppedItems    = new ExplorerItem[items.Count];
-            for (int n = 0; n < items.Count; n++) {
-                droppedItems[n] = (ExplorerItem)items[n];
-            }
-            EditorUtils.Post(RowDropped);
-        }; 
+        DragDrop.RowDrop       += RowDrop;
     }
-    private TreeDataGridRow dropTargetRow;
-    private ExplorerItem[]  droppedItems;
     
-    private void RowDropped()
+    private void RowDrop(object sender, TreeDataGridRowDragEventArgs args)
     {
-        var dropTarget  = (ExplorerItem)dropTargetRow.Model!;
-        var indexes     = new int[droppedItems.Length];
+        var rows    = DragDrop.Rows!;
+        var cx      = new RowDropContext();
+        switch (args.Position)
+        {
+            case TreeDataGridRowDropPosition.Inside:
+                cx.targetRow    = args.TargetRow;
+                break;
+            case TreeDataGridRowDropPosition.Before:
+            case TreeDataGridRowDropPosition.After:
+                var model       = rows.RowIndexToModelIndex(args.TargetRow.RowIndex);
+                model           = model.Slice(0, model.Count - 1);
+                var rowIndex    = rows.ModelIndexToRowIndex(model);
+                cx.targetRow    = DragDrop.TryGetRow(rowIndex);
+                break;
+            default:
+                throw new InvalidOperationException("unexpected");
+        }
+        var items           = DragDrop.RowSelection!.SelectedItems;
+        var droppedItems    = cx.droppedItems = new ExplorerItem[items.Count];
+        for (int n = 0; n < items.Count; n++) {
+            droppedItems[n] = (ExplorerItem)items[n];
+        }
+        EditorUtils.Post(() => RowDropped(cx));
+    }
+    
+    private void RowDropped(RowDropContext cx)
+    {
+        var indexes     = new int[cx.droppedItems.Length];
         int n           = 0;
-        foreach (var item in dropTarget) {
+        foreach (var item in cx.droppedItems) {
             var entity      = item.Entity;
             indexes[n++]    = entity.Parent.GetChildIndex(entity.Id);
         }
-        var targetModel = DragDrop.Rows!.RowIndexToModelIndex(dropTargetRow.RowIndex);
+        var targetModel = DragDrop.Rows!.RowIndexToModelIndex(cx.targetRow.RowIndex);
         var selection   = MoveSelection.Create(targetModel, indexes);
         SelectItems(selection, indexes, SelectionView.First);
     }

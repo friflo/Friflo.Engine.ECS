@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Friflo.Fliox.Editor.UI.Explorer;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 
@@ -52,3 +54,9 @@ internal class MoveSelection
         return new MoveSelection(parent, indexPaths);
     }
 }
+
+internal struct RowDropContext
+{
+    internal    TreeDataGridRow targetRow;
+    internal    ExplorerItem[]  droppedItems;
+} 
