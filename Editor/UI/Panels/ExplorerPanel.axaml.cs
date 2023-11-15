@@ -47,7 +47,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         return moveSelection != null;
     }
     
-    internal void SelectItems(MoveSelection moveSelection, int[] indexes, MoveDirection direction)
+    internal void SelectItems(MoveSelection moveSelection, int[] indexes, SelectionView view)
     {
         var parent      = moveSelection.parent;
         var selection   = DragDrop.RowSelection!;
@@ -58,13 +58,13 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         }
         selection.EndBatchUpdate();
         
-        BringSelectionIntoView(moveSelection.indexes, direction);
+        BringSelectionIntoView(moveSelection.indexes, view);
     }
     
-    private void BringSelectionIntoView(IReadOnlyList<IndexPath> indexes, MoveDirection direction) {
+    private void BringSelectionIntoView(IReadOnlyList<IndexPath> indexes, SelectionView view) {
         var rows            = DragDrop.Rows!;
         var rowPresenter    = DragDrop.RowsPresenter!;
-        if (direction == MoveDirection.Up) {
+        if (view == SelectionView.First) {
             var firstIndex = rows.ModelIndexToRowIndex(indexes[0]);
             rowPresenter.BringIntoView(firstIndex - 1);
             return;            
@@ -90,7 +90,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 if (e.KeyModifiers == KeyModifiers.Control) {
                     if (GetMoveSelection(out var moveSelection)) {
                         var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
-                        SelectItems(moveSelection, indexes, MoveDirection.Up);
+                        SelectItems(moveSelection, indexes, SelectionView.First);
                     }
                     return true;
                 }
@@ -99,7 +99,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 if (e.KeyModifiers == KeyModifiers.Control) {
                     if (GetMoveSelection(out var moveSelection)) {
                         var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
-                        SelectItems(moveSelection, indexes, MoveDirection.Down);
+                        SelectItems(moveSelection, indexes, SelectionView.Last);
                     }
                     return true;
                 }

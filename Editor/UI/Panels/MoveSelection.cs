@@ -3,10 +3,10 @@ using Avalonia.Controls;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 
-internal enum MoveDirection
+internal enum SelectionView
 {
-    Up      = 0,
-    Down    = 1,
+    First   = 0,
+    Last    = 1,
 }
 
 internal class MoveSelection

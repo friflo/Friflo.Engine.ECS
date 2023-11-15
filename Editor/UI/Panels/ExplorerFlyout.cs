@@ -88,7 +88,7 @@ public class ExplorerFlyout : MenuFlyout
         newMenu.InputGesture= new KeyGesture(Key.Up, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(items, 1, explorer);
-            explorer.SelectItems(moveSelection, indexes, MoveDirection.Up);
+            explorer.SelectItems(moveSelection, indexes, SelectionView.First);
         };
         Items.Add(newMenu);
     }
@@ -109,7 +109,7 @@ public class ExplorerFlyout : MenuFlyout
         newMenu.InputGesture= new KeyGesture(Key.Down, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(items, 1, explorer);
-            explorer.SelectItems(moveSelection, indexes, MoveDirection.Down);
+            explorer.SelectItems(moveSelection, indexes, SelectionView.Last);
         };
         Items.Add(newMenu);
     }
