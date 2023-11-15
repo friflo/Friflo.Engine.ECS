@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Explorer;
 
+// ReSharper disable UseIndexFromEndExpression
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable MergeIntoPattern
 // ReSharper disable UnusedParameter.Local
@@ -46,7 +47,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         return moveSelection != null;
     }
     
-    internal void SelectItems(MoveSelection moveSelection, int[] indexes)
+    internal void SelectItems(MoveSelection moveSelection, int[] indexes, MoveDirection direction)
     {
         var parent      = moveSelection.parent;
         var selection   = DragDrop.RowSelection!;
@@ -56,6 +57,20 @@ public partial class ExplorerPanel : UserControl, IEditorControl
             selection.Select(child);
         }
         selection.EndBatchUpdate();
+        
+        BringSelectionIntoView(moveSelection.indexes, direction);
+    }
+    
+    private void BringSelectionIntoView(IReadOnlyList<IndexPath> indexes, MoveDirection direction) {
+        var rows            = DragDrop.Rows!;
+        var rowPresenter    = DragDrop.RowsPresenter!;
+        if (direction == MoveDirection.Up) {
+            var firstIndex = rows.ModelIndexToRowIndex(indexes[0]);
+            rowPresenter.BringIntoView(firstIndex - 1);
+            return;            
+        }
+        var lastIndex = rows.ModelIndexToRowIndex(indexes[indexes.Count - 1]);
+        rowPresenter.BringIntoView(lastIndex + 1);
     }
     
     private bool HandleKeyDown(KeyEventArgs e)
@@ -75,7 +90,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 if (e.KeyModifiers == KeyModifiers.Control) {
                     if (GetMoveSelection(out var moveSelection)) {
                         var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
-                        SelectItems(moveSelection, indexes);
+                        SelectItems(moveSelection, indexes, MoveDirection.Up);
                     }
                     return true;
                 }
@@ -84,7 +99,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
                 if (e.KeyModifiers == KeyModifiers.Control) {
                     if (GetMoveSelection(out var moveSelection)) {
                         var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
-                        SelectItems(moveSelection, indexes);
+                        SelectItems(moveSelection, indexes, MoveDirection.Down);
                     }
                     return true;
                 }

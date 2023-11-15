@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.UI.Explorer;
@@ -89,7 +88,7 @@ public class ExplorerFlyout : MenuFlyout
         newMenu.InputGesture= new KeyGesture(Key.Up, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(items, 1, explorer);
-            explorer.SelectItems(moveSelection, indexes);
+            explorer.SelectItems(moveSelection, indexes, MoveDirection.Up);
         };
         Items.Add(newMenu);
     }
@@ -110,41 +109,8 @@ public class ExplorerFlyout : MenuFlyout
         newMenu.InputGesture= new KeyGesture(Key.Down, KeyModifiers.Control);
         newMenu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(items, 1, explorer);
-            explorer.SelectItems(moveSelection, indexes);
+            explorer.SelectItems(moveSelection, indexes, MoveDirection.Down);
         };
         Items.Add(newMenu);
-    }
-}
-
-internal class MoveSelection
-{
-    internal            IndexPath                   parent;
-    internal readonly   IReadOnlyList<IndexPath>    indexes;
-
-    public   override   string      ToString() => parent.ToString();
-
-    private MoveSelection(in IndexPath parent, IReadOnlyList<IndexPath> indexes) {
-        this.parent     = parent;
-        this.indexes    = indexes;
-    }
-    
-    internal static MoveSelection Create(IReadOnlyList<IndexPath> indexes)
-    {
-        if (indexes.Count == 0) {
-            return null;
-        }
-        var first   = indexes[0];
-        if (first == new IndexPath(0)) {
-            return null;
-        }
-        var parent  = indexes[0].Slice(0, first.Count - 1);
-        for (int n = 1; n < indexes.Count; n++)
-        {
-            var index = indexes[n];
-            if(!parent.IsParentOf(index)) {
-                return null;
-            }
-        }
-        return new MoveSelection(parent, indexes);
     }
 }
