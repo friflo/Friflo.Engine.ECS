@@ -86,6 +86,8 @@ public static class Test_ExplorerItem
         store.CreateEntity(2);
         store.CreateEntity(3);
         store.CreateEntity(4);
+        store.CreateEntity(5);
+        store.CreateEntity(6);
         
         var rootItem = tree.RootItem;
         var rootEvents  = ExplorerEvents.SetHandlerSeq(rootItem, (args, seq) => {
@@ -93,29 +95,40 @@ public static class Test_ExplorerItem
                 case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
                 case 1: AreEqual("Add ChildIds[1] = 3",     args.AsString());   return;
                 case 2: AreEqual("Add ChildIds[2] = 4",     args.AsString());   return;
+                case 3: AreEqual("Add ChildIds[3] = 5",     args.AsString());   return;
+                case 4: AreEqual("Add ChildIds[4] = 6",     args.AsString());   return;
                 //
-                case 3: AreEqual("Remove ChildIds[0] = 2",  args.AsString());   return;
-                case 4: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
-                case 5: AreEqual("Remove ChildIds[0] = 4",  args.AsString());   return;
+                case 5: AreEqual("Remove ChildIds[0] = 2",  args.AsString());   return;
+                case 6: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
+                case 7: AreEqual("Remove ChildIds[0] = 4",  args.AsString());   return;
+                case 8: AreEqual("Remove ChildIds[0] = 5",  args.AsString());   return;
+                case 9: AreEqual("Remove ChildIds[0] = 6",  args.AsString());   return;
                 default: Fail("unexpected");                                    return;
             }
         });
         
-        ICollection<ExplorerItem>   rootICollection = rootItem;
-        IList                       rootIList       = rootItem;
+        ICollection<ExplorerItem>   rootICollectionGen  = rootItem;
+        IList<ExplorerItem>         rootIListGen        = rootItem;
+        IList                       rootIList           = rootItem;
         var item2       = tree.GetItemById(2);
         var item3       = tree.GetItemById(3);
         var item4       = tree.GetItemById(4);
+        var item5       = tree.GetItemById(5);
+        var item6       = tree.GetItemById(6);
         
-        rootICollection.Add(item2);
+        rootICollectionGen.Add(item2);
         rootIList.Add(item3);
         rootIList.Insert(2, item4);
+        rootIListGen.Add(item5);
+        rootIListGen.Insert(4, item6);
         
-        rootICollection.Remove(item2);
+        rootICollectionGen.Remove(item2);
         rootIList.Remove(item3);
         rootIList.RemoveAt(0);
+        rootIListGen.Remove(item5);
+        rootIListGen.RemoveAt(0);
         
-        AreEqual(6, rootEvents.seq);
+        AreEqual(10, rootEvents.seq);
     }
     
     private static string AsString(this NotifyCollectionChangedEventArgs args)
