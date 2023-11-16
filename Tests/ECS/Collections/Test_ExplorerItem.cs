@@ -45,6 +45,31 @@ public static class Test_ExplorerItem
     }
     
     [Test]
+    public static void Test_ExplorerItem_CollectionChanged()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerTree(root, "test");
+        var rootItem    = tree.RootItem;
+        
+        var seq = 0;
+        NotifyCollectionChangedEventHandler handler = (_, args) => {
+            seq++;
+            AreEqual("Add ChildIds[0] = 2", args.AsString());
+        };
+        rootItem.CollectionChanged += handler;
+        
+        var child2 = store.CreateEntity(2);
+        root.AddChild(child2);  // fires event
+        
+        rootItem.CollectionChanged -= handler;
+        var child3 = store.CreateEntity(3);
+        root.AddChild(child3);  // no event fired - event handler was removed;
+        
+        AreEqual(1, seq);
+    }
+    
+    [Test]
     public static void Test_ExplorerItemEnumerator()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
