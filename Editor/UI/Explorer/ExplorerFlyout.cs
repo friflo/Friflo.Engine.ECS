@@ -10,15 +10,15 @@ using Friflo.Fliox.Engine.ECS.Collections;
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable SuggestBaseTypeForParameter
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public class ExplorerFlyout : MenuFlyout
 {
     private readonly    ExplorerTreeDataGrid       grid;
     
-    internal ExplorerFlyout(ExplorerPanel explorer)
+    internal ExplorerFlyout(ExplorerTreeDataGrid grid)
     {
-        grid   = explorer.Grid;
+        this.grid   = grid;
         FlyoutPresenterClasses.Add("editorMenuFlyout");
         var menu    = new MenuItem { Header = "Test" };
         menu.Click += ExecuteTestCommand;

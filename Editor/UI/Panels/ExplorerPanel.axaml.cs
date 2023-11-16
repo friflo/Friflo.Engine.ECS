@@ -18,7 +18,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         InitializeComponent();
         var viewModel           = new MainWindowViewModel();
         DataContext             = viewModel;
-        DockPanel.ContextFlyout = new ExplorerFlyout(this);
+        DockPanel.ContextFlyout = new ExplorerFlyout(Grid);
     }
 
     protected override void OnLoaded(RoutedEventArgs e) {

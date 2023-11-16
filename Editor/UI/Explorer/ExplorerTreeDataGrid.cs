@@ -12,12 +12,12 @@ using Friflo.Fliox.Engine.ECS.Collections;
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable UseIndexFromEndExpression
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 /// <summary>
 /// Extended <see cref="TreeDataGrid"/> should not be necessary. But is needed to get <see cref="OnKeyDown"/> callbacks.<br/>
 /// <br/>
-/// On Windows it is sufficient to handle these events in <see cref="ExplorerPanel.OnKeyDown"/>
+/// On Windows it is sufficient to handle these events in <see cref="Panels.ExplorerPanel.OnKeyDown"/>
 /// but on macOS this method is not called.
 /// </summary>
 public class ExplorerTreeDataGrid : TreeDataGrid

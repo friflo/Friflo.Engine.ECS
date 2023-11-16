@@ -5,7 +5,7 @@ using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public static class ExplorerCommands
 {
