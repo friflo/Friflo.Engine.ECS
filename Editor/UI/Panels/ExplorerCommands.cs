@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Editor.UI.Explorer;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ParameterTypeCanBeEnumerable.Global

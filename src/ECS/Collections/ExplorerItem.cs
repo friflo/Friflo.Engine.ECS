@@ -5,11 +5,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Friflo.Fliox.Engine.ECS;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Fliox.Engine.ECS.Collections;
 
 /// <summary>
 /// Implements same interfaces as <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/> to act as a replacement

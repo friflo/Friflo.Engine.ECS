@@ -6,7 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using Friflo.Fliox.Editor.UI.Explorer;
+using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable ParameterTypeCanBeEnumerable.Global

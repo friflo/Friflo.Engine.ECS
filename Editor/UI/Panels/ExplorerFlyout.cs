@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Editor.UI.Explorer;
+using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ParameterTypeCanBeEnumerable.Local

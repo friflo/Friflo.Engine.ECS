@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Friflo.Fliox.Engine.ECS;
 
 // ReSharper disable InlineTemporaryVariable
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Fliox.Engine.ECS.Collections;
 
 public class ExplorerTree
 {

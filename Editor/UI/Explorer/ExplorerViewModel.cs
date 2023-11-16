@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Friflo.Fliox.Editor.UI.Explorer.Lab;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Collections;
 
 namespace Friflo.Fliox.Editor.UI.Explorer;
 

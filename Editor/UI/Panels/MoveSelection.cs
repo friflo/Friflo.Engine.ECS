@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Friflo.Fliox.Editor.UI.Explorer;
+using Friflo.Fliox.Engine.ECS.Collections;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 

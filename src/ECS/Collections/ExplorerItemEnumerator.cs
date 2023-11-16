@@ -3,9 +3,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
 
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Fliox.Engine.ECS.Collections;
 
 internal class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
 {
