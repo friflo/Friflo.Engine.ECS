@@ -21,14 +21,14 @@ public static class Test_ExplorerItem
         var tree        = new ExplorerTree(root, "test");
         AreEqual("test", tree.ToString());
         
-        var rootEvents  = ExplorerEvents.SetHandlerSeq(tree.RootItem, (args, seq) => {
+        var rootEvents  = ExplorerEvents.AddHandlerSeq(tree.RootItem, (args, seq) => {
             switch (seq) {
                 case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
             }
         });
         var child2          = store.CreateEntity(2);
         var child2Item      = tree.GetItemById(child2.Id);
-        var child2Events    = ExplorerEvents.SetHandlerSeq(child2Item, (args, seq) => {
+        var child2Events    = ExplorerEvents.AddHandlerSeq(child2Item, (args, seq) => {
             switch (seq) {
                 case 0: AreEqual("Add ChildIds[0] = 3",     args.AsString());   return;
                 case 1: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
@@ -109,7 +109,7 @@ public static class Test_ExplorerItem
         rootItem.Name = null;
         AreEqual("---",         rootItem.Name);
         
-        var rootEvents  = ExplorerEvents.SetHandlerSeq(rootItem, (args, seq) => {
+        var rootEvents  = ExplorerEvents.AddHandlerSeq(rootItem, (args, seq) => {
             switch (seq) {
                 case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
                 case 1: AreEqual("Add ChildIds[1] = 3",     args.AsString());   return;

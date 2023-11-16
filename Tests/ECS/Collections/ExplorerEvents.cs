@@ -16,7 +16,7 @@ internal class ExplorerEvents
     /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
-    internal static ExplorerEvents SetHandler(ExplorerItem item, Action<NotifyCollectionChangedEventArgs> action)
+    internal static ExplorerEvents AddHandler(ExplorerItem item, Action<NotifyCollectionChangedEventArgs> action)
     {
         var events = new ExplorerEvents();
         // item.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
@@ -31,7 +31,7 @@ internal class ExplorerEvents
     /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
-    internal static ExplorerEvents SetHandlerSeq(ExplorerItem item, Action<NotifyCollectionChangedEventArgs, int> action)
+    internal static ExplorerEvents AddHandlerSeq(ExplorerItem item, Action<NotifyCollectionChangedEventArgs, int> action)
     {
         var events = new ExplorerEvents();
         // store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
