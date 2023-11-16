@@ -96,26 +96,5 @@ public class ExplorerTree
         collectionChanged(parent, collectionArgs);
     }
     
-    internal static readonly GameEntityStore TestStore = CreateTestStore(); 
-    
-    private static GameEntityStore CreateTestStore()
-    {
-        var store   = new GameEntityStore();
-        var root =    CreateEntity(store, 1, "root");
-        root.AddChild(CreateEntity(store, 2, "child 2"));
-        root.AddChild(CreateEntity(store, 3, "child 3"));
-        root.AddChild(CreateEntity(store, 4, "child 4"));
-        root.AddChild(CreateEntity(store, 5, "child 5"));
-        root.AddChild(CreateEntity(store, 6, "child 6"));
-        store.SetStoreRoot(root);
-        return store;
-    }
-    
-    private static GameEntity CreateEntity(GameEntityStore store, int id, string name)
-    {
-        var entity = store.CreateEntity(id);
-        entity.AddComponent(new EntityName(name));
-        return entity;
-    }
     #endregion
 }
