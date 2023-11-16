@@ -39,7 +39,7 @@ public static class ExplorerCommands
     internal static void CreateItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         foreach (var item in items) {
-            var parent      = item.entity;
+            var parent      = item.Entity;
             var newEntity   = parent.Store.CreateEntity();
             Log(() => $"parent id: {parent.Id} - CreateEntity id: {newEntity.Id}");
             newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
@@ -51,11 +51,11 @@ public static class ExplorerCommands
     internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes = new List<int>(items.Length);
-        var parent  = items[0].entity.Parent;
+        var parent  = items[0].Entity.Parent;
         var pos     = 0;
         foreach (var item in items)
         {
-            var entity      = item.entity;
+            var entity      = item.Entity;
             int index       = parent.GetChildIndex(entity.Id);
             int newIndex    = index - shift;
             if (newIndex < pos++) {
@@ -72,12 +72,12 @@ public static class ExplorerCommands
     internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes     = new List<int>(items.Length);
-        var parent      = items[0].entity.Parent;
+        var parent      = items[0].Entity.Parent;
         var childCount  = parent.ChildCount;
         var pos     = 0;
         for (int n = items.Length - 1; n >= 0; n--)
         {
-            var entity      = items[n].entity;
+            var entity      = items[n].Entity;
             int index       = parent.GetChildIndex(entity.Id);
             int newIndex    = index + shift;
             if (newIndex >= childCount - pos++) {

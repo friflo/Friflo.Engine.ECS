@@ -35,7 +35,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         var source      = Grid.GridSource;
         var rootEntity  = Editor.Store.StoreRoot;
         var tree        = new ExplorerTree(rootEntity);
-        source.Items    = new []{ tree.rootItem };
+        source.Items    = new []{ tree.RootItem };
     }
 
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
