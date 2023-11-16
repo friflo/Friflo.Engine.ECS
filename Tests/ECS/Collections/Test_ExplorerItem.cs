@@ -54,7 +54,7 @@ public static class Test_ExplorerItem
         AreEqual(4, root.ChildIds[1]);
         // AreEqual(TreeMembership.treeNode, floating4.TreeMembership); // todo
         var floating4Item = tree.GetItemById(floating4.Id);
-        floating4Item.CollectionChanged += (sender, args) => {
+        floating4Item.CollectionChanged += (_, args) => {
             Fail($"unexpected event: {args}");
         };
         floating4.RemoveChild(floating5);   // fires no event as floating5 has no corresponding ExplorerItem

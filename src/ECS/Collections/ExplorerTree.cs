@@ -54,7 +54,7 @@ public class ExplorerTree
         return item;
     }
     
-    private void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
+    internal void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args) // should be private
     {
         var treeItems = items;
         if (!treeItems.TryGetValue(args.parentId, out var parent)) {
