@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Explorer;
 
 // ReSharper disable UseObjectOrCollectionInitializer
@@ -19,10 +21,17 @@ public class ExplorerFlyout : MenuFlyout
         grid   = explorer.Grid;
         FlyoutPresenterClasses.Add("editorMenuFlyout");
         var menu    = new MenuItem { Header = "Test" };
-        menu.Click += (_, _) => { Console.WriteLine("Explorer - Test"); };
+        menu.Click += ExecuteTestCommand;
         Items.Add(menu);
         Items.Add(new Separator());
         base.OnOpened();
+    }
+    
+    private void ExecuteTestCommand(object sender, RoutedEventArgs args) {
+        Console.WriteLine("Explorer - Test");
+        // add TreeDataGrid column on demand
+        var idCol = new TextColumn<ExplorerItem, int>   ("id'",   item => item.Id,   GridLength.Auto);
+        grid.GridSource.Columns.Add(idCol);
     }
     
     protected override void OnOpened() {
