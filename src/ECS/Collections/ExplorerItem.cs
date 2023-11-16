@@ -84,6 +84,7 @@ public sealed class ExplorerItem :
     }
     
     // ReSharper disable twice UnusedParameter.Local
+    [ExcludeFromCodeCoverage]
     private void ReplaceChildEntityAt(int index, ExplorerItem item) {
         throw new NotImplementedException();
     }
@@ -159,6 +160,7 @@ public sealed class ExplorerItem :
 
     ExplorerItem IList<ExplorerItem>.this[int index] {
         get => GetChildByIndex(index);                          // called by TreeDataGrid
+        [ExcludeFromCodeCoverage]
         set => ReplaceChildEntityAt(index, value);
     }
 
@@ -187,6 +189,7 @@ public sealed class ExplorerItem :
 
     object IList.this[int index] {
         get => GetChildByIndex(index);                          // called by TreeDataGrid
+        [ExcludeFromCodeCoverage]
         set => ReplaceChildEntityAt(index, (ExplorerItem)value);
     }
 
