@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
-// ReSharper disable InlineTemporaryVariable
 
+// ReSharper disable InlineTemporaryVariable
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public class ExplorerTree
@@ -85,7 +84,7 @@ public class ExplorerTree
     
     /// <summary>Get <see cref="ExplorerItem"/> by id</summary>
     /// <remarks>
-    /// <see cref="TreeDataGridItemsSourceView"/> create items on demand => create <see cref="ExplorerItem"/> if not present. 
+    /// <c>Avalonia.Controls.TreeDataGridItemsSourceView"</c> create items on demand => create <see cref="ExplorerItem"/> if not present. 
     /// </remarks>
     internal ExplorerItem GetItemById(int id)
     {
