@@ -54,7 +54,12 @@ public class ExplorerTree
         return item;
     }
     
-    internal void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args) // should be private
+    /// <summary>
+    /// Fires a <see cref="INotifyCollectionChanged.CollectionChanged"/> event based on the
+    /// given <see cref="ChildNodesChangedArgs"/>.
+    /// </summary>
+    // only internal because of unit test
+    internal void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
     {
         var treeItems = items;
         if (!treeItems.TryGetValue(args.parentId, out var parent)) {
