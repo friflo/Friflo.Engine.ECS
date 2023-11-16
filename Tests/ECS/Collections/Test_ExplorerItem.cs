@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 using NUnit.Framework;
@@ -12,29 +13,45 @@ public static class Test_ExplorerItem
     [Test]
     public static void Test_ExplorerItem_Basics()
     {
-        var store   = new GameEntityStore(PidType.UsePidAsId);
-        var root    = store.CreateEntity(1);
-        var tree    = new ExplorerTree(root);
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerTree(root);
         
-        var events = ExplorerEvents.SetHandlerSeq(tree.RootItem, (args, seq) => {
+        var rootEvents  = ExplorerEvents.SetHandlerSeq(tree.RootItem, (args, seq) => {
             switch (seq) {
-                case 0: AreEqual("Add", args.AsString()); break;
+                case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
             }
         });
-        var child2  = store.CreateEntity(2);
+        var child2          = store.CreateEntity(2);
+        var child2Item      = tree.GetItemById(child2.Id);
+        var child2Events    = ExplorerEvents.SetHandlerSeq(child2Item, (args, seq) => {
+            switch (seq) {
+                case 0: AreEqual("Add ChildIds[0] = 3",     args.AsString());   return;
+                case 1: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
+            }
+        });
         root.AddChild(child2);
-        AreEqual(1, events.seq);
+        
+        var subChild3       = store.CreateEntity(3);
+        child2.AddChild(subChild3);
+        child2.RemoveChild(subChild3);
+        
+        AreEqual(1, rootEvents.seq);
+        AreEqual(2, child2Events.seq);
     }
     
-    public static string AsString(this NotifyCollectionChangedEventArgs args)
+    private static string AsString(this NotifyCollectionChangedEventArgs args)
     {
         switch (args.Action) {
             case NotifyCollectionChangedAction.Add:
-                return "Add";
+                var newItem     = args.NewItems![0] as ExplorerItem;
+                return $"Add ChildIds[{args.NewStartingIndex}] = {newItem!.Id}";
             case NotifyCollectionChangedAction.Remove:
-                return "Remove";
+                var removeItem = args.OldItems![0] as ExplorerItem;
+                return $"Remove ChildIds[{args.OldStartingIndex}] = {removeItem!.Id}";
+            default:
+                throw new InvalidOperationException("unexpected");
         }
-        return null;
     }
 }
 

@@ -10,17 +10,21 @@ namespace Friflo.Fliox.Engine.ECS.Collections;
 
 public class ExplorerTree
 {
+#region internal properties
     public              ExplorerItem                    RootItem => rootItem;
+    public   override   string                          ToString() => debugName;
+    #endregion
     
+#region internal fields
     private  readonly   GameEntityStore                 store;
     internal readonly   ExplorerItem                    rootItem;
     private  readonly   Dictionary<int, ExplorerItem>   items;
     private  readonly   string                          debugName;
     
-    public   override   string                          ToString() => debugName;
-
     private static      int                             _treeCount;
+    #endregion
     
+#region public methods
     public ExplorerTree (GameEntity rootEntity)
     {
         debugName                   = $"tree-{_treeCount++}";
@@ -30,6 +34,21 @@ public class ExplorerTree
         rootItem                    = CreateExplorerItem(rootEntity);
     }
     
+    /// <summary>Get <see cref="ExplorerItem"/> by id</summary>
+    /// <remarks>
+    /// <c>Avalonia.Controls.TreeDataGridItemsSourceView"</c> create items on demand => create <see cref="ExplorerItem"/> if not present. 
+    /// </remarks>
+    public ExplorerItem GetItemById(int id)
+    {
+        if (!items.TryGetValue(id, out var explorerItem)) {
+            var entity      = store.GetNodeById(id).Entity;
+            explorerItem    = CreateExplorerItem(entity);
+        }
+        return explorerItem;
+    }
+    #endregion
+    
+#region internal methods
     private ExplorerItem CreateExplorerItem(GameEntity entity)
     {
         var item = new ExplorerItem(this, entity);
@@ -77,19 +96,6 @@ public class ExplorerTree
         collectionChanged(parent, collectionArgs);
     }
     
-    /// <summary>Get <see cref="ExplorerItem"/> by id</summary>
-    /// <remarks>
-    /// <c>Avalonia.Controls.TreeDataGridItemsSourceView"</c> create items on demand => create <see cref="ExplorerItem"/> if not present. 
-    /// </remarks>
-    internal ExplorerItem GetItemById(int id)
-    {
-        if (!items.TryGetValue(id, out var explorerItem)) {
-            var entity      = store.GetNodeById(id).Entity;
-            explorerItem    = CreateExplorerItem(entity);
-        }
-        return explorerItem;
-    }
-    
     internal static readonly GameEntityStore TestStore = CreateTestStore(); 
     
     private static GameEntityStore CreateTestStore()
@@ -111,4 +117,5 @@ public class ExplorerTree
         entity.AddComponent(new EntityName(name));
         return entity;
     }
+    #endregion
 }
