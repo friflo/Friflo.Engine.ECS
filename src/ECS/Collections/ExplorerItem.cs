@@ -47,11 +47,10 @@ public sealed class ExplorerItem :
     }
     #endregion
 
+#region private methods
     private bool IsRootItem() {
         return tree.rootItem.entity == entity;
     }
-    
-#region private methods
     private static string GetName(GameEntity entity) {
         if (entity.HasName) {
             return entity.Name.value;
