@@ -2,18 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
-             Background="{DynamicResource PanelBackground1}"
-             x:Class="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
-             xmlns:vm="using:Friflo.Fliox.Editor.UI.Explorer"
-             xmlns:panels="clr-namespace:Friflo.Fliox.Editor.UI.Explorer"
-             x:DataType="vm:MainWindowViewModel">
+             mc:Ignorable   ="d" d:DesignWidth="300" d:DesignHeight="400"
+             Background     ="{DynamicResource PanelBackground1}"
+             x:Class        ="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
+             xmlns:main     ="using:Friflo.Fliox.Editor.UI.Main"
+             xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Explorer"
+             x:DataType="main:MainWindowViewModel">
         <DockPanel Name="DockPanel">
             <!-- <TreeDataGrid Name="DragDrop"
                           Source="{Binding DragDrop.DragDropSource}"
                           AutoDragDropRows="True"/> -->
-            <panels:ExplorerTreeDataGrid Name="Grid"
-                                  Source="{Binding DragDrop.ExplorerItemSource}"
+            <explorer:ExplorerTreeDataGrid Name="Grid"
+                                  Source="{Binding ExplorerModel.ExplorerItemSource}"
                                   RowDragStarted="DragDrop_OnRowDragStarted"
                                   RowDragOver="DragDrop_OnRowDragOver"
                                   AutoDragDropRows="True"/>
