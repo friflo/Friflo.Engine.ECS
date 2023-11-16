@@ -7,6 +7,7 @@ using Friflo.Fliox.Engine.ECS.Collections;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Collections;
 
@@ -108,6 +109,7 @@ public static class Test_ExplorerItem
         });
         
         ICollection<ExplorerItem>   rootICollectionGen  = rootItem;
+        ICollection                 rootICollection     = rootItem;
         IList<ExplorerItem>         rootIListGen        = rootItem;
         IList                       rootIList           = rootItem;
         var item2       = tree.GetItemById(2);
@@ -116,12 +118,39 @@ public static class Test_ExplorerItem
         var item5       = tree.GetItemById(5);
         var item6       = tree.GetItemById(6);
         
-        rootICollectionGen.Add(item2);
-        rootIList.Add(item3);
-        rootIList.Insert(2, item4);
-        rootIListGen.Add(item5);
-        rootIListGen.Insert(4, item6);
+        // --- Add() / Insert() mutations
+        rootICollectionGen. Add      (item2);
+        rootIList.          Add      (item3);
+        rootIList.          Insert(2, item4);
+        rootIListGen.       Add      (item5);
+        rootIListGen.       Insert(4, item6);
         
+        
+        // --- ICollection<ExplorerItem> queries
+        IsTrue  (rootICollectionGen.Contains(item2));
+        var items = new ExplorerItem[5];
+        rootICollectionGen.CopyTo(items, 0);
+        var expect = new [] { item2, item3, item4, item5, item6 };
+        AreEqual(expect, items);
+        AreEqual(5, rootICollectionGen.Count);
+        IsFalse (rootICollectionGen.IsReadOnly);
+        
+        // --- IList queries
+        AreSame (item2, rootIList[0]);
+        IsTrue  (rootIList.Contains(item2));
+        AreEqual(1, rootIList.IndexOf(item3));
+        IsFalse(rootIList.IsFixedSize);
+        IsFalse(rootIList.IsReadOnly);
+        
+        // ---ICollection queries
+        AreEqual(5, rootICollection.Count);
+        IsFalse (rootICollection.IsSynchronized);
+        IsNull  (rootICollection.SyncRoot);
+        var items2 = new ExplorerItem[5];
+        rootICollection.CopyTo(items2, 0);
+        AreEqual(expect, items2);
+        
+        // --- Remove() / RemoveAt() mutations
         rootICollectionGen.Remove(item2);
         rootIList.Remove(item3);
         rootIList.RemoveAt(0);

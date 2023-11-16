@@ -211,7 +211,7 @@ public sealed class ExplorerItem :
 #region ICollection
     int     ICollection.Count           => entity.ChildCount;   // called by TreeDataGrid
     bool    ICollection.IsSynchronized  => false;
-    object  ICollection.SyncRoot        => this;
+    object  ICollection.SyncRoot        => null!;
     
     void    ICollection.CopyTo(Array array, int index)
     {
