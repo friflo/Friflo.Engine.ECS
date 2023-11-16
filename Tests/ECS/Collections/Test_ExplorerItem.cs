@@ -23,7 +23,9 @@ public static class Test_ExplorerItem
         
         var rootEvents  = ExplorerEvents.AddHandlerSeq(tree.RootItem, (args, seq) => {
             switch (seq) {
-                case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
+                case 0:     AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
+                case 1:     AreEqual("Add ChildIds[1] = 4",     args.AsString());   return;
+                default:    Fail("unexpected");                                     return;
             }
         });
         var child2          = store.CreateEntity(2);
@@ -45,9 +47,19 @@ public static class Test_ExplorerItem
         var floating4       = store.CreateEntity(4);
         var floating5       = store.CreateEntity(5);
         AreEqual(TreeMembership.floating, floating4.TreeMembership);
-        floating4.AddChild(floating5);  // adding entities to floating entities send no events 
+        floating4.AddChild(floating5);      // adding entities to floating entities send no events
         
-        AreEqual(1, rootEvents.seq);
+        // --- floating entity becomes treeNode
+        root.AddChild(floating4);
+        AreEqual(4, root.ChildIds[1]);
+        // AreEqual(TreeMembership.treeNode, floating4.TreeMembership); // todo
+        var floating4Item = tree.GetItemById(floating4.Id);
+        floating4Item.CollectionChanged += (sender, args) => {
+            Fail($"unexpected event: {args}");
+        };
+        floating4.RemoveChild(floating5);   // fires no event as floating5 has no corresponding ExplorerItem
+        
+        AreEqual(2, rootEvents.seq);
         AreEqual(2, child2Events.seq);
     }
     
