@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException
@@ -72,6 +73,7 @@ public sealed class ExplorerItem :
         return tree.GetItemById(childId);
     }
     
+    [ExcludeFromCodeCoverage]
     private void ClearChildEntities() {
         throw new NotImplementedException();
     }
@@ -115,6 +117,7 @@ public sealed class ExplorerItem :
         entity.AddChild(item.entity);                           // called by TreeDataGrid
     }
 
+    [ExcludeFromCodeCoverage]
     void ICollection<ExplorerItem>.Clear() {
         ClearChildEntities();
     }
@@ -168,6 +171,7 @@ public sealed class ExplorerItem :
     
 // ---------------------------------- crab interface implementations :) ----------------------------------
 #region IList
+    [ExcludeFromCodeCoverage]
     void IList.Clear()  {
         ClearChildEntities();
     }

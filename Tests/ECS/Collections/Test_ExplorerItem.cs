@@ -51,19 +51,20 @@ public static class Test_ExplorerItem
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerTree(root, null);
         AreEqual("ExplorerTree", tree.ToString());
+        var rootItem    = tree.RootItem;
         
         root.AddChild(store.CreateEntity(2));
         root.AddChild(store.CreateEntity(3));
         root.AddChild(store.CreateEntity(4));
 
         int n = 2;
-        foreach (var child in tree.RootItem) {
+        foreach (var child in rootItem) {
             AreEqual(n++, child.Id);
         }
         AreEqual(5, n);
         
         n = 2;
-        IEnumerator<ExplorerItem> enumerator = tree.RootItem.GetEnumerator();
+        IEnumerator<ExplorerItem> enumerator = rootItem.GetEnumerator();
         IEnumerator enumerator2 = enumerator;
         enumerator.Reset();
         while (enumerator.MoveNext()) {
@@ -73,8 +74,15 @@ public static class Test_ExplorerItem
             n++;
         }
         AreEqual(5, n);
-        
         enumerator.Dispose();
+        
+        n = 2;
+        IEnumerable enumerable = rootItem;
+        foreach (var obj in enumerable) {
+            var item = obj as ExplorerItem;
+            AreEqual(n++, item!.Id);
+        }
+        AreEqual(5, n);
     }
     
     [Test]
@@ -117,10 +125,12 @@ public static class Test_ExplorerItem
             }
         });
         
-        ICollection<ExplorerItem>   rootICollectionGen  = rootItem;
-        ICollection                 rootICollection     = rootItem;
-        IList<ExplorerItem>         rootIListGen        = rootItem;
-        IList                       rootIList           = rootItem;
+        ICollection<ExplorerItem>           rootICollectionGen  = rootItem;
+        ICollection                         rootICollection     = rootItem;
+        IList<ExplorerItem>                 rootIListGen        = rootItem;
+        IList                               rootIList           = rootItem;
+        IReadOnlyList<ExplorerItem>         rootReadOnlyList    = rootItem;
+        IReadOnlyCollection<ExplorerItem>   rootReadOnlyCol     = rootItem;
         var item2       = tree.GetItemById(2);
         var item3       = tree.GetItemById(3);
         var item4       = tree.GetItemById(4);
@@ -147,6 +157,12 @@ public static class Test_ExplorerItem
         // --- IList<> queries
         AreEqual(1, rootIListGen.IndexOf(item3));
         AreSame (item3, rootIListGen[1]);
+        
+        // --- IReadOnlyList<> queries
+        AreSame (item3, rootReadOnlyList[1]);
+        
+        // --- IReadOnlyCollection<> queries
+        AreEqual(5, rootReadOnlyCol.Count);
         
         // --- IList queries
         AreSame (item2, rootIList[0]);
