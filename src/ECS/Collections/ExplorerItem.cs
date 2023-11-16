@@ -196,7 +196,7 @@ public sealed class ExplorerItem :
 
     void IList.Insert(int index, object item) {
         var childEntity = ((ExplorerItem)item).entity; 
-        childEntity.InsertChild(index, childEntity);
+        entity.InsertChild(index, childEntity);
     }
 
     void IList.Remove(object value) {

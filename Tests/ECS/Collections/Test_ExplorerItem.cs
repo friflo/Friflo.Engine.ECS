@@ -76,6 +76,48 @@ public static class Test_ExplorerItem
         enumerator.Dispose();
     }
     
+    [Test]
+    public static void Test_ExplorerItem_TreeDataGrid_Access()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerTree(root, null);
+        
+        store.CreateEntity(2);
+        store.CreateEntity(3);
+        store.CreateEntity(4);
+        
+        var rootItem = tree.RootItem;
+        var rootEvents  = ExplorerEvents.SetHandlerSeq(rootItem, (args, seq) => {
+            switch (seq) {
+                case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
+                case 1: AreEqual("Add ChildIds[1] = 3",     args.AsString());   return;
+                case 2: AreEqual("Add ChildIds[2] = 4",     args.AsString());   return;
+                //
+                case 3: AreEqual("Remove ChildIds[0] = 2",  args.AsString());   return;
+                case 4: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
+                case 5: AreEqual("Remove ChildIds[0] = 4",  args.AsString());   return;
+                default: Fail("unexpected");                                    return;
+            }
+        });
+        
+        ICollection<ExplorerItem>   rootICollection = rootItem;
+        IList                       rootIList       = rootItem;
+        var item2       = tree.GetItemById(2);
+        var item3       = tree.GetItemById(3);
+        var item4       = tree.GetItemById(4);
+        
+        rootICollection.Add(item2);
+        rootIList.Add(item3);
+        rootIList.Insert(2, item4);
+        
+        rootICollection.Remove(item2);
+        rootIList.Remove(item3);
+        rootIList.RemoveAt(0);
+        
+        AreEqual(6, rootEvents.seq);
+    }
+    
     private static string AsString(this NotifyCollectionChangedEventArgs args)
     {
         switch (args.Action) {
