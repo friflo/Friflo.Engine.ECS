@@ -105,9 +105,10 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         SelectItems(selection, indexes, SelectionView.First);
     }
     
+    internal HierarchicalTreeDataGridSource<ExplorerItem> GridSource => (HierarchicalTreeDataGridSource<ExplorerItem>)Source!;
+    
     private ExplorerItem GetRootItem() {
-        var source = (HierarchicalTreeDataGridSource<ExplorerItem>)Source!;
-        return source.Items.First();
+        return GridSource.Items.First();
     }
     
     internal ExplorerItem[] GetSelectedItems() {
