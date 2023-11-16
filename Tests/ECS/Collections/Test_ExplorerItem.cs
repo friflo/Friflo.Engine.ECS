@@ -91,6 +91,15 @@ public static class Test_ExplorerItem
         store.CreateEntity(6);
         
         var rootItem = tree.RootItem;
+        AreEqual("id: 1  []",   rootItem.ToString());
+        AreSame(root,           rootItem.Entity);
+        IsTrue  (rootItem.IsRoot);
+        AreEqual("---",         rootItem.Name);
+        rootItem.Name = "test";
+        AreEqual("test",        rootItem.Name);
+        rootItem.Name = null;
+        AreEqual("---",         rootItem.Name);
+        
         var rootEvents  = ExplorerEvents.SetHandlerSeq(rootItem, (args, seq) => {
             switch (seq) {
                 case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
@@ -135,12 +144,16 @@ public static class Test_ExplorerItem
         AreEqual(5, rootICollectionGen.Count);
         IsFalse (rootICollectionGen.IsReadOnly);
         
+        // --- IList<> queries
+        AreEqual(1, rootIListGen.IndexOf(item3));
+        AreSame (item3, rootIListGen[1]);
+        
         // --- IList queries
         AreSame (item2, rootIList[0]);
         IsTrue  (rootIList.Contains(item2));
         AreEqual(1, rootIList.IndexOf(item3));
-        IsFalse(rootIList.IsFixedSize);
-        IsFalse(rootIList.IsReadOnly);
+        IsFalse (rootIList.IsFixedSize);
+        IsFalse (rootIList.IsReadOnly);
         
         // ---ICollection queries
         AreEqual(5, rootICollection.Count);
