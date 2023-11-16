@@ -89,10 +89,6 @@ public sealed class ExplorerItem :
     private int GetChildIndex(ExplorerItem item) {
         return entity.GetChildIndex(item.entity.Id);
     }
-    
-    internal void ClearCollectionChanged() {
-        collectionChanged = null;
-    }
     #endregion
     
 // -------------------------------------- interface implementations --------------------------------------

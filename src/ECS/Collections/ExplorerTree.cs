@@ -79,7 +79,7 @@ public class ExplorerTree
                 }
                 // Note: Don't remove from treeItems to preserve UI ExplorerItem state. E.g. the state of a checkbox. 
                 // treeItems.Remove(args.childId);
-                // explorerItem.ClearCollectionChanged();
+                // explorerItem.collectionChanged = null;
                 break;
             default:
                 throw new InvalidOperationException($"unexpected case: {args.action}");
