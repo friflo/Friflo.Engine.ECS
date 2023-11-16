@@ -105,7 +105,7 @@ public sealed class ExplorerItem :
     #endregion
     
 #region IEnumerable<>
-    IEnumerator<ExplorerItem> IEnumerable<ExplorerItem>.GetEnumerator() {
+    public IEnumerator<ExplorerItem> GetEnumerator() {
         return new ExplorerItemEnumerator(this);
     }
 

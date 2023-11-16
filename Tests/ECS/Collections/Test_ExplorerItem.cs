@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -38,6 +40,38 @@ public static class Test_ExplorerItem
         
         AreEqual(1, rootEvents.seq);
         AreEqual(2, child2Events.seq);
+    }
+    
+    [Test]
+    public static void Test_ExplorerItemEnumerator()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerTree(root);
+        
+        root.AddChild(store.CreateEntity(2));
+        root.AddChild(store.CreateEntity(3));
+        root.AddChild(store.CreateEntity(4));
+
+        int n = 2;
+        foreach (var child in tree.RootItem) {
+            AreEqual(n++, child.Id);
+        }
+        AreEqual(5, n);
+        
+        n = 2;
+        IEnumerator<ExplorerItem> enumerator = tree.RootItem.GetEnumerator();
+        IEnumerator enumerator2 = enumerator;
+        enumerator.Reset();
+        while (enumerator.MoveNext()) {
+            AreEqual(n, enumerator.Current!.Id);
+            var current2 = enumerator2.Current as ExplorerItem; // test coverage
+            AreEqual(n, current2!.Id);
+            n++;
+        }
+        AreEqual(5, n);
+        
+        enumerator.Dispose();
     }
     
     private static string AsString(this NotifyCollectionChangedEventArgs args)
