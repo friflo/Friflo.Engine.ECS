@@ -44,7 +44,7 @@ public class ExplorerTree
             return;
         }
         // Console.WriteLine($"ExplorerTree event: {args}       parent: {parent}");
-        var collectionChanged = parent.CollectionChanged;
+        var collectionChanged = parent.collectionChanged;
         if (collectionChanged == null) {
             return;
         }

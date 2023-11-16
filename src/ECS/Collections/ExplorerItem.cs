@@ -27,18 +27,15 @@ public sealed class ExplorerItem :
     public              GameEntity                          Entity              => entity;
     public              bool                                IsRoot              => IsRootItem();
     public              bool                                AllowDrag           => !IsRootItem();   // todo remove
-    #endregion
-#region internal properties
-    public              bool                                flag;
-    internal            NotifyCollectionChangedEventHandler CollectionChanged   => collectionChanged;
-
+    public              bool                                flag;                                   // todo remove
+    
     public   override   string                              ToString()          => entity.ToString();
     #endregion
     
 #region internal fields
     internal readonly   GameEntity                          entity;
     internal readonly   ExplorerTree                        tree;
-    private             NotifyCollectionChangedEventHandler collectionChanged;
+    internal            NotifyCollectionChangedEventHandler collectionChanged;
  // public  event       PropertyChangedEventHandler         PropertyChanged;    not required. Implemented by ObservableCollection{T}
     #endregion
 
@@ -100,7 +97,7 @@ public sealed class ExplorerItem :
     
 // -------------------------------------- interface implementations --------------------------------------
 #region INotifyCollectionChanged
-    event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
+    public event NotifyCollectionChangedEventHandler CollectionChanged
     {
         add     => collectionChanged += value;
         remove  => collectionChanged -= value;
