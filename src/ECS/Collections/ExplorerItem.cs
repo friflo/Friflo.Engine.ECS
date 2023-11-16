@@ -27,7 +27,7 @@ public sealed class ExplorerItem :
     public              int                                 Id                  => entity.Id;
     public              GameEntity                          Entity              => entity;
     public              bool                                IsRoot              => IsRootItem();
-    public              bool                                AllowDrag           => !IsRootItem();   // todo remove
+    public              bool                                AllowDrag           => !IsRootItem();
     public              bool                                flag;                                   // todo remove
     
     public   override   string                              ToString()          => entity.ToString();

@@ -102,6 +102,7 @@ public static class Test_ExplorerItem
         AreEqual("id: 1  []",   rootItem.ToString());
         AreSame(root,           rootItem.Entity);
         IsTrue  (rootItem.IsRoot);
+        IsFalse (rootItem.AllowDrag);
         AreEqual("---",         rootItem.Name);
         rootItem.Name = "test";
         AreEqual("test",        rootItem.Name);
