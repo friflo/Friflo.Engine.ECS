@@ -66,8 +66,9 @@ public class ExplorerTree
                 if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
                     return;
                 }
-                treeItems.Remove(args.childId);
-                explorerItem.ClearCollectionChanged();
+                // Note: Don't remove from treeItems to preserve UI ExplorerItem state. E.g. the state of a checkbox. 
+                // treeItems.Remove(args.childId);
+                // explorerItem.ClearCollectionChanged();
                 break;
             default:
                 throw new InvalidOperationException($"unexpected case: {args.action}");
