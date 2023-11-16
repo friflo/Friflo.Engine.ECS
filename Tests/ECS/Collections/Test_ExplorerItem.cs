@@ -17,7 +17,8 @@ public static class Test_ExplorerItem
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root);
+        var tree        = new ExplorerTree(root, "test");
+        AreEqual("test", tree.ToString());
         
         var rootEvents  = ExplorerEvents.SetHandlerSeq(tree.RootItem, (args, seq) => {
             switch (seq) {
@@ -47,7 +48,8 @@ public static class Test_ExplorerItem
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root);
+        var tree        = new ExplorerTree(root, null);
+        AreEqual("ExplorerTree", tree.ToString());
         
         root.AddChild(store.CreateEntity(2));
         root.AddChild(store.CreateEntity(3));

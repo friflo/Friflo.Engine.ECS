@@ -35,9 +35,11 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         // return;
         var source      = Grid.GridSource;
         var rootEntity  = Editor.Store.StoreRoot;
-        var tree        = new ExplorerTree(rootEntity);
+        var tree        = new ExplorerTree(rootEntity, $"tree-{_treeCount++}");
         source.Items    = new []{ tree.RootItem };
     }
+    
+    private static      int _treeCount;
 
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
     {

@@ -11,8 +11,8 @@ namespace Friflo.Fliox.Engine.ECS.Collections;
 public class ExplorerTree
 {
 #region internal properties
-    public              ExplorerItem                    RootItem => rootItem;
-    public   override   string                          ToString() => debugName;
+    public              ExplorerItem                    RootItem    => rootItem;
+    public   override   string                          ToString()  => debugName;
     #endregion
     
 #region internal fields
@@ -20,14 +20,12 @@ public class ExplorerTree
     internal readonly   ExplorerItem                    rootItem;
     private  readonly   Dictionary<int, ExplorerItem>   items;
     private  readonly   string                          debugName;
-    
-    private static      int                             _treeCount;
     #endregion
     
 #region public methods
-    public ExplorerTree (GameEntity rootEntity)
+    public ExplorerTree (GameEntity rootEntity, string debugName)
     {
-        debugName                   = $"tree-{_treeCount++}";
+        this.debugName              = debugName ?? "ExplorerTree";
         store                       = rootEntity.Store;
         items                       = new Dictionary<int, ExplorerItem>();
         store.ChildNodesChanged    += ChildNodesChangedHandler;
