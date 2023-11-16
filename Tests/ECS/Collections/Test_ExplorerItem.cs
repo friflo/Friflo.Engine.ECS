@@ -30,15 +30,22 @@ public static class Test_ExplorerItem
         var child2Item      = tree.GetItemById(child2.Id);
         var child2Events    = ExplorerEvents.AddHandlerSeq(child2Item, (args, seq) => {
             switch (seq) {
-                case 0: AreEqual("Add ChildIds[0] = 3",     args.AsString());   return;
-                case 1: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
+                case 0:     AreEqual("Add ChildIds[0] = 3",     args.AsString());   return;
+                case 1:     AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
+                default:    Fail("unexpected");                                     return;
             }
         });
         root.AddChild(child2);
         
         var subChild3       = store.CreateEntity(3);
-        child2.AddChild(subChild3);
-        child2.RemoveChild(subChild3);
+        child2.AddChild     (subChild3);
+        child2.RemoveChild  (subChild3);
+
+        // --- floating entities
+        var floating4       = store.CreateEntity(4);
+        var floating5       = store.CreateEntity(5);
+        AreEqual(TreeMembership.floating, floating4.TreeMembership);
+        floating4.AddChild(floating5);  // adding entities to floating entities send no events 
         
         AreEqual(1, rootEvents.seq);
         AreEqual(2, child2Events.seq);

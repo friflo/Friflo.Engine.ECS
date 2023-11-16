@@ -82,7 +82,7 @@ public class ExplorerTree
                 // explorerItem.collectionChanged = null;
                 break;
             default:
-                throw new InvalidOperationException($"unexpected case: {args.action}");
+                throw InvalidActionException(args);
         }
         object child        = explorerItem ?? throw new NullReferenceException("explorerItem");
         var action          = (NotifyCollectionChangedAction)args.action;
@@ -92,6 +92,11 @@ public class ExplorerTree
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called
         // below to check if the change event (Add / Remove) is caused by the containing Control or other code.  
         collectionChanged(parent, collectionArgs);
+    }
+    
+    private static Exception InvalidActionException(in ChildNodesChangedArgs args) {
+        
+        return new InvalidOperationException($"unexpected action: {args.action}");
     }
     
     #endregion
