@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -21,6 +23,16 @@ public static class ExplorerCommands
         var msg = message();
         Console.WriteLine(msg);
 #pragma warning restore CS0162 // Unreachable code detected
+    }
+    
+    internal static void RenameEntity(ExplorerTreeDataGrid grid)
+    {
+        var modelIndex  = grid.RowSelection!.SelectedIndex;
+        var rowIndex    = grid.Rows!.ModelIndexToRowIndex(modelIndex);
+        var row         = grid.TryGetRow(rowIndex);
+        var cell        = ExplorerTreeDataGrid.FindControl<TreeDataGridCell>(row) as TreeDataGridCell;
+        var model       = cell!.Model as IEditableObject;
+        model?.BeginEdit();
     }
     
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)

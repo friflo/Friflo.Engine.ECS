@@ -60,6 +60,7 @@ public class ExplorerFlyout : MenuFlyout
         MoveSelection   moveSelection,
         ExplorerItem    rootItem)
     {
+        RenameEntity    (selectedItems);
         CopyEntities    (selectedItems);
         DeleteEntity    (selectedItems, rootItem);
         NewEntity       (selectedItems);
@@ -68,6 +69,15 @@ public class ExplorerFlyout : MenuFlyout
             MoveEntityUp    (selectedItems, moveSelection);
             MoveEntityDown  (selectedItems, moveSelection);
         }
+    }
+    
+    private void RenameEntity(ExplorerItem[] items)
+    {
+        var canRename       = items.Length > 0;
+        var menu            = new MenuItem { Header = "Rename", IsEnabled = canRename };
+        menu.InputGesture   = new KeyGesture(Key.F2);
+        menu.Click += (_, _) => ExplorerCommands.RenameEntity(grid);
+        Items.Add(menu);
     }
     
     private void CopyEntities(ExplorerItem[] items)

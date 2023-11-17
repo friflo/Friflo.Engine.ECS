@@ -46,7 +46,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
     }
     
-    private static Control FindControl<T>(Visual control) where T : Control
+    internal static Control FindControl<T>(Visual control) where T : Control
     {
         foreach (var child in control.GetVisualChildren()) {
             if (child is not Control childControl) {
