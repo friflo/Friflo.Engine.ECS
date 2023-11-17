@@ -23,7 +23,6 @@ public class ExplorerFlyout : MenuFlyout
         var menu    = new MenuItem { Header = "Test" };
         menu.Click += ExecuteTestCommand;
         Items.Add(menu);
-        Items.Add(new Separator());
         base.OnOpened();
     }
     
@@ -48,7 +47,7 @@ public class ExplorerFlyout : MenuFlyout
     }
 
     protected override void OnClosed() {
-        for (int n = Items.Count - 1; n >= 2; n--) {
+        for (int n = Items.Count - 1; n >= 1; n--) {
             Items.RemoveAt(n);
         }
         base.OnClosed();
@@ -61,9 +60,12 @@ public class ExplorerFlyout : MenuFlyout
         ExplorerItem    rootItem)
     {
         RenameEntity    (selectedItems);
+        Items.Add(new Separator());
+        
         CopyEntities    (selectedItems);
         DeleteEntity    (selectedItems, rootItem);
         NewEntity       (selectedItems);
+        
         if (moveSelection != null) {
             Items.Add(new Separator());
             MoveEntityUp    (selectedItems, moveSelection);

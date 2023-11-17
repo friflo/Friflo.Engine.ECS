@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Avalonia;
 using Avalonia.Controls;
@@ -25,14 +25,16 @@ public static class ExplorerCommands
 #pragma warning restore CS0162 // Unreachable code detected
     }
     
+    /// <remarks>Not nice but <see cref="TreeDataGridCell.BeginEdit"/> is protected</remarks>
     internal static void RenameEntity(ExplorerTreeDataGrid grid)
     {
         var modelIndex  = grid.RowSelection!.SelectedIndex;
         var rowIndex    = grid.Rows!.ModelIndexToRowIndex(modelIndex);
         var row         = grid.TryGetRow(rowIndex);
-        var cell        = ExplorerTreeDataGrid.FindControl<TreeDataGridCell>(row) as TreeDataGridCell;
-        var model       = cell!.Model as IEditableObject;
-        model?.BeginEdit();
+        var cell        = ExplorerTreeDataGrid.FindControl<TreeDataGridTextCell>(row);
+        // hm...
+        var beginEdit = typeof(TreeDataGridTextCell).GetMethod("BeginEdit", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        beginEdit!.Invoke(cell, BindingFlags.Instance | BindingFlags.Public, null, null, null);
     }
     
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
