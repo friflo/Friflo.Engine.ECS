@@ -9,7 +9,7 @@
         <Border Background="{DynamicResource PanelBackground2}" DockPanel.Dock="Top">
             <Label  HorizontalAlignment="Center">Inspector</Label>    
         </Border>
-        <Button Content="Click me">
-        </Button>
+        <Border DockPanel.Dock="Top" BorderThickness="1" BorderBrush="LightGray">
+        </Border>
     </DockPanel>
 </UserControl>
