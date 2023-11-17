@@ -36,13 +36,13 @@ public sealed class ExplorerItem :
     
 #region internal fields
     internal readonly   GameEntity                          entity;
-    internal readonly   ExplorerTree                        tree;
+    internal readonly   ExplorerItemTree                    tree;
     internal            NotifyCollectionChangedEventHandler collectionChanged;
  // public  event       PropertyChangedEventHandler         PropertyChanged;    not required. Implemented by ObservableCollection{T}
     #endregion
 
 #region constructor
-    internal ExplorerItem (ExplorerTree tree, GameEntity entity) {
+    internal ExplorerItem (ExplorerItemTree tree, GameEntity entity) {
         this.tree   = tree      ?? throw new ArgumentNullException(nameof(tree));
         this.entity = entity    ?? throw new ArgumentNullException(nameof(entity));
     }

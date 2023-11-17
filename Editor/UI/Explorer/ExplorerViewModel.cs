@@ -15,7 +15,7 @@ internal class ExplorerViewModel
         // var store       = ExplorerTree.TestStore;
         var store       = CreateDefaultStore();
         var rootEntity  = store.StoreRoot;
-        var tree        = new ExplorerTree(rootEntity, "DefaultStore");
+        var tree        = new ExplorerItemTree(rootEntity, "DefaultStore");
         var items       = new [] { tree.RootItem } as IEnumerable<ExplorerItem>;
         // items           = Array.Empty<ExplorerItem>();
         

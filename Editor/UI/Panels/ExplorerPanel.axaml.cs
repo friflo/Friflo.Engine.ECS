@@ -36,7 +36,7 @@ public partial class ExplorerPanel : UserControl, IEditorControl
         // return;
         var source      = Grid.GridSource;
         var rootEntity  = Editor.Store.StoreRoot;
-        var tree        = new ExplorerTree(rootEntity, $"tree-{_treeCount++}");
+        var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
         source.Items    = new []{ tree.RootItem };
     }
     

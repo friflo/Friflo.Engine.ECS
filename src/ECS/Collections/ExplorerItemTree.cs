@@ -8,7 +8,7 @@ using System.Collections.Specialized;
 // ReSharper disable InlineTemporaryVariable
 namespace Friflo.Fliox.Engine.ECS.Collections;
 
-public class ExplorerTree
+public class ExplorerItemTree
 {
 #region internal properties
     public              ExplorerItem                    RootItem    => rootItem;
@@ -23,7 +23,7 @@ public class ExplorerTree
     #endregion
     
 #region public methods
-    public ExplorerTree (GameEntity rootEntity, string debugName)
+    public ExplorerItemTree (GameEntity rootEntity, string debugName)
     {
         this.debugName              = debugName ?? "ExplorerTree";
         store                       = rootEntity.Store;

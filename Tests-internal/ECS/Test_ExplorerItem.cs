@@ -9,13 +9,13 @@ namespace Internal.ECS;
 
 public static class Test_ExplorerItem
 {
-    /// <summary>Cover <see cref="ExplorerTree.ChildNodesChangedHandler"/></summary>
+    /// <summary>Cover <see cref="ExplorerItemTree.ChildNodesChangedHandler"/></summary>
     [Test]
     public static void Test_ExplorerItem_assertion()
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root, "test");
+        var tree        = new ExplorerItemTree(root, "test");
         
         var rootItem    = tree.rootItem;
         root.AddChild(store.CreateEntity(2));

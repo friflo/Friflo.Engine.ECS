@@ -18,7 +18,7 @@ public static class Test_ExplorerItem
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root, "test");
+        var tree        = new ExplorerItemTree(root, "test");
         AreEqual("test", tree.ToString());
         
         var rootEvents  = ExplorerEvents.AddHandlerSeq(tree.RootItem, (args, seq) => {
@@ -68,7 +68,7 @@ public static class Test_ExplorerItem
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root, "test");
+        var tree        = new ExplorerItemTree(root, "test");
         var rootItem    = tree.RootItem;
         
         var seq = 0;
@@ -93,7 +93,7 @@ public static class Test_ExplorerItem
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root, null);
+        var tree        = new ExplorerItemTree(root, null);
         AreEqual("ExplorerTree", tree.ToString());
         var rootItem    = tree.RootItem;
         
@@ -134,7 +134,7 @@ public static class Test_ExplorerItem
     {
         var store       = new GameEntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
-        var tree        = new ExplorerTree(root, null);
+        var tree        = new ExplorerItemTree(root, null);
         
         store.CreateEntity(2);
         store.CreateEntity(3);

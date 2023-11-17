@@ -8,8 +8,8 @@ namespace Friflo.Fliox.Engine.ECS.Collections;
 
 internal class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
 {
-    private             ChildEnumerator entityEnumerator;
-    private readonly    ExplorerTree    tree;
+    private             ChildEnumerator     entityEnumerator;
+    private readonly    ExplorerItemTree    tree;
     
     internal ExplorerItemEnumerator(ExplorerItem item) {
         entityEnumerator    = item.entity.ChildNodes.GetEnumerator();
