@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -13,12 +14,12 @@ internal enum SelectionView
 
 internal class MoveSelection
 {
-    internal            IndexPath                   parent;
-    internal readonly   IReadOnlyList<IndexPath>    indexes;
+    internal            IndexPath   parent;
+    internal readonly   IndexPath[] indexes;
 
     public   override   string      ToString() => parent.ToString();
 
-    private MoveSelection(in IndexPath parent, IReadOnlyList<IndexPath> indexes) {
+    private MoveSelection(in IndexPath parent, IndexPath[] indexes) {
         this.parent     = parent;
         this.indexes    = indexes;
     }
@@ -28,7 +29,7 @@ internal class MoveSelection
         if (indexes.Count == 0) {
             return null;
         }
-        var first   = indexes[0];
+        var first = indexes[0];
         if (first == new IndexPath(0)) {
             return null;
         }
@@ -40,7 +41,8 @@ internal class MoveSelection
                 return null;
             }
         }
-        return new MoveSelection(parent, indexes);
+        var indexesCopy = indexes.ToArray(); // create copy to avoid side effects
+        return new MoveSelection(parent, indexesCopy);
     }
     
     internal static MoveSelection Create(in IndexPath parent, int[] indexes)
@@ -48,8 +50,8 @@ internal class MoveSelection
         var indexPaths = new IndexPath[indexes.Length];
         for (int n = 0; n < indexes.Length; n++)
         {
-            var child = parent.Append(indexes[n]);
-            indexPaths[n] = child;
+            var child       = parent.Append(indexes[n]);
+            indexPaths[n]   = child;
         }
         return new MoveSelection(parent, indexPaths);
     }
