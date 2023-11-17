@@ -36,8 +36,8 @@ public sealed class ExplorerItem :
     
 #region internal fields
     internal readonly   GameEntity                          entity;             //  8   - the corresponding entity
-    internal readonly   ExplorerItemTree                    tree;               //  8   - the tree containing this ExplorerItem
-    internal            NotifyCollectionChangedEventHandler collectionChanged;  //  8   - event handlers ae called in case entity children are modified   
+    internal readonly   ExplorerItemTree                    tree;               //  8   - the ExplorerItemTree containing this ExplorerItem
+    internal            NotifyCollectionChangedEventHandler collectionChanged;  //  8   - event handlers are called in case entity children are modified   
  // public  event       PropertyChangedEventHandler         PropertyChanged;    not required. Implemented by ObservableCollection{T}
     #endregion
 
