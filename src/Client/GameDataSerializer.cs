@@ -92,6 +92,22 @@ public class GameDataSerializer
         stream.Write(ArrayEnd);
     }
     
+    public void WriteEntities(Stream stream, IEnumerable<GameEntity> entities)
+    {
+        stream.Write(ArrayStart);
+        writer.SetPretty(true);
+        isFirst     = true;
+        foreach (var entity in entities)
+        {
+            if (entity == null) {
+                continue;
+            }
+            WriteEntity(entity);
+            stream.Write(writer.json.AsSpan());
+        }
+        stream.Write(ArrayEnd);
+    }
+    
     private void WriteEntity(GameEntity entity)
     {
         writer.InitSerializer();

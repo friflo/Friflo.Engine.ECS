@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 
@@ -19,9 +24,20 @@ public static class ExplorerCommands
     
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
+        var store       = items[0].Entity.Store;
+        var entities    = new List<GameEntity>();
         foreach (var item in items) {
-            var entity = item.Entity; 
-            Log(() => $"Copy entity id: {entity.Id}");
+            entities.Add(item.Entity);
+        }
+        var serializer  = new GameDataSerializer(store);
+        var stream      = new MemoryStream();
+        serializer.WriteEntities(stream, entities);
+        var clipboard   = TopLevel.GetTopLevel(grid)?.Clipboard;
+        if (clipboard != null) {
+            var dataObject  = new DataObject();
+            var text        = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+            dataObject.Set(DataFormats.Text, text);
+            clipboard.SetDataObjectAsync(dataObject);
         }
         grid.FocusPanel();
     }
