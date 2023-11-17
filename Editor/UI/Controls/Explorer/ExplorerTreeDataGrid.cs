@@ -4,6 +4,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -82,11 +83,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
             default:
                 throw new InvalidOperationException("unexpected");
         }
-        var items           = RowSelection!.SelectedItems;
-        var droppedItems    = cx.droppedItems = new ExplorerItem[items.Count];
-        for (int n = 0; n < items.Count; n++) {
-            droppedItems[n] = (ExplorerItem)items[n] ?? throw new NullReferenceException();
-        }
+        cx.droppedItems = GetSelectedItems();
         EditorUtils.Post(() => RowDropped(cx));
     }
     
@@ -109,7 +106,15 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         return GridSource.Items.First();
     }
     
+    /// <summary>
+    /// <b>Note</b>: Seem an issue in Avalonia. In some case:
+    /// <code>
+    ///     RowSelection.SelectedItem.Count != RowSelection.SelectedItems.ToArray().Length
+    /// </code>
+    /// => use this method when accessing <see cref="ITreeSelectionModel.SelectedItems"/>
+    /// </summary>
     internal ExplorerItem[] GetSelectedItems() {
+    
         var items = (IReadOnlyList<ExplorerItem>)RowSelection!.SelectedItems;
         return items.ToArray();
     }
