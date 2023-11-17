@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.ECS.Collections;
 
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
 
 internal enum SelectionView
 {

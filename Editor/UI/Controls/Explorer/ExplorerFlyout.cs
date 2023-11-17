@@ -10,7 +10,7 @@ using Friflo.Fliox.Engine.ECS.Collections;
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable SuggestBaseTypeForParameter
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
 
 public class ExplorerFlyout : MenuFlyout
 {

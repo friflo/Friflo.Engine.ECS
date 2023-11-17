@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using Op   = System.Collections.Specialized.NotifyCollectionChangedAction;
 using Args = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 
-namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
+namespace Friflo.Fliox.Editor.UI.Controls.Explorer.Lab;
 
 /// <summary>Implement interfaces of <see cref="ObservableCollection{T}"/></summary>
 // ObservableCollection : Collection<T>,                            INotifyCollectionChanged, INotifyPropertyChanged

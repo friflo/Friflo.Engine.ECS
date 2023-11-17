@@ -12,7 +12,7 @@ using Friflo.Fliox.Engine.ECS.Collections;
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable UseIndexFromEndExpression
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
 
 /// <summary>
 /// Extended <see cref="TreeDataGrid"/> should not be necessary. But is needed to get <see cref="OnKeyDown"/> callbacks.<br/>

@@ -6,7 +6,7 @@
              Background     ="{DynamicResource PanelBackground1}"
              x:Class        ="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
              xmlns:main     ="using:Friflo.Fliox.Editor.UI.Main"
-             xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Explorer"
+             xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Controls.Explorer"
              x:DataType     ="main:MainWindowViewModel">
         <DockPanel Name="DockPanel">
             <!-- <TreeDataGrid Name="DragDrop"

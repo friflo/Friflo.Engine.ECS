@@ -1,4 +1,4 @@
-using Friflo.Fliox.Editor.UI.Explorer;
+using Friflo.Fliox.Editor.UI.Controls.Explorer;
 
 namespace Friflo.Fliox.Editor.UI.Main;
 
