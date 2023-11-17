@@ -72,5 +72,9 @@
         <DependentUpon>InspectorPanel.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\InspectorControl.axaml.cs">
+        <DependentUpon>InspectorControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
