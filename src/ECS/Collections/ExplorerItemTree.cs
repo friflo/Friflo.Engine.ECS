@@ -89,9 +89,9 @@ public class ExplorerItemTree
             default:
                 throw InvalidActionException(args);
         }
-        object child    = explorerItem; // never null - see above
+        // explorerItem never null - see above
         var action      = (NotifyCollectionChangedAction)args.action;
-        var eventArgs   = new NotifyCollectionChangedEventArgs(action, child, args.childIndex);
+        var eventArgs   = new NotifyCollectionChangedEventArgs(action, (object)explorerItem, args.childIndex);
         // NOTE:
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called
         // below to check if the change event (Add / Remove) is caused by the containing Control or other code.  
