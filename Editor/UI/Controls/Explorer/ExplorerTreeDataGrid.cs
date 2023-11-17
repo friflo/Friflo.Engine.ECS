@@ -158,6 +158,10 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         rowPresenter.BringIntoView(lastIndex);
     }
     
+    /// <remarks>
+    /// <see cref="Key.F2"/> is handled by <see cref="TreeDataGrid"/> automatically.<br/>
+    /// Rename programatically with <see cref="ExplorerCommands.RenameEntity"/>.
+    /// </remarks>
     private bool HandleKeyDown(KeyEventArgs e)
     {
         var ctrlKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;

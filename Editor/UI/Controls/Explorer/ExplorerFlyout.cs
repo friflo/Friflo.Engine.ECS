@@ -75,7 +75,7 @@ public class ExplorerFlyout : MenuFlyout
     
     private void RenameEntity(ExplorerItem[] items)
     {
-        var canRename       = items.Length > 0;
+        var canRename       = items.Length == 1;
         var menu            = new MenuItem { Header = "Rename", IsEnabled = canRename };
         menu.InputGesture   = new KeyGesture(Key.F2);
         menu.Click += (_, _) => ExplorerCommands.RenameEntity(grid);
