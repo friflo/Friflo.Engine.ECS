@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -24,6 +24,10 @@ public static class ExplorerCommands
     
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
+        if (items.Length == 0) {
+            CopyToClipboard(grid, "[]");
+            return;            
+        }
         var store       = items[0].Entity.Store;
         var entities    = new List<GameEntity>();
         foreach (var item in items) {
@@ -32,16 +36,23 @@ public static class ExplorerCommands
         var serializer  = new GameDataSerializer(store);
         var stream      = new MemoryStream();
         serializer.WriteEntities(stream, entities);
-        var clipboard   = TopLevel.GetTopLevel(grid)?.Clipboard;
-        if (clipboard != null) {
-            var text        = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
-            clipboard.SetTextAsync(text);
-            // --- following example snippet didn't work on macOS on first try. In Windows 10 OK
-            // var dataObject  = new DataObject();
-            // dataObject.Set(DataFormats.Text, text);
-            // clipboard.SetDataObjectAsync(dataObject);
-        }
+        var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+        CopyToClipboard(grid, text);
         grid.FocusPanel();
+    }
+    
+    private static void CopyToClipboard(Visual visual, string text)
+    {
+        var clipboard = TopLevel.GetTopLevel(visual)?.Clipboard;
+        if (clipboard == null) {
+            Console.Error.WriteLine("CopyToClipboard() error: clipboard is null");
+            return;
+        }
+        clipboard.SetTextAsync(text);
+        // --- following example snippet didn't work on macOS on first try. In Windows 10 OK
+        // var dataObject  = new DataObject();
+        // dataObject.Set(DataFormats.Text, text);
+        // clipboard.SetDataObjectAsync(dataObject);
     }
     
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)

@@ -72,7 +72,8 @@ public class ExplorerFlyout : MenuFlyout
     
     private void CopyEntities(ExplorerItem[] items)
     {
-        var menu            = new MenuItem { Header = "Copy" };
+        var canCopy         = items.Length > 0;
+        var menu            = new MenuItem { Header = "Copy", IsEnabled = canCopy };
         menu.InputGesture   = new KeyGesture(Key.C, KeyModifiers.Control);
         menu.Click += (_, _) => ExplorerCommands.CopyItems(items, grid);
         Items.Add(menu);
