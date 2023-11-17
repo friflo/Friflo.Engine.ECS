@@ -109,12 +109,11 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     /// <summary>
     /// <b>Note</b>: Seem an issue in Avalonia. In some case:
     /// <code>
-    ///     RowSelection.SelectedItem.Count != RowSelection.SelectedItems.ToArray().Length
+    ///     RowSelection.SelectedItems.Count != RowSelection.SelectedItems.ToArray().Length
     /// </code>
     /// => use this method when accessing <see cref="ITreeSelectionModel.SelectedItems"/>
     /// </summary>
     internal ExplorerItem[] GetSelectedItems() {
-    
         var items = (IReadOnlyList<ExplorerItem>)RowSelection!.SelectedItems;
         return items.ToArray();
     }
