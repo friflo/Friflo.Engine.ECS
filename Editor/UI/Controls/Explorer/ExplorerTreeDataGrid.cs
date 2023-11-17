@@ -85,7 +85,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         var items           = RowSelection!.SelectedItems;
         var droppedItems    = cx.droppedItems = new ExplorerItem[items.Count];
         for (int n = 0; n < items.Count; n++) {
-            droppedItems[n] = (ExplorerItem)items[n];
+            droppedItems[n] = (ExplorerItem)items[n] ?? throw new NullReferenceException();
         }
         EditorUtils.Post(() => RowDropped(cx));
     }
