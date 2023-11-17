@@ -36,7 +36,7 @@ public static class ExplorerCommands
         if (clipboard != null) {
             var text        = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
             clipboard.SetTextAsync(text);
-            // --- following example snippet didn't work on macOS on first try
+            // --- following example snippet didn't work on macOS on first try. In Windows 10 OK
             // var dataObject  = new DataObject();
             // dataObject.Set(DataFormats.Text, text);
             // clipboard.SetDataObjectAsync(dataObject);
