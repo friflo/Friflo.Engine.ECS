@@ -93,7 +93,7 @@ public class ExplorerFlyout : MenuFlyout
     
     private void MoveEntityUp(ExplorerItem[] items, MoveSelection moveSelection)
     {
-        var canMove         = items.Length > 1 || moveSelection.indexes[0].Last() > 0;
+        var canMove         = items.Length > 1 || moveSelection.first.Last() > 0;
         var menu            = new MenuItem { Header = "Move up", IsEnabled = canMove };
         menu.InputGesture   = new KeyGesture(Key.Up, KeyModifiers.Control);
         menu.Click += (_, _) => {

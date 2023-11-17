@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.ECS.Collections;
 
+// ReSharper disable UseIndexFromEndExpression
 namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
 
 internal enum SelectionView
@@ -14,14 +14,16 @@ internal enum SelectionView
 
 internal class MoveSelection
 {
-    internal            IndexPath   parent;
-    internal readonly   IndexPath[] indexes;
+    internal readonly   IndexPath   parent;
+    internal readonly   IndexPath   first;
+    internal readonly   IndexPath   last;
 
     public   override   string      ToString() => parent.ToString();
 
-    private MoveSelection(in IndexPath parent, IndexPath[] indexes) {
+    private MoveSelection(in IndexPath parent, in IndexPath first, in IndexPath last) {
         this.parent     = parent;
-        this.indexes    = indexes;
+        this.first      = first;
+        this.last       = last;
     }
     
     internal static MoveSelection Create(IReadOnlyList<IndexPath> indexes)
@@ -29,7 +31,7 @@ internal class MoveSelection
         if (indexes.Count == 0) {
             return null;
         }
-        var first = indexes[0];
+        var first   = indexes[0];
         if (first == new IndexPath(0)) {
             return null;
         }
@@ -41,19 +43,14 @@ internal class MoveSelection
                 return null;
             }
         }
-        var indexesCopy = indexes.ToArray(); // create copy to avoid side effects
-        return new MoveSelection(parent, indexesCopy);
+        return new MoveSelection(parent, indexes[0], indexes[indexes.Count - 1]);
     }
     
     internal static MoveSelection Create(in IndexPath parent, int[] indexes)
     {
-        var indexPaths = new IndexPath[indexes.Length];
-        for (int n = 0; n < indexes.Length; n++)
-        {
-            var child       = parent.Append(indexes[n]);
-            indexPaths[n]   = child;
-        }
-        return new MoveSelection(parent, indexPaths);
+        var first   = parent.Append(indexes[0]);
+        var last    = parent.Append(indexes[indexes.Length - 1]);
+        return new MoveSelection(parent, first, last);
     }
 }
 
@@ -61,4 +58,4 @@ internal struct RowDropContext
 {
     internal    TreeDataGridRow targetRow;
     internal    ExplorerItem[]  droppedItems;
-} 
+}

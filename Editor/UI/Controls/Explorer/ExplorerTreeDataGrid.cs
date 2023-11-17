@@ -124,6 +124,9 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     
     internal void SelectItems(MoveSelection moveSelection, int[] indexes, SelectionView view)
     {
+        if (indexes.Length == 0) {
+            return;
+        }
         var parent      = moveSelection.parent;
         var selection   = RowSelection!;
         selection.BeginBatchUpdate();
@@ -133,19 +136,19 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
         selection.EndBatchUpdate();
         
-        BringSelectionIntoView(moveSelection.indexes, view);
+        BringSelectionIntoView(moveSelection, view);
     }
     
-    private void BringSelectionIntoView(IReadOnlyList<IndexPath> indexes, SelectionView view) {
+    private void BringSelectionIntoView(MoveSelection moveSelection, SelectionView view) {
         var rows            = Rows!;
         var rowPresenter    = RowsPresenter!;
         if (view == SelectionView.First) {
-            var firstIndex = rows.ModelIndexToRowIndex(indexes[0]);
-            rowPresenter.BringIntoView(firstIndex - 1);
+            var firstIndex = rows.ModelIndexToRowIndex(moveSelection.first) - 2;
+            rowPresenter.BringIntoView(firstIndex);
             return;            
         }
-        var lastIndex = rows.ModelIndexToRowIndex(indexes[indexes.Count - 1]);
-        rowPresenter.BringIntoView(lastIndex + 1);
+        var lastIndex = rows.ModelIndexToRowIndex(moveSelection.last) + 2;
+        rowPresenter.BringIntoView(lastIndex);
     }
     
     private bool HandleKeyDown(KeyEventArgs e)

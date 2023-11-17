@@ -48,6 +48,7 @@ public static class ExplorerCommands
         grid.FocusPanel();
     }
     
+    /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
     internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes = new List<int>(items.Length);
@@ -69,6 +70,7 @@ public static class ExplorerCommands
         return indexes.ToArray();
     }
     
+    /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
     internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
         var indexes     = new List<int>(items.Length);
