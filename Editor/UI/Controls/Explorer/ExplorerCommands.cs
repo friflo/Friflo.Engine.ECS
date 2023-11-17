@@ -34,10 +34,12 @@ public static class ExplorerCommands
         serializer.WriteEntities(stream, entities);
         var clipboard   = TopLevel.GetTopLevel(grid)?.Clipboard;
         if (clipboard != null) {
-            var dataObject  = new DataObject();
             var text        = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
-            dataObject.Set(DataFormats.Text, text);
-            clipboard.SetDataObjectAsync(dataObject);
+            clipboard.SetTextAsync(text);
+            // --- following example snippet didn't work on macOS on first try
+            // var dataObject  = new DataObject();
+            // dataObject.Set(DataFormats.Text, text);
+            // clipboard.SetDataObjectAsync(dataObject);
         }
         grid.FocusPanel();
     }
