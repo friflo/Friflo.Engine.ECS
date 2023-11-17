@@ -31,14 +31,19 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     public ExplorerTreeDataGrid() {
         Focusable   = true; // required to obtain focus when moving items with: Ctrl + Up / Down
         RowDrop    += RowDropHandler;
-        GotFocus   += (_, args) => {
-            // Workaround:  Focus TreeDataGridTextCell if navigating with up/down keys.
-            //              Otherwise it parent TreeDataGridExpanderCell is focus and F2 (rename) does not work.
-            if (args.Source is TreeDataGridExpanderCell expanderCell) {
-                var textCell = FindControl<TreeDataGridTextCell>(expanderCell);
-                textCell?.Focus();
-            }
-        };
+        GotFocus   += (_, args) => FocusWorkaround(args);
+    }
+    
+    /// <summary>
+    /// Workaround:  Focus TreeDataGridTextCell if navigating with up/down keys.
+    ///              Otherwise if parent is <see cref="TreeDataGridExpanderCell"/> its focus and F2 (rename) does not work.
+    /// </summary>
+    private static void FocusWorkaround(GotFocusEventArgs args)
+    {
+        if (args.Source is TreeDataGridExpanderCell expanderCell) {
+            var textCell = FindControl<TreeDataGridTextCell>(expanderCell);
+            textCell?.Focus();
+        }
     }
     
     private static Control FindControl<T>(Visual control) where T : Control
