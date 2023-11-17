@@ -162,29 +162,29 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem, this);
                 return true;
             case Key.N:
-                if (e.KeyModifiers == ctrlKey) {
-                    ExplorerCommands.CreateItems(GetSelectedItems(), this);
-                    return true;
+                if (e.KeyModifiers != ctrlKey) {
+                    return false;
                 }
-                return false;
+                ExplorerCommands.CreateItems(GetSelectedItems(), this);
+                return true;
             case Key.Up:
-                if (e.KeyModifiers == ctrlKey) {
-                    if (GetMoveSelection(out var moveSelection)) {
-                        var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
-                        SelectItems(moveSelection, indexes, SelectionView.First);
-                    }
-                    return true;
+                if (e.KeyModifiers != ctrlKey) {
+                    return false;
                 }
-                return false;
+                if (GetMoveSelection(out var moveSelection)) {
+                    var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
+                    SelectItems(moveSelection, indexes, SelectionView.First);
+                }
+                return true;
             case Key.Down:
-                if (e.KeyModifiers == ctrlKey) {
-                    if (GetMoveSelection(out var moveSelection)) {
-                        var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
-                        SelectItems(moveSelection, indexes, SelectionView.Last);
-                    }
-                    return true;
+                if (e.KeyModifiers != ctrlKey) {
+                    return false;
                 }
-                return false;
+                if (GetMoveSelection(out moveSelection)) {
+                    var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
+                    SelectItems(moveSelection, indexes, SelectionView.Last);
+                }
+                return true;
             default:
                 return false;
         }
