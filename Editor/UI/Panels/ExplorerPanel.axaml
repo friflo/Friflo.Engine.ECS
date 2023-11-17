@@ -9,6 +9,9 @@
              xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Controls.Explorer"
              x:DataType     ="main:MainWindowViewModel">
         <DockPanel Name="DockPanel">
+            <Border Background="{DynamicResource PanelBackground2}" DockPanel.Dock="Top">
+                <Label HorizontalAlignment="Center">Explorer</Label>    
+            </Border>
             <!-- <TreeDataGrid Name="DragDrop"
                           Source="{Binding DragDrop.DragDropSource}"
                           AutoDragDropRows="True"/> -->

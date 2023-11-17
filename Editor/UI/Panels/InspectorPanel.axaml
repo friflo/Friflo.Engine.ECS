@@ -4,18 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
              Background="{DynamicResource PanelBackground1}"
-             x:Class="Friflo.Fliox.Editor.UI.Panels.TestPanel">
+             x:Class="Friflo.Fliox.Editor.UI.Panels.InspectorPanel">
     <DockPanel>
         <Border Background="{DynamicResource PanelBackground2}" DockPanel.Dock="Top">
-            <Label HorizontalAlignment="Center">Test</Label>    
+            <Label  HorizontalAlignment="Center">Inspector</Label>    
         </Border>
-        <Button Click="OnButtonClick">Test</Button>
         <Button Content="Click me">
-            <Button.Flyout>
-                <Flyout>
-                    <TextBlock Text="Flyout Content!" />
-                </Flyout>
-            </Button.Flyout>
         </Button>
     </DockPanel>
 </UserControl>
