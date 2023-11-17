@@ -53,9 +53,14 @@ internal class MoveSelection
         return new MoveSelection(parent, first, last);
     }
 }
-
+//cannot use TreeDataGridRow targetRow
 internal struct RowDropContext
 {
-    internal    TreeDataGridRow targetRow;
+
+    /// <summary>
+    /// Cannot use TreeDataGridRow as <see cref="targetModel"/>.<br/>
+    /// It seems <see cref="TreeDataGridRow"/>'s exists only when in view.
+    /// </summary>
+    internal    IndexPath       targetModel;
     internal    ExplorerItem[]  droppedItems;
 }

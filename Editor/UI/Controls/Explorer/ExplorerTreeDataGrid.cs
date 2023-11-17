@@ -71,15 +71,13 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         switch (args.Position)
         {
             case TreeDataGridRowDropPosition.Inside:
-                cx.targetRow    = args.TargetRow;
+                cx.targetModel  = Rows!.RowIndexToModelIndex(args.TargetRow.RowIndex);
                 break;
             case TreeDataGridRowDropPosition.Before:
             case TreeDataGridRowDropPosition.After:
                 var rows        = Rows!;
                 var model       = rows.RowIndexToModelIndex(args.TargetRow.RowIndex);
-                model           = model.Slice(0, model.Count - 1); // get parent IndexPath
-                var rowIndex    = rows.ModelIndexToRowIndex(model);
-                cx.targetRow    = TryGetRow(rowIndex);
+                cx.targetModel  = model.Slice(0, model.Count - 1); // get parent IndexPath
                 break;
             default:
                 throw new InvalidOperationException("unexpected");
@@ -100,7 +98,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
             var entity      = item.Entity;
             indexes[n++]    = entity.Parent.GetChildIndex(entity.Id);
         }
-        var targetModel = Rows!.RowIndexToModelIndex(cx.targetRow.RowIndex);
+        var targetModel = cx.targetModel;
         var selection   = MoveSelection.Create(targetModel, indexes);
         SelectItems(selection, indexes, SelectionView.First);
     }
