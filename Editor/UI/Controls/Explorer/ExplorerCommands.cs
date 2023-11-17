@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Avalonia;
 using Avalonia.Controls;
@@ -24,16 +25,8 @@ public static class ExplorerCommands
     
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
-        if (items.Length == 0) {
-            CopyToClipboard(grid, "[]");
-            return;            
-        }
-        var store       = items[0].Entity.Store;
-        var entities    = new List<GameEntity>();
-        foreach (var item in items) {
-            entities.Add(item.Entity);
-        }
-        var serializer  = new GameDataSerializer(store);
+        var entities    = items.Select(item => item.Entity).ToList();
+        var serializer  = new GameDataSerializer(null);
         var stream      = new MemoryStream();
         serializer.WriteEntities(stream, entities);
         var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
