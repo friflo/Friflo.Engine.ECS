@@ -163,6 +163,12 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         var ctrlKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
         switch (e.Key)
         {
+            case Key.C:
+                if (e.KeyModifiers != ctrlKey) {
+                    return false;
+                }
+                ExplorerCommands.CopyItems(GetSelectedItems(), this);
+                return true;
             case Key.Delete:
                 ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem, this);
                 return true;

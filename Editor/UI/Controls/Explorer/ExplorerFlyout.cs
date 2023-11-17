@@ -60,6 +60,7 @@ public class ExplorerFlyout : MenuFlyout
         MoveSelection   moveSelection,
         ExplorerItem    rootItem)
     {
+        CopyEntities    (selectedItems);
         DeleteEntity    (selectedItems, rootItem);
         NewEntity       (selectedItems);
         if (moveSelection != null) {
@@ -67,6 +68,14 @@ public class ExplorerFlyout : MenuFlyout
             MoveEntityUp    (selectedItems, moveSelection);
             MoveEntityDown  (selectedItems, moveSelection);
         }
+    }
+    
+    private void CopyEntities(ExplorerItem[] items)
+    {
+        var menu            = new MenuItem { Header = "Copy" };
+        menu.InputGesture   = new KeyGesture(Key.C, KeyModifiers.Control);
+        menu.Click += (_, _) => ExplorerCommands.CopyItems(items, grid);
+        Items.Add(menu);
     }
     
     private void DeleteEntity(ExplorerItem[] items, ExplorerItem rootItem)

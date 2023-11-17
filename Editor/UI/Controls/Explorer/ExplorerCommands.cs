@@ -17,6 +17,15 @@ public static class ExplorerCommands
 #pragma warning restore CS0162 // Unreachable code detected
     }
     
+    internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
+    {
+        foreach (var item in items) {
+            var entity = item.Entity; 
+            Log(() => $"Copy entity id: {entity.Id}");
+        }
+        grid.FocusPanel();
+    }
+    
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
     {
         var next = grid.GetSelectionPath();
