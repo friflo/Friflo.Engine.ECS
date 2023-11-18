@@ -9,7 +9,7 @@ public abstract class EditorObserver
     protected           Editor  Editor  => editor;
         
     private             bool    editorReadyFired; 
-    internal  readonly  Editor  editor;
+    private   readonly  Editor  editor;
     
     protected EditorObserver(Editor editor) {
         this.editor = editor;

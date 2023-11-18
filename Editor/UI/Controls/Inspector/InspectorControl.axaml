@@ -6,12 +6,10 @@
              Background="{DynamicResource PanelBackground1}"
              x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.InspectorControl">
     <DockPanel>
-        <Border Background="Cornsilk" DockPanel.Dock="Top">
-            <Label  HorizontalAlignment="Center">Control</Label>    
-        </Border>
-        <Label Name="TestLabel" DockPanel.Dock="Top">
-            entity    
-        </Label>
+        <DockPanel DockPanel.Dock="Top">
+            <Label Name="EntityName" DockPanel.Dock="Left">name</Label>
+            <Label Name="EntityId">id</Label>
+        </DockPanel>
         <Border BorderThickness="1" BorderBrush="LightGray">
 
         </Border>

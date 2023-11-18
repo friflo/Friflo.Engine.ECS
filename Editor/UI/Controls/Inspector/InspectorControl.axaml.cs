@@ -24,8 +24,10 @@ public partial class InspectorControl : UserControl
         internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor) { this.inspector = inspector; }
 
         protected override void OnSelectionChanged(ExplorerItem selection) {
-            var text = selection?.ToString() ?? "no selection";
-            inspector.TestLabel.Content = text;
+            var text    = selection?.Name ?? "no selection";
+            var id      = selection != null ? $"id: {selection.Id}" : null;
+            inspector.EntityName.Content    = text;
+            inspector.EntityId.Content      = id;
         }
     }
 }
