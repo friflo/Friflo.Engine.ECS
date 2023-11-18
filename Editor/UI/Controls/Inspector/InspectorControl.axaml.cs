@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Engine.ECS.Collections;
 
@@ -25,9 +24,8 @@ public partial class InspectorControl : UserControl
         internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor) { this.inspector = inspector; }
 
         protected override void OnSelectionChanged(ExplorerItem selection) {
-            var text = selection.ToString();
+            var text = selection?.ToString() ?? "no selection";
             inspector.TestLabel.Content = text;
-            Console.WriteLine($"Inspector.OnSelectionChanged() - {selection}");
         }
     }
 }
