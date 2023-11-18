@@ -66,11 +66,14 @@ internal static class GameEntityUtils
     
     internal static string GetDebugJSON(GameEntity entity)
     {
-        lock (DebugConverter) {
-            DebugConverter.GameToDataEntity(entity, DebugDataEntity, true);
-            DebugObjectWriter.Pretty             = true;
-            DebugObjectWriter.WriteNullMembers   = false;
-            return DebugObjectWriter.Write(DebugDataEntity);
+        var converter       = DebugConverter;
+        lock (converter) {
+            var dataEntity  = DebugDataEntity;
+            var writer      = DebugObjectWriter;
+            converter.GameToDataEntity(entity, dataEntity, true);
+            writer.Pretty             = true;
+            writer.WriteNullMembers   = false;
+            return writer.Write(dataEntity);
         }
     }
     
