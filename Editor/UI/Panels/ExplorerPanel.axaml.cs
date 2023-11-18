@@ -24,7 +24,18 @@ public partial class ExplorerPanel : UserControl, IEditorControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor(SetupExplorer);
+        Editor = this.GetEditor(new ExplorerEditorEvent(this));
+    }
+    
+    private class ExplorerEditorEvent : EditorEvent
+    {
+        readonly ExplorerPanel panel;
+        
+        internal ExplorerEditorEvent (ExplorerPanel panel) { this.panel = panel; }
+        
+        protected override void OnEditorReady() {
+            panel.SetupExplorer();
+        }
     }
     
     /// <summary>

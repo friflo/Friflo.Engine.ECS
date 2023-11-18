@@ -14,6 +14,6 @@ public partial class InspectorPanel : UserControl, IEditorControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor();
+        Editor = this.GetEditor(null);
     }
 }

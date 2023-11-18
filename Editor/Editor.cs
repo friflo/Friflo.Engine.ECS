@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,9 +31,9 @@ public class Editor
 #region private fields
     private             GameEntityStore     store;
     private             GameDataSync        sync;
-    private             event Action        OnReady;
+    internal readonly   List<EditorEvent>   editorEvents    = new List<EditorEvent>();
     private             bool                isReady;
-    private readonly    ManualResetEvent    signalEvent = new ManualResetEvent(false);
+    private  readonly   ManualResetEvent    signalEvent     = new ManualResetEvent(false);
     private             EventProcessorQueue processor;
     private             HttpServer          server;
     #endregion
@@ -48,7 +49,7 @@ public class Editor
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
         isReady = true;
         EditorUtils.Post(() => {
-            OnReady?.Invoke();
+            EditorEvent.CastEditorReady(editorEvents);
         });
         // --- add client and database
         var schema      = DatabaseSchema.Create<GameClient>();
@@ -110,15 +111,15 @@ public class Editor
         server?.Stop();
     }
     
-    internal void HandleOnReady(Action onReady) {
-        if (onReady == null) {
+    internal void AddEvent(EditorEvent editorEvent)
+    {
+        if (editorEvent == null) {
             return;
         }
+        editorEvents.Add(editorEvent);
         if (isReady) {
-            onReady(); // could be deferred to event loop
-            return;
+            editorEvent.SendEditorReady();  // could be deferred to event loop
         }
-        OnReady += onReady;
     }
     
     internal void Run()
