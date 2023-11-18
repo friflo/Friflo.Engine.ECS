@@ -4,18 +4,16 @@ using Avalonia.Interactivity;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 
-public partial class TestPanel : UserControl, IEditorControl
+public partial class TestPanel : UserControl
 {
-    public Editor Editor { get; private set; }
-    
     public TestPanel()
     {
         InitializeComponent();
     }
 
+    // ReSharper disable once RedundantOverriddenMember
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor(null);
     }
 
     public void OnButtonClick(object sender, RoutedEventArgs routedEventArgs)

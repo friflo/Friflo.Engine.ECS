@@ -4,7 +4,7 @@ using Avalonia.Controls;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI;
 
-public partial class MainWindow : Window, IEditorControl
+public partial class MainWindow : Window
 {
     public Editor Editor { get; }
 

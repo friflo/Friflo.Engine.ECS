@@ -3,17 +3,15 @@ using Avalonia.Interactivity;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 
-public partial class InspectorPanel : UserControl, IEditorControl
+public partial class InspectorPanel : UserControl
 {
-    public Editor Editor { get; private set; }
-    
     public InspectorPanel()
     {
         InitializeComponent();
     }
 
+    // ReSharper disable once RedundantOverriddenMember
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor(null);
     }
 }

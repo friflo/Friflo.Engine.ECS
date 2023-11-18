@@ -16,11 +16,6 @@ using Friflo.Json.Fliox.Hub.Remote;
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Editor;
 
-public interface IEditorControl
-{
-    Editor Editor { get; }
-}
-
 public class Editor
 {
 #region public properties

@@ -1,10 +1,18 @@
 ﻿using System.Collections.Generic;
 
+// ReSharper disable ConvertToAutoProperty
 namespace Friflo.Fliox.Editor;
 
 public abstract class EditorObserver
 {
-    private bool editorReadyFired; 
+    protected           Editor  Editor  => editor;
+        
+    private             bool    editorReadyFired; 
+    internal  readonly  Editor  editor;
+    
+    protected EditorObserver(Editor editor) {
+        this.editor = editor;
+    }
         
     protected virtual void OnEditorReady() { }
     

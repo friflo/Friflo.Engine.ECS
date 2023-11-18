@@ -9,11 +9,8 @@ using Friflo.Fliox.Engine.ECS.Collections;
 // ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Panels;
 
-public partial class ExplorerPanel : UserControl, IEditorControl
+public partial class ExplorerPanel : UserControl
 {
-    public  Editor          Editor      { get; private set; }
-
-    
     public ExplorerPanel()
     {
         InitializeComponent();
@@ -24,21 +21,21 @@ public partial class ExplorerPanel : UserControl, IEditorControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor(new ExplorerEditorObserver(this));
+        new ExplorerEditorObserver(this, this.GetEditor()).Register();
     }
     
     private class ExplorerEditorObserver : EditorObserver
     {
         private readonly ExplorerPanel panel;
         
-        internal ExplorerEditorObserver (ExplorerPanel panel) { this.panel = panel; }
+        internal ExplorerEditorObserver (ExplorerPanel panel, Editor editor) : base (editor) { this.panel = panel; }
         
         /// <summary>
         /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
         /// </summary>
         protected override void OnEditorReady()
         {
-            var store = panel.Editor.Store;
+            var store       = Editor.Store;
             if (store == null) throw new InvalidOperationException("expect Store is present");
             // return;
             var source      = panel.Grid.GridSource;

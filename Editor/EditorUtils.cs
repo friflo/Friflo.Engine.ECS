@@ -29,16 +29,19 @@ public static class EditorUtils
 
 public static class EditorExtensions
 {
-    public static Editor GetEditor(this Visual visual, EditorObserver observer)
+    public static Editor GetEditor(this Visual visual)
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
-            var editor = mainWindow.Editor;
-            editor.AddObserver(observer);
-            return editor;
+            return mainWindow.Editor;
         }
         if (EditorUtils.IsDesignMode) {
             return null;
         }
         throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(MainWindow)} as visual root");
+    } 
+    
+    public static void Register(this EditorObserver observer)
+    {
+        observer.editor.AddObserver(observer);
     } 
 }
