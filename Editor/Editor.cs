@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Explorer;
 using Friflo.Json.Fliox.Hub.Host;
@@ -188,5 +189,9 @@ public class Editor
         var entity = store.CreateEntity();
         entity.AddComponent(new EntityName("child-" + id));
         return entity;
+    }
+
+    public void SelectionChanged(ExplorerItem selectedItem) {
+        EditorObserver.CastSelectionChanged(observers, selectedItem);
     }
 }

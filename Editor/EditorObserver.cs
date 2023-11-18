@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable ConvertToAutoProperty
 namespace Friflo.Fliox.Editor;
@@ -14,7 +15,8 @@ public abstract class EditorObserver
         this.editor = editor;
     }
         
-    protected virtual void OnEditorReady() { }
+    protected virtual void OnEditorReady()                              { }
+    protected virtual void OnSelectionChanged(ExplorerItem selection)   { }
     
     internal void SendEditorReady()
     {
@@ -27,8 +29,15 @@ public abstract class EditorObserver
     
     internal static void CastEditorReady(List<EditorObserver> observers)
     {
-        foreach (var editorEvent in observers) {
-            editorEvent.SendEditorReady();
+        foreach (var observer in observers) {
+            observer.SendEditorReady();
+        }
+    }
+    
+    internal static void CastSelectionChanged(List<EditorObserver> observers, ExplorerItem selection)
+    {
+        foreach (var observer in observers) {
+            observer.OnSelectionChanged(selection);
         }
     }
 }

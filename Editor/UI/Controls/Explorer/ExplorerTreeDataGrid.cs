@@ -25,6 +25,7 @@ namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
 public class ExplorerTreeDataGrid : TreeDataGrid
 {
     public  ExplorerItem    RootItem    => GetRootItem();
+    private Editor          editor;
        
     // https://stackoverflow.com/questions/71815213/how-can-i-show-my-own-control-in-avalonia
     protected override Type StyleKeyOverride => typeof(TreeDataGrid);
@@ -37,7 +38,19 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        new GridObserver(this, EditorUtils.GetEditor(this)).Register();
+        editor = EditorUtils.GetEditor(this);
+        editor.AddObserver(new GridObserver(this, editor));
+        
+        RowSelection!.SelectionChanged += (_, args) => OnSelectionChanged(args);
+    }
+    
+    // private readonly    HashSet<ExplorerItem>   selectedItems = new HashSet<ExplorerItem>();
+    // private             ExplorerItem            selectedItem;
+    
+    private void OnSelectionChanged(TreeSelectionModelSelectionChangedEventArgs _)
+    {
+        var selectedItem = RowSelection!.SelectedItem as ExplorerItem;
+        editor.SelectionChanged(selectedItem);
     }
     
     private class GridObserver : EditorObserver
@@ -45,11 +58,6 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         private readonly ExplorerTreeDataGrid grid;
         
         internal GridObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
-        
-        public void Register()
-        {
-            editor.AddObserver(this);
-        } 
         
         /// <summary>
         /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
