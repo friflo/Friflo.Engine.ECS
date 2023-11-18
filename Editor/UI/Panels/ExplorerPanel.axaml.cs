@@ -1,7 +1,5 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Friflo.Fliox.Editor.UI.Controls.Explorer;
 using Friflo.Fliox.Editor.UI.Main;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -18,34 +16,6 @@ public partial class ExplorerPanel : UserControl
         DataContext             = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(Grid);
     }
-
-    protected override void OnLoaded(RoutedEventArgs e) {
-        base.OnLoaded(e);
-        new ExplorerEditorObserver(this, this.GetEditor()).Register();
-    }
-    
-    private class ExplorerEditorObserver : EditorObserver
-    {
-        private readonly ExplorerPanel panel;
-        
-        internal ExplorerEditorObserver (ExplorerPanel panel, Editor editor) : base (editor) { this.panel = panel; }
-        
-        /// <summary>
-        /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
-        /// </summary>
-        protected override void OnEditorReady()
-        {
-            var store       = Editor.Store;
-            if (store == null) throw new InvalidOperationException("expect Store is present");
-            // return;
-            var source      = panel.Grid.GridSource;
-            var rootEntity  = store.StoreRoot;
-            var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
-            source.Items    = new []{ tree.RootItem };
-        }
-    }
-    
-    private static      int _treeCount;
 
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
     {

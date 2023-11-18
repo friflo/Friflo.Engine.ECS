@@ -6,7 +6,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable ReplaceSliceWithRangeIndexer
@@ -33,6 +35,34 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         RowDrop    += RowDropHandler;
         GotFocus   += (_, args) => FocusWorkaround(args);
     }
+    
+    protected override void OnLoaded(RoutedEventArgs e) {
+        base.OnLoaded(e);
+        new GridObserver(this, this.GetEditor()).Register();
+    }
+    
+    private class GridObserver : EditorObserver
+    {
+        private readonly ExplorerTreeDataGrid grid;
+        
+        internal GridObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
+        
+        /// <summary>
+        /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
+        /// </summary>
+        protected override void OnEditorReady()
+        {
+            var store       = Editor.Store;
+            if (store == null) throw new InvalidOperationException("expect Store is present");
+            // return;
+            var source      = grid.GridSource;
+            var rootEntity  = store.StoreRoot;
+            var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
+            source.Items    = new []{ tree.RootItem };
+        }
+    }
+    
+    private static      int _treeCount;
     
     /// <summary>
     /// Workaround:  Focus TreeDataGridTextCell if navigating with up/down keys.
