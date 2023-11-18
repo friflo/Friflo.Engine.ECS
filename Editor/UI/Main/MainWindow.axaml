@@ -13,8 +13,10 @@
         <Rectangle        Height="6"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
         <Rectangle        Height="30"   DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
         <Rectangle        Height="6"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
         <ui:ExplorerPanel Width="300"   DockPanel.Dock="Left" />
         <Rectangle        Width="6"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
         <DockPanel        Width="300"   DockPanel.Dock="Right" >
             <ui:TestPanel       DockPanel.Dock="Top" />
             <Rectangle    Height="6"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>

@@ -41,7 +41,10 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         editor = EditorUtils.GetEditor(this);
         editor?.AddObserver(new GridObserver(this, editor));
         
-        RowSelection!.SelectionChanged += (_, args) => OnSelectionChanged(args);
+        // condition to view in Designer
+        if (RowSelection != null) {
+            RowSelection.SelectionChanged += (_, args) => OnSelectionChanged(args);
+        }
     }
     
     // private readonly    HashSet<ExplorerItem>   selectedItems = new HashSet<ExplorerItem>();
