@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // Note! Must not using Avalonia namespaces
@@ -12,18 +13,29 @@ public struct EditorSelection {
 
 public abstract class EditorObserver
 {
-    protected           Editor  Editor  => editor;
+#region protected properties
+    protected           Editor          Editor  => editor;
+    protected           GameEntityStore Store   => editor.Store;
+    #endregion
         
-    private             bool    editorReadyFired; 
-    private   readonly  Editor  editor;
-    
+#region private fields
+    private             bool            editorReadyFired; 
+    private   readonly  Editor          editor;
+    #endregion
+
+#region construtor
     protected EditorObserver(Editor editor) {
         this.editor = editor;
     }
+    #endregion
         
+#region events
     protected virtual   void    OnEditorReady()                                     { }
     protected virtual   void    OnSelectionChanged(in EditorSelection selection)    { }
+    #endregion
     
+    // -------------------------------------- send methods --------------------------------------
+#region send methods
     internal void SendEditorReady()
     {
         if (editorReadyFired) {
@@ -32,7 +44,11 @@ public abstract class EditorObserver
         editorReadyFired = true;
         OnEditorReady();
     }
+    #endregion
     
+    
+    // -------------------------------------- cast methods --------------------------------------
+#region cast methods
     internal static void CastEditorReady(List<EditorObserver> observers)
     {
         foreach (var observer in observers) {
@@ -46,4 +62,5 @@ public abstract class EditorObserver
             observer.OnSelectionChanged(selection);
         }
     }
+    #endregion
 }

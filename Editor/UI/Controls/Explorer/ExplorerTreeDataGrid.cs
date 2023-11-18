@@ -256,7 +256,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         /// </summary>
         protected override void OnEditorReady()
         {
-            var store       = Editor.Store;
+            var store       = Store;
             if (store == null) throw new InvalidOperationException("expect Store is present");
             // return;
             var source      = grid.GridSource;

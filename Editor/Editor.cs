@@ -19,7 +19,7 @@ namespace Friflo.Fliox.Editor;
 public class Editor
 {
 #region public properties
-    public              GameEntityStore    Store    => store;
+    public              GameEntityStore         Store    => store;
 
     #endregion
 
