@@ -25,23 +25,15 @@ public static class EditorUtils
     {
         await Dispatcher.UIThread.InvokeAsync(action);
     }
-}
-
-public static class EditorExtensions
-{
-    public static Editor GetEditor(this Visual visual)
+    
+    public static Editor GetEditor(Visual visual)
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
             return mainWindow.Editor;
         }
-        if (EditorUtils.IsDesignMode) {
+        if (IsDesignMode) {
             return null;
         }
         throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(MainWindow)} as visual root");
-    } 
-    
-    public static void Register(this EditorObserver observer)
-    {
-        observer.editor.AddObserver(observer);
     } 
 }

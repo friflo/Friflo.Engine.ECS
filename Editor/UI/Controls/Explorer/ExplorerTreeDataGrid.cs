@@ -8,7 +8,6 @@ using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable ReplaceSliceWithRangeIndexer
@@ -38,7 +37,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        new GridObserver(this, this.GetEditor()).Register();
+        new GridObserver(this, EditorUtils.GetEditor(this)).Register();
     }
     
     private class GridObserver : EditorObserver
@@ -46,6 +45,11 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         private readonly ExplorerTreeDataGrid grid;
         
         internal GridObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
+        
+        public void Register()
+        {
+            editor.AddObserver(this);
+        } 
         
         /// <summary>
         /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
