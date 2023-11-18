@@ -26,7 +26,7 @@ public static class EditorUtils
         await Dispatcher.UIThread.InvokeAsync(action);
     }
     
-    public static Editor GetEditor(Visual visual)
+    public static Editor GetEditor(this Visual visual)
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
             return mainWindow.Editor;

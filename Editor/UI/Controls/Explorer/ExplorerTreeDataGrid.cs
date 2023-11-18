@@ -38,7 +38,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        editor = EditorUtils.GetEditor(this);
+        editor = this.GetEditor();
         editor?.AddObserver(new GridObserver(this, editor));
         
         // condition to view in Designer

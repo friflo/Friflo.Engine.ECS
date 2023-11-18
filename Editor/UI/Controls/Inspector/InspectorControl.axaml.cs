@@ -13,7 +13,7 @@ public partial class InspectorControl : UserControl
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        var editor = EditorUtils.GetEditor(this);
+        var editor = this.GetEditor();
         editor?.AddObserver(new InspectorObserver(this, editor));
     }
     
