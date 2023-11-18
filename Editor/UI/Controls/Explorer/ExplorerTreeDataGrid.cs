@@ -50,7 +50,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     private void OnSelectionChanged(TreeSelectionModelSelectionChangedEventArgs _)
     {
         var selectedItem = RowSelection!.SelectedItem as ExplorerItem;
-        editor.SelectionChanged(selectedItem);
+        editor.SelectionChanged(new EditorSelection { item = selectedItem });
     }
     
     private class GridObserver : EditorObserver

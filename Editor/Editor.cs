@@ -191,7 +191,7 @@ public class Editor
         return entity;
     }
 
-    public void SelectionChanged(ExplorerItem selectedItem) {
-        EditorObserver.CastSelectionChanged(observers, selectedItem);
+    public void SelectionChanged(in EditorSelection selection) {
+        EditorObserver.CastSelectionChanged(observers, selection);
     }
 }
