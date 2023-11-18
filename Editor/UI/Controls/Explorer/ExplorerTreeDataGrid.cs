@@ -39,7 +39,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         editor = EditorUtils.GetEditor(this);
-        editor.AddObserver(new GridObserver(this, editor));
+        editor?.AddObserver(new GridObserver(this, editor));
         
         RowSelection!.SelectionChanged += (_, args) => OnSelectionChanged(args);
     }

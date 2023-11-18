@@ -15,7 +15,7 @@ public partial class InspectorControl : UserControl
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         var editor = EditorUtils.GetEditor(this);
-        editor.AddObserver(new InspectorObserver(this, editor));
+        editor?.AddObserver(new InspectorObserver(this, editor));
     }
     
     private class InspectorObserver : EditorObserver
@@ -25,6 +25,8 @@ public partial class InspectorControl : UserControl
         internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor) { this.inspector = inspector; }
 
         protected override void OnSelectionChanged(ExplorerItem selection) {
+            var text = selection.ToString();
+            inspector.TestLabel.Content = text;
             Console.WriteLine($"Inspector.OnSelectionChanged() - {selection}");
         }
     }

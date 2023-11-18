@@ -9,6 +9,9 @@
         <Border Background="Cornsilk" DockPanel.Dock="Top">
             <Label  HorizontalAlignment="Center">Control</Label>    
         </Border>
+        <Label Name="TestLabel" DockPanel.Dock="Top">
+            entity    
+        </Label>
         <Border BorderThickness="1" BorderBrush="LightGray">
 
         </Border>
