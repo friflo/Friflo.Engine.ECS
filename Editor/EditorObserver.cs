@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Collections;
 
+// Note! Must not using Avalonia namespaces
+
 // ReSharper disable ConvertToAutoProperty
 namespace Friflo.Fliox.Editor;
-
 
 public struct EditorSelection {
     public ExplorerItem item;

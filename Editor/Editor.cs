@@ -5,14 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Explorer;
 using Friflo.Json.Fliox.Hub.Host;
 using Friflo.Json.Fliox.Hub.Host.Event;
 using Friflo.Json.Fliox.Hub.Remote;
 
-// Note: Must not using imports Avalonia namespaces 
+// Note! Must not using Avalonia namespaces
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Editor;

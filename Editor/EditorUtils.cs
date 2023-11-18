@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Editor;
 
 public static class EditorUtils
 {
-    public static bool IsDesignMode => Avalonia.Controls.Design.IsDesignMode;
+    private static bool IsDesignMode => Avalonia.Controls.Design.IsDesignMode;
     
     public static void AssertUIThread()
     {
