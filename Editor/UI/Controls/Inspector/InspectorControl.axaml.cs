@@ -16,6 +16,7 @@ public partial class InspectorControl : UserControl
         editor?.AddObserver(new InspectorObserver(this, editor));
     }
     
+    // ------------------------------------------- EditorObserver -------------------------------------------
     private class InspectorObserver : EditorObserver
     {
         private readonly InspectorControl inspector;

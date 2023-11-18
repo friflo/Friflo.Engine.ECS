@@ -53,29 +53,6 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         editor.SelectionChanged(new EditorSelection { item = selectedItem });
     }
     
-    private class GridObserver : EditorObserver
-    {
-        private readonly ExplorerTreeDataGrid grid;
-        
-        internal GridObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
-        
-        /// <summary>
-        /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
-        /// </summary>
-        protected override void OnEditorReady()
-        {
-            var store       = Editor.Store;
-            if (store == null) throw new InvalidOperationException("expect Store is present");
-            // return;
-            var source      = grid.GridSource;
-            var rootEntity  = store.StoreRoot;
-            var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
-            source.Items    = new []{ tree.RootItem };
-        }
-    }
-    
-    private static      int _treeCount;
-    
     /// <summary>
     /// Workaround:  Focus TreeDataGridTextCell if navigating with up/down keys.
     ///              Otherwise if parent is <see cref="TreeDataGridExpanderCell"/> its focus and F2 (rename) does not work.
@@ -266,4 +243,28 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         e.Handled = HandleKeyDown(e);
         base.OnKeyDown(e);
     }
+    
+    // ------------------------------------------- EditorObserver -------------------------------------------
+    private class GridObserver : EditorObserver
+    {
+        private readonly ExplorerTreeDataGrid grid;
+        
+        internal GridObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
+        
+        /// <summary>
+        /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
+        /// </summary>
+        protected override void OnEditorReady()
+        {
+            var store       = Editor.Store;
+            if (store == null) throw new InvalidOperationException("expect Store is present");
+            // return;
+            var source      = grid.GridSource;
+            var rootEntity  = store.StoreRoot;
+            var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
+            source.Items    = new []{ tree.RootItem };
+        }
+    }
+    
+    private static      int _treeCount;
 }
