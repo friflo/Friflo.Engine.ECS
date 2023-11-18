@@ -191,7 +191,10 @@ public class Editor
         return entity;
     }
 
-    public void SelectionChanged(in EditorSelection selection) {
-        EditorObserver.CastSelectionChanged(observers, selection);
+    public void SelectionChanged(EditorSelection selection) {
+        EditorUtils.Post(() => {
+            EditorObserver.CastSelectionChanged(observers, selection);    
+        });
+        
     }
 }

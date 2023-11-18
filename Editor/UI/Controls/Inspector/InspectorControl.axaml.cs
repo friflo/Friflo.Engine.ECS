@@ -22,7 +22,8 @@ public partial class InspectorControl : UserControl
         
         internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor) { this.inspector = inspector; }
 
-        protected override void OnSelectionChanged(in EditorSelection selection) {
+        protected override void OnSelectionChanged(in EditorSelection selection)
+        {
             var item    = selection.item;
             var text    = item?.Name ?? "no selection";
             var id      = item != null ? $"id: {item.Id}" : null;
