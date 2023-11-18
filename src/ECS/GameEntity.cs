@@ -112,6 +112,10 @@ public sealed class GameEntity
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
     
+    
+    [Obsolete($"use method only for debugging")]
+                    public  string          DebugJSON       => GameEntityUtils.GetDebugJSON(this);
+    
     public override string                  ToString()      => GameEntityUtils.GameEntityToString(this, new StringBuilder());
 
     #endregion

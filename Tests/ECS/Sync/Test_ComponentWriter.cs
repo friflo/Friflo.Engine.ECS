@@ -93,5 +93,42 @@ public static class Test_ComponentWriter
         var dataEntity = new DataEntity { pid = 1234 };
         AreEqual("pid: 1234", dataEntity.ToString());
     }
+    
+    [Test]
+    public static void Test_GameEntity_DebugJSON()
+    {
+        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var entity      = store.CreateEntity(10);
+        var child       = store.CreateEntity(11);
+        var unresolved  = new Unresolved { tags = new [] { "xyz " } };
+        entity.AddChild(child);
+        entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
+        entity.AddComponent(unresolved);
+        entity.AddTag<TestTag>();
+        entity.AddScript(new TestScript1 { val1 = 10 });
+
+#pragma warning disable CS0618 // Type or member is obsolete
+        var json = entity.DebugJSON;
+#pragma warning restore CS0618 // Type or member is obsolete
+        
+        var expect =
+"""
+{
+    "id": 10,
+    "children": [
+        11
+    ],
+    "components": {
+        "pos": {"x":1,"y":2,"z":3},
+        "testRef1": {"val1":10}
+    },
+    "tags": [
+        "TestTag",
+        "xyz "
+    ]
+}
+""";
+        AreEqual(expect, json);
+    }
 }
 

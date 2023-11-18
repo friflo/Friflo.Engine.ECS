@@ -3,6 +3,8 @@
 
 using System;
 using System.Text;
+using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Json.Fliox.Mapper;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable RedundantExplicitArrayCreation
@@ -56,6 +58,20 @@ internal static class GameEntityUtils
             sb.Append(']');
         }
         return sb.ToString();
+    }
+
+    private static readonly EntityConverter DebugConverter       = new EntityConverter();
+    private static readonly DataEntity      DebugDataEntity      = new DataEntity();      
+    private static readonly ObjectWriter    DebugObjectWriter    = new ObjectWriter(new TypeStore()); // todo use global TypeStore
+    
+    internal static string GetDebugJSON(GameEntity entity)
+    {
+        lock (DebugConverter) {
+            DebugConverter.GameToDataEntity(entity, DebugDataEntity, true);
+            DebugObjectWriter.Pretty             = true;
+            DebugObjectWriter.WriteNullMembers   = false;
+            return DebugObjectWriter.Write(DebugDataEntity);
+        }
     }
     
     internal static IComponent[] GetComponentsDebug(GameEntity entity)
