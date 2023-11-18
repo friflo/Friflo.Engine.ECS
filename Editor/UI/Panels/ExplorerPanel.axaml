@@ -9,7 +9,7 @@
              x:DataType     ="main:MainWindowViewModel">
     <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground1}">
     <DockPanel Name="DockPanel">
-        <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource Radius}" DockPanel.Dock="Top">
+        <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource RadiusTop}" DockPanel.Dock="Top">
             <Label HorizontalAlignment="Center">Explorer</Label>    
         </Border>
         <!-- <TreeDataGrid Name="DragDrop"

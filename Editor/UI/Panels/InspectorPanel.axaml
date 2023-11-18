@@ -8,7 +8,7 @@
              xmlns:inspector ="using:Friflo.Fliox.Editor.UI.Controls.Inspector">
     <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground1}">
     <DockPanel >
-        <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource Radius}" DockPanel.Dock="Top">
+        <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource RadiusTop}" DockPanel.Dock="Top">
             <Label  HorizontalAlignment="Center">Inspector</Label>    
         </Border>
         <inspector:InspectorControl/>
