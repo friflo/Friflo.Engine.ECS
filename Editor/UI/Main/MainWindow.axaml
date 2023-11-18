@@ -9,22 +9,24 @@
         Background="{DynamicResource AppBackground}"
         Title="Fliox Editor">
     <DockPanel>
-        <Rectangle        Height="30"   DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
-        <Rectangle        Height="6"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
-        <Rectangle        Height="30"   DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
-        <Rectangle        Height="6"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Height="0"   DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Height="0"   DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Height="4"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
         <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
         <ui:ExplorerPanel Width="300"   DockPanel.Dock="Left" />
-        <Rectangle        Width="6"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
+        <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
         <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
         <DockPanel        Width="300"   DockPanel.Dock="Right" >
             <ui:TestPanel       DockPanel.Dock="Top" />
-            <Rectangle    Height="6"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
+            <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
             <ui:ExplorerPanel   DockPanel.Dock="Top" Height="200"/>
-            <Rectangle    Height="6"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
+            <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
             <ui:InspectorPanel/>
         </DockPanel>
-        <Rectangle        Width="6"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
-        <openGl:SilkOpenGLControl Name="OpenGlControl" />
+        <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
+        <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}">
+            <openGl:SilkOpenGLControl Name="OpenGlControl" />
+        </Border>
     </DockPanel>
 </Window>
