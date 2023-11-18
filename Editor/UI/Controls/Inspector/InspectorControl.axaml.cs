@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
@@ -30,6 +31,16 @@ public partial class InspectorControl : UserControl
             var id      = item != null ? $"id: {item.Id}" : null;
             inspector.EntityName.Content    = text;
             inspector.EntityId.Content      = id;
+            
+            var entity = item?.Entity;
+            if (entity != null) {
+                Console.WriteLine($"--- Inspector entity: {entity}");
+                var archetype = entity.Archetype;
+                foreach (var componentType in archetype.Structs) {
+                    var component = archetype.GetEntityComponent(entity, componentType);
+                    Console.WriteLine($"{componentType}: {component}");
+                }
+            }
         }
     }
 }
