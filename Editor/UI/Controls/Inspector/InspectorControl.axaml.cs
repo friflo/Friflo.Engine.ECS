@@ -27,18 +27,24 @@ public partial class InspectorControl : UserControl
         protected override void OnSelectionChanged(in EditorSelection selection)
         {
             var item    = selection.item;
-            var text    = item?.Name ?? "no selection";
+            var name    = item?.Name ?? "no selection";
             var id      = item != null ? $"id: {item.Id}" : null;
-            inspector.EntityName.Content    = text;
+            inspector.EntityName.Content    = name;
             inspector.EntityId.Content      = id;
             
             var entity = item?.Entity;
             if (entity != null) {
+                var children = inspector.Components.Children;
+                children.Clear();
                 Console.WriteLine($"--- Inspector entity: {entity}");
                 var archetype = entity.Archetype;
                 foreach (var componentType in archetype.Structs) {
-                    var component = archetype.GetEntityComponent(entity, componentType);
-                    Console.WriteLine($"{componentType}: {component}");
+                    var value   = archetype.GetEntityComponent(entity, componentType);
+                    var text    = value.ToString();
+                    var label   = new Label { Content = text };
+                    DockPanel.SetDock(label, Dock.Top);
+                    children.Add(label);
+                    // Console.WriteLine(text);
                 }
             }
         }

@@ -10,8 +10,7 @@
             <Label Name="EntityName" DockPanel.Dock="Left">name</Label>
             <Label Name="EntityId">id</Label>
         </DockPanel>
-        <Border BorderThickness="1" BorderBrush="LightGray">
-
-        </Border>
+       <DockPanel Name="Components">
+       </DockPanel>
     </DockPanel>
 </UserControl>
