@@ -3,22 +3,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable   ="d" d:DesignWidth="300" d:DesignHeight="400"
-             Background     ="{DynamicResource PanelBackground1}"
              x:Class        ="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
              xmlns:main     ="using:Friflo.Fliox.Editor.UI.Main"
              xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Controls.Explorer"
              x:DataType     ="main:MainWindowViewModel">
-        <DockPanel Name="DockPanel">
-            <Border Background="{DynamicResource PanelBackground2}" DockPanel.Dock="Top">
-                <Label HorizontalAlignment="Center">Explorer</Label>    
-            </Border>
-            <!-- <TreeDataGrid Name="DragDrop"
-                          Source="{Binding DragDrop.DragDropSource}"
-                          AutoDragDropRows="True"/> -->
-            <explorer:ExplorerTreeDataGrid Name="Grid"
-                                  Source="{Binding ExplorerModel.ExplorerItemSource}"
-                                  RowDragStarted="DragDrop_OnRowDragStarted"
-                                  RowDragOver="DragDrop_OnRowDragOver"
-                                  AutoDragDropRows="True"/>
-        </DockPanel>
+    <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground1}">
+    <DockPanel Name="DockPanel">
+        <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource Radius}" DockPanel.Dock="Top">
+            <Label HorizontalAlignment="Center">Explorer</Label>    
+        </Border>
+        <!-- <TreeDataGrid Name="DragDrop"
+                      Source="{Binding DragDrop.DragDropSource}"
+                      AutoDragDropRows="True"/> -->
+        <explorer:ExplorerTreeDataGrid Name="Grid"
+                              Source="{Binding ExplorerModel.ExplorerItemSource}"
+                              RowDragStarted="DragDrop_OnRowDragStarted"
+                              RowDragOver="DragDrop_OnRowDragOver"
+                              AutoDragDropRows="True"/>
+    </DockPanel>
+    </Border>
 </UserControl>

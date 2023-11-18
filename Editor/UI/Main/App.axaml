@@ -16,14 +16,17 @@
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
+            <CornerRadius x:Key='Radius'>5</CornerRadius>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key='Light'>
                     <SolidColorBrush x:Key='PanelBackground1'>#ffffff</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBackground2'>#f4f4f4</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBorder'>#dddddd</SolidColorBrush>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key='Dark'>
                     <SolidColorBrush x:Key='PanelBackground1'>#303030</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBackground2'>#282828</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBorder'>#111111</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
