@@ -29,13 +29,13 @@ public class Editor
     #endregion
 
 #region private fields
-    private             GameEntityStore     store;
-    private             GameDataSync        sync;
-    internal readonly   List<EditorEvent>   editorEvents    = new List<EditorEvent>();
-    private             bool                isReady;
-    private  readonly   ManualResetEvent    signalEvent     = new ManualResetEvent(false);
-    private             EventProcessorQueue processor;
-    private             HttpServer          server;
+    private             GameEntityStore         store;
+    private             GameDataSync            sync;
+    private  readonly   List<EditorObserver>    observers   = new List<EditorObserver>();
+    private             bool                    isReady;
+    private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
+    private             EventProcessorQueue     processor;
+    private             HttpServer              server;
     #endregion
 
     public async Task Init()
@@ -49,7 +49,7 @@ public class Editor
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
         isReady = true;
         EditorUtils.Post(() => {
-            EditorEvent.CastEditorReady(editorEvents);
+            EditorObserver.CastEditorReady(observers);
         });
         // --- add client and database
         var schema      = DatabaseSchema.Create<GameClient>();
@@ -111,14 +111,14 @@ public class Editor
         server?.Stop();
     }
     
-    internal void AddEvent(EditorEvent editorEvent)
+    internal void AddObserver(EditorObserver observer)
     {
-        if (editorEvent == null) {
+        if (observer == null) {
             return;
         }
-        editorEvents.Add(editorEvent);
+        observers.Add(observer);
         if (isReady) {
-            editorEvent.SendEditorReady();  // could be deferred to event loop
+            observer.SendEditorReady();  // could be deferred to event loop
         }
     }
     

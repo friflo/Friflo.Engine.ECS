@@ -24,31 +24,28 @@ public partial class ExplorerPanel : UserControl, IEditorControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        Editor = this.GetEditor(new ExplorerEditorEvent(this));
+        Editor = this.GetEditor(new ExplorerEditorObserver(this));
     }
     
-    private class ExplorerEditorEvent : EditorEvent
+    private class ExplorerEditorObserver : EditorObserver
     {
-        readonly ExplorerPanel panel;
+        private readonly ExplorerPanel panel;
         
-        internal ExplorerEditorEvent (ExplorerPanel panel) { this.panel = panel; }
+        internal ExplorerEditorObserver (ExplorerPanel panel) { this.panel = panel; }
         
-        protected override void OnEditorReady() {
-            panel.SetupExplorer();
+        /// <summary>
+        /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
+        /// </summary>
+        protected override void OnEditorReady()
+        {
+            var store = panel.Editor.Store;
+            if (store == null) throw new InvalidOperationException("expect Store is present");
+            // return;
+            var source      = panel.Grid.GridSource;
+            var rootEntity  = store.StoreRoot;
+            var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
+            source.Items    = new []{ tree.RootItem };
         }
-    }
-    
-    /// <summary>
-    /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
-    /// </summary>
-    private void SetupExplorer()
-    {
-        if (Editor.Store == null) throw new InvalidOperationException("expect Store is present");
-        // return;
-        var source      = Grid.GridSource;
-        var rootEntity  = Editor.Store.StoreRoot;
-        var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
-        source.Items    = new []{ tree.RootItem };
     }
     
     private static      int _treeCount;

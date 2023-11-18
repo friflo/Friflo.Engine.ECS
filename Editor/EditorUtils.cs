@@ -29,11 +29,11 @@ public static class EditorUtils
 
 public static class EditorExtensions
 {
-    public static Editor GetEditor(this Visual visual, EditorEvent editorEvent)
+    public static Editor GetEditor(this Visual visual, EditorObserver observer)
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
             var editor = mainWindow.Editor;
-            editor.AddEvent(editorEvent);
+            editor.AddObserver(observer);
             return editor;
         }
         if (EditorUtils.IsDesignMode) {

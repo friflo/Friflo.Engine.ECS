@@ -2,7 +2,7 @@
 
 namespace Friflo.Fliox.Editor;
 
-public abstract class EditorEvent
+public abstract class EditorObserver
 {
     private bool editorReadyFired; 
         
@@ -17,9 +17,9 @@ public abstract class EditorEvent
         OnEditorReady();
     }
     
-    internal static void CastEditorReady(List<EditorEvent> editorEvents)
+    internal static void CastEditorReady(List<EditorObserver> observers)
     {
-        foreach (var editorEvent in editorEvents) {
+        foreach (var editorEvent in observers) {
             editorEvent.SendEditorReady();
         }
     }
