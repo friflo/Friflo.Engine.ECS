@@ -59,7 +59,7 @@ public class Editor
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
-        await AddSampleEntities(sync);
+        await TestBed.AddSampleEntities(sync);
 
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
@@ -164,36 +164,9 @@ public class Editor
         return new MemoryDatabase("game", schema) { Pretty = false };
     }
         
-    private static async Task AddSampleEntities(GameDataSync sync)
-    {
-        var store   = sync.Store;
-        var root    = store.StoreRoot;
-        root.AddComponent(new Position(1, 1, 1));
-        root.AddComponent(new EntityName("root"));
-        var child   = CreateEntity(store, 2);
-        child.AddComponent(new Position(2, 2, 2));
-
-        root.AddChild(child);
-        root.AddChild(CreateEntity(store, 3));
-        root.AddChild(CreateEntity(store, 4));
-        root.AddChild(CreateEntity(store, 5));
-        root.AddChild(CreateEntity(store, 6));
-        root.AddChild(CreateEntity(store, 7));
-        
-        await sync.StoreGameEntitiesAsync();
-    }
-    
-    private static GameEntity CreateEntity(GameEntityStore store, int id)
-    {
-        var entity = store.CreateEntity();
-        entity.AddComponent(new EntityName("child-" + id));
-        return entity;
-    }
-
     public void SelectionChanged(EditorSelection selection) {
         EditorUtils.Post(() => {
             EditorObserver.CastSelectionChanged(observers, selection);    
         });
-        
     }
 }
