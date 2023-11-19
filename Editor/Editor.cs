@@ -31,8 +31,13 @@ public class Editor
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
+    
+    private static readonly bool StoreGameEntities = false;
+
     #endregion
 
+    // ---------------------------------------- public methods ----------------------------------------
+#region public methods
     public async Task Init()
     {
         EditorUtils.AssertUIThread();
@@ -71,8 +76,30 @@ public class Editor
         server = RunServer(hub);
     }
     
-    private static readonly bool StoreGameEntities = false;
+    public void AddObserver(EditorObserver observer)
+    {
+        if (observer == null) {
+            return;
+        }
+        observers.Add(observer);
+        if (isReady) {
+            observer.SendEditorReady();  // could be deferred to event loop
+        }
+    }
     
+    public void SelectionChanged(EditorSelection selection) {
+        EditorUtils.Post(() => {
+            EditorObserver.CastSelectionChanged(observers, selection);    
+        });
+    }
+    
+    internal void Shutdown() {
+        server?.Stop();
+    }
+    #endregion
+
+    // ---------------------------------------- private methods ----------------------------------------
+#region private methods
     /// <summary>SYNC: <see cref="GameEntity"/> -> <see cref="GameDataSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
@@ -106,22 +133,7 @@ public class Editor
         EditorUtils.AssertUIThread();
         await sync.SyncChangesAsync();
     }
-    
-    internal void Shutdown() {
-        server?.Stop();
-    }
-    
-    internal void AddObserver(EditorObserver observer)
-    {
-        if (observer == null) {
-            return;
-        }
-        observers.Add(observer);
-        if (isReady) {
-            observer.SendEditorReady();  // could be deferred to event loop
-        }
-    }
-    
+
     internal void Run()
     {
         // simple event/game loop 
@@ -168,10 +180,5 @@ public class Editor
         }
         return new MemoryDatabase("game", schema) { Pretty = false };
     }
-        
-    public void SelectionChanged(EditorSelection selection) {
-        EditorUtils.Post(() => {
-            EditorObserver.CastSelectionChanged(observers, selection);    
-        });
-    }
+    #endregion
 }
