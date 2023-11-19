@@ -59,7 +59,10 @@ public class Editor
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
-        await TestBed.AddSampleEntities(sync);
+        TestBed.AddSampleEntities(sync);
+        if (StoreGameEntities) {
+            await sync.StoreGameEntitiesAsync();
+        }
 
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
@@ -67,6 +70,8 @@ public class Editor
         // --- run server
         server = RunServer(hub);
     }
+    
+    private static readonly bool StoreGameEntities = false;
     
     /// <summary>SYNC: <see cref="GameEntity"/> -> <see cref="GameDataSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)

@@ -21,7 +21,7 @@ public class TestScript : Script
 
 public static class TestBed
 {
-    internal static async Task AddSampleEntities(GameDataSync sync)
+    internal static void AddSampleEntities(GameDataSync sync)
     {
         var store   = sync.Store;
         var root    = store.StoreRoot;
@@ -37,7 +37,26 @@ public static class TestBed
         root.AddChild(CreateEntity(store, 6));
         root.AddChild(CreateEntity(store, 7));
         
-        await sync.StoreGameEntitiesAsync();
+        var many = store.CreateEntity();
+        many.AddComponent(new EntityName("many-root"));
+        AddManyEntities(many, new [] { 100, 100 }, 0);
+        // AddManyEntities(many, new [] { 100, 100, 100 }, 0);
+        
+        root.AddChild(many);
+    }
+    
+    private static void AddManyEntities(GameEntity entity, int[] counts, int depth)
+    {
+        if (depth >= counts.Length) {
+            return;
+        }
+        var count   = counts[depth];
+        var store   = entity.Store;
+        for (int n = 0; n < count; n++) {
+            var child = store.CreateEntity();
+            entity.AddChild(child);
+            AddManyEntities(child, counts, depth + 1);
+        }
     }
     
     private static GameEntity CreateEntity(GameEntityStore store, int id)
