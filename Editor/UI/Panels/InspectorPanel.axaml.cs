@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+﻿// Copyright (c) Ullrich Praetz. All rights reserved.
+// See LICENSE file in the project root for full license information.
+
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 
 namespace Friflo.Fliox.Editor.UI.Panels;

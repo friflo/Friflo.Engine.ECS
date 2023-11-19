@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) Ullrich Praetz. All rights reserved.
+// See LICENSE file in the project root for full license information.
+
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.ECS.Collections;
