@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CustomTitleBarTemplate.Views.CustomTitleBars.MacosTitleBar"
              DockPanel.Dock="Top"
-             Height="44">
+             Height="30">
   <Grid>
     <DockPanel Background="{DynamicResource MacOsTitleBarBackground}"
                IsHitTestVisible="False"
@@ -15,6 +15,7 @@
       <!--#DEE1E6-->
     </DockPanel>
     <DockPanel>
+      <!--
       <StackPanel Orientation="Horizontal"
                   DockPanel.Dock="Left"
                   Spacing="6"
@@ -104,6 +105,7 @@
         </Button>
 
       </StackPanel>
+      -->
 
       <StackPanel Orientation="Horizontal"
                   HorizontalAlignment="Center"
@@ -119,8 +121,8 @@
         <Image Source="/Assets/Images/Icon.ico"
                Height="25"
                Width="25"></Image>
-        <TextBlock Text="Custom TitleBar Demo"
-                   FontSize="20"
+        <TextBlock Text="Fliox Editor"
+
                    VerticalAlignment="Center"
                    Foreground="{DynamicResource MacOsWindowTitleColor}">
           <!--#999EA1-->

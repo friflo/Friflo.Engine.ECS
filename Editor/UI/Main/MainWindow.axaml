@@ -11,7 +11,7 @@
         
         xmlns:customTitleBars="clr-namespace:CustomTitleBarTemplate.Views.CustomTitleBars"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
         ExtendClientAreaTitleBarHeightHint="-1">
     
     <!-- template project: https://github.com/FrankenApps/Avalonia-CustomTitleBarTemplate -->

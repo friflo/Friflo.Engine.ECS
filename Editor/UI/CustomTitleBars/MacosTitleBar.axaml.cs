@@ -17,6 +17,8 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
         private DockPanel titleBarBackground;
         private StackPanel titleAndWindowIconWrapper;
 
+        private static readonly bool CustomSystemButtons = false;
+
         public static readonly StyledProperty<bool> IsSeamlessProperty =
         AvaloniaProperty.Register<MacosTitleBar, bool>(nameof(IsSeamless));
 
@@ -43,13 +45,15 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
             }
             else
             {
-                minimizeButton = this.FindControl<Button>("MinimizeButton");
-                zoomButton = this.FindControl<Button>("ZoomButton");
-                closeButton = this.FindControl<Button>("CloseButton");
+                if (CustomSystemButtons) {
+                    minimizeButton = this.FindControl<Button>("MinimizeButton");
+                    zoomButton = this.FindControl<Button>("ZoomButton");
+                    closeButton = this.FindControl<Button>("CloseButton");
 
-                minimizeButton.Click += MinimizeWindow;
-                zoomButton.Click += MaximizeWindow;
-                closeButton.Click += CloseWindow;
+                    minimizeButton.Click += MinimizeWindow;
+                    zoomButton.Click += MaximizeWindow;
+                    closeButton.Click += CloseWindow;
+                }
 
                 titleBarBackground = this.FindControl<DockPanel>("TitleBarBackground");
                 titleAndWindowIconWrapper = this.FindControl<StackPanel>("TitleAndWindowIconWrapper");
