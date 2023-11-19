@@ -18,6 +18,8 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
         private ToolTip maximizeToolTip;
         private Button closeButton;
         private Image windowIcon;
+        
+        private static readonly bool CustomSystemButtons = false;
 
         private DockPanel titleBar;
         private DockPanel titleBarBackground;
@@ -62,18 +64,20 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
             }
             else
             {
-                minimizeButton = this.FindControl<Button>("MinimizeButton");
-                maximizeButton = this.FindControl<Button>("MaximizeButton");
-                maximizeIcon = this.FindControl<Path>("MaximizeIcon");
-                maximizeToolTip = this.FindControl<ToolTip>("MaximizeToolTip");
-                closeButton = this.FindControl<Button>("CloseButton");
+                if (CustomSystemButtons) {
+                    minimizeButton = this.FindControl<Button>("MinimizeButton");
+                    maximizeButton = this.FindControl<Button>("MaximizeButton");
+                    maximizeIcon = this.FindControl<Path>("MaximizeIcon");
+                    maximizeToolTip = this.FindControl<ToolTip>("MaximizeToolTip");
+                    closeButton = this.FindControl<Button>("CloseButton");
+
+                    minimizeButton.Click += MinimizeWindow;
+                    maximizeButton.Click += MaximizeWindow;
+                    closeButton.Click += CloseWindow;
+                }
                 windowIcon = this.FindControl<Image>("WindowIcon");
-
-                minimizeButton.Click += MinimizeWindow;
-                maximizeButton.Click += MaximizeWindow;
-                closeButton.Click += CloseWindow;
                 windowIcon.DoubleTapped += CloseWindow;
-
+                
                 titleBar = this.FindControl<DockPanel>("TitleBar");
                 titleBarBackground = this.FindControl<DockPanel>("TitleBarBackground");
                 systemChromeTitle = this.FindControl<TextBlock>("SystemChromeTitle");
@@ -122,6 +126,9 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
 
             hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(s =>
             {
+                if (!CustomSystemButtons) {
+                    return;
+                }
                 if (s != WindowState.Maximized)
                 {
                     maximizeIcon.Data = Geometry.Parse("M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z");

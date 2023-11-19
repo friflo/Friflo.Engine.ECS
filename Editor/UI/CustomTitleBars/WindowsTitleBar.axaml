@@ -33,6 +33,7 @@
                      IsHitTestVisible="False"
                      Name="SystemChromeTitle"></TextBlock>
         </StackPanel>
+        <!--
         <StackPanel Height="22" 
 					HorizontalAlignment="Right"
                     Orientation="Horizontal"
@@ -117,6 +118,7 @@
           </Button>
 
         </StackPanel>
+        -->
       </DockPanel>
     </Grid>
     <NativeMenuBar HorizontalAlignment="Left"
