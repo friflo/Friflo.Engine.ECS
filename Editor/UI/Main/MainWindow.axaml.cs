@@ -9,7 +9,7 @@ namespace Friflo.Fliox.Editor.UI;
 
 public partial class MainWindow : Window
 {
-    public Editor Editor { get; }
+    public              Editor  Editor { get; }
 
     public MainWindow()
     {
@@ -41,4 +41,7 @@ public partial class MainWindow : Window
         Console.WriteLine($"--- MainWindow.OpenGlReady() {Program.startTime.ElapsedMilliseconds} ms");
     }
 
+    private void QuitProgramCommand(object sender, EventArgs e) {
+        Close();
+    }
 }
