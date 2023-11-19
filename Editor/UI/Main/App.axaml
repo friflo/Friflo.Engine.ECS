@@ -16,8 +16,8 @@
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
-            <CornerRadius x:Key='Radius'>6</CornerRadius>
-            <CornerRadius x:Key='RadiusTop'>6 0</CornerRadius>
+            <CornerRadius x:Key='Radius'>4</CornerRadius>
+            <CornerRadius x:Key='RadiusTop'>4 0</CornerRadius>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key='Light'>
                     <SolidColorBrush x:Key='AppBackground'>#F1E8FF</SolidColorBrush>
