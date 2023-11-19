@@ -52,9 +52,11 @@
         <!-- template project - end -->
         
         <DockPanel>
+            <!--
             <Rectangle        Height="0"   DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
-            <Rectangle        Height="0"   DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
+            -->
+            <Rectangle        Height="0"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Height="4"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
             <ui:ExplorerPanel Width="300"   DockPanel.Dock="Left" />
