@@ -9,8 +9,8 @@
         <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource RadiusTop}" DockPanel.Dock="Top">
             <Label HorizontalAlignment="Center">Test</Label>    
         </Border>
-        <Button Click="OnButtonClick">Test</Button>
-        <Button Content="Click me">
+        <Button Padding="4" Margin="4" Click="OnButtonClick">Click</Button>
+        <Button Padding="4" Margin="4" Content="Flyout">
             <Button.Flyout>
                 <Flyout>
                     <TextBlock Text="Flyout Content!" />
