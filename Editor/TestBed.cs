@@ -35,12 +35,15 @@ public static class TestBed
         root.AddChild(CreateEntity(store, 5));
         root.AddChild(CreateEntity(store, 6));
         root.AddChild(CreateEntity(store, 7));
-        
-        var many = store.CreateEntity();
-        many.AddComponent(new EntityName("many-root"));
-        AddManyEntities(many, new [] { 100, 100 }, 0);
-        // AddManyEntities(many, new [] { 100, 100, 100 }, 0);
-        
+        CreateManyEntities(root, "many - 10.000",       new [] { 100, 100 });
+        // CreateManyEntities(root, "many - 1.000.000",    new [] { 100, 100, 100 });
+    }
+    
+    private static void CreateManyEntities(GameEntity root, string name, int[] counts)
+    {
+        var many = root.Store.CreateEntity();
+        many.AddComponent(new EntityName(name));
+        AddManyEntities(many, counts, 0);
         root.AddChild(many);
     }
     
