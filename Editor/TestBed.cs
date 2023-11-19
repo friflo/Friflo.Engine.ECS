@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Friflo.Fliox.Engine.Client;
+﻿using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 
 namespace Friflo.Fliox.Editor;
