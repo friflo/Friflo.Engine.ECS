@@ -4,13 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable ReplaceSliceWithRangeIndexer
@@ -66,26 +64,9 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     private static void FocusWorkaround(GotFocusEventArgs args)
     {
         if (args.Source is TreeDataGridExpanderCell expanderCell) {
-            var textCell = FindControl<TreeDataGridTextCell>(expanderCell);
+            var textCell = EditorUtils.FindControl<TreeDataGridTextCell>(expanderCell);
             textCell?.Focus();
         }
-    }
-    
-    internal static T FindControl<T>(Visual control) where T : Control
-    {
-        foreach (var child in control.GetVisualChildren()) {
-            if (child is not Control childControl) {
-                continue;
-            }
-            if (childControl is T) {
-                return (T)childControl;
-            }
-            var sub = FindControl<T>(childControl);
-            if (sub != null) {
-                return sub;
-            }
-        }
-        return null;
     }
     
     internal void FocusPanel() {

@@ -34,7 +34,7 @@ public static class ExplorerCommands
         var modelIndex  = grid.RowSelection!.SelectedIndex;
         var rowIndex    = grid.Rows!.ModelIndexToRowIndex(modelIndex);
         var row         = grid.TryGetRow(rowIndex);
-        var cell        = ExplorerTreeDataGrid.FindControl<TreeDataGridTextCell>(row);
+        var cell        = EditorUtils.FindControl<TreeDataGridTextCell>(row);
         // hm...
         var beginEdit = typeof(TreeDataGridTextCell).GetMethod("BeginEdit", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         beginEdit!.Invoke(cell, BindingFlags.Instance | BindingFlags.Public, null, null, null);

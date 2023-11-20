@@ -4,15 +4,17 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI;
+using Friflo.Fliox.Editor.UI.Panels;
 
 namespace Friflo.Fliox.Editor;
 
 public static class EditorUtils
 {
-    private static bool IsDesignMode => Avalonia.Controls.Design.IsDesignMode;
+    private static bool IsDesignMode => Design.IsDesignMode;
     
     public static void AssertUIThread()
     {
@@ -38,5 +40,35 @@ public static class EditorUtils
             return null;
         }
         throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(MainWindow)} as visual root");
-    } 
+    }
+
+    private static PanelHeader _currentPanel;
+    
+    internal static void SetActivePanel(Visual panelControl)
+    {
+        if (_currentPanel != null) {
+            _currentPanel.PanelActive = false;
+        }
+        _currentPanel = FindControl<PanelHeader>(panelControl);
+        if (_currentPanel != null) {
+            _currentPanel.PanelActive = true;
+        }
+    }
+    
+    internal static T FindControl<T>(Visual control) where T : Control
+    {
+        foreach (var child in control.GetVisualChildren()) {
+            if (child is not Control childControl) {
+                continue;
+            }
+            if (childControl is T) {
+                return (T)childControl;
+            }
+            var sub = FindControl<T>(childControl);
+            if (sub != null) {
+                return sub;
+            }
+        }
+        return null;
+    }
 }

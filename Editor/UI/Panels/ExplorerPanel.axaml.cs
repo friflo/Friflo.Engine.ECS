@@ -20,6 +20,11 @@ public partial class ExplorerPanel : UserControl
         DockPanel.ContextFlyout = new ExplorerFlyout(Grid);
     }
 
+    protected override void OnGotFocus(GotFocusEventArgs e) {
+        base.OnGotFocus(e);
+        EditorUtils.SetActivePanel(this);
+    }
+
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
     {
         foreach (ExplorerItem item in e.Models)

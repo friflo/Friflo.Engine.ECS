@@ -3,6 +3,7 @@
 
 using System;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
@@ -22,5 +23,10 @@ public partial class TestPanel : UserControl
     public void OnButtonClick(object sender, RoutedEventArgs routedEventArgs)
     {
         Console.WriteLine("Click");
+    }
+    
+    protected override void OnGotFocus(GotFocusEventArgs e) {
+        base.OnGotFocus(e);
+        EditorUtils.SetActivePanel(this);
     }
 }

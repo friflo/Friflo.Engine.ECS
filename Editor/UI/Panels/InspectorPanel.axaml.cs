@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
@@ -16,5 +17,10 @@ public partial class InspectorPanel : UserControl
     // ReSharper disable once RedundantOverriddenMember
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
+    }
+
+    protected override void OnGotFocus(GotFocusEventArgs e) {
+        base.OnGotFocus(e);
+        EditorUtils.SetActivePanel(this);
     }
 }
