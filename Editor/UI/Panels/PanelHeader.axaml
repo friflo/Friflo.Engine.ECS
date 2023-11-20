@@ -15,7 +15,7 @@
                            Text="{Binding $parent[local:PanelHeader].PanelTitle}"/>
             </Border>
             
-            <Border Margin="2 2" Background="Magenta" Width="4" Height="17" CornerRadius="2"
+            <Border Margin="2 2" Background="Magenta" Width="5" Height="17" CornerRadius="2"
                     IsVisible="{Binding $parent[local:PanelHeader].PanelActive}">
             </Border>
         </RelativePanel>

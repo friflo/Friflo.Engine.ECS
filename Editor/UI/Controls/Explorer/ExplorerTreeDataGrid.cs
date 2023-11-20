@@ -238,8 +238,9 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     private bool HandleGetFocus(GotFocusEventArgs e)
     {
         if (e.NavigationMethod == NavigationMethod.Tab) {
+            bool passFocus = e.Source is TreeDataGrid; // || e.Source is TreeDataGridColumnHeader;
             if (e.KeyModifiers == KeyModifiers.None) {
-                if (e.Source is TreeDataGridColumnHeader || e.Source is TreeDataGrid) {
+                if (passFocus) {
                     return false;
                 }
                 var ancestor    = this.FindAncestorOfType<PanelControl>();
@@ -247,7 +248,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 next.Focus(NavigationMethod.Tab);
                 return true;
             }
-            if (e.Source is TreeDataGridColumnHeader || e.Source is TreeDataGrid) {
+            if (passFocus) {
                 return false;
             }
             Focus(NavigationMethod.Tab, KeyModifiers.Shift);
