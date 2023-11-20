@@ -70,7 +70,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     }
     
     internal void FocusPanel() {
-        // Focus(); - calling Focus() explicit corrupt navigation with Key.Tab
+        Focus();
     }
     
     /// <summary>
