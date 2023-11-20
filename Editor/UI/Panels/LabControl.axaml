@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200">
+
+    <Border Name="All" Width="300" BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground1}">
+        <DockPanel>
+            <Border DockPanel.Dock="Top" Background="LightBlue" Height="24">
+                <RelativePanel>
+                    <Border Background="{DynamicResource PanelBackground2}" CornerRadius="10"
+                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignTopWithPanel="True"  RelativePanel.AlignBottomWithPanel="True">
+                        <Label HorizontalAlignment="Center">Test 2</Label>
+                    </Border>
+                    <Ellipse Width="5" Height="5" Fill="Blue"/>
+                    <Label>---</Label>
+                    <Label>...</Label>
+                    <Label>'''</Label>
+                </RelativePanel>
+            </Border>
+            <TextBlock Text="TextBlock 1" DockPanel.Dock="Top"/>
+            <TextBlock Text="TextBlock 2" />
+        </DockPanel>
+    </Border>
+</UserControl>
