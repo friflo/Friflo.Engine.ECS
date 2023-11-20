@@ -34,7 +34,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     public ExplorerTreeDataGrid() {
         Focusable   = true; // required to obtain focus when moving items with: Ctrl + Up / Down
         RowDrop    += RowDropHandler;
-        GotFocus   += (_, args) => FocusWorkaround(args);
+        // GotFocus   += (_, args) => FocusWorkaround(args);
     }
     
     protected override void OnLoaded(RoutedEventArgs e) {
@@ -65,12 +65,12 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     {
         if (args.Source is TreeDataGridExpanderCell expanderCell) {
             var textCell = EditorUtils.FindControl<TreeDataGridTextCell>(expanderCell);
-            textCell?.Focus();
+            // textCell?.Focus(); - calling Focus() explicit corrupt navigation with Key.Tab
         }
     }
     
     internal void FocusPanel() {
-        Focus();
+        // Focus(); - calling Focus() explicit corrupt navigation with Key.Tab
     }
     
     /// <summary>
@@ -164,9 +164,17 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         rowPresenter.BringIntoView(lastIndex);
     }
     
+    private bool HandleKeyUp(KeyEventArgs e) {
+        if (e.Key == Key.F2) {
+            ExplorerCommands.RenameEntity(this);
+            return true;
+        }
+        return false;
+    }
+    
     /// <remarks>
-    /// <see cref="Key.F2"/> is handled by <see cref="TreeDataGrid"/> automatically.<br/>
-    /// Rename programatically with <see cref="ExplorerCommands.RenameEntity"/>.
+    /// <see cref="Key.F2"/> is handled by <see cref="TreeDataGrid"/> if focused.<br/>
+    /// Otherwise it is handled at <see cref="HandleKeyUp"/>
     /// </remarks>
     private bool HandleKeyDown(KeyEventArgs e)
     {
@@ -223,6 +231,11 @@ public class ExplorerTreeDataGrid : TreeDataGrid
             path = path.Slice(0, path.Count - 1);
         }
         RowSelection!.SelectedIndex = path;
+    }
+    
+    protected override void OnKeyUp(KeyEventArgs e) {
+        e.Handled = HandleKeyUp(e);
+        base.OnKeyUp(e);
     }
 
     protected override void OnKeyDown(KeyEventArgs e) {

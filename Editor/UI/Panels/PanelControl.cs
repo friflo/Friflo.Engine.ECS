@@ -25,7 +25,7 @@ public class PanelControl : UserControl
     protected override void OnPointerPressed(PointerPressedEventArgs e) {
         base.OnPointerPressed(e);
         editor.SetActivePanel(this);
-        Focus();
+        // Focus(); - calling Focus() explicit corrupt navigation with Key.Tab
     }
     
     protected override void OnLoaded(RoutedEventArgs e) {
