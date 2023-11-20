@@ -2,13 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:panels="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
              x:Class="Friflo.Fliox.Editor.UI.Panels.TestPanel">
     <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground1}">
     <DockPanel>
-        <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource RadiusTop}" DockPanel.Dock="Top">
-            <Label HorizontalAlignment="Center">Test</Label>    
-        </Border>
+        <panels:PanelHeader PanelTitle="Explorer" DockPanel.Dock="Top"/>
         <Button Padding="4" Margin="4" Click="OnButtonClick">Click</Button>
         <Button Padding="4" Margin="4" Content="Flyout">
             <Button.Flyout>
