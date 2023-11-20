@@ -8,7 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI;
-using Friflo.Fliox.Editor.UI.Panels;
+// ReSharper disable MergeCastWithTypeCheck
 
 namespace Friflo.Fliox.Editor;
 
@@ -54,37 +54,6 @@ public static class EditorUtils
         // var dataObject  = new DataObject();
         // dataObject.Set(DataFormats.Text, text);
         // clipboard.SetDataObjectAsync(dataObject);
-    }
-
-    private static PanelHeader  _currentHeader;
-    private static PanelControl _currentPanel;
-    
-    public static bool SendEvent(string ev) {
-        if (_currentPanel.OnEvent(ev)) {
-            return true;
-        }
-        switch (ev) {
-            case "CopyToClipboard":
-                CopyToClipboard(_currentPanel, "");
-                break;
-        }
-        return false;
-    }
-    
-    internal static void SetActivePanel(Visual visual)
-    {
-        if (visual is not PanelControl panelControl) {
-            panelControl = visual.FindAncestorOfType<PanelControl>();
-        }
-        _currentPanel = panelControl;
-        
-        if (_currentHeader != null) {
-            _currentHeader.PanelActive = false;
-        }
-        _currentHeader = FindControl<PanelHeader>(panelControl);
-        if (_currentHeader != null) {
-            _currentHeader.PanelActive = true;
-        }
     }
     
     internal static T FindControl<T>(Visual control) where T : Control

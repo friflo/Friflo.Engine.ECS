@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Hub.Client;
@@ -100,6 +101,36 @@ public class Editor
         server?.Stop();
     }
     #endregion
+    
+    // -------------------------------------- panel / commands --------------------------------------
+    private PanelControl activePanel;
+    
+    public bool ExecuteCommand(string command)
+    {
+        if (activePanel == null) {
+            return false;
+        }
+        if (activePanel.OnExecuteCommand(command)) {
+            return true;
+        }
+        switch (command) {
+            case "CopyToClipboard":
+                EditorUtils.CopyToClipboard(activePanel, "");
+                break;
+        }
+        return false;
+    }
+    
+    internal void SetActivePanel(PanelControl panel)
+    {
+        if (activePanel != null) {
+            activePanel.Header.PanelActive = false;
+        }
+        activePanel = panel;
+        if (panel != null) {
+            panel.Header.PanelActive = true;
+        }
+    }
 
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
