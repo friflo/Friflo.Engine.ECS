@@ -20,7 +20,7 @@ using Friflo.Json.Fliox.Hub.Remote;
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Editor;
 
-public class Editor
+public partial class Editor
 {
 #region public properties
     public              GameEntityStore         Store    => store;
@@ -104,22 +104,6 @@ public class Editor
     
     // -------------------------------------- panel / commands --------------------------------------
     private PanelControl activePanel;
-    
-    public bool ExecuteCommand(string command)
-    {
-        if (activePanel == null) {
-            return false;
-        }
-        if (activePanel.OnExecuteCommand(command)) {
-            return true;
-        }
-        switch (command) {
-            case "CopyToClipboard":
-                EditorUtils.CopyToClipboard(activePanel, "");
-                break;
-        }
-        return false;
-    }
     
     internal void SetActivePanel(PanelControl panel)
     {

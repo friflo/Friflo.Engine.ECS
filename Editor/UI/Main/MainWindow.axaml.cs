@@ -46,6 +46,6 @@ public partial class MainWindow : Window
     }
 
     private void CopyToClipboard(object sender, EventArgs e) {
-        Editor.ExecuteCommand("CopyToClipboard");
+        Editor.ExecuteCommand(new CopyToClipboardCommand());
     }
 }

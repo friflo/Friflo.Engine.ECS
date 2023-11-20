@@ -30,10 +30,10 @@ public partial class ExplorerPanel : PanelControl
         }
     }
     
-    public override bool OnExecuteCommand(string ev)
+    public override bool OnExecuteCommand(EditorCommand command)
     {
-        switch (ev) {
-            case "CopyToClipboard":
+        switch (command) {
+            case CopyToClipboardCommand:
                 ExplorerCommands.CopyItems(Grid.GetSelectedItems(), Grid);
                 return true;
         }

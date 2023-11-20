@@ -34,5 +34,5 @@ public class PanelControl : UserControl
         header = EditorUtils.FindControl<PanelHeader>(this);
     }
     
-    public virtual bool OnExecuteCommand(string command) => false;
+    public virtual bool OnExecuteCommand(EditorCommand command) => false;
 }
