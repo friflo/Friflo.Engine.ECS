@@ -7,8 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
@@ -47,22 +45,8 @@ public static class ExplorerCommands
         var stream      = new MemoryStream();
         serializer.WriteEntities(stream, entities);
         var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
-        CopyToClipboard(grid, text);
+        EditorUtils.CopyToClipboard(grid, text);
         grid.FocusPanel();
-    }
-    
-    private static void CopyToClipboard(Visual visual, string text)
-    {
-        var clipboard = TopLevel.GetTopLevel(visual)?.Clipboard;
-        if (clipboard == null) {
-            Console.Error.WriteLine("CopyToClipboard() error: clipboard is null");
-            return;
-        }
-        clipboard.SetTextAsync(text);
-        // --- following example snippet didn't work on macOS on first try. In Windows 10 OK
-        // var dataObject  = new DataObject();
-        // dataObject.Set(DataFormats.Text, text);
-        // clipboard.SetDataObjectAsync(dataObject);
     }
     
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)

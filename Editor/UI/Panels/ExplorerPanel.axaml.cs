@@ -10,7 +10,7 @@ using Friflo.Fliox.Engine.ECS.Collections;
 // ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Panels;
 
-public partial class ExplorerPanel : UserControl
+public partial class ExplorerPanel : PanelControl
 {
     public ExplorerPanel()
     {
@@ -18,11 +18,6 @@ public partial class ExplorerPanel : UserControl
         var viewModel           = new MainWindowViewModel();
         DataContext             = viewModel;
         DockPanel.ContextFlyout = new ExplorerFlyout(Grid);
-    }
-
-    protected override void OnGotFocus(GotFocusEventArgs e) {
-        base.OnGotFocus(e);
-        EditorUtils.SetActivePanel(this);
     }
 
     private void DragDrop_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
@@ -33,6 +28,15 @@ public partial class ExplorerPanel : UserControl
                 e.AllowedEffects = DragDropEffects.None;
             }
         }
+    }
+    
+    public override bool OnEvent(string ev) {
+        switch (ev) {
+            case "CopyToClipboard":
+                ExplorerCommands.CopyItems(Grid.GetSelectedItems(), Grid);
+                return true;
+        }
+        return false;
     }
 
     private void DragDrop_OnRowDragOver(object sender, TreeDataGridRowDragEventArgs e)

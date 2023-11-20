@@ -3,7 +3,6 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
@@ -11,7 +10,7 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 public partial class PanelHeader : UserControl
 {
     public static readonly StyledProperty<string>   PanelTitleProperty  = AP.Register<PanelHeader, string>(nameof(PanelTitle), "Panel Title");
-    public static readonly StyledProperty<bool>     PanelActiveProperty = AP.Register<PanelHeader, bool>(nameof(PanelTitle), true);
+    public static readonly StyledProperty<bool>     PanelActiveProperty = AP.Register<PanelHeader, bool>(nameof(PanelTitle), false);
     
     public string PanelTitle  { get => GetValue(PanelTitleProperty);    set => SetValue(PanelTitleProperty,  value); }
     public bool   PanelActive { get => GetValue(PanelActiveProperty);   set => SetValue(PanelActiveProperty, value); }
@@ -19,10 +18,5 @@ public partial class PanelHeader : UserControl
     public PanelHeader()
     {
         InitializeComponent();
-    }
-
-    // ReSharper disable once RedundantOverriddenMember
-    protected override void OnLoaded(RoutedEventArgs e) {
-        base.OnLoaded(e);
     }
 }

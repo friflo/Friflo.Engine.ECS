@@ -35,7 +35,9 @@
             <NativeMenuItem Header="Edit">
                 <NativeMenuItem.Menu>
                     <NativeMenu>
-                        <NativeMenuItem Header="Copy"/>
+                        <NativeMenuItem Header="Copy"
+                                        Gesture="CTRL+C"
+                                        Click="CopyToClipboard"/>
                         <NativeMenuItem Header="Paste"/>
                     </NativeMenu>
                 </NativeMenuItem.Menu>

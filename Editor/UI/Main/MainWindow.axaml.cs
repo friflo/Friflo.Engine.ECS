@@ -44,4 +44,9 @@ public partial class MainWindow : Window
     private void QuitProgramCommand(object sender, EventArgs e) {
         Close();
     }
+
+    private void CopyToClipboard(object sender, EventArgs e) {
+        
+        EditorUtils.SendEvent("CopyToClipboard");
+    }
 }
