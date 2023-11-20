@@ -9,6 +9,8 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable ReplaceSliceWithRangeIndexer
@@ -233,6 +235,33 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         RowSelection!.SelectedIndex = path;
     }
     
+    private bool HandleGetFocus(GotFocusEventArgs e)
+    {
+        if (e.NavigationMethod == NavigationMethod.Tab) {
+            if (e.KeyModifiers == KeyModifiers.None) {
+                if (e.Source is TreeDataGridColumnHeader || e.Source is TreeDataGrid) {
+                    return false;
+                }
+                var ancestor    = this.FindAncestorOfType<PanelControl>();
+                var next        = EditorUtils.GetTabIndex(ancestor, +1);
+                next.Focus(NavigationMethod.Tab);
+                return true;
+            }
+            if (e.Source is TreeDataGridColumnHeader || e.Source is TreeDataGrid) {
+                return false;
+            }
+            Focus(NavigationMethod.Tab, KeyModifiers.Shift);
+            return true;
+        }
+        return false;
+    }
+
+    protected override void OnGotFocus(GotFocusEventArgs e)
+    {
+        e.Handled = HandleGetFocus(e);
+        base.OnGotFocus(e);
+    }
+
     protected override void OnKeyUp(KeyEventArgs e) {
         e.Handled = HandleKeyUp(e);
         base.OnKeyUp(e);

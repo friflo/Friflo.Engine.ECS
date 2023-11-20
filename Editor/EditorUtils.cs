@@ -2,14 +2,17 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI;
-// ReSharper disable MergeCastWithTypeCheck
 
+// ReSharper disable MergeCastWithTypeCheck
 namespace Friflo.Fliox.Editor;
 
 public static class EditorUtils
@@ -72,4 +75,48 @@ public static class EditorUtils
         }
         return null;
     }
+    
+    private static InputElement GetFocusable(Visual visual)
+    {
+        if (visual is InputElement inputElement) {
+            if (inputElement.Focusable) {
+                return inputElement;
+            }
+        }
+        var children = (AvaloniaList<Visual>)visual.GetVisualChildren();
+        foreach (var child in children) {
+            var focusable = GetFocusable(child);
+            if (focusable != null) {
+                return focusable;
+            }
+        }
+        return null;
+    }
+
+    internal static InputElement GetTabIndex(Visual control, int tabOffset)
+    {
+        var parent          = control.GetVisualParent()!;
+        var children        = parent.GetVisualChildren();
+        var inputElements   = new List<Focusable>();
+        foreach (var child in children) {
+            var focusable = GetFocusable(child);
+            if (focusable != null) {
+                inputElements.Add(new Focusable { element = child, focusable = focusable });
+            }
+        }
+        var count = inputElements.Count;
+        for (int n = 0; n < count; n++) {
+            if (control == inputElements[n].element) {
+                int next = (n + tabOffset + count) % count;
+                return inputElements[next].focusable;
+            }
+        }
+        return null;
+    }
+}
+
+struct Focusable
+{
+    internal Visual         element;
+    internal InputElement   focusable;
 }
