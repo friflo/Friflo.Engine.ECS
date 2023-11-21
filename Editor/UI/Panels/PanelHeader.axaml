@@ -11,7 +11,7 @@
             <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource RadiusTop}"
                     RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"  RelativePanel.AlignBottomWithPanel="True">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14 0 0 0" 
                            Text="{Binding $parent[local:PanelHeader].PanelTitle}"/>
             </Border>
             
