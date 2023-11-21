@@ -8,7 +8,7 @@
              xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Controls.Explorer"
              xmlns:panels="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
              x:DataType     ="main:MainWindowViewModel">
-    <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground1}">
+    <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground}">
     <DockPanel Name="DockPanel">
         <panels:PanelHeader PanelTitle="Explorer" DockPanel.Dock="Top"/>
         <!-- <TreeDataGrid Name="DragDrop"

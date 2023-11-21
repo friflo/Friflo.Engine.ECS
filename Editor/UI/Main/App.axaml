@@ -24,7 +24,7 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key='Light'>
                     <SolidColorBrush x:Key='AppBackground'>#F1E8FF</SolidColorBrush>
-                    <SolidColorBrush x:Key='PanelBackground1'>#ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBackground'>#ffffff</SolidColorBrush>
                     <SolidColorBrush x:Key='FromBackground'>#ececec</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelTitleBackground'>#f4f4f4</SolidColorBrush>
                     <SolidColorBrush x:Key='ComponentBackground'>#ffffff</SolidColorBrush>
@@ -32,9 +32,9 @@
                 </ResourceDictionary>
                 <ResourceDictionary x:Key='Dark'>
                     <SolidColorBrush x:Key='AppBackground'>#422A6D</SolidColorBrush>
-                    <SolidColorBrush x:Key='PanelBackground1'>#303030</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelBackground'>#2c2c2c</SolidColorBrush>
                     <SolidColorBrush x:Key='FromBackground'>#383838</SolidColorBrush>
-                    <SolidColorBrush x:Key='PanelTitleBackground'>#282828</SolidColorBrush>
+                    <SolidColorBrush x:Key='PanelTitleBackground'>#242424</SolidColorBrush>
                     <SolidColorBrush x:Key='ComponentBackground'>#484848</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#000000</SolidColorBrush>
                 </ResourceDictionary>
