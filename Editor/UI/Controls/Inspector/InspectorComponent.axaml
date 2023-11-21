@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50">
 
-    <StackPanel>
-        <StackPanel  Background="{DynamicResource ComponentBackground}" Orientation="Horizontal">
+    <StackPanel Background="{DynamicResource FromBackground}">
+        <Border CornerRadius="2" Margin="2 0 2 0" 
+            Background="{DynamicResource ComponentBackground}">
+        <StackPanel Orientation="Horizontal">
             <ToggleButton Margin="4 0 0 0" Height="14" Width="14" FontSize="4"
                           IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
             </ToggleButton>
@@ -15,6 +17,7 @@
                        DockPanel.Dock="Top"
                        Text="{Binding $parent[local:InspectorComponent].ComponentTitle}"/>
         </StackPanel>
+        </Border>
         
         <StackPanel  Background="{DynamicResource FromBackground}"
                      IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
