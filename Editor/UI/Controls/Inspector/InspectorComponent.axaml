@@ -14,9 +14,11 @@
                                   IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
                     </ToggleButton>
                 </Border>
-                <Border Width="20" DockPanel.Dock="Right">
+                <Border Width="20" Margin="0 0 12 0" BorderThickness="1" 
+                        DockPanel.Dock="Right">
                     <Button Background="{DynamicResource ComponentBackground}"
-                            Content="..."
+                            Content="..." 
+                            HorizontalAlignment="Stretch"
                             BorderThickness="0" CornerRadius="2"
                             Margin="1" Padding="1">
                     </Button>
@@ -42,7 +44,7 @@
             <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
                      BorderThickness="0"
                      HorizontalAlignment="Right"
-                 Width= "200"  Margin="2 2 2 1" Padding="3 3 3 3">
+                 Width= "200"  Margin="2 2 6 1" Padding="3 3 3 3">
                 some
             </TextBox>
         </DockPanel>
@@ -54,7 +56,7 @@
             <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
                      BorderThickness="0"
                      HorizontalAlignment="Right"
-                     Width= "200"  Margin="2 2 2 1" Padding="3 3 3 3">
+                     Width= "200"  Margin="2 2 6 1" Padding="3 3 3 3">
                 text
             </TextBox>
         </DockPanel>
