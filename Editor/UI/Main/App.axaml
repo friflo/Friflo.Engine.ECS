@@ -27,7 +27,7 @@
                     <SolidColorBrush x:Key='PanelBackground1'>#ffffff</SolidColorBrush>
                     <SolidColorBrush x:Key='FromBackground'>#ececec</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelTitleBackground'>#f4f4f4</SolidColorBrush>
-                    <SolidColorBrush x:Key='ComponentBackground'>#d8d8d8</SolidColorBrush>
+                    <SolidColorBrush x:Key='ComponentBackground'>#ffffff</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#dddddd</SolidColorBrush>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key='Dark'>

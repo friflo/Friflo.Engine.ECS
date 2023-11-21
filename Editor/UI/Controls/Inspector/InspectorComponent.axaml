@@ -7,37 +7,46 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50">
 
     <StackPanel Background="{DynamicResource FromBackground}">
-        <Border CornerRadius="2" Margin="4 0 4 0"
-            Background="{DynamicResource ComponentBackground}">
+        <Border Margin="0" Height="20" Background="{DynamicResource ComponentBackground}" >
             <DockPanel>
-                <ToggleButton Margin="4 0 0 0" Height="14" Width="14" FontSize="4" DockPanel.Dock="Left"
-                              IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
-                </ToggleButton>
-                <Border HorizontalAlignment="Stretch">
-                    <Button Content="{Binding $parent[local:InspectorComponent].ComponentTitle}"
-                            Background="Transparent" BorderThickness="0"
-                            Margin="6 0 0 0" Padding="2"
-                            HorizontalAlignment="Stretch"
+                <Border Width="20" DockPanel.Dock="Left">
+                    <ToggleButton Margin="4 0 0 0" Height="14" Width="14" FontSize="4"
+                                  IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
+                    </ToggleButton>
+                </Border>
+                <Border Width="20" DockPanel.Dock="Right">
+                    <Button Background="{DynamicResource ComponentBackground}"
+                            Content="..."
+                            BorderThickness="0" CornerRadius="2"
+                            Margin="1" Padding="1">
+                    </Button>
+                </Border>
+                <Border>
+                    <Button Background="{DynamicResource ComponentBackground}"
+                            Content="{Binding $parent[local:InspectorComponent].ComponentTitle}"
+                            BorderThickness="0" CornerRadius="2"
+                            Margin="6 1 0 1" Padding="1"
                             Click="Button_OnClick"
                             Classes="ComponentTitle"
-                            >
+                    >
                     </Button>
                 </Border>
             </DockPanel>
         </Border>
         
-        <StackPanel  Background="{DynamicResource FromBackground}"
-                     Orientation="Horizontal"
-                     IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
+        <DockPanel Background="{DynamicResource FromBackground}"
+                   IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 2 2 2"
-                       DockPanel.Dock="Top"
+                       DockPanel.Dock="Left"
                        Text="value"/>
-            <TextBox MinHeight="20" Height="20" MaxHeight="20" BorderBrush="{DynamicResource ComponentBackground}"
-                 Width= "200"  Margin="20 2 2 2" Padding="3 0 3 0">
+            <TextBox MinHeight="1" Height="19" MaxHeight="19" BorderBrush="{DynamicResource ComponentBackground}"
+                     BorderThickness="0"
+                     HorizontalAlignment="Right"
+                 Width= "200"  Margin="2 2 2 1" Padding="3 0 3 0">
                 some text
-            </TextBox>         
+            </TextBox>
 
-        </StackPanel>
+        </DockPanel>
 
         <Border Height="1" Background="{DynamicResource FromBackground}"></Border>
     </StackPanel>
