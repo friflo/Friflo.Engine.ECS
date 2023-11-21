@@ -30,9 +30,9 @@
                 <ResourceDictionary x:Key='Dark'>
                     <SolidColorBrush x:Key='AppBackground'>#422A6D</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBackground1'>#303030</SolidColorBrush>
-                    <SolidColorBrush x:Key='FromBackground'>#303030</SolidColorBrush>
+                    <SolidColorBrush x:Key='FromBackground'>#383838</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBackground2'>#282828</SolidColorBrush>
-                    <SolidColorBrush x:Key='ComponentBackground'>#404040</SolidColorBrush>
+                    <SolidColorBrush x:Key='ComponentBackground'>#484848</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#000000</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
