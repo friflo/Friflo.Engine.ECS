@@ -8,6 +8,7 @@
 
     <Grid>
         <StackPanel Name="Panel">
+            <Border Height="1" Background="{DynamicResource PanelBackground1}"></Border>
             <inspector:InspectorComponent ComponentTitle="Name"/>
             <inspector:InspectorComponent ComponentTitle="Transform"/>
             <inspector:InspectorComponent ComponentTitle="Material"/>

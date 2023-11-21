@@ -7,7 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50">
 
     <StackPanel>
-        <StackPanel  Background="{DynamicResource PanelBackground3}" Orientation="Horizontal">
+        <StackPanel  Background="{DynamicResource ComponentBackground}" Orientation="Horizontal">
             <ToggleButton Margin="4 0 0 0" Height="14" Width="14" FontSize="4"
                           IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
             </ToggleButton>
@@ -16,13 +16,13 @@
                        Text="{Binding $parent[local:InspectorComponent].ComponentTitle}"/>
         </StackPanel>
         
-        <StackPanel  Background="{DynamicResource PanelBackground2}"
+        <StackPanel  Background="{DynamicResource FromBackground}"
                      IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 2 2 2"
                        DockPanel.Dock="Top"
                        Text="value"/>
         </StackPanel>
 
-        <Border Height="1" Background="{DynamicResource PanelBackground2}"></Border>
+        <Border Height="1" Background="{DynamicResource FromBackground}"></Border>
     </StackPanel>
 </UserControl>
