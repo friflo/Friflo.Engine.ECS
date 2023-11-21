@@ -39,10 +39,10 @@
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 2 2 2"
                        DockPanel.Dock="Left"
                        Text="value"/>
-            <TextBox MinHeight="1" Height="19" MaxHeight="19" BorderBrush="{DynamicResource ComponentBackground}"
+            <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
                      BorderThickness="0"
                      HorizontalAlignment="Right"
-                 Width= "200"  Margin="2 2 2 1" Padding="3 0 3 0">
+                 Width= "200"  Margin="2 2 2 1" Padding="3 3 3 3">
                 some text
             </TextBox>
 
