@@ -13,6 +13,9 @@
             <!-- Workaround for non transparent rounded corners. Required if OverlayPopups = false -->
             <!-- <Setter Property="CornerRadius" Value="0" /> -->
         </Style>
+        <Style Selector="Button.ComponentTitle">
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

@@ -3,6 +3,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
 
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
@@ -18,5 +19,9 @@ public partial class InspectorComponent : UserControl
     public InspectorComponent()
     {
         InitializeComponent();
+    }
+
+    private void Button_OnClick(object sender, RoutedEventArgs e) {
+        Expanded = !Expanded;
     }
 }
