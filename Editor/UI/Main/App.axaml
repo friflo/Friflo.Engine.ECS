@@ -26,6 +26,7 @@
                     <SolidColorBrush x:Key='AppBackground'>#F1E8FF</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBackground'>#ffffff</SolidColorBrush>
                     <SolidColorBrush x:Key='FromBackground'>#ececec</SolidColorBrush>
+                    <SolidColorBrush x:Key='EditBackground'>#fcfcfc</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelTitleBackground'>#f4f4f4</SolidColorBrush>
                     <SolidColorBrush x:Key='ComponentBackground'>#ffffff</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#dddddd</SolidColorBrush>
@@ -34,6 +35,7 @@
                     <SolidColorBrush x:Key='AppBackground'>#422A6D</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBackground'>#2c2c2c</SolidColorBrush>
                     <SolidColorBrush x:Key='FromBackground'>#383838</SolidColorBrush>
+                    <SolidColorBrush x:Key='EditBackground'>#242424</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelTitleBackground'>#242424</SolidColorBrush>
                     <SolidColorBrush x:Key='ComponentBackground'>#484848</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#000000</SolidColorBrush>
