@@ -27,10 +27,16 @@
         </Border>
         
         <StackPanel  Background="{DynamicResource FromBackground}"
+                     Orientation="Horizontal"
                      IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 2 2 2"
                        DockPanel.Dock="Top"
                        Text="value"/>
+            <TextBox MinHeight="20" Height="20" MaxHeight="20" BorderBrush="{DynamicResource ComponentBackground}"
+                 Width= "200"  Margin="20 2 2 2" Padding="3 0 3 0">
+                some text
+            </TextBox>         
+
         </StackPanel>
 
         <Border Height="1" Background="{DynamicResource FromBackground}"></Border>
