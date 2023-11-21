@@ -34,32 +34,32 @@
                 </Border>
             </DockPanel>
         </Border>
-        
-        <DockPanel Background="{DynamicResource FromBackground}" 
-                   IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
-            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 1 2 0"
-                       DockPanel.Dock="Left"
-                       Text="value 1"/>
-            <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
-                     BorderThickness="0"
-                     HorizontalAlignment="Right"
-                     Width= "200"  Margin="2 1 6 0" Padding="3 3 3 0">
-                text Gg
-            </TextBox>
-        </DockPanel>
-        
-        <DockPanel Background="{DynamicResource FromBackground}" 
-                   IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
-            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 1 2 0"
-                       DockPanel.Dock="Left"
-                       Text="value 1"/>
-            <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
-                     BorderThickness="0"
-                     HorizontalAlignment="Right"
-                     Width= "200"  Margin="2 1 6 0" Padding="3 3 3 0">
-                text Gg
-            </TextBox>
-        </DockPanel>
+        <Border IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
+        <StackPanel>
+            <DockPanel Background="{DynamicResource FromBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 1 2 0"
+                           DockPanel.Dock="Left"
+                           Text="value 1"/>
+                <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
+                         BorderThickness="0"
+                         HorizontalAlignment="Right"
+                         Width= "200"  Margin="2 1 6 0" Padding="3 3 3 0">
+                    text Gg
+                </TextBox>
+            </DockPanel>
+            <DockPanel Background="{DynamicResource FromBackground}">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 1 2 0"
+                           DockPanel.Dock="Left"
+                           Text="value 1"/>
+                <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
+                         BorderThickness="0"
+                         HorizontalAlignment="Right"
+                         Width= "200"  Margin="2 1 6 0" Padding="3 3 3 0">
+                    text Gg
+                </TextBox>
+            </DockPanel>
+        </StackPanel>
+        </Border>
 
         <Border Height="1"  Background="{DynamicResource FromBackground}"></Border>
     </StackPanel>
