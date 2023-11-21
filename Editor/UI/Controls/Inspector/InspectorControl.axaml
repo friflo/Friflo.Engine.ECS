@@ -6,14 +6,15 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
              x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.InspectorControl">
 
-    <Grid>
+    <DockPanel>
+        <Border Height="2" DockPanel.Dock="Top" Background="{DynamicResource FromBackground}">
+        </Border>
         <ScrollViewer>
         <StackPanel Name="Panel">
-            <Border Height="2" Background="{DynamicResource FromBackground}"></Border>
             <inspector:InspectorComponent ComponentTitle="Name"/>
             <inspector:InspectorComponent ComponentTitle="Transform"/>
             <inspector:InspectorComponent ComponentTitle="Material"/>
         </StackPanel>
         </ScrollViewer>
-    </Grid>
+    </DockPanel>
 </UserControl>
