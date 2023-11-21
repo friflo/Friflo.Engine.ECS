@@ -8,7 +8,7 @@
 
     <Border DockPanel.Dock="Top" Height="22">
         <RelativePanel>
-            <Border Background="{DynamicResource PanelBackground2}" CornerRadius="{DynamicResource RadiusTop}"
+            <Border Background="{DynamicResource PanelTitleBackground}" CornerRadius="{DynamicResource RadiusTop}"
                     RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                     RelativePanel.AlignTopWithPanel="True"  RelativePanel.AlignBottomWithPanel="True">
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14 0 0 0" 
