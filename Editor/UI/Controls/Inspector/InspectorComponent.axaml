@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.InspectorComponent"
+             xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="50">
+
+    <StackPanel>
+        <StackPanel  Background="{DynamicResource PanelBackground3}" Orientation="Horizontal">
+            <ToggleButton Margin="4 0 0 0" Height="14" Width="14" FontSize="4"
+                          IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
+            </ToggleButton>
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 2 2 2"
+                       DockPanel.Dock="Top"
+                       Text="{Binding $parent[local:InspectorComponent].ComponentTitle}"/>
+        </StackPanel>
+        
+        <StackPanel  Background="{DynamicResource PanelBackground2}"
+                     IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 2 2 2"
+                       DockPanel.Dock="Top"
+                       Text="value"/>
+        </StackPanel>
+
+        <Border Height="1" Background="{DynamicResource PanelBackground2}"></Border>
+    </StackPanel>
+</UserControl>

@@ -2,14 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:inspector="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
              x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.InspectorControl">
-    <DockPanel>
-        <DockPanel DockPanel.Dock="Top">
-            <Label Name="EntityName" DockPanel.Dock="Left">name</Label>
-            <Label Name="EntityId">id</Label>
-        </DockPanel>
-       <DockPanel Name="Components">
-       </DockPanel>
-    </DockPanel>
+
+    <Grid>
+        <StackPanel Name="Panel">
+            <inspector:InspectorComponent ComponentTitle="Name"/>
+            <inspector:InspectorComponent ComponentTitle="Transform"/>
+            <inspector:InspectorComponent ComponentTitle="Material"/>
+        </StackPanel>
+    </Grid>
 </UserControl>

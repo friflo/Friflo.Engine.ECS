@@ -32,8 +32,8 @@ public partial class InspectorControl : UserControl
             var item    = selection.item;
             var name    = item?.Name ?? "no selection";
             var id      = item != null ? $"id: {item.Id}" : null;
-            inspector.EntityName.Content    = name;
-            inspector.EntityId.Content      = id;
+            // inspector.EntityName.Content    = name;
+            // inspector.EntityId.Content      = id;
             
             var entity = item?.Entity;
             if (entity != null) {
@@ -44,7 +44,7 @@ public partial class InspectorControl : UserControl
         private void AddComponentControls(GameEntity entity)
         {
             // Console.WriteLine($"--- Inspector entity: {entity}");
-            var children = inspector.Components.Children;
+            var children = inspector.Panel.Children;
             children.Clear();
             var archetype = entity.Archetype;
             foreach (var componentType in archetype.Structs)

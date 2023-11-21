@@ -84,5 +84,9 @@
         <DependentUpon>PanelHeader.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\InspectorComponent.axaml.cs">
+        <DependentUpon>InspectorComponent.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
