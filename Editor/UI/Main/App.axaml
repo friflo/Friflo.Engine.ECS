@@ -16,6 +16,16 @@
         <Style Selector="Button.ComponentTitle">
             <Setter Property="RenderTransform" Value="none" />
         </Style>
+        <Style Selector="TextBox.EditField">
+            <Setter Property="MinHeight"        Value="1" />
+            <Setter Property="Height"           Value="22" />
+            <Setter Property="MaxHeight"        Value="22" />
+            <Setter Property="Margin"           Value="2, 1, 6, 0" />
+            <Setter Property="Padding"          Value="3, 3, 3, 0" />
+            <Setter Property="BorderThickness"  Value="0" />
+            <Setter Property="BorderBrush"      Value="{DynamicResource ComponentBackground}" />
+            <Setter Property="Background"       Value="{DynamicResource EditBackground}" />
+        </Style>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

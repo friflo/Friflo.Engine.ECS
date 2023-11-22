@@ -23,6 +23,10 @@ public struct  Position : IComponent, IEquatable<Position>
     [FieldOffset(0)] public     float   x;      // (4)
     [FieldOffset(4)] public     float   y;      // (4)
     [FieldOffset(8)] public     float   z;      // (4)
+    
+    [Ignore] public float ValueX { get => x; set => x = value; }
+    [Ignore] public float ValueY { get => y; set => y = value; }
+    [Ignore] public float ValueZ { get => z; set => z = value; }
 
     public readonly override string ToString() => $"{x}, {y}, {z}";
 

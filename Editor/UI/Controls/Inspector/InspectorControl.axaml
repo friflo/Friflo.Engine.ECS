@@ -27,7 +27,7 @@
                     Background="{DynamicResource FromBackground}">
             <DockPanel>
                 <inspector:FieldName Text="field 1"/>
-                <inspector:StringField Value="value 1"/>
+                <inspector:PositionField MaxWidth="200"/>
             </DockPanel>
             <DockPanel>
                 <inspector:FieldName Text="field 2"/>

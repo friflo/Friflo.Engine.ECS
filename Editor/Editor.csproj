@@ -100,5 +100,9 @@
         <DependentUpon>Separator.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\PositionField.axaml.cs">
+        <DependentUpon>PositionField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

@@ -1,0 +1,38 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.PositionField"
+             xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="30">
+
+    <Grid ColumnDefinitions="15, *, 15, *, 15, *" HorizontalAlignment="Stretch"
+          RowDefinitions="20">
+        
+        <TextBlock  Grid.Row="0" Grid.Column="0" 
+                    VerticalAlignment="Center" Margin="10 1 2 0"
+                    Text="x"/>
+        <TextBox    Grid.Row="0" Grid.Column="1" 
+                    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField"
+                    Text="{Binding $parent[local:PositionField].Value.ValueX}">
+        </TextBox>
+        
+        <TextBlock  Grid.Row="0" Grid.Column="2" 
+                    VerticalAlignment="Center" Margin="10 1 2 0"
+                    Text="y"/>
+        <TextBox    Grid.Row="0" Grid.Column="3" 
+                    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField"
+                    Text="{Binding $parent[local:PositionField].Value.ValueY}">
+        </TextBox>
+
+        <TextBlock  Grid.Row="0" Grid.Column="4" 
+                    VerticalAlignment="Center" Margin="10 1 2 0"
+                    Text="z"/>
+        
+        <TextBox    Grid.Row="0" Grid.Column="5" 
+                    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField"
+                    Text="{Binding $parent[local:PositionField].Value.ValueZ}">
+        </TextBox>
+    </Grid>
+
+</UserControl>
