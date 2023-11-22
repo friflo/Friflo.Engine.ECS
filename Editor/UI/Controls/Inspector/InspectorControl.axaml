@@ -14,7 +14,7 @@
         <inspector:InspectorGroup Name="Tags" Group="tags"/>
 
         <inspector:InspectorGroup Name="Components" Group="components"/>
-        <StackPanel IsVisible="{Binding #Components.Expanded}">
+        <StackPanel>
             <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
             <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                         Background="{DynamicResource FromBackground}">
@@ -59,7 +59,7 @@
         </StackPanel>
         
         <inspector:InspectorGroup Name="Scripts" Group="scripts"/>
-        <StackPanel IsVisible="{Binding #Scripts.Expanded}">
+        <StackPanel>
             <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
             <StackPanel IsVisible="{Binding #Script1.Expanded}"
                         Background="{DynamicResource FromBackground}">
