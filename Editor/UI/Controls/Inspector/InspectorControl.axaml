@@ -7,14 +7,54 @@
              x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.InspectorControl">
 
     <DockPanel>
-        <Border Height="1" DockPanel.Dock="Top" Background="{DynamicResource FromBackground}">
-        </Border>
-        <ScrollViewer>
-        <StackPanel Name="Panel">
-            <inspector:InspectorComponent ComponentTitle="Name"/>
-            <inspector:InspectorComponent ComponentTitle="Transform"/>
-            <inspector:InspectorComponent ComponentTitle="Material"/>
+    <Border Height="1" DockPanel.Dock="Top" Background="{DynamicResource FromBackground}"/>
+    
+    <ScrollViewer>
+    <StackPanel Name="Panel">
+        
+        <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
+        <StackPanel IsVisible="{Binding #Comp1.Expanded}"
+                    Background="{DynamicResource FromBackground}">
+            <DockPanel >
+                <inspector:FieldName Text="field 1"/>
+                <inspector:StringValue Value="value 1"/>
+            </DockPanel>
+            <inspector:Separator/>
         </StackPanel>
-        </ScrollViewer>
+        
+        <inspector:InspectorComponent Name="Comp2" ComponentTitle="Transform"/>
+        <StackPanel IsVisible="{Binding #Comp2.Expanded}"
+                    Background="{DynamicResource FromBackground}">
+            <DockPanel>
+                <inspector:FieldName Text="field 1"/>
+                <inspector:StringValue Value="value 1"/>
+            </DockPanel>
+            <DockPanel>
+                <inspector:FieldName Text="field 2"/>
+                <inspector:StringValue Value="value 2"/>
+            </DockPanel>
+            <inspector:Separator/>
+        </StackPanel>
+        
+        <inspector:InspectorComponent Name="Comp3" ComponentTitle="Material"/>
+        <StackPanel IsVisible="{Binding #Comp3.Expanded}"
+                    Background="{DynamicResource FromBackground}">
+            <DockPanel>
+                <inspector:FieldName Text="field 1"/>
+                <inspector:StringValue Value="value 1"/>
+            </DockPanel>
+            <DockPanel>
+                <inspector:FieldName Text="field 2"/>
+                <inspector:StringValue Value="value 2"/>
+            </DockPanel>
+            <DockPanel>
+                <inspector:FieldName Text="field 3"/>
+                <inspector:StringValue Value="value 3"/>
+            </DockPanel>
+            <inspector:Separator/>
+        </StackPanel>
+        
+    </StackPanel>
+    </ScrollViewer>
     </DockPanel>
 </UserControl>

@@ -34,18 +34,7 @@
                 </Border>
             </DockPanel>
         </Border>
-        <Border IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
-        <StackPanel>
-            <DockPanel Background="{DynamicResource FromBackground}">
-                <local:FieldName Text="field 1"></local:FieldName>
-                <local:StringValue Value="value 1"></local:StringValue>
-            </DockPanel>
-            <DockPanel Background="{DynamicResource FromBackground}">
-                <local:FieldName Text="field 2"></local:FieldName>
-                <local:StringValue Value="value 2"></local:StringValue>
-            </DockPanel>
-        </StackPanel>
-        </Border>
-        <Border Height="1"  Background="{DynamicResource FromBackground}"></Border>
+        <local:Separator    IsVisible="{Binding !$parent[local:InspectorComponent].Expanded}"
+                            Height="1"  Background="{DynamicResource FromBackground}"/>
     </StackPanel>
 </UserControl>

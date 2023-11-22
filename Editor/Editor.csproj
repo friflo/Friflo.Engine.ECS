@@ -96,5 +96,9 @@
         <DependentUpon>StringValue.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\Separator.axaml.cs">
+        <DependentUpon>Separator.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
