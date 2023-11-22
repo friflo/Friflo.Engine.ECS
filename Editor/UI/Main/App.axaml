@@ -60,6 +60,7 @@
                     <SolidColorBrush x:Key='ComponentBackground'>#d8d8d8</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#dddddd</SolidColorBrush>
                     <SolidColorBrush x:Key='GroupColor'>#606060</SolidColorBrush>
+                    <SolidColorBrush x:Key='ButtonBackground'>#f4f4f4</SolidColorBrush>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key='Dark'>
                     <SolidColorBrush x:Key='AppBackground'>#422A6D</SolidColorBrush>
@@ -70,6 +71,7 @@
                     <SolidColorBrush x:Key='ComponentBackground'>#484848</SolidColorBrush>
                     <SolidColorBrush x:Key='PanelBorder'>#000000</SolidColorBrush>
                     <SolidColorBrush x:Key='GroupColor'>#a0a0a0</SolidColorBrush>
+                    <SolidColorBrush x:Key='ButtonBackground'>#404040</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

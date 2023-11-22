@@ -7,12 +7,16 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="30">
 
     
-    <StackPanel>
+    <StackPanel PointerEntered="InputElement_OnPointerEntered"
+                PointerExited="InputElement_OnPointerExited">
         <Border Margin="0 0 0 0" Height="20" Background="{DynamicResource PanelBackground}">
             <DockPanel>
                 <Border Margin="0 0 18 0" BorderThickness="1" 
                         DockPanel.Dock="Right">
-                    <Button Content="Add" 
+                    <Button Name="Add" IsVisible="False"
+                            Content="add"
+                            Background="{DynamicResource ButtonBackground}"
+                            Foreground="{DynamicResource GroupColor}"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0" CornerRadius="2"
                             Margin="0" Padding="5 1">
