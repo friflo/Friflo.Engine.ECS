@@ -26,8 +26,8 @@
         <StackPanel IsVisible="{Binding #Comp2.Expanded}"
                     Background="{DynamicResource FromBackground}">
             <DockPanel>
-                <inspector:FieldName Text="field 1"/>
-                <inspector:PositionField MaxWidth="200"/>
+                <inspector:FieldName Text="position"/>
+                <inspector:PositionField/>
             </DockPanel>
             <DockPanel>
                 <inspector:FieldName Text="field 2"/>

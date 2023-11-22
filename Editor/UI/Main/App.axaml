@@ -26,6 +26,10 @@
             <Setter Property="BorderBrush"      Value="{DynamicResource ComponentBackground}" />
             <Setter Property="Background"       Value="{DynamicResource EditBackground}" />
         </Style>
+        <Style Selector=":is(Layoutable).ComponentField">
+            <Setter Property="HorizontalAlignment"  Value="Right" />
+            <Setter Property="Width"                Value="200" />
+        </Style>
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
