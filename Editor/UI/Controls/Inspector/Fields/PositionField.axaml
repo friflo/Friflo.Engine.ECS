@@ -7,33 +7,36 @@
              xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="30">
 
-    <Grid HorizontalAlignment="Stretch"
+    <Grid HorizontalAlignment="Stretch" Height="22"
           ColumnDefinitions="15, *, 15, *, 15, *" RowDefinitions="*">
         
         <TextBlock  Grid.Row="0" Grid.Column="0" 
                     VerticalAlignment="Center" Margin="2 1 0 0"
                     Text="x"/>
-        <TextBox    Grid.Row="0" Grid.Column="1" 
-                    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField"
-                    Text="{Binding $parent[local:PositionField].Value.ValueX}">
-        </TextBox>
+        <DockPanel Grid.Row="0" Grid.Column="1">
+            <Border     Background="Red" Classes="PositionBorder"/>
+            <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
+                        Text="{Binding $parent[local:PositionField].Value.ValueX}"/>
+        </DockPanel>
         
         <TextBlock  Grid.Row="0" Grid.Column="2" 
                     VerticalAlignment="Center" Margin="2 1 0 0"
                     Text="y"/>
-        <TextBox    Grid.Row="0" Grid.Column="3" 
-                    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField"
-                    Text="{Binding $parent[local:PositionField].Value.ValueY}">
-        </TextBox>
+        <DockPanel Grid.Row="0" Grid.Column="3">
+            <Border     Background="Green" Classes="PositionBorder"/>
+            <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
+                        Text="{Binding $parent[local:PositionField].Value.ValueY}"/>
+        </DockPanel>
 
         <TextBlock  Grid.Row="0" Grid.Column="4" 
                     VerticalAlignment="Center" Margin="2 1 0 0"
                     Text="z"/>
-        
-        <TextBox    Grid.Row="0" Grid.Column="5" 
-                    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField"
-                    Text="{Binding $parent[local:PositionField].Value.ValueZ}">
-        </TextBox>
+        <DockPanel Grid.Row="0" Grid.Column="5">
+            <Border     Background="Blue" Classes="PositionBorder"/>
+            <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
+                        Text="{Binding $parent[local:PositionField].Value.ValueZ}"/>
+        </DockPanel>
+       
     </Grid>
 
 </UserControl>

@@ -20,8 +20,8 @@
             <Setter Property="MinHeight"        Value="1" />
             <Setter Property="Height"           Value="22" />
             <Setter Property="MaxHeight"        Value="22" />
-            <Setter Property="Margin"           Value="2, 1, 6, 0" />
-            <Setter Property="Padding"          Value="3, 3, 3, 0" />
+            <Setter Property="Margin"           Value="2 1 6 0" />
+            <Setter Property="Padding"          Value="3 3 3 0" />
             <Setter Property="BorderThickness"  Value="0" />
             <Setter Property="BorderBrush"      Value="{DynamicResource ComponentBackground}" />
             <Setter Property="Background"       Value="{DynamicResource EditBackground}" />
@@ -30,6 +30,21 @@
             <Setter Property="HorizontalAlignment"  Value="Right" />
             <Setter Property="Width"                Value="200" />
         </Style>
+        <Style Selector="Border.PositionBorder">
+            <Setter Property="Width"        Value="2" />
+            <Setter Property="Height"       Value="20" />
+            <Setter Property="MaxHeight"    Value="20" />
+            <Setter Property="Margin"       Value="0 1 0 0" />
+            <Setter Property="CornerRadius" Value="2 0 0 2" />
+        </Style>
+        <Style Selector="TextBox.PositionEdit">
+            <Setter Property="Height"       Value="20" />
+            <Setter Property="MaxHeight"    Value="20" />
+            <Setter Property="Margin"       Value="0 1 6 0" />
+            <Setter Property="Padding"      Value="4 2 2 0" />
+            <Setter Property="CornerRadius" Value="0 2 2 0" />
+        </Style>
+        
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
