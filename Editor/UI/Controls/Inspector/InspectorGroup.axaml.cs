@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -16,15 +15,28 @@ public partial class InspectorGroup : UserControl
 {
     private List<InspectorComponent> components;
     
-    public static readonly StyledProperty<string>   GroupProperty   = AP.Register<InspectorGroup, string>(nameof(Group), "group");
-    public static readonly StyledProperty<Visual>   ExpandProperty  = AP.Register<InspectorGroup, Visual>(nameof(Expand));
+    public static readonly StyledProperty<string>       GroupProperty   = AP.Register<InspectorGroup, string>       (nameof(Group), "group");
+    public static readonly StyledProperty<InputElement> ExpandProperty  = AP.Register<InspectorGroup, InputElement> (nameof(Expand));
     
     public string   Group   { get => GetValue(GroupProperty);   set => SetValue(GroupProperty,  value); }
-    public Visual   Expand  { get => GetValue(ExpandProperty);  set => SetValue(ExpandProperty, value); }
-    
+    public InputElement   Expand {
+        get => GetValue(ExpandProperty);
+        set => SetValue(ExpandProperty, value);
+    }
+
     public InspectorGroup()
     {
         InitializeComponent();
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e) {
+        base.OnLoaded(e);
+        PointerEntered += (sender, args) => { Add.IsVisible = true; };
+        PointerExited += (sender, args)  => { Add.IsVisible = false; };
+        if (Expand != null) {
+            Expand.PointerEntered += (sender, args) => { Add.IsVisible = true; };
+            Expand.PointerExited += (sender, args)  => { Add.IsVisible = false; };
+        }
     }
 
     private void Button_OnClick(object sender, RoutedEventArgs e) {
@@ -37,21 +49,6 @@ public partial class InspectorGroup : UserControl
         foreach (var component in components) {
             component.Expanded = !expanded;
         }
-    }
-    
-    bool entered;
-
-    private async void InputElement_OnPointerEntered(object sender, PointerEventArgs e) {
-        entered = true;
-        await Task.Delay(50);
-        if (entered) {
-            Add.IsVisible = true;
-        }
-    }
-
-    private void InputElement_OnPointerExited(object sender, PointerEventArgs e) {
-        entered = false;
-        Add.IsVisible = false;
     }
 }
 

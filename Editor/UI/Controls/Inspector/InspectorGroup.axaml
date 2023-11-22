@@ -7,8 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="30">
 
     
-    <StackPanel PointerEntered="InputElement_OnPointerEntered"
-                PointerExited="InputElement_OnPointerExited">
+    <StackPanel>
         <Border Margin="0 0 0 0" Height="20" Background="{DynamicResource PanelBackground}">
             <DockPanel>
                 <Border Margin="0 0 18 0" BorderThickness="1" 
