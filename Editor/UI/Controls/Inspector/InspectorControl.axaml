@@ -11,10 +11,10 @@
     
     <ScrollViewer>
     <StackPanel Name="Panel">
-        <inspector:InspectorGroup Name="Tags" Group="tags"/>
+        <inspector:InspectorGroup Group="tags"/>
 
-        <inspector:InspectorGroup Name="Components" Group="components"/>
-        <StackPanel>
+        <inspector:InspectorGroup Group="components" Expand="{Binding #Components}"/>
+        <StackPanel Name="Components">
             <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
             <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                         Background="{DynamicResource FromBackground}">
@@ -58,8 +58,8 @@
             </StackPanel>
         </StackPanel>
         
-        <inspector:InspectorGroup Name="Scripts" Group="scripts"/>
-        <StackPanel>
+        <inspector:InspectorGroup Group="scripts" Expand="{Binding #Scripts}"/>
+        <StackPanel Name="Scripts">
             <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
             <StackPanel IsVisible="{Binding #Script1.Expanded}"
                         Background="{DynamicResource FromBackground}">

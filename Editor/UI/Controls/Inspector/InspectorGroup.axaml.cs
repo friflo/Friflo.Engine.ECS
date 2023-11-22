@@ -16,11 +16,11 @@ public partial class InspectorGroup : UserControl
 {
     private List<InspectorComponent> components;
     
-    public static readonly StyledProperty<string>   GroupProperty       = AP.Register<InspectorGroup, string>(nameof(Group), "group");
-    // public static readonly StyledProperty<bool>     ExpandedProperty    = AP.Register<InspectorGroup, bool>  (nameof(Expanded), true);
+    public static readonly StyledProperty<string>   GroupProperty   = AP.Register<InspectorGroup, string>(nameof(Group), "group");
+    public static readonly StyledProperty<Visual>   ExpandProperty  = AP.Register<InspectorGroup, Visual>(nameof(Expand));
     
-    public string   Group       { get => GetValue(GroupProperty);       set => SetValue(GroupProperty,      value); }
-    // public bool     Expanded    { get => GetValue(ExpandedProperty);    set => SetValue(ExpandedProperty,   value); }
+    public string   Group   { get => GetValue(GroupProperty);   set => SetValue(GroupProperty,  value); }
+    public Visual   Expand  { get => GetValue(ExpandProperty);  set => SetValue(ExpandProperty, value); }
     
     public InspectorGroup()
     {
@@ -29,8 +29,7 @@ public partial class InspectorGroup : UserControl
 
     private void Button_OnClick(object sender, RoutedEventArgs e) {
         components ??= new List<InspectorComponent>();
-        var parent = Parent as Visual;
-        EditorUtils.GetControls(parent, components);
+        EditorUtils.GetControls(Expand, components);
         var expanded = true;
         foreach (var component in components) {
             expanded &= component.Expanded;
