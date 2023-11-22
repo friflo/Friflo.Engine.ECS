@@ -20,6 +20,7 @@
                 </Border>
                 <Border>
                     <Button Background="{DynamicResource PanelBackground}"
+                            Foreground="{DynamicResource GroupColor}"
                             HorizontalAlignment="Left"
                             Content="{Binding $parent[local:InspectorGroup].Group}"
                             BorderThickness="0" CornerRadius="2"
