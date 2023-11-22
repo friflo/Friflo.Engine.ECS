@@ -92,5 +92,9 @@
         <DependentUpon>FieldName.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\StringValue.axaml.cs">
+        <DependentUpon>StringValue.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

@@ -7,13 +7,13 @@ using AP = Avalonia.AvaloniaProperty;
 
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
-public partial class FieldName : UserControl
+public partial class StringValue : UserControl
 {
-    public static readonly StyledProperty<string>   TextProperty  = AP.Register<InspectorComponent, string>(nameof(Text), "name");
+    public static readonly StyledProperty<string>   ValueProperty  = AP.Register<InspectorComponent, string>(nameof(Value), "value");
     
-    public string   Text  { get => GetValue(TextProperty);  set => SetValue(TextProperty, value); }
+    public string   Value  { get => GetValue(ValueProperty);  set => SetValue(ValueProperty, value); }
     
-    public FieldName()
+    public StringValue()
     {
         InitializeComponent();
     }
