@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using AP = Avalonia.AvaloniaProperty;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
 public partial class PositionField : UserControl

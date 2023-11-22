@@ -92,16 +92,16 @@
         <DependentUpon>FieldName.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\StringField.axaml.cs">
-        <DependentUpon>StringField.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
       <Compile Update="UI\Controls\Inspector\Separator.axaml.cs">
         <DependentUpon>Separator.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\PositionField.axaml.cs">
+      <Compile Update="UI\Controls\Inspector\Fields\PositionField.axaml.cs">
         <DependentUpon>PositionField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Controls\Inspector\Fields\StringField.axaml.cs">
+        <DependentUpon>StringField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>
