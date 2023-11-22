@@ -12,8 +12,8 @@
             <DockPanel>
                 <Border Margin="0 0 18 0" BorderThickness="1" 
                         DockPanel.Dock="Right">
-                    <Button Name="Add" IsVisible="false"
-                            Classes="GreenButton"
+                    <Button Name="Add"
+                            Classes="Transparent"
                             Content="add"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0" CornerRadius="2"

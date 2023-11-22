@@ -46,9 +46,14 @@
         </Style>
         
 
+        <Style Selector="Button.Transparent">
+            <Setter Property="Background"   Value="Transparent" />
+            <Setter Property="Opacity"      Value="0.5" />
+        </Style>
         <Style Selector="Button.GreenButton">
             <Setter Property="Background"   Value="#00a000" />
             <Setter Property="Foreground"   Value="#ffffff" />
+            <Setter Property="Opacity"      Value="1" />
         </Style>
         <Style Selector="Button.GreenButton:pointerover /template/ ContentPresenter">
             <Setter Property="Background"   Value="#00c000"/>

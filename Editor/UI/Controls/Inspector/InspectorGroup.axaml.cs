@@ -31,11 +31,12 @@ public partial class InspectorGroup : UserControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        PointerEntered += (sender, args) => { Add.IsVisible = true; };
-        PointerExited += (sender, args)  => { Add.IsVisible = false; };
+        
+        PointerEntered += (sender, args) => { Add.Classes.Add("GreenButton"); };
+        PointerExited += (sender, args)  => { Add.Classes.Remove("GreenButton"); };
         if (Expand != null) {
-            Expand.PointerEntered += (sender, args) => { Add.IsVisible = true; };
-            Expand.PointerExited += (sender, args)  => { Add.IsVisible = false; };
+            Expand.PointerEntered += (sender, args) => { Add.Classes.Add("GreenButton"); };
+            Expand.PointerExited += (sender, args)  => { Add.Classes.Remove("GreenButton"); };
         }
     }
 
