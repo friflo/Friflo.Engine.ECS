@@ -11,7 +11,10 @@
     
     <ScrollViewer>
     <StackPanel Name="Panel">
-        <inspector:InspectorGroup Group="tags"/>
+        
+        <inspector:InspectorGroup Group="tags" Expand="{Binding #Tags}"/>
+        <StackPanel Name="Tags">
+        </StackPanel>
 
         <inspector:InspectorGroup Group="components" Expand="{Binding #Components}"/>
         <StackPanel Name="Components">
