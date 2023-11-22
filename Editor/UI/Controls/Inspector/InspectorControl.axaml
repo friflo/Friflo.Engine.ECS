@@ -11,49 +11,70 @@
     
     <ScrollViewer>
     <StackPanel Name="Panel">
-        
-        <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
-        <StackPanel IsVisible="{Binding #Comp1.Expanded}"
-                    Background="{DynamicResource FromBackground}">
-            <DockPanel >
-                <inspector:FieldName Text="field 1"/>
-                <inspector:StringField Value="value 1"/>
-            </DockPanel>
-            <inspector:Separator/>
+        <inspector:InspectorGroup Name="Tags" Group="tags"/>
+
+        <inspector:InspectorGroup Name="Components" Group="components"/>
+        <StackPanel IsVisible="{Binding #Components.Expanded}">
+            <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
+            <StackPanel IsVisible="{Binding #Comp1.Expanded}"
+                        Background="{DynamicResource FromBackground}">
+                <DockPanel >
+                    <inspector:FieldName Text="field 1"/>
+                    <inspector:StringField Value="value 1"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
+            
+            <inspector:InspectorComponent Name="Comp2" ComponentTitle="Transform"/>
+            <StackPanel IsVisible="{Binding #Comp2.Expanded}"
+                        Background="{DynamicResource FromBackground}">
+                <DockPanel>
+                    <inspector:FieldName Text="position"/>
+                    <inspector:PositionField/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldName Text="field 2"/>
+                    <inspector:StringField Value="value 2"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
+            
+            <inspector:InspectorComponent Name="Comp3" ComponentTitle="Material"/>
+            <StackPanel IsVisible="{Binding #Comp3.Expanded}"
+                        Background="{DynamicResource FromBackground}">
+                <DockPanel>
+                    <inspector:FieldName Text="field 1"/>
+                    <inspector:StringField Value="value 1"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldName Text="field 2"/>
+                    <inspector:StringField Value="value 2"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldName Text="field 3"/>
+                    <inspector:StringField Value="value 3"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
         </StackPanel>
         
-        <inspector:InspectorComponent Name="Comp2" ComponentTitle="Transform"/>
-        <StackPanel IsVisible="{Binding #Comp2.Expanded}"
-                    Background="{DynamicResource FromBackground}">
-            <DockPanel>
-                <inspector:FieldName Text="position"/>
-                <inspector:PositionField/>
-            </DockPanel>
-            <DockPanel>
-                <inspector:FieldName Text="field 2"/>
-                <inspector:StringField Value="value 2"/>
-            </DockPanel>
-            <inspector:Separator/>
+        <inspector:InspectorGroup Name="Scripts" Group="scripts"/>
+        <StackPanel IsVisible="{Binding #Scripts.Expanded}">
+            <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
+            <StackPanel IsVisible="{Binding #Script1.Expanded}"
+                        Background="{DynamicResource FromBackground}">
+                <DockPanel>
+                    <inspector:FieldName Text="field 1"/>
+                    <inspector:StringField Value="value 1"/>
+                </DockPanel>
+                <DockPanel>
+                    <inspector:FieldName Text="field 2"/>
+                    <inspector:StringField Value="value 2"/>
+                </DockPanel>
+                <inspector:Separator/>
+            </StackPanel>
         </StackPanel>
-        
-        <inspector:InspectorComponent Name="Comp3" ComponentTitle="Material"/>
-        <StackPanel IsVisible="{Binding #Comp3.Expanded}"
-                    Background="{DynamicResource FromBackground}">
-            <DockPanel>
-                <inspector:FieldName Text="field 1"/>
-                <inspector:StringField Value="value 1"/>
-            </DockPanel>
-            <DockPanel>
-                <inspector:FieldName Text="field 2"/>
-                <inspector:StringField Value="value 2"/>
-            </DockPanel>
-            <DockPanel>
-                <inspector:FieldName Text="field 3"/>
-                <inspector:StringField Value="value 3"/>
-            </DockPanel>
-            <inspector:Separator/>
-        </StackPanel>
-        
+
     </StackPanel>
     </ScrollViewer>
     </DockPanel>
