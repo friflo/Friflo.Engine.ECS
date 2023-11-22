@@ -37,9 +37,7 @@
         <Border IsVisible="{Binding $parent[local:InspectorComponent].Expanded}">
         <StackPanel>
             <DockPanel Background="{DynamicResource FromBackground}">
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 1 2 0"
-                           DockPanel.Dock="Left"
-                           Text="value 1"/>
+                <local:FieldName Text="value 1"></local:FieldName>
                 <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
                          BorderThickness="0" HorizontalAlignment="Right"
                          Background="{DynamicResource EditBackground}"
@@ -48,9 +46,7 @@
                 </TextBox>
             </DockPanel>
             <DockPanel Background="{DynamicResource FromBackground}">
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 1 2 0"
-                           DockPanel.Dock="Left"
-                           Text="value 1"/>
+                <local:FieldName Text="value 2"></local:FieldName>
                 <TextBox MinHeight="1" Height="22" MaxHeight="22" BorderBrush="{DynamicResource ComponentBackground}"
                          BorderThickness="0" HorizontalAlignment="Right"
                          Background="{DynamicResource EditBackground}"
