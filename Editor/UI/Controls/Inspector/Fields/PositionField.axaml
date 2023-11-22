@@ -16,7 +16,7 @@
         <DockPanel Grid.Row="0" Grid.Column="1">
             <Border     Background="Red" Classes="PositionBorder"/>
             <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
-                        Text="{Binding $parent[local:PositionField].Value.ValueX}"/>
+                        Text="{Binding $parent[local:PositionField].X}"/>
         </DockPanel>
         
         <TextBlock  Grid.Row="0" Grid.Column="2" 
@@ -25,7 +25,7 @@
         <DockPanel Grid.Row="0" Grid.Column="3">
             <Border     Background="Green" Classes="PositionBorder"/>
             <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
-                        Text="{Binding $parent[local:PositionField].Value.ValueY}"/>
+                        Text="{Binding $parent[local:PositionField].Y}"/>
         </DockPanel>
 
         <TextBlock  Grid.Row="0" Grid.Column="4" 
@@ -34,7 +34,7 @@
         <DockPanel Grid.Row="0" Grid.Column="5">
             <Border     Background="Blue" Classes="PositionBorder"/>
             <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
-                        Text="{Binding $parent[local:PositionField].Value.ValueZ}"/>
+                        Text="{Binding $parent[local:PositionField].Z}"/>
         </DockPanel>
        
     </Grid>

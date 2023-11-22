@@ -11,9 +11,13 @@ namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
 public partial class PositionField : UserControl
 {
-    public static readonly StyledProperty<Position>   ValueProperty  = AP.Register<InspectorComponent, Position>(nameof(Value), new Position(1, 2, 3));
+    public static readonly StyledProperty<float>   XProperty  = AP.Register<PositionField, float>(nameof(X), 1);
+    public static readonly StyledProperty<float>   YProperty  = AP.Register<PositionField, float>(nameof(Y), 2);
+    public static readonly StyledProperty<float>   ZProperty  = AP.Register<PositionField, float>(nameof(Z), 3);
     
-    public Position   Value  { get => GetValue(ValueProperty);  set => SetValue(ValueProperty, value); }
+    public float   X  { get => GetValue(XProperty);  set => SetValue(XProperty, value); }
+    public float   Y  { get => GetValue(YProperty);  set => SetValue(YProperty, value); }
+    public float   Z  { get => GetValue(ZProperty);  set => SetValue(ZProperty, value); }
     
     public PositionField()
     {

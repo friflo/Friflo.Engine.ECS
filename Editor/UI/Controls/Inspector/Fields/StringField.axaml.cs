@@ -10,7 +10,7 @@ namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
 public partial class StringField : UserControl
 {
-    public static readonly StyledProperty<string>   ValueProperty  = AP.Register<InspectorComponent, string>(nameof(Value), "value");
+    public static readonly StyledProperty<string>   ValueProperty  = AP.Register<StringField, string>(nameof(Value), "value");
     
     public string   Value  { get => GetValue(ValueProperty);  set => SetValue(ValueProperty, value); }
     
