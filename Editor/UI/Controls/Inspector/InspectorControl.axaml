@@ -17,7 +17,7 @@
                     Background="{DynamicResource FromBackground}">
             <DockPanel >
                 <inspector:FieldName Text="field 1"/>
-                <inspector:StringValue Value="value 1"/>
+                <inspector:StringField Value="value 1"/>
             </DockPanel>
             <inspector:Separator/>
         </StackPanel>
@@ -27,11 +27,11 @@
                     Background="{DynamicResource FromBackground}">
             <DockPanel>
                 <inspector:FieldName Text="field 1"/>
-                <inspector:StringValue Value="value 1"/>
+                <inspector:StringField Value="value 1"/>
             </DockPanel>
             <DockPanel>
                 <inspector:FieldName Text="field 2"/>
-                <inspector:StringValue Value="value 2"/>
+                <inspector:StringField Value="value 2"/>
             </DockPanel>
             <inspector:Separator/>
         </StackPanel>
@@ -41,15 +41,15 @@
                     Background="{DynamicResource FromBackground}">
             <DockPanel>
                 <inspector:FieldName Text="field 1"/>
-                <inspector:StringValue Value="value 1"/>
+                <inspector:StringField Value="value 1"/>
             </DockPanel>
             <DockPanel>
                 <inspector:FieldName Text="field 2"/>
-                <inspector:StringValue Value="value 2"/>
+                <inspector:StringField Value="value 2"/>
             </DockPanel>
             <DockPanel>
                 <inspector:FieldName Text="field 3"/>
-                <inspector:StringValue Value="value 3"/>
+                <inspector:StringField Value="value 3"/>
             </DockPanel>
             <inspector:Separator/>
         </StackPanel>
