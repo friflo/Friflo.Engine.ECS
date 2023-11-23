@@ -59,7 +59,7 @@ public sealed class GameDataSync
     private void ConvertDataEntities(List<DataEntity> dataEntities)
     {
         foreach (var data in dataEntities) {
-            converter.DataToGameEntity(data, store, out _);
+            converter.DataEntityToEntity(data, store, out _);
         }
     }
     
@@ -94,7 +94,7 @@ public sealed class GameDataSync
         if (!localEntities.TryGetEntity(entity.Id, out DataEntity dataEntity)) {
             dataEntity = new DataEntity();
         }
-        dataEntity = converter.GameToDataEntity(entity, dataEntity, true);
+        dataEntity = converter.EntityToDataEntity(entity, dataEntity, true);
         upsertBuffer.Add(dataEntity);
     }
     
@@ -134,7 +134,7 @@ public sealed class GameDataSync
             return;
         }
         foreach (var upsert in changes.Upserts) {
-            converter.DataToGameEntity(upsert.entity, store, out _);
+            converter.DataEntityToEntity(upsert.entity, store, out _);
         }
         foreach (var delete in changes.Deletes) {
             ref var node = ref store.GetNodeByPid(delete.key);

@@ -85,7 +85,7 @@ public partial class EntityStore
 // --------------------------------------- DataEntity -> Entity ---------------------------------------
 #region DataEntity -> Entity
 
-    internal Entity DataToGameEntity(DataEntity dataEntity, out string error, ComponentReader reader)
+    internal Entity DataEntityToEntity(DataEntity dataEntity, out string error, ComponentReader reader)
     {
         Entity entity;
         if (pidType == PidType.UsePidAsId) {

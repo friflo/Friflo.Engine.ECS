@@ -13,7 +13,7 @@ namespace Tests.ECS.Sync;
 
 public static class Test_EntityConverter
 {
-    private static DataEntity CreateDbEntity(int id, int[] childIds)
+    private static DataEntity CreateDataEntity(int id, int[] childIds)
     {
         var children = new List<long>(childIds.Length);
         foreach (var childId in childIds) {
@@ -26,7 +26,7 @@ public static class Test_EntityConverter
     public static void Test_EntityConverter_Load_single_entity() {
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
-        var entity2 = converter.DataToGameEntity(new DataEntity { pid = 2 }, store, out _);
+        var entity2 = converter.DataEntityToEntity(new DataEntity { pid = 2 }, store, out _);
         
         AreEqual(2, entity2.Id);
         AreEqual(0, entity2.ChildNodes.Length);
@@ -40,7 +40,7 @@ public static class Test_EntityConverter
         var converter   = EntityConverter.Default;
 
         // --- create parent 5 first
-        var entity5 = converter.DataToGameEntity(CreateDbEntity(5, new [] { 8 }), store, out _);
+        var entity5 = converter.DataEntityToEntity(CreateDataEntity(5, new [] { 8 }), store, out _);
         AreEqual(5,                     entity5.Id);
         var ids     = entity5.ChildNodes.Ids;
         AreEqual(1,                     ids.Length);
@@ -52,7 +52,7 @@ public static class Test_EntityConverter
         AreEqual(1,                     store.EntityCount);
         
         // --- create child 8
-        var entity8 = converter.DataToGameEntity(new DataEntity { pid = 8 }, store, out _);
+        var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
         AreSame (entity8,               store.Nodes[8].Entity);
         AreEqual(Created,               store.Nodes[8].Flags);
         AreEqual(8,                     store.Nodes[8].Id);
@@ -70,7 +70,7 @@ public static class Test_EntityConverter
         var converter   = EntityConverter.Default;
         
         // --- create child 8 first
-        var entity8 = converter.DataToGameEntity(new DataEntity { pid = 8 }, store, out _);
+        var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
         AreSame (entity8,               store.Nodes[8].Entity);
         AreEqual(Created,               store.Nodes[8].Flags);      // diff_flags
         AreEqual(8,                     store.Nodes[8].Id);
@@ -78,7 +78,7 @@ public static class Test_EntityConverter
         AreEqual(1,                     store.EntityCount);
 
         // --- create parent 5
-        var entity5 = converter.DataToGameEntity(CreateDbEntity(5, new [] { 8 }), store, out _);
+        var entity5 = converter.DataEntityToEntity(CreateDataEntity(5, new [] { 8 }), store, out _);
         AreEqual(5,                     entity5.Id);
         var ids     = entity5.ChildNodes.Ids;
         AreEqual(1,                     ids.Length);
@@ -101,13 +101,13 @@ public static class Test_EntityConverter
         {
             var e = Throws<ArgumentException>(() => {
                 var entity = new DataEntity { pid = 0 };
-                converter.DataToGameEntity(entity, store, out _);    
+                converter.DataEntityToEntity(entity, store, out _);    
             });
             AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 0 (Parameter 'DataEntity.pid')", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 var entity = new DataEntity { pid = 1, children = new List<long> { 2147483647L + 1 }};
-                converter.DataToGameEntity(entity, store, out _);    
+                converter.DataEntityToEntity(entity, store, out _);    
             });
             AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 2147483648 (Parameter 'DataEntity.children')", e!.Message);
         }
@@ -118,10 +118,10 @@ public static class Test_EntityConverter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        converter.DataToGameEntity(CreateDbEntity(1, new [] { 2, 3 }), store, out _);
+        converter.DataEntityToEntity(CreateDataEntity(1, new [] { 2, 3 }), store, out _);
 
         var e = Throws<InvalidOperationException> (() => {
-            _ = converter.DataToGameEntity(CreateDbEntity(2, new [] { 3 }), store, out _);
+            _ = converter.DataEntityToEntity(CreateDataEntity(2, new [] { 3 }), store, out _);
         });
         AreEqual("child has already a parent. child: 3 current parent: 1, new parent: 2", e!.Message);
     }
@@ -131,10 +131,10 @@ public static class Test_EntityConverter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        converter.DataToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
+        converter.DataEntityToEntity(CreateDataEntity(1, new [] { 2 }), store, out _);
 
         var e = Throws<InvalidOperationException> (() => {
-            converter.DataToGameEntity(CreateDbEntity(3, new [] { 2 }), store, out _);
+            converter.DataEntityToEntity(CreateDataEntity(3, new [] { 2 }), store, out _);
         });
         AreEqual("child has already a parent. child: 2 current parent: 1, new parent: 3", e!.Message);
     }
@@ -145,7 +145,7 @@ public static class Test_EntityConverter
         var converter   = EntityConverter.Default;
         
         var e = Throws<InvalidOperationException> (() => {
-            converter.DataToGameEntity(CreateDbEntity(1, new [] { 1 }), store, out _);
+            converter.DataEntityToEntity(CreateDataEntity(1, new [] { 1 }), store, out _);
         });
         AreEqual("self reference in entity: 1", e!.Message);
     }
@@ -155,10 +155,10 @@ public static class Test_EntityConverter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        converter.DataToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
+        converter.DataEntityToEntity(CreateDataEntity(1, new [] { 2 }), store, out _);
         
         var e = Throws<InvalidOperationException> (() => {
-            converter.DataToGameEntity(CreateDbEntity(2, new [] { 1 }), store, out _);
+            converter.DataEntityToEntity(CreateDataEntity(2, new [] { 1 }), store, out _);
         });
         AreEqual("dependency cycle in entity children: 2 -> 1 -> 2", e!.Message);
     }
@@ -168,11 +168,11 @@ public static class Test_EntityConverter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        converter.DataToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
-        converter.DataToGameEntity(CreateDbEntity(2, new [] { 3 }), store, out _);
+        converter.DataEntityToEntity(CreateDataEntity(1, new [] { 2 }), store, out _);
+        converter.DataEntityToEntity(CreateDataEntity(2, new [] { 3 }), store, out _);
 
         var e = Throws<InvalidOperationException> (() => {
-            converter.DataToGameEntity(CreateDbEntity(3, new [] { 1 }), store, out _);
+            converter.DataEntityToEntity(CreateDataEntity(3, new [] { 1 }), store, out _);
         });
         AreEqual("dependency cycle in entity children: 3 -> 2 -> 1 -> 3", e!.Message);
     }
@@ -186,7 +186,7 @@ public static class Test_EntityConverter
         var entity = new DataEntity();
         for (int n = 1; n <= count; n++) {
             entity.pid = n;
-            _ = converter.DataToGameEntity(entity, store, out _);
+            _ = converter.DataEntityToEntity(entity, store, out _);
         }
         AreEqual(count, store.EntityCount);
         

@@ -116,7 +116,7 @@ public class GameDataSerializer
         } else {
             writer.json.AppendChar(',');
         }
-        converter.GameToDataEntity(entity, writeEntity, true);
+        converter.EntityToDataEntity(entity, writeEntity, true);
         WriteDataEntity(writeEntity);
     }
     
@@ -238,7 +238,7 @@ public class GameDataSerializer
                     if (ev != JsonEvent.ObjectEnd) {
                         return ev;
                     }
-                    converter.DataToGameEntity(readEntity, store, out _);
+                    converter.DataEntityToEntity(readEntity, store, out _);
                     readEntityCount++;
                     break;
                 case JsonEvent.ArrayEnd:

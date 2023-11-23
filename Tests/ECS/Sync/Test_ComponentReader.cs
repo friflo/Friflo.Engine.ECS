@@ -30,8 +30,8 @@ public static class Test_ComponentReader
         var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
         var childNode   = new DataEntity { pid = 11, components = ChildComponents };
         
-        var root        = converter.DataToGameEntity(rootNode, store, out _);
-        var child       = converter.DataToGameEntity(childNode, store, out _);
+        var root        = converter.DataEntityToEntity(rootNode, store, out _);
+        var child       = converter.DataEntityToEntity(childNode, store, out _);
         AssertRootEntity(root);
         AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -41,7 +41,7 @@ public static class Test_ComponentReader
         // --- read root DataEntity again
         root.Position   = default;
         root.Scale3     = default;
-        root            = converter.DataToGameEntity(rootNode, store, out _);
+        root            = converter.DataEntityToEntity(rootNode, store, out _);
         AssertRootEntity(root);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -49,7 +49,7 @@ public static class Test_ComponentReader
         // --- read child DataEntity again
         child.Position  = default;
         child.Scale3    = default;
-        child           = converter.DataToGameEntity(childNode, store, out _);
+        child           = converter.DataEntityToEntity(childNode, store, out _);
         AssertChildEntity(child);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
@@ -68,7 +68,7 @@ public static class Test_ComponentReader
         IsFalse (root.HasPosition);
         
         var rootNode    = new DataEntity { pid = 10, components = RootComponents };
-        var rootResult  = converter.DataToGameEntity(rootNode, store, out _);  // archetype changes
+        var rootResult  = converter.DataEntityToEntity(rootNode, store, out _);  // archetype changes
         AreSame (root, rootResult);
         IsTrue  (root.HasScale3);   // could change script and remove all components not present in DataEntity components
         IsTrue  (root.HasPosition);
@@ -82,7 +82,7 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
 
         var node    = new DataEntity { pid = 10, components = default };
-        var entity  = converter.DataToGameEntity(node, store, out var error);
+        var entity  = converter.DataEntityToEntity(node, store, out var error);
         AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
@@ -124,16 +124,16 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
 
         var dataRoot    = new DataEntity { pid = 1, children = new List<long> { 2, 3, 4, 5 } };
-        var root        = converter.DataToGameEntity(dataRoot, store, out _);
+        var root        = converter.DataEntityToEntity(dataRoot, store, out _);
         
         AreEqual(new [] { 2, 3, 4, 5 }, root.ChildIds.ToArray());
         for (int n = 2; n <= 6; n++) {
-            converter.DataToGameEntity(new DataEntity { pid = n }, store, out _);
+            converter.DataEntityToEntity(new DataEntity { pid = n }, store, out _);
         }
         AreEqual(6,     store.EntityCount);
         
         dataRoot    = new DataEntity { pid = 1, children = new List<long> { 6, 4, 2, 5 } };
-        root        = converter.DataToGameEntity(dataRoot, store, out _);
+        root        = converter.DataEntityToEntity(dataRoot, store, out _);
         
         AreEqual(new [] { 6, 4, 2, 5 }, root.ChildIds.ToArray());
         AreEqual(6,     store.EntityCount);
@@ -147,7 +147,7 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("{}") };
-        var entity  = converter.DataToGameEntity(node, store, out var error);
+        var entity  = converter.DataEntityToEntity(node, store, out var error);
         AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsNull  (error);
     }
@@ -159,7 +159,7 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("{\"name\":{\"value\":\"test\"}}") };
-        var entity  = converter.DataToGameEntity(node, store, out var error);
+        var entity  = converter.DataEntityToEntity(node, store, out var error);
         
         AreEqual("test", entity.GetComponent<EntityName>().value);
         IsNull  (error);
@@ -172,7 +172,7 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
-        var entity  = converter.DataToGameEntity(node, store, out _);
+        var entity  = converter.DataEntityToEntity(node, store, out _);
         AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());
     }
@@ -185,7 +185,7 @@ public static class Test_ComponentReader
         
         var json    = new JsonValue("{ \"pos\": [] }");
         var node    = new DataEntity { pid = 10, components = json };
-        var entity  = converter.DataToGameEntity(node, store, out var error);
+        var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
         AreEqual("component must be an object. was ArrayStart. id: 10, component: 'pos'", error);
     }
@@ -197,12 +197,12 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("123") };
-        var entity  = converter.DataToGameEntity(node, store, out var error);
+        var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
         AreEqual("expect 'components' == object or null. id: 10. was: ValueNumber", error);
         
         node        = new DataEntity { pid = 10, components = new JsonValue("invalid") };
-        entity      = converter.DataToGameEntity(node, store, out error);
+        entity      = converter.DataEntityToEntity(node, store, out error);
         NotNull(entity);
         AreEqual("unexpected character while reading value. Found: i path: '(root)' at position: 1. id: 10", error);
     }
@@ -216,7 +216,7 @@ public static class Test_ComponentReader
             var converter   = EntityConverter.Default;
         
             var e = Throws<ArgumentNullException>(() => {
-                converter.DataToGameEntity(null, store, out _);
+                converter.DataEntityToEntity(null, store, out _);
             });
             AreEqual("Value cannot be null. (Parameter 'dataEntity')", e!.Message);
         } {
@@ -225,7 +225,7 @@ public static class Test_ComponentReader
         
             var childNode   = new DataEntity { pid = int.MaxValue + 1L };
             var e = Throws<ArgumentException>(() => {
-                converter.DataToGameEntity(childNode, store, out _);
+                converter.DataEntityToEntity(childNode, store, out _);
             });
             AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 2147483648 (Parameter 'DataEntity.pid')", e!.Message);
         }
@@ -265,8 +265,8 @@ public static class Test_ComponentReader
         var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
         var childNode   = new DataEntity { pid = 11, components = ChildComponents };
         
-        var root        = converter.DataToGameEntity(rootNode, store, out _);
-        var child       = converter.DataToGameEntity(childNode, store, out _);
+        var root        = converter.DataEntityToEntity(rootNode, store, out _);
+        var child       = converter.DataEntityToEntity(childNode, store, out _);
         AssertRootEntity(root);
         AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -277,7 +277,7 @@ public static class Test_ComponentReader
         root.Position   = default;
         root.Scale3     = default;
         var start       = Mem.GetAllocatedBytes();
-        root            = converter.DataToGameEntity(rootNode, store, out _);
+        root            = converter.DataEntityToEntity(rootNode, store, out _);
         Mem.AssertNoAlloc(start);
         AssertRootEntity(root);
         AssertChildEntity(child);
@@ -296,7 +296,7 @@ public static class Test_ComponentReader
         const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
         {
-            var root = converter.DataToGameEntity(rootNode, store, out _);
+            var root = converter.DataEntityToEntity(rootNode, store, out _);
             root.DeleteEntity();
         }
     }
@@ -311,14 +311,14 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
 
-        var root        = converter.DataToGameEntity(rootNode, store, out _);
+        var root        = converter.DataEntityToEntity(rootNode, store, out _);
         AreEqual(1,     root.Scripts.Length);
         var script1     = root.GetScript<TestScript1>();
         AreEqual(2,     script1.val1);
         script1.val1      = -1;
         
         // --- read same DataEntity again
-        converter.DataToGameEntity(rootNode, store, out _);
+        converter.DataEntityToEntity(rootNode, store, out _);
         var comp2       = root.GetScript<TestScript1>();
         AreEqual(2,     comp2.val1);
         AreSame(script1, comp2);
@@ -334,7 +334,7 @@ public static class Test_ComponentReader
 
         const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
-            converter.DataToGameEntity(rootNode, store, out _);
+            converter.DataEntityToEntity(rootNode, store, out _);
         }
     }
     
@@ -350,7 +350,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataEntity { pid = 10, components = Scripts };
 
-        var root        = converter.DataToGameEntity(rootNode, store, out _);
+        var root        = converter.DataEntityToEntity(rootNode, store, out _);
         AreEqual(3,     root.Scripts.Length);
         var script1   = root.GetScript<TestScript1>();
         AreEqual(11,    script1.val1);
@@ -364,7 +364,7 @@ public static class Test_ComponentReader
         script3.val3      = -1;
         
         // --- read same DataEntity again
-        converter.DataToGameEntity(rootNode, store, out _);
+        converter.DataEntityToEntity(rootNode, store, out _);
         AreEqual(3,     root.Scripts.Length);
         script1       = root.GetScript<TestScript1>();
         AreEqual(11,    script1.val1);
@@ -385,7 +385,7 @@ public static class Test_ComponentReader
             children.Add(n + 20);
         }
         var node    = new DataEntity{ pid = 10, children = children };
-        var entity  = converter.DataToGameEntity(node, store, out _);
+        var entity  = converter.DataEntityToEntity(node, store, out _);
         
         AreEqual(10,    store.PidToId(10L));
         AreEqual(10,    store.GetNodeByPid(10L).Pid);
@@ -413,7 +413,7 @@ public static class Test_ComponentReader
             children.Add(n + 20);
         }
         var node        = new DataEntity{ pid = 10, children = children };
-        var entity      = converter.DataToGameEntity(node, store, out _);
+        var entity      = converter.DataEntityToEntity(node, store, out _);
         
         AreEqual(1,     store.PidToId(10L));
         AreEqual(1,     store.GetNodeByPid(10L).Id);
@@ -437,12 +437,12 @@ public static class Test_ComponentReader
         var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentNullException>(() => {
-                converter.DataToGameEntity(null, store, out _);    
+                converter.DataEntityToEntity(null, store, out _);    
             });
             AreEqual("Value cannot be null. (Parameter 'dataEntity')", e!.Message);
         } {
             var e = Throws<ArgumentNullException>(() => {
-                converter.GameToDataEntity(null);    
+                converter.EntityToDataEntity(null);    
             });
             AreEqual("Value cannot be null. (Parameter 'gameEntity')", e!.Message);
         }

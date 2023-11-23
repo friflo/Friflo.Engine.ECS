@@ -20,7 +20,7 @@ public static class Test_ComponentWriter
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
         
-        var node = converter.GameToDataEntity(entity);
+        var node = converter.EntityToDataEntity(entity);
         
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
@@ -36,7 +36,7 @@ public static class Test_ComponentWriter
         
         var gameEntity  = store.CreateEntity();
         gameEntity.AddComponent(new EntityName("test"));
-        var dataEntity = converter.GameToDataEntity(gameEntity);
+        var dataEntity = converter.EntityToDataEntity(gameEntity);
         
         AreEqual("{\"name\":{\"value\":\"test\"}}", dataEntity.components.AsString());
     }
@@ -48,7 +48,7 @@ public static class Test_ComponentWriter
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
-        var node    = converter.GameToDataEntity(entity);
+        var node    = converter.EntityToDataEntity(entity);
         
         AreEqual(10,    node.pid);
         IsNull  (node.children);
@@ -62,7 +62,7 @@ public static class Test_ComponentWriter
         
         var entity  = store.CreateEntity(10);
         entity.AddTag<TestTag>();
-        var node    = converter.GameToDataEntity(entity);
+        var node    = converter.EntityToDataEntity(entity);
         
         AreEqual(10,                node.pid);
         AreEqual(1,                 node.tags.Count);
@@ -82,7 +82,7 @@ public static class Test_ComponentWriter
         int count = 10; // 2_000_000 ~ 1.935 ms
         DataEntity node = null;
         for (int n = 0; n < count; n++) {
-            node = converter.GameToDataEntity(entity);
+            node = converter.EntityToDataEntity(entity);
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
     }

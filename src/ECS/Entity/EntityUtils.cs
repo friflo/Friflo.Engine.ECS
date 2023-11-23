@@ -70,7 +70,7 @@ internal static class EntityUtils
         lock (converter) {
             var dataEntity  = DebugDataEntity;
             var writer      = DebugObjectWriter;
-            converter.GameToDataEntity(entity, dataEntity, true);
+            converter.EntityToDataEntity(entity, dataEntity, true);
             writer.Pretty             = true;
             writer.WriteNullMembers   = false;
             return writer.Write(dataEntity);
