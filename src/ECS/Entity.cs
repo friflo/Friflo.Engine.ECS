@@ -280,7 +280,9 @@ public sealed class Entity
     }
     
     /// <remarks>
-    /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
+    /// Executes in O(1) in case <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
+    /// Otherwise O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
+    /// If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public void InsertChild(int index, Entity entity) {
@@ -290,7 +292,8 @@ public sealed class Entity
     }
     
     /// <remarks>
-    /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
+    /// Executes in O(N) to search the entity. N = <see cref="ChildCount"/><br/>
+    /// If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public bool RemoveChild(Entity entity) {
@@ -304,6 +307,9 @@ public sealed class Entity
     /// The deleted instance is in <see cref="detached"/> state.
     /// Calling <see cref="Entity"/> methods result in <see cref="NullReferenceException"/>'s
     /// </summary>
+    /// <remarks>
+    /// Executes in O(1) in case the entity has no children and if it is the last entity in <see cref="Parent"/>.<see cref="ChildIds"/>
+    /// </remarks>
     public void DeleteEntity()
     {
         var store = archetype.entityStore;
