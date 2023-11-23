@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Friflo.Fliox.Engine.Client;
 
-public readonly struct ReadSceneResult
+public readonly struct ReadEntitiesResult
 {
     public readonly     int     entityCount;
     public readonly     string  error;
     
-    internal ReadSceneResult(int entityCount, string error) {
+    internal ReadEntitiesResult(int entityCount, string error) {
         this.entityCount    = entityCount;
         this.error          = error;
     }

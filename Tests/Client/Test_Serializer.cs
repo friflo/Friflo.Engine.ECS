@@ -42,14 +42,14 @@ public static class Test_Serializer
         {
             var fileName    = TestUtils.GetBasePath() + "assets/write_scene.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            serializer.WriteScene(file);
+            serializer.Write(file);
             file.Close();
         }
         // --- store game entities as scene async
         {
             var fileName    = TestUtils.GetBasePath() + "assets/write_scene_async.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            await serializer.WriteSceneAsync(file);
+            await serializer.WriteAsync(file);
             file.Close();
         }
     }
@@ -61,7 +61,7 @@ public static class Test_Serializer
         var serializer  = new EntitySerializer(store);
 
         var stream = new MemoryStream();
-        serializer.WriteScene(stream);
+        serializer.Write(stream);
         var str = MemoryStreamAsString(stream);
         stream.Close();
         AreEqual("[]", str);
@@ -80,9 +80,9 @@ public static class Test_Serializer
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
             var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            var result      = serializer.ReadScene(file);
+            var result      = serializer.Read(file);
             file.Close();
-            AssertReadSceneResult(result, store);
+            AssertReadResult(result, store);
         }
     }
     
@@ -97,13 +97,13 @@ public static class Test_Serializer
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
             var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            var result      = await serializer.ReadSceneAsync(file);
+            var result      = await serializer.ReadAsync(file);
             file.Close();
-            AssertReadSceneResult(result, store);
+            AssertReadResult(result, store);
         }
     }
     
-    private static void AssertReadSceneResult(ReadSceneResult result, EntityStore store)
+    private static void AssertReadResult(ReadEntitiesResult result, EntityStore store)
     {
         AreEqual("entityCount: 2", result.ToString());
         IsNull(result.error);
@@ -143,7 +143,7 @@ public static class Test_Serializer
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         var stream      = new MemoryStream();
-        serializer.WriteScene(stream);
+        serializer.Write(stream);
         var sizeKb = stream.Length / 1024;
         stream.Close();
         Console.WriteLine($"Write scene: entities: {count}, size: {sizeKb} kb, duration: {stopwatch.ElapsedMilliseconds} ms");
@@ -165,7 +165,7 @@ public static class Test_Serializer
                 entity.AddTag<TestTag>();
             }
             AreEqual(entityCount, store.EntityCount);
-            serializer.WriteScene(stream);
+            serializer.Write(stream);
             MemoryStreamAsString(stream);
         }
         // --- read created JSON scene with EntitySerializer
@@ -175,12 +175,12 @@ public static class Test_Serializer
             var store       = new EntityStore(PidType.UsePidAsId);
             var serializer  = new EntitySerializer(store);
             stream.Position = 0;
-            var result = serializer.ReadScene(stream);
+            var result = serializer.Read(stream);
             IsNull  (result.error);
             AreEqual(entityCount, result.entityCount);
             AreEqual(entityCount, store.EntityCount);
         }
-        Console.WriteLine($"ReadScene(). JSON size: {stream.Length}, entities: {entityCount}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Read(). JSON size: {stream.Length}, entities: {entityCount}, duration: {stopwatch.ElapsedMilliseconds} ms");
         stream.Close();
     }
     
@@ -207,89 +207,89 @@ public static class Test_Serializer
         var serializer  = new EntitySerializer(store);
         var fileName    = TestUtils.GetBasePath() + "assets/read_unknown_members.json";
         var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-        var result      = serializer.ReadScene(file);
+        var result      = serializer.Read(file);
         file.Close();
-        AssertReadSceneResult(result, store);
+        AssertReadResult(result, store);
     }
     
-    /// <summary>Cover <see cref="EntitySerializer.ReadSceneAsync"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadAsync"/></summary>
     [Test]
-    public static async Task Test_Serializer_ReadSceneAsync_MemoryStream()
+    public static async Task Test_Serializer_ReadAsync_MemoryStream()
     {
         var stream      = new MemoryStream();
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer(store);
-        serializer.WriteScene(stream);
+        serializer.Write(stream);
         stream.Position = 0;
-        var result = await serializer.ReadSceneAsync(stream);
+        var result = await serializer.ReadAsync(stream);
         IsNull(result.error);
     }
     
-    /// <summary>Cover <see cref="EntitySerializer.ReadSceneSync"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadSync"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_error_ReadSceneSync()
+    public static void Test_Serializer_Read_error_ReadSync()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("xxx");
-        var result      = serializer.ReadScene(stream);
+        var result      = serializer.Read(stream);
         AreEqual("unexpected character while reading value. Found: x path: '(root)' at position: 1", result.error);
         
         stream          = StringAsStream("{}");
-        result          = serializer.ReadScene(stream);
+        result          = serializer.Read(stream);
         AreEqual("expect array. was: ObjectStart at position: 1", result.error);
         
         stream          = StringAsStream("[}");
-        result          = serializer.ReadScene(stream);
+        result          = serializer.Read(stream);
         AreEqual("unexpected character while reading value. Found: } path: '[0]' at position: 2", result.error);
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadEntity"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_error_ReadEntity()
+    public static void Test_Serializer_Read_error_ReadEntity()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[{ xxx");
-        var result      = serializer.ReadScene(stream);
+        var result      = serializer.Read(stream);
         AreEqual("unexpected character > expect key. Found: x path: '[0]' at position: 4", result.error);
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadEntities"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_error_ReadEntities()
+    public static void Test_Serializer_Read_error_ReadEntities()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[1]");
-        var result      = serializer.ReadScene(stream);
+        var result      = serializer.Read(stream);
         AreEqual("expect object entity. was: ValueNumber at position: 2 path: '[0]' at position: 2", result.error);
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadChildren"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_error_ReadChildren()
+    public static void Test_Serializer_Read_error_ReadChildren()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[ {\"children\":[true] } }");
-        var result      = serializer.ReadScene(stream);
+        var result      = serializer.Read(stream);
         AreEqual("expect child id number. was: ValueBool at position: 19 path: '[0].children[0]' at position: 19", result.error);
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadTags"/></summary>
     [Test]
-    public static void Test_Serializer_ReadScene_error_ReadTags()
+    public static void Test_Serializer_Read_error_ReadTags()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[ {\"tags\":[1] } }");
-        var result      = serializer.ReadScene(stream);
+        var result      = serializer.Read(stream);
         AreEqual("expect tag string. was: ValueNumber at position: 12 path: '[0].tags[0]' at position: 12", result.error);
     }
     #endregion

@@ -55,7 +55,7 @@ public class EntitySerializer
     private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
     private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
 
-    public async Task WriteSceneAsync(Stream stream)
+    public async Task WriteAsync(Stream stream)
     {
         await stream.WriteAsync(ArrayStart);
         writer.SetPretty(true);
@@ -74,7 +74,7 @@ public class EntitySerializer
         await stream.WriteAsync(ArrayEnd);
     }
     
-    public void WriteScene(Stream stream)
+    public void Write(Stream stream)
     {
         stream.Write(ArrayStart);
         writer.SetPretty(true);
@@ -171,33 +171,33 @@ public class EntitySerializer
         return new MemoryStream(capacity);
     }
 
-    public async Task<ReadSceneResult> ReadSceneAsync(Stream stream)
+    public async Task<ReadEntitiesResult> ReadAsync(Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
-            return ReadSceneSync(memoryStream);
+            return ReadSync(memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
         int read;
         while((read = await stream.ReadAsync(readBuffer)) > 0) {
             readStream.Write (readBuffer, 0, read);
         }
-        return ReadSceneSync(readStream);
+        return ReadSync(readStream);
     }
     
-    public ReadSceneResult ReadScene(Stream stream)
+    public ReadEntitiesResult Read(Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
-            return ReadSceneSync(memoryStream);
+            return ReadSync(memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
         int read;
         while((read = stream.Read (readBuffer)) > 0) {
             readStream.Write(readBuffer, 0, read);
         }
-        return ReadSceneSync(readStream);
+        return ReadSync(readStream);
     }
 
-    private ReadSceneResult ReadSceneSync(MemoryStream memoryStream)
+    private ReadEntitiesResult ReadSync(MemoryStream memoryStream)
     {
         try {
             readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
@@ -209,13 +209,13 @@ public class EntitySerializer
                 case JsonEvent.ArrayStart:
                     ev = ReadEntities();
                     if (ev == JsonEvent.Error) {
-                        return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
+                        return new ReadEntitiesResult(readEntityCount, parser.error.GetMessage());
                     }
-                    return new ReadSceneResult(readEntityCount, null);
+                    return new ReadEntitiesResult(readEntityCount, null);
                 case JsonEvent.Error:
-                    return new ReadSceneResult(readEntityCount, parser.error.GetMessage());
+                    return new ReadEntitiesResult(readEntityCount, parser.error.GetMessage());
                 default:
-                    return new ReadSceneResult(readEntityCount, $"expect array. was: {ev} at position: {parser.Position}");
+                    return new ReadEntitiesResult(readEntityCount, $"expect array. was: {ev} at position: {parser.Position}");
             }
         }
         finally {
