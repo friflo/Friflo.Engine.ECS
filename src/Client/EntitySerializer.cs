@@ -15,6 +15,7 @@ using Friflo.Json.Fliox;
 [assembly: InternalsVisibleTo("Tests-internal")]
 [assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
+// ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable UseUtf8StringLiteral
 // ReSharper disable MergeIntoPattern
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -23,7 +24,6 @@ namespace Friflo.Fliox.Engine.Client;
 public class EntitySerializer
 {
 #region private fields
-    private readonly    EntityStore         store;
     private             Bytes               componentBuf;
     private readonly    EntityConverter     converter;
     // --- write specific fields
@@ -39,8 +39,8 @@ public class EntitySerializer
     #endregion
     
 #region constructor
-    public EntitySerializer(EntityStore store) {
-        this.store      = store;
+    public EntitySerializer()
+    {
         converter       = new EntityConverter();
         componentBuf    = new Bytes(32);
         readEntity      = new DataEntity {
@@ -55,7 +55,7 @@ public class EntitySerializer
     private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
     private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
 
-    public async Task WriteAsync(Stream stream)
+    public async Task WriteStoreAsync(EntityStore store, Stream stream)
     {
         await stream.WriteAsync(ArrayStart);
         writer.SetPretty(true);
@@ -74,7 +74,7 @@ public class EntitySerializer
         await stream.WriteAsync(ArrayEnd);
     }
     
-    public void Write(Stream stream)
+    public void WriteStore(EntityStore store, Stream stream)
     {
         stream.Write(ArrayStart);
         writer.SetPretty(true);
@@ -92,7 +92,7 @@ public class EntitySerializer
         stream.Write(ArrayEnd);
     }
     
-    public void WriteEntities(Stream stream, IEnumerable<Entity> entities)
+    public void WriteEntities(IEnumerable<Entity> entities, Stream stream)
     {
         stream.Write(ArrayStart);
         writer.SetPretty(true);
@@ -171,33 +171,33 @@ public class EntitySerializer
         return new MemoryStream(capacity);
     }
 
-    public async Task<ReadEntitiesResult> ReadAsync(Stream stream)
+    public async Task<ReadEntitiesResult> ReadIntoStoreAsync(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
-            return ReadSync(memoryStream);
+            return ReadSync(store, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
         int read;
         while((read = await stream.ReadAsync(readBuffer)) > 0) {
             readStream.Write (readBuffer, 0, read);
         }
-        return ReadSync(readStream);
+        return ReadSync(store, readStream);
     }
     
-    public ReadEntitiesResult Read(Stream stream)
+    public ReadEntitiesResult ReadIntoStore(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
-            return ReadSync(memoryStream);
+            return ReadSync(store, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
         int read;
         while((read = stream.Read (readBuffer)) > 0) {
             readStream.Write(readBuffer, 0, read);
         }
-        return ReadSync(readStream);
+        return ReadSync(store, readStream);
     }
 
-    private ReadEntitiesResult ReadSync(MemoryStream memoryStream)
+    private ReadEntitiesResult ReadSync(EntityStore store, MemoryStream memoryStream)
     {
         try {
             readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
@@ -207,7 +207,7 @@ public class EntitySerializer
             switch (ev)
             {
                 case JsonEvent.ArrayStart:
-                    ev = ReadEntities();
+                    ev = ReadEntities(store);
                     if (ev == JsonEvent.Error) {
                         return new ReadEntitiesResult(readEntityCount, parser.error.GetMessage());
                     }
@@ -223,7 +223,7 @@ public class EntitySerializer
         }
     }
     
-    private JsonEvent ReadEntities()
+    private JsonEvent ReadEntities(EntityStore store)
     {
         while (true) {
             var ev = parser.NextEvent();
