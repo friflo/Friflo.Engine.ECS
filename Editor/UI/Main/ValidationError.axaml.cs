@@ -16,14 +16,12 @@ namespace Friflo.Fliox.Editor.UI;
 /// </summary>
 public partial class ValidationError : UserControl
 {
-    public static readonly StyledProperty<string>   ErrorProperty  = AP.Register<ValidationError, string>(nameof(Error), "name");
-    
-    public static readonly StyledProperty<IEnumerable> ItemsSourceProperty = AP.Register<ItemsControl, IEnumerable>(nameof(ItemsSource));
-    
-    public string   Error { get => GetValue(ErrorProperty); set => SetValue(ErrorProperty, value); }
+    public static readonly StyledProperty<IEnumerable>  ItemsSourceProperty = AP.Register<ValidationError, IEnumerable> (nameof(ItemsSource));
+    public static readonly StyledProperty<string>       ErrorProperty       = AP.Register<ValidationError, string>      (nameof(Error), "name");
 
     /// <summary>implement <see cref="ItemsSource"/> similar to <see cref="ItemsControl.ItemsSource"/></summary>
-    public IEnumerable ItemsSource { get => GetValue(ItemsSourceProperty); set => SetValue(ItemsSourceProperty, value); }
+    public IEnumerable  ItemsSource { get => GetValue(ItemsSourceProperty); set => SetValue(ItemsSourceProperty, value); }
+    public string       Error       { get => GetValue(ErrorProperty);       set => SetValue(ErrorProperty, value);       }
 
     public ValidationError()
     {

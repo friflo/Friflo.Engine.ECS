@@ -112,5 +112,9 @@
         <DependentUpon>ValidationError.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\InspectorTag.axaml.cs">
+        <DependentUpon>InspectorTag.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
