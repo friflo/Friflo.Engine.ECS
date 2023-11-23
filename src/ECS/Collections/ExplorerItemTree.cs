@@ -16,7 +16,7 @@ public class ExplorerItemTree
     #endregion
     
 #region internal fields
-    private  readonly   EntityStore                     store;      //  8   - the corresponding GameEntityStore
+    private  readonly   EntityStore                     store;      //  8   - the corresponding EntityStore
     internal readonly   ExplorerItem                    rootItem;   //  8   - the root ExplorerItem of the tree
     private  readonly   Dictionary<int, ExplorerItem>   items;      //  8   - map of ExplorerItem's created on demand for corresponding entities
     private  readonly   string                          debugName;  //  8   - name to identify an ExplorerItemTree instance when debugging 

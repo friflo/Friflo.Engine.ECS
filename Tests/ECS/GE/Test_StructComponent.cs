@@ -401,7 +401,7 @@ public static class Test_StructComponent
     }
     
     [Test]
-    public static void Test_StructComponent_GameEntityStore_creation_Perf() {
+    public static void Test_StructComponent_EntityStore_creation_Perf() {
         _ = new EntityStore();
         var stopwatch =  new Stopwatch();
         stopwatch.Start();
@@ -409,7 +409,7 @@ public static class Test_StructComponent
         for (int n = 0; n < count; n++) {
             _ = new EntityStore();
         }
-        Console.WriteLine($"GameEntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"EntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
 }
 

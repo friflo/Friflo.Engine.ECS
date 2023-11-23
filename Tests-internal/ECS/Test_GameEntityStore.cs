@@ -7,11 +7,11 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
 
-public static class Test_GameEntityStore
+public static class Test_EntityStore
 {
     /// <summary>Cover <see cref="EntityStore.DeleteNode"/></summary>
     [Test]
-    public static void Test_GameEntityStore_DeleteEntity()
+    public static void Test_EntityStore_DeleteEntity()
     {
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity(10);

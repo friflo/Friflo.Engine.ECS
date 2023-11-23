@@ -40,7 +40,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Test id assignment in <see cref="EntityStore.EnsureNodesLength"/></summary>
     [Test]
-    public static void Test_GameEntityStore_EnsureNodesLength()
+    public static void Test_EntityStore_EnsureNodesLength()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         for (int n = 0; n < 10; n++) {
@@ -522,7 +522,7 @@ public static class Test_Entity_Tree
     
     /// <summary>Cover <see cref="EntityStore.ChildNodesChanged"/></summary>
     [Test]
-    public static void Test_GameEntityStore_ChildNodesChanged()
+    public static void Test_EntityStore_ChildNodesChanged()
     {
         var store   = new EntityStore();
         var root    = store.CreateEntity(1);
