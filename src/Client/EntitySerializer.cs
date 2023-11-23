@@ -171,7 +171,7 @@ public class EntitySerializer
         return new MemoryStream(capacity);
     }
 
-    public async Task<ReadEntitiesResult> ReadIntoStoreAsync(EntityStore store, Stream stream)
+    public async Task<ReadResult> ReadIntoStoreAsync(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
             return ReadSync(store, memoryStream);
@@ -184,7 +184,7 @@ public class EntitySerializer
         return ReadSync(store, readStream);
     }
     
-    public ReadEntitiesResult ReadIntoStore(EntityStore store, Stream stream)
+    public ReadResult ReadIntoStore(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
             return ReadSync(store, memoryStream);
@@ -197,7 +197,7 @@ public class EntitySerializer
         return ReadSync(store, readStream);
     }
 
-    private ReadEntitiesResult ReadSync(EntityStore store, MemoryStream memoryStream)
+    private ReadResult ReadSync(EntityStore store, MemoryStream memoryStream)
     {
         try {
             readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
@@ -209,13 +209,13 @@ public class EntitySerializer
                 case JsonEvent.ArrayStart:
                     ev = ReadEntities(store);
                     if (ev == JsonEvent.Error) {
-                        return new ReadEntitiesResult(readEntityCount, parser.error.GetMessage());
+                        return new ReadResult(readEntityCount, parser.error.GetMessage());
                     }
-                    return new ReadEntitiesResult(readEntityCount, null);
+                    return new ReadResult(readEntityCount, null);
                 case JsonEvent.Error:
-                    return new ReadEntitiesResult(readEntityCount, parser.error.GetMessage());
+                    return new ReadResult(readEntityCount, parser.error.GetMessage());
                 default:
-                    return new ReadEntitiesResult(readEntityCount, $"expect array. was: {ev} at position: {parser.Position}");
+                    return new ReadResult(readEntityCount, $"expect array. was: {ev} at position: {parser.Position}");
             }
         }
         finally {

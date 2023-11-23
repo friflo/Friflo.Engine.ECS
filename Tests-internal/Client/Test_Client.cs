@@ -9,11 +9,11 @@ namespace Internal.Client;
 public static class Test_Client
 {
     
-    /// <summary>cover <see cref="ReadEntitiesResult.ToString"/></summary>
+    /// <summary>cover <see cref="ReadResult.ToString"/></summary>
     [Test]
     public static void Test_Client_ReadEntitiesResult_ToString()
     {
-        var result = new ReadEntitiesResult(2, "test error");
+        var result = new ReadResult(2, "test error");
         AreEqual("entityCount: 2 error: test error", result.ToString());
     }
 }

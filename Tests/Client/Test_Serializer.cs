@@ -103,7 +103,7 @@ public static class Test_Serializer
         }
     }
     
-    private static void AssertReadResult(ReadEntitiesResult result, EntityStore store)
+    private static void AssertReadResult(ReadResult result, EntityStore store)
     {
         AreEqual("entityCount: 2", result.ToString());
         IsNull(result.error);
