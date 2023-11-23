@@ -1,0 +1,15 @@
+[{
+    "id": 10,
+    "children": [
+        11
+    ],
+    "components": {
+        "pos": {"x":1,"y":2,"z":3},
+        "testRef1": {"val1":10}
+    },
+    "tags": [
+        "TestTag"
+    ]
+},{
+    "id": 11
+}]

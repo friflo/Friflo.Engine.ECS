@@ -7,8 +7,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 
@@ -19,7 +17,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable UseUtf8StringLiteral
 // ReSharper disable MergeIntoPattern
 // ReSharper disable ConvertToAutoPropertyWhenPossible
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.ECS.Serialize;
 
 public class EntitySerializer
 {

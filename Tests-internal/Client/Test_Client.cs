@@ -1,4 +1,4 @@
-﻿using Friflo.Fliox.Engine.Client;
+﻿using Friflo.Fliox.Engine.ECS.Serialize;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

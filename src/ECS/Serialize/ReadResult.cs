@@ -3,7 +3,7 @@
 
 using System.Text;
 
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.ECS.Serialize;
 
 public readonly struct ReadResult
 {

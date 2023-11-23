@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using NUnit.Framework;
 using Tests.ECS;
 using Tests.Utils;
@@ -21,7 +22,7 @@ public static class Test_Serializer
 {
 #region Happy path
     [Test]
-    public static async Task Test_Serializer_write_scene()
+    public static async Task Test_Serializer_write_store()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
@@ -38,14 +39,14 @@ public static class Test_Serializer
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         
-        // --- store entities as scene sync
+        // --- write store entities sync
         {
             var fileName    = TestUtils.GetBasePath() + "assets/write_scene.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             serializer.WriteStore(store, file);
             file.Close();
         }
-        // --- store entities as scene async
+        // --- write store entities async
         {
             var fileName    = TestUtils.GetBasePath() + "assets/write_scene_async.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
@@ -55,7 +56,36 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static void Test_Serializer_write_empty_scene()
+    public static void Test_Serializer_write_entities()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var serializer  = new EntitySerializer();
+
+        var entity  = store.CreateEntity(10);
+        entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
+        entity.AddScript(new TestScript1 { val1 = 10 });
+        entity.AddTag<TestTag>();
+        
+        var child   = store.CreateEntity(11);
+        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+            AreEqual("entity: 10 - Add ChildIds[0] = 11", args.ToString());
+        };
+        entity.AddChild(child);
+        AreEqual(2, store.EntityCount);
+        
+        var entities = new List<Entity> { entity, child, null };
+        
+        // --- store entities sync
+        {
+            var fileName    = TestUtils.GetBasePath() + "assets/write_entities.json";
+            var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+            serializer.WriteEntities(entities, file);
+            file.Close();
+        }
+    }
+    
+    [Test]
+    public static void Test_Serializer_write_empty_store()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
@@ -70,12 +100,12 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static void Test_Serializer_read_scene()
+    public static void Test_Serializer_read_into_store()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
 
-        // --- load entities as scene sync
+        // --- read entities into store sync
         for (int n = 0; n < 2; n++)
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
@@ -87,12 +117,12 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static async Task Test_Serializer_read_scene_async()
+    public static async Task Test_Serializer_read_into_store_async()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
 
-        // --- load entities as scene sync
+        // --- load entities into store sync
         for (int n = 0; n < 2; n++)
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
@@ -126,7 +156,7 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static void Test_Serializer_write_scene_Perf()
+    public static void Test_Serializer_write_store_Perf()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
@@ -146,15 +176,15 @@ public static class Test_Serializer
         serializer.WriteStore(store, stream);
         var sizeKb = stream.Length / 1024;
         stream.Close();
-        Console.WriteLine($"Write scene: entities: {count}, size: {sizeKb} kb, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Write store: entities: {count}, size: {sizeKb} kb, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     [Test]
-    public static void Test_Serializer_read_scene_Perf()
+    public static void Test_Serializer_read_into_store_Perf()
     {
         int entityCount = 100; // 1_000_000 ~ 2367 ms
         var stream      = new MemoryStream();
-        // --- create JSON scene with EntitySerializer
+        // --- create JSON store file with EntitySerializer
         {
             var store       = new EntityStore(PidType.UsePidAsId);
             var serializer  = new EntitySerializer();
@@ -168,7 +198,7 @@ public static class Test_Serializer
             serializer.WriteStore(store, stream);
             MemoryStreamAsString(stream);
         }
-        // --- read created JSON scene with EntitySerializer
+        // --- read created JSON store with EntitySerializer
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         {
