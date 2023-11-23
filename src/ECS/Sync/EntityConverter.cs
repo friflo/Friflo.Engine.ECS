@@ -18,16 +18,16 @@ public class EntityConverter
         writer = new ComponentWriter();
     }
     
-    public DataEntity EntityToDataEntity(Entity gameEntity, DataEntity dataEntity = null, bool pretty = false)
+    public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity = null, bool pretty = false)
     {
-        if (gameEntity == null) {
-            throw new ArgumentNullException(nameof(gameEntity));
+        if (entity == null) {
+            throw new ArgumentNullException(nameof(entity));
         }
-        var store       = gameEntity.archetype.entityStore;
-        var pid         = store.GetNodeById(gameEntity.id).pid;
+        var store       = entity.archetype.entityStore;
+        var pid         = store.GetNodeById(entity.id).pid;
         dataEntity    ??= new DataEntity();
         dataEntity.pid  = pid;
-        store.EntityToDataEntity(gameEntity, dataEntity, writer, pretty);
+        store.EntityToDataEntity(entity, dataEntity, writer, pretty);
         return dataEntity;
     }
     

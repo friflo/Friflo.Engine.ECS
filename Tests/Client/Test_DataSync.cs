@@ -26,7 +26,7 @@ public static class Test_DataSync
     }
     
     [Test]
-    public static async Task Test_DataSync_load_game_entities()
+    public static async Task Test_DataSync_load_entities()
     {
         var client  = CreateClient();
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
@@ -40,7 +40,7 @@ public static class Test_DataSync
         var sync    = new EntityStoreSync(store, client);
         AreSame(store, sync.Store); // ensure API available
         
-        // load game entities via client sync
+        // load entities via client sync
         for (int n = 0; n < 2; n++) {
             sync.LoadEntities();
             
@@ -53,12 +53,12 @@ public static class Test_DataSync
             AreEqual(2,     store.EntityCount);
         }
         
-        // clear game entities in store
+        // clear entities in store
         store.GetNodeById(10).Entity.DeleteEntity();
         store.GetNodeById(11).Entity.DeleteEntity();
         AreEqual(0,     store.EntityCount);
         
-        // load game entities via client async
+        // load entities via client async
         for (int n = 0; n < 2; n++) {
             await sync.LoadEntitiesAsync();
             
@@ -73,7 +73,7 @@ public static class Test_DataSync
     }
     
     [Test]
-    public static async Task Test_DataSync_store_game_entities()
+    public static async Task Test_DataSync_store_entities()
     {
         var client      = CreateClient();
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -91,7 +91,7 @@ public static class Test_DataSync
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         
-        // --- store game entities via client sync
+        // --- store entities via client sync
         for (int n = 0; n < 2; n++)
         {
             sync.StoreEntities();
@@ -108,7 +108,7 @@ public static class Test_DataSync
             IsNull  (data11.children);
             IsTrue  (data11.components.IsNull());
         }
-        // --- store game entities via client async
+        // --- store entities via client async
         sync.ClearData();
         AreEqual(0, client.entities.Local.Count);
         for (int n = 0; n < 2; n++)

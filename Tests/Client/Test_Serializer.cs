@@ -38,14 +38,14 @@ public static class Test_Serializer
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         
-        // --- store game entities as scene sync
+        // --- store entities as scene sync
         {
             var fileName    = TestUtils.GetBasePath() + "assets/write_scene.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
             serializer.WriteStore(store, file);
             file.Close();
         }
-        // --- store game entities as scene async
+        // --- store entities as scene async
         {
             var fileName    = TestUtils.GetBasePath() + "assets/write_scene_async.json";
             var file        = new FileStream(fileName, FileMode.Create, FileAccess.Write);
@@ -75,7 +75,7 @@ public static class Test_Serializer
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
 
-        // --- load game entities as scene sync
+        // --- load entities as scene sync
         for (int n = 0; n < 2; n++)
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";
@@ -92,7 +92,7 @@ public static class Test_Serializer
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
 
-        // --- load game entities as scene sync
+        // --- load entities as scene sync
         for (int n = 0; n < 2; n++)
         {
             var fileName    = TestUtils.GetBasePath() + "assets/read_scene.json";

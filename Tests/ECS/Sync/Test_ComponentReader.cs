@@ -444,7 +444,7 @@ public static class Test_ComponentReader
             var e = Throws<ArgumentNullException>(() => {
                 converter.EntityToDataEntity(null);    
             });
-            AreEqual("Value cannot be null. (Parameter 'gameEntity')", e!.Message);
+            AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
         }
     }
 }

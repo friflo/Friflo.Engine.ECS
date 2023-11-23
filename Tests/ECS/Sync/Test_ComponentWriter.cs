@@ -34,9 +34,9 @@ public static class Test_ComponentWriter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var gameEntity  = store.CreateEntity();
-        gameEntity.AddComponent(new EntityName("test"));
-        var dataEntity = converter.EntityToDataEntity(gameEntity);
+        var entity      = store.CreateEntity();
+        entity.AddComponent(new EntityName("test"));
+        var dataEntity = converter.EntityToDataEntity(entity);
         
         AreEqual("{\"name\":{\"value\":\"test\"}}", dataEntity.components.AsString());
     }
