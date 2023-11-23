@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -13,6 +12,8 @@ using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Engine.ECS.Collections;
 
+
+// ReSharper disable UnusedParameter.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
@@ -59,6 +60,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         editor.SelectionChanged(new EditorSelection { item = selectedItem });
     }
     
+    /*
     /// <summary>
     /// Workaround:  Focus TreeDataGridTextCell if navigating with up/down keys.
     ///              Otherwise if parent is <see cref="TreeDataGridExpanderCell"/> its focus and F2 (rename) does not work.
@@ -69,7 +71,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
             var textCell = EditorUtils.FindControl<TreeDataGridTextCell>(expanderCell);
             // textCell?.Focus(); - calling Focus() explicit corrupt navigation with Key.Tab
         }
-    }
+    } */
     
     internal void FocusPanel() {
         Focus();

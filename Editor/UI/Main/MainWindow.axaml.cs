@@ -4,6 +4,7 @@
 using System;
 using Avalonia.Controls;
 
+// ReSharper disable UnusedParameter.Local
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI;
 

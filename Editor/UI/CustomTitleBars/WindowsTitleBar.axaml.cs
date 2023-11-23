@@ -6,6 +6,7 @@ using Avalonia.Media;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+// ReSharper disable PossibleNullReferenceException
 
 namespace CustomTitleBarTemplate.Views.CustomTitleBars
 {
@@ -43,7 +44,7 @@ namespace CustomTitleBarTemplate.Views.CustomTitleBars
                 {
                     titleBarBackground.IsVisible = IsSeamless ? false : true;
                     systemChromeTitle.IsVisible = IsSeamless ? false : true;
-                    seamlessMenuBar.IsVisible = IsSeamless ? true : false;
+                    seamlessMenuBar.IsVisible = IsSeamless;
                     defaultMenuBar.IsVisible = IsSeamless ? false : true;
 
                     if (IsSeamless == false)

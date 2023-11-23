@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
 
+// ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
 public partial class InspectorComponent : UserControl
