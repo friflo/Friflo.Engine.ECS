@@ -41,7 +41,7 @@ public static class ExplorerCommands
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         var entities    = items.Select(item => item.Entity).ToList();
-        var serializer  = new GameDataSerializer(null);
+        var serializer  = new EntitySerializer(null);
         var stream      = new MemoryStream();
         serializer.WriteEntities(stream, entities);
         var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);

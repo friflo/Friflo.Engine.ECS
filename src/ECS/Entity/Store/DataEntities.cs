@@ -20,7 +20,7 @@ public partial class EntityStore
 {
 // --------------------------------------- Entity -> DataEntity ---------------------------------------
 #region Entity -> DataEntity
-    internal void GameToDataEntity(Entity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
+    internal void EntityToDataEntity(Entity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
         ProcessChildren(dataEntity, nodes[entity.id]);
         

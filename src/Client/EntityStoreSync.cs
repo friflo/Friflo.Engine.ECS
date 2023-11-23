@@ -14,12 +14,12 @@ using Friflo.Json.Fliox.Hub.Client;
 namespace Friflo.Fliox.Engine.Client;
 
 [CLSCompliant(true)]
-public sealed class GameDataSync
+public sealed class EntityStoreSync
 {
     public              EntityStore                     Store => store;
     
     private readonly    EntityStore                     store;
-    private readonly    GameClient                      client;
+    private readonly    EntityClient                    client;
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private readonly    Dictionary<int, EntityChange>   entityChanges;
@@ -27,7 +27,7 @@ public sealed class GameDataSync
     private readonly    List<long>                      deleteBuffer;
 
 
-    public GameDataSync (EntityStore store, GameClient client) {
+    public EntityStoreSync (EntityStore store, EntityClient client) {
         this.store      = store     ?? throw new ArgumentNullException(nameof(store));
         this.client     = client    ?? throw new ArgumentNullException(nameof(client));
         localEntities   = client.entities.Local;
@@ -42,14 +42,14 @@ public sealed class GameDataSync
         client.Reset();
     }
     
-    public void LoadGameEntities()
+    public void LoadEntities()
     {
         var query = client.entities.QueryAll();
         client.SyncTasks().Wait(); // todo enable synchronous queries in MemoryDatabase
         ConvertDataEntities(query.Result);
     }
     
-    public async Task LoadGameEntitiesAsync()
+    public async Task LoadEntitiesAsync()
     {
         var query = client.entities.QueryAll();
         await client.SyncTasks();
@@ -63,13 +63,13 @@ public sealed class GameDataSync
         }
     }
     
-    public void StoreGameEntities()
+    public void StoreEntities()
     {
         UpsertDataEntities();
         client.SyncTasksSynchronous();
     }
     
-    public async Task StoreGameEntitiesAsync()
+    public async Task StoreEntitiesAsync()
     {
         UpsertDataEntities();
         await client.SyncTasks();

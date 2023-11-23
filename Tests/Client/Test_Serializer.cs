@@ -24,7 +24,7 @@ public static class Test_Serializer
     public static async Task Test_Serializer_write_scene()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
 
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
@@ -58,7 +58,7 @@ public static class Test_Serializer
     public static void Test_Serializer_write_empty_scene()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
 
         var stream = new MemoryStream();
         serializer.WriteScene(stream);
@@ -73,7 +73,7 @@ public static class Test_Serializer
     public static void Test_Serializer_read_scene()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
 
         // --- load game entities as scene sync
         for (int n = 0; n < 2; n++)
@@ -90,7 +90,7 @@ public static class Test_Serializer
     public static async Task Test_Serializer_read_scene_async()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
 
         // --- load game entities as scene sync
         for (int n = 0; n < 2; n++)
@@ -129,7 +129,7 @@ public static class Test_Serializer
     public static void Test_Serializer_write_scene_Perf()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
 
         int count = 10;  // 1_000_000 ~ 1.227 ms
         for (int n = 0; n < count; n++) {
@@ -154,10 +154,10 @@ public static class Test_Serializer
     {
         int entityCount = 100; // 1_000_000 ~ 2367 ms
         var stream      = new MemoryStream();
-        // --- create JSON scene with GameDataSerializer
+        // --- create JSON scene with EntitySerializer
         {
             var store       = new EntityStore(PidType.UsePidAsId);
-            var serializer  = new GameDataSerializer(store);
+            var serializer  = new EntitySerializer(store);
 
             for (int n = 0; n < entityCount; n++) {
                 var entity  = store.CreateEntity();
@@ -168,12 +168,12 @@ public static class Test_Serializer
             serializer.WriteScene(stream);
             MemoryStreamAsString(stream);
         }
-        // --- read created JSON scene with GameDataSerializer
+        // --- read created JSON scene with EntitySerializer
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         {
             var store       = new EntityStore(PidType.UsePidAsId);
-            var serializer  = new GameDataSerializer(store);
+            var serializer  = new EntitySerializer(store);
             stream.Position = 0;
             var result = serializer.ReadScene(stream);
             IsNull  (result.error);
@@ -199,12 +199,12 @@ public static class Test_Serializer
     #endregion
     
 #region read coverage
-    /// <summary>Cover <see cref="GameDataSerializer.ReadEntity"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadEntity"/></summary>
     [Test]
     public static void Test_Serializer_read_unknown_JSON_members()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         var fileName    = TestUtils.GetBasePath() + "assets/read_unknown_members.json";
         var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
         var result      = serializer.ReadScene(file);
@@ -212,25 +212,25 @@ public static class Test_Serializer
         AssertReadSceneResult(result, store);
     }
     
-    /// <summary>Cover <see cref="GameDataSerializer.ReadSceneAsync"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadSceneAsync"/></summary>
     [Test]
     public static async Task Test_Serializer_ReadSceneAsync_MemoryStream()
     {
         var stream      = new MemoryStream();
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         serializer.WriteScene(stream);
         stream.Position = 0;
         var result = await serializer.ReadSceneAsync(stream);
         IsNull(result.error);
     }
     
-    /// <summary>Cover <see cref="GameDataSerializer.ReadSceneSync"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadSceneSync"/></summary>
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadSceneSync()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("xxx");
         var result      = serializer.ReadScene(stream);
@@ -245,48 +245,48 @@ public static class Test_Serializer
         AreEqual("unexpected character while reading value. Found: } path: '[0]' at position: 2", result.error);
     }
     
-    /// <summary>Cover <see cref="GameDataSerializer.ReadEntity"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadEntity"/></summary>
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadEntity()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[{ xxx");
         var result      = serializer.ReadScene(stream);
         AreEqual("unexpected character > expect key. Found: x path: '[0]' at position: 4", result.error);
     }
     
-    /// <summary>Cover <see cref="GameDataSerializer.ReadEntities"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadEntities"/></summary>
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadEntities()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[1]");
         var result      = serializer.ReadScene(stream);
         AreEqual("expect object entity. was: ValueNumber at position: 2 path: '[0]' at position: 2", result.error);
     }
     
-    /// <summary>Cover <see cref="GameDataSerializer.ReadChildren"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadChildren"/></summary>
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadChildren()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[ {\"children\":[true] } }");
         var result      = serializer.ReadScene(stream);
         AreEqual("expect child id number. was: ValueBool at position: 19 path: '[0].children[0]' at position: 19", result.error);
     }
     
-    /// <summary>Cover <see cref="GameDataSerializer.ReadTags"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadTags"/></summary>
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadTags()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var serializer  = new GameDataSerializer(store);
+        var serializer  = new EntitySerializer(store);
         
         var stream      = StringAsStream("[ {\"tags\":[1] } }");
         var result      = serializer.ReadScene(stream);

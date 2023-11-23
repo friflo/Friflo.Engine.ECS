@@ -27,7 +27,7 @@ public class EntityConverter
         var pid         = store.GetNodeById(gameEntity.id).pid;
         dataEntity    ??= new DataEntity();
         dataEntity.pid  = pid;
-        store.GameToDataEntity(gameEntity, dataEntity, writer, pretty);
+        store.EntityToDataEntity(gameEntity, dataEntity, writer, pretty);
         return dataEntity;
     }
     

@@ -29,14 +29,14 @@ public partial class Editor
 
 #region private fields
     private             EntityStore             store;
-    private             GameDataSync            sync;
+    private             EntityStoreSync         sync;
     private  readonly   List<EditorObserver>    observers   = new List<EditorObserver>();
     private             bool                    isReady;
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
     
-    private static readonly bool StoreGameEntities = false;
+    private static readonly bool StoreEntities = false;
 
     #endregion
 
@@ -56,21 +56,21 @@ public partial class Editor
             EditorObserver.CastEditorReady(observers);
         });
         // --- add client and database
-        var schema      = DatabaseSchema.Create<GameClient>();
+        var schema      = DatabaseSchema.Create<EntityClient>();
         var database    = CreateDatabase(schema, "file-system");
         var hub         = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
-        var client      = new GameClient(hub);
-        sync            = new GameDataSync(store, client);
+        var client      = new EntityClient(hub);
+        sync            = new EntityStoreSync(store, client);
         processor       = new EventProcessorQueue(ReceivedEvent);
         client.SetEventProcessor(processor);
         await sync.SubscribeDatabaseChangesAsync();
         
         TestBed.AddSampleEntities(sync);
-        if (StoreGameEntities) {
-            await sync.StoreGameEntitiesAsync();
+        if (StoreEntities) {
+            await sync.StoreEntitiesAsync();
         }
 
         store.ChildNodesChanged += ChildNodesChangedHandler;
@@ -118,7 +118,7 @@ public partial class Editor
 
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
-    /// <summary>SYNC: <see cref="Entity"/> -> <see cref="GameDataSync"/></summary>
+    /// <summary>SYNC: <see cref="Entity"/> -> <see cref="EntityStoreSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
         EditorUtils.AssertUIThread();

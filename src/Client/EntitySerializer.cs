@@ -20,7 +20,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Fliox.Engine.Client;
 
-public class GameDataSerializer
+public class EntitySerializer
 {
 #region private fields
     private readonly    EntityStore         store;
@@ -39,7 +39,7 @@ public class GameDataSerializer
     #endregion
     
 #region constructor
-    public GameDataSerializer(EntityStore store) {
+    public EntitySerializer(EntityStore store) {
         this.store      = store;
         converter       = new EntityConverter();
         componentBuf    = new Bytes(32);
@@ -347,7 +347,7 @@ public class GameDataSerializer
     
     private JsonEvent ReadError(string message)
     {
-        parser.ErrorMsg("GameDataSerializer", $"{message} at position: {parser.Position}");
+        parser.ErrorMsg("EntitySerializer", $"{message} at position: {parser.Position}");
         return JsonEvent.Error;
     }
     #endregion

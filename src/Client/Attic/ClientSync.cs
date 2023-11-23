@@ -22,7 +22,7 @@ internal sealed class ClientSync : IDatabaseSync
 {
     private readonly LocalEntities<long, DataEntity>  entities;
     
-    public ClientSync(GameClient client) {
+    public ClientSync(EntityClient client) {
         entities = client.entities.Local;
     }
         

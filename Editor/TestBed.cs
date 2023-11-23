@@ -20,7 +20,7 @@ public class TestScript : Script
 
 public static class TestBed
 {
-    internal static void AddSampleEntities(GameDataSync sync)
+    internal static void AddSampleEntities(EntityStoreSync sync)
     {
         var store   = sync.Store;
         var root    = store.StoreRoot;
