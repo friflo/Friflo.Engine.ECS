@@ -3,6 +3,8 @@
 
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// Hard rule: this file MUST NOT use type: Entity
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
