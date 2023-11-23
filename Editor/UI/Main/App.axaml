@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:Friflo.Fliox.Editor.UI"
              x:Class="Friflo.Fliox.Editor.UI.App"
              RequestedThemeVariant="Default">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -62,6 +63,59 @@
         <Style Selector="Button.GreenButton:pressed /template/ ContentPresenter">
             <Setter Property="Background"   Value="#007000"/>
         </Style>
+        
+        <!--
+        Notes to:  <Style Selector="DataValidationErrors">
+        [Data Validation | Avalonia UI > Customize the appearance of the validation message]
+        https://docs.avaloniaui.net/docs/data-binding/data-validation#customize-the-appearance-of-the-validation-message
+        
+        Modified access to "{Binding}" within <Setter Property="ErrorTemplate">
+        https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Themes.Fluent/Controls/DataValidationErrors.xaml#L52-L54
+        -->
+        <Style Selector="DataValidationErrors">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True">
+                        <ContentControl     DockPanel.Dock="Right"
+                                            ContentTemplate="{TemplateBinding ErrorTemplate}"
+                                            DataContext="{TemplateBinding Owner}"
+                                            Content="{Binding (DataValidationErrors.Errors)}"
+                                            IsVisible="{Binding (DataValidationErrors.HasErrors)}"/>
+                        <ContentPresenter   Name="PART_ContentPresenter"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="{TemplateBinding CornerRadius}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"/>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter>
+            <Setter Property="ErrorTemplate">
+                <DataTemplate>
+                    <Canvas Width="14" Height="14" Margin="4 0 1 0" Background="Transparent">
+                        <Canvas.Styles>
+                            <Style Selector="ToolTip">
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderBrush" Value="Red"/>
+                            </Style>
+                        </Canvas.Styles>
+                       
+                        <ToolTip.Tip >
+                            <DockPanel>
+                                <ui:ValidationError x:DataType="DataValidationErrors" ItemsSource="{Binding}"/>
+                            </DockPanel>
+                        </ToolTip.Tip>
+
+                        <Path Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2" 
+                              Stroke="Red" StrokeThickness="2"/>
+                    </Canvas>
+                </DataTemplate>
+            </Setter>
+        </Style>
+
+
 
         
     </Application.Styles>
