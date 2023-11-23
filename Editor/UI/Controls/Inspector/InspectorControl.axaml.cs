@@ -42,7 +42,7 @@ public partial class InspectorControl : UserControl
             }
         }
         
-        private void AddComponentControls(GameEntity entity)
+        private void AddComponentControls(Entity entity)
         {
             // Console.WriteLine($"--- Inspector entity: {entity}");
             var children = inspector.Panel.Children;

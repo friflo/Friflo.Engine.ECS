@@ -64,7 +64,7 @@ internal class ExplorerViewModel
         return store;
     }
     
-    private static GameEntity CreateEntity(EntityStore store, int id, string name)
+    private static Entity CreateEntity(EntityStore store, int id, string name)
     {
         var entity = store.CreateEntity(id);
         entity.AddComponent(new EntityName(name));

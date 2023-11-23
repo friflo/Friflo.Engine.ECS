@@ -23,7 +23,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <list type="bullet">
 ///   <item><see cref="Id"/> to identify an entity in its <see cref="EntityStore"/></item>
 ///   <item><see cref="Pid"/> used to store entities in a database</item>
-///   <item><see cref="Entity"/> to access the <see cref="GameEntity"/> attached to a node</item>
+///   <item><see cref="Entity"/> to access the <see cref="ECS.Entity"/> attached to a node</item>
 ///   <item><see cref="ParentId"/> and <see cref="ChildIds"/> to get the direct related nodes</item>
 /// </list>
 /// <b><see cref="Id"/></b><br/>
@@ -49,7 +49,7 @@ public struct EntityNode
                     public              int                 Id          =>  id;
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
                     public              long                Pid         =>  pid;
-                    public              GameEntity          Entity      =>  entity;
+                    public              Entity              Entity      =>  entity;
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
                     public              int                 ParentId    =>  parentId;
@@ -61,7 +61,7 @@ public struct EntityNode
 #region internal fields
     [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            long        pid;        // 8
-    [Browse(Never)] internal            GameEntity  entity;     // 8    can be null
+    [Browse(Never)] internal            Entity      entity;     // 8    can be null
     [Browse(Never)] internal            int         parentId;   // 4
                     internal            int[]       childIds;   // 8    can be null
     [Browse(Never)] internal            int         childCount; // 4
@@ -80,7 +80,7 @@ public struct EntityNode
     {
         var sb = new StringBuilder();
         if (entity != null) {
-            GameEntityUtils.GameEntityToString(entity, sb);
+            EntityUtils.EntityToString(entity, sb);
         } else {
             sb.Append("id: ");
             sb.Append(id);

@@ -86,7 +86,7 @@ public sealed class GameDataSync
         CreateChangeTasks();
     }
     
-    private void AddDataEntityUpsert(GameEntity entity)
+    private void AddDataEntityUpsert(Entity entity)
     {
         if (entity == null) {
             return;

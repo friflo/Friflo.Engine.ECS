@@ -92,7 +92,7 @@ public class GameDataSerializer
         stream.Write(ArrayEnd);
     }
     
-    public void WriteEntities(Stream stream, IEnumerable<GameEntity> entities)
+    public void WriteEntities(Stream stream, IEnumerable<Entity> entities)
     {
         stream.Write(ArrayStart);
         writer.SetPretty(true);
@@ -108,7 +108,7 @@ public class GameDataSerializer
         stream.Write(ArrayEnd);
     }
     
-    private void WriteEntity(GameEntity entity)
+    private void WriteEntity(Entity entity)
     {
         writer.InitSerializer();
         if (isFirst) {

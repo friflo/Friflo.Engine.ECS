@@ -23,26 +23,26 @@ public sealed class ExplorerItem :
  // INotifyPropertyChanged                                                      not required. Implemented by ObservableCollection{T}
 {
 #region internal properties
-    public              int         Id          => entity.Id;
-    public              GameEntity  Entity      => entity;
-    public              bool        IsRoot      => IsRootItem();
-    public              bool        AllowDrag   => !IsRootItem();
-    public              string      Name        { get => GetName(entity); set => SetName(entity, value); }
+    public              int     Id          => entity.Id;
+    public              Entity  Entity      => entity;
+    public              bool    IsRoot      => IsRootItem();
+    public              bool    AllowDrag   => !IsRootItem();
+    public              string  Name        { get => GetName(entity); set => SetName(entity, value); }
     
-    public              bool        flag;       // todo remove
+    public              bool    flag;       // todo remove
     
-    public   override   string      ToString()  => entity.ToString();
+    public   override   string  ToString()  => entity.ToString();
     #endregion
     
 #region internal fields
-    internal readonly   GameEntity                          entity;             //  8   - the corresponding entity
+    internal readonly   Entity                              entity;             //  8   - the corresponding entity
     internal readonly   ExplorerItemTree                    tree;               //  8   - the ExplorerItemTree containing this ExplorerItem
     internal            NotifyCollectionChangedEventHandler collectionChanged;  //  8   - event handlers are called in case entity children are modified   
  // public  event       PropertyChangedEventHandler         PropertyChanged;    not required. Implemented by ObservableCollection{T}
     #endregion
 
 #region constructor
-    internal ExplorerItem (ExplorerItemTree tree, GameEntity entity) {
+    internal ExplorerItem (ExplorerItemTree tree, Entity entity) {
         this.tree   = tree      ?? throw new ArgumentNullException(nameof(tree));
         this.entity = entity    ?? throw new ArgumentNullException(nameof(entity));
     }
@@ -52,14 +52,14 @@ public sealed class ExplorerItem :
     private bool IsRootItem() {
         return tree.rootItem.entity == entity;
     }
-    private static string GetName(GameEntity entity) {
+    private static string GetName(Entity entity) {
         if (entity.HasName) {
             return entity.Name.value;
         }
         return "---";
     }
     
-    private static void SetName(GameEntity entity, string value) {
+    private static void SetName(Entity entity, string value) {
         if (string.IsNullOrEmpty(value)) {
             entity.RemoveComponent<EntityName>();
             return;
@@ -80,7 +80,7 @@ public sealed class ExplorerItem :
     
     private void RemoveChildEntityAt(int index) {
         var child = entity.GetChildNodeByIndex(index).Entity;   // called by TreeDataGrid 
-        entity.RemoveChild(child);  // todo add GameEntity.RemoveChild(int index)
+        entity.RemoveChild(child);  // todo add Entity.RemoveChild(int index)
     }
     
     // ReSharper disable twice UnusedParameter.Local

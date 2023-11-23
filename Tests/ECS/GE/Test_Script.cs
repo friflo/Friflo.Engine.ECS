@@ -131,7 +131,7 @@ public static class Test_Script
         IsNull  (entity2.GetScript<TestScript2>());
     }
     
-    /// <summary>Cover <see cref="GameEntityUtils.RemoveScript"/></summary>
+    /// <summary>Cover <see cref="EntityUtils.RemoveScript"/></summary>
     [Test]
     public static void Test_3_cover_remove_non_added_script() {
         var store   = new EntityStore();
@@ -167,7 +167,7 @@ public static class Test_Script
     [Test]
     public static void Test_2_Perf() {
         var store   = new EntityStore();
-        var list = new List<GameEntity>();
+        var list = new List<Entity>();
         for (long n = 0; n < 10; n++) {
             list.Add(store.CreateEntity());
         }

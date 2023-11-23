@@ -47,7 +47,7 @@ internal sealed class ComponentReader
         unresolvedComponentMap  = new Dictionary<string, UnresolvedComponent>();
     }
     
-    internal string Read(DataEntity dataEntity, GameEntity entity, EntityStoreBase store)
+    internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store)
     {
         componentCount      = 0;
         var hasTags         = dataEntity.tags?.Count > 0;
@@ -64,7 +64,7 @@ internal sealed class ComponentReader
         return null;
     }
     
-    private string ReadRaw (DataEntity dataEntity, GameEntity entity)
+    private string ReadRaw (DataEntity dataEntity, Entity entity)
     {
         parser.InitParser(dataEntity.components);
         var ev = parser.NextEvent();
@@ -88,7 +88,7 @@ internal sealed class ComponentReader
         return null;
     }
     
-    private void ReadComponents(GameEntity entity)
+    private void ReadComponents(Entity entity)
     {
         unresolvedComponentList.Clear();
         for (int n = 0; n < componentCount; n++)
@@ -118,7 +118,7 @@ internal sealed class ComponentReader
         }
     }
     
-    private void AddUnresolvedComponents(GameEntity entity)
+    private void AddUnresolvedComponents(Entity entity)
     {
         ref var unresolved          = ref entity.GetComponent<Unresolved>();
         var componentList           = unresolvedComponentList;
@@ -149,7 +149,7 @@ internal sealed class ComponentReader
     /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all components 
     /// within the current JSON payload.
     /// </summary>
-    private void SetEntityArchetype(DataEntity dataEntity, GameEntity entity, EntityStoreBase store)
+    private void SetEntityArchetype(DataEntity dataEntity, Entity entity, EntityStoreBase store)
     {
         searchKey.Clear();
         var hasStructComponent  = GetStructComponents(ref searchKey.structs);
@@ -181,7 +181,7 @@ internal sealed class ComponentReader
         }
     }
     
-    private void AddUnresolvedTags(GameEntity entity)
+    private void AddUnresolvedTags(Entity entity)
     {
         ref var unresolved = ref entity.GetComponent<Unresolved>();
         var tags    = unresolved.tags;

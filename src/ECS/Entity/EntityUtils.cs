@@ -12,17 +12,17 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal static class GameEntityExtensions
+internal static class EntityExtensions
 {
-    internal static int ComponentCount (this GameEntity entity) {
+    internal static int ComponentCount (this Entity entity) {
         return entity.archetype.structCount + entity.Scripts.Length;
     }
 }
     
     
-internal static class GameEntityUtils
+internal static class EntityUtils
 {
-    internal static string GameEntityToString(GameEntity entity, StringBuilder sb)
+    internal static string EntityToString(Entity entity, StringBuilder sb)
     {
         var archetype = entity.archetype;
         sb.Append("id: ");
@@ -64,7 +64,7 @@ internal static class GameEntityUtils
     private static readonly DataEntity      DebugDataEntity      = new DataEntity();      
     private static readonly ObjectWriter    DebugObjectWriter    = new ObjectWriter(new TypeStore()); // todo use global TypeStore
     
-    internal static string GetDebugJSON(GameEntity entity)
+    internal static string GetDebugJSON(Entity entity)
     {
         var converter       = DebugConverter;
         lock (converter) {
@@ -77,7 +77,7 @@ internal static class GameEntityUtils
         }
     }
     
-    internal static IComponent[] GetComponentsDebug(GameEntity entity)
+    internal static IComponent[] GetComponentsDebug(Entity entity)
     {
         var archetype   = entity.archetype;
         var count       = archetype.structCount;
@@ -103,14 +103,14 @@ internal static class GameEntityUtils
         return new InvalidOperationException(msg);
     }
 
-    internal static Script[] GetScripts(GameEntity entity) {
+    internal static Script[] GetScripts(Entity entity) {
         if (entity.scriptIndex == NoScripts) {
             return EmptyScripts;
         }
         return entity.archetype.entityStore.GetScripts(entity);
     }
     
-    internal static Script GetScript(GameEntity entity, Type scriptType)
+    internal static Script GetScript(Entity entity, Type scriptType)
     {
         if (entity.scriptIndex == NoScripts) {
             return null;
@@ -118,7 +118,7 @@ internal static class GameEntityUtils
         return entity.archetype.entityStore.GetScript(entity, scriptType);
     }
     
-    internal static Script AddScript(GameEntity entity, Script script, Type scriptType, int classIndex)
+    internal static Script AddScript(Entity entity, Script script, Type scriptType, int classIndex)
     {
         if (classIndex == ClassUtils.MissingAttribute) {
             throw MissingAttributeException(scriptType);
@@ -129,7 +129,7 @@ internal static class GameEntityUtils
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }
     
-    internal static Script RemoveScript(GameEntity entity, Type scriptType) {
+    internal static Script RemoveScript(Entity entity, Type scriptType) {
         if (entity.scriptIndex == NoScripts) {
             return null;
         }

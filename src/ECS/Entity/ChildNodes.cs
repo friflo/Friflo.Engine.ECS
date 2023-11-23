@@ -14,9 +14,9 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <remarks>
 /// <see cref="Entities_"/><br/>
 /// It has poor performance due to its array creation.<br/>
-/// To access the <see cref="GameEntity"/>'s use either a <b>foreach</b> loop, <see cref="ToArray"/> or <see cref="this[int]"/>
+/// To access the <see cref="Entity"/>'s use either a <b>foreach</b> loop, <see cref="ToArray"/> or <see cref="this[int]"/>
 /// </remarks>
-public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not implemented to avoid boxing
+public readonly struct ChildNodes // : IEnumerable <Entity>  // <- not implemented to avoid boxing
 {
     // --- public properties
     [Browse(Never)]     public              int                 Length          => childLength;
@@ -24,8 +24,8 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
     
     /// <summary>Property <b>only used</b> to display child entities in Debugger. See <see cref="ChildNodes"/> remarks.</summary>
     [Obsolete($"use either {nameof(ChildNodes)}[], {nameof(ChildNodes)}.{nameof(ToArray)}() or foreach (var node in entity.{nameof(ChildNodes)})")]
-    [Browse(RootHidden)]public              GameEntity[]        Entities_       => GetEntities();
-                        public              GameEntity          this[int index] => nodes[Ids[index]].entity;
+    [Browse(RootHidden)]public              Entity[]            Entities_       => GetEntities();
+                        public              Entity              this[int index] => nodes[Ids[index]].entity;
                         public override     string              ToString()      => $"Length: {childLength}";
     
     // --- internal fields
@@ -42,15 +42,15 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
         this.childLength    = childLength;
     }
     
-    public void ToArray(GameEntity[] array) {
+    public void ToArray(Entity[] array) {
         var ids = Ids;
         for (int n = 0; n < childLength; n++) {
             array[n] = nodes[ids[n]].entity;
         }
     }
 
-    private GameEntity[] GetEntities() {
-        var childEntities = new GameEntity[childLength];
+    private Entity[] GetEntities() {
+        var childEntities = new Entity[childLength];
         for (int n = 0; n < childLength; n++) {
             childEntities[n] = nodes[childIds[n]].entity;
         }
@@ -58,7 +58,7 @@ public readonly struct ChildNodes // : IEnumerable <GameEntity>  // <- not imple
     }
     
     /* // intentionally not implemented to avoid boxing. See comment above     
-    public IEnumerator<GameEntity> GetEnumerator()  => throw new System.InvalidOperationException();
+    public IEnumerator<Entity> GetEnumerator()      => throw new System.InvalidOperationException();
     IEnumerator IEnumerable.GetEnumerator()         => throw new System.InvalidOperationException();
     */
 }

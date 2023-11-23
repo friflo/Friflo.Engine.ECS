@@ -31,7 +31,7 @@ internal sealed class ComponentWriter
         unresolvedIndex     = schema.unresolvedType.structIndex;
     }
     
-    internal JsonValue Write(GameEntity entity, bool pretty)
+    internal JsonValue Write(Entity entity, bool pretty)
     {
         var archetype = entity.archetype;
         if (entity.ComponentCount() == 0) {
@@ -69,7 +69,7 @@ internal sealed class ComponentWriter
         return new JsonValue(writer.json);
     }
     
-    private int WriteUnresolvedComponents(GameEntity entity)
+    private int WriteUnresolvedComponents(Entity entity)
     {
         var unresolved = entity.GetComponent<Unresolved>();
         var components = unresolved.components;

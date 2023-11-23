@@ -10,7 +10,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// An <see cref="Unresolved"/> component is added to a <see cref="GameEntity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataToGameEntity"/> if:<br/>
+/// An <see cref="Unresolved"/> component is added to a <see cref="Entity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataToGameEntity"/> if:<br/>
 /// <list type="bullet">
 ///   <item>
 ///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Script"/> type. 
@@ -21,7 +21,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </summary>
 /// <remarks>
-/// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="GameEntity"/> and vice versa<br/>
+/// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="Entity"/> and vice versa<br/>
 /// with components or tags that cannot be resolved to <see cref="IEntityTag"/>, <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
 /// <br/>
 /// Having support <see cref="Unresolved"/> component or tag types:

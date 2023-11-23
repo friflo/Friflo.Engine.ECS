@@ -20,11 +20,11 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   <item>
 ///   Store a map (container) of entities in linear memory.<br/>
 ///   Entity data can retrieved by entity <b>id</b> using the property <see cref="Nodes"/>.<br/>
-///   <see cref="GameEntity"/>'s have the states below:<br/>
+///   <see cref="Entity"/>'s have the states below:<br/>
 ///   <list type="bullet">
 ///     <item>
 ///       <b><see cref="StoreOwnership"/>:</b> <see cref="attached"/> / <see cref="detached"/><br/>
-///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="GameEntity"/> methods.
+///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="Entity"/> methods.
 ///     </item>
 ///     <item>
 ///       <b><see cref="TreeMembership"/>:</b> <see cref="treeNode"/> / <see cref="floating"/> node (not part of the <see cref="EntityStore"/> tree graph).<br/>
@@ -43,9 +43,9 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
-    public              GameEntity                  StoreRoot           => storeRoot; // null if no graph origin set
+    public              Entity                      StoreRoot           => storeRoot; // null if no graph origin set
     public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
-    /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="GameEntity"/>'s.</summary>
+    /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
     public              ChildNodesChangedHandler    ChildNodesChangedHandler { get => childNodesChanged; set => childNodesChanged = value; }
     #endregion
@@ -56,13 +56,13 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8               - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
-    [Browse(Never)] private             GameEntity              storeRoot;          //  8               - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] private             Entity                  storeRoot;          //  8               - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
     [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
     [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
     
-    [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete a GameEntity
+    [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     

@@ -95,7 +95,7 @@ public static class Test_ComponentWriter
     }
     
     [Test]
-    public static void Test_GameEntity_DebugJSON()
+    public static void Test_Entity_DebugJSON()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var entity      = store.CreateEntity(10);

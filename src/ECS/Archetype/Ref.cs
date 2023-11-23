@@ -16,7 +16,7 @@ public struct Ref<T>
 {
     /// <summary>
     /// Returns a mutable component value by reference.<br/>
-    /// <see cref="Value"/> modifications are instantaneously available via <see cref="GameEntity.GetComponent{T}"/>  
+    /// <see cref="Value"/> modifications are instantaneously available via <see cref="Entity.GetComponent{T}"/>  
     /// </summary>
     public readonly ref T       Value => ref components[pos];
     

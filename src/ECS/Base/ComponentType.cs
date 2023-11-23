@@ -51,7 +51,7 @@ public abstract class ComponentType
     internal virtual    StructHeap  CreateHeap          ()
         => throw new InvalidOperationException("operates only on StructComponentType<>");
     
-    internal virtual    void        ReadScript  (ObjectReader reader, JsonValue json, GameEntity entity)
+    internal virtual    void        ReadScript  (ObjectReader reader, JsonValue json, Entity entity)
         => throw new InvalidOperationException($"operates only on ScriptType<>");
     
     internal ComponentType(
@@ -104,7 +104,7 @@ internal sealed class ScriptType<T> : ComponentType
         typeMapper = typeStore.GetTypeMapper<T>();
     }
     
-    internal override void ReadScript(ObjectReader reader, JsonValue json, GameEntity entity) {
+    internal override void ReadScript(ObjectReader reader, JsonValue json, Entity entity) {
         var script = entity.GetScript<T>();
         if (script != null) { 
             reader.ReadToMapper(typeMapper, json, script, true);

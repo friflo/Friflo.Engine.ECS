@@ -8,8 +8,8 @@ using System;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// Annotated structs can be added as component to <see cref="GameEntity"/>'s using the specified key name.<br/>
-/// <b><c>struct</c></b> components are the preferred when dealing with a large amount (> 1.000) of <see cref="GameEntity"/>'s. 
+/// Annotated structs can be added as component to <see cref="Entity"/>'s using the specified key name.<br/>
+/// <b><c>struct</c></b> components are the preferred when dealing with a large amount (> 1.000) of <see cref="Entity"/>'s. 
 /// </summary>
 [AttributeUsage(AttributeTargets.Struct)]
 public sealed class ComponentAttribute : Attribute {
@@ -17,9 +17,9 @@ public sealed class ComponentAttribute : Attribute {
 }
 
 /// <summary>
-/// Annotated classes a can be added as <see cref="Script"/>'s to <see cref="GameEntity"/>'s using the specified key name.<br/>
+/// Annotated classes a can be added as <see cref="Script"/>'s to <see cref="Entity"/>'s using the specified key name.<br/>
 /// <b><see cref="Script"/></b>'s can be used if <b>OPP</b> programming approach is preferred
-/// while dealing with a small amount (&lt; 100) of <see cref="GameEntity"/>'s
+/// while dealing with a small amount (&lt; 100) of <see cref="Entity"/>'s
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ScriptAttribute : Attribute {

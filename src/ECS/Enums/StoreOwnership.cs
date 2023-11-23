@@ -5,12 +5,12 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-/// <summary>Describe the ownership state of a <see cref="GameEntity"/></summary>
+/// <summary>Describe the ownership state of a <see cref="Entity"/></summary>
 public enum StoreOwnership
 {
     /// <summary>The entity is not owned by an <see cref="EntityStore"/></summary>
     /// <remarks>
-    /// When calling <see cref="GameEntity.DeleteEntity"/> its state changes to <see cref="detached"/>.<br/>
+    /// When calling <see cref="Entity.DeleteEntity"/> its state changes to <see cref="detached"/>.<br/>
     /// </remarks>
     detached    = 0,
     /// <summary>The entity is owned by an <see cref="EntityStore"/></summary>

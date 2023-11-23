@@ -97,8 +97,8 @@ public static class Test_Entity_Tree
         AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
         AreSame (child,     childNodes[0]);
         
-        // --- copy child GameEntity's to array
-        var array = new GameEntity[childNodes.Length];
+        // --- copy child Entity's to array
+        var array = new Entity[childNodes.Length];
         childNodes.ToArray(array);
         AreSame(child, array[0]);
         
@@ -179,10 +179,10 @@ public static class Test_Entity_Tree
             }
             AreEqual(2,         count);
         }
-        // --- copy child GameEntity's to array
+        // --- copy child Entity's to array
         {
             var childNodes =    root.ChildNodes;
-            var array = new GameEntity[childNodes.Length];
+            var array = new Entity[childNodes.Length];
             childNodes.ToArray(array);
             AreSame(child5, array[0]);
             AreSame(child4, array[1]);
@@ -497,9 +497,9 @@ public static class Test_Entity_Tree
         AreEqual(4, childIds[1]);
     }
     
-    /// <summary>Cover <see cref="GameEntity.GetChildNodeByIndex"/></summary>
+    /// <summary>Cover <see cref="Entity.GetChildNodeByIndex"/></summary>
     [Test]
-    public static void Test_GameEntity_GetChildNodeByIndex()
+    public static void Test_Entity_GetChildNodeByIndex()
     {
         var store   = new EntityStore();
         var root    = store.CreateEntity(1);
@@ -511,9 +511,9 @@ public static class Test_Entity_Tree
         AreSame(child2, root.GetChildNodeByIndex(0).Entity);
     }
     
-    /// <summary>Cover <see cref="GameEntity.GetChildIndex"/></summary>
+    /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>
     [Test]
-    public static void Test_GameEntity_GetChildIndex()
+    public static void Test_Entity_GetChildIndex()
     {
         var store   = new EntityStore();
         var root    = store.CreateEntity(1);

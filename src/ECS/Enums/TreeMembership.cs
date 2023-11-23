@@ -8,7 +8,7 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// Describe the membership of a <see cref="GameEntity"/> to the <see cref="EntityStore"/> tree graph.
+/// Describe the membership of a <see cref="Entity"/> to the <see cref="EntityStore"/> tree graph.
 /// </summary>
 /// <remarks>Requirement: The entity must be <see cref="attached"/> to an <see cref="EntityStore"/></remarks>
 public enum TreeMembership

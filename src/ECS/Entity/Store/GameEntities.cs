@@ -15,15 +15,15 @@ using static Friflo.Fliox.Engine.ECS.NodeFlags;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-// This file contains implementation specific for storing GameEntity's.
-// The reason to separate handling of GameEntity's is to enable 'entity / component support' without GameEntity's.
+// This file contains implementation specific for storing Entity's.
+// The reason to separate handling of Entity's is to enable 'entity / component support' without Entity's.
 // EntityStore remarks.
 public partial class EntityStore
 {
     public static     ComponentSchema         GetComponentSchema()=> Static.ComponentSchema;
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
-    public GameEntity CreateEntity() {
+    public Entity CreateEntity() {
         var id      = sequenceId++;
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
@@ -31,7 +31,7 @@ public partial class EntityStore
     }
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
-    public GameEntity CreateEntity(int id) {
+    public Entity CreateEntity(int id) {
         if (id < Static.MinNodeId) {
             throw InvalidEntityIdException(id, nameof(id));
         }
@@ -68,7 +68,7 @@ public partial class EntityStore
     }
 
     /// <summary>expect <see cref="EntityStore.nodes"/> Length > id</summary> 
-    private GameEntity CreateEntityNode(int id, long pid)
+    private Entity CreateEntityNode(int id, long pid)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
@@ -82,7 +82,7 @@ public partial class EntityStore
         }
         AssertPid0(node.pid, pid);
         node.pid        = pid;
-        var entity      = new GameEntity(id, defaultArchetype);
+        var entity      = new Entity(id, defaultArchetype);
         // node.parentId   = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds   = Static.EmptyChildNodes;
         node.flags      = Created;
@@ -90,7 +90,7 @@ public partial class EntityStore
         return entity;
     }
     
-    public void SetStoreRoot(GameEntity entity) {
+    public void SetStoreRoot(Entity entity) {
         if (entity == null) {
             throw new ArgumentNullException(nameof(entity));
         }
@@ -103,7 +103,7 @@ public partial class EntityStore
     /// <summary>
     /// Creates a new entity with the components and tags of the given <paramref name="archetype"/>
     /// </summary>
-    public GameEntity CreateEntity(Archetype archetype)
+    public Entity CreateEntity(Archetype archetype)
     {
         if (this != archetype.store) {
             throw InvalidStoreException(nameof(archetype));

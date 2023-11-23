@@ -18,7 +18,7 @@ public class EntityConverter
         writer = new ComponentWriter();
     }
     
-    public DataEntity GameToDataEntity(GameEntity gameEntity, DataEntity dataEntity = null, bool pretty = false)
+    public DataEntity GameToDataEntity(Entity gameEntity, DataEntity dataEntity = null, bool pretty = false)
     {
         if (gameEntity == null) {
             throw new ArgumentNullException(nameof(gameEntity));
@@ -31,7 +31,7 @@ public class EntityConverter
         return dataEntity;
     }
     
-    public GameEntity DataToGameEntity(DataEntity dataEntity, EntityStore store, out string error)
+    public Entity DataToGameEntity(DataEntity dataEntity, EntityStore store, out string error)
     {
         if (dataEntity == null) {
             throw new ArgumentNullException(nameof(dataEntity));

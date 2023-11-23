@@ -118,7 +118,7 @@ public partial class Editor
 
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
-    /// <summary>SYNC: <see cref="GameEntity"/> -> <see cref="GameDataSync"/></summary>
+    /// <summary>SYNC: <see cref="Entity"/> -> <see cref="GameDataSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
         EditorUtils.AssertUIThread();

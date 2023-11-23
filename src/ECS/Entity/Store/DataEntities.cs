@@ -18,9 +18,9 @@ namespace Friflo.Fliox.Engine.ECS;
 // Loading and storing DataEntity's is implemented in EntityStore to enable declare all its fields private.
 public partial class EntityStore
 {
-// --------------------------------------- GameEntity -> DataEntity ---------------------------------------
-#region GameEntity -> DataEntity
-    internal void GameToDataEntity(GameEntity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
+// --------------------------------------- Entity -> DataEntity ---------------------------------------
+#region Entity -> DataEntity
+    internal void GameToDataEntity(Entity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
         ProcessChildren(dataEntity, nodes[entity.id]);
         
@@ -35,7 +35,7 @@ public partial class EntityStore
         ProcessTags(entity, dataEntity);
     }
 
-    private static void ProcessTags(GameEntity entity, DataEntity dataEntity)
+    private static void ProcessTags(Entity entity, DataEntity dataEntity)
     {
         var tagCount    = entity.Tags.Count;
         var tags        = dataEntity.tags;
@@ -82,12 +82,12 @@ public partial class EntityStore
     }
     #endregion
     
-// --------------------------------------- DataEntity -> GameEntity ---------------------------------------
-#region DataEntity -> GameEntity
+// --------------------------------------- DataEntity -> Entity ---------------------------------------
+#region DataEntity -> Entity
 
-    internal GameEntity DataToGameEntity(DataEntity dataEntity, out string error, ComponentReader reader)
+    internal Entity DataToGameEntity(DataEntity dataEntity, out string error, ComponentReader reader)
     {
-        GameEntity entity;
+        Entity entity;
         if (pidType == PidType.UsePidAsId) {
             entity = CreateFromDataEntityUsePidAsId(dataEntity);
         } else {
@@ -97,7 +97,7 @@ public partial class EntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDataEntityRandomPid(DataEntity dataEntity)
+    private Entity CreateFromDataEntityRandomPid(DataEntity dataEntity)
     {
         // --- map pid to id
         var pid     = dataEntity.pid;
@@ -130,7 +130,7 @@ public partial class EntityStore
         return entity;
     }
     
-    private GameEntity CreateFromDataEntityUsePidAsId(DataEntity dataEntity)
+    private Entity CreateFromDataEntityUsePidAsId(DataEntity dataEntity)
     {
         var pid = dataEntity.pid;
         if (pid < Static.MinNodeId || pid > int.MaxValue) {

@@ -3,7 +3,7 @@
 
 using System;
 
-// Hard rule: this file MUST NOT access GameEntity's
+// Hard rule: this file MUST NOT access Entity's
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation

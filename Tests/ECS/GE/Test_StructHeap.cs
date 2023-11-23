@@ -15,7 +15,7 @@ public static class Test_StructHeap
         var store       = new EntityStore(PidType.UsePidAsId);
         var arch1       = store.GetArchetype(Signature.Get<Position>());
         int count       = 2000;
-        var entities    = new GameEntity[count];
+        var entities    = new Entity[count];
         for (int n = 0; n < count; n++)
         {
             var entity = store.CreateEntity(arch1);
@@ -37,7 +37,7 @@ public static class Test_StructHeap
         var store       = new EntityStore(PidType.UsePidAsId);
         var arch1       = store.GetArchetype(Signature.Get<Position>());
         int count       = 2000;
-        var entities    = new GameEntity[count];
+        var entities    = new Entity[count];
         for (int n = 0; n < count; n++)
         {
             var entity = store.CreateEntity(arch1);
@@ -69,7 +69,7 @@ public static class Test_StructHeap
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
-        Console.WriteLine($"CreateEntity() - GameEntity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(count + 1, arch1.EntityCount);
     }
     

@@ -13,22 +13,22 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="GameEntity"/> represent any kind of object in a game scene.<br/>
-/// Every <see cref="GameEntity"/> has an <see cref="Id"/> and is a container of
+/// A <see cref="Entity"/> represent any kind of object in a game scene.<br/>
+/// Every <see cref="Entity"/> has an <see cref="Id"/> and is a container of
 /// <see cref="ECS.IComponent"/>'s, <see cref="ECS.Script"/>'s and <see cref="ECS.Tags"/><br/>
 /// <br/>
 /// It is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
-/// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="GameEntity"/>.<br/>
+/// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to a <see cref="Entity"/>.<br/>
 /// <br/>
-/// A <see cref="GameEntity"/> can be added to another <see cref="GameEntity"/> using <see cref="AddChild"/>.<br/>
-/// The added <see cref="GameEntity"/> becomes a child of the <see cref="GameEntity"/> it is added to - its <see cref="Parent"/>.<br/>
-/// This enables to build up a complex game scene with a hierarchy of <see cref="GameEntity"/>'s.<br/>
+/// A <see cref="Entity"/> can be added to another <see cref="Entity"/> using <see cref="AddChild"/>.<br/>
+/// The added <see cref="Entity"/> becomes a child of the <see cref="Entity"/> it is added to - its <see cref="Parent"/>.<br/>
+/// This enables to build up a complex game scene with a hierarchy of <see cref="Entity"/>'s.<br/>
 /// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
-/// <see cref="ECS.Script"/>'s can be added to a <see cref="GameEntity"/> to add custom logic (script) and data to an entity.<br/>
+/// <see cref="ECS.Script"/>'s can be added to a <see cref="Entity"/> to add custom logic (script) and data to an entity.<br/>
 /// <see cref="ECS.Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
 /// <br/>
-/// <see cref="Tags"/> can be added to a <see cref="GameEntity"/> to enable filtering entities in queries.<br/>
+/// <see cref="Tags"/> can be added to a <see cref="Entity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
 /// these <see cref="Tags"/>.
 /// </summary>
@@ -91,11 +91,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
-public sealed class GameEntity
+public sealed class Entity
 {
 #region public properties
     /// <summary>Unique entity id.<br/>
-    /// Uniqueness relates to the <see cref="GameEntity"/>'s stored in its <see cref="EntityStore"/></summary>
+    /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
                     public   int            Id              => id;
 
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
@@ -114,9 +114,9 @@ public sealed class GameEntity
     
     
     [Obsolete($"use method only for debugging")]
-                    public  string          DebugJSON       => GameEntityUtils.GetDebugJSON(this);
+                    public  string          DebugJSON       => EntityUtils.GetDebugJSON(this);
     
-    public override string                  ToString()      => GameEntityUtils.GameEntityToString(this, new StringBuilder());
+    public override string                  ToString()      => EntityUtils.EntityToString(this, new StringBuilder());
 
     #endregion
 
@@ -148,7 +148,7 @@ public sealed class GameEntity
                     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
-                    public GameEntity       Parent      => archetype.entityStore.GetParent(id);
+                    public Entity           Parent      => archetype.entityStore.GetParent(id);
     
                     /// <summary>
                     /// Use <b>ref</b> variable when iterating with <b>foreach</b> to copy struct copy. E.g. 
@@ -180,10 +180,10 @@ public sealed class GameEntity
     #endregion
     
 #region constructor
-    internal GameEntity(int id, Archetype archetype) {
+    internal Entity(int id, Archetype archetype) {
         this.id         = id;
         this.archetype  = archetype;
-        scriptIndex     = GameEntityUtils.NoScripts;
+        scriptIndex     = EntityUtils.NoScripts;
     }
     #endregion
 
@@ -228,35 +228,35 @@ public sealed class GameEntity
     /// To access a component use <see cref="GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(GetComponent)}<T>() to access a component")]
-    public      IComponent[]            Components_         => GameEntityUtils.GetComponentsDebug(this);
+    public      IComponent[]            Components_         => EntityUtils.GetComponentsDebug(this);
     #endregion
     
     // ------------------------------------ script methods -------------------------------------
 #region script methods
-    public      ReadOnlySpan<Script>  Scripts           => new (GameEntityUtils.GetScripts(this));
+    public      ReadOnlySpan<Script>  Scripts           => new (EntityUtils.GetScripts(this));
 
     /// <returns>the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
-    public T    GetScript<T>()        where T : Script  => (T)GameEntityUtils.GetScript(this, typeof(T));
+    public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
     
     /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
     public bool TryGetScript<T>(out T result)
         where T : Script
     {
-        result = (T)GameEntityUtils.GetScript(this, typeof(T));
+        result = (T)EntityUtils.GetScript(this, typeof(T));
         return result != null;
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    public T AddScript<T>(T script)   where T : Script  => (T)GameEntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
+    public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    public T RemoveScript<T>()        where T : Script  => (T)GameEntityUtils.RemoveScript(this, typeof(T));
+    public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript(this, typeof(T));
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------
 #region entity tag methods
     /// <returns>
-    /// A copy of the <see cref="Tags"/> assigned to the <see cref="GameEntity"/>.<br/>
+    /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
     /// <br/>
-    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="GameEntity"/>.<see cref="Tags"/>.<br/>
+    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<see cref="Tags"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
     public ref readonly Tags    Tags                        => ref archetype.tags;
@@ -273,7 +273,7 @@ public sealed class GameEntity
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
-    public int AddChild(GameEntity entity) {
+    public int AddChild(Entity entity) {
         var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return store.AddChild(id, entity.id);
@@ -283,7 +283,7 @@ public sealed class GameEntity
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
-    public void InsertChild(int index, GameEntity entity) {
+    public void InsertChild(int index, Entity entity) {
         var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         store.InsertChild(id, entity.id, index);
@@ -293,7 +293,7 @@ public sealed class GameEntity
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
-    public bool RemoveChild(GameEntity entity) {
+    public bool RemoveChild(Entity entity) {
         var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return store.RemoveChild(id, entity.id);
@@ -302,7 +302,7 @@ public sealed class GameEntity
     /// <summary>
     /// Remove the entity from its <see cref="EntityStore"/>.<br/>
     /// The deleted instance is in <see cref="detached"/> state.
-    /// Calling <see cref="GameEntity"/> methods result in <see cref="NullReferenceException"/>'s
+    /// Calling <see cref="Entity"/> methods result in <see cref="NullReferenceException"/>'s
     /// </summary>
     public void DeleteEntity()
     {

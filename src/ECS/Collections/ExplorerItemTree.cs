@@ -23,7 +23,7 @@ public class ExplorerItemTree
     #endregion
     
 #region public methods
-    public ExplorerItemTree (GameEntity rootEntity, string debugName)
+    public ExplorerItemTree (Entity rootEntity, string debugName)
     {
         this.debugName              = debugName ?? "ExplorerTree";
         store                       = rootEntity.Store;
@@ -47,7 +47,7 @@ public class ExplorerItemTree
     #endregion
     
 #region internal methods
-    private ExplorerItem CreateExplorerItem(GameEntity entity)
+    private ExplorerItem CreateExplorerItem(Entity entity)
     {
         var item = new ExplorerItem(this, entity);
         items.Add(entity.Id, item);

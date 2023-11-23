@@ -39,7 +39,7 @@ public static class TestBed
         // CreateManyEntities(root, "many - 1.000.000",    new [] { 100, 100, 100 });
     }
     
-    private static void CreateManyEntities(GameEntity root, string name, int[] counts)
+    private static void CreateManyEntities(Entity root, string name, int[] counts)
     {
         var many = root.Store.CreateEntity();
         many.AddComponent(new EntityName(name));
@@ -47,7 +47,7 @@ public static class TestBed
         root.AddChild(many);
     }
     
-    private static void AddManyEntities(GameEntity entity, int[] counts, int depth)
+    private static void AddManyEntities(Entity entity, int[] counts, int depth)
     {
         if (depth >= counts.Length) {
             return;
@@ -61,7 +61,7 @@ public static class TestBed
         }
     }
     
-    private static GameEntity CreateEntity(EntityStore store, int id)
+    private static Entity CreateEntity(EntityStore store, int id)
     {
         var entity = store.CreateEntity();
         entity.AddComponent(new EntityName("child-" + id));

@@ -231,7 +231,7 @@ public static class Test_ComponentReader
         }
     }
     
-    internal static void AssertRootEntity(GameEntity root) {
+    internal static void AssertRootEntity(Entity root) {
         AreEqual(10,    root.Id);
         AreEqual(1,     root.ChildCount);
         AreEqual(11,    root.ChildNodes.Ids[0]);
@@ -244,7 +244,7 @@ public static class Test_ComponentReader
         AreEqual(2f,    root.Scale3.z);
     }
     
-    internal static void AssertChildEntity(GameEntity child) {
+    internal static void AssertChildEntity(Entity child) {
         AreEqual(11,    child.Id);
         AreEqual(0,     child.ChildCount);
         AreEqual(2,     child.Archetype.ComponentCount);

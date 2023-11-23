@@ -5,26 +5,26 @@ using System;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-// Hard rule: this file MUST NOT access GameEntity's
+// Hard rule: this file MUST NOT access Entity's
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="RawEntityStore"/> enables using an entity store without <see cref="GameEntity"/>'s.<br/>
+/// A <see cref="RawEntityStore"/> enables using an entity store without <see cref="Entity"/>'s.<br/>
 /// <br/>
 /// The focus of the this entity store implementation is performance.<br/>
-/// The key is to eliminate heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
+/// The key is to eliminate heap consumption and GC costs caused by <see cref="Entity"/> instances.<br/>
 /// A <see cref="RawEntityStore"/> stores only an array of blittable <see cref="RawEntity"/>'s -
 /// structs having no reference type fields<br/>
 /// </summary>
 /// <remarks>
 /// The downside of this approach are:<br/>
 /// <list type="bullet">
-///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="GameEntity"/>'s.</item>
+///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="Entity"/>'s.</item>
 ///   <item>The API to access / query / mutate <see cref="RawEntity"/>'s is less convenient.<br/>
-///     It requires always two parameters - a <see cref="RawEntityStore"/> + entity <c>id</c> - instead of a single <see cref="GameEntity"/> reference.
+///     It requires always two parameters - a <see cref="RawEntityStore"/> + entity <c>id</c> - instead of a single <see cref="Entity"/> reference.
 ///   </item>
 /// </list>
 /// </remarks>

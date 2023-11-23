@@ -480,7 +480,7 @@ public partial class EntityStore
         }
     }
     
-    private void SetStoreRootEntity(GameEntity entity) {
+    private void SetStoreRootEntity(Entity entity) {
         if (storeRoot != null) {
             throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.id}");
         }
@@ -496,7 +496,7 @@ public partial class EntityStore
     
     // ---------------------------------- child nodes change notification ----------------------------------
     /// <summary>
-    /// Add / remove <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="GameEntity"/>'s.
+    /// Add / remove <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.
     /// </summary>
     public event ChildNodesChangedHandler ChildNodesChanged
     {
@@ -523,12 +523,12 @@ public partial class EntityStore
     }
     
     
-    // ------------------------------------- GameEntity access -------------------------------------
+    // ------------------------------------- Entity access -------------------------------------
     internal TreeMembership  GetTreeMembership(int id) {
         return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
-    internal GameEntity GetParent(int id)
+    internal Entity GetParent(int id)
     { 
         var parentNode  = nodes[id].parentId;
         return HasParent(parentNode) ? nodes[parentNode].entity : null;

@@ -7,10 +7,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// A <see cref="ChildNodesChangedHandler"/> added to <see cref="EntityStore.ChildNodesChanged"/> get events on
 /// <list type="bullet">
-///   <item><see cref="GameEntity.AddChild"/></item>
-///   <item><see cref="GameEntity.InsertChild"/></item>
-///   <item><see cref="GameEntity.RemoveChild"/></item>
-///   <item><see cref="GameEntity.DeleteEntity"/></item>
+///   <item><see cref="Entity.AddChild"/></item>
+///   <item><see cref="Entity.InsertChild"/></item>
+///   <item><see cref="Entity.RemoveChild"/></item>
+///   <item><see cref="Entity.DeleteEntity"/></item>
 /// </list>
 /// </summary>
 public delegate void   ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs e);

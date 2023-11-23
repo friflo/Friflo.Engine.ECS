@@ -10,11 +10,11 @@ namespace Friflo.Fliox.Engine.ECS;
 public partial class EntityStore
 {
     // --------------------------------- script methods ---------------------------------
-    internal Script[] GetScripts(GameEntity entity) {
+    internal Script[] GetScripts(Entity entity) {
         return entityScripts[entity.scriptIndex].scripts;
     }
     
-    internal Script GetScript(GameEntity entity, Type scriptType)
+    internal Script GetScript(Entity entity, Type scriptType)
     {
         var scripts = entityScripts[entity.scriptIndex].scripts;
         foreach (var script in scripts) {
@@ -25,10 +25,10 @@ public partial class EntityStore
         return null;
     }
     
-    internal void AppendScript(GameEntity entity, Script script)
+    internal void AppendScript(Entity entity, Script script)
     {
         script.entity = entity;
-        if (entity.scriptIndex == GameEntityUtils.NoScripts) {
+        if (entity.scriptIndex == EntityUtils.NoScripts) {
             // case: entity has not scripts => add new Scripts entry
             var lastIndex = entity.scriptIndex = entityScriptCount++;
             if (entityScripts.Length == lastIndex) {
@@ -45,10 +45,10 @@ public partial class EntityStore
         }
     }
     
-    internal Script AddScript(GameEntity entity, Script script, Type scriptType)
+    internal Script AddScript(Entity entity, Script script, Type scriptType)
     {
         script.entity = entity;
-        if (entity.scriptIndex == GameEntityUtils.NoScripts)
+        if (entity.scriptIndex == EntityUtils.NoScripts)
         {
             // case: entity has not scripts => add new Scripts entry
             var lastIndex = entity.scriptIndex = entityScriptCount++;
@@ -79,7 +79,7 @@ public partial class EntityStore
         return null;
     }
     
-    internal Script RemoveScript(GameEntity entity, Type scriptType)
+    internal Script RemoveScript(Entity entity, Type scriptType)
     {
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
         var scripts             = entityScript.scripts;
@@ -103,7 +103,7 @@ public partial class EntityStore
                     nodes[lastEntityId].entity.scriptIndex = entity.scriptIndex;
                 }
                 entityScripts[lastIndex] = default;               // clear last Script entry
-                entity.scriptIndex = GameEntityUtils.NoScripts; // set entity state to: contains no scripts 
+                entity.scriptIndex = EntityUtils.NoScripts; // set entity state to: contains no scripts 
                 return script;
             }
             // case: entity has two or more scripts. Remove the given one from its scripts
