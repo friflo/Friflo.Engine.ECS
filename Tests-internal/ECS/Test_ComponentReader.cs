@@ -1,4 +1,4 @@
-﻿using Friflo.Fliox.Engine.ECS.Sync;
+﻿using Friflo.Fliox.Engine.ECS.Serialize;
 using NUnit.Framework;
 
 namespace Internal.ECS;

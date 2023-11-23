@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
 using Friflo.Json.Fliox.Hub.Host.Event;

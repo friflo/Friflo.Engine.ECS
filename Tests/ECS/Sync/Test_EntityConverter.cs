@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;

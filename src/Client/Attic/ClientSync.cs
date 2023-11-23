@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox.Hub.Client;
 
 namespace Friflo.Fliox.Engine.Client.Attic;

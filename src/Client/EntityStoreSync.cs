@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox.Hub.Client;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator

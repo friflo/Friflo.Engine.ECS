@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Text;
-using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 

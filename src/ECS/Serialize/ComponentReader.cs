@@ -8,7 +8,7 @@ using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-namespace Friflo.Fliox.Engine.ECS.Sync;
+namespace Friflo.Fliox.Engine.ECS.Serialize;
 
 /// <summary>
 /// Create all components / scripts for an entity from <see cref="JsonValue"/> used as <see cref="DataEntity.components"/>

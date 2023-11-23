@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Sync;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
 using Tests.Utils;
