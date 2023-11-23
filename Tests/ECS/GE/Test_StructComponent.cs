@@ -20,7 +20,7 @@ public static class Test_StructComponent
 {
     [Test]
     public static void Test_1_TryGetComponentValue() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         
         var player1 = store.CreateEntity();
         IsTrue(player1.AddComponent<Scale3>());
@@ -59,7 +59,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_1_custom_Entity_Extensions() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         player.AddComponent<MyComponent1>();
         player.AddComponent<MyComponent2>();
@@ -74,7 +74,7 @@ public static class Test_StructComponent
     /// <summary>cover <see cref="EntityStoreBase.GetArchetypeWithout"/></summary>
     [Test]
     public static void Test_2_add_remove_struct_component() {
-        var store  = new GameEntityStore();
+        var store  = new EntityStore();
         var player = store.CreateEntity();
         IsTrue(player.AddComponent(new MyComponent1()));
         IsTrue(player.AddComponent(new Position()));
@@ -91,7 +91,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_2_CreateEntity() {
-        var store = new GameEntityStore();
+        var store = new EntityStore();
         for (int n = 0; n < 512; n++) {
             var player1 =store.CreateEntity();
             player1.AddComponent<Position>();
@@ -100,7 +100,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_3_AddPosition() {
-        var store = new GameEntityStore();
+        var store = new EntityStore();
         var player1 = store.CreateEntity();
         IsTrue (player1.AddComponent(new Position { x = 1,  y = 2 }));
         IsFalse(player1.AddComponent(new Position { x = 10, y = 11 }));
@@ -123,7 +123,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_4_GetArchetype() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         AreEqual(1, store.Archetypes.Length);
         
         var type1   = store.GetArchetype(Signature.Get<Position, Rotation>());
@@ -149,7 +149,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_5_AddPositionRotation() {
-        var store       = new GameEntityStore();
+        var store       = new EntityStore();
         var posType     = store.GetArchetype(Signature.Get<Position>());
         var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
         AreEqual(1,                             posType.Structs.Count);
@@ -194,7 +194,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_HasPosition_Perf() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         player.AddComponent(new Position());
         IsTrue(player.HasPosition);
@@ -207,7 +207,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_GetComponent_Perf() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         player.AddComponent(new MyComponent1());
         IsTrue(player.HasComponent<MyComponent1>());
@@ -231,7 +231,7 @@ public static class Test_StructComponent
 
     [Test]
     public static void Test_6_AddRotation() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var type    = store.GetArchetype(Signature.Get<Rotation, Scale3>());
         
         var player = store.CreateEntity();
@@ -260,7 +260,7 @@ public static class Test_StructComponent
     /// </summary>
     [Test]
     public static void Test_7_MoveComponent() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         AreEqual(1, store.Archetypes.Length);
         
         var player1 = store.CreateEntity();
@@ -280,7 +280,7 @@ public static class Test_StructComponent
 
     [Test]
     public static void Test_8_ModifyComponent() {
-        var store = new GameEntityStore();
+        var store = new EntityStore();
         var player = store.CreateEntity();
         player.AddComponent<Position>();
         // set via GetComponent<>()
@@ -293,7 +293,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_9_TestMissingAttribute() {
-        var store = new GameEntityStore();
+        var store = new EntityStore();
         var player = store.CreateEntity();
         var e1 = Throws<InvalidOperationException>(() => {
             player.AddComponent<MyInvalidComponent>();
@@ -312,7 +312,7 @@ public static class Test_StructComponent
     /// <summary>Similar to <see cref="Raw.Test_RawEntities.Test_RawEntities_Components"/></summary>
     [Test]
     public static void Test_9_RemoveComponent() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var type1 = store.GetArchetype(Signature.Get<Position>());
         var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         
@@ -357,7 +357,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_9_Add_Remove_Component_Perf() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var posType = store.GetArchetype(Signature.Get<Position>());
         store.CreateEntity().AddComponent<Position>();
         store.CreateEntity().AddComponent<Position>();
@@ -378,7 +378,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_9_Set_Name() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity  = store.CreateEntity();
         IsFalse(entity.HasName);
         IsFalse(entity.HasPosition);
@@ -402,12 +402,12 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_StructComponent_GameEntityStore_creation_Perf() {
-        _ = new GameEntityStore();
+        _ = new EntityStore();
         var stopwatch =  new Stopwatch();
         stopwatch.Start();
         int count = 10; // 1_000_000 ~ 454 ms
         for (int n = 0; n < count; n++) {
-            _ = new GameEntityStore();
+            _ = new EntityStore();
         }
         Console.WriteLine($"GameEntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }

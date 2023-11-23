@@ -15,7 +15,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// The <see cref="GameEntityStore"/> provide the features listed below
+/// The <see cref="EntityStore"/> provide the features listed below
 /// <list type="bullet">
 ///   <item>
 ///   Store a map (container) of entities in linear memory.<br/>
@@ -27,7 +27,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="GameEntity"/> methods.
 ///     </item>
 ///     <item>
-///       <b><see cref="TreeMembership"/>:</b> <see cref="treeNode"/> / <see cref="floating"/> node (not part of the <see cref="GameEntityStore"/> tree graph).<br/>
+///       <b><see cref="TreeMembership"/>:</b> <see cref="treeNode"/> / <see cref="floating"/> node (not part of the <see cref="EntityStore"/> tree graph).<br/>
 ///       All children of a <see cref="treeNode"/> are <see cref="treeNode"/>'s themselves.
 ///     </item>
 ///     </list>
@@ -37,11 +37,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </summary>
 [CLSCompliant(true)]
-public sealed partial class GameEntityStore : EntityStoreBase
+public sealed partial class EntityStore : EntityStoreBase
 {
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
-    /// <returns>A node array that can contain unused nodes. So its length is <see cref="GameEntityStore.EntityCount"/> + number of unused nodes</returns>
+    /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
     public              GameEntity                  StoreRoot           => storeRoot; // null if no graph origin set
     public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
@@ -69,9 +69,9 @@ public sealed partial class GameEntityStore : EntityStoreBase
     #endregion
     
 #region initialize
-    public GameEntityStore() : this (PidType.RandomPids) { }
+    public EntityStore() : this (PidType.RandomPids) { }
     
-    public GameEntityStore(PidType pidType)
+    public EntityStore(PidType pidType)
     {
         this.pidType    = pidType;
         nodes           = Array.Empty<EntityNode>();

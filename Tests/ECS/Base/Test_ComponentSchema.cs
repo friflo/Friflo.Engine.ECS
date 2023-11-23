@@ -9,7 +9,7 @@ public static class Test_ComponentSchema
 {
     [Test]
     public static void Test_EntityTags() {
-        var schema      = GameEntityStore.GetComponentSchema();
+        var schema      = EntityStore.GetComponentSchema();
         AreEqual(4,     schema.Tags.Length);
         
         var tags = schema.Tags;
@@ -36,7 +36,7 @@ public static class Test_ComponentSchema
     [Test]
     public static void Test_ComponentTypes()
     {
-        var schema      = GameEntityStore.GetComponentSchema();
+        var schema      = EntityStore.GetComponentSchema();
         var components  = schema.Components;
         var scripts   = schema.Scripts;
         

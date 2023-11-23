@@ -111,7 +111,7 @@ internal sealed class ScriptType<T> : ComponentType
             return;
         }
         script = reader.ReadMapper(typeMapper, json);
-        entity.archetype.gameEntityStore.AppendScript(entity, script);
+        entity.archetype.entityStore.AppendScript(entity, script);
     }
 }
 

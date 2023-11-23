@@ -51,7 +51,7 @@ public static class Test_Query
     [Test]
     public static void Test_generic_Query_with_AllTags()
     {
-        var store   = new GameEntityStore();
+        var store  =    new EntityStore();
         var query1 =    store.Query<Position>();
         var query2 =    store.Query<Position, Rotation>();
         var query3 =    store.Query<Position, Rotation, Scale3>();
@@ -75,7 +75,7 @@ public static class Test_Query
     [Test]
     public static void Test_Signature_Query()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity  = store.CreateEntity();
         
         var sig1 = Signature.Get<Position>();
@@ -141,7 +141,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_creation_Perf()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var sig     = Signature.Get<Position, Rotation>();
         var count   = 10; // 100_000_000 ~ 1.897 ms
         for (int n = 0; n < count; n++) {
@@ -152,7 +152,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_ForEach()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity  = store.CreateEntity();
         entity.AddComponent(new Position(1,2,3));
         entity.AddComponent(new Rotation(4,5,6,7));
@@ -179,7 +179,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_ForEach_RO()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity  = store.CreateEntity();
         entity.AddComponent(new Position(1,2,3));
         entity.AddComponent(new Rotation(4,5,6,7));
@@ -206,8 +206,8 @@ public static class Test_Query
     [Test]
     public static void Test_Query_loop()
     {
-        var store   = new GameEntityStore();
-        var entity2  = store.CreateEntity();
+        var store   = new EntityStore();
+        var entity2 = store.CreateEntity();
         entity2.AddComponent(new Position(1,2,3));
         entity2.AddComponent(new Rotation(4,5,6,7));
         
@@ -252,8 +252,8 @@ public static class Test_Query
     [Test]
     public static void Test_Query_Chunks_RO()
     {
-        var store   = new GameEntityStore();
-        var entity2  = store.CreateEntity();
+        var store   = new EntityStore();
+        var entity2 = store.CreateEntity();
         entity2.AddComponent(new Position(1, 1, 1));
         entity2.AddComponent(new Rotation(4, 2, 2, 2));
         

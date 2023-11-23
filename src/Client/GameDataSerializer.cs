@@ -23,7 +23,7 @@ namespace Friflo.Fliox.Engine.Client;
 public class GameDataSerializer
 {
 #region private fields
-    private readonly    GameEntityStore     store;
+    private readonly    EntityStore         store;
     private             Bytes               componentBuf;
     private readonly    EntityConverter     converter;
     // --- write specific fields
@@ -39,7 +39,7 @@ public class GameDataSerializer
     #endregion
     
 #region constructor
-    public GameDataSerializer(GameEntityStore store) {
+    public GameDataSerializer(EntityStore store) {
         this.store      = store;
         converter       = new EntityConverter();
         componentBuf    = new Bytes(32);

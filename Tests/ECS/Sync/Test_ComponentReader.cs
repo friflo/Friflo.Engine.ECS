@@ -24,7 +24,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
@@ -59,7 +59,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_change_archetype()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var root        = store.CreateEntity(10);
@@ -78,7 +78,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components_null()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
 
         var node    = new DataEntity { pid = 10, components = default };
@@ -90,14 +90,14 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_children()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         ComponentReader_read_children(store);
     }
     
     [Test]
     public static void Test_ComponentReader_read_children_events()
     {
-        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var events  = Events.SetHandlerSeq(store, (args, seq) => {
             switch (seq) {
                 // --- initial children: [2, 3, 4, 5]
@@ -119,7 +119,7 @@ public static class Test_ComponentReader
         AreEqual(10, events.seq);
     }
 
-    private static void ComponentReader_read_children(GameEntityStore store)
+    private static void ComponentReader_read_children(EntityStore store)
     {
         var converter   = EntityConverter.Default;
 
@@ -143,7 +143,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components_empty()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("{}") };
@@ -155,7 +155,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_EntityName()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("{\"name\":{\"value\":\"test\"}}") };
@@ -168,7 +168,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_tags()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
@@ -180,7 +180,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_invalid_component()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var json    = new JsonValue("{ \"pos\": [] }");
@@ -193,7 +193,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_invalid_components()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("123") };
@@ -212,7 +212,7 @@ public static class Test_ComponentReader
     public static void Test_ComponentReader_DataEntity_assertions()
     {
         {
-            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore(PidType.UsePidAsId);
             var converter   = EntityConverter.Default;
         
             var e = Throws<ArgumentNullException>(() => {
@@ -220,7 +220,7 @@ public static class Test_ComponentReader
             });
             AreEqual("Value cannot be null. (Parameter 'dataEntity')", e!.Message);
         } {
-            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore(PidType.UsePidAsId);
             var converter   = EntityConverter.Default;
         
             var childNode   = new DataEntity { pid = int.MaxValue + 1L };
@@ -259,7 +259,7 @@ public static class Test_ComponentReader
     [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
     public static void Test_ComponentReader_read_components_Mem()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
@@ -288,7 +288,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_components_Perf()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
@@ -306,7 +306,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_script()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
@@ -327,7 +327,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_read_script_Perf()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
@@ -341,11 +341,11 @@ public static class Test_ComponentReader
     private static JsonValue Scripts => new JsonValue(
         "{ \"testRef1\": { \"val1\": 11 }, \"testRef2\": { \"val2\": 22 }, \"testRef3\": { \"val3\": 33 } }");
     
-    /// <summary>Cover <see cref="GameEntityStore.AppendScript"/></summary>
+    /// <summary>Cover <see cref="EntityStore.AppendScript"/></summary>
     [Test]
     public static void Test_ComponentReader_read_multiple_scripts()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var rootNode    = new DataEntity { pid = 10, components = Scripts };
@@ -377,7 +377,7 @@ public static class Test_ComponentReader
     [Test]
     public static void Test_ComponentReader_Load_DataEntity_UsePidAsId()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var children    = new List<long>();
@@ -405,7 +405,7 @@ public static class Test_ComponentReader
     
     [Test]
     public static void Test_ComponentReader_Load_DataEntity_RandomPids() {
-        var store       = new GameEntityStore();
+        var store       = new EntityStore();
         var converter   = EntityConverter.Default;
         
         var children    = new List<long>();
@@ -433,7 +433,7 @@ public static class Test_ComponentReader
     
     [Test]
     public static void Test_ComponentReader_assertions() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentNullException>(() => {

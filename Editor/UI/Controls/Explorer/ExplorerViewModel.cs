@@ -37,9 +37,9 @@ internal class ExplorerViewModel
         return source;
     }
     
-    private static GameEntityStore CreateDefaultStore()
+    private static EntityStore CreateDefaultStore()
     {
-        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("root - default"));
         store.SetStoreRoot(root);
@@ -49,11 +49,11 @@ internal class ExplorerViewModel
     internal ITreeDataGridSource<ExplorerItem> ExplorerItemSource => CreateExplorerItemSource();
     
     // --------------------------------------- test data source ---------------------------------------
-    internal static readonly GameEntityStore TestStore = CreateTestStore(); 
+    internal static readonly EntityStore TestStore = CreateTestStore(); 
     
-    private static GameEntityStore CreateTestStore()
+    private static EntityStore CreateTestStore()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root =    CreateEntity(store, 1, "root");
         root.AddChild(CreateEntity(store, 2, "child 2"));
         root.AddChild(CreateEntity(store, 3, "child 3"));
@@ -64,7 +64,7 @@ internal class ExplorerViewModel
         return store;
     }
     
-    private static GameEntity CreateEntity(GameEntityStore store, int id, string name)
+    private static GameEntity CreateEntity(EntityStore store, int id, string name)
     {
         var entity = store.CreateEntity(id);
         entity.AddComponent(new EntityName(name));

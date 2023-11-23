@@ -11,7 +11,7 @@ public static class Test_ComponentWriter
     [Test]
     public static void Test_ComponentWriter_write_components()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
@@ -31,7 +31,7 @@ public static class Test_ComponentWriter
     [Test]
     public static void Test_ComponentWriter_write_EntityName()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var gameEntity  = store.CreateEntity();
@@ -44,7 +44,7 @@ public static class Test_ComponentWriter
     [Test]
     public static void Test_ComponentWriter_write_empty_components()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
@@ -57,7 +57,7 @@ public static class Test_ComponentWriter
     [Test]
     public static void Test_ComponentWriter_write_tags()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
@@ -72,7 +72,7 @@ public static class Test_ComponentWriter
     [Test]
     public static void Test_ComponentWriter_write_components_Perf()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var entity  = store.CreateEntity(10);
@@ -97,7 +97,7 @@ public static class Test_ComponentWriter
     [Test]
     public static void Test_GameEntity_DebugJSON()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var entity      = store.CreateEntity(10);
         var child       = store.CreateEntity(11);
         var unresolved  = new Unresolved { tags = new [] { "xyz " } };

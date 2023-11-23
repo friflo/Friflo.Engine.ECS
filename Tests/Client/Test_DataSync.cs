@@ -36,7 +36,7 @@ public static class Test_DataSync
         client.entities.Upsert(childNode);
         client.SyncTasksSynchronous();
         
-        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var sync    = new GameDataSync(store, client);
         AreSame(store, sync.Store); // ensure API available
         
@@ -76,7 +76,7 @@ public static class Test_DataSync
     public static async Task Test_DataSync_store_game_entities()
     {
         var client      = CreateClient();
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var sync        = new GameDataSync(store, client);
 
         var entity  = store.CreateEntity(10);
@@ -137,7 +137,7 @@ public static class Test_DataSync
         });
         AreEqual("Value cannot be null. (Parameter 'store')", e!.Message);
         
-        var store = new GameEntityStore();
+        var store = new EntityStore();
         e = Throws<ArgumentNullException>(() => {
             _ = new GameDataSync(store, null);
         });
@@ -152,7 +152,7 @@ public static class Test_DataSync
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         var client          = new GameClient(hub);
-        var store           = new GameEntityStore(PidType.UsePidAsId);
+        var store           = new EntityStore(PidType.UsePidAsId);
         sync                = new GameDataSync(store, client);
         processor           = new EventProcessorQueue();
         client.SetEventProcessor(processor);

@@ -15,7 +15,7 @@ internal class Events
     /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
-    internal static Events SetHandler(GameEntityStore store, Action<ChildNodesChangedArgs> action)
+    internal static Events SetHandler(EntityStore store, Action<ChildNodesChangedArgs> action)
     {
         var events = new Events();
         store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
@@ -29,7 +29,7 @@ internal class Events
     /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
-    internal static Events SetHandlerSeq(GameEntityStore store, Action<ChildNodesChangedArgs, int> action)
+    internal static Events SetHandlerSeq(EntityStore store, Action<ChildNodesChangedArgs, int> action)
     {
         var events = new Events();
         store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {

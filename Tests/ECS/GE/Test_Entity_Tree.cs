@@ -18,7 +18,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_CreateEntity_UseRandomPids()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         store.SetRandomSeed(0);
         var entity  = store.CreateEntity();
         AreEqual(1,             entity.Id);
@@ -30,7 +30,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_CreateEntity_UsePidAsId()
     {
-        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
         AreEqual(1,     entity.Id);
         AreEqual(1,     store.Nodes[entity.Id].Pid);
@@ -38,11 +38,11 @@ public static class Test_Entity_Tree
         AreEqual(1,     store.GetNodeByPid(1L).Pid);
     }
     
-    /// <summary>Test id assignment in <see cref="GameEntityStore.EnsureNodesLength"/></summary>
+    /// <summary>Test id assignment in <see cref="EntityStore.EnsureNodesLength"/></summary>
     [Test]
     public static void Test_GameEntityStore_EnsureNodesLength()
     {
-        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         for (int n = 0; n < 10; n++) {
             var nodes = store.Nodes;
             for (int i = 0; i < nodes.Length; i++) {
@@ -55,7 +55,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_AddChild()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -110,7 +110,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_InsertChild()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -189,11 +189,11 @@ public static class Test_Entity_Tree
         }
     }
     
-    /// <summary>Cover <see cref="GameEntityStore.EnsureChildIdsCapacity"/></summary>
+    /// <summary>Cover <see cref="EntityStore.EnsureChildIdsCapacity"/></summary>
     [Test]
     public static void Test_InsertChild_EnsureChildIdsCapacity()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var events = SetHandlerSeq(store, (args, seq) => {
             AreEqual(1,                             args.parentId);
@@ -209,11 +209,11 @@ public static class Test_Entity_Tree
         AreEqual(100, events.seq);
     }
     
-    /// <summary>Cover <see cref="GameEntityStore.InsertChild"/></summary>
+    /// <summary>Cover <see cref="EntityStore.InsertChild"/></summary>
     [Test]
     public static void Test_InsertChild_cover()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -253,11 +253,11 @@ public static class Test_Entity_Tree
         });
     }
     
-    /// <summary>code coverage for <see cref="GameEntityStore.SetTreeFlags"/></summary>
+    /// <summary>code coverage for <see cref="EntityStore.SetTreeFlags"/></summary>
     [Test]
     public static void Test_AddChild_move_root_tree_entity()
     {
-        var store       = new GameEntityStore();
+        var store       = new EntityStore();
         var root        = store.CreateEntity(1);
         store.SetStoreRoot(root);
         var child1      = store.CreateEntity(2);
@@ -291,7 +291,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_RemoveChild()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
         AreEqual(floating,  root.TreeMembership);
@@ -327,7 +327,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_RemoveChild_from_multiple_children()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
         var child3  = store.CreateEntity(3);
@@ -354,7 +354,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_SetRoot()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         
         var root    = store.CreateEntity(1);
         IsNull (root.Parent);
@@ -382,7 +382,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_move_with_AddChild()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         var child   = store.CreateEntity(3);
@@ -411,7 +411,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_DeleteEntity()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
         store.SetStoreRoot(root);
@@ -471,11 +471,11 @@ public static class Test_Entity_Tree
         });
     }
     
-    /// <summary>cover <see cref="GameEntityStore.DeleteNode"/></summary>
+    /// <summary>cover <see cref="EntityStore.DeleteNode"/></summary>
     [Test]
     public static void Test_Test_Entity_Tree_cover_DeleteNode()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
         var child3  = store.CreateEntity(3);
@@ -501,7 +501,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_GameEntity_GetChildNodeByIndex()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -515,16 +515,16 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_GameEntity_GetChildIndex()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         AreEqual(-1, root.GetChildIndex(123));
     }
     
-    /// <summary>Cover <see cref="GameEntityStore.ChildNodesChanged"/></summary>
+    /// <summary>Cover <see cref="EntityStore.ChildNodesChanged"/></summary>
     [Test]
     public static void Test_GameEntityStore_ChildNodesChanged()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
         var child3  = store.CreateEntity(3);
@@ -548,7 +548,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_Tree_ChildEnumerator()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
         root.AddChild(child);
@@ -568,7 +568,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_id_argument_exceptions()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var e = Throws<ArgumentException>(() => {
             store.CreateEntity(0);
         });
@@ -585,21 +585,21 @@ public static class Test_Entity_Tree
     public static void Test_Entity_SetRoot_assertions()
     {
         {
-            var store   = new GameEntityStore();
+            var store   = new EntityStore();
             var e       = Throws<ArgumentNullException>(() => {
                 store.SetStoreRoot(null);
             });
             AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
         } {
-            var store1  = new GameEntityStore();
-            var store2  = new GameEntityStore();
+            var store1  = new EntityStore();
+            var store2  = new EntityStore();
             var entity  = store1.CreateEntity();
             var e       = Throws<ArgumentException>(() => {
                 store2.SetStoreRoot(entity);            
             });
             AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         } {
-            var store   = new GameEntityStore();
+            var store   = new EntityStore();
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
             store.SetStoreRoot(entity1);
@@ -608,7 +608,7 @@ public static class Test_Entity_Tree
             });
             AreEqual("EntityStore already has a StoreRoot. StoreRoot id: 1", e!.Message);
         } {
-            var store   = new GameEntityStore();
+            var store   = new EntityStore();
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
             entity1.AddChild(entity2);
@@ -622,8 +622,8 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_Tree_InvalidStoreException()
     {
-        var store1   = new GameEntityStore();
-        var store2   = new GameEntityStore();
+        var store1   = new EntityStore();
+        var store2   = new EntityStore();
         
         var entity1 = store1.CreateEntity();
         var entity2 = store2.CreateEntity();
@@ -644,11 +644,11 @@ public static class Test_Entity_Tree
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
     }
 
-    /// <summary><see cref="GameEntityStore.GenerateRandomPidForId"/></summary>
+    /// <summary><see cref="EntityStore.GenerateRandomPidForId"/></summary>
     [Test]
     public static void Test_Entity_Tree_RandomPid_Coverage()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         store.SetRandomSeed(1);
         store.CreateEntity();
         store.SetRandomSeed(1); // Random generate same pid. use Next() pid
@@ -658,7 +658,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Add_Child_Entities_UseRandomPids_Perf()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
         long count  = 10; // 10_000_000L ~ 4.009 ms
@@ -672,7 +672,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Add_Child_Entities_UsePidAsId_Perf()
     {
-        var store   = new GameEntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
         long count  = 10; // 10_000_000L ~ 2.014 ms

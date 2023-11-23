@@ -61,7 +61,7 @@ public static class TestBed
         }
     }
     
-    private static GameEntity CreateEntity(GameEntityStore store, int id)
+    private static GameEntity CreateEntity(EntityStore store, int id)
     {
         var entity = store.CreateEntity();
         entity.AddComponent(new EntityName("child-" + id));

@@ -51,8 +51,8 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.CheckStructIndex"/></remarks>
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8       - Length always = maxStructIndex. Used for heap lookup
-    [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8       - containing EntityStore
-    [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing GameEntityStore
+    [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8       - containing EntityStoreBase
+    [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     #endregion
@@ -62,7 +62,7 @@ public sealed class Archetype
     internal Archetype(in ArchetypeConfig config)
     {
         store           = config.store;
-        gameEntityStore = store as GameEntityStore;
+        entityStore     = store as EntityStore;
         archIndex       = EntityStoreBase.Static.DefaultArchIndex;
         structHeaps     = Array.Empty<StructHeap>();
         heapMap         = EntityStoreBase.Static.DefaultHeapMap; // all items are always null
@@ -85,7 +85,7 @@ public sealed class Archetype
         memory.chunkCount       = 1;
         memory.chunkLength      = 1;
         store           = config.store;
-        gameEntityStore = store as GameEntityStore;
+        entityStore     = store as EntityStore;
         archIndex       = config.archetypeIndex;
         structCount     = heaps.Length;
         structHeaps     = heaps;

@@ -107,7 +107,7 @@ internal static class GameEntityUtils
         if (entity.scriptIndex == NoScripts) {
             return EmptyScripts;
         }
-        return entity.archetype.gameEntityStore.GetScripts(entity);
+        return entity.archetype.entityStore.GetScripts(entity);
     }
     
     internal static Script GetScript(GameEntity entity, Type scriptType)
@@ -115,7 +115,7 @@ internal static class GameEntityUtils
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.gameEntityStore.GetScript(entity, scriptType);
+        return entity.archetype.entityStore.GetScript(entity, scriptType);
     }
     
     internal static Script AddScript(GameEntity entity, Script script, Type scriptType, int classIndex)
@@ -126,13 +126,13 @@ internal static class GameEntityUtils
         if (script.entity != null) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }
-        return entity.archetype.gameEntityStore.AddScript(entity, script, scriptType);
+        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }
     
     internal static Script RemoveScript(GameEntity entity, Type scriptType) {
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.gameEntityStore.RemoveScript(entity, scriptType);
+        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
 }

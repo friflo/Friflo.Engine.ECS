@@ -23,7 +23,7 @@ public static class Test_Serializer
     [Test]
     public static async Task Test_Serializer_write_scene()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
 
         var entity  = store.CreateEntity(10);
@@ -57,7 +57,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_write_empty_scene()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
 
         var stream = new MemoryStream();
@@ -72,7 +72,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_read_scene()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
 
         // --- load game entities as scene sync
@@ -89,7 +89,7 @@ public static class Test_Serializer
     [Test]
     public static async Task Test_Serializer_read_scene_async()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
 
         // --- load game entities as scene sync
@@ -103,7 +103,7 @@ public static class Test_Serializer
         }
     }
     
-    private static void AssertReadSceneResult(ReadSceneResult result, GameEntityStore store)
+    private static void AssertReadSceneResult(ReadSceneResult result, EntityStore store)
     {
         AreEqual("entityCount: 2", result.ToString());
         IsNull(result.error);
@@ -128,7 +128,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_write_scene_Perf()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
 
         int count = 10;  // 1_000_000 ~ 1.227 ms
@@ -156,7 +156,7 @@ public static class Test_Serializer
         var stream      = new MemoryStream();
         // --- create JSON scene with GameDataSerializer
         {
-            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore(PidType.UsePidAsId);
             var serializer  = new GameDataSerializer(store);
 
             for (int n = 0; n < entityCount; n++) {
@@ -172,7 +172,7 @@ public static class Test_Serializer
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         {
-            var store       = new GameEntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore(PidType.UsePidAsId);
             var serializer  = new GameDataSerializer(store);
             stream.Position = 0;
             var result = serializer.ReadScene(stream);
@@ -203,7 +203,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_read_unknown_JSON_members()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         var fileName    = TestUtils.GetBasePath() + "assets/read_unknown_members.json";
         var file        = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -217,7 +217,7 @@ public static class Test_Serializer
     public static async Task Test_Serializer_ReadSceneAsync_MemoryStream()
     {
         var stream      = new MemoryStream();
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         serializer.WriteScene(stream);
         stream.Position = 0;
@@ -229,7 +229,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadSceneSync()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         
         var stream      = StringAsStream("xxx");
@@ -249,7 +249,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadEntity()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         
         var stream      = StringAsStream("[{ xxx");
@@ -261,7 +261,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadEntities()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         
         var stream      = StringAsStream("[1]");
@@ -273,7 +273,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadChildren()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         
         var stream      = StringAsStream("[ {\"children\":[true] } }");
@@ -285,7 +285,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_ReadScene_error_ReadTags()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new GameDataSerializer(store);
         
         var stream      = StringAsStream("[ {\"tags\":[1] } }");

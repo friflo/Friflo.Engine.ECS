@@ -17,13 +17,13 @@ public struct EditorSelection {
 public abstract class EditorObserver
 {
 #region protected properties
-    protected           Editor          Editor  => editor;
-    protected           GameEntityStore Store   => editor.Store;
+    protected           Editor      Editor  => editor;
+    protected           EntityStore Store   => editor.Store;
     #endregion
         
 #region private fields
-    private             bool            editorReadyFired; 
-    private   readonly  Editor          editor;
+    private             bool        editorReadyFired; 
+    private   readonly  Editor      editor;
     #endregion
 
 #region construtor

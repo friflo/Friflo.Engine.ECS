@@ -24,7 +24,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_single_entity() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         var entity2 = converter.DataToGameEntity(new DataEntity { pid = 2 }, store, out _);
         
@@ -36,7 +36,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_parent_child() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
 
         // --- create parent 5 first
@@ -66,7 +66,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_child_parent() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         // --- create child 8 first
@@ -96,7 +96,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_CreateFrom_assertions() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         {
             var e = Throws<ArgumentException>(() => {
@@ -115,7 +115,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_error_multiple_parents_1() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         converter.DataToGameEntity(CreateDbEntity(1, new [] { 2, 3 }), store, out _);
@@ -128,7 +128,7 @@ public static class Test_EntityConverter
 
     [Test]
     public static void Test_EntityConverter_Load_error_multiple_parents_2() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         converter.DataToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
@@ -141,7 +141,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_error_cycle_1() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         var e = Throws<InvalidOperationException> (() => {
@@ -152,7 +152,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_error_cycle_2() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         converter.DataToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
@@ -165,7 +165,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_error_cycle_3() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         converter.DataToGameEntity(CreateDbEntity(1, new [] { 2 }), store, out _);
@@ -179,7 +179,7 @@ public static class Test_EntityConverter
     
     [Test]
     public static void Test_EntityConverter_Load_Perf() {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
         int count       = 10; // 10_000_000 ~ 2.199 ms

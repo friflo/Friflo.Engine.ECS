@@ -7,7 +7,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public partial class GameEntityStore
+public partial class EntityStore
 {
     // --------------------------------- script methods ---------------------------------
     internal Script[] GetScripts(GameEntity entity) {

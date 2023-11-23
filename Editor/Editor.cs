@@ -23,12 +23,12 @@ namespace Friflo.Fliox.Editor;
 public partial class Editor
 {
 #region public properties
-    public              GameEntityStore         Store    => store;
+    public              EntityStore             Store    => store;
 
     #endregion
 
 #region private fields
-    private             GameEntityStore         store;
+    private             EntityStore             store;
     private             GameDataSync            sync;
     private  readonly   List<EditorObserver>    observers   = new List<EditorObserver>();
     private             bool                    isReady;
@@ -45,7 +45,7 @@ public partial class Editor
     public async Task Init()
     {
         EditorUtils.AssertUIThread();
-        store       = new GameEntityStore(PidType.UsePidAsId);
+        store       = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Editor Root"));
         store.SetStoreRoot(root);

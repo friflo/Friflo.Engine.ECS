@@ -95,22 +95,22 @@ public sealed class GameEntity
 {
 #region public properties
     /// <summary>Unique entity id.<br/>
-    /// Uniqueness relates to the <see cref="GameEntity"/>'s stored in its <see cref="GameEntityStore"/></summary>
+    /// Uniqueness relates to the <see cref="GameEntity"/>'s stored in its <see cref="EntityStore"/></summary>
                     public   int            Id              => id;
 
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
                     public   Archetype      Archetype       => archetype;
     
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
-    [Browse(Never)] public  GameEntityStore Store           => archetype?.gameEntityStore;
+    [Browse(Never)] public  EntityStore     Store           => archetype?.entityStore;
                     
     /// <remarks>If <see cref="attached"/> its <see cref="Store"/> and <see cref="Archetype"/> are not null. Otherwise null.</remarks>
     [Browse(Never)] public  StoreOwnership  StoreOwnership  => archetype != null ? attached : detached;
     
     /// <returns>
-    /// <see cref="treeNode"/> if the entity is member of the <see cref="GameEntityStore"/> tree graph.<br/>
+    /// <see cref="treeNode"/> if the entity is member of the <see cref="EntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.gameEntityStore.GetTreeMembership(id);
+    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.entityStore.GetTreeMembership(id);
     
     
     [Obsolete($"use method only for debugging")]
@@ -141,14 +141,14 @@ public sealed class GameEntity
     #endregion
     
 #region public properties - tree nodes
-    [Browse(Never)] public int              ChildCount  => archetype.gameEntityStore.Nodes[id].childCount;
+    [Browse(Never)] public int              ChildCount  => archetype.entityStore.Nodes[id].childCount;
     
                     /// <returns>
                     /// null if the entity has no parent.<br/>
-                    /// <i>Note:</i>The <see cref="GameEntityStore"/>.<see cref="GameEntityStore.StoreRoot"/> returns always null
+                    /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
                     /// </returns>
                     /// <remarks>Executes in O(1)</remarks> 
-                    public GameEntity       Parent      => archetype.gameEntityStore.GetParent(id);
+                    public GameEntity       Parent      => archetype.entityStore.GetParent(id);
     
                     /// <summary>
                     /// Use <b>ref</b> variable when iterating with <b>foreach</b> to copy struct copy. E.g. 
@@ -157,9 +157,9 @@ public sealed class GameEntity
                     /// </code>
                     /// </summary>
                     /// <remarks>Executes in O(1)</remarks>
-                    public ChildNodes       ChildNodes  => archetype.gameEntityStore.GetChildNodes(id);
+                    public ChildNodes       ChildNodes  => archetype.entityStore.GetChildNodes(id);
                     
-    [Browse(Never)] public ReadOnlySpan<int> ChildIds   => archetype.gameEntityStore.GetChildIds(id);
+    [Browse(Never)] public ReadOnlySpan<int> ChildIds   => archetype.entityStore.GetChildIds(id);
     #endregion
     
 #region internal fields
@@ -274,7 +274,7 @@ public sealed class GameEntity
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public int AddChild(GameEntity entity) {
-        var store = archetype.gameEntityStore;
+        var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return store.AddChild(id, entity.id);
     }
@@ -284,7 +284,7 @@ public sealed class GameEntity
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public void InsertChild(int index, GameEntity entity) {
-        var store = archetype.gameEntityStore;
+        var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         store.InsertChild(id, entity.id, index);
     }
@@ -294,19 +294,19 @@ public sealed class GameEntity
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public bool RemoveChild(GameEntity entity) {
-        var store = archetype.gameEntityStore;
+        var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return store.RemoveChild(id, entity.id);
     }
     
     /// <summary>
-    /// Remove the entity from its <see cref="GameEntityStore"/>.<br/>
+    /// Remove the entity from its <see cref="EntityStore"/>.<br/>
     /// The deleted instance is in <see cref="detached"/> state.
     /// Calling <see cref="GameEntity"/> methods result in <see cref="NullReferenceException"/>'s
     /// </summary>
     public void DeleteEntity()
     {
-        var store = archetype.gameEntityStore;
+        var store = archetype.entityStore;
         store.DeleteNode(id);
         if (archetype != store.defaultArchetype) {
             archetype.MoveLastComponentsTo(compIndex);
@@ -314,9 +314,9 @@ public sealed class GameEntity
         archetype = null;
     }
 
-    public              int         GetChildIndex(int childId)      => archetype.gameEntityStore.GetChildIndex(id, childId);
+    public              int         GetChildIndex(int childId)      => archetype.entityStore.GetChildIndex(id, childId);
 
-    public ref readonly EntityNode  GetChildNodeByIndex(int index)  => ref archetype.gameEntityStore.GetChildNodeByIndex(id, index);
+    public ref readonly EntityNode  GetChildNodeByIndex(int index)  => ref archetype.entityStore.GetChildNodeByIndex(id, index);
     
     #endregion
 }

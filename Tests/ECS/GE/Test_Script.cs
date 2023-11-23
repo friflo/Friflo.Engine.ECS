@@ -15,7 +15,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_1_AddComponent() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         AreEqual("id: 1  []",   player.ToString());
         AreSame(store,          player.Archetype.Store);
@@ -61,7 +61,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_2_RemoveScript() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player = store.CreateEntity();
         
         var testRef1 = new TestScript1();
@@ -93,7 +93,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_3_RemoveScript() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player = store.CreateEntity();
         
         IsNull  (player.AddScript(new TestScript1 { val1 = 1 }));
@@ -107,10 +107,10 @@ public static class Test_Script
         NotNull(player.GetScript<TestScript3>());
     }
     
-    /// <summary>Cover move last script in <see cref="GameEntityStore.RemoveScript"/> </summary>
+    /// <summary>Cover move last script in <see cref="EntityStore.RemoveScript"/> </summary>
     [Test]
     public static void Test_3_cover_move_last_script() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         
@@ -134,7 +134,7 @@ public static class Test_Script
     /// <summary>Cover <see cref="GameEntityUtils.RemoveScript"/></summary>
     [Test]
     public static void Test_3_cover_remove_non_added_script() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity  = store.CreateEntity();
         
         IsNull  (entity.AddScript(new TestScript1 { val1 = 1 }));
@@ -146,7 +146,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_3_InvalidRefComponent() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         
         var testRef1 = new InvalidRefComponent();
@@ -166,7 +166,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_2_Perf() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var list = new List<GameEntity>();
         for (long n = 0; n < 10; n++) {
             list.Add(store.CreateEntity());
@@ -176,7 +176,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_GetScript_Perf() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         player.AddScript(new TestScript1());
         NotNull(player.GetScript<TestScript1>());
@@ -189,7 +189,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_3_Perf_Add_Remove_Component() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var player  = store.CreateEntity();
         AreEqual("id: 1  []", player.ToString());
         
@@ -221,7 +221,7 @@ public static class Test_Script
     */
     [Test]
     public static void Test_3_Simulate_Editor() {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var entity  = store.CreateEntity();
         
         var test    = new TestComponent();

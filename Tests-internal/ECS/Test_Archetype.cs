@@ -13,7 +13,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_Key()
     {
-        var store       = new GameEntityStore();
+        var store       = new EntityStore();
         var posType     = store.GetArchetype(Signature.Get<Position>());
         var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
         
@@ -42,7 +42,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_StructHeap_ToString()
     {
-        var store       = new GameEntityStore();
+        var store       = new EntityStore();
         var entity      = store.CreateEntity();
         entity.AddComponent<Position>();
         var posType     = store.GetArchetype(Signature.Get<Position>());
@@ -59,7 +59,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_Tags_Query()
     {
-        var store           = new GameEntityStore();
+        var store           = new EntityStore();
         var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);
@@ -79,7 +79,7 @@ public static class Test_Archetype
         Throws<IndexOutOfRangeException>(() => {
             indexes.GetStructIndex(0);
         });
-        var schema  = GameEntityStore.GetComponentSchema();
+        var schema  = EntityStore.GetComponentSchema();
         var posType = schema.GetComponentType<Position>();
         
         indexes = new SignatureIndexes(1, posType.structIndex);

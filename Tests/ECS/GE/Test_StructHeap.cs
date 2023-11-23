@@ -12,7 +12,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_increase_entity_capacity()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var arch1       = store.GetArchetype(Signature.Get<Position>());
         int count       = 2000;
         var entities    = new GameEntity[count];
@@ -34,7 +34,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_shrink_entity_capacity()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var arch1       = store.GetArchetype(Signature.Get<Position>());
         int count       = 2000;
         var entities    = new GameEntity[count];
@@ -59,7 +59,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position>());
         _ = store.CreateEntity(arch1); // warmup
         
@@ -76,8 +76,8 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_invalid_store()
     {
-        var store1      = new GameEntityStore();
-        var store2      = new GameEntityStore();
+        var store1      = new EntityStore();
+        var store2      = new EntityStore();
         var arch1       = store1.GetArchetype(Signature.Get<Position>());
         var e = Assert.Throws<ArgumentException>(() => {
             store2.CreateEntity(arch1);

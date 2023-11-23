@@ -16,7 +16,7 @@ public static class Test_ExplorerItem
     [Test]
     public static void Test_ExplorerItem_Basics()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerItemTree(root, "test");
         AreEqual("test", tree.ToString());
@@ -66,7 +66,7 @@ public static class Test_ExplorerItem
     [Test]
     public static void Test_ExplorerItem_CollectionChanged()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerItemTree(root, "test");
         var rootItem    = tree.RootItem;
@@ -91,7 +91,7 @@ public static class Test_ExplorerItem
     [Test]
     public static void Test_ExplorerItemEnumerator()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerItemTree(root, null);
         AreEqual("ExplorerTree", tree.ToString());
@@ -132,7 +132,7 @@ public static class Test_ExplorerItem
     [Test]
     public static void Test_ExplorerItem_TreeDataGrid_Access()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerItemTree(root, null);
         

@@ -13,7 +13,7 @@ public static class Test_ExplorerItem
     [Test]
     public static void Test_ExplorerItem_assertion()
     {
-        var store       = new GameEntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerItemTree(root, "test");
         

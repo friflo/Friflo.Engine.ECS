@@ -14,7 +14,7 @@ public static class Test_Unresolved
     [Test]
     public static void Test_Unresolved_components()
     {
-        var store           = new GameEntityStore(PidType.UsePidAsId);
+        var store           = new EntityStore(PidType.UsePidAsId);
         var converter       = EntityConverter.Default;
         var source1         = new DataEntity { pid = 1, components = new JsonValue("{ \"xxx1\": { \"foo1\":1 }}") };
         var unresolvedQuery = store.Query(Signature.Get<Unresolved>());
@@ -52,7 +52,7 @@ public static class Test_Unresolved
     [Test]
     public static void Test_Unresolved_tags()
     {
-        var store           = new GameEntityStore(PidType.UsePidAsId);
+        var store           = new EntityStore(PidType.UsePidAsId);
         var converter       = EntityConverter.Default;
         var source1         = new DataEntity { pid = 1, tags = new List<string>{"yyy1"} };
         var unresolvedQuery = store.Query(Signature.Get<Unresolved>());

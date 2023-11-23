@@ -50,7 +50,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeStructs_Get()
     {
-        var schema = GameEntityStore.GetComponentSchema();
+        var schema = EntityStore.GetComponentSchema();
         AreEqual(3, schema.EngineDependants.Length);
         var engine = schema.EngineDependants[0];
         AreEqual("Engine.ECS.dll",  engine.Assembly.ManifestModule.Name);
@@ -137,7 +137,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeStructs_Tags()
     {
-        var store       = new GameEntityStore();
+        var store       = new EntityStore();
         var type        = store.GetArchetype(Tags.Get<TestTag2, TestTag3>());
         var tags        = type.Tags;
         AreEqual(2, tags.Count);
@@ -155,7 +155,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeStructs_lookup_structs_and_tags_Perf()
     {
-        var store   = new GameEntityStore();
+        var store   = new EntityStore();
         var type1   = store.GetArchetype(Signature.Get<Position>());
         var result  = store.FindArchetype(type1.Structs, type1.Tags);
         AreEqual(1, type1.Structs.Count);

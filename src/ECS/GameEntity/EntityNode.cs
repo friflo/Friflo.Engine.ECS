@@ -15,24 +15,24 @@ namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
-/// The tree graph is stored in an <see cref="GameEntityStore"/> to build up a scene stating with
-/// a single <see cref="GameEntityStore.StoreRoot"/> entity. 
+/// The tree graph is stored in an <see cref="EntityStore"/> to build up a scene stating with
+/// a single <see cref="EntityStore.StoreRoot"/> entity. 
 /// </summary>
 /// <remarks>
 /// It provide the properties listed below
 /// <list type="bullet">
-///   <item><see cref="Id"/> to identify an entity in its <see cref="GameEntityStore"/></item>
+///   <item><see cref="Id"/> to identify an entity in its <see cref="EntityStore"/></item>
 ///   <item><see cref="Pid"/> used to store entities in a database</item>
 ///   <item><see cref="Entity"/> to access the <see cref="GameEntity"/> attached to a node</item>
 ///   <item><see cref="ParentId"/> and <see cref="ChildIds"/> to get the direct related nodes</item>
 /// </list>
 /// <b><see cref="Id"/></b><br/>
-/// The entity id change when performing an <see cref="GameEntityStore"/> id cleanup.<br/>
+/// The entity id change when performing an <see cref="EntityStore"/> id cleanup.<br/>
 /// The clean remove unused ids and ensure that entities with the same <see cref="Archetype"/> have consecutive ids.<br/>
 /// <br/>
 /// <b><see cref="Pid"/></b><br/>
-/// When creating a new entity in the <see cref="GameEntityStore"/> it generates a random <see cref="Pid"/>
-/// using <see cref="GameEntityStore.GenerateRandomPidForId"/>.<br/>
+/// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
+/// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
 /// Using random pids avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
 /// The probability generating the same pid by two different users is:
 /// <code>

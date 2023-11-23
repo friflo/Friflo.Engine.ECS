@@ -16,9 +16,9 @@ namespace Friflo.Fliox.Engine.Client;
 [CLSCompliant(true)]
 public sealed class GameDataSync
 {
-    public              GameEntityStore                 Store => store;
+    public              EntityStore                     Store => store;
     
-    private readonly    GameEntityStore                 store;
+    private readonly    EntityStore                     store;
     private readonly    GameClient                      client;
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
@@ -27,7 +27,7 @@ public sealed class GameDataSync
     private readonly    List<long>                      deleteBuffer;
 
 
-    public GameDataSync (GameEntityStore store, GameClient client) {
+    public GameDataSync (EntityStore store, GameClient client) {
         this.store      = store     ?? throw new ArgumentNullException(nameof(store));
         this.client     = client    ?? throw new ArgumentNullException(nameof(client));
         localEntities   = client.entities.Local;
@@ -126,7 +126,7 @@ public sealed class GameDataSync
         await client.SyncTasks();
     }
     
-    /// <summary>SYNC: <see cref="DataEntity"/> -> <see cref="GameEntityStore"/></summary>
+    /// <summary>SYNC: <see cref="DataEntity"/> -> <see cref="EntityStore"/></summary>
     private void EntitiesChangeHandler(Changes<long, DataEntity> changes, EventContext context)
     {
         // Console.WriteLine($"Changes: {changes}");

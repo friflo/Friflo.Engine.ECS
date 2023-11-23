@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 // This file contains implementation specific for storing DataEntity's.
 // Loading and storing DataEntity's is implemented in GameEntityStore to enable declare all its fields private.
-public partial class GameEntityStore
+public partial class EntityStore
 {
 // --------------------------------------- GameEntity -> DataEntity ---------------------------------------
 #region GameEntity -> DataEntity

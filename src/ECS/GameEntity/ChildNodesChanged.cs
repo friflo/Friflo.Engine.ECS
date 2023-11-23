@@ -5,7 +5,7 @@
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="ChildNodesChangedHandler"/> added to <see cref="GameEntityStore.ChildNodesChanged"/> get events on
+/// A <see cref="ChildNodesChangedHandler"/> added to <see cref="EntityStore.ChildNodesChanged"/> get events on
 /// <list type="bullet">
 ///   <item><see cref="GameEntity.AddChild"/></item>
 ///   <item><see cref="GameEntity.InsertChild"/></item>
