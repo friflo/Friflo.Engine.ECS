@@ -35,12 +35,13 @@ public partial class InspectorGroup : UserControl
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         
+        /* was used to show add button with GreenButton style only on hover
         PointerEntered += (sender, args) => { Add.Classes.Add("GreenButton"); };
         PointerExited += (sender, args)  => { Add.Classes.Remove("GreenButton"); };
         if (Expand != null) {
             Expand.PointerEntered += (sender, args) => { Add.Classes.Add("GreenButton"); };
             Expand.PointerExited += (sender, args)  => { Add.Classes.Remove("GreenButton"); };
-        }
+        } */
     }
 
     private void Button_OnClick(object sender, RoutedEventArgs e) {
