@@ -17,7 +17,7 @@
                             Content="add"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0" CornerRadius="2"
-                            Margin="0" Padding="4 -1">
+                            Margin="0" Padding="3 -2">
                     </Button>
                 </Border>
                 <Border>
