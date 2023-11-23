@@ -275,7 +275,7 @@ public sealed class GameEntity
     /// </remarks>
     public int AddChild(GameEntity entity) {
         var store = archetype.gameEntityStore;
-        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
+        if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return store.AddChild(id, entity.id);
     }
     
@@ -285,7 +285,7 @@ public sealed class GameEntity
     /// </remarks>
     public void InsertChild(int index, GameEntity entity) {
         var store = archetype.gameEntityStore;
-        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
+        if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         store.InsertChild(id, entity.id, index);
     }
     
@@ -295,7 +295,7 @@ public sealed class GameEntity
     /// </remarks>
     public bool RemoveChild(GameEntity entity) {
         var store = archetype.gameEntityStore;
-        if (store != entity.archetype.store) throw EntityStore.InvalidStoreException(nameof(entity));
+        if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return store.RemoveChild(id, entity.id);
     }
     

@@ -12,7 +12,7 @@ using static Friflo.Fliox.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public partial class EntityStore
+public partial class EntityStoreBase
 {
     internal bool TryGetValue(ArchetypeKey searchKey, out ArchetypeKey archetypeKey) {
         return archSet.TryGetValue(searchKey, out archetypeKey);

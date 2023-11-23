@@ -16,7 +16,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
-public abstract partial class EntityStore
+public abstract partial class EntityStoreBase
 {
 #region public properties
     /// <summary>Number of all entities stored in the entity store</summary>
@@ -54,7 +54,7 @@ public abstract partial class EntityStore
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
         internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[ComponentSchema.maxStructIndex];
         
-        /// <summary>The index of the <see cref="EntityStore.defaultArchetype"/> - index is always 0</summary>
+        /// <summary>The index of the <see cref="EntityStoreBase.defaultArchetype"/> - index is always 0</summary>
         internal const              int             DefaultArchIndex        =  0;
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
@@ -69,7 +69,7 @@ public abstract partial class EntityStore
     #endregion
     
 #region initialize
-    protected EntityStore()
+    protected EntityStoreBase()
     {
         sequenceId          = Static.MinNodeId;
         archs               = new Archetype[2];

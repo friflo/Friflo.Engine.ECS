@@ -209,7 +209,7 @@ public static class Test_Tags
         AreEqual(4,                                 store.Archetypes.Length);
     }
     
-    /// <summary>Cover <see cref="EntityStore.GetArchetypeWithTags"/></summary>
+    /// <summary>Cover <see cref="EntityStoreBase.GetArchetypeWithTags"/></summary>
     [Test]
     public static void Test_Tags_cover_GetArchetypeWithTags() {
         var store   = new GameEntityStore();

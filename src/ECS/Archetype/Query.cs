@@ -31,7 +31,7 @@ public class ArchetypeQuery
 
 #region private / internal fields
     // --- non blittable types
-                    private  readonly   EntityStore         store;              //  8
+                    private  readonly   EntityStoreBase     store;              //  8
     [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
     // --- blittable types
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
@@ -48,7 +48,7 @@ public class ArchetypeQuery
     public QueryEnumerator  GetEnumerator()                             => new (this);
 //  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
 
-    internal ArchetypeQuery(EntityStore store, in SignatureIndexes indexes)
+    internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
     {
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
@@ -107,7 +107,7 @@ public class ArchetypeQuery
         var sb          = new StringBuilder();
         var hasTypes    = false;
         sb.Append("Query: [");
-        var components  = EntityStore.Static.ComponentSchema.Components;
+        var components  = EntityStoreBase.Static.ComponentSchema.Components;
         for (int n = 0; n < signatureIndexes.length; n++)
         {
             var structIndex = signatureIndexes.GetStructIndex(n);
@@ -138,7 +138,7 @@ public sealed class ArchetypeQuery<T> : ArchetypeQuery
 {
     public new ArchetypeQuery<T> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
-    internal ArchetypeQuery(EntityStore store, in Signature<T> signature)
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T> signature)
         : base(store, signature.signatureIndexes) {
     }
 }
@@ -152,7 +152,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     
      public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2> signature)
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature)
         : base(store, signature.signatureIndexes) {
     }
     
@@ -178,7 +178,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
 {
     public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3> signature)
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3> signature)
         : base(store, signature.signatureIndexes) {
     }
 }
@@ -191,7 +191,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
 {
     public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4> signature)
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4> signature)
         : base(store, signature.signatureIndexes) {
     }
 }
@@ -205,7 +205,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
 {
     public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
-    internal ArchetypeQuery(EntityStore store, in Signature<T1, T2, T3, T4, T5> signature)
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature.signatureIndexes) {
     }
 }

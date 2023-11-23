@@ -5,7 +5,7 @@ using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-using static Friflo.Fliox.Engine.ECS.EntityStore.Static;
+using static Friflo.Fliox.Engine.ECS.EntityStoreBase.Static;
 
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
@@ -71,7 +71,7 @@ public static class Test_StructComponent
         AreEqual(2, player.MyComponent2().b);
     }
     
-    /// <summary>cover <see cref="EntityStore.GetArchetypeWithout"/></summary>
+    /// <summary>cover <see cref="EntityStoreBase.GetArchetypeWithout"/></summary>
     [Test]
     public static void Test_2_add_remove_struct_component() {
         var store  = new GameEntityStore();

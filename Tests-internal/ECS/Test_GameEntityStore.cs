@@ -24,7 +24,7 @@ public static class Test_GameEntityStore
         AreEqual("unexpected state: child id not found. parent id: 5, child id: 10", e!.Message);
     }
     
-    /// <summary>Cover <see cref="EntityStore.AddArchetype"/></summary>
+    /// <summary>Cover <see cref="EntityStoreBase.AddArchetype"/></summary>
     [Test]
     public static void Test_Tags_cover_AddArchetype() {
         var store       = new GameEntityStore();

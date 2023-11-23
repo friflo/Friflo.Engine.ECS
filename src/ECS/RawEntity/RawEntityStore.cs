@@ -28,7 +28,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   </item>
 /// </list>
 /// </remarks>
-public sealed class RawEntityStore : EntityStore
+public sealed class RawEntityStore : EntityStoreBase
 {
     private            RawEntity[]             entities;          //  8 + all raw entities
 

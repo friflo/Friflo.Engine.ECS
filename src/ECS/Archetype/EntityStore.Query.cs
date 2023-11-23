@@ -10,7 +10,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public partial class EntityStore
+public partial class EntityStoreBase
 {
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype

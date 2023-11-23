@@ -27,14 +27,14 @@ public static class Signature
     /// Returns a <see cref="Signature{T1}"/> containing the given component types.<br/>
     /// <see cref="Signature{T1}"/> features:
     /// <list type="bullet">
-    ///   <item>Get the <see cref="Archetype"/> of an <see cref="GameEntityStore"/> using <see cref="EntityStore.GetArchetype{T1}"/>.</item>
+    ///   <item>Get the <see cref="Archetype"/> of an <see cref="GameEntityStore"/> using <see cref="GameEntityStore.GetArchetype{T1}"/>.</item>
     ///   <item>Create a query to process all entities containing the given component types with <see cref="GameEntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
     public static Signature<T> Get<T>()
         where T : struct, IComponent
     {
-        var schema  = EntityStore.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.ComponentSchema;
         var indexes   = new SignatureIndexes(1,
             T1: schema.CheckStructIndex(typeof(T), StructHeap<T>.StructIndex)
         );
@@ -53,7 +53,7 @@ public static class Signature
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        var schema  = EntityStore.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.ComponentSchema;
         var indexes = new SignatureIndexes(2,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex)
@@ -74,7 +74,7 @@ public static class Signature
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        var schema  = EntityStore.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.ComponentSchema;
         var indexes = new SignatureIndexes(3,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
@@ -97,7 +97,7 @@ public static class Signature
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        var schema  = EntityStore.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.ComponentSchema;
         var indexes = new SignatureIndexes(4,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
@@ -122,7 +122,7 @@ public static class Signature
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        var schema  = EntityStore.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.ComponentSchema;
         var indexes = new SignatureIndexes(5,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),

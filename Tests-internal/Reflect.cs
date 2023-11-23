@@ -12,7 +12,7 @@ public static class Reflect
 {
     [ExcludeFromCodeCoverage]
     public static Type EcsType(string name) {
-        return typeof(EntityStore).Assembly.GetType(name);
+        return typeof(EntityStoreBase).Assembly.GetType(name);
     }
     
     [ExcludeFromCodeCoverage]

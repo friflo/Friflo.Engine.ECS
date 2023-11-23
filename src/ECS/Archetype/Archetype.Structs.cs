@@ -142,7 +142,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
         sb.Append("Structs: [");
         var hasTypes    = false;
         foreach (var index in bitSet) {
-            var structType = EntityStore.Static.ComponentSchema.GetStructComponentAt(index);
+            var structType = EntityStoreBase.Static.ComponentSchema.GetStructComponentAt(index);
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;
@@ -164,7 +164,7 @@ public struct ArchetypeStructsEnumerator : IEnumerator<ComponentType>
 
            readonly object              IEnumerator.Current => Current;
 
-    public readonly ComponentType       Current => EntityStore.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
+    public readonly ComponentType       Current => EntityStoreBase.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
     
     internal ArchetypeStructsEnumerator(in ArchetypeStructs structs) {
         bitSetEnumerator = structs.bitSet.GetEnumerator();

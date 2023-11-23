@@ -34,8 +34,8 @@ internal sealed class ComponentReader
     internal ComponentReader() {
         buffer                  = new Bytes(128);
         components              = new RawComponent[1];
-        componentReader         = new ObjectReader(EntityStore.Static.TypeStore);
-        var schema              = EntityStore.Static.ComponentSchema;
+        componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore);
+        var schema              = EntityStoreBase.Static.ComponentSchema;
         unresolvedType          = schema.unresolvedType;
         componentTypeByKey      = schema.componentTypeByKey;
         tagTypeByName           = schema.tagTypeByName;
@@ -47,7 +47,7 @@ internal sealed class ComponentReader
         unresolvedComponentMap  = new Dictionary<string, UnresolvedComponent>();
     }
     
-    internal string Read(DataEntity dataEntity, GameEntity entity, EntityStore store)
+    internal string Read(DataEntity dataEntity, GameEntity entity, EntityStoreBase store)
     {
         componentCount      = 0;
         var hasTags         = dataEntity.tags?.Count > 0;
@@ -149,7 +149,7 @@ internal sealed class ComponentReader
     /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all components 
     /// within the current JSON payload.
     /// </summary>
-    private void SetEntityArchetype(DataEntity dataEntity, GameEntity entity, EntityStore store)
+    private void SetEntityArchetype(DataEntity dataEntity, GameEntity entity, EntityStoreBase store)
     {
         searchKey.Clear();
         var hasStructComponent  = GetStructComponents(ref searchKey.structs);
@@ -235,7 +235,7 @@ internal sealed class ComponentReader
         return hasStructComponent;
     }
     
-    private Archetype FindArchetype(ArchetypeKey searchKey, EntityStore store)
+    private Archetype FindArchetype(ArchetypeKey searchKey, EntityStoreBase store)
     {
         if (store.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;

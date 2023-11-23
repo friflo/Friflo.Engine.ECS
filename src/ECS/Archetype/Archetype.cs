@@ -23,7 +23,7 @@ public sealed class Archetype
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
-                    public              EntityStore         Store           => store;
+                    public              EntityStoreBase     Store           => store;
                     public ref readonly ArchetypeStructs    Structs         => ref structs;
                     public ref readonly Tags                Tags            => ref tags;
 #endregion
@@ -51,21 +51,21 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.CheckStructIndex"/></remarks>
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8       - Length always = maxStructIndex. Used for heap lookup
-    [Browse(Never)] internal readonly   EntityStore         store;          //  8       - containing EntityStore
+    [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8       - containing EntityStore
     [Browse(Never)] internal readonly   GameEntityStore     gameEntityStore;//  8       - containing GameEntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     #endregion
 
 #region initialize
-    /// <summary>Create an instance of an <see cref="EntityStore.defaultArchetype"/></summary>
+    /// <summary>Create an instance of an <see cref="EntityStoreBase.defaultArchetype"/></summary>
     internal Archetype(in ArchetypeConfig config)
     {
         store           = config.store;
         gameEntityStore = store as GameEntityStore;
-        archIndex       = EntityStore.Static.DefaultArchIndex;
+        archIndex       = EntityStoreBase.Static.DefaultArchIndex;
         structHeaps     = Array.Empty<StructHeap>();
-        heapMap         = EntityStore.Static.DefaultHeapMap; // all items are always null
+        heapMap         = EntityStoreBase.Static.DefaultHeapMap; // all items are always null
         key             = new ArchetypeKey(this);
         // entityIds        = null      // stores no entities
         // entityCapacity   = 0         // stores no entities
@@ -122,7 +122,7 @@ public sealed class Archetype
     {
         var length          = indexes.length;
         var componentHeaps  = new StructHeap[length];
-        var components      = EntityStore.Static.ComponentSchema.Components;
+        var components      = EntityStoreBase.Static.ComponentSchema.Components;
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
             var structType    = components[structIndex];

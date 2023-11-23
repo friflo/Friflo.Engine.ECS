@@ -37,7 +37,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </summary>
 [CLSCompliant(true)]
-public sealed partial class GameEntityStore : EntityStore
+public sealed partial class GameEntityStore : EntityStoreBase
 {
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
