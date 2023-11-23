@@ -11,18 +11,21 @@ using AP = Avalonia.AvaloniaProperty;
 // ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
+
+public interface IExpandable
+{
+    bool Expanded { get; set; }
+}
+
 public partial class InspectorGroup : UserControl
 {
-    private List<InspectorComponent> components;
+    private List<IExpandable> expandables;
     
     public static readonly StyledProperty<string>       GroupProperty   = AP.Register<InspectorGroup, string>       (nameof(Group), "group");
     public static readonly StyledProperty<InputElement> ExpandProperty  = AP.Register<InspectorGroup, InputElement> (nameof(Expand));
     
-    public string   Group   { get => GetValue(GroupProperty);   set => SetValue(GroupProperty,  value); }
-    public InputElement   Expand {
-        get => GetValue(ExpandProperty);
-        set => SetValue(ExpandProperty, value);
-    }
+    public string       Group   { get => GetValue(GroupProperty);   set => SetValue(GroupProperty,  value); }
+    public InputElement Expand  { get => GetValue(ExpandProperty);  set => SetValue(ExpandProperty, value); }
 
     public InspectorGroup()
     {
@@ -41,14 +44,14 @@ public partial class InspectorGroup : UserControl
     }
 
     private void Button_OnClick(object sender, RoutedEventArgs e) {
-        components ??= new List<InspectorComponent>();
-        EditorUtils.GetControls(Expand, components);
+        expandables ??= new List<IExpandable>();
+        EditorUtils.GetControls(Expand, expandables);
         var expanded = true;
-        foreach (var component in components) {
-            expanded &= component.Expanded;
+        foreach (var expandable in expandables) {
+            expanded &= expandable.Expanded;
         }
-        foreach (var component in components) {
-            component.Expanded = !expanded;
+        foreach (var expandable in expandables) {
+            expandable.Expanded = !expanded;
         }
     }
 }

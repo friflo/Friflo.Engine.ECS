@@ -76,14 +76,14 @@ public static class EditorUtils
         return null;
     }
     
-    internal static void GetControls<T>(Visual control, List<T> result) where T : Control
+    internal static void GetControls<T>(Visual control, List<T> result)
     {
+        if (control is T) {
+            result.Add((T)(object)control);
+        }
         foreach (var child in control.GetVisualChildren()) {
             if (child is not Control childControl) {
                 continue;
-            }
-            if (childControl is T) {
-                result.Add((T)childControl);
             }
             GetControls(childControl, result);
         }

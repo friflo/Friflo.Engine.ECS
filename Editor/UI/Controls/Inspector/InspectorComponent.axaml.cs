@@ -9,7 +9,7 @@ using AP = Avalonia.AvaloniaProperty;
 // ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
-public partial class InspectorComponent : UserControl
+public partial class InspectorComponent : UserControl, IExpandable
 {
     public static readonly StyledProperty<string>   ComponentTitleProperty  = AP.Register<InspectorComponent, string>(nameof(ComponentTitle), "Component");
     public static readonly StyledProperty<bool>     ExpandedProperty        = AP.Register<InspectorComponent, bool>  (nameof(Expanded), true);

@@ -116,5 +116,9 @@
         <DependentUpon>InspectorTag.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Controls\Inspector\InspectorTagSet.axaml.cs">
+        <DependentUpon>InspectorTagSet.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

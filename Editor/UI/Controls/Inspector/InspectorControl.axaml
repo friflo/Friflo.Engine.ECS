@@ -13,15 +13,19 @@
     <StackPanel Name="Panel">
         
         <inspector:InspectorGroup Group="tags" Expand="{Binding #Tags}"/>
-        <WrapPanel Name="Tags" Orientation="Horizontal">
-            <inspector:InspectorTag TagName="Player"/>
-            <inspector:InspectorTag TagName="Movable"/>
-            <inspector:InspectorTag TagName="Destroyable"/>
-            <inspector:InspectorTag TagName="Tag 4"/>
-            <inspector:InspectorTag TagName="Tag 5"/>
-            <inspector:InspectorTag TagName="Tag 6"/>
-        </WrapPanel>
-        <inspector:Separator/>
+        <inspector:InspectorTagSet Name="Tags">
+            <StackPanel IsVisible="{Binding #Tags.Expanded}" >
+                <WrapPanel Orientation="Horizontal">
+                    <inspector:InspectorTag TagName="Player"/>
+                    <inspector:InspectorTag TagName="Movable"/>
+                    <inspector:InspectorTag TagName="Destroyable"/>
+                    <inspector:InspectorTag TagName="Tag 4"/>
+                    <inspector:InspectorTag TagName="Tag 5"/>
+                    <inspector:InspectorTag TagName="Tag 6"/>
+                </WrapPanel>
+                <inspector:Separator/>
+            </StackPanel>
+        </inspector:InspectorTagSet>
 
         <inspector:InspectorGroup Group="components" Expand="{Binding #Components}"/>
         <StackPanel Name="Components">
