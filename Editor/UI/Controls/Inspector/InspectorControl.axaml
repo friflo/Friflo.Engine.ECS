@@ -14,8 +14,8 @@
         
         <inspector:InspectorGroup Group="tags" Expand="{Binding #Tags}"/>
         <inspector:InspectorTagSet Name="Tags">
-            <StackPanel IsVisible="{Binding #Tags.Expanded}" >
-                <WrapPanel Orientation="Horizontal">
+            <StackPanel IsVisible="{Binding #Tags.Expanded}" HorizontalAlignment="Center">
+                <WrapPanel Orientation="Horizontal" ItemWidth="98">
                     <inspector:InspectorTag TagName="Player"/>
                     <inspector:InspectorTag TagName="Movable"/>
                     <inspector:InspectorTag TagName="Destroyable"/>
