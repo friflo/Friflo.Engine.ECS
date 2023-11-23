@@ -19,16 +19,15 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract partial class EntityStore
 {
 #region public properties
-    /// <summary>Number of all entities stored in the <see cref="EntityStore"/></summary>
+    /// <summary>Number of all entities stored in the entity store</summary>
                     public              int                     EntityCount         => nodesCount;
                     public              int                     NodeMaxId           => nodesMaxId;
 
-    /// <summary>Array of <see cref="Archetype"/>'s utilized by the <see cref="EntityStore"/></summary>
+    /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
                     public ReadOnlySpan<Archetype>              Archetypes          => new (archs, 0, archsCount);
     [Browse(Never)] public              int                     ArchetypeCount      => archsCount;
-                    public static       ComponentSchema         GetComponentSchema()=> Static.ComponentSchema;
-                    public override     string                  ToString()          => $"Count: {nodesCount}";
+                    public   override   string                  ToString()          => $"Count: {nodesCount}";
     #endregion
     
 #region private / internal fields

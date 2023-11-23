@@ -94,7 +94,7 @@ public static class Test_Tags
     [Test]
     public static void Test_Tags_Get()
     {
-        var schema          = EntityStore.GetComponentSchema();
+        var schema          = GameEntityStore.GetComponentSchema();
         var testTagType     = schema.TagTypeByType[typeof(TestTag)];
         
         var tag1    = Tags.Get<TestTag>();

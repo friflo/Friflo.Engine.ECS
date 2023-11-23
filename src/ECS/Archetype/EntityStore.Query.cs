@@ -103,7 +103,7 @@ public partial class EntityStore
     // -------------------------------------- archetype query --------------------------------------
 #region archetype query
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
     public ArchetypeQuery Query ()
     {
@@ -111,7 +111,7 @@ public partial class EntityStore
     }
 
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
     public ArchetypeQuery<T> Query<T> (in Signature<T> signature)
         where T : struct, IComponent
@@ -126,7 +126,7 @@ public partial class EntityStore
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
     public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature)
         where T1: struct, IComponent
@@ -143,7 +143,7 @@ public partial class EntityStore
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
     public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (in Signature<T1, T2, T3> signature)
         where T1: struct, IComponent
@@ -162,7 +162,7 @@ public partial class EntityStore
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (in Signature<T1, T2, T3, T4> signature)
         where T1: struct, IComponent
@@ -183,7 +183,7 @@ public partial class EntityStore
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the <see cref="EntityStore"/>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (in Signature<T1, T2, T3, T4, T5> signature)
         where T1: struct, IComponent

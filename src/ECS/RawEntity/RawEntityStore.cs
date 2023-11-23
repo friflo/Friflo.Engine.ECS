@@ -12,9 +12,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="RawEntityStore"/> enables using an <see cref="EntityStore"/> without <see cref="GameEntity"/>'s.<br/>
+/// A <see cref="RawEntityStore"/> enables using an entity store without <see cref="GameEntity"/>'s.<br/>
 /// <br/>
-/// The focus of the this <see cref="EntityStore"/> implementation is performance.<br/>
+/// The focus of the this entity store implementation is performance.<br/>
 /// The key is to eliminate heap consumption and GC costs caused by <see cref="GameEntity"/> instances.<br/>
 /// A <see cref="RawEntityStore"/> stores only an array of blittable <see cref="RawEntity"/>'s -
 /// structs having no reference type fields<br/>

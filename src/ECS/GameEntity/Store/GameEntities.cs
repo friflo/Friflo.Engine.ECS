@@ -20,6 +20,8 @@ namespace Friflo.Fliox.Engine.ECS;
 // EntityStore remarks.
 public partial class GameEntityStore
 {
+    public static     ComponentSchema         GetComponentSchema()=> Static.ComponentSchema;
+    
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public GameEntity CreateEntity() {
         var id      = sequenceId++;

@@ -41,7 +41,7 @@ public sealed partial class GameEntityStore : EntityStore
 {
 #region public properties
     /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
-    /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
+    /// <returns>A node array that can contain unused nodes. So its length is <see cref="GameEntityStore.EntityCount"/> + number of unused nodes</returns>
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
     public              GameEntity                  StoreRoot           => storeRoot; // null if no graph origin set
     public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);

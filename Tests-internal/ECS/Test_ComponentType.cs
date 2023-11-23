@@ -15,7 +15,7 @@ public static class Test_ComponentType
     [Test]
     public static void Test_ComponentSchema_Dependencies()
     {
-        ComponentSchema schema = EntityStore.GetComponentSchema();
+        ComponentSchema schema = GameEntityStore.GetComponentSchema();
         AreEqual(4, schema.EngineDependants.Length);
         
         
