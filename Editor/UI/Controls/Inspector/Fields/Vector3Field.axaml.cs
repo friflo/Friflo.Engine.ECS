@@ -8,11 +8,11 @@ using AP = Avalonia.AvaloniaProperty;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
 
-public partial class PositionField : UserControl
+public partial class Vector3Field : UserControl
 {
-    public static readonly DirectProperty<PositionField, string> XProperty = AP.RegisterDirect<PositionField, string>(nameof(X), o => o.x, (o, v) => o.x = v);
-    public static readonly DirectProperty<PositionField, string> YProperty = AP.RegisterDirect<PositionField, string>(nameof(Y), o => o.y, (o, v) => o.y = v);
-    public static readonly DirectProperty<PositionField, string> ZProperty = AP.RegisterDirect<PositionField, string>(nameof(Z), o => o.z, (o, v) => o.z = v);
+    public static readonly DirectProperty<Vector3Field, string> XProperty = AP.RegisterDirect<Vector3Field, string>(nameof(X), o => o.x, (o, v) => o.x = v);
+    public static readonly DirectProperty<Vector3Field, string> YProperty = AP.RegisterDirect<Vector3Field, string>(nameof(Y), o => o.y, (o, v) => o.y = v);
+    public static readonly DirectProperty<Vector3Field, string> ZProperty = AP.RegisterDirect<Vector3Field, string>(nameof(Z), o => o.z, (o, v) => o.z = v);
 
     private string   x;
     private string   y;
@@ -22,7 +22,7 @@ public partial class PositionField : UserControl
     public  string   Y { get => y; set => SetAndRaise(YProperty, ref y, value); }
     public  string   Z { get => z; set => SetAndRaise(ZProperty, ref z, value); }
     
-    public PositionField()
+    public Vector3Field()
     {
         InitializeComponent();
     }

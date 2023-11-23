@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              Classes="ComponentField"
-             x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.PositionField"
+             x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.Vector3Field"
              xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="30">
 
@@ -16,7 +16,7 @@
         <DockPanel Grid.Row="0" Grid.Column="1">
             <Border     Background="Red" Classes="PositionBorder"/>
             <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
-                        Text="{Binding $parent[local:PositionField].X}"/>
+                        Text="{Binding $parent[local:Vector3Field].X}"/>
         </DockPanel>
         
         <TextBlock  Grid.Row="0" Grid.Column="2" 
@@ -25,7 +25,7 @@
         <DockPanel Grid.Row="0" Grid.Column="3">
             <Border     Background="Green" Classes="PositionBorder"/>
             <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
-                        Text="{Binding $parent[local:PositionField].Y}"/>
+                        Text="{Binding $parent[local:Vector3Field].Y}"/>
         </DockPanel>
 
         <TextBlock  Grid.Row="0" Grid.Column="4" 
@@ -34,7 +34,7 @@
         <DockPanel Grid.Row="0" Grid.Column="5">
             <Border     Background="Blue" Classes="PositionBorder"/>
             <TextBox    MinWidth="1" HorizontalAlignment="Stretch" Classes="EditField PositionEdit"
-                        Text="{Binding $parent[local:PositionField].Z}"/>
+                        Text="{Binding $parent[local:Vector3Field].Z}"/>
         </DockPanel>
        
     </Grid>

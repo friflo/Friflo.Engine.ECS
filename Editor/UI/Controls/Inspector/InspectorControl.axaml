@@ -33,7 +33,7 @@
                         Background="{DynamicResource FromBackground}">
                 <DockPanel>
                     <inspector:FieldName Text="position"/>
-                    <inspector:PositionField X="1" Y="2" Z="3"/>
+                    <inspector:Vector3Field X="1" Y="2" Z="3"/>
                 </DockPanel>
                 <DockPanel>
                     <inspector:FieldName Text="field 2"/>

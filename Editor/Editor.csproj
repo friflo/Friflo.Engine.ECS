@@ -96,8 +96,8 @@
         <DependentUpon>Separator.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Fields\PositionField.axaml.cs">
-        <DependentUpon>PositionField.axaml</DependentUpon>
+      <Compile Update="UI\Controls\Inspector\Fields\Vector3Field.axaml.cs">
+        <DependentUpon>Vector3Field.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
       <Compile Update="UI\Controls\Inspector\Fields\StringField.axaml.cs">
