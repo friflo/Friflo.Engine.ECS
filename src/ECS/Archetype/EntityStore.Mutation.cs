@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
 
-// Hard rule: this file MUST NOT access Entity's
+// Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers

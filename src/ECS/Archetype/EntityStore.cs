@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 [assembly: CLSCompliant(true)]
 
-// Hard rule: this file MUST NOT access Entity's
+// Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -41,7 +41,7 @@ public abstract partial class EntityStoreBase
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
-                    protected           int                     sequenceId;         //  4                   - incrementing id used for next new Entity
+                    protected           int                     sequenceId;         //  4                   - incrementing id used for next new entity
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion

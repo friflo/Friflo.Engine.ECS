@@ -3,7 +3,7 @@
 
 using System;
 
-// Hard rule: this file MUST NOT access Entity's
+// Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation
