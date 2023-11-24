@@ -16,13 +16,16 @@ public struct Tag3 : IEntityTag { }
 [Script("Script1")]
 public class Script1 : Script
 {
-    public string name;
+    public  string      name;
+    public  Position    spawn;
+    public  Position    target;
 }
 
 [Script("Script2")]
 public class Script2 : Script
 {
-    public string name;
+    public  int         size;
+    public  Position    center;
 }
 
 public static class TestBed
@@ -31,15 +34,15 @@ public static class TestBed
     {
         var store   = sync.Store;
         var root    = store.StoreRoot;
-        root.AddComponent(new Position(1, 1, 1));
+        root.AddComponent(new Transform { m11 = 1, m12 = 2, m13 = 3 });
         root.AddComponent(new EntityName("root"));
         root.AddTag<Tag1>();
         root.AddTag<Tag2>();
-        root.AddScript(new Script1 { name = "Peter"});
-        root.AddScript(new Script2 { name = "Paul"});
+        root.AddScript(new Script1 { name = "Peter", spawn = new Position(3, 3, 3), target = new Position(4, 4, 4)});
+        root.AddScript(new Script2 { size = 42, center = new Position(10, 10, 10)});
         
         var child   = CreateEntity(store, 2);
-        child.AddComponent(new Position(2, 2, 2));
+        child.AddComponent(new Transform { m11 = 4, m12 = 5, m13 = 6 });
         child.AddTag<Tag1>();
         child.AddTag<Tag2>();
         child.AddTag<Tag3>();

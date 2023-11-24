@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Mapper;
@@ -22,20 +23,36 @@ internal struct ComponentField
     
     private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
     
-    internal static void AddFields(List<ComponentField> componentField, Type type, object instance, string componentName)
+    private ComponentField(string name, Control control) {
+        this.name       = name;
+        this.control    = control;
+    }
+    
+    internal static void AddComponentFields(
+        List<ComponentField>    componentField,
+        Type                    type,
+        object                  instance,
+        string                  fieldName)
     {
         if (type == typeof(Position)) {
             var position    = (Position)instance;
-            var control     = new Vector3Field { vector = position.value };
-            var field       = new ComponentField { name = componentName, control = control };
-            componentField.Add(field);
+            fieldName     ??= "Value";
+            componentField.Add(new ComponentField(fieldName,         new Vector3Field { vector = position.value }));
+            return;
+        }
+        if (type == typeof(Transform)) {
+            var t           = (Transform)instance;
+            var position    = new Vector3(t.m11, t.m12, t.m13);
+            var rotation    = new Vector3(t.m21, t.m22, t.m23);
+            componentField.Add(new ComponentField("Position",   new Vector3Field { vector = position }));
+            componentField.Add(new ComponentField("Rotation",   new Vector3Field { vector = rotation }));
             return;
         }
         if (type == typeof(EntityName)) {
             var name        = (EntityName)instance;
             var control     = new StringField { Value = name.value };
-            var field       = new ComponentField { name = componentName, control = control };
-            componentField.Add(field);
+            fieldName     ??= "Value";
+            componentField.Add(new ComponentField(fieldName, control));
             return;
         }
         var classMapper     = TypeStore.GetTypeMapper(type);
@@ -46,7 +63,7 @@ internal struct ComponentField
             var value       = member.GetVar(instance);
             var str         = value.AsString();
             var control     = new StringField { Value = str };
-            var field       = new ComponentField { name = propField.name, control = control };
+            var field       = new ComponentField(propField.name, control);
             componentField.Add(field);
         }
     }
