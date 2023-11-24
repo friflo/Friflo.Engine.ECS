@@ -15,7 +15,7 @@ public partial class Vector3Field : UserControl
     public static readonly DirectProperty<Vector3Field, float> YProperty = AP.RegisterDirect<Vector3Field, float>(nameof(Y), o => o.Y, (o, v) => o.Y = v);
     public static readonly DirectProperty<Vector3Field, float> ZProperty = AP.RegisterDirect<Vector3Field, float>(nameof(Z), o => o.Z, (o, v) => o.Z = v);
 
-    internal Vector3 vector;
+    private Vector3 vector;
     
     public  float   X { get => vector.X; set => SetAndRaise(XProperty, ref vector.X, value); }
     public  float   Y { get => vector.Y; set => SetAndRaise(YProperty, ref vector.Y, value); }
@@ -23,6 +23,12 @@ public partial class Vector3Field : UserControl
     
     public Vector3Field()
     {
+        InitializeComponent();
+    }
+    
+    public Vector3Field(Vector3 vector)
+    {
+        this.vector = vector;
         InitializeComponent();
     }
 }

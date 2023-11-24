@@ -12,6 +12,7 @@ public struct  TestComponent : IComponent
 public struct Tag1 : IEntityTag { }
 public struct Tag2 : IEntityTag { }
 public struct Tag3 : IEntityTag { }
+public struct Tag4 : IEntityTag { }
 
 [Script("Script1")]
 public class Script1 : Script
@@ -24,7 +25,7 @@ public class Script1 : Script
 [Script("Script2")]
 public class Script2 : Script
 {
-    public  int         size;
+    public  int         maxHealth;
     public  Position    center;
 }
 
@@ -39,17 +40,22 @@ public static class TestBed
         root.AddTag<Tag1>();
         root.AddTag<Tag2>();
         root.AddScript(new Script1 { name = "Peter", spawn = new Position(3, 3, 3), target = new Position(4, 4, 4)});
-        root.AddScript(new Script2 { size = 42, center = new Position(10, 10, 10)});
+        root.AddScript(new Script2 { maxHealth = 42, center = new Position(10, 10, 10)});
         
-        var child   = CreateEntity(store, 2);
-        child.AddComponent(new Transform { m11 = 4, m12 = 5, m13 = 6 });
-        child.AddTag<Tag1>();
-        child.AddTag<Tag2>();
-        child.AddTag<Tag3>();
-        child.AddScript(new Script1 { name = "Mary" });
+        var child2   = CreateEntity(store, 2);
+        child2.AddComponent(new Transform { m11 = 4, m12 = 5, m13 = 6 });
+        child2.AddTag<Tag1>();
+        child2.AddTag<Tag2>();
+        child2.AddTag<Tag3>();
+        child2.AddScript(new Script1 { name = "Mary" });
 
-        root.AddChild(child);
-        root.AddChild(CreateEntity(store, 3));
+        root.AddChild(child2);
+        var child3 = CreateEntity(store, 3);
+        child3.AddTag<Tag1>();
+        child3.AddTag<Tag2>();
+        child3.AddTag<Tag3>();
+        child3.AddTag<Tag4>();
+        root.AddChild(child3);
         root.AddChild(CreateEntity(store, 4));
         root.AddChild(CreateEntity(store, 5));
         root.AddChild(CreateEntity(store, 6));

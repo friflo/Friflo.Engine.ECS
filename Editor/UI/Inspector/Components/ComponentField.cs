@@ -52,7 +52,10 @@ internal readonly struct ComponentField
 #region internal fields
     internal readonly   string  name;
     internal readonly   Control control;
-#endregion
+
+    public   override   string  ToString() => name;
+
+    #endregion
     
     private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
     
@@ -69,22 +72,22 @@ internal readonly struct ComponentField
     {
         if (type == typeof(Position)) {
             var position    = (Position)data.GetData();
-            fieldName     ??= "Value";
-            componentFields.Add(new ComponentField(fieldName,   new Vector3Field { vector = position.value }));
+            fieldName     ??= nameof(Position.value);
+            componentFields.Add(new ComponentField(fieldName,   new Vector3Field(position.value)));
             return true;
         }
         if (type == typeof(Transform)) {
             var t           = (Transform)data.GetData();
             var position    = new Vector3(t.m11, t.m12, t.m13);
             var rotation    = new Vector3(t.m21, t.m22, t.m23);
-            componentFields.Add(new ComponentField("Position",  new Vector3Field { vector = position }));
-            componentFields.Add(new ComponentField("Rotation",  new Vector3Field { vector = rotation }));
+            componentFields.Add(new ComponentField("position",  new Vector3Field(position)));
+            componentFields.Add(new ComponentField("rotation",  new Vector3Field(rotation)));
             return true;
         }
         if (type == typeof(EntityName)) {
             var name        = (EntityName)data.GetData();
             var control     = new StringField { Value = name.value };
-            fieldName     ??= "Value";
+            fieldName     ??= nameof(EntityName.value);
             componentFields.Add(new ComponentField(fieldName, control));
             return true;
         }

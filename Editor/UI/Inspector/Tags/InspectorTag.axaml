@@ -11,7 +11,8 @@
             HorizontalAlignment="Stretch" VerticalAlignment="Top"
             Background="{DynamicResource ComponentBackground}"
             CornerRadius="6" BorderThickness="0">
-        <TextBlock  Text="{Binding $parent[local:InspectorTag].TagName}"/>
+        <TextBlock HorizontalAlignment="Center"  
+                   Text="{Binding $parent[local:InspectorTag].TagName}"/>
     </Border>
 
 </UserControl>
