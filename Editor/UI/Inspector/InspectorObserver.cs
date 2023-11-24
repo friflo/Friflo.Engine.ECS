@@ -4,12 +4,18 @@
 using Avalonia;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Json.Fliox.Mapper;
+using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable ReturnTypeCanBeEnumerable.Local
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
 internal class InspectorObserver : EditorObserver
 {
     private readonly InspectorControl inspector;
+    
+    private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
+
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor) { this.inspector = inspector; }
 
@@ -70,12 +76,31 @@ internal class InspectorObserver : EditorObserver
     
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
-        for (int n = 1; n <= 2; n++) {
-            var dock = new DockPanel();
-            dock.Children.Add(new FieldName   { Text  = $"Field {n}"} );
-            dock.Children.Add(new StringField { Value = $"value {n}"} );
+        var instance    = entity.Archetype.GetEntityComponent(entity, componentType);
+        var fields      = GetComponentFields(entity, componentType);
+        
+        foreach (var field in fields) {
+            var dock    = new DockPanel();
+            var value   = field.member.GetVar(instance);
+            dock.Children.Add(new FieldName   { Text  = field.field.name } );
+            dock.Children.Add(new StringField { Value = value.AsString() } );
             panel.Children.Add(dock);
         }
+    }
+    
+    private static ComponentField[] GetComponentFields(Entity entity, ComponentType componentType)
+    {
+        var value       = entity.Archetype.GetEntityComponent(entity, componentType);
+        var classMapper = TypeStore.GetTypeMapper(componentType.type);
+        var fields      = classMapper.PropFields.fields;
+        var result      = new ComponentField[fields.Length];
+        
+        for (int n = 0; n < fields.Length; n++) {
+            var propField   = fields[n];
+            var member      = classMapper.GetMember(propField.name);
+            result[n]       = new ComponentField { field = propField, member = member };
+        }
+        return result;
     }
     
     private static void AddScriptFields(Entity entity, Script script, Panel panel)
@@ -87,4 +112,11 @@ internal class InspectorObserver : EditorObserver
             panel.Children.Add(dock);
         }
     }
+}
+
+class ComponentField
+{
+    internal    PropField   field;
+    /// <summary>Access member value with <see cref="Var.Member.GetVar"/></summary>
+    internal    Var.Member  member;
 }
