@@ -77,9 +77,10 @@ internal class InspectorObserver : EditorObserver
     /// <remarks><see cref="ComponentType.type"/> is a struct</remarks>
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
-        var instance        = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
-        var fields          = new List<ComponentField>();
-        ComponentField.AddComponentFields(fields, componentType.type, instance, null);
+        var instance    = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
+        var fields      = new List<ComponentField>();
+        var data        = new FieldData(instance);
+        ComponentField.AddComponentFields(fields, componentType.type, data, null);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());
     }
@@ -89,7 +90,7 @@ internal class InspectorObserver : EditorObserver
     {
         var scriptType  = script.GetType();
         var fields      = new List<ComponentField>();
-        ComponentField.AddComponentFields(fields, scriptType, script, null);
+        ComponentField.AddFields(fields, scriptType, script);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());
     }
