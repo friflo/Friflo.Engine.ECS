@@ -76,47 +76,49 @@
         <DependentUpon>PanelHeader.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Main\ValidationError.axaml.cs">
-        <DependentUpon>ValidationError.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
       <Compile Update="UI\Panels\InspectorPanel.axaml.cs">
         <DependentUpon>InspectorPanel.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\InspectorControl.axaml.cs">
+      
+      <Compile Update="UI\Main\ValidationError.axaml.cs">
+        <DependentUpon>ValidationError.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+
+      <Compile Update="UI\Inspector\InspectorControl.axaml.cs">
         <DependentUpon>InspectorControl.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\InspectorGroup.axaml.cs">
+      <Compile Update="UI\Inspector\InspectorGroup.axaml.cs">
         <DependentUpon>InspectorGroup.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Separator.axaml.cs">
+      <Compile Update="UI\Inspector\Separator.axaml.cs">
         <DependentUpon>Separator.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Components\InspectorComponent.axaml.cs">
+      <Compile Update="UI\Inspector\Components\InspectorComponent.axaml.cs">
         <DependentUpon>InspectorComponent.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Components\FieldName.axaml.cs">
+      <Compile Update="UI\Inspector\Components\FieldName.axaml.cs">
         <DependentUpon>FieldName.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Components\Fields\StringField.axaml">
+      <Compile Update="UI\Inspector\Components\Fields\StringField.axaml">
         <DependentUpon>StringField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Components\Fields\Vector3Field.axaml">
+      <Compile Update="UI\Inspector\Components\Fields\Vector3Field.axaml">
         <DependentUpon>Vector3Field.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Tags\InspectorTag.axaml.cs">
+      <Compile Update="UI\Inspector\Tags\InspectorTag.axaml.cs">
         <DependentUpon>InspectorTag.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Controls\Inspector\Tags\InspectorTagSet.axaml.cs">
+      <Compile Update="UI\Inspector\Tags\InspectorTagSet.axaml.cs">
         <DependentUpon>InspectorTagSet.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>

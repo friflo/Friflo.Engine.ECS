@@ -5,7 +5,7 @@
              Classes="ComponentField"
              x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.StringField"
              xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="30">
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="30">
 
     <TextBox HorizontalAlignment="Stretch"
              Classes="EditField"
