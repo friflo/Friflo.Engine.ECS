@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 
+// ReSharper disable ParameterTypeCanBeEnumerable.Local
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
 internal class InspectorObserver : EditorObserver
@@ -72,33 +73,32 @@ internal class InspectorObserver : EditorObserver
         }
     }
     
+    /// <remarks><see cref="ComponentType.type"/> is a struct</remarks>
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
-        var instance    = entity.Archetype.GetEntityComponent(entity, componentType);
-        var fields      = ComponentField.GetComponentFields(componentType.type);
-        
-        foreach (var field in fields) {
-            var dock    = new DockPanel();
-            var value   = field.member.GetVar(instance);
-            dock.Children.Add(new FieldName   { Text  = field.field.name } );
-            dock.Children.Add(new StringField { Value = value.AsString() } );
-            panel.Children.Add(dock);
-        }
+        var instance    = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
+        var fields      = ComponentField.GetComponentFields(componentType.type, instance);
+        AddFields(fields, panel);
         panel.Children.Add(new Separator());
     }
     
+    /// <remarks><paramref name="script"/> is a class</remarks>
     private static void AddScriptFields(Script script, Panel panel)
     {
         var scriptType  = script.GetType();
-        var fields      = ComponentField.GetComponentFields(scriptType);
-        
-        foreach (var field in fields) {
+        var fields      = ComponentField.GetComponentFields(scriptType, script);
+        AddFields(fields, panel);
+        panel.Children.Add(new Separator());
+    }
+    
+    private static void AddFields(ComponentField[] fields, Panel panel)
+    {
+        foreach (var field in fields)
+        {
             var dock    = new DockPanel();
-            var value   = field.member.GetVar(script);
             dock.Children.Add(new FieldName   { Text  = field.field.name } );
-            dock.Children.Add(new StringField { Value = value.AsString() } );
+            dock.Children.Add(field.control);
             panel.Children.Add(dock);
         }
-        panel.Children.Add(new Separator());
     }
 }
