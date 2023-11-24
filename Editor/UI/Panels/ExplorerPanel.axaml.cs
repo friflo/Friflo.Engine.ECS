@@ -3,7 +3,7 @@
 
 using Avalonia.Controls;
 using Avalonia.Input;
-using Friflo.Fliox.Editor.UI.Controls.Explorer;
+using Friflo.Fliox.Editor.UI.Explorer;
 using Friflo.Fliox.Editor.UI.Main;
 using Friflo.Fliox.Engine.ECS.Collections;
 

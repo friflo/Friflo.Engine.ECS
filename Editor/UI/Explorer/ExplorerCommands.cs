@@ -14,7 +14,7 @@ using Friflo.Fliox.Engine.ECS.Serialize;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
-namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public static class ExplorerCommands
 {

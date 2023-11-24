@@ -4,11 +4,11 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Friflo.Fliox.Editor.UI.Controls.Explorer.Lab;
+using Friflo.Fliox.Editor.UI.Explorer.Lab;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 
-namespace Friflo.Fliox.Editor.UI.Controls.Explorer;
+namespace Friflo.Fliox.Editor.UI.Explorer;
 
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/DragDropPageViewModel.cs
 internal class ExplorerViewModel

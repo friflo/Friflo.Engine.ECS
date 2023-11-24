@@ -5,7 +5,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Friflo.Fliox.Editor.UI.Controls.Explorer.Lab;
+namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
 
 /// <summary>
 /// Sample assigning an event handler to <see cref="ObservableCollection{T}.PropertyChanged"/> 
