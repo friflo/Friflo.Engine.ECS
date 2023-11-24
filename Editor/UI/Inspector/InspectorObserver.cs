@@ -77,7 +77,7 @@ internal class InspectorObserver : EditorObserver
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
         var instance    = entity.Archetype.GetEntityComponent(entity, componentType);
-        var fields      = GetComponentFields(entity, componentType);
+        var fields      = GetComponentFields(componentType);
         
         foreach (var field in fields) {
             var dock    = new DockPanel();
@@ -88,9 +88,8 @@ internal class InspectorObserver : EditorObserver
         }
     }
     
-    private static ComponentField[] GetComponentFields(Entity entity, ComponentType componentType)
+    private static ComponentField[] GetComponentFields(ComponentType componentType)
     {
-        var value       = entity.Archetype.GetEntityComponent(entity, componentType);
         var classMapper = TypeStore.GetTypeMapper(componentType.type);
         var fields      = classMapper.PropFields.fields;
         var result      = new ComponentField[fields.Length];
