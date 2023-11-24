@@ -255,36 +255,36 @@ This enables UI rendering is exactly the same on all platforms with a single cod
 <br/><br/>
 
 
-## `GameEntityStore` / `GameDataSync`
+## `EntityStore` / `EntityStoreSync`
 
-Both `GameEntityStore` and `GameDataSync` are used to store game entities.  
-The `GameEntityStore` store `GameEntity`'s at runtime.  
-A `GameDataSync` instance store serialized `GameEntity`'s as `DataEntity`'s in databases or scene files and transfer them via a network.  
+Both `EntityStore` and `EntityStoreSync` are used to store game entities.  
+The `EntityStore` store `Entity`'s at runtime.  
+A `EntityStoreSync` instance store serialized `Entity`'s as `DataEntity`'s in databases or scene files and transfer them via a network.  
 
-Using the `GameEntityStore` / `GameDataSync` enables instant synchronization of a game scene between multiple creators.  
+Using the `EntityStore` / `EntityStoreSync` enables instant synchronization of a game scene between multiple creators.  
 In this workflow the game scene is stored in a shared database without using a version control system like `Git`.  
 
 The common approach to store game scenes in scene files is also available.  
 It is the preferred use case when sharing demos or assets via a GitHub project or a file bundle.
 
 
-### `GameEntityStore`
+### `EntityStore`
 
-The `GameEntityStore` is used almost without exception when scripting game logic / script with **C#**.  
+The `EntityStore` is used almost without exception when scripting game logic / script with **C#**.  
 It stores game entities at runtime by using an ECS data structure.  
 Its focus is simplicity and performance.  
 
-Scripting is mainly driven by the API of `GameEntity`'s stored in a `GameEntityStore`.  
+Scripting is mainly driven by the API of `Entity`'s stored in a `EntityStore`.  
 The performance and efficiency is implemented by using ECS as data structure.
 
-A `GameEntityStore` stores game entities in a hierarchy - a tree graph to build a game scene.  
+A `EntityStore` stores game entities in a hierarchy - a tree graph to build a game scene.  
 Game entities in this hierarchy can be declared as sub scene to persist them as separate scene files on disk.  
 The use case of sub scenes is to enhance the scene structure and minimize merge conflicts when used by multiple creators.
 
 
-### `GameDataSync`
+### `EntityStoreSync`
 
-The `GameDataSync` is used to convert `GameEntity`'s to `DataEntity`'s or vise versa so that they can be stored in 
+The `EntityStoreSync` is used to convert `Entity`'s to `DataEntity`'s or vise versa so that they can be stored in 
 scene files or in a database.
 
 
@@ -328,15 +328,15 @@ Many stages in the pipeline processing entity data benefits from this approach.
 
 
 
-Features of an `GameEntityStore`
+Features of an `EntityStore`
 - Store a map (container) of entities in linear memory.
 - Organize entities in a tree structure starting with a single root entity.
 - Store the components (e.g. `Position`) of entities with the same `Archetype` in linear memory.  
   Basically the **E** & **C** of an **ECS** architecture.
 
 Types:
-- `GameEntityStore` - the storage for all entities and their components.
-- `GameEntity`      - each instances contains the following properties
+- `EntityStore` - the storage for all entities and their components.
+- `Entity`      - each instances contains the following properties
     - `id`          - type: `int` / id > 0
     - `children`    - contains and array of child entity `id`'s.
     - `components`
@@ -376,7 +376,7 @@ This enables reading already serialized data after refactoring a **`Script`** to
 
 ### Entity serialization model
 
-Entities are loaded using a `GameClient`
+Entities are loaded using a `EntityClient`
 
 ```csharp
 public sealed class DataEntity
@@ -389,11 +389,11 @@ public sealed class DataEntity
     public  string          nodeRef;    // can be null
 }
 
-public class GameClient : FlioxClient
+public class EntityClient : FlioxClient
 {
     public  readonly    EntitySet <long, DataEntity>   entities;
     
-    public GameClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
+    public EntityClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
 ```
 
@@ -428,15 +428,15 @@ Remarks:
 
 ### Loading / Storing game entities
 
-Entities are loaded using a `GameDataSync` instance created with a `GameEntityStore` and a `GameClient`.  
+Entities are loaded using a `EntityStoreSync` instance created with a `EntityStore` and a `EntityClient`.  
 There are two ways to load or save a game scene.
 
-1. Synchronize the entities of a `GameEntityStore` with a `SQL` or `Key/Value` database using
-   `GameDataSync.LoadGameEntities()` / `GameDataSync.StoreGameEntities()`.
-2. Load / Save a game scene as a `JSON` based file to disk using
-   `GameDataSync.ReadScene()` / `GameDataSync.WriteScene()`.
+1. Synchronize the entities of a `EntityStore` with a `SQL` or `Key/Value` database using
+   `EntityStoreSync.LoadEntities()` / `EntityStoreSync.StoreEntities()`.
+2. Load / Save a game scene as a `JSON` file to disk using
+   `EntitySerializer.ReadIntoStore()` / `EntitySerializer.WriteStore()`.
 
-In case of a database entities are loaded / stored in batches of 10.000 entities using a `GameClient`.  
+In case of a database entities are loaded / stored in batches of 10.000 entities using a `EntityClient`.  
 
 The entity tree is build by utilizing the field `children` of a `DataEntity`.  
 In case ids in `children` are inconsistent the errors can be ignored or cause a loading error.
