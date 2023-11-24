@@ -45,17 +45,30 @@ public partial class InspectorControl : UserControl
         private void AddComponentControls(Entity entity)
         {
             // Console.WriteLine($"--- Inspector entity: {entity}");
-            var children = inspector.Panel.Children;
-            children.Clear();
+            var tags        = inspector.Tags.Children;
+            var components  = inspector.Components.Children;
+            var scripts     = inspector.Scripts.Children;
+            tags.Clear();
+            components.Clear();
+            scripts.Clear();
             var archetype = entity.Archetype;
+            
+            // --- tags
+            foreach (var tagName in archetype.Tags) {
+                tags.Add(new InspectorTag { TagName = tagName.tagName });
+            }
+            // --- components
             foreach (var componentType in archetype.Structs)
             {
-                var value   = archetype.GetEntityComponent(entity, componentType);
-                var text    = value.ToString();
-                var label   = new Label { Content = text };
-                DockPanel.SetDock(label, Dock.Top);
-                children.Add(label);
-                // Console.WriteLine(text);
+                var component = new InspectorComponent { ComponentTitle = componentType.type.Name };
+                components.Add(component);
+                _ = archetype.GetEntityComponent(entity, componentType);
+            }
+            // --- scripts
+            foreach (var script in entity.Scripts)
+            {
+                var component = new InspectorComponent { ComponentTitle = script.GetType().Name };
+                scripts.Add(component);
             }
         }
     }

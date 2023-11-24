@@ -24,7 +24,7 @@
                     <Button Background="{DynamicResource PanelBackground}"
                             Foreground="{DynamicResource GroupColor}"
                             HorizontalAlignment="Left"
-                            Content="{Binding $parent[local:InspectorGroup].Group}"
+                            Content="{Binding $parent[local:InspectorGroup].GroupName}"
                             BorderThickness="0" CornerRadius="2"
                             Margin="4 1 0 1" Padding="1"
                             Click="Button_OnClick"

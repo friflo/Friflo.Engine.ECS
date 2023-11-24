@@ -21,11 +21,11 @@ public partial class InspectorGroup : UserControl
 {
     private List<IExpandable> expandables;
     
-    public static readonly StyledProperty<string>       GroupProperty   = AP.Register<InspectorGroup, string>       (nameof(Group), "group");
-    public static readonly StyledProperty<InputElement> ExpandProperty  = AP.Register<InspectorGroup, InputElement> (nameof(Expand));
+    public static readonly StyledProperty<string>       GroupNameProperty   = AP.Register<InspectorGroup, string>       (nameof(GroupName), "group");
+    public static readonly StyledProperty<InputElement> ExpandProperty      = AP.Register<InspectorGroup, InputElement> (nameof(Expand));
     
-    public string       Group   { get => GetValue(GroupProperty);   set => SetValue(GroupProperty,  value); }
-    public InputElement Expand  { get => GetValue(ExpandProperty);  set => SetValue(ExpandProperty, value); }
+    public string       GroupName   { get => GetValue(GroupNameProperty);   set => SetValue(GroupNameProperty,  value); }
+    public InputElement Expand      { get => GetValue(ExpandProperty);      set => SetValue(ExpandProperty,     value); }
 
     public InspectorGroup()
     {

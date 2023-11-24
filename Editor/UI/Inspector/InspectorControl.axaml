@@ -12,10 +12,10 @@
     <ScrollViewer>
     <StackPanel Name="Panel">
         
-        <inspector:InspectorGroup Group="tags" Expand="{Binding #Tags}"/>
-        <inspector:InspectorTagSet Name="Tags">
-            <StackPanel IsVisible="{Binding #Tags.Expanded}" HorizontalAlignment="Center">
-                <WrapPanel Orientation="Horizontal" ItemWidth="98">
+        <inspector:InspectorGroup GroupName="tags" Expand="{Binding #TagSet}"/>
+        <inspector:InspectorTagSet Name="TagSet">
+            <StackPanel IsVisible="{Binding #TagSet.Expanded}" HorizontalAlignment="Center">
+                <WrapPanel Name="Tags" Orientation="Horizontal" ItemWidth="98">
                     <inspector:InspectorTag TagName="Player"/>
                     <inspector:InspectorTag TagName="Moveable"/>
                     <inspector:InspectorTag TagName="Destroyable"/>
@@ -27,7 +27,7 @@
             </StackPanel>
         </inspector:InspectorTagSet>
 
-        <inspector:InspectorGroup Group="components" Expand="{Binding #Components}"/>
+        <inspector:InspectorGroup GroupName="components" Expand="{Binding #Components}"/>
         <StackPanel Name="Components">
             <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
             <StackPanel IsVisible="{Binding #Comp1.Expanded}"
@@ -72,7 +72,7 @@
             </StackPanel>
         </StackPanel>
         
-        <inspector:InspectorGroup Group="scripts" Expand="{Binding #Scripts}"/>
+        <inspector:InspectorGroup GroupName="scripts" Expand="{Binding #Scripts}"/>
         <StackPanel Name="Scripts">
             <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
             <StackPanel IsVisible="{Binding #Script1.Expanded}"

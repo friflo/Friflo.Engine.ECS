@@ -9,11 +9,18 @@ public struct  TestComponent : IComponent
     public string name;
 }
 
-public struct TestTag : IEntityTag { }
+public struct Tag1 : IEntityTag { }
+public struct Tag2 : IEntityTag { }
+public struct Tag3 : IEntityTag { }
 
+[Script("Script1")]
+public class Script1 : Script
+{
+    public string name;
+}
 
-[Script("TestScript")]
-public class TestScript : Script
+[Script("Script2")]
+public class Script2 : Script
 {
     public string name;
 }
@@ -26,8 +33,17 @@ public static class TestBed
         var root    = store.StoreRoot;
         root.AddComponent(new Position(1, 1, 1));
         root.AddComponent(new EntityName("root"));
+        root.AddTag<Tag1>();
+        root.AddTag<Tag2>();
+        root.AddScript(new Script1());
+        root.AddScript(new Script2());
+        
         var child   = CreateEntity(store, 2);
         child.AddComponent(new Position(2, 2, 2));
+        child.AddTag<Tag1>();
+        child.AddTag<Tag2>();
+        child.AddTag<Tag3>();
+        root.AddScript(new Script1());
 
         root.AddChild(child);
         root.AddChild(CreateEntity(store, 3));
