@@ -12,7 +12,6 @@ using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Engine.ECS.Collections;
 
-
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -43,7 +42,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         editor = this.GetEditor();
-        editor?.AddObserver(new GridObserver(this, editor));
+        editor?.AddObserver(new ExplorerObserver(this, editor));
         
         // condition to view in Designer
         if (RowSelection != null) {
@@ -275,28 +274,4 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         e.Handled = HandleKeyDown(e);
         base.OnKeyDown(e);
     }
-    
-    // ------------------------------------------- EditorObserver -------------------------------------------
-    private class GridObserver : EditorObserver
-    {
-        private readonly ExplorerTreeDataGrid grid;
-        
-        internal GridObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
-        
-        /// <summary>
-        /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>
-        /// </summary>
-        protected override void OnEditorReady()
-        {
-            var store       = Store;
-            if (store == null) throw new InvalidOperationException("expect Store is present");
-            // return;
-            var source      = grid.GridSource;
-            var rootEntity  = store.StoreRoot;
-            var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
-            source.Items    = new []{ tree.RootItem };
-        }
-    }
-    
-    private static      int _treeCount;
 }
