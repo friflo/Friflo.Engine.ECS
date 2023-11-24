@@ -35,15 +35,15 @@ public static class TestBed
         root.AddComponent(new EntityName("root"));
         root.AddTag<Tag1>();
         root.AddTag<Tag2>();
-        root.AddScript(new Script1());
-        root.AddScript(new Script2());
+        root.AddScript(new Script1 { name = "Peter"});
+        root.AddScript(new Script2 { name = "Paul"});
         
         var child   = CreateEntity(store, 2);
         child.AddComponent(new Position(2, 2, 2));
         child.AddTag<Tag1>();
         child.AddTag<Tag2>();
         child.AddTag<Tag3>();
-        root.AddScript(new Script1());
+        child.AddScript(new Script1 { name = "Mary" });
 
         root.AddChild(child);
         root.AddChild(CreateEntity(store, 3));

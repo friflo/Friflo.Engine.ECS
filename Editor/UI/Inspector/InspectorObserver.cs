@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
@@ -53,7 +54,7 @@ internal class InspectorObserver : EditorObserver
             
             // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
             var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
-            // same as: AvaloniaObjectExtensions.GetObservable(component, InspectorComponent.ExpandedProperty);
+            // ^-- same as: AvaloniaObjectExtensions.GetObservable(component, InspectorComponent.ExpandedProperty);
             panel.Bind(Visual.IsVisibleProperty, expanded);
             
             components.Add(panel);
@@ -64,7 +65,7 @@ internal class InspectorObserver : EditorObserver
             var component = new InspectorComponent { ComponentTitle = script.GetType().Name };
             scripts.Add(component);
             var panel = new StackPanel();
-            AddScriptFields(entity, script, panel);
+            AddScriptFields(script, panel);
             
             // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
             var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
@@ -77,7 +78,7 @@ internal class InspectorObserver : EditorObserver
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
         var instance    = entity.Archetype.GetEntityComponent(entity, componentType);
-        var fields      = GetComponentFields(componentType);
+        var fields      = GetComponentFields(componentType.type);
         
         foreach (var field in fields) {
             var dock    = new DockPanel();
@@ -88,9 +89,23 @@ internal class InspectorObserver : EditorObserver
         }
     }
     
-    private static ComponentField[] GetComponentFields(ComponentType componentType)
+    private static void AddScriptFields(Script script, Panel panel)
     {
-        var classMapper = TypeStore.GetTypeMapper(componentType.type);
+        var scriptType  = script.GetType();
+        var fields      = GetComponentFields(scriptType);
+        
+        foreach (var field in fields) {
+            var dock    = new DockPanel();
+            var value   = field.member.GetVar(script);
+            dock.Children.Add(new FieldName   { Text  = field.field.name } );
+            dock.Children.Add(new StringField { Value = value.AsString() } );
+            panel.Children.Add(dock);
+        }
+    }
+    
+    private static ComponentField[] GetComponentFields(Type type)
+    {
+        var classMapper = TypeStore.GetTypeMapper(type);
         var fields      = classMapper.PropFields.fields;
         var result      = new ComponentField[fields.Length];
         
@@ -100,16 +115,6 @@ internal class InspectorObserver : EditorObserver
             result[n]       = new ComponentField { field = propField, member = member };
         }
         return result;
-    }
-    
-    private static void AddScriptFields(Entity entity, Script script, Panel panel)
-    {
-        for (int n = 1; n <= 1; n++) {
-            var dock = new DockPanel();
-            dock.Children.Add(new FieldName   { Text  = $"Field {n}"} );
-            dock.Children.Add(new StringField { Value = $"value {n}"} );
-            panel.Children.Add(dock);
-        }
     }
 }
 
