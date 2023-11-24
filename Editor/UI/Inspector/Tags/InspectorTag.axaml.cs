@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using AP = Avalonia.AvaloniaProperty;
 
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class InspectorTag : UserControl

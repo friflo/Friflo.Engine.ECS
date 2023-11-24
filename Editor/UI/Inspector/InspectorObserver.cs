@@ -1,24 +1,21 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using Avalonia;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Json.Fliox.Mapper;
-using Friflo.Json.Fliox.Mapper.Map;
 
-// ReSharper disable ReturnTypeCanBeEnumerable.Local
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
 internal class InspectorObserver : EditorObserver
 {
     private readonly InspectorControl inspector;
     
-    private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
-
     
-    internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor) { this.inspector = inspector; }
+    internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
+    {
+        this.inspector = inspector;
+    }
 
     protected override void OnSelectionChanged(in EditorSelection selection)
     {
@@ -78,7 +75,7 @@ internal class InspectorObserver : EditorObserver
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
         var instance    = entity.Archetype.GetEntityComponent(entity, componentType);
-        var fields      = GetComponentFields(componentType.type);
+        var fields      = ComponentField.GetComponentFields(componentType.type);
         
         foreach (var field in fields) {
             var dock    = new DockPanel();
@@ -93,7 +90,7 @@ internal class InspectorObserver : EditorObserver
     private static void AddScriptFields(Script script, Panel panel)
     {
         var scriptType  = script.GetType();
-        var fields      = GetComponentFields(scriptType);
+        var fields      = ComponentField.GetComponentFields(scriptType);
         
         foreach (var field in fields) {
             var dock    = new DockPanel();
@@ -104,25 +101,4 @@ internal class InspectorObserver : EditorObserver
         }
         panel.Children.Add(new Separator());
     }
-    
-    private static ComponentField[] GetComponentFields(Type type)
-    {
-        var classMapper = TypeStore.GetTypeMapper(type);
-        var fields      = classMapper.PropFields.fields;
-        var result      = new ComponentField[fields.Length];
-        
-        for (int n = 0; n < fields.Length; n++) {
-            var propField   = fields[n];
-            var member      = classMapper.GetMember(propField.name);
-            result[n]       = new ComponentField { field = propField, member = member };
-        }
-        return result;
-    }
-}
-
-internal struct ComponentField
-{
-    internal    PropField   field;
-    /// <summary>Access member value with <see cref="Var.Member.GetVar"/></summary>
-    internal    Var.Member  member;
 }

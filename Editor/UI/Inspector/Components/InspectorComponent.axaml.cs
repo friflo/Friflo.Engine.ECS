@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable UnusedParameter.Local
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class InspectorComponent : UserControl, IExpandable

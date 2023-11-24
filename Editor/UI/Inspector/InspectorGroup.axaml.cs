@@ -31,7 +31,6 @@ public partial class InspectorGroup : UserControl
     {
         InitializeComponent();
     }
-
     
     /*
     protected override void OnLoaded(RoutedEventArgs e) {
