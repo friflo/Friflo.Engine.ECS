@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              Classes="ComponentField"
-             x:Class="Friflo.Fliox.Editor.UI.Controls.Inspector.Vector3Field"
-             xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Controls.Inspector"
+             x:Class="Friflo.Fliox.Editor.UI.Inspector.Vector3Field"
+             xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Inspector"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="30">
 
     <Grid HorizontalAlignment="Stretch" Height="22"

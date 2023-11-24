@@ -5,7 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using AP = Avalonia.AvaloniaProperty;
 
-namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
+namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class FieldName : UserControl
 {

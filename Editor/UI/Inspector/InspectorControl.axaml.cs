@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Friflo.Fliox.Engine.ECS;
 
-namespace Friflo.Fliox.Editor.UI.Controls.Inspector;
+namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class InspectorControl : UserControl
 {

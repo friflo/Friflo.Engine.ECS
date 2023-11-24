@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
 
              x:Class="Friflo.Fliox.Editor.UI.Panels.InspectorPanel"
-             xmlns:inspector ="using:Friflo.Fliox.Editor.UI.Controls.Inspector"
+             xmlns:inspector ="using:Friflo.Fliox.Editor.UI.Inspector"
              xmlns:panels="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
              >
     <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground}">
