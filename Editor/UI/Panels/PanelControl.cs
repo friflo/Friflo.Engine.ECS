@@ -17,6 +17,7 @@ public class PanelControl : UserControl
     protected PanelControl() {
         Focusable = true;
     }
+    
     protected override void OnGotFocus(GotFocusEventArgs e) {
         base.OnGotFocus(e);
         editor.SetActivePanel(this);

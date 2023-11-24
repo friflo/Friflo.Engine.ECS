@@ -14,10 +14,7 @@ public partial class StringField : UserControl
 
     private string   text;
     
-    public  string   Value {
-        get => text;
-        set => SetAndRaise(ValueProperty, ref text, value);
-    }
+    public  string   Value { get => text; set => SetAndRaise(ValueProperty, ref text, value); }
 
     public StringField()
     {

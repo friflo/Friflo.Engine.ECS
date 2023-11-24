@@ -65,10 +65,12 @@
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
             <DockPanel        Width="300"   DockPanel.Dock="Right" >
-                <ui:TestPanel       DockPanel.Dock="Top" />
+                <ui:TestPanel Name="Test"      DockPanel.Dock="Top" />
                 <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
-                <ui:ExplorerPanel   DockPanel.Dock="Top" Height="200"/>
-                <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
+                <ui:ExplorerPanel   DockPanel.Dock="Top" Height="200"
+                              IsVisible="{Binding #Test.Explorer}"/>
+                <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"
+                              IsVisible="{Binding #Test.Explorer}"/>
                 <ui:InspectorPanel/>
             </DockPanel>
             <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>

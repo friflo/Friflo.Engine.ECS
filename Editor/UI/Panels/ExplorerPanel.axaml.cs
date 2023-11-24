@@ -12,6 +12,8 @@ namespace Friflo.Fliox.Editor.UI.Panels;
 
 public partial class ExplorerPanel : PanelControl
 {
+    public override string ToString() => Grid.RootItem.DebugTreeName;
+
     public ExplorerPanel()
     {
         InitializeComponent();

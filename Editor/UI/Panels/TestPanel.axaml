@@ -16,6 +16,7 @@
                 </Flyout>
             </Button.Flyout>
         </Button>
+        <CheckBox IsChecked="{Binding $parent[panels:TestPanel].Explorer}"/>
     </DockPanel>
     </Border>
 </UserControl>

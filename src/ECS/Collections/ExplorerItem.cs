@@ -23,13 +23,14 @@ public sealed class ExplorerItem :
  // INotifyPropertyChanged                                                      not required. Implemented by ObservableCollection{T}
 {
 #region internal properties
-    public              int     Id          => entity.Id;
-    public              Entity  Entity      => entity;
-    public              bool    IsRoot      => IsRootItem();
-    public              bool    AllowDrag   => !IsRootItem();
-    public              string  Name        { get => GetName(entity); set => SetName(entity, value); }
+    public              int     Id              => entity.Id;
+    public              Entity  Entity          => entity;
+    public              bool    IsRoot          => IsRootItem();
+    public              bool    AllowDrag       => !IsRootItem();
+    public              string  Name            { get => GetName(entity); set => SetName(entity, value); }
+    public              string  DebugTreeName   => tree.debugName;             
     
-    public              bool    flag;       // todo remove
+    public              bool    flag;           // todo remove
     
     public   override   string  ToString()  => entity.ToString();
     #endregion
