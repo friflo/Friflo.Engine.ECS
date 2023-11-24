@@ -118,7 +118,7 @@ internal class InspectorObserver : EditorObserver
     }
 }
 
-class ComponentField
+internal struct ComponentField
 {
     internal    PropField   field;
     /// <summary>Access member value with <see cref="Var.Member.GetVar"/></summary>
