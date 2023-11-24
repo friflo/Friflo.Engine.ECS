@@ -26,10 +26,9 @@
         </inspector:InspectorTagSet>
 
         <inspector:InspectorGroup GroupName="components" Expand="{Binding #Components}"/>
-        <StackPanel Name="Components">
+        <StackPanel Name="Components" Background="{DynamicResource FromBackground}">
             <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
-            <StackPanel IsVisible="{Binding #Comp1.Expanded}"
-                        Background="{DynamicResource FromBackground}">
+            <StackPanel IsVisible="{Binding #Comp1.Expanded}">
                 <DockPanel >
                     <inspector:FieldName Text="field 1"/>
                     <inspector:StringField Value="value 1"/>
@@ -38,8 +37,7 @@
             </StackPanel>
             
             <inspector:InspectorComponent Name="Comp2" ComponentTitle="Transform"/>
-            <StackPanel IsVisible="{Binding #Comp2.Expanded}"
-                        Background="{DynamicResource FromBackground}">
+            <StackPanel IsVisible="{Binding #Comp2.Expanded}">
                 <DockPanel>
                     <inspector:FieldName Text="position"/>
                     <inspector:Vector3Field X="1" Y="2" Z="3"/>
@@ -52,8 +50,7 @@
             </StackPanel>
             
             <inspector:InspectorComponent Name="Comp3" ComponentTitle="Material"/>
-            <StackPanel IsVisible="{Binding #Comp3.Expanded}"
-                        Background="{DynamicResource FromBackground}">
+            <StackPanel IsVisible="{Binding #Comp3.Expanded}">
                 <DockPanel>
                     <inspector:FieldName Text="field 1"/>
                     <inspector:StringField Value="value 1"/>
@@ -71,10 +68,9 @@
         </StackPanel>
         
         <inspector:InspectorGroup GroupName="scripts" Expand="{Binding #Scripts}"/>
-        <StackPanel Name="Scripts">
+        <StackPanel Name="Scripts" Background="{DynamicResource FromBackground}">
             <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
-            <StackPanel IsVisible="{Binding #Script1.Expanded}"
-                        Background="{DynamicResource FromBackground}">
+            <StackPanel IsVisible="{Binding #Script1.Expanded}">
                 <DockPanel>
                     <inspector:FieldName Text="field 1"/>
                     <inspector:StringField Value="value 1"/>

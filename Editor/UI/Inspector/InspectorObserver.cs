@@ -87,6 +87,7 @@ internal class InspectorObserver : EditorObserver
             dock.Children.Add(new StringField { Value = value.AsString() } );
             panel.Children.Add(dock);
         }
+        panel.Children.Add(new Separator());
     }
     
     private static void AddScriptFields(Script script, Panel panel)
@@ -101,6 +102,7 @@ internal class InspectorObserver : EditorObserver
             dock.Children.Add(new StringField { Value = value.AsString() } );
             panel.Children.Add(dock);
         }
+        panel.Children.Add(new Separator());
     }
     
     private static ComponentField[] GetComponentFields(Type type)
