@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
@@ -76,8 +77,10 @@ internal class InspectorObserver : EditorObserver
     /// <remarks><see cref="ComponentType.type"/> is a struct</remarks>
     private static void AddComponentFields(Entity entity, ComponentType componentType, Panel panel)
     {
-        var instance    = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
-        var fields      = ComponentField.GetComponentFields(componentType.type, instance);
+        var instance        = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
+        var fields          = new List<ComponentField>();
+        var componentName   = componentType.type.Name;
+        ComponentField.AddFields(fields, componentType.type, instance, componentName);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());
     }
@@ -86,17 +89,18 @@ internal class InspectorObserver : EditorObserver
     private static void AddScriptFields(Script script, Panel panel)
     {
         var scriptType  = script.GetType();
-        var fields      = ComponentField.GetComponentFields(scriptType, script);
+        var fields      = new List<ComponentField>();
+        ComponentField.AddFields(fields, scriptType, script, null);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());
     }
     
-    private static void AddFields(ComponentField[] fields, Panel panel)
+    private static void AddFields(List<ComponentField> fields, Panel panel)
     {
         foreach (var field in fields)
         {
             var dock    = new DockPanel();
-            dock.Children.Add(new FieldName   { Text  = field.field.name } );
+            dock.Children.Add(new FieldName   { Text  = field.name } );
             dock.Children.Add(field.control);
             panel.Children.Add(dock);
         }
