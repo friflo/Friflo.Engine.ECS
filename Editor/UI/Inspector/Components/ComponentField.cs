@@ -8,7 +8,9 @@ using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
+using static Friflo.Fliox.Editor.UI.Inspector.FieldDataKind;
 
+// ReSharper disable ConvertToConstant.Local
 // ReSharper disable RedundantJumpStatement
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -170,15 +172,19 @@ internal class ComponentField
     
     // ------------------------------ change component / script field ------------------------------ 
 #region set vector
+    private static readonly bool LogChanges = false;
+
     internal void SetVector(in Vector3 vector)
     {
+        if (LogChanges && data.kind != None)  Console.WriteLine($"--- set vector: {vector}");
+        
         switch (data.kind) {
-            case FieldDataKind.None:
+            case None:
                 return;
-            case FieldDataKind.Component:
+            case Component:
                 SetComponentVector(data.entity, vector);
                 return;
-            case FieldDataKind.Member:
+            case Member:
                 SetScriptVector(data.instance, vector);
                 return;
         }
@@ -230,13 +236,15 @@ internal class ComponentField
 #region set string
     internal void SetString(string value)
     {
+        if (LogChanges && data.kind != None)  Console.WriteLine($"--- set string: {value}");
+        
         switch (data.kind) {
-            case FieldDataKind.None:
+            case None:
                 return;
-            case FieldDataKind.Component:
+            case Component:
                 SetComponentString(data.entity, value);
                 return;
-            case FieldDataKind.Member:
+            case Member:
                 SetScriptString(data.instance, value);
                 return;
         }
