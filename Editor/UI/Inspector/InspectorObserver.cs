@@ -128,7 +128,7 @@ internal class InspectorObserver : EditorObserver
     private static ComponentField[] AddComponentFields(ComponentType componentType, Panel panel)
     {
         var fields = new List<ComponentField>();
-        ComponentField.AddComponentFields(fields, componentType.type, null, null, default);
+        ComponentField.AddComponentFields(fields, componentType.type, null, default);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());
         return fields.ToArray();

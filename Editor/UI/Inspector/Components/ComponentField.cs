@@ -10,91 +10,51 @@ using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 
 // ReSharper disable RedundantJumpStatement
-// ReSharper disable UseObjectOrCollectionInitializer
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
-// ReSharper disable LoopCanBeConvertedToQuery
-// ReSharper disable SuggestBaseTypeForParameter
-// ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Inspector;
-
-internal enum FieldDataKind
-{
-    None        = 0,
-    Component   = 1,
-    Member      = 2
-}
-
-internal readonly struct FieldData
-{
-    internal readonly   FieldDataKind   kind;
-    internal readonly   Entity          entity;
-    internal readonly   object          instance;
-    internal readonly   Var.Member      member;
-    
-    internal FieldData(Entity entity, object component) {
-        kind        = FieldDataKind.Component;
-        this.entity = entity; 
-        instance    = component;
-    }
-    
-    internal FieldData(Script instance, Var.Member member) {
-        kind            = FieldDataKind.Member;
-        this.instance   = instance;
-        this.member     = member;
-    }
-    
-    internal object GetData() {
-        if (kind == FieldDataKind.Component) {
-            return instance;
-        }
-        return member.GetVar(instance).Object;
-    }
-}
-
 
 internal class ComponentField
 {
 #region internal fields
-    private  readonly   string      path;
     internal readonly   string      name;
     internal            Control     control;
-    internal            FieldData   data;
+    private             FieldData   data;
     private  readonly   Type        type;
     private  readonly   int         index;
     private  readonly   Var.Member  member;
 
-    public   override   string  ToString() => path;
+    public   override   string      ToString() => name;
 
     #endregion
     
     private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
     
-    private ComponentField(string parent, string name, Type type, int index, Var.Member member) {
+    private ComponentField(string name, Type type, int index, Var.Member member) {
         this.name       = name;
-        path            = parent == null ? name : $"{parent}.{name}"; 
         this.member     = member;
         this.type       = type;
         this.index      = index;
     }
     
+#region create component fields
     internal static bool AddComponentFields(
         List<ComponentField>    fields,
         Type                    type,
-        string                  parent,
         string                  fieldName,
         Var.Member              member)
     {
         if (type == typeof(Position)) {
             fieldName     ??= nameof(Position.value);
-            var field       = new ComponentField(parent, fieldName,    typeof(Position),   0, member);
+            var field       = new ComponentField(fieldName,    typeof(Position),   0, member);
             field.control   = new Vector3Field(field);
             fields.Add(field);
             return true;
         }
         if (type == typeof(Transform)) {
-            var field0      = new ComponentField(parent, "position",   typeof(Transform),  0, member);
-            var field1      = new ComponentField(parent, "rotation",   typeof(Transform),  1, member);
+            var field0      = new ComponentField("position",   typeof(Transform),  0, member);
+            var field1      = new ComponentField("rotation",   typeof(Transform),  1, member);
             field0.control  = new Vector3Field(field0);
             field1.control  = new Vector3Field(field1);
             fields.Add(field0);
@@ -103,7 +63,7 @@ internal class ComponentField
         }
         if (type == typeof(EntityName)) {
             fieldName     ??= nameof(EntityName.value);
-            var field       = new ComponentField(parent, fieldName,    typeof(EntityName), 0, member);
+            var field       = new ComponentField(fieldName,    typeof(EntityName), 0, member);
             field.control   = new StringField(field);
             fields.Add(field);
             return true;
@@ -120,10 +80,10 @@ internal class ComponentField
             var propField   = propFields[n];
             var fieldType   = propField.fieldType.type;
             var member      = classMapper.GetMember(propField.name);
-            if (AddComponentFields(fields, fieldType, null, propField.name, member)) {
+            if (AddComponentFields(fields, fieldType, propField.name, member)) {
                 continue;
             }
-            var field       = new ComponentField(null, propField.name, fieldType, 0, member);
+            var field       = new ComponentField(propField.name, fieldType, 0, member);
             field.control   = CreateField(fieldType, field); 
             fields.Add(field);
         }
@@ -140,7 +100,9 @@ internal class ComponentField
             return new StringField(field);
         }
     }
+    #endregion
     
+#region read component values
     internal static void SetComponentFields(ComponentField[] componentFields, Entity entity, object component)
     {
         var data = new FieldData(entity, component);
@@ -204,6 +166,7 @@ internal class ComponentField
         }
         throw new InvalidOperationException($"missing field assignment. field: {field.name}");
     }
+    #endregion
     
     // ------------------------------ change component / script field ------------------------------ 
 #region set vector
