@@ -3,12 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
@@ -23,16 +23,16 @@ internal enum FieldDataKind
 
 internal readonly struct FieldData
 {
-    private readonly    FieldDataKind   kind;
-    private readonly    object          instance;
-    private readonly    Var.Member      member;
+    private  readonly   FieldDataKind   kind;
+    internal readonly   object          instance;
+    internal readonly   Var.Member      member;
     
     internal FieldData(object component) {
         kind        = FieldDataKind.Component;
         instance    = component;
     }
     
-    internal FieldData(object instance, Var.Member member) {
+    internal FieldData(Script instance, Var.Member member) {
         kind            = FieldDataKind.Member;
         this.instance   = instance;
         this.member     = member;
@@ -50,51 +50,70 @@ internal readonly struct FieldData
 internal readonly struct ComponentField
 {
 #region internal fields
-    internal readonly   string  name;
-    internal readonly   Control control;
+    private  readonly   string      path;
+    internal readonly   string      name;
+    internal readonly   Control     control;
+    private  readonly   Type        type;
+    private  readonly   int         index;
+    internal readonly   Var.Member  member;
 
-    public   override   string  ToString() => name;
+    public   override   string  ToString() => path;
 
     #endregion
     
     private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
     
-    private ComponentField(string name, Control control) {
+    private ComponentField(string parent, string name, Type type, int index, Control control, Var.Member member) {
         this.name       = name;
         this.control    = control;
+        path            = parent == null ? name : $"{parent}.{name}"; 
+        this.member     = member;
+        this.type       = type;
+        this.index      = index;
+    }
+    
+    internal static ComponentField Find(ComponentField[] fields, string path)
+    {
+        foreach (var field in fields) {
+            if (field.path == path) {
+                return field;
+            }
+        }
+        throw new InvalidOperationException($"path not found: {path}");
     }
     
     internal static bool AddComponentFields(
         List<ComponentField>    componentFields,
         Type                    type,
-        FieldData               data,
-        string                  fieldName)
+        string                  parent,
+        string                  fieldName,
+        Var.Member              member)
     {
         if (type == typeof(Position)) {
-            var position    = (Position)data.GetData();
+            // var position    = (Position)data.GetData();
             fieldName     ??= nameof(Position.value);
-            componentFields.Add(new ComponentField(fieldName,   new Vector3Field(position.value)));
+            componentFields.Add(new ComponentField(parent, fieldName,   typeof(Position), 0, new Vector3Field(), member));
             return true;
         }
         if (type == typeof(Transform)) {
-            var t           = (Transform)data.GetData();
-            var position    = new Vector3(t.m11, t.m12, t.m13);
-            var rotation    = new Vector3(t.m21, t.m22, t.m23);
-            componentFields.Add(new ComponentField("position",  new Vector3Field(position)));
-            componentFields.Add(new ComponentField("rotation",  new Vector3Field(rotation)));
+            // var t           = (Transform)data.GetData();
+            // var position    = new Vector3(t.m11, t.m12, t.m13);
+            // var rotation    = new Vector3(t.m21, t.m22, t.m23);
+            componentFields.Add(new ComponentField(parent, "position",   typeof(Transform), 0, new Vector3Field(), member));
+            componentFields.Add(new ComponentField(parent, "rotation",   typeof(Transform), 1, new Vector3Field(), member));
             return true;
         }
         if (type == typeof(EntityName)) {
-            var name        = (EntityName)data.GetData();
-            var control     = new StringField { Value = name.value };
+            // var name        = (EntityName)data.GetData();
+            var control     = new StringField();
             fieldName     ??= nameof(EntityName.value);
-            componentFields.Add(new ComponentField(fieldName, control));
+            componentFields.Add(new ComponentField(parent, fieldName,   typeof(EntityName), 0, control, member));
             return true;
         }
         return false;
     }
         
-    internal static void AddFields(List<ComponentField> componentFields, Type type, object instance)
+    internal static void AddScriptFields(List<ComponentField> componentFields, Type type)
     {
         var classMapper = TypeStore.GetTypeMapper(type);
         var fields      = classMapper.PropFields.fields;
@@ -103,28 +122,88 @@ internal readonly struct ComponentField
             var propField   = fields[n];
             var fieldType   = propField.fieldType.type;
             var member      = classMapper.GetMember(propField.name);
-            var data        = new FieldData(instance, member);
-            if (AddComponentFields(componentFields, fieldType, data, propField.name)) {
+            // var data        = new FieldData(instance, member);
+            if (AddComponentFields(componentFields, fieldType, null, propField.name, member)) {
                 continue;
             }
-            var value       = member.GetVar(instance);
-            var control     = CreateField(fieldType, value);
-            componentFields.Add(new ComponentField(propField.name, control));
+            // var value       = member.GetVar(instance);
+            var control     = CreateField(fieldType);
+            componentFields.Add(new ComponentField(null, propField.name, fieldType, 0, control, member));
         }
     }
     
-    private static Control CreateField (Type fieldType, Var var)
+    private static Control CreateField (Type fieldType)
     {
         if (fieldType == typeof(string)) {
-            var value = var.String;
-            return new StringField { Value = value };
+            // var value = var.String;
+            return new StringField();
         }
         if (fieldType == typeof(int)) {
-            var value = var.Int32; 
-            return new StringField { Value = value.ToString() };
+            // var value = var.Int32; 
+            return new StringField();
         } else {
-            var value = var.AsString();
-            return new StringField { Value = value };
+            // var value = var.AsString();
+            return new StringField();
         }
+    }
+    
+    internal static void SetComponentFields(ComponentField[] componentFields, object instance)
+    {
+        var data = new FieldData(instance);
+        foreach (var field in componentFields) {
+            SetComponentField(field, data);
+        }
+    }
+    
+    internal static void SetScriptFields(ComponentField[] componentFields, Script script)
+    {
+        foreach (var field in componentFields) {
+            var data = new FieldData(script, field.member);
+            SetComponentField(field, data);
+        }
+    }
+    
+    private static void SetComponentField(ComponentField field, FieldData data)
+    {
+        var type = field.type;
+        if (type == typeof(Position)) {
+            var control     = (Vector3Field)field.control; 
+            var position    = (Position)data.GetData();
+            control.X = position.x;
+            control.Y = position.y;
+            control.Z = position.z;
+            return;
+        }
+        if (type == typeof(Transform)) {
+            var control     = (Vector3Field)field.control; 
+            var transform   = (Transform)data.GetData();
+            if (field.index == 0) {
+                control.X = transform.m11;
+                control.Y = transform.m12;
+                control.Z = transform.m13;
+                return;
+            }
+            control.X = transform.m21;
+            control.Y = transform.m22;
+            control.Z = transform.m23;
+            return;
+        }
+        if (type == typeof(EntityName)) {
+            var control     = (StringField)field.control; 
+            var entityName  = (EntityName)data.GetData();
+            control.Value   = entityName.value;
+            return;
+        }
+        if (type == typeof(string)) {
+            var control     = (StringField)field.control; 
+            control.Value   = data.member.GetVar(data.instance).String;
+            return;
+        }
+        if (type == typeof(int)) {
+            var control     = (StringField)field.control; 
+            control.Value   = data.member.GetVar(data.instance).Int32.ToString();
+            return;
+        }
+        throw new InvalidOperationException($"missing field assignment. field: {field.name}");
     }
 }
