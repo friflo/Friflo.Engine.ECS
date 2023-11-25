@@ -19,7 +19,7 @@ public partial class StringField : UserControl
     public  string   Value { get => text; set => Set(ValueProperty, ref text, value); }
     
     private void Set(DirectPropertyBase<string> property, ref string field, string value) {
-        componentField?.UpdateValue(data, value);
+        componentField?.SetString(data, value);
         SetAndRaise(property, ref field, value);
     }
 

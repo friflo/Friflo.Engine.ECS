@@ -25,7 +25,7 @@ public partial class Vector3Field : UserControl
     
     private void Set(DirectPropertyBase<float> property, ref float field, float value) {
         SetAndRaise(property, ref field, value);
-        componentField?.UpdateValue(data, vector);
+        componentField?.SetVector(data, vector);
     }
     
     public Vector3Field()

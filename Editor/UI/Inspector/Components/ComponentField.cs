@@ -9,6 +9,7 @@ using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable RedundantJumpStatement
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -209,76 +210,102 @@ internal class ComponentField
         throw new InvalidOperationException($"missing field assignment. field: {field.name}");
     }
     
-    internal void UpdateValue(FieldData data, Vector3 vector)
+    // ------------------------------ change component / script field ------------------------------ 
+#region set vector
+    internal void SetVector(in FieldData data, in Vector3 vector)
     {
-        if (data.kind == FieldDataKind.None) {
-            return;
+        switch (data.kind) {
+            case FieldDataKind.None:
+                return;
+            case FieldDataKind.Component:
+                SetComponentVector(data.entity, vector);
+                return;
+            case FieldDataKind.Member:
+                SetScriptVector(data.instance, vector);
+                return;
         }
+    }
+    
+    private void SetComponentVector(Entity entity, in Vector3 vector)
+    {
         if (type == typeof(Transform))
         {
-            switch (data.kind)
-            {
-                case FieldDataKind.Component:
-                    ref var transform = ref data.entity.GetComponent<Transform>();
-                    switch (index) {
-                        case 0:
-                            transform.m11 = vector.X;
-                            transform.m12 = vector.Y;
-                            transform.m13 = vector.Z;
-                            return;
-                        case 1:
-                            transform.m21 = vector.X;
-                            transform.m22 = vector.Y;
-                            transform.m23 = vector.Z;
-                            return;
-                    }
+            ref var transform = ref entity.GetComponent<Transform>();
+            switch (index) {
+                case 0:
+                    transform.m11 = vector.X;
+                    transform.m12 = vector.Y;
+                    transform.m13 = vector.Z;
                     return;
-                case FieldDataKind.Member:
-                    member.SetVar(data.instance, new Var(vector));
+                case 1:
+                    transform.m21 = vector.X;
+                    transform.m22 = vector.Y;
+                    transform.m23 = vector.Z;
                     return;
             }
             return;
         }
         if (type == typeof(Position))
         {
-            switch (data.kind)
-            {
-                case FieldDataKind.Component:
-                    ref var position = ref data.entity.GetComponent<Position>();
-                    position.value = vector;
-                    return;
-                case FieldDataKind.Member:
-                    var var = new Var(new Position { value = vector});
-                    member.SetVar(data.instance, var);
-                    return;
-            }
+            ref var position = ref entity.GetComponent<Position>();
+            position.value = vector;
+            return;
         }
     }
     
-    internal void UpdateValue(FieldData data, string value)
+    private void SetScriptVector(object script, in Vector3 vector)
     {
-        if (data.kind == FieldDataKind.None) {
+        if (type == typeof(Transform))
+        {
+            member.SetVar(script, new Var(vector));
             return;
         }
+        if (type == typeof(Position))
+        {
+            var var = new Var(new Position { value = vector});
+            member.SetVar(script, var);
+            return;
+        }
+    }
+    #endregion
+    
+#region set string
+    internal void SetString(in FieldData data, string value) {
+        switch (data.kind) {
+            case FieldDataKind.None:
+                return;
+            case FieldDataKind.Component:
+                SetComponentString(data.entity, value);
+                return;
+            case FieldDataKind.Member:
+                SetScriptString(data.instance, value);
+                return;
+        }
+    }
+    
+    private void SetComponentString(Entity entity, string value)
+    {
         if (type == typeof(EntityName)) {
-            switch (data.kind) {
-                case FieldDataKind.Component:
-                    data.entity.AddComponent(new EntityName(value));
-                    return;
-                case FieldDataKind.Member:
-                    member.SetVar(data.instance, new Var(value));
-                    return;
-            }
+            entity.AddComponent(new EntityName(value));
+            return;
+        }
+    }
+    
+    private void SetScriptString(object script, string value)
+    {
+        if (type == typeof(EntityName)) {
+             member.SetVar(script, new Var(value));
             return;
         }
         if (type == typeof(string)) {
-            member.SetVar(data.instance, new Var(value));
+            member.SetVar(script, new Var(value));
             return;
         }
         if (type == typeof(int)) {
             var i32     = int.Parse(value);
-            member.SetVar(data.instance, new Var(i32));
+            member.SetVar(script, new Var(i32));
             return;
         }
     }
+    #endregion
 }
