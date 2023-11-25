@@ -90,7 +90,7 @@ internal class InspectorObserver : EditorObserver
                 componentMap.Add(componentType, item);
             }          
             var instance = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
-            ComponentField.SetComponentFields(item.fields, instance);
+            ComponentField.SetComponentFields(item.fields, entity, instance);
             
             components.Add(item.control);
             components.Add(item.panel);
