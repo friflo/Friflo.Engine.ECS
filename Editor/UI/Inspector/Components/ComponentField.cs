@@ -72,16 +72,6 @@ internal readonly struct ComponentField
         this.index      = index;
     }
     
-    internal static ComponentField Find(ComponentField[] fields, string path)
-    {
-        foreach (var field in fields) {
-            if (field.path == path) {
-                return field;
-            }
-        }
-        throw new InvalidOperationException($"path not found: {path}");
-    }
-    
     internal static bool AddComponentFields(
         List<ComponentField>    componentFields,
         Type                    type,
