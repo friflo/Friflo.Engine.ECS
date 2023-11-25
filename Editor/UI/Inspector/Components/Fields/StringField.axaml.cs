@@ -14,12 +14,11 @@ public partial class StringField : UserControl
 
     private             string          text;
     private readonly    ComponentField  componentField;
-    internal            FieldData       data;
     
     public  string   Value { get => text; set => Set(ValueProperty, ref text, value); }
     
     private void Set(DirectPropertyBase<string> property, ref string field, string value) {
-        componentField?.SetString(data, value);
+        componentField?.SetString(value);
         SetAndRaise(property, ref field, value);
     }
 

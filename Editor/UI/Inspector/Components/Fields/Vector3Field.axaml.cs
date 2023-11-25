@@ -17,7 +17,6 @@ public partial class Vector3Field : UserControl
 
     private             Vector3         vector;
     private  readonly   ComponentField  componentField;
-    internal            FieldData       data;       
     
     public  float   X { get => vector.X; set => Set(XProperty, ref vector.X, value); }
     public  float   Y { get => vector.Y; set => Set(YProperty, ref vector.Y, value); }
@@ -25,7 +24,7 @@ public partial class Vector3Field : UserControl
     
     private void Set(DirectPropertyBase<float> property, ref float field, float value) {
         SetAndRaise(property, ref field, value);
-        componentField?.SetVector(data, vector);
+        componentField?.SetVector(vector);
     }
     
     public Vector3Field()

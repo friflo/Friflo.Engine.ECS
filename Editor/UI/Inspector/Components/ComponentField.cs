@@ -59,6 +59,7 @@ internal class ComponentField
     private  readonly   string      path;
     internal readonly   string      name;
     internal            Control     control;
+    internal            FieldData   data;
     private  readonly   Type        type;
     private  readonly   int         index;
     private  readonly   Var.Member  member;
@@ -144,34 +145,35 @@ internal class ComponentField
     {
         var data = new FieldData(entity, component);
         foreach (var field in componentFields) {
+            field.data  = default; // clear to prevent update calls
             SetComponentField(field, data);
+            field.data  = data;
         }
     }
     
     internal static void SetScriptFields(ComponentField[] componentFields, Script script)
     {
         foreach (var field in componentFields) {
-            var data = new FieldData(script, field.member);
+            field.data  = default; // clear to prevent update calls
+            var data    = new FieldData(script, field.member);
             SetComponentField(field, data);
+            field.data  = data;
         }
     }
     
     private static void SetComponentField(ComponentField field, FieldData data)
     {
-        var type = field.type;
+        var type    = field.type;
         if (type == typeof(Position)) {
             var control     = (Vector3Field)field.control; 
-            control.data    = default; // clear to prevent update calls
             var position    = (Position)data.GetData();
             control.X       = position.x;
             control.Y       = position.y;
             control.Z       = position.z;
-            control.data    = data;
             return;
         }
         if (type == typeof(Transform)) {
             var control     = (Vector3Field)field.control;
-            control.data    = default; // clear to prevent update calls
             var transform   = (Transform)data.GetData();
             if (field.index == 0) {
                 control.X = transform.m11;
@@ -182,29 +184,22 @@ internal class ComponentField
                 control.Y = transform.m22;
                 control.Z = transform.m23;
             }
-            control.data    = data;
             return;
         }
         if (type == typeof(EntityName)) {
             var control     = (StringField)field.control;
             var entityName  = (EntityName)data.GetData();
-            control.data    = default; // clear to prevent update calls
             control.Value   = entityName.value;
-            control.data    = data;
             return;
         }
         if (type == typeof(string)) {
             var control     = (StringField)field.control;
-            control.data    = default; // clear to prevent update calls
             control.Value   = data.member.GetVar(data.instance).String;
-            control.data    = data;
             return;
         }
         if (type == typeof(int)) {
             var control     = (StringField)field.control;
-            control.data    = default; // clear to prevent update calls
             control.Value   = data.member.GetVar(data.instance).Int32.ToString();
-            control.data    = data;
             return;
         }
         throw new InvalidOperationException($"missing field assignment. field: {field.name}");
@@ -212,7 +207,7 @@ internal class ComponentField
     
     // ------------------------------ change component / script field ------------------------------ 
 #region set vector
-    internal void SetVector(in FieldData data, in Vector3 vector)
+    internal void SetVector(in Vector3 vector)
     {
         switch (data.kind) {
             case FieldDataKind.None:
@@ -270,7 +265,8 @@ internal class ComponentField
     #endregion
     
 #region set string
-    internal void SetString(in FieldData data, string value) {
+    internal void SetString(string value)
+    {
         switch (data.kind) {
             case FieldDataKind.None:
                 return;
