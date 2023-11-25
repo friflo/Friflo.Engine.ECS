@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:inspector="clr-namespace:Friflo.Fliox.Editor.UI.Inspector"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
-             x:Class="Friflo.Fliox.Editor.UI.Inspector.InspectorControl">
+             x:Class="Friflo.Fliox.Editor.UI.Inspector.InspectorControl"
+             x:DataType     ="inspector:InspectorControlModel">
 
     <DockPanel>
     <Border Height="1" DockPanel.Dock="Top" Background="{DynamicResource PanelBackground}"/>
@@ -12,7 +13,8 @@
     <ScrollViewer>
     <StackPanel Name="Panel">
         
-        <inspector:InspectorGroup GroupName="tags" Expand="{Binding #TagSet}"/>
+        <inspector:InspectorGroup GroupName="tags" Expand="{Binding #TagSet}"
+                                  Count="{Binding TagCount}"/>
         <inspector:InspectorTagSet Name="TagSet">
             <StackPanel IsVisible="{Binding #TagSet.Expanded}" HorizontalAlignment="Stretch">
                 <WrapPanel Name="Tags" Orientation="Horizontal" ItemWidth="98" HorizontalAlignment="Center">
@@ -25,7 +27,8 @@
             </StackPanel>
         </inspector:InspectorTagSet>
 
-        <inspector:InspectorGroup GroupName="components" Expand="{Binding #Components}"/>
+        <inspector:InspectorGroup GroupName="components" Expand="{Binding #Components}"
+                                  Count="{Binding ComponentCount}"/>
         <StackPanel Name="Components" Background="{DynamicResource FromBackground}">
             <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
             <StackPanel IsVisible="{Binding #Comp1.Expanded}">
@@ -67,7 +70,8 @@
             </StackPanel>
         </StackPanel>
         
-        <inspector:InspectorGroup GroupName="scripts" Expand="{Binding #Scripts}"/>
+        <inspector:InspectorGroup GroupName="scripts" Expand="{Binding #Scripts}"
+                                  Count="{Binding ScriptCount}"/>
         <StackPanel Name="Scripts" Background="{DynamicResource FromBackground}">
             <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
             <StackPanel IsVisible="{Binding #Script1.Expanded}">

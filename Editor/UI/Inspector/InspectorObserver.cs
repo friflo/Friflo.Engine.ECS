@@ -24,6 +24,11 @@ internal class InspectorObserver : EditorObserver
         var item    = selection.item;
         var entity  = item?.Entity;
         if (entity != null) {
+            var archetype           = entity.Archetype;
+            var model               = inspector.model;
+            model.TagCount          = archetype.Tags.Count;
+            model.ComponentCount    = archetype.Structs.Count;
+            model.ScriptCount       = entity.Scripts.Length;
             AddEntityControls(entity);
         }
     }

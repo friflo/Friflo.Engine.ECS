@@ -8,8 +8,11 @@ namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class InspectorControl : UserControl
 {
+    internal readonly InspectorControlModel model = new InspectorControlModel();
+    
     public InspectorControl()
     {
+        DataContext = model;
         InitializeComponent();
     }
     
