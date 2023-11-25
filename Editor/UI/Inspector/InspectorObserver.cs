@@ -28,6 +28,7 @@ internal readonly struct ComponentItem
 internal class InspectorObserver : EditorObserver
 {
     private readonly    InspectorControl                            inspector;
+    private readonly    Dictionary<ComponentType, InspectorTag>     tagMap;
     private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
     private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
     
@@ -35,6 +36,7 @@ internal class InspectorObserver : EditorObserver
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
         this.inspector  = inspector;
+        tagMap          = new Dictionary<ComponentType, InspectorTag>();
         componentMap    = new Dictionary<ComponentType, ComponentItem>();
         scriptMap       = new Dictionary<Type,          ComponentItem>();
     }
@@ -56,16 +58,23 @@ internal class InspectorObserver : EditorObserver
     private void AddEntityControls(Entity entity)
     {
         // Console.WriteLine($"--- Inspector entity: {entity}");
-        var tags        = inspector.Tags.Children;
+        SetTags         (entity);
+        SetComponents   (entity);
+        SetScripts      (entity);
+    }
+    
+    private void SetTags(Entity entity)
+    {
+        var tags = inspector.Tags.Children;
         tags.Clear();
         var archetype = entity.Archetype;
-        
-        // --- tags
-        foreach (var tagName in archetype.Tags) {
-            tags.Add(new InspectorTag { TagName = tagName.tagName });
+        foreach (var tag in archetype.Tags) {
+            if (!tagMap.TryGetValue(tag, out var item)) {
+                item = new InspectorTag { TagName = tag.tagName };
+                tagMap.Add(tag, item);
+            }
+            tags.Add(item);
         }
-        SetComponents(entity);
-        SetScripts(entity);
     }
     
     private void SetComponents(Entity entity)
