@@ -13,23 +13,24 @@
     <ScrollViewer>
     <StackPanel Name="Panel">
         
-        <inspector:InspectorGroup GroupName="tags" Expand="{Binding #TagSet}"
+        <inspector:InspectorGroup Name="TagGroup" GroupName="tags" Expand="{Binding #TagSet}"
                                   Count="{Binding TagCount}"/>
         <inspector:InspectorTagSet Name="TagSet">
-            <StackPanel IsVisible="{Binding #TagSet.Expanded}" HorizontalAlignment="Stretch">
-                <WrapPanel Name="Tags" Orientation="Horizontal" ItemWidth="98" HorizontalAlignment="Center">
-                    <inspector:InspectorTag TagName="Player"/>
-                    <inspector:InspectorTag TagName="Moveable"/>
-                    <inspector:InspectorTag TagName="Destroyable"/>
-                    <inspector:InspectorTag TagName="Tag 4"/>
-                </WrapPanel>
-                <inspector:Separator/>
-            </StackPanel>
+        <StackPanel IsVisible="{Binding #TagGroup.Expanded}" HorizontalAlignment="Stretch">
+            <WrapPanel Name="Tags" Orientation="Horizontal" ItemWidth="98" HorizontalAlignment="Center">
+                <inspector:InspectorTag TagName="Player"/>
+                <inspector:InspectorTag TagName="Moveable"/>
+                <inspector:InspectorTag TagName="Destroyable"/>
+                <inspector:InspectorTag TagName="Tag 4"/>
+            </WrapPanel>
+            <inspector:Separator/>
+        </StackPanel>
         </inspector:InspectorTagSet>
 
-        <inspector:InspectorGroup GroupName="components" Expand="{Binding #Components}"
+        <inspector:InspectorGroup Name="ComponentGroup" GroupName="components" Expand="{Binding #Components}"
                                   Count="{Binding ComponentCount}"/>
-        <StackPanel Name="Components" Background="{DynamicResource FromBackground}">
+        <StackPanel Name="Components" Background="{DynamicResource FromBackground}"
+                    IsVisible="{Binding #ComponentGroup.Expanded}">
             <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
             <StackPanel IsVisible="{Binding #Comp1.Expanded}">
                 <DockPanel >
@@ -70,9 +71,10 @@
             </StackPanel>
         </StackPanel>
         
-        <inspector:InspectorGroup GroupName="scripts" Expand="{Binding #Scripts}"
+        <inspector:InspectorGroup Name="ScriptGroup" GroupName="scripts" Expand="{Binding #Scripts}"
                                   Count="{Binding ScriptCount}"/>
-        <StackPanel Name="Scripts" Background="{DynamicResource FromBackground}">
+        <StackPanel Name="Scripts" Background="{DynamicResource FromBackground}"
+                    IsVisible="{Binding #ScriptGroup.Expanded}">
             <inspector:InspectorComponent Name="Script1" ComponentTitle="MyScript"/>
             <StackPanel IsVisible="{Binding #Script1.Expanded}">
                 <DockPanel>

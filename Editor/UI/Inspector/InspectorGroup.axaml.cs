@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -17,8 +18,12 @@ public interface IExpandable
     bool Expanded { get; set; }
 }
 
-public partial class InspectorGroup : UserControl
+public partial class InspectorGroup : UserControl, IExpandable
 {
+    public static readonly StyledProperty<bool>     ExpandedProperty        = AP.Register<InspectorTagSet, bool>  (nameof(Expanded), true);
+
+    public bool     Expanded        { get => GetValue(ExpandedProperty);        set => SetValue(ExpandedProperty,       value); }
+    
     private List<IExpandable> expandables;
     
     public static readonly StyledProperty<string>       GroupNameProperty   = AP.Register<InspectorGroup, string>       (nameof(GroupName), "items");
@@ -49,14 +54,31 @@ public partial class InspectorGroup : UserControl
 
     private void Button_OnClick(object sender, RoutedEventArgs e) {
         expandables ??= new List<IExpandable>();
+        expandables.Clear();
         EditorUtils.GetControls(Expand, expandables);
-        var expanded = true;
+        if (expandables.Count == 0) {
+            return;
+        }
+        Expanded = !Expanded;
+
+        /* if (!Expanded) {
+            foreach (var expandable in expandables) {
+                expandable.Expanded = false;
+            }
+            Expanded = true;
+            return;
+        }
+        var hasExpanded = false;
         foreach (var expandable in expandables) {
-            expanded &= expandable.Expanded;
+            hasExpanded    |= expandable.Expanded;
+        }
+        if (hasExpanded) {
+            Expanded = false;   
+            return;
         }
         foreach (var expandable in expandables) {
-            expandable.Expanded = !expanded;
-        }
+            expandable.Expanded = true;
+        } */
     }
 }
 
