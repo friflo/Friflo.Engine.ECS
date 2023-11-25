@@ -36,7 +36,7 @@ internal class InspectorObserver : EditorObserver
     {
         this.inspector  = inspector;
         componentMap    = new Dictionary<ComponentType, ComponentItem>();
-        scriptMap       = new Dictionary<Type, ComponentItem>();
+        scriptMap       = new Dictionary<Type,          ComponentItem>();
     }
 
     protected override void OnSelectionChanged(in EditorSelection selection)
@@ -127,7 +127,7 @@ internal class InspectorObserver : EditorObserver
     /// <remarks><see cref="ComponentType.type"/> is a struct</remarks>
     private static ComponentField[] AddComponentFields(ComponentType componentType, Panel panel)
     {
-        var fields      = new List<ComponentField>();
+        var fields = new List<ComponentField>();
         ComponentField.AddComponentFields(fields, componentType.type, null, null, default);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());

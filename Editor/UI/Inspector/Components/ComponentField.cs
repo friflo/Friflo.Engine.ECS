@@ -73,7 +73,7 @@ internal readonly struct ComponentField
     }
     
     internal static bool AddComponentFields(
-        List<ComponentField>    componentFields,
+        List<ComponentField>    fields,
         Type                    type,
         string                  parent,
         string                  fieldName,
@@ -81,37 +81,37 @@ internal readonly struct ComponentField
     {
         if (type == typeof(Position)) {
             fieldName     ??= nameof(Position.value);
-            componentFields.Add(new ComponentField(parent, fieldName,   typeof(Position), 0, new Vector3Field(), member));
+            fields.Add(new ComponentField(parent, fieldName,   typeof(Position),   0, new Vector3Field(),  member));
             return true;
         }
         if (type == typeof(Transform)) {
-            componentFields.Add(new ComponentField(parent, "position",   typeof(Transform), 0, new Vector3Field(), member));
-            componentFields.Add(new ComponentField(parent, "rotation",   typeof(Transform), 1, new Vector3Field(), member));
+            fields.Add(new ComponentField(parent, "position",  typeof(Transform),  0, new Vector3Field(), member));
+            fields.Add(new ComponentField(parent, "rotation",  typeof(Transform),  1, new Vector3Field(), member));
             return true;
         }
         if (type == typeof(EntityName)) {
             var control     = new StringField();
             fieldName     ??= nameof(EntityName.value);
-            componentFields.Add(new ComponentField(parent, fieldName,   typeof(EntityName), 0, control, member));
+            fields.Add(new ComponentField(parent, fieldName,   typeof(EntityName), 0, control, member));
             return true;
         }
         return false;
     }
         
-    internal static void AddScriptFields(List<ComponentField> componentFields, Type type)
+    internal static void AddScriptFields(List<ComponentField> fields, Type type)
     {
         var classMapper = TypeStore.GetTypeMapper(type);
-        var fields      = classMapper.PropFields.fields;
-        for (int n = 0; n < fields.Length; n++)
+        var propFields  = classMapper.PropFields.fields;
+        for (int n = 0; n < propFields.Length; n++)
         {
-            var propField   = fields[n];
+            var propField   = propFields[n];
             var fieldType   = propField.fieldType.type;
             var member      = classMapper.GetMember(propField.name);
-            if (AddComponentFields(componentFields, fieldType, null, propField.name, member)) {
+            if (AddComponentFields(fields, fieldType, null, propField.name, member)) {
                 continue;
             }
             var control     = CreateField(fieldType);
-            componentFields.Add(new ComponentField(null, propField.name, fieldType, 0, control, member));
+            fields.Add(new ComponentField(null, propField.name, fieldType, 0, control, member));
         }
     }
     
