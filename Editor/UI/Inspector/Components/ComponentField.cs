@@ -55,7 +55,7 @@ internal readonly struct ComponentField
     internal readonly   Control     control;
     private  readonly   Type        type;
     private  readonly   int         index;
-    internal readonly   Var.Member  member;
+    private  readonly   Var.Member  member;
 
     public   override   string  ToString() => path;
 
@@ -90,21 +90,16 @@ internal readonly struct ComponentField
         Var.Member              member)
     {
         if (type == typeof(Position)) {
-            // var position    = (Position)data.GetData();
             fieldName     ??= nameof(Position.value);
             componentFields.Add(new ComponentField(parent, fieldName,   typeof(Position), 0, new Vector3Field(), member));
             return true;
         }
         if (type == typeof(Transform)) {
-            // var t           = (Transform)data.GetData();
-            // var position    = new Vector3(t.m11, t.m12, t.m13);
-            // var rotation    = new Vector3(t.m21, t.m22, t.m23);
             componentFields.Add(new ComponentField(parent, "position",   typeof(Transform), 0, new Vector3Field(), member));
             componentFields.Add(new ComponentField(parent, "rotation",   typeof(Transform), 1, new Vector3Field(), member));
             return true;
         }
         if (type == typeof(EntityName)) {
-            // var name        = (EntityName)data.GetData();
             var control     = new StringField();
             fieldName     ??= nameof(EntityName.value);
             componentFields.Add(new ComponentField(parent, fieldName,   typeof(EntityName), 0, control, member));
@@ -122,11 +117,9 @@ internal readonly struct ComponentField
             var propField   = fields[n];
             var fieldType   = propField.fieldType.type;
             var member      = classMapper.GetMember(propField.name);
-            // var data        = new FieldData(instance, member);
             if (AddComponentFields(componentFields, fieldType, null, propField.name, member)) {
                 continue;
             }
-            // var value       = member.GetVar(instance);
             var control     = CreateField(fieldType);
             componentFields.Add(new ComponentField(null, propField.name, fieldType, 0, control, member));
         }
@@ -135,14 +128,11 @@ internal readonly struct ComponentField
     private static Control CreateField (Type fieldType)
     {
         if (fieldType == typeof(string)) {
-            // var value = var.String;
             return new StringField();
         }
         if (fieldType == typeof(int)) {
-            // var value = var.Int32; 
             return new StringField();
         } else {
-            // var value = var.AsString();
             return new StringField();
         }
     }

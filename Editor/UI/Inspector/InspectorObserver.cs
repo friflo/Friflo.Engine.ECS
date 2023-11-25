@@ -14,10 +14,12 @@ namespace Friflo.Fliox.Editor.UI.Inspector;
 internal readonly struct ComponentItem
 {
     internal readonly   InspectorComponent  control;
+    internal readonly   Panel               panel;
     internal readonly   ComponentField[]    fields;
     
-    internal ComponentItem(InspectorComponent control, ComponentField[] fields) {
+    internal ComponentItem(InspectorComponent control, Panel panel, ComponentField[] fields) {
         this.control    = control;
+        this.panel      = panel;
         this.fields     = fields;
     }
 } 
@@ -28,7 +30,6 @@ internal class InspectorObserver : EditorObserver
     private readonly    InspectorControl                            inspector;
     private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
     private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
-    private             bool                                        initialized;
     
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
@@ -57,11 +58,6 @@ internal class InspectorObserver : EditorObserver
         // Console.WriteLine($"--- Inspector entity: {entity}");
         var tags        = inspector.Tags.Children;
         tags.Clear();
-        if (!initialized) {
-            initialized = true;
-            inspector.Components.Children.Clear();
-            inspector.Scripts.Children.Clear();
-        }
         var archetype = entity.Archetype;
         
         // --- tags
@@ -75,59 +71,56 @@ internal class InspectorObserver : EditorObserver
     private void SetComponents(Entity entity)
     {
         var components  = inspector.Components.Children;
-        foreach (var control in components) {
-            control.IsVisible = false;   // todo optimize
-        }
+        components.Clear();  // todo optimize
         var archetype   = entity.Archetype;
+        
         foreach (var componentType in archetype.Structs)
         {
             if (!componentMap.TryGetValue(componentType, out var item)) {
-                var component = new InspectorComponent { ComponentTitle = componentType.type.Name };
-                components.Add(component);
-                var panel   = new StackPanel();
-                var fields  = AddComponentFields(componentType, panel);
+                var component   = new InspectorComponent { ComponentTitle = componentType.type.Name };
+                var panel       = new StackPanel();
+                var fields      = AddComponentFields(componentType, panel);
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
                 // ^-- same as: AvaloniaObjectExtensions.GetObservable(component, InspectorComponent.ExpandedProperty);
                 panel.Bind(Visual.IsVisibleProperty, expanded);
                 
-                components.Add(panel);
-                item = new ComponentItem(component, fields);
+                item = new ComponentItem(component, panel, fields);
                 componentMap.Add(componentType, item);
             }          
             var instance = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
             ComponentField.SetComponentFields(item.fields, instance);
-            item.control.IsVisible = true;
+            
+            components.Add(item.control);
+            components.Add(item.panel);
         }
     }
     
     private void SetScripts(Entity entity)
     {
         var scripts = inspector.Scripts.Children;
-        foreach (var control in scripts) {
-            control.IsVisible = false;   // todo optimize
-        }
-
+        scripts.Clear();  // todo optimize
+        
         foreach (var script in entity.Scripts)
         {
             var scriptType = script.GetType();
             if (!scriptMap.TryGetValue(scriptType, out var item)) {
-                var component = new InspectorComponent { ComponentTitle = script.GetType().Name };
-                scripts.Add(component);
-                var panel   = new StackPanel();
-                var fields  = AddScriptFields(script, panel);
+                var component   = new InspectorComponent { ComponentTitle = script.GetType().Name };
+                var panel       = new StackPanel();
+                var fields      = AddScriptFields(script, panel);
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
                 panel.Bind(Visual.IsVisibleProperty, expanded);
-                scripts.Add(panel);
                 
-                item = new ComponentItem(component, fields);
+                item = new ComponentItem(component, panel, fields);
                 scriptMap.Add(scriptType, item);
             }
             ComponentField.SetScriptFields(item.fields, script);
-            item.control.IsVisible = true;
+            
+            scripts.Add(item.control);
+            scripts.Add(item.panel);
         }
     }
     
