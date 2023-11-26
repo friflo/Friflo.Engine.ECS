@@ -220,7 +220,7 @@ public sealed class Entity
     /// <remarks>Executes in O(1)</remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     
-    public bool RemoveComponent(ComponentType type)                          => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, type.structIndex);
+    public bool RemoveComponent(SchemaType type)                             => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, type.structIndex);
     
     /// <summary>
     /// Property is only used to display components in the Debugger.<br/>

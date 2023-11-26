@@ -16,10 +16,10 @@ namespace Friflo.Fliox.Engine.ECS.Serialize;
 internal sealed class ComponentReader
 {
     private readonly    ObjectReader                            componentReader;
-    private readonly    Dictionary<string, ComponentType>       componentTypeByKey;
-    private readonly    Dictionary<string, ComponentType>       tagTypeByName;
-    private readonly    ComponentType                           unresolvedType;
-    private readonly    List<ComponentType>                     structTypes;
+    private readonly    Dictionary<string, SchemaType>          componentTypeByKey;
+    private readonly    Dictionary<string, SchemaType>          tagTypeByName;
+    private readonly    SchemaType                              unresolvedType;
+    private readonly    List<SchemaType>                        structTypes;
     private readonly    ArchetypeKey                            searchKey;
     private readonly    List<string>                            unresolvedTagList;
     private readonly    HashSet<string>                         unresolvedTagSet;
@@ -39,7 +39,7 @@ internal sealed class ComponentReader
         unresolvedType          = schema.unresolvedType;
         componentTypeByKey      = schema.componentTypeByKey;
         tagTypeByName           = schema.tagTypeByName;
-        structTypes             = new List<ComponentType>();
+        structTypes             = new List<SchemaType>();
         searchKey               = new ArchetypeKey();
         unresolvedTagList       = new List<string>();
         unresolvedTagSet        = new HashSet<string>();
@@ -297,13 +297,13 @@ internal sealed class ComponentReader
 
 internal struct RawComponent
 {
-    internal  readonly  string          key;
-    internal  readonly  int             start;
-    internal  readonly  int             end;
+    internal  readonly  string      key;
+    internal  readonly  int         start;
+    internal  readonly  int         end;
     /// <summary>Is set when looking up components in <see cref="ComponentSchema.componentTypeByKey"/></summary>
-    internal            ComponentType   type; 
+    internal            SchemaType  type; 
 
-    public    override  string          ToString() => key;
+    public    override  string      ToString() => key;
     
     internal RawComponent(string key, int start, int end) {
         this.key    = key;

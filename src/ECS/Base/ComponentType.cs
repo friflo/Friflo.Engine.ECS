@@ -11,7 +11,7 @@ using static Friflo.Fliox.Engine.ECS.ComponentKind;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public abstract class ComponentType
+public abstract class SchemaType
 {
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the key assigned in <see cref="ComponentAttribute"/><br/>
@@ -54,7 +54,7 @@ public abstract class ComponentType
     internal virtual    void        ReadScript  (ObjectReader reader, JsonValue json, Entity entity)
         => throw new InvalidOperationException($"operates only on ScriptType<>");
     
-    internal ComponentType(
+    internal SchemaType(
         string          componentKey,
         string          tagName,
         Type            type,
@@ -76,7 +76,7 @@ public abstract class ComponentType
     }
 }
 
-internal sealed class StructComponentType<T> : ComponentType 
+internal sealed class StructComponentType<T> : SchemaType 
     where T : struct, IComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
@@ -92,7 +92,7 @@ internal sealed class StructComponentType<T> : ComponentType
     }
 }
 
-public abstract class ScriptType : ComponentType
+public abstract class ScriptType : SchemaType
 {
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, null, type, ComponentKind.Script, scriptIndex, 0, 0)
@@ -122,7 +122,7 @@ internal sealed class ScriptType<T> : ScriptType
     }
 }
 
-internal sealed class TagType : ComponentType 
+internal sealed class TagType : SchemaType 
 {
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     

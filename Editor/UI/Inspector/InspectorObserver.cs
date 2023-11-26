@@ -27,18 +27,18 @@ internal readonly struct ComponentItem
 
 internal class InspectorObserver : EditorObserver
 {
-    private readonly    InspectorControl                            inspector;
-    private readonly    Dictionary<ComponentType, InspectorTag>     tagMap;
-    private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
-    private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
+    private readonly    InspectorControl                        inspector;
+    private readonly    Dictionary<SchemaType, InspectorTag>    tagMap;
+    private readonly    Dictionary<SchemaType, ComponentItem>   componentMap;
+    private readonly    Dictionary<Type,       ComponentItem>   scriptMap;
     
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
         this.inspector  = inspector;
-        tagMap          = new Dictionary<ComponentType, InspectorTag>();
-        componentMap    = new Dictionary<ComponentType, ComponentItem>();
-        scriptMap       = new Dictionary<Type,          ComponentItem>();
+        tagMap          = new Dictionary<SchemaType, InspectorTag>();
+        componentMap    = new Dictionary<SchemaType, ComponentItem>();
+        scriptMap       = new Dictionary<Type,       ComponentItem>();
     }
 
     protected override void OnSelectionChanged(in EditorSelection selection)
@@ -139,8 +139,8 @@ internal class InspectorObserver : EditorObserver
         }
     }
     
-    /// <remarks><see cref="ComponentType.type"/> is a struct</remarks>
-    private static ComponentField[] AddComponentFields(ComponentType componentType, Panel panel)
+    /// <remarks><see cref="SchemaType.type"/> is a struct</remarks>
+    private static ComponentField[] AddComponentFields(SchemaType componentType, Panel panel)
     {
         var fields = new List<ComponentField>();
         ComponentField.AddComponentFields(fields, componentType.type, null, default);

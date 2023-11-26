@@ -16,64 +16,64 @@ public sealed class ComponentSchema
 {
 #region public properties
     /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
-    public   ReadOnlySpan<EngineDependant>                  EngineDependants    => new (engineDependants);
+    public   ReadOnlySpan<EngineDependant>              EngineDependants    => new (engineDependants);
     /// <summary>return all component types attributed with <see cref="ComponentAttribute"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
+    /// <see cref="SchemaType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Components          => new (components);
+    public   ReadOnlySpan<SchemaType>                   Components          => new (components);
     /// <summary>return all <see cref="Script"/> types attributed with <see cref="ScriptAttribute"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.scriptIndex"/> is equal to the array index<br/>
+    /// <see cref="SchemaType.scriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Scripts             => new (scripts);
+    public   ReadOnlySpan<SchemaType>                   Scripts             => new (scripts);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.tagIndex"/> is equal to the array index<br/>
+    /// <see cref="SchemaType.tagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<ComponentType>                    Tags                => new (tags);
+    public   ReadOnlySpan<SchemaType>                   Tags                => new (tags);
     
-    public   IReadOnlyDictionary<string, ComponentType>     ComponentTypeByKey  => componentTypeByKey;
-    public   IReadOnlyDictionary<Type,   ComponentType>     ComponentTypeByType => componentTypeByType;
-    public   IReadOnlyDictionary<Type,   ComponentType>     TagTypeByType       => tagTypeByType;
+    public   IReadOnlyDictionary<string, SchemaType>    ComponentTypeByKey  => componentTypeByKey;
+    public   IReadOnlyDictionary<Type,   SchemaType>    ComponentTypeByType => componentTypeByType;
+    public   IReadOnlyDictionary<Type,   SchemaType>    TagTypeByType       => tagTypeByType;
 
-    public   override string                                ToString()          => GetString();
+    public   override string                            ToString()          => GetString();
 
     #endregion
     
 #region private fields
-    [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
-    [Browse(Never)] internal readonly   int                                 maxStructIndex;
-    [Browse(Never)] internal readonly   ComponentType[]                     components;
-    [Browse(Never)] private  readonly   ComponentType[]                     scripts;
-    [Browse(Never)] private  readonly   ComponentType[]                     tags;
-    [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
-    [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   componentTypeByKey;
-    [Browse(Never)] internal readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
-    [Browse(Never)] internal readonly   Dictionary<string, ComponentType>   tagTypeByName;
-    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   tagTypeByType;
+    [Browse(Never)] private  readonly   EngineDependant[]               engineDependants;
+    [Browse(Never)] internal readonly   int                             maxStructIndex;
+    [Browse(Never)] internal readonly   SchemaType[]                    components;
+    [Browse(Never)] private  readonly   SchemaType[]                    scripts;
+    [Browse(Never)] private  readonly   SchemaType[]                    tags;
+    [Browse(Never)] internal readonly   SchemaType                      unresolvedType;
+    [Browse(Never)] internal readonly   Dictionary<string, SchemaType>  componentTypeByKey;
+    [Browse(Never)] internal readonly   Dictionary<Type,   SchemaType>  componentTypeByType;
+    [Browse(Never)] internal readonly   Dictionary<string, SchemaType>  tagTypeByName;
+    [Browse(Never)] private  readonly   Dictionary<Type,   SchemaType>  tagTypeByType;
     #endregion
     
 #region internal methods
     internal ComponentSchema(
         List<EngineDependant>   dependants,
-        List<ComponentType>     structList,
-        List<ComponentType>     classList,
-        List<ComponentType>     tagList)
+        List<SchemaType>        structList,
+        List<SchemaType>        classList,
+        List<SchemaType>        tagList)
     {
         engineDependants        = dependants.ToArray();
         int count               = structList.Count + classList.Count;
-        componentTypeByKey      = new Dictionary<string, ComponentType>(count);
-        componentTypeByType     = new Dictionary<Type,   ComponentType>(count);
-        tagTypeByName           = new Dictionary<string, ComponentType>(count);
-        tagTypeByType           = new Dictionary<Type,   ComponentType>(count);
+        componentTypeByKey      = new Dictionary<string, SchemaType>(count);
+        componentTypeByType     = new Dictionary<Type,   SchemaType>(count);
+        tagTypeByName           = new Dictionary<string, SchemaType>(count);
+        tagTypeByType           = new Dictionary<Type,   SchemaType>(count);
         maxStructIndex          = structList.Count + 1;
-        components              = new ComponentType[maxStructIndex];
-        scripts               = new ComponentType[classList.Count + 1];
-        tags                    = new ComponentType[tagList.Count + 1];
+        components              = new SchemaType[maxStructIndex];
+        scripts                 = new SchemaType[classList.Count + 1];
+        tags                    = new SchemaType[tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
@@ -93,9 +93,9 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
+    /// return <see cref="SchemaType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
     /// </summary>
-    public ComponentType GetComponentType<T>()
+    public SchemaType GetComponentType<T>()
         where T : struct, IComponent
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
@@ -103,9 +103,9 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
+    /// return <see cref="SchemaType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
-    public ComponentType GetScriptType<T>()
+    public SchemaType GetScriptType<T>()
         where T : Script
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
@@ -113,9 +113,9 @@ public sealed class ComponentSchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
+    /// return <see cref="SchemaType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
-    public ComponentType GetTagType<T>()
+    public SchemaType GetTagType<T>()
         where T : struct, IEntityTag
     {
         tagTypeByType.TryGetValue(typeof(T), out var result);
@@ -139,11 +139,11 @@ public sealed class ComponentSchema
         return structIndex;
     }
     
-    internal ComponentType GetTagAt(int index) {
+    internal SchemaType GetTagAt(int index) {
         return tags[index];
     }
     
-    internal ComponentType GetStructComponentAt(int index) {
+    internal SchemaType GetStructComponentAt(int index) {
         return components[index];
     }
     
@@ -156,15 +156,15 @@ public sealed class ComponentSchema
     
 public readonly struct EngineDependant
 {
-                    public  ReadOnlySpan<ComponentType> Types       => new (types);
+                    public  ReadOnlySpan<SchemaType>    Types       => new (types);
                     public              Assembly        Assembly    => assembly;
     
     [Browse(Never)] private readonly    Assembly        assembly;
-    [Browse(Never)] private readonly    ComponentType[] types;
+    [Browse(Never)] private readonly    SchemaType[]    types;
 
-    public override     string          ToString()  => assembly.ManifestModule.Name;
+    public override                     string          ToString()  => assembly.ManifestModule.Name;
 
-    internal EngineDependant(Assembly assembly, List<ComponentType> types) {
+    internal EngineDependant(Assembly assembly, List<SchemaType> types) {
         this.assembly   = assembly;
         this.types      = types.ToArray();
     }

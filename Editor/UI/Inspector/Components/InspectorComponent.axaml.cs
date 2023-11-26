@@ -21,7 +21,7 @@ public partial class InspectorComponent : UserControl, IExpandable
     public bool     Expanded        { get => GetValue(ExpandedProperty);        set => SetValue(ExpandedProperty,       value); }
     
     public Entity           Entity          { get; set; }
-    public ComponentType    ComponentType   { get; init; }
+    public SchemaType       ComponentType   { get; init; }
     public ScriptType       ScriptType      { get; init; }
     
     public InspectorComponent()

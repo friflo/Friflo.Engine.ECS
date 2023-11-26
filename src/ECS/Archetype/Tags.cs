@@ -10,7 +10,7 @@ using System.Text;
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
-public struct Tags : IEnumerable<ComponentType>
+public struct Tags : IEnumerable<SchemaType>
 {
     internal            BitSet  bitSet;  // 32
     
@@ -20,7 +20,7 @@ public struct Tags : IEnumerable<ComponentType>
            readonly     IEnumerator     IEnumerable.GetEnumerator()                 => new TagsEnumerator (this);
 
     // --- IEnumerable<>
-    readonly IEnumerator<ComponentType> IEnumerable<ComponentType>.GetEnumerator()  => new TagsEnumerator (this);
+    readonly IEnumerator<SchemaType> IEnumerable<SchemaType>.GetEnumerator()  => new TagsEnumerator (this);
 
     public  readonly override string    ToString() => GetString();
     
@@ -101,7 +101,7 @@ public struct Tags : IEnumerable<ComponentType>
         return tags;
     }
     
-    public static Tags Get(ComponentType type)
+    public static Tags Get(SchemaType type)
     {
         var tags = new Tags();
         tags.SetBit(type.tagIndex);
@@ -138,16 +138,16 @@ public struct Tags : IEnumerable<ComponentType>
     }
 }
 
-public struct TagsEnumerator : IEnumerator<ComponentType>
+public struct TagsEnumerator : IEnumerator<SchemaType>
 {
     private BitSetEnumerator    bitSetEnumerator;
 
     // --- IEnumerator
-    public          void                Reset()             => bitSetEnumerator.Reset();
+    public          void        Reset()             => bitSetEnumerator.Reset();
 
-           readonly object              IEnumerator.Current => Current;
+           readonly object      IEnumerator.Current => Current;
 
-    public readonly ComponentType       Current             => EntityStoreBase.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
+    public readonly SchemaType  Current             => EntityStoreBase.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
         bitSetEnumerator = tags.bitSet.GetEnumerator();

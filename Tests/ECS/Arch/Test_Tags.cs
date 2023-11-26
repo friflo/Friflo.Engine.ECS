@@ -63,7 +63,7 @@ public static class Test_Tags
     [Test]
     public static void Test_Tags_generic_IEnumerator()
     {
-        IEnumerable<ComponentType> tags = Tags.Get<TestTag>();
+        IEnumerable<SchemaType> tags = Tags.Get<TestTag>();
         int count = 0;
         foreach (var _ in tags) {
             count++;

@@ -19,7 +19,7 @@ internal static class ComponentUtils
         var dependants  = assemblyLoader.dependants;
         foreach (var assembly in assemblies) {
             var types           = AssemblyLoader.GetComponentTypes(assembly);
-            var componentTypes  = new List<ComponentType>();
+            var componentTypes  = new List<SchemaType>();
             foreach (var type in types) {
                 var componentType = CreateComponentType(type, typeStore);
                 componentTypes.Add(componentType);
@@ -28,9 +28,9 @@ internal static class ComponentUtils
         }
         Console.WriteLine(assemblyLoader);
         
-        var structs     = new List<ComponentType>();
-        var scripts     = new List<ComponentType>();
-        var tags        = new List<ComponentType>();
+        var structs     = new List<SchemaType>();
+        var scripts     = new List<SchemaType>();
+        var tags        = new List<SchemaType>();
         foreach (var dependant in dependants)
         {
             foreach (var type in dependant.Types)
@@ -45,14 +45,14 @@ internal static class ComponentUtils
         return new ComponentSchema(dependants, structs, scripts, tags);
     }
     
-    internal static ComponentType CreateComponentType(Type type, TypeStore typeStore)
+    internal static SchemaType CreateComponentType(Type type, TypeStore typeStore)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
         if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
             var method          = typeof(ComponentUtils).GetMethod(nameof(CreateTagType), flags);
             var genericMethod   = method!.MakeGenericMethod(type);
-            var componentType   = (ComponentType)genericMethod.Invoke(null, null);
+            var componentType   = (SchemaType)genericMethod.Invoke(null, null);
             return componentType;
         }
         var createParams = new object[] { typeStore };
@@ -63,21 +63,21 @@ internal static class ComponentUtils
             {
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateStructFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
-                var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
+                var componentType   = (SchemaType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
             if (attributeType == typeof(ScriptAttribute))
             {
                 var method          = typeof(ComponentUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
-                var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
+                var componentType   = (SchemaType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
         }
         throw new InvalidOperationException($"missing expected attribute. Type: {type}");
     }
     
-    internal static ComponentType CreateStructFactory<T>(TypeStore typeStore)
+    internal static SchemaType CreateStructFactory<T>(TypeStore typeStore)
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -85,7 +85,7 @@ internal static class ComponentUtils
         return new StructComponentType<T>(structKey, structIndex, typeStore);
     }
     
-    internal static ComponentType CreateClassFactory<T>(TypeStore typeStore)
+    internal static SchemaType CreateClassFactory<T>(TypeStore typeStore)
         where T : Script
     {
         var scriptIndex   = ClassType<T>.ScriptIndex;
@@ -93,7 +93,7 @@ internal static class ComponentUtils
         return new ScriptType<T>(scriptKey, scriptIndex, typeStore);
     }
     
-    internal static ComponentType CreateTagType<T>()
+    internal static SchemaType CreateTagType<T>()
         where T : struct, IEntityTag
     {
         var tagIndex    = TagType<T>.TagIndex;

@@ -132,10 +132,10 @@ public sealed class Archetype
     }
     
     /// <remarks>
-    /// Is called by methods using a set of arbitrary struct <see cref="ComponentType"/>'s.<br/>
+    /// Is called by methods using a set of arbitrary struct <see cref="SchemaType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
     /// </remarks>
-    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> structTypes, in Tags tags)
+    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<SchemaType> structTypes, in Tags tags)
     {
         var length          = structTypes.Count;
         var componentHeaps  = new StructHeap[length];
@@ -148,7 +148,7 @@ public sealed class Archetype
 
 #region public methods
     // todo for solution using generic component type T. Therefore add method to StructHeap 
-    public object GetEntityComponent(Entity entity, ComponentType componentType)
+    public object GetEntityComponent(Entity entity, SchemaType componentType)
     {
         // => ref ((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex]).chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
         // heapMap[componentType.structIndex].chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
