@@ -252,7 +252,7 @@ public sealed class Entity
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript(this, typeof(T));
     
-    public Script RemoveScript(ComponentType type)      => EntityUtils.RemoveScript(this, type.type);
+    public Script RemoveScript(ScriptType type)         => EntityUtils.RemoveScript(this, type.type);
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------

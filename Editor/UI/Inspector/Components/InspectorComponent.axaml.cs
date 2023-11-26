@@ -22,7 +22,7 @@ public partial class InspectorComponent : UserControl, IExpandable
     
     public Entity           Entity          { get; set; }
     public ComponentType    ComponentType   { get; init; }
-    public ComponentType    ScriptType      { get; init; }
+    public ScriptType       ScriptType      { get; init; }
     
     public InspectorComponent()
     {

@@ -92,14 +92,21 @@ internal sealed class StructComponentType<T> : ComponentType
     }
 }
 
-internal sealed class ScriptType<T> : ComponentType 
+public abstract class ScriptType : ComponentType
+{
+    protected ScriptType(string scriptKey, int scriptIndex, Type type)
+        : base (scriptKey, null, type, ComponentKind.Script, scriptIndex, 0, 0)
+    { }
+}
+
+internal sealed class ScriptType<T> : ScriptType 
     where T : Script
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"script: '{componentKey}' [*{typeof(T).Name}]";
     
     internal ScriptType(string scriptKey, int scriptIndex, TypeStore typeStore)
-        : base(scriptKey, null, typeof(T), ComponentKind.Script, scriptIndex, 0, 0)
+        : base(scriptKey, scriptIndex, typeof(T))
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
