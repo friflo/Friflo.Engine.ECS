@@ -17,7 +17,7 @@ namespace Friflo.Fliox.Editor;
 
 public static class EditorUtils
 {
-    private static bool IsDesignMode => Design.IsDesignMode;
+    public static bool IsDesignMode => Design.IsDesignMode;
     
     public static void AssertUIThread()
     {

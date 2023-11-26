@@ -39,6 +39,9 @@ public partial class ValidationError : UserControl
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        if (EditorUtils.IsDesignMode) {
+            return;
+        }
         foreach (var error in ItemsSource)
         {
             // set error to first error entry
