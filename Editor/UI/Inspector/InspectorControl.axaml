@@ -15,7 +15,8 @@
         
         <inspector:InspectorGroup Name="TagGroup" GroupName="tags" Expand="{Binding #TagSet}"
                                   Count="{Binding TagCount}"/>
-        <inspector:InspectorTagSet Name="TagSet">
+        <inspector:InspectorTagSet Name="TagSet"
+                                   IsVisible="{Binding TagCount}">
         <StackPanel IsVisible="{Binding #TagGroup.Expanded}" HorizontalAlignment="Stretch">
             <WrapPanel Name="Tags" Orientation="Horizontal" ItemWidth="98" HorizontalAlignment="Center">
                 <inspector:InspectorTag TagName="Player"/>
