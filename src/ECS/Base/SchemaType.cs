@@ -64,7 +64,7 @@ public abstract class SchemaType
     {
         this.componentKey   = componentKey;
         this.tagName        = tagName;
-        this.scriptIndex  = scriptIndex;
+        this.scriptIndex    = scriptIndex;
         this.structIndex    = structIndex;
         this.tagIndex       = tagIndex;
         this.kind           = kind;
