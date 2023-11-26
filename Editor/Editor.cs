@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ public partial class Editor
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
     
-    private static readonly bool StoreEntities = false;
+    private static readonly bool StoreEntities = true;
 
     #endregion
 
@@ -57,7 +58,7 @@ public partial class Editor
         });
         // --- add client and database
         var schema      = DatabaseSchema.Create<EntityClient>();
-        var database    = CreateDatabase(schema, "file-system");
+        var database    = CreateDatabase(schema, "in-memory");
         var hub         = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
@@ -72,7 +73,6 @@ public partial class Editor
         if (StoreEntities) {
             await sync.StoreEntitiesAsync();
         }
-
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
         EditorUtils.AssertUIThread();
@@ -196,7 +196,10 @@ public partial class Editor
             var directory = Directory.GetCurrentDirectory() + "/DB";
             return new FileDatabase("game", directory, schema) { Pretty = false };
         }
-        return new MemoryDatabase("game", schema) { Pretty = false };
+        if (provider == "in-memory") {
+            return new MemoryDatabase("game", schema) { Pretty = false };
+        }
+        throw new InvalidEnumArgumentException($"invalid database provider: {provider}");
     }
     #endregion
 }
