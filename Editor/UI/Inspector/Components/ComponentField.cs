@@ -17,7 +17,12 @@ using static Friflo.Fliox.Editor.UI.Inspector.FieldDataKind;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
-internal class ComponentField
+public interface IFieldControl
+{
+    ComponentField  ComponentField { get; init; }  
+} 
+
+public class ComponentField
 {
 #region internal fields
     internal readonly   string      name;
@@ -50,15 +55,15 @@ internal class ComponentField
         if (type == typeof(Position)) {
             fieldName     ??= nameof(Position.value);
             var field       = new ComponentField(fieldName,    typeof(Position),   0, member);
-            field.control   = new Vector3Field(field);
+            field.control   = new Vector3Field { ComponentField = field };
             fields.Add(field);
             return true;
         }
         if (type == typeof(Transform)) {
             var field0      = new ComponentField("position",   typeof(Transform),  0, member);
             var field1      = new ComponentField("rotation",   typeof(Transform),  1, member);
-            field0.control  = new Vector3Field(field0);
-            field1.control  = new Vector3Field(field1);
+            field0.control  = new Vector3Field { ComponentField = field0 };
+            field1.control  = new Vector3Field { ComponentField = field1 };
             fields.Add(field0);
             fields.Add(field1);
             return true;
@@ -66,7 +71,7 @@ internal class ComponentField
         if (type == typeof(EntityName)) {
             fieldName     ??= nameof(EntityName.value);
             var field       = new ComponentField(fieldName,    typeof(EntityName), 0, member);
-            field.control   = new StringField(field);
+            field.control   = new StringField { ComponentField = field };
             fields.Add(field);
             return true;
         }
@@ -94,12 +99,12 @@ internal class ComponentField
     private static Control CreateField (Type fieldType, ComponentField field)
     {
         if (fieldType == typeof(string)) {
-            return new StringField(field);
+            return new StringField { ComponentField = field };
         }
         if (fieldType == typeof(int)) {
-            return new StringField(field);
+            return new StringField { ComponentField = field };
         } else {
-            return new StringField(field);
+            return new StringField { ComponentField = field };
         }
     }
     #endregion
