@@ -8,9 +8,9 @@
 
     
     <StackPanel>
-        <Border Margin="0 0 0 0" Height="20" Background="{DynamicResource PanelBackground}">
+        <Border Margin="0" Height="20" Background="{DynamicResource PanelBackground}">
             <DockPanel>
-                <Border Margin="0 0 18 0" BorderThickness="1" 
+                <Border Margin="0 0 18 0" BorderThickness="0" 
                         DockPanel.Dock="Right">
                     <Button Name="Add"
                             Classes="GreenButton"

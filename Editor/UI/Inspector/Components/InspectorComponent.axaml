@@ -14,13 +14,12 @@
                                   IsChecked="{Binding $parent[local:InspectorComponent].Expanded}">
                     </ToggleButton>
                 </Border>
-                <Border Width="20" Margin="0 0 12 0" BorderThickness="1" 
+                <Border Margin="0 0 18 0"
                         DockPanel.Dock="Right">
                     <Button Background="{DynamicResource ComponentBackground}"
                             Content="..." 
-                            HorizontalAlignment="Stretch"
                             BorderThickness="0" CornerRadius="2"
-                            Margin="1" Padding="1">
+                            Margin="0 1" Padding="3 1">
                     </Button>
                 </Border>
                 <Border>
