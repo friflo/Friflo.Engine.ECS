@@ -30,7 +30,7 @@ public static class Test_ComponentType
     [Test]
     public static void Test_ComponentType_Exceptions()
     {
-        SchemaType componentType = new TagType(typeof(string), 0);
+        var componentType = new TagType(typeof(string), 0);
         var e = Throws<InvalidOperationException>(() => {
             componentType.ReadScript(null, default, null);
         });

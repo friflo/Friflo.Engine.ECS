@@ -126,7 +126,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeStructs_generic_IEnumerator()
     {
-        IEnumerable<SchemaType> tags = ArchetypeStructs.Get<Position>();
+        IEnumerable<ComponentType> tags = ArchetypeStructs.Get<Position>();
         int count = 0;
         foreach (var _ in tags) {
             count++;

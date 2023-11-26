@@ -19,12 +19,12 @@ internal static class SchemaUtils
         var dependants  = assemblyLoader.dependants;
         foreach (var assembly in assemblies) {
             var types           = AssemblyLoader.GetComponentTypes(assembly);
-            var componentTypes  = new List<SchemaType>();
+            var schemaTypes     = new List<SchemaType>();
             foreach (var type in types) {
                 var componentType = CreateComponentType(type, typeStore);
-                componentTypes.Add(componentType);
+                schemaTypes.Add(componentType);
             }
-            dependants.Add(new EngineDependant (assembly, componentTypes));
+            dependants.Add(new EngineDependant (assembly, schemaTypes));
         }
         Console.WriteLine(assemblyLoader);
         
@@ -52,8 +52,8 @@ internal static class SchemaUtils
         if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
             var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
             var genericMethod   = method!.MakeGenericMethod(type);
-            var componentType   = (SchemaType)genericMethod.Invoke(null, null);
-            return componentType;
+            var tagType         = (TagType)genericMethod.Invoke(null, null);
+            return tagType;
         }
         var createParams = new object[] { typeStore };
         foreach (var attr in type.CustomAttributes)
@@ -63,21 +63,21 @@ internal static class SchemaUtils
             {
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateStructFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
-                var componentType   = (SchemaType)genericMethod.Invoke(null, createParams);
+                var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
             if (attributeType == typeof(ScriptAttribute))
             {
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
-                var componentType   = (SchemaType)genericMethod.Invoke(null, createParams);
-                return componentType;
+                var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);
+                return scriptType;
             }
         }
         throw new InvalidOperationException($"missing expected attribute. Type: {type}");
     }
     
-    internal static SchemaType CreateStructFactory<T>(TypeStore typeStore)
+    internal static ComponentType CreateStructFactory<T>(TypeStore typeStore)
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -85,7 +85,7 @@ internal static class SchemaUtils
         return new ComponentType<T>(structKey, structIndex, typeStore);
     }
     
-    internal static SchemaType CreateClassFactory<T>(TypeStore typeStore)
+    internal static ScriptType CreateClassFactory<T>(TypeStore typeStore)
         where T : Script
     {
         var scriptIndex   = ClassType<T>.ScriptIndex;
@@ -93,7 +93,7 @@ internal static class SchemaUtils
         return new ScriptType<T>(scriptKey, scriptIndex, typeStore);
     }
     
-    internal static SchemaType CreateTagType<T>()
+    internal static TagType CreateTagType<T>()
         where T : struct, IEntityTag
     {
         var tagIndex    = TagType<T>.TagIndex;
