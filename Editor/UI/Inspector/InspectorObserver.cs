@@ -91,7 +91,7 @@ internal class InspectorObserver : EditorObserver
             if (!componentMap.TryGetValue(componentType, out var item)) {
                 var component   = new InspectorComponent { ComponentTitle = componentType.type.Name, ComponentType = componentType };
                 var panel       = new StackPanel();
-                var fields      = AddComponentFields(componentType, panel);
+                var fields      = AddComponentFields(componentType.type, panel);
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
@@ -140,10 +140,10 @@ internal class InspectorObserver : EditorObserver
     }
     
     /// <remarks><see cref="SchemaType.type"/> is a struct</remarks>
-    private static ComponentField[] AddComponentFields(SchemaType componentType, Panel panel)
+    private static ComponentField[] AddComponentFields(Type type, Panel panel)
     {
         var fields = new List<ComponentField>();
-        ComponentField.AddComponentFields(fields, componentType.type, null, default);
+        ComponentField.AddComponentFields(fields, type, null, default);
         AddFields(fields, panel);
         panel.Children.Add(new Separator());
         return fields.ToArray();
