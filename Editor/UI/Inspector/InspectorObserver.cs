@@ -68,11 +68,14 @@ internal class InspectorObserver : EditorObserver
         var tags = inspector.Tags.Children;
         tags.Clear();
         var archetype = entity.Archetype;
-        foreach (var tag in archetype.Tags) {
-            if (!tagMap.TryGetValue(tag, out var item)) {
-                item = new InspectorTag { TagName = tag.tagName };
-                tagMap.Add(tag, item);
+        foreach (var tagType in archetype.Tags)
+        {
+            if (!tagMap.TryGetValue(tagType, out var item)) {
+                var tag = Tags.Get(tagType);
+                item = new InspectorTag { TagName = tagType.tagName, EntityTag = tag };
+                tagMap.Add(tagType, item);
             }
+            item.Entity = entity;
             tags.Add(item);
         }
     }

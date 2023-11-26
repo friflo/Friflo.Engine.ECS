@@ -5,6 +5,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Friflo.Fliox.Engine.ECS;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable UnusedParameter.Local
@@ -15,7 +16,9 @@ public partial class InspectorTag : UserControl
 {
     public static readonly StyledProperty<string>   TagNameProperty  = AP.Register<InspectorTag, string>(nameof(TagName), "Tag");
     
-    public string   TagName  { get => GetValue(TagNameProperty);  set => SetValue(TagNameProperty, value); }
+    public string           TagName     { get => GetValue(TagNameProperty);  set => SetValue(TagNameProperty, value); }
+    public Entity           Entity      { get; set; }
+    public Tags             EntityTag   { get; init; }
     
     public InspectorTag()
     {
@@ -23,6 +26,7 @@ public partial class InspectorTag : UserControl
     }
 
     private void MenuItem_RemoveTag(object sender, RoutedEventArgs e) {
+        Entity.RemoveTags(EntityTag);
         Console.WriteLine("MenuItem_RemoveTag");
     }
 }
