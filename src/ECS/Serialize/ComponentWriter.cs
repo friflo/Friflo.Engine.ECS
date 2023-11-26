@@ -19,7 +19,7 @@ internal sealed class ComponentWriter
     private             Utf8JsonWriter                  writer;
     internal            Bytes                           buffer;
     private  readonly   ComponentType[]                 structTypes;
-    private  readonly   Dictionary<Type, SchemaType>    componentTypeByType;
+    private  readonly   Dictionary<Type, ScriptType>    scriptTypeByType;
     private  readonly   int                             unresolvedIndex;
     
     internal ComponentWriter() {
@@ -27,7 +27,7 @@ internal sealed class ComponentWriter
         componentWriter     = new ObjectWriter(EntityStoreBase.Static.TypeStore);
         var schema          = EntityStoreBase.Static.ComponentSchema;
         structTypes         = schema.components;
-        componentTypeByType = schema.componentTypeByType;
+        scriptTypeByType    = schema.scriptTypeByType;
         unresolvedIndex     = schema.unresolvedType.structIndex;
     }
     
@@ -57,7 +57,7 @@ internal sealed class ComponentWriter
         // --- write scripts
         foreach (var script in entity.Scripts) {
             componentWriter.WriteObject(script, ref buffer);
-            var classType   = componentTypeByType[script.GetType()];
+            var classType   = scriptTypeByType[script.GetType()];
             var keyBytes    = classType.componentKeyBytes;
             writer.MemberBytes(keyBytes.AsSpan(), buffer);
             componentCount++;

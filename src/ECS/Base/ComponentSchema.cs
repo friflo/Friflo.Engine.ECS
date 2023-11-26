@@ -36,8 +36,9 @@ public sealed class ComponentSchema
     /// </remarks>
     public   ReadOnlySpan<TagType>                      Tags                => new (tags);
     
-    public   IReadOnlyDictionary<string, SchemaType>    ComponentTypeByKey  => componentTypeByKey;
-    public   IReadOnlyDictionary<Type,   SchemaType>    ComponentTypeByType => componentTypeByType;
+    public   IReadOnlyDictionary<string, SchemaType>    SchemaTypeByKey     => schemaTypeByKey;
+    public   IReadOnlyDictionary<Type,   ScriptType>    ScriptTypeByType    => scriptTypeByType;
+    public   IReadOnlyDictionary<Type,   ComponentType> ComponentTypeByType => componentTypeByType;
     public   IReadOnlyDictionary<Type,   TagType>       TagTypeByType       => tagTypeByType;
 
     public   override string                            ToString()          => GetString();
@@ -45,16 +46,17 @@ public sealed class ComponentSchema
     #endregion
     
 #region private fields
-    [Browse(Never)] private  readonly   EngineDependant[]               engineDependants;
-    [Browse(Never)] internal readonly   int                             maxStructIndex;
-    [Browse(Never)] internal readonly   ComponentType[]                 components;
-    [Browse(Never)] private  readonly   ScriptType[]                    scripts;
-    [Browse(Never)] private  readonly   TagType[]                       tags;
-    [Browse(Never)] internal readonly   SchemaType                      unresolvedType;
-    [Browse(Never)] internal readonly   Dictionary<string, SchemaType>  componentTypeByKey;
-    [Browse(Never)] internal readonly   Dictionary<Type,   SchemaType>  componentTypeByType;
-    [Browse(Never)] internal readonly   Dictionary<string, TagType>     tagTypeByName;
-    [Browse(Never)] private  readonly   Dictionary<Type,   TagType>     tagTypeByType;
+    [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
+    [Browse(Never)] internal readonly   int                                 maxStructIndex;
+    [Browse(Never)] internal readonly   ComponentType[]                     components;
+    [Browse(Never)] private  readonly   ScriptType[]                        scripts;
+    [Browse(Never)] private  readonly   TagType[]                           tags;
+    [Browse(Never)] internal readonly   SchemaType                          unresolvedType;
+    [Browse(Never)] internal readonly   Dictionary<string, SchemaType>      schemaTypeByKey;
+    [Browse(Never)] internal readonly   Dictionary<Type,   ScriptType>      scriptTypeByType;
+    [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    [Browse(Never)] internal readonly   Dictionary<string, TagType>         tagTypeByName;
+    [Browse(Never)] private  readonly   Dictionary<Type,   TagType>         tagTypeByType;
     #endregion
     
 #region internal methods
@@ -66,24 +68,25 @@ public sealed class ComponentSchema
     {
         engineDependants        = dependants.ToArray();
         int count               = componentList.Count + scriptList.Count;
-        componentTypeByKey      = new Dictionary<string, SchemaType>(count);
-        componentTypeByType     = new Dictionary<Type,   SchemaType>(count);
+        schemaTypeByKey         = new Dictionary<string, SchemaType>(count);
+        scriptTypeByType        = new Dictionary<Type,   ScriptType>(count);
+        componentTypeByType     = new Dictionary<Type,   ComponentType>();
         tagTypeByName           = new Dictionary<string, TagType>   (count);
         tagTypeByType           = new Dictionary<Type,   TagType>   (count);
         maxStructIndex          = componentList.Count + 1;
         components              = new ComponentType[maxStructIndex];
         scripts                 = new ScriptType[scriptList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
-        foreach (var structType in componentList) {
-            componentTypeByKey. Add(structType.componentKey, structType);
-            componentTypeByType.Add(structType.type,         structType);
-            components[structType.structIndex] = structType;
+        foreach (var componentType in componentList) {
+            schemaTypeByKey. Add(componentType.componentKey, componentType);
+            componentTypeByType.Add(componentType.type,         componentType);
+            components[componentType.structIndex] = componentType;
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
-        foreach (var classType in scriptList) {
-            componentTypeByKey.Add (classType.componentKey, classType);
-            componentTypeByType.Add(classType.type,         classType);
-            scripts[classType.scriptIndex] = classType;
+        foreach (var scriptType in scriptList) {
+            schemaTypeByKey.Add (scriptType.componentKey, scriptType);
+            scriptTypeByType.  Add(scriptType.type,          scriptType);
+            scripts[scriptType.scriptIndex] = scriptType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type,      tagType);
@@ -95,7 +98,7 @@ public sealed class ComponentSchema
     /// <summary>
     /// return <see cref="SchemaType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
     /// </summary>
-    public SchemaType GetComponentType<T>()
+    public ComponentType GetComponentType<T>()
         where T : struct, IComponent
     {
         componentTypeByType.TryGetValue(typeof(T), out var result);
@@ -105,10 +108,10 @@ public sealed class ComponentSchema
     /// <summary>
     /// return <see cref="SchemaType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
-    public SchemaType GetScriptType<T>()
+    public ScriptType GetScriptType<T>()
         where T : Script
     {
-        componentTypeByType.TryGetValue(typeof(T), out var result);
+        scriptTypeByType.TryGetValue(typeof(T), out var result);
         return result;
     }
     

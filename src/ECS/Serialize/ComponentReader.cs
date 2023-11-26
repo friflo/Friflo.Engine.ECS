@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.ECS.Serialize;
 internal sealed class ComponentReader
 {
     private readonly    ObjectReader                            componentReader;
-    private readonly    Dictionary<string, SchemaType>          componentTypeByKey;
+    private readonly    Dictionary<string, SchemaType>          schemaTypeByKey;
     private readonly    Dictionary<string, TagType>             tagTypeByName;
     private readonly    SchemaType                              unresolvedType;
     private readonly    List<SchemaType>                        structTypes;
@@ -37,7 +37,7 @@ internal sealed class ComponentReader
         componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore);
         var schema              = EntityStoreBase.Static.ComponentSchema;
         unresolvedType          = schema.unresolvedType;
-        componentTypeByKey      = schema.componentTypeByKey;
+        schemaTypeByKey         = schema.schemaTypeByKey;
         tagTypeByName           = schema.tagTypeByName;
         structTypes             = new List<SchemaType>();
         searchKey               = new ArchetypeKey();
@@ -218,7 +218,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
-            componentTypeByKey.TryGetValue(component.key, out var type);
+            schemaTypeByKey.TryGetValue(component.key, out var type);
             if (type == null) {
                 // case: unresolved component
                 hasStructComponent = true;
@@ -300,7 +300,7 @@ internal struct RawComponent
     internal  readonly  string      key;
     internal  readonly  int         start;
     internal  readonly  int         end;
-    /// <summary>Is set when looking up components in <see cref="ComponentSchema.componentTypeByKey"/></summary>
+    /// <summary>Is set when looking up components in <see cref="ComponentSchema.schemaTypeByKey"/></summary>
     internal            SchemaType  type; 
 
     public    override  string      ToString() => key;

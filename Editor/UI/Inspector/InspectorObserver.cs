@@ -119,7 +119,7 @@ internal class InspectorObserver : EditorObserver
         {
             var scriptType = script.GetType();
             if (!scriptMap.TryGetValue(scriptType, out var item)) {
-                var componentType   = EntityStore.GetComponentSchema().ComponentTypeByType[scriptType] as ScriptType;
+                var componentType   = EntityStore.GetComponentSchema().ScriptTypeByType[scriptType];
                 var component       = new InspectorComponent { ComponentTitle = scriptType.Name, ScriptType = componentType };
                 var panel           = new StackPanel();
                 var fields          = AddScriptFields(script, panel);

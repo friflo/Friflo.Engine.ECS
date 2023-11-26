@@ -44,8 +44,9 @@ public static class Test_ComponentSchema
         AreEqual(10,     components.Length);
         AreEqual( 6,     scripts.Length);
         
-        AreEqual(14,    schema.ComponentTypeByKey.Count);
-        AreEqual(14,    schema.ComponentTypeByType.Count);
+        AreEqual(14,    schema.SchemaTypeByKey.Count);
+        AreEqual( 9,    schema.ComponentTypeByType.Count);
+        AreEqual( 5,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);
         for (int n = 1; n < components.Length; n++) {
@@ -66,10 +67,10 @@ public static class Test_ComponentSchema
             NotNull (type.componentKey);
         }
         
-        var posType = schema.ComponentTypeByKey["pos"];
+        var posType = schema.SchemaTypeByKey["pos"];
         AreEqual(typeof(Position), posType.type);
         
-        var testType = schema.ComponentTypeByKey["test"];
+        var testType = schema.SchemaTypeByKey["test"];
         AreEqual(typeof(TestComponent), testType.type);
         
         var myComponentType = schema.GetComponentType<MyComponent1>();
@@ -80,7 +81,7 @@ public static class Test_ComponentSchema
         AreEqual("test",                                testComponentType.componentKey);
         AreEqual("script: 'test' [*TestComponent]",     testComponentType.ToString());
         
-        AreEqual(typeof(Position),  schema.ComponentTypeByKey["pos"].type);
-        AreEqual("test",            schema.ComponentTypeByType[typeof(TestComponent)].componentKey);
+        AreEqual(typeof(Position),  schema.SchemaTypeByKey["pos"].type);
+        AreEqual("test",            schema.ScriptTypeByType[typeof(TestComponent)].componentKey);
     }
 }
