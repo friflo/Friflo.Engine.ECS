@@ -51,7 +51,7 @@ public sealed class ComponentSchema
     [Browse(Never)] internal readonly   ComponentType[]                     components;
     [Browse(Never)] private  readonly   ScriptType[]                        scripts;
     [Browse(Never)] private  readonly   TagType[]                           tags;
-    [Browse(Never)] internal readonly   SchemaType                          unresolvedType;
+    [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
     [Browse(Never)] internal readonly   Dictionary<string, SchemaType>      schemaTypeByKey;
     [Browse(Never)] internal readonly   Dictionary<Type,   ScriptType>      scriptTypeByType;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;

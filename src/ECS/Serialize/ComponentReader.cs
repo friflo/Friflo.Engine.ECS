@@ -18,8 +18,8 @@ internal sealed class ComponentReader
     private readonly    ObjectReader                            componentReader;
     private readonly    Dictionary<string, SchemaType>          schemaTypeByKey;
     private readonly    Dictionary<string, TagType>             tagTypeByName;
-    private readonly    SchemaType                              unresolvedType;
-    private readonly    List<SchemaType>                        structTypes;
+    private readonly    ComponentType                           unresolvedType;
+    private readonly    List<ComponentType>                     structTypes;
     private readonly    ArchetypeKey                            searchKey;
     private readonly    List<string>                            unresolvedTagList;
     private readonly    HashSet<string>                         unresolvedTagSet;
@@ -39,7 +39,7 @@ internal sealed class ComponentReader
         unresolvedType          = schema.unresolvedType;
         schemaTypeByKey         = schema.schemaTypeByKey;
         tagTypeByName           = schema.tagTypeByName;
-        structTypes             = new List<SchemaType>();
+        structTypes             = new List<ComponentType>();
         searchKey               = new ArchetypeKey();
         unresolvedTagList       = new List<string>();
         unresolvedTagSet        = new HashSet<string>();
@@ -245,7 +245,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
             if (component.type.kind == ComponentKind.Component) {
-                structTypes.Add(component.type);
+                structTypes.Add((ComponentType)component.type);
             }
         }
         if (unresolvedTagList.Count > 0) {
