@@ -5,6 +5,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Friflo.Fliox.Engine.ECS;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable UnusedParameter.Local
@@ -19,6 +20,10 @@ public partial class InspectorComponent : UserControl, IExpandable
     public string   ComponentTitle  { get => GetValue(ComponentTitleProperty);  set => SetValue(ComponentTitleProperty, value); }
     public bool     Expanded        { get => GetValue(ExpandedProperty);        set => SetValue(ExpandedProperty,       value); }
     
+    public Entity           Entity          { get; set; }
+    public ComponentType    ComponentType   { get; init; }
+    public ComponentType    ScriptType      { get; init; }
+    
     public InspectorComponent()
     {
         InitializeComponent();
@@ -28,7 +33,14 @@ public partial class InspectorComponent : UserControl, IExpandable
         Expanded = !Expanded;
     }
 
-    private void MenuItem_RemoveComponent(object sender, RoutedEventArgs e) {
+    private void MenuItem_RemoveComponent(object sender, RoutedEventArgs e)
+    {
         Console.WriteLine("MenuItem_RemoveComponent");
+        if (ComponentType != null) {
+            Entity.RemoveComponent(ComponentType);
+        }
+        if (ScriptType != null) {
+            Entity.RemoveScript(ScriptType);
+        }
     }
 }

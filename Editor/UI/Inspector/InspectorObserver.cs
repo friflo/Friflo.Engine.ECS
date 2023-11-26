@@ -89,7 +89,7 @@ internal class InspectorObserver : EditorObserver
         foreach (var componentType in archetype.Structs)
         {
             if (!componentMap.TryGetValue(componentType, out var item)) {
-                var component   = new InspectorComponent { ComponentTitle = componentType.type.Name };
+                var component   = new InspectorComponent { ComponentTitle = componentType.type.Name, ComponentType = componentType };
                 var panel       = new StackPanel();
                 var fields      = AddComponentFields(componentType, panel);
                 
@@ -103,6 +103,7 @@ internal class InspectorObserver : EditorObserver
             }          
             var instance = entity.Archetype.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
             ComponentField.SetComponentFields(item.fields, entity, instance);
+            item.control.Entity = entity;
             
             components.Add(item.control);
             components.Add(item.panel);
@@ -118,9 +119,10 @@ internal class InspectorObserver : EditorObserver
         {
             var scriptType = script.GetType();
             if (!scriptMap.TryGetValue(scriptType, out var item)) {
-                var component   = new InspectorComponent { ComponentTitle = script.GetType().Name };
-                var panel       = new StackPanel();
-                var fields      = AddScriptFields(script, panel);
+                var componentType   = EntityStore.GetComponentSchema().ComponentTypeByType[scriptType];
+                var component       = new InspectorComponent { ComponentTitle = scriptType.Name, ScriptType = componentType };
+                var panel           = new StackPanel();
+                var fields          = AddScriptFields(script, panel);
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
@@ -130,6 +132,7 @@ internal class InspectorObserver : EditorObserver
                 scriptMap.Add(scriptType, item);
             }
             ComponentField.SetScriptFields(item.fields, script);
+            item.control.Entity = entity;
             
             scripts.Add(item.control);
             scripts.Add(item.panel);

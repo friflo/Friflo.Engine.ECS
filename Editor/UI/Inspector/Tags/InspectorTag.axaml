@@ -16,7 +16,7 @@
                 Content="{Binding $parent[local:InspectorTag].TagName}">
             <Button.Flyout>
                 <MenuFlyout>
-                    <MenuItem Header="Remove Tag" Click="MenuItem_RemoveTag"/>
+                    <MenuItem Header="Remove" Click="MenuItem_RemoveTag"/>
                 </MenuFlyout>
             </Button.Flyout>
         </Button>

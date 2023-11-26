@@ -220,6 +220,8 @@ public sealed class Entity
     /// <remarks>Executes in O(1)</remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     
+    public bool RemoveComponent(ComponentType type)                          => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, type.structIndex);
+    
     /// <summary>
     /// Property is only used to display components in the Debugger.<br/>
     /// It has poor performance as is creates an array and boxes all components. 
@@ -249,6 +251,8 @@ public sealed class Entity
     public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript(this, typeof(T));
+    
+    public Script RemoveScript(ComponentType type)      => EntityUtils.RemoveScript(this, type.type);
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------
