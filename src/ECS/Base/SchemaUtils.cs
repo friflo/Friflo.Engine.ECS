@@ -82,7 +82,7 @@ internal static class SchemaUtils
     {
         var structIndex = StructHeap<T>.StructIndex;
         var structKey   = StructHeap<T>.StructKey;
-        return new StructComponentType<T>(structKey, structIndex, typeStore);
+        return new ComponentType<T>(structKey, structIndex, typeStore);
     }
     
     internal static SchemaType CreateClassFactory<T>(TypeStore typeStore)

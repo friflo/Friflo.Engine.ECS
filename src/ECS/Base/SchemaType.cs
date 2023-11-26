@@ -76,14 +76,21 @@ public abstract class SchemaType
     }
 }
 
-internal sealed class StructComponentType<T> : SchemaType 
+public abstract class ComponentType : SchemaType
+{
+    protected ComponentType(string componentKey, int structIndex, Type type)
+        : base (componentKey, null, type, Component, 0, structIndex, 0)
+    { }
+}
+
+internal sealed class ComponentType<T> : ComponentType 
     where T : struct, IComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"component: '{componentKey}' [{typeof(T).Name}]";
 
-    internal StructComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, null, typeof(T), Component, 0, structIndex, 0)
+    internal ComponentType(string componentKey, int structIndex, TypeStore typeStore)
+        : base(componentKey, structIndex, typeof(T))
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
