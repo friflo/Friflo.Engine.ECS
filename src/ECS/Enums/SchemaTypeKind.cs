@@ -8,7 +8,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// Declares the <see cref="SchemaType.kind"/> of a <see cref="SchemaType"/> 
 /// </summary>
-public enum ComponentKind
+public enum SchemaTypeKind
 {
     /// <summary>Declare a <see cref="SchemaType"/> is an <b><see cref="ECS.IComponent"/></b></summary>
     Component   = 0,

@@ -19,7 +19,7 @@ public static class Test_ComponentSchema
             AreEqual(n,                 type.tagIndex);
             AreEqual(0,                 type.structIndex);
             AreEqual(0,                 type.scriptIndex);
-            AreEqual(ComponentKind.Tag, type.kind);
+            AreEqual(SchemaTypeKind.Tag, type.kind);
             IsNull(type.componentKey);
         }
         var testTagType = schema.TagTypeByType[typeof(TestTag)];
@@ -54,7 +54,7 @@ public static class Test_ComponentSchema
             AreEqual(n, type.structIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.scriptIndex);
-            AreEqual(ComponentKind.Component, type.kind);
+            AreEqual(SchemaTypeKind.Component, type.kind);
             NotNull (type.componentKey);
         }
         IsNull(scripts[0]);
@@ -63,7 +63,7 @@ public static class Test_ComponentSchema
             AreEqual(n, type.scriptIndex);
             AreEqual(0, type.tagIndex);
             AreEqual(0, type.structIndex);
-            AreEqual(ComponentKind.Script, type.kind);
+            AreEqual(SchemaTypeKind.Script, type.kind);
             NotNull (type.componentKey);
         }
         

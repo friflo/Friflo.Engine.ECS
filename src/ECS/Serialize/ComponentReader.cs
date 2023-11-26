@@ -102,11 +102,11 @@ internal sealed class ComponentReader
                 continue;
             }
             switch (type.kind) {
-                case ComponentKind.Script:
+                case SchemaTypeKind.Script:
                     // --- read script
                     component.type.ReadScript(componentReader, json, entity);
                     break;
-                case ComponentKind.Component:
+                case SchemaTypeKind.Component:
                     var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
@@ -227,7 +227,7 @@ internal sealed class ComponentReader
                 continue;
             }
             component.type = type;
-            if (type.kind == ComponentKind.Component) {
+            if (type.kind == SchemaTypeKind.Component) {
                 hasStructComponent = true;
                 structs.SetBit(type.structIndex);
             }                
@@ -244,7 +244,7 @@ internal sealed class ComponentReader
         structTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
-            if (component.type.kind == ComponentKind.Component) {
+            if (component.type.kind == SchemaTypeKind.Component) {
                 structTypes.Add((ComponentType)component.type);
             }
         }

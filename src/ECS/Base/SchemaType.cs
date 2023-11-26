@@ -6,7 +6,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
-using static Friflo.Fliox.Engine.ECS.ComponentKind;
+using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -37,7 +37,7 @@ public abstract class SchemaType
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
     /// </returns>
-    public   readonly   ComponentKind   kind;           //  4
+    public   readonly   SchemaTypeKind  kind;           //  4
     
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the type of a component attributed with <see cref="ComponentAttribute"/><br/>
@@ -58,7 +58,7 @@ public abstract class SchemaType
         string          componentKey,
         string          tagName,
         Type            type,
-        ComponentKind   kind,
+        SchemaTypeKind  kind,
         int             scriptIndex,
         int             structIndex,
         int             tagIndex)
@@ -102,7 +102,7 @@ internal sealed class ComponentType<T> : ComponentType
 public abstract class ScriptType : SchemaType
 {
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
-        : base (scriptKey, null, type, ComponentKind.Script, scriptIndex, 0, 0)
+        : base (scriptKey, null, type, SchemaTypeKind.Script, scriptIndex, 0, 0)
     { }
 }
 
