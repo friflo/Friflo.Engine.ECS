@@ -38,7 +38,7 @@ public sealed class ComponentSchema
     
     public   IReadOnlyDictionary<string, SchemaType>    ComponentTypeByKey  => componentTypeByKey;
     public   IReadOnlyDictionary<Type,   SchemaType>    ComponentTypeByType => componentTypeByType;
-    public   IReadOnlyDictionary<Type,   SchemaType>    TagTypeByType       => tagTypeByType;
+    public   IReadOnlyDictionary<Type,   TagType>       TagTypeByType       => tagTypeByType;
 
     public   override string                            ToString()          => GetString();
 
@@ -53,42 +53,42 @@ public sealed class ComponentSchema
     [Browse(Never)] internal readonly   SchemaType                      unresolvedType;
     [Browse(Never)] internal readonly   Dictionary<string, SchemaType>  componentTypeByKey;
     [Browse(Never)] internal readonly   Dictionary<Type,   SchemaType>  componentTypeByType;
-    [Browse(Never)] internal readonly   Dictionary<string, SchemaType>  tagTypeByName;
-    [Browse(Never)] private  readonly   Dictionary<Type,   SchemaType>  tagTypeByType;
+    [Browse(Never)] internal readonly   Dictionary<string, TagType>     tagTypeByName;
+    [Browse(Never)] private  readonly   Dictionary<Type,   TagType>     tagTypeByType;
     #endregion
     
 #region internal methods
     internal ComponentSchema(
         List<EngineDependant>   dependants,
-        List<SchemaType>        structList,
-        List<SchemaType>        classList,
-        List<SchemaType>        tagList)
+        List<ComponentType>     componentList,
+        List<ScriptType>        scriptList,
+        List<TagType>           tagList)
     {
         engineDependants        = dependants.ToArray();
-        int count               = structList.Count + classList.Count;
+        int count               = componentList.Count + scriptList.Count;
         componentTypeByKey      = new Dictionary<string, SchemaType>(count);
         componentTypeByType     = new Dictionary<Type,   SchemaType>(count);
-        tagTypeByName           = new Dictionary<string, SchemaType>(count);
-        tagTypeByType           = new Dictionary<Type,   SchemaType>(count);
-        maxStructIndex          = structList.Count + 1;
+        tagTypeByName           = new Dictionary<string, TagType>   (count);
+        tagTypeByType           = new Dictionary<Type,   TagType>   (count);
+        maxStructIndex          = componentList.Count + 1;
         components              = new ComponentType[maxStructIndex];
-        scripts                 = new ScriptType[classList.Count + 1];
+        scripts                 = new ScriptType[scriptList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
-        foreach (var structType in structList) {
+        foreach (var structType in componentList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
-            components[structType.structIndex] = (ComponentType)structType;
+            components[structType.structIndex] = structType;
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
-        foreach (var classType in classList) {
+        foreach (var classType in scriptList) {
             componentTypeByKey.Add (classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
-            scripts[classType.scriptIndex] = (ScriptType)classType;
+            scripts[classType.scriptIndex] = classType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type,      tagType);
             tagTypeByName.Add(tagType.type.Name, tagType);
-            tags[tagType.tagIndex] = (TagType)tagType;
+            tags[tagType.tagIndex] = tagType;
         }
     }
     
@@ -115,7 +115,7 @@ public sealed class ComponentSchema
     /// <summary>
     /// return <see cref="SchemaType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
-    public SchemaType GetTagType<T>()
+    public TagType GetTagType<T>()
         where T : struct, IEntityTag
     {
         tagTypeByType.TryGetValue(typeof(T), out var result);

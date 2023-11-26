@@ -18,7 +18,7 @@ internal sealed class ComponentWriter
     private  readonly   ObjectWriter                    componentWriter;
     private             Utf8JsonWriter                  writer;
     internal            Bytes                           buffer;
-    private  readonly   SchemaType[]                    structTypes;
+    private  readonly   ComponentType[]                 structTypes;
     private  readonly   Dictionary<Type, SchemaType>    componentTypeByType;
     private  readonly   int                             unresolvedIndex;
     

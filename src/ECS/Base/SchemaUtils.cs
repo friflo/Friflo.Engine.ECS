@@ -28,17 +28,17 @@ internal static class SchemaUtils
         }
         Console.WriteLine(assemblyLoader);
         
-        var structs     = new List<SchemaType>();
-        var scripts     = new List<SchemaType>();
-        var tags        = new List<SchemaType>();
+        var structs     = new List<ComponentType>();
+        var scripts     = new List<ScriptType>();
+        var tags        = new List<TagType>();
         foreach (var dependant in dependants)
         {
             foreach (var type in dependant.Types)
             {
                 switch (type.kind) {
-                    case ComponentKind.Script:      scripts.Add(type);  break;
-                    case ComponentKind.Component:   structs.Add(type);  break;
-                    case ComponentKind.Tag:         tags.Add(type);     break;
+                    case ComponentKind.Script:      scripts.Add((ScriptType)    type);  break;
+                    case ComponentKind.Component:   structs.Add((ComponentType) type);  break;
+                    case ComponentKind.Tag:         tags.   Add((TagType)       type);  break;
                 }
             }
         }

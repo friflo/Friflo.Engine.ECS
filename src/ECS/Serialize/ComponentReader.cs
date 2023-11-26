@@ -17,7 +17,7 @@ internal sealed class ComponentReader
 {
     private readonly    ObjectReader                            componentReader;
     private readonly    Dictionary<string, SchemaType>          componentTypeByKey;
-    private readonly    Dictionary<string, SchemaType>          tagTypeByName;
+    private readonly    Dictionary<string, TagType>             tagTypeByName;
     private readonly    SchemaType                              unresolvedType;
     private readonly    List<SchemaType>                        structTypes;
     private readonly    ArchetypeKey                            searchKey;
