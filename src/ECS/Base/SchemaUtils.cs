@@ -9,7 +9,7 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-internal static class ComponentUtils
+internal static class SchemaUtils
 {
     internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
     {
@@ -50,7 +50,7 @@ internal static class ComponentUtils
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
         if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
-            var method          = typeof(ComponentUtils).GetMethod(nameof(CreateTagType), flags);
+            var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
             var genericMethod   = method!.MakeGenericMethod(type);
             var componentType   = (SchemaType)genericMethod.Invoke(null, null);
             return componentType;
@@ -61,14 +61,14 @@ internal static class ComponentUtils
             var attributeType = attr.AttributeType;
             if (attributeType == typeof(ComponentAttribute))
             {
-                var method          = typeof(ComponentUtils).GetMethod(nameof(CreateStructFactory), flags);
+                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateStructFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (SchemaType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
             if (attributeType == typeof(ScriptAttribute))
             {
-                var method          = typeof(ComponentUtils).GetMethod(nameof(CreateClassFactory), flags);
+                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateClassFactory), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (SchemaType)genericMethod.Invoke(null, createParams);
                 return componentType;

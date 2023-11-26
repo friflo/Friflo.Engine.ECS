@@ -50,7 +50,7 @@ public abstract partial class EntityStoreBase
     public static class Static {
         internal static readonly    int[]           EmptyChildNodes = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
-        internal static readonly    ComponentSchema ComponentSchema = ComponentUtils.RegisterComponentTypes(TypeStore);
+        internal static readonly    ComponentSchema ComponentSchema = SchemaUtils.RegisterComponentTypes(TypeStore);
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
         internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[ComponentSchema.maxStructIndex];
         
