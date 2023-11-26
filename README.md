@@ -22,6 +22,35 @@
 |                   |                           | [How to use and debug assembly unloadability in .NET](https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability)
 
 
+## Build Editor
+
+### Dependency
+
+**.NET SDK 7.0**  
+- Download and install SDK [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+
+- Clone git repository: https://github.com/friflo/Friflo.Json.Fliox
+
+- Navigate to folder: `./Engine/Editor` - assuming you are in the root folder of the git repository.
+```
+cd ./Engine/Editor
+```
+
+- Build & Launch with:
+```
+dotnet run
+```
+
+- Launch without build
+```
+dotnet run --no-build
+```
+
+The Editor should launch in less than a second.
+
+<br/><br/>
+
+
 ## Engine Architecture
 
 The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *depends on* `ECS`
