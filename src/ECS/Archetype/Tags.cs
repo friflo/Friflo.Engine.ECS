@@ -101,6 +101,13 @@ public struct Tags : IEnumerable<ComponentType>
         return tags;
     }
     
+    public static Tags Get(ComponentType type)
+    {
+        var tags = new Tags();
+        tags.SetBit(type.tagIndex);
+        return tags;
+    }
+    
     public static Tags Get<T1, T2>()
         where T1 : struct, IEntityTag
         where T2 : struct, IEntityTag
