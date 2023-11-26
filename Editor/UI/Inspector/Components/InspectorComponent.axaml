@@ -20,6 +20,11 @@
                             Content="..." 
                             BorderThickness="0" CornerRadius="2"
                             Margin="0 1" Padding="3 1">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="Remove Component" Click="MenuItem_RemoveComponent"/>
+                            </MenuFlyout>
+                        </Button.Flyout>
                     </Button>
                 </Border>
                 <Border>

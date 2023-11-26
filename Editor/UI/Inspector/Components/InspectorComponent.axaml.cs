@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -25,5 +26,9 @@ public partial class InspectorComponent : UserControl, IExpandable
 
     private void Button_OnClick(object sender, RoutedEventArgs e) {
         Expanded = !Expanded;
+    }
+
+    private void MenuItem_RemoveComponent(object sender, RoutedEventArgs e) {
+        Console.WriteLine("MenuItem_RemoveComponent");
     }
 }
