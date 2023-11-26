@@ -41,6 +41,11 @@ cd ./Engine/Editor
 dotnet run
 ```
 
+When the Editor launches is also starts an HTTP server at:  
+http://localhost:5000/  
+The server provides a Web UI to access and modify entities.  
+It also has a REST and Websocket API to access and modify entities using HTTP.
+
 - Launch without build
 ```
 dotnet run --no-build
