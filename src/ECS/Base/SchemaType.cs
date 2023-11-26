@@ -5,7 +5,6 @@ using System;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
-using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
@@ -74,66 +73,4 @@ public abstract class SchemaType
             componentKeyBytes = new Bytes(componentKey);   
         }
     }
-}
-
-public abstract class ComponentType : SchemaType
-{
-    protected ComponentType(string componentKey, int structIndex, Type type)
-        : base (componentKey, null, type, Component, 0, structIndex, 0)
-    { }
-}
-
-internal sealed class ComponentType<T> : ComponentType 
-    where T : struct, IComponent
-{
-    private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"component: '{componentKey}' [{typeof(T).Name}]";
-
-    internal ComponentType(string componentKey, int structIndex, TypeStore typeStore)
-        : base(componentKey, structIndex, typeof(T))
-    {
-        typeMapper = typeStore.GetTypeMapper<T>();
-    }
-    internal override StructHeap CreateHeap() {
-        return new StructHeap<T>(structIndex, typeMapper);
-    }
-}
-
-public abstract class ScriptType : SchemaType
-{
-    protected ScriptType(string scriptKey, int scriptIndex, Type type)
-        : base (scriptKey, null, type, SchemaTypeKind.Script, scriptIndex, 0, 0)
-    { }
-}
-
-internal sealed class ScriptType<T> : ScriptType 
-    where T : Script
-{
-    private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"script: '{componentKey}' [*{typeof(T).Name}]";
-    
-    internal ScriptType(string scriptKey, int scriptIndex, TypeStore typeStore)
-        : base(scriptKey, scriptIndex, typeof(T))
-    {
-        typeMapper = typeStore.GetTypeMapper<T>();
-    }
-    
-    internal override void ReadScript(ObjectReader reader, JsonValue json, Entity entity) {
-        var script = entity.GetScript<T>();
-        if (script != null) { 
-            reader.ReadToMapper(typeMapper, json, script, true);
-            return;
-        }
-        script = reader.ReadMapper(typeMapper, json);
-        entity.archetype.entityStore.AppendScript(entity, script);
-    }
-}
-
-public sealed class TagType : SchemaType 
-{
-    public  override    string  ToString() => $"tag: [#{type.Name}]";
-    
-    internal TagType(Type type, int tagIndex)
-        : base(null, type.Name, type, Tag, 0, 0, tagIndex)
-    { }
 }
