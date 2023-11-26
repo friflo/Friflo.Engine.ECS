@@ -27,18 +27,18 @@ internal readonly struct ComponentItem
 
 internal class InspectorObserver : EditorObserver
 {
-    private readonly    InspectorControl                        inspector;
-    private readonly    Dictionary<TagType,    InspectorTag>    tagMap;
-    private readonly    Dictionary<SchemaType, ComponentItem>   componentMap;
-    private readonly    Dictionary<Type,       ComponentItem>   scriptMap;
+    private readonly    InspectorControl                            inspector;
+    private readonly    Dictionary<TagType,       InspectorTag>     tagMap;
+    private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
+    private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
     
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
         this.inspector  = inspector;
-        tagMap          = new Dictionary<TagType,    InspectorTag>();
-        componentMap    = new Dictionary<SchemaType, ComponentItem>();
-        scriptMap       = new Dictionary<Type,       ComponentItem>();
+        tagMap          = new Dictionary<TagType,       InspectorTag>();
+        componentMap    = new Dictionary<ComponentType, ComponentItem>();
+        scriptMap       = new Dictionary<Type,          ComponentItem>();
     }
 
     protected override void OnSelectionChanged(in EditorSelection selection)

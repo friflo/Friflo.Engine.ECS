@@ -11,19 +11,19 @@ using System.Text;
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
-public struct ArchetypeStructs : IEnumerable<SchemaType>
+public struct ArchetypeStructs : IEnumerable<ComponentType>
 {
     internal        BitSet  bitSet;     // 32
     
-    public readonly int                         Count                                   => bitSet.GetBitCount();
+    public readonly int                         Count                                       => bitSet.GetBitCount();
    
-    public readonly ArchetypeStructsEnumerator  GetEnumerator()                         => new ArchetypeStructsEnumerator (this);
+    public readonly ArchetypeStructsEnumerator  GetEnumerator()                             => new ArchetypeStructsEnumerator (this);
 
     // --- IEnumerable
-           readonly IEnumerator                 IEnumerable.GetEnumerator()             => new ArchetypeStructsEnumerator (this);
+           readonly IEnumerator                 IEnumerable.GetEnumerator()                 => new ArchetypeStructsEnumerator (this);
 
     // --- IEnumerable<>
-           readonly IEnumerator<SchemaType>     IEnumerable<SchemaType>.GetEnumerator() => new ArchetypeStructsEnumerator (this);
+           readonly IEnumerator<ComponentType>  IEnumerable<ComponentType>.GetEnumerator()  => new ArchetypeStructsEnumerator (this);
 
     public override string                      ToString() => GetString();
     
@@ -142,7 +142,7 @@ public struct ArchetypeStructs : IEnumerable<SchemaType>
         sb.Append("Structs: [");
         var hasTypes    = false;
         foreach (var index in bitSet) {
-            var structType = EntityStoreBase.Static.ComponentSchema.GetStructComponentAt(index);
+            var structType = EntityStoreBase.Static.ComponentSchema.GetComponentAt(index);
             sb.Append(structType.type.Name);
             sb.Append(", ");
             hasTypes = true;
@@ -155,16 +155,16 @@ public struct ArchetypeStructs : IEnumerable<SchemaType>
     }
 }
 
-public struct ArchetypeStructsEnumerator : IEnumerator<SchemaType>
+public struct ArchetypeStructsEnumerator : IEnumerator<ComponentType>
 {
-    private BitSetEnumerator    bitSetEnumerator;
+    private BitSetEnumerator        bitSetEnumerator;
 
     // --- IEnumerator
-    public          void        Reset()             => bitSetEnumerator.Reset();
+    public          void            Reset()             => bitSetEnumerator.Reset();
 
-           readonly object      IEnumerator.Current => Current;
+           readonly object          IEnumerator.Current => Current;
 
-    public readonly SchemaType  Current => EntityStoreBase.Static.ComponentSchema.GetStructComponentAt(bitSetEnumerator.Current);
+    public readonly ComponentType   Current => EntityStoreBase.Static.ComponentSchema.GetComponentAt(bitSetEnumerator.Current);
     
     internal ArchetypeStructsEnumerator(in ArchetypeStructs structs) {
         bitSetEnumerator = structs.bitSet.GetEnumerator();

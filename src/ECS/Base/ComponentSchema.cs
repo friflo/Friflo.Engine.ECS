@@ -22,7 +22,7 @@ public sealed class ComponentSchema
     /// <see cref="SchemaType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<SchemaType>                   Components          => new (components);
+    public   ReadOnlySpan<ComponentType>                Components          => new (components);
     /// <summary>return all <see cref="Script"/> types attributed with <see cref="ScriptAttribute"/></summary>
     /// <remarks>
     /// <see cref="SchemaType.scriptIndex"/> is equal to the array index<br/>
@@ -47,7 +47,7 @@ public sealed class ComponentSchema
 #region private fields
     [Browse(Never)] private  readonly   EngineDependant[]               engineDependants;
     [Browse(Never)] internal readonly   int                             maxStructIndex;
-    [Browse(Never)] internal readonly   SchemaType[]                    components;
+    [Browse(Never)] internal readonly   ComponentType[]                 components;
     [Browse(Never)] private  readonly   ScriptType[]                    scripts;
     [Browse(Never)] private  readonly   TagType[]                       tags;
     [Browse(Never)] internal readonly   SchemaType                      unresolvedType;
@@ -71,13 +71,13 @@ public sealed class ComponentSchema
         tagTypeByName           = new Dictionary<string, SchemaType>(count);
         tagTypeByType           = new Dictionary<Type,   SchemaType>(count);
         maxStructIndex          = structList.Count + 1;
-        components              = new SchemaType[maxStructIndex];
+        components              = new ComponentType[maxStructIndex];
         scripts                 = new ScriptType[classList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
-            components[structType.structIndex] = structType;
+            components[structType.structIndex] = (ComponentType)structType;
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
         foreach (var classType in classList) {
@@ -143,7 +143,7 @@ public sealed class ComponentSchema
         return tags[index];
     }
     
-    internal SchemaType GetStructComponentAt(int index) {
+    internal ComponentType GetComponentAt(int index) {
         return components[index];
     }
     
