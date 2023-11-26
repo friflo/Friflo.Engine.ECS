@@ -117,19 +117,19 @@ internal class InspectorObserver : EditorObserver
         
         foreach (var script in entity.Scripts)
         {
-            var scriptType = script.GetType();
-            if (!scriptMap.TryGetValue(scriptType, out var item)) {
-                var componentType   = EntityStore.GetComponentSchema().ScriptTypeByType[scriptType];
-                var component       = new InspectorComponent { ComponentTitle = scriptType.Name, ScriptType = componentType };
-                var panel           = new StackPanel();
-                var fields          = AddScriptFields(script, panel);
+            var type = script.GetType();
+            if (!scriptMap.TryGetValue(type, out var item)) {
+                var scriptType  = EntityStore.GetEntitySchema().ScriptTypeByType[type];
+                var component   = new InspectorComponent { ComponentTitle = type.Name, ScriptType = scriptType };
+                var panel       = new StackPanel();
+                var fields      = AddScriptFields(script, panel);
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
                 panel.Bind(Visual.IsVisibleProperty, expanded);
                 
                 item = new ComponentItem(component, panel, fields);
-                scriptMap.Add(scriptType, item);
+                scriptMap.Add(type, item);
             }
             ComponentField.SetScriptFields(item.fields, script);
             item.control.Entity = entity;

@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
-public sealed class ComponentSchema
+public sealed class EntitySchema
 {
 #region public properties
     /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
@@ -60,7 +60,7 @@ public sealed class ComponentSchema
     #endregion
     
 #region internal methods
-    internal ComponentSchema(
+    internal EntitySchema(
         List<EngineDependant>   dependants,
         List<ComponentType>     componentList,
         List<ScriptType>        scriptList,

@@ -34,7 +34,7 @@ public static class Signature
     public static Signature<T> Get<T>()
         where T : struct, IComponent
     {
-        var schema  = EntityStoreBase.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes   = new SignatureIndexes(1,
             T1: schema.CheckStructIndex(typeof(T), StructHeap<T>.StructIndex)
         );
@@ -53,7 +53,7 @@ public static class Signature
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        var schema  = EntityStoreBase.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes = new SignatureIndexes(2,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex)
@@ -74,7 +74,7 @@ public static class Signature
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        var schema  = EntityStoreBase.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes = new SignatureIndexes(3,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
@@ -97,7 +97,7 @@ public static class Signature
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        var schema  = EntityStoreBase.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes = new SignatureIndexes(4,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),
@@ -122,7 +122,7 @@ public static class Signature
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        var schema  = EntityStoreBase.Static.ComponentSchema;
+        var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes = new SignatureIndexes(5,
             T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex),
             T2: schema.CheckStructIndex(typeof(T2), StructHeap<T2>.StructIndex),

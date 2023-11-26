@@ -25,7 +25,7 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig();
-        var schema      = Static.ComponentSchema;
+        var schema      = Static.EntitySchema;
         var heaps       = current.Heaps;
         var structTypes = new List<ComponentType>(heaps.Length + 1);
         foreach (var heap in current.Heaps) {
@@ -47,7 +47,7 @@ public partial class EntityStoreBase
         var componentCount  = heaps.Length - 1;
         var structTypes     = new List<ComponentType>(componentCount);
         var config          = GetArchetypeConfig();
-        var schema          = Static.ComponentSchema;
+        var schema          = Static.EntitySchema;
         foreach (var heap in heaps) {
             if (heap.structIndex == structIndex)
                 continue;
@@ -63,7 +63,7 @@ public partial class EntityStoreBase
         var heaps       = archetype.Heaps;
         var structTypes = new List<ComponentType>(heaps.Length);
         var config      = GetArchetypeConfig();
-        var schema      = Static.ComponentSchema;
+        var schema      = Static.EntitySchema;
         foreach (var heap in heaps) {
             structTypes.Add(schema.components[heap.structIndex]);
         }

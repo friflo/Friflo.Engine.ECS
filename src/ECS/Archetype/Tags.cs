@@ -124,7 +124,7 @@ public struct Tags : IEnumerable<TagType>
         var hasTypes    = false;
         sb.Append("Tags: [");
         foreach (var index in bitSet) {
-            var tagType = EntityStoreBase.Static.ComponentSchema.GetTagAt(index);
+            var tagType = EntityStoreBase.Static.EntitySchema.GetTagAt(index);
             sb.Append('#');
             sb.Append(tagType.type.Name);
             sb.Append(", ");
@@ -147,7 +147,7 @@ public struct TagsEnumerator : IEnumerator<TagType>
 
            readonly object      IEnumerator.Current => Current;
 
-    public readonly TagType     Current             => EntityStoreBase.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
+    public readonly TagType     Current             => EntityStoreBase.Static.EntitySchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
         bitSetEnumerator = tags.bitSet.GetEnumerator();

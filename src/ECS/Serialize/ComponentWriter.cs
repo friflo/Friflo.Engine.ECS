@@ -25,7 +25,7 @@ internal sealed class ComponentWriter
     internal ComponentWriter() {
         buffer              = new Bytes(128);
         componentWriter     = new ObjectWriter(EntityStoreBase.Static.TypeStore);
-        var schema          = EntityStoreBase.Static.ComponentSchema;
+        var schema          = EntityStoreBase.Static.EntitySchema;
         structTypes         = schema.components;
         scriptTypeByType    = schema.scriptTypeByType;
         unresolvedIndex     = schema.unresolvedType.structIndex;

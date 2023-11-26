@@ -20,7 +20,7 @@ namespace Friflo.Fliox.Engine.ECS;
 // EntityStore remarks.
 public partial class EntityStore
 {
-    public static     ComponentSchema         GetComponentSchema()=> Static.ComponentSchema;
+    public static     EntitySchema         GetEntitySchema()=> Static.EntitySchema;
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity() {

@@ -21,15 +21,15 @@ public abstract class SchemaType
     
     public   readonly   string          tagName;        //  8
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Script"/> the index in <see cref="ComponentSchema.Scripts"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Script"/> the index in <see cref="EntitySchema.Scripts"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             scriptIndex;  //  4
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="ComponentSchema.Components"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="EntitySchema.Components"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             structIndex;    //  4
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Tag"/> the index in <see cref="ComponentSchema.Tags"/>. Otherwise 0<br/>
+    /// If <see cref="kind"/> == <see cref="Tag"/> the index in <see cref="EntitySchema.Tags"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             tagIndex;       //  4
     /// <returns>

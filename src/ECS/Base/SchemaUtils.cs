@@ -11,7 +11,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 internal static class SchemaUtils
 {
-    internal static ComponentSchema RegisterComponentTypes(TypeStore typeStore)
+    internal static EntitySchema RegisterSchemaTypes(TypeStore typeStore)
     {
         var assemblyLoader  = new AssemblyLoader();
         var assemblies      = assemblyLoader.GetEngineDependants();
@@ -42,7 +42,7 @@ internal static class SchemaUtils
                 }
             }
         }
-        return new ComponentSchema(dependants, structs, scripts, tags);
+        return new EntitySchema(dependants, structs, scripts, tags);
     }
     
     internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore)

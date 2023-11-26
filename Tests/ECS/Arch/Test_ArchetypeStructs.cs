@@ -50,7 +50,7 @@ public static class Test_ArchetypeStructs
     [Test]
     public static void Test_ArchetypeStructs_Get()
     {
-        var schema = EntityStore.GetComponentSchema();
+        var schema = EntityStore.GetEntitySchema();
         AreEqual(3, schema.EngineDependants.Length);
         var engine = schema.EngineDependants[0];
         AreEqual("Engine.ECS.dll",  engine.Assembly.ManifestModule.Name);

@@ -66,7 +66,7 @@ internal readonly struct SignatureIndexes
             sb.Append(prefix);
         }
         sb.Append('[');
-        var components = EntityStoreBase.Static.ComponentSchema.Components;
+        var components = EntityStoreBase.Static.EntitySchema.Components;
         for (int n = 0; n < length; n++)
         {
             var structIndex = GetStructIndex(n);
@@ -93,7 +93,7 @@ public struct StructIndexesEnumerator
     
     public ComponentType Current {
         get {
-            var schema = EntityStore.Static.ComponentSchema;
+            var schema = EntityStore.Static.EntitySchema;
             return schema.structs[indexes.GetIndex(index)];
         }
     }

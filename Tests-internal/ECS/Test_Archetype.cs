@@ -79,7 +79,7 @@ public static class Test_Archetype
         Throws<IndexOutOfRangeException>(() => {
             indexes.GetStructIndex(0);
         });
-        var schema  = EntityStore.GetComponentSchema();
+        var schema  = EntityStore.GetEntitySchema();
         var posType = schema.GetComponentType<Position>();
         
         indexes = new SignatureIndexes(1, posType.structIndex);

@@ -35,7 +35,7 @@ internal sealed class ComponentReader
         buffer                  = new Bytes(128);
         components              = new RawComponent[1];
         componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore);
-        var schema              = EntityStoreBase.Static.ComponentSchema;
+        var schema              = EntityStoreBase.Static.EntitySchema;
         unresolvedType          = schema.unresolvedType;
         schemaTypeByKey         = schema.schemaTypeByKey;
         tagTypeByName           = schema.tagTypeByName;
@@ -300,7 +300,7 @@ internal struct RawComponent
     internal  readonly  string      key;
     internal  readonly  int         start;
     internal  readonly  int         end;
-    /// <summary>Is set when looking up components in <see cref="ComponentSchema.schemaTypeByKey"/></summary>
+    /// <summary>Is set when looking up components in <see cref="EntitySchema.schemaTypeByKey"/></summary>
     internal            SchemaType  schemaType; 
 
     public    override  string      ToString() => key;

@@ -49,7 +49,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - component types of archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
-    /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="ComponentSchema.CheckStructIndex"/></remarks>
+    /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="EntitySchema.CheckStructIndex"/></remarks>
     [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8       - Length always = maxStructIndex. Used for heap lookup
     [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8       - containing EntityStoreBase
     [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8       - containing EntityStore
@@ -122,7 +122,7 @@ public sealed class Archetype
     {
         var length          = indexes.length;
         var componentHeaps  = new StructHeap[length];
-        var components      = EntityStoreBase.Static.ComponentSchema.Components;
+        var components      = EntityStoreBase.Static.EntitySchema.Components;
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
             var structType    = components[structIndex];

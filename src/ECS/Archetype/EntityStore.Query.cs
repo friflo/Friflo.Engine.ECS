@@ -21,7 +21,7 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config  = GetArchetypeConfig();
-        var schema  = Static.ComponentSchema;
+        var schema  = Static.EntitySchema;
         var types   = new SignatureIndexes(1,
             T1: schema.CheckStructIndex(structType, structIndex)
         );

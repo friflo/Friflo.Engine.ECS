@@ -50,9 +50,9 @@ public abstract partial class EntityStoreBase
     public static class Static {
         internal static readonly    int[]           EmptyChildNodes = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
-        internal static readonly    ComponentSchema ComponentSchema = SchemaUtils.RegisterComponentTypes(TypeStore);
+        internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes(TypeStore);
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
-        internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[ComponentSchema.maxStructIndex];
+        internal static readonly    StructHeap[]    DefaultHeapMap  = new StructHeap[EntitySchema.maxStructIndex];
         
         /// <summary>The index of the <see cref="EntityStoreBase.defaultArchetype"/> - index is always 0</summary>
         internal const              int             DefaultArchIndex        =  0;
