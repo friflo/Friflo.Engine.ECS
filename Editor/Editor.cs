@@ -37,7 +37,7 @@ public partial class Editor
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
     
-    private static readonly bool StoreEntities = true;
+    private static readonly bool SeedDatabase = true;
 
     #endregion
 
@@ -70,7 +70,7 @@ public partial class Editor
         await sync.SubscribeDatabaseChangesAsync();
         
         TestBed.AddSampleEntities(sync);
-        if (StoreEntities) {
+        if (SeedDatabase) {
             await sync.StoreEntitiesAsync();
         }
         store.ChildNodesChanged += ChildNodesChangedHandler;
