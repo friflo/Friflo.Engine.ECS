@@ -28,7 +28,7 @@ internal readonly struct ComponentItem
 internal class InspectorObserver : EditorObserver
 {
     private readonly    InspectorControl                        inspector;
-    private readonly    Dictionary<SchemaType, InspectorTag>    tagMap;
+    private readonly    Dictionary<TagType,    InspectorTag>    tagMap;
     private readonly    Dictionary<SchemaType, ComponentItem>   componentMap;
     private readonly    Dictionary<Type,       ComponentItem>   scriptMap;
     
@@ -36,7 +36,7 @@ internal class InspectorObserver : EditorObserver
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
         this.inspector  = inspector;
-        tagMap          = new Dictionary<SchemaType, InspectorTag>();
+        tagMap          = new Dictionary<TagType,    InspectorTag>();
         componentMap    = new Dictionary<SchemaType, ComponentItem>();
         scriptMap       = new Dictionary<Type,       ComponentItem>();
     }

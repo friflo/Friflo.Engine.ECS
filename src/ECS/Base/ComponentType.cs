@@ -122,7 +122,7 @@ internal sealed class ScriptType<T> : ScriptType
     }
 }
 
-internal sealed class TagType : SchemaType 
+public sealed class TagType : SchemaType 
 {
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     

@@ -28,13 +28,13 @@ public sealed class ComponentSchema
     /// <see cref="SchemaType.scriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<SchemaType>                   Scripts             => new (scripts);
+    public   ReadOnlySpan<ScriptType>                   Scripts             => new (scripts);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
     /// <see cref="SchemaType.tagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
     /// </remarks>
-    public   ReadOnlySpan<SchemaType>                   Tags                => new (tags);
+    public   ReadOnlySpan<TagType>                      Tags                => new (tags);
     
     public   IReadOnlyDictionary<string, SchemaType>    ComponentTypeByKey  => componentTypeByKey;
     public   IReadOnlyDictionary<Type,   SchemaType>    ComponentTypeByType => componentTypeByType;
@@ -48,8 +48,8 @@ public sealed class ComponentSchema
     [Browse(Never)] private  readonly   EngineDependant[]               engineDependants;
     [Browse(Never)] internal readonly   int                             maxStructIndex;
     [Browse(Never)] internal readonly   SchemaType[]                    components;
-    [Browse(Never)] private  readonly   SchemaType[]                    scripts;
-    [Browse(Never)] private  readonly   SchemaType[]                    tags;
+    [Browse(Never)] private  readonly   ScriptType[]                    scripts;
+    [Browse(Never)] private  readonly   TagType[]                       tags;
     [Browse(Never)] internal readonly   SchemaType                      unresolvedType;
     [Browse(Never)] internal readonly   Dictionary<string, SchemaType>  componentTypeByKey;
     [Browse(Never)] internal readonly   Dictionary<Type,   SchemaType>  componentTypeByType;
@@ -72,8 +72,8 @@ public sealed class ComponentSchema
         tagTypeByType           = new Dictionary<Type,   SchemaType>(count);
         maxStructIndex          = structList.Count + 1;
         components              = new SchemaType[maxStructIndex];
-        scripts                 = new SchemaType[classList.Count + 1];
-        tags                    = new SchemaType[tagList.Count + 1];
+        scripts                 = new ScriptType[classList.Count + 1];
+        tags                    = new TagType   [tagList.Count + 1];
         foreach (var structType in structList) {
             componentTypeByKey. Add(structType.componentKey, structType);
             componentTypeByType.Add(structType.type,         structType);
@@ -81,14 +81,14 @@ public sealed class ComponentSchema
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
         foreach (var classType in classList) {
-            componentTypeByKey.Add(classType.componentKey, classType);
+            componentTypeByKey.Add (classType.componentKey, classType);
             componentTypeByType.Add(classType.type,         classType);
-            scripts[classType.scriptIndex] = classType;
+            scripts[classType.scriptIndex] = (ScriptType)classType;
         }
         foreach (var tagType in tagList) {
             tagTypeByType.Add(tagType.type,      tagType);
             tagTypeByName.Add(tagType.type.Name, tagType);
-            tags[tagType.tagIndex] = tagType;
+            tags[tagType.tagIndex] = (TagType)tagType;
         }
     }
     
@@ -139,7 +139,7 @@ public sealed class ComponentSchema
         return structIndex;
     }
     
-    internal SchemaType GetTagAt(int index) {
+    internal TagType GetTagAt(int index) {
         return tags[index];
     }
     

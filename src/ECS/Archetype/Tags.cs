@@ -10,17 +10,17 @@ using System.Text;
 namespace Friflo.Fliox.Engine.ECS;
 
 [CLSCompliant(true)]
-public struct Tags : IEnumerable<SchemaType>
+public struct Tags : IEnumerable<TagType>
 {
     internal            BitSet  bitSet;  // 32
     
-    public readonly     TagsEnumerator  GetEnumerator()                             => new TagsEnumerator (this);
+    public readonly     TagsEnumerator  GetEnumerator()                         => new TagsEnumerator (this);
 
     // --- IEnumerable
-           readonly     IEnumerator     IEnumerable.GetEnumerator()                 => new TagsEnumerator (this);
+           readonly     IEnumerator     IEnumerable.GetEnumerator()             => new TagsEnumerator (this);
 
     // --- IEnumerable<>
-    readonly IEnumerator<SchemaType> IEnumerable<SchemaType>.GetEnumerator()  => new TagsEnumerator (this);
+    readonly IEnumerator<TagType>       IEnumerable<TagType>.GetEnumerator()    => new TagsEnumerator (this);
 
     public  readonly override string    ToString() => GetString();
     
@@ -101,7 +101,7 @@ public struct Tags : IEnumerable<SchemaType>
         return tags;
     }
     
-    public static Tags Get(SchemaType type)
+    public static Tags Get(TagType type)
     {
         var tags = new Tags();
         tags.SetBit(type.tagIndex);
@@ -138,7 +138,7 @@ public struct Tags : IEnumerable<SchemaType>
     }
 }
 
-public struct TagsEnumerator : IEnumerator<SchemaType>
+public struct TagsEnumerator : IEnumerator<TagType>
 {
     private BitSetEnumerator    bitSetEnumerator;
 
@@ -147,7 +147,7 @@ public struct TagsEnumerator : IEnumerator<SchemaType>
 
            readonly object      IEnumerator.Current => Current;
 
-    public readonly SchemaType  Current             => EntityStoreBase.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
+    public readonly TagType     Current             => EntityStoreBase.Static.ComponentSchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
         bitSetEnumerator = tags.bitSet.GetEnumerator();
