@@ -21,8 +21,8 @@ internal static class SchemaUtils
             var types           = AssemblyLoader.GetComponentTypes(assembly);
             var schemaTypes     = new List<SchemaType>();
             foreach (var type in types) {
-                var componentType = CreateComponentType(type, typeStore);
-                schemaTypes.Add(componentType);
+                var schemaType = CreateSchemaType(type, typeStore);
+                schemaTypes.Add(schemaType);
             }
             dependants.Add(new EngineDependant (assembly, schemaTypes));
         }
@@ -45,7 +45,7 @@ internal static class SchemaUtils
         return new ComponentSchema(dependants, structs, scripts, tags);
     }
     
-    internal static SchemaType CreateComponentType(Type type, TypeStore typeStore)
+    internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         

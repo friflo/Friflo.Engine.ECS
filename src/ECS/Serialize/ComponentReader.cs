@@ -95,19 +95,19 @@ internal sealed class ComponentReader
         {
             var component = components[n];
             buffer.Clear();
-            var json = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
-            var type = component.type;
-            if (type == unresolvedType) {
+            var json        = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
+            var schemaType  = component.schemaType;
+            if (schemaType == unresolvedType) {
                 unresolvedComponentList.Add(new UnresolvedComponent(component.key, json));
                 continue;
             }
-            switch (type.kind) {
+            switch (schemaType.kind) {
                 case SchemaTypeKind.Script:
                     // --- read script
-                    component.type.ReadScript(componentReader, json, entity);
+                    component.schemaType.ReadScript(componentReader, json, entity);
                     break;
                 case SchemaTypeKind.Component:
-                    var heap = entity.archetype.heapMap[component.type.structIndex]; // no range or null check required
+                    var heap = entity.archetype.heapMap[component.schemaType.structIndex]; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
                     break;
@@ -223,10 +223,10 @@ internal sealed class ComponentReader
                 // case: unresolved component
                 hasStructComponent = true;
                 structs.SetBit(unresolvedType.structIndex);
-                component.type = unresolvedType;
+                component.schemaType = unresolvedType;
                 continue;
             }
-            component.type = type;
+            component.schemaType = type;
             if (type.kind == SchemaTypeKind.Component) {
                 hasStructComponent = true;
                 structs.SetBit(type.structIndex);
@@ -244,8 +244,8 @@ internal sealed class ComponentReader
         structTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
-            if (component.type.kind == SchemaTypeKind.Component) {
-                structTypes.Add((ComponentType)component.type);
+            if (component.schemaType.kind == SchemaTypeKind.Component) {
+                structTypes.Add((ComponentType)component.schemaType);
             }
         }
         if (unresolvedTagList.Count > 0) {
@@ -301,7 +301,7 @@ internal struct RawComponent
     internal  readonly  int         start;
     internal  readonly  int         end;
     /// <summary>Is set when looking up components in <see cref="ComponentSchema.schemaTypeByKey"/></summary>
-    internal            SchemaType  type; 
+    internal            SchemaType  schemaType; 
 
     public    override  string      ToString() => key;
     
