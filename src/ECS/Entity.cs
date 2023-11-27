@@ -239,6 +239,7 @@ public sealed class Entity
     public      ReadOnlySpan<Script>  Scripts           => new (EntityUtils.GetScripts(this));
 
     /// <returns>the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
+    /// <remarks>Note: Use <see cref="GetEntityScript"/> as non generic alternative</remarks> 
     public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
     
     /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
@@ -350,6 +351,10 @@ public sealed class Entity
     /* public static bool AddEntityComponent(Entity entity, ComponentType componentType) {
         return entity.archetype.store.AddComponent<T>(entity.id, ref entity.archetype, ref entity.compIndex, default);
     } */
+    
+    public static Script GetEntityScript(Entity entity, ScriptType scriptType) {
+        return EntityUtils.GetScript(entity, scriptType.type);
+    }
             
     public static Script RemoveEntityScript(Entity entity, ScriptType scriptType) {
         return EntityUtils.RemoveScript(entity, scriptType.type);
