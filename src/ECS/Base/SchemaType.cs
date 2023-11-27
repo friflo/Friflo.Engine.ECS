@@ -27,10 +27,6 @@ public abstract class SchemaType
     /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="EntitySchema.Components"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             structIndex;    //  4
-    /// <summary>
-    /// If <see cref="kind"/> == <see cref="Tag"/> the index in <see cref="EntitySchema.Tags"/>. Otherwise 0<br/>
-    /// </summary>
-    public   readonly   int             tagIndex;       //  4
     /// <returns>
     /// <see cref="Script"/> if the type is a <see cref="Script"/><br/>
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
@@ -59,14 +55,12 @@ public abstract class SchemaType
         Type            type,
         SchemaTypeKind  kind,
         int             scriptIndex,
-        int             structIndex,
-        int             tagIndex)
+        int             structIndex)
     {
         this.componentKey   = componentKey;
         this.tagName        = tagName;
         this.scriptIndex    = scriptIndex;
         this.structIndex    = structIndex;
-        this.tagIndex       = tagIndex;
         this.kind           = kind;
         this.type           = type;
         if (this.componentKey != null) {

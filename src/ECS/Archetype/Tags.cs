@@ -24,6 +24,12 @@ public struct Tags : IEnumerable<TagType>
 
     public  readonly override string    ToString() => GetString();
     
+    // ----------------------------------- specialized constructor  -----------------------------------
+    public Tags(TagType type)
+    {
+        SetBit(type.tagIndex);
+    }
+    
     // ----------------------------------------- read Tags ----------------------------------------- 
     public readonly int     Count => bitSet.GetBitCount();
     
@@ -98,13 +104,6 @@ public struct Tags : IEnumerable<TagType>
     {
         var tags = new Tags();
         tags.SetBit(TagType<T>.TagIndex);
-        return tags;
-    }
-    
-    public static Tags Get(TagType type)
-    {
-        var tags = new Tags();
-        tags.SetBit(type.tagIndex);
         return tags;
     }
     

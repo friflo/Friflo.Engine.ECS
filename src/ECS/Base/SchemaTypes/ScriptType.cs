@@ -12,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ScriptType : SchemaType
 {
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
-        : base (scriptKey, null, type, SchemaTypeKind.Script, scriptIndex, 0, 0)
+        : base (scriptKey, null, type, SchemaTypeKind.Script, scriptIndex, 0)
     { }
 }
 

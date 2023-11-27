@@ -71,7 +71,7 @@ internal class InspectorObserver : EditorObserver
         foreach (var tagType in archetype.Tags)
         {
             if (!tagMap.TryGetValue(tagType, out var item)) {
-                var tag = Tags.Get(tagType);
+                var tag = new Tags(tagType);
                 item = new InspectorTag { TagName = tagType.tagName, EntityTag = tag };
                 tagMap.Add(tagType, item);
             }
