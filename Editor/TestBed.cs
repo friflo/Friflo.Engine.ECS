@@ -6,7 +6,9 @@ namespace Friflo.Fliox.Editor;
 [Component("TestComponent")]
 public struct  TestComponent : IComponent
 {
-    public string name;
+    public string   name;
+    public Position start;
+    public Scale3   scale;
 }
 
 public struct Tag1 : IEntityTag { }

@@ -93,6 +93,7 @@ internal class InspectorObserver : EditorObserver
                 var component   = new InspectorComponent { ComponentTitle = componentType.name, ComponentType = componentType };
                 var panel       = new StackPanel();
                 var fields      = AddComponentFields(componentType.type, panel);
+                panel.Children.Add(new Separator());
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
@@ -124,7 +125,8 @@ internal class InspectorObserver : EditorObserver
                 var scriptType  = EntityStore.GetEntitySchema().ScriptTypeByType[type];
                 var component   = new InspectorComponent { ComponentTitle = type.Name, ScriptType = scriptType };
                 var panel       = new StackPanel();
-                var fields      = AddScriptFields(script, panel);
+                var fields      = AddTypeMembers(type, panel);
+                panel.Children.Add(new Separator());
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
@@ -146,22 +148,20 @@ internal class InspectorObserver : EditorObserver
     private static ComponentField[] AddComponentFields(Type type, Panel panel)
     {
         var fields = new List<ComponentField>();
-        ComponentField.AddComponentFields(fields, type, null, default);
+        if (!ComponentField.AddComponentFields(fields, type, null, default)) {
+            AddTypeMembers(type, panel);
+        }
         AddFields(fields, panel);
-        panel.Children.Add(new Separator());
         return fields.ToArray();
     }
     
     
-    /// <remarks><paramref name="script"/> is a class</remarks>
-    private static ComponentField[] AddScriptFields(Script script, Panel panel)
+    private static ComponentField[] AddTypeMembers(Type type, Panel panel)
     {
-        var scriptType  = script.GetType();
         var fields      = new List<ComponentField>();
-        ComponentField.AddScriptFields(fields, scriptType);
+        ComponentField.AddScriptFields(fields, type);
         
         AddFields(fields, panel);
-        panel.Children.Add(new Separator());
         return fields.ToArray();
     }
     
