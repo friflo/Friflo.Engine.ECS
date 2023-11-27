@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using AP = Avalonia.AvaloniaProperty;
 
+// ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class GroupAdd : UserControl
@@ -57,13 +58,22 @@ public partial class GroupAdd : UserControl
     
     private void Add(int index)
     {
+        var schema = EntityStore.GetEntitySchema();
+        index++; // Schema types start with index 1 
         switch (GroupName)
         {
             case "tags":
+                var tagType = schema.Tags[index];
+                var tag = new Tags(tagType);
+                Entity.AddTags(tag);
                 break;
             case "components":
+                var componentType = schema.Components[index];
+                Entity.AddEntityComponent(Entity, componentType);
                 break;
             case "scripts":
+                var scriptType = schema.Scripts[index];
+                Entity.AddEntityScript(Entity, scriptType);
                 break;
         }
     }
