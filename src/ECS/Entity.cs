@@ -217,7 +217,10 @@ public sealed class Entity
     public bool AddComponent<T>(in T component) where T : struct, IComponent => archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
     
     /// <returns>true if entity contained a component of the given type before</returns>
-    /// <remarks>Executes in O(1)</remarks>
+    /// <remarks>
+    /// Executes in O(1)<br/>
+    /// <remarks>Note: Use <see cref="RemoveEntityComponent"/> as non generic alternative</remarks>
+    /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent => archetype.store.RemoveComponent(id, ref archetype, ref compIndex, StructHeap<T>.StructIndex);
     
     /// <summary>
@@ -248,6 +251,7 @@ public sealed class Entity
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
+    /// <remarks>Note: Use <see cref="GetEntityComponent"/> as non generic alternative</remarks>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript(this, typeof(T));
     
     #endregion
@@ -325,5 +329,24 @@ public sealed class Entity
 
     public ref readonly EntityNode  GetChildNodeByIndex(int index)  => ref archetype.entityStore.GetChildNodeByIndex(id, index);
     
+    #endregion
+    
+#region non generic entity component / script methods
+    /// <summary>
+    /// Returns a copy of the entity component as an object.<br/>
+    /// The returned <see cref="IComponent"/> is a boxed struct.<br/>
+    /// So avoid using this method whenever possible. Use <see cref="GetComponent{T}"/> instead.
+    /// </summary>
+    public static object GetEntityComponent(Entity entity, ComponentType componentType) {
+        return entity.archetype.heapMap[componentType.structIndex].GetComponentDebug(entity.compIndex);
+    }
+
+    public static bool RemoveEntityComponent(Entity entity, ComponentType type) {
+        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, type.structIndex);
+    }
+            
+    public static Script RemoveEntityScript(Entity entity, ScriptType type) {
+        return EntityUtils.RemoveScript(entity, type.type);
+    }
     #endregion
 }
