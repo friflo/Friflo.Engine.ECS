@@ -213,7 +213,9 @@ public sealed class Entity
     public bool AddComponent<T>()               where T : struct, IComponent => archetype.store.AddComponent<T>(id, ref archetype, ref compIndex, default);
     
     /// <returns>true if component is newly added to the entity</returns>
-    /// <remarks>Executes in O(1)</remarks>
+    /// <remarks>Executes in O(1)<br/>
+    /// <remarks>Note: Use <see cref="AddEntityComponent"/> as non generic alternative</remarks>
+    /// </remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent => archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
     
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -348,21 +350,17 @@ public sealed class Entity
         return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, componentType.structIndex);
     }
     
-    /* public static bool AddEntityComponent(Entity entity, ComponentType componentType) {
-        return entity.archetype.store.AddComponent<T>(entity.id, ref entity.archetype, ref entity.compIndex, default);
-    } */
+    public static bool AddEntityComponent(Entity entity, ComponentType componentType) {
+        return componentType.AddEntityComponent(entity);
+    }
     #endregion
     
 #region non generic script methods
-    public static Script GetEntityScript(Entity entity, ScriptType scriptType) {
-        return EntityUtils.GetScript(entity, scriptType.type);
-    }
+    public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript(entity, scriptType.type);
             
-    public static Script RemoveEntityScript(Entity entity, ScriptType scriptType) {
-        return EntityUtils.RemoveScript(entity, scriptType.type);
-    }
+    public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScript(entity, scriptType.type);
     
-    public static Script AddEntityScript(Entity entity, ScriptType scriptType) {
+    public static Script AddEntityScript    (Entity entity, ScriptType scriptType) {
         var script = scriptType.CreateScript();
         return EntityUtils.AddScript(entity, script, scriptType.type, scriptType.scriptIndex);
     }

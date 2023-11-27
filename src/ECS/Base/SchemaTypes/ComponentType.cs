@@ -16,6 +16,8 @@ public abstract class ComponentType : SchemaType
     /// </summary>
     public   readonly   int             structIndex;    //  4
     
+    internal abstract bool AddEntityComponent(Entity entity);
+    
     protected ComponentType(string componentKey, int structIndex, Type type)
         : base (componentKey, type, Component)
     {
@@ -34,6 +36,11 @@ internal sealed class ComponentType<T> : ComponentType
     {
         typeMapper = typeStore.GetTypeMapper<T>();
     }
+    
+    internal override bool AddEntityComponent(Entity entity) {
+        return entity.archetype.store.AddComponent<T>(entity.id, ref entity.archetype, ref entity.compIndex, default);
+    }
+    
     internal override StructHeap CreateHeap() {
         return new StructHeap<T>(structIndex, typeMapper);
     }
