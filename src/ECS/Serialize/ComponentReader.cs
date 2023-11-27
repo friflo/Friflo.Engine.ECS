@@ -19,7 +19,7 @@ internal sealed class ComponentReader
     private readonly    Dictionary<string, SchemaType>          schemaTypeByKey;
     private readonly    Dictionary<string, TagType>             tagTypeByName;
     private readonly    ComponentType                           unresolvedType;
-    private readonly    List<ComponentType>                     structTypes;
+    private readonly    List<ComponentType>                     componentTypes;
     private readonly    ArchetypeKey                            searchKey;
     private readonly    List<string>                            unresolvedTagList;
     private readonly    HashSet<string>                         unresolvedTagSet;
@@ -39,7 +39,7 @@ internal sealed class ComponentReader
         unresolvedType          = schema.unresolvedType;
         schemaTypeByKey         = schema.schemaTypeByKey;
         tagTypeByName           = schema.tagTypeByName;
-        structTypes             = new List<ComponentType>();
+        componentTypes          = new List<ComponentType>();
         searchKey               = new ArchetypeKey();
         unresolvedTagList       = new List<string>();
         unresolvedTagSet        = new HashSet<string>();
@@ -244,17 +244,17 @@ internal sealed class ComponentReader
             return archetypeKey.archetype;
         }
         var config = store.GetArchetypeConfig();
-        structTypes.Clear();
+        componentTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
             if (component.schemaType.kind == SchemaTypeKind.Component) {
-                structTypes.Add((ComponentType)component.schemaType);
+                componentTypes.Add((ComponentType)component.schemaType);
             }
         }
         if (unresolvedTagList.Count > 0) {
-            structTypes.Add(unresolvedType);
+            componentTypes.Add(unresolvedType);
         }
-        var newArchetype = Archetype.CreateWithStructTypes(config, structTypes, searchKey.tags);
+        var newArchetype = Archetype.CreateWithStructTypes(config, componentTypes, searchKey.tags);
         store.AddArchetype(newArchetype);
         return newArchetype;
     }

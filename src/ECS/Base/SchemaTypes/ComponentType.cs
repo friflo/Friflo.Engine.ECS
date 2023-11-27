@@ -16,7 +16,8 @@ public abstract class ComponentType : SchemaType
     /// </summary>
     public   readonly   int             structIndex;    //  4
     
-    internal abstract bool AddEntityComponent(Entity entity);
+    internal abstract StructHeap    CreateHeap();
+    internal abstract bool          AddEntityComponent(Entity entity);
     
     protected ComponentType(string componentKey, int structIndex, Type type)
         : base (componentKey, type, Component)

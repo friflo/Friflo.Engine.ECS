@@ -35,11 +35,6 @@ public static class Test_ComponentType
             componentType.ReadScript(null, default, null);
         });
         AreEqual("operates only on ScriptType<>", e!.Message);
-        
-        e = Throws<InvalidOperationException>(() => {
-            componentType.CreateHeap();
-        });
-        AreEqual("operates only on StructComponentType<>", e!.Message);
     }
     
     [Test]

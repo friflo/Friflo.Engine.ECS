@@ -34,9 +34,6 @@ public abstract class SchemaType
     
     internal readonly   Bytes           componentKeyBytes;
         
-    internal virtual    StructHeap  CreateHeap          ()
-        => throw new InvalidOperationException("operates only on StructComponentType<>");
-    
     internal virtual    void        ReadScript  (ObjectReader reader, JsonValue json, Entity entity)
         => throw new InvalidOperationException($"operates only on ScriptType<>");
     

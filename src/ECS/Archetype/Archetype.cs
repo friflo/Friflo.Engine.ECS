@@ -127,8 +127,8 @@ public sealed class Archetype
         var components      = EntityStoreBase.Static.EntitySchema.Components;
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
-            var structType    = components[structIndex];
-            componentHeaps[n] = structType.CreateHeap();
+            var componentType = components[structIndex];
+            componentHeaps[n] = componentType.CreateHeap();
         }
         return new Archetype(config, componentHeaps, tags);
     }
@@ -137,12 +137,12 @@ public sealed class Archetype
     /// Is called by methods using a set of arbitrary struct <see cref="SchemaType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
     /// </remarks>
-    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> structTypes, in Tags tags)
+    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> componentTypes, in Tags tags)
     {
-        var length          = structTypes.Count;
+        var length          = componentTypes.Count;
         var componentHeaps  = new StructHeap[length];
         for (int n = 0; n < length; n++) {
-            componentHeaps[n] = structTypes[n].CreateHeap();
+            componentHeaps[n] = componentTypes[n].CreateHeap();
         }
         return new Archetype(config, componentHeaps, tags);
     }
