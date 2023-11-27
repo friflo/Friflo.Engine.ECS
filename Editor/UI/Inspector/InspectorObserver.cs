@@ -78,6 +78,7 @@ internal class InspectorObserver : EditorObserver
             item.Entity = entity;
             tags.Add(item);
         }
+        inspector.TagGroup.GroupAdd.Entity = entity;
     }
     
     private void SetComponents(Entity entity)
@@ -108,6 +109,7 @@ internal class InspectorObserver : EditorObserver
             components.Add(item.control);
             components.Add(item.panel);
         }
+        inspector.ComponentGroup.GroupAdd.Entity = entity;
     }
     
     private void SetScripts(Entity entity)
@@ -137,6 +139,7 @@ internal class InspectorObserver : EditorObserver
             scripts.Add(item.control);
             scripts.Add(item.panel);
         }
+        inspector.ScriptGroup.GroupAdd.Entity = entity;
     }
     
     /// <remarks><see cref="SchemaType.type"/> is a struct</remarks>
