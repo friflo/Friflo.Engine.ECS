@@ -19,19 +19,19 @@ public sealed class EntitySchema
     public   ReadOnlySpan<EngineDependant>              EngineDependants    => new (engineDependants);
     /// <summary>return all component types attributed with <see cref="ComponentAttribute"/></summary>
     /// <remarks>
-    /// <see cref="SchemaType.structIndex"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                Components          => new (components);
     /// <summary>return all <see cref="Script"/> types attributed with <see cref="ScriptAttribute"/></summary>
     /// <remarks>
-    /// <see cref="SchemaType.scriptIndex"/> is equal to the array index<br/>
+    /// <see cref="ScriptType.scriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ScriptType>                   Scripts             => new (scripts);
     /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
     /// <remarks>
-    /// <see cref="SchemaType.tagIndex"/> is equal to the array index<br/>
+    /// <see cref="TagType.tagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<TagType>                      Tags                => new (tags);

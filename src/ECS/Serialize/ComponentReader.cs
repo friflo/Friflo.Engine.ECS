@@ -104,10 +104,11 @@ internal sealed class ComponentReader
             switch (schemaType.kind) {
                 case SchemaTypeKind.Script:
                     // --- read script
-                    component.schemaType.ReadScript(componentReader, json, entity);
+                    schemaType.ReadScript(componentReader, json, entity);
                     break;
                 case SchemaTypeKind.Component:
-                    var heap = entity.archetype.heapMap[component.schemaType.structIndex]; // no range or null check required
+                    var componentType   = (ComponentType)schemaType;
+                    var heap            = entity.archetype.heapMap[componentType.structIndex]; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
                     break;
@@ -218,18 +219,20 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
-            schemaTypeByKey.TryGetValue(component.key, out var type);
-            if (type == null) {
+            schemaTypeByKey.TryGetValue(component.key, out var schemaType);
+            if (schemaType == null) {
                 // case: unresolved component
                 hasStructComponent = true;
                 structs.SetBit(unresolvedType.structIndex);
                 component.schemaType = unresolvedType;
                 continue;
             }
-            component.schemaType = type;
-            if (type.kind == SchemaTypeKind.Component) {
+            component.schemaType = schemaType;
+            if (schemaType.kind == SchemaTypeKind.Component)
+            {
+                var componentType = (ComponentType)schemaType;
                 hasStructComponent = true;
-                structs.SetBit(type.structIndex);
+                structs.SetBit(componentType.structIndex);
             }                
         }
         return hasStructComponent;

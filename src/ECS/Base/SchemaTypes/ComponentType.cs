@@ -11,9 +11,16 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public abstract class ComponentType : SchemaType
 {
+    /// <summary>
+    /// The index in <see cref="EntitySchema.Components"/>.<br/>
+    /// </summary>
+    public   readonly   int             structIndex;    //  4
+    
     protected ComponentType(string componentKey, int structIndex, Type type)
-        : base (componentKey, type, Component, structIndex)
-    { }
+        : base (componentKey, type, Component)
+    {
+        this.structIndex = structIndex;
+    }
 }
 
 internal sealed class ComponentType<T> : ComponentType 

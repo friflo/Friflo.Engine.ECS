@@ -18,7 +18,7 @@ public sealed class TagType : SchemaType
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     
     internal TagType(Type type, int tagIndex)
-        : base(null, type, Tag, 0)
+        : base(null, type, Tag)
     {
         tagName         = type.Name;
         this.tagIndex   = tagIndex;
