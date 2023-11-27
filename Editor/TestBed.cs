@@ -27,6 +27,7 @@ public class Script2 : Script
 {
     public  int         maxHealth;
     public  Position    center;
+    public  Scale3      scale;
 }
 
 public static class TestBed

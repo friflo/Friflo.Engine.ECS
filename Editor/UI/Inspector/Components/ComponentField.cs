@@ -243,6 +243,12 @@ public class ComponentField
             position.value = vector;
             return;
         }
+        if (type == typeof(Scale3))
+        {
+            ref var position = ref entity.GetComponent<Scale3>();
+            position.value = vector;
+            return;
+        }
     }
     
     private void SetScriptVector(object script, in Vector3 vector)
@@ -254,7 +260,13 @@ public class ComponentField
         }
         if (type == typeof(Position))
         {
-            var var = new Var(new Position { value = vector});
+            var var = new Var(new Position { value = vector });
+            member.SetVar(script, var);
+            return;
+        }
+        if (type == typeof(Scale3))
+        {
+            var var = new Var(new Scale3 { value = vector });
             member.SetVar(script, var);
             return;
         }
