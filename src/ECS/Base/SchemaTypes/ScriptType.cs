@@ -17,7 +17,7 @@ public abstract class ScriptType : SchemaType
     public   readonly   int             scriptIndex;  //  4
     
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
-        : base (scriptKey, null, type, SchemaTypeKind.Script, 0)
+        : base (scriptKey, type, SchemaTypeKind.Script, 0)
     {
         this.scriptIndex = scriptIndex;
     }

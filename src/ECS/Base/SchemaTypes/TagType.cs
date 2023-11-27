@@ -9,6 +9,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public sealed class TagType : SchemaType 
 {
+    public   readonly   string          tagName;        //  8
     /// <summary>
     /// The index in <see cref="EntitySchema.Tags"/>.<br/>
     /// </summary>
@@ -17,8 +18,9 @@ public sealed class TagType : SchemaType
     public  override    string  ToString() => $"tag: [#{type.Name}]";
     
     internal TagType(Type type, int tagIndex)
-        : base(null, type.Name, type, Tag, 0)
+        : base(null, type, Tag, 0)
     {
-        this.tagIndex = tagIndex;
+        tagName         = type.Name;
+        this.tagIndex   = tagIndex;
     }
 }

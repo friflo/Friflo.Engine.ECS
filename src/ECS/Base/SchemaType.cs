@@ -18,7 +18,6 @@ public abstract class SchemaType
     /// </summary>
     public   readonly   string          componentKey;   //  8
     
-    public   readonly   string          tagName;        //  8
     /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="EntitySchema.Components"/>. Otherwise 0<br/>
     /// </summary>
@@ -47,13 +46,11 @@ public abstract class SchemaType
     
     internal SchemaType(
         string          componentKey,
-        string          tagName,
         Type            type,
         SchemaTypeKind  kind,
         int             structIndex)
     {
         this.componentKey   = componentKey;
-        this.tagName        = tagName;
         this.structIndex    = structIndex;
         this.kind           = kind;
         this.type           = type;
