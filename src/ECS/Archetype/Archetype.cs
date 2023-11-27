@@ -146,15 +146,6 @@ public sealed class Archetype
     }
     #endregion
 
-#region public methods
-    // todo for solution using generic component type T. Therefore add method to StructHeap 
-    public object GetEntityComponent(Entity entity, ComponentType componentType)
-    {
-        // => ref ((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex]).chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
-        // heapMap[componentType.structIndex].chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
-        return heapMap[componentType.structIndex].GetComponentDebug(entity.compIndex);
-    }
-    #endregion
     
 #region component handling
 
