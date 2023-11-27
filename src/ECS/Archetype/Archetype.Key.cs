@@ -4,6 +4,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+// Hard rule: this file MUST NOT use type: Entity
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
