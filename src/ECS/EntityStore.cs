@@ -109,4 +109,22 @@ public sealed partial class EntityStore : EntityStoreBase
         return ref nodes[id];
     }
     #endregion
+    
+#region non generic entity access
+    public bool RemoveEntityComponent(Entity entity, ComponentType type)
+    {
+        if (this != entity.archetype.store) {
+            InvalidStoreException(nameof(entity));
+        }
+        return RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, type.structIndex);
+    }
+    
+    public Script RemoveEntityScript(Entity entity, ScriptType type)
+    {
+        if (this != entity.archetype.store) {
+            InvalidStoreException(nameof(entity));
+        }
+        return EntityUtils.RemoveScript(entity, type.type);
+    }
+    #endregion
 }
