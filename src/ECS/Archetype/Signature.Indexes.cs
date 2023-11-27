@@ -70,7 +70,7 @@ internal readonly struct SignatureIndexes
         for (int n = 0; n < length; n++)
         {
             var structIndex = GetStructIndex(n);
-            sb.Append(components[structIndex].type.Name);
+            sb.Append(components[structIndex].name);
             sb.Append(", "); 
         }
         sb.Length -= 2;

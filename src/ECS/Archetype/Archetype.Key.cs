@@ -76,13 +76,13 @@ internal sealed class ArchetypeKey
         sb.Append("Key: [");
         var hasTypes = false;
         foreach (var structType in structs) {
-            sb.Append(structType.type.Name);
+            sb.Append(structType.name);
             sb.Append(", ");
             hasTypes = true;
         }
         foreach (var tag in tags) {
             sb.Append('#');
-            sb.Append(tag.type.Name);
+            sb.Append(tag.name);
             sb.Append(", ");
             hasTypes = true;
         }

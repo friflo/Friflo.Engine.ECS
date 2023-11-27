@@ -90,7 +90,7 @@ internal class InspectorObserver : EditorObserver
         foreach (var componentType in archetype.Structs)
         {
             if (!componentMap.TryGetValue(componentType, out var item)) {
-                var component   = new InspectorComponent { ComponentTitle = componentType.type.Name, ComponentType = componentType };
+                var component   = new InspectorComponent { ComponentTitle = componentType.name, ComponentType = componentType };
                 var panel       = new StackPanel();
                 var fields      = AddComponentFields(componentType.type, panel);
                 

@@ -270,7 +270,7 @@ public sealed class Archetype
         }
         foreach (var tag in tags) {
             sb.Append('#');
-            sb.Append(tag.type.Name);
+            sb.Append(tag.name);
             sb.Append(", ");
             hasTypes = true;
         }

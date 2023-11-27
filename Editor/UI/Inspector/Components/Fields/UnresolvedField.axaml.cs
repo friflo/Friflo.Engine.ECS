@@ -9,13 +9,11 @@ namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class UnresolvedField : UserControl, IFieldControl
 {
-    private Unresolved      unresolved;
     public  ComponentField  ComponentField { get; init; }
     
     
     internal void Set(Unresolved unresolved)
     {
-        this.unresolved     = unresolved;
         var tags            = unresolved.tags;
         var components      = unresolved.components;
         var tagItems        = Tags.Items;

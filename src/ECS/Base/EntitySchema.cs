@@ -78,19 +78,19 @@ public sealed class EntitySchema
         scripts                 = new ScriptType[scriptList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
         foreach (var componentType in componentList) {
-            schemaTypeByKey. Add(componentType.componentKey, componentType);
+            schemaTypeByKey.    Add(componentType.componentKey, componentType);
             componentTypeByType.Add(componentType.type,         componentType);
             components[componentType.structIndex] = componentType;
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
         foreach (var scriptType in scriptList) {
-            schemaTypeByKey.Add (scriptType.componentKey, scriptType);
+            schemaTypeByKey.   Add(scriptType.componentKey,  scriptType);
             scriptTypeByType.  Add(scriptType.type,          scriptType);
             scripts[scriptType.scriptIndex] = scriptType;
         }
         foreach (var tagType in tagList) {
-            tagTypeByType.Add(tagType.type,      tagType);
-            tagTypeByName.Add(tagType.type.Name, tagType);
+            tagTypeByType.Add(tagType.type, tagType);
+            tagTypeByName.Add(tagType.name, tagType);
             tags[tagType.tagIndex] = tagType;
         }
     }

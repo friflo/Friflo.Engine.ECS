@@ -112,13 +112,13 @@ public class ArchetypeQuery
         {
             var structIndex = signatureIndexes.GetStructIndex(n);
             var structType  = components[structIndex];
-            sb.Append(structType.type.Name);
+            sb.Append(structType.name);
             sb.Append(", ");
             hasTypes = true;
         }
         foreach (var tag in requiredTags) {
             sb.Append('#');
-            sb.Append(tag.type.Name);
+            sb.Append(tag.name);
             sb.Append(", ");
             hasTypes = true;
         }

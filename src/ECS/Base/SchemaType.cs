@@ -29,6 +29,8 @@ public abstract class SchemaType
     /// </summary>
     public   readonly   Type            type;           //  8
     
+    public   readonly   string          name;           //  8
+    
     
     internal readonly   Bytes           componentKeyBytes;
         
@@ -40,6 +42,7 @@ public abstract class SchemaType
         this.componentKey   = componentKey;
         this.kind           = kind;
         this.type           = type;
+        name                = type.Name;
         if (this.componentKey != null) {
             componentKeyBytes = new Bytes(componentKey);   
         }

@@ -145,7 +145,7 @@ public struct ArchetypeStructs : IEnumerable<ComponentType>
         var hasTypes    = false;
         foreach (var index in bitSet) {
             var structType = EntityStoreBase.Static.EntitySchema.GetComponentAt(index);
-            sb.Append(structType.type.Name);
+            sb.Append(structType.name);
             sb.Append(", ");
             hasTypes = true;
         }

@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="Friflo.Fliox.Editor.UI.Inspector.UnresolvedField"
-             xmlns:local="clr-namespace:Friflo.Fliox.Editor.UI.Inspector"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100">
 
     <StackPanel>
