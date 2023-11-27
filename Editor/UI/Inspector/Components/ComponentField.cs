@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
@@ -100,7 +101,7 @@ public class ComponentField
                 continue;
             }
             var field       = new ComponentField(propField.name, fieldType, 0, member);
-            field.control   = CreateField(fieldType, field); 
+            field.control   = CreateField(fieldType, field);
             fields.Add(field);
         }
     }
@@ -186,15 +187,20 @@ public class ComponentField
         }
         if (type == typeof(string)) {
             var control     = (StringField)field.control;
-            control.Value   = data.member.GetVar(data.instance).String;
+            control.Value   = field.member.GetVar(data.instance).String;
             return;
         }
         if (type == typeof(int)) {
             var control     = (StringField)field.control;
-            control.Value   = data.member.GetVar(data.instance).Int32.ToString();
+            control.Value   = field.member.GetVar(data.instance).Int32.ToString();
             return;
         }
-        throw new InvalidOperationException($"missing field assignment. field: {field.name}");
+        if (type == typeof(float)) {
+            var control     = (StringField)field.control;
+            control.Value   = field.member.GetVar(data.instance).Flt32.ToString(CultureInfo.InvariantCulture);
+            return;
+        }
+        throw new InvalidOperationException($"missing field assignment. field: {field.name}, type: {type.Name}");
     }
     #endregion
     
@@ -295,6 +301,10 @@ public class ComponentField
         if (type == typeof(EntityName)) {
             entity.AddComponent(new EntityName(value));
             return;
+        }
+        if (type == typeof(float)) {
+            _ = 1;
+            // todo
         }
     }
     

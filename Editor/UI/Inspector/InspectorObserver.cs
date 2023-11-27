@@ -125,14 +125,15 @@ internal class InspectorObserver : EditorObserver
                 var scriptType  = EntityStore.GetEntitySchema().ScriptTypeByType[type];
                 var component   = new InspectorComponent { ComponentTitle = type.Name, ScriptType = scriptType };
                 var panel       = new StackPanel();
-                var fields      = AddTypeMembers(type, panel);
+                var fields      = new List<ComponentField>();
+                ComponentField.AddScriptFields(fields, type);
+                AddFields(fields, panel);
                 panel.Children.Add(new Separator());
-                
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
                 var expanded = component.GetObservable(InspectorComponent.ExpandedProperty);
                 panel.Bind(Visual.IsVisibleProperty, expanded);
                 
-                item = new ComponentItem(component, panel, fields);
+                item = new ComponentItem(component, panel, fields.ToArray());
                 scriptMap.Add(type, item);
             }
             ComponentField.SetScriptFields(item.fields, script);
@@ -149,18 +150,8 @@ internal class InspectorObserver : EditorObserver
     {
         var fields = new List<ComponentField>();
         if (!ComponentField.AddComponentFields(fields, type, null, default)) {
-            AddTypeMembers(type, panel);
+            ComponentField.AddScriptFields(fields, type);
         }
-        AddFields(fields, panel);
-        return fields.ToArray();
-    }
-    
-    
-    private static ComponentField[] AddTypeMembers(Type type, Panel panel)
-    {
-        var fields      = new List<ComponentField>();
-        ComponentField.AddScriptFields(fields, type);
-        
         AddFields(fields, panel);
         return fields.ToArray();
     }
