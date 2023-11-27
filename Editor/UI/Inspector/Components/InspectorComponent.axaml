@@ -21,7 +21,7 @@
                             BorderThickness="0" CornerRadius="2"
                             Margin="0 1" Padding="3 1">
                         <Button.Flyout>
-                            <MenuFlyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedRight">
                                 <MenuItem Header="Remove" Click="MenuItem_RemoveComponent"/>
                             </MenuFlyout>
                         </Button.Flyout>
