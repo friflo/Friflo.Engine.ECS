@@ -86,6 +86,10 @@
         <SubType>Code</SubType>
       </Compile>
 
+      <Compile Update="UI\Inspector\GroupAdd.axaml.cs">
+        <DependentUpon>GroupAdd.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
       <Compile Update="UI\Inspector\InspectorControl.axaml.cs">
         <DependentUpon>InspectorControl.axaml</DependentUpon>
         <SubType>Code</SubType>

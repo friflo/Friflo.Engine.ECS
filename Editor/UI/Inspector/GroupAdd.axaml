@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Friflo.Fliox.Editor.UI.Inspector.GroupAdd"
+             Width="200" Height="300"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
+    <StackPanel>
+        <TextBox></TextBox>
+        <ListBox>
+            <ListBoxItem Content="Tag1"/>
+            <ListBoxItem Content="Tag2"/>
+            <ListBoxItem Content="Tag3"/>
+        </ListBox>
+    </StackPanel>
+</UserControl>
