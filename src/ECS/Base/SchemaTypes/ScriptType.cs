@@ -16,7 +16,8 @@ public abstract class ScriptType : SchemaType
     /// </summary>
     public   readonly   int             scriptIndex;  //  4
     
-    internal abstract Script CreateScript();        
+    internal abstract   Script  CreateScript();
+    internal abstract   void    ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, type, SchemaTypeKind.Script)

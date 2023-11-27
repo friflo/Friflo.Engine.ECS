@@ -3,8 +3,6 @@
 
 using System;
 using Friflo.Json.Burst;
-using Friflo.Json.Fliox;
-using Friflo.Json.Fliox.Mapper;
 using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
@@ -34,9 +32,6 @@ public abstract class SchemaType
     
     internal readonly   Bytes           componentKeyBytes;
         
-    internal virtual    void        ReadScript  (ObjectReader reader, JsonValue json, Entity entity)
-        => throw new InvalidOperationException($"operates only on ScriptType<>");
-    
     internal SchemaType(
         string          componentKey,
         Type            type,

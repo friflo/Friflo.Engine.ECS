@@ -28,16 +28,6 @@ public static class Test_ComponentType
     }
     
     [Test]
-    public static void Test_ComponentType_Exceptions()
-    {
-        var componentType = new TagType(typeof(string), 0);
-        var e = Throws<InvalidOperationException>(() => {
-            componentType.ReadScript(null, default, null);
-        });
-        AreEqual("operates only on ScriptType<>", e!.Message);
-    }
-    
-    [Test]
     public static void Test_ComponentType_MissingAttribute()
     {
         var e = Throws<InvalidOperationException>(() => {

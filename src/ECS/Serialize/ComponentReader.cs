@@ -104,7 +104,8 @@ internal sealed class ComponentReader
             switch (schemaType.kind) {
                 case SchemaTypeKind.Script:
                     // --- read script
-                    schemaType.ReadScript(componentReader, json, entity);
+                    var scriptType      = (ScriptType)schemaType;
+                    scriptType.ReadScript(componentReader, json, entity);
                     break;
                 case SchemaTypeKind.Component:
                     var componentType   = (ComponentType)schemaType;
