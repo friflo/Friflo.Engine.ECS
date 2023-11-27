@@ -110,7 +110,7 @@ public class ComponentField
     #endregion
     
 #region read component values
-    internal static void SetComponentFields(ComponentField[] componentFields, Entity entity, object component)
+    internal static void SetComponentFields(ComponentField[] componentFields, Entity entity, IComponent component)
     {
         var data = new FieldData(entity, component);
         foreach (var field in componentFields) {

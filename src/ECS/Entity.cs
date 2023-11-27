@@ -340,7 +340,7 @@ public sealed class Entity
     /// The returned <see cref="IComponent"/> is a boxed struct.<br/>
     /// So avoid using this method whenever possible. Use <see cref="GetComponent{T}"/> instead.
     /// </summary>
-    public static object GetEntityComponent(Entity entity, ComponentType componentType) {
+    public static IComponent GetEntityComponent(Entity entity, ComponentType componentType) {
         return entity.archetype.heapMap[componentType.structIndex].GetComponentDebug(entity.compIndex);
     }
 
