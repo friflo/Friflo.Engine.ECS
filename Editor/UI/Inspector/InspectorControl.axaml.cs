@@ -14,6 +14,10 @@ public partial class InspectorControl : UserControl
     {
         DataContext = model;
         InitializeComponent();
+        
+        TagGroup.GroupAdd.AddSchemaTypes("tags");
+        ComponentGroup.GroupAdd.AddSchemaTypes("components");
+        ScriptGroup.GroupAdd.AddSchemaTypes("scripts");
     }
     
     protected override void OnLoaded(RoutedEventArgs e) {

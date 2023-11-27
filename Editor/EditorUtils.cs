@@ -59,6 +59,17 @@ public static class EditorUtils
         // clipboard.SetDataObjectAsync(dataObject);
     }
     
+    internal static T FindAncestor<T>(StyledElement control) where T : Control
+    {
+        while (control != null) {
+            if (control is T) {
+                return (T)control;
+            }
+            control = control.Parent;
+        }
+        return null;
+    }
+    
     internal static T FindControl<T>(Visual control) where T : Control
     {
         foreach (var child in control.GetVisualChildren()) {

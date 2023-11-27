@@ -20,7 +20,7 @@
                             Margin="0" Padding="3 -1">
                         <Button.Flyout>
                             <Flyout>
-                                <local:GroupAdd Name="GroupAdd" GroupName="{Binding !$parent[local:InspectorGroup].GroupName}"/>
+                                <local:GroupAdd Name="GroupAdd"/>
                             </Flyout>
                         </Button.Flyout>
                     </Button>
