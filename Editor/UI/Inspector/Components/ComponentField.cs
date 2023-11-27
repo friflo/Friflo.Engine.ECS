@@ -52,16 +52,18 @@ public class ComponentField
         string                  fieldName,
         Var.Member              member)
     {
-        if (type == typeof(Position)) {
-            fieldName     ??= nameof(Position.value);
-            var field       = new ComponentField(fieldName,    typeof(Position),   0, member);
+        if (type == typeof(Position) ||
+            type == typeof(Scale3))
+        {
+            fieldName     ??= "value";
+            var field       = new ComponentField(fieldName,    type,   0, member);
             field.control   = new Vector3Field { ComponentField = field };
             fields.Add(field);
             return true;
         }
         if (type == typeof(Transform)) {
-            var field0      = new ComponentField("position",   typeof(Transform),  0, member);
-            var field1      = new ComponentField("rotation",   typeof(Transform),  1, member);
+            var field0      = new ComponentField("position",   type,  0, member);
+            var field1      = new ComponentField("rotation",   type,  1, member);
             field0.control  = new Vector3Field { ComponentField = field0 };
             field1.control  = new Vector3Field { ComponentField = field1 };
             fields.Add(field0);
@@ -70,14 +72,14 @@ public class ComponentField
         }
         if (type == typeof(EntityName)) {
             fieldName     ??= nameof(EntityName.value);
-            var field       = new ComponentField(fieldName,    typeof(EntityName), 0, member);
+            var field       = new ComponentField(fieldName,    type, 0, member);
             field.control   = new StringField { ComponentField = field };
             fields.Add(field);
             return true;
         }
         if (type == typeof(Unresolved)) {
             fieldName     ??= "unresolved";
-            var field       = new ComponentField(fieldName,    typeof(Unresolved), 0, member);
+            var field       = new ComponentField(fieldName,    type, 0, member);
             field.control   = new UnresolvedField{ ComponentField = field };
             fields.Add(field);
             return true;
@@ -146,6 +148,14 @@ public class ComponentField
             control.X       = position.x;
             control.Y       = position.y;
             control.Z       = position.z;
+            return;
+        }
+        if (type == typeof(Scale3)) {
+            var control     = (Vector3Field)field.control; 
+            var scale3      = (Scale3)data.GetData();
+            control.X       = scale3.x;
+            control.Y       = scale3.y;
+            control.Z       = scale3.z;
             return;
         }
         if (type == typeof(Transform)) {
