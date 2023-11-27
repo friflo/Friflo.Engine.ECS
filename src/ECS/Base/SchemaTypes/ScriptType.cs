@@ -11,9 +11,16 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public abstract class ScriptType : SchemaType
 {
+    /// <summary>
+    /// Ihe index in <see cref="EntitySchema.Scripts"/>.<br/>
+    /// </summary>
+    public   readonly   int             scriptIndex;  //  4
+    
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
-        : base (scriptKey, null, type, SchemaTypeKind.Script, scriptIndex, 0)
-    { }
+        : base (scriptKey, null, type, SchemaTypeKind.Script, 0)
+    {
+        this.scriptIndex = scriptIndex;
+    }
 }
 
 internal sealed class ScriptType<T> : ScriptType 

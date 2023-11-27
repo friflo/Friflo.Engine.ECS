@@ -12,7 +12,7 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class ComponentType : SchemaType
 {
     protected ComponentType(string componentKey, int structIndex, Type type)
-        : base (componentKey, null, type, Component, 0, structIndex)
+        : base (componentKey, null, type, Component, structIndex)
     { }
 }
 

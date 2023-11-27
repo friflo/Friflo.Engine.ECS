@@ -18,7 +18,6 @@ public static class Test_ComponentSchema
             var type = tags[n];
             AreEqual(n,                 type.tagIndex);
             AreEqual(0,                 type.structIndex);
-            AreEqual(0,                 type.scriptIndex);
             AreEqual(SchemaTypeKind.Tag, type.kind);
             IsNull(type.componentKey);
         }
@@ -52,7 +51,6 @@ public static class Test_ComponentSchema
         for (int n = 1; n < components.Length; n++) {
             var type = components[n];
             AreEqual(n, type.structIndex);
-            AreEqual(0, type.scriptIndex);
             AreEqual(SchemaTypeKind.Component, type.kind);
             NotNull (type.componentKey);
         }

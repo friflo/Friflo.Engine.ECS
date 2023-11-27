@@ -20,10 +20,6 @@ public abstract class SchemaType
     
     public   readonly   string          tagName;        //  8
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Script"/> the index in <see cref="EntitySchema.Scripts"/>. Otherwise 0<br/>
-    /// </summary>
-    public   readonly   int             scriptIndex;  //  4
-    /// <summary>
     /// If <see cref="kind"/> == <see cref="Component"/> the index in <see cref="EntitySchema.Components"/>. Otherwise 0<br/>
     /// </summary>
     public   readonly   int             structIndex;    //  4
@@ -54,12 +50,10 @@ public abstract class SchemaType
         string          tagName,
         Type            type,
         SchemaTypeKind  kind,
-        int             scriptIndex,
         int             structIndex)
     {
         this.componentKey   = componentKey;
         this.tagName        = tagName;
-        this.scriptIndex    = scriptIndex;
         this.structIndex    = structIndex;
         this.kind           = kind;
         this.type           = type;
