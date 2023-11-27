@@ -334,7 +334,7 @@ public sealed class Entity
     
     #endregion
     
-#region non generic entity component / script methods
+#region non generic component methods
     /// <summary>
     /// Returns a copy of the entity component as an object.<br/>
     /// The returned <see cref="IComponent"/> is a boxed struct.<br/>
@@ -351,7 +351,9 @@ public sealed class Entity
     /* public static bool AddEntityComponent(Entity entity, ComponentType componentType) {
         return entity.archetype.store.AddComponent<T>(entity.id, ref entity.archetype, ref entity.compIndex, default);
     } */
+    #endregion
     
+#region non generic script methods
     public static Script GetEntityScript(Entity entity, ScriptType scriptType) {
         return EntityUtils.GetScript(entity, scriptType.type);
     }
