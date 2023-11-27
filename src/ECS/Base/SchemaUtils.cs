@@ -61,14 +61,14 @@ internal static class SchemaUtils
             var attributeType = attr.AttributeType;
             if (attributeType == typeof(ComponentAttribute))
             {
-                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateStructFactory), flags);
+                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
             if (attributeType == typeof(ScriptAttribute))
             {
-                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateClassFactory), flags);
+                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);
                 return scriptType;
@@ -77,7 +77,7 @@ internal static class SchemaUtils
         throw new InvalidOperationException($"missing expected attribute. Type: {type}");
     }
     
-    internal static ComponentType CreateStructFactory<T>(TypeStore typeStore)
+    internal static ComponentType CreateComponentType<T>(TypeStore typeStore)
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -85,8 +85,8 @@ internal static class SchemaUtils
         return new ComponentType<T>(structKey, structIndex, typeStore);
     }
     
-    internal static ScriptType CreateClassFactory<T>(TypeStore typeStore)
-        where T : Script
+    internal static ScriptType CreateScriptType<T>(TypeStore typeStore)
+        where T : Script, new()
     {
         var scriptIndex   = ClassType<T>.ScriptIndex;
         var scriptKey     = ClassType<T>.ScriptKey;

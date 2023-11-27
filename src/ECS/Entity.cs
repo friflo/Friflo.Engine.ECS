@@ -249,9 +249,11 @@ public sealed class Entity
         return result != null;
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
+    /// <remarks>Note: Use <see cref="AddEntityScript"/> as non generic alternative</remarks>
     public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
+    
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="GetEntityComponent"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="RemoveEntityScript"/> as non generic alternative</remarks>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript(this, typeof(T));
     
     #endregion
@@ -341,12 +343,21 @@ public sealed class Entity
         return entity.archetype.heapMap[componentType.structIndex].GetComponentDebug(entity.compIndex);
     }
 
-    public static bool RemoveEntityComponent(Entity entity, ComponentType type) {
-        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, type.structIndex);
+    public static bool RemoveEntityComponent(Entity entity, ComponentType componentType) {
+        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, componentType.structIndex);
     }
+    
+    /* public static bool AddEntityComponent(Entity entity, ComponentType componentType) {
+        return entity.archetype.store.AddComponent<T>(entity.id, ref entity.archetype, ref entity.compIndex, default);
+    } */
             
-    public static Script RemoveEntityScript(Entity entity, ScriptType type) {
-        return EntityUtils.RemoveScript(entity, type.type);
+    public static Script RemoveEntityScript(Entity entity, ScriptType scriptType) {
+        return EntityUtils.RemoveScript(entity, scriptType.type);
+    }
+    
+    public static Script AddEntityScript(Entity entity, ScriptType scriptType) {
+        var script = scriptType.CreateScript();
+        return EntityUtils.AddScript(entity, script, scriptType.type, scriptType.scriptIndex);
     }
     #endregion
 }

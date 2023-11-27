@@ -16,6 +16,8 @@ public abstract class ScriptType : SchemaType
     /// </summary>
     public   readonly   int             scriptIndex;  //  4
     
+    internal abstract Script CreateScript();        
+    
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
@@ -24,7 +26,7 @@ public abstract class ScriptType : SchemaType
 }
 
 internal sealed class ScriptType<T> : ScriptType 
-    where T : Script
+    where T : Script, new()
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"script: '{componentKey}' [*{typeof(T).Name}]";
@@ -33,6 +35,10 @@ internal sealed class ScriptType<T> : ScriptType
         : base(scriptKey, scriptIndex, typeof(T))
     {
         typeMapper = typeStore.GetTypeMapper<T>();
+    }
+    
+    internal override Script CreateScript() {
+        return new T();
     }
     
     internal override void ReadScript(ObjectReader reader, JsonValue json, Entity entity) {
