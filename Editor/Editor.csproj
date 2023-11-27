@@ -102,6 +102,7 @@
         <DependentUpon>Separator.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      
       <Compile Update="UI\Inspector\Components\InspectorComponent.axaml.cs">
         <DependentUpon>InspectorComponent.axaml</DependentUpon>
         <SubType>Code</SubType>
@@ -110,14 +111,20 @@
         <DependentUpon>FieldName.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+
       <Compile Update="UI\Inspector\Components\Fields\StringField.axaml">
         <DependentUpon>StringField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Components\Fields\UnresolvedField.axaml.cs">
+        <DependentUpon>UnresolvedField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
       <Compile Update="UI\Inspector\Components\Fields\Vector3Field.axaml">
         <DependentUpon>Vector3Field.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+
       <Compile Update="UI\Inspector\Tags\InspectorTag.axaml.cs">
         <DependentUpon>InspectorTag.axaml</DependentUpon>
         <SubType>Code</SubType>

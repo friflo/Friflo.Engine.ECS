@@ -75,6 +75,13 @@ public class ComponentField
             fields.Add(field);
             return true;
         }
+        if (type == typeof(Unresolved)) {
+            fieldName     ??= "unresolved";
+            var field       = new ComponentField(fieldName,    typeof(Unresolved), 0, member);
+            field.control   = new UnresolvedField{ ComponentField = field };
+            fields.Add(field);
+            return true;
+        }
         return false;
     }
         
@@ -153,6 +160,12 @@ public class ComponentField
                 control.Y = transform.m22;
                 control.Z = transform.m23;
             }
+            return;
+        }
+        if (type == typeof(Unresolved)) {
+            var control     = (UnresolvedField)field.control;
+            var unresolved  = (Unresolved)data.GetData();
+            control.Set(unresolved);
             return;
         }
         if (type == typeof(EntityName)) {
