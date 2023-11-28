@@ -48,19 +48,24 @@ internal class InspectorObserver : EditorObserver
         store.ComponentRemovedHandler   += ComponentChanged;
         store.ScriptAddedHandler        += ScriptChanged;
         store.ScriptRemovedHandler      += ScriptChanged;
+        store.TagsChanged               += TagsChanged;
     }
 
     private void ComponentChanged(in ComponentEventArgs args) {
-        if (args.entityId != entityId) {
+        if (args.entityId != entityId)
             return;
-        }
         PostSetEntity(args.entityId);
     }
     
     private void ScriptChanged(in ScriptEventArgs args) {
-        if (args.entityId != entityId) {
+        if (args.entityId != entityId)
             return;
-        }
+        PostSetEntity(args.entityId);
+    }
+    
+    private void TagsChanged(in TagsChangedArgs args) {
+        if (args.entityId != entityId)
+            return;
         PostSetEntity(args.entityId);
     }
     
