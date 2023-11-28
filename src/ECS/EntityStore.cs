@@ -112,7 +112,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <remarks>
     /// - SEND_EVENT notes -
     /// <br/>
-    /// Send event must be last statement <b>AFTER</b> a mutation has finished.<br/>
+    /// Send event must be last statement <b>AFTER</b> an entity mutation has finished.<br/>
     /// This ensures preserving a valid entity state after a mutation - add / remove - has finished.<br/>
     /// <br/>
     /// The reason is when sending an event to the event handlers any of them may throw an exception.<br/>
