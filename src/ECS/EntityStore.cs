@@ -102,6 +102,12 @@ public sealed partial class EntityStore : EntityStoreBase
         idBufferSet     = new HashSet<int>();
     }
     #endregion
+
+    internal static void SendAddedComponent(EntityStore store, int id, int structIndex)
+    {
+        store.addedComponent?.Invoke(new ComponentEventArgs (id, ComponentEventType.Added,Static.EntitySchema.components[structIndex]));
+    }
+
     
 #region access by pid
     /// <remarks>

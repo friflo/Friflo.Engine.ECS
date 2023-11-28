@@ -212,12 +212,24 @@ public sealed class Entity
     /// <remarks>Executes in O(1)<br/>
     /// <remarks>Note: Use <see cref="AddEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
-    public bool AddComponent<T>()               where T : struct, IComponent => archetype.store.AddComponent<T>(id, ref archetype, ref compIndex, default);
-    
+    public bool AddComponent<T>()               where T : struct, IComponent {
+        var store       = archetype.entityStore;
+        var structIndex = StructHeap<T>.StructIndex;
+        var result      = store.AddComponent<T>(id, structIndex, ref archetype, ref compIndex, default);
+        EntityStore.SendAddedComponent(store, id, structIndex);
+        return result;
+    }
+
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
-    public bool AddComponent<T>(in T component) where T : struct, IComponent => archetype.store.AddComponent(id, ref archetype, ref compIndex, in component);
-    
+    public bool AddComponent<T>(in T component) where T : struct, IComponent {
+        var store       = archetype.entityStore;
+        var structIndex = StructHeap<T>.StructIndex;
+        var result      = store.AddComponent(id, structIndex, ref archetype, ref compIndex, in component);
+        EntityStore.SendAddedComponent(store, id, structIndex);
+        return result;
+    }
+
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>
     /// Executes in O(1)<br/>

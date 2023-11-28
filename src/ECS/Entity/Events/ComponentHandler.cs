@@ -8,13 +8,13 @@ namespace Friflo.Fliox.Engine.ECS;
 /// A <see cref="AddedComponentHandler"/> added to <see cref="EntityStore.AddedComponent"/>
 /// get events on <see cref="Entity.AddComponent{T}()"/>
 /// </summary>
-public delegate void   AddedComponentHandler    (object sender, in ComponentEventArgs e);
+public delegate void   AddedComponentHandler    (in ComponentEventArgs e);
 
 /// <summary>
 /// A <see cref="RemovedComponentHandler"/> added to <see cref="EntityStore.RemovedComponent"/>
 /// get events on <see cref="Entity.RemoveComponent{T}()"/>
 /// </summary>
-public delegate void   RemovedComponentHandler  (object sender, in ComponentEventArgs e);
+public delegate void   RemovedComponentHandler  (in ComponentEventArgs e);
 
 
 public enum ComponentEventType
@@ -29,7 +29,7 @@ public readonly struct  ComponentEventArgs
     public readonly     ComponentEventType  type; 
     public readonly     ComponentType       componentType;
     
-    public override     string          ToString() => $"entity: {entityId} - {type} {componentType}";
+    public override     string              ToString() => $"entity: {entityId} - {type} {componentType}";
 
     internal ComponentEventArgs(int entityId, ComponentEventType type, ComponentType  componentType)
     {

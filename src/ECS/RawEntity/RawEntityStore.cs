@@ -128,7 +128,8 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        var result          = AddComponent(id, ref archetype, ref entity.compIndex, component);
+        var structIndex     = StructHeap<T>.StructIndex;
+        var result          = AddComponent(id, structIndex, ref archetype, ref entity.compIndex, component);
         entity.archIndex    = archetype.archIndex;
         return result;
     }

@@ -94,17 +94,16 @@ public partial class EntityStoreBase
     /// </remarks>
     internal bool AddComponent<T>(
             int         id,
+            int         structIndex,
         ref Archetype   archetype,  // possible mutation is not null
         ref int         compIndex,
         in  T           component)
         where T : struct, IComponent
     {
-        var structIndex = StructHeap<T>.StructIndex;
-        var result      = AddComponentInternal(id, ref archetype, ref compIndex, structIndex, out var structHeap);
+        var result  = AddComponentInternal(id, ref archetype, ref compIndex, structIndex, out var structHeap);
         // --- change component value 
-        var heap        = (StructHeap<T>)structHeap;
+        var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
-        // var componentType   = Static.EntitySchema.components[structIndex];
         return result;
     }
     
