@@ -100,10 +100,12 @@ public partial class EntityStoreBase
             int         structIndex,
         ref Archetype   archetype,  // possible mutation is not null
         ref int         compIndex,
+        out int         archIndex,
         in  T           component)
         where T : struct, IComponent
     {
         var result  = AddComponentInternal(id, ref archetype, ref compIndex, structIndex, out var structHeap);
+        archIndex   = archetype.archIndex;
         // --- change component value 
         var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
@@ -144,11 +146,13 @@ public partial class EntityStoreBase
             int         id,
         ref Archetype   archetype,    // possible mutation is not null
         ref int         compIndex,
+        out int         archIndex,
             int         structIndex)
     {
         var arch    = archetype;
         var heap    = arch.heapMap[structIndex];
         if (heap == null) {
+            archIndex = archetype.archIndex;
             return false;
         }
         var newArchetype = GetArchetypeWithout(arch, structIndex);
@@ -157,12 +161,14 @@ public partial class EntityStoreBase
             // --- update entity
             archetype   = defaultArchetype;
             compIndex   = 0;
+            archIndex   = archetype.archIndex;
             arch.MoveLastComponentsTo(removePos);
-            return true;
+        } else {
+            // --- change entity archetype
+            archetype   = newArchetype;
+            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         }
-        // --- change entity archetype
-        archetype   = newArchetype;
-        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+        archIndex   = archetype.archIndex;
         return true;
     }
     #endregion

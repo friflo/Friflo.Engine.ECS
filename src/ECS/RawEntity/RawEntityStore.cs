@@ -129,9 +129,7 @@ public sealed class RawEntityStore : EntityStoreBase
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
         var structIndex     = StructHeap<T>.StructIndex;
-        var result          = AddComponent(id, structIndex, ref archetype, ref entity.compIndex, component);
-        entity.archIndex    = archetype.archIndex;
-        return result;
+        return AddComponent(id, structIndex, ref archetype, ref entity.compIndex, out entity.archIndex, component);
     }
     
     public bool RemoveEntityComponent<T>(int id)
@@ -139,9 +137,7 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        var result          = RemoveComponent(id, ref archetype, ref entity.compIndex, StructHeap<T>.StructIndex);
-        entity.archIndex    = archetype.archIndex;
-        return result;
+        return RemoveComponent(id, ref archetype, ref entity.compIndex, out entity.archIndex, StructHeap<T>.StructIndex);
     }
     #endregion
     
