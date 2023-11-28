@@ -82,17 +82,19 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
     [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
-    
-    [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
-    //
-    [Browse(Never)] private             AddedComponentHandler   addedComponent;     //  8
-    [Browse(Never)] private             RemovedComponentHandler removedComponent;   //  8
-    //
-    [Browse(Never)] private             AddedScriptHandler      addedScript;     //  8
-    [Browse(Never)] private             RemovedScriptHandler    removedScript;   //  8
-    //
+
+    // --- id buffers
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
+
+    // --- delegates
+    [Browse(Never)] private         ChildNodesChangedHandler    childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
+    //
+    [Browse(Never)] private         AddedComponentHandler       addedComponent;     //  8
+    [Browse(Never)] private         RemovedComponentHandler     removedComponent;   //  8
+    //
+    [Browse(Never)] private         AddedScriptHandler          addedScript;        //  8
+    [Browse(Never)] private         RemovedScriptHandler        removedScript;      //  8
     
     #endregion
     
@@ -114,6 +116,7 @@ public sealed partial class EntityStore : EntityStoreBase
     }
     #endregion
 
+#region send events
     internal static void SendAddedComponent(EntityStore store, int id, int structIndex)
     {
         store.addedComponent?.Invoke(new ComponentEventArgs (id, ChangedEventType.Added, Static.EntitySchema.components[structIndex]));
@@ -133,6 +136,7 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         store.removedScript?.Invoke(new ScriptEventArgs (id, ChangedEventType.Removed, scriptType));
     }
+    #endregion
 
     
 #region access by pid
