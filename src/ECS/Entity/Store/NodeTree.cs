@@ -495,15 +495,6 @@ public partial class EntityStore
     }
     
     // ---------------------------------- child nodes change notification ----------------------------------
-    /// <summary>
-    /// Add / remove <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.
-    /// </summary>
-    public event ChildNodesChangedHandler ChildNodesChanged
-    {
-        add     => childNodesChanged += value;
-        remove  => childNodesChanged -= value;
-    }
-
     private void OnChildNodeAdd(int parentId, int childId, int childIndex)
     {
         if (childNodesChanged == null) {

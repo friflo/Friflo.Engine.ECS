@@ -45,9 +45,19 @@ public sealed partial class EntityStore : EntityStoreBase
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
     public              Entity                      StoreRoot           => storeRoot; // null if no graph origin set
     public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
+    
+    // ---
     /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
-    public              ChildNodesChangedHandler    ChildNodesChangedHandler { get => childNodesChanged; set => childNodesChanged = value; }
+    public          ChildNodesChangedHandler    ChildNodesChangedHandler{ get => childNodesChanged;             set    => childNodesChanged  = value; }
+    /// <summary>
+    /// Add / remove <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.
+    /// </summary>
+    public event    ChildNodesChangedHandler    ChildNodesChanged       { add => childNodesChanged  += value;   remove => childNodesChanged -= value; }
+
+    // ---
+    public          AddedComponentHandler       AddedComponentHandler   { get => addedComponent;                set    => addedComponent     = value; }
+    public event    AddedComponentHandler       AddedComponent          { add => addedComponent     += value;   remove => addedComponent    -= value; }
     #endregion
     
 #region internal fields
@@ -63,6 +73,7 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
     
     [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
+    [Browse(Never)] private             AddedComponentHandler   addedComponent;     //  8
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     
