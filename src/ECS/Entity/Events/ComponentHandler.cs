@@ -17,7 +17,7 @@ public delegate void   AddedComponentHandler    (in ComponentEventArgs e);
 public delegate void   RemovedComponentHandler  (in ComponentEventArgs e);
 
 
-public enum ComponentEventType
+public enum ChangedEventType
 {
     Added,
     Removed,
@@ -26,12 +26,12 @@ public enum ComponentEventType
 public readonly struct  ComponentEventArgs
 {
     public readonly     int                 entityId;
-    public readonly     ComponentEventType  type; 
+    public readonly     ChangedEventType    type; 
     public readonly     ComponentType       componentType;
     
     public override     string              ToString() => $"entity: {entityId} - {type} {componentType}";
 
-    internal ComponentEventArgs(int entityId, ComponentEventType type, ComponentType  componentType)
+    internal ComponentEventArgs(int entityId, ChangedEventType type, ComponentType  componentType)
     {
         this.entityId       = entityId;
         this.type           = type;

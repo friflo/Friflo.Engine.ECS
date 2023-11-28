@@ -59,9 +59,15 @@ public sealed partial class EntityStore : EntityStoreBase
     public          AddedComponentHandler       AddedComponentHandler   { get => addedComponent;                set    => addedComponent     = value; }
     public event    AddedComponentHandler       AddedComponent          { add => addedComponent     += value;   remove => addedComponent    -= value; }
     
-    // ---
     public          RemovedComponentHandler     RemovedComponentHandler { get => removedComponent;              set    => removedComponent   = value; }
     public event    RemovedComponentHandler     RemovedComponent        { add => removedComponent   += value;   remove => removedComponent  -= value; }
+    
+    // ---
+    public          AddedScriptHandler          AddedScriptHandler      { get => addedScript;                   set    => addedScript        = value; }
+    public event    AddedScriptHandler          AddedScript             { add => addedScript     += value;      remove => addedScript       -= value; }
+    
+    public          RemovedScriptHandler        RemovedScriptHandler    { get => removedScript;                 set    => removedScript      = value; }
+    public event    RemovedScriptHandler        RemovedScript           { add => removedScript   += value;      remove => removedScript     -= value; }
 
     #endregion
     
@@ -78,8 +84,13 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
     
     [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
+    //
     [Browse(Never)] private             AddedComponentHandler   addedComponent;     //  8
     [Browse(Never)] private             RemovedComponentHandler removedComponent;   //  8
+    //
+    [Browse(Never)] private             AddedScriptHandler      addedScript;     //  8
+    [Browse(Never)] private             RemovedScriptHandler    removedScript;   //  8
+    //
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     
@@ -105,12 +116,12 @@ public sealed partial class EntityStore : EntityStoreBase
 
     internal static void SendAddedComponent(EntityStore store, int id, int structIndex)
     {
-        store.addedComponent?.Invoke(new ComponentEventArgs (id, ComponentEventType.Added, Static.EntitySchema.components[structIndex]));
+        store.addedComponent?.Invoke(new ComponentEventArgs (id, ChangedEventType.Added, Static.EntitySchema.components[structIndex]));
     }
     
     internal static void SendRemovedComponent(EntityStore store, int id, int structIndex)
     {
-        store.removedComponent?.Invoke(new ComponentEventArgs (id, ComponentEventType.Removed, Static.EntitySchema.components[structIndex]));
+        store.removedComponent?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
     }
 
     
