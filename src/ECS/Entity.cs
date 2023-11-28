@@ -356,13 +356,8 @@ public sealed class Entity
     #endregion
     
 #region non generic script methods
-    public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript(entity, scriptType.type);
-            
+    public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript   (entity, scriptType.type);
     public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScript(entity, scriptType.type);
-    
-    public static Script AddEntityScript    (Entity entity, ScriptType scriptType) {
-        var script = scriptType.CreateScript();
-        return EntityUtils.AddScript(entity, script, scriptType.type, scriptType.scriptIndex);
-    }
+    public static Script AddEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.AddScript   (entity, scriptType);
     #endregion
 }

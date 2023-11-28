@@ -118,6 +118,11 @@ internal static class EntityUtils
         return entity.archetype.entityStore.GetScript(entity, scriptType);
     }
     
+    internal static Script AddScript(Entity entity, ScriptType scriptType) {
+        var script = scriptType.CreateScript();
+        return AddScript(entity, script, scriptType.type, scriptType.scriptIndex);
+    }
+    
     internal static Script AddScript(Entity entity, Script script, Type scriptType, int classIndex)
     {
         if (classIndex == ClassUtils.MissingAttribute) {
