@@ -113,10 +113,11 @@ public sealed partial class EntityStore : EntityStoreBase
     /// - SEND_EVENT notes -
     /// <br/>
     /// Send event must be last statement <b>AFTER</b> an entity mutation has finished.<br/>
-    /// This ensures preserving a valid entity state after a mutation - add / remove - has finished.<br/>
-    /// <br/>
-    /// The reason is when sending an event to the event handlers any of them may throw an exception.<br/>
-    /// So this exception will not result in an invalid entity state.
+    /// This ensures preserving a valid entity state after an add / remove mutation has finished.<br/>
+    /// Reasons: <br/>
+    /// - Event handlers expect a valid entity state after add / remove mutation.<br/> 
+    /// - When sending an event to the event handlers any of them may throw an exception.
+    ///   So this exception will not result in an invalid entity state.<br/>
     /// <br/> 
     /// The entity state refers to:
     /// <list type="buttlet">

@@ -39,7 +39,8 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override bool AddEntityComponent(Entity entity) {
-        return entity.archetype.entityStore.AddComponent<T>(entity.id, structIndex, ref entity.archetype, ref entity.compIndex, out _, default);
+        int archIndex = 0;
+        return entity.archetype.entityStore.AddComponent<T>(entity.id, structIndex, ref entity.archetype, ref entity.compIndex, ref archIndex, default);
     }
     
     internal override StructHeap CreateHeap() {
