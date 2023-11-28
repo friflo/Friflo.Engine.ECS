@@ -134,10 +134,10 @@ public sealed class Entity
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
     [Browse(Never)] public  ref Scale3      Scale3      => ref archetype.std.scale3.  chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     
-    [Browse(Never)] public  bool            HasName         => archetype.std.name              != null;
-    [Browse(Never)] public  bool            HasPosition     => archetype.std.position          != null;
-    [Browse(Never)] public  bool            HasRotation     => archetype.std.rotation          != null;
-    [Browse(Never)] public  bool            HasScale3       => archetype.std.scale3            != null;
+    [Browse(Never)] public  bool            HasName     =>     archetype.std.name              != null;
+    [Browse(Never)] public  bool            HasPosition =>     archetype.std.position          != null;
+    [Browse(Never)] public  bool            HasRotation =>     archetype.std.rotation          != null;
+    [Browse(Never)] public  bool            HasScale3   =>     archetype.std.scale3            != null;
     #endregion
     
 #region public properties - tree nodes
@@ -163,16 +163,16 @@ public sealed class Entity
     #endregion
     
 #region internal fields
-    [Browse(Never)] internal readonly   int                     id;                 //  4
+    [Browse(Never)] internal readonly   int         id;             //  4
     
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal            Archetype               archetype;          //  8 - null if detached. See property Archetype
+    [Browse(Never)] internal            Archetype   archetype;      //  8 - null if detached. See property Archetype
 
     /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal            int                     compIndex;          //  4
+    [Browse(Never)] internal            int         compIndex;      //  4
     
-    [Browse(Never)] internal            int                     scriptIndex;      //  4
+    [Browse(Never)] internal            int         scriptIndex;    //  4
     
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
@@ -233,7 +233,7 @@ public sealed class Entity
     /// To access a component use <see cref="GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(GetComponent)}<T>() to access a component")]
-    public      IComponent[]            Components_         => EntityUtils.GetComponentsDebug(this);
+    public      IComponent[]            Components_     => EntityUtils.GetComponentsDebug(this);
     #endregion
     
     // ------------------------------------ script methods -------------------------------------
@@ -271,10 +271,10 @@ public sealed class Entity
     /// </returns>
     public ref readonly Tags    Tags                        => ref archetype.tags;
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
-    public bool AddTag<T>()    where T : struct, IEntityTag => archetype.store.AddTags(Tags.Get<T>(), id, ref archetype, ref compIndex);
-    public bool AddTags(in Tags tags)                       => archetype.store.AddTags(tags, id, ref archetype, ref compIndex);
+    public bool AddTag<T>()    where T : struct, IEntityTag => archetype.store.AddTags   (Tags.Get<T>(), id, ref archetype, ref compIndex);
+    public bool AddTags(in Tags tags)                       => archetype.store.AddTags   (tags,          id, ref archetype, ref compIndex);
     public bool RemoveTag<T>() where T : struct, IEntityTag => archetype.store.RemoveTags(Tags.Get<T>(), id, ref archetype, ref compIndex);
-    public bool RemoveTags(in Tags tags)                    => archetype.store.RemoveTags(tags, id, ref archetype, ref compIndex);
+    public bool RemoveTags(in Tags tags)                    => archetype.store.RemoveTags(tags,          id, ref archetype, ref compIndex);
     #endregion
     
     // ------------------------------------ tree methods -----------------------------------------
