@@ -58,6 +58,11 @@ public sealed partial class EntityStore : EntityStoreBase
     // ---
     public          AddedComponentHandler       AddedComponentHandler   { get => addedComponent;                set    => addedComponent     = value; }
     public event    AddedComponentHandler       AddedComponent          { add => addedComponent     += value;   remove => addedComponent    -= value; }
+    
+    // ---
+    public          RemovedComponentHandler     RemovedComponentHandler { get => removedComponent;              set    => removedComponent   = value; }
+    public event    RemovedComponentHandler     RemovedComponent        { add => removedComponent   += value;   remove => removedComponent  -= value; }
+
     #endregion
     
 #region internal fields
@@ -74,6 +79,7 @@ public sealed partial class EntityStore : EntityStoreBase
     
     [Browse(Never)] private            ChildNodesChangedHandler childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
     [Browse(Never)] private             AddedComponentHandler   addedComponent;     //  8
+    [Browse(Never)] private             RemovedComponentHandler removedComponent;   //  8
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     
