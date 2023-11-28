@@ -14,6 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+#region get / add archetype
     internal bool TryGetValue(ArchetypeKey searchKey, out ArchetypeKey archetypeKey) {
         return archSet.TryGetValue(searchKey, out archetypeKey);
     }
@@ -85,8 +86,10 @@ public partial class EntityStoreBase
         archsCount++;
         archSet.Add(archetype.key);
     }
+    #endregion
     
     // ------------------------------------ add / remove component ------------------------------------
+#region add / remove component
     /// <remarks>
     /// Minimize method body size requiring generic type <typeparam name="T"></typeparam> by
     /// extracting <see cref="AddComponentInternal"/>.<br/>
@@ -162,8 +165,11 @@ public partial class EntityStoreBase
         compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         return true;
     }
+    #endregion
     
     // ------------------------------------ add / remove entity Tag ------------------------------------
+#region add / remove tags
+
     internal bool AddTags(
         in Tags             tags,
         int                 id,
@@ -228,4 +234,5 @@ public partial class EntityStoreBase
         archetype   = newArchetype;
         return true;
     }
+    #endregion
 }
