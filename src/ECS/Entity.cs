@@ -253,11 +253,11 @@ public sealed class Entity
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="AddEntityScript"/> as non generic alternative</remarks>
-    public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript(this, script, typeof(T), ClassType<T>.ScriptIndex);
+    public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript    (this, ClassType<T>.ScriptIndex, script);
     
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="RemoveEntityScript"/> as non generic alternative</remarks>
-    public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript(this, typeof(T));
+    public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);
     
     #endregion
     
@@ -356,8 +356,8 @@ public sealed class Entity
     #endregion
     
 #region non generic script methods
-    public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript   (entity, scriptType.type);
-    public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScript(entity, scriptType.type);
-    public static Script AddEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.AddScript   (entity, scriptType);
+    public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript       (entity, scriptType.type);
+    public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScriptType(entity, scriptType);
+    public static Script AddEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.AddScriptType   (entity, scriptType);
     #endregion
 }

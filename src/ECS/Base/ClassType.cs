@@ -16,10 +16,10 @@ internal static class ClassType<T>
 
 internal static class ClassUtils
 {
-    private  static     int     _nextScriptIndex     = 1;
+    private  static     int     _nextScriptIndex    = 1;
 
-    internal const      int     MissingAttribute    = 0;
-
+    private  const      int     MissingAttribute    = 0;
+    
     internal static int NewClassIndex(Type type, out string classKey) {
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType != typeof(ScriptAttribute)) {

@@ -118,15 +118,22 @@ internal static class EntityUtils
         return entity.archetype.entityStore.GetScript(entity, scriptType);
     }
     
-    internal static Script AddScript(Entity entity, ScriptType scriptType) {
-        var script = scriptType.CreateScript();
-        return AddScript(entity, script, scriptType.type, scriptType.scriptIndex);
+    internal static Script AddScript(Entity entity, int scriptIndex, Script script)
+    {
+        var scriptType = EntityStoreBase.Static.EntitySchema.Scripts[scriptIndex];
+        return AddScriptInternal(entity, script, scriptType);
     }
     
-    internal static Script AddScript(Entity entity, Script script, Type scriptType, int classIndex)
+    internal static Script AddScriptType(Entity entity, ScriptType scriptType)
     {
-        if (classIndex == ClassUtils.MissingAttribute) {
-            throw MissingAttributeException(scriptType);
+        var script = scriptType.CreateScript();
+        return AddScriptInternal(entity, script, scriptType);
+    }
+    
+    private static  Script AddScriptInternal(Entity entity, Script script, ScriptType scriptType)
+    {
+        if (scriptType == null) {
+            throw MissingAttributeException(script.GetType());
         }
         if (script.entity != null) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
@@ -134,7 +141,15 @@ internal static class EntityUtils
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }
     
-    internal static Script RemoveScript(Entity entity, Type scriptType) {
+    internal static Script RemoveScript(Entity entity, int scriptIndex) {
+        if (entity.scriptIndex == NoScripts) {
+            return null;
+        }
+        var scriptType = EntityStoreBase.Static.EntitySchema.Scripts[scriptIndex];
+        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
+    }
+    
+    internal static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
         if (entity.scriptIndex == NoScripts) {
             return null;
         }

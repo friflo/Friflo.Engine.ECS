@@ -45,7 +45,7 @@ public partial class EntityStore
         }
     }
     
-    internal Script AddScript(Entity entity, Script script, Type scriptType)
+    internal Script AddScript(Entity entity, Script script, ScriptType scriptType)
     {
         script.entity = entity;
         if (entity.scriptIndex == EntityUtils.NoScripts)
@@ -66,7 +66,7 @@ public partial class EntityStore
         for (int n = 0; n < len; n++)
         {
             var current = scripts[n]; 
-            if (current.GetType() == scriptType) {
+            if (current.GetType() == scriptType.type) {
                 // case: scripts contains a script of the given scriptType => replace current script
                 scripts[n] = script;
                 current.entity = null;
@@ -79,7 +79,7 @@ public partial class EntityStore
         return null;
     }
     
-    internal Script RemoveScript(Entity entity, Type scriptType)
+    internal Script RemoveScript(Entity entity, ScriptType scriptType)
     {
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
         var scripts             = entityScript.scripts;
@@ -87,7 +87,7 @@ public partial class EntityStore
         for (int n = 0; n < len; n++)
         {
             var script = scripts[n];
-            if (script.GetType() != scriptType) {
+            if (script.GetType() != scriptType.type) {
                 continue;
             }
             // case: found script in entity scripts
