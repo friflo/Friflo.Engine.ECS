@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -19,8 +20,8 @@ public sealed class ExplorerItem :
     IList<ExplorerItem>,
     IList,
     IReadOnlyList<ExplorerItem>,
-    INotifyCollectionChanged
- // INotifyPropertyChanged                                                      not required. Implemented by ObservableCollection{T}
+    INotifyCollectionChanged,
+    INotifyPropertyChanged      //  only required to notify EntityName changes to Avalonia > TreeDataGrid
 {
 #region internal properties
     public              int     Id              => entity.Id;
@@ -28,7 +29,7 @@ public sealed class ExplorerItem :
     public              bool    IsRoot          => IsRootItem();
     public              bool    AllowDrag       => !IsRootItem();
     public              string  Name            { get => GetName(entity); set => SetName(entity, value); }
-    public              string  DebugTreeName   => tree.debugName;             
+    public              string  DebugTreeName   => tree.debugName;
     
     public              bool    flag;           // todo remove
     
@@ -36,10 +37,10 @@ public sealed class ExplorerItem :
     #endregion
     
 #region internal fields
-    internal readonly   Entity                              entity;             //  8   - the corresponding entity
-    internal readonly   ExplorerItemTree                    tree;               //  8   - the ExplorerItemTree containing this ExplorerItem
-    internal            NotifyCollectionChangedEventHandler collectionChanged;  //  8   - event handlers are called in case entity children are modified   
- // public  event       PropertyChangedEventHandler         PropertyChanged;    not required. Implemented by ObservableCollection{T}
+    internal readonly   Entity                              entity;                 //  8   - the corresponding entity
+    internal readonly   ExplorerItemTree                    tree;                   //  8   - the ExplorerItemTree containing this ExplorerItem
+    internal            NotifyCollectionChangedEventHandler collectionChanged;      //  8   - event handlers are called in case entity children are modified
+    public              PropertyChangedEventHandler         propertyChangedHandler; //  8   - used to notify EntityName changes to Avalonia > TreeDataGrid 
     #endregion
 
 #region constructor
@@ -63,6 +64,10 @@ public sealed class ExplorerItem :
     private static void SetName(Entity entity, string value) {
         if (string.IsNullOrEmpty(value)) {
             entity.RemoveComponent<EntityName>();
+            return;
+        }
+        entity.TryGetComponent<EntityName>(out var name);
+        if (name.value == value) {
             return;
         }
         entity.AddComponent(new EntityName(value));
@@ -102,6 +107,10 @@ public sealed class ExplorerItem :
         add     => collectionChanged += value;
         remove  => collectionChanged -= value;
     }
+    #endregion
+    
+#region INotifyPropertyChanged
+    public event    PropertyChangedEventHandler PropertyChanged { add => propertyChangedHandler     += value;   remove => propertyChangedHandler    -= value; }
     #endregion
     
 #region IEnumerable<>

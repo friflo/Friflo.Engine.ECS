@@ -2,10 +2,12 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.ComponentModel;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 
+// ReSharper disable ConvertToConstant.Local
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
 internal class ExplorerObserver : EditorObserver
@@ -42,7 +44,13 @@ internal class ExplorerObserver : EditorObserver
             return;
         }
         EditorUtils.Post(() => {
-            Console.WriteLine("implement name update");
+            if (Log) Console.WriteLine($"tree: {tree} - name update {_count++}");
+            
+            var args = new PropertyChangedEventArgs("name");
+            item.propertyChangedHandler?.Invoke(grid, args);
         });
-    } 
+    }
+
+    private static readonly bool    Log     = true;
+    private static          int     _count;
 }
