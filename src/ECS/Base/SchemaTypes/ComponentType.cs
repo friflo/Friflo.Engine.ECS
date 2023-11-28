@@ -41,6 +41,7 @@ internal sealed class ComponentType<T> : ComponentType
     internal override bool AddEntityComponent(Entity entity) {
         var store   = entity.archetype.entityStore;
         var result  = store.AddComponent<T>(entity.id, structIndex, ref entity.archetype, ref entity.compIndex, default);
+        // send event
         EntityStore.SendAddedComponent(store, entity.id, structIndex);
         return result;
     }

@@ -105,7 +105,12 @@ public sealed partial class EntityStore : EntityStoreBase
 
     internal static void SendAddedComponent(EntityStore store, int id, int structIndex)
     {
-        store.addedComponent?.Invoke(new ComponentEventArgs (id, ComponentEventType.Added,Static.EntitySchema.components[structIndex]));
+        store.addedComponent?.Invoke(new ComponentEventArgs (id, ComponentEventType.Added, Static.EntitySchema.components[structIndex]));
+    }
+    
+    internal static void SendRemovedComponent(EntityStore store, int id, int structIndex)
+    {
+        store.removedComponent?.Invoke(new ComponentEventArgs (id, ComponentEventType.Removed, Static.EntitySchema.components[structIndex]));
     }
 
     
