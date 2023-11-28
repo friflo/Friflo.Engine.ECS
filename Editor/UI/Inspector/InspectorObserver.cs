@@ -31,7 +31,10 @@ internal class InspectorObserver : EditorObserver
     private readonly    Dictionary<TagType,       InspectorTag>     tagMap;
     private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
     private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
+    private readonly    HashSet<Control>                            controlSet;
+    private readonly    List<Control>                               controlList;
     private             int                                         entityId;
+    private             bool                                        initialized;
     
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
@@ -40,6 +43,8 @@ internal class InspectorObserver : EditorObserver
         tagMap          = new Dictionary<TagType,       InspectorTag>();
         componentMap    = new Dictionary<ComponentType, ComponentItem>();
         scriptMap       = new Dictionary<Type,          ComponentItem>();
+        controlSet      = new HashSet<Control>();
+        controlList     = new List<Control>();
     }
 
     protected override void OnEditorReady() {
@@ -85,7 +90,11 @@ internal class InspectorObserver : EditorObserver
         model.TagCount          = archetype.Tags.Count;
         model.ComponentCount    = archetype.Structs.Count;
         model.ScriptCount       = entity.Scripts.Length;
-
+        
+        if (!initialized) {
+            initialized = true;
+            inspector.Components.Children.Clear();
+        }
         SetTags         (entity);
         SetComponents   (entity);
         SetScripts      (entity);
@@ -111,8 +120,7 @@ internal class InspectorObserver : EditorObserver
     
     private void SetComponents(Entity entity)
     {
-        var components  = inspector.Components.Children;
-        components.Clear();  // todo optimize
+        var controls    = InitControlSet(inspector.Components.Children);
         var archetype   = entity.Archetype;
         
         foreach (var componentType in archetype.Structs)
@@ -135,16 +143,16 @@ internal class InspectorObserver : EditorObserver
             ComponentField.SetComponentFields(item.fields, entity, instance);
             item.control.Entity = entity;
             
-            components.Add(item.control);
-            components.Add(item.panel);
+            controlList.Add(item.control);
+            controlList.Add(item.panel);
         }
         inspector.ComponentGroup.GroupAdd.Entity = entity;
+        UpdateControls(controls);
     }
     
     private void SetScripts(Entity entity)
     {
-        var scripts = inspector.Scripts.Children;
-        scripts.Clear();  // todo optimize
+        var controls = InitControlSet(inspector.Scripts.Children);
         
         foreach (var script in entity.Scripts)
         {
@@ -167,10 +175,11 @@ internal class InspectorObserver : EditorObserver
             ComponentField.SetScriptFields(item.fields, script);
             item.control.Entity = entity;
             
-            scripts.Add(item.control);
-            scripts.Add(item.panel);
+            controlList.Add(item.control);
+            controlList.Add(item.panel);
         }
         inspector.ScriptGroup.GroupAdd.Entity = entity;
+        UpdateControls(controls);
     }
     
     /// <remarks><see cref="SchemaType.type"/> is a struct</remarks>
@@ -192,6 +201,32 @@ internal class InspectorObserver : EditorObserver
             dock.Children.Add(new FieldName   { Text  = field.name } );
             dock.Children.Add(field.control);
             panel.Children.Add(dock);
+        }
+    }
+    
+    private Controls InitControlSet(Controls controls)
+    {
+        controlList.Clear();
+        return controls;
+    }
+    
+    private void UpdateControls(Controls controls)
+    {
+        controlSet.Clear();
+        foreach (var control in controls) {
+            controlSet.Add(control);
+        }
+        foreach (var control in controlList)
+        {
+            if (control.Parent == null) {
+                controls.Add(control);
+            } else {
+                control.IsVisible = true;
+            }
+            controlSet.Remove(control);
+        }
+        foreach (var control in controlSet) {
+            control.IsVisible = false;
         }
     }
 }
