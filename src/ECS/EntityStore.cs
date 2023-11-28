@@ -45,8 +45,9 @@ public sealed partial class EntityStore : EntityStoreBase
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
     public              Entity                      StoreRoot           => storeRoot; // null if no graph origin set
     public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
+    #endregion
     
-    // ---
+#region event handler
     /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
     public          ChildNodesChangedHandler    ChildNodesChangedHandler{ get => childNodesChanged;             set    => childNodesChanged  = value; }
