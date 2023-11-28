@@ -56,19 +56,24 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     public event    ChildNodesChangedHandler    ChildNodesChanged       { add => childNodesChanged  += value;   remove => childNodesChanged -= value; }
 
-    // ---
+    // --- component: added / removed
     public          ComponentAddedHandler       ComponentAddedHandler   { get => componentAdded;                set    => componentAdded     = value; }
     public event    ComponentAddedHandler       ComponentAdded          { add => componentAdded     += value;   remove => componentAdded    -= value; }
     
     public          ComponentRemovedHandler     ComponentRemovedHandler { get => componentRemoved;              set    => componentRemoved   = value; }
     public event    ComponentRemovedHandler     ComponentRemoved        { add => componentRemoved   += value;   remove => componentRemoved  -= value; }
     
-    // ---
+    // --- script:   added / removed
     public          ScriptAddedHandler          ScriptAddedHandler      { get => scriptAdded;                   set    => scriptAdded        = value; }
     public event    ScriptAddedHandler          ScriptAdded             { add => scriptAdded     += value;      remove => scriptAdded       -= value; }
     
     public          ScriptRemovedHandler        ScriptRemovedHandler    { get => scriptRemoved;                 set    => scriptRemoved      = value; }
     public event    ScriptRemovedHandler        ScriptRemoved           { add => scriptRemoved   += value;      remove => scriptRemoved     -= value; }
+    
+    // --- tags: changed
+    public          TagsChangedHandler          TagsChangedHandler      { get => tagsChanged;                   set    => tagsChanged        = value; }
+    public event    TagsChangedHandler          TagsChanged             { add => tagsChanged     += value;      remove => tagsChanged       -= value; }
+
 
     #endregion
     
@@ -96,6 +101,8 @@ public sealed partial class EntityStore : EntityStoreBase
     //
     [Browse(Never)] private         ScriptAddedHandler          scriptAdded;        //  8
     [Browse(Never)] private         ScriptRemovedHandler        scriptRemoved;      //  8
+    
+    [Browse(Never)] private         TagsChangedHandler          tagsChanged;        //  8
     
     #endregion
     
@@ -136,6 +143,11 @@ public sealed partial class EntityStore : EntityStoreBase
     internal static void SendScriptRemoved(EntityStore store, int id, ScriptType scriptType)
     {
         store.scriptRemoved?.Invoke(new ScriptEventArgs (id, ChangedEventType.Removed, scriptType));
+    }
+    
+    internal static void SendTagsChanged(EntityStore store, int id, in Tags tags)
+    {
+        store.tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
     }
     #endregion
 
