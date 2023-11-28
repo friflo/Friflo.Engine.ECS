@@ -31,6 +31,7 @@ internal class InspectorObserver : EditorObserver
     private readonly    Dictionary<TagType,       InspectorTag>     tagMap;
     private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
     private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
+    private             int                                         entityId;
     
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
@@ -41,18 +42,39 @@ internal class InspectorObserver : EditorObserver
         scriptMap       = new Dictionary<Type,          ComponentItem>();
     }
 
+    protected override void OnEditorReady() {
+        var store = Store;
+        store.AddedComponentHandler   += ComponentChanged;
+        store.RemovedComponentHandler += ComponentChanged;
+    }
+
+    private void ComponentChanged(in ComponentEventArgs args) {
+        if (args.entityId != entityId) {
+            return;
+        }
+        var entity = Store.GetNodeById(args.entityId).Entity;
+        SetEntity(entity);
+    }
+
     protected override void OnSelectionChanged(in EditorSelection selection)
     {
         var item    = selection.item;
         var entity  = item?.Entity;
-        if (entity != null) {
-            var archetype           = entity.Archetype;
-            var model               = inspector.model;
-            model.TagCount          = archetype.Tags.Count;
-            model.ComponentCount    = archetype.Structs.Count;
-            model.ScriptCount       = entity.Scripts.Length;
-            AddEntityControls(entity);
+        if (entity == null) {
+            return;
         }
+        SetEntity(entity);
+    }
+    
+    private void SetEntity(Entity entity)
+    {
+        entityId                = entity.Id;
+        var archetype           = entity.Archetype;
+        var model               = inspector.model;
+        model.TagCount          = archetype.Tags.Count;
+        model.ComponentCount    = archetype.Structs.Count;
+        model.ScriptCount       = entity.Scripts.Length;
+        AddEntityControls(entity);    
     }
     
     private void AddEntityControls(Entity entity)
