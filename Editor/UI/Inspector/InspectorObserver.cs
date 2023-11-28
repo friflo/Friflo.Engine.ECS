@@ -44,15 +44,29 @@ internal class InspectorObserver : EditorObserver
 
     protected override void OnEditorReady() {
         var store = Store;
-        store.AddedComponentHandler   += ComponentChanged;
-        store.RemovedComponentHandler += ComponentChanged;
+        store.AddedComponentHandler     += ComponentChanged;
+        store.RemovedComponentHandler   += ComponentChanged;
+        store.AddedScriptHandler        += ScriptChanged;
+        store.RemovedScriptHandler      += ScriptChanged;
     }
 
     private void ComponentChanged(in ComponentEventArgs args) {
         if (args.entityId != entityId) {
             return;
         }
-        var entity = Store.GetNodeById(args.entityId).Entity;
+        PostSetEntity(args.entityId);
+    }
+    
+    private void ScriptChanged(in ScriptEventArgs args) {
+        if (args.entityId != entityId) {
+            return;
+        }
+        PostSetEntity(args.entityId);
+    }
+    
+    private void PostSetEntity(int id)
+    {
+        var entity = Store.GetNodeById(id).Entity;
         EditorUtils.Post(() => {
             SetEntity(entity);
         });
