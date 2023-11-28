@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
         xmlns:openGl="clr-namespace:Friflo.Fliox.Editor.OpenGL"
-        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"
         x:Class="Friflo.Fliox.Editor.UI.MainWindow"
         Background="{DynamicResource AppBackground}"
         Title="Fliox Editor"
@@ -61,11 +61,16 @@
             <Rectangle        Height="0"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Height="4"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
-            <ui:ExplorerPanel Width="300"   DockPanel.Dock="Left" />
+            <DockPanel        Width="300"   DockPanel.Dock="Left">
+                <ui:ExplorerPanel DockPanel.Dock="Top"
+                              Height="400"/>
+                <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
+                <ui:InspectorPanel/>
+            </DockPanel>
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
             <DockPanel        Width="300"   DockPanel.Dock="Right" >
-                <ui:TestPanel Name="Test"      DockPanel.Dock="Top" />
+                <ui:TestPanel Name="Test"   DockPanel.Dock="Top" />
                 <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
                 <ui:ExplorerPanel   DockPanel.Dock="Top" Height="200"
                               IsVisible="{Binding #Test.Explorer}"/>
