@@ -29,6 +29,13 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] public              int                     ArchetypeCount      => archsCount;
                     public   override   string                  ToString()          => $"Count: {nodesCount}";
     #endregion
+
+#region event handler
+    // --- tags: changed
+    public          TagsChangedHandler          TagsChangedHandler      { get => tagsChanged;                   set    => tagsChanged        = value; }
+    public event    TagsChangedHandler          TagsChanged             { add => tagsChanged     += value;      remove => tagsChanged       -= value; }
+
+    #endregion
     
 #region private / internal fields
     // --- archetypes
@@ -42,6 +49,8 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
                     protected           int                     sequenceId;         //  4                   - incrementing id used for next new entity
+    // --- delegates
+    [Browse(Never)] private             TagsChangedHandler      tagsChanged;        //  8
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion

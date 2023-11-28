@@ -171,10 +171,11 @@ public partial class EntityStoreBase
 #region add / remove tags
 
     internal bool AddTags(
-        in Tags             tags,
-        int                 id,
-        ref Archetype       archetype,      // possible mutation is not null
-        ref int             compIndex)
+        in Tags         tags,
+        int             id,
+        ref Archetype   archetype,      // possible mutation is not null
+        ref int         compIndex,
+        ref int         archIndex)
     {
         var arch            = archetype;
         var archTagsValue   = arch.tags.bitSet.value;
@@ -194,18 +195,22 @@ public partial class EntityStoreBase
         if (arch != defaultArchetype) {
             archetype   = newArchetype;
             compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
-            return true;
+        } else {
+            compIndex   = newArchetype.AddEntity(id);
+            archetype   = newArchetype;
         }
-        compIndex           = newArchetype.AddEntity(id);
-        archetype           = newArchetype;
+        archIndex = archetype.archIndex;
+        // send event
+        tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
         return true;
     }
     
     internal bool RemoveTags(
-        in Tags             tags,
-        int                 id,
-        ref Archetype       archetype,      // possible mutation is not null
-        ref int             compIndex)
+        in Tags         tags,
+        int             id,
+        ref Archetype   archetype,      // possible mutation is not null
+        ref int         compIndex,
+        ref int         archIndex)
     {
         var arch            = archetype;
         var archTags        = arch.tags.bitSet.value;
@@ -228,10 +233,13 @@ public partial class EntityStoreBase
             compIndex   = 0;
             archetype   = defaultArchetype;
             arch.MoveLastComponentsTo(removePos);
-            return true;
+        } else {
+            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+            archetype   = newArchetype;
         }
-        compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
-        archetype   = newArchetype;
+        archIndex = archetype.archIndex;
+        // send event
+        tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
         return true;
     }
     #endregion

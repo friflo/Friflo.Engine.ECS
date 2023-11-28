@@ -292,10 +292,26 @@ public sealed class Entity
     /// </returns>
     public ref readonly Tags    Tags                        => ref archetype.tags;
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
-    public bool AddTag<T>()    where T : struct, IEntityTag => archetype.store.AddTags   (Tags.Get<T>(), id, ref archetype, ref compIndex);
-    public bool AddTags(in Tags tags)                       => archetype.store.AddTags   (tags,          id, ref archetype, ref compIndex);
-    public bool RemoveTag<T>() where T : struct, IEntityTag => archetype.store.RemoveTags(Tags.Get<T>(), id, ref archetype, ref compIndex);
-    public bool RemoveTags(in Tags tags)                    => archetype.store.RemoveTags(tags,          id, ref archetype, ref compIndex);
+    public bool AddTag<T>()    where T : struct, IEntityTag {
+        int index = 0;
+        return archetype.store.AddTags(Tags.Get<T>(), id, ref archetype, ref compIndex, ref index);
+    }
+
+    public bool AddTags(in Tags tags) {
+        int index = 0;
+        return archetype.store.AddTags(tags, id, ref archetype, ref compIndex, ref index);
+    }
+
+    public bool RemoveTag<T>() where T : struct, IEntityTag {
+        int index = 0;
+        return archetype.store.RemoveTags(Tags.Get<T>(), id, ref archetype, ref compIndex, ref index);
+    }
+
+    public bool RemoveTags(in Tags tags) {
+        int index = 0;
+        return archetype.store.RemoveTags(tags, id, ref archetype, ref compIndex, ref index);
+    }
+
     #endregion
     
     // ------------------------------------ tree methods -----------------------------------------
