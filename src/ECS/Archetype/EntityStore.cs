@@ -34,6 +34,13 @@ public abstract partial class EntityStoreBase
     // --- tags: changed
     public          TagsChangedHandler          TagsChangedHandler      { get => tagsChanged;                   set    => tagsChanged        = value; }
     public event    TagsChangedHandler          TagsChanged             { add => tagsChanged     += value;      remove => tagsChanged       -= value; }
+    
+    // --- component: added / removed
+    public          ComponentAddedHandler       ComponentAddedHandler   { get => componentAdded;                set    => componentAdded     = value; }
+    public event    ComponentAddedHandler       ComponentAdded          { add => componentAdded     += value;   remove => componentAdded    -= value; }
+    
+    public          ComponentRemovedHandler     ComponentRemovedHandler { get => componentRemoved;              set    => componentRemoved   = value; }
+    public event    ComponentRemovedHandler     ComponentRemoved        { add => componentRemoved   += value;   remove => componentRemoved  -= value; }
 
     #endregion
     
@@ -51,6 +58,9 @@ public abstract partial class EntityStoreBase
                     protected           int                     sequenceId;         //  4                   - incrementing id used for next new entity
     // --- delegates
     [Browse(Never)] private             TagsChangedHandler      tagsChanged;        //  8
+    //
+    [Browse(Never)] private             ComponentAddedHandler   componentAdded;     //  8
+    [Browse(Never)] private             ComponentRemovedHandler componentRemoved;   //  8
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion
@@ -92,6 +102,11 @@ public abstract partial class EntityStoreBase
     protected internal abstract void UpdateEntityCompIndex(int id, int compIndex); 
     
     #endregion
+    
+    internal static void SendComponentRemoved(EntityStoreBase store, int id, int structIndex)
+    {
+        store.componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
+    }
 
 #region exceptions
     public static Exception InvalidStoreException(string parameterName) {

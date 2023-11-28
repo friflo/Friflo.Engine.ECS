@@ -109,6 +109,8 @@ public partial class EntityStoreBase
         // --- change component value 
         var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
+        // send event
+        componentAdded?.Invoke(new ComponentEventArgs (id, ChangedEventType.Added, Static.EntitySchema.components[structIndex]));
         return result;
     }
     

@@ -215,10 +215,7 @@ public sealed class Entity
     public bool AddComponent<T>()               where T : struct, IComponent {
         var store       = archetype.entityStore;
         var structIndex = StructHeap<T>.StructIndex;
-        var result      = store.AddComponent<T>(id, structIndex, ref archetype, ref compIndex, out _, default);
-        // send event
-        EntityStore.SendComponentAdded(store, id, structIndex);
-        return result;
+        return store.AddComponent<T>(id, structIndex, ref archetype, ref compIndex, out _, default);
     }
 
     /// <returns>true if component is newly added to the entity</returns>
@@ -226,10 +223,7 @@ public sealed class Entity
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         var store       = archetype.entityStore;
         var structIndex = StructHeap<T>.StructIndex;
-        var result      = store.AddComponent(id, structIndex, ref archetype, ref compIndex, out _, in component);
-        // send event
-        EntityStore.SendComponentAdded(store, id, structIndex);
-        return result;
+        return store.AddComponent(id, structIndex, ref archetype, ref compIndex, out _, in component);
     }
 
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -242,7 +236,7 @@ public sealed class Entity
         var structIndex = StructHeap<T>.StructIndex;
         var result      = store.RemoveComponent(id, ref archetype, ref compIndex, out _, structIndex);
         // send event
-        EntityStore.SendComponentRemoved(store, id, structIndex);
+        EntityStoreBase.SendComponentRemoved(store, id, structIndex);
         return result;
     }
 
@@ -388,7 +382,7 @@ public sealed class Entity
         var store   = entity.archetype.entityStore;
         var result  = store.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, out _, componentType.structIndex);
         // send event
-        EntityStore.SendComponentRemoved(store, entity.id, componentType.structIndex);
+        EntityStoreBase.SendComponentRemoved(store, entity.id, componentType.structIndex);
         return result;
     }
     

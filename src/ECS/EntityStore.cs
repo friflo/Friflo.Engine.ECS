@@ -56,12 +56,6 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     public event    ChildNodesChangedHandler    ChildNodesChanged       { add => childNodesChanged  += value;   remove => childNodesChanged -= value; }
 
-    // --- component: added / removed
-    public          ComponentAddedHandler       ComponentAddedHandler   { get => componentAdded;                set    => componentAdded     = value; }
-    public event    ComponentAddedHandler       ComponentAdded          { add => componentAdded     += value;   remove => componentAdded    -= value; }
-    
-    public          ComponentRemovedHandler     ComponentRemovedHandler { get => componentRemoved;              set    => componentRemoved   = value; }
-    public event    ComponentRemovedHandler     ComponentRemoved        { add => componentRemoved   += value;   remove => componentRemoved  -= value; }
     
     // --- script:   added / removed
     public          ScriptAddedHandler          ScriptAddedHandler      { get => scriptAdded;                   set    => scriptAdded        = value; }
@@ -91,9 +85,6 @@ public sealed partial class EntityStore : EntityStoreBase
     // --- delegates
     [Browse(Never)] private         ChildNodesChangedHandler    childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
     //
-    [Browse(Never)] private         ComponentAddedHandler       componentAdded;     //  8
-    [Browse(Never)] private         ComponentRemovedHandler     componentRemoved;   //  8
-    //
     [Browse(Never)] private         ScriptAddedHandler          scriptAdded;        //  8
     [Browse(Never)] private         ScriptRemovedHandler        scriptRemoved;      //  8
     
@@ -118,16 +109,6 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
 
 #region send events
-    internal static void SendComponentAdded(EntityStore store, int id, int structIndex)
-    {
-        store.componentAdded?.Invoke(new ComponentEventArgs (id, ChangedEventType.Added, Static.EntitySchema.components[structIndex]));
-    }
-    
-    internal static void SendComponentRemoved(EntityStore store, int id, int structIndex)
-    {
-        store.componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
-    }
-    
     internal static void SendScriptAdded(EntityStore store, int id, ScriptType scriptType)
     {
         store.scriptAdded?.Invoke(new ScriptEventArgs (id, ChangedEventType.Added, scriptType));
