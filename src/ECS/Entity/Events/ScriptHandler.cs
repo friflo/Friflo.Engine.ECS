@@ -5,16 +5,16 @@
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="AddedScriptHandler"/> added to <see cref="EntityStore.AddedScript"/>
+/// A <see cref="ScriptAddedHandler"/> added to <see cref="EntityStore.ScriptAdded"/>
 /// get events on <see cref="Entity.AddScript{T}"/>
 /// </summary>
-public delegate void   AddedScriptHandler    (in ScriptEventArgs e);
+public delegate void   ScriptAddedHandler    (in ScriptEventArgs e);
 
 /// <summary>
-/// A <see cref="RemovedScriptHandler"/> added to <see cref="EntityStore.RemovedScript"/>
+/// A <see cref="ScriptRemovedHandler"/> added to <see cref="EntityStore.ScriptRemoved"/>
 /// get events on <see cref="Entity.RemoveScript{T}()"/>
 /// </summary>
-public delegate void   RemovedScriptHandler  (in ScriptEventArgs e);
+public delegate void   ScriptRemovedHandler  (in ScriptEventArgs e);
 
 
 public readonly struct  ScriptEventArgs

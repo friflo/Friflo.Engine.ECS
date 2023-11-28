@@ -217,7 +217,7 @@ public sealed class Entity
         var structIndex = StructHeap<T>.StructIndex;
         var result      = store.AddComponent<T>(id, structIndex, ref archetype, ref compIndex, default);
         // send event
-        EntityStore.SendAddedComponent(store, id, structIndex);
+        EntityStore.SendComponentAdded(store, id, structIndex);
         return result;
     }
 
@@ -228,7 +228,7 @@ public sealed class Entity
         var structIndex = StructHeap<T>.StructIndex;
         var result      = store.AddComponent(id, structIndex, ref archetype, ref compIndex, in component);
         // send event
-        EntityStore.SendAddedComponent(store, id, structIndex);
+        EntityStore.SendComponentAdded(store, id, structIndex);
         return result;
     }
 
@@ -242,7 +242,7 @@ public sealed class Entity
         var structIndex = StructHeap<T>.StructIndex;
         var result      = store.RemoveComponent(id, ref archetype, ref compIndex, structIndex);
         // send event
-        EntityStore.SendRemovedComponent(store, id, structIndex);
+        EntityStore.SendComponentRemoved(store, id, structIndex);
         return result;
     }
 
@@ -372,7 +372,7 @@ public sealed class Entity
         var store   = entity.archetype.entityStore;
         var result  = store.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, componentType.structIndex);
         // send event
-        EntityStore.SendRemovedComponent(store, entity.id, componentType.structIndex);
+        EntityStore.SendComponentRemoved(store, entity.id, componentType.structIndex);
         return result;
     }
     

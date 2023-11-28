@@ -141,7 +141,7 @@ internal static class EntityUtils
         var store   = entity.archetype.entityStore;
         var result  = store.AddScript(entity, script, scriptType);
         // send event
-        EntityStore.SendAddedScript(store, entity.id, scriptType);
+        EntityStore.SendScriptAdded(store, entity.id, scriptType);
         return result;
     }
     
@@ -153,7 +153,7 @@ internal static class EntityUtils
         var store       = entity.archetype.entityStore;
         var result      = store.RemoveScript(entity, scriptType);
         // send event
-        EntityStore.SendRemovedScript(store, entity.id, scriptType);
+        EntityStore.SendScriptRemoved(store, entity.id, scriptType);
         return result;
     }
     
@@ -164,7 +164,7 @@ internal static class EntityUtils
         var store   = entity.archetype.entityStore;
         var result  = store.RemoveScript(entity, scriptType);
         // send event
-        EntityStore.SendRemovedScript(store, entity.id, scriptType);
+        EntityStore.SendScriptRemoved(store, entity.id, scriptType);
         return result;
     }
 }

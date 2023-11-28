@@ -5,16 +5,16 @@
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="AddedComponentHandler"/> added to <see cref="EntityStore.AddedComponent"/>
+/// A <see cref="ComponentAddedHandler"/> added to <see cref="EntityStore.ComponentAdded"/>
 /// get events on <see cref="Entity.AddComponent{T}()"/>
 /// </summary>
-public delegate void   AddedComponentHandler    (in ComponentEventArgs e);
+public delegate void   ComponentAddedHandler    (in ComponentEventArgs e);
 
 /// <summary>
-/// A <see cref="RemovedComponentHandler"/> added to <see cref="EntityStore.RemovedComponent"/>
+/// A <see cref="ComponentRemovedHandler"/> added to <see cref="EntityStore.ComponentRemoved"/>
 /// get events on <see cref="Entity.RemoveComponent{T}()"/>
 /// </summary>
-public delegate void   RemovedComponentHandler  (in ComponentEventArgs e);
+public delegate void   ComponentRemovedHandler  (in ComponentEventArgs e);
 
 
 public enum ChangedEventType

@@ -44,10 +44,10 @@ internal class InspectorObserver : EditorObserver
 
     protected override void OnEditorReady() {
         var store = Store;
-        store.AddedComponentHandler     += ComponentChanged;
-        store.RemovedComponentHandler   += ComponentChanged;
-        store.AddedScriptHandler        += ScriptChanged;
-        store.RemovedScriptHandler      += ScriptChanged;
+        store.ComponentAddedHandler     += ComponentChanged;
+        store.ComponentRemovedHandler   += ComponentChanged;
+        store.ScriptAddedHandler        += ScriptChanged;
+        store.ScriptRemovedHandler      += ScriptChanged;
     }
 
     private void ComponentChanged(in ComponentEventArgs args) {
