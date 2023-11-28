@@ -29,18 +29,16 @@ internal class ExplorerObserver : EditorObserver
         tree            = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
         source.Items    = new []{ tree.RootItem };
         
-        store.ComponentAddedHandler     += ComponentChanged;
-        store.ComponentRemovedHandler   += ComponentChanged;
+        store.ComponentAddedHandler     += PostEntityUpdate;
+        store.ComponentRemovedHandler   += PostEntityUpdate;
     }
-    
-    private void ComponentChanged (in ComponentEventArgs args)  => PostEntityUpdate(args);
     
     private void PostEntityUpdate(in ComponentEventArgs args)
     {
         if (args.componentType.type != typeof(EntityName)) {
             return;
         }
-        if (!tree.TryGetExplorerItem(args.entityId, out _)) {
+        if (!tree.TryGetExplorerItem(args.entityId, out var item)) {
             return;
         }
         EditorUtils.Post(() => {
