@@ -109,6 +109,23 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
 
 #region send events
+    /// <remarks>
+    /// - SEND_EVENT notes -
+    /// <br/>
+    /// Send event must be last statement <b>AFTER</b> a mutation has finished.<br/>
+    /// This ensures preserving a valid entity state after a mutation - add / remove - has finished.<br/>
+    /// <br/>
+    /// The reason is when sending an event to the event handlers any of them may throw an exception.<br/>
+    /// So this exception will not result in an invalid entity state.
+    /// <br/> 
+    /// The entity state refers to:
+    /// <list type="buttlet">
+    ///   <item><see cref="Entity.archetype"/></item>
+    ///   <item><see cref="Entity.compIndex"/></item>
+    ///   <item><see cref="Entity.scriptIndex"/></item>
+    ///   <item><see cref="RawEntity.archIndex"/></item>
+    /// </list>
+    /// </remarks>
     internal static void SendScriptAdded(EntityStore store, int id, ScriptType scriptType)
     {
         store.scriptAdded?.Invoke(new ScriptEventArgs (id, ChangedEventType.Added, scriptType));

@@ -109,7 +109,7 @@ public partial class EntityStoreBase
         // --- change component value 
         var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         componentAdded?.Invoke(new ComponentEventArgs (id, ChangedEventType.Added, Static.EntitySchema.components[structIndex]));
         return result;
     }
@@ -171,7 +171,7 @@ public partial class EntityStoreBase
             compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         }
         archIndex   = archetype.archIndex;
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
         return true;
     }
@@ -210,7 +210,7 @@ public partial class EntityStoreBase
             archetype   = newArchetype;
         }
         archIndex = archetype.archIndex;
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
         return true;
     }
@@ -248,7 +248,7 @@ public partial class EntityStoreBase
             archetype   = newArchetype;
         }
         archIndex = archetype.archIndex;
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
         return true;
     }

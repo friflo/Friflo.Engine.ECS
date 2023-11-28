@@ -140,7 +140,7 @@ internal static class EntityUtils
         }
         var store   = entity.archetype.entityStore;
         var result  = store.AddScript(entity, script, scriptType);
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         EntityStore.SendScriptAdded(store, entity.id, scriptType);
         return result;
     }
@@ -152,7 +152,7 @@ internal static class EntityUtils
         var scriptType  = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
         var store       = entity.archetype.entityStore;
         var result      = store.RemoveScript(entity, scriptType);
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         EntityStore.SendScriptRemoved(store, entity.id, scriptType);
         return result;
     }
@@ -163,7 +163,7 @@ internal static class EntityUtils
         }
         var store   = entity.archetype.entityStore;
         var result  = store.RemoveScript(entity, scriptType);
-        // Send event. Must be last statement - any handler may throw an exception
+        // Send event. See: SEND_EVENT notes
         EntityStore.SendScriptRemoved(store, entity.id, scriptType);
         return result;
     }
