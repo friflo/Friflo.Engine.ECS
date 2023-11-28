@@ -3,6 +3,7 @@
 
 using System;
 using Avalonia.Controls;
+using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 namespace Friflo.Fliox.Editor.UI.Explorer;
@@ -10,6 +11,7 @@ namespace Friflo.Fliox.Editor.UI.Explorer;
 internal class ExplorerObserver : EditorObserver
 {
     private readonly    ExplorerTreeDataGrid    grid;
+    private             ExplorerItemTree        tree;
     private static      int                     _treeCount;
         
     internal ExplorerObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
@@ -24,7 +26,25 @@ internal class ExplorerObserver : EditorObserver
         // return;
         var source      = grid.GridSource;
         var rootEntity  = store.StoreRoot;
-        var tree        = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
+        tree            = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
         source.Items    = new []{ tree.RootItem };
+        
+        store.ComponentAddedHandler     += ComponentChanged;
+        store.ComponentRemovedHandler   += ComponentChanged;
     }
+    
+    private void ComponentChanged (in ComponentEventArgs args)  => PostEntityUpdate(args);
+    
+    private void PostEntityUpdate(in ComponentEventArgs args)
+    {
+        if (args.componentType.type != typeof(EntityName)) {
+            return;
+        }
+        if (!tree.TryGetExplorerItem(args.entityId, out _)) {
+            return;
+        }
+        EditorUtils.Post(() => {
+            Console.WriteLine("implement name update");
+        });
+    } 
 }

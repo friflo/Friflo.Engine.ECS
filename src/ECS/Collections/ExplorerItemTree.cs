@@ -44,6 +44,10 @@ public class ExplorerItemTree
         }
         return explorerItem;
     }
+    
+    public bool TryGetExplorerItem(int id, out ExplorerItem item) {
+        return items.TryGetValue(id, out item);
+    }
     #endregion
     
 #region internal methods
