@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
-
 // Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
@@ -14,7 +12,7 @@ public partial class EntityStoreBase
 {
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
-    private Archetype GetArchetype(in Tags tags, Type structType, int structIndex)
+    private Archetype GetArchetype(in Tags tags, int structIndex)
     {
         searchKey.SetTagsWith(tags, structIndex);
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -23,7 +21,7 @@ public partial class EntityStoreBase
         var config  = GetArchetypeConfig();
         var schema  = Static.EntitySchema;
         var types   = new SignatureIndexes(1,
-            T1: schema.CheckStructIndex(structType, structIndex)
+            T1: schema.CheckStructIndex(null, structIndex)
         );
         var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
         AddArchetype(archetype);

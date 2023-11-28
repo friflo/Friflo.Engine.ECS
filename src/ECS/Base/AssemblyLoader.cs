@@ -170,19 +170,22 @@ internal sealed class AssemblyLoader
     
     private static void AddComponentType(List<Type> componentTypes, Type type)
     {
-        foreach (var attr in type.CustomAttributes)
+        if (type.IsValueType)
         {
-            if (type.IsValueType) {
-                var attributeType = attr.AttributeType;
-                if (attributeType == typeof(ComponentAttribute)) {
-                    componentTypes.Add(type);
-                }
+            if (typeof(IComponent).IsAssignableFrom(type)) {
+                componentTypes.Add(type);
             }
-            if (type.IsClass) {
+            return;
+        }
+        if (type.IsClass)
+        {
+            foreach (var attr in type.CustomAttributes)
+            {
                 var attributeType = attr.AttributeType;
                 if (attributeType == typeof(ScriptAttribute))
                 {
                     componentTypes.Add(type);
+                    return;
                 }
             }
         }

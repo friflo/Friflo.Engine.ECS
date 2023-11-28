@@ -124,7 +124,7 @@ public sealed class Archetype
     {
         var length          = indexes.length;
         var componentHeaps  = new StructHeap[length];
-        var components      = EntityStoreBase.Static.EntitySchema.Components;
+        var components      = EntityStoreBase.Static.EntitySchema.components;
         for (int n = 0; n < length; n++) {
             var structIndex   = indexes.GetStructIndex(n);
             var componentType = components[structIndex];

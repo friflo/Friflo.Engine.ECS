@@ -49,25 +49,29 @@ internal static class SchemaUtils
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
-        if (type.IsValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
-            var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
-            var genericMethod   = method!.MakeGenericMethod(type);
-            var tagType         = (TagType)genericMethod.Invoke(null, null);
-            return tagType;
-        }
-        var createParams = new object[] { typeStore };
-        foreach (var attr in type.CustomAttributes)
-        {
-            var attributeType = attr.AttributeType;
-            if (attributeType == typeof(ComponentAttribute))
+        if (type.IsValueType) {
+            if (typeof(IEntityTag).IsAssignableFrom(type))
             {
+                var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
+                var genericMethod   = method!.MakeGenericMethod(type);
+                var tagType         = (TagType)genericMethod.Invoke(null, null);
+                return tagType;
+            }
+            if (typeof(IComponent).IsAssignableFrom(type))
+            {
+                var createParams    = new object[] { typeStore };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
+        }
+        foreach (var attr in type.CustomAttributes)
+        {
+            var attributeType = attr.AttributeType;
             if (attributeType == typeof(ScriptAttribute))
             {
+                var createParams    = new object[] { typeStore };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);

@@ -49,7 +49,7 @@ public sealed class EntitySchema
     [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] internal readonly   ComponentType[]                     components;
-    [Browse(Never)] private  readonly   ScriptType[]                        scripts;
+    [Browse(Never)] internal readonly   ScriptType[]                        scripts;
     [Browse(Never)] private  readonly   TagType[]                           tags;
     [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
     [Browse(Never)] internal readonly   Dictionary<string, SchemaType>      schemaTypeByKey;
@@ -137,10 +137,6 @@ public sealed class EntitySchema
     /// </remarks>
     internal int CheckStructIndex(Type structType, int structIndex)
     {
-        if (structIndex == StructInfo.MissingAttribute) {
-            var msg = $"Missing attribute [StructComponent(\"<key>\")] on type: {structType.Namespace}.{structType.Name}";
-            throw new InvalidOperationException(msg);
-        }
         if (structIndex >= maxStructIndex) {
             string msg = $"number of structs exceed EntityStore.{nameof(maxStructIndex)}: {maxStructIndex}";
             throw new InvalidOperationException(msg);

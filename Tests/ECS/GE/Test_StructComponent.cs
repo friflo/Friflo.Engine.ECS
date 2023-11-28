@@ -292,15 +292,11 @@ public static class Test_StructComponent
     }
     
     [Test]
-    public static void Test_9_TestMissingAttribute() {
-        var store = new EntityStore();
-        var player = store.CreateEntity();
-        var e1 = Throws<InvalidOperationException>(() => {
-            player.AddComponent<MyInvalidComponent>();
-        });
-        AreEqual("Missing attribute [StructComponent(\"<key>\")] on type: Tests.ECS.MyInvalidComponent", e1!.Message);
-        
-        var e2 = Throws<NullReferenceException>(() => {
+    public static void Test_9_TestMissingComponent()
+    {
+        var store   = new EntityStore();
+        var player  = store.CreateEntity();
+        var e2      = Throws<NullReferenceException>(() => {
             player.GetComponent<MyInvalidComponent>();
         });
         AreEqual("Object reference not set to an instance of an object.", e2!.Message);

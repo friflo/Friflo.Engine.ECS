@@ -120,7 +120,7 @@ internal static class EntityUtils
     
     internal static Script AddScript(Entity entity, int scriptIndex, Script script)
     {
-        var scriptType = EntityStoreBase.Static.EntitySchema.Scripts[scriptIndex];
+        var scriptType = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
         return AddScriptInternal(entity, script, scriptType);
     }
     
@@ -145,7 +145,7 @@ internal static class EntityUtils
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        var scriptType = EntityStoreBase.Static.EntitySchema.Scripts[scriptIndex];
+        var scriptType = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
