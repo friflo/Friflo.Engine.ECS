@@ -213,17 +213,13 @@ public sealed class Entity
     /// <remarks>Note: Use <see cref="AddEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
-        var store       = archetype.entityStore;
-        var structIndex = StructHeap<T>.StructIndex;
-        return store.AddComponent<T>(id, structIndex, ref archetype, ref compIndex, out _, default);
+        return archetype.entityStore.AddComponent<T>(id, StructHeap<T>.StructIndex, ref archetype, ref compIndex, out _, default);
     }
 
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
-        var store       = archetype.entityStore;
-        var structIndex = StructHeap<T>.StructIndex;
-        return store.AddComponent(id, structIndex, ref archetype, ref compIndex, out _, in component);
+        return archetype.entityStore.AddComponent(id, StructHeap<T>.StructIndex, ref archetype, ref compIndex, out _, in component);
     }
 
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -232,12 +228,7 @@ public sealed class Entity
     /// <remarks>Note: Use <see cref="RemoveEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
-        var store       = archetype.entityStore;
-        var structIndex = StructHeap<T>.StructIndex;
-        var result      = store.RemoveComponent(id, ref archetype, ref compIndex, out _, structIndex);
-        // send event
-        EntityStoreBase.SendComponentRemoved(store, id, structIndex);
-        return result;
+        return archetype.entityStore.RemoveComponent(id, ref archetype, ref compIndex, out _, StructHeap<T>.StructIndex);
     }
 
     /// <summary>
@@ -379,11 +370,7 @@ public sealed class Entity
 
     public static  bool       RemoveEntityComponent (Entity entity, ComponentType componentType)
     {
-        var store   = entity.archetype.entityStore;
-        var result  = store.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, out _, componentType.structIndex);
-        // send event
-        EntityStoreBase.SendComponentRemoved(store, entity.id, componentType.structIndex);
-        return result;
+        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, out _, componentType.structIndex);
     }
     
     public static  bool       AddEntityComponent    (Entity entity, ComponentType componentType) {

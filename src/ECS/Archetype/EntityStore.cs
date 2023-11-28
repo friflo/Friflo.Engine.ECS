@@ -103,11 +103,6 @@ public abstract partial class EntityStoreBase
     
     #endregion
     
-    internal static void SendComponentRemoved(EntityStoreBase store, int id, int structIndex)
-    {
-        store.componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
-    }
-
 #region exceptions
     public static Exception InvalidStoreException(string parameterName) {
         return new ArgumentException("entity is owned by a different store", parameterName);

@@ -171,6 +171,8 @@ public partial class EntityStoreBase
             compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         }
         archIndex   = archetype.archIndex;
+        // send event
+        componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
         return true;
     }
     #endregion
