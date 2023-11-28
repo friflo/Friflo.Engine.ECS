@@ -138,21 +138,33 @@ internal static class EntityUtils
         if (script.entity != null) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }
-        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
+        var store   = entity.archetype.entityStore;
+        var result  = store.AddScript(entity, script, scriptType);
+        // send event
+        EntityStore.SendAddedScript(store, entity.id, scriptType);
+        return result;
     }
     
     internal static Script RemoveScript(Entity entity, int scriptIndex) {
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        var scriptType = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
-        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
+        var scriptType  = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
+        var store       = entity.archetype.entityStore;
+        var result      = store.RemoveScript(entity, scriptType);
+        // send event
+        EntityStore.SendRemovedScript(store, entity.id, scriptType);
+        return result;
     }
     
     internal static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
+        var store   = entity.archetype.entityStore;
+        var result  = store.RemoveScript(entity, scriptType);
+        // send event
+        EntityStore.SendRemovedScript(store, entity.id, scriptType);
+        return result;
     }
 }

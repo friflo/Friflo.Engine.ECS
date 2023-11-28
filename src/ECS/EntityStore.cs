@@ -123,6 +123,16 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         store.removedComponent?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
     }
+    
+    internal static void SendAddedScript(EntityStore store, int id, ScriptType scriptType)
+    {
+        store.addedScript?.Invoke(new ScriptEventArgs (id, ChangedEventType.Added, scriptType));
+    }
+    
+    internal static void SendRemovedScript(EntityStore store, int id, ScriptType scriptType)
+    {
+        store.removedScript?.Invoke(new ScriptEventArgs (id, ChangedEventType.Removed, scriptType));
+    }
 
     
 #region access by pid
