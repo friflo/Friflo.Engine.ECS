@@ -57,7 +57,7 @@ internal class InspectorObserver : EditorObserver
     }
 
     private void ComponentChanged (in ComponentChangedArgs args)=> PostSetEntity(args.entityId);
-    private void ScriptChanged    (in ScriptEventArgs args)     => PostSetEntity(args.entityId);
+    private void ScriptChanged    (in ScriptChangedArgs args)   => PostSetEntity(args.entityId);
     private void TagsChanged      (in TagsChangedArgs args)     => PostSetEntity(args.entityId);
     
     private void PostSetEntity(int id)
