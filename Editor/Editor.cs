@@ -71,6 +71,11 @@ public partial class Editor
         
         TestBed.AddSampleEntities(sync);
         if (SeedDatabase) {
+            store.ComponentAdded     += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
+            store.ComponentRemoved   += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
+            store.ScriptAdded        += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
+            store.ScriptRemoved      += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
+            store.TagsChanged        += (in TagsChangedArgs      args) => SyncEntity(args.entityId);
             await sync.StoreEntitiesAsync();
         }
         store.ChildNodesChanged += ChildNodesChangedHandler;
@@ -78,6 +83,12 @@ public partial class Editor
         EditorUtils.AssertUIThread();
         // --- run server
         server = RunServer(hub);
+    }
+    
+    private void SyncEntity(int id)
+    {
+        sync.UpsertDataEntity(id);
+        PostSyncChanges();
     }
     
     public void AddObserver(EditorObserver observer)
