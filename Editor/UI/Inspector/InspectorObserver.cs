@@ -49,11 +49,11 @@ internal class InspectorObserver : EditorObserver
 
     protected override void OnEditorReady() {
         var store = Store;
-        store.ComponentAddedHandler     += ComponentChanged;
-        store.ComponentRemovedHandler   += ComponentChanged;
-        store.ScriptAddedHandler        += ScriptChanged;
-        store.ScriptRemovedHandler      += ScriptChanged;
-        store.TagsChanged               += TagsChanged;
+        store.ComponentAdded     += ComponentChanged;
+        store.ComponentRemoved   += ComponentChanged;
+        store.ScriptAdded        += ScriptChanged;
+        store.ScriptRemoved      += ScriptChanged;
+        store.TagsChanged        += TagsChanged;
     }
 
     private void ComponentChanged (in ComponentChangedArgs args)=> PostSetEntity(args.entityId);

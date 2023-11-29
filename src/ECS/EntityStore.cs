@@ -58,11 +58,9 @@ public sealed partial class EntityStore : EntityStoreBase
 
     
     // --- script:   added / removed
-    public          ScriptChangedHandler        ScriptAddedHandler      { get => scriptAdded;                   set    => scriptAdded        = value; }
-    public event    ScriptChangedHandler        ScriptAdded             { add => scriptAdded     += value;      remove => scriptAdded       -= value; }
-    
-    public          ScriptChangedHandler        ScriptRemovedHandler    { get => scriptRemoved;                 set    => scriptRemoved      = value; }
-    public event    ScriptChangedHandler        ScriptRemoved           { add => scriptRemoved   += value;      remove => scriptRemoved     -= value; }
+    public          ScriptChangedHandler        ScriptAdded             { get => scriptAdded;                   set    => scriptAdded        = value; }
+    public          ScriptChangedHandler        ScriptRemoved           { get => scriptRemoved;                 set    => scriptRemoved      = value; }
+
     
     #endregion
     

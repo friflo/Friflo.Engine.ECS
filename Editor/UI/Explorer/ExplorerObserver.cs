@@ -31,8 +31,8 @@ internal class ExplorerObserver : EditorObserver
         tree            = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
         source.Items    = new []{ tree.RootItem };
         
-        store.ComponentAddedHandler     += PostEntityUpdate;
-        store.ComponentRemovedHandler   += PostEntityUpdate;
+        store.ComponentAdded     += PostEntityUpdate;
+        store.ComponentRemoved   += PostEntityUpdate;
     }
     
     private void PostEntityUpdate(in ComponentChangedArgs args)

@@ -189,7 +189,7 @@ public static class Test_Tags
                 default:    Fail("unexpected event");                                       return;
             }
         });
-        store.TagsChangedHandler += handler;
+        store.TagsChanged += handler;
         
         entity.AddTag<TestTag>();
         AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
@@ -224,7 +224,7 @@ public static class Test_Tags
         AreEqual(4,                                 store.Archetypes.Length);
         
         AreEqual(4, eventCount);
-        store.TagsChangedHandler -= handler;
+        store.TagsChanged -= handler;
         
         // Execute previous operations again. All required archetypes are now present
         const int count = 10; // 10_000_000 ~ 1.349 ms
