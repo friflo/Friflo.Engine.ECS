@@ -50,6 +50,7 @@ public struct EntityNode
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
                     public              long                Pid         =>  pid;
                     public              Entity              Entity      =>  entity;
+                    public              Archetype           Archetype   =>  entity.archetype;
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
                     public              int                 ParentId    =>  parentId;
