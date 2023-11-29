@@ -40,7 +40,7 @@ internal class ExplorerObserver : EditorObserver
         if (args.componentType.type != typeof(EntityName)) {
             return;
         }
-        if (!tree.TryGetExplorerItem(args.entityId, out var item)) {
+        if (!tree.TryGetItem(args.entityId, out var item)) {
             return;
         }
         EditorUtils.Post(() => {

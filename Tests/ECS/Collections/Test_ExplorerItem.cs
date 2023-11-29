@@ -181,7 +181,13 @@ public static class Test_ExplorerItem
         var item4       = tree.GetItemById(4);
         var item5       = tree.GetItemById(5);
         var item6       = tree.GetItemById(6);
+
+        IsTrue(tree.TryGetItem(6, out var tryItem));
+        AreSame(item6, tryItem);
         
+        IsFalse(tree.TryGetItem(777, out tryItem));
+        IsNull(tryItem);
+
         // --- Add() / Insert() mutations
         rootICollectionGen. Add      (item2);
         rootIList.          Add      (item3);
