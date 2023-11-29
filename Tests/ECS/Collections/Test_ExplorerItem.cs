@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 using NUnit.Framework;
@@ -238,6 +239,36 @@ public static class Test_ExplorerItem
         rootIListGen.RemoveAt(0);
         
         AreEqual(10, rootEvents.seq);
+    }
+    
+    [Test]
+    public static void Test_ExplorerItem_PropertyChanged()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        var rootItem    = tree.GetItemById(1);
+        AreSame("test-tree", rootItem.DebugTreeName);
+        
+        var count       = 0;
+        var senderObj   = new object();
+        // --- add handler
+        var handler     = new PropertyChangedEventHandler((sender, args) => {
+            count++;
+            AreEqual("test-name", args.PropertyName);
+            AreSame(senderObj, sender);
+        });
+        rootItem.PropertyChanged += handler;
+        rootItem.PropertyChanged += (_, _) => { };
+        
+        var ev = new PropertyChangedEventArgs("test-name");
+        rootItem.propertyChangedHandler.Invoke(senderObj, ev);
+        AreEqual(1, count);
+        
+        // --- remove handler
+        rootItem.PropertyChanged -= handler;
+        rootItem.propertyChangedHandler.Invoke(senderObj, ev);
+        AreEqual(1, count); // no event send to handler
     }
     
     private static string AsString(this NotifyCollectionChangedEventArgs args)
