@@ -104,8 +104,8 @@ public static class Test_Script
         for (long n = 0; n < Count; n++) {
             _ = player.GetScript<TestScript1>();
         }
-        AreEqual(3, addCount);
-        AreEqual(1, removeCount);
+        AreEqual(3, addCount);      // last assertion ensuring no events sent in perf test
+        AreEqual(1, removeCount);   // last assertion ensuring no events sent in perf test
     }
     
     [Test]

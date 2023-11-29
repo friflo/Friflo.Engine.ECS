@@ -227,7 +227,6 @@ public static class Test_Tags
         AreEqual(1,                                 store.EntityCount);
         AreEqual(4,                                 store.Archetypes.Length);
         
-        AreEqual(4, eventCount);
         store.TagsChanged -= handler;
         
         // Execute previous operations again. All required archetypes are now present
@@ -241,8 +240,10 @@ public static class Test_Tags
             entity.RemoveTags   (testTag2);
         }
         Mem.AssertNoAlloc(start);
+        
         AreEqual(1,                                 store.EntityCount);
         AreEqual(4,                                 store.Archetypes.Length);
+        AreEqual(4, eventCount); // last assertion ensuring no events sent in perf test
     }
     
     /// <summary>Cover <see cref="EntityStoreBase.GetArchetypeWithTags"/></summary>
