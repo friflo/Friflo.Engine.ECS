@@ -31,18 +31,10 @@ public readonly struct  ComponentEventArgs
     
     public override     string              ToString() => $"entity: {entityId} - {type} {componentType}";
 
-    internal ComponentEventArgs(int entityId, ChangedEventType type, ComponentType  componentType)
+    internal ComponentEventArgs(int entityId, ChangedEventType type, int structIndex)
     {
         this.entityId       = entityId;
         this.type           = type;
-        this.componentType  = componentType;
-    }
-    
-    internal ComponentEventArgs(int entityId, int structIndex)
-    {
-        this.entityId       = entityId;
-        this.type           = ChangedEventType.Added;
         this.componentType  = EntityStoreBase.Static.EntitySchema.components[structIndex];
     }
-
 }

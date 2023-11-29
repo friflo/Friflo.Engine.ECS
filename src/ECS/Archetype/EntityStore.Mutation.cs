@@ -97,8 +97,7 @@ public partial class EntityStoreBase
         ref int         compIndex,
         // ReSharper disable once RedundantAssignment - archIndex must be changed before send event
         ref int         archIndex,
-        in  T           component)
-        where T : struct, IComponent
+        in  T           component)      where T : struct, IComponent
     {
         var         arch = archetype;
         bool        added;
@@ -134,7 +133,7 @@ public partial class EntityStoreBase
         var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         // Send event. See: SEND_EVENT notes
-        componentAdded?.Invoke(new ComponentEventArgs (id, structIndex));
+        componentAdded?.Invoke(new ComponentEventArgs (id, ChangedEventType.Added, structIndex));
         return added;
     }
 
@@ -204,7 +203,7 @@ public partial class EntityStoreBase
         }
         archIndex   = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, Static.EntitySchema.components[structIndex]));
+        componentRemoved?.Invoke(new ComponentEventArgs (id, ChangedEventType.Removed, structIndex));
         return true;
     }
     #endregion
