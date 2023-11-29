@@ -21,6 +21,12 @@
 |                   |                           | [Example](https://github.com/dotnet/samples/blob/main/core/tutorials/Unloading/Host/Program.cs)
 |                   |                           | [How to use and debug assembly unloadability in .NET](https://learn.microsoft.com/en-us/dotnet/standard/assembly/unloadability)
 
+<div style="background:#ffffff; display: flex; justify-content: center; border-radius: 6px; border: 1px solid;">
+    <div style="color:#9E00AF; font-weight: bold; padding-right:10px; font-size:15px;"> It's not a game!</div>
+    🎮 😎
+</div>
+
+<br/><br/>
 
 ## Build Editor
 
