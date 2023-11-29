@@ -61,6 +61,20 @@ public static class Test_Tags
     }
     
     [Test]
+    public static void Test_Tags_constructor()
+    {
+        var schema  = EntityStore.GetEntitySchema();
+        var tagType = schema.TagTypeByType[typeof(TestTag)];
+        var tags    = new Tags(tagType);
+        int count = 0;
+        foreach (var tag in tags) {
+            count++;
+            AreSame(typeof(TestTag), tag.type);
+        }
+        AreEqual(1, count);
+    }
+    
+    [Test]
     public static void Test_Tags_generic_IEnumerator()
     {
         IEnumerable<TagType> tags = Tags.Get<TestTag>();
