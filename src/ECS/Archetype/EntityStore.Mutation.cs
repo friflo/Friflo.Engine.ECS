@@ -194,7 +194,6 @@ public partial class EntityStoreBase
             // --- update entity
             archetype   = defaultArchetype;
             compIndex   = 0;
-            archIndex   = archetype.archIndex;
             arch.MoveLastComponentsTo(removePos);
         } else {
             // --- change entity archetype
