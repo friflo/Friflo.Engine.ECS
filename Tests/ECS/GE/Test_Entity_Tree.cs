@@ -439,7 +439,7 @@ public static class Test_Entity_Tree
         
         
         var start = Mem.GetAllocatedBytes();
-        store.ChildNodesChangedHandler = null;
+        store.ChildNodesChanged = null;
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.EntityCount);
@@ -536,7 +536,7 @@ public static class Test_Entity_Tree
             eventCount++;
         };
         store.ChildNodesChanged += handler;
-        AreSame(store.ChildNodesChangedHandler, handler);
+        AreSame(store.ChildNodesChanged, handler);
         root.AddChild(child2);
         AreEqual(1, eventCount);
         

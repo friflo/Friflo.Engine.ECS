@@ -50,16 +50,11 @@ public sealed partial class EntityStore : EntityStoreBase
 #region event handler
     /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
-    public          ChildNodesChangedHandler    ChildNodesChangedHandler{ get => childNodesChanged;             set    => childNodesChanged  = value; }
-    /// <summary>
-    /// Add / remove <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.
-    /// </summary>
-    public event    ChildNodesChangedHandler    ChildNodesChanged       { add => childNodesChanged  += value;   remove => childNodesChanged -= value; }
-
+    public  ChildNodesChangedHandler    ChildNodesChanged   { get => childNodesChanged; set => childNodesChanged    = value; }
     
     // --- script:   added / removed
-    public          ScriptChangedHandler        ScriptAdded             { get => scriptAdded;                   set    => scriptAdded        = value; }
-    public          ScriptChangedHandler        ScriptRemoved           { get => scriptRemoved;                 set    => scriptRemoved      = value; }
+    public  ScriptChangedHandler        ScriptAdded         { get => scriptAdded;       set => scriptAdded          = value; }
+    public  ScriptChangedHandler        ScriptRemoved       { get => scriptRemoved;     set => scriptRemoved        = value; }
 
     
     #endregion

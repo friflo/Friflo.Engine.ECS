@@ -33,7 +33,7 @@ public static class Test_Serializer
         entity.AddTag<TestTag>();
         
         var child   = store.CreateEntity(11);
-        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+        store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
             AreEqual("entity: 10 - Add ChildIds[0] = 11", args.ToString());
         };
         entity.AddChild(child);
@@ -67,7 +67,7 @@ public static class Test_Serializer
         entity.AddTag<TestTag>();
         
         var child   = store.CreateEntity(11);
-        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+        store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
             AreEqual("entity: 10 - Add ChildIds[0] = 11", args.ToString());
         };
         entity.AddChild(child);

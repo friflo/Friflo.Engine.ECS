@@ -18,7 +18,7 @@ internal class Events
     internal static Events SetHandler(EntityStore store, Action<ChildNodesChangedArgs> action)
     {
         var events = new Events();
-        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+        store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
             events.seq++;
             action(args);
         };
@@ -32,7 +32,7 @@ internal class Events
     internal static Events SetHandlerSeq(EntityStore store, Action<ChildNodesChangedArgs, int> action)
     {
         var events = new Events();
-        store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+        store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
             action(args, events.seq++);
         };
         return events;
