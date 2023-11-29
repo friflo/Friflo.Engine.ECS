@@ -26,7 +26,10 @@ public static class Test_Script
         var addHandler  = new ScriptChangedHandler((in ScriptChangedArgs args) => {
             var str = args.ToString();
             switch (addCount++) {
-                case 0:     AreEqual("entity: 1 - Added script: 'testRef1' [*TestScript1]",     str);   return;
+                case 0:     AreEqual(1,                         args.entityId);
+                            AreEqual(ChangedEventAction.Added,  args.action);
+                            AreEqual(typeof(TestScript1),       args.scriptType.type);
+                            AreEqual("entity: 1 - Added script: 'testRef1' [*TestScript1]",     str);   return;
                 case 1:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;
                 case 2:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;
                 default:    Fail("unexpected event");                                                   return;
@@ -37,7 +40,10 @@ public static class Test_Script
         var removeHandler  = new ScriptChangedHandler((in ScriptChangedArgs args) => {
             var str = args.ToString();
             switch (removeCount++) {
-                case 0:     AreEqual("entity: 1 - Removed script: 'testRef2' [*TestScript2]",   str);   return;
+                case 0:     AreEqual(1,                         args.entityId);
+                            AreEqual(ChangedEventAction.Removed,args.action);
+                            AreEqual(typeof(TestScript2),       args.scriptType.type);
+                            AreEqual("entity: 1 - Removed script: 'testRef2' [*TestScript2]",   str);   return;
                 default:    Fail("unexpected event");                                                   return;
             }
         });

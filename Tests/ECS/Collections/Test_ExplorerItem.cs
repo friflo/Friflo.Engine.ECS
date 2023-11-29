@@ -142,7 +142,10 @@ public static class Test_ExplorerItem
         store.ComponentAdded += (in ComponentChangedArgs args) => {
             var argsStr = args.ToString();
             switch (addCount++) {
-                case 0:     AreEqual("entity: 1 - Added component: 'name' [EntityName]", argsStr);      return;
+                case 0:     AreEqual(1,                         args.entityId);
+                            AreEqual(ChangedEventAction.Added,  args.action);
+                            AreEqual(typeof(EntityName),        args.componentType.type);
+                            AreEqual("entity: 1 - Added component: 'name' [EntityName]", argsStr);      return;
                 default:    Fail("unexpected event");                                                   return;
             }
         };
@@ -150,7 +153,10 @@ public static class Test_ExplorerItem
         store.ComponentRemoved += (in ComponentChangedArgs args) => {
             var argsStr = args.ToString();
             switch (removeCount++) {
-                case 0:     AreEqual("entity: 1 - Removed component: 'name' [EntityName]", argsStr);    return;
+                case 0:     AreEqual(1,                         args.entityId);
+                            AreEqual(ChangedEventAction.Removed,args.action);
+                            AreEqual(typeof(EntityName),        args.componentType.type);
+                            AreEqual("entity: 1 - Removed component: 'name' [EntityName]", argsStr);    return;
                 default:    Fail("unexpected event");                                                   return;
             }
         };

@@ -181,7 +181,9 @@ public static class Test_Tags
         var handler     = new TagsChangedHandler((in TagsChangedArgs args) => {
             var str = args.ToString();
             switch (eventCount++) {
-                case 0:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
+                case 0:     AreEqual(1,                     args.entityId);
+                            AreEqual("Tags: [#TestTag]",    args.tags.ToString());
+                            AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
                 case 1:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
                 case 2:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
                 case 3:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
