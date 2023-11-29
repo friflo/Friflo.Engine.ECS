@@ -107,11 +107,11 @@ public partial class EntityStoreBase
         {
             structHeap = arch.heapMap[structIndex];
             if (structHeap != null) {
-                // case: archetype contains the component type
+                // --- case: archetype contains the component type  => archetype remains unchanged
                 added = false;
                 goto AssignComponent;
             }
-            // --- change entity archetype
+            // --- case: archetype doesn't contain component type   => change entity archetype
             // removed passing typeof(T) in commit:
             //   Engine - extract EntityStoreBase.AddComponentInternal() to prepare sending events for EntityStoreBase.AddComponent<>()
             //   https://github.com/friflo/Friflo.Json.Fliox/commit/f1cf0db5a59a961fc39c30918157678d82d3573e
@@ -120,7 +120,7 @@ public partial class EntityStoreBase
             archetype           = arch = newArchetype;
             added               = true;
         } else {
-            // --- add entity to archetype
+            // --- case: entity is assigned to default archetype    => get archetype and add entity
             arch                = GetArchetype(arch.tags, structIndex);
             compIndex           = arch.AddEntity(id);
             archetype           = arch;
