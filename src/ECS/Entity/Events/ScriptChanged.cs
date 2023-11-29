@@ -13,7 +13,7 @@ public delegate void   ScriptChangedHandler    (in ScriptChangedArgs e);
 public readonly struct  ScriptChangedArgs
 {
     public readonly     int                 entityId;   //  4
-    public readonly     ChangedEventAction  action;       //  4
+    public readonly     ChangedEventAction  action;     //  4
     public readonly     ScriptType          scriptType; //  8
     
     public override     string              ToString() => $"entity: {entityId} - {action} {scriptType}";

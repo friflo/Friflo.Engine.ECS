@@ -12,8 +12,8 @@ public delegate void   ComponentChangedHandler    (in ComponentChangedArgs e);
 
 public enum ChangedEventAction
 {
-    Added,
-    Removed,
+    Added   = 0,
+    Removed = 1,
 }
 
 public readonly struct  ComponentChangedArgs
