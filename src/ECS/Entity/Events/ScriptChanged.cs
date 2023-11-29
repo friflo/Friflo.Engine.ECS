@@ -13,15 +13,15 @@ public delegate void   ScriptChangedHandler    (in ScriptChangedArgs e);
 public readonly struct  ScriptChangedArgs
 {
     public readonly     int                 entityId;   //  4
-    public readonly     ChangedEventType    type;       //  4
+    public readonly     ChangedEventAction  action;       //  4
     public readonly     ScriptType          scriptType; //  8
     
-    public override     string              ToString() => $"entity: {entityId} - {type} {scriptType}";
+    public override     string              ToString() => $"entity: {entityId} - {action} {scriptType}";
 
-    internal ScriptChangedArgs(int entityId, ChangedEventType type, ScriptType scriptType)
+    internal ScriptChangedArgs(int entityId, ChangedEventAction action, ScriptType scriptType)
     {
         this.entityId       = entityId;
-        this.type           = type;
+        this.action         = action;
         this.scriptType     = scriptType;
     }
 }

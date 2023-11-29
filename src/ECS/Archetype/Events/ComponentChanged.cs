@@ -10,7 +10,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </summary>
 public delegate void   ComponentChangedHandler    (in ComponentChangedArgs e);
 
-public enum ChangedEventType
+public enum ChangedEventAction
 {
     Added,
     Removed,
@@ -19,15 +19,15 @@ public enum ChangedEventType
 public readonly struct  ComponentChangedArgs
 {
     public readonly     int                 entityId;       //  4
-    public readonly     ChangedEventType    type;           //  4
+    public readonly     ChangedEventAction  action;         //  4
     public readonly     ComponentType       componentType;  //  8
     
-    public override     string              ToString() => $"entity: {entityId} - {type} {componentType}";
+    public override     string              ToString() => $"entity: {entityId} - {action} {componentType}";
 
-    internal ComponentChangedArgs(int entityId, ChangedEventType type, int structIndex)
+    internal ComponentChangedArgs(int entityId, ChangedEventAction action, int structIndex)
     {
         this.entityId       = entityId;
-        this.type           = type;
+        this.action         = action;
         this.componentType  = EntityStoreBase.Static.EntitySchema.components[structIndex];
     }
 }

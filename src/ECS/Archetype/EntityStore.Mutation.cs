@@ -133,7 +133,7 @@ public partial class EntityStoreBase
         var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         // Send event. See: SEND_EVENT notes
-        componentAdded?.Invoke(new ComponentChangedArgs (id, ChangedEventType.Added, structIndex));
+        componentAdded?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Added, structIndex));
         return added;
     }
 
@@ -203,7 +203,7 @@ public partial class EntityStoreBase
         }
         archIndex   = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        componentRemoved?.Invoke(new ComponentChangedArgs (id, ChangedEventType.Removed, structIndex));
+        componentRemoved?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Removed, structIndex));
         return true;
     }
     #endregion
