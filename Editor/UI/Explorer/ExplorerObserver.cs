@@ -35,7 +35,7 @@ internal class ExplorerObserver : EditorObserver
         store.ComponentRemovedHandler   += PostEntityUpdate;
     }
     
-    private void PostEntityUpdate(in ComponentEventArgs args)
+    private void PostEntityUpdate(in ComponentChangedArgs args)
     {
         if (args.componentType.type != typeof(EntityName)) {
             return;
