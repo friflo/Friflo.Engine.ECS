@@ -18,9 +18,9 @@ public enum ChangedEventType
 
 public readonly struct  ComponentChangedArgs
 {
-    public readonly     int                 entityId;
-    public readonly     ChangedEventType    type; 
-    public readonly     ComponentType       componentType;
+    public readonly     int                 entityId;       //  4
+    public readonly     ChangedEventType    type;           //  4
+    public readonly     ComponentType       componentType;  //  8
     
     public override     string              ToString() => $"entity: {entityId} - {type} {componentType}";
 

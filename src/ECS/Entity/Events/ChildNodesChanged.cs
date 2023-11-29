@@ -17,10 +17,10 @@ public delegate void   ChildNodesChangedHandler(object sender, in ChildNodesChan
 
 public readonly struct ChildNodesChangedArgs
 {
-    public readonly ChildNodesChangedAction action;
-    public readonly int                     parentId;
-    public readonly int                     childId;
-    public readonly int                     childIndex;
+    public readonly ChildNodesChangedAction action;     //  4
+    public readonly int                     parentId;   //  4
+    public readonly int                     childId;    //  4
+    public readonly int                     childIndex; //  4
 
     public override string                  ToString() => $"entity: {parentId} - {action} ChildIds[{childIndex}] = {childId}";
 

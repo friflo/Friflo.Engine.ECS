@@ -12,8 +12,8 @@ public delegate void   TagsChangedHandler    (in TagsChangedArgs e);
 
 public readonly struct  TagsChangedArgs
 {
-    public readonly     int     entityId;
-    public readonly     Tags    tags;
+    public readonly     int     entityId;   //  4
+    public readonly     Tags    tags;       // 32
 
     
     public override     string              ToString() => $"entity: {entityId} - tags change: {tags}";
