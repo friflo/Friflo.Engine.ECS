@@ -156,11 +156,26 @@ public static class Test_Tags
     }
     
     [Test]
-    public static void Test_Tags_Add_Remove() {
+    public static void Test_Tags_Add_Remove()
+    {
         var store       = new EntityStore();
         AreEqual(1,                                 store.Archetypes.Length);
         var entity      = store.CreateEntity();
         var testTag2    = Tags.Get<TestTag2>();
+        
+        var eventCount  = 0;
+        var handler     = new TagsChangedHandler((in TagsChangedArgs args) => {
+            var str = args.ToString();
+            switch (eventCount++) {
+                case 0:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
+                case 1:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
+                case 2:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
+                case 3:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
+                case 4:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
+                default:    Fail("unexpected event");                                       return;
+            }
+        });
+        store.TagsChangedHandler += handler;
         
         entity.AddTag<TestTag>();
         AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
@@ -168,7 +183,7 @@ public static class Test_Tags
         AreEqual(2,                                 store.Archetypes.Length);
         
         // add same tag again
-        entity.AddTag<TestTag>();
+        entity.AddTag<TestTag>(); // no event sent
         AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
         AreEqual(1,                                 store.EntityCount);
         AreEqual(2,                                 store.Archetypes.Length);
@@ -189,10 +204,13 @@ public static class Test_Tags
         AreEqual(4,                                 store.Archetypes.Length);
         
         // remove same tag again
-        entity.RemoveTags(testTag2);
+        entity.RemoveTags(testTag2); // no event sent
         AreEqual("[]",                              entity.Archetype.ToString());
         AreEqual(1,                                 store.EntityCount);
         AreEqual(4,                                 store.Archetypes.Length);
+        
+        AreEqual(4, eventCount);
+        store.TagsChangedHandler -= handler;
         
         // Execute previous operations again. All required archetypes are now present
         const int count = 10; // 10_000_000 ~ 1.349 ms
