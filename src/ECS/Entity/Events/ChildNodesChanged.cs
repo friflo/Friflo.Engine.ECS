@@ -18,7 +18,15 @@ public delegate void   ChildNodesChangedHandler(object sender, in ChildNodesChan
 public readonly struct ChildNodesChangedArgs
 {
     public readonly ChildNodesChangedAction action;     //  4
+    /// <remarks>
+    /// Use <see cref="EntityStore.GetNodeById"/> to get the <see cref="Entity"/>. E.g.<br/>
+    /// <code>      var entity = store.GetNodeById(args.entityId).Entity;       </code>
+    /// </remarks>
     public readonly int                     parentId;   //  4
+    /// <remarks>
+    /// Use <see cref="EntityStore.GetNodeById"/> to get the <see cref="Entity"/>. E.g.
+    /// <code>      var entity = store.GetNodeById(args.entityId).Entity;       </code>
+    /// </remarks>
     public readonly int                     childId;    //  4
     public readonly int                     childIndex; //  4
 

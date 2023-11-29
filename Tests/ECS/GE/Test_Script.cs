@@ -29,7 +29,7 @@ public static class Test_Script
                 case 0:     AreEqual(1,                         args.entityId);
                             AreEqual(ChangedEventAction.Added,  args.action);
                             AreEqual(typeof(TestScript1),       args.scriptType.type);
-                            // Ensure Scripts are updated                            
+                            // Ensure Scripts are updated
                             AreEqual(1, store.GetNodeById(args.entityId).Entity.Scripts.Length);
                             AreEqual("entity: 1 - Added script: 'testRef1' [*TestScript1]",     str);   return;
                 case 1:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;

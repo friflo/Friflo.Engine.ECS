@@ -13,6 +13,10 @@ public delegate void   ScriptChangedHandler    (in ScriptChangedArgs e);
 
 public readonly struct  ScriptChangedArgs
 {
+    /// <remarks>
+    /// Use <see cref="EntityStore.GetNodeById"/> to get the <see cref="Entity"/>. E.g.<br/>
+    /// <code>      var entity = store.GetNodeById(args.entityId).Entity;       </code>
+    /// </remarks>
     public readonly     int                 entityId;   //  4
     public readonly     ChangedEventAction  action;     //  4
     public readonly     ScriptType          scriptType; //  8

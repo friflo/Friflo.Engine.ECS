@@ -19,6 +19,10 @@ public enum ChangedEventAction
 
 public readonly struct  ComponentChangedArgs
 {
+    /// <remarks>
+    /// Use <see cref="EntityStore.GetNodeById"/> to get the <see cref="Entity"/>. E.g.<br/>
+    /// <code>      var entity = store.GetNodeById(args.entityId).Entity;       </code>
+    /// </remarks>
     public readonly     int                 entityId;       //  4
     public readonly     ChangedEventAction  action;         //  4
     public readonly     ComponentType       componentType;  //  8
