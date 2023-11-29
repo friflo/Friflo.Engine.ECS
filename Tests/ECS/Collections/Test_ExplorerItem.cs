@@ -131,6 +131,51 @@ public static class Test_ExplorerItem
     }
     
     [Test]
+    public static void Test_ExplorerItem_Name()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerItemTree(root, null);
+        var rootItem    = tree.RootItem;
+        
+        var addCount       = 0;
+        store.ComponentAddedHandler += (in ComponentChangedArgs args) => {
+            var argsStr = args.ToString();
+            switch (addCount++) {
+                case 0:     AreEqual("entity: 1 - Added component: 'name' [EntityName]", argsStr);      return;
+                default:    Fail("unexpected event");                                                   return;
+            }
+        };
+        var removeCount       = 0;
+        store.ComponentRemovedHandler += (in ComponentChangedArgs args) => {
+            var argsStr = args.ToString();
+            switch (removeCount++) {
+                case 0:     AreEqual("entity: 1 - Removed component: 'name' [EntityName]", argsStr);    return;
+                default:    Fail("unexpected event");                                                   return;
+            }
+        };
+        
+        AreEqual("---",         rootItem.Name);
+        
+        // --- add Name
+        rootItem.Name = "test";
+        AreEqual("test",        rootItem.Name);
+        
+        rootItem.Name = "test";
+        AreEqual("test",        rootItem.Name); // no event sent. name is already "test"
+        
+        // --- remove Name
+        rootItem.Name = null;
+        AreEqual("---",         rootItem.Name);
+        
+        rootItem.Name = null;
+        AreEqual("---",         rootItem.Name); // no event sent. name is already removed
+        
+        AreEqual(1, addCount);
+        AreEqual(1, removeCount);
+    }
+    
+    [Test]
     public static void Test_ExplorerItem_TreeDataGrid_Access()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -148,11 +193,6 @@ public static class Test_ExplorerItem
         AreSame(root,           rootItem.Entity);
         IsTrue  (rootItem.IsRoot);
         IsFalse (rootItem.AllowDrag);
-        AreEqual("---",         rootItem.Name);
-        rootItem.Name = "test";
-        AreEqual("test",        rootItem.Name);
-        rootItem.Name = null;
-        AreEqual("---",         rootItem.Name);
         
         var rootEvents  = ExplorerEvents.AddHandlerSeq(rootItem, (args, seq) => {
             switch (seq) {
