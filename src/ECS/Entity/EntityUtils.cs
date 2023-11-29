@@ -150,21 +150,13 @@ internal static class EntityUtils
             return null;
         }
         var scriptType  = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
-        var store       = entity.archetype.entityStore;
-        var result      = store.RemoveScript(entity, scriptType);
-        // Send event. See: SEND_EVENT notes
-        EntityStore.SendScriptRemoved(store, entity.id, scriptType);
-        return result;
+        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
     internal static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        var store   = entity.archetype.entityStore;
-        var result  = store.RemoveScript(entity, scriptType);
-        // Send event. See: SEND_EVENT notes
-        EntityStore.SendScriptRemoved(store, entity.id, scriptType);
-        return result;
+        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
 }

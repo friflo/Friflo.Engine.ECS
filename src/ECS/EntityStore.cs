@@ -131,11 +131,6 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         store.scriptAdded?.Invoke(new ScriptChangedArgs (id, ChangedEventAction.Added, scriptType));
     }
-    
-    internal static void SendScriptRemoved(EntityStore store, int id, ScriptType scriptType)
-    {
-        store.scriptRemoved?.Invoke(new ScriptChangedArgs (id, ChangedEventAction.Removed, scriptType));
-    }
     #endregion
 
     

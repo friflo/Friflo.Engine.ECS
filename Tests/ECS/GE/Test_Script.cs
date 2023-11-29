@@ -14,13 +14,37 @@ public static class Test_Script
     private const long Count = 10; // 1_000_000_000L
     
     [Test]
-    public static void Test_1_AddComponent() {
+    public static void Test_1_add_remove_Script()
+    {
         var store   = new EntityStore();
         var player  = store.CreateEntity();
         AreEqual("id: 1  []",   player.ToString());
         AreSame(store,          player.Archetype.Store);
         
-        // --- add script
+        // --- add script handler
+        var addCount    = 0;
+        var addHandler  = new ScriptChangedHandler((in ScriptChangedArgs args) => {
+            var str = args.ToString();
+            switch (addCount++) {
+                case 0:     AreEqual("entity: 1 - Added script: 'testRef1' [*TestScript1]",     str);   return;
+                case 1:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;
+                case 2:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;
+                default:    Fail("unexpected event");                                                   return;
+            }
+        });
+        // --- add script handler
+        var removeCount    = 0;
+        var removeHandler  = new ScriptChangedHandler((in ScriptChangedArgs args) => {
+            var str = args.ToString();
+            switch (removeCount++) {
+                case 0:     AreEqual("entity: 1 - Removed script: 'testRef2' [*TestScript2]",   str);   return;
+                default:    Fail("unexpected event");                                                   return;
+            }
+        });
+        store.ScriptAddedHandler    += addHandler;
+        store.ScriptRemovedHandler  += removeHandler;
+        
+        // --- add script type: TestScript1
         var testRef1 = new TestScript1 { val1 = 1 };
         IsNull(player.AddScript(testRef1));
         NotNull(testRef1.Entity);
@@ -37,6 +61,7 @@ public static class Test_Script
         AreEqual("script already added to an entity. current entity id: 1", e!.Message);
         AreEqual(1,             player.Scripts.Length);
         
+        // --- add script type: TestScript2
         var testRef2 = new TestScript2 { val2 = 2 };
         IsNull (player.AddScript(testRef2));
         NotNull (testRef2.Entity);
@@ -46,17 +71,31 @@ public static class Test_Script
         AreEqual("id: 1  [*TestScript1, *TestScript2]", player.ToString());
         AreEqual(1,             store.EntityScripts.Length);
         
+        // --- add script type that already exists
         var testRef3 = new TestScript2();
-        NotNull (player.AddScript(testRef3));
+        NotNull (player.AddScript(testRef3));   // will send event
         IsNull  (testRef2.Entity);
         NotNull (testRef3.Entity);
         AreSame (testRef3,      player.GetScript<TestScript2>());
         AreEqual(2,             player.Scripts.Length);
         AreEqual("id: 1  [*TestScript1, *TestScript2]", player.ToString());
         
+        // --- remove Script
+        player.RemoveScript<TestScript2>();
+        AreEqual(1,             player.Scripts.Length);
+        
+        // --- remove non existing Script
+        player.RemoveScript<TestScript2>();
+        AreEqual(1,             player.Scripts.Length); // no event sent
+        
+        store.ScriptAddedHandler    -= addHandler;
+        store.ScriptRemovedHandler  -= removeHandler;
+        
         for (long n = 0; n < Count; n++) {
             _ = player.GetScript<TestScript1>();
         }
+        AreEqual(3, addCount);
+        AreEqual(1, removeCount);
     }
     
     [Test]

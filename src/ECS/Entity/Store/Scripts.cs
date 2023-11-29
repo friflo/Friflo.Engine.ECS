@@ -104,7 +104,7 @@ public partial class EntityStore
                 }
                 entityScripts[lastIndex] = default;               // clear last Script entry
                 entity.scriptIndex = EntityUtils.NoScripts; // set entity state to: contains no scripts 
-                return script;
+                goto SendEvent;
             }
             // case: entity has two or more scripts. Remove the given one from its scripts
             var newScripts = new Script[len - 1];
@@ -115,6 +115,9 @@ public partial class EntityStore
                 newScripts[i - 1] = scripts[i];
             }
             entityScript.scripts = newScripts;
+        SendEvent:
+            // Send event. See: SEND_EVENT notes
+            scriptRemoved?.Invoke(new ScriptChangedArgs ( entity.id, ChangedEventAction.Removed, scriptType));
             return script;
         }
         return null;
