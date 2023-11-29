@@ -45,8 +45,27 @@ public partial class EntityStore
         }
     }
     
+    /// <remarks>
+    /// - SEND_EVENT notes -
+    /// <br/>
+    /// Send event must be last statement <b>AFTER</b> an entity mutation has finished.<br/>
+    /// This ensures preserving a valid entity state after an add / remove mutation has finished.<br/>
+    /// Reasons: <br/>
+    /// - Event handlers expect a valid entity state after add / remove mutation.<br/> 
+    /// - When sending an event to the event handlers any of them may throw an exception.
+    ///   So this exception will not result in an invalid entity state.<br/>
+    /// <br/> 
+    /// The entity state refers to:
+    /// <list type="buttlet">
+    ///   <item><see cref="Entity.archetype"/></item>
+    ///   <item><see cref="Entity.compIndex"/></item>
+    ///   <item><see cref="Entity.scriptIndex"/></item>
+    ///   <item><see cref="RawEntity.archIndex"/></item>
+    /// </list>
+    /// </remarks>
     internal Script AddScript(Entity entity, Script script, ScriptType scriptType)
     {
+        Script currentScript;
         script.entity = entity;
         if (entity.scriptIndex == EntityUtils.NoScripts)
         {
@@ -57,7 +76,8 @@ public partial class EntityStore
                 Utils.Resize(ref entityScripts, newLength);
             }
             entityScripts[lastIndex] = new EntityScripts(entity.id, new Script [] { script });
-            return null;
+            currentScript   = null;
+            goto SendEvent;
         }
         // case: entity has already scripts => add / replace script to / in scripts
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
@@ -69,14 +89,19 @@ public partial class EntityStore
             if (current.GetType() == scriptType.type) {
                 // case: scripts contains a script of the given scriptType => replace current script
                 scripts[n] = script;
-                current.entity = null;
-                return script;
+                current.entity  = null;
+                currentScript   = script;
+                goto SendEvent;
             }
         }
         // --- case: scripts does not contain a script of the given scriptType => add script
         Utils.Resize(ref entityScript.scripts, len + 1);
         entityScript.scripts[len] = script;
-        return null;
+        currentScript = null;
+    SendEvent:        
+        // Send event. See: SEND_EVENT notes
+        scriptAdded?.Invoke(new ScriptChangedArgs (entity.id, ChangedEventAction.Added, scriptType));
+        return currentScript;
     }
     
     internal Script RemoveScript(Entity entity, ScriptType scriptType)

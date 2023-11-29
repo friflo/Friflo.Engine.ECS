@@ -138,11 +138,7 @@ internal static class EntityUtils
         if (script.entity != null) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }
-        var store   = entity.archetype.entityStore;
-        var result  = store.AddScript(entity, script, scriptType);
-        // Send event. See: SEND_EVENT notes
-        EntityStore.SendScriptAdded(store, entity.id, scriptType);
-        return result;
+        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }
     
     internal static Script RemoveScript(Entity entity, int scriptIndex) {
