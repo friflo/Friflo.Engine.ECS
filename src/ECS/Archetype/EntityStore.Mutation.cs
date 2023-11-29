@@ -131,6 +131,9 @@ public partial class EntityStoreBase
                 return false;
             }
             // --- change entity archetype
+            // removed passing typeof(T) in commit:
+            //   Engine - extract EntityStoreBase.AddComponentInternal() to prepare sending events for EntityStoreBase.AddComponent<>()
+            //   https://github.com/friflo/Friflo.Json.Fliox/commit/f1cf0db5a59a961fc39c30918157678d82d3573e
             var newArchetype    = GetArchetypeWith(arch, structIndex);
             compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype);
             archetype           = arch = newArchetype;
