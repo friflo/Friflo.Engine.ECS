@@ -34,8 +34,6 @@ internal class InspectorObserver : EditorObserver
     private readonly    HashSet<Control>                            controlSet;
     private readonly    List<Control>                               controlList;
     private             int                                         entityId;
-    private             bool                                        initialized;
-    
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
@@ -87,10 +85,6 @@ internal class InspectorObserver : EditorObserver
         model.ComponentCount    = archetype.Structs.Count;
         model.ScriptCount       = entity.Scripts.Length;
         
-        if (!initialized) {
-            initialized = true;
-            inspector.Components.Children.Clear();
-        }
         SetTags         (entity);
         SetComponents   (entity);
         SetScripts      (entity);

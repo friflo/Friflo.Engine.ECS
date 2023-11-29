@@ -18,6 +18,12 @@ public partial class InspectorControl : UserControl
         TagGroup.GroupAdd.AddSchemaTypes("tags");
         ComponentGroup.GroupAdd.AddSchemaTypes("components");
         ScriptGroup.GroupAdd.AddSchemaTypes("scripts");
+        //
+        if (!EditorUtils.IsDesignMode) {
+            Tags.Children.Clear();
+            Components.Children.Clear();
+            Scripts.Children.Clear();
+        }
     }
     
     protected override void OnLoaded(RoutedEventArgs e) {
