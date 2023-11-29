@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
-// ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.GE;
 
@@ -26,6 +23,10 @@ public static class Test_Entity
         AreEqual(1,                     entity.Scripts.Length);
         AreSame(typeof(TestScript1),    script.GetType());
         
+        Entity.RemoveEntityScript(entity, scriptType);
+        AreEqual(0,                     entity.Scripts.Length);
+        
+        // remove same script type again
         Entity.RemoveEntityScript(entity, scriptType);
         AreEqual(0,                     entity.Scripts.Length);
     }
