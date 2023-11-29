@@ -37,4 +37,12 @@ public readonly struct  ComponentEventArgs
         this.type           = type;
         this.componentType  = componentType;
     }
+    
+    internal ComponentEventArgs(int entityId, int structIndex)
+    {
+        this.entityId       = entityId;
+        this.type           = ChangedEventType.Added;
+        this.componentType  = EntityStoreBase.Static.EntitySchema.components[structIndex];
+    }
+
 }
