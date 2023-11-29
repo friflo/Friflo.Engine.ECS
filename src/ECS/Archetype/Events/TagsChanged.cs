@@ -5,7 +5,13 @@
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// A <see cref="TagsChangedHandler"/> added to <see cref="EntityStore.TagsChanged"/>
+/// A <see cref="TagsChangedHandler"/> added to <see cref="EntityStore.TagsChanged"/> get events on
+/// <list type="bullet">
+///   <item><see cref="Entity.AddTag{T}"/></item>
+///   <item><see cref="Entity.AddTags"/></item>
+///   <item><see cref="Entity.RemoveTag{T}"/></item>
+///   <item><see cref="Entity.RemoveTags"/></item>
+/// </list>
 /// </summary>
 public delegate void   TagsChangedHandler    (in TagsChangedArgs e);
 
