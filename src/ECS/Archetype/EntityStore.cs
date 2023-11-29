@@ -36,11 +36,11 @@ public abstract partial class EntityStoreBase
     public event    TagsChangedHandler          TagsChanged             { add => tagsChanged     += value;      remove => tagsChanged       -= value; }
     
     // --- component: added / removed
-    public          ComponentAddedHandler       ComponentAddedHandler   { get => componentAdded;                set    => componentAdded     = value; }
-    public event    ComponentAddedHandler       ComponentAdded          { add => componentAdded     += value;   remove => componentAdded    -= value; }
+    public          ComponentChangedHandler     ComponentAddedHandler   { get => componentAdded;                set    => componentAdded     = value; }
+    public event    ComponentChangedHandler     ComponentAdded          { add => componentAdded     += value;   remove => componentAdded    -= value; }
     
-    public          ComponentRemovedHandler     ComponentRemovedHandler { get => componentRemoved;              set    => componentRemoved   = value; }
-    public event    ComponentRemovedHandler     ComponentRemoved        { add => componentRemoved   += value;   remove => componentRemoved  -= value; }
+    public          ComponentChangedHandler     ComponentRemovedHandler { get => componentRemoved;              set    => componentRemoved   = value; }
+    public event    ComponentChangedHandler     ComponentRemoved        { add => componentRemoved   += value;   remove => componentRemoved  -= value; }
 
     #endregion
     
@@ -59,8 +59,8 @@ public abstract partial class EntityStoreBase
     // --- delegates
     [Browse(Never)] private             TagsChangedHandler      tagsChanged;        //  8
     //
-    [Browse(Never)] private             ComponentAddedHandler   componentAdded;     //  8
-    [Browse(Never)] private             ComponentRemovedHandler componentRemoved;   //  8
+    [Browse(Never)] private             ComponentChangedHandler componentAdded;     //  8
+    [Browse(Never)] private             ComponentChangedHandler componentRemoved;   //  8
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion

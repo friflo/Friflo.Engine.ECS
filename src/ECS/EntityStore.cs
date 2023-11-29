@@ -58,11 +58,11 @@ public sealed partial class EntityStore : EntityStoreBase
 
     
     // --- script:   added / removed
-    public          ScriptAddedHandler          ScriptAddedHandler      { get => scriptAdded;                   set    => scriptAdded        = value; }
-    public event    ScriptAddedHandler          ScriptAdded             { add => scriptAdded     += value;      remove => scriptAdded       -= value; }
+    public          ScriptChangedHandler        ScriptAddedHandler      { get => scriptAdded;                   set    => scriptAdded        = value; }
+    public event    ScriptChangedHandler        ScriptAdded             { add => scriptAdded     += value;      remove => scriptAdded       -= value; }
     
-    public          ScriptRemovedHandler        ScriptRemovedHandler    { get => scriptRemoved;                 set    => scriptRemoved      = value; }
-    public event    ScriptRemovedHandler        ScriptRemoved           { add => scriptRemoved   += value;      remove => scriptRemoved     -= value; }
+    public          ScriptChangedHandler        ScriptRemovedHandler    { get => scriptRemoved;                 set    => scriptRemoved      = value; }
+    public event    ScriptChangedHandler        ScriptRemoved           { add => scriptRemoved   += value;      remove => scriptRemoved     -= value; }
     
     #endregion
     
@@ -85,8 +85,8 @@ public sealed partial class EntityStore : EntityStoreBase
     // --- delegates
     [Browse(Never)] private         ChildNodesChangedHandler    childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
     //
-    [Browse(Never)] private         ScriptAddedHandler          scriptAdded;        //  8
-    [Browse(Never)] private         ScriptRemovedHandler        scriptRemoved;      //  8
+    [Browse(Never)] private         ScriptChangedHandler        scriptAdded;        //  8
+    [Browse(Never)] private         ScriptChangedHandler        scriptRemoved;      //  8
     
     #endregion
     
