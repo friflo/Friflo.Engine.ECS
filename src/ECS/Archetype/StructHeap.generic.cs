@@ -82,6 +82,10 @@ internal sealed class StructHeap<T> : StructHeap
                    chunks[sourcePos / ChunkSize].components[sourcePos % ChunkSize];
     }
     
+    /// <remarks>
+    /// Copying a component using a simple assignment works only for blittable component types.<br/>
+    /// In case a component type contains reference types serializing must be used.
+    /// </remarks>
     internal override void CopyComponent(int sourcePos, int targetPos)
     {
         chunks[targetPos / ChunkSize].components[targetPos % ChunkSize] =

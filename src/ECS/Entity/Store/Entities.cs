@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
@@ -51,7 +52,15 @@ public partial class EntityStore
         var archetype       = original.archetype;
         entity.compIndex    = archetype.AddEntity(entity.id);
         entity.archetype    = archetype;
-        archetype.CopyComponents(original.compIndex, entity.compIndex);
+
+        var converter       = EntityConverter.Default;
+        converter.EntityToDataEntity(original, dataBuffer);
+        
+        dataBuffer.pid      = GetNodeById(entity.id).pid;
+        var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
+        if (copy != entity) throw new InvalidOperationException("expect same entity instance");
+
+        // archetype.CopyComponents(original.compIndex, entity.compIndex);
         return entity;
     }
     

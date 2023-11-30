@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
@@ -71,9 +72,10 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
     [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
 
-    // --- id buffers
+    // --- buffers
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
+    [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
 
     // --- delegates
     [Browse(Never)] private         ChildNodesChangedHandler    childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
@@ -98,6 +100,7 @@ public sealed partial class EntityStore : EntityStoreBase
         entityScripts   = Array.Empty<EntityScripts>();
         idBuffer        = new int[1];
         idBufferSet     = new HashSet<int>();
+        dataBuffer      = new DataEntity();
     }
     #endregion
 
