@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -17,9 +18,11 @@ internal sealed class ComponentReader
 {
     private readonly    ObjectReader                            componentReader;
     private readonly    Dictionary<string, SchemaType>          schemaTypeByKey;
+    private readonly    Dictionary<Type,   ScriptType>          scriptTypeByType;
     private readonly    Dictionary<string, TagType>             tagTypeByName;
     private readonly    ComponentType                           unresolvedType;
     private readonly    List<ComponentType>                     componentTypes;
+    private readonly    HashSet<ScriptType>                     scriptTypes;
     private readonly    ArchetypeKey                            searchKey;
     private readonly    List<string>                            unresolvedTagList;
     private readonly    HashSet<string>                         unresolvedTagSet;
@@ -38,8 +41,10 @@ internal sealed class ComponentReader
         var schema              = EntityStoreBase.Static.EntitySchema;
         unresolvedType          = schema.unresolvedType;
         schemaTypeByKey         = schema.schemaTypeByKey;
+        scriptTypeByType        = schema.scriptTypeByType;
         tagTypeByName           = schema.tagTypeByName;
         componentTypes          = new List<ComponentType>();
+        scriptTypes             = new HashSet<ScriptType>(); // Cannot use Script. User code may override Equals() or GetHashCode()
         searchKey               = new ArchetypeKey();
         unresolvedTagList       = new List<string>();
         unresolvedTagSet        = new HashSet<string>();
@@ -91,6 +96,11 @@ internal sealed class ComponentReader
     private void ReadComponents(Entity entity)
     {
         unresolvedComponentList.Clear();
+        scriptTypes.Clear();
+        foreach (var script in entity.Scripts) {
+            var scriptType = scriptTypeByType[script.GetType()];
+            scriptTypes.Add(scriptType);
+        }
         for (int n = 0; n < componentCount; n++)
         {
             var component = components[n];
@@ -104,7 +114,8 @@ internal sealed class ComponentReader
             switch (schemaType.kind) {
                 case SchemaTypeKind.Script:
                     // --- read script
-                    var scriptType      = (ScriptType)schemaType;
+                    var scriptType = (ScriptType)schemaType;
+                    scriptTypes.Remove(scriptType);
                     scriptType.ReadScript(componentReader, json, entity);
                     break;
                 case SchemaTypeKind.Component:
@@ -115,6 +126,11 @@ internal sealed class ComponentReader
                     break;
             }
         }
+        // --- remove missing scripts from entity
+        foreach (var scriptType in scriptTypes) {
+            Entity.RemoveEntityScript(entity, scriptType);
+        }
+        // --- add unresolved components
         if (unresolvedComponentList.Count > 0 ) {
             AddUnresolvedComponents(entity);
         }
