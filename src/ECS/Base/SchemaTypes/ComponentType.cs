@@ -15,6 +15,7 @@ public abstract class ComponentType : SchemaType
     /// The index in <see cref="EntitySchema.Components"/>.<br/>
     /// </summary>
     public   readonly   int             structIndex;    //  4
+    public   readonly   bool            isBlittable;    //  4
     
     internal abstract StructHeap    CreateHeap();
     internal abstract bool          AddEntityComponent(Entity entity);
@@ -22,7 +23,8 @@ public abstract class ComponentType : SchemaType
     protected ComponentType(string componentKey, int structIndex, Type type)
         : base (componentKey, type, Component)
     {
-        this.structIndex = structIndex;
+        this.structIndex    = structIndex;
+        isBlittable         = IsBlittableType(type);
     }
 }
 

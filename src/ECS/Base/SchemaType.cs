@@ -2,7 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Friflo.Json.Burst;
+using Friflo.Json.Fliox;
 using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
@@ -46,5 +49,68 @@ public abstract class SchemaType
         if (this.componentKey != null) {
             componentKeyBytes = new Bytes(componentKey);   
         }
+    }
+    
+    private static readonly Dictionary<Type, bool> BlittableTypes = new Dictionary<Type, bool>();
+    
+    static SchemaType()
+    {
+        var types = BlittableTypes;
+        types.Add(typeof(bool),         true);
+        types.Add(typeof(char),         true);
+        //
+        types.Add(typeof(byte),         true);
+        types.Add(typeof(short),        true);
+        types.Add(typeof(int),          true);
+        types.Add(typeof(long),         true);
+        //
+        types.Add(typeof(sbyte),        true);
+        types.Add(typeof(ushort),       true);
+        types.Add(typeof(uint),         true);
+        types.Add(typeof(ulong),        true);
+        //
+        types.Add(typeof(float),        true);
+        types.Add(typeof(double),       true);
+        //
+        types.Add(typeof(Guid),         true);
+        types.Add(typeof(DateTime),     true);
+        //
+        types.Add(typeof(JsonValue),    true);
+        //
+        types.Add(typeof(string),       true);
+    }
+    
+    internal static bool IsBlittableType(Type type)
+    {
+        if (BlittableTypes.TryGetValue(type, out bool blittable)) {
+            return blittable;
+        }
+        blittable = IsBlittableMembers(type);
+        BlittableTypes.Add(type, blittable);
+        return blittable;
+    }
+
+    private static bool IsBlittableMembers(Type type)
+    {
+        var members = type.GetMembers();
+        foreach (var member in members)
+        {
+            switch (member) {
+                case FieldInfo fieldInfo:
+                    var fieldType = fieldInfo.FieldType;
+                    if (IsBlittableType(fieldType)) {
+                        continue;
+                    }
+                    return false;
+                case PropertyInfo: // propertyInfo:
+                    continue;
+                /*  var propertyType = propertyInfo.PropertyType;
+                    if (IsBlittableType(propertyType)) {
+                        continue;
+                    }
+                    return false; */
+            }
+        }
+        return true;
     }
 }

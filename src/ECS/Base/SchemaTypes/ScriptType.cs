@@ -14,7 +14,8 @@ public abstract class ScriptType : SchemaType
     /// <summary>
     /// Ihe index in <see cref="EntitySchema.Scripts"/>.<br/>
     /// </summary>
-    public   readonly   int             scriptIndex;  //  4
+    public   readonly   int             scriptIndex;    //  4
+    public   readonly   bool            isBlittable;    //  4
     
     internal abstract   Script  CreateScript();
     internal abstract   void    ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
@@ -22,7 +23,8 @@ public abstract class ScriptType : SchemaType
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
-        this.scriptIndex = scriptIndex;
+        this.scriptIndex    = scriptIndex;
+        isBlittable         = IsBlittableType(type);
     }
 }
 

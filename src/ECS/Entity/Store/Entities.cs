@@ -59,8 +59,9 @@ public partial class EntityStore
         dataBuffer.pid      = GetNodeById(entity.id).pid;
         var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
         if (copy != entity) throw new InvalidOperationException("expect same entity instance");
-
+        
         // CopyComponents() can be used only in case all component types are blittable
+        // todo optimize - use CopyComponents() if applicable
         // archetype.CopyComponents(original.compIndex, entity.compIndex);
         return entity;
     }
