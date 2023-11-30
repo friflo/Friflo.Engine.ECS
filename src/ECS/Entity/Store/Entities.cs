@@ -72,7 +72,7 @@ public partial class EntityStore
                 }    
             }
         }
-
+        // todo optimize - serialize / deserialize only non blittable components and scripts
         if (isBlittable) {
             // CopyComponents() can be used only in case all component types are blittable
             archetype.CopyComponents(original.compIndex, entity.compIndex);
