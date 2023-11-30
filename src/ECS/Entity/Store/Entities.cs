@@ -79,7 +79,7 @@ public partial class EntityStore
             // --- clone scripts
             foreach (var script in scripts) {
                 var scriptType  = scriptTypeByType[script.GetType()];
-                var clone       = scriptType.MemberwiseClone(script);
+                var clone       = scriptType.CloneScript(script);
                 Entity.AddEntityScript2(entity, scriptType, clone);
             }
         } else {

@@ -10,6 +10,8 @@ using Friflo.Json.Fliox.Mapper.Map;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
+internal delegate object CloneScript(object instance);
+
 public abstract class ScriptType : SchemaType
 {
     /// <summary>
@@ -17,7 +19,7 @@ public abstract class ScriptType : SchemaType
     /// </summary>
     public   readonly   int             scriptIndex;    //  4
     public   readonly   bool            isBlittable;    //  4
-    private  readonly   MethodInfo      cloneMethod;    //  8
+    private  readonly   CloneScript     cloneScript;    //  8
     
     internal abstract   Script  CreateScript();
     internal abstract   void    ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
@@ -29,13 +31,18 @@ public abstract class ScriptType : SchemaType
         isBlittable         = IsBlittableType(type);
         if (isBlittable) {
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod;
-            cloneMethod = type.GetMethod("MemberwiseClone", flags);
+            var methodInfo      = type.GetMethod("MemberwiseClone", flags);
+            // Create a delegate representing an 'open instance method'.
+            // An instance must be passed when the delegate is invoked.
+            // See: https://learn.microsoft.com/en-us/dotnet/api/system.delegate.createdelegate
+            var cloneDelegate   = Delegate.CreateDelegate(typeof(CloneScript), null, methodInfo!);
+            cloneScript         = (CloneScript)cloneDelegate;
         }
     }
     
-    internal Script MemberwiseClone(Script original)
+    internal Script CloneScript(Script original)
     {
-        var clone = cloneMethod.Invoke(original, null); // todo optimize - create delegate?
+        var clone = cloneScript(original);
         return (Script)clone;
     }
 }
