@@ -55,7 +55,7 @@ public partial class EntityStore
         
         bool isBlittable = true;
         foreach (var componentType in archetype.componentTypes) {
-            if (!componentType.isBlittable) {
+            if (!componentType.blittable) {
                 isBlittable = false;
                 break;
             }
@@ -66,7 +66,7 @@ public partial class EntityStore
             foreach (var script in scripts)
             {
                 var scriptType = scriptTypeByType[script.GetType()];
-                if (!scriptType.isBlittable) {
+                if (!scriptType.blittable) {
                     isBlittable = false;
                     break;
                 }    

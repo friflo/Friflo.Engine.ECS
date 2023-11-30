@@ -18,18 +18,18 @@ public abstract class ScriptType : SchemaType
     /// Ihe index in <see cref="EntitySchema.Scripts"/>.<br/>
     /// </summary>
     public   readonly   int             scriptIndex;    //  4
-    public   readonly   bool            isBlittable;    //  4
+    public   readonly   bool            blittable;      //  4
     private  readonly   CloneScript     cloneScript;    //  8
     
-    internal abstract   Script  CreateScript();
-    internal abstract   void    ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
+    internal abstract   Script          CreateScript();
+    internal abstract   void            ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
         this.scriptIndex    = scriptIndex;
-        isBlittable         = IsBlittableType(type);
-        if (isBlittable) {
+        blittable           = IsBlittableType(type);
+        if (blittable) {
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod;
             var methodInfo      = type.GetMethod("MemberwiseClone", flags);
             // Create a delegate representing an 'open instance method'.

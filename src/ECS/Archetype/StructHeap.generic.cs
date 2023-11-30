@@ -83,8 +83,9 @@ internal sealed class StructHeap<T> : StructHeap
     }
     
     /// <remarks>
-    /// Copying a component using a simple assignment works only for blittable component types.<br/>
-    /// In case a component type contains reference types serializing must be used.
+    /// Copying a component using an assignment can only be done for <see cref="ComponentType.blittable"/>
+    /// <see cref="ComponentType"/>'s.<br/>
+    /// If not <see cref="ComponentType.blittable"/> serialization must be used.
     /// </remarks>
     internal override void CopyComponent(int sourcePos, int targetPos)
     {
