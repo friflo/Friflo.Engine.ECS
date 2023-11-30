@@ -54,7 +54,7 @@ internal class ExplorerObserver : EditorObserver
     
     private void EntitiesChanged(in EntitiesChangedArgs args)
     {
-        foreach (var id in args.entityIds) {
+        foreach (var id in args.EntityIds) {
             if (!tree.TryGetItem(id, out var item)) {
                 return;
             }

@@ -67,7 +67,7 @@ internal class InspectorObserver : EditorObserver
     }
     
     private void EntitiesChanged(in EntitiesChangedArgs args) {
-        if (!args.entityIds.Contains(entityId)) {
+        if (!args.EntityIds.Contains(entityId)) {
             return;
         }
         // could Post() change event
