@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Reflection;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
@@ -16,6 +17,7 @@ public abstract class ScriptType : SchemaType
     /// </summary>
     public   readonly   int             scriptIndex;    //  4
     public   readonly   bool            isBlittable;    //  4
+    private  readonly   MethodInfo      cloneMethod;    //  8
     
     internal abstract   Script  CreateScript();
     internal abstract   void    ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
@@ -25,6 +27,16 @@ public abstract class ScriptType : SchemaType
     {
         this.scriptIndex    = scriptIndex;
         isBlittable         = IsBlittableType(type);
+        if (isBlittable) {
+            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod;
+            cloneMethod = type.GetMethod("MemberwiseClone", flags);
+        }
+    }
+    
+    internal Script MemberwiseClone(Script original)
+    {
+        var clone = cloneMethod.Invoke(original, null); // todo optimize - create delegate?
+        return (Script)clone;
     }
 }
 

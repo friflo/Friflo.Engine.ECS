@@ -386,5 +386,9 @@ public sealed class Entity
     public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript       (entity, scriptType.type);
     public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScriptType(entity, scriptType);
     public static Script AddEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.AddScriptType   (entity, scriptType);
+    public static Script AddEntityScript2   (Entity entity, ScriptType scriptType, Script script) {
+        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
+    }
+
     #endregion
 }

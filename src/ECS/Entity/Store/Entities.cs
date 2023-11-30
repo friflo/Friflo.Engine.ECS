@@ -52,17 +52,46 @@ public partial class EntityStore
         var archetype       = original.archetype;
         entity.compIndex    = archetype.AddEntity(entity.id);
         entity.archetype    = archetype;
+        
+        bool isBlittable = true;
+        foreach (var componentType in archetype.structs) {
+            if (!componentType.isBlittable) {
+                isBlittable = false;
+                break;
+            }
+        }
+        var scripts = original.Scripts;
+        var scriptTypeByType = Static.EntitySchema.ScriptTypeByType;
+        if (isBlittable) {
+            foreach (var script in scripts)
+            {
+                var scriptType = scriptTypeByType[script.GetType()];
+                if (!scriptType.isBlittable) {
+                    isBlittable = false;
+                    break;
+                }    
+            }
+        }
 
-        var converter       = EntityConverter.Default;
-        converter.EntityToDataEntity(original, dataBuffer);
-        
-        dataBuffer.pid      = GetNodeById(entity.id).pid;
-        var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
-        if (copy != entity) throw new InvalidOperationException("expect same entity instance");
-        
-        // CopyComponents() can be used only in case all component types are blittable
-        // todo optimize - use CopyComponents() if applicable
-        // archetype.CopyComponents(original.compIndex, entity.compIndex);
+        if (isBlittable) {
+            // CopyComponents() can be used only in case all component types are blittable
+            archetype.CopyComponents(original.compIndex, entity.compIndex);
+            // --- clone scripts
+            foreach (var script in scripts) {
+                var scriptType  = scriptTypeByType[script.GetType()];
+                var clone       = scriptType.MemberwiseClone(script);
+                Entity.AddEntityScript2(entity, scriptType, clone);
+            }
+        } else {
+            // --- serialize entity
+            var converter       = EntityConverter.Default;
+            converter.EntityToDataEntity(original, dataBuffer);
+            
+            // --- deserialize DataEntity
+            dataBuffer.pid      = GetNodeById(entity.id).pid;
+            var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
+            if (copy != entity) throw new InvalidOperationException("expect same entity instance");
+        }
         return entity;
     }
     
