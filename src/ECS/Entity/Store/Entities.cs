@@ -60,6 +60,7 @@ public partial class EntityStore
         var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
         if (copy != entity) throw new InvalidOperationException("expect same entity instance");
 
+        // CopyComponents() can be used only in case all component types are blittable
         // archetype.CopyComponents(original.compIndex, entity.compIndex);
         return entity;
     }

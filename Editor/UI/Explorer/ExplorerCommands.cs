@@ -45,8 +45,8 @@ public static class ExplorerCommands
             var store       = items[0].Entity.Store;
             var entities    = items.Select(item => item.Entity).ToList();
             foreach (var entity in entities) {
-                var duplicate = store.InstantiateEntity(entity);
-                entity.Parent.AddChild(duplicate);
+                var copy = store.InstantiateEntity(entity);
+                entity.Parent.AddChild(copy);
             }
         }
         grid.FocusPanel();
