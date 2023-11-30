@@ -30,8 +30,8 @@ internal class ExplorerViewModel
         var idCol   = new TextColumn<ExplorerItem, int>   ("id",   item => item.Id,   GridLength.Auto);
         source.Columns.Add(idCol);
         
-        var flagCol = new CheckBoxColumn<ExplorerItem>    ("flag", item => item.flag, (item, value) => item.flag = value);
-        source.Columns.Add(flagCol);
+        // var flagCol = new CheckBoxColumn<ExplorerItem>    ("flag", item => item.flag, (item, value) => item.flag = value);
+        // source.Columns.Add(flagCol);
 
         source.RowSelection!.SingleSelect = false;
         return source;
