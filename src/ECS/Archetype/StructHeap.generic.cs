@@ -82,6 +82,13 @@ internal sealed class StructHeap<T> : StructHeap
                    chunks[sourcePos / ChunkSize].components[sourcePos % ChunkSize];
     }
     
+    internal override void CopyComponent(int sourcePos, int targetPos)
+    {
+        chunks[targetPos / ChunkSize].components[targetPos % ChunkSize] =
+        chunks[sourcePos / ChunkSize].components[sourcePos % ChunkSize];
+    }
+    
+    
     /// <summary>
     /// Method only available for debugging. Reasons:<br/>
     /// - it boxes struct values to return them as objects<br/>

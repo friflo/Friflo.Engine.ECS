@@ -40,15 +40,15 @@ public static class ExplorerCommands
     
     internal static void DuplicateItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
-        var entities    = items.Select(item => item.Entity).ToList();
         Console.WriteLine("Duplicate");
-        /*
-        var serializer  = new EntitySerializer();
-        var stream      = new MemoryStream();
-        serializer.WriteEntities(entities, stream);
-        var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
-        EditorUtils.CopyToClipboard(grid, text);
-        */
+        if (items.Length > 0) {
+            var store       = items[0].Entity.Store;
+            var entities    = items.Select(item => item.Entity).ToList();
+            foreach (var entity in entities) {
+                var duplicate = store.InstantiateEntity(entity);
+                entity.Parent.AddChild(duplicate);
+            }
+        }
         grid.FocusPanel();
     }
     

@@ -151,6 +151,7 @@ public sealed class Archetype
     
 #region component handling
 
+    /// <remarks> the component index in the <paramref name="newArchetype"/> </remarks>
     internal int MoveEntityTo(int id, int sourceIndex, Archetype newArchetype)
     {
         // --- copy entity components to components of new newArchetype
@@ -194,6 +195,14 @@ public sealed class Archetype
         CheckChunkCapacity();
     }
     
+    internal void CopyComponents(int sourceIndex, int targetIndex)
+    {
+        foreach (var sourceHeap in structHeaps) {
+            sourceHeap.CopyComponent(sourceIndex, targetIndex);
+        }
+    }
+    
+    /// <returns> the component index in this <see cref="Archetype"/> </returns>
     internal int AddEntity(int id)
     {
         var index = entityCount++;

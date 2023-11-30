@@ -23,7 +23,8 @@ public partial class EntityStore
     public static     EntitySchema         GetEntitySchema()=> Static.EntitySchema;
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
-    public Entity CreateEntity() {
+    public Entity CreateEntity()
+    {
         var id      = sequenceId++;
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
@@ -31,7 +32,8 @@ public partial class EntityStore
     }
     
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
-    public Entity CreateEntity(int id) {
+    public Entity CreateEntity(int id)
+    {
         if (id < Static.MinNodeId) {
             throw InvalidEntityIdException(id, nameof(id));
         }
@@ -41,6 +43,16 @@ public partial class EntityStore
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
         return CreateEntityNode(id, pid);
+    }
+    
+    public Entity InstantiateEntity(Entity original)
+    {
+        var entity          = CreateEntity();
+        var archetype       = original.archetype;
+        entity.compIndex    = archetype.AddEntity(entity.id);
+        entity.archetype    = archetype;
+        archetype.CopyComponents(original.compIndex, entity.compIndex);
+        return entity;
     }
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
