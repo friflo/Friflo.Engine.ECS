@@ -56,7 +56,8 @@ public sealed partial class EntityStore : EntityStoreBase
     // --- script:   added / removed
     public  ScriptChangedHandler        ScriptAdded         { get => scriptAdded;       set => scriptAdded          = value; }
     public  ScriptChangedHandler        ScriptRemoved       { get => scriptRemoved;     set => scriptRemoved        = value; }
-
+    
+    public  EntitiesChangedHandler      EntitiesChanged     { get => entitiesChanged;   set => entitiesChanged      = value; }
     
     #endregion
     
@@ -82,6 +83,8 @@ public sealed partial class EntityStore : EntityStoreBase
     //
     [Browse(Never)] private         ScriptChangedHandler        scriptAdded;        //  8
     [Browse(Never)] private         ScriptChangedHandler        scriptRemoved;      //  8
+    //
+    [Browse(Never)] private         EntitiesChangedHandler      entitiesChanged;    //  8
     
     #endregion
     

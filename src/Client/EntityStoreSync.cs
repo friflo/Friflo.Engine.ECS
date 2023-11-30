@@ -25,6 +25,7 @@ public sealed class EntityStoreSync
     private readonly    Dictionary<int, EntityChange>   entityChanges;
     private readonly    List<DataEntity>                upsertBuffer;
     private readonly    List<long>                      deleteBuffer;
+    private readonly    HashSet<int>                    idSet;
 
 
     public EntityStoreSync (EntityStore store, EntityClient client) {
@@ -35,6 +36,7 @@ public sealed class EntityStoreSync
         entityChanges   = new Dictionary<int, EntityChange>();
         upsertBuffer    = new List<DataEntity>();
         deleteBuffer    = new List<long>();
+        idSet           = new HashSet<int>();
         client.entities.WritePretty = true;
     }
     
@@ -133,13 +135,18 @@ public sealed class EntityStoreSync
         if (context.IsOrigin) {
             return;
         }
+        idSet.Clear();
         foreach (var upsert in changes.Upserts) {
-            converter.DataEntityToEntity(upsert.entity, store, out _);
+            var entity = converter.DataEntityToEntity(upsert.entity, store, out _);
+            idSet.Add(entity.Id);
         }
         foreach (var delete in changes.Deletes) {
             ref var node = ref store.GetNodeByPid(delete.key);
             node.Entity.DeleteEntity();
         }
+        // Send event. See: SEND_EVENT notes
+        var args = new EntitiesChangedArgs(idSet);
+        store.EntitiesChanged?.Invoke(args);
     }
     
     public void UpsertDataEntity(int entityId)

@@ -52,6 +52,7 @@ internal class InspectorObserver : EditorObserver
         store.ScriptAdded        += (in ScriptChangedArgs    args) => PostSetEntity(args.entityId); 
         store.ScriptRemoved      += (in ScriptChangedArgs    args) => PostSetEntity(args.entityId); 
         store.TagsChanged        += (in TagsChangedArgs      args) => PostSetEntity(args.entityId);
+        store.EntitiesChanged    += EntitiesChanged;
     }
     
     private void PostSetEntity(int id)
@@ -63,6 +64,15 @@ internal class InspectorObserver : EditorObserver
         EditorUtils.Post(() => {
             SetEntity(entity);
         });
+    }
+    
+    private void EntitiesChanged(in EntitiesChangedArgs args) {
+        if (!args.entityIds.Contains(entityId)) {
+            return;
+        }
+        // could Post() change event
+        var entity = Store.GetNodeById(entityId).Entity;
+        SetEntity(entity);
     }
 
     protected override void OnSelectionChanged(in EditorSelection selection)

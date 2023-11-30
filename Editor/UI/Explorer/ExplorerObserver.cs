@@ -31,8 +31,9 @@ internal class ExplorerObserver : EditorObserver
         tree            = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
         source.Items    = new []{ tree.RootItem };
         
-        store.ComponentAdded     += PostEntityUpdate;
-        store.ComponentRemoved   += PostEntityUpdate;
+        store.ComponentAdded    += PostEntityUpdate;
+        store.ComponentRemoved  += PostEntityUpdate;
+        store.EntitiesChanged   += EntitiesChanged;
     }
     
     private void PostEntityUpdate(in ComponentChangedArgs args)
@@ -49,6 +50,18 @@ internal class ExplorerObserver : EditorObserver
             var args = new PropertyChangedEventArgs("name");
             item.propertyChangedHandler?.Invoke(grid, args);
         });
+    }
+    
+    private void EntitiesChanged(in EntitiesChangedArgs args)
+    {
+        foreach (var id in args.entityIds) {
+            if (!tree.TryGetItem(id, out var item)) {
+                return;
+            }
+            // could Post() change events instead
+            var propertyChangedEventArgs = new PropertyChangedEventArgs("name");
+            item.propertyChangedHandler?.Invoke(grid, propertyChangedEventArgs);
+        }
     }
 
     private static readonly bool    Log     = true;
