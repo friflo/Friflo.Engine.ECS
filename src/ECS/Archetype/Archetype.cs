@@ -26,7 +26,7 @@ public sealed class Archetype
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
                     public              EntityStoreBase     Store           => store;
-                    public ref readonly ArchetypeStructs    Structs         => ref structs;
+                    public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
                     public ref readonly Tags                Tags            => ref tags;
 #endregion
 
@@ -48,7 +48,7 @@ public sealed class Archetype
                     private             ChunkMemory         memory;         // 16       - count & length used to store components in chunks  
     // --- internal
     [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of component types
-    [Browse(Never)] internal readonly   ArchetypeStructs    structs;        // 32       - component types of archetype
+    [Browse(Never)] internal readonly   ComponentTypes      componentTypes; // 32       - component types of archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="EntitySchema.CheckStructIndex"/></remarks>
@@ -73,7 +73,7 @@ public sealed class Archetype
         // entityCapacity   = 0         // stores no entities
         // shrinkThreshold  = 0         // stores no entities - will not shrink
         // componentCount   = 0         // has no components
-        // structs          = default   // has no components
+        // componentTypes   = default   // has no components
         // tags             = default   // has no tags
     }
     
@@ -93,7 +93,7 @@ public sealed class Archetype
         structHeaps     = heaps;
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
-        structs         = new ArchetypeStructs(heaps);
+        componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
         for (int pos = 0; pos < structCount; pos++)

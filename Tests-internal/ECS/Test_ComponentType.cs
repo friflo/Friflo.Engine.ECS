@@ -23,7 +23,7 @@ public static class Test_ComponentType
         {
             schema.CheckStructIndex(typeof(string), schema.maxStructIndex);    
         });
-        var expect = $"number of structs exceed EntityStore.maxStructIndex: {schema.maxStructIndex}";
+        var expect = $"number of component types exceed EntityStore.maxStructIndex: {schema.maxStructIndex}";
         AreEqual(expect, e!.Message);
     }
     

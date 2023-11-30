@@ -223,7 +223,7 @@ public partial class EntityStoreBase
         if (archTagsValue == tagsValue) {
             return false;
         } 
-        searchKey.structs           = arch.structs;
+        searchKey.componentTypes    = arch.componentTypes;
         searchKey.tags.bitSet.value = archTagsValue | tagsValue;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
@@ -258,7 +258,7 @@ public partial class EntityStoreBase
         if (archTagsRemoved == archTags) {
             return false;
         }
-        searchKey.structs           = arch.structs;
+        searchKey.componentTypes    = arch.componentTypes;
         searchKey.tags.bitSet.value = archTagsRemoved;
         searchKey.CalculateHashCode();
         Archetype newArchetype;

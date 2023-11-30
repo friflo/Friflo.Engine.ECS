@@ -54,7 +54,7 @@ public partial class EntityStore
         entity.archetype    = archetype;
         
         bool isBlittable = true;
-        foreach (var componentType in archetype.structs) {
+        foreach (var componentType in archetype.componentTypes) {
             if (!componentType.isBlittable) {
                 isBlittable = false;
                 break;

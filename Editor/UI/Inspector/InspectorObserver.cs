@@ -82,7 +82,7 @@ internal class InspectorObserver : EditorObserver
         var archetype           = entity.Archetype;
         var model               = inspector.model;
         model.TagCount          = archetype.Tags.Count;
-        model.ComponentCount    = archetype.Structs.Count;
+        model.ComponentCount    = archetype.ComponentTypes.Count;
         model.ScriptCount       = entity.Scripts.Length;
         
         SetTags         (entity);
@@ -113,7 +113,7 @@ internal class InspectorObserver : EditorObserver
         var controls    = InitControlSet(inspector.Components.Children);
         var archetype   = entity.Archetype;
         
-        foreach (var componentType in archetype.Structs)
+        foreach (var componentType in archetype.ComponentTypes)
         {
             if (!componentMap.TryGetValue(componentType, out var item)) {
                 var component   = new InspectorComponent { ComponentTitle = componentType.name, ComponentType = componentType };

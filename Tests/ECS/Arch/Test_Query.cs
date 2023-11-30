@@ -14,14 +14,14 @@ public static class Test_Query
     public static void Test_SignatureTypes()
     {
         var sig1            = Signature.Get<Position>();
-        AreEqual("Signature: [Position]",           sig1.ToString());
-        AreEqual("Structs: [Position]",             sig1.Structs.ToString());
+        AreEqual("Signature: [Position]",   sig1.ToString());
+        AreEqual("Components: [Position]",  sig1.ComponentTypes.ToString());
         
         var sig2            = Signature.Get<Position, Rotation>();
         AreEqual("Signature: [Position, Rotation]", sig2.ToString());
 
         int count = 0;
-        foreach (var _ in sig2.Structs) {
+        foreach (var _ in sig2.ComponentTypes) {
             count++;    
         }
         AreEqual(2, count);
@@ -42,11 +42,11 @@ public static class Test_Query
         
         AssertNoAlloc(start);
         
-        AreEqual("Structs: [Position]",                                                sig1.Structs.ToString());
-        AreEqual("Structs: [Position, Rotation]",                                      sig2.Structs.ToString());
-        AreEqual("Structs: [Position, Rotation, Scale3]",                              sig3.Structs.ToString());
-        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1]",                sig4.Structs.ToString());
-        AreEqual("Structs: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.Structs.ToString());
+        AreEqual("Components: [Position]",                                                sig1.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Rotation]",                                      sig2.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Rotation, Scale3]",                              sig3.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Rotation, Scale3, MyComponent1]",                sig4.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.ComponentTypes.ToString());
     }
     [Test]
     public static void Test_generic_Query_with_AllTags()

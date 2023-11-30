@@ -74,16 +74,16 @@ public class ArchetypeQuery
             return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
         }
         // --- update archetypes / archetypesCount: Add matching archetypes newly added to the store
-        var storeArchetypes = store.Archetypes;
-        var newStoreLength  = storeArchetypes.Length;
-        var nextArchetypes  = archetypes;
-        var nextCount       = archetypeCount;
-        var requiredStructs = new ArchetypeStructs(signatureIndexes);
+        var storeArchetypes     = store.Archetypes;
+        var newStoreLength      = storeArchetypes.Length;
+        var nextArchetypes      = archetypes;
+        var nextCount           = archetypeCount;
+        var requiredComponents  = new ComponentTypes(signatureIndexes);
         
         for (int n = lastArchetypeCount; n < newStoreLength; n++)
         {
             var archetype         = storeArchetypes[n];
-            var hasRequiredTypes  = archetype.structs.HasAll(requiredStructs) &&
+            var hasRequiredTypes  = archetype.componentTypes.HasAll(requiredComponents) &&
                                     archetype.tags.   HasAll(requiredTags);
             if (!hasRequiredTypes) {
                 continue;

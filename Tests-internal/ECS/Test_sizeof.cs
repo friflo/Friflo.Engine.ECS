@@ -39,8 +39,8 @@ public static class Test_sizeof
     }
     
     [Test]
-    public static unsafe void Test_sizeof_ArchetypeStructs() {
-        var size = sizeof(ArchetypeStructs);
+    public static unsafe void Test_sizeof_ComponentTypes() {
+        var size = sizeof(ComponentTypes);
         AreEqual(32, size);
     }
         

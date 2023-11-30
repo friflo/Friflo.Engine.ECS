@@ -17,8 +17,8 @@ public static class Test_Archetype
         var posType     = store.GetArchetype(Signature.Get<Position>());
         var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
         
-        AreEqual(1,                             posType.Structs.Count);
-        AreEqual(2,                             posRotType.Structs.Count);
+        AreEqual(1,                             posType.ComponentTypes.Count);
+        AreEqual(2,                             posRotType.ComponentTypes.Count);
         AreEqual("Key: [Position]",             posType.key.ToString());
         AreEqual("Key: [Position, Rotation]",   posRotType.key.ToString());
     }

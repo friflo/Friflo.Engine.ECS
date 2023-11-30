@@ -94,7 +94,7 @@ public struct StructIndexesEnumerator
     public ComponentType Current {
         get {
             var schema = EntityStore.Static.EntitySchema;
-            return schema.structs[indexes.GetIndex(index)];
+            return schema.componentTypes[indexes.GetIndex(index)];
         }
     }
 

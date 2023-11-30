@@ -138,7 +138,7 @@ public sealed class EntitySchema
     internal int CheckStructIndex(Type structType, int structIndex)
     {
         if (structIndex >= maxStructIndex) {
-            string msg = $"number of structs exceed EntityStore.{nameof(maxStructIndex)}: {maxStructIndex}";
+            string msg = $"number of component types exceed EntityStore.{nameof(maxStructIndex)}: {maxStructIndex}";
             throw new InvalidOperationException(msg);
         }
         return structIndex;

@@ -44,9 +44,9 @@ public partial class EntityStoreBase
         return archetype;
     }
     
-    public Archetype FindArchetype(in ArchetypeStructs structs, in Tags tags) {
-        searchKey.structs   = structs;
-        searchKey.tags      = tags;
+    public Archetype FindArchetype(in ComponentTypes componentTypes, in Tags tags) {
+        searchKey.componentTypes    = componentTypes;
+        searchKey.tags              = tags;
         searchKey.CalculateHashCode();
         archSet.TryGetValue(searchKey, out var actualValue);
         return actualValue?.archetype;

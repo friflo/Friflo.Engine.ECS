@@ -8,47 +8,47 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch;
 
-public static class Test_ArchetypeStructs
+public static class Test_ComponentTypes
 {
     [Test]
-    public static void Test_ArchetypeStructs_basics()
+    public static void Test_ComponentTypes_basics()
     {
-        var twoStructs = ArchetypeStructs.Get<Position, Rotation>();
-        AreEqual("Structs: [Position, Rotation]",  twoStructs.ToString());
+        var twoStructs = ComponentTypes.Get<Position, Rotation>();
+        AreEqual("Components: [Position, Rotation]",  twoStructs.ToString());
         
-        var structs    = new ArchetypeStructs();
-        AreEqual("Structs: []",                    structs.ToString());
-        IsFalse(structs.Has<Position>());
-        IsFalse(structs.HasAll(twoStructs));
-        IsFalse(structs.HasAny(twoStructs));
+        var types    = new ComponentTypes();
+        AreEqual("Components: []",                    types.ToString());
+        IsFalse(types.Has<Position>());
+        IsFalse(types.HasAll(twoStructs));
+        IsFalse(types.HasAny(twoStructs));
         
-        structs.Add<Position>();
-        IsTrue (structs.Has<Position>());
-        IsFalse(structs.HasAll(twoStructs));
-        IsTrue (structs.HasAny(twoStructs));
+        types.Add<Position>();
+        IsTrue (types.Has<Position>());
+        IsFalse(types.HasAll(twoStructs));
+        IsTrue (types.HasAny(twoStructs));
         
-        AreEqual("Structs: [Position]",            structs.ToString());
+        AreEqual("Components: [Position]",            types.ToString());
         
-        structs.Add<Rotation>();
-        AreEqual("Structs: [Position, Rotation]",  structs.ToString());
-        IsTrue (structs.Has<Position, Rotation>());
-        IsFalse(structs.Has<Position, Rotation, Scale3>());
-        IsTrue (structs.HasAll(twoStructs));
-        IsTrue (structs.HasAny(twoStructs));
+        types.Add<Rotation>();
+        AreEqual("Components: [Position, Rotation]",  types.ToString());
+        IsTrue (types.Has<Position, Rotation>());
+        IsFalse(types.Has<Position, Rotation, Scale3>());
+        IsTrue (types.HasAll(twoStructs));
+        IsTrue (types.HasAny(twoStructs));
 
-        var copy = new ArchetypeStructs();
-        copy.Add(structs);
-        AreEqual("Structs: [Position, Rotation]",  copy.ToString());
+        var copy = new ComponentTypes();
+        copy.Add(types);
+        AreEqual("Components: [Position, Rotation]",  copy.ToString());
         
         copy.Remove<Position>();
-        AreEqual("Structs: [Rotation]",            copy.ToString());
+        AreEqual("Components: [Rotation]",            copy.ToString());
         
-        copy.Remove(structs);
-        AreEqual("Structs: []",                    copy.ToString());
+        copy.Remove(types);
+        AreEqual("Components: []",                    copy.ToString());
     }
     
     [Test]
-    public static void Test_ArchetypeStructs_Get()
+    public static void Test_ComponentTypes_Get()
     {
         var schema = EntityStore.GetEntitySchema();
         AreEqual(3, schema.EngineDependants.Length);
@@ -62,8 +62,8 @@ public static class Test_ArchetypeStructs
         
         var testStructType  = schema.ComponentTypeByType[typeof(Position)];
         
-        var struct1    = ArchetypeStructs.Get<Position>();
-        AreEqual("Structs: [Position]", struct1.ToString());
+        var struct1    = ComponentTypes.Get<Position>();
+        AreEqual("Components: [Position]", struct1.ToString());
         int count1 = 0;
         foreach (var structType in struct1) {
             AreSame(testStructType, structType);
@@ -72,20 +72,20 @@ public static class Test_ArchetypeStructs
         AreEqual(1, count1);
         
         var count2 = 0;
-        var struct2 = ArchetypeStructs.Get<Position, Rotation>();
-        AreEqual("Structs: [Position, Rotation]", struct2.ToString());
+        var struct2 = ComponentTypes.Get<Position, Rotation>();
+        AreEqual("Components: [Position, Rotation]", struct2.ToString());
         foreach (var _ in struct2) {
             count2++;
         }
         AreEqual(2, count2);
         
-        AreEqual(struct2, ArchetypeStructs.Get<Position, Rotation>());
+        AreEqual(struct2, ComponentTypes.Get<Position, Rotation>());
     }
     
     [Test]
-    public static void Test_ArchetypeStructs_Get_Mem()
+    public static void Test_ComponentTypes_Get_Mem()
     {
-        var struct1    = ArchetypeStructs.Get<Position>();
+        var struct1    = ComponentTypes.Get<Position>();
         foreach (var _ in struct1) { }
         
         // --- 1 struct
@@ -97,9 +97,9 @@ public static class Test_ArchetypeStructs
         Mem.AssertNoAlloc(start);
         AreEqual(1, count1);
         
-        // --- 2 structs
+        // --- 2 components
         start       = Mem.GetAllocatedBytes();
-        var struct2 = ArchetypeStructs.Get<Position, Rotation>();
+        var struct2 = ComponentTypes.Get<Position, Rotation>();
         var count2 = 0;
         foreach (var _ in struct2) {
             count2++;
@@ -109,10 +109,10 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeStructs_Enumerator_Reset()
+    public static void Test_ComponentTypes_Enumerator_Reset()
     {
-        var structs    = ArchetypeStructs.Get<Position>();
-        var enumerator = structs.GetEnumerator();
+        var types       = ComponentTypes.Get<Position>();
+        var enumerator  = types.GetEnumerator();
         while (enumerator.MoveNext()) { }
         enumerator.Reset();
         int count = 0;
@@ -124,9 +124,9 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeStructs_generic_IEnumerator()
+    public static void Test_ComponentTypes_generic_IEnumerator()
     {
-        IEnumerable<ComponentType> tags = ArchetypeStructs.Get<Position>();
+        IEnumerable<ComponentType> tags = ComponentTypes.Get<Position>();
         int count = 0;
         foreach (var _ in tags) {
             count++;
@@ -135,7 +135,7 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeStructs_Tags()
+    public static void Test_ComponentTypes_Tags()
     {
         var store       = new EntityStore();
         var type        = store.GetArchetype(Tags.Get<TestTag2, TestTag3>());
@@ -153,21 +153,21 @@ public static class Test_ArchetypeStructs
     }
     
     [Test]
-    public static void Test_ArchetypeStructs_lookup_structs_and_tags_Perf()
+    public static void Test_ComponentTypes_lookup_structs_and_tags_Perf()
     {
         var store   = new EntityStore();
         var type1   = store.GetArchetype(Signature.Get<Position>());
-        var result  = store.FindArchetype(type1.Structs, type1.Tags);
-        AreEqual(1, type1.Structs.Count);
+        var result  = store.FindArchetype(type1.ComponentTypes, type1.Tags);
+        AreEqual(1, type1.ComponentTypes.Count);
         AreSame (type1, result);
         
         var start   = Mem.GetAllocatedBytes();
-        var structs = type1.Structs;
+        var types   = type1.ComponentTypes;
         var tags    = type1.Tags;
         var count   = 10; // 100_000_000 ~ 1.707 ms
         for (int n = 0; n < count; n++)
         {
-            store.FindArchetype(structs, tags);
+            store.FindArchetype(types, tags);
         }
         Mem.AssertNoAlloc(start);
     }

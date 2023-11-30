@@ -17,57 +17,57 @@ namespace Friflo.Fliox.Engine.ECS;
 internal sealed class ArchetypeKey
 {
     // --- internal fields
-    internal                ArchetypeStructs    structs;    // 32   - components of an Archetype
-    internal                Tags                tags;       // 32   - tags of an Archetype
-    internal                int                 hash;       //  4   - hash code from structs & tags
-    internal readonly       Archetype           archetype;  //  8   - the result of a key lookup
+    internal                ComponentTypes  componentTypes; // 32   - components of an Archetype
+    internal                Tags            tags;           // 32   - tags of an Archetype
+    internal                int             hash;           //  4   - hash code from components & tags
+    internal readonly       Archetype       archetype;      //  8   - the result of a key lookup
 
-    public   override       string              ToString() => GetString();
+    public   override       string          ToString() => GetString();
     
     internal ArchetypeKey() { }
     
     internal ArchetypeKey(Archetype archetype) {
-        structs         = archetype.structs;
+        componentTypes  = archetype.componentTypes;
         tags            = archetype.tags;
-        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
+        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
         this.archetype  = archetype;
     }
     
     internal void Clear() {
-        structs = default;
-        tags    = default;
-        hash    = default;
+        componentTypes  = default;
+        tags            = default;
+        hash            = default;
     }
     
     internal void CalculateHashCode() {
-        hash    = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
+        hash    = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetTagsWith(in Tags tags, int structIndex) {
-        structs         = default;
-        structs.SetBit(structIndex);
+        componentTypes  = default;
+        componentTypes.SetBit(structIndex);
         this.tags       = tags;
-        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
+        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetSignatureTags(in SignatureIndexes indexes, in Tags tags) {
-        structs         = new ArchetypeStructs(indexes);
+        componentTypes  = new ComponentTypes(indexes);
         this.tags       = tags;
-        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
+        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetWith(Archetype archetype, int structIndex) {
-        structs         = archetype.structs;
-        structs.SetBit(structIndex);
+        componentTypes  = archetype.componentTypes;
+        componentTypes.SetBit(structIndex);
         tags            = archetype.tags;
-        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
+        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     internal void SetWithout(Archetype archetype, int structIndex) {
-        structs         = archetype.structs;
-        structs.ClearBit(structIndex);
+        componentTypes  = archetype.componentTypes;
+        componentTypes.ClearBit(structIndex);
         tags            = archetype.tags;
-        hash            = structs.bitSet.HashCode() ^ tags.bitSet.HashCode();
+        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
     private string GetString()
@@ -75,7 +75,7 @@ internal sealed class ArchetypeKey
         var sb = new StringBuilder();
         sb.Append("Key: [");
         var hasTypes = false;
-        foreach (var structType in structs) {
+        foreach (var structType in componentTypes) {
             sb.Append(structType.name);
             sb.Append(", ");
             hasTypes = true;
@@ -99,8 +99,8 @@ internal sealed class ArchetypeKeyEqualityComparer : IEqualityComparer<Archetype
     internal static readonly ArchetypeKeyEqualityComparer Instance = new ();
 
     public bool Equals(ArchetypeKey left, ArchetypeKey right) {
-        return left!.structs.bitSet.value   == right!.structs.bitSet.value &&
-               left!.tags.bitSet.value      == right!.tags.bitSet.value;
+        return left!.componentTypes.bitSet.value   == right!.componentTypes.bitSet.value &&
+               left!.tags.bitSet.value             == right!.tags.bitSet.value;
     }
 
     public int GetHashCode(ArchetypeKey key) {

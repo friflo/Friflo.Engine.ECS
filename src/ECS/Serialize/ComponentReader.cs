@@ -154,10 +154,10 @@ internal sealed class ComponentReader
     private void SetEntityArchetype(DataEntity dataEntity, Entity entity, EntityStoreBase store)
     {
         searchKey.Clear();
-        var hasStructComponent  = GetStructComponents(ref searchKey.structs);
+        var hasComponentTypes   = GetStructComponents(ref searchKey.componentTypes);
         var tags                = dataEntity.tags;
         var hasTags             = tags?.Count > 0;
-        if (!hasStructComponent && !hasTags) {
+        if (!hasComponentTypes && !hasTags) {
             return; // early out in absence of components and tags
         }
         unresolvedTagList.Clear();
@@ -213,7 +213,7 @@ internal sealed class ComponentReader
         }
     }
     
-    private bool GetStructComponents(ref ArchetypeStructs structs)
+    private bool GetStructComponents(ref ComponentTypes componentTypes)
     {
         var hasStructComponent  = false;
         var count               = componentCount;
@@ -224,7 +224,7 @@ internal sealed class ComponentReader
             if (schemaType == null) {
                 // case: unresolved component
                 hasStructComponent = true;
-                structs.SetBit(unresolvedType.structIndex);
+                componentTypes.SetBit(unresolvedType.structIndex);
                 component.schemaType = unresolvedType;
                 continue;
             }
@@ -233,7 +233,7 @@ internal sealed class ComponentReader
             {
                 var componentType = (ComponentType)schemaType;
                 hasStructComponent = true;
-                structs.SetBit(componentType.structIndex);
+                componentTypes.SetBit(componentType.structIndex);
             }                
         }
         return hasStructComponent;
@@ -290,7 +290,7 @@ internal sealed class ComponentReader
     {
         foreach (var tag in tagList) {
             if (!tagTypeByName.TryGetValue(tag, out var tagType)) {
-                archetypeKey.structs.SetBit(unresolvedType.structIndex);
+                archetypeKey.componentTypes.SetBit(unresolvedType.structIndex);
                 unresolvedTagList.Add(tag);
                 continue;
             }

@@ -28,7 +28,7 @@ internal static class SchemaUtils
         }
         Console.WriteLine(assemblyLoader);
         
-        var structs     = new List<ComponentType>();
+        var components  = new List<ComponentType>();
         var scripts     = new List<ScriptType>();
         var tags        = new List<TagType>();
         foreach (var dependant in dependants)
@@ -36,13 +36,13 @@ internal static class SchemaUtils
             foreach (var type in dependant.Types)
             {
                 switch (type.kind) {
-                    case SchemaTypeKind.Script:      scripts.Add((ScriptType)    type);  break;
-                    case SchemaTypeKind.Component:   structs.Add((ComponentType) type);  break;
-                    case SchemaTypeKind.Tag:         tags.   Add((TagType)       type);  break;
+                    case SchemaTypeKind.Script:      scripts.   Add((ScriptType)    type);  break;
+                    case SchemaTypeKind.Component:   components.Add((ComponentType) type);  break;
+                    case SchemaTypeKind.Tag:         tags.      Add((TagType)       type);  break;
                 }
             }
         }
-        return new EntitySchema(dependants, structs, scripts, tags);
+        return new EntitySchema(dependants, components, scripts, tags);
     }
     
     internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore)
