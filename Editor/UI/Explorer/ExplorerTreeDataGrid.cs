@@ -190,6 +190,12 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 ExplorerCommands.CopyItems(GetSelectedItems(), this);
                 return true;
+            case Key.D:
+                if (e.KeyModifiers != ctrlKey) {
+                    return false;
+                }
+                ExplorerCommands.DuplicateItems(GetSelectedItems(), this);
+                return true;
             case Key.Delete:
                 ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem, this);
                 return true;

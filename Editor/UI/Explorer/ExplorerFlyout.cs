@@ -62,12 +62,13 @@ public class ExplorerFlyout : MenuFlyout
         MoveSelection   moveSelection,
         ExplorerItem    rootItem)
     {
-        RenameEntity    (selectedItems);
+        RenameEntity        (selectedItems);
+        DuplicateEntities   (selectedItems);
         Items.Add(new Separator());
         
-        CopyEntities    (selectedItems);
-        DeleteEntity    (selectedItems, rootItem);
-        NewEntity       (selectedItems);
+        CopyEntities        (selectedItems);
+        DeleteEntity        (selectedItems, rootItem);
+        NewEntity           (selectedItems);
         
         if (moveSelection != null) {
             Items.Add(new Separator());
@@ -82,6 +83,15 @@ public class ExplorerFlyout : MenuFlyout
         var menu            = new MenuItem { Header = "Rename", IsEnabled = canRename };
         menu.InputGesture   = new KeyGesture(Key.F2);
         menu.Click += (_, _) => ExplorerCommands.RenameEntity(grid);
+        Items.Add(menu);
+    }
+    
+    private void DuplicateEntities(ExplorerItem[] items)
+    {
+        var canDuplicate    = items.Length == 1;
+        var menu            = new MenuItem { Header = "Duplicate", IsEnabled = canDuplicate };
+        menu.InputGesture   = new KeyGesture(Key.D, KeyModifiers.Control);
+        menu.Click += (_, _) => ExplorerCommands.DuplicateItems(items, grid);
         Items.Add(menu);
     }
     

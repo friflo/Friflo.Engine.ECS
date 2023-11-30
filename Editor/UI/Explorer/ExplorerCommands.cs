@@ -38,6 +38,20 @@ public static class ExplorerCommands
         beginEdit!.Invoke(cell, BindingFlags.Instance | BindingFlags.Public, null, null, null);
     }
     
+    internal static void DuplicateItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
+    {
+        var entities    = items.Select(item => item.Entity).ToList();
+        Console.WriteLine("Duplicate");
+        /*
+        var serializer  = new EntitySerializer();
+        var stream      = new MemoryStream();
+        serializer.WriteEntities(entities, stream);
+        var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+        EditorUtils.CopyToClipboard(grid, text);
+        */
+        grid.FocusPanel();
+    }
+    
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         var entities    = items.Select(item => item.Entity).ToList();
