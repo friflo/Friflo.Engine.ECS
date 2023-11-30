@@ -23,7 +23,9 @@ public partial class InspectorComponent : UserControl, IExpandable
     public Entity           Entity          { get; set; }
     public ComponentType    ComponentType   { get; init; }
     public ScriptType       ScriptType      { get; init; }
-    
+
+    public override string  ToString()      => $"Title: {ComponentTitle}, Expanded: {Expanded}, IsVisible: {IsVisible}";
+
     public InspectorComponent()
     {
         InitializeComponent();

@@ -13,14 +13,14 @@ namespace Friflo.Fliox.Editor.UI.Inspector;
 
 internal readonly struct ComponentItem
 {
-    internal readonly   InspectorComponent  control;
-    internal readonly   Panel               panel;
+    internal readonly   InspectorComponent  inspectorComponent;
+    internal readonly   Panel               componentPanel;
     internal readonly   ComponentField[]    fields;
     
-    internal ComponentItem(InspectorComponent control, Panel panel, ComponentField[] fields) {
-        this.control    = control;
-        this.panel      = panel;
-        this.fields     = fields;
+    internal ComponentItem(InspectorComponent inspectorComponent, Panel componentPanel, ComponentField[] fields) {
+        this.inspectorComponent = inspectorComponent;
+        this.componentPanel     = componentPanel;
+        this.fields             = fields;
     }
 } 
 
@@ -131,10 +131,10 @@ internal class InspectorObserver : EditorObserver
             }          
             var instance = Entity.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
             ComponentField.SetComponentFields(item.fields, entity, instance);
-            item.control.Entity = entity;
+            item.inspectorComponent.Entity = entity;
             
-            controlList.Add(item.control);
-            controlList.Add(item.panel);
+            controlList.Add(item.inspectorComponent);
+            controlList.Add(item.componentPanel);
         }
         inspector.ComponentGroup.GroupAdd.Entity = entity;
         UpdateControls(controls);
@@ -163,10 +163,10 @@ internal class InspectorObserver : EditorObserver
                 scriptMap.Add(type, item);
             }
             ComponentField.SetScriptFields(item.fields, script);
-            item.control.Entity = entity;
+            item.inspectorComponent.Entity = entity;
             
-            controlList.Add(item.control);
-            controlList.Add(item.panel);
+            controlList.Add(item.inspectorComponent);
+            controlList.Add(item.componentPanel);
         }
         inspector.ScriptGroup.GroupAdd.Entity = entity;
         UpdateControls(controls);
@@ -200,18 +200,39 @@ internal class InspectorObserver : EditorObserver
         return controls;
     }
     
+    /// <remarks>
+    /// <see cref="controlList"/> items layout
+    /// <code>
+    ///     [0] InspectorComponent
+    ///     [1] Panel
+    ///     [2] InspectorComponent
+    ///     [3] Panel
+    ///     ...
+    /// </code>
+    /// </remarks>
     private void UpdateControls(Controls controls)
     {
         controlSet.Clear();
         foreach (var control in controls) {
             controlSet.Add(control);
         }
+        InspectorComponent inspectorComponent = null; 
         foreach (var control in controlList)
         {
+            bool isInspectorComponent = false;
+            if (control is InspectorComponent component) {
+                inspectorComponent      = component;
+                isInspectorComponent    = true;
+            }
             if (control.Parent == null) {
                 controls.Add(control);
             } else {
-                control.IsVisible = true;
+                if (isInspectorComponent) {
+                    inspectorComponent.IsVisible = true;
+                } else {
+                    // case: control is componentPanel
+                    control.IsVisible = inspectorComponent!.Expanded;
+                }
             }
             controlSet.Remove(control);
         }
