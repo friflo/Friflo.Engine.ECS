@@ -80,7 +80,7 @@ public partial class EntityStore
             foreach (var script in scripts) {
                 var scriptType  = scriptTypeByType[script.GetType()];
                 var clone       = scriptType.CloneScript(script);
-                Entity.AddEntityScript2(entity, scriptType, clone);
+                entity.archetype.entityStore.AddScript(entity, clone, scriptType);
             }
         } else {
             // --- serialize entity

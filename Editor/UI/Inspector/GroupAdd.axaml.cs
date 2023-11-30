@@ -73,7 +73,7 @@ public partial class GroupAdd : UserControl
                 break;
             case "scripts":
                 var scriptType = schema.Scripts[index];
-                Entity.AddEntityScript(Entity, scriptType);
+                Entity.AddNewEntityScript(Entity, scriptType);
                 break;
         }
     }

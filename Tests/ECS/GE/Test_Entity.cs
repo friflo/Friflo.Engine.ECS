@@ -18,7 +18,7 @@ public static class Test_Entity
         var schema      = EntityStore.GetEntitySchema();
         var scriptType  = schema.ScriptTypeByType[typeof(TestScript1)];
         
-        Entity.AddEntityScript(entity, scriptType);
+        Entity.AddNewEntityScript(entity, scriptType);
         var script = Entity.GetEntityScript(entity, scriptType);
         AreEqual(1,                     entity.Scripts.Length);
         AreSame(typeof(TestScript1),    script.GetType());

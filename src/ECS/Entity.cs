@@ -261,7 +261,7 @@ public sealed class Entity
         return result != null;
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="AddEntityScript"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="AddNewEntityScript"/> as non generic alternative</remarks>
     public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript    (this, ClassType<T>.ScriptIndex, script);
     
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
@@ -384,11 +384,12 @@ public sealed class Entity
     
 #region non generic script methods
     public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript       (entity, scriptType.type);
+    
     public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScriptType(entity, scriptType);
-    public static Script AddEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.AddScriptType   (entity, scriptType);
-    public static Script AddEntityScript2   (Entity entity, ScriptType scriptType, Script script) {
-        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
-    }
+    
+    public static Script AddNewEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.AddNewScript    (entity, scriptType);
+    
+    public static Script AddEntityScript    (Entity entity, Script script)         => EntityUtils.AddScript       (entity, script);
 
     #endregion
 }
