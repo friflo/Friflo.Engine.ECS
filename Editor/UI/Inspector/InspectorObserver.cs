@@ -60,9 +60,8 @@ internal class InspectorObserver : EditorObserver
         if (id != entityId) {
             return;
         }
-        var entity = Store.GetNodeById(id).Entity;
         EditorUtils.Post(() => {
-            SetEntity(entity);
+            SetEntity(id);
         });
     }
     
@@ -71,8 +70,7 @@ internal class InspectorObserver : EditorObserver
             return;
         }
         // could Post() change event
-        var entity = Store.GetNodeById(entityId).Entity;
-        SetEntity(entity);
+        SetEntity(entityId);
     }
 
     protected override void OnSelectionChanged(in EditorSelection selection)
@@ -82,13 +80,14 @@ internal class InspectorObserver : EditorObserver
         if (entity == null) {
             return;
         }
-        SetEntity(entity);
+        SetEntity(entity.Id);
     }
     
-    private void SetEntity(Entity entity)
+    private void SetEntity(int id)
     {
         // Console.WriteLine($"--- Inspector entity: {entity}");
-        entityId                = entity.Id;
+        entityId                = id;
+        var entity              = Store.GetNodeById(id).Entity;
         var archetype           = entity.Archetype;
         var model               = inspector.model;
         model.TagCount          = archetype.Tags.Count;
