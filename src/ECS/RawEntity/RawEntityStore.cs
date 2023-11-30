@@ -112,7 +112,7 @@ public sealed class RawEntityStore : EntityStoreBase
 
 #region components
     public int GetEntityComponentCount(int id) {
-        return archs[entities[id].archIndex].structCount;
+        return archs[entities[id].archIndex].componentCount;
     }
     
     public ref T GetEntityComponent<T>(int id)

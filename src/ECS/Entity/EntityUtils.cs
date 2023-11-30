@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 internal static class EntityExtensions
 {
     internal static int ComponentCount (this Entity entity) {
-        return entity.archetype.structCount + entity.Scripts.Length;
+        return entity.archetype.componentCount + entity.Scripts.Length;
     }
 }
     
@@ -80,7 +80,7 @@ internal static class EntityUtils
     internal static IComponent[] GetComponentsDebug(Entity entity)
     {
         var archetype   = entity.archetype;
-        var count       = archetype.structCount;
+        var count       = archetype.componentCount;
         if (count == 0) {
             return EmptyComponents;
         }

@@ -33,7 +33,7 @@ public partial class EntityStoreBase
             componentTypes.Add(schema.components[heap.structIndex]);
         }
         componentTypes.Add(schema.components[structIndex]);
-        var archetype = Archetype.CreateWithStructTypes(config, componentTypes, current.tags);
+        var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags);
         AddArchetype(archetype);
         return archetype;
     }
@@ -54,7 +54,7 @@ public partial class EntityStoreBase
                 continue;
             componentTypes.Add(schema.components[heap.structIndex]);
         }
-        var result = Archetype.CreateWithStructTypes(config, componentTypes, archetype.tags);
+        var result = Archetype.CreateWithComponentTypes(config, componentTypes, archetype.tags);
         AddArchetype(result);
         return result;
     }
@@ -68,7 +68,7 @@ public partial class EntityStoreBase
         foreach (var heap in heaps) {
             componentTypes.Add(schema.components[heap.structIndex]);
         }
-        var result = Archetype.CreateWithStructTypes(config, componentTypes, tags);
+        var result = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
         AddArchetype(result);
         return result;
     }

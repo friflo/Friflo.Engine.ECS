@@ -19,7 +19,7 @@ public sealed class Archetype
 #region     public properties
     /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
-    [Browse(Never)] public              int                 ComponentCount  => structCount;
+    [Browse(Never)] public              int                 ComponentCount  => componentCount;
                     public              int                 Capacity        => memory.capacity;
 
     /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
@@ -47,7 +47,7 @@ public sealed class Archetype
     [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
                     private             ChunkMemory         memory;         // 16       - count & length used to store components in chunks  
     // --- internal
-    [Browse(Never)] internal readonly   int                 structCount;    //  4       - number of component types
+    [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
     [Browse(Never)] internal readonly   ComponentTypes      componentTypes; // 32       - component types of archetype
     [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
     [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
@@ -89,14 +89,14 @@ public sealed class Archetype
         store           = config.store;
         entityStore     = store as EntityStore;
         archIndex       = config.archetypeIndex;
-        structCount     = heaps.Length;
+        componentCount  = heaps.Length;
         structHeaps     = heaps;
         entityIds       = new int [1];
         heapMap         = new StructHeap[config.maxStructIndex];
         componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
         key             = new ArchetypeKey(this);
-        for (int pos = 0; pos < structCount; pos++)
+        for (int pos = 0; pos < componentCount; pos++)
         {
             var heap = heaps[pos];
             heap.SetArchetypeDebug(this);
@@ -137,7 +137,7 @@ public sealed class Archetype
     /// Is called by methods using a set of arbitrary struct <see cref="SchemaType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
     /// </remarks>
-    internal static Archetype CreateWithStructTypes(in ArchetypeConfig config, List<ComponentType> componentTypes, in Tags tags)
+    internal static Archetype CreateWithComponentTypes(in ArchetypeConfig config, List<ComponentType> componentTypes, in Tags tags)
     {
         var length          = componentTypes.Count;
         var componentHeaps  = new StructHeap[length];

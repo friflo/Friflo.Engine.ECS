@@ -154,7 +154,7 @@ internal sealed class ComponentReader
     private void SetEntityArchetype(DataEntity dataEntity, Entity entity, EntityStoreBase store)
     {
         searchKey.Clear();
-        var hasComponentTypes   = GetStructComponents(ref searchKey.componentTypes);
+        var hasComponentTypes   = GetComponentTypes(ref searchKey.componentTypes);
         var tags                = dataEntity.tags;
         var hasTags             = tags?.Count > 0;
         if (!hasComponentTypes && !hasTags) {
@@ -213,9 +213,9 @@ internal sealed class ComponentReader
         }
     }
     
-    private bool GetStructComponents(ref ComponentTypes componentTypes)
+    private bool GetComponentTypes(ref ComponentTypes componentTypes)
     {
-        var hasStructComponent  = false;
+        var hasComponentTypes   = false;
         var count               = componentCount;
         for (int n = 0; n < count; n++)
         {
@@ -223,7 +223,7 @@ internal sealed class ComponentReader
             schemaTypeByKey.TryGetValue(component.key, out var schemaType);
             if (schemaType == null) {
                 // case: unresolved component
-                hasStructComponent = true;
+                hasComponentTypes = true;
                 componentTypes.SetBit(unresolvedType.structIndex);
                 component.schemaType = unresolvedType;
                 continue;
@@ -232,11 +232,11 @@ internal sealed class ComponentReader
             if (schemaType.kind == SchemaTypeKind.Component)
             {
                 var componentType = (ComponentType)schemaType;
-                hasStructComponent = true;
+                hasComponentTypes = true;
                 componentTypes.SetBit(componentType.structIndex);
             }                
         }
-        return hasStructComponent;
+        return hasComponentTypes;
     }
     
     private Archetype FindArchetype(ArchetypeKey searchKey, EntityStoreBase store)
@@ -255,7 +255,7 @@ internal sealed class ComponentReader
         if (unresolvedTagList.Count > 0) {
             componentTypes.Add(unresolvedType);
         }
-        var newArchetype = Archetype.CreateWithStructTypes(config, componentTypes, searchKey.tags);
+        var newArchetype = Archetype.CreateWithComponentTypes(config, componentTypes, searchKey.tags);
         store.AddArchetype(newArchetype);
         return newArchetype;
     }

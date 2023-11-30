@@ -75,8 +75,8 @@ internal sealed class ArchetypeKey
         var sb = new StringBuilder();
         sb.Append("Key: [");
         var hasTypes = false;
-        foreach (var structType in componentTypes) {
-            sb.Append(structType.name);
+        foreach (var componentType in componentTypes) {
+            sb.Append(componentType.name);
             sb.Append(", ");
             hasTypes = true;
         }
