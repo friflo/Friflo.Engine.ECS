@@ -90,6 +90,7 @@ internal class InspectorObserver : EditorObserver
         var entity              = Store.GetNodeById(id).Entity;
         var archetype           = entity.Archetype;
         var model               = inspector.model;
+        model.EntityId          = id;
         model.TagCount          = archetype.Tags.Count;
         model.ComponentCount    = archetype.ComponentTypes.Count;
         model.ScriptCount       = entity.Scripts.Length;

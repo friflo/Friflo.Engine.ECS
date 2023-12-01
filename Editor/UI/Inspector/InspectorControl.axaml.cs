@@ -30,6 +30,7 @@ public partial class InspectorControl : UserControl
         base.OnLoaded(e);
         // designer example data
         if (EditorUtils.IsDesignMode) {
+            model.EntityId          = 123456789;
             model.TagCount          = 4;
             model.ComponentCount    = 3;
             model.ScriptCount       = 1;

@@ -8,8 +8,16 @@
              x:DataType     ="inspector:InspectorControlModel">
 
     <DockPanel>
-    <Border Height="1" DockPanel.Dock="Top" Background="{DynamicResource PanelBackground}"/>
-    
+        
+    <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+        <TextBlock Text="id" Margin="10 0"
+                   Foreground="{DynamicResource GroupColor}"/>
+        <TextBox Text="{Binding EntityId}" IsReadOnly="True" Width="80"
+                 Margin="0" Padding="3 0" MinHeight="1" MaxHeight="22" BorderThickness="0"
+                 Foreground="{DynamicResource GroupColor}"/>
+    </StackPanel>
+    <Border DockPanel.Dock="Top" Height="1"  Background="{DynamicResource FromBackground}"/>
+        
     <ScrollViewer>
     <StackPanel>
         
