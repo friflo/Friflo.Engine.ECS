@@ -30,6 +30,8 @@
 
 ## Build Editor
 
+The Editor can be build and launched on Windows, macOS (both tested) and Linux (untested).
+
 ### Dependency
 
 **.NET SDK 7.0**  
