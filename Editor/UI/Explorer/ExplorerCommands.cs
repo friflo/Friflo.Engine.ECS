@@ -14,7 +14,6 @@ using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
 // ReSharper disable HeuristicUnreachableCode
-// ReSharper disable ParameterTypeCanBeEnumerable.Global
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
 public static class ExplorerCommands
@@ -66,27 +65,35 @@ public static class ExplorerCommands
         grid.FocusPanel();
     }
     
-    private static JsonValue CopyEntities(List<Entity> entities)
+    private static JsonValue CopyEntities(IEnumerable<Entity> entities)
     {
         var stream      = new MemoryStream();
         var serializer  = new EntitySerializer();
-        var entityTrees = new List<Entity>();
+        var treeList    = new List<Entity>();
+        var treeSet     = new HashSet<Entity>();
+
         foreach (var entity in entities)
         {
-            entityTrees.Add(entity);
-            AddChildren(entity, entityTrees);
+            if (!treeSet.Add(entity)) {
+                continue;
+            }
+            treeList.Add(entity);
+            AddChildren(entity, treeList, treeSet);
         }
-        serializer.WriteEntities(entityTrees, stream);
+        serializer.WriteEntities(treeList, stream);
     
         return new JsonValue(stream.GetBuffer(), 0, (int)stream.Length);
     }
     
-    private static void AddChildren(Entity entity, List<Entity> entityTrees)
+    private static void AddChildren(Entity entity, List<Entity> list, HashSet<Entity> set)
     {
         foreach (var childNode in entity.ChildNodes) {
             var child = childNode.Entity;
-            entityTrees.Add(child);
-            AddChildren(child, entityTrees);
+            if (!set.Add(child)) {
+                continue;
+            }
+            list.Add(child);
+            AddChildren(child, list, set);
         }
     }
     
