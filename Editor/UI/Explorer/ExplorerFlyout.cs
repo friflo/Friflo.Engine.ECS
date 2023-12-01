@@ -64,11 +64,11 @@ public class ExplorerFlyout : MenuFlyout
     {
         RenameEntity        (selectedItems);
         DuplicateEntities   (selectedItems);
+        DeleteEntities      (selectedItems, rootItem);
         Items.Add(new Separator());
         
         CopyEntities        (selectedItems);
         PasteEntities       (selectedItems);
-        DeleteEntity        (selectedItems, rootItem);
         NewEntity           (selectedItems);
         
         if (moveSelection != null) {
@@ -114,11 +114,11 @@ public class ExplorerFlyout : MenuFlyout
         Items.Add(menu);
     }
     
-    private void DeleteEntity(ExplorerItem[] items, ExplorerItem rootItem)
+    private void DeleteEntities(ExplorerItem[] items, ExplorerItem rootItem)
     {
         var isRootItem      = items.Length == 1 && items[0] == rootItem;
         var canDelete       = isRootItem ? items.Length > 1 : items.Length > 0;
-        var menu            = new MenuItem { Header = "Delete entity", IsEnabled = canDelete };
+        var menu            = new MenuItem { Header = "Delete", IsEnabled = canDelete };
         menu.InputGesture   = new KeyGesture(Key.Delete);
         if (canDelete) {
             menu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem, grid);
