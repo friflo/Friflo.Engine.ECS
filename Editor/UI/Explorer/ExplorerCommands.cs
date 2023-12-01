@@ -121,6 +121,7 @@ public static class ExplorerCommands
         if (result.error != null) {
             return;
         }
+        var childEntities   = new HashSet<long>(dataEntities.Count);
         var pidMap          = new Dictionary<long, long>();
         var store           = targetEntity.Store;
         foreach (var dataEntity in dataEntities)
@@ -134,11 +135,13 @@ public static class ExplorerCommands
         foreach (var dataEntity in dataEntities)
         {
             var children = dataEntity.children;
+            dataEntity.children = null;
             if (children != null) {
                 for (int n = 0; n < children.Count; n++) {
                     var oldPid  = children[n];
                     if (pidMap.TryGetValue(oldPid, out long newPid)) {
-                        children[n] = newPid;    
+                        children[n] = newPid;
+                        childEntities.Add(newPid);
                         continue;
                     }
                     var missingChild    = store.CreateEntity();
@@ -146,16 +149,25 @@ public static class ExplorerCommands
                     var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
                     children[n]         = missingChildPid;
                     pidMap[oldPid]      = missingChildPid;
+                    childEntities.Add(missingChildPid);
                 }
             }
             var entity = converter.DataEntityToEntity(dataEntity, store, out _);
-            
             if (children != null) {
                 foreach (var childPid in children) {
                     var child = store.GetNodeByPid(childPid).Entity;
                     entity.AddChild(child);
                 }
             }
+        }
+        // --- add all root entities to target
+        foreach (var dataEntity in dataEntities)
+        {
+            var pid = dataEntity.pid;
+            if (childEntities.Contains(pid)) {
+                continue;
+            }
+            var entity = store.GetNodeByPid(pid).Entity;
             targetEntity.AddChild(entity);
         }
     }
