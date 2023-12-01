@@ -109,8 +109,13 @@ public static class ExplorerCommands
         grid.FocusPanel();
     }
     
+    /// <remarks>
+    /// When pasting the <param name="jsonArray"/> to the <param name="targetEntity"/>
+    /// the order of JSON objects in the array is not relevant. 
+    /// </remarks>
     private static void PasteEntities(Entity targetEntity, JsonValue jsonArray)
     {
+        // --- convert JSON array to DataEntity's
         var serializer      = new EntitySerializer();
         var stream          = new MemoryStream(jsonArray.Count);
         stream.Write(jsonArray.AsReadOnlySpan());
@@ -119,11 +124,14 @@ public static class ExplorerCommands
         var result          = serializer.ReadEntities(dataEntities, stream);
         // Console.WriteLine($"Paste - entities: {result.entityCount}, error: {result.error}");
         if (result.error != null) {
+            Console.Error.WriteLine($"Paste error: {result.error}");
             return;
         }
         var childEntities   = new HashSet<long>(dataEntities.Count);
         var pidMap          = new Dictionary<long, long>();
         var store           = targetEntity.Store;
+        
+        // --- create a new Entity for every DataEntity in the store
         foreach (var dataEntity in dataEntities)
         {
             var entity              = store.CreateEntity();
@@ -132,32 +140,30 @@ public static class ExplorerCommands
             dataEntity.pid          = newPid;
         }
         var converter = EntityConverter.Default;
+        
+        // --- convert each DataEntity into an Entity's created above
+        //     replace children pid's with their new pid
         foreach (var dataEntity in dataEntities)
         {
             var children = dataEntity.children;
             dataEntity.children = null;
-            if (children != null) {
-                for (int n = 0; n < children.Count; n++) {
-                    var oldPid  = children[n];
-                    if (pidMap.TryGetValue(oldPid, out long newPid)) {
-                        children[n] = newPid;
-                        childEntities.Add(newPid);
-                        continue;
-                    }
-                    var missingChild    = store.CreateEntity();
-                    missingChild.AddComponent(new EntityName($"missing entity - pid: {oldPid}"));
-                    var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
-                    children[n]         = missingChildPid;
-                    pidMap[oldPid]      = missingChildPid;
-                    childEntities.Add(missingChildPid);
-                }
+            converter.DataEntityToEntity(dataEntity, store, out _);
+            
+            ReplaceChildrenPids(children, pidMap, store);
+            dataEntity.children = children;
+        }
+        // --- add child entities to their parent entity
+        foreach (var dataEntity in dataEntities)
+        {
+            var entity      = store.GetNodeByPid(dataEntity.pid).Entity;
+            var children    = dataEntity.children;
+            if (children == null) {
+                continue;
             }
-            var entity = converter.DataEntityToEntity(dataEntity, store, out _);
-            if (children != null) {
-                foreach (var childPid in children) {
-                    var child = store.GetNodeByPid(childPid).Entity;
-                    entity.AddChild(child);
-                }
+            foreach (var childPid in children) {
+                childEntities.Add(childPid);
+                var child = store.GetNodeByPid(childPid).Entity;
+                entity.AddChild(child);
             }
         }
         // --- add all root entities to target
@@ -169,6 +175,27 @@ public static class ExplorerCommands
             }
             var entity = store.GetNodeByPid(pid).Entity;
             targetEntity.AddChild(entity);
+        }
+    }
+    
+    private static void ReplaceChildrenPids(List<long> children, Dictionary<long, long> pidMap, EntityStore store)
+    {
+        if (children == null) {
+            return;
+        }
+        // replace each child pid with its new pid
+        for (int n = 0; n < children.Count; n++)
+        {
+            var oldPid  = children[n];
+            if (pidMap.TryGetValue(oldPid, out long newPid)) {
+                children[n] = newPid;
+                continue;
+            }
+            var missingChild    = store.CreateEntity();
+            missingChild.AddComponent(new EntityName($"missing entity - pid: {oldPid}"));
+            var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
+            children[n]         = missingChildPid;
+            pidMap[oldPid]      = missingChildPid;
         }
     }
     
