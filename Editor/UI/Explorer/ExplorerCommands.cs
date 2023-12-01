@@ -70,10 +70,24 @@ public static class ExplorerCommands
     {
         var stream      = new MemoryStream();
         var serializer  = new EntitySerializer();
-        
-        serializer.WriteEntities(entities, stream);
+        var entityTrees = new List<Entity>();
+        foreach (var entity in entities)
+        {
+            entityTrees.Add(entity);
+            AddChildren(entity, entityTrees);
+        }
+        serializer.WriteEntities(entityTrees, stream);
     
         return new JsonValue(stream.GetBuffer(), 0, (int)stream.Length);
+    }
+    
+    private static void AddChildren(Entity entity, List<Entity> entityTrees)
+    {
+        foreach (var childNode in entity.ChildNodes) {
+            var child = childNode.Entity;
+            entityTrees.Add(child);
+            AddChildren(child, entityTrees);
+        }
     }
     
     internal static async void PasteItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
@@ -157,7 +171,7 @@ public static class ExplorerCommands
             var parent      = item.Entity;
             var newEntity   = parent.Store.CreateEntity();
             Log(() => $"parent id: {parent.Id} - CreateEntity id: {newEntity.Id}");
-            newEntity.AddComponent(new EntityName($"new entity-{newEntity.Id}"));
+            newEntity.AddComponent(new EntityName($"entity"));
             parent.AddChild(newEntity);
         }
         grid.FocusPanel();
