@@ -59,6 +59,17 @@ public static class EditorUtils
         // clipboard.SetDataObjectAsync(dataObject);
     }
     
+    public static async Task<string> GetClipboardText(Visual visual)
+    {
+        var clipboard = TopLevel.GetTopLevel(visual)?.Clipboard;
+        if (clipboard == null) {
+            // ReSharper disable once MethodHasAsyncOverload
+            Console.Error.WriteLine("GetClipboardText() error: clipboard is null");
+            return null;
+        }
+        return await clipboard.GetTextAsync();
+    }
+    
     internal static T FindAncestor<T>(StyledElement control) where T : Control
     {
         while (control != null) {

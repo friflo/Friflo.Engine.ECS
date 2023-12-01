@@ -67,9 +67,21 @@ public static class ExplorerCommands
         grid.FocusPanel();
     }
     
-    internal static void PasteItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
+    internal static async void PasteItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
-        Console.WriteLine("Paste");
+        var text = await EditorUtils.GetClipboardText(grid);
+        if (text != null) {
+            var serializer  = new EntitySerializer();
+            var utf8        = Encoding.UTF8.GetBytes(text);
+            var stream      = new MemoryStream(utf8.Length);
+            stream.Write(utf8, 0, utf8.Length);
+            stream.Position = 0;
+            var entities    = new List<DataEntity>();
+            var result      = serializer.ReadEntities(entities, stream);
+            if (result.error == null) {
+                
+            }
+        }
         grid.FocusPanel();
     }
     

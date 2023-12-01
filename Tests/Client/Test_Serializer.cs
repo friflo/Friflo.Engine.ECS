@@ -255,7 +255,7 @@ public static class Test_Serializer
         IsNull(result.error);
     }
     
-    /// <summary>Cover <see cref="EntitySerializer.ReadSync"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadIntoStoreSync"/></summary>
     [Test]
     public static void Test_Serializer_Read_error_ReadSync()
     {
@@ -287,7 +287,7 @@ public static class Test_Serializer
         AreEqual("unexpected character > expect key. Found: x path: '[0]' at position: 4", result.error);
     }
     
-    /// <summary>Cover <see cref="EntitySerializer.ReadEntities"/></summary>
+    /// <summary>Cover <see cref="EntitySerializer.ReadEntitiesArrayIntoStore"/></summary>
     [Test]
     public static void Test_Serializer_Read_error_ReadEntities()
     {

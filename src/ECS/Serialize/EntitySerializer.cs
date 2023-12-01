@@ -33,17 +33,18 @@ public class EntitySerializer
     private             int                 readEntityCount;
     private             JsonValue           readJson;
     private             byte[]              readBuffer;
-    private readonly    DataEntity          readEntity;
+    private readonly    DataEntity          readEntityBuffer;
+    private             DataEntity          readEntity;
     #endregion
     
 #region constructor
     public EntitySerializer()
     {
-        converter       = new EntityConverter();
-        componentBuf    = new Bytes(32);
-        readEntity      = new DataEntity {
-            children        = new List<long>(),
-            tags            = new List<string>()
+        converter           = new EntityConverter();
+        componentBuf        = new Bytes(32);
+        readEntityBuffer    = new DataEntity {
+            children            = new List<long>(),
+            tags                = new List<string>()
         };
         writeEntity      = new DataEntity();
     }
@@ -158,7 +159,7 @@ public class EntitySerializer
 
     #endregion
     
-#region read entities
+#region read entities into store
     private MemoryStream CreateReadBuffers(Stream stream) {
         readBuffer ??= new byte[16*1024];
         int capacity = 0;
@@ -172,30 +173,30 @@ public class EntitySerializer
     public async Task<ReadResult> ReadIntoStoreAsync(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
-            return ReadSync(store, memoryStream);
+            return ReadIntoStoreSync(store, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
         int read;
         while((read = await stream.ReadAsync(readBuffer)) > 0) {
             readStream.Write (readBuffer, 0, read);
         }
-        return ReadSync(store, readStream);
+        return ReadIntoStoreSync(store, readStream);
     }
     
     public ReadResult ReadIntoStore(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
-            return ReadSync(store, memoryStream);
+            return ReadIntoStoreSync(store, memoryStream);
         }
         var readStream = CreateReadBuffers(stream);
         int read;
         while((read = stream.Read (readBuffer)) > 0) {
             readStream.Write(readBuffer, 0, read);
         }
-        return ReadSync(store, readStream);
+        return ReadIntoStoreSync(store, readStream);
     }
 
-    private ReadResult ReadSync(EntityStore store, MemoryStream memoryStream)
+    private ReadResult ReadIntoStoreSync(EntityStore store, MemoryStream memoryStream)
     {
         try {
             readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
@@ -205,7 +206,7 @@ public class EntitySerializer
             switch (ev)
             {
                 case JsonEvent.ArrayStart:
-                    ev = ReadEntities(store);
+                    ev = ReadEntitiesArrayIntoStore(store);
                     if (ev == JsonEvent.Error) {
                         return new ReadResult(readEntityCount, parser.error.GetMessage());
                     }
@@ -221,13 +222,14 @@ public class EntitySerializer
         }
     }
     
-    private JsonEvent ReadEntities(EntityStore store)
+    private JsonEvent ReadEntitiesArrayIntoStore(EntityStore store)
     {
         while (true) {
             var ev = parser.NextEvent();
             switch (ev)
             {
                 case JsonEvent.ObjectStart:
+                    readEntity = readEntityBuffer;
                     readEntity.pid = -1;
                     readEntity.children.Clear();
                     readEntity.components = default;
@@ -247,7 +249,72 @@ public class EntitySerializer
             }
         }
     }
+    #endregion
     
+#region read entities
+    public ReadResult ReadEntities(List<DataEntity> entities, Stream stream)
+    {
+        if (stream is MemoryStream memoryStream) {
+            return ReadEntitiesSync(entities, memoryStream);
+        }
+        var readStream = CreateReadBuffers(stream);
+        int read;
+        while((read = stream.Read (readBuffer)) > 0) {
+            readStream.Write(readBuffer, 0, read);
+        }
+        return ReadEntitiesSync(entities, readStream);
+    }
+
+    private ReadResult ReadEntitiesSync(List<DataEntity> entities, MemoryStream memoryStream)
+    {
+        try {
+            readJson = new JsonValue(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
+            parser.InitParser(readJson);
+            var ev = parser.NextEvent();
+            switch (ev)
+            {
+                case JsonEvent.ArrayStart:
+                    ev = ReadEntitiesArray(entities);
+                    if (ev == JsonEvent.Error) {
+                        return new ReadResult(entities.Count, parser.error.GetMessage());
+                    }
+                    return new ReadResult(entities.Count, null);
+                case JsonEvent.Error:
+                    return new ReadResult(entities.Count, parser.error.GetMessage());
+                default:
+                    return new ReadResult(entities.Count, $"expect array. was: {ev} at position: {parser.Position}");
+            }
+        }
+        finally {
+            readJson = default;
+        }
+    }
+    
+    private JsonEvent ReadEntitiesArray(List<DataEntity> entities)
+    {
+        while (true) {
+            var ev = parser.NextEvent();
+            switch (ev)
+            {
+                case JsonEvent.ObjectStart:
+                    readEntity = new DataEntity();
+                    ev = ReadEntity();
+                    if (ev != JsonEvent.ObjectEnd) {
+                        return ev;
+                    }
+                    entities.Add(readEntity);
+                    break;
+                case JsonEvent.ArrayEnd:
+                case JsonEvent.Error:
+                    return ev;
+                default:
+                    return ReadError($"expect object entity. was: {ev}");
+            }
+        }
+    }
+    #endregion
+    
+#region read JSON entity
     private static readonly Bytes   Id          = new Bytes("id");
     private static readonly Bytes   Children    = new Bytes("children");
     private static readonly Bytes   Components  = new Bytes("components");
