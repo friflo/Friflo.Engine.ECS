@@ -70,20 +70,50 @@ public static class ExplorerCommands
     internal static async void PasteItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         var text = await EditorUtils.GetClipboardText(grid);
-        if (text != null) {
-            var serializer  = new EntitySerializer();
-            var utf8        = Encoding.UTF8.GetBytes(text);
-            var stream      = new MemoryStream(utf8.Length);
-            stream.Write(utf8, 0, utf8.Length);
-            stream.Position = 0;
-            var entities    = new List<DataEntity>();
-            var result      = serializer.ReadEntities(entities, stream);
-            Console.WriteLine($"Paste - entities: {result.entityCount}, error: {result.error}");
-            if (result.error == null) {
-                
-            }
+        if (text != null && items.Length > 0) {
+            PasteEntities(items, text);
         }
         grid.FocusPanel();
+    }
+    
+    private static void PasteEntities(ExplorerItem[] items, string text)
+    {
+        var serializer      = new EntitySerializer();
+        var utf8            = Encoding.UTF8.GetBytes(text);
+        var stream          = new MemoryStream(utf8.Length);
+        stream.Write(utf8, 0, utf8.Length);
+        stream.Position     = 0;
+        var dataEntities    = new List<DataEntity>();
+        var result          = serializer.ReadEntities(dataEntities, stream);
+        // Console.WriteLine($"Paste - entities: {result.entityCount}, error: {result.error}");
+        if (result.error != null) {
+            return;
+        }
+        var pidMap          = new Dictionary<long, long>();
+        var targetEntity    = items[0].Entity;
+        targetEntity        = targetEntity.Parent ?? targetEntity; // paste entities to parent
+        var store           = targetEntity.Store;
+        foreach (var dataEntity in dataEntities)
+        {
+            var entity              = store.CreateEntity();
+            var newPid              = store.GetNodeById(entity.Id).Pid;
+            pidMap[dataEntity.pid]  = newPid;
+            dataEntity.pid          = newPid;
+        }
+        var converter = EntityConverter.Default;
+        foreach (var dataEntity in dataEntities)
+        {
+            var children = dataEntity.children;
+            if (children != null) {
+                for (int n = 0; n < children.Count; n++) {
+                    var oldPid  = children[0];
+                    var newPid  = pidMap[oldPid];
+                    children[n] = newPid;     
+                }
+            }
+            var entity = converter.DataEntityToEntity(dataEntity, store, out _);
+            targetEntity.AddChild(entity);
+        }
     }
     
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
