@@ -303,6 +303,7 @@ public static class Test_ComponentReader
     
     private static JsonValue Script => new JsonValue("{ \"script1\": { \"val1\": 2 } }");
     
+    /// <summary> Cover also remove script in <see cref="ComponentReader.ReadComponents"/> </summary>
     [Test]
     public static void Test_ComponentReader_read_script()
     {
@@ -321,7 +322,13 @@ public static class Test_ComponentReader
         converter.DataEntityToEntity(rootNode, store, out _);
         var comp2       = root.GetScript<TestScript1>();
         AreEqual(2,     comp2.val1);
-        AreSame(script1, comp2);
+        AreSame(script1,comp2);
+        
+        // --- remove script from JSON components read again
+        rootNode.components = new JsonValue("{ }");
+        converter.DataEntityToEntity(rootNode, store, out _);
+        var comp3       = root.GetScript<TestScript1>();
+        IsNull(comp3);
     }
     
     [Test]
