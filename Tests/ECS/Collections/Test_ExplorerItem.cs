@@ -143,12 +143,12 @@ public static class Test_ExplorerItem
             var argsStr = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
-                            AreEqual(ChangedEventAction.Added,  args.action);
+                            AreEqual(ChangedEventAction.Add,    args.action);
                             AreEqual(typeof(EntityName),        args.componentType.type);
                             // ensure entity is in new Archetype 
                             AreEqual("[EntityName]  Count: 1",  store.GetNodeById(args.entityId).Archetype.ToString());
-                            AreEqual("entity: 1 - Added component: 'name' [EntityName]", argsStr);      return;
-                default:    Fail("unexpected event");                                                   return;
+                            AreEqual("entity: 1 - Add component: 'name' [EntityName]", argsStr);    return;
+                default:    Fail("unexpected event");                                               return;
             }
         };
         var removeCount       = 0;
@@ -156,12 +156,12 @@ public static class Test_ExplorerItem
             var argsStr = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
-                            AreEqual(ChangedEventAction.Removed,args.action);
+                            AreEqual(ChangedEventAction.Remove,args.action);
                             AreEqual(typeof(EntityName),        args.componentType.type);
                             // ensure entity is in new Archetype
                             AreEqual("[]",                      store.GetNodeById(args.entityId).Archetype.ToString());
-                            AreEqual("entity: 1 - Removed component: 'name' [EntityName]", argsStr);    return;
-                default:    Fail("unexpected event");                                                   return;
+                            AreEqual("entity: 1 - Remove component: 'name' [EntityName]", argsStr); return;
+                default:    Fail("unexpected event");                                               return;
             }
         };
         

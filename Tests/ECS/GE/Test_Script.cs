@@ -27,14 +27,14 @@ public static class Test_Script
             var str = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
-                            AreEqual(ChangedEventAction.Added,  args.action);
+                            AreEqual(ChangedEventAction.Add,    args.action);
                             AreEqual(typeof(TestScript1),       args.scriptType.type);
                             // Ensure Scripts are updated
                             AreEqual(1, store.GetNodeById(args.entityId).Entity.Scripts.Length);
-                            AreEqual("entity: 1 - Added script: 'testRef1' [*TestScript1]",     str);   return;
-                case 1:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;
-                case 2:     AreEqual("entity: 1 - Added script: 'testRef2' [*TestScript2]",     str);   return;
-                default:    Fail("unexpected event");                                                   return;
+                            AreEqual("entity: 1 - Add script: 'testRef1' [*TestScript1]",     str); return;
+                case 1:     AreEqual("entity: 1 - Add script: 'testRef2' [*TestScript2]",     str); return;
+                case 2:     AreEqual("entity: 1 - Add script: 'testRef2' [*TestScript2]",     str); return;
+                default:    Fail("unexpected event");                                               return;
             }
         });
         // --- add script handler
@@ -43,11 +43,11 @@ public static class Test_Script
             var str = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
-                            AreEqual(ChangedEventAction.Removed,args.action);
+                            AreEqual(ChangedEventAction.Remove, args.action);
                             AreEqual(typeof(TestScript2),       args.scriptType.type);
                             // Ensure Scripts are updated                            
                             AreEqual(1, store.GetNodeById(args.entityId).Entity.Scripts.Length);
-                            AreEqual("entity: 1 - Removed script: 'testRef2' [*TestScript2]",   str);   return;
+                            AreEqual("entity: 1 - Remove script: 'testRef2' [*TestScript2]",   str);    return;
                 default:    Fail("unexpected event");                                                   return;
             }
         });
