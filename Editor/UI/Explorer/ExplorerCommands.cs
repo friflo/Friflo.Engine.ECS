@@ -142,6 +142,13 @@ public static class ExplorerCommands
                 }
             }
             var entity = converter.DataEntityToEntity(dataEntity, store, out _);
+            
+            if (children != null) {
+                foreach (var childPid in children) {
+                    var child = store.GetNodeByPid(childPid).Entity;
+                    entity.AddChild(child);
+                }
+            }
             targetEntity.AddChild(entity);
         }
     }
