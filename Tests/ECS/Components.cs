@@ -43,17 +43,17 @@ public struct TestTag3 : IEntityTag { }
 
 // ------------------------------------------------ scripts
 [CodeCoverageTest]
-[Script("testRef1")]
+[Script("script1")]
 class TestScript1 : Script {
     public int  val1;
 }
 
-[Script("testRef2")]
+[Script("script2")]
 class TestScript2 : Script {
     public int  val2;
 }
 
-[Script("testRef3")]
+[Script("script3")]
 class TestScript3 : Script {
     public int  val3;
 }

@@ -25,7 +25,7 @@ public static class Test_ComponentWriter
         AreEqual(10,    node.pid);
         AreEqual(1,     node.children.Count);
         AreEqual(11,    node.children[0]);
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node.components.AsString());
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", node.components.AsString());
     }
     
     [Test]
@@ -84,7 +84,7 @@ public static class Test_ComponentWriter
         for (int n = 0; n < count; n++) {
             node = converter.EntityToDataEntity(entity);
         }
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"testRef1\":{\"val1\":10}}", node!.components.AsString());
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", node!.components.AsString());
     }
     
     [Test]
@@ -120,7 +120,7 @@ public static class Test_ComponentWriter
     ],
     "components": {
         "pos": {"x":1,"y":2,"z":3},
-        "testRef1": {"val1":10}
+        "script1": {"val1":10}
     },
     "tags": [
         "TestTag",

@@ -301,7 +301,7 @@ public static class Test_ComponentReader
         }
     }
     
-    private static JsonValue Script => new JsonValue("{ \"testRef1\": { \"val1\": 2 } }");
+    private static JsonValue Script => new JsonValue("{ \"script1\": { \"val1\": 2 } }");
     
     [Test]
     public static void Test_ComponentReader_read_script()
@@ -339,7 +339,7 @@ public static class Test_ComponentReader
     }
     
     private static JsonValue Scripts => new JsonValue(
-        "{ \"testRef1\": { \"val1\": 11 }, \"testRef2\": { \"val2\": 22 }, \"testRef3\": { \"val3\": 33 } }");
+        "{ \"script1\": { \"val1\": 11 }, \"script2\": { \"val2\": 22 }, \"script3\": { \"val3\": 33 } }");
     
     /// <summary>Cover <see cref="EntityStore.AppendScript"/></summary>
     [Test]
