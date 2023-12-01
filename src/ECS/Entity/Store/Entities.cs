@@ -46,7 +46,7 @@ public partial class EntityStore
         return CreateEntityNode(id, pid);
     }
     
-    public Entity InstantiateEntity(Entity original)
+    public Entity CloneEntity(Entity original)
     {
         var entity          = CreateEntity();
         var archetype       = original.archetype;
