@@ -11,7 +11,7 @@
     <Border Height="1" DockPanel.Dock="Top" Background="{DynamicResource PanelBackground}"/>
     
     <ScrollViewer>
-    <StackPanel Name="Panel">
+    <StackPanel>
         
         <inspector:InspectorGroup Name="TagGroup" GroupName="tags" Expand="{Binding #TagSet}"
                                   Count="{Binding TagCount}"/>
@@ -32,7 +32,7 @@
                                   Count="{Binding ComponentCount}"/>
         <StackPanel Name="Components" Background="{DynamicResource FromBackground}"
                     IsVisible="{Binding #ComponentGroup.Expanded}">
-            <inspector:InspectorComponent Name="Comp1" ComponentTitle="Name"/>
+            <inspector:InspectorComponent Name="Comp1" ComponentTitle="EntityName"/>
             <StackPanel IsVisible="{Binding #Comp1.Expanded}">
                 <DockPanel >
                     <inspector:FieldName Text="field 1"/>

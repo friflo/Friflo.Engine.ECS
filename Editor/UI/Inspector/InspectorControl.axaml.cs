@@ -28,6 +28,12 @@ public partial class InspectorControl : UserControl
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
+        // designer example data
+        if (EditorUtils.IsDesignMode) {
+            model.TagCount          = 4;
+            model.ComponentCount    = 3;
+            model.ScriptCount       = 1;
+        }
         var editor = this.GetEditor();
         editor?.AddObserver(new InspectorObserver(this, editor));
     }
