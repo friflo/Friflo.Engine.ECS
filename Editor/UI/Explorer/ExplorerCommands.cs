@@ -11,6 +11,7 @@ using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Json.Fliox;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -71,17 +72,19 @@ public static class ExplorerCommands
     {
         var text = await EditorUtils.GetClipboardText(grid);
         if (text != null && items.Length > 0) {
-            PasteEntities(items, text);
+            var targetEntity    = items[0].Entity;
+            targetEntity        = targetEntity.Parent ?? targetEntity; // paste entities to parent
+            var jsonArray       = new JsonValue(Encoding.UTF8.GetBytes(text));
+            PasteEntities(targetEntity, jsonArray);
         }
         grid.FocusPanel();
     }
     
-    private static void PasteEntities(ExplorerItem[] items, string text)
+    private static void PasteEntities(Entity targetEntity, JsonValue jsonArray)
     {
         var serializer      = new EntitySerializer();
-        var utf8            = Encoding.UTF8.GetBytes(text);
-        var stream          = new MemoryStream(utf8.Length);
-        stream.Write(utf8, 0, utf8.Length);
+        var stream          = new MemoryStream(jsonArray.Count);
+        stream.Write(jsonArray.AsReadOnlySpan());
         stream.Position     = 0;
         var dataEntities    = new List<DataEntity>();
         var result          = serializer.ReadEntities(dataEntities, stream);
@@ -90,8 +93,6 @@ public static class ExplorerCommands
             return;
         }
         var pidMap          = new Dictionary<long, long>();
-        var targetEntity    = items[0].Entity;
-        targetEntity        = targetEntity.Parent ?? targetEntity; // paste entities to parent
         var store           = targetEntity.Store;
         foreach (var dataEntity in dataEntities)
         {
