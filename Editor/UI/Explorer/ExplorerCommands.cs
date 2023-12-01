@@ -60,12 +60,20 @@ public static class ExplorerCommands
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         var entities    = items.Select(item => item.Entity).ToList();
-        var serializer  = new EntitySerializer();
-        var stream      = new MemoryStream();
-        serializer.WriteEntities(entities, stream);
-        var text = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+        var json        = CopyEntities(entities);
+        var text        = json.AsString();
         EditorUtils.CopyToClipboard(grid, text);
         grid.FocusPanel();
+    }
+    
+    private static JsonValue CopyEntities(List<Entity> entities)
+    {
+        var stream      = new MemoryStream();
+        var serializer  = new EntitySerializer();
+        
+        serializer.WriteEntities(entities, stream);
+    
+        return new JsonValue(stream.GetBuffer(), 0, (int)stream.Length);
     }
     
     internal static async void PasteItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
@@ -113,7 +121,7 @@ public static class ExplorerCommands
                         continue;
                     }
                     var missingChild    = store.CreateEntity();
-                    missingChild.AddComponent(new EntityName($"Missing entity - pid: {oldPid}"));
+                    missingChild.AddComponent(new EntityName($"missing entity - pid: {oldPid}"));
                     var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
                     children[n]         = missingChildPid;
                     pidMap[oldPid]      = missingChildPid;
