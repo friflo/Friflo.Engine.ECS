@@ -67,6 +67,7 @@ public class ExplorerFlyout : MenuFlyout
         Items.Add(new Separator());
         
         CopyEntities        (selectedItems);
+        PasteEntities       (selectedItems);
         DeleteEntity        (selectedItems, rootItem);
         NewEntity           (selectedItems);
         
@@ -101,6 +102,15 @@ public class ExplorerFlyout : MenuFlyout
         var menu            = new MenuItem { Header = "Copy", IsEnabled = canCopy };
         menu.InputGesture   = new KeyGesture(Key.C, KeyModifiers.Control);
         menu.Click += (_, _) => ExplorerCommands.CopyItems(items, grid);
+        Items.Add(menu);
+    }
+    
+    private void PasteEntities(ExplorerItem[] items)
+    {
+        var canPaste        = items.Length > 0;
+        var menu            = new MenuItem { Header = "Paste", IsEnabled = canPaste };
+        menu.InputGesture   = new KeyGesture(Key.V, KeyModifiers.Control);
+        menu.Click += (_, _) => ExplorerCommands.PasteItems(items, grid);
         Items.Add(menu);
     }
     

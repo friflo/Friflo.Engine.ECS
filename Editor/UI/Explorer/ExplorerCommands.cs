@@ -67,6 +67,12 @@ public static class ExplorerCommands
         grid.FocusPanel();
     }
     
+    internal static void PasteItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
+    {
+        Console.WriteLine("Paste");
+        grid.FocusPanel();
+    }
+    
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
     {
         var next = grid.GetSelectionPath();
