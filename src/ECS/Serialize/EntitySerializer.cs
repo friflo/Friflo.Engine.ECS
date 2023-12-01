@@ -381,7 +381,11 @@ public class EntitySerializer
             switch (ev) {
                 case JsonEvent.ValueNumber:
                     var childId = parser.ValueAsLong(out _);
-                    readEntity.children.Add(childId);
+                    var children = readEntity.children;
+                    if (children == null) {
+                        children = readEntity.children = new List<long>(1);
+                    }
+                    children.Add(childId);
                     continue;
                 case JsonEvent.ArrayEnd:
                 case JsonEvent.Error:
@@ -398,8 +402,12 @@ public class EntitySerializer
             var ev = parser.NextEvent();
             switch (ev) {
                 case JsonEvent.ValueString:
-                    var tag = parser.value.AsString();
-                    readEntity.tags.Add(tag);
+                    var tag     = parser.value.AsString();
+                    var tags    = readEntity.tags;
+                    if (tags == null) {
+                        tags = readEntity.tags = new List<string>(1);
+                    }
+                    tags.Add(tag);
                     continue;
                 case JsonEvent.ArrayEnd:
                 case JsonEvent.Error:

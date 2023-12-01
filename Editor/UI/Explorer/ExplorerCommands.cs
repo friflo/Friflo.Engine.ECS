@@ -78,6 +78,7 @@ public static class ExplorerCommands
             stream.Position = 0;
             var entities    = new List<DataEntity>();
             var result      = serializer.ReadEntities(entities, stream);
+            Console.WriteLine($"Paste - entities: {result.entityCount}, error: {result.error}");
             if (result.error == null) {
                 
             }
