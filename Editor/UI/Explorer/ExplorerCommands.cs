@@ -107,9 +107,16 @@ public static class ExplorerCommands
             var children = dataEntity.children;
             if (children != null) {
                 for (int n = 0; n < children.Count; n++) {
-                    var oldPid  = children[0];
-                    var newPid  = pidMap[oldPid];
-                    children[n] = newPid;     
+                    var oldPid  = children[n];
+                    if (pidMap.TryGetValue(oldPid, out long newPid)) {
+                        children[n] = newPid;    
+                        continue;
+                    }
+                    var missingChild    = store.CreateEntity();
+                    missingChild.AddComponent(new EntityName($"Missing entity - pid: {oldPid}"));
+                    var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
+                    children[n]         = missingChildPid;
+                    pidMap[oldPid]      = missingChildPid;
                 }
             }
             var entity = converter.DataEntityToEntity(dataEntity, store, out _);
