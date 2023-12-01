@@ -10,7 +10,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// An <see cref="Unresolved"/> component is added to a <see cref="Entity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataEntityToEntity"/> if:<br/>
+/// An <see cref="Unresolved"/> component is added to an <see cref="Entity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataEntityToEntity"/> if:<br/>
 /// <list type="bullet">
 ///   <item>
 ///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Script"/> type. 
@@ -21,16 +21,16 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </summary>
 /// <remarks>
-/// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to <see cref="Entity"/> and vice versa<br/>
+/// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to an <see cref="Entity"/> and vice versa<br/>
 /// with components or tags that cannot be resolved to <see cref="IEntityTag"/>, <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
 /// <br/>
 /// Having support <see cref="Unresolved"/> component or tag types:
 /// <list type="bullet">
 ///   <item>
-///     Ensures the ability to use a scene containing unresolved types without being blocked by a missing fix.
+///     Ensures the ability to use an <see cref="EntityStore"/> containing unresolved types without being blocked by a missing fix.
 ///   </item>
 ///   <item>
-///     Prevents data loss of tags or components when storing a scene with entities containing unresolved tag or component types.
+///     Prevents data loss of tags or components when storing an <see cref="EntityStore"/> with entities containing unresolved tag or component types.
 ///   </item>
 /// </list>
 /// The reason for unresolved tag or component types can be:<br/>
@@ -39,7 +39,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     Missed to merge C# code containing an <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definition.
 ///   </item>
 ///   <item>
-///     Intentionally when creating a scene with external tools without the need to wait for the implementation of new<br/>
+///     Intentionally when creating an <see cref="EntityStore"/> with external tools without the need to wait for the implementation of new<br/>
 ///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definitions.
 ///   </item>
 /// </list>

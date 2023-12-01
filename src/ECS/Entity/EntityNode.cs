@@ -15,8 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
-/// The tree graph is stored in an <see cref="EntityStore"/> to build up a scene stating with
-/// a single <see cref="EntityStore.StoreRoot"/> entity. 
+/// The tree graph is stored in an <see cref="EntityStore"/> starting with a single <see cref="EntityStore.StoreRoot"/> entity. 
 /// </summary>
 /// <remarks>
 /// It provide the properties listed below
@@ -33,11 +32,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b><see cref="Pid"/></b><br/>
 /// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
 /// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
-/// Using random pids avoid merge conflicts when multiples users make changes to the same scene file / database.<br/>
+/// Using random pids avoid merge conflicts when multiples users make changes to the same <see cref="EntityStore"/> file / database.<br/>
 /// The probability generating the same pid by two different users is:
 /// <code>
 ///     p = 1 - exp(-r^2 / (2 * N))
-///     r:  number of new entities added by a user to an existing scene (not the number of all entities)
+///     r:  number of new entities added by a user to an existing <see cref="EntityStore"/> (not the number of all entities)
 ///     N:  number of possible values = int.MaxValue = 2147483647
 /// </code>
 /// See: https://en.wikipedia.org/wiki/Birthday_problem

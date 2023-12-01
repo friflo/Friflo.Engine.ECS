@@ -49,7 +49,7 @@ public class EntitySerializer
     }
     #endregion
 
-#region write scene
+#region write entities
     private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
     private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
 
@@ -158,7 +158,7 @@ public class EntitySerializer
 
     #endregion
     
-#region read scene
+#region read entities
     private MemoryStream CreateReadBuffers(Stream stream) {
         readBuffer ??= new byte[16*1024];
         int capacity = 0;
