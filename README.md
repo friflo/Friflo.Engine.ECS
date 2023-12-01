@@ -33,31 +33,39 @@
 ### Dependency
 
 **.NET SDK 7.0**  
-- Download and install SDK [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+1. Download and install SDK [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
-- Clone git repository: https://github.com/friflo/Friflo.Json.Fliox
-
-- Navigate to folder: `./Engine/Editor` - assuming you are in the root folder of the git repository.
+2. Check if .NET SDK CLI is available by requesting its version.  
+   If installed properly it returns  
+   `7.0.404`  
+   or a higher version if using a newer .NET SDK.
+```cmd
+dotnet --version
 ```
+
+3. Clone git repository: https://github.com/friflo/Friflo.Json.Fliox
+
+4. Navigate to folder: `./Engine/Editor`  
+   Assuming you are in the root folder of the git repository.
+```cmd
 cd ./Engine/Editor
 ```
 
-- Build & Launch with:
-```
+5. Build & Launch with
+```cmd
 dotnet run
 ```
 
-When the Editor launches is also starts an HTTP server at:  
-http://localhost:5000/  
-The server provides a Web UI to access and modify entities.  
-It also has a REST and Websocket API to access and modify entities using HTTP.
+6. When the Editor launches is also starts an HTTP server at:  
+   http://localhost:5000/  
+   The server provides a Web UI to access and modify entities.  
+   It also has a REST and Websocket API to access and modify entities using HTTP.
 
-- Launch without build
-```
+7. Launch without build - *optional*  
+   The Editor should launch in less than a second.
+```cmd
 dotnet run --no-build
 ```
-
-The Editor should launch in less than a second.
 
 <br/><br/>
 
