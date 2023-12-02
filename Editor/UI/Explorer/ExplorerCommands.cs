@@ -65,7 +65,7 @@ public static class ExplorerCommands
             if (ECSUtils.JsonToDataEntities (jsonArray, dataEntities) == null) {
                 var targetEntity    = items[0].Entity;
                 targetEntity        = targetEntity.Parent ?? targetEntity; // add entities to parent
-                ECSUtils.AddEntities(targetEntity, dataEntities);
+                ECSUtils.AddDataEntities(targetEntity, dataEntities);
             }
         }
         grid.FocusPanel();

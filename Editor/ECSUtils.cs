@@ -12,8 +12,10 @@ namespace Friflo.Fliox.Editor;
 
 public static class ECSUtils
 {
-    internal static string JsonToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities) {
-        // --- convert JSON array to DataEntity's
+    /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
+    internal static string JsonToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
+    {
+        // --- 
         var serializer      = new EntitySerializer();
         var stream          = new MemoryStream(jsonArray.Count);
         stream.Write(jsonArray.AsReadOnlySpan());
@@ -44,10 +46,10 @@ public static class ECSUtils
     
 #region paste DataEntity's
     /// <remarks>
-    /// When adding the <param name="dataEntities"/> to the <param name="targetEntity"/>
+    /// When adding the <paramref name="dataEntities"/> to the <paramref name="targetEntity"/>
     /// the order of JSON objects in the array is not relevant. 
     /// </remarks>
-    internal static void AddEntities(Entity targetEntity, List<DataEntity> dataEntities)
+    internal static void AddDataEntities(Entity targetEntity, List<DataEntity> dataEntities)
     {
 
         var childEntities   = new HashSet<long>(dataEntities.Count);
@@ -124,6 +126,7 @@ public static class ECSUtils
     #endregion
     
 #region Copy Entity's
+    /// <summary> Create a JSON array from given <paramref name="entities"/> </summary>
     internal static JsonValue CopyEntities(IEnumerable<Entity> entities)
     {
         var stream      = new MemoryStream();
