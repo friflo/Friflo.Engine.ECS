@@ -93,9 +93,10 @@ internal static class SchemaUtils
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore)
         where T : Script, new()
     {
-        var scriptIndex   = ClassType<T>.ScriptIndex;
-        var scriptKey     = ClassType<T>.ScriptKey;
-        return new ScriptType<T>(scriptKey, scriptIndex, typeStore);
+        var scriptIndex = ClassType<T>.ScriptIndex;
+        var scriptKey   = ClassType<T>.ScriptKey;
+        var typeMapper  = typeStore.GetTypeMapper<T>();
+        return new ScriptType<T>(scriptKey, scriptIndex, typeMapper);
     }
     
     internal static TagType CreateTagType<T>()

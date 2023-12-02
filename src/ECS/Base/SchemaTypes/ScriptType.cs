@@ -53,10 +53,10 @@ internal sealed class ScriptType<T> : ScriptType
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"script: '{componentKey}' [*{typeof(T).Name}]";
     
-    internal ScriptType(string scriptKey, int scriptIndex, TypeStore typeStore)
+    internal ScriptType(string scriptKey, int scriptIndex, TypeMapper<T> typeMapper)
         : base(scriptKey, scriptIndex, typeof(T))
     {
-        typeMapper = typeStore.GetTypeMapper<T>();
+        this.typeMapper = typeMapper;
     }
     
     internal override Script CreateScript() {
