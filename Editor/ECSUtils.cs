@@ -5,13 +5,24 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
+// ReSharper disable HeuristicUnreachableCode
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
 namespace Friflo.Fliox.Editor;
 
 public static class ECSUtils
 {
+    private static void Log(Func<string> message) {
+        return;
+#pragma warning disable CS0162 // Unreachable code detected
+        var msg = message();
+        Console.WriteLine(msg);
+#pragma warning restore CS0162 // Unreachable code detected
+    }
+    
     /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
     internal static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
     {
@@ -49,7 +60,7 @@ public static class ECSUtils
     /// When adding the <paramref name="dataEntities"/> to the <paramref name="targetEntity"/>
     /// the order of JSON objects in the array is not relevant. 
     /// </remarks>
-    internal static void AddDataEntities(Entity targetEntity, List<DataEntity> dataEntities)
+    internal static void AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
 
         var childEntities   = new HashSet<long>(dataEntities.Count);
@@ -157,6 +168,65 @@ public static class ECSUtils
             list.Add(child);
             AddChildren(child, list, set);
         }
+    }
+    #endregion
+    
+#region ExplorerItem's
+    internal static void RemoveExplorerItems(ExplorerItem[] items, ExplorerItem rootItem)
+    {
+        foreach (var item in items) {
+            var entity = item.Entity; 
+            if (entity.TreeMembership != TreeMembership.treeNode) {
+                continue;
+            }
+            if (rootItem == item) {
+                continue;
+            }
+            var parent = entity.Parent;
+            Log(() => $"parent id: {parent.Id} - Remove child id: {entity.Id}");
+            parent.RemoveChild(entity);
+        }
+    }
+    
+    internal static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
+    {
+        var indexes = new List<int>(items.Length);
+        var parent  = items[0].Entity.Parent;
+        var pos     = 0;
+        foreach (var item in items)
+        {
+            var entity      = item.Entity;
+            int index       = parent.GetChildIndex(entity.Id);
+            int newIndex    = index - shift;
+            if (newIndex < pos++) {
+                continue;
+            }
+            indexes.Add(newIndex);
+            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
+            parent.InsertChild(newIndex, entity);
+        }
+        return indexes.ToArray();
+    }
+    
+    internal static int[] MoveExplorerItemsDown(ExplorerItem[] items, int shift)
+    {
+        var indexes     = new List<int>(items.Length);
+        var parent      = items[0].Entity.Parent;
+        var childCount  = parent.ChildCount;
+        var pos     = 0;
+        for (int n = items.Length - 1; n >= 0; n--)
+        {
+            var entity      = items[n].Entity;
+            int index       = parent.GetChildIndex(entity.Id);
+            int newIndex    = index + shift;
+            if (newIndex >= childCount - pos++) {
+                continue;
+            }
+            indexes.Add(newIndex);
+            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
+            parent.InsertChild(newIndex, entity);
+        }
+        return indexes.ToArray();
     }
     #endregion
 }

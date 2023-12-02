@@ -65,7 +65,7 @@ public static class ExplorerCommands
             if (ECSUtils.JsonArrayToDataEntities (jsonArray, dataEntities) == null) {
                 var targetEntity    = items[0].Entity;
                 targetEntity        = targetEntity.Parent ?? targetEntity; // add entities to parent
-                ECSUtils.AddDataEntities(targetEntity, dataEntities);
+                ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
             }
         }
         grid.FocusPanel();
@@ -74,18 +74,7 @@ public static class ExplorerCommands
     internal static void RemoveItems(ExplorerItem[] items, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
     {
         var next = grid.GetSelectionPath();
-        foreach (var item in items) {
-            var entity = item.Entity; 
-            if (entity.TreeMembership != TreeMembership.treeNode) {
-                continue;
-            }
-            if (rootItem == item) {
-                continue;
-            }
-            var parent = entity.Parent;
-            Log(() => $"parent id: {parent.Id} - Remove child id: {entity.Id}");
-            parent.RemoveChild(entity);
-        }
+        ECSUtils.RemoveExplorerItems(items, rootItem);
         grid.SetSelectionPath(next);
         grid.FocusPanel();
     }
@@ -105,21 +94,7 @@ public static class ExplorerCommands
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
     internal static int[] MoveItemsUp(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
-        var indexes = new List<int>(items.Length);
-        var parent  = items[0].Entity.Parent;
-        var pos     = 0;
-        foreach (var item in items)
-        {
-            var entity      = item.Entity;
-            int index       = parent.GetChildIndex(entity.Id);
-            int newIndex    = index - shift;
-            if (newIndex < pos++) {
-                continue;
-            }
-            indexes.Add(newIndex);
-            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
-            parent.InsertChild(newIndex, entity);
-        }
+        var indexes = ECSUtils.MoveExplorerItemsUp(items, shift);
         grid.FocusPanel();
         return indexes.ToArray();
     }
@@ -127,22 +102,7 @@ public static class ExplorerCommands
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
     internal static int[] MoveItemsDown(ExplorerItem[] items, int shift, ExplorerTreeDataGrid grid)
     {
-        var indexes     = new List<int>(items.Length);
-        var parent      = items[0].Entity.Parent;
-        var childCount  = parent.ChildCount;
-        var pos     = 0;
-        for (int n = items.Length - 1; n >= 0; n--)
-        {
-            var entity      = items[n].Entity;
-            int index       = parent.GetChildIndex(entity.Id);
-            int newIndex    = index + shift;
-            if (newIndex >= childCount - pos++) {
-                continue;
-            }
-            indexes.Add(newIndex);
-            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
-            parent.InsertChild(newIndex, entity);
-        }
+        var indexes = ECSUtils.MoveExplorerItemsDown(items, shift);
         grid.FocusPanel();
         return indexes.ToArray();
     }
