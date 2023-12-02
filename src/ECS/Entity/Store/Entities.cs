@@ -50,9 +50,7 @@ public partial class EntityStore
     {
         var entity          = CreateEntity();
         var archetype       = original.archetype;
-        if (archetype == defaultArchetype) {
-            entity.archetype    = defaultArchetype;
-        } else { 
+        if (archetype != defaultArchetype) {
             entity.compIndex    = archetype.AddEntity(entity.id);
             entity.archetype    = archetype;
         }
