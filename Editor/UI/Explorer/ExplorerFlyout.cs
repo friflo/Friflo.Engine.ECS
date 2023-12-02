@@ -89,7 +89,7 @@ public class ExplorerFlyout : MenuFlyout
     
     private void DuplicateEntities(ExplorerItem[] items)
     {
-        var canDuplicate    = items.Length == 1;
+        var canDuplicate    = items.Length > 0;
         var menu            = new MenuItem { Header = "Duplicate", IsEnabled = canDuplicate };
         menu.InputGesture   = new KeyGesture(Key.D, KeyModifiers.Control);
         menu.Click += (_, _) => ExplorerCommands.DuplicateItems(items, grid);
