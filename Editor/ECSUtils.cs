@@ -13,7 +13,7 @@ namespace Friflo.Fliox.Editor;
 public static class ECSUtils
 {
     /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
-    internal static string JsonToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
+    internal static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
     {
         // --- 
         var serializer      = new EntitySerializer();
@@ -127,7 +127,7 @@ public static class ECSUtils
     
 #region Copy Entity's
     /// <summary> Create a JSON array from given <paramref name="entities"/> </summary>
-    internal static JsonValue CopyEntities(IEnumerable<Entity> entities)
+    internal static JsonValue EntitiesToJsonArray(IEnumerable<Entity> entities)
     {
         var stream      = new MemoryStream();
         var serializer  = new EntitySerializer();

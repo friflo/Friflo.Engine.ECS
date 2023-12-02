@@ -50,7 +50,7 @@ public static class ExplorerCommands
     internal static void CopyItems(ExplorerItem[] items, ExplorerTreeDataGrid grid)
     {
         var entities    = items.Select(item => item.Entity).ToList();
-        var json        = ECSUtils.CopyEntities(entities);
+        var json        = ECSUtils.EntitiesToJsonArray(entities);
         var text        = json.AsString();
         EditorUtils.CopyToClipboard(grid, text);
         grid.FocusPanel();
@@ -62,7 +62,7 @@ public static class ExplorerCommands
         if (text != null && items.Length > 0) {
             var jsonArray       = new JsonValue(Encoding.UTF8.GetBytes(text));
             var dataEntities    = new List<DataEntity>();
-            if (ECSUtils.JsonToDataEntities (jsonArray, dataEntities) == null) {
+            if (ECSUtils.JsonArrayToDataEntities (jsonArray, dataEntities) == null) {
                 var targetEntity    = items[0].Entity;
                 targetEntity        = targetEntity.Parent ?? targetEntity; // add entities to parent
                 ECSUtils.AddDataEntities(targetEntity, dataEntities);
