@@ -34,10 +34,10 @@ internal sealed class ComponentType<T> : ComponentType
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"component: '{componentKey}' [{typeof(T).Name}]";
 
-    internal ComponentType(string componentKey, int structIndex, TypeStore typeStore)
+    internal ComponentType(string componentKey, int structIndex, TypeMapper<T> typeMapper)
         : base(componentKey, structIndex, typeof(T))
     {
-        typeMapper = typeStore.GetTypeMapper<T>();
+        this.typeMapper = typeMapper;
     }
     
     internal override bool AddEntityComponent(Entity entity) {

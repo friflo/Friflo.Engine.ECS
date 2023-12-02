@@ -86,7 +86,8 @@ internal static class SchemaUtils
     {
         var structIndex = StructHeap<T>.StructIndex;
         var structKey   = StructHeap<T>.StructKey;
-        return new ComponentType<T>(structKey, structIndex, typeStore);
+        var typeMapper  = typeStore.GetTypeMapper<T>();
+        return new ComponentType<T>(structKey, structIndex, typeMapper);
     }
     
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore)
