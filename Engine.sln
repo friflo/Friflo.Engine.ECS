@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-internal", "Tests-int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGL", "OpenGL\OpenGL.csproj", "{6D1DEE07-F369-4455-8C2A-18BCB1E0044C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D1DEE07-F369-4455-8C2A-18BCB1E0044C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D1DEE07-F369-4455-8C2A-18BCB1E0044C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D1DEE07-F369-4455-8C2A-18BCB1E0044C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D1DEE07-F369-4455-8C2A-18BCB1E0044C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

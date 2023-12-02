@@ -16,7 +16,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <DefineConstants>TRACE,COMP_ITER</DefineConstants>
+      <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -24,6 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\OpenGL\OpenGL.csproj" />
       <ProjectReference Include="..\src\Client\Engine.Client.csproj" />
     </ItemGroup>
 
@@ -43,12 +44,6 @@
         <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.1" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Silk.NET.OpenGL" Version="2.18.0" />
-      <PackageReference Include="Silk.NET.Windowing" Version="2.18.0" />
-      <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
     </ItemGroup>
 
     <ItemGroup>
