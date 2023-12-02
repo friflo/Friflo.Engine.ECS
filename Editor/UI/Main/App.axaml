@@ -64,6 +64,10 @@
             <Setter Property="Background"   Value="#007000"/>
         </Style>
         
+        <Style Selector="TextBlock.Hyperlink:pointerover">
+            <Setter Property="TextDecorations"   Value="Underline"/>
+        </Style>
+        
         <!--
         Notes to:  <Style Selector="DataValidationErrors">
         [Data Validation | Avalonia UI > Customize the appearance of the validation message]

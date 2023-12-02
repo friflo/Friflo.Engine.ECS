@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
@@ -22,6 +22,9 @@ public partial class TestPanel : PanelControl
 
     public void OnButtonClick(object sender, RoutedEventArgs routedEventArgs)
     {
-        Console.WriteLine("Click");
+        ProcessStartInfo sInfo = new ProcessStartInfo("http://localhost:5000") { UseShellExecute = true };
+#pragma warning disable RS0030
+        Process.Start(sInfo);
+#pragma warning restore RS0030
     }
 }
