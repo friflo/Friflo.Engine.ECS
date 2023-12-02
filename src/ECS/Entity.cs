@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a game scene.<br/>
 /// Every <see cref="Entity"/> has an <see cref="Id"/> and is a container of
-/// <see cref="Tags"/>, <see cref="IComponent"/>'s, <see cref="Script"/>'s and other child <see cref="Entity"/>'s.<br/>
+/// <see cref="ECS.Tags"/>, <see cref="IComponent"/>'s, <see cref="Script"/>'s and other child <see cref="Entity"/>'s.<br/>
 /// <br/>
 /// Comparison to other game engines.
 /// <list type="bullet">
@@ -34,6 +34,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///         In contrast to this engine or Unity it has no ECS architecture - Entity Component System.
 ///     </item>
 /// </list>
+/// <br/>
 /// An <see cref="Entity"/> is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to an <see cref="Entity"/>.<br/>
 /// <br/>
