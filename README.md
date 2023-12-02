@@ -60,8 +60,14 @@ dotnet run
 
 6. When the Editor launches is also starts an HTTP server at:  
    http://localhost:5000/  
-   The server provides a Web UI to access and modify entities.  
-   It also has a REST and Websocket API to access and modify entities using HTTP.
+   The server has a Web UI with the following features:
+   - Access and modify entities in the **Explorer** panel.
+   - Subscribe to entity changes in the **Pub-Sub** panel.
+   - The server can be accessed using the REST or Websocket API to access and modify entities using HTTP.  
+     These API's can be tested in the **Playground** panel.
+
+   To get an impression about the WebUI of a similar server checkout the [DemoHub](http://ec2-18-215-176-108.compute-1.amazonaws.com/fliox/).
+
 
 7. Launch without build - *optional*  
    The Editor should launch in less than a second.
