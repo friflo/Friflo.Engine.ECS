@@ -12,7 +12,6 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
-// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>

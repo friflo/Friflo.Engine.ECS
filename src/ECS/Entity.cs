@@ -9,7 +9,6 @@ using static Friflo.Fliox.Engine.ECS.StructInfo;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-// ReSharper disable InconsistentNaming
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
@@ -260,6 +259,7 @@ public sealed class Entity
     /// To access a component use <see cref="GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(GetComponent)}<T>() to access a component")]
+    // ReSharper disable once InconsistentNaming
     public      IComponent[]            Components_     => EntityUtils.GetComponentsDebug(this);
     #endregion
     
