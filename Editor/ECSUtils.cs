@@ -70,13 +70,9 @@ public static class ECSUtils
     #endregion
     
 #region paste DataEntity's
-    /// <remarks>
-    /// When adding the <paramref name="dataEntities"/> to the <paramref name="targetEntity"/>
-    /// the order of JSON objects in the array is not relevant. 
-    /// </remarks>
+    /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
     internal static void AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
-
         var childEntities   = new HashSet<long>(dataEntities.Count);
         var pidMap          = new Dictionary<long, long>();
         var store           = targetEntity.Store;
