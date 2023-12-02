@@ -50,9 +50,12 @@ public partial class EntityStore
     {
         var entity          = CreateEntity();
         var archetype       = original.archetype;
-        entity.compIndex    = archetype.AddEntity(entity.id);
-        entity.archetype    = archetype;
-        
+        if (archetype == defaultArchetype) {
+            entity.archetype    = defaultArchetype;
+        } else { 
+            entity.compIndex    = archetype.AddEntity(entity.id);
+            entity.archetype    = archetype;
+        }
         bool isBlittable = true;
         foreach (var componentType in archetype.componentTypes) {
             if (!componentType.blittable) {

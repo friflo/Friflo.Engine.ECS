@@ -43,7 +43,7 @@ public static class ECSUtils
 #region duplicate Entity's
     internal static void DuplicateEntities(List<Entity> entities)
     {
-        var store = entities[0].Store;
+        var store   = entities[0].Store;
         foreach (var entity in entities) {
             var parent  = entity.Parent;
             if (parent == null) {
@@ -51,8 +51,22 @@ public static class ECSUtils
             }
             var clone = store.CloneEntity(entity);
             parent.AddChild(clone);
+            
+            DuplicateChildren(entity, clone, store);
         }
     }
+    
+    private static void DuplicateChildren(Entity entity, Entity clone, EntityStore store)
+    {
+        foreach (var childId in entity.ChildIds) {
+            var child       = store.GetNodeById(childId).Entity;
+            var childClone  = store.CloneEntity(child);
+            clone.AddChild(childClone);
+            
+            DuplicateChildren(child, childClone, store);
+        }
+    }
+    
     #endregion
     
 #region paste DataEntity's
