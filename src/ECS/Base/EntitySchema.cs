@@ -102,7 +102,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return <see cref="SchemaType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
+    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
     /// </summary>
     public ComponentType GetComponentType<T>()
         where T : struct, IComponent
@@ -112,7 +112,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return <see cref="SchemaType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
+    /// return <see cref="ScriptType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
     public ScriptType GetScriptType<T>()
         where T : Script
@@ -122,7 +122,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return <see cref="SchemaType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
+    /// return <see cref="TagType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
     public TagType GetTagType<T>()
         where T : struct, IEntityTag

@@ -15,7 +15,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a game scene.<br/>
 /// Every <see cref="Entity"/> has an <see cref="Id"/> and is a container of
-/// <see cref="ECS.IComponent"/>'s, <see cref="ECS.Script"/>'s and <see cref="ECS.Tags"/><br/>
+/// <see cref="IComponent"/>'s, <see cref="Script"/>'s and <see cref="Tags"/><br/>
 /// <br/>
 /// It is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to an <see cref="Entity"/>.<br/>
@@ -25,8 +25,8 @@ namespace Friflo.Fliox.Engine.ECS;
 /// This enables to build up a complex game scene with a hierarchy of <see cref="Entity"/>'s.<br/>
 /// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
-/// <see cref="ECS.Script"/>'s can be added to an <see cref="Entity"/> to add custom logic (script) and data to an entity.<br/>
-/// <see cref="ECS.Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
+/// An <see cref="Script"/>'s can be added to an <see cref="Entity"/> to add custom logic (script) and data to an entity.<br/>
+/// <see cref="Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
 /// <br/>
 /// <see cref="Tags"/> can be added to an <see cref="Entity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the

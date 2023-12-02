@@ -134,7 +134,7 @@ public sealed class Archetype
     }
     
     /// <remarks>
-    /// Is called by methods using a set of arbitrary struct <see cref="SchemaType"/>'s.<br/>
+    /// Is called by methods using a set of arbitrary struct <see cref="ComponentType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
     /// </remarks>
     internal static Archetype CreateWithComponentTypes(in ArchetypeConfig config, List<ComponentType> componentTypes, in Tags tags)
