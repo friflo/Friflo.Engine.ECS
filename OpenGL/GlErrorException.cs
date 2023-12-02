@@ -1,7 +1,7 @@
 using System;
 using Silk.NET.OpenGL;
 
-namespace Friflo.Fliox.Editor.OpenGL
+namespace Friflo.Fliox.Engine.OpenGL
 {
     public class GlErrorException : Exception
     {

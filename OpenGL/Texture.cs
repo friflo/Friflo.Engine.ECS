@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Friflo.Fliox.Editor.OpenGL
+namespace Friflo.Fliox.Engine.OpenGL
 {
     public class Texture : IDisposable
     {

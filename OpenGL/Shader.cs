@@ -3,7 +3,7 @@ using System.IO;
 using Silk.NET.OpenGL;
 
 // ReSharper disable InconsistentNaming
-namespace Friflo.Fliox.Editor.OpenGL
+namespace Friflo.Fliox.Engine.OpenGL
 {
     public class Shader : IDisposable
     {
