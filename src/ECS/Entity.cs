@@ -15,9 +15,26 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <summary>
 /// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a game scene.<br/>
 /// Every <see cref="Entity"/> has an <see cref="Id"/> and is a container of
-/// <see cref="IComponent"/>'s, <see cref="Script"/>'s and <see cref="Tags"/><br/>
+/// <see cref="Tags"/>, <see cref="IComponent"/>'s, <see cref="Script"/>'s and other child <see cref="Entity"/>'s.<br/>
 /// <br/>
-/// It is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
+/// Comparison to other game engines.
+/// <list type="bullet">
+///     <item>
+///         <b>Unity</b>  - an <see cref="Entity"/> provides a similar features set as a <c>GameObject</c> and their ECS <c>Entity</c>.
+///     </item>
+///     <item>
+///         <b>Godot</b>  - <see cref="Entity"/> is the counterpart of a <c>Node</c>.<br/>
+///         The key difference is Godot is an OOP architecture inheriting from <c>Node</c> over multiple levels.
+///     </item>
+///     <item>
+///         <b>FLAX</b>   - <see cref="Entity"/> is the counterpart of an <c>Actor</c> - an OOP architecture like Godot.
+///     </item>
+///     <item>
+///         <b>STRIDE</b> - <see cref="Entity"/> is the counterpart of a STRIDE <c>Entity</c> - a component based architecture like Unity.<br/>
+///         In contrast to this engine or Unity it has no ECS architecture - Entity Component System.
+///     </item>
+/// </list>
+/// An <see cref="Entity"/> is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to an <see cref="Entity"/>.<br/>
 /// <br/>
 /// An <see cref="Entity"/> can be added to another <see cref="Entity"/> using <see cref="AddChild"/>.<br/>
@@ -25,7 +42,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// This enables to build up a complex game scene with a hierarchy of <see cref="Entity"/>'s.<br/>
 /// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
-/// An <see cref="Script"/>'s can be added to an <see cref="Entity"/> to add custom logic (script) and data to an entity.<br/>
+/// A <see cref="Script"/>'s can be added to an <see cref="Entity"/> to add custom logic (script) and data to an entity.<br/>
 /// <see cref="Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
 /// <br/>
 /// <see cref="Tags"/> can be added to an <see cref="Entity"/> to enable filtering entities in queries.<br/>
@@ -249,7 +266,7 @@ public sealed class Entity
 #region script methods
     public      ReadOnlySpan<Script>  Scripts           => new (EntityUtils.GetScripts(this));
 
-    /// <returns>the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
+    /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
     /// <remarks>Note: Use <see cref="GetEntityScript"/> as non generic alternative</remarks> 
     public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
     
