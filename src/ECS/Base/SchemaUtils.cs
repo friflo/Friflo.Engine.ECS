@@ -65,11 +65,20 @@ internal static class SchemaUtils
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 return componentType;
             }
-        }
-        foreach (var attr in type.CustomAttributes)
-        {
-            var attributeType = attr.AttributeType;
-            if (attributeType == typeof(ScriptAttribute))
+        } else {
+            /* foreach (var attr in type.CustomAttributes)
+            {
+                var attributeType = attr.AttributeType;
+                if (attributeType == typeof(ScriptAttribute))
+                {
+                    var createParams    = new object[] { typeStore };
+                    var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);
+                    var genericMethod   = method!.MakeGenericMethod(type);
+                    var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);
+                    return scriptType;
+                }
+            } */
+            if (type.IsClass && type.IsSubclassOf(typeof(Script)))
             {
                 var createParams    = new object[] { typeStore };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);

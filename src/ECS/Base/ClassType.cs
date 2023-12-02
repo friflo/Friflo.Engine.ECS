@@ -18,9 +18,10 @@ internal static class ClassUtils
 {
     private  static     int     _nextScriptIndex    = 1;
 
-    private  const      int     MissingAttribute    = 0;
+//  private  const      int     MissingAttribute    = 0;
     
-    internal static int NewClassIndex(Type type, out string classKey) {
+    internal static int NewClassIndex(Type type, out string classKey)
+    {
         foreach (var attr in type.CustomAttributes) {
             if (attr.AttributeType != typeof(ScriptAttribute)) {
                 continue;
@@ -29,7 +30,7 @@ internal static class ClassUtils
             classKey    = (string) arg[0].Value;
             return _nextScriptIndex++;
         }
-        classKey = null;
-        return MissingAttribute;
+        classKey = type.Name;
+        return _nextScriptIndex++;
     }
 }

@@ -193,7 +193,7 @@ public static class Test_Script
         AreEqual(1, entity.Scripts.Length); // remains unchanged
     }
     
-    [Test]
+    // changed behavior. [Script("...")] attribute is optional now 
     public static void Test_3_InvalidRefComponent() {
         var store   = new EntityStore();
         var player  = store.CreateEntity();

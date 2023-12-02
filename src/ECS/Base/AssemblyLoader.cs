@@ -177,17 +177,9 @@ internal sealed class AssemblyLoader
             }
             return;
         }
-        if (type.IsClass)
+        if (type.IsClass && type.IsSubclassOf(typeof(Script)))
         {
-            foreach (var attr in type.CustomAttributes)
-            {
-                var attributeType = attr.AttributeType;
-                if (attributeType == typeof(ScriptAttribute))
-                {
-                    componentTypes.Add(type);
-                    return;
-                }
-            }
+            componentTypes.Add(type);
         }
     }
 }

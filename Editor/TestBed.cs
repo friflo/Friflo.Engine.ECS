@@ -15,7 +15,6 @@ public struct Tag2 : IEntityTag { }
 public struct Tag3 : IEntityTag { }
 public struct Tag4 : IEntityTag { }
 
-[Script("Script1")]
 public class Script1 : Script
 {
     public  string      name;
@@ -23,7 +22,6 @@ public class Script1 : Script
     public  Position    target;
 }
 
-[Script("Script2")]
 public class Script2 : Script
 {
     public  int         maxHealth;
