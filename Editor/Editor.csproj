@@ -24,7 +24,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OpenGL\OpenGL.csproj" />
+      <ProjectReference Include="..\OpenGL\Engine.OpenGL.csproj" />
       <ProjectReference Include="..\src\Client\Engine.Client.csproj" />
     </ItemGroup>
 
