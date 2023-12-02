@@ -81,6 +81,7 @@ public partial class EntityStore
             foreach (var script in scripts) {
                 var scriptType  = scriptTypeByType[script.GetType()];
                 var clone       = scriptType.CloneScript(script);
+                clone.entity    = entity;                                   // todo add test assertion
                 entity.archetype.entityStore.AddScript(entity, clone, scriptType);
             }
         } else {
