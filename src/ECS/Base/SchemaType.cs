@@ -80,6 +80,7 @@ public abstract class SchemaType
         types.Add(typeof(string),       true);
     }
     
+    // todo - add test assertion EntityName is a blittable type 
     internal static bool IsBlittableType(Type type)
     {
         if (BlittableTypes.TryGetValue(type, out bool blittable)) {

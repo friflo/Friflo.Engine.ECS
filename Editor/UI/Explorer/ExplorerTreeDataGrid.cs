@@ -127,9 +127,14 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     /// </code>
     /// => use this method when accessing <see cref="ITreeSelectionModel.SelectedItems"/>
     /// </summary>
-    internal ExplorerItem[] GetSelectedItems() {
+    private ExplorerItem[] GetSelectedItems() {
         var items = (IReadOnlyList<ExplorerItem>)RowSelection!.SelectedItems;
         return items.ToArray();
+    }
+    
+    internal TreeSelection GetSelection() {
+        var items = GetSelectedItems();
+        return new TreeSelection(items);
     }
     
     internal bool GetMoveSelection(out MoveSelection moveSelection) {
@@ -188,35 +193,35 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 if (e.KeyModifiers != ctrlKey) {
                     return false;
                 }
-                ExplorerCommands.CopyItems(GetSelectedItems(), this);
+                ExplorerCommands.CopyItems(GetSelection(), this);
                 return true;
             case Key.V:
                 if (e.KeyModifiers != ctrlKey) {
                     return false;
                 }
-                ExplorerCommands.PasteItems(GetSelectedItems(), this);
+                ExplorerCommands.PasteItems(GetSelection(), this);
                 return true;
             case Key.D:
                 if (e.KeyModifiers != ctrlKey) {
                     return false;
                 }
-                ExplorerCommands.DuplicateItems(GetSelectedItems(), this);
+                ExplorerCommands.DuplicateItems(GetSelection(), this);
                 return true;
             case Key.Delete:
-                ExplorerCommands.RemoveItems(GetSelectedItems(), RootItem, this);
+                ExplorerCommands.RemoveItems(GetSelection(), RootItem, this);
                 return true;
             case Key.N:
                 if (e.KeyModifiers != ctrlKey) {
                     return false;
                 }
-                ExplorerCommands.CreateItems(GetSelectedItems(), this);
+                ExplorerCommands.CreateItems(GetSelection(), this);
                 return true;
             case Key.Up:
                 if (e.KeyModifiers != ctrlKey) {
                     return false;
                 }
                 if (GetMoveSelection(out var moveSelection)) {
-                    var indexes = ExplorerCommands.MoveItemsUp(GetSelectedItems(), 1, this);
+                    var indexes = ExplorerCommands.MoveItemsUp(GetSelection(), 1, this);
                     SelectItems(moveSelection, indexes, SelectionView.First);
                 }
                 return true;
@@ -225,7 +230,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                     return false;
                 }
                 if (GetMoveSelection(out moveSelection)) {
-                    var indexes = ExplorerCommands.MoveItemsDown(GetSelectedItems(), 1, this);
+                    var indexes = ExplorerCommands.MoveItemsDown(GetSelection(), 1, this);
                     SelectItems(moveSelection, indexes, SelectionView.Last);
                 }
                 return true;

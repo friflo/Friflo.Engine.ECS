@@ -38,13 +38,13 @@ public class ExplorerFlyout : MenuFlyout
     
     protected override void OnOpened() {
 
-        var selection   = grid.RowSelection;
-        if (selection != null) {
+        var rowSelection = grid.RowSelection;
+        if (rowSelection != null) {
             // var firstSelected   = (ExplorerItem)selection.SelectedItem;
-            var selectedItems   = grid.GetSelectedItems();
-            var rootItem        = grid.RootItem;
+            var selection   = grid.GetSelection();
+            var rootItem    = grid.RootItem;
             grid.GetMoveSelection(out var moveSelection);
-            AddMenuItems(selectedItems, moveSelection, rootItem);
+            AddMenuItems(selection, moveSelection, rootItem);
         }
         base.OnOpened();
     }
@@ -58,101 +58,102 @@ public class ExplorerFlyout : MenuFlyout
     
     // ----------------------------------- add menu commands -----------------------------------
     private void AddMenuItems(
-        ExplorerItem[]  selectedItems,
+        TreeSelection   selection,
         MoveSelection   moveSelection,
         ExplorerItem    rootItem)
     {
-        RenameEntity        (selectedItems);
-        DuplicateEntities   (selectedItems);
-        DeleteEntities      (selectedItems, rootItem);
+        RenameEntity        (selection);
+        DuplicateEntities   (selection);
+        DeleteEntities      (selection, rootItem);
         Items.Add(new Separator());
         
-        CopyEntities        (selectedItems);
-        PasteEntities       (selectedItems);
-        NewEntity           (selectedItems);
+        CopyEntities        (selection);
+        PasteEntities       (selection);
+        NewEntity           (selection);
         
         if (moveSelection != null) {
             Items.Add(new Separator());
-            MoveEntityUp    (selectedItems, moveSelection);
-            MoveEntityDown  (selectedItems, moveSelection);
+            MoveEntityUp    (selection, moveSelection);
+            MoveEntityDown  (selection, moveSelection);
         }
     }
     
-    private void RenameEntity(ExplorerItem[] items)
+    private void RenameEntity(TreeSelection selection)
     {
-        var canRename       = items.Length == 1;
+        var canRename       = selection.Length == 1;
         var menu            = new MenuItem { Header = "Rename", IsEnabled = canRename };
         menu.InputGesture   = new KeyGesture(Key.F2);
         menu.Click += (_, _) => ExplorerCommands.RenameEntity(grid);
         Items.Add(menu);
     }
     
-    private void DuplicateEntities(ExplorerItem[] items)
+    private void DuplicateEntities(TreeSelection selection)
     {
-        var canDuplicate    = items.Length > 0;
+        var canDuplicate    = selection.Length > 0;
         var menu            = new MenuItem { Header = "Duplicate", IsEnabled = canDuplicate };
         menu.InputGesture   = new KeyGesture(Key.D, KeyModifiers.Control);
-        menu.Click += (_, _) => ExplorerCommands.DuplicateItems(items, grid);
+        menu.Click += (_, _) => ExplorerCommands.DuplicateItems(selection, grid);
         Items.Add(menu);
     }
     
-    private void CopyEntities(ExplorerItem[] items)
+    private void CopyEntities(TreeSelection selection)
     {
-        var canCopy         = items.Length > 0;
+        var canCopy         = selection.Length > 0;
         var menu            = new MenuItem { Header = "Copy", IsEnabled = canCopy };
         menu.InputGesture   = new KeyGesture(Key.C, KeyModifiers.Control);
-        menu.Click += (_, _) => ExplorerCommands.CopyItems(items, grid);
+        menu.Click += (_, _) => ExplorerCommands.CopyItems(selection, grid);
         Items.Add(menu);
     }
     
-    private void PasteEntities(ExplorerItem[] items)
+    private void PasteEntities(TreeSelection selection)
     {
-        var canPaste        = items.Length > 0;
+        var canPaste        = selection.Length > 0;
         var menu            = new MenuItem { Header = "Paste", IsEnabled = canPaste };
         menu.InputGesture   = new KeyGesture(Key.V, KeyModifiers.Control);
-        menu.Click += (_, _) => ExplorerCommands.PasteItems(items, grid);
+        menu.Click += (_, _) => ExplorerCommands.PasteItems(selection, grid);
         Items.Add(menu);
     }
     
-    private void DeleteEntities(ExplorerItem[] items, ExplorerItem rootItem)
+    private void DeleteEntities(TreeSelection selection, ExplorerItem rootItem)
     {
+        var items           = selection.items; 
         var isRootItem      = items.Length == 1 && items[0] == rootItem;
         var canDelete       = isRootItem ? items.Length > 1 : items.Length > 0;
         var menu            = new MenuItem { Header = "Delete", IsEnabled = canDelete };
         menu.InputGesture   = new KeyGesture(Key.Delete);
         if (canDelete) {
-            menu.Click += (_, _) => ExplorerCommands.RemoveItems(items, rootItem, grid);
+            menu.Click += (_, _) => ExplorerCommands.RemoveItems(selection, rootItem, grid);
         }
         Items.Add(menu);
     }
     
-    private void NewEntity(ExplorerItem[] items)
+    private void NewEntity(TreeSelection selection)
     {
-        var menu            = new MenuItem { Header = "New entity", IsEnabled = items.Length > 0 };
+        var menu            = new MenuItem { Header = "New entity", IsEnabled = selection.Length > 0 };
         menu.InputGesture   = new KeyGesture(Key.N, KeyModifiers.Control);
-        if (items.Length > 0) {
-            menu.Click += (_, _) => ExplorerCommands.CreateItems(items, grid);
+        if (selection.Length > 0) {
+            menu.Click += (_, _) => ExplorerCommands.CreateItems(selection, grid);
         }
         Items.Add(menu);
     }
     
-    private void MoveEntityUp(ExplorerItem[] items, MoveSelection moveSelection)
+    private void MoveEntityUp(TreeSelection selection, MoveSelection moveSelection)
     {
-        var canMove         = items.Length > 1 || moveSelection.first.Last() > 0;
+        var canMove         = selection.Length > 1 || moveSelection.first.Last() > 0;
         var menu            = new MenuItem { Header = "Move up", IsEnabled = canMove };
         menu.InputGesture   = new KeyGesture(Key.Up, KeyModifiers.Control);
         menu.Click += (_, _) => {
-            var indexes = ExplorerCommands.MoveItemsUp(items, 1, grid);
+            var indexes = ExplorerCommands.MoveItemsUp(selection, 1, grid);
             grid.SelectItems(moveSelection, indexes, SelectionView.First);
         };
         Items.Add(menu);
     }
     
-    private void MoveEntityDown(ExplorerItem[] items, MoveSelection moveSelection)
+    private void MoveEntityDown(TreeSelection selection, MoveSelection moveSelection)
     {
         var canMove = true;
-        if (items.Length == 1) {
-            var entity  = items.Last().Entity;
+        if (selection.Length == 1) {
+            var entity  = selection.items.Last().Entity;
             var parent  = entity.Parent;
             var index   = parent.GetChildIndex(entity.Id);
             canMove     = index < parent.ChildCount - 1;
@@ -160,7 +161,7 @@ public class ExplorerFlyout : MenuFlyout
         var menu            = new MenuItem { Header = "Move down", IsEnabled = canMove };
         menu.InputGesture   = new KeyGesture(Key.Down, KeyModifiers.Control);
         menu.Click += (_, _) => {
-            var indexes = ExplorerCommands.MoveItemsDown(items, 1, grid);
+            var indexes = ExplorerCommands.MoveItemsDown(selection, 1, grid);
             grid.SelectItems(moveSelection, indexes, SelectionView.Last);
         };
         Items.Add(menu);

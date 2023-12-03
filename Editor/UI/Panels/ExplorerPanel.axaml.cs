@@ -36,7 +36,7 @@ public partial class ExplorerPanel : PanelControl
     {
         switch (command) {
             case CopyToClipboardCommand:
-                ExplorerCommands.CopyItems(Grid.GetSelectedItems(), Grid);
+                ExplorerCommands.CopyItems(Grid.GetSelection(), Grid);
                 return true;
         }
         return false;
