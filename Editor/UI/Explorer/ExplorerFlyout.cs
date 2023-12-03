@@ -144,7 +144,7 @@ public class ExplorerFlyout : MenuFlyout
         menu.InputGesture   = new KeyGesture(Key.Up, KeyModifiers.Control);
         menu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(selection, 1, grid);
-            grid.SelectItems(moveSelection, indexes, SelectionView.First);
+            grid.SelectItems(moveSelection, indexes, SelectionView.First, 2);
         };
         Items.Add(menu);
     }
@@ -162,7 +162,7 @@ public class ExplorerFlyout : MenuFlyout
         menu.InputGesture   = new KeyGesture(Key.Down, KeyModifiers.Control);
         menu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(selection, 1, grid);
-            grid.SelectItems(moveSelection, indexes, SelectionView.Last);
+            grid.SelectItems(moveSelection, indexes, SelectionView.Last, 2);
         };
         Items.Add(menu);
     }

@@ -326,6 +326,10 @@ public sealed class Entity
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
+    /// <returns>
+    /// The index within <see cref="ChildIds"/> the <paramref name="entity"/> is added.<br/>
+    /// Or -1 if the <paramref name="entity"/> is already a child entity.
+    /// </returns>
     public int AddChild(Entity entity) {
         var store = archetype.entityStore;
         if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));

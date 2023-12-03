@@ -44,17 +44,28 @@ public static class ExplorerCommands
         Focus(element);
     }
     
-    internal static async void PasteItems(TreeSelection selection, InputElement element)
+    internal static async void PasteItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
         if (selection.Length > 0) {
-            var dataEntities = await ClipboardUtils.GetDataEntities(element);
+            var dataEntities = await ClipboardUtils.GetDataEntities(grid);
             if (dataEntities != null) {
                 var targetEntity    = selection.items[0].Entity;
-                targetEntity        = targetEntity.Parent ?? targetEntity; // add entities to parent
-                ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
+                var targetPath      = grid.RowSelection!.SelectedIndex;
+                if (targetEntity.Parent != null) {
+                    targetEntity    = targetEntity.Parent; // add entities to parent
+                    targetPath      = targetPath.Slice(0, targetPath.Count - 1);
+                }
+                var indexes         = ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
+                var moveSelection   = MoveSelection.Create(targetPath, indexes);
+
+                // requires Post() to avoid artifacts in grid. No clue why.
+                EditorUtils.Post(() => {
+                    grid.RowSelection.Clear();
+                    grid.SelectItems(moveSelection, indexes, SelectionView.Last, 0);    
+                });
             }
         }
-        Focus(element);
+        Focus(grid);
     }
     
     internal static void DuplicateItems(TreeSelection selection, IInputElement element)

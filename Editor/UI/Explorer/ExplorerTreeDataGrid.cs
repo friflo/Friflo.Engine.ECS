@@ -107,7 +107,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
         var targetModel = cx.targetModel;
         var selection   = MoveSelection.Create(targetModel, indexes);
-        SelectItems(selection, indexes, SelectionView.First);
+        SelectItems(selection, indexes, SelectionView.First, 2);
     }
     
     internal HierarchicalTreeDataGridSource<ExplorerItem> GridSource => (HierarchicalTreeDataGridSource<ExplorerItem>)Source!;
@@ -140,7 +140,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         return moveSelection != null;
     }
     
-    internal void SelectItems(MoveSelection moveSelection, int[] indexes, SelectionView view)
+    internal void SelectItems(MoveSelection moveSelection, int[] indexes, SelectionView view, int offset)
     {
         if (indexes.Length == 0) {
             return;
@@ -154,19 +154,18 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
         selection.EndBatchUpdate();
         
-        BringSelectionIntoView(moveSelection, view);
+        BringSelectionIntoView (moveSelection, view, offset);
     }
     
-    private void BringSelectionIntoView(MoveSelection moveSelection, SelectionView view) {
-        var rows            = Rows!;
-        var rowPresenter    = RowsPresenter!;
+    private void BringSelectionIntoView(MoveSelection moveSelection, SelectionView view, int offset) {
+        var rows = Rows!;
+        int showIndex;
         if (view == SelectionView.First) {
-            var firstIndex = rows.ModelIndexToRowIndex(moveSelection.first) - 2;
-            rowPresenter.BringIntoView(firstIndex);
-            return;            
+            showIndex = rows.ModelIndexToRowIndex(moveSelection.first) - offset;
+        } else {
+            showIndex = rows.ModelIndexToRowIndex(moveSelection.last)  + offset;
         }
-        var lastIndex = rows.ModelIndexToRowIndex(moveSelection.last) + 2;
-        rowPresenter.BringIntoView(lastIndex);
+        RowsPresenter!.BringIntoView(showIndex);
     }
     
     private bool HandleKeyUp(KeyEventArgs e) {
@@ -219,7 +218,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 if (GetMoveSelection(out var moveSelection)) {
                     var indexes = ExplorerCommands.MoveItemsUp(GetSelection(), 1, this);
-                    SelectItems(moveSelection, indexes, SelectionView.First);
+                    SelectItems(moveSelection, indexes, SelectionView.First, 2);
                 }
                 return true;
             case Key.Down:
@@ -228,7 +227,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 if (GetMoveSelection(out moveSelection)) {
                     var indexes = ExplorerCommands.MoveItemsDown(GetSelection(), 1, this);
-                    SelectItems(moveSelection, indexes, SelectionView.Last);
+                    SelectItems(moveSelection, indexes, SelectionView.Last, 2);
                 }
                 return true;
             default:

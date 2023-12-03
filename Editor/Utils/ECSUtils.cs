@@ -71,7 +71,7 @@ public static class ECSUtils
     
 #region paste DataEntity's
     /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
-    internal static void AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
+    internal static int[] AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
         var childEntities   = new HashSet<long>(dataEntities.Count);
         var pidMap          = new Dictionary<long, long>();
@@ -113,6 +113,7 @@ public static class ECSUtils
             }
         }
         // --- add all root entities to target
+        var indexes = new List<int>();
         foreach (var dataEntity in dataEntities)
         {
             var pid = dataEntity.pid;
@@ -120,8 +121,10 @@ public static class ECSUtils
                 continue;
             }
             var entity = store.GetNodeByPid(pid).Entity;
-            targetEntity.AddChild(entity);
+            var index = targetEntity.AddChild(entity);
+            indexes.Add(index);
         }
+        return indexes.ToArray();
     }
     
     private static void ReplaceChildrenPids(List<long> children, Dictionary<long, long> pidMap, EntityStore store)
