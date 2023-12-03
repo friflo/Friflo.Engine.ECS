@@ -28,7 +28,8 @@ public sealed class ExplorerItem :
     public              Entity  Entity          => entity;
     public              bool    IsRoot          => IsRootItem();
     public              bool    AllowDrag       => !IsRootItem();
-    public              string  Name            { get => GetName(entity); set => SetName(entity, value); }
+    public              string  Name            { get => GetName(entity);   set => SetName    (entity, value); }
+    public              bool    IsExpanded      { get => isExpanded;        set => SetExpanded(value);         }
     public              string  DebugTreeName   => tree.debugName;
     
     public              bool    flag;           // todo remove
@@ -37,6 +38,7 @@ public sealed class ExplorerItem :
     #endregion
     
 #region internal fields
+    private             bool                                isExpanded;
     internal readonly   Entity                              entity;                 //  8   - the corresponding entity
     internal readonly   ExplorerItemTree                    tree;                   //  8   - the ExplorerItemTree containing this ExplorerItem
     internal            NotifyCollectionChangedEventHandler collectionChanged;      //  8   - event handlers are called in case entity children are modified
@@ -71,6 +73,15 @@ public sealed class ExplorerItem :
             return;
         }
         entity.AddComponent(new EntityName(value));
+    }
+    
+    private void SetExpanded(bool value) {
+        if (isExpanded == value) {
+            return;
+        }
+        isExpanded = value;
+        var args = new PropertyChangedEventArgs(nameof(IsExpanded));
+        propertyChangedHandler?.Invoke(this, args);
     }
     
     private ExplorerItem GetChildByIndex(int index) {

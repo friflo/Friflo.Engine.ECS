@@ -108,6 +108,9 @@ public static class ExplorerCommands
             indexes[n]      = parent.AddChild(newEntity);
         }
         grid.RowSelection?.Clear();
+        foreach (var item in selection.items) {
+            item.IsExpanded = true;
+        }
         selectedPaths.AppendLeafIndexes(indexes);
         grid.SelectItems(selectedPaths, SelectionView.Last, 0);
         Focus(grid);
