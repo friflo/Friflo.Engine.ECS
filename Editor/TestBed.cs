@@ -60,8 +60,8 @@ public static class TestBed
         root.AddChild(CreateEntity(store, 5));
         root.AddChild(CreateEntity(store, 6));
         root.AddChild(CreateEntity(store, 7));
-        CreateManyEntities(root, "many - 10.000",       new [] { 100, 100 });
-        // CreateManyEntities(root, "many - 1.000.000",    new [] { 100, 100, 100 });
+        CreateManyEntities(root, "10.000",       new [] { 100, 100 });
+        // CreateManyEntities(root, "1.000.000",    new [] { 100, 100, 100 });
     }
     
     private static void CreateManyEntities(Entity root, string name, int[] counts)

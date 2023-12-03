@@ -29,7 +29,9 @@ internal class ExplorerObserver : EditorObserver
         var source      = grid.GridSource;
         var rootEntity  = store.StoreRoot;
         tree            = new ExplorerItemTree(rootEntity, $"tree-{_treeCount++}");
-        source.Items    = new []{ tree.RootItem };
+        var root        = tree.RootItem; 
+        root.IsExpanded = true; 
+        source.Items    = new []{ root };
         
         store.ComponentAdded    += PostEntityUpdate;
         store.ComponentRemoved  += PostEntityUpdate;
