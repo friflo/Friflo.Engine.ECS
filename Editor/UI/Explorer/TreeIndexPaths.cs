@@ -32,25 +32,17 @@ internal class TreeIndexPaths
         if (indexes.Count == 0) {
             return null;
         }
-        var first   = indexes[0];
+        var first = indexes[0];
         if (first == new IndexPath(0)) {
             return null;
         }
-        /* var parent  = indexes[0].Slice(0, first.Count - 1);
-        for (int n = 1; n < indexes.Count; n++)
-        {
-            var index = indexes[n];
-            if(!parent.IsParentOf(index)) {
-                return null;
-            }
-        } */
         var paths = indexes.ToArray();
         return new TreeIndexPaths(paths);
     }
     
     internal static TreeIndexPaths Create(in IndexPath parent, int[] indexes)
     {
-        var paths   = new IndexPath[indexes.Length];
+        var paths = new IndexPath[indexes.Length];
         for (int n = 0; n < indexes.Length; n++) {
             paths[n] = parent.Append(indexes[n]); 
         }
