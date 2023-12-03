@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -15,21 +16,18 @@ internal enum SelectionView
     Last    = 1,
 }
 
-internal class MoveSelection
+internal class TreeIndexPaths
 {
-    internal readonly   IndexPath   parent;
-    internal readonly   IndexPath   first;
-    internal readonly   IndexPath   last;
+    internal            IndexPath       First   => paths[0];
+    internal readonly   IndexPath[]     paths;
 
-    public   override   string      ToString() => parent.ToString();
+    public   override   string          ToString() => $"Length: {paths.Length}";
 
-    private MoveSelection(in IndexPath parent, in IndexPath first, in IndexPath last) {
-        this.parent     = parent;
-        this.first      = first;
-        this.last       = last;
+    private TreeIndexPaths(IndexPath[] paths) {
+        this.paths      = paths;
     }
     
-    internal static MoveSelection Create(IReadOnlyList<IndexPath> indexes)
+    internal static TreeIndexPaths Create(IReadOnlyList<IndexPath> indexes)
     {
         if (indexes.Count == 0) {
             return null;
@@ -38,22 +36,25 @@ internal class MoveSelection
         if (first == new IndexPath(0)) {
             return null;
         }
-        var parent  = indexes[0].Slice(0, first.Count - 1);
+        /* var parent  = indexes[0].Slice(0, first.Count - 1);
         for (int n = 1; n < indexes.Count; n++)
         {
             var index = indexes[n];
             if(!parent.IsParentOf(index)) {
                 return null;
             }
-        }
-        return new MoveSelection(parent, indexes[0], indexes[indexes.Count - 1]);
+        } */
+        var paths = indexes.ToArray();
+        return new TreeIndexPaths(paths);
     }
     
-    internal static MoveSelection Create(in IndexPath parent, int[] indexes)
+    internal static TreeIndexPaths Create(in IndexPath parent, int[] indexes)
     {
-        var first   = parent.Append(indexes[0]);
-        var last    = parent.Append(indexes[indexes.Length - 1]);
-        return new MoveSelection(parent, first, last);
+        var paths   = new IndexPath[indexes.Length];
+        for (int n = 0; n < indexes.Length; n++) {
+            paths[n] = parent.Append(indexes[n]); 
+        }
+        return new TreeIndexPaths(paths);
     }
 }
 //cannot use TreeDataGridRow targetRow

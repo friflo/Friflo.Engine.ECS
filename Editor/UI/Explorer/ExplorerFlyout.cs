@@ -43,8 +43,8 @@ public class ExplorerFlyout : MenuFlyout
             // var firstSelected   = (ExplorerItem)selection.SelectedItem;
             var selection   = grid.GetSelection();
             var rootItem    = grid.RootItem;
-            grid.GetMoveSelection(out var moveSelection);
-            AddMenuItems(selection, moveSelection, rootItem);
+            grid.GetSelectedPaths(out var selectedPaths);
+            AddMenuItems(selection, selectedPaths, rootItem);
         }
         base.OnOpened();
     }
@@ -58,9 +58,9 @@ public class ExplorerFlyout : MenuFlyout
     
     // ----------------------------------- add menu commands -----------------------------------
     private void AddMenuItems(
-        TreeSelection   selection,
-        MoveSelection   moveSelection,
-        ExplorerItem    rootItem)
+        TreeSelection       selection,
+        TreeIndexPaths      selectedPaths,
+        ExplorerItem        rootItem)
     {
         RenameEntity        (selection);
         DuplicateEntities   (selection);
@@ -71,10 +71,10 @@ public class ExplorerFlyout : MenuFlyout
         PasteEntities       (selection);
         NewEntity           (selection);
         
-        if (moveSelection != null) {
+        if (selectedPaths != null) {
             Items.Add(new Separator());
-            MoveEntityUp    (selection, moveSelection);
-            MoveEntityDown  (selection, moveSelection);
+            MoveEntityUp    (selection, selectedPaths);
+            MoveEntityDown  (selection, selectedPaths);
         }
     }
     
@@ -137,19 +137,19 @@ public class ExplorerFlyout : MenuFlyout
         Items.Add(menu);
     }
     
-    private void MoveEntityUp(TreeSelection selection, MoveSelection moveSelection)
+    private void MoveEntityUp(TreeSelection selection, TreeIndexPaths selectedPaths)
     {
-        var canMove         = selection.Length > 1 || moveSelection.first.Last() > 0;
+        var canMove         = selection.Length > 1 || selectedPaths.First.Last() > 0;
         var menu            = new MenuItem { Header = "Move up", IsEnabled = canMove };
         menu.InputGesture   = new KeyGesture(Key.Up, KeyModifiers.Control);
         menu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(selection, 1, grid);
-            grid.SelectItems(moveSelection, indexes, SelectionView.First, 2);
+            grid.SelectItems(selectedPaths, indexes, SelectionView.First, 1);
         };
         Items.Add(menu);
     }
     
-    private void MoveEntityDown(TreeSelection selection, MoveSelection moveSelection)
+    private void MoveEntityDown(TreeSelection selection, TreeIndexPaths selectedPaths)
     {
         var canMove = true;
         if (selection.Length == 1) {
@@ -162,7 +162,7 @@ public class ExplorerFlyout : MenuFlyout
         menu.InputGesture   = new KeyGesture(Key.Down, KeyModifiers.Control);
         menu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(selection, 1, grid);
-            grid.SelectItems(moveSelection, indexes, SelectionView.Last, 2);
+            grid.SelectItems(selectedPaths, indexes, SelectionView.Last, 1);
         };
         Items.Add(menu);
     }

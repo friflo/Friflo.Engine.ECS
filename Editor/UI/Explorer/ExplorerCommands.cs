@@ -56,25 +56,32 @@ public static class ExplorerCommands
                     targetPath      = targetPath.Slice(0, targetPath.Count - 1);
                 }
                 var indexes         = ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
-                var moveSelection   = MoveSelection.Create(targetPath, indexes);
+                var newSelection    = TreeIndexPaths.Create(targetPath, indexes);
 
                 // requires Post() to avoid artifacts in grid. No clue why.
                 EditorUtils.Post(() => {
                     grid.RowSelection.Clear();
-                    grid.SelectItems(moveSelection, indexes, SelectionView.Last, 0);    
+                    grid.SelectItems(newSelection, indexes, SelectionView.Last, 0);    
                 });
             }
         }
         Focus(grid);
     }
     
-    internal static void DuplicateItems(TreeSelection selection, IInputElement element)
+    internal static void DuplicateItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
         if (selection.Length > 0) {
             var entities    = selection.items.Select(item => item.Entity).ToList();
-            ECSUtils.DuplicateEntities(entities);
+            grid.GetSelectedPaths(out var selectedPaths);
+            var indexes     = ECSUtils.DuplicateEntities(entities);
+            
+            // requires Post() to avoid artifacts in grid. No clue why.
+            EditorUtils.Post(() => {
+                grid.RowSelection?.Clear();
+                grid.SelectItems(selectedPaths, indexes, SelectionView.Last, 0);
+            });
         }
-        Focus(element);
+        Focus(grid);
     }
     
     internal static void RemoveItems(TreeSelection selection, ExplorerItem rootItem, ExplorerTreeDataGrid grid)

@@ -41,8 +41,9 @@ public static class ECSUtils
     }
     
 #region duplicate Entity's
-    internal static void DuplicateEntities(List<Entity> entities)
+    internal static int[] DuplicateEntities(List<Entity> entities)
     {
+        var indexes = new List<int>(entities.Count);
         var store   = entities[0].Store;
         foreach (var entity in entities) {
             var parent  = entity.Parent;
@@ -50,10 +51,12 @@ public static class ECSUtils
                 continue;
             }
             var clone = store.CloneEntity(entity);
-            parent.AddChild(clone);
+            var index = parent.AddChild(clone);
+            indexes.Add(index);
             
             DuplicateChildren(entity, clone, store);
         }
+        return indexes.ToArray();
     }
     
     private static void DuplicateChildren(Entity entity, Entity clone, EntityStore store)
@@ -203,7 +206,7 @@ public static class ECSUtils
     
     internal static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
     {
-        var indexes = new List<int>(items.Length);
+        var indexes = new int[items.Length];
         var parent  = items[0].Entity.Parent;
         var pos     = 0;
         foreach (var item in items)
@@ -211,35 +214,38 @@ public static class ECSUtils
             var entity      = item.Entity;
             int index       = parent.GetChildIndex(entity.Id);
             int newIndex    = index - shift;
-            if (newIndex < pos++) {
-                continue;
+            if (newIndex < pos) {
+                indexes[pos] = index;
+            } else {
+                indexes[pos] = newIndex;
+                Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
+                parent.InsertChild(newIndex, entity);
             }
-            indexes.Add(newIndex);
-            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
-            parent.InsertChild(newIndex, entity);
+            pos++;
         }
-        return indexes.ToArray();
+        return indexes;
     }
     
     internal static int[] MoveExplorerItemsDown(ExplorerItem[] items, int shift)
     {
-        var indexes     = new List<int>(items.Length);
+        var indexes     = new int[items.Length];
         var parent      = items[0].Entity.Parent;
         var childCount  = parent.ChildCount;
-        var pos     = 0;
+        var pos         = 0;
         for (int n = items.Length - 1; n >= 0; n--)
         {
             var entity      = items[n].Entity;
             int index       = parent.GetChildIndex(entity.Id);
             int newIndex    = index + shift;
             if (newIndex >= childCount - pos++) {
+                indexes[n] = index;
                 continue;
             }
-            indexes.Add(newIndex);
+            indexes[n] = newIndex;
             Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
             parent.InsertChild(newIndex, entity);
         }
-        return indexes.ToArray();
+        return indexes;
     }
     #endregion
 }
