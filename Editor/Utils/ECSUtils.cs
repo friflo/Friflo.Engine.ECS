@@ -11,7 +11,7 @@ using Friflo.Json.Fliox;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Fliox.Editor.Utils;
 
 public static class ECSUtils
 {

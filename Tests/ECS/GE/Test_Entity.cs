@@ -1,3 +1,4 @@
+using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -29,6 +30,15 @@ public static class Test_Entity
         // remove same script type again
         Entity.RemoveEntityScript(entity, scriptType);
         AreEqual(0,                     entity.Scripts.Length);
+        {
+            var bytes = new byte[1_000_000_000];
+            for (int n = 0; n < bytes.Length; n++) {
+                bytes[n]= (byte)n;
+            }
+            bytes = null;
+        }
+        GC.Collect(10);
+        
     }
     
     [Test]

@@ -2,15 +2,12 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Avalonia.Controls.Primitives;
+using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
-using Friflo.Fliox.Engine.ECS.Serialize;
-using Friflo.Json.Fliox;
 
 // ReSharper disable HeuristicUnreachableCode
 namespace Friflo.Fliox.Editor.UI.Explorer;
@@ -37,16 +34,6 @@ public static class ExplorerCommands
         beginEdit!.Invoke(cell, BindingFlags.Instance | BindingFlags.Public, null, null, null);
     }
     
-    internal static void DuplicateItems(TreeSelection selection, ExplorerTreeDataGrid grid)
-    {
-        Console.WriteLine("Duplicate");
-        if (selection.Length > 0) {
-            var entities    = selection.items.Select(item => item.Entity).ToList();
-            ECSUtils.DuplicateEntities(entities);
-        }
-        grid.FocusPanel();
-    }
-    
     internal static void CopyItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
         var entities    = selection.items.Select(item => item.Entity).ToList();
@@ -58,15 +45,22 @@ public static class ExplorerCommands
     
     internal static async void PasteItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
-        var text = await EditorUtils.GetClipboardText(grid);
-        if (text != null && selection.Length > 0) {
-            var jsonArray       = new JsonValue(Encoding.UTF8.GetBytes(text));
-            var dataEntities    = new List<DataEntity>();
-            if (ECSUtils.JsonArrayToDataEntities (jsonArray, dataEntities) == null) {
+        if (selection.Length > 0) {
+            var dataEntities = await ClipboardUtils.GetDataEntities(grid);
+            if (dataEntities != null) {
                 var targetEntity    = selection.items[0].Entity;
                 targetEntity        = targetEntity.Parent ?? targetEntity; // add entities to parent
                 ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
             }
+        }
+        grid.FocusPanel();
+    }
+    
+    internal static void DuplicateItems(TreeSelection selection, ExplorerTreeDataGrid grid)
+    {
+        if (selection.Length > 0) {
+            var entities    = selection.items.Select(item => item.Entity).ToList();
+            ECSUtils.DuplicateEntities(entities);
         }
         grid.FocusPanel();
     }
