@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
@@ -34,35 +35,35 @@ public static class ExplorerCommands
         beginEdit!.Invoke(cell, BindingFlags.Instance | BindingFlags.Public, null, null, null);
     }
     
-    internal static void CopyItems(TreeSelection selection, ExplorerTreeDataGrid grid)
+    internal static void CopyItems(TreeSelection selection, InputElement element)
     {
         var entities    = selection.items.Select(item => item.Entity).ToList();
         var json        = ECSUtils.EntitiesToJsonArray(entities);
         var text        = json.AsString();
-        EditorUtils.CopyToClipboard(grid, text);
-        grid.FocusPanel();
+        EditorUtils.CopyToClipboard(element, text);
+        Focus(element);
     }
     
-    internal static async void PasteItems(TreeSelection selection, ExplorerTreeDataGrid grid)
+    internal static async void PasteItems(TreeSelection selection, InputElement element)
     {
         if (selection.Length > 0) {
-            var dataEntities = await ClipboardUtils.GetDataEntities(grid);
+            var dataEntities = await ClipboardUtils.GetDataEntities(element);
             if (dataEntities != null) {
                 var targetEntity    = selection.items[0].Entity;
                 targetEntity        = targetEntity.Parent ?? targetEntity; // add entities to parent
                 ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
             }
         }
-        grid.FocusPanel();
+        Focus(element);
     }
     
-    internal static void DuplicateItems(TreeSelection selection, ExplorerTreeDataGrid grid)
+    internal static void DuplicateItems(TreeSelection selection, IInputElement element)
     {
         if (selection.Length > 0) {
             var entities    = selection.items.Select(item => item.Entity).ToList();
             ECSUtils.DuplicateEntities(entities);
         }
-        grid.FocusPanel();
+        Focus(element);
     }
     
     internal static void RemoveItems(TreeSelection selection, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
@@ -70,10 +71,10 @@ public static class ExplorerCommands
         var next = grid.GetSelectionPath();
         ECSUtils.RemoveExplorerItems(selection.items, rootItem);
         grid.SetSelectionPath(next);
-        grid.FocusPanel();
+        Focus(grid);
     }
     
-    internal static void CreateItems(TreeSelection selection, ExplorerTreeDataGrid grid)
+    internal static void CreateItems(TreeSelection selection, IInputElement element)
     {
         foreach (var item in selection.items) {
             var parent      = item.Entity;
@@ -82,22 +83,26 @@ public static class ExplorerCommands
             newEntity.AddComponent(new EntityName($"entity"));
             parent.AddChild(newEntity);
         }
-        grid.FocusPanel();
+        Focus(element);
     }
     
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
-    internal static int[] MoveItemsUp(TreeSelection selection, int shift, ExplorerTreeDataGrid grid)
+    internal static int[] MoveItemsUp(TreeSelection selection, int shift, IInputElement element)
     {
         var indexes = ECSUtils.MoveExplorerItemsUp(selection.items, shift);
-        grid.FocusPanel();
+        Focus(element);
         return indexes.ToArray();
     }
     
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
-    internal static int[] MoveItemsDown(TreeSelection selection, int shift, ExplorerTreeDataGrid grid)
+    internal static int[] MoveItemsDown(TreeSelection selection, int shift, IInputElement element)
     {
         var indexes = ECSUtils.MoveExplorerItemsDown(selection.items, shift);
-        grid.FocusPanel();
+        Focus(element);
         return indexes.ToArray();
+    }
+    
+    private static void Focus(IInputElement element) {
+        element?.Focus();
     }
 }

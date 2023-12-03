@@ -72,10 +72,6 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
     } */
     
-    internal void FocusPanel() {
-        Focus();
-    }
-    
     /// <summary>
     /// The only purpose of <see cref="RowDropHandler"/> and <see cref="RowDropped"/> is to select the
     /// <see cref="RowDropContext.droppedItems"/> after drag/drop is finished.
