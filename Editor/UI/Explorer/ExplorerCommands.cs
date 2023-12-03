@@ -61,7 +61,8 @@ public static class ExplorerCommands
                 // requires Post() to avoid artifacts in grid. No clue why.
                 EditorUtils.Post(() => {
                     grid.RowSelection.Clear();
-                    grid.SelectItems(newSelection, indexes, SelectionView.Last, 0);    
+                    newSelection.UpdateIndexPaths(indexes);
+                    grid.SelectItems(newSelection, SelectionView.Last, 0);    
                 });
             }
         }
@@ -78,7 +79,8 @@ public static class ExplorerCommands
             // requires Post() to avoid artifacts in grid. No clue why.
             EditorUtils.Post(() => {
                 grid.RowSelection?.Clear();
-                grid.SelectItems(selectedPaths, indexes, SelectionView.Last, 0);
+                selectedPaths.UpdateIndexPaths(indexes);
+                grid.SelectItems(selectedPaths, SelectionView.Last, 0);
             });
         }
         Focus(grid);
@@ -92,16 +94,21 @@ public static class ExplorerCommands
         Focus(grid);
     }
     
-    internal static void CreateItems(TreeSelection selection, IInputElement element)
+    internal static void CreateItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
-        foreach (var item in selection.items) {
+        grid.GetSelectedPaths(out var selectedPaths);
+        var items   = selection.items;
+        var indexes = new int[items.Length];
+        for (int n = 0; n < items.Length; n++) {
+            var item        = items[n];
             var parent      = item.Entity;
             var newEntity   = parent.Store.CreateEntity();
             Log(() => $"parent id: {parent.Id} - CreateEntity id: {newEntity.Id}");
             newEntity.AddComponent(new EntityName($"entity"));
-            parent.AddChild(newEntity);
+            indexes[n]      = parent.AddChild(newEntity);
+            // grid.SelectItems(selectedPaths, indexes, SelectionView.Last, 0);
         }
-        Focus(element);
+        Focus(grid);
     }
     
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>

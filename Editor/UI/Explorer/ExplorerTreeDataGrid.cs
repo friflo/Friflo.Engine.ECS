@@ -107,7 +107,8 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
         var targetModel     = cx.targetModel;
         var newSelection    = TreeIndexPaths.Create(targetModel, indexes);
-        SelectItems(newSelection, indexes, SelectionView.First, 1);
+        newSelection.UpdateIndexPaths(indexes);
+        SelectItems(newSelection, SelectionView.First, 1);
     }
     
     internal HierarchicalTreeDataGridSource<ExplorerItem> GridSource => (HierarchicalTreeDataGridSource<ExplorerItem>)Source!;
@@ -140,29 +141,23 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         return selectedPaths != null;
     }
     
-    internal void SelectItems(TreeIndexPaths newSelection, int[] indexes, SelectionView view, int offset)
+    internal void SelectItems(TreeIndexPaths treeIndexPaths, SelectionView view, int offset)
     {
-        if (indexes.Length == 0) {
-            return;
-        }
-        if (indexes.Length != newSelection.paths.Length) throw new InvalidOperationException("expect equal lengths");
-        
-        var selection = RowSelection!;
+        var paths       = treeIndexPaths.paths;
+        var selection   = RowSelection!;
         selection.BeginBatchUpdate();
         IndexPath first = default;
         IndexPath last  = default;
-        int length      = indexes.Length;
+        int length      = paths.Length;
         for (int n = 0; n < length; n++) {
-            var path    = newSelection.paths[n];
-            var parent  = path.Slice(0, path.Count - 1);
-            var child   = parent.Append(indexes[n]);
+            var path    = paths[n];
             if (n == 0) {
-                first = child;
+                first = path;
             }
             if (n == length - 1) {
-                last = child;
+                last = path;
             }
-            selection.Select(child);
+            selection.Select(path);
         }
         selection.EndBatchUpdate();
         
@@ -231,7 +226,8 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 if (GetSelectedPaths(out var selectedPaths)) {
                     var indexes = ExplorerCommands.MoveItemsUp(GetSelection(), 1, this);
-                    SelectItems(selectedPaths, indexes, SelectionView.First, 1);
+                    selectedPaths.UpdateIndexPaths(indexes);
+                    SelectItems(selectedPaths, SelectionView.First, 1);
                 }
                 return true;
             case Key.Down:
@@ -240,7 +236,8 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 if (GetSelectedPaths(out selectedPaths)) {
                     var indexes = ExplorerCommands.MoveItemsDown(GetSelection(), 1, this);
-                    SelectItems(selectedPaths, indexes, SelectionView.Last, 1);
+                    selectedPaths.UpdateIndexPaths(indexes);
+                    SelectItems(selectedPaths, SelectionView.Last, 1);
                 }
                 return true;
             default:

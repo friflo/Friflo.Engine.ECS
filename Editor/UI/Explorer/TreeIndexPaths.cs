@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
@@ -47,6 +48,20 @@ internal class TreeIndexPaths
             paths[n] = parent.Append(indexes[n]); 
         }
         return new TreeIndexPaths(paths);
+    }
+    
+    internal void UpdateIndexPaths(int[] indexes)
+    {
+        int length      = indexes.Length;
+        var indexPaths  = paths;
+        if (length != indexPaths.Length) throw new InvalidOperationException("expect equal lengths");
+        
+        for (int n = 0; n < length; n++)
+        {
+            var path        = indexPaths[n];
+            var parent      = path.Slice(0, path.Count - 1);
+            indexPaths[n]   = parent.Append(indexes[n]);
+        }
     }
 }
 //cannot use TreeDataGridRow targetRow
