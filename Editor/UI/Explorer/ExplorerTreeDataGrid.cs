@@ -107,7 +107,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
         var targetModel     = cx.targetModel;
         var newSelection    = TreeIndexPaths.Create(targetModel, indexes);
-        newSelection.UpdateIndexPaths(indexes);
+        // newSelection.UpdateIndexPaths(indexes); todo fix
         SelectItems(newSelection, SelectionView.First, 1);
     }
     
@@ -136,12 +136,12 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     }
     
     internal bool GetSelectedPaths(out TreeIndexPaths selectedPaths) {
-        var indexes = RowSelection!.SelectedIndexes;
-        selectedPaths = TreeIndexPaths.Create(indexes);
+        var indexes     = RowSelection!.SelectedIndexes;
+        selectedPaths   = TreeIndexPaths.Create(indexes);
         return selectedPaths != null;
     }
     
-    internal void SelectItems(TreeIndexPaths treeIndexPaths, SelectionView view, int offset)
+    internal void SelectItems(TreeIndexPaths treeIndexPaths, SelectionView view, int margin)
     {
         var paths       = treeIndexPaths.paths;
         var selection   = RowSelection!;
@@ -161,16 +161,16 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         }
         selection.EndBatchUpdate();
         
-        BringSelectionIntoView (first, last, view, offset);
+        BringSelectionIntoView (first, last, view, margin);
     }
     
-    private void BringSelectionIntoView(IndexPath first, IndexPath last, SelectionView view, int offset) {
+    private void BringSelectionIntoView(IndexPath first, IndexPath last, SelectionView view, int margin) {
         var rows = Rows!;
         int showIndex;
         if (view == SelectionView.First) {
-            showIndex = rows.ModelIndexToRowIndex(first) - offset;
+            showIndex = rows.ModelIndexToRowIndex(first) - margin;
         } else {
-            showIndex = rows.ModelIndexToRowIndex(last)  + offset;
+            showIndex = rows.ModelIndexToRowIndex(last)  + margin;
         }
         // Console.WriteLine($"BringIntoView: {showIndex}");
         RowsPresenter!.BringIntoView(showIndex);
@@ -226,7 +226,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 if (GetSelectedPaths(out var selectedPaths)) {
                     var indexes = ExplorerCommands.MoveItemsUp(GetSelection(), 1, this);
-                    selectedPaths.UpdateIndexPaths(indexes);
+                    selectedPaths.UpdateLeafIndexes(indexes);
                     SelectItems(selectedPaths, SelectionView.First, 1);
                 }
                 return true;
@@ -236,7 +236,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 }
                 if (GetSelectedPaths(out selectedPaths)) {
                     var indexes = ExplorerCommands.MoveItemsDown(GetSelection(), 1, this);
-                    selectedPaths.UpdateIndexPaths(indexes);
+                    selectedPaths.UpdateLeafIndexes(indexes);
                     SelectItems(selectedPaths, SelectionView.Last, 1);
                 }
                 return true;

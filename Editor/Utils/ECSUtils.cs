@@ -206,8 +206,11 @@ public static class ECSUtils
     
     internal static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
     {
-        var indexes = new int[items.Length];
         var parent  = items[0].Entity.Parent;
+        if (parent == null) {
+            return null;
+        }
+        var indexes = new int[items.Length];
         var pos     = 0;
         foreach (var item in items)
         {
@@ -228,8 +231,11 @@ public static class ECSUtils
     
     internal static int[] MoveExplorerItemsDown(ExplorerItem[] items, int shift)
     {
-        var indexes     = new int[items.Length];
         var parent      = items[0].Entity.Parent;
+        if (parent == null) {
+            return null;
+        }
+        var indexes     = new int[items.Length];
         var childCount  = parent.ChildCount;
         var pos         = 0;
         for (int n = items.Length - 1; n >= 0; n--)

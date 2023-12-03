@@ -144,7 +144,7 @@ public class ExplorerFlyout : MenuFlyout
         menu.InputGesture   = new KeyGesture(Key.Up, KeyModifiers.Control);
         menu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsUp(selection, 1, grid);
-            selectedPaths.UpdateIndexPaths(indexes);
+            selectedPaths.UpdateLeafIndexes(indexes);
             grid.SelectItems(selectedPaths, SelectionView.First, 1);
         };
         Items.Add(menu);
@@ -156,14 +156,18 @@ public class ExplorerFlyout : MenuFlyout
         if (selection.Length == 1) {
             var entity  = selection.items.Last().Entity;
             var parent  = entity.Parent;
-            var index   = parent.GetChildIndex(entity.Id);
-            canMove     = index < parent.ChildCount - 1;
+            if (parent != null) {
+                var index   = parent.GetChildIndex(entity.Id);
+                canMove     = index < parent.ChildCount - 1;
+            } else {
+                canMove     = false;
+            }
         }
         var menu            = new MenuItem { Header = "Move down", IsEnabled = canMove };
         menu.InputGesture   = new KeyGesture(Key.Down, KeyModifiers.Control);
         menu.Click += (_, _) => {
             var indexes = ExplorerCommands.MoveItemsDown(selection, 1, grid);
-            selectedPaths.UpdateIndexPaths(indexes);
+            selectedPaths.UpdateLeafIndexes(indexes);
             grid.SelectItems(selectedPaths, SelectionView.Last, 1);
         };
         Items.Add(menu);

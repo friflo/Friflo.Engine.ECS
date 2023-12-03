@@ -33,10 +33,6 @@ internal class TreeIndexPaths
         if (indexes.Count == 0) {
             return null;
         }
-        var first = indexes[0];
-        if (first == new IndexPath(0)) {
-            return null;
-        }
         var paths = indexes.ToArray();
         return new TreeIndexPaths(paths);
     }
@@ -50,17 +46,30 @@ internal class TreeIndexPaths
         return new TreeIndexPaths(paths);
     }
     
-    internal void UpdateIndexPaths(int[] indexes)
+    internal void UpdateLeafIndexes(int[] indexes)
+    {
+        if (indexes == null) {
+            return;
+        }
+        int length      = indexes.Length;
+        var indexPaths  = paths;
+        if (length != indexPaths.Length) throw new InvalidOperationException("expect equal lengths");
+        
+        for (int n = 0; n < length; n++) {
+            var path        = indexPaths[n];
+            var parent      = path.Slice(0, path.Count - 1);
+            indexPaths[n]   = parent.Append(indexes[n]);
+        }
+    }
+    
+    internal void AppendLeafIndexes(int[] indexes)
     {
         int length      = indexes.Length;
         var indexPaths  = paths;
         if (length != indexPaths.Length) throw new InvalidOperationException("expect equal lengths");
         
-        for (int n = 0; n < length; n++)
-        {
-            var path        = indexPaths[n];
-            var parent      = path.Slice(0, path.Count - 1);
-            indexPaths[n]   = parent.Append(indexes[n]);
+        for (int n = 0; n < length; n++) {
+            indexPaths[n] = indexPaths[n].Append(indexes[n]);
         }
     }
 }

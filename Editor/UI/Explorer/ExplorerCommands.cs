@@ -61,7 +61,7 @@ public static class ExplorerCommands
                 // requires Post() to avoid artifacts in grid. No clue why.
                 EditorUtils.Post(() => {
                     grid.RowSelection.Clear();
-                    newSelection.UpdateIndexPaths(indexes);
+                    newSelection.UpdateLeafIndexes(indexes);
                     grid.SelectItems(newSelection, SelectionView.Last, 0);    
                 });
             }
@@ -79,7 +79,7 @@ public static class ExplorerCommands
             // requires Post() to avoid artifacts in grid. No clue why.
             EditorUtils.Post(() => {
                 grid.RowSelection?.Clear();
-                selectedPaths.UpdateIndexPaths(indexes);
+                selectedPaths.UpdateLeafIndexes(indexes);
                 grid.SelectItems(selectedPaths, SelectionView.Last, 0);
             });
         }
@@ -106,8 +106,10 @@ public static class ExplorerCommands
             Log(() => $"parent id: {parent.Id} - CreateEntity id: {newEntity.Id}");
             newEntity.AddComponent(new EntityName($"entity"));
             indexes[n]      = parent.AddChild(newEntity);
-            // grid.SelectItems(selectedPaths, indexes, SelectionView.Last, 0);
         }
+        grid.RowSelection?.Clear();
+        selectedPaths.AppendLeafIndexes(indexes);
+        grid.SelectItems(selectedPaths, SelectionView.Last, 0);
         Focus(grid);
     }
     
@@ -116,7 +118,7 @@ public static class ExplorerCommands
     {
         var indexes = ECSUtils.MoveExplorerItemsUp(selection.items, shift);
         Focus(element);
-        return indexes.ToArray();
+        return indexes?.ToArray();
     }
     
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
@@ -124,7 +126,7 @@ public static class ExplorerCommands
     {
         var indexes = ECSUtils.MoveExplorerItemsDown(selection.items, shift);
         Focus(element);
-        return indexes.ToArray();
+        return indexes?.ToArray();
     }
     
     private static void Focus(IInputElement element) {
