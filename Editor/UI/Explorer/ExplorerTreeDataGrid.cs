@@ -129,6 +129,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     /// </summary>
     private ExplorerItem[] GetSelectedItems() {
         var items = (IReadOnlyList<ExplorerItem>)RowSelection!.SelectedItems;
+        // create a copy as SelectedItems may change
         return items.ToArray();
     }
     

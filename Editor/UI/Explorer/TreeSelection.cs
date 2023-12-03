@@ -5,7 +5,7 @@ using Friflo.Fliox.Engine.ECS.Collections;
 
 namespace Friflo.Fliox.Editor.UI.Explorer;
 
-public class TreeSelection
+public readonly struct TreeSelection
 {
     internal            int             Length => items.Length;
     
