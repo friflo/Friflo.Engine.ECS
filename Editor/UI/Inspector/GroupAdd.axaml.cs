@@ -11,8 +11,10 @@ namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class GroupAdd : UserControl
 {
-    public  Entity  Entity      { get; set; }
-    private string  GroupName   { get; set; }
+    public  Entity              Entity      { get; set; }
+    private string              GroupName   { get; set; }
+    
+    private InspectorControl    inspector;
     
     public GroupAdd()
     {
@@ -26,10 +28,11 @@ public partial class GroupAdd : UserControl
         };
     }
 
-    internal void AddSchemaTypes(string groupName)
+    internal void AddSchemaTypes(InspectorControl inspector, string groupName)
     {
-        GroupName = groupName;
-        var schema = EntityStore.GetEntitySchema();
+        this.inspector  = inspector;
+        GroupName       = groupName;
+        var schema      = EntityStore.GetEntitySchema();
         switch (groupName)
         {
             case "tags":
@@ -70,6 +73,10 @@ public partial class GroupAdd : UserControl
             case "components":
                 var componentType = schema.Components[index];
                 Entity.AddEntityComponent(Entity, componentType);
+                if (componentType.type == typeof(EntityName)) {
+                    Entity.Name.value = "name";
+                }
+                inspector.Observer.FocusComponent(componentType);
                 break;
             case "scripts":
                 var scriptType = schema.Scripts[index];

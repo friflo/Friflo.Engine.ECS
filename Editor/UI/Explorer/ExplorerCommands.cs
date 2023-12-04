@@ -7,7 +7,6 @@ using System.Reflection;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable HeuristicUnreachableCode
@@ -104,7 +103,7 @@ public static class ExplorerCommands
             var parent      = item.Entity;
             var newEntity   = parent.Store.CreateEntity();
             Log(() => $"parent id: {parent.Id} - CreateEntity id: {newEntity.Id}");
-            newEntity.AddComponent(new EntityName($"entity"));
+            // newEntity.AddComponent(new EntityName($"entity"));
             indexes[n]      = parent.AddChild(newEntity);
         }
         grid.RowSelection?.Clear();

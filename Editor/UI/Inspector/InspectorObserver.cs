@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Friflo.Fliox.Engine.ECS;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
@@ -34,6 +35,7 @@ internal class InspectorObserver : EditorObserver
     private readonly    HashSet<Control>                            controlSet;
     private readonly    List<Control>                               controlList;
     private             int                                         entityId;
+    private             SchemaType                                  focusSchemaType;
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
@@ -44,7 +46,7 @@ internal class InspectorObserver : EditorObserver
         controlSet      = new HashSet<Control>();
         controlList     = new List<Control>();
     }
-
+    
     protected override void OnEditorReady() {
         var store = Store;
         store.ComponentAdded     += (in ComponentChangedArgs args) => PostSetEntity(args.entityId); 
@@ -98,6 +100,28 @@ internal class InspectorObserver : EditorObserver
         SetTags         (entity);
         SetComponents   (entity);
         SetScripts      (entity);
+        
+        SetComponentFocus();
+    }
+    
+    internal void FocusComponent(SchemaType schemaType) {
+        focusSchemaType = schemaType;
+    }
+    
+    private void SetComponentFocus()
+    {
+        var focus = focusSchemaType;
+        if (focus == null) {
+            return;
+        }
+        focusSchemaType = null;
+        if (focus is ComponentType componentType) {
+            var panel = componentMap[componentType].componentPanel;
+            EditorUtils.Post(() => {
+                var focusable = EditorUtils.FindFocusable(panel);
+                focusable?.Focus(NavigationMethod.Tab);    
+            });
+        }
     }
     
     private void SetTags(Entity entity)

@@ -8,16 +8,19 @@ namespace Friflo.Fliox.Editor.UI.Inspector;
 
 public partial class InspectorControl : UserControl
 {
-    internal readonly InspectorControlModel model = new InspectorControlModel();
+    internal            InspectorObserver       Observer => observer;
+    
+    internal readonly   InspectorControlModel   model = new InspectorControlModel();
+    private             InspectorObserver       observer;
     
     public InspectorControl()
     {
         DataContext = model;
         InitializeComponent();
         
-        TagGroup.GroupAdd.AddSchemaTypes("tags");
-        ComponentGroup.GroupAdd.AddSchemaTypes("components");
-        ScriptGroup.GroupAdd.AddSchemaTypes("scripts");
+        TagGroup.       GroupAdd.AddSchemaTypes(this, "tags");
+        ComponentGroup. GroupAdd.AddSchemaTypes(this, "components");
+        ScriptGroup.    GroupAdd.AddSchemaTypes(this, "scripts");
         //
         if (!EditorUtils.IsDesignMode) {
             Tags.Children.Clear();
@@ -35,7 +38,8 @@ public partial class InspectorControl : UserControl
             model.ComponentCount    = 3;
             model.ScriptCount       = 1;
         }
-        var editor = this.GetEditor();
-        editor?.AddObserver(new InspectorObserver(this, editor));
+        var editor  = this.GetEditor();
+        observer    = new InspectorObserver(this, editor);
+        editor?.AddObserver(observer);
     }
 }

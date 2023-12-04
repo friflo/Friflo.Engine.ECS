@@ -81,6 +81,22 @@ public static class EditorUtils
         return null;
     }
     
+    internal static InputElement FindFocusable(Visual control)
+    {
+        foreach (var child in control.GetVisualChildren()) {
+            if (child is InputElement inputElement) {
+                if (inputElement.Focusable) {
+                    return inputElement;
+                }
+            }
+            var focusableChild = FindFocusable(child);
+            if (focusableChild != null) {
+                return focusableChild;
+            }
+        }
+        return null;
+    }
+    
     internal static T FindControl<T>(Visual control) where T : Control
     {
         foreach (var child in control.GetVisualChildren()) {

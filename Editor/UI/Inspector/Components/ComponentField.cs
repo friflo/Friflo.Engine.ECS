@@ -109,12 +109,12 @@ public class ComponentField
     private static Control CreateField (Type fieldType, ComponentField field)
     {
         if (fieldType == typeof(string)) {
-            return new StringField { ComponentField = field };
+            return new StringField  { ComponentField = field };
         }
         if (fieldType == typeof(int)) {
-            return new ValueField { ComponentField = field };
+            return new ValueField   { ComponentField = field };
         } else {
-            return new ValueField { ComponentField = field };
+            return new ValueField   { ComponentField = field };
         }
     }
     #endregion
