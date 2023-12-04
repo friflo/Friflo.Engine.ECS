@@ -9,6 +9,10 @@ using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
+// Hard rule: this file MUST NOT use namespaces:
+// - Friflo.Fliox.Editor.*
+// - Avalonia.*
+
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 namespace Friflo.Fliox.Editor.Utils;
@@ -40,7 +44,7 @@ public static class ECSUtils
         return null;
     }
     
-#region duplicate Entity's
+#region Duplicate Entity's
     internal static int[] DuplicateEntities(List<Entity> entities)
     {
         var indexes = new List<int>(entities.Count);
@@ -72,7 +76,7 @@ public static class ECSUtils
     
     #endregion
     
-#region paste DataEntity's
+#region Paste DataEntity's
     /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
     internal static int[] AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
@@ -187,7 +191,7 @@ public static class ECSUtils
     }
     #endregion
     
-#region ExplorerItem's
+#region Remove ExplorerItem's
     internal static void RemoveExplorerItems(ExplorerItem[] items, ExplorerItem rootItem)
     {
         foreach (var item in items) {
@@ -203,7 +207,9 @@ public static class ECSUtils
             parent.RemoveChild(entity);
         }
     }
+    #endregion
     
+#region Move ExplorerItem's
     internal static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
     {
         var parent  = items[0].Entity.Parent;
