@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -31,20 +30,23 @@ internal class InspectorObserver : EditorObserver
     private readonly    InspectorControl                            inspector;
     private readonly    Dictionary<TagType,       InspectorTag>     tagMap;
     private readonly    Dictionary<ComponentType, ComponentItem>    componentMap;
-    private readonly    Dictionary<Type,          ComponentItem>    scriptMap;
+    private readonly    Dictionary<ScriptType,    ComponentItem>    scriptMap;
     private readonly    HashSet<Control>                            controlSet;
     private readonly    List<Control>                               controlList;
+    private readonly    EntitySchema                                schema;
     private             int                                         entityId;
     private             SchemaType                                  focusSchemaType;
+    
     
     internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
     {
         this.inspector  = inspector;
         tagMap          = new Dictionary<TagType,       InspectorTag>();
         componentMap    = new Dictionary<ComponentType, ComponentItem>();
-        scriptMap       = new Dictionary<Type,          ComponentItem>();
+        scriptMap       = new Dictionary<ScriptType,    ComponentItem>();
         controlSet      = new HashSet<Control>();
         controlList     = new List<Control>();
+        schema          = EntityStore.GetEntitySchema();
     }
     
     protected override void OnEditorReady() {
@@ -117,11 +119,21 @@ internal class InspectorObserver : EditorObserver
         focusSchemaType = null;
         if (focus is ComponentType componentType) {
             var panel = componentMap[componentType].componentPanel;
-            EditorUtils.Post(() => {
-                var focusable = EditorUtils.FindFocusable(panel);
-                focusable?.Focus(NavigationMethod.Tab);    
-            });
+            FocusPanel(panel);
+            return;
         }
+        if (focus is ScriptType scriptType) {
+            var panel = scriptMap[scriptType].componentPanel;
+            FocusPanel(panel);
+            return;
+        }
+    }
+    
+    private static void FocusPanel(Panel panel) {
+        EditorUtils.Post(() => {
+            var focusable = EditorUtils.FindFocusable(panel);
+            focusable?.Focus(NavigationMethod.Tab);
+        });
     }
     
     private void SetTags(Entity entity)
@@ -180,9 +192,10 @@ internal class InspectorObserver : EditorObserver
         
         foreach (var script in entity.Scripts)
         {
-            var type = script.GetType();
-            if (!scriptMap.TryGetValue(type, out var item)) {
-                var scriptType  = EntityStore.GetEntitySchema().ScriptTypeByType[type];
+            var type        = script.GetType();
+            var scriptType  = schema.ScriptTypeByType[type];
+            if (!scriptMap.TryGetValue(scriptType, out var item))
+            {
                 var component   = new InspectorComponent { ComponentTitle = type.Name, ScriptType = scriptType };
                 var panel       = new StackPanel();
                 var fields      = new List<ComponentField>();
@@ -194,7 +207,7 @@ internal class InspectorObserver : EditorObserver
                 panel.Bind(Visual.IsVisibleProperty, expanded);
                 
                 item = new ComponentItem(component, panel, fields.ToArray());
-                scriptMap.Add(type, item);
+                scriptMap.Add(scriptType, item);
             }
             ComponentField.SetScriptFields(item.fields, script);
             item.inspectorComponent.Entity = entity;
