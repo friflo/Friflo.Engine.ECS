@@ -112,9 +112,9 @@ public class ComponentField
             return new StringField { ComponentField = field };
         }
         if (fieldType == typeof(int)) {
-            return new StringField { ComponentField = field };
+            return new ValueField { ComponentField = field };
         } else {
-            return new StringField { ComponentField = field };
+            return new ValueField { ComponentField = field };
         }
     }
     #endregion
@@ -191,12 +191,12 @@ public class ComponentField
             return;
         }
         if (type == typeof(int)) {
-            var control     = (StringField)field.control;
+            var control     = (ValueField)field.control;
             control.Value   = field.member.GetVar(data.instance).Int32.ToString();
             return;
         }
         if (type == typeof(float)) {
-            var control     = (StringField)field.control;
+            var control     = (ValueField)field.control;
             control.Value   = field.member.GetVar(data.instance).Flt32.ToString(CultureInfo.InvariantCulture);
             return;
         }

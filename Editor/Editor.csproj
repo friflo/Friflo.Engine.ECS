@@ -111,6 +111,10 @@
         <DependentUpon>StringField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="UI\Inspector\Components\Fields\ValueField.axaml.cs">
+        <DependentUpon>ValueField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
       <Compile Update="UI\Inspector\Components\Fields\UnresolvedField.axaml.cs">
         <DependentUpon>UnresolvedField.axaml</DependentUpon>
         <SubType>Code</SubType>
