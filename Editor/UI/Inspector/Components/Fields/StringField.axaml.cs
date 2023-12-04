@@ -15,6 +15,7 @@ public partial class StringField : UserControl, IFieldControl
     public static readonly DirectProperty<StringField, string> ValueProperty = AP.RegisterDirect<StringField, string>(nameof(Value), o => o.Value, (o, v) => o.Value = v);
 
     private     string          text;
+    private     string          initText;
     private     bool            modified;
     public      ComponentField  ComponentField { get; init; }
     
@@ -22,6 +23,7 @@ public partial class StringField : UserControl, IFieldControl
     
     public void InitValue(string value) {
         Value       = value;
+        initText    = value;
         modified    = false;
     }
     
@@ -41,6 +43,10 @@ public partial class StringField : UserControl, IFieldControl
         if (e.Key == Key.Return && e.KeyModifiers == KeyModifiers.None) {
             ChangeComponentField();
         }
+        if (e.Key == Key.Escape && e.KeyModifiers == KeyModifiers.None) {
+            Value       = initText;
+            modified    = false;
+        }
     }
 
     protected override void OnLostFocus(RoutedEventArgs e) {
@@ -52,7 +58,8 @@ public partial class StringField : UserControl, IFieldControl
         if (!modified) {
             return;
         }
-        modified = false;
+        modified    = false;
+        initText    = text;
         ComponentField?.SetString(text);
     }
 }
