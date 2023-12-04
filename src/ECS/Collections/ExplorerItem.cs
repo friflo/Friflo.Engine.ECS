@@ -28,8 +28,8 @@ public sealed class ExplorerItem :
     public              Entity  Entity          => entity;
     public              bool    IsRoot          => IsRootItem();
     public              bool    AllowDrag       => !IsRootItem();
-    public              string  Name            { get => GetName(entity);   set => SetName    (entity, value); }
-    public              bool    IsExpanded      { get => isExpanded;        set => SetExpanded(value);         }
+    public              string  Name            { get => GetName();   set => SetName    (value); }
+    public              bool    IsExpanded      { get => isExpanded;  set => SetExpanded(value);         }
     public              string  DebugTreeName   => tree.debugName;
     
     public              bool    flag;           // todo remove
@@ -56,20 +56,22 @@ public sealed class ExplorerItem :
     private bool IsRootItem() {
         return tree.rootItem.entity == entity;
     }
-    private static string GetName(Entity entity) {
+    
+    private string GetName() {
         if (entity.HasName) {
             return entity.Name.value;
         }
-        return "---";
+        return tree.defaultEntityName;
     }
     
-    private static void SetName(Entity entity, string value) {
-        if (string.IsNullOrEmpty(value)) {
-            entity.RemoveComponent<EntityName>();
-            return;
-        }
+    private void SetName(string value)
+    {
         entity.TryGetComponent<EntityName>(out var name);
         if (name.value == value) {
+            return;
+        }
+        if (string.IsNullOrEmpty(value) || value == tree.defaultEntityName) {
+            entity.RemoveComponent<EntityName>();
             return;
         }
         entity.AddComponent(new EntityName(value));

@@ -165,7 +165,9 @@ public static class Test_ExplorerItem
             }
         };
         
-        AreEqual("---",         rootItem.Name);
+        var defaultName = "entity";
+        
+        AreEqual(defaultName,   rootItem.Name);
         
         // --- add Name
         rootItem.Name = "test";
@@ -176,10 +178,10 @@ public static class Test_ExplorerItem
         
         // --- remove Name
         rootItem.Name = null;
-        AreEqual("---",         rootItem.Name);
+        AreEqual(defaultName,   rootItem.Name);
         
         rootItem.Name = null;
-        AreEqual("---",         rootItem.Name); // no event sent. name is already removed
+        AreEqual(defaultName,   rootItem.Name); // no event sent. name is already removed
         
         AreEqual(1, addCount);
         AreEqual(1, removeCount);
