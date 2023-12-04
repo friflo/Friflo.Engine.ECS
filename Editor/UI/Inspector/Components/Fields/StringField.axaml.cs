@@ -3,6 +3,8 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable once CheckNamespace
@@ -12,18 +14,45 @@ public partial class StringField : UserControl, IFieldControl
 {
     public static readonly DirectProperty<StringField, string> ValueProperty = AP.RegisterDirect<StringField, string>(nameof(Value), o => o.Value, (o, v) => o.Value = v);
 
-    private string          text;
-    public  ComponentField  ComponentField { get; init; }
+    private     string          text;
+    private     bool            modified;
+    public      ComponentField  ComponentField { get; init; }
     
     public  string   Value { get => text; set => Set(ValueProperty, ref text, value); }
     
+    public void InitValue(string value) {
+        Value       = value;
+        modified    = false;
+    }
+    
     private void Set(DirectPropertyBase<string> property, ref string field, string value) {
-        ComponentField?.SetString(value);
+        // ComponentField?.SetString(value);
+        modified = true;
         SetAndRaise(property, ref field, value);
     }
 
     public StringField()
     {
         InitializeComponent();
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e) {
+        base.OnKeyDown(e);
+        if (e.Key == Key.Return && e.KeyModifiers == KeyModifiers.None) {
+            ChangeComponentField();
+        }
+    }
+
+    protected override void OnLostFocus(RoutedEventArgs e) {
+        base.OnLostFocus(e);
+        ChangeComponentField();
+    }
+    
+    private void ChangeComponentField() {
+        if (!modified) {
+            return;
+        }
+        modified = false;
+        ComponentField?.SetString(text);
     }
 }

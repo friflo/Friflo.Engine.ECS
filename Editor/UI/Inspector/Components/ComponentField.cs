@@ -182,12 +182,13 @@ public class ComponentField
         if (type == typeof(EntityName)) {
             var control     = (StringField)field.control;
             var entityName  = (EntityName)data.GetData();
-            control.Value   = entityName.value;
+            control.InitValue(entityName.value);
             return;
         }
         if (type == typeof(string)) {
             var control     = (StringField)field.control;
-            control.Value   = field.member.GetVar(data.instance).String;
+            var value       = field.member.GetVar(data.instance).String;
+            control.InitValue(value);
             return;
         }
         if (type == typeof(int)) {
