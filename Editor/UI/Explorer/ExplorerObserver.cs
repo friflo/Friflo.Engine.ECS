@@ -36,6 +36,8 @@ internal class ExplorerObserver : EditorObserver
         store.ComponentAdded    += PostEntityUpdate;
         store.ComponentRemoved  += PostEntityUpdate;
         store.EntitiesChanged   += EntitiesChanged;
+        // select RootItem
+        grid.RowSelection!.Select(0);
     }
     
     private void PostEntityUpdate(in ComponentChangedArgs args)

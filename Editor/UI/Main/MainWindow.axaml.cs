@@ -23,6 +23,11 @@ public partial class MainWindow : Window
     /// <summary>Is the last call into user code before the event loop is entered</summary>
     public override void Show() {
         base.Show();
+        EditorUtils.Post(() =>
+        {
+            ExplorerPanel.Grid.Focus();    
+        });
+        
         // Console.WriteLine($"--- MainWindow.Show() - startup {Program.startTime.ElapsedMilliseconds} ms");
     }
 

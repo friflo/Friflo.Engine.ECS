@@ -62,7 +62,8 @@
             <Rectangle        Height="4"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
             <DockPanel        Width="300"   DockPanel.Dock="Left">
-                <ui:ExplorerPanel DockPanel.Dock="Top"
+                <ui:ExplorerPanel           DockPanel.Dock="Top"
+                              Name="ExplorerPanel"
                               Height="400"/>
                 <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
                 <ui:InspectorPanel/>
