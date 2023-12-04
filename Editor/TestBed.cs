@@ -89,7 +89,7 @@ public static class TestBed
     private static Entity CreateEntity(EntityStore store, int id)
     {
         var entity = store.CreateEntity();
-        entity.AddComponent(new EntityName("child-" + id));
+        entity.AddComponent(new EntityName("child - " + id));
         return entity;
     }
 }

@@ -63,24 +63,31 @@ public partial class GroupAdd : UserControl
     {
         var schema = EntityStore.GetEntitySchema();
         index++; // Schema types start with index 1 
+        var entity = Entity;
         switch (GroupName)
         {
             case "tags":
                 var tagType = schema.Tags[index];
                 var tag = new Tags(tagType);
-                Entity.AddTags(tag);
+                entity.AddTags(tag);
                 break;
             case "components":
                 var componentType = schema.Components[index];
-                Entity.AddEntityComponent(Entity, componentType);
                 if (componentType.type == typeof(EntityName)) {
-                    Entity.Name.value = "name";
+                    if (entity.TryGetComponent<EntityName>(out var name)) {
+                        entity.AddComponent(name);
+                    } else {
+                        Entity.AddEntityComponent(entity, componentType);
+                        entity.Name.value = $"entity - {entity.Id}";
+                    }
+                } else {
+                    Entity.AddEntityComponent(entity, componentType);
                 }
                 inspector.Observer.FocusComponent(componentType);
                 break;
             case "scripts":
                 var scriptType = schema.Scripts[index];
-                Entity.AddNewEntityScript(Entity, scriptType);
+                Entity.AddNewEntityScript(entity, scriptType);
                 inspector.Observer.FocusComponent(scriptType);
                 break;
         }
