@@ -125,7 +125,6 @@ internal class InspectorObserver : EditorObserver
         if (focus is ScriptType scriptType) {
             var panel = scriptMap[scriptType].componentPanel;
             FocusPanel(panel);
-            return;
         }
     }
     
