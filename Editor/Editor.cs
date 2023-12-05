@@ -59,7 +59,9 @@ public partial class Editor
         // --- add client and database
         var schema      = DatabaseSchema.Create<EntityClient>();
         var database    = CreateDatabase(schema, "in-memory");
-        database.AddCommands(new EditorService());
+        var service     = new EditorService(store);
+        database.AddCommands(service);        
+        
         var hub         = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);

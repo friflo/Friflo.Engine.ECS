@@ -1,5 +1,8 @@
 using System;
 using System.Diagnostics;
+using Friflo.Fliox.Editor.Utils;
+using Friflo.Fliox.Engine.Client;
+using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Host;
 
@@ -9,6 +12,13 @@ namespace Friflo.Fliox.Editor;
 
 public class EditorService : IServiceCommands
 {
+    private readonly EntityStore    store;
+        
+    public EditorService(EntityStore store) {
+        this.store = store;
+    }
+    
+        
     [CommandHandler("editor.Collect")]
     private static Result<string> Collect(Param<int?> param, MessageContext context)
     {
@@ -27,4 +37,27 @@ public class EditorService : IServiceCommands
 
         return msg;
     }
+    
+    [CommandHandler("editor.Add")]
+    private Result<int> Add(Param<AddEntities> param, MessageContext context)
+    {
+        if (!param.GetValidate(out var addEntities, out var error)) {
+            return Result.ValidationError(error);
+        }
+        if (addEntities == null) {
+            return Result.Error("addEntities payload is null");
+        }
+        var dataEntities = addEntities.entities;
+        if (addEntities.entities == null) {
+            return Result.Error("missing entities array");
+        }
+        if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
+            return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
+        }
+        EditorUtils.Post(() => {
+            ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);    
+        });
+        return 1;
+    }
 }
+

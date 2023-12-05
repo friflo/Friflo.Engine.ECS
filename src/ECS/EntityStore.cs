@@ -133,6 +133,26 @@ public sealed partial class EntityStore : EntityStoreBase
         return new Entity((int)pid, this);
     }
     
+    public  bool  TryGetEntityByPid(long pid, out Entity value) {
+        if (pid2Id != null) {
+            if (pid2Id.TryGetValue(pid,out int id)) {
+                value = new Entity(id, this);
+                return true;
+            }
+            value = default;
+            return false;
+        }
+        if (0 < pid && pid <= nodesMaxId) {
+            var id = (int)pid;
+            if (nodes[id].Is(NodeFlags.Created)) {
+                value = new Entity(id, this);
+                return true;
+            }
+        }
+        value = default;
+        return false;
+    }
+    
     public  ref EntityNode  GetNodeById(int id) {
         return ref nodes[id];
     }
