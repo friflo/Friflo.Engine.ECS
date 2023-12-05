@@ -30,7 +30,7 @@ public partial class EntityStore
         script.entity = entity;
         if (entity.scriptIndex == EntityUtils.NoScripts) {
             // case: entity has not scripts => add new Scripts entry
-            var lastIndex = entity.scriptIndex = entityScriptCount++;
+            var lastIndex = entity.refScriptIndex = entityScriptCount++;
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
                 Utils.Resize(ref entityScripts, newLength);
@@ -57,9 +57,9 @@ public partial class EntityStore
     /// <br/> 
     /// The entity state refers to:
     /// <list type="buttlet">
-    ///   <item><see cref="Entity.archetype"/></item>
-    ///   <item><see cref="Entity.compIndex"/></item>
-    ///   <item><see cref="Entity.scriptIndex"/></item>
+    ///   <item><see cref="Entity.refArchetype"/></item>
+    ///   <item><see cref="Entity.refCompIndex"/></item>
+    ///   <item><see cref="Entity.refScriptIndex"/></item>
     ///   <item><see cref="RawEntity.archIndex"/></item>
     /// </list>
     /// </remarks>
@@ -70,7 +70,7 @@ public partial class EntityStore
         if (entity.scriptIndex == EntityUtils.NoScripts)
         {
             // case: entity has not scripts => add new Scripts entry
-            var lastIndex = entity.scriptIndex = entityScriptCount++;
+            var lastIndex = entity.refScriptIndex = entityScriptCount++;
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
                 Utils.Resize(ref entityScripts, newLength);
@@ -89,7 +89,7 @@ public partial class EntityStore
             if (current.GetType() == scriptType.type) {
                 // case: scripts contains a script of the given scriptType => replace current script
                 scripts[n] = script;
-                current.entity  = null;
+                current.entity  = default;
                 currentScript   = script;
                 goto SendEvent;
             }
@@ -116,19 +116,20 @@ public partial class EntityStore
                 continue;
             }
             // case: found script in entity scripts
-            script.entity   = null;
+            script.entity   = default;
             if (len == 1) {
                 // case: script is the only one attached to the entity => remove complete scripts entry 
                 var lastIndex       = --entityScriptCount;
+                if (lastIndex < 1)  throw new InvalidOperationException("invariant: entityScriptCount > 0");
                 var lastEntityId    = entityScripts[lastIndex].id;
                 // Is the Script not the last in store.entityScripts?
                 if (entity.id != lastEntityId) {
                     // move scriptIndex of last item in store.entityScripts to the index which will be removed
-                    entityScripts[entity.scriptIndex] = entityScripts[lastIndex];
-                    nodes[lastEntityId].entity.scriptIndex = entity.scriptIndex;
+                    entityScripts[entity.scriptIndex]   = entityScripts[lastIndex];
+                    nodes[lastEntityId].scriptIndex     = entity.scriptIndex;
                 }
-                entityScripts[lastIndex] = default;               // clear last Script entry
-                entity.scriptIndex = EntityUtils.NoScripts; // set entity state to: contains no scripts 
+                entityScripts[lastIndex]    = default;                  // clear last Script entry
+                entity.refScriptIndex       = EntityUtils.NoScripts;    // set entity state to: contains no scripts 
                 goto SendEvent;
             }
             // case: entity has two or more scripts. Remove the given one from its scripts

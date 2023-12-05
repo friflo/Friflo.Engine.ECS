@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
@@ -108,7 +107,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
-public sealed class Entity
+public readonly struct Entity
 {
 #region public properties
     /// <summary>Unique entity id.<br/>
@@ -129,11 +128,14 @@ public sealed class Entity
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.entityStore.GetTreeMembership(id);
     
+    [Browse(Never)] public  bool    IsNull                      => store?.nodes[id].archetype == null;
+    [Browse(Never)] public  bool    IsNotNull                   => store?.nodes[id].archetype != null;
+                    public  bool    IsEqual (in Entity entity)  => id == entity.id;
     
     [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.GetDebugJSON(this);
     
-    public override string                  ToString()      => EntityUtils.EntityToString(this, new StringBuilder());
+    public override string                  ToString()      => EntityUtils.EntityToString(this);
 
     #endregion
 
@@ -180,27 +182,38 @@ public sealed class Entity
     #endregion
     
 #region internal fields
+    // Note! Must not have any other fields to keep its size at 16 bytes   
+    // ReSharper disable once InconsistentNaming
     [Browse(Never)] internal readonly   int         id;             //  4
+    // ReSharper disable once InconsistentNaming
+    [Browse(Never)] internal readonly   EntityStore store;          //  8
+    #endregion
+    
+#region internal properties
+//  [Browse(Never)] internal readonly   int         id;             //  4
     
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal            Archetype   archetype;      //  8 - null if detached. See property Archetype
+    [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[id].archetype;
+    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[id].archetype;
 
-    /// <summary>The index within the <see cref="archetype"/> the entity is stored</summary>
+    /// <summary>The index within the <see cref="refArchetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal            int         compIndex;      //  4
+    [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[id].compIndex;
+    [Browse(Never)] internal        int            compIndex    =>     store.nodes[id].compIndex;
     
-    [Browse(Never)] internal            int         scriptIndex;    //  4
-    
+    [Browse(Never)] internal    ref int         refScriptIndex  => ref store.nodes[id].scriptIndex;
+    [Browse(Never)] internal        int            scriptIndex  =>     store.nodes[id].scriptIndex;
+
+    // Deprecated comment. Was valid when Entity was a class
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
     // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
     
     #endregion
     
 #region constructor
-    internal Entity(int id, Archetype archetype) {
-        this.id         = id;
-        this.archetype  = archetype;
-        scriptIndex     = EntityUtils.NoScripts;
+    internal Entity(int id, EntityStore store) {
+        this.id     = id;
+        this.store  = store;
     }
     #endregion
 
@@ -231,14 +244,14 @@ public sealed class Entity
     /// </remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
-        return archetype.entityStore.AddComponent<T>(id, StructHeap<T>.StructIndex, ref archetype, ref compIndex, ref archIndex, default);
+        return archetype.entityStore.AddComponent<T>(id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
 
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
-        return archetype.entityStore.AddComponent(id, StructHeap<T>.StructIndex, ref archetype, ref compIndex, ref archIndex, in component);
+        return archetype.entityStore.AddComponent(id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
 
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -248,7 +261,7 @@ public sealed class Entity
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
-        return archetype.entityStore.RemoveComponent(id, ref archetype, ref compIndex, ref archIndex, StructHeap<T>.StructIndex);
+        return archetype.entityStore.RemoveComponent(id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
 
     /// <summary>
@@ -300,22 +313,22 @@ public sealed class Entity
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
     public bool AddTag<T>()    where T : struct, IEntityTag {
         int index = 0;
-        return archetype.store.AddTags(Tags.Get<T>(), id, ref archetype, ref compIndex, ref index);
+        return archetype.store.AddTags(Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool AddTags(in Tags tags) {
         int index = 0;
-        return archetype.store.AddTags(tags, id, ref archetype, ref compIndex, ref index);
+        return archetype.store.AddTags(tags, id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool RemoveTag<T>() where T : struct, IEntityTag {
         int index = 0;
-        return archetype.store.RemoveTags(Tags.Get<T>(), id, ref archetype, ref compIndex, ref index);
+        return archetype.store.RemoveTags(Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool RemoveTags(in Tags tags) {
         int index = 0;
-        return archetype.store.RemoveTags(tags, id, ref archetype, ref compIndex, ref index);
+        return archetype.store.RemoveTags(tags, id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     #endregion
@@ -331,9 +344,9 @@ public sealed class Entity
     /// Or -1 if the <paramref name="entity"/> is already a child entity.
     /// </returns>
     public int AddChild(Entity entity) {
-        var store = archetype.entityStore;
-        if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        return store.AddChild(id, entity.id);
+        var entityStore = archetype.entityStore;
+        if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
+        return entityStore.AddChild(id, entity.id);
     }
     
     /// <remarks>
@@ -343,9 +356,9 @@ public sealed class Entity
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     public void InsertChild(int index, Entity entity) {
-        var store = archetype.entityStore;
-        if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        store.InsertChild(id, entity.id, index);
+        var entityStore = archetype.entityStore;
+        if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
+        entityStore.InsertChild(id, entity.id, index);
     }
     
     /// <remarks>
@@ -354,9 +367,9 @@ public sealed class Entity
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
     public bool RemoveChild(Entity entity) {
-        var store = archetype.entityStore;
-        if (store != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        return store.RemoveChild(id, entity.id);
+        var entityStore = archetype.entityStore;
+        if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
+        return entityStore.RemoveChild(id, entity.id);
     }
     
     /// <summary>
@@ -369,17 +382,19 @@ public sealed class Entity
     /// </remarks>
     public void DeleteEntity()
     {
-        var store = archetype.entityStore;
-        store.DeleteNode(id);
-        if (archetype != store.defaultArchetype) {
-            archetype.MoveLastComponentsTo(compIndex);
+        var arch            = archetype;
+        var componentIndex  = compIndex; 
+        var entityStore = arch.entityStore;
+        entityStore.DeleteNode(id);
+        if (arch != entityStore.defaultArchetype) {
+            arch.MoveLastComponentsTo(componentIndex);
         }
-        archetype = null;
     }
 
-    public              int         GetChildIndex(int childId)      => archetype.entityStore.GetChildIndex(id, childId);
+    public              int         GetChildIndex(int childId)          => archetype.entityStore.GetChildIndex(id, childId);
 
-    public ref readonly EntityNode  GetChildNodeByIndex(int index)  => ref archetype.entityStore.GetChildNodeByIndex(id, index);
+    public ref readonly EntityNode  GetChildNodeByIndex(int index)      => ref archetype.entityStore.GetChildNodeByIndex(id, index);
+    public              Entity      GetChildEntityByIndex(int index)    =>     archetype.entityStore.GetChildEntityByIndex(id, index);
     
     #endregion
     
@@ -396,7 +411,7 @@ public sealed class Entity
     public static  bool       RemoveEntityComponent (Entity entity, ComponentType componentType)
     {
         int archIndex = 0;
-        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.archetype, ref entity.compIndex, ref archIndex, componentType.structIndex);
+        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
     }
     
     public static  bool       AddEntityComponent    (Entity entity, ComponentType componentType) {

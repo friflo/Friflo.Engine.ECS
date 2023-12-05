@@ -20,7 +20,7 @@ public class EntityConverter
     
     public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity = null, bool pretty = false)
     {
-        if (entity == null) {
+        if (entity.IsNull) {
             throw new ArgumentNullException(nameof(entity));
         }
         var store       = entity.archetype.entityStore;

@@ -179,7 +179,7 @@ public static class Test_StructComponent
         AreEqual(2,         posRotType.EntityCount);
         AreEqual(2,         store.EntityCount);
         var node = store.Nodes[1];          // check node fields are reset to default values
-        AreSame (player1,   node.Entity);
+        AreEqual(player1,   store.GetEntityById(node.Id));
         AreEqual(0,         node.ChildCount);
         AreEqual(0,         node.ChildIds.Length);
         AreEqual(NoParentId,node.ParentId);

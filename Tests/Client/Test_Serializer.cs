@@ -73,7 +73,7 @@ public static class Test_Serializer
         entity.AddChild(child);
         AreEqual(2, store.EntityCount);
         
-        var entities = new List<Entity> { entity, child, null };
+        var entities = new List<Entity> { entity, child, default };
         
         // --- store entities sync
         {
@@ -140,13 +140,13 @@ public static class Test_Serializer
         AreEqual(2, result.entityCount);
         AreEqual(2, store.EntityCount);
             
-        var root        = store.GetNodeById(10).Entity;
+        var root        = store.GetEntityById(10);
         AreEqual(11,    root.ChildIds[0]);
         IsTrue  (new Position(1,2,3) == root.Position);
         AreEqual(1,     root.Tags.Count);
         IsTrue  (root.Tags.Has<TestTag>());
             
-        var child       = store.GetNodeById(11).Entity;
+        var child       = store.GetEntityById(11);
         AreEqual(0,     child.ChildCount);
         AreEqual(0,     child.Components_.Length);
         AreEqual(0,     child.Tags.Count);

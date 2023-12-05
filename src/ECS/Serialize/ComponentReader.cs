@@ -187,11 +187,11 @@ internal sealed class ComponentReader
         var curArchetype = entity.archetype;
         if (curArchetype != newArchetype)
         {
-            entity.archetype = newArchetype;
+            entity.refArchetype = newArchetype;
             if (curArchetype == store.defaultArchetype) {
-                entity.compIndex = newArchetype.AddEntity(entity.id);
+                entity.refCompIndex = newArchetype.AddEntity(entity.id);
             } else {
-                entity.compIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
+                entity.refCompIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
             }
         }
         if (unresolvedTagList.Count > 0) {

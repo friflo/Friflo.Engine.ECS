@@ -50,7 +50,7 @@ public static class ExplorerCommands
             if (dataEntities != null) {
                 var targetEntity    = selection.items[0].Entity;
                 var targetPath      = grid.RowSelection!.SelectedIndex;
-                if (targetEntity.Parent != null) {
+                if (targetEntity.Parent.IsNotNull) {
                     targetEntity    = targetEntity.Parent; // add entities to parent
                     targetPath      = targetPath.Slice(0, targetPath.Count - 1);
                 }

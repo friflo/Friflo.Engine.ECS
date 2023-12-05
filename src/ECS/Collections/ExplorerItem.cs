@@ -48,13 +48,14 @@ public sealed class ExplorerItem :
 #region constructor
     internal ExplorerItem (ExplorerItemTree tree, Entity entity) {
         this.tree   = tree      ?? throw new ArgumentNullException(nameof(tree));
-        this.entity = entity    ?? throw new ArgumentNullException(nameof(entity));
+        if (entity.IsNull)         throw new ArgumentNullException(nameof(entity));
+        this.entity = entity;
     }
     #endregion
 
 #region private methods
     private bool IsRootItem() {
-        return tree.rootItem.entity == entity;
+        return tree.rootItem.entity.IsEqual(entity);
     }
     
     private string GetName() {
@@ -98,7 +99,7 @@ public sealed class ExplorerItem :
     }
     
     private void RemoveChildEntityAt(int index) {
-        var child = entity.GetChildNodeByIndex(index).Entity;   // called by TreeDataGrid 
+        var child = entity.GetChildEntityByIndex(index);   // called by TreeDataGrid 
         entity.RemoveChild(child);  // todo add Entity.RemoveChild(int index)
     }
     

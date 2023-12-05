@@ -80,8 +80,11 @@ internal class InspectorObserver : EditorObserver
     protected override void OnSelectionChanged(in EditorSelection selection)
     {
         var item    = selection.item;
-        var entity  = item?.Entity;
-        if (entity == null) {
+        if (item == null) {
+            return;
+        }
+        var entity  = item.Entity;
+        if (entity.IsNull) {
             return;
         }
         SetEntity(entity.Id);
@@ -91,7 +94,7 @@ internal class InspectorObserver : EditorObserver
     {
         // Console.WriteLine($"--- Inspector entity: {entity}");
         entityId                = id;
-        var entity              = Store.GetNodeById(id).Entity;
+        var entity              = Store.GetEntityById(id);
         var archetype           = entity.Archetype;
         var model               = inspector.model;
         model.EntityId          = id;

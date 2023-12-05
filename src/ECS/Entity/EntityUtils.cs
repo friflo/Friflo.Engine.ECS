@@ -22,15 +22,22 @@ internal static class EntityExtensions
     
 internal static class EntityUtils
 {
-    internal static string EntityToString(Entity entity, StringBuilder sb)
+    internal static string EntityToString(Entity entity) {
+        if (entity.store == null) {
+            return "null";
+        }
+        return EntityToString(entity.id, entity.archetype, new StringBuilder());
+    }
+    
+    internal static string EntityToString(int id, Archetype archetype, StringBuilder sb)
     {
-        var archetype = entity.archetype;
         sb.Append("id: ");
-        sb.Append(entity.id);
+        sb.Append(id);
         if (archetype == null) {
             sb.Append("  (detached)");
             return sb.ToString();
         }
+        var entity = new Entity(id, archetype.entityStore);
         if (entity.HasName) {
             var name = entity.Name.value;
             if (name != null) {
@@ -96,7 +103,7 @@ internal static class EntityUtils
     // ---------------------------------- Script utils ----------------------------------
     private  static readonly IComponent[]   EmptyComponents = Array.Empty<IComponent>();
     private  static readonly Script[]       EmptyScripts  = Array.Empty<Script>();
-    internal const  int                     NoScripts     = -1;  
+    internal const  int                     NoScripts     = 0;  
     
     private  static Exception MissingAttributeException(Type type) {
         var msg = $"Missing attribute [Script(\"<key>\")] on type: {type.Namespace}.{type.Name}";
@@ -140,7 +147,7 @@ internal static class EntityUtils
         if (scriptType == null) {
             throw MissingAttributeException(script.GetType());
         }
-        if (script.entity != null) {
+        if (script.entity.IsNotNull) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);

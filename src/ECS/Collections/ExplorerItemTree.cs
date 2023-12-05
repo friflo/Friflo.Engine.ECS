@@ -40,7 +40,7 @@ public class ExplorerItemTree
     public ExplorerItem GetItemById(int id)
     {
         if (!items.TryGetValue(id, out var explorerItem)) {
-            var entity      = store.GetNodeById(id).Entity;
+            var entity      = store.GetEntityById(id);
             explorerItem    = CreateExplorerItem(entity);
         }
         return explorerItem;
@@ -79,7 +79,7 @@ public class ExplorerItemTree
         switch (args.action) {
             case ChildNodesChangedAction.Add:
                 if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
-                    var entity      = store.GetNodeById(args.childId).Entity;
+                    var entity      = store.GetEntityById(args.childId);
                     explorerItem    = CreateExplorerItem(entity);
                 }
                 break;

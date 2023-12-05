@@ -51,8 +51,8 @@ public partial class EntityStore
         var entity          = CreateEntity();
         var archetype       = original.archetype;
         if (archetype != defaultArchetype) {
-            entity.compIndex    = archetype.AddEntity(entity.id);
-            entity.archetype    = archetype;
+            entity.refCompIndex    = archetype.AddEntity(entity.id);
+            entity.refArchetype    = archetype;
         }
         bool isBlittable = true;
         foreach (var componentType in archetype.componentTypes) {
@@ -92,7 +92,7 @@ public partial class EntityStore
             // --- deserialize DataEntity
             dataBuffer.pid      = GetNodeById(entity.id).pid;
             var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
-            if (copy != entity) throw new InvalidOperationException("expect same entity instance");
+            if (copy.IsEqual(entity)) throw new InvalidOperationException("expect same entity");
         }
         return entity;
     }
@@ -128,24 +128,26 @@ public partial class EntityStore
         ref var node = ref nodes[id];
         if (node.Is(Created)) {
             AssertPid(node.pid, pid);
-            return node.entity;
+            return new Entity(id, this);
         }
         nodesCount++;
         if (nodesMaxId < id) {
             nodesMaxId = id;
         }
         AssertPid0(node.pid, pid);
-        node.pid        = pid;
-        var entity      = new Entity(id, defaultArchetype);
-        // node.parentId   = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
-        node.childIds   = Static.EmptyChildNodes;
-        node.flags      = Created;
-        node.entity     = entity;
+        var entity          = new Entity(id, this);
+        node.pid            = pid;
+        node.archetype      = defaultArchetype;
+        node.scriptIndex    = EntityUtils.NoScripts;
+        // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
+        node.childIds       = Static.EmptyChildNodes;
+        node.flags          = Created;
+        // node.entity      = entity;
         return entity;
     }
     
     public void SetStoreRoot(Entity entity) {
-        if (entity == null) {
+        if (entity.IsNull) {
             throw new ArgumentNullException(nameof(entity));
         }
         if (this != entity.archetype.store) {
@@ -163,8 +165,8 @@ public partial class EntityStore
             throw InvalidStoreException(nameof(archetype));
         }
         var entity          = CreateEntity();
-        entity.archetype    = archetype;
-        entity.compIndex    = archetype.AddEntity(entity.id);
+        entity.refArchetype = archetype;
+        entity.refCompIndex = archetype.AddEntity(entity.id);
         return entity;
     }
 }

@@ -138,6 +138,11 @@ public partial class EntityStore
         return ref nodes[childIds[childIndex]];
     }
     
+    internal Entity GetChildEntityByIndex(int parentId, int childIndex) {
+        var childIds = nodes[parentId].childIds;
+        return new Entity(childIds[childIndex], this);
+    }
+    
     internal int GetChildIndex(int parentId, int childId) => GetChildIndex(nodes[parentId], childId);
     
     private static int GetChildIndex(in EntityNode parent, int childId)
@@ -432,7 +437,7 @@ public partial class EntityStore
     }
     
     protected internal override void UpdateEntityCompIndex(int id, int compIndex) {
-        nodes[id].entity.compIndex = compIndex;
+        nodes[id].compIndex = compIndex;
     }
     
     internal void DeleteNode(int id)
@@ -481,7 +486,7 @@ public partial class EntityStore
     }
     
     private void SetStoreRootEntity(Entity entity) {
-        if (storeRoot != null) {
+        if (storeRoot.IsNotNull) {
             throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.id}");
         }
         var id = entity.id;
@@ -522,13 +527,13 @@ public partial class EntityStore
     internal Entity GetParent(int id)
     { 
         var parentNode  = nodes[id].parentId;
-        return HasParent(parentNode) ? nodes[parentNode].entity : null;
+        return HasParent(parentNode) ? new Entity(parentNode, this) : new Entity(Static.NoParentId, this); // ENTITY_STRUCT
     }
     
     internal ChildNodes GetChildNodes(int id)
     {
         ref var node    = ref nodes[id];
-        return new ChildNodes(nodes, node.childIds, node.childCount);
+        return new ChildNodes(this, nodes, node.childIds, node.childCount);
     }
     
     internal ReadOnlySpan<int> GetChildIds(int id)

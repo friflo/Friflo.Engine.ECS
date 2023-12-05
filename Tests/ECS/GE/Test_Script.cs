@@ -14,6 +14,14 @@ public static class Test_Script
     private const long Count = 10; // 1_000_000_000L
     
     [Test]
+    public static void Test_1_Scripts_default() {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        
+        AreEqual(0, entity.Scripts.Length);
+    }
+    
+    [Test]
     public static void Test_1_add_remove_Script()
     {
         var store   = new EntityStore();
@@ -30,7 +38,7 @@ public static class Test_Script
                             AreEqual(ChangedEventAction.Add,    args.action);
                             AreEqual(typeof(TestScript1),       args.scriptType.type);
                             // Ensure Scripts are updated
-                            AreEqual(1, store.GetNodeById(args.entityId).Entity.Scripts.Length);
+                            AreEqual(1, store.GetEntityById(args.entityId).Scripts.Length);
                             AreEqual("entity: 1 - Add script: 'script1' [*TestScript1]",     str);  return;
                 case 1:     AreEqual("entity: 1 - Add script: 'script2' [*TestScript2]",     str);  return;
                 case 2:     AreEqual("entity: 1 - Add script: 'script2' [*TestScript2]",     str);  return;
@@ -46,7 +54,7 @@ public static class Test_Script
                             AreEqual(ChangedEventAction.Remove, args.action);
                             AreEqual(typeof(TestScript2),       args.scriptType.type);
                             // Ensure Scripts are updated                            
-                            AreEqual(1, store.GetNodeById(args.entityId).Entity.Scripts.Length);
+                            AreEqual(1, store.GetEntityById(args.entityId).Scripts.Length);
                             AreEqual("entity: 1 - Remove script: 'script2' [*TestScript2]",   str);     return;
                 default:    Fail("unexpected event");                                                   return;
             }
@@ -84,8 +92,8 @@ public static class Test_Script
         // --- add script type that already exists
         var script3 = new TestScript2();
         NotNull (player.AddScript(script3));   // will send event
-        IsNull  (script2.Entity);
-        NotNull (script3.Entity);
+        IsTrue  (script2.Entity.IsNull);
+        IsTrue  (script3.Entity.IsNotNull);
         AreSame (script3,       player.GetScript<TestScript2>());
         AreEqual(2,             player.Scripts.Length);
         AreEqual("id: 1  [*TestScript1, *TestScript2]", player.ToString());
@@ -134,7 +142,7 @@ public static class Test_Script
         IsNull  (player.GetScript<TestScript1>());
         IsFalse (player.TryGetScript<TestScript1>(out _));
         AreEqual("id: 1  []",               player.ToString());
-        IsNull(script1.Entity);
+        IsTrue  (script1.Entity.IsNull);
         
         IsNull(player.RemoveScript<TestScript1>());
         AreEqual(0,                         player.Scripts.Length);
@@ -281,7 +289,7 @@ public static class Test_Script
         AreEqual(1, entity.Scripts.Length);
         AreEqual(2, entity.Archetype.ComponentCount);
         AreEqual("id: 1  [*TestComponent, Position, MyComponent1]", entity.ToString());
-        AreSame(entity, test.Entity);
+        AreEqual(entity, test.Entity);
         test.Start();
         test.Update();
     }

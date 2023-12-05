@@ -82,7 +82,7 @@ public sealed class EntityStoreSync
         var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
-            var entity = store.GetNodeById(n).Entity;
+            var entity = store.GetEntityById(n);
             AddDataEntityUpsert(entity);
         }
         CreateChangeTasks();
@@ -90,7 +90,7 @@ public sealed class EntityStoreSync
     
     private void AddDataEntityUpsert(Entity entity)
     {
-        if (entity == null) {
+        if (entity.IsNull) {
             return;
         }
         if (!localEntities.TryGetEntity(entity.Id, out DataEntity dataEntity)) {
@@ -141,8 +141,8 @@ public sealed class EntityStoreSync
             idSet.Add(entity.Id);
         }
         foreach (var delete in changes.Deletes) {
-            ref var node = ref store.GetNodeByPid(delete.key);
-            node.Entity.DeleteEntity();
+            var entity = store.GetEntityByPid(delete.key);
+            entity.DeleteEntity();
         }
         // Send event. See: SEND_EVENT notes
         var args = new EntitiesChangedArgs(idSet);
@@ -167,7 +167,7 @@ public sealed class EntityStoreSync
             var id      = pair.Key;
             switch (pair.Value) {
                 case EntityChange.Upsert:
-                    var entity = store.GetNodeById(id).Entity;
+                    var entity = store.GetEntityById(id);
                     AddDataEntityUpsert(entity);
                     continue;
                 case EntityChange.Delete:

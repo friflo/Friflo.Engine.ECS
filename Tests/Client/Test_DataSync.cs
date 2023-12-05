@@ -44,8 +44,8 @@ public static class Test_DataSync
         for (int n = 0; n < 2; n++) {
             sync.LoadEntities();
             
-            var root        = store.GetNodeById(10).Entity;
-            var child       = store.GetNodeById(11).Entity;
+            var root        = store.GetEntityById(10);
+            var child       = store.GetEntityById(11);
             Test_ComponentReader.AssertRootEntity(root);
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -54,16 +54,16 @@ public static class Test_DataSync
         }
         
         // clear entities in store
-        store.GetNodeById(10).Entity.DeleteEntity();
-        store.GetNodeById(11).Entity.DeleteEntity();
+        store.GetEntityById(10).DeleteEntity();
+        store.GetEntityById(11).DeleteEntity();
         AreEqual(0,     store.EntityCount);
         
         // load entities via client async
         for (int n = 0; n < 2; n++) {
             await sync.LoadEntitiesAsync();
             
-            var root        = store.GetNodeById(10).Entity;
-            var child       = store.GetNodeById(11).Entity;
+            var root        = store.GetEntityById(10);
+            var child       = store.GetEntityById(11);
             Test_ComponentReader.AssertRootEntity(root);
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(Signature.Get<Position, Scale3>());
@@ -177,8 +177,8 @@ public static class Test_DataSync
         processor.ProcessEvents();
         
         AreEqual(2, store.EntityCount);
-        var root        = store.GetNodeById(10).Entity;
-        var child       = store.GetNodeById(11).Entity;
+        var root        = store.GetEntityById(10);
+        var child       = store.GetEntityById(11);
         Test_ComponentReader.AssertRootEntity(root);
         Test_ComponentReader.AssertChildEntity(child);
         
@@ -207,8 +207,8 @@ public static class Test_DataSync
         processor.ProcessEvents();
         
         AreEqual(2, store.EntityCount);
-        var root        = store.GetNodeById(10).Entity;
-        var child       = store.GetNodeById(11).Entity;
+        var root        = store.GetEntityById(10);
+        var child       = store.GetEntityById(11);
         Test_ComponentReader.AssertRootEntity(root);
         Test_ComponentReader.AssertChildEntity(child);
         

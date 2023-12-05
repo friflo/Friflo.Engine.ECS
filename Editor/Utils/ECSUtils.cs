@@ -51,7 +51,7 @@ public static class ECSUtils
         var store   = entities[0].Store;
         foreach (var entity in entities) {
             var parent  = entity.Parent;
-            if (parent == null) {
+            if (parent.IsNull) {
                 continue;
             }
             var clone = store.CloneEntity(entity);
@@ -66,7 +66,7 @@ public static class ECSUtils
     private static void DuplicateChildren(Entity entity, Entity clone, EntityStore store)
     {
         foreach (var childId in entity.ChildIds) {
-            var child       = store.GetNodeById(childId).Entity;
+            var child       = store.GetEntityById(childId);
             var childClone  = store.CloneEntity(child);
             clone.AddChild(childClone);
             
@@ -108,14 +108,14 @@ public static class ECSUtils
         // --- add child entities to their parent entity
         foreach (var dataEntity in dataEntities)
         {
-            var entity      = store.GetNodeByPid(dataEntity.pid).Entity;
+            var entity      = store.GetEntityByPid(dataEntity.pid);
             var children    = dataEntity.children;
             if (children == null) {
                 continue;
             }
             foreach (var childPid in children) {
                 childEntities.Add(childPid);
-                var child = store.GetNodeByPid(childPid).Entity;
+                var child = store.GetEntityByPid(childPid);
                 entity.AddChild(child);
             }
         }
@@ -127,7 +127,7 @@ public static class ECSUtils
             if (childEntities.Contains(pid)) {
                 continue;
             }
-            var entity = store.GetNodeByPid(pid).Entity;
+            var entity = store.GetEntityByPid(pid);
             var index = targetEntity.AddChild(entity);
             indexes.Add(index);
         }
@@ -180,8 +180,7 @@ public static class ECSUtils
     
     private static void AddChildren(Entity entity, List<Entity> list, HashSet<Entity> set)
     {
-        foreach (var childNode in entity.ChildNodes) {
-            var child = childNode.Entity;
+        foreach (var child in entity.ChildNodes) {
             if (!set.Add(child)) {
                 continue;
             }
@@ -213,7 +212,7 @@ public static class ECSUtils
     internal static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
     {
         var parent  = items[0].Entity.Parent;
-        if (parent == null) {
+        if (parent.IsNull) {
             return null;
         }
         var indexes = new int[items.Length];
@@ -238,7 +237,7 @@ public static class ECSUtils
     internal static int[] MoveExplorerItemsDown(ExplorerItem[] items, int shift)
     {
         var parent      = items[0].Entity.Parent;
-        if (parent == null) {
+        if (parent.IsNull) {
             return null;
         }
         var indexes     = new int[items.Length];

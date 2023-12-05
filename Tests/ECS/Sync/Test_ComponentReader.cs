@@ -69,7 +69,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataEntity { pid = 10, components = RootComponents };
         var rootResult  = converter.DataEntityToEntity(rootNode, store, out _);  // archetype changes
-        AreSame (root, rootResult);
+        AreEqual(root, rootResult);
         IsTrue  (root.HasScale3);   // could change script and remove all components not present in DataEntity components
         IsTrue  (root.HasPosition);
     }
@@ -449,7 +449,7 @@ public static class Test_ComponentReader
             AreEqual("Value cannot be null. (Parameter 'dataEntity')", e!.Message);
         } {
             var e = Throws<ArgumentNullException>(() => {
-                converter.EntityToDataEntity(null);    
+                converter.EntityToDataEntity(default);    
             });
             AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
         }

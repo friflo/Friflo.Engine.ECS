@@ -45,7 +45,7 @@ public static class Test_EntityConverter
         var ids     = entity5.ChildNodes.Ids;
         AreEqual(1,                     ids.Length);
         AreEqual(8,                     ids[0]);
-        IsNull  (                       store.Nodes[8].Entity);
+        IsTrue  (                       store.GetEntityById(8).IsNull);
         AreEqual(NullNode,              store.Nodes[8].Flags);      // diff_flags
         AreEqual(8,                     store.Nodes[8].Id);
         AreEqual(5,                     store.Nodes[8].ParentId);   // diff_parent
@@ -53,13 +53,13 @@ public static class Test_EntityConverter
         
         // --- create child 8
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
-        AreSame (entity8,               store.Nodes[8].Entity);
+        AreEqual(entity8,               store.GetEntityById(8));
         AreEqual(Created,               store.Nodes[8].Flags);
         AreEqual(8,                     store.Nodes[8].Id);
         AreEqual(5,                     store.Nodes[8].ParentId);
         AreEqual(2,                     store.EntityCount);
         //
-        IsNull(                         store.StoreRoot);
+        IsTrue  (                       store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
         AreEqual(Created | TreeNode,store.Nodes[8].Flags);
     }
@@ -71,7 +71,7 @@ public static class Test_EntityConverter
         
         // --- create child 8 first
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
-        AreSame (entity8,               store.Nodes[8].Entity);
+        AreEqual(entity8,               store.GetEntityById(8));
         AreEqual(Created,               store.Nodes[8].Flags);      // diff_flags
         AreEqual(8,                     store.Nodes[8].Id);
         AreEqual(0,                     store.Nodes[8].ParentId);   // diff_parent
@@ -89,7 +89,7 @@ public static class Test_EntityConverter
         AreEqual(2,                     store.EntityCount);
         
         //
-        IsNull(                         store.StoreRoot);
+        IsTrue(                         store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
         AreEqual(Created | TreeNode,store.Nodes[8].Flags);
     }
@@ -196,7 +196,7 @@ public static class Test_EntityConverter
         var nodes       = store.Nodes;
         var nodeMax     = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++) {
-            if (nodes[n].Entity != null) {
+            if (nodes[n].Archetype != null) {
                 entityCount++;
             }
         }

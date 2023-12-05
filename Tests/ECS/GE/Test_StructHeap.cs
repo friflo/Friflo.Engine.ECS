@@ -32,7 +32,7 @@ public static class Test_StructHeap
     }
     
     [Test]
-    public static void Test_StructHeap_shrink_entity_capacity()
+    public static void Test_StructHeap_shrink_entity_capacity() // ENTITY_STRUCT
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var arch1       = store.GetArchetype(Signature.Get<Position>());

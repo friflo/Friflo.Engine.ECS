@@ -62,8 +62,8 @@ public class EntitySerializer
         var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
-            var entity  = store.GetNodeById(n).Entity;
-            if (entity == null) {
+            var entity  = store.GetEntityById(n);
+            if (entity.IsNull) {
                 continue;
             }
             WriteEntity(entity);
@@ -81,8 +81,8 @@ public class EntitySerializer
         var nodeMax = store.NodeMaxId;
         for (int n = 1; n <= nodeMax; n++)
         {
-            var entity  = store.GetNodeById(n).Entity;
-            if (entity == null) {
+            var entity  = store.GetEntityById(n);
+            if (entity.IsNull) {
                 continue;
             }
             WriteEntity(entity);
@@ -98,7 +98,7 @@ public class EntitySerializer
         isFirst     = true;
         foreach (var entity in entities)
         {
-            if (entity == null) {
+            if (entity.IsNull) {
                 continue;
             }
             WriteEntity(entity);

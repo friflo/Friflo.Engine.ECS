@@ -25,18 +25,20 @@ public readonly struct ChildNodes // : IEnumerable <Entity>  // <- not implement
     /// <summary>Property <b>only used</b> to display child entities in Debugger. See <see cref="ChildNodes"/> remarks.</summary>
     [Obsolete($"use either {nameof(ChildNodes)}[], {nameof(ChildNodes)}.{nameof(ToArray)}() or foreach (var node in entity.{nameof(ChildNodes)})")]
     [Browse(RootHidden)]public              Entity[]            Entities_       => GetEntities();
-                        public              Entity              this[int index] => nodes[Ids[index]].entity;
+                        public              Entity              this[int index] => new Entity(Ids[index], store);
                         public override     string              ToString()      => $"Length: {childLength}";
     
     // --- internal fields
     [Browse(Never)]     internal readonly   int                 childLength;    //  4
     [Browse(Never)]     internal readonly   int[]               childIds;       //  8
-    [Browse(Never)]     internal readonly   EntityNode[]        nodes;          //  8
+    [Browse(Never)]     internal readonly   EntityNode[]        nodes;          //  8  // todo remove ENTITY_STRUCT
+    [Browse(Never)]     internal readonly   EntityStore         store;          //  8
 
 
     public ChildEnumerator GetEnumerator() => new ChildEnumerator(this);
 
-    internal ChildNodes(EntityNode[] nodes, int[] childIds, int childLength) {
+    internal ChildNodes(EntityStore store, EntityNode[] nodes, int[] childIds, int childLength) {
+        this.store          = store;
         this.nodes          = nodes;
         this.childIds       = childIds;
         this.childLength    = childLength;
@@ -45,14 +47,14 @@ public readonly struct ChildNodes // : IEnumerable <Entity>  // <- not implement
     public void ToArray(Entity[] array) {
         var ids = Ids;
         for (int n = 0; n < childLength; n++) {
-            array[n] = nodes[ids[n]].entity;
+            array[n] = new Entity(ids[n], store);
         }
     }
 
     private Entity[] GetEntities() {
         var childEntities = new Entity[childLength];
         for (int n = 0; n < childLength; n++) {
-            childEntities[n] = nodes[childIds[n]].entity;
+            childEntities[n] = new Entity(childIds[n], store);
         }
         return childEntities;
     }
@@ -73,7 +75,7 @@ public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly ref EntityNode Current   => ref childNodes.nodes[childNodes.childIds[index - 1]];
+    public readonly Entity Current   => new Entity(childNodes.childIds[index - 1], childNodes.store);
     
     // --- IEnumerator
     public bool MoveNext() {

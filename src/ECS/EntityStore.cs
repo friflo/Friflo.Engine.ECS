@@ -44,7 +44,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
     public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
     public              Entity                      StoreRoot           => storeRoot; // null if no graph origin set
-    public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 0, entityScriptCount);
+    public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 1, entityScriptCount - 1);
     #endregion
     
 #region event handler
@@ -62,15 +62,15 @@ public sealed partial class EntityStore : EntityStoreBase
     
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
-    [Browse(Never)] private             EntityNode[]            nodes;              //  8 + all nodes   - acts also id2pid
+    [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes   - acts also id2pid
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8               - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
     [Browse(Never)] private             Entity                  storeRoot;          //  8               - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
-    [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8
+    [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8               - invariant: entityScripts[0] = 0
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
-    [Browse(Never)] private             int                     entityScriptCount;  //  4               - >= 0  and  <= entityScripts.Length
+    [Browse(Never)] private             int                     entityScriptCount;  //  4               - invariant: > 0  and  <= entityScripts.Length
 
     // --- buffers
     [Browse(Never)] private             int[]                   idBuffer;           //  8
@@ -92,17 +92,18 @@ public sealed partial class EntityStore : EntityStoreBase
     
     public EntityStore(PidType pidType)
     {
-        this.pidType    = pidType;
-        nodes           = Array.Empty<EntityNode>();
+        this.pidType        = pidType;
+        nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();
             randPid = new Random();
         }
-        entityScripts   = Array.Empty<EntityScripts>();
-        idBuffer        = new int[1];
-        idBufferSet     = new HashSet<int>();
-        dataBuffer      = new DataEntity();
+        entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
+        entityScriptCount   = 1;
+        idBuffer            = new int[1];
+        idBufferSet         = new HashSet<int>();
+        dataBuffer          = new DataEntity();
     }
     #endregion
 
@@ -125,8 +126,19 @@ public sealed partial class EntityStore : EntityStoreBase
         return ref nodes[pid];
     }
     
+    public  Entity  GetEntityByPid(long pid) {
+        if (pid2Id != null) {
+            return new Entity(pid2Id[pid], this);
+        }
+        return new Entity((int)pid, this);
+    }
+    
     public  ref EntityNode  GetNodeById(int id) {
         return ref nodes[id];
+    }
+    
+    public  Entity  GetEntityById(int id) {
+        return new Entity(id, this);
     }
     #endregion
 }

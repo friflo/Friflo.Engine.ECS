@@ -48,8 +48,8 @@ public struct EntityNode
                     public              int                 Id          =>  id;
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
                     public              long                Pid         =>  pid;
-                    public              Entity              Entity      =>  entity;
-                    public              Archetype           Archetype   =>  entity.archetype;
+//                  public              Entity              Entity      =>  entity;
+                    public              Archetype           Archetype   =>  archetype;
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
                     public              int                 ParentId    =>  parentId;
@@ -61,7 +61,7 @@ public struct EntityNode
 #region internal fields
     [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            long        pid;        // 8
-    [Browse(Never)] internal            Entity      entity;     // 8    can be null
+//  [Browse(Never)] internal            Entity      entity;     // 8    can be null
     [Browse(Never)] internal            int         parentId;   // 4
                     internal            int[]       childIds;   // 8    can be null
     [Browse(Never)] internal            int         childCount; // 4
@@ -69,6 +69,11 @@ public struct EntityNode
                     
                     internal readonly   bool        Is      (NodeFlags flag) => (flags & flag) != 0;
                     internal readonly   bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
+                    
+    // --- from class Entity
+    [Browse(Never)] internal            Archetype   archetype;  //  8 (4)   NOTE: could be replaced by int
+    [Browse(Never)] internal            int         compIndex;  //  4
+    [Browse(Never)] internal            int         scriptIndex;//  4
     #endregion
     
 #region internal methods
@@ -79,8 +84,8 @@ public struct EntityNode
     private readonly string GetString()
     {
         var sb = new StringBuilder();
-        if (entity != null) {
-            EntityUtils.EntityToString(entity, sb);
+        if (archetype != null) {
+            EntityUtils.EntityToString(id, archetype, sb);
         } else {
             sb.Append("id: ");
             sb.Append(id);
