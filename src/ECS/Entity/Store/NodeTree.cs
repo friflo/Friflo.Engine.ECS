@@ -20,7 +20,7 @@ public partial class EntityStore
         if (length <= curLength) {
             return;
         }
-        var newLength = Math.Max(length, 2 * curLength);
+        var newLength = Math.Max(length, 2 * curLength); // could grow slower to minimize heap pressure
         Utils.Resize(ref nodes, newLength);
         var localNodes = nodes;
         for (int n = curLength; n < newLength; n++) {

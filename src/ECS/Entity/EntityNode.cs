@@ -48,7 +48,6 @@ public struct EntityNode
                     public              int                 Id          =>  id;
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
                     public              long                Pid         =>  pid;
-//                  public              Entity              Entity      =>  entity;
                     public              Archetype           Archetype   =>  archetype;
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
@@ -61,9 +60,8 @@ public struct EntityNode
 #region internal fields
     [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            long        pid;        // 8
-//  [Browse(Never)] internal            Entity      entity;     // 8    can be null
     [Browse(Never)] internal            int         parentId;   // 4
-                    internal            int[]       childIds;   // 8    can be null
+                    internal            int[]       childIds;   // 8        can be null
     [Browse(Never)] internal            int         childCount; // 4
     [Browse(Never)] internal            NodeFlags   flags;      // 4 (1)
                     
@@ -71,7 +69,7 @@ public struct EntityNode
                     internal readonly   bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
                     
     // --- from class Entity
-    [Browse(Never)] internal            Archetype   archetype;  //  8 (4)   NOTE: could be replaced by int
+    [Browse(Never)] internal            Archetype   archetype;  //  8 (4)   could use int to relieve GC tracing reference types 
     [Browse(Never)] internal            int         compIndex;  //  4
     [Browse(Never)] internal            int         scriptIndex;//  4
     #endregion
