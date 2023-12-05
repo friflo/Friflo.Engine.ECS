@@ -46,6 +46,13 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     </ItemGroup>
 
+    <!-- Copy XML files from all PackageReferences to output dir -->
+    <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
+        <ItemGroup>
+        <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+        </ItemGroup>
+    </Target>
+
     <ItemGroup>
       <None Remove="**/*.csproj.xml" />
     </ItemGroup>
