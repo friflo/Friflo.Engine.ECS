@@ -1,5 +1,4 @@
-﻿using Friflo.Fliox.Engine.Client;
-using Friflo.Fliox.Engine.ECS;
+﻿using Friflo.Fliox.Engine.ECS;
 
 namespace Friflo.Fliox.Editor;
 

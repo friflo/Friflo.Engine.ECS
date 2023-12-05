@@ -189,27 +189,6 @@ public readonly struct Entity
     [Browse(Never)] internal readonly   EntityStore store;          //  8
     #endregion
     
-#region internal properties
-//  [Browse(Never)] internal readonly   int         id;             //  4
-    
-    /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[id].archetype;
-    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[id].archetype;
-
-    /// <summary>The index within the <see cref="refArchetype"/> the entity is stored</summary>
-    /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[id].compIndex;
-    [Browse(Never)] internal        int            compIndex    =>     store.nodes[id].compIndex;
-    
-    [Browse(Never)] internal    ref int         refScriptIndex  => ref store.nodes[id].scriptIndex;
-    [Browse(Never)] internal        int            scriptIndex  =>     store.nodes[id].scriptIndex;
-
-    // Deprecated comment. Was valid when Entity was a class
-    // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
-    // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
-    
-    #endregion
-    
 #region constructor
     internal Entity(int id, EntityStore store) {
         this.id     = id;
@@ -428,5 +407,24 @@ public readonly struct Entity
     
     public static Script AddEntityScript    (Entity entity, Script script)         => EntityUtils.AddScript       (entity, script);
 
+    #endregion
+    
+// ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
+#region internal properties
+    /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
+    [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[id].archetype;
+    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[id].archetype;
+
+    /// <summary>The index within the <see cref="refArchetype"/> the entity is stored</summary>
+    /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
+    [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[id].compIndex;
+    [Browse(Never)] internal        int            compIndex    =>     store.nodes[id].compIndex;
+    
+    [Browse(Never)] internal    ref int         refScriptIndex  => ref store.nodes[id].scriptIndex;
+    [Browse(Never)] internal        int            scriptIndex  =>     store.nodes[id].scriptIndex;
+
+    // Deprecated comment. Was valid when Entity was a class
+    // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64
+    // https://stackoverflow.com/questions/10655829/what-is-the-memory-overhead-of-a-net-object/10655864#10655864
     #endregion
 }
