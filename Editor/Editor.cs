@@ -37,7 +37,7 @@ public partial class Editor
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
     
-    private static readonly bool SeedDatabase = true;
+    private static readonly bool SyncDatabase = true;
 
     #endregion
 
@@ -59,18 +59,20 @@ public partial class Editor
         // --- add client and database
         var schema      = DatabaseSchema.Create<EntityClient>();
         var database    = CreateDatabase(schema, "in-memory");
+        database.AddCommands(new EditorService());
         var hub         = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
         var client      = new EntityClient(hub);
-        sync            = new EntityStoreSync(store, client);
-        processor       = new EventProcessorQueue(ReceivedEvent);
-        client.SetEventProcessor(processor);
-        await sync.SubscribeDatabaseChangesAsync();
-        
-        TestBed.AddSampleEntities(sync);
-        if (SeedDatabase) {
+        if (SyncDatabase) {
+            sync            = new EntityStoreSync(store, client);
+            processor       = new EventProcessorQueue(ReceivedEvent);
+            client.SetEventProcessor(processor);
+            await sync.SubscribeDatabaseChangesAsync();
+        }
+        TestBed.AddSampleEntities(store);
+        if (SyncDatabase) {
             store.ComponentAdded     += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
             store.ComponentRemoved   += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
             store.ScriptAdded        += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
@@ -136,11 +138,11 @@ public partial class Editor
         switch (args.action)
         {
             case ChildNodesChangedAction.Add:
-                sync.UpsertDataEntity(args.parentId);
+                sync?.UpsertDataEntity(args.parentId);
                 PostSyncChanges();
                 break;
             case ChildNodesChangedAction.Remove:
-                sync.UpsertDataEntity(args.parentId);
+                sync?.UpsertDataEntity(args.parentId);
                 PostSyncChanges();
                 break;
         }
@@ -160,7 +162,9 @@ public partial class Editor
     private async void SyncChangesAsync() {
         syncChangesPending = false;
         EditorUtils.AssertUIThread();
-        await sync.SyncChangesAsync();
+        if (sync != null) {
+            await sync.SyncChangesAsync();
+        }
     }
 
     internal void Run()

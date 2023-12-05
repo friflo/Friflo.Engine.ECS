@@ -31,9 +31,8 @@ public class Script2 : Script
 
 public static class TestBed
 {
-    internal static void AddSampleEntities(EntityStoreSync sync)
+    internal static void AddSampleEntities(EntityStore store)
     {
-        var store   = sync.Store;
         var root    = store.StoreRoot;
         root.AddComponent(new Transform { m11 = 1, m12 = 2, m13 = 3 });
         root.AddComponent(new EntityName("root"));

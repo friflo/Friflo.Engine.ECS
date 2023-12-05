@@ -16,7 +16,7 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        startTime = new Stopwatch();
+		startTime = new Stopwatch();
         startTime.Start();
         /*
         var graphicsClosed      = new ManualResetEvent(false);
