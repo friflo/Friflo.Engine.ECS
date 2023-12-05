@@ -61,15 +61,15 @@ public struct EntityNode
     [Browse(Never)] internal readonly   int         id;         // 4
     [Browse(Never)] internal            long        pid;        // 8
     [Browse(Never)] internal            int         parentId;   // 4
-                    internal            int[]       childIds;   // 8        can be null
+                    internal            int[]       childIds;   // 8    can be null.
     [Browse(Never)] internal            int         childCount; // 4
     [Browse(Never)] internal            NodeFlags   flags;      // 4 (1)
                     
                     internal readonly   bool        Is      (NodeFlags flag) => (flags & flag) != 0;
                     internal readonly   bool        IsNot   (NodeFlags flag) => (flags & flag) == 0;
                     
-    // --- from class Entity
-    [Browse(Never)] internal            Archetype   archetype;  //  8 (4)   could use int to relieve GC tracing reference types 
+    /// <remarks>Is set to null only in <see cref="EntityStore.DeleteNode"/></remarks>
+    [Browse(Never)] internal            Archetype   archetype;  //  8   can be null. Could use int to relieve GC tracing reference types 
     [Browse(Never)] internal            int         compIndex;  //  4
     [Browse(Never)] internal            int         scriptIndex;//  4
     #endregion

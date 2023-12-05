@@ -440,6 +440,7 @@ public partial class EntityStore
         nodes[id].compIndex = compIndex;
     }
     
+    /// <remarks> Set <see cref="EntityNode.archetype"/> = null. </remarks>
     internal void DeleteNode(int id)
     {
         nodesCount--;
@@ -452,7 +453,8 @@ public partial class EntityStore
             localNodes[childId].parentId = Static.NoParentId;
         }
         var parentId    = node.parentId;
-        // --- clear node entry
+        // --- clear node entry.
+        //     Set node.archetype = null
         node            = new EntityNode(id); // clear node
         
         // --- remove child from parent 
