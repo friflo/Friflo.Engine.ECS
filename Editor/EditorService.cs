@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
@@ -39,7 +40,7 @@ public class EditorService : IServiceCommands
     }
     
     [CommandHandler("editor.Add")]
-    private Result<int> Add(Param<AddEntities> param, MessageContext context)
+    private async Task<Result<int>> Add(Param<AddEntities> param, MessageContext context)
     {
         if (!param.GetValidate(out var addEntities, out var error)) {
             return Result.ValidationError(error);
@@ -54,10 +55,10 @@ public class EditorService : IServiceCommands
         if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
         }
-        EditorUtils.Post(() => {
-            ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);    
+        await EditorUtils.InvokeAsync(async () => {
+            ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
         });
-        return 1;
+        return dataEntities.Count;
     }
 }
 

@@ -29,9 +29,19 @@ public static class EditorUtils
         Dispatcher.UIThread.Post(action);
     }
     
+    public static TResult Invoke<TResult>(Func<TResult> action)
+    {
+        return Dispatcher.UIThread.Invoke<TResult>(action);
+    }
+    
     public static async Task InvokeAsync(Func<Task> action)
     {
         await Dispatcher.UIThread.InvokeAsync(action);
+    }
+    
+    public static async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)
+    {
+        return await Dispatcher.UIThread.InvokeAsync(action);
     }
     
     public static Editor GetEditor(this Visual visual)
