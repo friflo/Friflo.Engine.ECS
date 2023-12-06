@@ -16,6 +16,7 @@ namespace Friflo.Fliox.Editor;
 /// </summary>
 public class EditorService : IServiceCommands
 {
+    /// <remarks> Must be accessed only from main thread. </remarks>
     private readonly EntityStore    store;
         
     public EditorService(EntityStore store) {
@@ -50,18 +51,19 @@ public class EditorService : IServiceCommands
         if (addEntities == null) {
             return Result.Error("addEntities payload is null");
         }
-        var dataEntities = addEntities.entities;
         if (addEntities.entities == null) {
             return Result.Error("missing entities array");
         }
+        return await EditorUtils.InvokeAsync(() => Task.FromResult(AddInternal(addEntities)));
+    }
+    
+    private Result<int> AddInternal (AddEntities addEntities)
+    {
         if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
         }
-        await EditorUtils.InvokeAsync(() => {
-            ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
-            return Task.CompletedTask;
-        });
-        return dataEntities.Count;
+        ECSUtils.AddDataEntitiesToEntity(targetEntity, addEntities.entities);
+        return addEntities.entities.Count;
     }
 }
 
