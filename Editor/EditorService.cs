@@ -57,8 +57,9 @@ public class EditorService : IServiceCommands
         if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
         }
-        await EditorUtils.InvokeAsync(async () => {
+        await EditorUtils.InvokeAsync(() => {
             ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
+            return Task.CompletedTask;
         });
         return dataEntities.Count;
     }
