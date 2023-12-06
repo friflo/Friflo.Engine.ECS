@@ -4,19 +4,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
-// Hard rule: this file MUST NOT use namespaces:
-// - Friflo.Fliox.Editor.*
-// - Avalonia.*
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
-namespace Friflo.Fliox.Engine.Client;
+// ReSharper disable once CheckNamespace
+namespace Friflo.Fliox.Engine.ECS.Utils;
 
+/// <remarks> Note: This file will be moved to project: <see cref="Friflo.Fliox.Engine.ECS"/> </remarks>
 public static class ECSUtils
 {
     private static void Log(Func<string> message) {
