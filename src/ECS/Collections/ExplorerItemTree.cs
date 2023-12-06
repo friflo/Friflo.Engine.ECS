@@ -55,7 +55,7 @@ public class ExplorerItemTree
     private ExplorerItem CreateExplorerItem(Entity entity)
     {
         var item = new ExplorerItem(this, entity);
-        items.Add(entity.Id, item);
+        items.Add(entity.id, item);
         return item;
     }
     
