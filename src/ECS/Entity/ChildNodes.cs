@@ -2,16 +2,17 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoProperty
-// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-public readonly struct ChildEntities // : IEnumerable <Entity>  // <- not implemented to avoid boxing
+public readonly struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties
     [Browse(Never)]     public              int                 Length          => childLength;
@@ -28,8 +29,14 @@ public readonly struct ChildEntities // : IEnumerable <Entity>  // <- not implem
     [Browse(Never)]     internal readonly   int[]               childIds;       //  8
     [Browse(Never)]     internal readonly   EntityStore         store;          //  8
 
-
-    public ChildEnumerator GetEnumerator() => new ChildEnumerator(this);
+    // --- IEnumerable<>
+    IEnumerator<Entity> IEnumerable<Entity>.GetEnumerator() => new ChildEnumerator(this);
+    
+    // --- IEnumerable
+    IEnumerator                 IEnumerable.GetEnumerator() => new ChildEnumerator(this);
+    
+    // --- new
+    public ChildEnumerator                  GetEnumerator() => new ChildEnumerator(this);
 
     internal ChildEntities(EntityStore store, int[] childIds, int childLength) {
         this.store          = store;
@@ -52,14 +59,9 @@ public readonly struct ChildEntities // : IEnumerable <Entity>  // <- not implem
         }
         return childEntities;
     } */
-    
-    /* // intentionally not implemented to avoid boxing. See comment above     
-    public IEnumerator<Entity> GetEnumerator()      => throw new System.InvalidOperationException();
-    IEnumerator IEnumerable.GetEnumerator()         => throw new System.InvalidOperationException();
-    */
 }
 
-public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented to enable returning Current by ref
+public struct ChildEnumerator  : IEnumerator<Entity> // <- not implemented to enable returning Current by ref
 {
     private             int             index;          //  4
     private readonly    ChildEntities   childEntities;  // 20
@@ -68,7 +70,7 @@ public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented
         this.childEntities = childEntities;
     }
     
-    /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
+    // --- IEnumerator<>
     public readonly Entity Current   => new Entity(childEntities.childIds[index - 1], childEntities.store);
     
     // --- IEnumerator
@@ -83,11 +85,10 @@ public struct ChildEnumerator // : IEnumerator<EntityNode> // <- not implemented
     public void Reset() {
         index = 0;
     }
-    // object IEnumerator.Current => Current;                                           // not implemented: see comment above
+    
+    object IEnumerator.Current => Current;
 
-    // --- IEnumerator<>
-    // public EntityNode Current   => childNodes.nodes[childNodes.childIds[index - 1]]; // not implemented: see comment above
-
+    // --- IDisposable
     public void Dispose() { }
 }
 

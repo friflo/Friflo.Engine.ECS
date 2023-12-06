@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -574,17 +576,32 @@ public static class Test_Entity_Tree
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
         root.AddChild(child);
-        
-        ChildEnumerator enumerator = root.ChildEntities.GetEnumerator();
-        while (enumerator.MoveNext()) { }
-        enumerator.Reset();
-        
-        int count = 0;
-        while (enumerator.MoveNext()) {
-            count++;
+        {
+            IEnumerable<Entity> childEntities = root.ChildEntities;
+            int count = 0;
+            foreach (var _ in childEntities) {
+                count++;
+            }
+            AreEqual(1, count);
+        } {
+            IEnumerable childEntities = root.ChildEntities;
+            int count = 0;
+            foreach (var _ in childEntities) {
+                count++;
+            }
+            AreEqual(1, count);
+        } {
+            ChildEnumerator enumerator = root.ChildEntities.GetEnumerator();
+            while (enumerator.MoveNext()) { }
+            enumerator.Reset();
+            
+            int count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+            }
+            enumerator.Dispose();
+            AreEqual(1, count);
         }
-        enumerator.Dispose();
-        AreEqual(1, count);
     }
     
     [Test]
