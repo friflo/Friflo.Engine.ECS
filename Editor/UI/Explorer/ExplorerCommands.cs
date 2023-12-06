@@ -55,7 +55,8 @@ public static class ExplorerCommands
                     targetEntity    = targetEntity.Parent; // add entities to parent
                     targetPath      = targetPath.Slice(0, targetPath.Count - 1);
                 }
-                var indexes         = ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
+                var addResult       = ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
+                var indexes         = addResult.indexes.ToArray();
                 var newSelection    = TreeIndexPaths.Create(targetPath, indexes);
 
                 // requires Post() to avoid artifacts in grid. No clue why.

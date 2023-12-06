@@ -42,7 +42,7 @@ public class EditorService : IServiceCommands
     }
     
     [CommandHandler("editor.Add")]
-    private async Task<Result<int>> Add(Param<AddEntities> param, MessageContext context)
+    private async Task<Result<AddEntitiesResult>> Add(Param<AddEntities> param, MessageContext context)
     {
         if (!param.GetValidate(out var addEntities, out var error)) {
             return Result.ValidationError(error);
@@ -56,13 +56,17 @@ public class EditorService : IServiceCommands
         return await EditorUtils.InvokeAsync(() => Task.FromResult(AddInternal(addEntities)));
     }
     
-    private Result<int> AddInternal (AddEntities addEntities)
+    private Result<AddEntitiesResult> AddInternal (AddEntities addEntities)
     {
         if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
         }
-        ECSUtils.AddDataEntitiesToEntity(targetEntity, addEntities.entities);
-        return addEntities.entities.Count;
+        var result = ECSUtils.AddDataEntitiesToEntity(targetEntity, addEntities.entities);
+        
+        return new AddEntitiesResult {
+            count           = addEntities.entities.Count,
+            missingEntities = result.missingPids 
+        };
     }
 }
 

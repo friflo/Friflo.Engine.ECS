@@ -78,7 +78,7 @@ public static class ECSUtils
     
 #region Paste DataEntity's
     /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
-    public static int[] AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
+    public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
         var childEntities   = new HashSet<long>(dataEntities.Count);
         var pidMap          = new Dictionary<long, long>();
@@ -96,13 +96,14 @@ public static class ECSUtils
         
         // --- convert each DataEntity into an Entity's created above
         //     replace children pid's with their new pid
+        var missingPids = new HashSet<long>();            
         foreach (var dataEntity in dataEntities)
         {
             var children = dataEntity.children;
             dataEntity.children = null;
             converter.DataEntityToEntity(dataEntity, store, out _);
             
-            ReplaceChildrenPids(children, pidMap, store);
+            ReplaceChildrenPids(children, pidMap, store, missingPids);
             dataEntity.children = children;
         }
         // --- add child entities to their parent entity
@@ -131,10 +132,17 @@ public static class ECSUtils
             var index = targetEntity.AddChild(entity);
             indexes.Add(index);
         }
-        return indexes.ToArray();
+        return new AddDataEntitiesResult {
+            indexes     = indexes,
+            missingPids = missingPids
+        };
     }
     
-    private static void ReplaceChildrenPids(List<long> children, Dictionary<long, long> pidMap, EntityStore store)
+    private static void ReplaceChildrenPids(
+        List<long>              children,
+        Dictionary<long, long>  pidMap,
+        EntityStore             store,
+        HashSet<long>           missingPids)
     {
         if (children == null) {
             return;
@@ -147,6 +155,7 @@ public static class ECSUtils
                 children[n] = newPid;
                 continue;
             }
+            missingPids.Add(oldPid);
             var missingChild    = store.CreateEntity();
             missingChild.AddComponent(new EntityName($"missing entity - pid: {oldPid}"));
             var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
@@ -259,4 +268,11 @@ public static class ECSUtils
         return indexes;
     }
     #endregion
+}
+
+
+public class AddDataEntitiesResult
+{
+    public List<int>        indexes;
+    public HashSet<long>    missingPids;
 }
