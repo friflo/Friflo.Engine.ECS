@@ -52,10 +52,7 @@ public class StoreCommands : IServiceCommands
             return Result.ValidationError(error);
         }
         if (addEntities == null) {
-            return Result.Error("addEntities payload is null");
-        }
-        if (addEntities.entities == null) {
-            return Result.Error("missing entities array");
+            return Result.Error("missing param");
         }
         return await StoreUtils.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
     }
@@ -86,19 +83,20 @@ public class StoreCommands : IServiceCommands
     }
     
     [CommandHandler("store.GetEntities")]
-    private async Task<Result<GetEntitiesResult>> GetEntities(Param<List<long>> param, MessageContext context)
+    private async Task<Result<GetEntitiesResult>> GetEntities(Param<GetEntities> param, MessageContext context)
     {
-        if (!param.GetValidate(out var ids, out var error)) {
+        if (!param.GetValidate(out var getEntities, out var error)) {
             return Result.ValidationError(error);
         }
-        if (ids == null) {
-            return Result.Error("missing ids array");
+        if (getEntities == null) {
+            return Result.Error("missing param");
         }
-        return await StoreUtils.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(ids)));
+        return await StoreUtils.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(getEntities)));
     }
     
-    private Result<GetEntitiesResult> GetEntitiesInternal(List<long> ids)
+    private Result<GetEntitiesResult> GetEntitiesInternal(GetEntities getEntities)
     {
+        var ids = getEntities.ids;
         var entities = new List<Entity>(ids.Count);
         foreach (var pid in ids) {
             if (!store.TryGetEntityByPid(pid, out var entity)) {

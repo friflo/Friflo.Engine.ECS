@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
@@ -14,6 +15,7 @@ namespace Friflo.Fliox.Engine.Client;
 public class AddEntities
 {
     public  long                targetEntity;
+    [Required]
     public  List<DataEntity>    entities;
 }
 
@@ -27,6 +29,12 @@ public class AddEntitiesResult
     public  HashSet<long>       missingEntities;
     /// <summary> Contains pid's failed to add because of inconsistent input. E.g. an entity contains itself an an entity.</summary>
     public  HashSet<long>       addErrors;
+}
+
+public class GetEntities
+{
+    [Required]
+    public  List<long>          ids;
 }
 
 public class GetEntitiesResult
