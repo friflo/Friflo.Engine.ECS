@@ -38,8 +38,8 @@ public static class ExplorerCommands
     internal static void CopyItems(TreeSelection selection, InputElement element)
     {
         var entities    = selection.items.Select(item => item.Entity).ToList();
-        var json        = ECSUtils.EntitiesToJsonArray(entities);
-        var text        = json.AsString();
+        var result      = ECSUtils.EntitiesToJsonArray(entities);
+        var text        = result.entities.AsString();
         EditorUtils.CopyToClipboard(element, text);
         Focus(element);
     }

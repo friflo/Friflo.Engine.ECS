@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Json.Fliox;
 
 // ReSharper disable UnassignedField.Global
 // ReSharper disable ClassNeverInstantiated.Global
@@ -26,4 +27,12 @@ public class AddEntitiesResult
     public  HashSet<long>       missingEntities;
     /// <summary> Contains pid's failed to add because of inconsistent input. E.g. an entity contains itself an an entity.</summary>
     public  HashSet<long>       addErrors;
+}
+
+public class GetEntitiesResult
+{
+    /// <summary> Number of returned entities. </summary>
+    public  int         count;
+    /// <summary> Contains the requested entities including their children. </summary>
+    public  JsonValue   entities;
 }

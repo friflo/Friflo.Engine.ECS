@@ -7,6 +7,7 @@ using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Host;
 
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedMember.Local
 namespace Friflo.Fliox.Editor;
@@ -54,10 +55,10 @@ public class EditorService : IServiceCommands
         if (addEntities.entities == null) {
             return Result.Error("missing entities array");
         }
-        return await EditorUtils.InvokeAsync(() => Task.FromResult(AddInternal(addEntities)));
+        return await EditorUtils.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
     }
     
-    private Result<AddEntitiesResult> AddInternal (AddEntities addEntities)
+    private Result<AddEntitiesResult> AddEntitiesInternal (AddEntities addEntities)
     {
         if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
@@ -80,6 +81,31 @@ public class EditorService : IServiceCommands
             addErrors       = result.addErrors,
             added           = added
         };
+    }
+    
+    [CommandHandler("editor.GetEntities")]
+    private async Task<Result<GetEntitiesResult>> GetEntities(Param<List<long>> param, MessageContext context)
+    {
+        if (!param.GetValidate(out var ids, out var error)) {
+            return Result.ValidationError(error);
+        }
+        if (ids == null) {
+            return Result.Error("missing ids array");
+        }
+        return await EditorUtils.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(ids)));
+    }
+    
+    private Result<GetEntitiesResult> GetEntitiesInternal(List<long> ids)
+    {
+        var entities = new List<Entity>(ids.Count);
+        foreach (var pid in ids) {
+            if (!store.TryGetEntityByPid(pid, out var entity)) {
+                return Result.Error($"pid not found. was: {pid}");
+            }
+            entities.Add(entity);
+        }
+        var result = ECSUtils.EntitiesToJsonArray(entities);
+        return new GetEntitiesResult { count = result.count, entities = result.entities };
     }
 }
 

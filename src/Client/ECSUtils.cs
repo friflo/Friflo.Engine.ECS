@@ -182,7 +182,7 @@ public static class ECSUtils
     
 #region Copy Entity's
     /// <summary> Create a JSON array from given <paramref name="entities"/> </summary>
-    public static JsonValue EntitiesToJsonArray(IEnumerable<Entity> entities)
+    public static JsonEntities EntitiesToJsonArray(IEnumerable<Entity> entities)
     {
         var stream      = new MemoryStream();
         var serializer  = new EntitySerializer();
@@ -198,8 +198,8 @@ public static class ECSUtils
             AddChildren(entity, treeList, treeSet);
         }
         serializer.WriteEntities(treeList, stream);
-    
-        return new JsonValue(stream.GetBuffer(), 0, (int)stream.Length);
+        var json = new JsonValue(stream.GetBuffer(), 0, (int)stream.Length); 
+        return new JsonEntities { count = treeList.Count, entities = json };
     }
     
     private static void AddChildren(Entity entity, List<Entity> list, HashSet<Entity> set)
@@ -295,4 +295,10 @@ public class AddDataEntitiesResult
     public  HashSet<long>   missingPids;
     /// <summary> contains old pid's </summary>
     public  HashSet<long>   addErrors;
+}
+
+public class JsonEntities
+{
+    public  int             count;
+    public  JsonValue       entities;
 }

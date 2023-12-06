@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
@@ -29,6 +30,8 @@ public class EntityClient : FlioxClient
     /// <summary> Add the passed <see cref="AddEntities.entities"/> to the <see cref="AddEntities.targetEntity"/> </summary>
     public CommandTask<AddEntitiesResult>   AddEntities (AddEntities param) => send.Command<AddEntities, AddEntitiesResult> (param);
     
+    /// <summary> Return the <see cref="DataEntity"/>'s of the passed entity id's including their children. </summary>
+    public CommandTask<GetEntitiesResult>   GetEntities (List<long> param)  => send.Command<List<long>, GetEntitiesResult>  (param);
     
     // --- constructor
     public EntityClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
