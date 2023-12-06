@@ -19,10 +19,10 @@ namespace Tests.Client;
 
 public static class Test_DataSync
 {
-    private static EntityClient CreateClient() {
+    private static StoreClient CreateClient() {
         var database    = new MemoryDatabase("test");
         var hub         = new FlioxHub(database);
-        return new EntityClient(hub);
+        return new StoreClient(hub);
     }
     
     [Test]
@@ -37,7 +37,7 @@ public static class Test_DataSync
         client.SyncTasksSynchronous();
         
         var store   = new EntityStore(PidType.UsePidAsId);
-        var sync    = new EntityStoreSync(store, client);
+        var sync    = new StoreSync(store, client);
         AreSame(store, sync.Store); // ensure API available
         
         // load entities via client sync
@@ -77,7 +77,7 @@ public static class Test_DataSync
     {
         var client      = CreateClient();
         var store       = new EntityStore(PidType.UsePidAsId);
-        var sync        = new EntityStoreSync(store, client);
+        var sync        = new StoreSync(store, client);
 
         var entity  = store.CreateEntity(10);
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
@@ -133,38 +133,38 @@ public static class Test_DataSync
     public static void Test_DataSync_constructor_params()
     {
         var e = Throws<ArgumentNullException>(() => {
-            _ = new EntityStoreSync(null, null);
+            _ = new StoreSync(null, null);
         });
         AreEqual("Value cannot be null. (Parameter 'store')", e!.Message);
         
         var store = new EntityStore();
         e = Throws<ArgumentNullException>(() => {
-            _ = new EntityStoreSync(store, null);
+            _ = new StoreSync(store, null);
         });
         AreEqual("Value cannot be null. (Parameter 'client')", e!.Message);
     }
     
-    private static FlioxHub Prepare_SubscribeDatabaseChanges(out EntityStoreSync sync, out EventProcessorQueue processor)
+    private static FlioxHub Prepare_SubscribeDatabaseChanges(out StoreSync sync, out EventProcessorQueue processor)
     {
-        var schema          = DatabaseSchema.Create<EntityClient>();
+        var schema          = DatabaseSchema.Create<StoreClient>();
         var database        = new MemoryDatabase("test", schema);
         var hub             = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
-        var client          = new EntityClient(hub);
+        var client          = new StoreClient(hub);
         var store           = new EntityStore(PidType.UsePidAsId);
-        sync                = new EntityStoreSync(store, client);
+        sync                = new StoreSync(store, client);
         processor           = new EventProcessorQueue();
         client.SetEventProcessor(processor);
         return hub;
     }
     
-    /// <summary>Cover <see cref="EntityStoreSync.SubscribeDatabaseChanges"/></summary>
+    /// <summary>Cover <see cref="StoreSync.SubscribeDatabaseChanges"/></summary>
     [Test]
     public static void Test_DataSync_SubscribeDatabaseChanges()
     {
         var hub     = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
-        var client  = new EntityClient(hub);
+        var client  = new StoreClient(hub);
         var store   = sync.Store;
         sync.SubscribeDatabaseChanges();
         
@@ -189,12 +189,12 @@ public static class Test_DataSync
         AreEqual(0, store.EntityCount);
     }
     
-    /// <summary>Cover <see cref="EntityStoreSync.SubscribeDatabaseChangesAsync"/></summary>
+    /// <summary>Cover <see cref="StoreSync.SubscribeDatabaseChangesAsync"/></summary>
     [Test]
     public static async Task Test_DataSync_SubscribeDatabaseChangesAsync()
     {
         var hub     = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
-        var client  = new EntityClient(hub);
+        var client  = new StoreClient(hub);
         var store   = sync.Store;
         await sync.SubscribeDatabaseChangesAsync();
         

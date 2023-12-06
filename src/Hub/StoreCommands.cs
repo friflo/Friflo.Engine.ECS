@@ -16,7 +16,7 @@ using Friflo.Json.Fliox.Hub.Host;
 namespace Friflo.Fliox.Engine.Hub;
 
 /// <summary>
-/// Implementation of <see cref="EntityClient"/> commands.
+/// Implementation of <see cref="StoreClient"/> commands.
 /// </summary>
 public class StoreCommands : IServiceCommands
 {

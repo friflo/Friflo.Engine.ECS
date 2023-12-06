@@ -30,7 +30,7 @@ public partial class Editor
 
 #region private fields
     private             EntityStore             store;
-    private             EntityStoreSync         sync;
+    private             StoreSync         sync;
     private  readonly   List<EditorObserver>    observers   = new List<EditorObserver>();
     private             bool                    isReady;
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
@@ -57,7 +57,7 @@ public partial class Editor
             EditorObserver.CastEditorReady(observers);
         });
         // --- add client and database
-        var schema          = DatabaseSchema.Create<EntityClient>();
+        var schema          = DatabaseSchema.Create<StoreClient>();
         var database        = CreateDatabase(schema, "in-memory");
         var storeCommands   = new StoreCommands(store);
         database.AddCommands(storeCommands);
@@ -66,9 +66,9 @@ public partial class Editor
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
-        var client          = new EntityClient(hub);
+        var client          = new StoreClient(hub);
         if (SyncDatabase) {
-            sync            = new EntityStoreSync(store, client);
+            sync            = new StoreSync(store, client);
             processor       = new EventProcessorQueue(ReceivedEvent);
             client.SetEventProcessor(processor);
             await sync.SubscribeDatabaseChangesAsync();
@@ -133,7 +133,7 @@ public partial class Editor
 
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
-    /// <summary>SYNC: <see cref="Entity"/> -> <see cref="EntityStoreSync"/></summary>
+    /// <summary>SYNC: <see cref="Entity"/> -> <see cref="StoreSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
         StoreUtils.AssertMainThread();

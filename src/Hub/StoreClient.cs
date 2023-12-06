@@ -17,7 +17,7 @@ namespace Friflo.Fliox.Engine.Hub;
 /// <remarks> commands are implemented by <see cref="StoreCommands"/> </remarks>
 [CLSCompliant(true)]
 [MessagePrefix("store.")]
-public class EntityClient : FlioxClient
+public class StoreClient : FlioxClient
 {
     // --- containers
     public  readonly    EntitySet <long, DataEntity>   entities;
@@ -34,5 +34,5 @@ public class EntityClient : FlioxClient
     public CommandTask<GetEntitiesResult>   GetEntities (GetEntities param) => send.Command<GetEntities, GetEntitiesResult> (param);
     
     // --- constructor
-    public EntityClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
+    public StoreClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }

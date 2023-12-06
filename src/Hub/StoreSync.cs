@@ -14,12 +14,12 @@ using Friflo.Json.Fliox.Hub.Client;
 namespace Friflo.Fliox.Engine.Hub;
 
 [CLSCompliant(true)]
-public sealed class EntityStoreSync
+public sealed class StoreSync
 {
     public              EntityStore                     Store => store;
     
     private readonly    EntityStore                     store;
-    private readonly    EntityClient                    client;
+    private readonly    StoreClient                    client;
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private readonly    Dictionary<int, EntityChange>   entityChanges;
@@ -28,7 +28,7 @@ public sealed class EntityStoreSync
     private readonly    HashSet<int>                    idSet;
 
 
-    public EntityStoreSync (EntityStore store, EntityClient client) {
+    public StoreSync (EntityStore store, StoreClient client) {
         this.store      = store     ?? throw new ArgumentNullException(nameof(store));
         this.client     = client    ?? throw new ArgumentNullException(nameof(client));
         localEntities   = client.entities.Local;
