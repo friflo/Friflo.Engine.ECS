@@ -18,9 +18,9 @@ public struct MyComponent1 : IComponent { public int a; }
 [Component("my2")]
 public struct MyComponent2 : IComponent { public int b; }
 
-public struct NonBlittableArray         : IComponent { internal int[] array;                }
-public struct NonBlittableList          : IComponent { internal List<int> array;            }
-public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int> array; }
+public struct NonBlittableArray         : IComponent { internal int[]                   array;  }
+public struct NonBlittableList          : IComponent { internal List<int>               list;   }
+public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }
 
 
 [CodeCoverageTest]
