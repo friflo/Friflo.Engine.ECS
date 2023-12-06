@@ -4,6 +4,8 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Friflo.Fliox.Editor.Utils;
+using Friflo.Fliox.Engine.Client;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Editor.UI;
@@ -26,5 +28,6 @@ public class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+        StoreUtils.SetDispatcher(new AvaloniaDispatcher());
     }
 }

@@ -5,8 +5,6 @@ using System;
 using System.Diagnostics;
 using Avalonia;
 using Friflo.Fliox.Editor.UI;
-using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.Client;
 
 namespace Friflo.Fliox.Editor;
 
@@ -18,7 +16,6 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        StoreUtils.SetDispatcher(new AvaloniaDispatcher());
 		startTime = new Stopwatch();
         startTime.Start();
         /*
@@ -43,7 +40,7 @@ public static class Program
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
         AppBuilder builder = BuildAvaloniaApp();
-        
+
         builder.StartWithClassicDesktopLifetime(args);
 
         // loop.Stop();

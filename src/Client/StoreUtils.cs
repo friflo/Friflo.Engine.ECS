@@ -25,9 +25,10 @@ public static class StoreUtils
     private static IMainThreadDispatcher _dispatcher;
     
     public static void SetDispatcher(IMainThreadDispatcher dispatcher) {
-        if (_dispatcher != null) {
-            throw new InvalidOperationException("dispatcher already set");
-        }
+        dispatcher.Post(() => {
+            int threadId = Environment.CurrentManagedThreadId;
+            Console.WriteLine($"{nameof(StoreUtils)} - Set dispatcher to thread id: {threadId}");                
+        });
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
     }
     
