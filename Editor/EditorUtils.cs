@@ -31,7 +31,7 @@ public static class EditorUtils
     
     public static TResult Invoke<TResult>(Func<TResult> action)
     {
-        return Dispatcher.UIThread.Invoke<TResult>(action);
+        return Dispatcher.UIThread.Invoke(action);
     }
     
     public static async Task InvokeAsync(Func<Task> action)
