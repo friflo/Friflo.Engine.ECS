@@ -27,13 +27,19 @@ public static class Test_ComponentType
         AreEqual(expect, e!.Message);
     }
     
+    /// <summary> cover <see cref="SchemaUtils.CreateSchemaType"/> </summary>
     [Test]
-    public static void Test_ComponentType_MissingAttribute()
+    public static void Test_ComponentType_CreateSchemaType()
     {
         var e = Throws<InvalidOperationException>(() => {
             SchemaUtils.CreateSchemaType(typeof(string), null);
         });
-        AreEqual("missing expected attribute. Type: System.String", e!.Message);
+        AreEqual("Cannot create SchemaType for Type: System.String", e!.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
+            SchemaUtils.CreateSchemaType(typeof(Guid), null);
+        });
+        AreEqual("Cannot create SchemaType for Type: System.Guid", e!.Message);
     }
 
 }

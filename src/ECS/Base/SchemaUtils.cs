@@ -87,7 +87,7 @@ internal static class SchemaUtils
                 return scriptType;
             }
         }
-        throw new InvalidOperationException($"missing expected attribute. Type: {type}");
+        throw new InvalidOperationException($"Cannot create SchemaType for Type: {type}");
     }
     
     internal static ComponentType CreateComponentType<T>(TypeStore typeStore)
