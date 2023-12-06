@@ -4,6 +4,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Friflo.Fliox.Editor.Utils;
 
 namespace Friflo.Fliox.Editor.UI.Panels;
 

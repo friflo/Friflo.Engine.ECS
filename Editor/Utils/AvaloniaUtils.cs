@@ -12,7 +12,7 @@ using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI;
 
 // ReSharper disable MergeCastWithTypeCheck
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Fliox.Editor.Utils;
 
 public static class EditorUtils
 {
