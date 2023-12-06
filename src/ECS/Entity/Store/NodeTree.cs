@@ -63,6 +63,11 @@ public partial class EntityStore
             // --- remove child from current parent
             int curIndex = RemoveChildNode(ref localNodes[curParentId], childId);
             OnChildNodeRemove(curParentId, childId, curIndex);
+        } else {
+            if (parentId == childId) {
+                // case: tried to add entity to itself as a child
+                return -2;
+            }
         }
         // --- add entity with given id as child to this entity
         ref var parent      = ref localNodes[parentId];

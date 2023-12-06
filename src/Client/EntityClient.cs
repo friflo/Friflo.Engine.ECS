@@ -47,4 +47,5 @@ public class AddEntitiesResult
 {
     public  int                 count;
     public  HashSet<long>       missingEntities;
+    public  HashSet<long>       addErrors;
 }

@@ -65,7 +65,8 @@ public class EditorService : IServiceCommands
         
         return new AddEntitiesResult {
             count           = addEntities.entities.Count,
-            missingEntities = result.missingPids 
+            missingEntities = result.missingPids,
+            addErrors       = result.addErrors
         };
     }
 }

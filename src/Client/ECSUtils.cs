@@ -107,6 +107,7 @@ public static class ECSUtils
             dataEntity.children = children;
         }
         // --- add child entities to their parent entity
+        var addErrors = new HashSet<long>();  
         foreach (var dataEntity in dataEntities)
         {
             var entity      = store.GetEntityByPid(dataEntity.pid);
@@ -117,7 +118,11 @@ public static class ECSUtils
             foreach (var childPid in children) {
                 childEntities.Add(childPid);
                 var child = store.GetEntityByPid(childPid);
-                entity.AddChild(child);
+                var index = entity.AddChild(child);
+                if (index >= 0) {
+                    continue;
+                }
+                addErrors.Add(childPid);
             }
         }
         // --- add all root entities to target
@@ -134,7 +139,8 @@ public static class ECSUtils
         }
         return new AddDataEntitiesResult {
             indexes     = indexes,
-            missingPids = missingPids
+            missingPids = missingPids,
+            addErrors   = addErrors  
         };
     }
     
@@ -275,4 +281,5 @@ public class AddDataEntitiesResult
 {
     public List<int>        indexes;
     public HashSet<long>    missingPids;
+    public HashSet<long>    addErrors;
 }
