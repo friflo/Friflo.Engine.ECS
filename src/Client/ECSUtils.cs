@@ -15,7 +15,7 @@ using Friflo.Json.Fliox;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
-namespace Friflo.Fliox.Editor.Utils;
+namespace Friflo.Fliox.Engine.Client;
 
 public static class ECSUtils
 {
@@ -28,7 +28,7 @@ public static class ECSUtils
     }
     
     /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
-    internal static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
+    public static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
     {
         // --- 
         var serializer      = new EntitySerializer();
@@ -45,7 +45,7 @@ public static class ECSUtils
     }
     
 #region Duplicate Entity's
-    internal static int[] DuplicateEntities(List<Entity> entities)
+    public static int[] DuplicateEntities(List<Entity> entities)
     {
         var indexes = new List<int>(entities.Count);
         var store   = entities[0].Store;
@@ -78,7 +78,7 @@ public static class ECSUtils
     
 #region Paste DataEntity's
     /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
-    internal static int[] AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
+    public static int[] AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
         var childEntities   = new HashSet<long>(dataEntities.Count);
         var pidMap          = new Dictionary<long, long>();
@@ -158,7 +158,7 @@ public static class ECSUtils
     
 #region Copy Entity's
     /// <summary> Create a JSON array from given <paramref name="entities"/> </summary>
-    internal static JsonValue EntitiesToJsonArray(IEnumerable<Entity> entities)
+    public static JsonValue EntitiesToJsonArray(IEnumerable<Entity> entities)
     {
         var stream      = new MemoryStream();
         var serializer  = new EntitySerializer();
@@ -191,7 +191,7 @@ public static class ECSUtils
     #endregion
     
 #region Remove ExplorerItem's
-    internal static void RemoveExplorerItems(ExplorerItem[] items, ExplorerItem rootItem)
+    public static void RemoveExplorerItems(ExplorerItem[] items, ExplorerItem rootItem)
     {
         foreach (var item in items) {
             var entity = item.Entity; 
@@ -209,7 +209,7 @@ public static class ECSUtils
     #endregion
     
 #region Move ExplorerItem's
-    internal static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
+    public static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
     {
         var parent  = items[0].Entity.Parent;
         if (parent.IsNull) {
@@ -234,7 +234,7 @@ public static class ECSUtils
         return indexes;
     }
     
-    internal static int[] MoveExplorerItemsDown(ExplorerItem[] items, int shift)
+    public static int[] MoveExplorerItemsDown(ExplorerItem[] items, int shift)
     {
         var parent      = items[0].Entity.Parent;
         if (parent.IsNull) {
