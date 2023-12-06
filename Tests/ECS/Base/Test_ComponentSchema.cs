@@ -38,12 +38,12 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 11  scripts: 6  entity tags: 3", schema.ToString());
-        AreEqual(12,    components.Length);
+        AreEqual("components: 13  scripts: 6  entity tags: 3", schema.ToString());
+        AreEqual(14,    components.Length);
         AreEqual( 7,    scripts.Length);
         
-        AreEqual(17,    schema.SchemaTypeByKey.Count);
-        AreEqual(11,    schema.ComponentTypeByType.Count);
+        AreEqual(19,    schema.SchemaTypeByKey.Count);
+        AreEqual(13,    schema.ComponentTypeByType.Count);
         AreEqual( 6,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);
@@ -72,12 +72,15 @@ public static class Test_ComponentSchema
         AssertBlittableComponent<EntityName>    (schema, true);
         AssertBlittableComponent<Unresolved>    (schema, false);
         
-        // --- Test types
+        // --- Test blittable types
         AssertBlittableComponent<MyComponent1>  (schema, true);
         AssertBlittableComponent<MyComponent1>  (schema, true);
         AssertBlittableComponent<ByteComponent> (schema, true);
         
-        AssertBlittableComponent<NonBlittable>  (schema, false);
+        // --- Test non-blittable types
+        AssertBlittableComponent<NonBlittableArray>     (schema, false);
+        AssertBlittableComponent<NonBlittableList>      (schema, false);
+        AssertBlittableComponent<NonBlittableDictionary>(schema, false);
     }
     
     private static void AssertBlittableComponent<T>(EntitySchema schema, bool expect) where T : struct, IComponent {

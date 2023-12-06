@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
 using static NUnit.Framework.Assert;
 
@@ -17,8 +18,9 @@ public struct MyComponent1 : IComponent { public int a; }
 [Component("my2")]
 public struct MyComponent2 : IComponent { public int b; }
 
-[Component("non-blittable")]
-public struct NonBlittable : IComponent { internal int[] array; }
+public struct NonBlittableArray         : IComponent { internal int[] array;                }
+public struct NonBlittableList          : IComponent { internal List<int> array;            }
+public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int> array; }
 
 
 [CodeCoverageTest]
