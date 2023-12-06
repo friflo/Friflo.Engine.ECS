@@ -86,12 +86,12 @@ public abstract class SchemaType
         if (BlittableTypes.TryGetValue(type, out bool blittable)) {
             return blittable;
         }
-        blittable = IsBlittableMembers(type);
+        blittable = AreAllMembersBlittable(type);
         BlittableTypes.Add(type, blittable);
         return blittable;
     }
 
-    private static bool IsBlittableMembers(Type type)
+    private static bool AreAllMembersBlittable(Type type)
     {
         var members = type.GetMembers();
         foreach (var member in members)
