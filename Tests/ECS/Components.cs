@@ -23,10 +23,10 @@ public struct NonBlittableArray         : IComponent { internal int[]           
 public struct NonBlittableList          : IComponent { internal List<int>               list;   }
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }
 
-public struct BlittableDatetime         : IComponent { internal DateTime    dateTime;    }
-public struct BlittableGuid             : IComponent { internal Guid        guid;        }
-public struct BlittableBigInteger       : IComponent { internal BigInteger  bigInteger;  }
-
+public struct BlittableDatetime         : IComponent { public DateTime      dateTime;    }
+public struct BlittableGuid             : IComponent { public Guid          guid;        }
+public struct BlittableBigInteger       : IComponent { public BigInteger    bigInteger;  }
+// public struct BlittableUri           : IComponent { public Uri           uri;         } todo requires fix in Fliox.Mapper
 
 
 

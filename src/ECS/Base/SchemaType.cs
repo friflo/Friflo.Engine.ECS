@@ -59,6 +59,7 @@ public abstract class SchemaType
         var types = BlittableTypes;
         types.Add(typeof(bool),         true);
         types.Add(typeof(char),         true);
+        types.Add(typeof(decimal),      true);
         //
         types.Add(typeof(byte),         true);
         types.Add(typeof(short),        true);
