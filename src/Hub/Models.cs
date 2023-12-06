@@ -9,7 +9,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable UnassignedField.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable NotAccessedField.Global
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Hub;
 
 // --------------------------------------- command models ---------------------------------------
 public class AddEntities

@@ -11,7 +11,7 @@ using Friflo.Json.Fliox.Hub.Client;
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Hub;
 
 [CLSCompliant(true)]
 public sealed class EntityStoreSync

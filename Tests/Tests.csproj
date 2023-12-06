@@ -26,7 +26,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Client\Engine.Client.csproj" />
+      <ProjectReference Include="..\src\Hub\Engine.Hub.csproj" />
     </ItemGroup>
 
 

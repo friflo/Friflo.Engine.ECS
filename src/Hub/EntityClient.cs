@@ -11,7 +11,7 @@ using Friflo.Json.Fliox.Hub.Host;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnassignedReadonlyField
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Hub;
 
 
 /// <remarks> commands are implemented by <see cref="StoreCommands"/> </remarks>

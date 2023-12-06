@@ -26,7 +26,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Client\Fliox.Engine.Client.csproj" />
+      <ProjectReference Include="..\src\Hub\Fliox.Engine.Client.csproj" />
     </ItemGroup>
 
 

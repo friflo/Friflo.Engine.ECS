@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.ECS", "src\ECS\Engine.ECS.csproj", "{BC0E03EC-91A5-4777-9D52-464FD10170AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Client", "src\Client\Engine.Client.csproj", "{1C33A81E-E654-40DC-94A5-27A8765E65B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Hub", "src\Hub\Engine.Hub.csproj", "{1C33A81E-E654-40DC-94A5-27A8765E65B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C224813F-2372-4879-B661-5F00FD947938}"
 EndProject

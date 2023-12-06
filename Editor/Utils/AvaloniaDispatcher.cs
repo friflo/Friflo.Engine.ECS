@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Friflo.Fliox.Engine.Client;
+using Friflo.Fliox.Engine.Hub;
 
 namespace Friflo.Fliox.Editor.Utils;
 

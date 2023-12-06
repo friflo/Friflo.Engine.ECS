@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Hub;
 
 /// <summary>
 /// Contains methods like <see cref="Post"/> or <see cref="Invoke{TResult}"/> to dispatch execution<br/>

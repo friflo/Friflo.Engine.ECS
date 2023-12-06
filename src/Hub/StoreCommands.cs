@@ -13,7 +13,7 @@ using Friflo.Json.Fliox.Hub.Host;
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedMember.Local
-namespace Friflo.Fliox.Engine.Client;
+namespace Friflo.Fliox.Engine.Hub;
 
 /// <summary>
 /// Implementation of <see cref="EntityClient"/> commands.
