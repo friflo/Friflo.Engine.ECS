@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Friflo.Fliox.Engine.Client;
@@ -61,12 +62,23 @@ public class EditorService : IServiceCommands
         if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
         }
-        var result = ECSUtils.AddDataEntitiesToEntity(targetEntity, addEntities.entities);
+        var entities    = addEntities.entities;
+        var result      = ECSUtils.AddDataEntitiesToEntity(targetEntity, entities);
         
+        var added       = new List<long?>(entities.Count);
+        var missingPids = result.missingPids;
+        foreach (var entity in entities) {
+            if (result.addedEntities.Contains(entity.pid)) {
+                added.Add(entity.pid);
+                continue;
+            }
+            added.Add(null);
+        }
         return new AddEntitiesResult {
             count           = addEntities.entities.Count,
-            missingEntities = result.missingPids,
-            addErrors       = result.addErrors
+            missingEntities = missingPids,
+            addErrors       = result.addErrors,
+            added           = added
         };
     }
 }

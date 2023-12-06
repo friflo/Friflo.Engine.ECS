@@ -80,17 +80,21 @@ public static class ECSUtils
     /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
     public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
     {
-        var childEntities   = new HashSet<long>(dataEntities.Count);
-        var pidMap          = new Dictionary<long, long>();
+        var entityCount     = dataEntities.Count;
+        var addedEntities   = new HashSet<long>         (entityCount);               
+        var childEntities   = new HashSet<long>         (entityCount);
+        var oldToNewPid     = new Dictionary<long, long>(entityCount);
+        var newToOldPid     = new Dictionary<long, long>(entityCount);
         var store           = targetEntity.Store;
         
         // --- create a new Entity for every DataEntity in the store
         foreach (var dataEntity in dataEntities)
         {
-            var entity              = store.CreateEntity();
-            var newPid              = store.GetNodeById(entity.Id).Pid;
-            pidMap[dataEntity.pid]  = newPid;
-            dataEntity.pid          = newPid;
+            var entity                  = store.CreateEntity();
+            var newPid                  = store.GetNodeById(entity.Id).Pid;
+            oldToNewPid[dataEntity.pid] = newPid;
+            newToOldPid[newPid]         = dataEntity.pid;
+            dataEntity.pid              = newPid;
         }
         var converter = EntityConverter.Default;
         
@@ -103,7 +107,7 @@ public static class ECSUtils
             dataEntity.children = null;
             converter.DataEntityToEntity(dataEntity, store, out _);
             
-            ReplaceChildrenPids(children, pidMap, store, missingPids);
+            ReplaceChildrenPids(children, oldToNewPid, newToOldPid, store, missingPids);
             dataEntity.children = children;
         }
         // --- add child entities to their parent entity
@@ -120,9 +124,10 @@ public static class ECSUtils
                 var child = store.GetEntityByPid(childPid);
                 var index = entity.AddChild(child);
                 if (index >= 0) {
+                    addedEntities.Add(childPid);
                     continue;
                 }
-                addErrors.Add(childPid);
+                addErrors.Add(newToOldPid[childPid]);
             }
         }
         // --- add all root entities to target
@@ -135,18 +140,21 @@ public static class ECSUtils
             }
             var entity = store.GetEntityByPid(pid);
             var index = targetEntity.AddChild(entity);
+            addedEntities.Add(pid);
             indexes.Add(index);
         }
         return new AddDataEntitiesResult {
-            indexes     = indexes,
-            missingPids = missingPids,
-            addErrors   = addErrors  
+            indexes         = indexes,
+            addedEntities   = addedEntities,
+            missingPids     = missingPids,
+            addErrors       = addErrors
         };
     }
     
     private static void ReplaceChildrenPids(
         List<long>              children,
-        Dictionary<long, long>  pidMap,
+        Dictionary<long, long>  oldToNewPid,
+        Dictionary<long, long>  newToOldPid,
         EntityStore             store,
         HashSet<long>           missingPids)
     {
@@ -157,16 +165,17 @@ public static class ECSUtils
         for (int n = 0; n < children.Count; n++)
         {
             var oldPid  = children[n];
-            if (pidMap.TryGetValue(oldPid, out long newPid)) {
+            if (oldToNewPid.TryGetValue(oldPid, out long newPid)) {
                 children[n] = newPid;
                 continue;
             }
             missingPids.Add(oldPid);
             var missingChild    = store.CreateEntity();
             missingChild.AddComponent(new EntityName($"missing entity - pid: {oldPid}"));
-            var missingChildPid = store.GetNodeById(missingChild.Id).Pid;
-            children[n]         = missingChildPid;
-            pidMap[oldPid]      = missingChildPid;
+            var missingChildPid             = store.GetNodeById(missingChild.Id).Pid;
+            children[n]                     = missingChildPid;
+            oldToNewPid[oldPid]             = missingChildPid;
+            newToOldPid[missingChildPid]    = oldPid;
         }
     }
     #endregion
@@ -279,7 +288,11 @@ public static class ECSUtils
 
 public class AddDataEntitiesResult
 {
-    public List<int>        indexes;
-    public HashSet<long>    missingPids;
-    public HashSet<long>    addErrors;
+    public  List<int>       indexes;
+    /// <summary> contains new pid's </summary>
+    public  HashSet<long>   addedEntities;
+    /// <summary> contains old pid's </summary>
+    public  HashSet<long>   missingPids;
+    /// <summary> contains old pid's </summary>
+    public  HashSet<long>   addErrors;
 }
