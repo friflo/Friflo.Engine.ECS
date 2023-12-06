@@ -6,6 +6,20 @@ using System.Threading.Tasks;
 
 namespace Friflo.Fliox.Engine.Client;
 
+/// <summary>
+/// Contains methods like <see cref="Post"/> or <see cref="Invoke{TResult}"/> to dispatch execution<br/>
+/// of <see cref="Action"/>'s or <see cref="Func{TResult}"/>'s to the main thread.<br/>
+/// <br/>
+/// These methods are required to access an <see cref="ECS.EntityStore"/> as instances of this class are not thread safe. 
+/// </summary>
+/// <remarks>
+/// Method mapping for various UI application libraries.
+/// <list type="bullet">
+///   <item> <b>AvaloniaUI</b> - methods map to <c>Avalonia.Threading.Dispatcher.UIThread</c> methods. <br/> </item>
+///   <item> <b>MAUI</b> - methods map to <c>Microsoft.Maui.ApplicationModel.MainThread</c> methods. <br/> </item>
+///   <item> <b>WinForms</b> - methods map to <c>System.Windows.Threading.Dispatcher</c> methods. <br/> </item>
+/// </list>
+/// </remarks>
 public static class StoreUtils
 {
     private static IMainThreadDispatcher _dispatcher;

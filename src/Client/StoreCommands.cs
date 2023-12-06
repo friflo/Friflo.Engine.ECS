@@ -19,7 +19,7 @@ namespace Friflo.Fliox.Engine.Client;
 /// </summary>
 public class StoreCommands : IServiceCommands
 {
-    /// <remarks> Must be accessed only from main thread. </remarks>
+    /// <remarks> Must be accessed only from main thread. See <see cref="StoreUtils"/>.</remarks>
     private readonly EntityStore    store;
         
     public StoreCommands(EntityStore store) {
