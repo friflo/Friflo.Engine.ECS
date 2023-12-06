@@ -55,7 +55,7 @@ public class EditorService : IServiceCommands
         if (addEntities.entities == null) {
             return Result.Error("missing entities array");
         }
-        return await EditorUtils.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
+        return await StoreUtils.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
     }
     
     private Result<AddEntitiesResult> AddEntitiesInternal (AddEntities addEntities)
@@ -92,7 +92,7 @@ public class EditorService : IServiceCommands
         if (ids == null) {
             return Result.Error("missing ids array");
         }
-        return await EditorUtils.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(ids)));
+        return await StoreUtils.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(ids)));
     }
     
     private Result<GetEntitiesResult> GetEntitiesInternal(List<long> ids)

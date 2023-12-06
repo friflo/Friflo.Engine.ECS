@@ -45,7 +45,7 @@ public partial class Editor
 #region public methods
     public async Task Init()
     {
-        EditorUtils.AssertUIThread();
+        StoreUtils.AssertUIThread();
         store       = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Editor Root"));
@@ -53,7 +53,7 @@ public partial class Editor
         
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
         isReady = true;
-        EditorUtils.Post(() => {
+        StoreUtils.Post(() => {
             EditorObserver.CastEditorReady(observers);
         });
         // --- add client and database
@@ -84,7 +84,7 @@ public partial class Editor
         }
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
-        EditorUtils.AssertUIThread();
+        StoreUtils.AssertUIThread();
         // --- run server
         server = RunServer(hub);
     }
@@ -107,7 +107,7 @@ public partial class Editor
     }
     
     public void SelectionChanged(EditorSelection selection) {
-        EditorUtils.Post(() => {
+        StoreUtils.Post(() => {
             EditorObserver.CastSelectionChanged(observers, selection);    
         });
     }
@@ -136,7 +136,7 @@ public partial class Editor
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="EntityStoreSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
-        EditorUtils.AssertUIThread();
+        StoreUtils.AssertUIThread();
         switch (args.action)
         {
             case ChildNodesChangedAction.Add:
@@ -158,12 +158,12 @@ public partial class Editor
             return;
         }
         syncChangesPending = true;
-        EditorUtils.Post(SyncChangesAsync);
+        StoreUtils.Post(SyncChangesAsync);
     }
     
     private async void SyncChangesAsync() {
         syncChangesPending = false;
-        EditorUtils.AssertUIThread();
+        StoreUtils.AssertUIThread();
         if (sync != null) {
             await sync.SyncChangesAsync();
         }
@@ -180,12 +180,12 @@ public partial class Editor
     }
     
     private void ProcessEvents() {
-        EditorUtils.AssertUIThread();
+        StoreUtils.AssertUIThread();
         processor.ProcessEvents();
     }
     
     private void ReceivedEvent () {
-        EditorUtils.Post(ProcessEvents);
+        StoreUtils.Post(ProcessEvents);
     }
     
     private static HttpServer RunServer(FlioxHub hub)

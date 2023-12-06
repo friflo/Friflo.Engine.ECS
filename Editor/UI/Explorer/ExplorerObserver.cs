@@ -48,7 +48,7 @@ internal class ExplorerObserver : EditorObserver
         if (!tree.TryGetItem(args.entityId, out var item)) {
             return;
         }
-        EditorUtils.Post(() => {
+        StoreUtils.Post(() => {
             if (Log) Console.WriteLine($"tree: {tree} - name update {_count++}");
             
             var args = new PropertyChangedEventArgs("name");

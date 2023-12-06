@@ -8,7 +8,6 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI;
 
@@ -18,31 +17,6 @@ namespace Friflo.Fliox.Editor;
 public static class EditorUtils
 {
     public static bool IsDesignMode => Design.IsDesignMode;
-    
-    public static void AssertUIThread()
-    {
-        Dispatcher.UIThread.VerifyAccess();
-    }
-
-    public static void Post(Action action)
-    {
-        Dispatcher.UIThread.Post(action);
-    }
-    
-    public static TResult Invoke<TResult>(Func<TResult> action)
-    {
-        return Dispatcher.UIThread.Invoke(action);
-    }
-    
-    public static async Task InvokeAsync(Func<Task> action)
-    {
-        await Dispatcher.UIThread.InvokeAsync(action);
-    }
-    
-    public static async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)
-    {
-        return await Dispatcher.UIThread.InvokeAsync(action);
-    }
     
     public static Editor GetEditor(this Visual visual)
     {

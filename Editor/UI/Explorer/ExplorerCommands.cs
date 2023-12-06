@@ -60,7 +60,7 @@ public static class ExplorerCommands
                 var newSelection    = TreeIndexPaths.Create(targetPath, indexes);
 
                 // requires Post() to avoid artifacts in grid. No clue why.
-                EditorUtils.Post(() => {
+                StoreUtils.Post(() => {
                     grid.RowSelection.Clear();
                     newSelection.UpdateLeafIndexes(indexes);
                     grid.SelectItems(newSelection, SelectionView.Last, 0);    
@@ -78,7 +78,7 @@ public static class ExplorerCommands
             var indexes     = ECSUtils.DuplicateEntities(entities);
             
             // requires Post() to avoid artifacts in grid. No clue why.
-            EditorUtils.Post(() => {
+            StoreUtils.Post(() => {
                 grid.RowSelection?.Clear();
                 selectedPaths.UpdateLeafIndexes(indexes);
                 grid.SelectItems(selectedPaths, SelectionView.Last, 0);

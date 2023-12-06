@@ -94,7 +94,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 throw new InvalidOperationException("unexpected");
         }
         cx.droppedItems = GetSelectedItems();
-        EditorUtils.Post(() => RowDropped(cx));
+        StoreUtils.Post(() => RowDropped(cx));
     }
     
     private void RowDropped(RowDropContext cx)
