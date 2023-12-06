@@ -29,9 +29,9 @@ public static class Test_EntityConverter
         var entity2 = converter.DataEntityToEntity(new DataEntity { pid = 2 }, store, out _);
         
         AreEqual(2, entity2.Id);
-        AreEqual(0, entity2.ChildNodes.Length);
+        AreEqual(0, entity2.ChildEntities.Length);
         AreEqual(1, store.EntityCount);
-        AreEqual("Length: 0", entity2.ChildNodes.ToString());
+        AreEqual("Length: 0", entity2.ChildEntities.ToString());
     }
     
     [Test]
@@ -42,7 +42,7 @@ public static class Test_EntityConverter
         // --- create parent 5 first
         var entity5 = converter.DataEntityToEntity(CreateDataEntity(5, new [] { 8 }), store, out _);
         AreEqual(5,                     entity5.Id);
-        var ids     = entity5.ChildNodes.Ids;
+        var ids     = entity5.ChildEntities.Ids;
         AreEqual(1,                     ids.Length);
         AreEqual(8,                     ids[0]);
         IsTrue  (                       store.GetEntityById(8).IsNull);
@@ -80,7 +80,7 @@ public static class Test_EntityConverter
         // --- create parent 5
         var entity5 = converter.DataEntityToEntity(CreateDataEntity(5, new [] { 8 }), store, out _);
         AreEqual(5,                     entity5.Id);
-        var ids     = entity5.ChildNodes.Ids;
+        var ids     = entity5.ChildEntities.Ids;
         AreEqual(1,                     ids.Length);
         AreEqual(8,                     ids[0]);
         AreEqual(Created,               store.Nodes[8].Flags);

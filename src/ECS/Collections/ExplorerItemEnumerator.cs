@@ -12,7 +12,7 @@ internal class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
     private readonly    ExplorerItemTree    tree;
     
     internal ExplorerItemEnumerator(ExplorerItem item) {
-        entityEnumerator    = item.entity.ChildNodes.GetEnumerator();
+        entityEnumerator    = item.entity.ChildEntities.GetEnumerator();
         tree                = item.tree;
     }
     

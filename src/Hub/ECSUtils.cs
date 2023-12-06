@@ -202,7 +202,7 @@ public static class ECSUtils
     
     private static void AddChildren(Entity entity, List<Entity> list, HashSet<Entity> set)
     {
-        foreach (var child in entity.ChildNodes) {
+        foreach (var child in entity.ChildEntities) {
             if (!set.Add(child)) {
                 continue;
             }

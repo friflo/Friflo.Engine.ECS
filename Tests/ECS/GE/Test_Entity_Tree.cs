@@ -60,10 +60,10 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("root"));
        
         IsTrue  (root.Parent.IsNull);
-        AreEqual(0,         root.ChildNodes.Ids.Length);
+        AreEqual(0,         root.ChildEntities.Ids.Length);
         AreEqual(0,         root.ChildCount);
         AreEqual(attached,  root.StoreOwnership);
-        foreach (var _ in root.ChildNodes) {
+        foreach (var _ in root.ChildEntities) {
             Fail("expect empty child nodes");
         }
         
@@ -76,13 +76,14 @@ public static class Test_Entity_Tree
         
         AreEqual(root,      child.Parent);
         AreEqual(attached,  child.StoreOwnership);
-        var childNodes =    root.ChildNodes;
-        AreEqual(1,         childNodes.Ids.Length);
-        AreEqual(4,         childNodes.Ids[0]);
+        var childEntities = root.ChildEntities;
+        AreEqual(1,         childEntities.Ids.Length);
+        AreEqual(4,         childEntities.Ids[0]);
         AreEqual(1,         root.ChildCount);
-        AreEqual(child,     root.ChildNodes[0]);
+        AreEqual(1,         childEntities.Length);
+        AreEqual(child,     childEntities[0]);
         int count = 0;
-        foreach (var childEntity in root.ChildNodes) {
+        foreach (var childEntity in root.ChildEntities) {
             count++;
             AreEqual(child, childEntity);
         }
@@ -90,21 +91,24 @@ public static class Test_Entity_Tree
         
         // -- add same child again
         AreEqual(-1,        root.AddChild(child));       // event handler is not called
-        AreEqual(1,         childNodes.Ids.Length);
+        AreEqual(1,         childEntities.Ids.Length);
         var rootNode = store.Nodes[1];
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
         AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
-        AreEqual(child,     childNodes[0]);
+        AreEqual(1,         childEntities.Length);
+        AreEqual(child,     childEntities[0]);
         
         // --- copy child Entity's to array
-        var array = new Entity[childNodes.Length];
-        childNodes.ToArray(array);
+        var array = new Entity[childEntities.Length];
+        childEntities.ToArray(array);
         AreEqual(child, array[0]);
+
         
+/*  was used for class Entity  
 #pragma warning disable CS0618 // Type or member is obsolete
-        AreEqual(1,                                 childNodes.Entities_.Length);
-#pragma warning restore CS0618 // Type or member is obsolete
+        AreEqual(1,                                 childEntities.Entities_.Length);
+#pragma warning restore CS0618 // Type or member is obsolete */
     }
     
     [Test]
@@ -115,10 +119,10 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("root"));
        
         IsTrue  (root.Parent.IsNull);
-        AreEqual(0,         root.ChildNodes.Ids.Length);
+        AreEqual(0,         root.ChildEntities.Ids.Length);
         AreEqual(0,         root.ChildCount);
         AreEqual(attached,  root.StoreOwnership);
-        foreach (var _ in root.ChildNodes) {
+        foreach (var _ in root.ChildEntities) {
             Fail("expect empty child nodes");
         }
         var child4 = store.CreateEntity(4);
@@ -131,7 +135,7 @@ public static class Test_Entity_Tree
             
             AreEqual(root,      child4.Parent);
             AreEqual(attached,  child4.StoreOwnership);
-            var childNodes =    root.ChildNodes;
+            var childNodes =    root.ChildEntities;
             AreEqual(1,         childNodes.Ids.Length);
             AreEqual(4,         childNodes.Ids[0]);
             AreEqual(1,         root.ChildCount);
@@ -162,7 +166,7 @@ public static class Test_Entity_Tree
             
             AreEqual(root,      child5.Parent);
             AreEqual(attached,  child5.StoreOwnership);
-            var childNodes =    root.ChildNodes;
+            var childNodes =    root.ChildEntities;
             AreEqual(2,         childNodes.Ids.Length);
             AreEqual(5,         childNodes.Ids[0]);
             AreEqual(4,         childNodes.Ids[1]);
@@ -181,7 +185,7 @@ public static class Test_Entity_Tree
         }
         // --- copy child Entity's to array
         {
-            var childNodes =    root.ChildNodes;
+            var childNodes =    root.ChildEntities;
             var array = new Entity[childNodes.Length];
             childNodes.ToArray(array);
             AreEqual(child5, array[0]);
@@ -405,7 +409,7 @@ public static class Test_Entity_Tree
         AreEqual(2,     events.seq);
         AreEqual(0,     entity1.ChildCount);
         AreEqual(1,     entity2.ChildCount);
-        AreEqual(child, entity2.ChildNodes[0]);
+        AreEqual(child, entity2.ChildEntities[0]);
     }
     
     [Test]
@@ -506,8 +510,8 @@ public static class Test_Entity_Tree
         SetHandler(store, args => AreEqual("entity: 1 - Remove ChildIds[1] = 3", args.ToString()));
         child3.DeleteEntity();
         AreEqual(2, root.ChildCount);
-        AreEqual(2, root.ChildNodes[0].Id);
-        AreEqual(4, root.ChildNodes[1].Id);
+        AreEqual(2, root.ChildEntities[0].Id);
+        AreEqual(4, root.ChildEntities[1].Id);
         
         var childIds = root.ChildIds; 
         AreEqual(2, childIds.Length);
@@ -571,7 +575,7 @@ public static class Test_Entity_Tree
         var child   = store.CreateEntity(2);
         root.AddChild(child);
         
-        ChildEnumerator enumerator = root.ChildNodes.GetEnumerator();
+        ChildEnumerator enumerator = root.ChildEntities.GetEnumerator();
         while (enumerator.MoveNext()) { }
         enumerator.Reset();
         

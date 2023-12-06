@@ -537,10 +537,10 @@ public partial class EntityStore
         return HasParent(parentNode) ? new Entity(parentNode, this) : new Entity(Static.NoParentId, this); // ENTITY_STRUCT
     }
     
-    internal ChildNodes GetChildNodes(int id)
+    internal ChildEntities GetChildEntities(int id)
     {
         ref var node    = ref nodes[id];
-        return new ChildNodes(this, nodes, node.childIds, node.childCount);
+        return new ChildEntities(this, node.childIds, node.childCount);
     }
     
     internal ReadOnlySpan<int> GetChildIds(int id)

@@ -95,7 +95,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b>tree nodes</b>
 /// <list type="bullet">
 ///     <item><see cref="Parent"/></item>
-///     <item><see cref="ChildNodes"/></item>
+///     <item><see cref="ChildEntities"/></item>
 ///     <item><see cref="ChildIds"/></item>
 ///     <item><see cref="ChildCount"/></item>
 ///     <item><see cref="AddChild"/></item>
@@ -176,7 +176,7 @@ public readonly struct Entity
                     /// </code>
                     /// </summary>
                     /// <remarks>Executes in O(1)</remarks>
-                    public ChildNodes       ChildNodes  => archetype.entityStore.GetChildNodes(id);
+                    public ChildEntities ChildEntities  => archetype.entityStore.GetChildEntities(id);
                     
     [Browse(Never)] public ReadOnlySpan<int> ChildIds   => archetype.entityStore.GetChildIds(id);
     #endregion

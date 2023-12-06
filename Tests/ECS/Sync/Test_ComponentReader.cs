@@ -234,7 +234,7 @@ public static class Test_ComponentReader
     internal static void AssertRootEntity(Entity root) {
         AreEqual(10,    root.Id);
         AreEqual(1,     root.ChildCount);
-        AreEqual(11,    root.ChildNodes.Ids[0]);
+        AreEqual(11,    root.ChildEntities.Ids[0]);
         AreEqual(2,     root.Archetype.ComponentCount);
         AreEqual(1f,    root.Position.x);
         AreEqual(1f,    root.Position.y);
@@ -397,7 +397,7 @@ public static class Test_ComponentReader
         AreEqual(10,    store.PidToId(10L));
         AreEqual(10,    store.GetNodeByPid(10L).Pid);
         AreEqual(10,    entity.Id);
-        AreEqual(100,   entity.ChildNodes.Length);
+        AreEqual(100,   entity.ChildEntities.Length);
         var nodes = store.Nodes;
         AreEqual(100,   nodes[10].ChildCount);
         AreEqual(10,    nodes[10].Pid);
@@ -425,7 +425,7 @@ public static class Test_ComponentReader
         AreEqual(1,     store.PidToId(10L));
         AreEqual(1,     store.GetNodeByPid(10L).Id);
         AreEqual(1,     entity.Id);
-        AreEqual(100,   entity.ChildNodes.Length);
+        AreEqual(100,   entity.ChildEntities.Length);
         AreEqual(100,   store.Nodes[1].ChildCount);
         var nodes = store.Nodes;
         AreEqual(10,    nodes[1].Pid);
