@@ -30,7 +30,7 @@ public partial class Editor
 
 #region private fields
     private             EntityStore             store;
-    private             StoreSync         sync;
+    private             StoreSync               sync;
     private  readonly   List<EditorObserver>    observers   = new List<EditorObserver>();
     private             bool                    isReady;
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);

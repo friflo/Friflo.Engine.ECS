@@ -19,7 +19,7 @@ public sealed class StoreSync
     public              EntityStore                     Store => store;
     
     private readonly    EntityStore                     store;
-    private readonly    StoreClient                    client;
+    private readonly    StoreClient                     client;
     private readonly    LocalEntities<long, DataEntity> localEntities;
     private readonly    EntityConverter                 converter;
     private readonly    Dictionary<int, EntityChange>   entityChanges;
