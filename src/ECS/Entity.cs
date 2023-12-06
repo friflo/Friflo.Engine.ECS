@@ -112,10 +112,10 @@ public readonly struct Entity
 #region public properties
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
-                    public   int            Id              => id;
+                    public  int             Id              => id;
 
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
-                    public   Archetype      Archetype       => archetype;
+                    public  Archetype       Archetype       => archetype;
     
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
     [Browse(Never)] public  EntityStore     Store           => archetype?.entityStore;
@@ -128,9 +128,9 @@ public readonly struct Entity
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.entityStore.GetTreeMembership(id);
     
-    [Browse(Never)] public  bool    IsNull                      => store?.nodes[id].archetype == null;
-    [Browse(Never)] public  bool    IsNotNull                   => store?.nodes[id].archetype != null;
-                    public  bool    IsEqual (in Entity entity)  => id == entity.id;
+    [Browse(Never)] public  bool            IsNull                      => store?.nodes[id].archetype == null;
+    [Browse(Never)] public  bool            IsNotNull                   => store?.nodes[id].archetype != null;
+                    public  bool            IsEqual (in Entity entity)  => id == entity.id;
     
     [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.GetDebugJSON(this);
@@ -184,9 +184,9 @@ public readonly struct Entity
 #region internal fields
     // Note! Must not have any other fields to keep its size at 16 bytes   
     // ReSharper disable once InconsistentNaming
-    [Browse(Never)] internal readonly   int         id;             //  4
+    [Browse(Never)] internal readonly   int         id;     //  4
     // ReSharper disable once InconsistentNaming
-    [Browse(Never)] internal readonly   EntityStore store;          //  8
+    [Browse(Never)] internal readonly   EntityStore store;  //  8
     #endregion
     
 #region constructor
