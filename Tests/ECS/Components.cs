@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Friflo.Fliox.Engine.ECS;
 using static NUnit.Framework.Assert;
 
@@ -21,6 +22,12 @@ public struct MyComponent2 : IComponent { public int b; }
 public struct NonBlittableArray         : IComponent { internal int[]                   array;  }
 public struct NonBlittableList          : IComponent { internal List<int>               list;   }
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }
+
+public struct BlittableDatetime         : IComponent { internal DateTime    dateTime;    }
+public struct BlittableGuid             : IComponent { internal Guid        guid;        }
+public struct BlittableBigInteger       : IComponent { internal BigInteger  bigInteger;  }
+
+
 
 
 [CodeCoverageTest]

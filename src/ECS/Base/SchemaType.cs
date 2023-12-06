@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -74,6 +75,7 @@ public abstract class SchemaType
         //
         types.Add(typeof(Guid),         true);
         types.Add(typeof(DateTime),     true);
+        types.Add(typeof(BigInteger),   true);
         //
         types.Add(typeof(JsonValue),    true);
         types.Add(typeof(Entity),       true);
