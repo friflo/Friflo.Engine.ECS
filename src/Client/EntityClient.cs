@@ -47,7 +47,7 @@ public class AddEntitiesResult
 {
     /// <summary> Number of entities requested to add. </summary>
     public  int                 count;
-    /// <summary> Contains new pid#s for every entity in <see cref="AddEntities.entities"/> </summary>
+    /// <summary> Contains new pid's for every entity in <see cref="AddEntities.entities"/> </summary>
     public  List<long?>         added;
     /// <summary> Contains pid's used in <see cref="DataEntity.children"/> but missing in <see cref="AddEntities.entities"/> </summary>
     public  HashSet<long>       missingEntities;
