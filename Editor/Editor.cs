@@ -57,16 +57,16 @@ public partial class Editor
             EditorObserver.CastEditorReady(observers);
         });
         // --- add client and database
-        var schema      = DatabaseSchema.Create<EntityClient>();
-        var database    = CreateDatabase(schema, "in-memory");
-        var service     = new StoreCommands(store);
-        database.AddCommands(service);        
+        var schema          = DatabaseSchema.Create<EntityClient>();
+        var database        = CreateDatabase(schema, "in-memory");
+        var storeCommands   = new StoreCommands(store);
+        database.AddCommands(storeCommands);
         
-        var hub         = new FlioxHub(database);
+        var hub             = new FlioxHub(database);
         hub.UsePubSub();    // need currently called before SetupSubscriptions()
         hub.EventDispatcher = new EventDispatcher(EventDispatching.Send);
         //
-        var client      = new EntityClient(hub);
+        var client          = new EntityClient(hub);
         if (SyncDatabase) {
             sync            = new EntityStoreSync(store, client);
             processor       = new EventProcessorQueue(ReceivedEvent);
