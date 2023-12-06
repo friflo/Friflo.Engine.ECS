@@ -45,7 +45,7 @@ public partial class Editor
 #region public methods
     public async Task Init()
     {
-        StoreUtils.AssertUIThread();
+        StoreUtils.AssertMainThread();
         store       = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Editor Root"));
@@ -84,7 +84,7 @@ public partial class Editor
         }
         store.ChildNodesChanged += ChildNodesChangedHandler;
         
-        StoreUtils.AssertUIThread();
+        StoreUtils.AssertMainThread();
         // --- run server
         server = RunServer(hub);
     }
@@ -136,7 +136,7 @@ public partial class Editor
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="EntityStoreSync"/></summary>
     private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
     {
-        StoreUtils.AssertUIThread();
+        StoreUtils.AssertMainThread();
         switch (args.action)
         {
             case ChildNodesChangedAction.Add:
@@ -163,7 +163,7 @@ public partial class Editor
     
     private async void SyncChangesAsync() {
         syncChangesPending = false;
-        StoreUtils.AssertUIThread();
+        StoreUtils.AssertMainThread();
         if (sync != null) {
             await sync.SyncChangesAsync();
         }
@@ -180,7 +180,7 @@ public partial class Editor
     }
     
     private void ProcessEvents() {
-        StoreUtils.AssertUIThread();
+        StoreUtils.AssertMainThread();
         processor.ProcessEvents();
     }
     

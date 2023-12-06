@@ -17,7 +17,7 @@ public static class StoreUtils
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
     }
     
-    public static   void            AssertUIThread()                                 => _dispatcher.AssertUIThread();
+    public static   void            AssertMainThread()                               => _dispatcher.AssertMainThread();
     public static   void            Post                (Action              action) => _dispatcher.Post(action);
     public static   TResult         Invoke<TResult>     (Func<TResult>       action) => _dispatcher.Invoke(action);
     public static   Task            InvokeAsync         (Func<Task>          action) => _dispatcher.InvokeAsync(action);
@@ -26,7 +26,7 @@ public static class StoreUtils
 
 public interface IMainThreadDispatcher
 {
-    public  void            AssertUIThread();
+    public  void            AssertMainThread();
     public  void            Post(Action action);
     public  TResult         Invoke<TResult>(Func<TResult> action);
     public  Task            InvokeAsync(Func<Task> action);

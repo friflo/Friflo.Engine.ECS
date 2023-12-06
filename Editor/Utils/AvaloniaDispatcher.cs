@@ -10,7 +10,7 @@ namespace Friflo.Fliox.Editor.Utils;
 
 public class AvaloniaDispatcher : IMainThreadDispatcher
 {
-    public void AssertUIThread()
+    public void AssertMainThread()
     {
         Dispatcher.UIThread.VerifyAccess();
     }
