@@ -2,17 +2,14 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
 
-// ReSharper disable NotAccessedField.Global
 [assembly: CLSCompliant(true)]
 
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnassignedField.Global
+// ReSharper disable UnusedMember.Global
 // ReSharper disable UnassignedReadonlyField
 namespace Friflo.Fliox.Engine.Client;
 
@@ -35,22 +32,4 @@ public class EntityClient : FlioxClient
     
     // --- constructor
     public EntityClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
-}
-
-public class AddEntities
-{
-    public  long                targetEntity;
-    public  List<DataEntity>    entities;
-}
-
-public class AddEntitiesResult
-{
-    /// <summary> Number of entities requested to add. </summary>
-    public  int                 count;
-    /// <summary> Contains new pid's for every entity in <see cref="AddEntities.entities"/> </summary>
-    public  List<long?>         added;
-    /// <summary> Contains pid's used in <see cref="DataEntity.children"/> but missing in <see cref="AddEntities.entities"/> </summary>
-    public  HashSet<long>       missingEntities;
-    /// <summary> Contains pid's failed to add because of inconsistent input. E.g. an entity contains itself an an entity.</summary>
-    public  HashSet<long>       addErrors;
 }
