@@ -4,32 +4,33 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Friflo.Fliox.Engine.Client;
 
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Fliox.Editor.Utils;
 
-public static class StoreUtils
+public class AvaloniaDispatcher : IMainThreadDispatcher
 {
-    public static void AssertUIThread()
+    public void AssertUIThread()
     {
         Dispatcher.UIThread.VerifyAccess();
     }
 
-    public static void Post(Action action)
+    public void Post(Action action)
     {
         Dispatcher.UIThread.Post(action);
     }
     
-    public static TResult Invoke<TResult>(Func<TResult> action)
+    public TResult Invoke<TResult>(Func<TResult> action)
     {
         return Dispatcher.UIThread.Invoke(action);
     }
     
-    public static async Task InvokeAsync(Func<Task> action)
+    public async Task InvokeAsync(Func<Task> action)
     {
         await Dispatcher.UIThread.InvokeAsync(action);
     }
     
-    public static async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)
+    public async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)
     {
         return await Dispatcher.UIThread.InvokeAsync(action);
     }

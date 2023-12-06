@@ -10,6 +10,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI.Panels;
+using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS.Collections;
 
 // ReSharper disable UnusedParameter.Local

@@ -4,6 +4,7 @@
 using System;
 using System.ComponentModel;
 using Avalonia.Controls;
+using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
 

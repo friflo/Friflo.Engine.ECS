@@ -1,8 +1,10 @@
+// Copyright (c) Ullrich Praetz. All rights reserved.
+// See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Host;
@@ -10,21 +12,21 @@ using Friflo.Json.Fliox.Hub.Host;
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedMember.Local
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Fliox.Engine.Client;
 
 /// <summary>
 /// Implementation of <see cref="EntityClient"/> commands.
 /// </summary>
-public class EditorService : IServiceCommands
+public class StoreCommands : IServiceCommands
 {
     /// <remarks> Must be accessed only from main thread. </remarks>
     private readonly EntityStore    store;
         
-    public EditorService(EntityStore store) {
+    public StoreCommands(EntityStore store) {
         this.store = store;
     }
         
-    [CommandHandler("editor.Collect")]
+    [CommandHandler("store.Collect")]
     private static Result<string> Collect(Param<int?> param, MessageContext context)
     {
         if (!param.GetValidate(out var nullableGeneration, out var error)) {
@@ -43,7 +45,7 @@ public class EditorService : IServiceCommands
         return msg;
     }
     
-    [CommandHandler("editor.AddEntities")]
+    [CommandHandler("store.AddEntities")]
     private async Task<Result<AddEntitiesResult>> AddEntities(Param<AddEntities> param, MessageContext context)
     {
         if (!param.GetValidate(out var addEntities, out var error)) {
@@ -83,7 +85,7 @@ public class EditorService : IServiceCommands
         };
     }
     
-    [CommandHandler("editor.GetEntities")]
+    [CommandHandler("store.GetEntities")]
     private async Task<Result<GetEntitiesResult>> GetEntities(Param<List<long>> param, MessageContext context)
     {
         if (!param.GetValidate(out var ids, out var error)) {

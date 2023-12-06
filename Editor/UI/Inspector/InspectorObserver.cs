@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Friflo.Fliox.Engine.Client;
 using Friflo.Fliox.Engine.ECS;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Local

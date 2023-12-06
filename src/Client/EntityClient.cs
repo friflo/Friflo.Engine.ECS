@@ -16,7 +16,7 @@ namespace Friflo.Fliox.Engine.Client;
 
 
 [CLSCompliant(true)]
-[MessagePrefix("editor.")]
+[MessagePrefix("store.")]
 public class EntityClient : FlioxClient
 {
     // --- containers
