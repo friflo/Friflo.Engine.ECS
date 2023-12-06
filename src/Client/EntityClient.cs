@@ -15,6 +15,7 @@ using Friflo.Json.Fliox.Hub.Host;
 namespace Friflo.Fliox.Engine.Client;
 
 
+/// <remarks> commands are implemented by <see cref="StoreCommands"/> </remarks>
 [CLSCompliant(true)]
 [MessagePrefix("store.")]
 public class EntityClient : FlioxClient
