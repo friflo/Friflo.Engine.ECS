@@ -11,6 +11,9 @@ using Friflo.Json.Fliox.Hub.Host;
 // ReSharper disable UnusedMember.Local
 namespace Friflo.Fliox.Editor;
 
+/// <summary>
+/// Implementation of <see cref="EntityClient"/> commands.
+/// </summary>
 public class EditorService : IServiceCommands
 {
     private readonly EntityStore    store;
@@ -18,7 +21,6 @@ public class EditorService : IServiceCommands
     public EditorService(EntityStore store) {
         this.store = store;
     }
-    
         
     [CommandHandler("editor.Collect")]
     private static Result<string> Collect(Param<int?> param, MessageContext context)

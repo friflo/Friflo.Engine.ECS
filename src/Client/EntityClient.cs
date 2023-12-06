@@ -20,14 +20,19 @@ namespace Friflo.Fliox.Engine.Client;
 [MessagePrefix("editor.")]
 public class EntityClient : FlioxClient
 {
+    // --- containers
     public  readonly    EntitySet <long, DataEntity>   entities;
     
+    
+    // --- commands
     /// <summary> Run the garbage collector using <c>GC.Collect(generation)</c> </summary>
     public CommandTask<string>  Collect (int? param)        => send.Command<int?, string>       (param);
     
     /// <summary> Add the passed <see cref="AddEntities.entities"/> to the <see cref="AddEntities.targetEntity"/> </summary>
     public CommandTask<int>     Add     (AddEntities param) => send.Command<AddEntities, int>   (param);
     
+    
+    // --- constructor
     public EntityClient(FlioxHub hub, string dbName = null) : base (hub, dbName) { }
 }
 
