@@ -24,10 +24,10 @@ public class EntityClient : FlioxClient
     
     // --- commands
     /// <summary> Run the garbage collector using <c>GC.Collect(generation)</c> </summary>
-    public CommandTask<string>              Collect (int? param)        => send.Command<int?, string>                   (param);
+    public CommandTask<string>              Collect     (int? param)        => send.Command<int?, string>                   (param);
     
     /// <summary> Add the passed <see cref="AddEntities.entities"/> to the <see cref="AddEntities.targetEntity"/> </summary>
-    public CommandTask<AddEntitiesResult>   Add     (AddEntities param) => send.Command<AddEntities, AddEntitiesResult> (param);
+    public CommandTask<AddEntitiesResult>   AddEntities (AddEntities param) => send.Command<AddEntities, AddEntitiesResult> (param);
     
     
     // --- constructor

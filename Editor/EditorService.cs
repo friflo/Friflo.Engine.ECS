@@ -42,8 +42,8 @@ public class EditorService : IServiceCommands
         return msg;
     }
     
-    [CommandHandler("editor.Add")]
-    private async Task<Result<AddEntitiesResult>> Add(Param<AddEntities> param, MessageContext context)
+    [CommandHandler("editor.AddEntities")]
+    private async Task<Result<AddEntitiesResult>> AddEntities(Param<AddEntities> param, MessageContext context)
     {
         if (!param.GetValidate(out var addEntities, out var error)) {
             return Result.ValidationError(error);

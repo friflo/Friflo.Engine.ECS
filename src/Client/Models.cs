@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS.Serialize;
 
+// ReSharper disable UnassignedField.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable NotAccessedField.Global
 namespace Friflo.Fliox.Engine.Client;
