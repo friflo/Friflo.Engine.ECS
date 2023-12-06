@@ -17,6 +17,9 @@ public struct MyComponent1 : IComponent { public int a; }
 [Component("my2")]
 public struct MyComponent2 : IComponent { public int b; }
 
+[Component("non-blittable")]
+public struct NonBlittable : IComponent { internal int[] array; }
+
 
 [CodeCoverageTest]
 [Component("byte")]

@@ -76,6 +76,7 @@ public abstract class SchemaType
         types.Add(typeof(DateTime),     true);
         //
         types.Add(typeof(JsonValue),    true);
+        types.Add(typeof(Entity),       true);
         //
         types.Add(typeof(string),       true);
     }
@@ -86,14 +87,24 @@ public abstract class SchemaType
         if (BlittableTypes.TryGetValue(type, out bool blittable)) {
             return blittable;
         }
-        blittable = AreAllMembersBlittable(type);
+        if (type.IsArray) {
+            blittable = false;    
+        } else if (type.IsClass || type.IsValueType) {
+            blittable = AreAllMembersBlittable(type);
+        }
         BlittableTypes.Add(type, blittable);
         return blittable;
     }
+    
+    private const BindingFlags MemberFlags =
+        BindingFlags.Public             |
+        BindingFlags.NonPublic          |
+        BindingFlags.Instance           |
+        BindingFlags.FlattenHierarchy;
 
     private static bool AreAllMembersBlittable(Type type)
     {
-        var members = type.GetMembers();
+        var members = type.GetMembers(MemberFlags);
         foreach (var member in members)
         {
             switch (member) {
