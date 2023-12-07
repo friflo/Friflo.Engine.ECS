@@ -169,7 +169,7 @@ public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
     public readonly ComponentType   Current => EntityStoreBase.Static.EntitySchema.components[bitSetEnumerator.Current];
     
     internal ComponentTypesEnumerator(in ComponentTypes componentTypes) {
-        bitSetEnumerator = componentTypes.bitSet.GetEnumerator();
+        bitSetEnumerator = new BitSetEnumerator(componentTypes.bitSet);
     }
     
     // --- IEnumerator

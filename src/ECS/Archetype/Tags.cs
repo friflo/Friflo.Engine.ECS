@@ -149,7 +149,7 @@ public struct TagsEnumerator : IEnumerator<TagType>
     public readonly TagType     Current             => EntityStoreBase.Static.EntitySchema.GetTagAt(bitSetEnumerator.Current);
     
     internal TagsEnumerator(in Tags tags) {
-        bitSetEnumerator = tags.bitSet.GetEnumerator();
+        bitSetEnumerator = new BitSetEnumerator(tags.bitSet);
     }
     
     // --- IEnumerator

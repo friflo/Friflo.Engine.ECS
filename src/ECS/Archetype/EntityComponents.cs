@@ -40,7 +40,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     
     internal ComponentEnumerator(in Entity entity) {
         this.entity     = entity;
-        typesEnumerator = entity.archetype.componentTypes.GetEnumerator();
+        typesEnumerator = new ComponentTypesEnumerator (entity.archetype.componentTypes);
     }
     
     // --- IEnumerator<>
