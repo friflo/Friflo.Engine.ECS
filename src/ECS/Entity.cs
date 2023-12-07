@@ -245,16 +245,6 @@ public readonly struct Entity
     
     public      EntityComponents        Components => new EntityComponents(this);
 
-    /// <summary>
-    /// Property is only used to display components in the Debugger.<br/>
-    /// It has poor performance as is creates an array and boxes all components. 
-    /// </summary>
-    /// <remarks>
-    /// To access a component use <see cref="GetComponent{T}"/>
-    /// </remarks>
-    [Obsolete($"use {nameof(GetComponent)}<T>() to access a component")]
-    // ReSharper disable once InconsistentNaming
-    public      IComponent[]            Components_     => EntityUtils.GetComponentsDebug(this);
     #endregion
     
     // ------------------------------------ script methods -------------------------------------

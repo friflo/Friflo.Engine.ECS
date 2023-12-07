@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,7 +13,8 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     // --- internal fields
     private  readonly   Entity  entity;     // 16
 
-    public   override   string  ToString()  => $"Count: {entity.archetype.componentCount}";
+    public              int     Count       => entity.archetype.componentCount;
+    public   override   string  ToString()  => $"Count: {Count}";
 
     // --- IEnumerable<>
     IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(entity);
@@ -65,6 +67,14 @@ public readonly struct EntityComponent
     public  readonly    ComponentType   type;       //  8
     
     // --- public properties
+    /// <summary>
+    /// Property is mainly used to display a component value in the Debugger.<br/>
+    /// It has poor performance as is boxes the returned component. 
+    /// </summary>
+    /// <remarks>
+    /// To access a component use <see cref="Entity.GetComponent{T}"/>
+    /// </remarks>
+    [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
     public              object          Value       => entity.archetype.heapMap[type.structIndex].GetComponentDebug(entity.compIndex);
     
     

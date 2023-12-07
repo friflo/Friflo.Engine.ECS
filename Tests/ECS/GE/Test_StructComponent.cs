@@ -235,7 +235,7 @@ public static class Test_StructComponent
         var type    = store.GetArchetype(Signature.Get<Rotation, Scale3>());
         
         var player = store.CreateEntity();
-        AreEqual(0,     player.Components_.Length);
+        AreEqual(0,     player.Components.Count);
         
         var rotation = new Rotation { x = 1, y = 2 };
         player.AddComponent(rotation);
@@ -247,10 +247,17 @@ public static class Test_StructComponent
         AreEqual(3f,    player.Scale3.x);
         AreEqual(4f,    player.Scale3.y);
         
-        var components  =       player.Components_;
-        AreEqual(2,             components.Length);
-        AreEqual("1, 2, 0, 0",  components[0].ToString());
-        AreEqual("3, 4, 0",     components[1].ToString());
+        var components  =       player.Components;
+        AreEqual(2,             components.Count);
+
+        int count = 0;
+        foreach (var component in components) {
+            switch (count++) {
+                case 0: AreEqual("1, 2, 0, 0",  component.Value.ToString()); break;
+                case 1: AreEqual("3, 4, 0",     component.Value.ToString()); break;
+            }
+        }
+        AreEqual(2, count);
     }
 #pragma warning restore CS0618 // Type or member is obsolete
     
