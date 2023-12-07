@@ -65,7 +65,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
 public readonly struct EntityComponent
 {
     // --- public fields
-    [Browse(Never)] public  readonly    Entity          entity;     // 16
+    [Browse(Never)] private readonly    Entity          entity;     // 16
     [Browse(Never)] private readonly    ComponentType   type;       //  8
     
     // --- public properties
