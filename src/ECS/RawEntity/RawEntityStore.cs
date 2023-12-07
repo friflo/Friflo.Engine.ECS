@@ -3,7 +3,6 @@
 
 using System;
 using static Friflo.Fliox.Engine.ECS.StructInfo;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file MUST NOT use type: Entity
 

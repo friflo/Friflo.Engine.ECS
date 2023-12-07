@@ -5,7 +5,6 @@ using System;
 using Avalonia.Controls;
 using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.ECS;
-using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable UnusedParameter.Local
 namespace Friflo.Fliox.Editor.UI.Inspector;

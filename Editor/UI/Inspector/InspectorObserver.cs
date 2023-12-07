@@ -7,7 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.Hub;
+using Friflo.Fliox.Engine.ECS.Utils;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
 namespace Friflo.Fliox.Editor.UI.Inspector;

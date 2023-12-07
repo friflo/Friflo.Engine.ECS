@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file MUST NOT use type: Entity
 

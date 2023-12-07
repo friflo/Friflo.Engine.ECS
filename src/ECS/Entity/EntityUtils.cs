@@ -5,7 +5,6 @@ using System;
 using System.Text;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox.Mapper;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global

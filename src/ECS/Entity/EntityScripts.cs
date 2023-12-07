@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Text;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
+
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;

@@ -3,7 +3,7 @@
 
 using System;
 using Avalonia.Controls;
-using Friflo.Fliox.Engine.Hub;
+using Friflo.Fliox.Engine.ECS.Utils;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable once CheckNamespace

@@ -4,7 +4,6 @@
 using System.Text;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
