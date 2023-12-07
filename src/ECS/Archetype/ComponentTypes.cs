@@ -138,7 +138,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
-    private string GetString()
+    internal string GetString()
     {
         var sb = new StringBuilder();
         sb.Append("Components: [");

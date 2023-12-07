@@ -250,7 +250,6 @@ public static class Test_StructComponent
         var components  =       player.Components;
         AreEqual(2,             components.Count);
 
-
         int count = 0;
         foreach (var component in components) {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -280,7 +279,7 @@ public static class Test_StructComponent
         player.AddComponent(rotation);
         var scale    = new Scale3   { x = 3, y = 4 };
         player.AddComponent(scale);
-        AreEqual("[Rotation, Scale3]  Count: 1",     player.Components.ToString());
+        AreEqual("Components: [Rotation, Scale3]",     player.Components.ToString());
         {
             IEnumerable<EntityComponent> components = player.Components;
             int count = 0;

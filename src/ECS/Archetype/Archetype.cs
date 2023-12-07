@@ -268,7 +268,7 @@ public sealed class Archetype
         return count;
     }
     
-    internal string GetString() {
+    private string GetString() {
         var sb          = new StringBuilder();
         var hasTypes    = false;
         sb.Append('[');
