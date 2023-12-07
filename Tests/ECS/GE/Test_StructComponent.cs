@@ -253,8 +253,12 @@ public static class Test_StructComponent
         int count = 0;
         foreach (var component in components) {
             switch (count++) {
-                case 0: AreEqual("1, 2, 0, 0",  component.Value.ToString()); break;
-                case 1: AreEqual("3, 4, 0",     component.Value.ToString()); break;
+                case 0:
+                    AreEqual("component: 'rot' [Rotation]", component.Type.ToString());
+                    AreEqual("1, 2, 0, 0",                  component.Value.ToString());    break;
+                case 1:
+                    AreEqual("component: 'scl3' [Scale3]",  component.Type.ToString());
+                    AreEqual("3, 4, 0",                     component.Value.ToString());    break;
             }
         }
         AreEqual(2, count);

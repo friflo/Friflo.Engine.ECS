@@ -82,7 +82,7 @@ public static class Test_Entity_Tree
         AreEqual(1,         childEntities.Ids.Length);
         AreEqual(4,         childEntities.Ids[0]);
         AreEqual(1,         root.ChildCount);
-        AreEqual(1,         childEntities.Length);
+        AreEqual(1,         childEntities.Count);
         AreEqual(child,     childEntities[0]);
         int count = 0;
         foreach (var childEntity in root.ChildEntities) {
@@ -98,11 +98,11 @@ public static class Test_Entity_Tree
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
         AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
-        AreEqual(1,         childEntities.Length);
+        AreEqual(1,         childEntities.Count);
         AreEqual(child,     childEntities[0]);
         
         // --- copy child Entity's to array
-        var array = new Entity[childEntities.Length];
+        var array = new Entity[childEntities.Count];
         childEntities.ToArray(array);
         AreEqual(child, array[0]);
 
@@ -188,7 +188,7 @@ public static class Test_Entity_Tree
         // --- copy child Entity's to array
         {
             var childNodes =    root.ChildEntities;
-            var array = new Entity[childNodes.Length];
+            var array = new Entity[childNodes.Count];
             childNodes.ToArray(array);
             AreEqual(child5, array[0]);
             AreEqual(child4, array[1]);

@@ -29,9 +29,9 @@ public static class Test_EntityConverter
         var entity2 = converter.DataEntityToEntity(new DataEntity { pid = 2 }, store, out _);
         
         AreEqual(2, entity2.Id);
-        AreEqual(0, entity2.ChildEntities.Length);
+        AreEqual(0, entity2.ChildEntities.Count);
         AreEqual(1, store.EntityCount);
-        AreEqual("Length: 0", entity2.ChildEntities.ToString());
+        AreEqual("Count: 0", entity2.ChildEntities.ToString());
     }
     
     [Test]

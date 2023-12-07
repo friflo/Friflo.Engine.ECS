@@ -4,6 +4,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
@@ -63,8 +65,8 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
 public readonly struct EntityComponent
 {
     // --- public fields
-    public  readonly    Entity          entity;     // 16
-    public  readonly    ComponentType   type;       //  8
+    [Browse(Never)] public  readonly    Entity          entity;     // 16
+    [Browse(Never)] private readonly    ComponentType   type;       //  8
     
     // --- public properties
     /// <summary>
@@ -76,7 +78,7 @@ public readonly struct EntityComponent
     /// </remarks>
     [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
     public              object          Value       => entity.archetype.heapMap[type.structIndex].GetComponentDebug(entity.compIndex);
-    
+    public              ComponentType   Type        => type;
     
     public  override    string          ToString()  => type.ToString();
 

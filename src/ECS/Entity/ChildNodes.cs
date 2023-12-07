@@ -15,17 +15,17 @@ namespace Friflo.Fliox.Engine.ECS;
 public readonly struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties
-    [Browse(Never)]     public              int                 Length          => childLength;
-    [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childLength);
+    [Browse(Never)]     public              int                 Count           => childCount;
+    [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
     
 /*  /// <summary>Property <b>only used</b> to display child entities in Debugger. See <see cref="ChildEntities"/> remarks.</summary>
     [Obsolete($"use either {nameof(ChildEntities)}[], {nameof(ChildEntities)}.{nameof(ToArray)}() or foreach (var node in entity.{nameof(ChildEntities)})")]
     [Browse(RootHidden)]public              Entity[]            Entities_       => GetEntities(); */
                         public              Entity              this[int index] => new Entity(Ids[index], store);
-                        public override     string              ToString()      => $"Length: {childLength}";
+                        public override     string              ToString()      => $"Count: {childCount}";
     
     // --- internal fields
-    [Browse(Never)]     internal readonly   int                 childLength;    //  4
+    [Browse(Never)]     internal readonly   int                 childCount;     //  4
     [Browse(Never)]     internal readonly   int[]               childIds;       //  8
     [Browse(Never)]     internal readonly   EntityStore         store;          //  8
 
@@ -38,15 +38,15 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     // --- new
     public ChildEnumerator                  GetEnumerator() => new ChildEnumerator(this);
 
-    internal ChildEntities(EntityStore store, int[] childIds, int childLength) {
+    internal ChildEntities(EntityStore store, int[] childIds, int childCount) {
         this.store          = store;
         this.childIds       = childIds;
-        this.childLength    = childLength;
+        this.childCount     = childCount;
     }
     
     public void ToArray(Entity[] array) {
         var ids = Ids;
-        for (int n = 0; n < childLength; n++) {
+        for (int n = 0; n < childCount; n++) {
             array[n] = new Entity(ids[n], store);
         }
     }
@@ -75,7 +75,7 @@ public struct ChildEnumerator  : IEnumerator<Entity>
     
     // --- IEnumerator
     public bool MoveNext() {
-        if (index < childEntities.childLength) {
+        if (index < childEntities.childCount) {
             index++;
             return true;
         }
