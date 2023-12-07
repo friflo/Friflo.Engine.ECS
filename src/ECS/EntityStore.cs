@@ -66,7 +66,7 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8               - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
-    [Browse(Never)] private             Entity                  storeRoot;          //  8               - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] private             Entity                  storeRoot;          // 16               - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
     [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8               - invariant: entityScripts[0] = 0
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>

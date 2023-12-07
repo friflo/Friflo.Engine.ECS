@@ -24,7 +24,7 @@ public abstract class Script
     public          Entity      Entity  => entity;
                     
     // --- internal
-    [Browse(Never)] internal    Entity  entity;
+    [Browse(Never)] internal    Entity  entity;     // 16
     
     public override string      ToString()  => $"[*{GetType().Name}]";
 

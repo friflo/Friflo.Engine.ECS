@@ -39,7 +39,7 @@ public sealed class ExplorerItem :
     
 #region internal fields
     private             bool                                isExpanded;
-    internal readonly   Entity                              entity;                 //  8   - the corresponding entity
+    internal readonly   Entity                              entity;                 // 16   - the corresponding entity
     internal readonly   ExplorerItemTree                    tree;                   //  8   - the ExplorerItemTree containing this ExplorerItem
     internal            NotifyCollectionChangedEventHandler collectionChanged;      //  8   - event handlers are called in case entity children are modified
     public              PropertyChangedEventHandler         propertyChangedHandler; //  8   - used to notify EntityName changes to Avalonia > TreeDataGrid 
