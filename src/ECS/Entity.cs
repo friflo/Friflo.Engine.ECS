@@ -67,6 +67,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </list>
 /// <b>components</b> · common
 /// <list type="bullet">
+///     <item><see cref="Components"/></item>
 ///     <item><see cref="Name"/></item>
 ///     <item><see cref="Position"/></item>
 ///     <item><see cref="Rotation"/></item>

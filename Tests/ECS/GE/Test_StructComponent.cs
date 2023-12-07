@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Friflo.Fliox.Engine.ECS;
@@ -254,9 +256,11 @@ public static class Test_StructComponent
         foreach (var component in components) {
             switch (count++) {
                 case 0:
+                    AreEqual("component: 'rot' [Rotation]", component.ToString());
                     AreEqual("component: 'rot' [Rotation]", component.Type.ToString());
                     AreEqual("1, 2, 0, 0",                  component.Value.ToString());    break;
                 case 1:
+                    AreEqual("component: 'scl3' [Scale3]",  component.ToString());
                     AreEqual("component: 'scl3' [Scale3]",  component.Type.ToString());
                     AreEqual("3, 4, 0",                     component.Value.ToString());    break;
             }
@@ -264,6 +268,46 @@ public static class Test_StructComponent
         AreEqual(2, count);
     }
 #pragma warning restore CS0618 // Type or member is obsolete
+    
+    [Test]
+    public static void Test_ComponentEnumerator()
+    {
+        var store   = new EntityStore();
+        var player  = store.CreateEntity();
+        AreEqual(0,     player.Components.Count);
+        
+        var rotation = new Rotation { x = 1, y = 2 };
+        player.AddComponent(rotation);
+        var scale    = new Scale3   { x = 3, y = 4 };
+        player.AddComponent(scale);
+        AreEqual("Count: 2",     player.Components.ToString());
+        {
+            IEnumerable<EntityComponent> components = player.Components;
+            int count = 0;
+            foreach (var _ in components) {
+                count++;
+            }
+            AreEqual(2, count);
+        } {
+            IEnumerable components = player.Components;
+            int count = 0;
+            foreach (var _ in components) {
+                count++;
+            }
+            AreEqual(2, count);
+        } {
+            ComponentEnumerator enumerator = player.Components.GetEnumerator();
+            while (enumerator.MoveNext()) { }
+            enumerator.Reset();
+            
+            int count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+            }
+            enumerator.Dispose();
+            AreEqual(2, count);
+        }
+    }
     
     /// <summary>Test
     /// <see cref="Archetype.MoveEntityTo"/>
