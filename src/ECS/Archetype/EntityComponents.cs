@@ -10,8 +10,10 @@ namespace Friflo.Fliox.Engine.ECS;
 public readonly struct EntityComponents : IEnumerable<EntityComponent>
 {
     // --- internal fields
-    internal readonly   Entity  entity;     // 16    
-    
+    internal readonly   Entity  entity;     // 16
+
+    public   override   string  ToString()  => $"Count: {entity.archetype.componentCount}";
+
     // --- IEnumerable<>
     IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(this);
     

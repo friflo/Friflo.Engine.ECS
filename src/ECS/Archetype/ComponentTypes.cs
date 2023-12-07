@@ -144,7 +144,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         sb.Append("Components: [");
         var hasTypes    = false;
         foreach (var index in bitSet) {
-            var structType = EntityStoreBase.Static.EntitySchema.GetComponentAt(index);
+            var structType = EntityStoreBase.Static.EntitySchema.components[index];
             sb.Append(structType.name);
             sb.Append(", ");
             hasTypes = true;
@@ -166,7 +166,7 @@ public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
 
            readonly object          IEnumerator.Current => Current;
 
-    public readonly ComponentType   Current => EntityStoreBase.Static.EntitySchema.GetComponentAt(bitSetEnumerator.Current);
+    public readonly ComponentType   Current => EntityStoreBase.Static.EntitySchema.components[bitSetEnumerator.Current];
     
     internal ComponentTypesEnumerator(in ComponentTypes componentTypes) {
         bitSetEnumerator = componentTypes.bitSet.GetEnumerator();

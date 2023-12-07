@@ -148,10 +148,6 @@ public sealed class EntitySchema
         return tags[index];
     }
     
-    internal ComponentType GetComponentAt(int index) {
-        return components[index];
-    }
-    
     private string GetString() {
         return $"components: {components.Length - 1}  scripts: {scripts.Length - 1}  entity tags: {tags.Length - 1}";
     } 
