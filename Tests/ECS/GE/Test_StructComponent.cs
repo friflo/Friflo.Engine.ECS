@@ -229,8 +229,6 @@ public static class Test_StructComponent
         }
     }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-
     [Test]
     public static void Test_6_AddRotation() {
         var store   = new EntityStore();
@@ -252,8 +250,10 @@ public static class Test_StructComponent
         var components  =       player.Components;
         AreEqual(2,             components.Count);
 
+
         int count = 0;
         foreach (var component in components) {
+#pragma warning disable CS0618 // Type or member is obsolete
             switch (count++) {
                 case 0:
                     AreEqual("component: 'rot' [Rotation]", component.ToString());
@@ -264,10 +264,10 @@ public static class Test_StructComponent
                     AreEqual("component: 'scl3' [Scale3]",  component.Type.ToString());
                     AreEqual("3, 4, 0",                     component.Value.ToString());    break;
             }
+#pragma warning restore CS0618 // Type or member is obsolete
         }
         AreEqual(2, count);
     }
-#pragma warning restore CS0618 // Type or member is obsolete
     
     [Test]
     public static void Test_ComponentEnumerator()
