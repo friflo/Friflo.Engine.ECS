@@ -34,9 +34,9 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     private             ComponentTypesEnumerator    typesEnumerator;    // 48
     private  readonly   Entity                      entity;             // 16
     
-    internal ComponentEnumerator(in EntityComponents components) {
-        typesEnumerator = components.entity.archetype.componentTypes.GetEnumerator();
-        entity          = components.entity;
+    internal ComponentEnumerator(in EntityComponents entityComponents) {
+        typesEnumerator = entityComponents.entity.archetype.componentTypes.GetEnumerator();
+        entity          = entityComponents.entity;
     }
     
     // --- IEnumerator<>
@@ -51,7 +51,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
         typesEnumerator.Reset();
     }
     
-    object IEnumerator.Current => Current;
+    object IEnumerator.Current => new EntityComponent(entity, typesEnumerator.Current);
 
     // --- IDisposable
     public void Dispose() { }
