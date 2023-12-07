@@ -10,18 +10,18 @@ namespace Friflo.Fliox.Engine.ECS;
 public readonly struct EntityComponents : IEnumerable<EntityComponent>
 {
     // --- internal fields
-    internal readonly   Entity  entity;     // 16
+    private  readonly   Entity  entity;     // 16
 
     public   override   string  ToString()  => $"Count: {entity.archetype.componentCount}";
 
     // --- IEnumerable<>
-    IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(this);
+    IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(entity);
     
     // --- IEnumerable
-    IEnumerator                                     IEnumerable.GetEnumerator() => new ComponentEnumerator(this);
+    IEnumerator                                     IEnumerable.GetEnumerator() => new ComponentEnumerator(entity);
     
     // --- new
-    public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(this);
+    public ComponentEnumerator                                  GetEnumerator() => new ComponentEnumerator(entity);
 
     internal EntityComponents(Entity entity) {
         this.entity          = entity;
@@ -31,12 +31,12 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
 public struct ComponentEnumerator : IEnumerator<EntityComponent>
 {
     // --- internal fields
-    private             ComponentTypesEnumerator    typesEnumerator;    // 48
     private  readonly   Entity                      entity;             // 16
+    private             ComponentTypesEnumerator    typesEnumerator;    // 48
     
-    internal ComponentEnumerator(in EntityComponents entityComponents) {
-        typesEnumerator = entityComponents.entity.archetype.componentTypes.GetEnumerator();
-        entity          = entityComponents.entity;
+    internal ComponentEnumerator(in Entity entity) {
+        this.entity     = entity;
+        typesEnumerator = entity.archetype.componentTypes.GetEnumerator();
     }
     
     // --- IEnumerator<>
