@@ -100,26 +100,38 @@ public static class Test_StructComponent
         }
     }
     
+    /// <summary>
+    /// Note:
+    /// Create dummy entities in same <see cref="Archetype"/> to avoid resize of
+    /// <see cref="EntityStore.nodes"/> and <see cref="Archetype.entityIds"/> 
+    /// </summary>
     [Test]
-    public static void Test_3_AddPosition() {
+    public static void Test_3_AddPosition()
+    {
         var store = new EntityStore();
-        var player1 = store.CreateEntity();
-        IsTrue (player1.AddComponent(new Position { x = 1,  y = 2 }));
-        IsFalse(player1.AddComponent(new Position { x = 10, y = 11 }));
+        var entity1 = store.CreateEntity();
+        IsTrue (entity1.AddComponent(new Position { x = 1,  y = 2 }));
+        IsFalse(entity1.AddComponent(new Position { x = 10, y = 11 }));
         
-        var player2 = store.CreateEntity();
-        // var start = Mem.GetAllocatedBytes();
-        player2.AddComponent<Position>();
-        player2.AddComponent<Position>();
+        // Create dummy entities. See Note above
+        store.CreateEntity(entity1.Archetype);
+        store.CreateEntity(entity1.Archetype);
+        store.CreateEntity(entity1.Archetype);
+        store.CreateEntity(entity1.Archetype);
+        
+        var start = Mem.GetAllocatedBytes();
+        var entity2 = store.CreateEntity();
+        entity2.AddComponent<Position>();
+        entity2.AddComponent<Position>();
 
-        // Mem.AssertNoAlloc(start);  // todo
-        AreEqual(10f, player1.Position.x);
-        AreEqual(11f, player1.Position.y);
+        Mem.AssertNoAlloc(start);
+        AreEqual(10f, entity1.Position.x);
+        AreEqual(11f, entity1.Position.y);
         
         long count = 10; // 1_000_000_000L ~ 967 ms
         for (var n = 0; n < count; n++) {
             // _ = player1.GetComponentValue<Position>();
-            _ = player1.Position;
+            _ = entity1.Position;
         }
     }
     
