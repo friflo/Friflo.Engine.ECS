@@ -61,7 +61,7 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     } */
 }
 
-public struct ChildEnumerator  : IEnumerator<Entity> // <- not implemented to enable returning Current by ref
+public struct ChildEnumerator  : IEnumerator<Entity>
 {
     private             int             index;          //  4
     private readonly    ChildEntities   childEntities;  // 20

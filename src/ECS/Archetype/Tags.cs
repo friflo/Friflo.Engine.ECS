@@ -139,7 +139,7 @@ public struct Tags : IEnumerable<TagType>
 
 public struct TagsEnumerator : IEnumerator<TagType>
 {
-    private BitSetEnumerator    bitSetEnumerator;
+    private BitSetEnumerator    bitSetEnumerator;   // 48
 
     // --- IEnumerator
     public          void        Reset()             => bitSetEnumerator.Reset();

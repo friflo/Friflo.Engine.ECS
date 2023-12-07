@@ -242,6 +242,8 @@ public readonly struct Entity
         int archIndex = 0;
         return archetype.entityStore.RemoveComponent(id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
+    
+    public      EntityComponents        Components => new EntityComponents(this);
 
     /// <summary>
     /// Property is only used to display components in the Debugger.<br/>
