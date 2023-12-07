@@ -280,7 +280,7 @@ public static class Test_StructComponent
         player.AddComponent(rotation);
         var scale    = new Scale3   { x = 3, y = 4 };
         player.AddComponent(scale);
-        AreEqual("Count: 2",     player.Components.ToString());
+        AreEqual("[Rotation, Scale3]  Count: 1",     player.Components.ToString());
         {
             IEnumerable<EntityComponent> components = player.Components;
             int count = 0;

@@ -16,7 +16,7 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     private  readonly   Entity  entity;     // 16
 
     public              int     Count       => entity.archetype.componentCount;
-    public   override   string  ToString()  => $"Count: {Count}";
+    public   override   string  ToString()  => entity.archetype.GetString();
 
     // --- IEnumerable<>
     IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(entity);
