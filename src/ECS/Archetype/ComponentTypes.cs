@@ -159,7 +159,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
 
 public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
 {
-    private BitSetEnumerator        bitSetEnumerator;   // 48
+    internal BitSetEnumerator       bitSetEnumerator;   // 48
 
     // --- IEnumerator
     public          void            Reset()             => bitSetEnumerator.Reset();

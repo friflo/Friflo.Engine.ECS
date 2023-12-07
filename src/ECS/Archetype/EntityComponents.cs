@@ -48,11 +48,11 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     
     // --- IEnumerator
     public bool MoveNext() {
-        return typesEnumerator.MoveNext();
+        return typesEnumerator.bitSetEnumerator.MoveNext();
     }
 
     public void Reset() {
-        typesEnumerator.Reset();
+        typesEnumerator.bitSetEnumerator.Reset();
     }
     
     object IEnumerator.Current => new EntityComponent(entity, typesEnumerator.Current);
