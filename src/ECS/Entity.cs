@@ -52,6 +52,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <b>general</b>
 /// <list type="bullet">
 ///     <item><see cref="Id"/></item>
+///     <item><see cref="Pid"/></item>
 ///     <item><see cref="Archetype"/></item>
 ///     <item><see cref="Store"/></item>
 ///     <item><see cref="StoreOwnership"/></item>
@@ -114,6 +115,8 @@ public readonly struct Entity
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
                     public  int             Id              => id;
+    
+                    public  long            Pid             => store.nodes[id].pid; 
 
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
                     public  Archetype       Archetype       => archetype;

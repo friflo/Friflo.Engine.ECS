@@ -2,6 +2,7 @@ using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.GE;
 
@@ -58,6 +59,42 @@ public static class Test_Entity
         
         Entity.RemoveEntityComponent(entity, componentType);
         AreEqual(0,                     entity.Archetype.ComponentCount);
+    }
+    
+    
+
+    [Test]
+    public static void Test_Entity_TryGetEntityByPid()
+    {
+        var store   = new EntityStore(PidType.RandomPids);
+        Assert_TryGetEntityByPid(store);
+        
+        store       = new EntityStore(PidType.UsePidAsId);
+        Assert_TryGetEntityByPid(store);
+    }
+    
+    private static void Assert_TryGetEntityByPid(EntityStore store)
+    {
+        var entity2 = store.CreateEntity(2);
+        Entity entity;
+        
+        IsTrue (store.TryGetEntityByPid(entity2.Pid, out entity));
+        IsTrue(!entity.IsNull);
+        
+        IsFalse(store.TryGetEntityByPid( 0, out entity));
+        IsTrue(entity.IsNull);
+        
+        IsFalse(store.TryGetEntityByPid(-1, out entity));
+        IsTrue(entity.IsNull);
+        
+        IsFalse(store.TryGetEntityByPid( 1, out entity));
+        IsTrue(entity.IsNull);
+        
+        IsFalse(store.TryGetEntityByPid( 3, out entity));
+        IsTrue(entity.IsNull);
+        
+        IsFalse(store.TryGetEntityByPid(long.MaxValue, out entity));
+        IsTrue(entity.IsNull);
     }
 }
 
