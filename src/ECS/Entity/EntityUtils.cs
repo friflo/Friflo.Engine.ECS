@@ -83,22 +83,6 @@ internal static class EntityUtils
         }
     }
     
-    internal static IComponent[] GetComponentsDebug(Entity entity)
-    {
-        var archetype   = entity.archetype;
-        var count       = archetype.componentCount;
-        if (count == 0) {
-            return EmptyComponents;
-        }
-        var components  = new IComponent[count];
-        // --- add components
-        var heaps       = archetype.Heaps;
-        for (int n = 0; n < count; n++) {
-            components[n] = heaps[n].GetComponentDebug(entity.compIndex); 
-        }
-        return components;
-    }
-    
     // ---------------------------------- Script utils ----------------------------------
     private  static readonly IComponent[]   EmptyComponents = Array.Empty<IComponent>();
     private  static readonly Script[]       EmptyScripts  = Array.Empty<Script>();
