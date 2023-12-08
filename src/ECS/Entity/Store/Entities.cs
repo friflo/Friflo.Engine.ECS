@@ -60,14 +60,14 @@ public partial class EntityStore
         // todo optimize - serialize / deserialize only non blittable components and scripts
         if (isBlittable) {
             var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
-            // CopyComponents() can be used only in case all component types are blittable
+            // CopyComponents() must be used only in case all component types are blittable
             archetype.CopyComponents(original.compIndex, entity.compIndex);
             // --- clone scripts
             foreach (var script in original.Scripts) {
                 var scriptType      = scriptTypeByType[script.GetType()];
                 var scriptClone     = scriptType.CloneScript(script);
-                scriptClone.entity  = entity;                                   // todo add test assertion
-                entity.archetype.entityStore.AddScript(entity, scriptClone, scriptType);
+                scriptClone.entity  = entity;
+                AddScript(entity, scriptClone, scriptType);
             }
             return entity;
         }

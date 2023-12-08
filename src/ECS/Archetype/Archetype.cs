@@ -195,6 +195,7 @@ public sealed class Archetype
         CheckChunkCapacity();
     }
     
+    /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.blittable"/></remarks>
     internal void CopyComponents(int sourceIndex, int targetIndex)
     {
         foreach (var sourceHeap in structHeaps) {
