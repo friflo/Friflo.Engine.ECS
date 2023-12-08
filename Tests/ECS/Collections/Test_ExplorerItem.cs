@@ -323,6 +323,36 @@ public static class Test_ExplorerItem
         AreEqual(1, count); // no event send to handler
     }
     
+    [Test]
+    public static void Test_ExplorerItem_IsExpanded()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        var rootItem    = tree.GetItemById(1);
+        AreSame("test-tree", rootItem.DebugTreeName);
+        
+        var count       = 0;
+        // --- add handler
+        var handler     = new PropertyChangedEventHandler((sender, args) => {
+            count++;
+            AreEqual("IsExpanded", args.PropertyName);
+            AreSame(rootItem, sender);
+        });
+        rootItem.PropertyChanged += handler;
+        rootItem.PropertyChanged += (_, _) => { };
+        
+        IsFalse(rootItem.IsExpanded);
+        rootItem.IsExpanded = true;
+        IsTrue(rootItem.IsExpanded);
+        rootItem.IsExpanded = true;  // no event send. IsExpanded is already true
+        
+        // --- remove handler
+        rootItem.PropertyChanged -= handler;
+        rootItem.IsExpanded = false;
+        AreEqual(1, count);         // no event send. handler was removed
+    }
+    
     private static string AsString(this NotifyCollectionChangedEventArgs args)
     {
         switch (args.Action) {
