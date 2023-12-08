@@ -28,4 +28,17 @@ public static class Test_ExplorerItem
         });
         AreEqual("unexpected action: 99", e!.Message);
     }
+    
+    [Test]
+    public static void Test_ExplorerItem_null_Entity()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        var tree        = new ExplorerItemTree(root, "test");
+        var entity = new Entity();
+        var e = Throws<ArgumentNullException>(() => {
+            _ = new ExplorerItem(tree, entity);
+        });
+        AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
+    }
 }
