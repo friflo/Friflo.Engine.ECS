@@ -90,7 +90,7 @@ public partial class EntityStore
             converter.EntityToDataEntity(original, dataBuffer);
             
             // --- deserialize DataEntity
-            dataBuffer.pid      = GetNodeById(entity.id).pid;
+            dataBuffer.pid      = IdToPid(entity.id);
             var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
             if (copy.IsEqual(entity)) throw new InvalidOperationException("expect same entity");
         }

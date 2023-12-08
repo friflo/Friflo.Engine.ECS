@@ -113,8 +113,11 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Instead use <see cref="EntityNode.Id"/> instead of <see cref="EntityNode.Pid"/> if possible
     /// as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
-    public  int             PidToId(long pid) => pid2Id != null ? pid2Id[pid] : (int)pid;
+    public  int             PidToId(long pid)   => pid2Id != null ? pid2Id[pid] : (int)pid;
     
+    public  long            IdToPid(int id)     => nodes[id].pid;
+    
+    /*
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
     /// Instead use <see cref="Nodes"/> if possible as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
@@ -125,6 +128,10 @@ public sealed partial class EntityStore : EntityStoreBase
         }
         return ref nodes[pid];
     }
+    
+    public  ref EntityNode  GetNodeById(int id) {
+        return ref nodes[id];
+    } */
     
     public  Entity  GetEntityByPid(long pid) {
         if (pid2Id != null) {
@@ -151,10 +158,6 @@ public sealed partial class EntityStore : EntityStoreBase
         }
         value = default;
         return false;
-    }
-    
-    public  ref EntityNode  GetNodeById(int id) {
-        return ref nodes[id];
     }
     
     public  Entity  GetEntityById(int id) {

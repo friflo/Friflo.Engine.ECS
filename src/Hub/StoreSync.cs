@@ -171,7 +171,7 @@ public sealed class StoreSync
                     AddDataEntityUpsert(entity);
                     continue;
                 case EntityChange.Delete:
-                    var pid = store.GetNodeById(id).Pid;
+                    var pid = store.IdToPid(id);
                     deleteBuffer.Add(pid);
                     continue;
             }

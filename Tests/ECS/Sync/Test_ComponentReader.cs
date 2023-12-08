@@ -395,7 +395,7 @@ public static class Test_ComponentReader
         var entity  = converter.DataEntityToEntity(node, store, out _);
         
         AreEqual(10,    store.PidToId(10L));
-        AreEqual(10,    store.GetNodeByPid(10L).Pid);
+        AreEqual(10,    store.GetEntityByPid(10L).Pid);
         AreEqual(10,    entity.Id);
         AreEqual(100,   entity.ChildEntities.Count);
         var nodes = store.Nodes;
@@ -423,7 +423,7 @@ public static class Test_ComponentReader
         var entity      = converter.DataEntityToEntity(node, store, out _);
         
         AreEqual(1,     store.PidToId(10L));
-        AreEqual(1,     store.GetNodeByPid(10L).Id);
+        AreEqual(1,     store.GetEntityByPid(10L).Id);
         AreEqual(1,     entity.Id);
         AreEqual(100,   entity.ChildEntities.Count);
         AreEqual(100,   store.Nodes[1].ChildCount);

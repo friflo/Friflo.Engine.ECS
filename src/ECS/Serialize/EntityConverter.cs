@@ -24,7 +24,7 @@ public class EntityConverter
             throw new ArgumentNullException(nameof(entity));
         }
         var store       = entity.archetype.entityStore;
-        var pid         = store.GetNodeById(entity.id).pid;
+        var pid         = store.IdToPid(entity.id);
         dataEntity    ??= new DataEntity();
         dataEntity.pid  = pid;
         store.EntityToDataEntity(entity, dataEntity, writer, pretty);

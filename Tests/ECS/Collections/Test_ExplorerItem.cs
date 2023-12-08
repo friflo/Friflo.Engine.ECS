@@ -146,7 +146,7 @@ public static class Test_ExplorerItem
                             AreEqual(ChangedEventAction.Add,    args.action);
                             AreEqual(typeof(EntityName),        args.componentType.type);
                             // ensure entity is in new Archetype 
-                            AreEqual("[EntityName]  Count: 1",  store.GetNodeById(args.entityId).Archetype.ToString());
+                            AreEqual("[EntityName]  Count: 1",  store.GetEntityById(args.entityId).Archetype.ToString());
                             AreEqual("entity: 1 - Add component: 'name' [EntityName]", argsStr);    return;
                 default:    Fail("unexpected event");                                               return;
             }
@@ -159,7 +159,7 @@ public static class Test_ExplorerItem
                             AreEqual(ChangedEventAction.Remove,args.action);
                             AreEqual(typeof(EntityName),        args.componentType.type);
                             // ensure entity is in new Archetype
-                            AreEqual("[]",                      store.GetNodeById(args.entityId).Archetype.ToString());
+                            AreEqual("[]",                      store.GetEntityById(args.entityId).Archetype.ToString());
                             AreEqual("entity: 1 - Remove component: 'name' [EntityName]", argsStr); return;
                 default:    Fail("unexpected event");                                               return;
             }

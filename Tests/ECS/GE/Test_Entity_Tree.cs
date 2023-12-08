@@ -26,7 +26,7 @@ public static class Test_Entity_Tree
         AreEqual(1,             entity.Id);
         AreEqual(1559595546L,   entity.Pid);
         AreEqual(1,             store.PidToId(1559595546L));
-        AreEqual(1,             store.GetNodeByPid(1559595546L).Id);
+        AreEqual(1,             store.GetEntityByPid(1559595546L).Id);
     }
     
     [Test]
@@ -37,7 +37,7 @@ public static class Test_Entity_Tree
         AreEqual(1,     entity.Id);
         AreEqual(1,     entity.Pid);
         AreEqual(1,     store.PidToId(1L));
-        AreEqual(1,     store.GetNodeByPid(1L).Pid);
+        AreEqual(1,     store.GetEntityByPid(1L).Pid);
     }
     
     /// <summary>Test id assignment in <see cref="EntityStore.EnsureNodesLength"/></summary>
