@@ -132,8 +132,8 @@ public readonly struct Entity
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.entityStore.GetTreeMembership(id);
     
-    [Browse(Never)] public  bool            IsNull                      => store?.nodes[id].archetype == null;
-    [Browse(Never)] public  bool            IsNotNull                   => store?.nodes[id].archetype != null;
+    [Browse(Never)] public  bool            IsNull          => store?.nodes[id].archetype == null;
+    [Browse(Never)] public  bool            IsNotNull       => store?.nodes[id].archetype != null;
     
     [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
