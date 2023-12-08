@@ -24,7 +24,7 @@ public static class Test_Entity_Tree
         store.SetRandomSeed(0);
         var entity  = store.CreateEntity();
         AreEqual(1,             entity.Id);
-        AreEqual(1559595546L,   store.Nodes[entity.Id].Pid);
+        AreEqual(1559595546L,   entity.Pid);
         AreEqual(1,             store.PidToId(1559595546L));
         AreEqual(1,             store.GetNodeByPid(1559595546L).Id);
     }
@@ -35,7 +35,7 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
         AreEqual(1,     entity.Id);
-        AreEqual(1,     store.Nodes[entity.Id].Pid);
+        AreEqual(1,     entity.Pid);
         AreEqual(1,     store.PidToId(1L));
         AreEqual(1,     store.GetNodeByPid(1L).Pid);
     }

@@ -89,7 +89,7 @@ public static class ECSUtils
         foreach (var dataEntity in dataEntities)
         {
             var entity                  = store.CreateEntity();
-            var newPid                  = store.GetNodeById(entity.Id).Pid;
+            var newPid                  = entity.Pid;
             oldToNewPid[dataEntity.pid] = newPid;
             newToOldPid[newPid]         = dataEntity.pid;
             dataEntity.pid              = newPid;
@@ -170,7 +170,7 @@ public static class ECSUtils
             missingPids.Add(oldPid);
             var missingChild    = store.CreateEntity();
             missingChild.AddComponent(new EntityName($"missing entity - pid: {oldPid}"));
-            var missingChildPid             = store.GetNodeById(missingChild.Id).Pid;
+            var missingChildPid             = missingChild.Pid;
             children[n]                     = missingChildPid;
             oldToNewPid[oldPid]             = missingChildPid;
             newToOldPid[missingChildPid]    = oldPid;
