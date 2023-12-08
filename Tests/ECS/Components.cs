@@ -56,7 +56,7 @@ public struct TestTag3 : IEntityTag { }
 // ------------------------------------------------ scripts
 [CodeCoverageTest]
 [Script("script1")]
-class TestScript1 : Script {
+public class TestScript1 : Script {
     public int  val1;
 }
 
