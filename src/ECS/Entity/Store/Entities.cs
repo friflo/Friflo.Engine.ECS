@@ -9,6 +9,7 @@ using static Friflo.Fliox.Engine.ECS.StoreOwnership;
 using static Friflo.Fliox.Engine.ECS.TreeMembership;
 using static Friflo.Fliox.Engine.ECS.NodeFlags;
 
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable UseObjectOrCollectionInitializer
@@ -54,47 +55,51 @@ public partial class EntityStore
             entity.refCompIndex    = archetype.AddEntity(entity.id);
             entity.refArchetype    = archetype;
         }
-        bool isBlittable = true;
-        foreach (var componentType in archetype.componentTypes) {
-            if (!componentType.blittable) {
-                isBlittable = false;
-                break;
-            }
-        }
-        var scripts = original.Scripts;
-        var scriptTypeByType = Static.EntitySchema.ScriptTypeByType;
-        if (isBlittable) {
-            foreach (var script in scripts)
-            {
-                var scriptType = scriptTypeByType[script.GetType()];
-                if (!scriptType.blittable) {
-                    isBlittable = false;
-                    break;
-                }    
-            }
-        }
+        var isBlittable = IsBlittable(original);
+
         // todo optimize - serialize / deserialize only non blittable components and scripts
         if (isBlittable) {
+            var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
             // CopyComponents() can be used only in case all component types are blittable
             archetype.CopyComponents(original.compIndex, entity.compIndex);
             // --- clone scripts
-            foreach (var script in scripts) {
-                var scriptType  = scriptTypeByType[script.GetType()];
-                var clone       = scriptType.CloneScript(script);
-                clone.entity    = entity;                                   // todo add test assertion
-                entity.archetype.entityStore.AddScript(entity, clone, scriptType);
+            foreach (var script in original.Scripts) {
+                var scriptType      = scriptTypeByType[script.GetType()];
+                var scriptClone     = scriptType.CloneScript(script);
+                scriptClone.entity  = entity;                                   // todo add test assertion
+                entity.archetype.entityStore.AddScript(entity, scriptClone, scriptType);
             }
-        } else {
-            // --- serialize entity
-            var converter       = EntityConverter.Default;
-            converter.EntityToDataEntity(original, dataBuffer);
-            
-            // --- deserialize DataEntity
-            dataBuffer.pid      = IdToPid(entity.id);
-            // convert will use entity created above
-            converter.DataEntityToEntity(dataBuffer, this, out _);
+            return entity;
         }
+        // --- serialize entity
+        var converter       = EntityConverter.Default;
+        converter.EntityToDataEntity(original, dataBuffer);
+        
+        // --- deserialize DataEntity
+        dataBuffer.pid      = IdToPid(entity.id);
+        // convert will use entity created above
+        converter.DataEntityToEntity(dataBuffer, this, out _);
         return entity;
+    }
+    
+    private static bool IsBlittable(Entity original)
+    {
+        foreach (var componentType in original.Archetype.componentTypes)
+        {
+            if (!componentType.blittable) {
+                return false;
+            }
+        }
+        var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
+        var scripts             = original.Scripts;
+        foreach (var script in scripts)
+        {
+            var scriptType = scriptTypeByType[script.GetType()];
+            if (!scriptType.blittable) {
+                return false;
+            }    
+        }
+        return true;
     }
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
