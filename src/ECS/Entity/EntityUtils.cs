@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox.Mapper;
@@ -10,6 +11,12 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
+
+public class EntityEqualityComparer : IEqualityComparer<Entity>
+{
+    public  bool    Equals(Entity left, Entity right)   => left.id == right.id;
+    public  int     GetHashCode(Entity entity)          => entity.id;
+}
 
 internal static class EntityExtensions
 {

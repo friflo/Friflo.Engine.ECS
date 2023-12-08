@@ -269,7 +269,7 @@ public static class Test_Script
         AreEqual(1, entity.Scripts.Length);
         AreEqual(2, entity.Archetype.ComponentCount);
         AreEqual("id: 1  [*TestComponent, Position, MyComponent1]", entity.ToString());
-        AreEqual(entity, test.Entity);
+        IsTrue  (entity == test.Entity);
         test.Start();
         test.Update();
     }

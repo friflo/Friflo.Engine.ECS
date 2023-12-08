@@ -53,7 +53,7 @@ public static class Test_EntityConverter
         
         // --- create child 8
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
-        AreEqual(entity8,               store.GetEntityById(8));
+        IsTrue  (entity8 ==             store.GetEntityById(8));
         AreEqual(Created,               store.Nodes[8].Flags);
         AreEqual(8,                     store.Nodes[8].Id);
         AreEqual(5,                     store.Nodes[8].ParentId);
@@ -71,7 +71,7 @@ public static class Test_EntityConverter
         
         // --- create child 8 first
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
-        AreEqual(entity8,               store.GetEntityById(8));
+        IsTrue  (entity8 ==             store.GetEntityById(8));
         AreEqual(Created,               store.Nodes[8].Flags);      // diff_flags
         AreEqual(8,                     store.Nodes[8].Id);
         AreEqual(0,                     store.Nodes[8].ParentId);   // diff_parent

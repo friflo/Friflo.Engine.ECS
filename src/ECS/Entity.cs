@@ -134,7 +134,6 @@ public readonly struct Entity
     
     [Browse(Never)] public  bool            IsNull                      => store?.nodes[id].archetype == null;
     [Browse(Never)] public  bool            IsNotNull                   => store?.nodes[id].archetype != null;
-                    public  bool            IsEqual (in Entity entity)  => id == entity.id;
     
     [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
@@ -371,6 +370,23 @@ public readonly struct Entity
     public ref readonly EntityNode  GetChildNodeByIndex(int index)      => ref archetype.entityStore.GetChildNodeByIndex(id, index);
     public              Entity      GetChildEntityByIndex(int index)    =>     archetype.entityStore.GetChildEntityByIndex(id, index);
     
+    #endregion
+
+#region general methods
+
+    public static   bool    operator == (Entity a, Entity b)    => a.id == b.id && a.store == b.store;
+    public static   bool    operator != (Entity a, Entity b)    => a.id != b.id || a.store != b.store;
+
+    // --- object
+    public override bool    Equals(object obj) => throw ObjectMethodNotImplement(id, "==");
+    public override int     GetHashCode()      => throw ObjectMethodNotImplement(id, nameof(Id));
+    
+    public static  readonly EntityEqualityComparer EqualityComparer = new ();
+    
+    private static Exception ObjectMethodNotImplement(int id, string use) {
+        var msg = $"to avoid excessive boxing. Use: {use} or {nameof(Entity)}.{nameof(EqualityComparer)}. id: {id}";
+        return new NotImplementedException(msg);
+    }
     #endregion
     
 #region non generic component methods

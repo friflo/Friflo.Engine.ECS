@@ -55,7 +55,7 @@ public sealed class ExplorerItem :
 
 #region private methods
     private bool IsRootItem() {
-        return tree.rootItem.entity.IsEqual(entity);
+        return tree.rootItem.entity == entity;
     }
     
     private string GetName() {

@@ -1,3 +1,4 @@
+using System;
 using Friflo.Fliox.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -126,6 +127,34 @@ public static class Test_Entity
         
         AreEqual(2,                             clone.Scripts.Length);
         NotNull(clone.GetScript<NonBlittableScript>());
+    }
+    
+    [Test]
+    public static void Test_Entity_EqualityComparer()
+    {
+        var store       = new EntityStore();
+        var entity1     = store.CreateEntity(1);
+        var entity2     = store.CreateEntity(2);
+        
+        IsFalse (entity1 == entity2);
+        IsTrue  (entity1 != entity2);
+        
+        var comparer = Entity.EqualityComparer;
+        IsTrue  (comparer.Equals(entity1, entity1));
+        IsFalse (comparer.Equals(entity1, entity2));
+        
+        AreEqual(1, comparer.GetHashCode(entity1));
+        AreEqual(2, comparer.GetHashCode(entity2));
+        
+        var e = Throws<NotImplementedException>(() => {
+            _ = entity1.GetHashCode();
+        });
+        AreEqual("to avoid excessive boxing. Use: Id or Entity.EqualityComparer. id: 1", e!.Message);
+        
+        e = Throws<NotImplementedException>(() => {
+            _ = entity1.Equals(entity2);
+        });
+        AreEqual("to avoid excessive boxing. Use: == or Entity.EqualityComparer. id: 1", e!.Message);
     }
 }
 

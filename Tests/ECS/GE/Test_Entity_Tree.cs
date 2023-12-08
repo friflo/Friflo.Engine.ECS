@@ -76,18 +76,18 @@ public static class Test_Entity_Tree
         SetHandler(store, args => AreEqual("entity: 1 - Add ChildIds[0] = 4", args.ToString()));
         AreEqual(0,         root.AddChild(child));
         
-        AreEqual(root,      child.Parent);
+        IsTrue(root ==      child.Parent);
         AreEqual(attached,  child.StoreOwnership);
         var childEntities = root.ChildEntities;
         AreEqual(1,         childEntities.Ids.Length);
         AreEqual(4,         childEntities.Ids[0]);
         AreEqual(1,         root.ChildCount);
         AreEqual(1,         childEntities.Count);
-        AreEqual(child,     childEntities[0]);
+        IsTrue(child ==     childEntities[0]);
         int count = 0;
         foreach (var childEntity in root.ChildEntities) {
             count++;
-            AreEqual(child, childEntity);
+            IsTrue(child == childEntity);
         }
         AreEqual(1,         count);
         
@@ -99,12 +99,12 @@ public static class Test_Entity_Tree
         AreEqual(1,         rootNode.ChildIds.Length);
         AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
         AreEqual(1,         childEntities.Count);
-        AreEqual(child,     childEntities[0]);
+        IsTrue(child ==     childEntities[0]);
         
         // --- copy child Entity's to array
         var array = new Entity[childEntities.Count];
         childEntities.ToArray(array);
-        AreEqual(child, array[0]);
+        IsTrue(child == array[0]);
 
         
 /*  was used for class Entity  
@@ -135,17 +135,17 @@ public static class Test_Entity_Tree
             root.InsertChild(0, child4);
             AreEqual(1, events.seq);
             
-            AreEqual(root,      child4.Parent);
+            IsTrue(root ==      child4.Parent);
             AreEqual(attached,  child4.StoreOwnership);
             var childNodes =    root.ChildEntities;
             AreEqual(1,         childNodes.Ids.Length);
             AreEqual(4,         childNodes.Ids[0]);
             AreEqual(1,         root.ChildCount);
-            AreEqual(child4,    childNodes[0]);
+            IsTrue(child4 ==    childNodes[0]);
             int count = 0;
             foreach (var child in childNodes) {
                 count++;
-                AreEqual(child4, child);
+                IsTrue(child4 == child);
             }
             AreEqual(1,         count);
             
@@ -156,7 +156,7 @@ public static class Test_Entity_Tree
             AreEqual(1,                                 rootNode.ChildCount);
             AreEqual(1,                                 rootNode.ChildIds.Length);
             AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
-            AreEqual(child4,                             childNodes[0]);
+            IsTrue(child4 ==                            childNodes[0]);
         }
         var child5 = store.CreateEntity(5);
         {
@@ -166,20 +166,20 @@ public static class Test_Entity_Tree
             root.InsertChild(0, child5);
             AreEqual(1, events.seq);
             
-            AreEqual(root,      child5.Parent);
+            IsTrue(root ==      child5.Parent);
             AreEqual(attached,  child5.StoreOwnership);
             var childNodes =    root.ChildEntities;
             AreEqual(2,         childNodes.Ids.Length);
             AreEqual(5,         childNodes.Ids[0]);
             AreEqual(4,         childNodes.Ids[1]);
             AreEqual(2,         root.ChildCount);
-            AreEqual(child5,    childNodes[0]);
-            AreEqual(child4,    childNodes[1]);
+            IsTrue(child5 ==    childNodes[0]);
+            IsTrue(child4 ==    childNodes[1]);
             var count = 0;
             foreach (var child in childNodes) {
                 switch(count++) {
-                    case 0:     AreEqual(child5, child);     break;
-                    case 1:     AreEqual(child4, child);     break;
+                    case 0:     IsTrue(child5 == child);    break;
+                    case 1:     IsTrue(child4 == child);    break;
                     default:    Fail("unexpected");         return;
                 }
             }
@@ -190,8 +190,8 @@ public static class Test_Entity_Tree
             var childNodes =    root.ChildEntities;
             var array = new Entity[childNodes.Count];
             childNodes.ToArray(array);
-            AreEqual(child5, array[0]);
-            AreEqual(child4, array[1]);
+            IsTrue(child5 == array[0]);
+            IsTrue(child4 == array[1]);
         }
     }
     
@@ -368,13 +368,13 @@ public static class Test_Entity_Tree
         
         store.SetStoreRoot(root);
         Mem.AssertNoAlloc(start);
-        AreEqual(root,           store.StoreRoot);
+        IsTrue(root ==          store.StoreRoot);
         IsTrue  (root.Parent.IsNull);
         
         var child   = store.CreateEntity(2);
         SetHandler(store, args => AreEqual("entity: 1 - Add ChildIds[0] = 2",     args.ToString()));
         AreEqual(0,             root.AddChild(child));
-        AreEqual(root,          child.Parent);
+        IsTrue(root ==          child.Parent);
         AreEqual(treeNode,      child.TreeMembership);
         AreEqual(2,             store.EntityCount);
         var nodes = store.Nodes;
@@ -417,7 +417,7 @@ public static class Test_Entity_Tree
         AreEqual(2,     events.seq);
         AreEqual(0,     entity1.ChildCount);
         AreEqual(1,     entity2.ChildCount);
-        AreEqual(child, entity2.ChildEntities[0]);
+        IsTrue(child == entity2.ChildEntities[0]);
     }
     
     [Test]
@@ -451,16 +451,16 @@ public static class Test_Entity_Tree
         var events = SetHandler(store, args => AreEqual("entity: 1 - Add ChildIds[0] = 2", args.ToString()));
         AreEqual(0, root.AddChild(child));
         AreEqual(1, events.seq);
-        var subChild= store.CreateEntity(3);
-        AreEqual(root,      subChild.Store.StoreRoot);
+        var subChild = store.CreateEntity(3);
+        IsTrue(root ==      subChild.Store.StoreRoot);
         subChild.AddComponent(new EntityName("subChild"));
         events = SetHandler(store, args => AreEqual("entity: 2 - Add ChildIds[0] = 3", args.ToString()));
         AreEqual(0, child.AddChild(subChild));
         AreEqual(1, events.seq);
         
         AreEqual(3,         store.EntityCount);
-        AreEqual(root,      child.Parent);
-        AreEqual(root,      subChild.Store.StoreRoot);
+        IsTrue(root ==      child.Parent);
+        IsTrue(root ==      subChild.Store.StoreRoot);
         var childArchetype = child.Archetype;
         AreEqual(3,         childArchetype.EntityCount);
         AreEqual(treeNode,  subChild.TreeMembership);
@@ -478,7 +478,7 @@ public static class Test_Entity_Tree
         AreEqual(floating,  subChild.TreeMembership);
         IsNull  (child.Archetype);
         AreEqual("id: 2  (detached)", child.ToString());
-        AreEqual(subChild,  store.GetEntityById(3));
+        IsTrue(subChild ==  store.GetEntityById(3));
         AreEqual(detached,  child.StoreOwnership);
         IsNull  (child.Archetype);
         IsNull  (child.Store);
@@ -536,9 +536,9 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("root"));
        
         var child2      = store.CreateEntity(2);
-        AreEqual(0,     root.AddChild(child2));
+        AreEqual(0,         root.AddChild(child2));
         
-        AreEqual(child2, root.GetChildEntityByIndex(0));
+        IsTrue(child2 ==    root.GetChildEntityByIndex(0));
     }
     
     /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>

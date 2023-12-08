@@ -202,7 +202,7 @@ public static class Test_ExplorerItem
         
         var rootItem = tree.RootItem;
         AreEqual("id: 1  []",   rootItem.ToString());
-        AreEqual(root,          rootItem.Entity);
+        IsTrue(root ==          rootItem.Entity);
         IsTrue  (rootItem.IsRoot);
         IsFalse (rootItem.AllowDrag);
         
