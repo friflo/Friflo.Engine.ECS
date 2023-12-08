@@ -17,15 +17,32 @@ public static class Test_ComponentWriter
         var entity  = store.CreateEntity(10);
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
+        entity.AddTag<TestTag>();
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
         
-        var node = converter.EntityToDataEntity(entity);
+        var dataEntity = converter.EntityToDataEntity(entity);
         
-        AreEqual(10,    node.pid);
-        AreEqual(1,     node.children.Count);
-        AreEqual(11,    node.children[0]);
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", node.components.AsString());
+        AreEqual(10,    dataEntity.pid);
+        AreEqual(1,     dataEntity.children.Count);
+        AreEqual(11,    dataEntity.children[0]);
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", dataEntity.components.AsString());
+        
+var expect =
+"""
+{
+    "id": 10,
+    "children": [
+        11
+    ],
+    "components": {"pos":{"x":1,"y":2,"z":3},"script1":{"val1":10}},
+    "tags": [
+        "TestTag"
+    ]
+}
+""";
+        var json = dataEntity.DebugJson;
+        AreEqual(expect, json);
     }
     
     [Test]
@@ -47,11 +64,11 @@ public static class Test_ComponentWriter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var entity  = store.CreateEntity(10);
-        var node    = converter.EntityToDataEntity(entity);
+        var entity      = store.CreateEntity(10);
+        var dataEntity  = converter.EntityToDataEntity(entity);
         
-        AreEqual(10,    node.pid);
-        IsNull  (node.children);
+        AreEqual(10,    dataEntity.pid);
+        IsNull  (dataEntity.children);
     }
     
     [Test]
@@ -60,13 +77,13 @@ public static class Test_ComponentWriter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var entity  = store.CreateEntity(10);
+        var entity      = store.CreateEntity(10);
         entity.AddTag<TestTag>();
-        var node    = converter.EntityToDataEntity(entity);
+        var dataEntity  = converter.EntityToDataEntity(entity);
         
-        AreEqual(10,                node.pid);
-        AreEqual(1,                 node.tags.Count);
-        Contains(nameof(TestTag),   node.tags);
+        AreEqual(10,                dataEntity.pid);
+        AreEqual(1,                 dataEntity.tags.Count);
+        Contains(nameof(TestTag),   dataEntity.tags);
     }
     
     [Test]
@@ -80,11 +97,11 @@ public static class Test_ComponentWriter
         entity.AddScript(new TestScript1 { val1 = 10 });
 
         int count = 10; // 2_000_000 ~ 1.935 ms
-        DataEntity node = null;
+        DataEntity dataEntity = null;
         for (int n = 0; n < count; n++) {
-            node = converter.EntityToDataEntity(entity);
+            dataEntity = converter.EntityToDataEntity(entity);
         }
-        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", node!.components.AsString());
+        AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", dataEntity!.components.AsString());
     }
     
     [Test]

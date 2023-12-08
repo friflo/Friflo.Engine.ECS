@@ -66,19 +66,26 @@ internal static class EntityUtils
         return sb.ToString();
     }
 
-    private static readonly EntityConverter DebugConverter       = new EntityConverter();
-    private static readonly DataEntity      DebugDataEntity      = new DataEntity();      
-    private static readonly ObjectWriter    DebugObjectWriter    = new ObjectWriter(new TypeStore()); // todo use global TypeStore
+    private static readonly EntityConverter DebugConverter      = new EntityConverter();
+    private static readonly DataEntity      DebugDataEntity     = new DataEntity();      
+    private static readonly ObjectWriter    DebugObjectWriter   = new (new TypeStore()) {  // todo use global TypeStore
+                                                                      Pretty = true, WriteNullMembers = false
+                                                                  };
     
-    internal static string GetDebugJSON(Entity entity)
+    internal static string EntityToJSON(Entity entity)
     {
-        var converter       = DebugConverter;
-        lock (converter) {
-            var dataEntity  = DebugDataEntity;
-            var writer      = DebugObjectWriter;
-            converter.EntityToDataEntity(entity, dataEntity, true);
-            writer.Pretty             = true;
-            writer.WriteNullMembers   = false;
+        var writer = DebugObjectWriter;
+        lock (writer) {
+            var dataEntity = DebugDataEntity;
+            DebugConverter.EntityToDataEntity(entity, dataEntity, true);
+            return writer.Write(dataEntity);
+        }
+    }
+    
+    public static string DataEntityToJSON(DataEntity dataEntity)
+    {
+        var writer = DebugObjectWriter;
+        lock (writer) {
             return writer.Write(dataEntity);
         }
     }

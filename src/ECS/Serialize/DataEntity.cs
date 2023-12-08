@@ -57,6 +57,7 @@ public sealed class DataEntity
     /// </summary>
     public  string          modify;     //  8   - can be null
 
+    public  override string ToString()  => $"pid: {pid}";
     
-    public  override string ToString() => $"pid: {pid}";
+    public  string          DebugJson   => EntityUtils.DataEntityToJSON(this);
 }

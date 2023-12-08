@@ -134,7 +134,7 @@ public readonly struct Entity
                     public  bool            IsEqual (in Entity entity)  => id == entity.id;
     
     [Obsolete($"use method only for debugging")]
-                    public  string          DebugJSON       => EntityUtils.GetDebugJSON(this);
+                    public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
     
     public override string                  ToString()      => EntityUtils.EntityToString(this);
 
