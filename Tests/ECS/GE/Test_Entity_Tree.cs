@@ -527,6 +527,7 @@ public static class Test_Entity_Tree
         AreEqual(4, childIds[1]);
     }
     
+    /*
     /// <summary>Cover <see cref="Entity.GetChildNodeByIndex"/></summary>
     [Test]
     public static void Test_Entity_GetChildNodeByIndex()
@@ -539,7 +540,7 @@ public static class Test_Entity_Tree
         AreEqual(0,         root.AddChild(child2));
         
         IsTrue(child2 ==    root.ChildEntities[0]);
-    }
+    } */
     
     /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>
     [Test]

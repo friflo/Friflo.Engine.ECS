@@ -105,7 +105,6 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="RemoveChild"/></item>
 ///     <item><see cref="DeleteEntity"/></item>
 ///     <item><see cref="GetChildIndex"/></item>
-///     <item><see cref="GetChildNodeByIndex"/></item>
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
@@ -362,8 +361,6 @@ public readonly struct Entity
     }
 
     public              int         GetChildIndex(int childId)          => archetype.entityStore.GetChildIndex(id, childId);
-
-    public ref readonly EntityNode  GetChildNodeByIndex(int index)      => ref archetype.entityStore.GetChildNodeByIndex(id, index);
     
     #endregion
 

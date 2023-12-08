@@ -88,7 +88,7 @@ public sealed class ExplorerItem :
     }
     
     private ExplorerItem GetChildByIndex(int index) {
-        int childId = entity.GetChildNodeByIndex(index).id;
+        int childId = entity.ChildEntities[index].id;
         // Console.WriteLine($"GetChildByIndex {entity.Id} {index} - child {childId}");
         return tree.GetItemById(childId);
     }

@@ -151,47 +151,12 @@ public static class Test_Entity
         var e = Throws<NotImplementedException>(() => {
             _ = entity1.GetHashCode();
         });
-        AreEqual("to avoid excessive boxing. Use: Id or Entity.EqualityComparer. id: 1", e!.Message);
+        AreEqual("to avoid excessive boxing. Use: Id or EntityUtils.EqualityComparer. id: 1", e!.Message);
         
         e = Throws<NotImplementedException>(() => {
             _ = entity1.Equals(entity2);
         });
-        AreEqual("to avoid excessive boxing. Use: == or Entity.EqualityComparer. id: 1", e!.Message);
-    }
-    
-    
-    [Test]
-    public static void Test_EntityStore_CreateEntity_Perf() 
-    {
-        var store = new EntityStore(PidType.UsePidAsId);
-        for (int n = 0; n < 10_000_000; n++) {
-            store.CreateEntity();
-        }
-        Console.WriteLine(store.EntityCount);
-    }
-    
-    private static void Resize<T>(ref T[] array, int len) {
-        var newArray = new T[len];
-        if (array != null) {
-            Array.Copy(array, newArray, array.Length);
-        }
-        array = newArray;
-    }
-    
-    [Test]
-    public static void Test_EntityStore_Resize() 
-    {
-        int count = 0;
-        for (int i = 0; i < 100; i++)
-        {
-            var array = new Position[10];
-            while (array.Length < 10_000_000) {
-                var newLen = array.Length * 2;
-                Resize(ref array, newLen);
-                count++;
-            }
-        }
-        Console.WriteLine(count);
+        AreEqual("to avoid excessive boxing. Use: == or EntityUtils.EqualityComparer. id: 1", e!.Message);
     }
 }
 
