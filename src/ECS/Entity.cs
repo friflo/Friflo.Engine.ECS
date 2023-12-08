@@ -364,7 +364,6 @@ public readonly struct Entity
     public              int         GetChildIndex(int childId)          => archetype.entityStore.GetChildIndex(id, childId);
 
     public ref readonly EntityNode  GetChildNodeByIndex(int index)      => ref archetype.entityStore.GetChildNodeByIndex(id, index);
-    public              Entity      GetChildEntityByIndex(int index)    =>     archetype.entityStore.GetChildEntityByIndex(id, index);
     
     #endregion
 

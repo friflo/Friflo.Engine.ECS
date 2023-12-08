@@ -538,7 +538,7 @@ public static class Test_Entity_Tree
         var child2      = store.CreateEntity(2);
         AreEqual(0,         root.AddChild(child2));
         
-        IsTrue(child2 ==    root.GetChildEntityByIndex(0));
+        IsTrue(child2 ==    root.ChildEntities[0]);
     }
     
     /// <summary>Cover <see cref="Entity.GetChildIndex"/></summary>

@@ -99,7 +99,7 @@ public sealed class ExplorerItem :
     }
     
     private void RemoveChildEntityAt(int index) {
-        var child = entity.GetChildEntityByIndex(index);   // called by TreeDataGrid 
+        var child = entity.ChildEntities[index];   // called by TreeDataGrid 
         entity.RemoveChild(child);  // todo add Entity.RemoveChild(int index)
     }
     
