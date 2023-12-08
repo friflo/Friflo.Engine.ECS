@@ -84,15 +84,9 @@ internal static class EntityUtils
     }
     
     // ---------------------------------- Script utils ----------------------------------
-    private  static readonly IComponent[]   EmptyComponents = Array.Empty<IComponent>();
     private  static readonly Script[]       EmptyScripts  = Array.Empty<Script>();
     internal const  int                     NoScripts     = 0;  
     
-    private  static Exception MissingAttributeException(Type type) {
-        var msg = $"Missing attribute [Script(\"<key>\")] on type: {type.Namespace}.{type.Name}";
-        return new InvalidOperationException(msg);
-    }
-
     internal static Script[] GetScripts(Entity entity) {
         if (entity.scriptIndex == NoScripts) {
             return EmptyScripts;
@@ -127,9 +121,6 @@ internal static class EntityUtils
     
     private static  Script AddScriptInternal(Entity entity, Script script, ScriptType scriptType)
     {
-        if (scriptType == null) {
-            throw MissingAttributeException(script.GetType());
-        }
         if (script.entity.IsNotNull) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }

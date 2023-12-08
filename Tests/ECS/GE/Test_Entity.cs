@@ -18,9 +18,9 @@ public static class Test_Entity
         var script2Type = schema.ScriptTypeByType[typeof(TestScript2)];
         
         Entity.AddNewEntityScript(entity, script1Type);
-        var script = Entity.GetEntityScript(entity, script1Type);
+        var script1     = Entity.GetEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
-        AreSame(typeof(TestScript1),    script.GetType());
+        AreSame(typeof(TestScript1),    script1.GetType());
         
         var script2 = new TestScript2();
         Entity.AddEntityScript(entity, script2);
@@ -28,12 +28,19 @@ public static class Test_Entity
         AreSame(script2, script2Result);
         AreEqual(2,                     entity.Scripts.Length);
         
+        // --- remove script1
         Entity.RemoveEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
-        
         // remove same script type again
         Entity.RemoveEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
+        
+        // --- remove script2
+        Entity.RemoveEntityScript(entity, script2Type);
+        AreEqual(0,                     entity.Scripts.Length);
+        // remove same script type again
+        Entity.RemoveEntityScript(entity, script1Type);
+        AreEqual(0,                     entity.Scripts.Length);
     }
     
     [Test]

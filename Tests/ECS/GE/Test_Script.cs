@@ -201,26 +201,6 @@ public static class Test_Script
         AreEqual(1, entity.Scripts.Length); // remains unchanged
     }
     
-    // changed behavior. [Script("...")] attribute is optional now 
-    public static void Test_3_InvalidRefComponent() {
-        var store   = new EntityStore();
-        var player  = store.CreateEntity();
-        
-        var script1 = new InvalidRefComponent();
-        var e = Throws<InvalidOperationException>(() => {
-            player.AddScript(script1); 
-        });
-        AreEqual("Missing attribute [Script(\"<key>\")] on type: Tests.ECS.InvalidRefComponent", e!.Message);
-        AreEqual(0, player.Scripts.Length);
-        
-        var script = player.GetScript<InvalidRefComponent>();
-        IsNull  (script);
-        
-        // throws currently no exception
-        player.RemoveScript<InvalidRefComponent>();
-        AreEqual(0, player.Scripts.Length);
-    }
-    
     [Test]
     public static void Test_2_Perf() {
         var store   = new EntityStore();

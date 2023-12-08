@@ -70,10 +70,6 @@ class TestScript3 : Script {
     public int  val3;
 }
 
-// test missing [Script()] attribute
-class InvalidRefComponent : Script { }
-
-
 [Script("test")]
 class TestComponent : Script
 {
