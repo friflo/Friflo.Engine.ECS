@@ -105,7 +105,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
         int n           = 0;
         foreach (var item in cx.droppedItems) {
             var entity      = item.Entity;
-            indexes[n++]    = entity.Parent.GetChildIndex(entity.Id);
+            indexes[n++]    = entity.Parent.GetChildIndex(entity);
         }
         var targetModel     = cx.targetModel;
         var newSelection    = TreeIndexPaths.Create(targetModel, indexes);

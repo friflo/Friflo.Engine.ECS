@@ -110,7 +110,7 @@ public sealed class ExplorerItem :
     }
     
     private int GetChildIndex(ExplorerItem item) {
-        return entity.GetChildIndex(item.entity.id);
+        return entity.GetChildIndex(item.entity);
     }
     #endregion
     

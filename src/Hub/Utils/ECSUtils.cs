@@ -242,7 +242,7 @@ public static class ECSUtils
         foreach (var item in items)
         {
             var entity      = item.Entity;
-            int index       = parent.GetChildIndex(entity.Id);
+            int index       = parent.GetChildIndex(entity);
             int newIndex    = index - shift;
             if (newIndex < pos) {
                 indexes[pos] = index;
@@ -268,7 +268,7 @@ public static class ECSUtils
         for (int n = items.Length - 1; n >= 0; n--)
         {
             var entity      = items[n].Entity;
-            int index       = parent.GetChildIndex(entity.Id);
+            int index       = parent.GetChildIndex(entity);
             int newIndex    = index + shift;
             if (newIndex >= childCount - pos++) {
                 indexes[n] = index;

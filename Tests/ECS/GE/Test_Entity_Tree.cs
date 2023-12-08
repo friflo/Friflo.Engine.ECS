@@ -238,10 +238,10 @@ public static class Test_Entity_Tree
             }
         });
         AreEqual(new [] { 2, 3 }, root.ChildIds.ToArray());
-        AreEqual(1, root.GetChildIndex(child3.Id));
+        AreEqual(1, root.GetChildIndex(child3));
         root.InsertChild(0, child3);    // move child3 within root. index: 1 -> 0
         AreEqual(2, events.seq);
-        AreEqual(0, root.GetChildIndex(child3.Id));
+        AreEqual(0, root.GetChildIndex(child3));
         AreEqual(new [] { 3, 2 }, root.ChildIds.ToArray());
         
         events = SetHandlerSeq(store, (args, seq) => {
@@ -548,7 +548,8 @@ public static class Test_Entity_Tree
     {
         var store   = new EntityStore();
         var root    = store.CreateEntity(1);
-        AreEqual(-1, root.GetChildIndex(123));
+        var entity2 = store.CreateEntity(2);
+        AreEqual(-1, root.GetChildIndex(entity2));
     }
     
     /// <summary>Cover <see cref="EntityStore.ChildNodesChanged"/></summary>
