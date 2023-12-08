@@ -400,6 +400,12 @@ public static class Test_Entity_Tree
         AreEqual(0,     entity1.AddChild(child));
         AreEqual(1,     entity1.ChildCount);
         
+        var e = Throws<InvalidOperationException>(() => {
+            entity1.AddChild(entity1);
+        });
+        AreEqual("Cannot add entity to itself as a child. id: 1", e!.Message);
+        AreEqual(1,     entity1.ChildCount); // count stays unchanged
+        
         // --- move child from entity1 -> entity2
         var events = SetHandlerSeq(store, (args, seq) => {
             switch (seq) {

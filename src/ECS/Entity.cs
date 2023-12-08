@@ -316,8 +316,7 @@ public readonly struct Entity
     /// </remarks>
     /// <returns>
     /// The index within <see cref="ChildIds"/> the <paramref name="entity"/> is added.<br/>
-    /// -1 if the <paramref name="entity"/> is already a child entity.<br/>
-    /// -2 if adding an <paramref name="entity"/> to itself as a child.
+    /// -1 if the <paramref name="entity"/> is already a child entity.
     /// </returns>
     public int AddChild(Entity entity) {
         var entityStore = archetype.entityStore;

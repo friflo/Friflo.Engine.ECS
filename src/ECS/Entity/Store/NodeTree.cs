@@ -66,7 +66,7 @@ public partial class EntityStore
         } else {
             if (parentId == childId) {
                 // case: tried to add entity to itself as a child
-                return -2;
+                throw AddEntityAsChildToItselfException(parentId);
             }
         }
         // --- add entity with given id as child to this entity

@@ -120,12 +120,12 @@ public static class ECSUtils
             foreach (var childPid in children) {
                 childEntities.Add(childPid);
                 var child = store.GetEntityByPid(childPid);
-                var index = entity.AddChild(child);
-                if (index >= 0) {
+                try {
+                    entity.AddChild(child);
                     addedEntities.Add(childPid);
-                    continue;
+                } catch(Exception) {
+                    addErrors.Add(newToOldPid[childPid]);
                 }
-                addErrors.Add(newToOldPid[childPid]);
             }
         }
         // --- add all root entities to target

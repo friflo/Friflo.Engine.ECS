@@ -117,6 +117,10 @@ public abstract partial class EntityStoreBase
         var msg = $"pid must be in range [1, 2147483647] when using {nameof(PidType)}.{nameof(PidType.UsePidAsId)}. was: {pid}";
         return new ArgumentException(msg, parameterName);
     }
+    
+    internal static Exception AddEntityAsChildToItselfException(int id) {
+        return new InvalidOperationException($"Cannot add entity to itself as a child. id: {id}");
+    }
     #endregion
 
 }
