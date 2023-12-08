@@ -93,7 +93,7 @@ public static class Test_Script
         var script3 = new TestScript2();
         NotNull (player.AddScript(script3));   // will send event
         IsTrue  (script2.Entity.IsNull);
-        IsTrue  (script3.Entity.IsNotNull);
+        IsFalse (script3.Entity.IsNull);
         AreSame (script3,       player.GetScript<TestScript2>());
         AreEqual(2,             player.Scripts.Length);
         AreEqual("id: 1  [*TestScript1, *TestScript2]", player.ToString());

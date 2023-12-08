@@ -493,7 +493,7 @@ public partial class EntityStore
     }
     
     private void SetStoreRootEntity(Entity entity) {
-        if (storeRoot.IsNotNull) {
+        if (!storeRoot.IsNull) {
             throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.id}");
         }
         var id = entity.id;

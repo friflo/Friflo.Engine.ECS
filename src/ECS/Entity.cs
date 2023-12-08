@@ -111,7 +111,7 @@ namespace Friflo.Fliox.Engine.ECS;
 [CLSCompliant(true)]
 public readonly struct Entity
 {
-#region public properties
+#region general - properties
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
                     public  int             Id              => id;
@@ -133,13 +133,12 @@ public readonly struct Entity
     [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.entityStore.GetTreeMembership(id);
     
     [Browse(Never)] public  bool            IsNull          => store?.nodes[id].archetype == null;
-    [Browse(Never)] public  bool            IsNotNull       => store?.nodes[id].archetype != null;
     
     [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
     #endregion
 
-#region public properties - components
+#region component - properties
     
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName  Name        => ref archetype.std.name.    chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
@@ -159,7 +158,7 @@ public readonly struct Entity
     [Browse(Never)] public  bool            HasScale3   =>     archetype.std.scale3            != null;
     #endregion
     
-#region public properties - tree nodes
+#region child / tree - properties
     [Browse(Never)] public int              ChildCount  => archetype.entityStore.Nodes[id].childCount;
     
                     /// <returns>
@@ -181,7 +180,7 @@ public readonly struct Entity
     [Browse(Never)] public ReadOnlySpan<int> ChildIds   => archetype.entityStore.GetChildIds(id);
     #endregion
     
-#region internal fields
+#region internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes   
     // ReSharper disable once InconsistentNaming
     [Browse(Never)] internal readonly   int         id;     //  4
@@ -197,7 +196,7 @@ public readonly struct Entity
     #endregion
 
     // ------------------------------------ component methods ------------------------------------
-#region component methods
+#region component - methods
     public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructHeap<T>.StructIndex] != null;
 
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
@@ -248,7 +247,7 @@ public readonly struct Entity
     #endregion
     
     // ------------------------------------ script methods -------------------------------------
-#region script methods
+#region script - methods
     public      ReadOnlySpan<Script>  Scripts           => new (EntityUtils.GetScripts(this));
 
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
@@ -273,7 +272,7 @@ public readonly struct Entity
     #endregion
     
     // ------------------------------------ entity tag methods -----------------------------------
-#region entity tag methods
+#region tag - methods
     /// <returns>
     /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
     /// <br/>
@@ -305,7 +304,7 @@ public readonly struct Entity
     #endregion
     
     // ------------------------------------ tree methods -----------------------------------------
-#region tree node methods
+#region child / tree - methods
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
@@ -369,7 +368,7 @@ public readonly struct Entity
     
     #endregion
 
-#region general methods
+#region general - methods
 
     public static   bool    operator == (Entity a, Entity b)    => a.id == b.id && a.store == b.store;
     public static   bool    operator != (Entity a, Entity b)    => a.id != b.id || a.store != b.store;
@@ -387,7 +386,7 @@ public readonly struct Entity
     }
     #endregion
     
-#region non generic component methods
+#region non generic component - methods
     /// <summary>
     /// Returns a copy of the entity component as an object.<br/>
     /// The returned <see cref="IComponent"/> is a boxed struct.<br/>
@@ -408,7 +407,7 @@ public readonly struct Entity
     }
     #endregion
     
-#region non generic script methods
+#region non generic script - methods
     public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript       (entity, scriptType.type);
     
     public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScriptType(entity, scriptType);
@@ -420,7 +419,7 @@ public readonly struct Entity
     #endregion
     
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
-#region internal properties
+#region internal - properties
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
     [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[id].archetype;
     [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[id].archetype;

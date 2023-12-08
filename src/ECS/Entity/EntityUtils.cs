@@ -135,7 +135,7 @@ internal static class EntityUtils
     
     private static  Script AddScriptInternal(Entity entity, Script script, ScriptType scriptType)
     {
-        if (script.entity.IsNotNull) {
+        if (!script.entity.IsNull) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
         }
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);

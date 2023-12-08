@@ -156,7 +156,7 @@ public class ExplorerFlyout : MenuFlyout
         if (selection.Length == 1) {
             var entity  = selection.items.Last().Entity;
             var parent  = entity.Parent;
-            if (parent.IsNotNull) {
+            if (!parent.IsNull) {
                 var index   = parent.GetChildIndex(entity.Id);
                 canMove     = index < parent.ChildCount - 1;
             } else {
