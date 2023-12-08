@@ -375,13 +375,13 @@ public readonly struct Entity
     public static   bool    operator != (Entity a, Entity b)    => a.id != b.id || a.store != b.store;
 
     // --- object
-    public override bool    Equals(object obj)  => throw ObjectMethodNotImplement(id, "==");
-    public override int     GetHashCode()       => throw ObjectMethodNotImplement(id, nameof(Id));
+    public override bool    Equals(object obj)  => throw ObjectMethodNotImplemented(id, "==");
+    public override int     GetHashCode()       => throw ObjectMethodNotImplemented(id, nameof(Id));
     public override string  ToString()          => EntityUtils.EntityToString(this);
     
     public static  readonly EntityEqualityComparer EqualityComparer = new ();
     
-    private static Exception ObjectMethodNotImplement(int id, string use) {
+    private static Exception ObjectMethodNotImplemented(int id, string use) {
         var msg = $"to avoid excessive boxing. Use: {use} or {nameof(Entity)}.{nameof(EqualityComparer)}. id: {id}";
         return new NotImplementedException(msg);
     }
