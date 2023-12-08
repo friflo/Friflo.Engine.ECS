@@ -91,8 +91,8 @@ public partial class EntityStore
             
             // --- deserialize DataEntity
             dataBuffer.pid      = IdToPid(entity.id);
-            var copy            = converter.DataEntityToEntity(dataBuffer, this, out _);
-            if (copy.IsEqual(entity)) throw new InvalidOperationException("expect same entity");
+            // convert will use entity created above
+            converter.DataEntityToEntity(dataBuffer, this, out _);
         }
         return entity;
     }

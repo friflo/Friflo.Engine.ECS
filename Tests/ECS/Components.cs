@@ -56,19 +56,15 @@ public struct TestTag3 : IEntityTag { }
 // ------------------------------------------------ scripts
 [CodeCoverageTest]
 [Script("script1")]
-public class TestScript1 : Script {
-    public int  val1;
-}
+public class TestScript1    : Script { public   int     val1; }
 
 [Script("script2")]
-class TestScript2 : Script {
-    public int  val2;
-}
+class TestScript2           : Script { public   int     val2; }
 
 [Script("script3")]
-class TestScript3 : Script {
-    public int  val3;
-}
+class TestScript3           : Script { public   int     val3; }
+
+class NonBlittableScript    : Script { internal int[]   array; }
 
 [Script("test")]
 class TestComponent : Script

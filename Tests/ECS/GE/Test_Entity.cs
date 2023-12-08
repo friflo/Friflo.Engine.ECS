@@ -96,6 +96,37 @@ public static class Test_Entity
         IsFalse(store.TryGetEntityByPid(long.MaxValue, out entity));
         IsTrue(entity.IsNull);
     }
+        
+    [Test]
+    public static void Test_EntityStore_CloneEntity()
+    {
+        var store       = new EntityStore();
+        var entity      = store.CreateEntity();
+        entity.AddScript(new TestScript1());
+        entity.AddComponent(new EntityName("original"));
+        entity.AddTag<TestTag>();
+        
+        // --- clone entity with blittable components & scripts
+        var clone = store.CloneEntity(entity);
+        
+        AreEqual("Tags: [#TestTag]",            clone.Tags.ToString());
+        AreEqual("Components: [EntityName]",    clone.Components.ToString());
+        AreEqual(1,                             clone.Scripts.Length);
+        NotNull(clone.GetScript<TestScript1>());
+        
+        // --- clone entity with non blittable component
+        entity.AddComponent<NonBlittableArray>();
+        clone = store.CloneEntity(entity);
+        AreEqual("Components: [EntityName, NonBlittableArray]",    clone.Components.ToString());
+        
+        // --- clone entity with non blittable script
+        entity.RemoveComponent<NonBlittableArray>();
+        entity.AddScript(new NonBlittableScript());
+        clone = store.CloneEntity(entity);
+        
+        AreEqual(2,                             clone.Scripts.Length);
+        NotNull(clone.GetScript<NonBlittableScript>());
+    }
 }
 
 
