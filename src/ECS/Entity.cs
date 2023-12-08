@@ -137,9 +137,6 @@ public readonly struct Entity
     
     [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
-    
-    public override string                  ToString()      => EntityUtils.EntityToString(this);
-
     #endregion
 
 #region public properties - components
@@ -378,8 +375,9 @@ public readonly struct Entity
     public static   bool    operator != (Entity a, Entity b)    => a.id != b.id || a.store != b.store;
 
     // --- object
-    public override bool    Equals(object obj) => throw ObjectMethodNotImplement(id, "==");
-    public override int     GetHashCode()      => throw ObjectMethodNotImplement(id, nameof(Id));
+    public override bool    Equals(object obj)  => throw ObjectMethodNotImplement(id, "==");
+    public override int     GetHashCode()       => throw ObjectMethodNotImplement(id, nameof(Id));
+    public override string  ToString()          => EntityUtils.EntityToString(this);
     
     public static  readonly EntityEqualityComparer EqualityComparer = new ();
     
