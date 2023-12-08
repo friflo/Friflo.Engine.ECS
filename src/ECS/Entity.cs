@@ -114,12 +114,24 @@ public readonly struct Entity
 #region general - properties
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
-                    public  int             Id              => id;
+    public              int                 Id              => id;
     
-                    public  long            Pid             => store.nodes[id].pid; 
+    public              long                Pid             => store.nodes[id].pid;
+                    
+    public              EntityComponents    Components      => new EntityComponents(this);
+                    
+    public     ReadOnlySpan<Script>         Scripts         => new (EntityUtils.GetScripts(this));
+
+    /// <returns>
+    /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
+    /// <br/>
+    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<see cref="Tags"/>.<br/>
+    /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
+    /// </returns>
+    public     ref readonly Tags            Tags            => ref archetype.tags;
 
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
-                    public  Archetype       Archetype       => archetype;
+    public                  Archetype       Archetype       => archetype;
     
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
     [Browse(Never)] public  EntityStore     Store           => archetype?.entityStore;
@@ -139,7 +151,7 @@ public readonly struct Entity
     #endregion
 
 #region component - properties
-    
+
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName  Name        => ref archetype.std.name.    chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
 
@@ -241,15 +253,11 @@ public readonly struct Entity
         int archIndex = 0;
         return archetype.entityStore.RemoveComponent(id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
-    
-    public      EntityComponents        Components => new EntityComponents(this);
 
     #endregion
     
     // ------------------------------------ script methods -------------------------------------
 #region script - methods
-    public      ReadOnlySpan<Script>  Scripts           => new (EntityUtils.GetScripts(this));
-
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
     /// <remarks>Note: Use <see cref="GetEntityScript"/> as non generic alternative</remarks> 
     public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
@@ -273,13 +281,6 @@ public readonly struct Entity
     
     // ------------------------------------ entity tag methods -----------------------------------
 #region tag - methods
-    /// <returns>
-    /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
-    /// <br/>
-    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<see cref="Tags"/>.<br/>
-    /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
-    /// </returns>
-    public ref readonly Tags    Tags                        => ref archetype.tags;
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
     public bool AddTag<T>()    where T : struct, IEntityTag {
         int index = 0;
