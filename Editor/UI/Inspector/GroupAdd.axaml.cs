@@ -77,17 +77,17 @@ public partial class GroupAdd : UserControl
                     if (entity.TryGetComponent<EntityName>(out var name)) {
                         entity.AddComponent(name);
                     } else {
-                        EntityExtensions.AddEntityComponent(entity, componentType);
+                        EntityUtils.AddEntityComponent(entity, componentType);
                         entity.Name.value = $"entity - {entity.Id}";
                     }
                 } else {
-                    EntityExtensions.AddEntityComponent(entity, componentType);
+                    EntityUtils.AddEntityComponent(entity, componentType);
                 }
                 inspector.Observer.FocusComponent(componentType);
                 break;
             case "scripts":
                 var scriptType = schema.Scripts[index];
-                EntityExtensions.AddNewEntityScript(entity, scriptType);
+                EntityUtils.AddNewEntityScript(entity, scriptType);
                 inspector.Observer.FocusComponent(scriptType);
                 break;
         }

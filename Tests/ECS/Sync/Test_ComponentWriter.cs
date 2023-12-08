@@ -124,10 +124,6 @@ var expect =
         entity.AddTag<TestTag>();
         entity.AddScript(new TestScript1 { val1 = 10 });
 
-#pragma warning disable CS0618 // Type or member is obsolete
-        var json = entity.DebugJSON;
-#pragma warning restore CS0618 // Type or member is obsolete
-        
         var expect =
 """
 {
@@ -145,7 +141,7 @@ var expect =
     ]
 }
 """;
-        AreEqual(expect, json);
+        AreEqual(expect, entity.DebugJSON);
     }
 }
 

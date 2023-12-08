@@ -179,7 +179,7 @@ internal class InspectorObserver : EditorObserver
                 item = new ComponentItem(component, panel, fields);
                 componentMap.Add(componentType, item);
             }          
-            var instance = EntityExtensions.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
+            var instance = EntityUtils.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
             ComponentField.SetComponentFields(item.fields, entity, instance);
             item.inspectorComponent.Entity = entity;
             

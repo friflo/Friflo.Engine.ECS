@@ -146,7 +146,6 @@ public readonly struct Entity
     
     [Browse(Never)] public  bool            IsNull          => store?.nodes[id].archetype == null;
     
-    [Obsolete($"use method only for debugging")]
                     public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
     #endregion
 
@@ -230,7 +229,7 @@ public readonly struct Entity
     
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)<br/>
-    /// <remarks>Note: Use <see cref="EntityExtensions.AddEntityComponent"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
@@ -247,7 +246,7 @@ public readonly struct Entity
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>
     /// Executes in O(1)<br/>
-    /// <remarks>Note: Use <see cref="EntityExtensions.RemoveEntityComponent"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
@@ -259,7 +258,7 @@ public readonly struct Entity
     // ------------------------------------ script methods -------------------------------------
 #region script - methods
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
-    /// <remarks>Note: Use <see cref="EntityExtensions.GetEntityScript"/> as non generic alternative</remarks> 
+    /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative</remarks> 
     public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
     
     /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
@@ -270,11 +269,11 @@ public readonly struct Entity
         return result != null;
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="EntityExtensions.AddNewEntityScript"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative</remarks>
     public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript    (this, ClassType<T>.ScriptIndex, script);
     
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="EntityExtensions.RemoveEntityScript"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative</remarks>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);
     
     #endregion

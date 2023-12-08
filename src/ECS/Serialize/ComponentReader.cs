@@ -128,7 +128,7 @@ internal sealed class ComponentReader
         }
         // --- remove missing scripts from entity
         foreach (var scriptType in scriptTypes) {
-            entity.RemoveEntityScript(scriptType);
+            EntityUtils.RemoveEntityScript(entity, scriptType);
         }
         // --- add unresolved components
         if (unresolvedComponentList.Count > 0 ) {

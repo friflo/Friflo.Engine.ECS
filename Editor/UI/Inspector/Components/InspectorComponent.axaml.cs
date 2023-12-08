@@ -39,10 +39,10 @@ public partial class InspectorComponent : UserControl, IExpandable
     {
         Console.WriteLine("MenuItem_RemoveComponent");
         if (ComponentType != null) {
-            EntityExtensions.RemoveEntityComponent(Entity, ComponentType);
+            EntityUtils.RemoveEntityComponent(Entity, ComponentType);
         }
         if (ScriptType != null) {
-            EntityExtensions.RemoveEntityScript(Entity, ScriptType);
+            EntityUtils.RemoveEntityScript(Entity, ScriptType);
         }
     }
 }
