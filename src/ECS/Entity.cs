@@ -230,7 +230,7 @@ public readonly struct Entity
     
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)<br/>
-    /// <remarks>Note: Use <see cref="AddEntityComponent"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityExtensions.AddEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
@@ -247,7 +247,7 @@ public readonly struct Entity
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>
     /// Executes in O(1)<br/>
-    /// <remarks>Note: Use <see cref="RemoveEntityComponent"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityExtensions.RemoveEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
@@ -259,7 +259,7 @@ public readonly struct Entity
     // ------------------------------------ script methods -------------------------------------
 #region script - methods
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
-    /// <remarks>Note: Use <see cref="GetEntityScript"/> as non generic alternative</remarks> 
+    /// <remarks>Note: Use <see cref="EntityExtensions.GetEntityScript"/> as non generic alternative</remarks> 
     public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
     
     /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
@@ -270,11 +270,11 @@ public readonly struct Entity
         return result != null;
     }
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="AddNewEntityScript"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityExtensions.AddNewEntityScript"/> as non generic alternative</remarks>
     public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript    (this, ClassType<T>.ScriptIndex, script);
     
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="RemoveEntityScript"/> as non generic alternative</remarks>
+    /// <remarks>Note: Use <see cref="EntityExtensions.RemoveEntityScript"/> as non generic alternative</remarks>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);
     
     #endregion
@@ -379,44 +379,10 @@ public readonly struct Entity
     public override int     GetHashCode()       => throw ObjectMethodNotImplemented(id, nameof(Id));
     public override string  ToString()          => EntityUtils.EntityToString(this);
     
-    public static  readonly EntityEqualityComparer EqualityComparer = new ();
-    
     private static Exception ObjectMethodNotImplemented(int id, string use) {
-        var msg = $"to avoid excessive boxing. Use: {use} or {nameof(Entity)}.{nameof(EqualityComparer)}. id: {id}";
+        var msg = $"to avoid excessive boxing. Use: {use} or {nameof(EntityUtils)}.{nameof(EntityUtils.EqualityComparer)}. id: {id}";
         return new NotImplementedException(msg);
     }
-    #endregion
-    
-#region non generic component - methods
-    /// <summary>
-    /// Returns a copy of the entity component as an object.<br/>
-    /// The returned <see cref="IComponent"/> is a boxed struct.<br/>
-    /// So avoid using this method whenever possible. Use <see cref="GetComponent{T}"/> instead.
-    /// </summary>
-    public static  IComponent GetEntityComponent    (Entity entity, ComponentType componentType) {
-        return entity.archetype.heapMap[componentType.structIndex].GetComponentDebug(entity.compIndex);
-    }
-
-    public static  bool       RemoveEntityComponent (Entity entity, ComponentType componentType)
-    {
-        int archIndex = 0;
-        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
-    }
-    
-    public static  bool       AddEntityComponent    (Entity entity, ComponentType componentType) {
-        return componentType.AddEntityComponent(entity);
-    }
-    #endregion
-    
-#region non generic script - methods
-    public static Script GetEntityScript    (Entity entity, ScriptType scriptType) => EntityUtils.GetScript       (entity, scriptType.type);
-    
-    public static Script RemoveEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.RemoveScriptType(entity, scriptType);
-    
-    public static Script AddNewEntityScript (Entity entity, ScriptType scriptType) => EntityUtils.AddNewScript    (entity, scriptType);
-    
-    public static Script AddEntityScript    (Entity entity, Script script)         => EntityUtils.AddScript       (entity, script);
-
     #endregion
     
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints

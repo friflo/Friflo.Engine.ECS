@@ -185,7 +185,7 @@ public static class ECSUtils
         var stream      = new MemoryStream();
         var serializer  = new EntitySerializer();
         var treeList    = new List<Entity>();
-        var treeSet     = new HashSet<Entity>(Entity.EqualityComparer);
+        var treeSet     = new HashSet<Entity>(EntityUtils.EqualityComparer);
 
         foreach (var entity in entities)
         {

@@ -18,16 +18,10 @@ public class EntityEqualityComparer : IEqualityComparer<Entity>
     public  int     GetHashCode(Entity entity)          => entity.id;
 }
 
-internal static class EntityExtensions
+public static class EntityUtils
 {
-    internal static int ComponentCount (this Entity entity) {
-        return entity.archetype.componentCount + entity.Scripts.Length;
-    }
-}
+    public static  readonly EntityEqualityComparer EqualityComparer = new (); 
     
-    
-internal static class EntityUtils
-{
     internal static string EntityToString(Entity entity) {
         if (entity.store == null) {
             return "null";
@@ -89,7 +83,7 @@ internal static class EntityUtils
         }
     }
     
-    public static string DataEntityToJSON(DataEntity dataEntity)
+    internal static string DataEntityToJSON(DataEntity dataEntity)
     {
         var writer = DebugObjectWriter;
         lock (writer) {

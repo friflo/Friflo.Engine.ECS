@@ -35,7 +35,7 @@ public struct BlittableBigInteger       : IComponent { public BigInteger    bigI
 public struct ByteComponent : IComponent { public byte b; }
 
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
-public static class EntityExtensions
+public static class MyEntityExtensions
 {
     public static ref MyComponent1 MyComponent1(this Entity entity) => ref entity.GetComponent<MyComponent1>();
     public static ref MyComponent2 MyComponent2(this Entity entity) => ref entity.GetComponent<MyComponent2>();

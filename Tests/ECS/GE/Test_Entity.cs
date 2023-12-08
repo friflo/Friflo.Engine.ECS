@@ -19,29 +19,29 @@ public static class Test_Entity
         var script1Type = schema.ScriptTypeByType[typeof(TestScript1)];
         var script2Type = schema.ScriptTypeByType[typeof(TestScript2)];
         
-        Entity.AddNewEntityScript(entity, script1Type);
-        var script1     = Entity.GetEntityScript(entity, script1Type);
+        EntityExtensions.AddNewEntityScript(entity, script1Type);
+        var script1     = EntityExtensions.GetEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
         AreSame(typeof(TestScript1),    script1.GetType());
         
         var script2 = new TestScript2();
-        Entity.AddEntityScript(entity, script2);
-        var script2Result = Entity.GetEntityScript(entity, script2Type);
+        EntityExtensions.AddEntityScript(entity, script2);
+        var script2Result = EntityExtensions.GetEntityScript(entity, script2Type);
         AreSame(script2, script2Result);
         AreEqual(2,                     entity.Scripts.Length);
         
         // --- remove script1
-        Entity.RemoveEntityScript(entity, script1Type);
+        EntityExtensions.RemoveEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
         // remove same script type again
-        Entity.RemoveEntityScript(entity, script1Type);
+        EntityExtensions.RemoveEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
         
         // --- remove script2
-        Entity.RemoveEntityScript(entity, script2Type);
+        EntityExtensions.RemoveEntityScript(entity, script2Type);
         AreEqual(0,                     entity.Scripts.Length);
         // remove same script type again
-        Entity.RemoveEntityScript(entity, script1Type);
+        EntityExtensions.RemoveEntityScript(entity, script1Type);
         AreEqual(0,                     entity.Scripts.Length);
     }
     
@@ -53,12 +53,12 @@ public static class Test_Entity
         var schema          = EntityStore.GetEntitySchema();
         var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
         
-        Entity.AddEntityComponent(entity, componentType);
-        var component = Entity.GetEntityComponent(entity, componentType);
+        EntityExtensions.AddEntityComponent(entity, componentType);
+        var component = EntityExtensions.GetEntityComponent(entity, componentType);
         AreEqual(1,                     entity.Archetype.ComponentCount);
         AreSame(typeof(EntityName),     component.GetType());
         
-        Entity.RemoveEntityComponent(entity, componentType);
+        EntityExtensions.RemoveEntityComponent(entity, componentType);
         AreEqual(0,                     entity.Archetype.ComponentCount);
     }
     
@@ -141,7 +141,7 @@ public static class Test_Entity
         IsFalse (entity1 == entity2);
         IsTrue  (entity1 != entity2);
         
-        var comparer = Entity.EqualityComparer;
+        var comparer = EntityUtils.EqualityComparer;
         IsTrue  (comparer.Equals(entity1, entity1));
         IsFalse (comparer.Equals(entity1, entity2));
         
@@ -157,6 +157,41 @@ public static class Test_Entity
             _ = entity1.Equals(entity2);
         });
         AreEqual("to avoid excessive boxing. Use: == or Entity.EqualityComparer. id: 1", e!.Message);
+    }
+    
+    
+    [Test]
+    public static void Test_EntityStore_CreateEntity_Perf() 
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+        for (int n = 0; n < 10_000_000; n++) {
+            store.CreateEntity();
+        }
+        Console.WriteLine(store.EntityCount);
+    }
+    
+    private static void Resize<T>(ref T[] array, int len) {
+        var newArray = new T[len];
+        if (array != null) {
+            Array.Copy(array, newArray, array.Length);
+        }
+        array = newArray;
+    }
+    
+    [Test]
+    public static void Test_EntityStore_Resize() 
+    {
+        int count = 0;
+        for (int i = 0; i < 100; i++)
+        {
+            var array = new Position[10];
+            while (array.Length < 10_000_000) {
+                var newLen = array.Length * 2;
+                Resize(ref array, newLen);
+                count++;
+            }
+        }
+        Console.WriteLine(count);
     }
 }
 
