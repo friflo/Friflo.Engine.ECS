@@ -36,11 +36,11 @@ public sealed class EntitySchema
     /// </remarks>
     public   ReadOnlySpan<TagType>                      Tags                => new (tags);
     
-    // --- components / scripts
+    // --- lookup: components / scripts
     public   IReadOnlyDictionary<string, SchemaType>    SchemaTypeByKey     => schemaTypeByKey;
     public   IReadOnlyDictionary<Type,   ScriptType>    ScriptTypeByType    => scriptTypeByType;
     public   IReadOnlyDictionary<Type,   ComponentType> ComponentTypeByType => componentTypeByType;
-    // --- tags
+    // --- lookup: tags
     public   IReadOnlyDictionary<string, TagType>       TagTypeByName       => tagTypeByName;
     public   IReadOnlyDictionary<Type,   TagType>       TagTypeByType       => tagTypeByType;
 
@@ -55,9 +55,11 @@ public sealed class EntitySchema
     [Browse(Never)] internal readonly   ScriptType[]                        scripts;
     [Browse(Never)] private  readonly   TagType[]                           tags;
     [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
+    // --- lookup: component / script
     [Browse(Never)] internal readonly   Dictionary<string, SchemaType>      schemaTypeByKey;
     [Browse(Never)] internal readonly   Dictionary<Type,   ScriptType>      scriptTypeByType;
     [Browse(Never)] private  readonly   Dictionary<Type,   ComponentType>   componentTypeByType;
+    // --- lookup: tags
     [Browse(Never)] internal readonly   Dictionary<string, TagType>         tagTypeByName;
     [Browse(Never)] private  readonly   Dictionary<Type,   TagType>         tagTypeByType;
     #endregion
