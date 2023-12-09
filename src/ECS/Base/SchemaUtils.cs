@@ -50,7 +50,7 @@ internal static class SchemaUtils
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
         if (type.IsValueType) {
-            if (typeof(IEntityTag).IsAssignableFrom(type))
+            if (typeof(ITag).IsAssignableFrom(type))
             {
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
@@ -109,7 +109,7 @@ internal static class SchemaUtils
     }
     
     internal static TagType CreateTagType<T>()
-        where T : struct, IEntityTag
+        where T : struct, ITag
     {
         var tagIndex    = TagType<T>.TagIndex;
         return new TagType(typeof(T), tagIndex);

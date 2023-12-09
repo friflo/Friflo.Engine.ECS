@@ -9,10 +9,10 @@ public struct  TestComponent : IComponent
     public Scale3   scale;
 }
 
-public struct Tag1 : IEntityTag { }
-public struct Tag2 : IEntityTag { }
-public struct Tag3 : IEntityTag { }
-public struct Tag4 : IEntityTag { }
+public struct Tag1 : ITag { }
+public struct Tag2 : ITag { }
+public struct Tag3 : ITag { }
+public struct Tag4 : ITag { }
 
 public class Script1 : Script
 {

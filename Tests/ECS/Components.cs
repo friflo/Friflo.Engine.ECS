@@ -46,11 +46,11 @@ struct MyInvalidComponent : IComponent { public int b; }
 
 
 // ------------------------------------------------ tags
-public struct TestTag  : IEntityTag { }
+public struct TestTag  : ITag { }
 
-public struct TestTag2 : IEntityTag { }
+public struct TestTag2 : ITag { }
 
-public struct TestTag3 : IEntityTag { }
+public struct TestTag3 : ITag { }
 
 
 // ------------------------------------------------ scripts

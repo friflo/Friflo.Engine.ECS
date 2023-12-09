@@ -23,7 +23,7 @@ public abstract class SchemaType
     /// <returns>
     /// <see cref="Script"/> if the type is a <see cref="Script"/><br/>
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
-    /// <see cref="Tag"/> if the type is an <see cref="IEntityTag"/><br/>
+    /// <see cref="Tag"/> if the type is an <see cref="ITag"/><br/>
     /// </returns>
     public   readonly   SchemaTypeKind  kind;           //  4
     

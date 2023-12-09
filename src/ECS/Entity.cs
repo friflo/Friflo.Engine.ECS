@@ -278,7 +278,7 @@ public readonly struct Entity
     // ------------------------------------ entity tag methods -----------------------------------
 #region tag - methods
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
-    public bool AddTag<T>()    where T : struct, IEntityTag {
+    public bool AddTag<T>()    where T : struct, ITag {
         int index = 0;
         return archetype.store.AddTags(Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
     }
@@ -288,7 +288,7 @@ public readonly struct Entity
         return archetype.store.AddTags(tags, id, ref refArchetype, ref refCompIndex, ref index);
     }
 
-    public bool RemoveTag<T>() where T : struct, IEntityTag {
+    public bool RemoveTag<T>() where T : struct, ITag {
         int index = 0;
         return archetype.store.RemoveTags(Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
     }

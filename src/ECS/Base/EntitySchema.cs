@@ -29,7 +29,7 @@ public sealed class EntitySchema
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ScriptType>                   Scripts             => new (scripts);
-    /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="IEntityTag"/></summary>
+    /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="ITag"/></summary>
     /// <remarks>
     /// <see cref="TagType.tagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
@@ -125,7 +125,7 @@ public sealed class EntitySchema
     /// return <see cref="TagType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
     /// </summary>
     public TagType GetTagType<T>()
-        where T : struct, IEntityTag
+        where T : struct, ITag
     {
         tagTypeByType.TryGetValue(typeof(T), out var result);
         return result;

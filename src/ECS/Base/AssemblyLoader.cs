@@ -159,7 +159,7 @@ internal sealed class AssemblyLoader
             if (!isValueType && !isClass) {
                 continue;
             }
-            if (isValueType && typeof(IEntityTag).IsAssignableFrom(type)) {
+            if (isValueType && typeof(ITag).IsAssignableFrom(type)) {
                 componentTypes.Add(type);
                 continue;
             }

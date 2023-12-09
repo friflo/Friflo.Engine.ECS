@@ -15,13 +15,13 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Script"/> type. 
 ///   </item>
 ///   <item>
-///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="IEntityTag"/> type.
+///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="ITag"/> type.
 ///   </item>
 /// </list>
 /// </summary>
 /// <remarks>
 /// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to an <see cref="Entity"/> and vice versa<br/>
-/// with components or tags that cannot be resolved to <see cref="IEntityTag"/>, <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
+/// with components or tags that cannot be resolved to <see cref="ITag"/>, <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
 /// <br/>
 /// Having support <see cref="Unresolved"/> component or tag types:
 /// <list type="bullet">
@@ -35,11 +35,11 @@ namespace Friflo.Fliox.Engine.ECS;
 /// The reason for unresolved tag or component types can be:<br/>
 /// <list type="bullet">
 ///   <item>
-///     Missed to merge C# code containing an <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definition.
+///     Missed to merge C# code containing an <see cref="ITag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definition.
 ///   </item>
 ///   <item>
 ///     Intentionally when creating an <see cref="EntityStore"/> with external tools without the need to wait for the implementation of new<br/>
-///     <see cref="IEntityTag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definitions.
+///     <see cref="ITag"/>, an <see cref="IComponent"/> or <see cref="Script"/> type definitions.
 ///   </item>
 /// </list>
 /// </remarks>

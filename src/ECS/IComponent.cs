@@ -5,12 +5,6 @@
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// Used to create entity <b>Tag</b>'s by declaring a struct without fields or properties extending <see cref="IEntityTag"/>
-/// </summary>
-public interface IEntityTag { }
-
-
-/// <summary>
 /// To enable adding components to an <see cref="Entity"/> it need to implement <see cref="IComponent"/>.<br/>
 /// <br/> 
 /// <see cref="IComponent"/> types are <b><c>struct</c></b>'s which only contains data <b>but no</b> script / methods.<br/>

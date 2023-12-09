@@ -7,7 +7,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
 
-public struct InternalTestTag  : IEntityTag { }
+public struct InternalTestTag  : ITag { }
 
 [ExcludeFromCodeCoverage]
 public static class Test_ComponentType

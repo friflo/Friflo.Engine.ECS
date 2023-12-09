@@ -34,23 +34,23 @@ public struct Tags : IEnumerable<TagType>
     public readonly int     Count => bitSet.GetBitCount();
     
     public readonly bool    Has<T> ()
-        where T : struct, IEntityTag
+        where T : struct, ITag
     {
         return bitSet.Has(TagType<T>.TagIndex);
     }
 
     public readonly bool    Has<T1, T2> ()
-        where T1 : struct, IEntityTag
-        where T2 : struct, IEntityTag
+        where T1 : struct, ITag
+        where T2 : struct, ITag
     {
         return bitSet.Has(TagType<T1>.TagIndex) &&
                bitSet.Has(TagType<T2>.TagIndex);
     }
 
     public readonly bool    Has<T1, T2, T3> ()
-        where T1 : struct, IEntityTag
-        where T2 : struct, IEntityTag
-        where T3 : struct, IEntityTag
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
     {
         return bitSet.Has(TagType<T1>.TagIndex) &&
                bitSet.Has(TagType<T2>.TagIndex) &&
@@ -77,7 +77,7 @@ public struct Tags : IEnumerable<TagType>
     }
     
     public void Add<T>()
-        where T : struct, IEntityTag
+        where T : struct, ITag
     {
         SetBit(TagType<T>.TagIndex);
     }
@@ -88,7 +88,7 @@ public struct Tags : IEnumerable<TagType>
     }
     
     public void Remove<T>()
-        where T : struct, IEntityTag
+        where T : struct, ITag
     {
         ClearBit(TagType<T>.TagIndex);
     }
@@ -100,7 +100,7 @@ public struct Tags : IEnumerable<TagType>
         
     // ----------------------------------------- static methods -----------------------------------------    
     public static Tags Get<T>()
-        where T : struct, IEntityTag
+        where T : struct, ITag
     {
         var tags = new Tags();
         tags.SetBit(TagType<T>.TagIndex);
@@ -108,8 +108,8 @@ public struct Tags : IEnumerable<TagType>
     }
     
     public static Tags Get<T1, T2>()
-        where T1 : struct, IEntityTag
-        where T2 : struct, IEntityTag
+        where T1 : struct, ITag
+        where T2 : struct, ITag
     {
         var tags = new Tags();
         tags.SetBit(TagType<T1>.TagIndex);
