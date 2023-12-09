@@ -73,7 +73,7 @@ public partial class EntityStore
         }
         // --- serialize entity
         var converter       = EntityConverter.Default;
-        converter.EntityToDataEntity(original, dataBuffer);
+        converter.EntityToDataEntity(original, dataBuffer, false);
         
         // --- deserialize DataEntity
         dataBuffer.pid      = IdToPid(entity.id);

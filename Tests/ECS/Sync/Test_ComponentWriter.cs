@@ -22,7 +22,7 @@ public static class Test_ComponentWriter
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
         
-        var dataEntity = converter.EntityToDataEntity(entity);
+        var dataEntity = converter.EntityToDataEntity(entity, null, false);
         
         AreEqual(10,                dataEntity.pid);
         
@@ -60,7 +60,7 @@ var expect =
         
         var entity      = store.CreateEntity();
         entity.AddComponent(new EntityName("test"));
-        var dataEntity = converter.EntityToDataEntity(entity);
+        var dataEntity = converter.EntityToDataEntity(entity, null, false);
         
         AreEqual("{\"name\":{\"value\":\"test\"}}", dataEntity.components.AsString());
     }
@@ -72,7 +72,7 @@ var expect =
         var converter   = EntityConverter.Default;
         
         var entity      = store.CreateEntity(10);
-        var dataEntity  = converter.EntityToDataEntity(entity);
+        var dataEntity  = converter.EntityToDataEntity(entity, null, false);
         
         AreEqual(10,    dataEntity.pid);
         IsNull  (dataEntity.children);
@@ -87,7 +87,7 @@ var expect =
         var entity      = store.CreateEntity(10);
         entity.AddTag<TestTag>();
         entity.AddTag<TestTag3>();
-        var dataEntity  = converter.EntityToDataEntity(entity);
+        var dataEntity  = converter.EntityToDataEntity(entity, null, false);
         
         AreEqual(10,                dataEntity.pid);
         AreEqual(2,                 dataEntity.tags.Count);
@@ -108,7 +108,7 @@ var expect =
         int count = 10; // 2_000_000 ~ 1.935 ms
         DataEntity dataEntity = null;
         for (int n = 0; n < count; n++) {
-            dataEntity = converter.EntityToDataEntity(entity);
+            dataEntity = converter.EntityToDataEntity(entity, null, false);
         }
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", dataEntity!.components.AsString());
     }

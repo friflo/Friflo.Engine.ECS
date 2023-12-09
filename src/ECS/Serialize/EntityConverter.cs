@@ -18,7 +18,7 @@ public class EntityConverter
         writer = new ComponentWriter();
     }
     
-    public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity = null, bool pretty = false)
+    public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity, bool pretty)
     {
         if (entity.IsNull) {
             throw new ArgumentNullException(nameof(entity));

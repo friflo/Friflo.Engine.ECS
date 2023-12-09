@@ -29,7 +29,7 @@ public static class Test_Unresolved
             AreEqual("unresolved components: \"xxx1\"",         unresolved.ToString());
             AreEqual(1,                                         unresolvedQuery.EntityCount);
             
-            var targetEntity = converter.EntityToDataEntity(entity);
+            var targetEntity = converter.EntityToDataEntity(entity, null, false);
             AreEqual("{\"xxx1\":{ \"foo1\":1 }}",               targetEntity.components.ToString());
         }
         
@@ -44,7 +44,7 @@ public static class Test_Unresolved
             AreEqual("unresolved components: \"xxx1\", \"xxx2\"",   unresolved.ToString());
             AreEqual(1,                                             unresolvedQuery.EntityCount);
             
-            var targetEntity = converter.EntityToDataEntity(entity);
+            var targetEntity = converter.EntityToDataEntity(entity, null, false);
             AreEqual("{\"xxx1\":{ \"foo1\":1 },\"xxx2\":{ \"foo2\":2 }}", targetEntity.components.ToString());
         }
     }
@@ -67,7 +67,7 @@ public static class Test_Unresolved
             AreEqual("unresolved tags: \"yyy1\"",       unresolved.ToString());
             AreEqual(1,                                 unresolvedQuery.EntityCount);
             
-            var targetEntity = converter.EntityToDataEntity(entity);
+            var targetEntity = converter.EntityToDataEntity(entity, null, false);
             AreEqual(1, targetEntity.tags.Count);
             IsTrue  (targetEntity.tags.Contains("yyy1"));
             IsTrue  (targetEntity.components.IsNull()); // Unresolved component is not serialized.
@@ -85,7 +85,7 @@ public static class Test_Unresolved
             AreEqual("unresolved tags: \"yyy1\", \"yyy2\"", unresolved.ToString());
             AreEqual(1,                                     unresolvedQuery.EntityCount);
             
-            var targetEntity = converter.EntityToDataEntity(entity);
+            var targetEntity = converter.EntityToDataEntity(entity, null, false);
             AreEqual(2, targetEntity.tags.Count);
             IsTrue  (targetEntity.tags.Contains("yyy1"));
             IsTrue  (targetEntity.tags.Contains("yyy2"));
