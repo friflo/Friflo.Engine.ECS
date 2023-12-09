@@ -28,6 +28,7 @@ internal sealed class ComponentReader
     private readonly    HashSet<string>                         unresolvedTagSet;
     private readonly    List<UnresolvedComponent>               unresolvedComponentList;
     private readonly    Dictionary<string, UnresolvedComponent> unresolvedComponentMap;
+    private readonly    Dictionary<BytesHash, string>           keyCache;
     private             Utf8JsonParser                          parser;
     private             Bytes                                   buffer;
     private             RawComponent[]                          components;
@@ -50,6 +51,7 @@ internal sealed class ComponentReader
         unresolvedTagSet        = new HashSet<string>();
         unresolvedComponentList = new List<UnresolvedComponent>();
         unresolvedComponentMap  = new Dictionary<string, UnresolvedComponent>();
+        keyCache                = new Dictionary<BytesHash, string>(BytesHash.Equality);
     }
     
     internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store)
@@ -276,13 +278,20 @@ internal sealed class ComponentReader
         return newArchetype;
     }
     
+
+    
     private JsonEvent ReadRawComponents()
     {
         var ev = parser.NextEvent();
         while (true) {
             switch (ev) {
                 case JsonEvent.ObjectStart:
-                    var key     = parser.key.AsString();  // todo remove string allocation
+                    var keyBytes    = parser.key;
+                    var keyHash     = new BytesHash(keyBytes);
+                    if (!keyCache.TryGetValue(keyHash, out string key)) {
+                        key = keyBytes.AsString();
+                        keyCache.Add(new BytesHash(new Bytes(keyBytes)), key);
+                    }
                     var start   = parser.Position;
                     parser.SkipTree();
                     if (componentCount == components.Length) {
