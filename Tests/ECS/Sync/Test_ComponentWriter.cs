@@ -18,14 +18,20 @@ public static class Test_ComponentWriter
         var child   = store.CreateEntity(11);
         entity.AddChild(child);
         entity.AddTag<TestTag>();
+        entity.AddTag<TestTag3>();
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
         
         var dataEntity = converter.EntityToDataEntity(entity);
         
-        AreEqual(10,    dataEntity.pid);
-        AreEqual(1,     dataEntity.children.Count);
-        AreEqual(11,    dataEntity.children[0]);
+        AreEqual(10,                dataEntity.pid);
+        
+        AreEqual(2,                 dataEntity.tags.Count);
+        AreEqual("test-tag",        dataEntity.tags[0]);
+        AreEqual(nameof(TestTag3),  dataEntity.tags[1]);
+        
+        AreEqual(1,                 dataEntity.children.Count);
+        AreEqual(11,                dataEntity.children[0]);
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", dataEntity.components.AsString());
         
 var expect =
@@ -37,7 +43,8 @@ var expect =
     ],
     "components": {"pos":{"x":1,"y":2,"z":3},"script1":{"val1":10}},
     "tags": [
-        "TestTag"
+        "test-tag",
+        "TestTag3"
     ]
 }
 """;
@@ -79,11 +86,13 @@ var expect =
         
         var entity      = store.CreateEntity(10);
         entity.AddTag<TestTag>();
+        entity.AddTag<TestTag3>();
         var dataEntity  = converter.EntityToDataEntity(entity);
         
         AreEqual(10,                dataEntity.pid);
-        AreEqual(1,                 dataEntity.tags.Count);
-        Contains(nameof(TestTag),   dataEntity.tags);
+        AreEqual(2,                 dataEntity.tags.Count);
+        Contains("test-tag",        dataEntity.tags);
+        Contains(nameof(TestTag3),  dataEntity.tags);
     }
     
     [Test]
@@ -122,6 +131,7 @@ var expect =
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddComponent(unresolved);
         entity.AddTag<TestTag>();
+        entity.AddTag<TestTag3>();
         entity.AddScript(new TestScript1 { val1 = 10 });
 
         var expect =
@@ -136,7 +146,8 @@ var expect =
         "script1": {"val1":10}
     },
     "tags": [
-        "TestTag",
+        "test-tag",
+        "TestTag3",
         "xyz "
     ]
 }

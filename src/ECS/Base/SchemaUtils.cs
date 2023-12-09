@@ -112,7 +112,7 @@ internal static class SchemaUtils
         where T : struct, ITag
     {
         var tagIndex    = TagType<T>.TagIndex;
-        var tagKey      = TagType<T>.TagKey;
-        return new TagType(tagKey, typeof(T), tagIndex);
+        var tagName     = TagType<T>.TagName;
+        return new TagType(tagName, typeof(T), tagIndex);
     }
 }

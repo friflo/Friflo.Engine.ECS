@@ -46,13 +46,13 @@ struct MyInvalidComponent : IComponent { public int b; }
 
 
 // ------------------------------------------------ tags
-[Tag("tag")]
+[Tag("test-tag")]
 public struct TestTag  : ITag { }
 
-[Tag("tag2")]
+[Tag("test-tag2")]
 public struct TestTag2 : ITag { }
 
-[Tag("tag3")]
+// Intentionally without [Tag("test-tag3")] attribute for testing
 public struct TestTag3 : ITag { }
 
 

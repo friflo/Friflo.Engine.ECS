@@ -18,17 +18,27 @@ public static class Test_ComponentSchema
             var type = tags[n];
             AreEqual(n,                 type.tagIndex);
             AreEqual(SchemaTypeKind.Tag, type.kind);
-            NotNull(type.key);
+            IsNull  (type.key);
         }
-        var testTagType = schema.TagTypeByType[typeof(TestTag)];
         AreEqual(3,                     schema.TagTypeByType.Count);
-        AreEqual(typeof(TestTag),       testTagType.type);
-        AreEqual("tag: [#TestTag]",     testTagType.ToString());
-        
-        testTagType = schema.GetTagType<TestTag>();
-        AreEqual(3,                     schema.TagTypeByType.Count);
-        AreEqual(typeof(TestTag),       testTagType.type);
-        AreEqual("tag: [#TestTag]",     testTagType.ToString());
+        AreEqual(3,                     schema.TagTypeByName.Count);
+        {
+            var testTagType = schema.TagTypeByType[typeof(TestTag)];
+            AreEqual(typeof(TestTag),       testTagType.type);
+            AreEqual("tag: [#TestTag]",     testTagType.ToString());
+        } {
+            var testTagType = schema.GetTagType<TestTag>();
+            AreEqual(typeof(TestTag),       testTagType.type);
+            AreEqual("tag: [#TestTag]",     testTagType.ToString());
+        } {
+            var testTagType = schema.TagTypeByName["test-tag"];
+            AreEqual(typeof(TestTag),       testTagType.type);
+            AreEqual("tag: [#TestTag]",     testTagType.ToString());
+        } {
+            var testTagType = schema.TagTypeByName[nameof(TestTag3)];
+            AreEqual(typeof(TestTag3),      testTagType.type);
+            AreEqual("tag: [#TestTag3]",    testTagType.ToString());
+        }
     }
     
     [Test]

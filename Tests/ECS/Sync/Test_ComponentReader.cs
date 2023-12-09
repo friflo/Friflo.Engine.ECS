@@ -171,7 +171,7 @@ public static class Test_ComponentReader
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var node    = new DataEntity { pid = 10, tags = new List<string> { nameof(TestTag) } };
+        var node    = new DataEntity { pid = 10, tags = new List<string> { "test-tag", nameof(TestTag3) } };
         var entity  = converter.DataEntityToEntity(node, store, out _);
         AreEqual(0, entity.Scripts.Length + entity.Archetype.ComponentCount);
         IsTrue  (entity.Tags.Has<TestTag>());

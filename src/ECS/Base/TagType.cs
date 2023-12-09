@@ -6,31 +6,33 @@
 
 using System;
 
+// ReSharper disable StaticMemberInGenericType
+// ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
 internal static class TagType<T>
     where T : struct, ITag
 {
     // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    int     TagIndex  = TagUtils.NewTagIndex(typeof(T), out TagKey);
-    internal static readonly    string  TagKey;
+    internal static readonly    int     TagIndex  = TagUtils.NewTagIndex(typeof(T), out TagName);
+    internal static readonly    string  TagName;
 }
 
 internal static class TagUtils
 {
     private  static             int     _nextTagIndex             = 1;
 
-    internal static int NewTagIndex(Type type, out string tagKey)
+    internal static int NewTagIndex(Type type, out string tagName)
     {
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(ComponentAttribute)) {
+            if (attr.AttributeType != typeof(TagAttribute)) {
                 continue;
             }
             var arg = attr.ConstructorArguments;
-            tagKey  = (string) arg[0].Value;
+            tagName = (string) arg[0].Value;
             return _nextTagIndex++;
         }
-        tagKey = type.Name;
+        tagName = type.Name;
         return _nextTagIndex++;
     }
 }

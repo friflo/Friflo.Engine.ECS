@@ -8,7 +8,8 @@
         "script1": {"val1":10}
     },
     "tags": [
-        "TestTag"
+        "test-tag",
+        "TestTag3"
     ]
 },{
     "id": 11

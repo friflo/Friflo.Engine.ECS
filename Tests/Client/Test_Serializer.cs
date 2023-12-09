@@ -31,6 +31,7 @@ public static class Test_Serializer
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
         entity.AddTag<TestTag>();
+        entity.AddTag<TestTag3>();
         
         var child   = store.CreateEntity(11);
         store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
@@ -65,6 +66,7 @@ public static class Test_Serializer
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
         entity.AddTag<TestTag>();
+        entity.AddTag<TestTag3>();
         
         var child   = store.CreateEntity(11);
         store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
@@ -143,15 +145,16 @@ public static class Test_Serializer
         var root        = store.GetEntityById(10);
         AreEqual(11,    root.ChildIds[0]);
         IsTrue  (new Position(1,2,3) == root.Position);
-        AreEqual(1,     root.Tags.Count);
+        AreEqual(2,     root.Tags.Count);
         IsTrue  (root.Tags.Has<TestTag>());
+        IsTrue  (root.Tags.Has<TestTag3>());
             
         var child       = store.GetEntityById(11);
         AreEqual(0,     child.ChildCount);
         AreEqual(0,     child.Components.Count);
         AreEqual(0,     child.Tags.Count);
             
-        var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
+        var type = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag, TestTag3>());
         AreEqual(1,     type.EntityCount);
     }
     
@@ -189,13 +192,14 @@ public static class Test_Serializer
     
     private static void AssertReadEntitiesResult(List<DataEntity> entities) {
         var root = entities[0];
-        AreEqual(10,        root.pid);
-        AreEqual(1,         root.children.Count);
-        AreEqual(11,        root.children[0]);
+        AreEqual(10,                root.pid);
+        AreEqual(1,                 root.children.Count);
+        AreEqual(11,                root.children[0]);
         AreEqual("{\n        \"pos\": {\"x\":1,\"y\":2,\"z\":3},\n        \"script1\": {\"val1\":10}\n    }",
-                            root.components.AsString());
-        AreEqual(1,         root.tags.Count);
-        AreEqual("TestTag", root.tags[0]);
+                                    root.components.AsString());
+        AreEqual(2,                 root.tags.Count);
+        AreEqual("test-tag",        root.tags[0]);
+        AreEqual(nameof(TestTag3),  root.tags[1]);
         
         var child  = entities[1];
         AreEqual(11,        child.pid);
