@@ -360,7 +360,7 @@ public readonly struct Entity
         }
     }
 
-    public              int         GetChildIndex(Entity child)          => archetype.entityStore.GetChildIndex(id, child.id);
+    public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(id, child.id);
     
     #endregion
 
