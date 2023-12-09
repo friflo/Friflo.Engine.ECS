@@ -169,32 +169,30 @@ public readonly struct Entity
     #endregion
     
 #region child / tree - properties
-    [Browse(Never)] public int              ChildCount  => archetype.entityStore.Nodes[id].childCount;
+    [Browse(Never)] public  int                 ChildCount      => archetype.entityStore.Nodes[id].childCount;
     
-                    /// <returns>
-                    /// null if the entity has no parent.<br/>
-                    /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
-                    /// </returns>
-                    /// <remarks>Executes in O(1)</remarks> 
-                    public Entity           Parent      => archetype.entityStore.GetParent(id);
+    /// <returns>
+    /// null if the entity has no parent.<br/>
+    /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
+    /// </returns>
+    /// <remarks>Executes in O(1)</remarks> 
+                    public  Entity              Parent          => archetype.entityStore.GetParent(id);
     
-                    /// <summary>
-                    /// Use <b>ref</b> variable when iterating with <b>foreach</b> to copy struct copy. E.g. 
-                    /// <code>
-                    ///     foreach (ref var node in entity.ChildNodes)
-                    /// </code>
-                    /// </summary>
-                    /// <remarks>Executes in O(1)</remarks>
-                    public ChildEntities ChildEntities  => archetype.entityStore.GetChildEntities(id);
+    /// <summary>
+    /// Use <b>ref</b> variable when iterating with <b>foreach</b> to copy struct copy. E.g. 
+    /// <code>
+    ///     foreach (ref var node in entity.ChildNodes)
+    /// </code>
+    /// </summary>
+    /// <remarks>Executes in O(1)</remarks>
+                    public  ChildEntities       ChildEntities   => archetype.entityStore.GetChildEntities(id);
                     
-    [Browse(Never)] public ReadOnlySpan<int> ChildIds   => archetype.entityStore.GetChildIds(id);
+    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => archetype.entityStore.GetChildIds(id);
     #endregion
     
 #region internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes   
-    // ReSharper disable once InconsistentNaming
     [Browse(Never)] internal readonly   int         id;     //  4
-    // ReSharper disable once InconsistentNaming
     [Browse(Never)] internal readonly   EntityStore store;  //  8
     #endregion
     
