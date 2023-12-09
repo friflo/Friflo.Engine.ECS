@@ -138,10 +138,11 @@ public partial class EntityStore
         return true;
     }
     
+    /* redundant: Entity.GetChildIndex() provide same feature but cleaner
     internal ref readonly EntityNode GetChildNodeByIndex(int parentId, int childIndex) {
         var childIds = nodes[parentId].childIds;
         return ref nodes[childIds[childIndex]];
-    }
+    } */
     
     /* redundant: Entity.ChildEntities[] provide same feature but cleaner
     internal Entity GetChildEntityByIndex(int parentId, int childIndex) {
