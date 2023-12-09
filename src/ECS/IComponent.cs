@@ -19,5 +19,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     <item><see cref="Scale3"/></item>
 ///     <item><see cref="Transform"/></item>
 /// </list>
+/// Optionally attribute the implementing struct with <see cref="ComponentKeyAttribute"/><br/>
+/// to assign a custom component key name used for JSON serialization.
 /// </remarks>
 public interface IComponent { }

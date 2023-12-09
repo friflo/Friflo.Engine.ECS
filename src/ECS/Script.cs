@@ -15,7 +15,10 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <see cref="Script"/>'s can be used if <b>OPP</b> programming approach is preferred
 /// while dealing with a small amount (&lt; 100) of <see cref="ECS.Entity"/>'s.<br/>
 /// <br/>
-/// <i>Info:</i> Its functionality is similar to <c>MonoScript</c> added to <c>GameObject</c>'s in Unity
+/// Optionally attribute the extended class with <see cref="ComponentKeyAttribute"/><br/>
+/// to assign a custom component key name used for JSON serialization.<br/>
+/// <br/>
+/// <i>Info:</i> Its functionality is similar to classes extending <c>MonoBehaviour</c> and added to <c>GameObject</c>'s in Unity.
 /// </remarks>
 public abstract class Script
 {
