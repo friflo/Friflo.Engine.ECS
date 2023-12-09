@@ -20,7 +20,7 @@ public enum PidType
     /// </remarks>
     UsePidAsId  = 0,
     /// <summary>
-    /// Map random <see cref="EntityNode.Pid"/>'s to internal used <see cref="EntityNode.Id"/>'s.<br/>
+    /// Map random <see cref="Entity.Pid"/>'s to <see cref="Entity.Id"/>'s used within the engine at runtime.<br/>
     /// This method is intended to be used to store entities of an <see cref="EntityStore"/> in JSON files or in a database. 
     /// </summary>
     RandomPids  = 1,

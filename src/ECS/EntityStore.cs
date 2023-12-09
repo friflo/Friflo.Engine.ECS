@@ -110,7 +110,7 @@ public sealed partial class EntityStore : EntityStoreBase
 #region access by pid
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
-    /// Instead use <see cref="EntityNode.Id"/> instead of <see cref="EntityNode.Pid"/> if possible
+    /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
     /// as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
     public  int             PidToId(long pid)   => pid2Id != null ? pid2Id[pid] : (int)pid;
