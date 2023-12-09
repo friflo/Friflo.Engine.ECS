@@ -278,8 +278,6 @@ internal sealed class ComponentReader
         return newArchetype;
     }
     
-
-    
     private JsonEvent ReadRawComponents()
     {
         var ev = parser.NextEvent();

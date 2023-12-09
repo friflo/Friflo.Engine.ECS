@@ -41,7 +41,10 @@ var expect =
     "children": [
         11
     ],
-    "components": {"pos":{"x":1,"y":2,"z":3},"script1":{"val1":10}},
+    "components": {
+        "pos": {"x":1,"y":2,"z":3},
+        "script1": {"val1":10}
+    },
     "tags": [
         "test-tag",
         "TestTag3"
