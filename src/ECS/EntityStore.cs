@@ -33,7 +33,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///     </list>
 ///   </item>
 ///   <item>Manage a tree graph of entities which starts with the <see cref="StoreRoot"/> entity to build up a scene graph</item>
-///   <item>Store the values of <b>struct</b> components - attributed with <see cref="ComponentAttribute"/> - in linear memory</item>
+///   <item>Store the data of <see cref="IComponent"/>'s and <see cref="Script"/>'s.</item>
 /// </list>
 /// </summary>
 [CLSCompliant(true)]

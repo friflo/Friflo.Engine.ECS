@@ -23,7 +23,7 @@ internal static class ClassUtils
     internal static int NewClassIndex(Type type, out string classKey)
     {
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(ScriptAttribute)) {
+            if (attr.AttributeType != typeof(ComponentKeyAttribute)) {
                 continue;
             }
             var arg     = attr.ConstructorArguments;

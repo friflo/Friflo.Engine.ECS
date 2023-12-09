@@ -17,19 +17,19 @@ public sealed class EntitySchema
 #region public properties
     /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
     public   ReadOnlySpan<EngineDependant>              EngineDependants    => new (engineDependants);
-    /// <summary>return all component types attributed with <see cref="ComponentAttribute"/></summary>
+    /// <summary>return all <b>component</b> types - structs implementing <see cref="IComponent"/></summary>
     /// <remarks>
     /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                Components          => new (components);
-    /// <summary>return all <see cref="Script"/> types attributed with <see cref="ScriptAttribute"/></summary>
+    /// <summary>return all <see cref="Script"/> types - classes extending <see cref="Script"/></summary>
     /// <remarks>
     /// <see cref="ScriptType.scriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ScriptType>                   Scripts             => new (scripts);
-    /// <summary>return all entity <b>Tag</b>'s - structs extending <see cref="ITag"/></summary>
+    /// <summary>return all <b>Tag</b> types - structs implementing <see cref="ITag"/></summary>
     /// <remarks>
     /// <see cref="TagType.tagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
@@ -107,7 +107,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return <see cref="ComponentType"/> of a struct attributed with <see cref="ComponentAttribute"/> for the given key
+    /// return teh <see cref="ComponentType"/> of a struct implementing <see cref="IComponent"/>.
     /// </summary>
     public ComponentType GetComponentType<T>()
         where T : struct, IComponent
@@ -117,7 +117,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return <see cref="ScriptType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
+    /// return the <see cref="ScriptType"/> of a class extending <see cref="Script"/>.
     /// </summary>
     public ScriptType GetScriptType<T>()
         where T : Script
@@ -127,7 +127,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return <see cref="TagType"/> of a class attributed with <see cref="ScriptAttribute"/> for the given type
+    /// return the <see cref="TagType"/> of a struct implementing <see cref="ITag"/>.
     /// </summary>
     public TagType GetTagType<T>()
         where T : struct, ITag

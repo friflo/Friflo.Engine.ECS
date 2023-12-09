@@ -238,7 +238,7 @@ public static class Test_Script
         }
     }
     
-    [Script("empty")]
+    [ComponentKey("empty")]
     private class EmptyScript : Script { }
     
     [Test]

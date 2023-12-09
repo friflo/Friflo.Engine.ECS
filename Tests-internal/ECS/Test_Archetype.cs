@@ -26,9 +26,8 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_ComponentAttribute()
     {
-        _ = new ComponentAttribute("abc");
-        _ = new ScriptAttribute("xyz");
-        _ = new TagAttribute("foo");
+        _ = new ComponentKeyAttribute("abc");
+        _ = new TagNameAttribute("foo");
         
         var type = typeof(Test_Archetype);
         var handle = type.Handle();

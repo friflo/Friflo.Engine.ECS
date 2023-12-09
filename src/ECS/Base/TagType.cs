@@ -25,7 +25,7 @@ internal static class TagUtils
     internal static int NewTagIndex(Type type, out string tagName)
     {
         foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(TagAttribute)) {
+            if (attr.AttributeType != typeof(TagNameAttribute)) {
                 continue;
             }
             var arg = attr.ConstructorArguments;

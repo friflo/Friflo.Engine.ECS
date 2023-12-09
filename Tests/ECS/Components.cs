@@ -13,10 +13,10 @@ public sealed class CodeCoverageTestAttribute : Attribute { }
 
 // ------------------------------------------------ components
 [CodeCoverageTest]
-[Component("my1")]
+[ComponentKey("my1")]
 public struct MyComponent1 : IComponent { public int a; }
 
-[Component("my2")]
+[ComponentKey("my2")]
 public struct MyComponent2 : IComponent { public int b; }
 
 public struct NonBlittableArray         : IComponent { internal int[]                   array;  }
@@ -31,7 +31,7 @@ public struct BlittableBigInteger       : IComponent { public BigInteger    bigI
 
 
 [CodeCoverageTest]
-[Component("byte")]
+[ComponentKey("byte")]
 public struct ByteComponent : IComponent { public byte b; }
 
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
@@ -46,10 +46,10 @@ struct MyInvalidComponent : IComponent { public int b; }
 
 
 // ------------------------------------------------ tags
-[Tag("test-tag")]
+[TagName("test-tag")]
 public struct TestTag  : ITag { }
 
-[Tag("test-tag2")]
+[TagName("test-tag2")]
 public struct TestTag2 : ITag { }
 
 // Intentionally without [Tag("test-tag3")] attribute for testing
@@ -58,18 +58,18 @@ public struct TestTag3 : ITag { }
 
 // ------------------------------------------------ scripts
 [CodeCoverageTest]
-[Script("script1")]
+[ComponentKey("script1")]
 public class TestScript1    : Script { public   int     val1; }
 
-[Script("script2")]
+[ComponentKey("script2")]
 class TestScript2           : Script { public   int     val2; }
 
-[Script("script3")]
+[ComponentKey("script3")]
 class TestScript3           : Script { public   int     val3; }
 
 class NonBlittableScript    : Script { internal int[]   array; }
 
-[Script("test")]
+[ComponentKey("test")]
 class TestComponent : Script
 {
     private int                      health;     // is serialized

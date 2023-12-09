@@ -43,7 +43,7 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   </item>
 /// </list>
 /// </remarks>
-[Component("unresolved")]
+[ComponentKey("unresolved")]
 public struct Unresolved : IComponent
 {
     public          UnresolvedComponent[]   components;

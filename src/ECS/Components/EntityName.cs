@@ -8,7 +8,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-[Component("name")]
+[ComponentKey("name")]
 public struct EntityName : IComponent
 {
                     public  string  value;  //  8

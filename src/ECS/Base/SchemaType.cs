@@ -15,8 +15,8 @@ namespace Friflo.Fliox.Engine.ECS;
 public abstract class SchemaType
 {
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Component"/> the key assigned in <see cref="ComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Script"/>  the key assigned in <see cref="ScriptAttribute"/>
+    /// If <see cref="kind"/> is a <see cref="Component"/> or a <see cref="Script"/>
+    /// the key assigned in <see cref="ComponentKeyAttribute"/>
     /// </summary>
     public   readonly   string          componentKey;   //  8
     
@@ -28,8 +28,9 @@ public abstract class SchemaType
     public   readonly   SchemaTypeKind  kind;           //  4
     
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Component"/> the type of a component attributed with <see cref="ComponentAttribute"/><br/>
-    /// If <see cref="kind"/> == <see cref="Script"/> the type of a script attributed with <see cref="ScriptAttribute"/>
+    /// If <see cref="kind"/> == <see cref="Tag"/> the type of a component struct implementing <see cref="ITag"/><br/>
+    /// If <see cref="kind"/> == <see cref="Component"/> the type of a component struct implementing <see cref="IComponent"/><br/>
+    /// If <see cref="kind"/> == <see cref="Script"/> the type of a script class extending <see cref="Script"/><br/>
     /// </summary>
     public   readonly   Type            type;           //  8
     

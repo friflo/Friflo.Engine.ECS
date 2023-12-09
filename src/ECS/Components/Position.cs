@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-[Component("pos")]
+[ComponentKey("pos")]
 [StructLayout(LayoutKind.Explicit)]
 public struct  Position : IComponent, IEquatable<Position>
 {
