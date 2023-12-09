@@ -6,7 +6,8 @@ using static Friflo.Fliox.Engine.ECS.EntityUtils;
 
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS;
 
 public static class Test_Entity
 {

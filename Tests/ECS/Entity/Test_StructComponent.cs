@@ -12,7 +12,8 @@ using static Friflo.Fliox.Engine.ECS.EntityStoreBase.Static;
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
 
-namespace Tests.ECS.GE;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS;
 
 class PlayerRef {
     public Position position;

@@ -9,7 +9,8 @@ using Tests.Utils;
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS;
 
 public static class Test_StructHeapRaw
 {

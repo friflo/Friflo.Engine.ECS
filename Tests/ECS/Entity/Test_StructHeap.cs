@@ -5,7 +5,8 @@ using NUnit.Framework;
 using Tests.Utils;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS;
 
 public static class Test_StructHeap
 {

@@ -13,7 +13,8 @@ using static Tests.Utils.Events;
 // ReSharper disable ConvertToLocalFunction
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.GE;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS;
 
 public static class Test_Entity_Tree
 {
