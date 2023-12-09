@@ -93,10 +93,10 @@ internal static class SchemaUtils
     internal static ComponentType CreateComponentType<T>(TypeStore typeStore)
         where T : struct, IComponent
     {
-        var structIndex = StructHeap<T>.StructIndex;
-        var structKey   = StructHeap<T>.StructKey;
-        var typeMapper  = typeStore.GetTypeMapper<T>();
-        return new ComponentType<T>(structKey, structIndex, typeMapper);
+        var structIndex     = StructHeap<T>.StructIndex;
+        var componentKey    = StructHeap<T>.StructKey;
+        var typeMapper      = typeStore.GetTypeMapper<T>();
+        return new ComponentType<T>(componentKey, structIndex, typeMapper);
     }
     
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore)
@@ -112,6 +112,7 @@ internal static class SchemaUtils
         where T : struct, ITag
     {
         var tagIndex    = TagType<T>.TagIndex;
-        return new TagType(typeof(T), tagIndex);
+        var tagKey      = TagType<T>.TagKey;
+        return new TagType(tagKey, typeof(T), tagIndex);
     }
 }

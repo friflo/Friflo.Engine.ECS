@@ -18,7 +18,7 @@ public static class Test_ComponentSchema
             var type = tags[n];
             AreEqual(n,                 type.tagIndex);
             AreEqual(SchemaTypeKind.Tag, type.kind);
-            IsNull(type.componentKey);
+            NotNull(type.key);
         }
         var testTagType = schema.TagTypeByType[typeof(TestTag)];
         AreEqual(3,                     schema.TagTypeByType.Count);
@@ -51,7 +51,7 @@ public static class Test_ComponentSchema
             var type = components[n];
             AreEqual(n, type.structIndex);
             AreEqual(SchemaTypeKind.Component, type.kind);
-            NotNull (type.componentKey);
+            NotNull (type.key);
         }
         {
             var schemaType = schema.SchemaTypeByKey["pos"];
@@ -61,7 +61,7 @@ public static class Test_ComponentSchema
             AreEqual(typeof(TestComponent), schemaType.type);
         } {
             var componentType = schema.GetComponentType<MyComponent1>();
-            AreEqual("my1",                                 componentType.componentKey);
+            AreEqual("my1",                                 componentType.key);
             AreEqual("component: 'my1' [MyComponent1]",     componentType.ToString());
         }
         // --- Engine.ECS types
@@ -109,15 +109,15 @@ public static class Test_ComponentSchema
             var type = scripts[n];
             AreEqual(n, type.scriptIndex);
             AreEqual(SchemaTypeKind.Script, type.kind);
-            NotNull (type.componentKey);
+            NotNull (type.key);
         }
         
         var scriptType = schema.GetScriptType<TestComponent>();
-        AreEqual("test",                                scriptType.componentKey);
+        AreEqual("test",                                scriptType.key);
         AreEqual("script: 'test' [*TestComponent]",     scriptType.ToString());
         
         AreEqual(typeof(Position),  schema.SchemaTypeByKey["pos"].type);
-        AreEqual("test",            schema.ScriptTypeByType[typeof(TestComponent)].componentKey);
+        AreEqual("test",            schema.ScriptTypeByType[typeof(TestComponent)].key);
         
         AssertBlittableScript<TestComponent>(schema, true);
     }

@@ -51,7 +51,7 @@ internal sealed class ScriptType<T> : ScriptType
     where T : Script, new()
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"script: '{componentKey}' [*{typeof(T).Name}]";
+    public  override    string          ToString() => $"script: '{key}' [*{typeof(T).Name}]";
     
     internal ScriptType(string scriptKey, int scriptIndex, TypeMapper<T> typeMapper)
         : base(scriptKey, scriptIndex, typeof(T))

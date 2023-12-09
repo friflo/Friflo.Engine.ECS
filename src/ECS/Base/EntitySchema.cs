@@ -84,19 +84,19 @@ public sealed class EntitySchema
         //     System.ArgumentException: An item with the same key has already been added.
         // => so for now use Dictionary<,> index operator
         foreach (var componentType in componentList) {
-            schemaTypeByKey    [componentType.componentKey] =   componentType;  // SHOULD_USE_ADD
-            componentTypeByType.Add(componentType.type,         componentType);
-            components[componentType.structIndex] = componentType;
+            schemaTypeByKey    [componentType.key] =    componentType;  // SHOULD_USE_ADD
+            componentTypeByType.Add(componentType.type, componentType);
+            components[componentType.structIndex] =     componentType;
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
         foreach (var scriptType in scriptList) {
-            schemaTypeByKey     [scriptType.componentKey] =      scriptType;    // SHOULD_USE_ADD
-            scriptTypeByType.   Add(scriptType.type,             scriptType);
-            scripts[scriptType.scriptIndex] = scriptType;
+            schemaTypeByKey     [scriptType.key] =      scriptType;    // SHOULD_USE_ADD
+            scriptTypeByType.   Add(scriptType.type,    scriptType);
+            scripts[scriptType.scriptIndex] =           scriptType;
         }
         foreach (var tagType in tagList) {
-            tagTypeByType.      Add(tagType.type,               tagType);
-            tagTypeByName       [tagType.name] =                tagType;        // SHOULD_USE_ADD
+            tagTypeByType.      Add(tagType.type,       tagType);
+            tagTypeByName       [tagType.name] =        tagType;        // SHOULD_USE_ADD
             tags[tagType.tagIndex] = tagType;
         }
     }

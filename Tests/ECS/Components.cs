@@ -46,10 +46,13 @@ struct MyInvalidComponent : IComponent { public int b; }
 
 
 // ------------------------------------------------ tags
+[Tag("tag")]
 public struct TestTag  : ITag { }
 
+[Tag("tag2")]
 public struct TestTag2 : ITag { }
 
+[Tag("tag3")]
 public struct TestTag3 : ITag { }
 
 
