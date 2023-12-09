@@ -32,7 +32,7 @@ public static class Test_ComponentReader
         
         var root        = converter.DataEntityToEntity(rootNode, store, out _);
         var child       = converter.DataEntityToEntity(childNode, store, out _);
-        AssertRootEntity(root);
+        AssertRootEntity(root, 2);
         AssertChildEntity(child);
         var type = store.GetArchetype(Signature.Get<Position, Scale3>());
         AreEqual(2,     type.EntityCount);
@@ -42,7 +42,7 @@ public static class Test_ComponentReader
         root.Position   = default;
         root.Scale3     = default;
         root            = converter.DataEntityToEntity(rootNode, store, out _);
-        AssertRootEntity(root);
+        AssertRootEntity(root, 2);
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
@@ -231,17 +231,20 @@ public static class Test_ComponentReader
         }
     }
     
-    internal static void AssertRootEntity(Entity root) {
-        AreEqual(10,    root.Id);
-        AreEqual(1,     root.ChildCount);
-        AreEqual(11,    root.ChildEntities.Ids[0]);
-        AreEqual(2,     root.Archetype.ComponentCount);
-        AreEqual(1f,    root.Position.x);
-        AreEqual(1f,    root.Position.y);
-        AreEqual(1f,    root.Position.z);
-        AreEqual(2f,    root.Scale3.x);
-        AreEqual(2f,    root.Scale3.y);
-        AreEqual(2f,    root.Scale3.z);
+    internal static void AssertRootEntity(Entity root, int componentCount) {
+        AreEqual(10,                root.Id);
+        AreEqual(1,                 root.ChildCount);
+        AreEqual(11,                root.ChildEntities.Ids[0]);
+        AreEqual(componentCount,    root.Archetype.ComponentCount);
+        if (componentCount == 0) {
+            return;
+        } 
+        AreEqual(1f,                root.Position.x);
+        AreEqual(1f,                root.Position.y);
+        AreEqual(1f,                root.Position.z);
+        AreEqual(2f,                root.Scale3.x);
+        AreEqual(2f,                root.Scale3.y);
+        AreEqual(2f,                root.Scale3.z);
     }
     
     internal static void AssertChildEntity(Entity child) {
@@ -256,33 +259,35 @@ public static class Test_ComponentReader
         AreEqual(4f,    child.Scale3.z);
     }
     
-    [NUnit.Framework.IgnoreAttribute($"{nameof(EntityConverter.DataEntityToEntity)}() allocates memory when deserializing component structs")]
+    /// <remarks>
+    /// Fliox deserializer allocates memory for component structs => no components are added in test
+    /// </remarks>
     [Test]
-    public static void Test_ComponentReader_read_components_Mem()
+    public static void Test_ComponentReader_DataEntityToEntity_Mem()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
-        var childNode   = new DataEntity { pid = 11, components = ChildComponents };
+        var rootData    = new DataEntity { pid = 10, children = new List<long> { 11 } };
+        var childData   = new DataEntity { pid = 11, components = ChildComponents };
         
-        var root        = converter.DataEntityToEntity(rootNode, store, out _);
-        var child       = converter.DataEntityToEntity(childNode, store, out _);
-        AssertRootEntity(root);
+        var root        = converter.DataEntityToEntity(rootData,  store, out _);
+        var child       = converter.DataEntityToEntity(childData, store, out _);
+        AssertRootEntity(root, 0);  // 0 -> Fliox deserializer allocates memory for component structs
         AssertChildEntity(child);
-        var type = store.GetArchetype(Signature.Get<Position, Scale3>());
-        AreEqual(2,     type.EntityCount);
+        // var type = store.GetArchetype(Signature.Get<Position, Scale3>());
+        // AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         
         // --- read same DataEntity again
-        root.Position   = default;
-        root.Scale3     = default;
+        // root.Position   = default;
+        // root.Scale3     = default;
         var start       = Mem.GetAllocatedBytes();
-        root            = converter.DataEntityToEntity(rootNode, store, out _);
+        root            = converter.DataEntityToEntity(rootData, store, out _);
         Mem.AssertNoAlloc(start);
-        AssertRootEntity(root);
+        AssertRootEntity(root, 0);// 0 -> Fliox deserializer allocates memory for component structs
         AssertChildEntity(child);
-        AreEqual(2,     type.EntityCount);
+        // AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
     }
     

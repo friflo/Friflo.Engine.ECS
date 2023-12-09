@@ -46,7 +46,7 @@ public static class Test_DataSync
             
             var root        = store.GetEntityById(10);
             var child       = store.GetEntityById(11);
-            Test_ComponentReader.AssertRootEntity(root);
+            Test_ComponentReader.AssertRootEntity(root, 2);
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(Signature.Get<Position, Scale3>());
             AreEqual(2,     type.EntityCount);
@@ -64,7 +64,7 @@ public static class Test_DataSync
             
             var root        = store.GetEntityById(10);
             var child       = store.GetEntityById(11);
-            Test_ComponentReader.AssertRootEntity(root);
+            Test_ComponentReader.AssertRootEntity(root, 2);
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(Signature.Get<Position, Scale3>());
             AreEqual(2,     type.EntityCount);
@@ -179,7 +179,7 @@ public static class Test_DataSync
         AreEqual(2, store.EntityCount);
         var root        = store.GetEntityById(10);
         var child       = store.GetEntityById(11);
-        Test_ComponentReader.AssertRootEntity(root);
+        Test_ComponentReader.AssertRootEntity(root, 2);
         Test_ComponentReader.AssertChildEntity(child);
         
         client.entities.Delete(10L);
@@ -209,7 +209,7 @@ public static class Test_DataSync
         AreEqual(2, store.EntityCount);
         var root        = store.GetEntityById(10);
         var child       = store.GetEntityById(11);
-        Test_ComponentReader.AssertRootEntity(root);
+        Test_ComponentReader.AssertRootEntity(root, 2);
         Test_ComponentReader.AssertChildEntity(child);
         
         client.entities.Delete(10L);
