@@ -709,7 +709,7 @@ public static class Test_Entity_Tree
         var store   = new EntityStore();
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        long count  = 10; // 10_000_000L ~ 4.009 ms
+        long count  = 10; // 10_000_000L ~ 3.425 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
@@ -723,7 +723,7 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        long count  = 10; // 10_000_000L ~ 2.014 ms
+        long count  = 10; // 10_000_000L ~ 1.473 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
