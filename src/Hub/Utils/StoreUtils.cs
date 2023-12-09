@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS.Utils;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
 /// Contains methods like <see cref="Post"/> or <see cref="Invoke{TResult}"/> to dispatch execution<br/>

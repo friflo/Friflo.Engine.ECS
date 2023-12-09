@@ -12,7 +12,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS.Utils;
+namespace Friflo.Fliox.Engine.ECS;
 
 /// <remarks> Note: This file will be moved to project: <see cref="Friflo.Fliox.Engine.ECS"/> </remarks>
 public static class ECSUtils

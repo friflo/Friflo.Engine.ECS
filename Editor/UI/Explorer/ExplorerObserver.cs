@@ -6,7 +6,6 @@ using System.ComponentModel;
 using Avalonia.Controls;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
-using Friflo.Fliox.Engine.ECS.Utils;
 
 // ReSharper disable ConvertToConstant.Local
 namespace Friflo.Fliox.Editor.UI.Explorer;

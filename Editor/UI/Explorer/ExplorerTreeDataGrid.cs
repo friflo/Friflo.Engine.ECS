@@ -11,8 +11,8 @@ using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using Friflo.Fliox.Editor.UI.Panels;
 using Friflo.Fliox.Editor.Utils;
+using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Collections;
-using Friflo.Fliox.Engine.ECS.Utils;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
