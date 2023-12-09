@@ -256,7 +256,8 @@ public static class Test_ComponentReader
         AreEqual(4f,    child.Scale3.z);
     }
     
-    [NUnit.Framework.IgnoreAttribute("remove childIds reallocation")][Test]
+    [NUnit.Framework.IgnoreAttribute($"{nameof(EntityConverter.DataEntityToEntity)}() allocates memory when deserializing structs")]
+    [Test]
     public static void Test_ComponentReader_read_components_Mem()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
