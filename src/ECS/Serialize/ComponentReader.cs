@@ -7,6 +7,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
+// ReSharper disable CanSimplifyDictionaryTryGetValueWithGetValueOrDefault
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Fliox.Engine.ECS.Serialize;
@@ -28,7 +29,7 @@ internal sealed class ComponentReader
     private readonly    HashSet<string>                         unresolvedTagSet;
     private readonly    List<UnresolvedComponent>               unresolvedComponentList;
     private readonly    Dictionary<string, UnresolvedComponent> unresolvedComponentMap;
-    private readonly    Dictionary<BytesHash, string>           keyCache;
+    private readonly    Dictionary<BytesHash, RawKey>           rawKeyCache;
     private             Utf8JsonParser                          parser;
     private             Bytes                                   buffer;
     private             RawComponent[]                          components;
@@ -51,7 +52,7 @@ internal sealed class ComponentReader
         unresolvedTagSet        = new HashSet<string>();
         unresolvedComponentList = new List<UnresolvedComponent>();
         unresolvedComponentMap  = new Dictionary<string, UnresolvedComponent>();
-        keyCache                = new Dictionary<BytesHash, string>(BytesHash.Equality);
+        rawKeyCache             = new Dictionary<BytesHash, RawKey>(BytesHash.Equality);
     }
     
     internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store)
@@ -108,9 +109,9 @@ internal sealed class ComponentReader
             var component = components[n];
             buffer.Clear();
             var json        = new JsonValue(parser.GetInputBytes(component.start - 1, component.end));
-            var schemaType  = component.schemaType;
+            var schemaType  = component.rawKey.schemaType;
             if (schemaType == unresolvedType) {
-                unresolvedComponentList.Add(new UnresolvedComponent(component.key, json));
+                unresolvedComponentList.Add(new UnresolvedComponent(component.rawKey.key, json));
                 continue;
             }
             switch (schemaType.kind) {
@@ -238,15 +239,13 @@ internal sealed class ComponentReader
         for (int n = 0; n < count; n++)
         {
             ref var component   = ref components[n];
-            schemaTypeByKey.TryGetValue(component.key, out var schemaType);
-            if (schemaType == null) {
+            var schemaType      = component.rawKey.schemaType;
+            if (schemaType == unresolvedType) {
                 // case: unresolved component
                 hasComponentTypes = true;
                 componentTypes.SetBit(unresolvedType.structIndex);
-                component.schemaType = unresolvedType;
                 continue;
             }
-            component.schemaType = schemaType;
             if (schemaType.kind == SchemaTypeKind.Component)
             {
                 var componentType = (ComponentType)schemaType;
@@ -266,8 +265,9 @@ internal sealed class ComponentReader
         componentTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
-            if (component.schemaType.kind == SchemaTypeKind.Component) {
-                componentTypes.Add((ComponentType)component.schemaType);
+            var schemaType = component.rawKey.schemaType;
+            if (schemaType.kind == SchemaTypeKind.Component) {
+                componentTypes.Add((ComponentType)schemaType);
             }
         }
         if (unresolvedTagList.Count > 0) {
@@ -286,18 +286,13 @@ internal sealed class ComponentReader
         while (true) {
             switch (ev) {
                 case JsonEvent.ObjectStart:
-                    var keyBytes    = parser.key;
-                    var keyHash     = new BytesHash(keyBytes);
-                    if (!keyCache.TryGetValue(keyHash, out string key)) {
-                        key = keyBytes.AsString();
-                        keyCache.Add(new BytesHash(new Bytes(keyBytes)), key);
-                    }
+                    var rawKey  = ToRawKey(parser.key);
                     var start   = parser.Position;
                     parser.SkipTree();
                     if (componentCount == components.Length) {
                         Utils.Resize(ref components, 2 * componentCount);
                     }
-                    components[componentCount++] = new RawComponent(key, start, parser.Position);
+                    components[componentCount++] = new RawComponent(rawKey, start, parser.Position);
                     ev = parser.NextEvent();
                     if (ev == JsonEvent.ObjectEnd) {
                         return JsonEvent.ObjectEnd;
@@ -309,6 +304,23 @@ internal sealed class ComponentReader
                     return ev;
             }
         }
+    }
+    
+    private RawKey ToRawKey(in Bytes keyBytes)
+    {
+        var keyHash = new BytesHash(keyBytes);
+        if (rawKeyCache.TryGetValue(keyHash, out RawKey rawKey)) {
+            return rawKey;
+        }
+        var key = keyBytes.AsString();
+        if (schemaTypeByKey.TryGetValue(key, out var schemaType)) {
+            rawKey  = new RawKey(key, schemaType);
+        } else {
+            rawKey  = new RawKey(key, unresolvedType);
+        }
+        var bytesCopy = new Bytes(keyBytes);    // must create copy - given key Bytes will be mutated
+        rawKeyCache.Add(new BytesHash(bytesCopy), rawKey);
+        return rawKey;
     }
     
     private void AddTags(List<string> tagList, ArchetypeKey archetypeKey)
@@ -324,18 +336,29 @@ internal sealed class ComponentReader
     }
 }
 
-internal struct RawComponent
+internal readonly struct RawKey
 {
-    internal  readonly  string      key;
+    internal  readonly  string      key;            // never null
+    internal  readonly  SchemaType  schemaType;     // never null
+
+    public    override  string      ToString() => $"{key} - {schemaType.type.Name}";
+    
+    internal RawKey(string key, SchemaType schemaType) {
+        this.key        = key;
+        this.schemaType = schemaType;
+    }
+}
+
+internal readonly struct RawComponent
+{
+    internal  readonly  RawKey      rawKey;
     internal  readonly  int         start;
     internal  readonly  int         end;
-    /// <summary>Is set when looking up components in <see cref="EntitySchema.schemaTypeByKey"/></summary>
-    internal            SchemaType  schemaType; 
 
-    public    override  string      ToString() => key;
+    public    override  string      ToString() => rawKey.ToString();
     
-    internal RawComponent(string key, int start, int end) {
-        this.key    = key;
+    internal RawComponent(in RawKey rawKey, int start, int end) {
+        this.rawKey = rawKey;
         this.start  = start;
         this.end    = end;
     }
