@@ -18,7 +18,7 @@ public abstract class SchemaType
     /// If <see cref="kind"/> == <see cref="Component"/> the key assigned in <see cref="ComponentAttribute"/><br/>
     /// If <see cref="kind"/> == <see cref="Script"/>  the key assigned in <see cref="ScriptAttribute"/>
     /// </summary>
-    public   readonly   string          key;   //  8
+    public   readonly   string          componentKey;   //  8
     
     /// <returns>
     /// <see cref="Script"/> if the type is a <see cref="Script"/><br/>
@@ -38,14 +38,14 @@ public abstract class SchemaType
     
     internal readonly   Bytes           componentKeyBytes;
         
-    internal SchemaType(string key, Type type, SchemaTypeKind kind)
+    internal SchemaType(string componentKey, Type type, SchemaTypeKind kind)
     {
-        this.key    = key;
-        this.kind   = kind;
-        this.type   = type;
-        name        = type.Name;
-        if (this.key != null) {
-            componentKeyBytes = new Bytes(key);   
+        this.componentKey   = componentKey;
+        this.kind           = kind;
+        this.type           = type;
+        name                = type.Name;
+        if (componentKey != null) {
+            componentKeyBytes = new Bytes(componentKey);   
         }
     }
     

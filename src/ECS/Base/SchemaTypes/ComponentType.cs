@@ -31,7 +31,7 @@ internal sealed class ComponentType<T> : ComponentType
     where T : struct, IComponent
 {
     private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"component: '{key}' [{typeof(T).Name}]";
+    public  override    string          ToString() => $"component: '{componentKey}' [{typeof(T).Name}]";
 
     internal ComponentType(string componentKey, int structIndex, TypeMapper<T> typeMapper)
         : base(componentKey, structIndex, typeof(T))
