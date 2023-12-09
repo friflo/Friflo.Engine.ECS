@@ -64,6 +64,11 @@ public static class EntityUtils
         return entity.archetype.componentCount + entity.Scripts.Length;
     }
     
+    internal static Exception NotImplemented(int id, string use) {
+        var msg = $"to avoid excessive boxing. Use {use} or {nameof(EntityUtils)}.{nameof(EntityUtils.EqualityComparer)}. id: {id}";
+        return new NotImplementedException(msg);
+    }
+    
     internal static string EntityToString(Entity entity) {
         if (entity.store == null) {
             return "null";

@@ -151,12 +151,12 @@ public static class Test_Entity
         var e = Throws<NotImplementedException>(() => {
             _ = entity1.GetHashCode();
         });
-        AreEqual("to avoid excessive boxing. Use: Id or EntityUtils.EqualityComparer. id: 1", e!.Message);
+        AreEqual("to avoid excessive boxing. Use Id or EntityUtils.EqualityComparer. id: 1", e!.Message);
         
         e = Throws<NotImplementedException>(() => {
             _ = entity1.Equals(entity2);
         });
-        AreEqual("to avoid excessive boxing. Use: == or EntityUtils.EqualityComparer. id: 1", e!.Message);
+        AreEqual("to avoid excessive boxing. Use == or EntityUtils.EqualityComparer. id: 1", e!.Message);
     }
 }
 

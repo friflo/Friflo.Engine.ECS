@@ -354,7 +354,7 @@ public readonly struct Entity
         var arch            = archetype;
         var componentIndex  = compIndex; 
         var entityStore = arch.entityStore;
-        entityStore.DeleteNode(id);
+        entityStore.DeleteNode(id); 
         if (arch != entityStore.defaultArchetype) {
             arch.MoveLastComponentsTo(componentIndex);
         }
@@ -370,14 +370,16 @@ public readonly struct Entity
     public static   bool    operator != (Entity a, Entity b)    => a.id != b.id || a.store != b.store;
 
     // --- object
-    public override bool    Equals(object obj)  => throw ObjectMethodNotImplemented(id, "==");
-    public override int     GetHashCode()       => throw ObjectMethodNotImplemented(id, nameof(Id));
-    public override string  ToString()          => EntityUtils.EntityToString(this);
+    /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
+    /// <remarks> Use <see cref="operator=="/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
+    public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(id, "==");
     
-    private static Exception ObjectMethodNotImplemented(int id, string use) {
-        var msg = $"to avoid excessive boxing. Use: {use} or {nameof(EntityUtils)}.{nameof(EntityUtils.EqualityComparer)}. id: {id}";
-        return new NotImplementedException(msg);
-    }
+    /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
+    /// <remarks> Use <see cref="Id"/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
+    public override int     GetHashCode()       => throw EntityUtils.NotImplemented(id, nameof(Id));
+    
+    public override string  ToString()          => EntityUtils.EntityToString(this);
+
     #endregion
     
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
