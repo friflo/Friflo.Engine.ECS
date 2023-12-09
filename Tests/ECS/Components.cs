@@ -49,6 +49,7 @@ struct MyInvalidComponent : IComponent { public int b; }
 [TagName("test-tag")]
 public struct TestTag  : ITag { }
 
+[NewTagIndex]
 [TagName("test-tag2")]
 public struct TestTag2 : ITag { }
 
@@ -81,3 +82,7 @@ class TestComponent : Script
         AreEqual(2f, Entity.Position.x);
     }
 }
+
+/// <summary> Used only used to cover <see cref="TagUtils.NewTagIndex"/> </summary>
+[AttributeUsage(AttributeTargets.Struct)]
+public sealed class NewTagIndexAttribute : Attribute { }
