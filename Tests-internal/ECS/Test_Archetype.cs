@@ -28,6 +28,7 @@ public static class Test_Archetype
     {
         _ = new ComponentAttribute("abc");
         _ = new ScriptAttribute("xyz");
+        _ = new TagAttribute("foo");
         
         var type = typeof(Test_Archetype);
         var handle = type.Handle();
