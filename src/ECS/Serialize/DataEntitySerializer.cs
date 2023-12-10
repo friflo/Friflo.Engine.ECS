@@ -5,6 +5,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
+// ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS.Serialize;
 
