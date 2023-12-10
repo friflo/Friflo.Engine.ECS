@@ -5,7 +5,7 @@
 namespace Friflo.Fliox.Engine.ECS;
 
 /// <summary>
-/// To enable adding components to an <see cref="Entity"/> it need to implement <see cref="IComponent"/>.<br/>
+/// To enable adding a struct component to an <see cref="Entity"/> it need to implement <see cref="IComponent"/>.<br/>
 /// <br/> 
 /// <see cref="IComponent"/> types are <b><c>struct</c></b>'s which only contains data <b>but no</b> script / methods.<br/>
 /// An <see cref="Entity"/> can contain multiple components but only one of each type.<br/>

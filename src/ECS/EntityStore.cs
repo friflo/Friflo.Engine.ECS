@@ -19,7 +19,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <list type="bullet">
 ///   <item>
 ///   Store a map (container) of entities in linear memory.<br/>
-///   Entity data can retrieved by entity <b>id</b> using the property <see cref="Nodes"/>.<br/>
+///   Entity data can retrieved by entity <b>id</b> using the property <see cref="GetEntityById"/>.<br/>
 ///   <see cref="Entity"/>'s have the states below:<br/>
 ///   <list type="bullet">
 ///     <item>
@@ -111,7 +111,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
-    /// as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
+    /// as this method performs a <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
     public  int             PidToId(long pid)   => pid2Id != null ? pid2Id[pid] : (int)pid;
     
