@@ -25,17 +25,18 @@ public class DataEntitySerializer
         };
     }
     
-    public string WriteDataEntity(DataEntity data)
+    public string WriteDataEntity(DataEntity data, out string error)
     {
         parser.InitParser(data.components);
-        var error = Traverse();
+        error = Traverse();
         if (error != null) {
-            return error;
+            return null;
         }
         dataEntity.pid          = data.pid;
         dataEntity.tags         = data.tags;
         dataEntity.children     = data.children;
-        dataEntity.components   = new JsonValue(jsonWriter.json);
+        var components          = jsonWriter.json;
+        dataEntity.components   = components.buffer == null ? new JsonValue() : new JsonValue(jsonWriter.json);
         
         return objectWriter.Write(dataEntity);
     }
@@ -47,14 +48,15 @@ public class DataEntitySerializer
         switch (ev)
         {
             case JsonEvent.Error:
-                return parser.error.GetMessage();
+                var msg = parser.error.GetMessage();
+                return $"components error: {msg}";
             case JsonEvent.ValueNull:
                 break;
             case JsonEvent.ObjectStart:
                 jsonWriter.InitSerializer();
                 ev = TraverseComponents();
                 if (ev != JsonEvent.ObjectEnd) {
-                    return $"component must be an object. was {ev}, component: '{parser.key}'";
+                    return $"components must be an object. was {ev}, component: '{parser.key}'";
                 }
                 break;
             default:

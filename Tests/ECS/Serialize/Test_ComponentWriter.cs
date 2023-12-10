@@ -1,5 +1,6 @@
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Json.Fliox;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -53,6 +54,10 @@ var expect =
 """;
         var json = dataEntity.DebugJson;
         AreEqual(expect, json);
+        
+        dataEntity.components = new JsonValue("xxx");
+        json = dataEntity.DebugJson;
+        AreEqual("components error: unexpected character while reading value. Found: x path: '(root)' at position: 1", json);
     }
     
     [Test]

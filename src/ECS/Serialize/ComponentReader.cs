@@ -87,7 +87,7 @@ internal sealed class ComponentReader
                 ev = ReadRawComponents();
                 if (ev != JsonEvent.ObjectEnd) {
                     // could support also scalar types in future: string, number or boolean
-                    return $"component must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
+                    return $"components must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
                 }
                 break;
             default:

@@ -129,7 +129,11 @@ public static class EntityUtils
     {
         var convert = DataEntitySerializer;
         lock (convert) {
-            return convert.WriteDataEntity(dataEntity);
+            var json = convert.WriteDataEntity(dataEntity, out string error);
+            if (json == null) {
+                return error;
+            }
+            return json;
         }
     }
     

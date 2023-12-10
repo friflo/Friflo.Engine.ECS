@@ -187,7 +187,7 @@ public static class Test_ComponentReader
         var node    = new DataEntity { pid = 10, components = json };
         var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
-        AreEqual("component must be an object. was ArrayStart. id: 10, component: 'pos'", error);
+        AreEqual("components must be an object. was ArrayStart. id: 10, component: 'pos'", error);
     }
     
     [Test]
