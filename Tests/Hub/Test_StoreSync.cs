@@ -9,13 +9,13 @@ using Friflo.Json.Fliox.Hub.Host;
 using Friflo.Json.Fliox.Hub.Host.Event;
 using NUnit.Framework;
 using Tests.ECS;
-using Tests.ECS.Sync;
+using Tests.ECS.Serialize;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.Client;
+namespace Tests.Hub;
 
 public static class Test_StoreSync
 {

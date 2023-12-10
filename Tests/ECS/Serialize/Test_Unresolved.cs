@@ -7,7 +7,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Sync;
+namespace Tests.ECS.Serialize;
 
 public static class Test_Unresolved
 {

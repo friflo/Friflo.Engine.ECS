@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
-namespace Tests.ECS.Sync;
+namespace Tests.ECS.Serialize;
 
 // ReSharper disable once InconsistentNaming
 public static class Test_ComponentReader

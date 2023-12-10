@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using NUnit.Framework;
-using Tests.ECS;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
@@ -16,7 +15,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.Client;
+namespace Tests.ECS.Serialize;
 
 public static class Test_Serializer
 {
