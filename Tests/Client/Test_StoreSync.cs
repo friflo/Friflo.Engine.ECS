@@ -17,7 +17,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.Client;
 
-public static class Test_DataSync
+public static class Test_StoreSync
 {
     private static StoreClient CreateClient() {
         var database    = new MemoryDatabase("test");
