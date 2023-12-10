@@ -1,25 +1,22 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS.Serialize;
 
-internal class JsonConvert
+public class DataEntitySerializer
 {
-    private readonly    EntityConverter converter;
     private readonly    DataEntity      dataEntity;      
     private readonly    ObjectWriter    objectWriter;
     private             Utf8JsonParser  parser;
     private             Utf8JsonWriter  jsonWriter;
     
-    internal JsonConvert()
+    public DataEntitySerializer()
     {
-        converter       = new EntityConverter();
         dataEntity      = new DataEntity();      
         objectWriter    = new (new TypeStore()) {  // todo use global TypeStore
             Pretty              = true,
@@ -27,13 +24,7 @@ internal class JsonConvert
         };
     }
     
-    internal string EntityToJSON(Entity entity)
-    {
-        converter.EntityToDataEntity(entity, dataEntity, true);
-        return objectWriter.Write(dataEntity);
-    }
-    
-    internal string DataEntityToJSON(DataEntity data)
+    public string WriteDataEntity(DataEntity data)
     {
         parser.InitParser(data.components);
         var error = Traverse();

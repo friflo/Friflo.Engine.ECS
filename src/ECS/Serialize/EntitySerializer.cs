@@ -66,7 +66,7 @@ public class EntitySerializer
             if (entity.IsNull) {
                 continue;
             }
-            WriteEntity(entity);
+            WriteEntityInternal(entity);
             var memory = new ReadOnlyMemory<byte>(writer.json.buffer, 0, writer.json.end);
             await stream.WriteAsync(memory);
         }
@@ -85,7 +85,7 @@ public class EntitySerializer
             if (entity.IsNull) {
                 continue;
             }
-            WriteEntity(entity);
+            WriteEntityInternal(entity);
             stream.Write(writer.json.AsSpan());
         }
         stream.Write(ArrayEnd);
@@ -101,13 +101,21 @@ public class EntitySerializer
             if (entity.IsNull) {
                 continue;
             }
-            WriteEntity(entity);
+            WriteEntityInternal(entity);
             stream.Write(writer.json.AsSpan());
         }
         stream.Write(ArrayEnd);
     }
     
-    private void WriteEntity(Entity entity)
+    public string WriteEntity(Entity entity)
+    {
+        writer.SetPretty(true);
+        isFirst     = true;
+        WriteEntityInternal(entity);
+        return writer.json.AsString();
+    }
+    
+    private void WriteEntityInternal(Entity entity)
     {
         writer.InitSerializer();
         if (isFirst) {

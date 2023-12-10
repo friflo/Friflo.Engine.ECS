@@ -113,21 +113,23 @@ public static class EntityUtils
         return sb.ToString();
     }
 
-    private static readonly JsonConvert JsonConvert = new JsonConvert();
+    private static readonly EntitySerializer EntitySerializer = new EntitySerializer();
     
     internal static string EntityToJSON(Entity entity)
     {
-        var convert = JsonConvert;
-        lock (convert) {
-            return convert.EntityToJSON(entity);
+        var serializer = EntitySerializer;
+        lock (serializer) {
+            return serializer.WriteEntity(entity);
         }
     }
     
+    private static readonly DataEntitySerializer DataEntitySerializer = new DataEntitySerializer();
+    
     internal static string DataEntityToJSON(DataEntity dataEntity)
     {
-        var convert = JsonConvert;
+        var convert = DataEntitySerializer;
         lock (convert) {
-            return convert.DataEntityToJSON(dataEntity);
+            return convert.WriteDataEntity(dataEntity);
         }
     }
     
