@@ -49,14 +49,14 @@ public class DataEntitySerializer
         {
             case JsonEvent.Error:
                 var msg = parser.error.GetMessage();
-                return $"components error: {msg}";
+                return $"'components' error: {msg}";
             case JsonEvent.ValueNull:
                 break;
             case JsonEvent.ObjectStart:
                 jsonWriter.InitSerializer();
                 ev = TraverseComponents();
                 if (ev != JsonEvent.ObjectEnd) {
-                    return $"components must be an object. was {ev}, component: '{parser.key}'";
+                    return $"'components' element must be an object. was {ev}, component: '{parser.key}'";
                 }
                 break;
             default:

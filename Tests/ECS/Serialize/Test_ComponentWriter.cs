@@ -57,7 +57,7 @@ var expect =
         
         dataEntity.components = new JsonValue("xxx");
         json = dataEntity.DebugJson;
-        AreEqual("components error: unexpected character while reading value. Found: x path: '(root)' at position: 1", json);
+        AreEqual("'components' error: unexpected character while reading value. Found: x path: '(root)' at position: 1", json);
     }
     
     [Test]

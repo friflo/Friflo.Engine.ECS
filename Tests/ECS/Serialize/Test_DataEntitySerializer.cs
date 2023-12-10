@@ -4,6 +4,7 @@ using Friflo.Json.Fliox;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
@@ -52,19 +53,22 @@ public static class Test_DataEntitySerializer
     public static void Test_WriteDataEntity_errors()
     {
         var serializer = new DataEntitySerializer();
-        
-        var dataEntity = new DataEntity { pid = 1, components  = new JsonValue("1") };
         string error;
-        
+        var dataEntity = new DataEntity { pid = 1 };
+
+        // -- write invalid components
+        dataEntity.components  = new JsonValue("1");
         serializer.WriteDataEntity(dataEntity, out error);
         AreEqual("expect 'components' == object or null. was: ValueNumber", error);
         
+        // -- write invalid components
         dataEntity.components = new JsonValue("");
         serializer.WriteDataEntity(dataEntity, out error);
-        AreEqual("components error: unexpected EOF on root path: '(root)' at position: 0", error);
+        AreEqual("'components' error: unexpected EOF on root path: '(root)' at position: 0", error);
         
-        
-        
-        
+        // -- write invalid components element
+        dataEntity.components = new JsonValue("{\"foo\":1}");
+        serializer.WriteDataEntity(dataEntity, out error);
+        AreEqual("'components' element must be an object. was ValueNumber, component: 'foo'", error);
     }
 }
