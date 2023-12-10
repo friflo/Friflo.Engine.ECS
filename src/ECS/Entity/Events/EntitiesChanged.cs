@@ -17,7 +17,7 @@ public readonly struct  EntitiesChangedArgs
 {
     /// <remarks>
     /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
-    /// <code>      var entity = store.GetNodeById(args.entityIds[n]).Entity;       </code>
+    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
     /// </remarks>
     public              IReadOnlySet<int>   EntityIds   => entityIds;
     

@@ -64,7 +64,7 @@ public abstract partial class EntityStoreBase
     
 #region static fields
     public static class Static {
-        internal static readonly    int[]           EmptyChildNodes = null;
+        internal static readonly    int[]           EmptyChildIds   = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes(TypeStore);
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>

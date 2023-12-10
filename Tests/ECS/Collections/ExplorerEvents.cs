@@ -13,13 +13,13 @@ internal class ExplorerEvents
     internal int seq;
     
     /// <summary>
-    /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
+    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
     internal static ExplorerEvents AddHandler(ExplorerItem item, Action<NotifyCollectionChangedEventArgs> action)
     {
         var events = new ExplorerEvents();
-        // item.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+        // item.ChildEntitiesChangedHandler = (object _, in ChildEntitiesChangedArgs args) => {
         item.CollectionChanged += (_, args) => {
             events.seq++;
             action(args);
@@ -28,13 +28,13 @@ internal class ExplorerEvents
     }
     
     /// <summary>
-    /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
+    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
     internal static ExplorerEvents AddHandlerSeq(ExplorerItem item, Action<NotifyCollectionChangedEventArgs, int> action)
     {
         var events = new ExplorerEvents();
-        // store.ChildNodesChangedHandler = (object _, in ChildNodesChangedArgs args) => {
+        // store.ChildEntitiesChangedHandler = (object _, in ChildEntitiesChangedArgs args) => {
         item.CollectionChanged += (_, args) => {
             action(args, events.seq++);
         };

@@ -48,15 +48,15 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
     
 #region event handler
-    /// <summary>Set or clear a <see cref="ECS.ChildNodesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
-    /// <remarks>Event handlers previously added with <see cref="ChildNodesChanged"/> are removed.</remarks>
-    public  ChildNodesChangedHandler    ChildNodesChanged   { get => childNodesChanged; set => childNodesChanged    = value; }
+    /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
+    /// <remarks>Event handlers previously added with <see cref="ChildEntitiesChanged"/> are removed.</remarks>
+    public  ChildEntitiesChangedHandler ChildEntitiesChanged{ get => childEntitiesChanged;  set => childEntitiesChanged = value; }
     
     // --- script:   added / removed
-    public  ScriptChangedHandler        ScriptAdded         { get => scriptAdded;       set => scriptAdded          = value; }
-    public  ScriptChangedHandler        ScriptRemoved       { get => scriptRemoved;     set => scriptRemoved        = value; }
+    public  ScriptChangedHandler        ScriptAdded         { get => scriptAdded;           set => scriptAdded          = value; }
+    public  ScriptChangedHandler        ScriptRemoved       { get => scriptRemoved;         set => scriptRemoved        = value; }
     
-    public  EntitiesChangedHandler      EntitiesChanged     { get => entitiesChanged;   set => entitiesChanged      = value; }
+    public  EntitiesChangedHandler      EntitiesChanged     { get => entitiesChanged;       set => entitiesChanged      = value; }
     
     #endregion
     
@@ -78,7 +78,7 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
 
     // --- delegates
-    [Browse(Never)] private         ChildNodesChangedHandler    childNodesChanged;  //  8               - fire events on add, insert, remove or delete an Entity
+    [Browse(Never)] private         ChildEntitiesChangedHandler childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
     //
     [Browse(Never)] private         ScriptChangedHandler        scriptAdded;        //  8
     [Browse(Never)] private         ScriptChangedHandler        scriptRemoved;      //  8

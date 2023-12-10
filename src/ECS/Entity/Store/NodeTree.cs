@@ -186,11 +186,11 @@ public partial class EntityStore
     private static void InsertChildNode (ref EntityNode parent, int childId, int childIndex)
     {
         EnsureChildIdsCapacity(ref parent, parent.childCount + 1);
-        var childNodes = parent.childIds;
+        var childIds = parent.childIds;
         for (int n = parent.childCount; n > childIndex; n--) {
-            childNodes[n] = childNodes[n - 1];
+            childIds[n] = childIds[n - 1];
         }
-        childNodes[childIndex] = childId;
+        childIds[childIndex] = childId;
         parent.childCount++;
     }
     
@@ -208,7 +208,7 @@ public partial class EntityStore
     
     private void SetChildNodes(int parentId, ReadOnlySpan<int> newChildIds)
     {
-        if (childNodesChanged != null) {
+        if (childEntitiesChanged != null) {
             // case: childNodesChanged handler exists       => assign new child ids one by one to send events
             SetChildNodesWithEvents(parentId, newChildIds);
             return;
@@ -511,20 +511,20 @@ public partial class EntityStore
     // ---------------------------------- child nodes change notification ----------------------------------
     private void OnChildNodeAdd(int parentId, int childId, int childIndex)
     {
-        if (childNodesChanged == null) {
+        if (childEntitiesChanged == null) {
             return;
         }
-        var args = new ChildNodesChangedArgs(ChildNodesChangedAction.Add, parentId, childId, childIndex);
-        childNodesChanged(this, args);
+        var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Add, parentId, childId, childIndex);
+        childEntitiesChanged(this, args);
     }
     
     private void OnChildNodeRemove(int parentId, int childId, int childIndex)
     {
-        if (childNodesChanged == null) {
+        if (childEntitiesChanged == null) {
             return;
         }
-        var args = new ChildNodesChangedArgs(ChildNodesChangedAction.Remove, parentId, childId, childIndex);
-        childNodesChanged(this, args);
+        var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Remove, parentId, childId, childIndex);
+        childEntitiesChanged(this, args);
     }
     
     

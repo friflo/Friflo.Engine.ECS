@@ -12,13 +12,13 @@ internal class Events
     internal int seq;
     
     /// <summary>
-    /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
+    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
-    internal static Events SetHandler(EntityStore store, Action<ChildNodesChangedArgs> action)
+    internal static Events SetHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
     {
         var events = new Events();
-        store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
+        store.ChildEntitiesChanged = (object _, in ChildEntitiesChangedArgs args) => {
             events.seq++;
             action(args);
         };
@@ -26,13 +26,13 @@ internal class Events
     }
     
     /// <summary>
-    /// <see cref="ChildNodesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
+    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
     /// See: <see cref="Test_ObservableCollection_Reference"/>
     /// </summary>
-    internal static Events SetHandlerSeq(EntityStore store, Action<ChildNodesChangedArgs, int> action)
+    internal static Events SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
     {
         var events = new Events();
-        store.ChildNodesChanged = (object _, in ChildNodesChangedArgs args) => {
+        store.ChildEntitiesChanged = (object _, in ChildEntitiesChangedArgs args) => {
             action(args, events.seq++);
         };
         return events;

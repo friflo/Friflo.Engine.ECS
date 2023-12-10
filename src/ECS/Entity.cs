@@ -180,9 +180,9 @@ public readonly struct Entity
                     public  Entity              Parent          => archetype.entityStore.GetParent(id);
     
     /// <summary>
-    /// Use <b>ref</b> variable when iterating with <b>foreach</b> to copy struct copy. E.g. 
+    /// Return all child <see cref="Entity"/>'s. Enumerate with: 
     /// <code>
-    ///     foreach (ref var node in entity.ChildNodes)
+    ///     foreach (var child in entity.ChildEntities)
     /// </code>
     /// </summary>
     /// <remarks>Executes in O(1)</remarks>

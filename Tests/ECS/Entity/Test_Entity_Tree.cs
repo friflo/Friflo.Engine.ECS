@@ -203,11 +203,11 @@ public static class Test_Entity_Tree
         var store   = new EntityStore();
         var root    = store.CreateEntity(1);
         var events = SetHandlerSeq(store, (args, seq) => {
-            AreEqual(1,                             args.parentId);
-            AreEqual(seq,                           args.childIndex);
-            AreEqual(seq + 2,                       args.childId);
-            AreEqual(ChildNodesChangedAction.Add,   args.action);
-            AreEqual(seq + 1,                       root.ChildCount);
+            AreEqual(1,                                 args.parentId);
+            AreEqual(seq,                               args.childIndex);
+            AreEqual(seq + 2,                           args.childId);
+            AreEqual(ChildEntitiesChangedAction.Add,    args.action);
+            AreEqual(seq + 1,                           root.ChildCount);
         });
         for (int n = 0; n < 100; n++) {
             var child = store.CreateEntity(n + 2);
@@ -470,7 +470,7 @@ public static class Test_Entity_Tree
         
         
         var start = Mem.GetAllocatedBytes();
-        store.ChildNodesChanged = null;
+        store.ChildEntitiesChanged = null;
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.EntityCount);
@@ -553,9 +553,9 @@ public static class Test_Entity_Tree
         AreEqual(-1, root.GetChildIndex(entity2));
     }
     
-    /// <summary>Cover <see cref="EntityStore.ChildNodesChanged"/></summary>
+    /// <summary>Cover <see cref="EntityStore.ChildEntitiesChanged"/></summary>
     [Test]
-    public static void Test_EntityStore_ChildNodesChanged()
+    public static void Test_EntityStore_ChildEntitiesChanged()
     {
         var store   = new EntityStore();
         var root    = store.CreateEntity(1);
@@ -564,16 +564,16 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("root"));
         int eventCount = 0;
         
-        ChildNodesChangedHandler handler = (object _, in ChildNodesChangedArgs args) => {
+        ChildEntitiesChangedHandler handler = (object _, in ChildEntitiesChangedArgs args) => {
             AreEqual("entity: 1 - Add ChildIds[0] = 2", args.ToString());
             eventCount++;
         };
-        store.ChildNodesChanged += handler;
-        AreSame(store.ChildNodesChanged, handler);
+        store.ChildEntitiesChanged += handler;
+        AreSame(store.ChildEntitiesChanged, handler);
         root.AddChild(child2);
         AreEqual(1, eventCount);
         
-        store.ChildNodesChanged -= handler;
+        store.ChildEntitiesChanged -= handler;
         root.AddChild(child3);
         AreEqual(1, eventCount); // no event fired
     }

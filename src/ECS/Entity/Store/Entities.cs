@@ -145,7 +145,7 @@ public partial class EntityStore
         node.archetype      = defaultArchetype;
         node.scriptIndex    = EntityUtils.NoScripts;
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
-        node.childIds       = Static.EmptyChildNodes;
+        node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
         // node.entity      = entity;
         return entity;

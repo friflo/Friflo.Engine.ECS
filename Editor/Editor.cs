@@ -82,7 +82,7 @@ public partial class Editor
             store.TagsChanged        += (in TagsChangedArgs      args) => SyncEntity(args.entityId);
             await sync.StoreEntitiesAsync();
         }
-        store.ChildNodesChanged += ChildNodesChangedHandler;
+        store.ChildEntitiesChanged += ChildEntitiesChangedHandler;
         
         StoreUtils.AssertMainThread();
         // --- run server
@@ -134,16 +134,16 @@ public partial class Editor
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="StoreSync"/></summary>
-    private void ChildNodesChangedHandler (object sender, in ChildNodesChangedArgs args)
+    private void ChildEntitiesChangedHandler (object sender, in ChildEntitiesChangedArgs args)
     {
         StoreUtils.AssertMainThread();
         switch (args.action)
         {
-            case ChildNodesChangedAction.Add:
+            case ChildEntitiesChangedAction.Add:
                 sync?.UpsertDataEntity(args.parentId);
                 PostSyncChanges();
                 break;
-            case ChildNodesChangedAction.Remove:
+            case ChildEntitiesChangedAction.Remove:
                 sync?.UpsertDataEntity(args.parentId);
                 PostSyncChanges();
                 break;

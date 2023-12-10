@@ -9,7 +9,7 @@ namespace Internal.ECS;
 
 public static class Test_ExplorerItem
 {
-    /// <summary>Cover <see cref="ExplorerItemTree.ChildNodesChangedHandler"/></summary>
+    /// <summary>Cover <see cref="ExplorerItemTree.ChildEntitiesChangedHandler"/></summary>
     [Test]
     public static void Test_ExplorerItem_assertion()
     {
@@ -22,9 +22,9 @@ public static class Test_ExplorerItem
         rootItem.CollectionChanged += (_, _) => {
             Fail("unexpected)");
         };
-        var args = new ChildNodesChangedArgs((ChildNodesChangedAction)99, 1, 2, 0);
+        var args = new ChildEntitiesChangedArgs((ChildEntitiesChangedAction)99, 1, 2, 0);
         var e = Throws<InvalidOperationException>(() => {
-            tree.ChildNodesChangedHandler(null, args);    
+            tree.ChildEntitiesChangedHandler(null, args);    
         });
         AreEqual("unexpected action: 99", e!.Message);
     }

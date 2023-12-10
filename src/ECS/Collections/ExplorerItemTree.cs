@@ -29,7 +29,7 @@ public class ExplorerItemTree
         this.debugName              = debugName ?? "ExplorerTree";
         store                       = rootEntity.Store;
         items                       = new Dictionary<int, ExplorerItem>();
-        store.ChildNodesChanged    += ChildNodesChangedHandler;
+        store.ChildEntitiesChanged += ChildEntitiesChangedHandler;
         rootItem                    = CreateExplorerItem(rootEntity);
     }
     
@@ -61,10 +61,10 @@ public class ExplorerItemTree
     
     /// <summary>
     /// Fires a <see cref="INotifyCollectionChanged.CollectionChanged"/> event based on the
-    /// given <see cref="ChildNodesChangedArgs"/>.
+    /// given <see cref="ChildEntitiesChangedArgs"/>.
     /// </summary>
     // only internal because of unit test
-    internal void ChildNodesChangedHandler(object sender, in ChildNodesChangedArgs args)
+    internal void ChildEntitiesChangedHandler(object sender, in ChildEntitiesChangedArgs args)
     {
         var treeItems = items;
         if (!treeItems.TryGetValue(args.parentId, out var parent)) {
@@ -77,13 +77,13 @@ public class ExplorerItemTree
         }
         ExplorerItem explorerItem;
         switch (args.action) {
-            case ChildNodesChangedAction.Add:
+            case ChildEntitiesChangedAction.Add:
                 if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
                     var entity      = store.GetEntityById(args.childId);
                     explorerItem    = CreateExplorerItem(entity);
                 }
                 break;
-            case ChildNodesChangedAction.Remove:
+            case ChildEntitiesChangedAction.Remove:
                 if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
                     return;
                 }
@@ -103,7 +103,7 @@ public class ExplorerItemTree
         collectionChanged(parent, eventArgs);
     }
     
-    private static Exception InvalidActionException(in ChildNodesChangedArgs args) {
+    private static Exception InvalidActionException(in ChildEntitiesChangedArgs args) {
         
         return new InvalidOperationException($"unexpected action: {args.action}");
     }
