@@ -24,9 +24,11 @@ public static class Test_DataEntitySerializer
         AreEqual("{\n    \"id\": 10\n}", json);
         
         // --- write entity containing children, tags and components
+        // arbitrary formatted JSON components
+        var components = "  {  \"pos\" : { \"x\"  :  1 , \"y\"  :  2 ,  \"z\" : 3 } , \"script1\" :  {\"val1\": 10} }  ";
         dataEntity.children    = new List<long> { 11 };
         dataEntity.tags        = new List<string> { "test-tag", nameof(TestTag3) };
-        dataEntity.components  = new JsonValue("{ \"pos\": { \"x\" : 1 , \"y\" : 2 , \"z\" : 3 } , \"script1\":{\"val1\":10}}");
+        dataEntity.components  = new JsonValue(components);
         
         var expect =
 """
