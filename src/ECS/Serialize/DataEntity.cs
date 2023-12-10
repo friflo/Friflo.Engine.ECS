@@ -59,5 +59,6 @@ public sealed class DataEntity
 
     public  override string ToString()  => $"pid: {pid}";
     
-    public  string          DebugJson   => EntityUtils.DataEntityToJSON(this);
+    /// <summary> Counterpart of <see cref="Entity.DebugJSON"/> </summary>
+    public  string          DebugJSON   => EntityUtils.DataEntityToJSON(this);
 }

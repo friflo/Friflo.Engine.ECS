@@ -52,11 +52,11 @@ var expect =
     ]
 }
 """;
-        var json = dataEntity.DebugJson;
+        var json = dataEntity.DebugJSON;
         AreEqual(expect, json);
         
         dataEntity.components = new JsonValue("xxx");
-        json = dataEntity.DebugJson;
+        json = dataEntity.DebugJSON;
         AreEqual("'components' error: unexpected character while reading value. Found: x path: '(root)' at position: 1", json);
     }
     

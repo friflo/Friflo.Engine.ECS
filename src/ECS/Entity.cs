@@ -145,6 +145,7 @@ public readonly struct Entity
     
     [Browse(Never)] public  bool            IsNull          => store?.nodes[id].archetype == null;
     
+    /// <summary> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </summary>
                     public  string          DebugJSON       => EntityUtils.EntityToJSON(this);
     #endregion
 
