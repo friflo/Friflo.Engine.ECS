@@ -36,7 +36,7 @@ public class DataEntitySerializer
         dataEntity.tags         = data.tags;
         dataEntity.children     = data.children;
         var components          = jsonWriter.json;
-        dataEntity.components   = components.buffer == null ? new JsonValue() : new JsonValue(jsonWriter.json);
+        dataEntity.components   = components.buffer == null ? new JsonValue() : new JsonValue(components);
         
         return objectWriter.Write(dataEntity);
     }
