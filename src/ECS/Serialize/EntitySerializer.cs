@@ -168,7 +168,57 @@ public class EntitySerializer
     #endregion
     
 #region read entities into store
-    private MemoryStream CreateReadBuffers(Stream stream) {
+    /// <remarks> The "id" in the passed <paramref name="value"/> is ignored. </remarks>
+    internal void ReadIntoEntity(Entity entity, JsonValue value)
+    {
+        readJson = value;
+        readEntityCount = 0;
+        parser.InitParser(readJson);
+        var ev = ReadIntoEntity(entity);
+        if (ev == JsonEvent.EOF) {
+            return;
+        }
+        var msg = parser.error.GetMessage();
+        throw new ArgumentException("Error: " + msg);
+    }
+    
+    private JsonEvent ReadIntoEntity(Entity entity)
+    {
+        var store = entity.store;
+        while (true) {
+            var ev = parser.NextEvent();
+            switch (ev)
+            {
+                case JsonEvent.ObjectStart:
+                    readEntity              = readEntityBuffer;
+                    readEntity.components   = default;
+                    readEntity.children.Clear();
+                    readEntity.tags.Clear();
+                    ev = ReadEntity();
+                    if (ev != JsonEvent.ObjectEnd) {
+                        return ev;
+                    }
+                    ev = ReadEntity();
+                    if (ev != JsonEvent.EOF) {
+                        return ev;
+                    }
+                    readEntity.pid = entity.Pid;
+                    converter.DataEntityToEntity(readEntity, store, out string error);
+                    readEntityCount++;
+                    if (error != null) {
+                        return ReadError(error);
+                    }
+                    return ev;
+                case JsonEvent.Error:
+                    return ev;
+                default:
+                    return ReadError($"expect object entity. was: {ev}");
+            }
+        }
+    }
+
+    private MemoryStream CreateReadBuffers(Stream stream)
+    {
         readBuffer ??= new byte[16*1024];
         int capacity = 0;
         if (stream is FileStream fileStream) {
@@ -237,10 +287,10 @@ public class EntitySerializer
             switch (ev)
             {
                 case JsonEvent.ObjectStart:
-                    readEntity = readEntityBuffer;
-                    readEntity.pid = -1;
+                    readEntity              = readEntityBuffer;
+                    readEntity.pid          = -1;
+                    readEntity.components   = default;
                     readEntity.children.Clear();
-                    readEntity.components = default;
                     readEntity.tags.Clear();
                     ev = ReadEntity();
                     if (ev != JsonEvent.ObjectEnd) {
@@ -356,6 +406,10 @@ public class EntitySerializer
                             return ev;
                         }
                         continue;
+                    }
+                    if (parser.key.IsEqual(Components)) {   // "components" - error
+                        parser.ErrorMsg(nameof(EntitySerializer), $"expect 'components' == object. was: array.");
+                        return JsonEvent.Error;
                     }
                     parser.SkipTree();
                     continue;

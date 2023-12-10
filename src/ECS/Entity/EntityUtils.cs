@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Json.Fliox;
 
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
@@ -113,13 +114,24 @@ public static class EntityUtils
         return sb.ToString();
     }
 
-    private static readonly EntitySerializer EntitySerializer = new EntitySerializer();
+    private static readonly EntitySerializer EntitySerializer   = new EntitySerializer();
     
     internal static string EntityToJSON(Entity entity)
     {
         var serializer = EntitySerializer;
         lock (serializer) {
             return serializer.WriteEntity(entity);
+        }
+    }
+    
+    internal static void JsonToEntity(Entity entity, string json)
+    {
+        if (json == null) throw new ArgumentNullException(nameof(json));
+        var serializer = EntitySerializer;
+        lock (serializer) {
+            var jsonBytes   = Encoding.UTF8.GetBytes(json);
+            var jsonValue   = new JsonValue(jsonBytes);
+            serializer.ReadIntoEntity(entity, jsonValue);
         }
     }
     
