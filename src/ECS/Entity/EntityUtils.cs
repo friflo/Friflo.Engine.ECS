@@ -127,9 +127,9 @@ public static class EntityUtils
     
     internal static string DataEntityToJSON(DataEntity dataEntity)
     {
-        var convert = DataEntitySerializer;
-        lock (convert) {
-            var json = convert.WriteDataEntity(dataEntity, out string error);
+        var serializer = DataEntitySerializer;
+        lock (serializer) {
+            var json = serializer.WriteDataEntity(dataEntity, out string error);
             if (json == null) {
                 return error;
             }
