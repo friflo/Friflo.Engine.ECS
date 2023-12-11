@@ -171,7 +171,7 @@ public class EntitySerializer
     /// <remarks> The "id" in the passed <paramref name="value"/> is ignored. </remarks>
     internal void ReadIntoEntity(Entity entity, JsonValue value)
     {
-        readJson = value;
+        readJson        = value;
         readEntityCount = 0;
         parser.InitParser(readJson);
         var ev = ReadIntoEntity(entity);

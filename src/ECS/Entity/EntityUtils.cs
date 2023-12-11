@@ -124,12 +124,13 @@ public static class EntityUtils
         }
     }
     
-    internal static void JsonToEntity(Entity entity, string json)
+    /// <remarks> The "id" in the passed JSON <paramref name="value"/> is ignored. </remarks>
+    internal static void JsonToEntity(Entity entity, string value)
     {
-        if (json == null) throw new ArgumentNullException(nameof(json));
+        if (value == null) throw new ArgumentNullException(nameof(value));
         var serializer = EntitySerializer;
         lock (serializer) {
-            var jsonValue = new JsonValue(json);
+            var jsonValue = new JsonValue(value);
             serializer.ReadIntoEntity(entity, jsonValue);
         }
     }
