@@ -482,7 +482,7 @@ public class EntitySerializer
     
     private JsonEvent ReadError(string message)
     {
-        parser.ErrorMsg("EntitySerializer", $"{message} at position: {parser.Position}");
+        parser.ErrorMsg("EntitySerializer", message);
         return JsonEvent.Error;
     }
     #endregion

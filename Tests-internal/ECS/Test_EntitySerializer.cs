@@ -1,5 +1,6 @@
 using System;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Serialize;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
@@ -57,6 +58,7 @@ public static class Test_EntitySerializer
         IsTrue  (                       entity.Tags.Has<TestTag3>());
     }
     
+    /// <summary> Cover <see cref="EntitySerializer.ReadIntoEntity(Entity)"/> </summary>
     [Test]
     public static void Test_Entity_DebugJSON_set_errors()
     {
@@ -76,7 +78,7 @@ public static class Test_EntitySerializer
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "[]";
             });
-            AreEqual("Error: expect object entity. was: ArrayStart at position: 1 path: '[]' at position: 1", e!.Message);
+            AreEqual("Error: expect object entity. was: ArrayStart path: '[]' at position: 1", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "{}x";
@@ -92,6 +94,21 @@ public static class Test_EntitySerializer
                 entity.DebugJSON = "{\"components\":[]}";
             });
             AreEqual("Error: expect 'components' == object. was: array. path: 'components[]' at position: 15", e!.Message);
+        }
+    }
+    
+    /// <summary> Cover <see cref="EntitySerializer.ReadIntoEntity(Entity)"/> </summary>
+    [Test]
+    public static void Test_Entity_DebugJSON_set_component_error()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity(1);
+        {
+            var e = Throws<ArgumentException>(() => {
+                var json = "{\"components\":{\"pos\":{\"x\":true}}}";
+                entity.DebugJSON = json;
+            });
+            AreEqual("Error: Cannot assign bool to float. got: true path: '(root)' at position: 33", e!.Message);
         }
     }
 }

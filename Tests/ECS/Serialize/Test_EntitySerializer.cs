@@ -353,9 +353,9 @@ public static class Test_Serializer
         
         var stream      = StringAsStream("[1]");
         var result      = serializer.ReadIntoStore(store, stream);
-        AreEqual("expect object entity. was: ValueNumber at position: 2 path: '[0]' at position: 2", result.error);
+        AreEqual("expect object entity. was: ValueNumber path: '[0]' at position: 2", result.error);
         result          = serializer.ReadEntities(entities, stream);
-        AreEqual("expect object entity. was: ValueNumber at position: 2 path: '[0]' at position: 2", result.error);
+        AreEqual("expect object entity. was: ValueNumber path: '[0]' at position: 2", result.error);
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadChildren"/></summary>
@@ -368,9 +368,9 @@ public static class Test_Serializer
         
         var stream      = StringAsStream("[ {\"children\":[true] } }");
         var result      = serializer.ReadIntoStore(store, stream);
-        AreEqual("expect child id number. was: ValueBool at position: 19 path: '[0].children[0]' at position: 19", result.error);
+        AreEqual("expect child id number. was: ValueBool path: '[0].children[0]' at position: 19", result.error);
         result          = serializer.ReadEntities(entities, stream);
-        AreEqual("expect child id number. was: ValueBool at position: 19 path: '[0].children[0]' at position: 19", result.error);
+        AreEqual("expect child id number. was: ValueBool path: '[0].children[0]' at position: 19", result.error);
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadTags"/></summary>
@@ -382,7 +382,7 @@ public static class Test_Serializer
         
         var stream      = StringAsStream("[ {\"tags\":[1] } }");
         var result      = serializer.ReadIntoStore(store, stream);
-        AreEqual("expect tag string. was: ValueNumber at position: 12 path: '[0].tags[0]' at position: 12", result.error);
+        AreEqual("expect tag string. was: ValueNumber path: '[0].tags[0]' at position: 12", result.error);
     }
     #endregion
 }

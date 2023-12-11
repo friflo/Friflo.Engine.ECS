@@ -39,7 +39,7 @@ internal sealed class ComponentReader
     internal ComponentReader() {
         buffer                  = new Bytes(128);
         components              = new RawComponent[1];
-        componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore);
+        componentReader         = new ObjectReader(EntityStoreBase.Static.TypeStore) { ErrorHandler = ObjectReader.NoThrow };
         var schema              = EntityStoreBase.Static.EntitySchema;
         unresolvedType          = schema.unresolvedType;
         schemaTypeByKey         = schema.schemaTypeByKey;
@@ -68,8 +68,7 @@ internal sealed class ComponentReader
             return error;
         }
         SetEntityArchetype(dataEntity, entity, store);
-        ReadComponents(entity);
-        return null;
+        return ReadComponents(entity);
     }
     
     private string ReadRaw (DataEntity dataEntity, Entity entity)
@@ -96,7 +95,7 @@ internal sealed class ComponentReader
         return null;
     }
     
-    private void ReadComponents(Entity entity)
+    private string ReadComponents(Entity entity)
     {
         unresolvedComponentList.Clear();
         scriptTypes.Clear();
@@ -128,6 +127,9 @@ internal sealed class ComponentReader
                     heap.Read(componentReader, entity.compIndex, json);
                     break;
             }
+            if (componentReader.Error.ErrSet) {
+                return componentReader.Error.GetMessageBody();
+            }
         }
         // --- remove missing scripts from entity
         foreach (var scriptType in scriptTypes) {
@@ -137,6 +139,7 @@ internal sealed class ComponentReader
         if (unresolvedComponentList.Count > 0 ) {
             AddUnresolvedComponents(entity);
         }
+        return null;
     }
     
     private void AddUnresolvedComponents(Entity entity)
