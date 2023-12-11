@@ -107,37 +107,30 @@ public sealed partial class EntityStore : EntityStoreBase
     }
     #endregion
     
-#region get EntityNode by id
-    public  ref readonly  EntityNode  GetEntityNode(int id) {
-        return ref nodes[id];
-    }
-    #endregion
 
-#region get Entity by id / pid
+#region id / pid conversion
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
     /// as this method performs a <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
     public  int             PidToId(long pid)   => pid2Id != null ? pid2Id[pid] : (int)pid;
-    
+        
     public  long            IdToPid(int id)     => nodes[id].pid;
+    #endregion
     
-    /*
-    /// <remarks>
-    /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
-    /// Instead use <see cref="Nodes"/> if possible as this method performs an expensive <see cref="Dictionary{TKey,TValue}"/> lookup.
-    /// </remarks>
-    public  ref EntityNode  GetNodeByPid(long pid) {
-        if (pid2Id != null) {
-            return ref nodes[pid2Id[pid]];
-        }
-        return ref nodes[pid];
-    }
-    
-    public  ref EntityNode  GetNodeById(int id) {
+#region get EntityNode by id
+
+    public  ref readonly  EntityNode  GetEntityNode(int id) {
         return ref nodes[id];
-    } */
+    }
+    #endregion
+
+#region get Entity by id / pid
+
+    public  Entity  GetEntityById(int id) {
+        return new Entity(id, this);
+    }
     
     public  Entity  GetEntityByPid(long pid) {
         if (pid2Id != null) {
@@ -164,10 +157,6 @@ public sealed partial class EntityStore : EntityStoreBase
         }
         value = default;
         return false;
-    }
-    
-    public  Entity  GetEntityById(int id) {
-        return new Entity(id, this);
     }
     #endregion
 }
