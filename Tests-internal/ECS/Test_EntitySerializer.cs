@@ -74,27 +74,27 @@ public static class Test_EntitySerializer
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "";
             });
-            AreEqual("Error: unexpected EOF on root path: '(root)' at position: 0", e!.Message);
+            AreEqual("unexpected EOF on root path: '(root)' at position: 0", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "[]";
             });
-            AreEqual("Error: expect object entity. was: ArrayStart path: '[]' at position: 1", e!.Message);
+            AreEqual("expect object entity. was: ArrayStart path: '[]' at position: 1", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "{}x";
             });
-            AreEqual("Error: Expected EOF path: '(root)' at position: 3", e!.Message);
+            AreEqual("Expected EOF path: '(root)' at position: 3", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "{";
             });
-            AreEqual("Error: unexpected EOF > expect key path: '(root)' at position: 1", e!.Message);
+            AreEqual("unexpected EOF > expect key path: '(root)' at position: 1", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "{\"components\":[]}";
             });
-            AreEqual("Error: expect 'components' == object. was: array. path: 'components[]' at position: 15", e!.Message);
+            AreEqual("expect 'components' == object. was: array. path: 'components[]' at position: 15", e!.Message);
         }
     }
     

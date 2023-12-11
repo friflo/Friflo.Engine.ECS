@@ -135,7 +135,7 @@ public static class EntityUtils
             if (error == null) {
                 return;
             }
-            throw new ArgumentException("Error: " + error);
+            throw new ArgumentException(error);
         }
     }
     
