@@ -98,18 +98,21 @@ public static class ECSUtils
         
         // --- convert each DataEntity into an Entity's created above
         //     replace children pid's with their new pid
+        var errors      = new List<string>();
         var missingPids = new HashSet<long>();            
         foreach (var dataEntity in dataEntities)
         {
             var children = dataEntity.children;
             dataEntity.children = null;
-            converter.DataEntityToEntity(dataEntity, store, out _);
-            
+            converter.DataEntityToEntity(dataEntity, store, out string error);
+            if (error != null) {
+                var oldPid = newToOldPid[dataEntity.pid];
+                errors.Add($"entity: {oldPid} {error}");
+            }
             ReplaceChildrenPids(children, oldToNewPid, newToOldPid, store, missingPids);
             dataEntity.children = children;
         }
         // --- add child entities to their parent entity
-        var addErrors = new List<string>();  
         foreach (var dataEntity in dataEntities)
         {
             var entity      = store.GetEntityByPid(dataEntity.pid);
@@ -126,7 +129,7 @@ public static class ECSUtils
                     continue;
                 }
                 var oldPid = newToOldPid[childPid];
-                addErrors.Add($"entity contains itself as a child. id: {oldPid}");
+                errors.Add($"entity contains itself as a child. id: {oldPid}");
             }
         }
         // --- add all root entities to target
@@ -146,7 +149,7 @@ public static class ECSUtils
             indexes         = indexes,
             addedEntities   = addedEntities,
             missingPids     = missingPids,
-            errors          = addErrors
+            errors          = errors
         };
     }
     
