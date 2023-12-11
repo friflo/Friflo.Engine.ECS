@@ -131,7 +131,11 @@ public static class EntityUtils
         var serializer = EntitySerializer;
         lock (serializer) {
             var jsonValue = new JsonValue(value);
-            serializer.ReadIntoEntity(entity, jsonValue);
+            var error = serializer.ReadIntoEntity(entity, jsonValue);
+            if (error == null) {
+                return;
+            }
+            throw new ArgumentException("Error: " + error);
         }
     }
     

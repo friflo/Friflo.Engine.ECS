@@ -1,6 +1,7 @@
 using System;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Json.Fliox;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
@@ -58,7 +59,7 @@ public static class Test_EntitySerializer
         IsTrue  (                       entity.Tags.Has<TestTag3>());
     }
     
-    /// <summary> Cover <see cref="EntitySerializer.ReadIntoEntity(Entity)"/> </summary>
+    /// <summary> Cover <see cref="EntitySerializer.ReadIntoEntity"/> </summary>
     [Test]
     public static void Test_Entity_DebugJSON_set_errors()
     {
@@ -97,18 +98,17 @@ public static class Test_EntitySerializer
         }
     }
     
-    /// <summary> Cover <see cref="EntitySerializer.ReadIntoEntity(Entity)"/> </summary>
+    /// <summary> Cover <see cref="EntitySerializer.ReadIntoEntity"/> </summary>
     [Test]
     public static void Test_Entity_DebugJSON_set_component_error()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
+        var serializer = new EntitySerializer();
         var entity  = store.CreateEntity(1);
         {
-            var e = Throws<ArgumentException>(() => {
-                var json = "{\"components\":{\"pos\":{\"x\":true}}}";
-                entity.DebugJSON = json;
-            });
-            AreEqual("Error: 'components[pos]' - Cannot assign bool to float. got: true path: 'x' at position: 9 path: '(root)' at position: 33", e!.Message);
+            var json = new JsonValue("{\"components\":{\"pos\":{\"x\":true}}}");
+            var error = serializer.ReadIntoEntity(entity, json);
+            AreEqual("'components[pos]' - Cannot assign bool to float. got: true path: 'x' at position: 9 path: '(root)' at position: 33", error);
         }
     }
 }

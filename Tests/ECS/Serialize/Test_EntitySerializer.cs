@@ -384,5 +384,16 @@ public static class Test_Serializer
         var result      = serializer.ReadIntoStore(store, stream);
         AreEqual("expect tag string. was: ValueNumber path: '[0].tags[0]' at position: 12", result.error);
     }
+    
+    [Test]
+    public static void Test_Serializer_Read_component_error()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var serializer  = new EntitySerializer();
+        
+        var stream      = StringAsStream("[ {\"tags\":[1] } }");
+        var result      = serializer.ReadIntoStore(store, stream);
+        AreEqual("expect tag string. was: ValueNumber path: '[0].tags[0]' at position: 12", result.error);
+    }
     #endregion
 }

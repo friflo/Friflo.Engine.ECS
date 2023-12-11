@@ -169,20 +169,19 @@ public class EntitySerializer
     
 #region read entities into store
     /// <remarks> The "id" in the passed <paramref name="value"/> is ignored. </remarks>
-    internal void ReadIntoEntity(Entity entity, JsonValue value)
+    internal string ReadIntoEntity(Entity entity, JsonValue value)
     {
         readJson        = value;
         readEntityCount = 0;
         parser.InitParser(readJson);
-        var ev = ReadIntoEntity(entity);
+        var ev = ReadIntoEntityInternal(entity);
         if (ev == JsonEvent.EOF) {
-            return;
+            return null;
         }
-        var msg = parser.error.GetMessage();
-        throw new ArgumentException("Error: " + msg);
+        return parser.error.GetMessage();
     }
     
-    private JsonEvent ReadIntoEntity(Entity entity)
+    private JsonEvent ReadIntoEntityInternal(Entity entity)
     {
         var store = entity.store;
         while (true) {
