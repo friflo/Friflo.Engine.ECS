@@ -66,7 +66,6 @@ public class StoreCommands : IServiceCommands
         var result      = ECSUtils.AddDataEntitiesToEntity(targetEntity, entities);
         
         var added       = new List<long?>(entities.Count);
-        var missingPids = result.missingPids;
         foreach (var entity in entities) {
             if (result.addedEntities.Contains(entity.pid)) {
                 added.Add(entity.pid);
@@ -76,7 +75,6 @@ public class StoreCommands : IServiceCommands
         }
         return new AddEntitiesResult {
             count           = addEntities.entities.Count,
-            missingEntities = missingPids,
             errors          = result.errors,
             added           = added
         };

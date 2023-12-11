@@ -109,7 +109,14 @@ public static class ECSUtils
                 var oldPid = newToOldPid[dataEntity.pid];
                 errors.Add($"entity: {oldPid} {error}");
             }
+            missingPids.Clear();
             ReplaceChildrenPids(children, oldToNewPid, newToOldPid, store, missingPids);
+            
+            if (missingPids.Count > 0) {
+                var oldPid  = newToOldPid[dataEntity.pid];
+                var ids     = string.Join(",", missingPids);
+                errors.Add($"entity: {oldPid} 'children' - missing entities: [{ids}]");
+            }
             dataEntity.children = children;
         }
         // --- add child entities to their parent entity
@@ -148,7 +155,6 @@ public static class ECSUtils
         return new AddDataEntitiesResult {
             indexes         = indexes,
             addedEntities   = addedEntities,
-            missingPids     = missingPids,
             errors          = errors
         };
     }
@@ -293,8 +299,6 @@ public class AddDataEntitiesResult
     public  List<int>       indexes;
     /// <summary> contains new pid's </summary>
     public  HashSet<long>   addedEntities;
-    /// <summary> contains old pid's </summary>
-    public  HashSet<long>   missingPids;
     /// <summary> contains old pid's </summary>
     public  List<string>    errors;
 }
