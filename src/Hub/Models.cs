@@ -14,31 +14,29 @@ namespace Friflo.Fliox.Engine.Hub;
 // --------------------------------------- command models ---------------------------------------
 public class AddEntities
 {
-    public  long                targetEntity;
-    [Required]
-    public  List<DataEntity>    entities;
+                public  long                targetEntity;
+    [Required]  public  List<DataEntity>    entities;
 }
 
 public class AddEntitiesResult
 {
     /// <summary> Number of entities requested to add. </summary>
-    public  int                 count;
+                public  int             count;
     /// <summary> Contains errors caused by inconsistent input. E.g. an entity contains itself an an entity.</summary>
-    public  List<string>        errors;
+    [Required]  public  List<string>    errors;
     /// <summary> Contains new pid's for every entity in <see cref="AddEntities.entities"/> </summary>
-    public  List<long?>         added;
+    [Required]  public  List<long?>     added;
 }
 
 public class GetEntities
 {
-    [Required]
-    public  List<long>          ids;
+    [Required]  public  List<long>  ids;
 }
 
 public class GetEntitiesResult
 {
     /// <summary> Number of returned entities. </summary>
-    public  int         count;
+                public  int         count;
     /// <summary> Contains the requested entities including their children. </summary>
-    public  JsonValue   entities;
+    [Required]  public  JsonValue   entities;
 }
