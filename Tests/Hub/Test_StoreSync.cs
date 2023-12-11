@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Friflo.Fliox.Engine.ECS;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Fliox.Engine.Hub;
+using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
 using Friflo.Json.Fliox.Hub.Host.Event;
@@ -42,7 +43,8 @@ public static class Test_StoreSync
         
         // load entities via client sync
         for (int n = 0; n < 2; n++) {
-            sync.LoadEntities();
+            var errors      = sync.LoadEntities();
+            AreEqual(0, errors.Count);
             
             var root        = store.GetEntityById(10);
             var child       = store.GetEntityById(11);
@@ -60,7 +62,8 @@ public static class Test_StoreSync
         
         // load entities via client async
         for (int n = 0; n < 2; n++) {
-            await sync.LoadEntitiesAsync();
+            var errors      = await sync.LoadEntitiesAsync();
+            AreEqual(0, errors.Count);
             
             var root        = store.GetEntityById(10);
             var child       = store.GetEntityById(11);
@@ -69,6 +72,34 @@ public static class Test_StoreSync
             var type = store.GetArchetype(Signature.Get<Position, Scale3>());
             AreEqual(2,     type.EntityCount);
             AreEqual(2,     store.EntityCount);
+        }
+    }
+    
+    [Test]
+    public static void Test_DataSync_load_entities_error()
+    {
+        var client      = CreateClient();
+        var components  = new JsonValue("{ \"pos\": { \"x\": true }}");
+        var rootNode    = new DataEntity { pid = 10L, components = components, children = new List<long> { 11 } };
+        
+        client.entities.Upsert(rootNode);
+        client.SyncTasksSynchronous();
+        
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var sync    = new StoreSync(store, client);
+        AreSame(store, sync.Store); // ensure API available
+        
+        // load entities via client sync
+        for (int n = 0; n < 2; n++) {
+            var errors      = sync.LoadEntities();
+            AreEqual(1, errors.Count);
+            AreEqual("entity: 10 - 'components[pos]' - Cannot assign bool to float. got: true path: 'x' at position: 9", errors[0]);
+            
+            var root = store.GetEntityById(10);
+            IsTrue(         root.HasPosition);
+            var type = store.GetArchetype(Signature.Get<Position>());
+            AreEqual(1,     type.EntityCount);
+            AreEqual(1,     store.EntityCount);
         }
     }
     

@@ -44,25 +44,31 @@ public sealed class StoreSync
         client.Reset();
     }
     
-    public void LoadEntities()
+    public List<string> LoadEntities()
     {
         var query = client.entities.QueryAll();
         client.SyncTasks().Wait(); // todo enable synchronous queries in MemoryDatabase
-        ConvertDataEntities(query.Result);
+        return ConvertDataEntities(query.Result);
     }
     
-    public async Task LoadEntitiesAsync()
+    public async Task<List<string>> LoadEntitiesAsync()
     {
         var query = client.entities.QueryAll();
         await client.SyncTasks();
-        ConvertDataEntities(query.Result);
+        return ConvertDataEntities(query.Result);
     }
     
-    private void ConvertDataEntities(List<DataEntity> dataEntities)
+    private List<string> ConvertDataEntities(List<DataEntity> dataEntities)
     {
+        var errors = new List<string>();
         foreach (var data in dataEntities) {
-            converter.DataEntityToEntity(data, store, out _);
+            converter.DataEntityToEntity(data, store, out string error);
+            if (error == null) {
+                continue;
+            }
+            errors.Add($"entity: {data.pid} - {error}");
         }
+        return errors;
     }
     
     public void StoreEntities()
