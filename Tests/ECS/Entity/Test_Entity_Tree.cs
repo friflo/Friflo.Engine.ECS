@@ -95,7 +95,7 @@ public static class Test_Entity_Tree
         // -- add same child again
         AreEqual(-1,        root.AddChild(child));       // event handler is not called
         AreEqual(1,         childEntities.Ids.Length);
-        var rootNode = store.Nodes[1];
+        var rootNode = store.GetEntityNode(1);
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
         AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
@@ -153,7 +153,7 @@ public static class Test_Entity_Tree
             // --- insert same child (id: 4) at same index again
             root.InsertChild(0, child4);     // event handler is not called
             AreEqual(1,                                 childNodes.Ids.Length);
-            var rootNode = store.Nodes[1];
+            var rootNode = store.GetEntityNode(1);
             AreEqual(1,                                 rootNode.ChildCount);
             AreEqual(1,                                 rootNode.ChildIds.Length);
             AreEqual("id: 1  \"root\"  ChildCount: 1  flags: Created",  rootNode.ToString());
@@ -378,12 +378,13 @@ public static class Test_Entity_Tree
         IsTrue(root ==          child.Parent);
         AreEqual(treeNode,      child.TreeMembership);
         AreEqual(2,             store.EntityCount);
-        var nodes = store.Nodes;
-        AreEqual("id: 0",                                   nodes[0].ToString());
-        AreEqual("id: 2  []  flags: TreeNode | Created",    nodes[2].ToString());
+        var node0 = store.GetEntityNode(0);
+        var node2 = store.GetEntityNode(2);
+        AreEqual("id: 0",                                   node0.ToString());
+        AreEqual("id: 2  []  flags: TreeNode | Created",    node2.ToString());
         
-        AreEqual(NullNode,                                  nodes[0].Flags);
-        AreEqual(TreeNode | Created,                        nodes[2].Flags);
+        AreEqual(NullNode,                                  node0.Flags);
+        AreEqual(TreeNode | Created,                        node2.Flags);
     }
     
     [Test]
@@ -484,7 +485,7 @@ public static class Test_Entity_Tree
         IsNull  (child.Archetype);
         IsNull  (child.Store);
         
-        var childNode = store.Nodes[2]; // child is detached => all fields have their default value
+        var childNode = store.GetEntityNode(2); // child is detached => all fields have their default value
         IsTrue  (           store.GetEntityById(childNode.Id).IsNull);
         AreEqual(2,         childNode.Id);
         AreEqual(0,         childNode.Pid);

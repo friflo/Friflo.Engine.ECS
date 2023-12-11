@@ -416,12 +416,13 @@ public static class Test_ComponentReader
         AreEqual(10,    store.GetEntityByPid(10L).Pid);
         AreEqual(10,    entity.Id);
         AreEqual(100,   entity.ChildEntities.Count);
-        var nodes = store.Nodes;
-        AreEqual(100,   nodes[10].ChildCount);
-        AreEqual(10,    nodes[10].Pid);
-        AreEqual(10,    nodes[20].ParentId);
-        AreEqual(20,    nodes[20].Pid);
-        var childIds = nodes[10].ChildIds;
+        var node10 = store.GetEntityNode(10);
+        AreEqual(100,   node10.ChildCount);
+        AreEqual(10,    node10.Pid);
+        var node20 = store.GetEntityNode(20);
+        AreEqual(10,    node20.ParentId);
+        AreEqual(20,    node20.Pid);
+        var childIds = node10.ChildIds;
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 20, childIds[n]);
         }
@@ -444,12 +445,13 @@ public static class Test_ComponentReader
         AreEqual(1,     store.GetEntityByPid(10L).Id);
         AreEqual(1,     entity.Id);
         AreEqual(100,   entity.ChildEntities.Count);
-        AreEqual(100,   store.Nodes[1].ChildCount);
-        var nodes = store.Nodes;
-        AreEqual(10,    nodes[1].Pid);
-        AreEqual(1,     nodes[2].ParentId);
-        AreEqual(20,    nodes[2].Pid);
-        var childIds = nodes[1].ChildIds;
+        var node1 = store.GetEntityNode(1);
+        AreEqual(100,   node1.ChildCount);
+        AreEqual(10,    node1.Pid);
+        var node2 = store.GetEntityNode(2);
+        AreEqual(1,     node2.ParentId);
+        AreEqual(20,    node2.Pid);
+        var childIds = node1.ChildIds;
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 2, childIds[n]);
         }

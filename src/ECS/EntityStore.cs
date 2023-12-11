@@ -106,8 +106,14 @@ public sealed partial class EntityStore : EntityStoreBase
         dataBuffer          = new DataEntity();
     }
     #endregion
+    
+#region get EntityNode by id
+    public  ref readonly  EntityNode  GetEntityNode(int id) {
+        return ref nodes[id];
+    }
+    #endregion
 
-#region access by pid
+#region get Entity by id / pid
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible

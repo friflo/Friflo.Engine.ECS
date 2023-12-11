@@ -46,22 +46,23 @@ public static class Test_EntityConverter
         AreEqual(1,                     ids.Length);
         AreEqual(8,                     ids[0]);
         IsTrue  (                       store.GetEntityById(8).IsNull);
-        AreEqual(NullNode,              store.Nodes[8].Flags);      // diff_flags
-        AreEqual(8,                     store.Nodes[8].Id);
-        AreEqual(5,                     store.Nodes[8].ParentId);   // diff_parent
+        ref readonly var node8 = ref store.GetEntityNode(8);
+        AreEqual(NullNode,              node8.Flags);      // diff_flags
+        AreEqual(8,                     node8.Id);
+        AreEqual(5,                     node8.ParentId);   // diff_parent
         AreEqual(1,                     store.EntityCount);
         
         // --- create child 8
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
         IsTrue  (entity8 ==             store.GetEntityById(8));
-        AreEqual(Created,               store.Nodes[8].Flags);
-        AreEqual(8,                     store.Nodes[8].Id);
-        AreEqual(5,                     store.Nodes[8].ParentId);
+        AreEqual(Created,               node8.Flags);
+        AreEqual(8,                     node8.Id);
+        AreEqual(5,                     node8.ParentId);
         AreEqual(2,                     store.EntityCount);
         //
         IsTrue  (                       store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
-        AreEqual(Created | TreeNode,store.Nodes[8].Flags);
+        AreEqual(Created | TreeNode,    node8.Flags);
     }
     
     [Test]
@@ -72,9 +73,10 @@ public static class Test_EntityConverter
         // --- create child 8 first
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
         IsTrue  (entity8 ==             store.GetEntityById(8));
-        AreEqual(Created,               store.Nodes[8].Flags);      // diff_flags
-        AreEqual(8,                     store.Nodes[8].Id);
-        AreEqual(0,                     store.Nodes[8].ParentId);   // diff_parent
+        ref readonly var node8 = ref store.GetEntityNode(8);
+        AreEqual(Created,               node8.Flags);      // diff_flags
+        AreEqual(8,                     node8.Id);
+        AreEqual(0,                     node8.ParentId);   // diff_parent
         AreEqual(1,                     store.EntityCount);
 
         // --- create parent 5
@@ -83,15 +85,15 @@ public static class Test_EntityConverter
         var ids     = entity5.ChildEntities.Ids;
         AreEqual(1,                     ids.Length);
         AreEqual(8,                     ids[0]);
-        AreEqual(Created,               store.Nodes[8].Flags);
-        AreEqual(8,                     store.Nodes[8].Id);
-        AreEqual(5,                     store.Nodes[8].ParentId);
+        AreEqual(Created,               node8.Flags);
+        AreEqual(8,                     node8.Id);
+        AreEqual(5,                     node8.ParentId);
         AreEqual(2,                     store.EntityCount);
         
         //
         IsTrue(                         store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
-        AreEqual(Created | TreeNode,store.Nodes[8].Flags);
+        AreEqual(Created | TreeNode,    node8.Flags);
     }
     
     [Test]
