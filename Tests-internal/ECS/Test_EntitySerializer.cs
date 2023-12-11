@@ -66,7 +66,7 @@ public static class Test_EntitySerializer
             var e = Throws<ArgumentNullException>(() => {
                 entity.DebugJSON = null;
             });
-            AreEqual("Value cannot be null. (Parameter 'json')", e!.Message);
+            AreEqual("Value cannot be null. (Parameter 'value')", e!.Message);
         } {
             var e = Throws<ArgumentException>(() => {
                 entity.DebugJSON = "";
