@@ -146,11 +146,8 @@ public readonly struct Entity
     [Browse(Never)] public  bool            IsNull          => store?.nodes[id].archetype == null;
     
     /// <summary> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </summary>
-    /// <remarks>
-    /// In contrast to <see cref="Serialize.DataEntity.DebugJSON"/> the entity can be modified by assigning a JSON value.<br/>
-    /// When assigning a JSON value its "id" member is ignored. 
-    /// </remarks>
-                    public  string          DebugJSON { get => EntityUtils.EntityToJSON(this); set => EntityUtils.JsonToEntity(this, value);  }
+    // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
+                    public  string          DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
 
     #endregion
 
