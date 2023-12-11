@@ -136,7 +136,7 @@ public static class ECSUtils
                     continue;
                 }
                 var oldPid = newToOldPid[childPid];
-                errors.Add($"entity contains itself as a child. id: {oldPid}");
+                errors.Add($"entity: {oldPid} 'children' - entity contains itself as a child.");
             }
         }
         // --- add all root entities to target
