@@ -36,10 +36,10 @@ public static class StoreUtils
     }
     
     public static   void            AssertMainThread()                               => _dispatcher.AssertMainThread();
-    public static   void            Post                (Action              action) => _dispatcher.Post(action);
-    public static   TResult         Invoke<TResult>     (Func<TResult>       action) => _dispatcher.Invoke(action);
-    public static   Task            InvokeAsync         (Func<Task>          action) => _dispatcher.InvokeAsync(action);
-    public static   Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>> action) => _dispatcher.InvokeAsync(action);
+    public static   void            Post                (Action              action) => _dispatcher.Post        (action);
+    public static        TResult    Invoke<TResult>     (Func     <TResult>  action) => _dispatcher.Invoke      (action);
+    public static   Task            InvokeAsync         (Func<Task>          action) => _dispatcher.InvokeAsync (action);
+    public static   Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>> action) => _dispatcher.InvokeAsync (action);
 }
 
 public interface IMainThreadDispatcher

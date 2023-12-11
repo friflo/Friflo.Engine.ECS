@@ -152,11 +152,7 @@ public static class ECSUtils
             addedEntities.Add(pid);
             indexes.Add(index);
         }
-        return new AddDataEntitiesResult {
-            indexes         = indexes,
-            addedEntities   = addedEntities,
-            errors          = errors
-        };
+        return new AddDataEntitiesResult { indexes = indexes, addedEntities = addedEntities, errors = errors };
     }
     
     private static void ReplaceChildrenPids(

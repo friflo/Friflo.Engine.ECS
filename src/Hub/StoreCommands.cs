@@ -73,11 +73,7 @@ public class StoreCommands : IServiceCommands
             }
             added.Add(null);
         }
-        return new AddEntitiesResult {
-            count           = addEntities.entities.Count,
-            errors          = result.errors,
-            added           = added
-        };
+        return new AddEntitiesResult { count = addEntities.entities.Count, errors = result.errors, added = added };
     }
     
     [CommandHandler("store.GetEntities")]
