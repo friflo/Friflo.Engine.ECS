@@ -195,10 +195,10 @@ public static class Test_EntityConverter
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         int entityCount = 0;
-        var nodes       = store.Nodes;
         var nodeMax     = store.NodeMaxId;
-        for (int n = 1; n <= nodeMax; n++) {
-            if (nodes[n].Archetype != null) {
+        for (int id = 1; id <= nodeMax; id++) {
+            var node = store.GetEntityNode(id);
+            if (node.Archetype != null) {
                 entityCount++;
             }
         }

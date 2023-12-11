@@ -40,23 +40,20 @@ namespace Friflo.Fliox.Engine.ECS;
 public sealed partial class EntityStore : EntityStoreBase
 {
 #region public properties
-    /// <summary>Enables access to <see cref="EntityNode"/>'s by <see cref="EntityNode.id"/>.</summary>
-    /// <returns>A node array that can contain unused nodes. So its length is <see cref="EntityStore.EntityCount"/> + number of unused nodes</returns>
-    public ReadOnlySpan<EntityNode>                 Nodes               => new (nodes);
-    public              Entity                      StoreRoot           => storeRoot; // null if no graph origin set
-    public ReadOnlySpan<EntityScripts>              EntityScripts       => new (entityScripts, 1, entityScriptCount - 1);
+    public              Entity          StoreRoot               => storeRoot; // null if no graph origin set
+    public ReadOnlySpan<EntityScripts>  EntityScripts           => new (entityScripts, 1, entityScriptCount - 1);
     #endregion
     
 #region event handler
     /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="ChildEntitiesChanged"/> are removed.</remarks>
-    public  ChildEntitiesChangedHandler ChildEntitiesChanged{ get => childEntitiesChanged;  set => childEntitiesChanged = value; }
+    public  ChildEntitiesChangedHandler ChildEntitiesChanged    { get => childEntitiesChanged;  set => childEntitiesChanged = value; }
     
     // --- script:   added / removed
-    public  ScriptChangedHandler        ScriptAdded         { get => scriptAdded;           set => scriptAdded          = value; }
-    public  ScriptChangedHandler        ScriptRemoved       { get => scriptRemoved;         set => scriptRemoved        = value; }
+    public  ScriptChangedHandler        ScriptAdded             { get => scriptAdded;           set => scriptAdded          = value; }
+    public  ScriptChangedHandler        ScriptRemoved           { get => scriptRemoved;         set => scriptRemoved        = value; }
     
-    public  EntitiesChangedHandler      EntitiesChanged     { get => entitiesChanged;       set => entitiesChanged      = value; }
+    public  EntitiesChangedHandler      EntitiesChanged         { get => entitiesChanged;       set => entitiesChanged      = value; }
     
     #endregion
     

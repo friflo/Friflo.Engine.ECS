@@ -172,7 +172,7 @@ public readonly struct Entity
     #endregion
     
 #region child / tree - properties
-    [Browse(Never)] public  int                 ChildCount      => archetype.entityStore.Nodes[id].childCount;
+    [Browse(Never)] public  int                 ChildCount      => archetype.entityStore.nodes[id].childCount;
     
     /// <returns>
     /// null if the entity has no parent.<br/>

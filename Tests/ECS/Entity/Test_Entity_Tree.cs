@@ -41,20 +41,6 @@ public static class Test_Entity_Tree
         AreEqual(1,     store.GetEntityByPid(1L).Pid);
     }
     
-    /// <summary>Test id assignment in <see cref="EntityStore.EnsureNodesLength"/></summary>
-    [Test]
-    public static void Test_EntityStore_EnsureNodesLength()
-    {
-        var store   = new EntityStore(PidType.UsePidAsId);
-        for (int n = 0; n < 10; n++) {
-            var nodes = store.Nodes;
-            for (int i = 0; i < nodes.Length; i++) {
-                AreEqual(i, nodes[i].Id);
-            }
-            store.CreateEntity();
-        }
-    }
-    
     [Test]
     public static void Test_AddChild()
     {
