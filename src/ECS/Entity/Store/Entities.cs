@@ -78,8 +78,17 @@ public partial class EntityStore
         // --- deserialize DataEntity
         dataBuffer.pid      = IdToPid(entity.id);
         // convert will use entity created above
-        converter.DataEntityToEntity(dataBuffer, this, out _); // errors always null. No possibility for mapping errors
+        converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
+        AssertNoError(error);
         return entity;
+    }
+    
+    [ExcludeFromCodeCoverage]
+    private static void AssertNoError(string error) {
+        if (error == null) {
+            return;
+        }
+        throw new InvalidOperationException($"unexpected error: {error}");
     }
     
     private static bool IsBlittable(Entity original)
