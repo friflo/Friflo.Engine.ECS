@@ -25,8 +25,8 @@ public class AddEntitiesResult
     public  int                 count;
     /// <summary> Contains pid's used in <see cref="DataEntity.children"/> but missing in <see cref="AddEntities.entities"/> </summary>
     public  HashSet<long>       missingEntities;
-    /// <summary> Contains pid's failed to add because of inconsistent input. E.g. an entity contains itself an an entity.</summary>
-    public  HashSet<long>       addErrors;
+    /// <summary> Contains errors caused by inconsistent input. E.g. an entity contains itself an an entity.</summary>
+    public  List<string>        errors;
     /// <summary> Contains new pid's for every entity in <see cref="AddEntities.entities"/> </summary>
     public  List<long?>         added;
 }

@@ -77,7 +77,7 @@ public class StoreCommands : IServiceCommands
         return new AddEntitiesResult {
             count           = addEntities.entities.Count,
             missingEntities = missingPids,
-            addErrors       = result.addErrors,
+            errors          = result.errors,
             added           = added
         };
     }

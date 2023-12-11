@@ -109,7 +109,7 @@ public static class ECSUtils
             dataEntity.children = children;
         }
         // --- add child entities to their parent entity
-        var addErrors = new HashSet<long>();  
+        var addErrors = new List<string>();  
         foreach (var dataEntity in dataEntities)
         {
             var entity      = store.GetEntityByPid(dataEntity.pid);
@@ -125,7 +125,8 @@ public static class ECSUtils
                     addedEntities.Add(childPid);
                     continue;
                 }
-                addErrors.Add(newToOldPid[childPid]);
+                var oldPid = newToOldPid[childPid];
+                addErrors.Add($"entity contains itself as a child. id: {oldPid}");
             }
         }
         // --- add all root entities to target
@@ -145,7 +146,7 @@ public static class ECSUtils
             indexes         = indexes,
             addedEntities   = addedEntities,
             missingPids     = missingPids,
-            addErrors       = addErrors
+            errors          = addErrors
         };
     }
     
@@ -292,7 +293,7 @@ public class AddDataEntitiesResult
     /// <summary> contains old pid's </summary>
     public  HashSet<long>   missingPids;
     /// <summary> contains old pid's </summary>
-    public  HashSet<long>   addErrors;
+    public  List<string>    errors;
 }
 
 public class JsonEntities
