@@ -129,8 +129,7 @@ public static class EntityUtils
         if (json == null) throw new ArgumentNullException(nameof(json));
         var serializer = EntitySerializer;
         lock (serializer) {
-            var jsonBytes   = Encoding.UTF8.GetBytes(json);
-            var jsonValue   = new JsonValue(jsonBytes);
+            var jsonValue = new JsonValue(json);
             serializer.ReadIntoEntity(entity, jsonValue);
         }
     }
