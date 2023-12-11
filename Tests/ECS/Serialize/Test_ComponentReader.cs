@@ -187,7 +187,7 @@ public static class Test_ComponentReader
         var node    = new DataEntity { pid = 10, components = json };
         var entity  = converter.DataEntityToEntity(node, store, out var error);
         NotNull(entity);
-        AreEqual("components element must be an object. was ArrayStart. id: 10, component: 'pos'", error);
+        AreEqual("'components' element must be an object. was ArrayStart. id: 10, component: 'pos'", error);
     }
     
     [Test]
@@ -205,6 +205,18 @@ public static class Test_ComponentReader
         entity      = converter.DataEntityToEntity(node, store, out error);
         NotNull(entity);
         AreEqual("unexpected character while reading value. Found: i path: '(root)' at position: 1. id: 10", error);
+    }
+    
+    [Test]
+    public static void Test_ComponentReader_read_component_error()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var node    = new DataEntity { pid = 10, components = new JsonValue("{\"pos\":{\"x\":[]}}") };
+        var entity  = converter.DataEntityToEntity(node, store, out var error);
+        AreEqual("'components[pos]' - Cannot assign array to float. got: [...]", error);
+        NotNull(entity);
     }
     
     /// <summary>cover <see cref="ComponentReader.Read"/></summary>

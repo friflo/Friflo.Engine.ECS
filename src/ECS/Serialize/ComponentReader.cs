@@ -86,7 +86,7 @@ internal sealed class ComponentReader
                 ev = ReadRawComponents();
                 if (ev != JsonEvent.ObjectEnd) {
                     // could support also scalar types in future: string, number or boolean
-                    return $"components element must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
+                    return $"'components' element must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
                 }
                 break;
             default:
@@ -128,7 +128,7 @@ internal sealed class ComponentReader
                     break;
             }
             if (componentReader.Error.ErrSet) {
-                return componentReader.Error.GetMessageBody();
+                return $"'components[{component.rawKey.key}]' - {componentReader.Error.GetMessageBody()}";
             }
         }
         // --- remove missing scripts from entity

@@ -108,7 +108,7 @@ public static class Test_EntitySerializer
                 var json = "{\"components\":{\"pos\":{\"x\":true}}}";
                 entity.DebugJSON = json;
             });
-            AreEqual("Error: Cannot assign bool to float. got: true path: '(root)' at position: 33", e!.Message);
+            AreEqual("Error: 'components[pos]' - Cannot assign bool to float. got: true path: '(root)' at position: 33", e!.Message);
         }
     }
 }
