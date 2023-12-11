@@ -78,7 +78,7 @@ public partial class EntityStore
         // --- deserialize DataEntity
         dataBuffer.pid      = IdToPid(entity.id);
         // convert will use entity created above
-        converter.DataEntityToEntity(dataBuffer, this, out _);
+        converter.DataEntityToEntity(dataBuffer, this, out _); // errors always null. No possibility for mapping errors
         return entity;
     }
     
