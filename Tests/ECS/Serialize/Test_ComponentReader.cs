@@ -215,7 +215,7 @@ public static class Test_ComponentReader
         
         var node    = new DataEntity { pid = 10, components = new JsonValue("{\"pos\":{\"x\":[]}}") };
         var entity  = converter.DataEntityToEntity(node, store, out var error);
-        AreEqual("'components[pos]' - Cannot assign array to float. got: [...]", error);
+        AreEqual("'components[pos]' - Cannot assign array to float. got: [...] path: 'x[]' at position: 6", error);
         NotNull(entity);
     }
     

@@ -128,7 +128,7 @@ internal sealed class ComponentReader
                     break;
             }
             if (componentReader.Error.ErrSet) {
-                return $"'components[{component.rawKey.key}]' - {componentReader.Error.GetMessageBody()}";
+                return $"'components[{component.rawKey.key}]' - {componentReader.Error.GetMessage()}";
             }
         }
         // --- remove missing scripts from entity
