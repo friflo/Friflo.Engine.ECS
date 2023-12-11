@@ -45,8 +45,8 @@ public static class StoreUtils
 public interface IMainThreadDispatcher
 {
     public  void            AssertMainThread();
-    public  void            Post(Action action);
-    public  TResult         Invoke<TResult>(Func<TResult> action);
-    public  Task            InvokeAsync(Func<Task> action);
-    public  Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>> action);
+    public  void            Post                (Action                 action);
+    public       TResult    Invoke     <TResult>(Func     <TResult>     action);
+    public  Task            InvokeAsync         (Func<Task>             action);
+    public  Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>>    action);
 }
