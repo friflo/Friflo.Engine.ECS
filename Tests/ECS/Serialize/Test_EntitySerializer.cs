@@ -386,7 +386,7 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static void Test_Serializer_Read_component_error()
+    public static void Test_Serializer_Read_tags_error()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
@@ -394,6 +394,17 @@ public static class Test_Serializer
         var stream      = StringAsStream("[ {\"tags\":[1] } }");
         var result      = serializer.ReadIntoStore(store, stream);
         AreEqual("expect tag string. was: ValueNumber path: '[0].tags[0]' at position: 12", result.error);
+    }
+    
+    [Test]
+    public static void Test_Serializer_Read_component_error()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var serializer  = new EntitySerializer();
+        
+        var stream      = StringAsStream("[ {\"id\":10, \"components\":{\"pos\":{\"x\":false}} } }");
+        var result      = serializer.ReadIntoStore(store, stream);
+        AreEqual("'components[pos]' - Cannot assign bool to float. got: false path: 'x' at position: 10 path: '[0]' at position: 46", result.error);
     }
     #endregion
 }

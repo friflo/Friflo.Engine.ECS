@@ -295,8 +295,11 @@ public class EntitySerializer
                     if (ev != JsonEvent.ObjectEnd) {
                         return ev;
                     }
-                    converter.DataEntityToEntity(readEntity, store, out _);
+                    converter.DataEntityToEntity(readEntity, store, out var error);
                     readEntityCount++;
+                    if (error != null) {
+                        return ReadError(error);
+                    }
                     break;
                 case JsonEvent.ArrayEnd:
                 case JsonEvent.Error:
