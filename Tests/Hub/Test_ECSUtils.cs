@@ -150,6 +150,28 @@ public static class Test_ECSUtils
     }
     #endregion
     
+#region Add DataEntity's to Entity
+    /// <summary> Cover <see cref="ECSUtils.AddDataEntitiesToEntity"/> and <see cref="ECSUtils.ReplaceChildrenPids"/></summary>
+    [Test]
+    public static void Test_ECSUtils_AddDataEntitiesToEntity()
+    {
+        var store           = new EntityStore(PidType.UsePidAsId);
+        var root            = store.CreateEntity(1);
+        var child1          = store.CreateEntity(2);
+        root.AddChild(child1);
+        
+        var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 11 }};
+        var dataEntity11    = new DataEntity { pid = 11 };
+        var dataEntities    = new [] { dataEntity10, dataEntity11 };
+        
+        var result = ECSUtils.AddDataEntitiesToEntity(root, dataEntities);
+        
+        AreEqual(1,         result.indexes.Count);
+        AreEqual(2,         result.addedEntities.Count);
+        AreEqual(0,         result.errors.Count);
+    }
+    #endregion
+
 #region Remove ExplorerItem's
     /// <summary> Cover <see cref="ECSUtils.RemoveExplorerItems"/> </summary>
     [Test]

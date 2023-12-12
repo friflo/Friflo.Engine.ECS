@@ -77,7 +77,7 @@ public static class ECSUtils
     
 #region Paste DataEntity's
     /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
-    public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, List<DataEntity> dataEntities)
+    public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, IReadOnlyList<DataEntity> dataEntities)
     {
         var entityCount     = dataEntities.Count;
         var addedEntities   = new HashSet<long>         (entityCount);               
