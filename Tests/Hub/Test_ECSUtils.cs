@@ -16,6 +16,7 @@ namespace Tests.Hub;
 public static class Test_ECSUtils
 {
 #region JsonArrayToDataEntities()
+    /// <summary> Cover <see cref="ECSUtils.JsonArrayToDataEntities"/> </summary>
     [Test]
     public static void Test_ECSUtils_JsonArrayToDataEntities()
     {
@@ -42,6 +43,7 @@ public static class Test_ECSUtils
         AreEqual(components,        data0.components.ToString());
     }
     
+    /// <summary> Cover <see cref="ECSUtils.JsonArrayToDataEntities"/> errors </summary>
     [Test]
     public static void Test_ECSUtils_JsonArrayToDataEntities_errors()
     {
@@ -61,6 +63,7 @@ public static class Test_ECSUtils
     
     
 #region DuplicateEntities()
+    /// <summary> Cover <see cref="ECSUtils.DuplicateEntities"/> and <see cref="ECSUtils.DuplicateChildren"/> </summary>
     [Test]
     public static void Test_ECSUtils_DuplicateEntities()
     {
@@ -73,27 +76,29 @@ public static class Test_ECSUtils
         
         store.SetStoreRoot(root);
         root.AddChild(child2);
-        root.AddChild(child3);
-        AreEqual(2, root.ChildCount);
+        child2.AddChild(child3);
+        AreEqual(1,             root.ChildCount);
+        AreEqual(1,             child2.ChildCount);
         
         // --- Duplicate two child entities
         var entities    = new List<Entity>{ child2, child3 };
         var indexes     = ECSUtils.DuplicateEntities(entities);
         
         AreEqual(2,             indexes.Length);
-        AreEqual(4,             root.ChildCount);
+        AreEqual(2,             root.ChildCount);
+        AreEqual(2,             child2.ChildCount);
         
-        var clone2 =            root.ChildEntities[indexes[0]];
+        var clone2 =            root.ChildEntities  [indexes[0]];
         AreEqual("child-2",     clone2.Name.value);
         
-        var clone3 =            root.ChildEntities[indexes[1]];
+        var clone3 =            child2.ChildEntities[indexes[1]];
         AreEqual("child-3",     clone3.Name.value);
         
         // --- Duplicate root
         entities        = new List<Entity>{ root };
         indexes         = ECSUtils.DuplicateEntities(entities);
         
-        AreEqual(4,             root.ChildCount);
+        AreEqual(2,             root.ChildCount);
         AreEqual(1,             indexes.Length);
         AreEqual(-1,            indexes[0]);
     }
