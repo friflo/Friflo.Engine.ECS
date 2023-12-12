@@ -16,7 +16,7 @@ namespace Tests.Hub;
 
 public static class Test_ECSUtils
 {
-#region JsonArrayToDataEntities()
+#region JSON array -> DataEntity's
     /// <summary> Cover <see cref="ECSUtils.JsonArrayToDataEntities"/> </summary>
     [Test]
     public static void Test_ECSUtils_JsonArrayToDataEntities()
@@ -62,8 +62,7 @@ public static class Test_ECSUtils
     }
     #endregion
     
-    
-#region DuplicateEntities()
+#region Duplicate Entity's
     /// <summary> Cover <see cref="ECSUtils.DuplicateEntities"/> and <see cref="ECSUtils.DuplicateChildren"/> </summary>
     [Test]
     public static void Test_ECSUtils_DuplicateEntities()
@@ -105,7 +104,7 @@ public static class Test_ECSUtils
     }
     #endregion
     
-#region EntitiesToJsonArray()
+#region Entity's -> JSON array
     /// <summary> Cover <see cref="ECSUtils.EntitiesToJsonArray"/> and <see cref="ECSUtils.AddChildren"/></summary>
     [Test]
     public static void Test_ECSUtils_EntitiesToJsonArray()
@@ -151,7 +150,7 @@ public static class Test_ECSUtils
     }
     #endregion
     
-#region RemoveExplorerItems()
+#region Remove ExplorerItem's
     /// <summary> Cover <see cref="ECSUtils.RemoveExplorerItems"/> </summary>
     [Test]
     public static void Test_ECSUtils_RemoveExplorerItems()
@@ -182,7 +181,7 @@ public static class Test_ECSUtils
     }
     #endregion
     
-#region move ExplorerItem's
+#region Move ExplorerItem's
     /// <summary> Cover <see cref="ECSUtils.MoveExplorerItemsUp"/> </summary>
     [Test]
     public static void Test_ECSUtils_MoveExplorerItemsUp()
