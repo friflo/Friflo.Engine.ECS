@@ -27,7 +27,7 @@ public static class Test_StoreSync
     }
     
     [Test]
-    public static async Task Test_DataSync_load_entities()
+    public static async Task Test_StoreSync_load_entities()
     {
         var client  = CreateClient();
         var rootNode    = new DataEntity { pid = 10L, components = Test_ComponentReader.RootComponents, children = new List<long> { 11 } };
@@ -76,7 +76,7 @@ public static class Test_StoreSync
     }
     
     [Test]
-    public static void Test_DataSync_load_entities_error()
+    public static void Test_StoreSync_load_entities_error()
     {
         var client      = CreateClient();
         var components  = new JsonValue("{ \"pos\": { \"x\": true }}");
@@ -104,7 +104,7 @@ public static class Test_StoreSync
     }
     
     [Test]
-    public static async Task Test_DataSync_store_entities()
+    public static async Task Test_StoreSync_store_entities()
     {
         var client      = CreateClient();
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -161,7 +161,7 @@ public static class Test_StoreSync
     }
     
     [Test]
-    public static void Test_DataSync_constructor_params()
+    public static void Test_StoreSync_constructor_params()
     {
         var e = Throws<ArgumentNullException>(() => {
             _ = new StoreSync(null, null);
@@ -192,7 +192,7 @@ public static class Test_StoreSync
     
     /// <summary>Cover <see cref="StoreSync.SubscribeDatabaseChanges"/></summary>
     [Test]
-    public static void Test_DataSync_SubscribeDatabaseChanges()
+    public static void Test_StoreSync_SubscribeDatabaseChanges()
     {
         var hub     = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
         var client  = new StoreClient(hub);
@@ -222,7 +222,7 @@ public static class Test_StoreSync
     
     /// <summary>Cover <see cref="StoreSync.SubscribeDatabaseChangesAsync"/></summary>
     [Test]
-    public static async Task Test_DataSync_SubscribeDatabaseChangesAsync()
+    public static async Task Test_StoreSync_SubscribeDatabaseChangesAsync()
     {
         var hub     = Prepare_SubscribeDatabaseChanges(out var sync, out var processor);
         var client  = new StoreClient(hub);
