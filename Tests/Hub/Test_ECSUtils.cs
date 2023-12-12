@@ -103,4 +103,50 @@ public static class Test_ECSUtils
         AreEqual(-1,            indexes[0]);
     }
     #endregion
+    
+#region EntitiesToJsonArray()
+    /// <summary> Cover <see cref="ECSUtils.EntitiesToJsonArray"/> and <see cref="ECSUtils.AddChildren"/></summary>
+    [Test]
+    public static void Test_ECSUtils_EntitiesToJsonArray()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        root.  AddComponent(new EntityName("root"));
+        child2.AddComponent(new EntityName("child-2"));
+        child3.AddComponent(new EntityName("child-3"));
+        
+        var entities        = new [] { root, child2 };
+        var jsonEntities    = ECSUtils.EntitiesToJsonArray(entities);
+        
+        AreEqual(3, jsonEntities.count);
+        var json =
+"""
+[{
+    "id": 1,
+    "children": [
+        2,
+        3
+    ],
+    "components": {
+        "name": {"value":"root"}
+    }
+},{
+    "id": 2,
+    "components": {
+        "name": {"value":"child-2"}
+    }
+},{
+    "id": 3,
+    "components": {
+        "name": {"value":"child-3"}
+    }
+}]
+""";
+        AreEqual(json, jsonEntities.entities.ToString());
+    }
+    #endregion
 }
