@@ -56,9 +56,13 @@ internal class TreeIndexPaths
         if (length != indexPaths.Length) throw new InvalidOperationException("expect equal lengths");
         
         for (int n = 0; n < length; n++) {
+            var index       = indexes[n];
+            if (index == -1) {
+                continue; // skip if no index available. E.g. for Duplicate root
+            }
             var path        = indexPaths[n];
             var parent      = path.Slice(0, path.Count - 1);
-            indexPaths[n]   = parent.Append(indexes[n]);
+            indexPaths[n]   = parent.Append(index);
         }
     }
     

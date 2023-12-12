@@ -76,10 +76,11 @@ public static class Test_ECSUtils
         root.AddChild(child3);
         AreEqual(2, root.ChildCount);
         
+        // --- Duplicate two child entities
         var entities    = new List<Entity>{ child2, child3 };
-        
         var indexes     = ECSUtils.DuplicateEntities(entities);
         
+        AreEqual(2,             indexes.Length);
         AreEqual(4,             root.ChildCount);
         
         var clone2 =            root.ChildEntities[indexes[0]];
@@ -87,6 +88,14 @@ public static class Test_ECSUtils
         
         var clone3 =            root.ChildEntities[indexes[1]];
         AreEqual("child-3",     clone3.Name.value);
+        
+        // --- Duplicate root
+        entities        = new List<Entity>{ root };
+        indexes         = ECSUtils.DuplicateEntities(entities);
+        
+        AreEqual(4,             root.ChildCount);
+        AreEqual(1,             indexes.Length);
+        AreEqual(-1,            indexes[0]);
     }
     #endregion
 }
