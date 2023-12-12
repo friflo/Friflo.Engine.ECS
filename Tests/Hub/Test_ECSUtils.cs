@@ -181,4 +181,54 @@ public static class Test_ECSUtils
         AreEqual("child-3", root.ChildEntities[0].Name.value);
     }
     #endregion
+    
+#region move ExplorerItem's
+    /// <summary> Cover <see cref="ECSUtils.MoveExplorerItemsUp"/> </summary>
+    [Test]
+    public static void Test_ECSUtils_MoveExplorerItemsUp()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        store.SetStoreRoot(root);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        root.AddComponent(new EntityName("root"));
+        
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        var item3       = tree.GetItemById(3);
+        var items       = new [] { item3 };
+        AreEqual(new [] { 2, 3 },   root.ChildIds.ToArray());
+     
+        // move item3 up
+        ECSUtils.MoveExplorerItemsUp(items, 1);
+        
+        AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
+    }
+    
+    /// <summary> Cover <see cref="ECSUtils.MoveExplorerItemsDown"/> </summary>
+    [Test]
+    public static void Test_ECSUtils_MoveExplorerItemsDown()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        store.SetStoreRoot(root);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        root.AddComponent(new EntityName("root"));
+        
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        var item2       = tree.GetItemById(2);
+        var items       = new [] { item2 };
+        AreEqual(new [] { 2, 3 },   root.ChildIds.ToArray());
+     
+        // move item2 down
+        ECSUtils.MoveExplorerItemsDown(items, 1);
+        
+        AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
+    }
+    #endregion
 }
