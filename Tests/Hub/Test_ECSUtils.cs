@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
@@ -147,6 +148,37 @@ public static class Test_ECSUtils
 }]
 """;
         AreEqual(json, jsonEntities.entities.ToString());
+    }
+    #endregion
+    
+#region RemoveExplorerItems()
+    /// <summary> Cover <see cref="ECSUtils.RemoveExplorerItems"/> </summary>
+    [Test]
+    public static void Test_ECSUtils_RemoveExplorerItems()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        store.SetStoreRoot(root);
+        var child2  = store.CreateEntity(2);
+        var child3  = store.CreateEntity(3);
+        root.AddChild(child2);
+        root.AddChild(child3);
+        root.  AddComponent(new EntityName("root"));
+        child2.AddComponent(new EntityName("child-2"));
+        child3.AddComponent(new EntityName("child-3"));
+        
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        var rootItem    = tree.GetItemById(1);
+        var item2       = tree.GetItemById(2);
+        var items = new [] { item2 };
+        AreEqual(2,         root.ChildCount);
+        AreEqual("child-2", root.ChildEntities[0].Name.value);
+     
+        // remove child2
+        ECSUtils.RemoveExplorerItems(items, rootItem);
+        
+        AreEqual(1,         root.ChildCount);
+        AreEqual("child-3", root.ChildEntities[0].Name.value);
     }
     #endregion
 }
