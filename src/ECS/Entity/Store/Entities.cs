@@ -27,7 +27,7 @@ public partial class EntityStore
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()
     {
-        var id      = sequenceId++;
+        var id  = NewId();
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
         return CreateEntityNode(id, pid);
@@ -49,8 +49,8 @@ public partial class EntityStore
     
     public Entity CloneEntity(Entity original)
     {
-        var entity          = CreateEntity();
-        var archetype       = original.archetype;
+        var entity      = CreateEntity();
+        var archetype   = original.archetype;
         if (archetype != defaultArchetype) {
             entity.refCompIndex    = archetype.AddEntity(entity.id);
             entity.refArchetype    = archetype;

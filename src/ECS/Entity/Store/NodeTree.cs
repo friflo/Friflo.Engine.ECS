@@ -443,8 +443,24 @@ public partial class EntityStore
         return new InvalidOperationException(sb.ToString());
     }
     
-    protected internal override void UpdateEntityCompIndex(int id, int compIndex) {
+    protected internal override void    UpdateEntityCompIndex(int id, int compIndex) {
         nodes[id].compIndex = compIndex;
+    }
+    
+    private int NewId()
+    {
+        var localNodes  = nodes;
+        var max         = localNodes.Length;
+        int id          = sequenceId;
+        for (; id < max; id++)
+        {
+            if ((localNodes[id].flags & Created) != 0) {
+                continue;
+            }
+            break;
+        }
+        sequenceId = id + 1;
+        return id;
     }
     
     /// <remarks> Set <see cref="EntityNode.archetype"/> = null. </remarks>

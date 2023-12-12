@@ -52,7 +52,6 @@ public abstract partial class EntityStoreBase
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
-                    protected           int                     sequenceId;         //  4                   - incrementing id used for next new entity
     // --- delegates
     [Browse(Never)] private             TagsChangedHandler      tagsChanged;        //  8
     //
@@ -87,7 +86,6 @@ public abstract partial class EntityStoreBase
 #region initialize
     protected EntityStoreBase()
     {
-        sequenceId          = Static.MinNodeId;
         archs               = new Archetype[2];
         archSet             = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
         var config          = GetArchetypeConfig();
@@ -96,7 +94,7 @@ public abstract partial class EntityStoreBase
         AddArchetype(defaultArchetype);
     }
     
-    protected internal abstract void UpdateEntityCompIndex(int id, int compIndex); 
+    protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);
     
     #endregion
     

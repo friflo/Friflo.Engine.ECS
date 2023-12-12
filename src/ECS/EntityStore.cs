@@ -60,6 +60,8 @@ public sealed partial class EntityStore : EntityStoreBase
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
     [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes   - acts also id2pid
+                    private             int                     sequenceId;         //  4               - incrementing id used for next new entity
+
     [Browse(Never)] private  readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
     [Browse(Never)] private             Random                  randPid;            //  8               - null if using pid == id
                     private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
@@ -91,6 +93,7 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         this.pidType        = pidType;
         nodes               = Array.Empty<EntityNode>();
+        sequenceId          = Static.MinNodeId;
         EnsureNodesLength(2);
         if (pidType == PidType.RandomPids) {
             pid2Id  = new Dictionary<long, int>();

@@ -29,11 +29,13 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public sealed class RawEntityStore : EntityStoreBase
 {
-    private            RawEntity[]             entities;          //  8 + all raw entities
+    private     RawEntity[]     entities;       //  8 + all raw entities
+    private     int             sequenceId;     //  4               - incrementing id used for next new entity
 
     public RawEntityStore()
     {
-        entities = Array.Empty<RawEntity>();
+        entities    = Array.Empty<RawEntity>();
+        sequenceId  = Static.MinNodeId;
     }
 
 #region entity create
@@ -75,13 +77,15 @@ public sealed class RawEntityStore : EntityStoreBase
         return id;
     }
     
-    public int CreateEntity() {
-        var id      = sequenceId++;
+    public int CreateEntity()
+    {
+        var id = NewId();
         CreateEntity(id);
         return id;
     }
     
-    public int CreateEntity(int id) {
+    public int CreateEntity(int id)
+    {
         EnsureEntitiesLength(id + 1);
         nodesCount++;
         if (nodesMaxId < id) {
@@ -90,8 +94,12 @@ public sealed class RawEntityStore : EntityStoreBase
         return id;
     }
     
-    protected internal override void UpdateEntityCompIndex(int id, int compIndex) {
+    protected internal override void    UpdateEntityCompIndex(int id, int compIndex) {
         entities[id].compIndex = compIndex;
+    }
+    
+    private int NewId() {
+        return sequenceId++;
     }
     
     public void DeleteEntity(int id)

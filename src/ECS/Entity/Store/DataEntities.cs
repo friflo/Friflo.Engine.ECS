@@ -103,7 +103,7 @@ public partial class EntityStore
         var pid     = dataEntity.pid;
         var pidMap  = pid2Id;
         if (!pidMap.TryGetValue(pid, out int id)) {
-            id = sequenceId++;
+            id = NewId();
             pidMap.Add(pid, id);
         }
         // --- map children pid's to id's
@@ -115,7 +115,7 @@ public partial class EntityStore
         {
             var childPid = children[n];
             if (!pidMap.TryGetValue(childPid, out int childId)) {
-                childId = sequenceId++;
+                childId = NewId();
                 pidMap.Add(childPid, childId);
             }
             ids[n] = childId;

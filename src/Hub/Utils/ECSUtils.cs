@@ -28,7 +28,6 @@ public static class ECSUtils
     /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
     public static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
     {
-        // --- 
         var serializer      = new EntitySerializer();
         var stream          = new MemoryStream(jsonArray.Count);
         stream.Write(jsonArray.AsReadOnlySpan());
@@ -43,6 +42,7 @@ public static class ECSUtils
     }
     
 #region Duplicate Entity's
+    /// <returns> the indexes of the duplicated entities within the parent of the original entities</returns>
     public static int[] DuplicateEntities(List<Entity> entities)
     {
         var indexes = new List<int>(entities.Count);
