@@ -224,7 +224,10 @@ public static class Test_ECSUtils
      
         // move item3 up
         ECSUtils.MoveExplorerItemsUp(items, 1);
+        AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
         
+        // move item3 up - already on top => index stay unchanged
+        ECSUtils.MoveExplorerItemsUp(items, 1);
         AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
     }
     
@@ -248,8 +251,25 @@ public static class Test_ECSUtils
      
         // move item2 down
         ECSUtils.MoveExplorerItemsDown(items, 1);
-        
         AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
+        
+        // move item2 down - already on bottom => index stay unchanged
+        ECSUtils.MoveExplorerItemsDown(items, 1);
+        AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
+    }
+    
+    [Test]
+    public static void Test_ECSUtils_MoveExplorerItems_root()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        store.SetStoreRoot(root);
+        
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        
+        var items   = new [] { tree.RootItem };
+        IsNull(ECSUtils.MoveExplorerItemsUp  (items, 1));
+        IsNull(ECSUtils.MoveExplorerItemsDown(items, 1));
     }
     #endregion
 }
