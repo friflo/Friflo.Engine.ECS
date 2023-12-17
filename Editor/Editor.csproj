@@ -41,7 +41,7 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.6" />
-        <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.1" />
+        <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6" />
     </ItemGroup>
