@@ -3,12 +3,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Friflo.Fliox.Engine.ECS.Collections;
 using Friflo.Fliox.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
-
+// ReSharper disable ConvertToConstant.Local
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable once CheckNamespace
@@ -17,14 +18,6 @@ namespace Friflo.Fliox.Engine.ECS;
 /// <remarks> Note: This file will be moved to project: <see cref="Friflo.Fliox.Engine.ECS"/> </remarks>
 public static class ECSUtils
 {
-    private static void Log(Func<string> message) {
-        return;
-#pragma warning disable CS0162 // Unreachable code detected
-        var msg = message();
-        Console.WriteLine(msg);
-#pragma warning restore CS0162 // Unreachable code detected
-    }
-    
     /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
     public static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
     {
@@ -220,6 +213,15 @@ public static class ECSUtils
     #endregion
     
 #region Remove ExplorerItem's
+    private static readonly bool Log = false;
+    
+    [ExcludeFromCodeCoverage]
+    private static void LogRemove(Entity parent, Entity entity) {
+        if (!Log) return;
+        var msg = $"parent id: {parent.Id} - Remove child id: {entity.Id}";
+        Console.WriteLine(msg);
+    }
+    
     public static void RemoveExplorerItems(ExplorerItem[] items, ExplorerItem rootItem)
     {
         foreach (var item in items) {
@@ -231,13 +233,20 @@ public static class ECSUtils
                 continue;
             }
             var parent = entity.Parent;
-            Log(() => $"parent id: {parent.Id} - Remove child id: {entity.Id}");
+            LogRemove(parent, entity);
             parent.RemoveChild(entity);
         }
     }
     #endregion
     
 #region Move ExplorerItem's
+    [ExcludeFromCodeCoverage]
+    private static void LogMove(Entity parent, int newIndex, Entity entity) {
+        if (!Log) return;
+        var msg = $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}";
+        Console.WriteLine(msg);
+    }
+
     public static int[] MoveExplorerItemsUp(ExplorerItem[] items, int shift)
     {
         var parent  = items[0].Entity.Parent;
@@ -255,7 +264,7 @@ public static class ECSUtils
                 indexes[pos] = index;
             } else {
                 indexes[pos] = newIndex;
-                Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
+                LogMove(parent, newIndex, entity);
                 parent.InsertChild(newIndex, entity);
             }
             pos++;
@@ -282,7 +291,7 @@ public static class ECSUtils
                 continue;
             }
             indexes[n] = newIndex;
-            Log(() => $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}");
+            LogMove(parent, newIndex, entity);
             parent.InsertChild(newIndex, entity);
         }
         return indexes;
