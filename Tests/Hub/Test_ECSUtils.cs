@@ -160,15 +160,78 @@ public static class Test_ECSUtils
         var child1          = store.CreateEntity(2);
         root.AddChild(child1);
         
-        var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 11 }};
-        var dataEntity11    = new DataEntity { pid = 11 };
-        var dataEntities    = new [] { dataEntity10, dataEntity11 };
+        {
+            var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 11 }};
+            var dataEntity11    = new DataEntity { pid = 11 };
+            var dataEntities    = new [] { dataEntity10, dataEntity11 };
+            var result = ECSUtils.AddDataEntitiesToEntity(root, dataEntities);
+            
+            AreEqual(1,         result.indexes.Count);
+            AreEqual(2,         result.addedEntities.Count);
+            AreEqual(0,         result.errors.Count);
+        }
         
-        var result = ECSUtils.AddDataEntitiesToEntity(root, dataEntities);
+        /* {
+            var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 11, 11, 11 }};
+            var dataEntity11    = new DataEntity { pid = 11 };
+            var dataEntities    = new [] { dataEntity10, dataEntity11 };
+            var result = ECSUtils.AddDataEntitiesToEntity(root, dataEntities);
+            AreEqual(1,         result.indexes.Count);
+            AreEqual(2,         result.addedEntities.Count);
+            AreEqual(0,         result.errors.Count);
+        } */
+    }
+    
+    [Test]
+    public static void Test_ECSUtils_AddDataEntitiesToEntity_errors()
+    {
+        var store           = new EntityStore(PidType.UsePidAsId);
+        var root            = store.CreateEntity(1);
+        var child1          = store.CreateEntity(2);
+        root.AddChild(child1);
         
-        AreEqual(1,         result.indexes.Count);
-        AreEqual(2,         result.addedEntities.Count);
-        AreEqual(0,         result.errors.Count);
+        // --- add entity with invalid component
+        {
+            var json            = new JsonValue("{\n                \"name\": { \"value\": 1 }\n            }");
+            var dataEntity10    = new DataEntity { pid = 10, components = json };
+            var dataEntities    = new [] { dataEntity10 };
+            
+            var result = ECSUtils.AddDataEntitiesToEntity(child1, dataEntities);
+            
+            AreEqual(1,         result.indexes.Count);
+            AreEqual(1,         result.addedEntities.Count);
+            AreEqual(1,         result.errors.Count);
+            var error0 = "entity: 10 'components[name]' - Cannot assign number to string. got: 1 path: 'value' at position: 12";
+            AreEqual(error0,    result.errors[0]);
+        }
+        
+        // --- add entity with missing 'children' entity
+        {
+            var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 99 } };
+            var dataEntities    = new [] { dataEntity10 };
+            
+            var result = ECSUtils.AddDataEntitiesToEntity(child1, dataEntities);
+            
+            AreEqual(1,         result.indexes.Count);
+            AreEqual(2,         result.addedEntities.Count);
+            AreEqual(1,         result.errors.Count);
+            var error0 = "entity: 10 'children' - missing entities: [99]";
+            AreEqual(error0,    result.errors[0]);
+        }
+        
+        // --- add entity which reference itself as a child
+        {
+            var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 10 } };
+            var dataEntities    = new [] { dataEntity10 };
+            
+            var result = ECSUtils.AddDataEntitiesToEntity(child1, dataEntities);
+            
+            AreEqual(0,         result.indexes.Count);
+            AreEqual(0,         result.addedEntities.Count);
+            AreEqual(1,         result.errors.Count);
+            var error0 = "entity: 10 'children' - entity contains itself as a child.";
+            AreEqual(error0,    result.errors[0]);
+        }
     }
     #endregion
 
