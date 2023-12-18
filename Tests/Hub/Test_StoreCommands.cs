@@ -28,11 +28,21 @@ public static class Test_StoreCommands
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var client  = CreateClient(store);
-        
-        var collect = client.Collect(1);
-        await client.SyncTasks();
-        
-        StringAssert.StartsWith("GC.Collect(1) - duration:", collect.Result);
+        {
+            var collect = client.Collect(1);
+            await client.SyncTasks();
+            
+            StringAssert.StartsWith("GC.Collect(1) - duration:", collect.Result);
+        }
+        // --- errors
+        {
+            var get     = client.SendCommand<string, string>("store.Collect", "foo");
+            await client.TrySyncTasks();
+            
+            IsFalse(get.Success);
+            var expect = "ValidationError ~ Incorrect type. was: 'foo', expect: int32 (root), pos: 5";
+            AreEqual(expect, get.Error.Message);
+        }
     }
     
     [Test]
@@ -62,6 +72,14 @@ public static class Test_StoreCommands
             
             IsFalse(get.Success);
             AreEqual("CommandError ~ missing param", get.Error.Message);
+        }
+        {
+            var get     = client.SendCommand<string, GetEntitiesResult>("store.GetEntities", "foo");
+            await client.TrySyncTasks();
+            
+            IsFalse(get.Success);
+            var expect = "ValidationError ~ Incorrect type. was: 'foo', expect: GetEntities (root), pos: 5";
+            AreEqual(expect, get.Error.Message);
         }
     }
     
@@ -96,6 +114,14 @@ public static class Test_StoreCommands
             
             IsFalse(add.Success);
             var expect = "CommandError ~ missing param";
+            AreEqual(expect, add.Error.Message);
+        }
+        {
+            var add     = client.SendCommand<string, AddEntitiesResult>("store.AddEntities", "foo");
+            await client.TrySyncTasks();
+            
+            IsFalse(add.Success);
+            var expect = "ValidationError ~ Incorrect type. was: 'foo', expect: AddEntities (root), pos: 5";
             AreEqual(expect, add.Error.Message);
         }
     }
