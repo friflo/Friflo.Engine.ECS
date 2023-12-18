@@ -20,7 +20,7 @@ namespace Friflo.Fliox.Engine.Hub;
 /// </summary>
 public class StoreCommands : IServiceCommands
 {
-    /// <remarks> Must be accessed only from main thread. See <see cref="StoreUtils"/>.</remarks>
+    /// <remarks> Must be accessed only from main thread. See <see cref="StoreDispatcher"/>.</remarks>
     private readonly EntityStore    store;
         
     public StoreCommands(EntityStore store) {
@@ -55,7 +55,7 @@ public class StoreCommands : IServiceCommands
         if (addEntities == null) {
             return Result.Error("missing param");
         }
-        return await StoreUtils.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
+        return await StoreDispatcher.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
     }
     
     private Result<AddEntitiesResult> AddEntitiesInternal (AddEntities addEntities)
@@ -86,7 +86,7 @@ public class StoreCommands : IServiceCommands
         if (getEntities == null) {
             return Result.Error("missing param");
         }
-        return await StoreUtils.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(getEntities)));
+        return await StoreDispatcher.InvokeAsync(() => Task.FromResult(GetEntitiesInternal(getEntities)));
     }
     
     private Result<GetEntitiesResult> GetEntitiesInternal(GetEntities getEntities)

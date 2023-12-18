@@ -8,7 +8,7 @@ using Friflo.Fliox.Engine.ECS;
 
 namespace Friflo.Fliox.Editor.Utils;
 
-public class AvaloniaDispatcher : IMainThreadDispatcher
+public class AvaloniaDispatcher : IStoreDispatcher
 {
     public void          AssertMainThread    ()                             => Dispatcher.UIThread.VerifyAccess();
     public void          Post                (Action              action)   => Dispatcher.UIThread.Post       (action);

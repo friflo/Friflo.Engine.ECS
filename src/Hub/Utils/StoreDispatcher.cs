@@ -22,15 +22,15 @@ namespace Friflo.Fliox.Engine.ECS;
 ///   <item> <b>WinForms</b> - methods map to <c>System.Windows.Threading.Dispatcher</c> methods. <br/> </item>
 /// </list>
 /// </remarks>
-public static class StoreUtils
+public static class StoreDispatcher
 {
-    private static IMainThreadDispatcher _dispatcher;
+    private static IStoreDispatcher _dispatcher;
     
-    public static void SetDispatcher(IMainThreadDispatcher dispatcher) {
+    public static void SetDispatcher(IStoreDispatcher dispatcher) {
         if (dispatcher == null) throw new ArgumentNullException(nameof(dispatcher));
         dispatcher.Post(() => {
             int threadId = Environment.CurrentManagedThreadId;
-            Console.WriteLine($"{nameof(StoreUtils)} - Set dispatcher to thread id: {threadId}");                
+            Console.WriteLine($"{nameof(StoreDispatcher)} - Set dispatcher to thread id: {threadId}");                
         });
         _dispatcher = dispatcher;
     }
@@ -42,7 +42,7 @@ public static class StoreUtils
     public static   Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>> action) => _dispatcher.InvokeAsync (action);
 }
 
-public interface IMainThreadDispatcher
+public interface IStoreDispatcher
 {
     public  void            AssertMainThread();
     public  void            Post                (Action                 action);

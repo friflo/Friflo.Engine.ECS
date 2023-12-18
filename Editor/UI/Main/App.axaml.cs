@@ -28,6 +28,6 @@ public class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
-        StoreUtils.SetDispatcher(new AvaloniaDispatcher());
+        StoreDispatcher.SetDispatcher(new AvaloniaDispatcher());
     }
 }

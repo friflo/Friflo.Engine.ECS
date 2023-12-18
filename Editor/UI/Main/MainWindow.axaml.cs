@@ -24,7 +24,7 @@ public partial class MainWindow : Window
     /// <summary>Is the last call into user code before the event loop is entered</summary>
     public override void Show() {
         base.Show();
-        StoreUtils.Post(() =>
+        StoreDispatcher.Post(() =>
         {
             ExplorerPanel.Grid.Focus();    
         });

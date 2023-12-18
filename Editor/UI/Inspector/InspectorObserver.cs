@@ -65,7 +65,7 @@ internal class InspectorObserver : EditorObserver
         if (id != entityId) {
             return;
         }
-        StoreUtils.Post(() => {
+        StoreDispatcher.Post(() => {
             SetEntity(id);
         });
     }
@@ -133,7 +133,7 @@ internal class InspectorObserver : EditorObserver
     }
     
     private static void FocusPanel(Panel panel) {
-        StoreUtils.Post(() => {
+        StoreDispatcher.Post(() => {
             var focusable = EditorUtils.FindFocusable(panel);
             focusable?.Focus(NavigationMethod.Tab);
         });

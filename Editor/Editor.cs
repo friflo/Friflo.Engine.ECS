@@ -45,7 +45,7 @@ public partial class Editor
 #region public methods
     public async Task Init()
     {
-        StoreUtils.AssertMainThread();
+        StoreDispatcher.AssertMainThread();
         store       = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Editor Root"));
@@ -53,7 +53,7 @@ public partial class Editor
         
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
         isReady = true;
-        StoreUtils.Post(() => {
+        StoreDispatcher.Post(() => {
             EditorObserver.CastEditorReady(observers);
         });
         // --- add client and database
@@ -84,7 +84,7 @@ public partial class Editor
         }
         store.ChildEntitiesChanged += ChildEntitiesChangedHandler;
         
-        StoreUtils.AssertMainThread();
+        StoreDispatcher.AssertMainThread();
         // --- run server
         server = RunServer(hub);
     }
@@ -107,7 +107,7 @@ public partial class Editor
     }
     
     public void SelectionChanged(EditorSelection selection) {
-        StoreUtils.Post(() => {
+        StoreDispatcher.Post(() => {
             EditorObserver.CastSelectionChanged(observers, selection);    
         });
     }
@@ -136,7 +136,7 @@ public partial class Editor
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="StoreSync"/></summary>
     private void ChildEntitiesChangedHandler (object sender, in ChildEntitiesChangedArgs args)
     {
-        StoreUtils.AssertMainThread();
+        StoreDispatcher.AssertMainThread();
         switch (args.action)
         {
             case ChildEntitiesChangedAction.Add:
@@ -158,12 +158,12 @@ public partial class Editor
             return;
         }
         syncChangesPending = true;
-        StoreUtils.Post(SyncChangesAsync);
+        StoreDispatcher.Post(SyncChangesAsync);
     }
     
     private async void SyncChangesAsync() {
         syncChangesPending = false;
-        StoreUtils.AssertMainThread();
+        StoreDispatcher.AssertMainThread();
         if (sync != null) {
             await sync.SyncChangesAsync();
         }
@@ -180,12 +180,12 @@ public partial class Editor
     }
     
     private void ProcessEvents() {
-        StoreUtils.AssertMainThread();
+        StoreDispatcher.AssertMainThread();
         processor.ProcessEvents();
     }
     
     private void ReceivedEvent () {
-        StoreUtils.Post(ProcessEvents);
+        StoreDispatcher.Post(ProcessEvents);
     }
     
     private static HttpServer RunServer(FlioxHub hub)
