@@ -88,10 +88,10 @@ public static class ExplorerCommands
         Focus(grid);
     }
     
-    internal static void RemoveItems(TreeSelection selection, ExplorerItem rootItem, ExplorerTreeDataGrid grid)
+    internal static void RemoveItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
         var next = grid.GetSelectionPath();
-        ECSUtils.RemoveExplorerItems(selection.items, rootItem);
+        ECSUtils.RemoveExplorerItems(selection.items);
         grid.SetSelectionPath(next);
         Focus(grid);
     }

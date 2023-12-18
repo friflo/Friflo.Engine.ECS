@@ -222,17 +222,19 @@ public static class ECSUtils
         Console.WriteLine(msg);
     }
     
-    public static void RemoveExplorerItems(ExplorerItem[] items, ExplorerItem rootItem)
+    public static void RemoveExplorerItems(ExplorerItem[] items)
     {
         foreach (var item in items) {
             var entity = item.Entity; 
             if (entity.TreeMembership != TreeMembership.treeNode) {
-                continue;
-            }
-            if (rootItem == item) {
+                // case: entity is not a tree member => cannot remove from tree
                 continue;
             }
             var parent = entity.Parent;
+            if (parent.IsNull) {
+                // case: entity is root item => cannot remove root item
+                continue;
+            }
             LogRemove(parent, entity);
             parent.RemoveChild(entity);
         }

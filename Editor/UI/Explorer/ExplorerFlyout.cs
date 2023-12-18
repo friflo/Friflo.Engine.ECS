@@ -122,7 +122,7 @@ public class ExplorerFlyout : MenuFlyout
         var menu            = new MenuItem { Header = "Delete", IsEnabled = canDelete };
         menu.InputGesture   = new KeyGesture(Key.Delete);
         if (canDelete) {
-            menu.Click += (_, _) => ExplorerCommands.RemoveItems(selection, rootItem, grid);
+            menu.Click += (_, _) => ExplorerCommands.RemoveItems(selection, grid);
         }
         Items.Add(menu);
     }

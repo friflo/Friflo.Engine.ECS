@@ -214,7 +214,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
                 ExplorerCommands.DuplicateItems(GetSelection(), this);
                 return true;
             case Key.Delete:
-                ExplorerCommands.RemoveItems(GetSelection(), RootItem, this);
+                ExplorerCommands.RemoveItems(GetSelection(), this);
                 return true;
             case Key.N:
                 if (e.KeyModifiers != ctrlKey) {

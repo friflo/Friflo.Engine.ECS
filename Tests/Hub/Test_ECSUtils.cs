@@ -252,17 +252,37 @@ public static class Test_ECSUtils
         child3.AddComponent(new EntityName("child-3"));
         
         var tree        = new ExplorerItemTree(root, "test-tree");
-        var rootItem    = tree.GetItemById(1);
         var item2       = tree.GetItemById(2);
         var items = new [] { item2 };
         AreEqual(2,         root.ChildCount);
         AreEqual("child-2", root.ChildEntities[0].Name.value);
      
         // remove child2
-        ECSUtils.RemoveExplorerItems(items, rootItem);
-        
+        ECSUtils.RemoveExplorerItems(items);
         AreEqual(1,         root.ChildCount);
         AreEqual("child-3", root.ChildEntities[0].Name.value);
+        
+        // remove - already removed - child2 again
+        ECSUtils.RemoveExplorerItems(items);
+        AreEqual(1,         root.ChildCount);
+        AreEqual("child-3", root.ChildEntities[0].Name.value);
+    }
+    
+    /// <summary> Cover <see cref="ECSUtils.RemoveExplorerItems"/> </summary>
+    [Test]
+    public static void Test_ECSUtils_Remove_RootItem()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        store.SetStoreRoot(root);
+        
+        var tree        = new ExplorerItemTree(root, "test-tree");
+        var items = new [] { tree.RootItem };
+        AreEqual(1,         store.EntityCount);
+     
+        // try remove root item
+        ECSUtils.RemoveExplorerItems(items);
+        AreEqual(1,         store.EntityCount);
     }
     #endregion
     
