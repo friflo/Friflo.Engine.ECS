@@ -4,8 +4,7 @@
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS.Utils;
 
 public static class JsonUtils
 {

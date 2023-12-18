@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Friflo.Fliox.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;

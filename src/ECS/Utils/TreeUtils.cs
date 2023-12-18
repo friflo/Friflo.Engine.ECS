@@ -12,8 +12,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS.Utils;
 
 public static class TreeUtils
 {

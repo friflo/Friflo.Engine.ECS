@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Fliox.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
 
 // ReSharper disable InlineTemporaryVariable

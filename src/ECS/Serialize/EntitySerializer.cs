@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Friflo.Fliox.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 

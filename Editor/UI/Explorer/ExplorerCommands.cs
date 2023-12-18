@@ -8,6 +8,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.ECS;
+using Friflo.Fliox.Engine.ECS.Utils;
 
 
 // ReSharper disable HeuristicUnreachableCode
