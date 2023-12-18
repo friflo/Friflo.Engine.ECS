@@ -11,8 +11,7 @@ using System.Text;
 [assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
 // ReSharper disable ConvertToAutoProperty
-// ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Fliox.Engine.ECS.Utils;
 
 /// <summary>
 /// Support a bit set currently limited to 256 bits.<br/>

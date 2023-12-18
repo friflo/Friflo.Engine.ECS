@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Friflo.Fliox.Engine.ECS.Utils;
 
 // Hard rule: this file MUST NOT use type: Entity
 
