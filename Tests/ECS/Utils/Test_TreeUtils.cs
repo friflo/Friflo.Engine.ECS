@@ -11,15 +11,15 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable InconsistentNaming
-namespace Tests.Hub;
+namespace Tests.ECS.Utils;
 
 
-public static class Test_ECSUtils
+public static class Test_TreeUtils
 {
 #region JSON array -> DataEntity's
-    /// <summary> Cover <see cref="ECSUtils.JsonArrayToDataEntities"/> </summary>
+    /// <summary> Cover <see cref="TreeUtils.JsonArrayToDataEntities"/> </summary>
     [Test]
-    public static void Test_ECSUtils_JsonArrayToDataEntities()
+    public static void Test_TreeUtils_JsonArrayToDataEntities()
     {
         var json = new JsonValue(
         """
@@ -33,7 +33,7 @@ public static class Test_ECSUtils
         }]
         """);
         var dataEntities = new List<DataEntity>();
-        IsNull(ECSUtils.JsonArrayToDataEntities(json, dataEntities));
+        IsNull(TreeUtils.JsonArrayToDataEntities(json, dataEntities));
         
         AreEqual(1, dataEntities.Count);
         var data0 = dataEntities[0];
@@ -44,28 +44,28 @@ public static class Test_ECSUtils
         AreEqual(components,        data0.components.ToString());
     }
     
-    /// <summary> Cover <see cref="ECSUtils.JsonArrayToDataEntities"/> errors </summary>
+    /// <summary> Cover <see cref="TreeUtils.JsonArrayToDataEntities"/> errors </summary>
     [Test]
-    public static void Test_ECSUtils_JsonArrayToDataEntities_errors()
+    public static void Test_TreeUtils_JsonArrayToDataEntities_errors()
     {
         var dataEntities = new List<DataEntity>();
         {
-            var error = ECSUtils.JsonArrayToDataEntities(new JsonValue(), dataEntities);
+            var error = TreeUtils.JsonArrayToDataEntities(new JsonValue(), dataEntities);
             AreEqual("expect array. was: ValueNull at position: 4", error);
         } {
-            var error = ECSUtils.JsonArrayToDataEntities(new JsonValue(""), dataEntities);
+            var error = TreeUtils.JsonArrayToDataEntities(new JsonValue(""), dataEntities);
             AreEqual("unexpected EOF on root path: '(root)' at position: 0", error);
         } {
-            var error = ECSUtils.JsonArrayToDataEntities(new JsonValue("{}"), dataEntities);
+            var error = TreeUtils.JsonArrayToDataEntities(new JsonValue("{}"), dataEntities);
             AreEqual("expect array. was: ObjectStart at position: 1", error);
         }
     }
     #endregion
     
 #region Duplicate Entity's
-    /// <summary> Cover <see cref="ECSUtils.DuplicateEntities"/> and <see cref="ECSUtils.DuplicateChildren"/> </summary>
+    /// <summary> Cover <see cref="TreeUtils.DuplicateEntities"/> and <see cref="TreeUtils.DuplicateChildren"/> </summary>
     [Test]
-    public static void Test_ECSUtils_DuplicateEntities()
+    public static void Test_TreeUtils_DuplicateEntities()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -82,7 +82,7 @@ public static class Test_ECSUtils
         
         // --- Duplicate two child entities
         var entities    = new List<Entity>{ child2, child3 };
-        var indexes     = ECSUtils.DuplicateEntities(entities);
+        var indexes     = TreeUtils.DuplicateEntities(entities);
         
         AreEqual(2,             indexes.Length);
         AreEqual(2,             root.ChildCount);
@@ -96,7 +96,7 @@ public static class Test_ECSUtils
         
         // --- Duplicate root
         entities        = new List<Entity>{ root };
-        indexes         = ECSUtils.DuplicateEntities(entities);
+        indexes         = TreeUtils.DuplicateEntities(entities);
         
         AreEqual(2,             root.ChildCount);
         AreEqual(1,             indexes.Length);
@@ -105,9 +105,9 @@ public static class Test_ECSUtils
     #endregion
     
 #region Entity's -> JSON array
-    /// <summary> Cover <see cref="ECSUtils.EntitiesToJsonArray"/> and <see cref="ECSUtils.AddChildren"/></summary>
+    /// <summary> Cover <see cref="TreeUtils.EntitiesToJsonArray"/> and <see cref="TreeUtils.AddChildren"/></summary>
     [Test]
-    public static void Test_ECSUtils_EntitiesToJsonArray()
+    public static void Test_TreeUtils_EntitiesToJsonArray()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -120,7 +120,7 @@ public static class Test_ECSUtils
         child3.AddComponent(new EntityName("child-3"));
         
         var entities        = new [] { root, child2 };
-        var jsonEntities    = ECSUtils.EntitiesToJsonArray(entities);
+        var jsonEntities    = TreeUtils.EntitiesToJsonArray(entities);
         
         AreEqual(3, jsonEntities.count);
         var json =
@@ -149,9 +149,9 @@ public static class Test_ECSUtils
         AreEqual(json, jsonEntities.entities.ToString());
     }
     
-    /// <summary> Cover <see cref="ECSUtils.EntitiesToJsonArray"/> and <see cref="ECSUtils.AddChildren"/></summary>
+    /// <summary> Cover <see cref="TreeUtils.EntitiesToJsonArray"/> and <see cref="TreeUtils.AddChildren"/></summary>
     [Test]
-    public static void Test_ECSUtils_EntitiesToJsonArray_deduplicate_result()
+    public static void Test_TreeUtils_EntitiesToJsonArray_deduplicate_result()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -163,7 +163,7 @@ public static class Test_ECSUtils
         // - it is added explicit to requested entities and
         // - it is a child of its requested parent (root)
         var entities        = new [] { child2, root };
-        var jsonEntities    = ECSUtils.EntitiesToJsonArray(entities);
+        var jsonEntities    = TreeUtils.EntitiesToJsonArray(entities);
         
         AreEqual(2, jsonEntities.count);
         var json =
@@ -189,9 +189,9 @@ public static class Test_ECSUtils
     #endregion
     
 #region Add DataEntity's to Entity
-    /// <summary> Cover <see cref="ECSUtils.AddDataEntitiesToEntity"/> and <see cref="ECSUtils.ReplaceChildrenPids"/></summary>
+    /// <summary> Cover <see cref="TreeUtils.AddDataEntitiesToEntity"/> and <see cref="TreeUtils.ReplaceChildrenPids"/></summary>
     [Test]
-    public static void Test_ECSUtils_AddDataEntitiesToEntity()
+    public static void Test_TreeUtils_AddDataEntitiesToEntity()
     {
         var store           = new EntityStore(PidType.UsePidAsId);
         var root            = store.CreateEntity(1);
@@ -202,7 +202,7 @@ public static class Test_ECSUtils
             var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 11 }};
             var dataEntity11    = new DataEntity { pid = 11 };
             var dataEntities    = new [] { dataEntity10, dataEntity11 };
-            var result = ECSUtils.AddDataEntitiesToEntity(root, dataEntities);
+            var result = TreeUtils.AddDataEntitiesToEntity(root, dataEntities);
             
             AreEqual(1,         result.indexes.Count);
             AreEqual(2,         result.addedEntities.Count);
@@ -221,7 +221,7 @@ public static class Test_ECSUtils
     }
     
     [Test]
-    public static void Test_ECSUtils_AddDataEntitiesToEntity_errors()
+    public static void Test_TreeUtils_AddDataEntitiesToEntity_errors()
     {
         var store           = new EntityStore(PidType.UsePidAsId);
         var root            = store.CreateEntity(1);
@@ -234,7 +234,7 @@ public static class Test_ECSUtils
             var dataEntity10    = new DataEntity { pid = 10, components = json };
             var dataEntities    = new [] { dataEntity10 };
             
-            var result = ECSUtils.AddDataEntitiesToEntity(child1, dataEntities);
+            var result = TreeUtils.AddDataEntitiesToEntity(child1, dataEntities);
             
             AreEqual(1,         result.indexes.Count);
             AreEqual(1,         result.addedEntities.Count);
@@ -248,7 +248,7 @@ public static class Test_ECSUtils
             var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 99 } };
             var dataEntities    = new [] { dataEntity10 };
             
-            var result = ECSUtils.AddDataEntitiesToEntity(child1, dataEntities);
+            var result = TreeUtils.AddDataEntitiesToEntity(child1, dataEntities);
             
             AreEqual(1,         result.indexes.Count);
             AreEqual(2,         result.addedEntities.Count);
@@ -262,7 +262,7 @@ public static class Test_ECSUtils
             var dataEntity10    = new DataEntity { pid = 10, children = new List<long> { 10 } };
             var dataEntities    = new [] { dataEntity10 };
             
-            var result = ECSUtils.AddDataEntitiesToEntity(child1, dataEntities);
+            var result = TreeUtils.AddDataEntitiesToEntity(child1, dataEntities);
             
             AreEqual(0,         result.indexes.Count);
             AreEqual(0,         result.addedEntities.Count);
@@ -274,9 +274,9 @@ public static class Test_ECSUtils
     #endregion
 
 #region Remove ExplorerItem's
-    /// <summary> Cover <see cref="ECSUtils.RemoveExplorerItems"/> </summary>
+    /// <summary> Cover <see cref="TreeUtils.RemoveExplorerItems"/> </summary>
     [Test]
-    public static void Test_ECSUtils_RemoveExplorerItems()
+    public static void Test_TreeUtils_RemoveExplorerItems()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -296,19 +296,19 @@ public static class Test_ECSUtils
         AreEqual("child-2", root.ChildEntities[0].Name.value);
      
         // remove child2
-        ECSUtils.RemoveExplorerItems(items);
+        TreeUtils.RemoveExplorerItems(items);
         AreEqual(1,         root.ChildCount);
         AreEqual("child-3", root.ChildEntities[0].Name.value);
         
         // remove - already removed - child2 again
-        ECSUtils.RemoveExplorerItems(items);
+        TreeUtils.RemoveExplorerItems(items);
         AreEqual(1,         root.ChildCount);
         AreEqual("child-3", root.ChildEntities[0].Name.value);
     }
     
-    /// <summary> Cover <see cref="ECSUtils.RemoveExplorerItems"/> </summary>
+    /// <summary> Cover <see cref="TreeUtils.RemoveExplorerItems"/> </summary>
     [Test]
-    public static void Test_ECSUtils_Remove_RootItem()
+    public static void Test_TreeUtils_Remove_RootItem()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -319,15 +319,15 @@ public static class Test_ECSUtils
         AreEqual(1,         store.EntityCount);
      
         // try remove root item
-        ECSUtils.RemoveExplorerItems(items);
+        TreeUtils.RemoveExplorerItems(items);
         AreEqual(1,         store.EntityCount);
     }
     #endregion
     
 #region Move ExplorerItem's
-    /// <summary> Cover <see cref="ECSUtils.MoveExplorerItemsUp"/> </summary>
+    /// <summary> Cover <see cref="TreeUtils.MoveExplorerItemsUp"/> </summary>
     [Test]
-    public static void Test_ECSUtils_MoveExplorerItemsUp()
+    public static void Test_TreeUtils_MoveExplorerItemsUp()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -344,17 +344,17 @@ public static class Test_ECSUtils
         AreEqual(new [] { 2, 3 },   root.ChildIds.ToArray());
      
         // move item3 up
-        ECSUtils.MoveExplorerItemsUp(items, 1);
+        TreeUtils.MoveExplorerItemsUp(items, 1);
         AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
         
         // move item3 up - already on top => index stay unchanged
-        ECSUtils.MoveExplorerItemsUp(items, 1);
+        TreeUtils.MoveExplorerItemsUp(items, 1);
         AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
     }
     
-    /// <summary> Cover <see cref="ECSUtils.MoveExplorerItemsDown"/> </summary>
+    /// <summary> Cover <see cref="TreeUtils.MoveExplorerItemsDown"/> </summary>
     [Test]
-    public static void Test_ECSUtils_MoveExplorerItemsDown()
+    public static void Test_TreeUtils_MoveExplorerItemsDown()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -371,16 +371,16 @@ public static class Test_ECSUtils
         AreEqual(new [] { 2, 3 },   root.ChildIds.ToArray());
      
         // move item2 down
-        ECSUtils.MoveExplorerItemsDown(items, 1);
+        TreeUtils.MoveExplorerItemsDown(items, 1);
         AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
         
         // move item2 down - already on bottom => index stay unchanged
-        ECSUtils.MoveExplorerItemsDown(items, 1);
+        TreeUtils.MoveExplorerItemsDown(items, 1);
         AreEqual(new [] { 3, 2 },   root.ChildIds.ToArray());
     }
     
     [Test]
-    public static void Test_ECSUtils_MoveExplorerItems_root()
+    public static void Test_TreeUtils_MoveExplorerItems_root()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
@@ -389,8 +389,8 @@ public static class Test_ECSUtils
         var tree        = new ExplorerItemTree(root, "test-tree");
         
         var items   = new [] { tree.RootItem };
-        IsNull(ECSUtils.MoveExplorerItemsUp  (items, 1));
-        IsNull(ECSUtils.MoveExplorerItemsDown(items, 1));
+        IsNull(TreeUtils.MoveExplorerItemsUp  (items, 1));
+        IsNull(TreeUtils.MoveExplorerItemsDown(items, 1));
     }
     #endregion
 }

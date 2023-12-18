@@ -63,7 +63,7 @@ public class StoreCommands : IServiceCommands
             return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
         }
         var entities    = addEntities.entities;
-        var result      = ECSUtils.AddDataEntitiesToEntity(targetEntity, entities);
+        var result      = TreeUtils.AddDataEntitiesToEntity(targetEntity, entities);
         
         var added       = new List<long?>(entities.Count);
         foreach (var entity in entities) {
@@ -98,7 +98,7 @@ public class StoreCommands : IServiceCommands
             }
             entities.Add(entity);
         }
-        var result = ECSUtils.EntitiesToJsonArray(entities);
+        var result = TreeUtils.EntitiesToJsonArray(entities);
         return new GetEntitiesResult { count = result.count, entities = result.entities };
     }
 }

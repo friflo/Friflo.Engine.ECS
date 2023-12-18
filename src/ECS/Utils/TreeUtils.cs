@@ -15,9 +15,9 @@ using Friflo.Json.Fliox;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Fliox.Engine.ECS;
 
-/// <remarks> Note: This file will be moved to project: <see cref="Friflo.Fliox.Engine.ECS"/> </remarks>
-public static class ECSUtils
+public static class TreeUtils
 {
+#region Convert a JSON array to DataEntity's
     /// <summary> Convert a JSON array to <see cref="DataEntity"/>'s </summary>
     public static string JsonArrayToDataEntities(JsonValue jsonArray, List<DataEntity> dataEntities)
     {
@@ -33,6 +33,7 @@ public static class ECSUtils
         }
         return null;
     }
+    #endregion
     
 #region Duplicate Entity's
     /// <returns> the indexes of the duplicated entities within the parent of the original entities</returns>

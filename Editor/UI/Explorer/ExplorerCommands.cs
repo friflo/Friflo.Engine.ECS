@@ -8,7 +8,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Friflo.Fliox.Editor.Utils;
 using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Collections;
 
 
 // ReSharper disable HeuristicUnreachableCode
@@ -39,7 +38,7 @@ public static class ExplorerCommands
     internal static void CopyItems(TreeSelection selection, InputElement element)
     {
         var entities    = selection.items.Select(item => item.Entity).ToList();
-        var result      = ECSUtils.EntitiesToJsonArray(entities);
+        var result      = TreeUtils.EntitiesToJsonArray(entities);
         var text        = result.entities.AsString();
         EditorUtils.CopyToClipboard(element, text);
         Focus(element);
@@ -56,7 +55,7 @@ public static class ExplorerCommands
                     targetEntity    = targetEntity.Parent; // add entities to parent
                     targetPath      = targetPath.Slice(0, targetPath.Count - 1);
                 }
-                var addResult       = ECSUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
+                var addResult       = TreeUtils.AddDataEntitiesToEntity(targetEntity, dataEntities);
                 var indexes         = addResult.indexes.ToArray();
                 var newSelection    = TreeIndexPaths.Create(targetPath, indexes);
 
@@ -76,7 +75,7 @@ public static class ExplorerCommands
         if (selection.Length > 0) {
             var entities    = selection.items.Select(item => item.Entity).ToList();
             grid.GetSelectedPaths(out var selectedPaths);
-            var indexes     = ECSUtils.DuplicateEntities(entities);
+            var indexes     = TreeUtils.DuplicateEntities(entities);
             
             // requires Post() to avoid artifacts in grid. No clue why.
             StoreUtils.Post(() => {
@@ -91,7 +90,7 @@ public static class ExplorerCommands
     internal static void RemoveItems(TreeSelection selection, ExplorerTreeDataGrid grid)
     {
         var next = grid.GetSelectionPath();
-        ECSUtils.RemoveExplorerItems(selection.items);
+        TreeUtils.RemoveExplorerItems(selection.items);
         grid.SetSelectionPath(next);
         Focus(grid);
     }
@@ -121,7 +120,7 @@ public static class ExplorerCommands
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
     internal static int[] MoveItemsUp(TreeSelection selection, int shift, IInputElement element)
     {
-        var indexes = ECSUtils.MoveExplorerItemsUp(selection.items, shift);
+        var indexes = TreeUtils.MoveExplorerItemsUp(selection.items, shift);
         Focus(element);
         return indexes?.ToArray();
     }
@@ -129,7 +128,7 @@ public static class ExplorerCommands
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
     internal static int[] MoveItemsDown(TreeSelection selection, int shift, IInputElement element)
     {
-        var indexes = ECSUtils.MoveExplorerItemsDown(selection.items, shift);
+        var indexes = TreeUtils.MoveExplorerItemsDown(selection.items, shift);
         Focus(element);
         return indexes?.ToArray();
     }

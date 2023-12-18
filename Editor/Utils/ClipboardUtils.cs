@@ -30,7 +30,7 @@ internal static class ClipboardUtils
             return null;
         }
         var result      = new List<DataEntity>();
-        ECSUtils.JsonArrayToDataEntities (jsonText, result);
+        TreeUtils.JsonArrayToDataEntities (jsonText, result);
         return result;
     }
 }
