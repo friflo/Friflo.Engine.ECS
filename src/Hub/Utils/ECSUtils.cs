@@ -179,7 +179,9 @@ public static class ECSUtils
     #endregion
     
 #region Copy Entity's
-    /// <summary> Create a JSON array from given <paramref name="entities"/> </summary>
+    /// <summary>
+    /// Create a JSON array from given <paramref name="entities"/> including their <see cref="Entity.ChildEntities"/>.
+    /// </summary>
     public static JsonEntities EntitiesToJsonArray(IEnumerable<Entity> entities)
     {
         var stream      = new MemoryStream();
@@ -204,6 +206,7 @@ public static class ECSUtils
     {
         foreach (var child in entity.ChildEntities) {
             if (!set.Add(child)) {
+                // case: child already added => skip 
                 continue;
             }
             list.Add(child);

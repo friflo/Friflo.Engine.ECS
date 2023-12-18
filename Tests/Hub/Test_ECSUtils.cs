@@ -148,6 +148,44 @@ public static class Test_ECSUtils
 """;
         AreEqual(json, jsonEntities.entities.ToString());
     }
+    
+    /// <summary> Cover <see cref="ECSUtils.EntitiesToJsonArray"/> and <see cref="ECSUtils.AddChildren"/></summary>
+    [Test]
+    public static void Test_ECSUtils_EntitiesToJsonArray_deduplicate_result()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        var child2  = store.CreateEntity(2);
+        root.AddChild(child2);
+        root.  AddComponent(new EntityName("root"));
+        child2.AddComponent(new EntityName("child-2"));
+        // JSON of child2 is returned only once - deduplicated - even
+        // - it is added explicit to requested entities and
+        // - it is a child of its requested parent (root)
+        var entities        = new [] { child2, root };
+        var jsonEntities    = ECSUtils.EntitiesToJsonArray(entities);
+        
+        AreEqual(2, jsonEntities.count);
+        var json =
+"""
+[{
+    "id": 2,
+    "components": {
+        "name": {"value":"child-2"}
+    }
+},{
+    "id": 1,
+    "children": [
+        2
+    ],
+    "components": {
+        "name": {"value":"root"}
+    }
+}]
+""";
+        AreEqual(json, jsonEntities.entities.ToString());
+    }
+    
     #endregion
     
 #region Add DataEntity's to Entity
