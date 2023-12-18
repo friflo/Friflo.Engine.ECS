@@ -24,7 +24,9 @@ namespace Friflo.Fliox.Engine.ECS;
 /// </remarks>
 public static class StoreDispatcher
 {
-    private static IStoreDispatcher _dispatcher;
+    private static readonly DefaultDispatcher   DefaultDispatcher   = new DefaultDispatcher();
+    private static          IStoreDispatcher    _dispatcher         = DefaultDispatcher;
+    
     
     public static void SetDispatcher(IStoreDispatcher dispatcher) {
         if (dispatcher == null) throw new ArgumentNullException(nameof(dispatcher));
@@ -49,4 +51,13 @@ public interface IStoreDispatcher
     public       TResult    Invoke     <TResult>(Func     <TResult>     action);
     public  Task            InvokeAsync         (Func<Task>             action);
     public  Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>>    action);
+}
+
+internal class DefaultDispatcher : IStoreDispatcher
+{
+    public void          AssertMainThread    ()                             { }
+    public void          Post                (Action              action)   => action();
+    public      TResult  Invoke     <TResult>(Func     <TResult>  action)   => action();
+    public Task          InvokeAsync         (Func<Task>          action)   => action();
+    public Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)   => action();
 }
