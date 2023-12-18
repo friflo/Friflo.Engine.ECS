@@ -291,7 +291,7 @@ internal sealed class ComponentReader
                     var start   = parser.Position;
                     parser.SkipTree();
                     if (componentCount == components.Length) {
-                        Utils.Resize(ref components, 2 * componentCount);
+                        ArrayUtils.Resize(ref components, 2 * componentCount);
                     }
                     components[componentCount++] = new RawComponent(rawKey, start, parser.Position);
                     ev = parser.NextEvent();

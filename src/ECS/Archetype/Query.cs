@@ -90,7 +90,7 @@ public class ArchetypeQuery
             }
             if (nextCount == nextArchetypes.Length) {
                 var length = Math.Max(4, 2 * nextCount);
-                Utils.Resize(ref nextArchetypes, length);
+                ArrayUtils.Resize(ref nextArchetypes, length);
             }
             nextArchetypes[nextCount++] = archetype;
         }

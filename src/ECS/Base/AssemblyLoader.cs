@@ -25,7 +25,7 @@ internal sealed class AssemblyLoader
     
     internal AssemblyLoader()
     {
-        var engineAssembly = typeof(Utils).Assembly;
+        var engineAssembly = typeof(ArrayUtils).Assembly;
         engineFullName  = engineAssembly.FullName;
         engineDependants.Add(engineAssembly);
     }

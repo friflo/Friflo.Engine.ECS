@@ -21,7 +21,7 @@ public partial class EntityStore
             return;
         }
         var newLength = Math.Max(length, 2 * curLength); // could grow slower to minimize heap pressure
-        Utils.Resize(ref nodes, newLength);
+        ArrayUtils.Resize(ref nodes, newLength);
         var localNodes = nodes;
         for (int n = curLength; n < newLength; n++) {
             localNodes[n] = new EntityNode (n);
@@ -202,7 +202,7 @@ public partial class EntityStore
         }
         if (length > parent.childIds.Length) { 
             var newLen = Math.Max(2 * parent.childIds.Length, length);
-            Utils.Resize(ref parent.childIds, newLen);
+            ArrayUtils.Resize(ref parent.childIds, newLen);
         }
     }
     
@@ -236,7 +236,7 @@ public partial class EntityStore
         var newCount    = newIds.Length;
         var childIds    = node.childIds;
         if (childIds == null || newCount > childIds.Length) {
-            Utils.Resize(ref node.childIds, newCount);
+            ArrayUtils.Resize(ref node.childIds, newCount);
             childIds = node.childIds;
         }
         // --- 1. Remove missing ids in new child ids.          E.g.    cur ids [2, 3, 4, 5]

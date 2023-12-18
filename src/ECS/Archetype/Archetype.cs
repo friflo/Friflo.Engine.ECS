@@ -208,7 +208,7 @@ public sealed class Archetype
     {
         var index = entityCount++;
         if (index == entityIds.Length) {
-            Utils.Resize(ref entityIds, 2 * entityIds.Length);
+            ArrayUtils.Resize(ref entityIds, 2 * entityIds.Length);
         }
         entityIds[index] = id;  // add entity id
         if (index < memory.capacity) {

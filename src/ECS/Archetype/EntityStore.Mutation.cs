@@ -77,7 +77,7 @@ public partial class EntityStoreBase
     {
         if (archsCount == archs.Length) {
             var newLen = 2 * archs.Length;
-            Utils.Resize(ref archs,     newLen);
+            ArrayUtils.Resize(ref archs,     newLen);
         }
         if (archetype.archIndex != archsCount) {
             throw new InvalidOperationException($"invalid archIndex. expect: {archsCount}, was: {archetype.archIndex}");

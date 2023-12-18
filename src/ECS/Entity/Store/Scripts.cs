@@ -33,14 +33,14 @@ public partial class EntityStore
             var lastIndex = entity.refScriptIndex = entityScriptCount++;
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
-                Utils.Resize(ref entityScripts, newLength);
+                ArrayUtils.Resize(ref entityScripts, newLength);
             }
             entityScripts[lastIndex] = new EntityScripts(entity.id, new Script[] { script });
         } else {
             // case: entity already has scripts => add script to its scripts
             ref var scripts = ref entityScripts[entity.scriptIndex].scripts;
             var len = scripts.Length;
-            Utils.Resize(ref scripts, len + 1);
+            ArrayUtils.Resize(ref scripts, len + 1);
             scripts[len] = script;
         }
     }
@@ -73,7 +73,7 @@ public partial class EntityStore
             var lastIndex = entity.refScriptIndex = entityScriptCount++;
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
-                Utils.Resize(ref entityScripts, newLength);
+                ArrayUtils.Resize(ref entityScripts, newLength);
             }
             entityScripts[lastIndex] = new EntityScripts(entity.id, new Script [] { script });
             currentScript   = null;
@@ -95,7 +95,7 @@ public partial class EntityStore
             }
         }
         // --- case: scripts does not contain a script of the given scriptType => add script
-        Utils.Resize(ref entityScript.scripts, len + 1);
+        ArrayUtils.Resize(ref entityScript.scripts, len + 1);
         entityScript.scripts[len] = script;
         currentScript = null;
     SendEvent:        

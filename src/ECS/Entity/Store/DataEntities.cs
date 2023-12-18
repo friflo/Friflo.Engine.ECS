@@ -168,7 +168,7 @@ public partial class EntityStore
         if (idBuffer.Length >= count) {
             return;
         }
-        Utils.Resize(ref idBuffer, Math.Max(2 * idBuffer.Length, count));
+        ArrayUtils.Resize(ref idBuffer, Math.Max(2 * idBuffer.Length, count));
     }
     
     /// update EntityNode.pid of the child nodes

@@ -15,7 +15,7 @@ internal static class TypeExtensions
     }
 }
 
-internal static class Utils
+internal static class ArrayUtils
 {
     internal static void Resize<T>(ref T[] array, int len) {
         var newArray = new T[len];

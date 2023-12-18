@@ -50,7 +50,7 @@ public sealed class RawEntityStore : EntityStoreBase
             return;
         }
         var newLength = Math.Max(length, 2 * entities.Length);
-        Utils.Resize(ref entities, newLength);
+        ArrayUtils.Resize(ref entities, newLength);
         // Note: Assigning each new entity a default value ensures they get filled into the memory cache.
         //       As a result subsequent calls to CreateEntity() are faster in perf test 
         for (int n = curLength; n < length; n++) {
