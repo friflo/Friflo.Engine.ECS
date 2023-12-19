@@ -7,7 +7,7 @@ using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS.Serialize;
+namespace Friflo.Engine.ECS.Serialize;
 
 public class DataEntitySerializer
 {

@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Friflo.Fliox.Engine.ECS.Collections;
+namespace Friflo.Engine.ECS.Collections;
 
 internal class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
 {

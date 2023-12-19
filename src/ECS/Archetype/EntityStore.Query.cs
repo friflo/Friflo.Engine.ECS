@@ -6,7 +6,7 @@
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {

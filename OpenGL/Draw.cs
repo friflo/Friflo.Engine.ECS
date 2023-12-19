@@ -1,5 +1,5 @@
 /*
-namespace Friflo.Fliox.Editor.OpenGL
+namespace Friflo.Editor.OpenGL
 {
 
 class Program

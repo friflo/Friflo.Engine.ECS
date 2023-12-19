@@ -2,10 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using Avalonia.Controls;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 public partial class UnresolvedField : UserControl, IFieldControl
 {

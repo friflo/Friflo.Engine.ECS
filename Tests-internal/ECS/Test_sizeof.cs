@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Utils;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Utils;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;

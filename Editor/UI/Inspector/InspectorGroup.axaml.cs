@@ -6,11 +6,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Editor.Utils;
+using Friflo.Editor.Utils;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable UnusedParameter.Local
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 
 public interface IExpandable

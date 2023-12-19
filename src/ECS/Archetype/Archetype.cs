@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public sealed class Archetype
 {

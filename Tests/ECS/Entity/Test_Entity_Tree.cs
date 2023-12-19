@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
-using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Engine.ECS.StoreOwnership;
+using static Friflo.Engine.ECS.TreeMembership;
+using static Friflo.Engine.ECS.NodeFlags;
 using static Tests.Utils.Events;
 
 // ReSharper disable ConvertToLocalFunction

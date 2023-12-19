@@ -3,14 +3,14 @@
 
 using System;
 using System.Collections.Generic;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {

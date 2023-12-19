@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;

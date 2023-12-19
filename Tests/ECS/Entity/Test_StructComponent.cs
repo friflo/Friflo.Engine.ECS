@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-using static Friflo.Fliox.Engine.ECS.EntityStoreBase.Static;
+using static Friflo.Engine.ECS.EntityStoreBase.Static;
 
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value

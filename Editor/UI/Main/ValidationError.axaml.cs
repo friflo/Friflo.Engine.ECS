@@ -6,11 +6,11 @@ using System.Collections;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Editor.Utils;
+using Friflo.Editor.Utils;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable once CheckNamespace - fix namespace
-namespace Friflo.Fliox.Editor.UI;
+namespace Friflo.Editor.UI;
 
 /// <summary>
 /// Used to display data validation error in Avalonia control within a <see cref="ToolTip"/>

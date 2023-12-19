@@ -5,15 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Utils;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Host;
 
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedMember.Local
-namespace Friflo.Fliox.Engine.Hub;
+namespace Friflo.Engine.Hub;
 
 /// <summary>
 /// Implementation of <see cref="StoreClient"/> commands.

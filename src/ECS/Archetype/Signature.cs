@@ -8,7 +8,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable UnusedTypeParameter
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 // ------------------------------------ generic Signature<> creation ------------------------------------
 #region generic Signature<> creation

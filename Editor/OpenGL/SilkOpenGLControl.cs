@@ -2,11 +2,11 @@ using System;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Controls;
 using Avalonia.Threading;
-using Friflo.Fliox.Engine.OpenGL;
+using Friflo.Engine.OpenGL;
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable InconsistentNaming
-namespace Friflo.Fliox.Editor.OpenGL
+namespace Friflo.Editor.OpenGL
 {
     public class SilkOpenGLControl : OpenGlControlBase
     {

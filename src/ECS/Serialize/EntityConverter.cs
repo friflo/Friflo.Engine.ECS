@@ -4,7 +4,7 @@
 // ReSharper disable ConvertConstructorToMemberInitializers
 using System;
 
-namespace Friflo.Fliox.Engine.ECS.Serialize;
+namespace Friflo.Engine.ECS.Serialize;
 
 public class EntityConverter
 {

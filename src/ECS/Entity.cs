@@ -3,12 +3,12 @@
 
 using System;
 using static System.Diagnostics.DebuggerBrowsableState;
-using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Engine.ECS.StoreOwnership;
+using static Friflo.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a game scene.<br/>

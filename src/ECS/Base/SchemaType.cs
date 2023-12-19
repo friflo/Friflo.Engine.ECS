@@ -7,10 +7,10 @@ using System.Numerics;
 using System.Reflection;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
-using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
+using static Friflo.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public abstract class SchemaType
 {

@@ -4,10 +4,10 @@
 #if COMP_ITER
 
 using System;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public ref struct QueryEnumerator<T1, T2>
     where T1 : struct, IComponent

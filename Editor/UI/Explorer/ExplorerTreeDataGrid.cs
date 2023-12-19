@@ -9,17 +9,17 @@ using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using Friflo.Fliox.Editor.UI.Panels;
-using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Editor.UI.Panels;
+using Friflo.Editor.Utils;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable UseIndexFromEndExpression
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Editor.UI.Explorer;
 
 /// <summary>
 /// Extended <see cref="TreeDataGrid"/> should not be necessary. But is needed to get <see cref="OnKeyDown"/> callbacks.<br/>

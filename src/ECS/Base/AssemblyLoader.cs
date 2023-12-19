@@ -11,7 +11,7 @@ using System.Text;
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable UnusedMember.Local
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 internal sealed class AssemblyLoader
 {

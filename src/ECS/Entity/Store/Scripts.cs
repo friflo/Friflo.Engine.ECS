@@ -5,7 +5,7 @@ using System;
 
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public partial class EntityStore
 {

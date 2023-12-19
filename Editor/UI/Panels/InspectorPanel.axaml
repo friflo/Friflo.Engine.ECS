@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
 
-             x:Class="Friflo.Fliox.Editor.UI.Panels.InspectorPanel"
-             xmlns:inspector ="using:Friflo.Fliox.Editor.UI.Inspector"
-             xmlns:panels="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
+             x:Class="Friflo.Editor.UI.Panels.InspectorPanel"
+             xmlns:inspector ="using:Friflo.Editor.UI.Inspector"
+             xmlns:panels="clr-namespace:Friflo.Editor.UI.Panels"
              >
     <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground}">
     <DockPanel >

@@ -3,16 +3,16 @@
 
 using System;
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Serialize;
 using static System.Diagnostics.DebuggerBrowsableState;
-using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Engine.ECS.StoreOwnership;
+using static Friflo.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// The <see cref="EntityStore"/> provide the features listed below

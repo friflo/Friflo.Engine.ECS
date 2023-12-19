@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// To enable adding a struct component to an <see cref="Entity"/> it need to implement <see cref="IComponent"/>.<br/>

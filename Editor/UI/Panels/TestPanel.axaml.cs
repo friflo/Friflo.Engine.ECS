@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Interactivity;
 using AP = Avalonia.AvaloniaProperty;
 
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Editor.UI.Panels;
 
 public partial class TestPanel : PanelControl
 {

@@ -3,7 +3,7 @@
 
 using System;
 using System.Text;
-using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Engine.ECS.NodeFlags;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -11,7 +11,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>

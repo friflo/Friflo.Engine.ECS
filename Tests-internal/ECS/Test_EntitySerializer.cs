@@ -1,6 +1,6 @@
 using System;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using NUnit.Framework;
 using Tests.ECS;

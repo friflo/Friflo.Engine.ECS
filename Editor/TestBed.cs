@@ -1,6 +1,6 @@
-﻿using Friflo.Fliox.Engine.ECS;
+﻿using Friflo.Engine.ECS;
 
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Editor;
 
 public struct  TestComponent : IComponent
 {

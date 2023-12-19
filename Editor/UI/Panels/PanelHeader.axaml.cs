@@ -5,7 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using AP = Avalonia.AvaloniaProperty;
 
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Editor.UI.Panels;
 
 public partial class PanelHeader : UserControl
 {

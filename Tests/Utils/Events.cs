@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

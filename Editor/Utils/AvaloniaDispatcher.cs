@@ -4,9 +4,9 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 
-namespace Friflo.Fliox.Editor.Utils;
+namespace Friflo.Editor.Utils;
 
 public class AvaloniaDispatcher : IStoreDispatcher
 {

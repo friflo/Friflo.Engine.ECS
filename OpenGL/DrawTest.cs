@@ -3,7 +3,7 @@ using System.Drawing;
 using Silk.NET.OpenGL;
 
 // ReSharper disable InconsistentNaming
-namespace Friflo.Fliox.Engine.OpenGL;
+namespace Friflo.Engine.OpenGL;
 
 public class DrawTest
 {

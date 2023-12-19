@@ -2,11 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
+using static Friflo.Engine.ECS.TreeMembership;
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 [Flags]
 public enum NodeFlags : byte

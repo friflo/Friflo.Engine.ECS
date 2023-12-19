@@ -5,12 +5,12 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using AP = Avalonia.AvaloniaProperty;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 public partial class InspectorComponent : UserControl, IExpandable
 {

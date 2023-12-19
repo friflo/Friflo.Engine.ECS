@@ -6,13 +6,13 @@ using System.Linq;
 using System.Reflection;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Utils;
+using Friflo.Editor.Utils;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Utils;
 
 
 // ReSharper disable HeuristicUnreachableCode
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Editor.UI.Explorer;
 
 public static class ExplorerCommands
 {

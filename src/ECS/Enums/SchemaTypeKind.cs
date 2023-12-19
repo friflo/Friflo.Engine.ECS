@@ -3,7 +3,7 @@
 
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Declares the <see cref="SchemaType.kind"/> of a <see cref="SchemaType"/> 

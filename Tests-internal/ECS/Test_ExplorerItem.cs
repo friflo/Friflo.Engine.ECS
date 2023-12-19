@@ -1,6 +1,6 @@
 ﻿using System;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 

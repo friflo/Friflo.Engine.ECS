@@ -3,11 +3,11 @@
 
 using System;
 using Avalonia.Controls;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI;
+namespace Friflo.Editor.UI;
 
 public partial class MainWindow : Window
 {

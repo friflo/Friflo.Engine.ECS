@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Engine.ECS.Collections;
 
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Editor.UI.Explorer;
 
 public readonly struct TreeSelection
 {

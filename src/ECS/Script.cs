@@ -4,7 +4,7 @@
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// To enable adding a script class to an <see cref="ECS.Entity"/> it need to extend <see cref="Script"/>.<br/>

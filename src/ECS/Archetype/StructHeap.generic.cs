@@ -6,11 +6,11 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <remarks>
 /// <b>Note:</b> Should not contain any other fields. Reasons:<br/>

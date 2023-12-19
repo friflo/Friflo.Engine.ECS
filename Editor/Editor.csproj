@@ -6,7 +6,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <GenerateProgramFile>true</GenerateProgramFile>
-        <RootNamespace>Friflo.Fliox.Editor</RootNamespace>
+        <RootNamespace>Friflo.Editor</RootNamespace>
         
         <!-- Avalionia specific -->
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>

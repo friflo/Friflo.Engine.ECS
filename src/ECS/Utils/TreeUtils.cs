@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Friflo.Fliox.Engine.ECS.Collections;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Collections;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
-namespace Friflo.Fliox.Engine.ECS.Utils;
+namespace Friflo.Engine.ECS.Utils;
 
 public static class TreeUtils
 {

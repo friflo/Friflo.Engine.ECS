@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable   ="d" d:DesignWidth="300" d:DesignHeight="400"
-             x:Class        ="Friflo.Fliox.Editor.UI.Panels.ExplorerPanel"
-             xmlns:main     ="using:Friflo.Fliox.Editor.UI.Main"
-             xmlns:explorer ="using:Friflo.Fliox.Editor.UI.Explorer"
-             xmlns:panels="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
+             x:Class        ="Friflo.Editor.UI.Panels.ExplorerPanel"
+             xmlns:main     ="using:Friflo.Editor.UI.Main"
+             xmlns:explorer ="using:Friflo.Editor.UI.Explorer"
+             xmlns:panels="clr-namespace:Friflo.Editor.UI.Panels"
              x:DataType     ="main:MainWindowViewModel">
     <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}" CornerRadius="{DynamicResource Radius}" Background="{DynamicResource PanelBackground}">
     <DockPanel Name="DockPanel">

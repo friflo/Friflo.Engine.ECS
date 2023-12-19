@@ -5,7 +5,7 @@
 using System;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Enables access to a component by reference using its property <see cref="Value"/>

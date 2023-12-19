@@ -3,13 +3,13 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
 // ReSharper disable UnassignedField.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable NotAccessedField.Global
-namespace Friflo.Fliox.Engine.Hub;
+namespace Friflo.Engine.Hub;
 
 // --------------------------------------- command models ---------------------------------------
 public class AddEntities

@@ -3,12 +3,12 @@
 
 using Avalonia.Controls;
 using Avalonia.Input;
-using Friflo.Fliox.Editor.UI.Explorer;
-using Friflo.Fliox.Editor.UI.Main;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Editor.UI.Explorer;
+using Friflo.Editor.UI.Main;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable UnusedParameter.Local
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Editor.UI.Panels;
 
 public partial class ExplorerPanel : PanelControl
 {

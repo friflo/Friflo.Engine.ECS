@@ -4,7 +4,7 @@
 using System;
 using System.Collections.ObjectModel;
 
-namespace Friflo.Fliox.Editor.UI.Explorer.Lab;
+namespace Friflo.Editor.UI.Explorer.Lab;
 
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/Models/DragDropItem.cs
 public class DragDropItem 

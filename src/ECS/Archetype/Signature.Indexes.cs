@@ -6,7 +6,7 @@ using System.Text;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable InconsistentNaming
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Note: The order of struct type indices matters.<br/>

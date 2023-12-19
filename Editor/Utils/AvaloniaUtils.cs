@@ -9,10 +9,10 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using Friflo.Fliox.Editor.UI;
+using Friflo.Editor.UI;
 
 // ReSharper disable MergeCastWithTypeCheck
-namespace Friflo.Fliox.Editor.Utils;
+namespace Friflo.Editor.Utils;
 
 public static class EditorUtils
 {

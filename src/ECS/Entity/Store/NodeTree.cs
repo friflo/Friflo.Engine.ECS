@@ -3,13 +3,13 @@
 
 using System;
 using System.Text;
-using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public partial class EntityStore
 {

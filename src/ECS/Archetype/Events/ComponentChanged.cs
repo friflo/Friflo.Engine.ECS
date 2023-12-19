@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStore.ComponentAdded"/> get events on <see cref="Entity.AddComponent{T}()"/><br/>

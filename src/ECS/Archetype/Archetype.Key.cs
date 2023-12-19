@@ -7,7 +7,7 @@ using System.Text;
 // Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <remarks>
 /// As the <see cref="ArchetypeKey"/> requires ~72 bytes it performs much better as a class than a struct

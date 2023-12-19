@@ -3,7 +3,7 @@
 
 using Avalonia.Controls;
 
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 public partial class Separator : UserControl
 {

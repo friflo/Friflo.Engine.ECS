@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Host;
@@ -11,7 +11,7 @@ using Friflo.Json.Fliox.Hub.Host;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnassignedReadonlyField
-namespace Friflo.Fliox.Engine.Hub;
+namespace Friflo.Engine.Hub;
 
 
 /// <remarks> commands are implemented by <see cref="StoreCommands"/> </remarks>

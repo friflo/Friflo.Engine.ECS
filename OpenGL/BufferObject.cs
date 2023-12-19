@@ -2,7 +2,7 @@ using System;
 using Silk.NET.OpenGL;
 
 // ReSharper disable InconsistentNaming
-namespace Friflo.Fliox.Engine.OpenGL
+namespace Friflo.Engine.OpenGL
 {
     public class BufferObject<TDataType> : IDisposable
         where TDataType : unmanaged

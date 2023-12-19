@@ -6,17 +6,17 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using Avalonia.Controls;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
-using static Friflo.Fliox.Editor.UI.Inspector.FieldDataKind;
+using static Friflo.Editor.UI.Inspector.FieldDataKind;
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable RedundantJumpStatement
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 public interface IFieldControl
 {

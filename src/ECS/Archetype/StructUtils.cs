@@ -4,7 +4,7 @@
 using System;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public static class StructInfo
 {

@@ -5,7 +5,7 @@ using System.Text;
 
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public struct EntityScripts
 {

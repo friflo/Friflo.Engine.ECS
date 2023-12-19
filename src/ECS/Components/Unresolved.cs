@@ -2,11 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Text;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// An <see cref="Unresolved"/> component is added to an <see cref="Entity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataEntityToEntity"/> if:<br/>

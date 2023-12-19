@@ -5,9 +5,9 @@
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
-using Friflo.Fliox.Editor.Utils;
+using Friflo.Editor.Utils;
 
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Editor;
 
 public abstract class EditorCommand { }
 

@@ -5,7 +5,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 internal class InspectorControlModel : INotifyPropertyChanged
 {

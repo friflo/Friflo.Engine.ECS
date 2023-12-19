@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using static Friflo.Fliox.Engine.ECS.StoreOwnership;
+using static Friflo.Engine.ECS.StoreOwnership;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Describe the membership of an <see cref="Entity"/> to the <see cref="EntityStore"/> tree graph.

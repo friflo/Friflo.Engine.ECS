@@ -1,9 +1,9 @@
 // Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using Friflo.Fliox.Editor.UI.Explorer;
+using Friflo.Editor.UI.Explorer;
 
-namespace Friflo.Fliox.Editor.UI.Main;
+namespace Friflo.Editor.UI.Main;
 
 // see: https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid/blob/master/samples/TreeDataGridDemo/ViewModels/MainWindowViewModel.cs
 internal class MainWindowViewModel

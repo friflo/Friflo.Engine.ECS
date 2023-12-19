@@ -3,7 +3,7 @@
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>Describe the ownership state of an <see cref="Entity"/></summary>
 public enum StoreOwnership

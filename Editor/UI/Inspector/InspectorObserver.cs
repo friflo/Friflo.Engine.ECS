@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Editor.Utils;
+using Friflo.Engine.ECS;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 
 internal readonly struct ComponentItem

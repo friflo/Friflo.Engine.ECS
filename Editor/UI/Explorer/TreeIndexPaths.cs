@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable UseIndexFromEndExpression
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Editor.UI.Explorer;
 
 internal enum SelectionView
 {

@@ -4,11 +4,11 @@
 using System;
 using System.ComponentModel;
 using Avalonia.Controls;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable ConvertToConstant.Local
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Editor.UI.Explorer;
 
 internal class ExplorerObserver : EditorObserver
 {

@@ -9,7 +9,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 [CLSCompliant(true)]
 public sealed class EntitySchema

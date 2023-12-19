@@ -4,10 +4,10 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Friflo.Fliox.Engine.ECS.Serialize;
-using static Friflo.Fliox.Engine.ECS.StoreOwnership;
-using static Friflo.Fliox.Engine.ECS.TreeMembership;
-using static Friflo.Fliox.Engine.ECS.NodeFlags;
+using Friflo.Engine.ECS.Serialize;
+using static Friflo.Engine.ECS.StoreOwnership;
+using static Friflo.Engine.ECS.TreeMembership;
+using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable InlineTemporaryVariable
@@ -15,7 +15,7 @@ using static Friflo.Fliox.Engine.ECS.NodeFlags;
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 // This file contains implementation specific for storing Entity's.
 // The reason to separate handling of Entity's is to enable 'entity / component support' without Entity's.

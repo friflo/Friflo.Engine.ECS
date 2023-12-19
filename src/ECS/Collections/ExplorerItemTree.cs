@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 
 // ReSharper disable InlineTemporaryVariable
-namespace Friflo.Fliox.Engine.ECS.Collections;
+namespace Friflo.Engine.ECS.Collections;
 
 public class ExplorerItemTree
 {

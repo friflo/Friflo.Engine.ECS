@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A <see cref="EntitiesChangedHandler"/> added to <see cref="EntityStore.EntitiesChanged"/> get events in

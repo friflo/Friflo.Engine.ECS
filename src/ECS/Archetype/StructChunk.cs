@@ -5,7 +5,7 @@
 using System;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <remarks>
 /// <b>Note!</b> Must not contain any other field. Reasons:<br/>

@@ -7,13 +7,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Engine.ECS.Collections;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
 // ReSharper disable ReplaceSliceWithRangeIndexer
 // ReSharper disable SuggestBaseTypeForParameter
-namespace Friflo.Fliox.Editor.UI.Explorer;
+namespace Friflo.Editor.UI.Explorer;
 
 public class ExplorerFlyout : MenuFlyout
 {

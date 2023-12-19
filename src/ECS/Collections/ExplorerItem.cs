@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException
-namespace Friflo.Fliox.Engine.ECS.Collections;
+namespace Friflo.Engine.ECS.Collections;
 
 /// <summary>
 /// Implements same interfaces as <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/> to act as a replacement

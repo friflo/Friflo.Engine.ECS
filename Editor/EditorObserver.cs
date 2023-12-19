@@ -2,13 +2,13 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Collections;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Collections;
 
 // Note! Must not using Avalonia namespaces
 
 // ReSharper disable ConvertToAutoProperty
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Editor;
 
 public struct EditorSelection {
     public ExplorerItem item;

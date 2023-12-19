@@ -12,7 +12,7 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <remarks>
 /// <b>Note:</b> Should not contain any other fields. Reasons:<br/>

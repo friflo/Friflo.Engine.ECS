@@ -2,13 +2,13 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A <see cref="RawEntityStore"/> enables using an entity store without using <see cref="Entity"/>'s.<br/>

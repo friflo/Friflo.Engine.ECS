@@ -2,10 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
+using static Friflo.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public sealed class TagType : SchemaType 
 {

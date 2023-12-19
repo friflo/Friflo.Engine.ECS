@@ -4,7 +4,7 @@
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 
-namespace Friflo.Fliox.Engine.ECS.Utils;
+namespace Friflo.Engine.ECS.Utils;
 
 public static class JsonUtils
 {

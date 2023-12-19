@@ -5,7 +5,7 @@ using System;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Assign a custom tag name used for JSON serialization of the annotated structs implementing <see cref="ITag"/>.<br/>

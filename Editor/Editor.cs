@@ -7,9 +7,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Friflo.Fliox.Editor.UI.Panels;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.Hub;
+using Friflo.Editor.UI.Panels;
+using Friflo.Engine.ECS;
+using Friflo.Engine.Hub;
 using Friflo.Json.Fliox.Hub.Client;
 using Friflo.Json.Fliox.Hub.Explorer;
 using Friflo.Json.Fliox.Hub.Host;
@@ -19,7 +19,7 @@ using Friflo.Json.Fliox.Hub.Remote;
 // Note! Must not using Avalonia namespaces
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Editor;
 
 public partial class Editor
 {

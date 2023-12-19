@@ -4,13 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public class EntityEqualityComparer : IEqualityComparer<Entity>
 {

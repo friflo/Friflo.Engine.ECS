@@ -3,11 +3,11 @@
 
 using System;
 using Avalonia.Controls;
-using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Editor.Utils;
+using Friflo.Engine.ECS;
 
 // ReSharper disable UnusedParameter.Local
-namespace Friflo.Fliox.Editor.UI.Inspector;
+namespace Friflo.Editor.UI.Inspector;
 
 public partial class GroupAdd : UserControl
 {

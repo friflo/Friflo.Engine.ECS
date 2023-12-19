@@ -4,9 +4,9 @@
 using System;
 using System.Diagnostics;
 using Avalonia;
-using Friflo.Fliox.Editor.UI;
+using Friflo.Editor.UI;
 
-namespace Friflo.Fliox.Editor;
+namespace Friflo.Editor;
 
 public static class Program
 {

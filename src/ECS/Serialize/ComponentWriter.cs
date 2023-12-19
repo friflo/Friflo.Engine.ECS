@@ -4,12 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Friflo.Fliox.Engine.ECS.Utils;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 
-namespace Friflo.Fliox.Engine.ECS.Serialize;
+namespace Friflo.Engine.ECS.Serialize;
 
 /// <summary>
 /// Create the <see cref="JsonValue"/> from all components and scripts used at <see cref="DataEntity.components"/>.<br/>

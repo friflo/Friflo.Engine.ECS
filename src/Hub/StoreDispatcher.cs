@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Contains methods like <see cref="Post"/> or <see cref="Invoke{TResult}"/> to dispatch execution<br/>
@@ -14,7 +14,7 @@ namespace Friflo.Fliox.Engine.ECS;
 /// These methods are required to access an <see cref="ECS.EntityStore"/> as instances of this class are not thread safe. 
 /// </summary>
 /// <remarks>
-/// Note: This file may be moved to project: <see cref="Friflo.Fliox.Engine.ECS"/>
+/// Note: This file may be moved to project: <see cref="Friflo.Engine.ECS"/>
 /// Method mapping for various UI application libraries.
 /// <list type="bullet">
 ///   <item> <b>AvaloniaUI</b> - methods map to <c>Avalonia.Threading.Dispatcher.UIThread</c> methods. <br/> </item>

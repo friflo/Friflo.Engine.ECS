@@ -4,11 +4,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Friflo.Fliox.Editor.Utils;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Editor.Utils;
+using Friflo.Engine.ECS;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Editor.UI;
+namespace Friflo.Editor.UI;
 
 public class App : Application
 {

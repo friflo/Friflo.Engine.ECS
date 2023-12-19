@@ -13,7 +13,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable ConvertToAutoPropertyWhenPossible
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 [CLSCompliant(true)]
 public abstract partial class EntityStoreBase

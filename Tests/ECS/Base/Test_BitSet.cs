@@ -1,4 +1,4 @@
-﻿using Friflo.Fliox.Engine.ECS.Utils;
+﻿using Friflo.Engine.ECS.Utils;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;

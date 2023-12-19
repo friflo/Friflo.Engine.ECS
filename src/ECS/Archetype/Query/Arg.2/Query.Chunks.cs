@@ -2,10 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Fliox.Engine.ECS.StructInfo;
+using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public readonly struct QueryChunks<T1, T2>  // : IEnumerable <>  // <- not implemented to avoid boxing
     where T1 : struct, IComponent

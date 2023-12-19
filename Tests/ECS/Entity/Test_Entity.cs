@@ -1,8 +1,8 @@
 using System;
-using Friflo.Fliox.Engine.ECS;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-using static Friflo.Fliox.Engine.ECS.EntityUtils;
+using static Friflo.Engine.ECS.EntityUtils;
 
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming

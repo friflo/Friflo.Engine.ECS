@@ -4,14 +4,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Friflo.Fliox.Engine.ECS;
-using Friflo.Fliox.Engine.ECS.Serialize;
+using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox.Hub.Client;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
-namespace Friflo.Fliox.Engine.Hub;
+namespace Friflo.Engine.Hub;
 
 [CLSCompliant(true)]
 public sealed class StoreSync

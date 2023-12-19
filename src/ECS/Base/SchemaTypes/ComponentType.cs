@@ -3,10 +3,10 @@
 
 using System;
 using Friflo.Json.Fliox.Mapper.Map;
-using static Friflo.Fliox.Engine.ECS.SchemaTypeKind;
+using static Friflo.Engine.ECS.SchemaTypeKind;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 public abstract class ComponentType : SchemaType
 {

@@ -4,9 +4,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Friflo.Fliox.Editor.Utils;
+using Friflo.Editor.Utils;
 
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Editor.UI.Panels;
 
 public class PanelControl : UserControl
 {

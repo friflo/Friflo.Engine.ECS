@@ -2,10 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="clr-namespace:Friflo.Fliox.Editor.UI.Panels"
-        xmlns:openGl="clr-namespace:Friflo.Fliox.Editor.OpenGL"
+        xmlns:ui="clr-namespace:Friflo.Editor.UI.Panels"
+        xmlns:openGl="clr-namespace:Friflo.Editor.OpenGL"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"
-        x:Class="Friflo.Fliox.Editor.UI.MainWindow"
+        x:Class="Friflo.Editor.UI.MainWindow"
         Background="{DynamicResource AppBackground}"
         Title="Fliox Editor"
         

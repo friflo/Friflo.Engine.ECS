@@ -1,7 +1,7 @@
 using System;
 using Silk.NET.OpenGL;
 
-namespace Friflo.Fliox.Engine.OpenGL
+namespace Friflo.Engine.OpenGL
 {
     public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
         where TVertexType : unmanaged

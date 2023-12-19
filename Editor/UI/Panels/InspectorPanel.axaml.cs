@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-namespace Friflo.Fliox.Editor.UI.Panels;
+namespace Friflo.Editor.UI.Panels;
 
 public partial class InspectorPanel : PanelControl
 {

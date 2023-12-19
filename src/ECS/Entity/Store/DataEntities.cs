@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Friflo.Fliox.Engine.ECS.Serialize;
-using Friflo.Fliox.Engine.ECS.Utils;
+using Friflo.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
 
 // ReSharper disable InlineTemporaryVariable
@@ -13,7 +13,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable MergeIntoLogicalPattern
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
-namespace Friflo.Fliox.Engine.ECS;
+namespace Friflo.Engine.ECS;
 
 // This file contains implementation specific for storing DataEntity's.
 // Loading and storing DataEntity's is implemented in EntityStore to enable declare all its fields private.

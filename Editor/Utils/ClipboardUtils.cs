@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
-using Friflo.Fliox.Engine.ECS.Serialize;
-using Friflo.Fliox.Engine.ECS.Utils;
+using Friflo.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
 
-namespace Friflo.Fliox.Editor.Utils;
+namespace Friflo.Editor.Utils;
 
 internal static class ClipboardUtils
 {
