@@ -70,7 +70,7 @@ public class StoreCommands : IServiceCommands
         foreach (var entity in entities) {
             newPids.Add(entity.pid);
         }
-        return new AddEntitiesResult { count = add.entities.Count, errors = result.errors, newPids = newPids };
+        return new AddEntitiesResult { count = entities.Count, errors = result.errors, newPids = newPids };
     }
     
     [CommandHandler("store.GetEntities")]
