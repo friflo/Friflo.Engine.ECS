@@ -69,7 +69,14 @@ public static class TreeUtils
     #endregion
     
 #region Paste DataEntity's
-    /// <remarks> The order of items in <paramref name="dataEntities"/> is not relevant. </remarks>
+    /// <summary>
+    /// Add the given <paramref name="dataEntities"/> to the specified <paramref name="targetEntity"/>.<br/>
+    /// The <see cref="DataEntity.pid"/> and the <see cref="DataEntity.children"/> of the given <paramref name="dataEntities"/> 
+    /// are replaced with the pids of the newly created <see cref="Entity"/>'s. 
+    /// </summary>
+    /// <remarks>
+    /// The order of items in <paramref name="dataEntities"/> is not relevant.
+    /// </remarks>
     public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, IReadOnlyList<DataEntity> dataEntities)
     {
         var entityCount     = dataEntities.Count;
