@@ -33,7 +33,7 @@ public readonly struct Chunk<T>
     private readonly    T[]     values;
     private readonly    int     count;
     
-    public Chunk(T[] values, T[] copy, int count) {
+    internal Chunk(T[] values, T[] copy, int count) {
         this.count  = count;
         if (copy == null) {
             this.values = values;
