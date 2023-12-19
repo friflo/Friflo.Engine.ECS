@@ -60,13 +60,14 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        var store   = new EntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<Position>());
+        int count   = 10; // 10_000_000 (UsePidAsId) ~ 1082 ms
+        var store   = new EntityStore(PidType.UsePidAsId);
+        store.EnsureCapacity(count);
+        var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
         _ = store.CreateEntity(arch1); // warmup
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        int count = 10; // 10_000_000 ~ 3634 ms
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
@@ -77,13 +78,15 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()
     {
-        int count = 10; // 100_000 ~ 2069 ms
+        int count = 10; // 100_000 (UsePidAsId) ~ 739 ms
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int i = 0; i < 100; i++) {
-            var store   = new EntityStore();
-            var arch1   = store.GetArchetype(Signature.Get<Position>());
+            var store   = new EntityStore(PidType.UsePidAsId);
+            store.EnsureCapacity(count);
+
+            var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
             for (int n = 0; n < count; n++) {
                 _ = store.CreateEntity(arch1);
             }
