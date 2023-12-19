@@ -14,15 +14,15 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStore
 {
     // --------------------------------- tree node methods ---------------------------------
-    public int EnsureCapacity(int count)
+    public int EnsureCapacity(int capacity)
     {
         var curLength   = nodes.Length;
         var last        = sequenceId;
-        var capacity    = curLength - last;
-        if (capacity >= count) {
-            return capacity;
+        var curCapacity = curLength - last;
+        if (curCapacity >= capacity) {
+            return curCapacity;
         }
-        var newLength   = last + count;
+        var newLength   = last + capacity;
         ArrayUtils.Resize(ref nodes, newLength);
         var localNodes = nodes;
         for (int n = curLength; n < newLength; n++) {

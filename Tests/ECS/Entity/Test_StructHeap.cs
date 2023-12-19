@@ -58,6 +58,22 @@ public static class Test_StructHeap
     }
     
     [Test]
+    public static void Test_StructHeap_EnsureCapacity()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        Mem.AreEqual(1, store.EnsureCapacity(0)); // 1 => default capacity
+        store.CreateEntity();
+        Mem.AreEqual(0, store.EnsureCapacity(0));
+        
+        Mem.AreEqual(9, store.EnsureCapacity(9));
+        for (int n = 0; n < 9; n++) {
+            Mem.AreEqual(9 - n, store.EnsureCapacity(0));
+            store.CreateEntity();
+        }
+        Mem.AreEqual(0, store.EnsureCapacity(0));
+    }
+    
+    [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
         int count   = 10; // 10_000_000 (UsePidAsId) ~ 1082 ms
