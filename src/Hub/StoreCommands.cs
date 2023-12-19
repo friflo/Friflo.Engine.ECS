@@ -58,23 +58,19 @@ public class StoreCommands : IServiceCommands
         return await StoreDispatcher.InvokeAsync(() => Task.FromResult(AddEntitiesInternal(addEntities)));
     }
     
-    private Result<AddEntitiesResult> AddEntitiesInternal (AddEntities addEntities)
+    private Result<AddEntitiesResult> AddEntitiesInternal (AddEntities add)
     {
-        if (!store.TryGetEntityByPid(addEntities.targetEntity, out var targetEntity)) {
-            return Result.Error($"targetEntity not found. was: {addEntities.targetEntity}");
+        if (!store.TryGetEntityByPid(add.targetEntity, out var targetEntity)) {
+            return Result.Error($"targetEntity not found. was: {add.targetEntity}");
         }
-        var entities    = addEntities.entities;
+        var entities    = add.entities;
         var result      = TreeUtils.AddDataEntitiesToEntity(targetEntity, entities);
         
-        var added       = new List<long?>(entities.Count);
+        var newPids     = new List<long>(entities.Count);
         foreach (var entity in entities) {
-            if (result.addedEntities.Contains(entity.pid)) {
-                added.Add(entity.pid);
-                continue;
-            }
-            added.Add(null);
+            newPids.Add(entity.pid);
         }
-        return new AddEntitiesResult { count = addEntities.entities.Count, errors = result.errors, added = added };
+        return new AddEntitiesResult { count = add.entities.Count, errors = result.errors, newPids = newPids };
     }
     
     [CommandHandler("store.GetEntities")]

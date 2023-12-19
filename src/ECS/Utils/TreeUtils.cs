@@ -73,13 +73,12 @@ public static class TreeUtils
     public static AddDataEntitiesResult AddDataEntitiesToEntity(Entity targetEntity, IReadOnlyList<DataEntity> dataEntities)
     {
         var entityCount     = dataEntities.Count;
-        var addedEntities   = new HashSet<long>         (entityCount);               
         var childEntities   = new HashSet<long>         (entityCount);
         var oldToNewPid     = new Dictionary<long, long>(entityCount);
         var newToOldPid     = new Dictionary<long, long>(entityCount);
         var store           = targetEntity.Store;
         
-        // --- create a new Entity for every DataEntity in the store
+        // --- create a new Entity for every DataEntity in dataEntities
         foreach (var dataEntity in dataEntities)
         {
             var entity                  = store.CreateEntity();
@@ -122,11 +121,10 @@ public static class TreeUtils
                 continue;
             }
             foreach (var childPid in children) {
-                childEntities.Add(childPid);
                 var child = store.GetEntityByPid(childPid);
                 if (entity.Id != child.Id) {
+                    childEntities.Add(childPid);
                     entity.AddChild(child);
-                    addedEntities.Add(childPid);
                     continue;
                 }
                 var oldPid = newToOldPid[childPid];
@@ -143,10 +141,9 @@ public static class TreeUtils
             }
             var entity = store.GetEntityByPid(pid);
             var index = targetEntity.AddChild(entity);
-            addedEntities.Add(pid);
             indexes.Add(index);
         }
-        return new AddDataEntitiesResult { indexes = indexes, addedEntities = addedEntities, errors = errors };
+        return new AddDataEntitiesResult { indexes = indexes, errors = errors };
     }
     
     private static void ReplaceChildrenPids(
@@ -308,9 +305,7 @@ public static class TreeUtils
 public class AddDataEntitiesResult
 {
     public  List<int>       indexes;
-    /// <summary> contains new pid's </summary>
-    public  HashSet<long>   addedEntities;
-    /// <summary> contains old pid's </summary>
+    /// <summary> contains errors detected when executing <see cref="TreeUtils.AddDataEntitiesToEntity"/> </summary>
     public  List<string>    errors;
 }
 

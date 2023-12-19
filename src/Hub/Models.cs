@@ -25,7 +25,7 @@ public class AddEntitiesResult
     /// <summary> Contains errors caused by inconsistent input. E.g. an entity contains itself an an entity.</summary>
     [Required]  public  List<string>    errors;
     /// <summary> Contains new pid's for every entity in <see cref="AddEntities.entities"/> </summary>
-    [Required]  public  List<long?>     added;
+    [Required]  public  List<long>      newPids;
 }
 
 public class GetEntities

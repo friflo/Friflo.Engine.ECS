@@ -206,7 +206,6 @@ public static class Test_TreeUtils
             var result = TreeUtils.AddDataEntitiesToEntity(root, dataEntities);
             
             AreEqual(1,         result.indexes.Count);
-            AreEqual(2,         result.addedEntities.Count);
             AreEqual(0,         result.errors.Count);
         }
         
@@ -238,7 +237,6 @@ public static class Test_TreeUtils
             var result = TreeUtils.AddDataEntitiesToEntity(child1, dataEntities);
             
             AreEqual(1,         result.indexes.Count);
-            AreEqual(1,         result.addedEntities.Count);
             AreEqual(1,         result.errors.Count);
             var error0 = "entity: 10 'components[name]' - Cannot assign number to string. got: 1 path: 'value' at position: 12";
             AreEqual(error0,    result.errors[0]);
@@ -252,7 +250,6 @@ public static class Test_TreeUtils
             var result = TreeUtils.AddDataEntitiesToEntity(child1, dataEntities);
             
             AreEqual(1,         result.indexes.Count);
-            AreEqual(2,         result.addedEntities.Count);
             AreEqual(1,         result.errors.Count);
             var error0 = "entity: 10 'children' - missing entities: [99]";
             AreEqual(error0,    result.errors[0]);
@@ -265,8 +262,7 @@ public static class Test_TreeUtils
             
             var result = TreeUtils.AddDataEntitiesToEntity(child1, dataEntities);
             
-            AreEqual(0,         result.indexes.Count);
-            AreEqual(0,         result.addedEntities.Count);
+            AreEqual(1,         result.indexes.Count);
             AreEqual(1,         result.errors.Count);
             var error0 = "entity: 10 'children' - entity contains itself as a child.";
             AreEqual(error0,    result.errors[0]);

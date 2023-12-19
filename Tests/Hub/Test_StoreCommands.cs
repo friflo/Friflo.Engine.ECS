@@ -97,7 +97,7 @@ public static class Test_StoreCommands
             
             var addResult = add.Result;
             AreEqual(1, addResult.count);
-            AreEqual(1, addResult.added.Count);
+            AreEqual(1, addResult.newPids.Count);
             AreEqual(0, addResult.errors.Count);
         }
         // --- errors
