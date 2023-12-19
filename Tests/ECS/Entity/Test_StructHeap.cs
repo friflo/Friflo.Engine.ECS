@@ -66,12 +66,30 @@ public static class Test_StructHeap
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        int count = 10; // 10_000_000 ~ 5754 ms
+        int count = 10; // 10_000_000 ~ 3634 ms
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
         Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(count + 1, arch1.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_StructHeap_CreateEntity_Perf_100()
+    {
+        int count = 10; // 100_000 ~ 2069 ms
+        
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        for (int i = 0; i < 100; i++) {
+            var store   = new EntityStore();
+            var arch1   = store.GetArchetype(Signature.Get<Position>());
+            for (int n = 0; n < count; n++) {
+                _ = store.CreateEntity(arch1);
+            }
+            Mem.AreEqual(count, arch1.EntityCount);
+        }
+        Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     [Test]
