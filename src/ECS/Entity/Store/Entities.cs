@@ -140,7 +140,7 @@ public partial class EntityStore
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
-        if (node.Is(Created)) {
+        if ((node.flags & Created) != 0) {
             AssertPid(node.pid, pid);
             return new Entity(id, this);
         }
@@ -149,15 +149,13 @@ public partial class EntityStore
             nodesMaxId = id;
         }
         AssertPid0(node.pid, pid);
-        var entity          = new Entity(id, this);
         node.pid            = pid;
         node.archetype      = defaultArchetype;
         node.scriptIndex    = EntityUtils.NoScripts;
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
-        // node.entity      = entity;
-        return entity;
+        return new Entity(id, this);
     }
     
     public void SetStoreRoot(Entity entity) {

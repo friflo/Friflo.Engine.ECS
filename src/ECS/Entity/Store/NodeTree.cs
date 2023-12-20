@@ -26,7 +26,8 @@ public partial class EntityStore
         ArrayUtils.Resize(ref nodes, newLength);
         var localNodes = nodes;
         for (int n = curLength; n < newLength; n++) {
-            localNodes[n] = new EntityNode (n);
+            localNodes[n].id = n;
+            // localNodes[n] = new EntityNode (n);      // see: EntityNode.id comment
         }
         return newLength - last;
     }
@@ -41,7 +42,8 @@ public partial class EntityStore
         ArrayUtils.Resize(ref nodes, newLength);
         var localNodes = nodes;
         for (int n = curLength; n < newLength; n++) {
-            localNodes[n] = new EntityNode (n);
+            localNodes[n].id = n;
+            // localNodes[n] = new EntityNode (n);      // see: EntityNode.id comment
         }
     }
     

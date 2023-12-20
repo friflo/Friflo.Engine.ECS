@@ -58,10 +58,10 @@ public struct EntityNode
     #endregion
     
 #region internal fields
-    [Browse(Never)] internal readonly   int         id;             //  4
+    [Browse(Never)] internal            int         id;             //  4   is not readonly for perf. If readonly EnsureCapacity() & EnsureNodesLength() must call its constructor.  
     [Browse(Never)] internal            long        pid;            //  8
     [Browse(Never)] internal            int         parentId;       //  4
-                    internal            int[]       childIds;       //  8    can be null.
+                    internal            int[]       childIds;       //  8   can be null.
     [Browse(Never)] internal            int         childCount;     //  4
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal            NodeFlags   flags;          //  4 (1)
@@ -78,7 +78,7 @@ public struct EntityNode
     
 #region internal methods
     internal EntityNode(int id) {
-        this.id     = id;
+        this.id = id;
     }
     
     private readonly string GetString()
