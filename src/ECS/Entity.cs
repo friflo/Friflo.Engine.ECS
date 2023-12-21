@@ -283,22 +283,22 @@ public readonly struct Entity
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
     public bool AddTag<T>()    where T : struct, ITag {
         int index = 0;
-        return archetype.store.AddTags(Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.AddTags   (archetype.store, Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool AddTags(in Tags tags) {
         int index = 0;
-        return archetype.store.AddTags(tags, id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.AddTags   (archetype.store, tags,          id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool RemoveTag<T>() where T : struct, ITag {
         int index = 0;
-        return archetype.store.RemoveTags(Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool RemoveTags(in Tags tags) {
         int index = 0;
-        return archetype.store.RemoveTags(tags, id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.RemoveTags(archetype.store, tags,          id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     #endregion

@@ -157,14 +157,14 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity  = ref entities[id];
         var archetype   = archs[entity.archIndex];
-        return AddTags(tags, id, ref archetype, ref entity.compIndex, ref entity.archIndex);
+        return AddTags(this, tags, id, ref archetype, ref entity.compIndex, ref entity.archIndex);
     }
         
     public  bool RemoveEntityTags(int id, in Tags tags)
     {
         ref var entity  = ref entities[id];
         var archetype   = archs[entity.archIndex];
-        return RemoveTags(tags, id, ref archetype, ref entity.compIndex, ref entity.archIndex);
+        return RemoveTags(this, tags, id, ref archetype, ref entity.compIndex, ref entity.archIndex);
     }
     #endregion
 }

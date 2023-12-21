@@ -210,7 +210,8 @@ public partial class EntityStoreBase
     // ------------------------------------ add / remove entity Tag ------------------------------------
 #region add / remove tags
 
-    internal bool AddTags(
+    internal static bool AddTags(
+        EntityStoreBase store,
         in Tags         tags,
         int             id,
         ref Archetype   archetype,      // possible mutation is not null
@@ -222,17 +223,18 @@ public partial class EntityStoreBase
         var tagsValue       = tags.bitSet.value;
         if (archTagsValue == tagsValue) {
             return false;
-        } 
+        }
+        var searchKey = store.searchKey;
         searchKey.componentTypes    = arch.componentTypes;
         searchKey.tags.bitSet.value = archTagsValue | tagsValue;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
-        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
-            newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
+            newArchetype = store.GetArchetypeWithTags(arch, searchKey.tags);
         }
-        if (arch != defaultArchetype) {
+        if (arch != store.defaultArchetype) {
             archetype   = newArchetype;
             compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
         } else {
@@ -241,11 +243,12 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
+        store.tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
         return true;
     }
     
-    internal bool RemoveTags(
+    internal static bool RemoveTags(
+        EntityStoreBase store,
         in Tags         tags,
         int             id,
         ref Archetype   archetype,      // possible mutation is not null
@@ -258,20 +261,21 @@ public partial class EntityStoreBase
         if (archTagsRemoved == archTags) {
             return false;
         }
+        var searchKey = store.searchKey;
         searchKey.componentTypes    = arch.componentTypes;
         searchKey.tags.bitSet.value = archTagsRemoved;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
-        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
-            newArchetype = GetArchetypeWithTags(arch, searchKey.tags);
+            newArchetype = store.GetArchetypeWithTags(arch, searchKey.tags);
         }
-        if (newArchetype == defaultArchetype) {
+        if (newArchetype == store.defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
             compIndex   = 0;
-            archetype   = defaultArchetype;
+            archetype   = store.defaultArchetype;
             arch.MoveLastComponentsTo(removePos);
         } else {
             compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
@@ -279,7 +283,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
+        store.tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
         return true;
     }
     #endregion
