@@ -568,21 +568,21 @@ public partial class EntityStore
         return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
-    internal Entity GetParent(int id)
-    { 
-        var parentNode  = nodes[id].parentId;
-        return HasParent(parentNode) ? new Entity(parentNode, this) : new Entity(Static.NoParentId, this); // ENTITY_STRUCT
+    internal static Entity GetParent(EntityStore store, int id)
+    {
+        var parentNode  = store.nodes[id].parentId;
+        return HasParent(parentNode) ? new Entity(parentNode, store) : new Entity(Static.NoParentId, store); // ENTITY_STRUCT
     }
     
-    internal ChildEntities GetChildEntities(int id)
+    internal static ChildEntities GetChildEntities(EntityStore store, int id)
     {
-        ref var node    = ref nodes[id];
-        return new ChildEntities(this, node.childIds, node.childCount);
+        ref var node    = ref store.nodes[id];
+        return new ChildEntities(store, node.childIds, node.childCount);
     }
     
-    internal ReadOnlySpan<int> GetChildIds(int id)
+    internal static ReadOnlySpan<int> GetChildIds(EntityStore store, int id)
     {
-        ref var node = ref nodes[id];
+        ref var node = ref store.nodes[id];
         return new ReadOnlySpan<int>(node.childIds, 0, node.childCount);
     }
 }

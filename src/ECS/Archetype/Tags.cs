@@ -28,7 +28,7 @@ public struct Tags : IEnumerable<TagType>
     // ----------------------------------- specialized constructor  -----------------------------------
     public Tags(TagType type)
     {
-        SetBit(type.tagIndex);
+        bitSet.SetBit(type.tagIndex);
     }
     
     // ----------------------------------------- read Tags ----------------------------------------- 
@@ -69,18 +69,10 @@ public struct Tags : IEnumerable<TagType>
     }
     
     // ----------------------------------------- mutate Tags -----------------------------------------
-    internal void SetBit(int tagIndex) {
-        bitSet.SetBit(tagIndex);
-    }
-    
-    private void ClearBit(int tagIndex) {
-        bitSet.ClearBit(tagIndex);
-    }
-    
     public void Add<T>()
         where T : struct, ITag
     {
-        SetBit(TagType<T>.TagIndex);
+        bitSet.SetBit(TagType<T>.TagIndex);
     }
     
     public void Add(in Tags tags)
@@ -91,7 +83,7 @@ public struct Tags : IEnumerable<TagType>
     public void Remove<T>()
         where T : struct, ITag
     {
-        ClearBit(TagType<T>.TagIndex);
+        bitSet.ClearBit(TagType<T>.TagIndex);
     }
     
     public void Remove(in Tags tags)
@@ -104,7 +96,7 @@ public struct Tags : IEnumerable<TagType>
         where T : struct, ITag
     {
         var tags = new Tags();
-        tags.SetBit(TagType<T>.TagIndex);
+        tags.bitSet.SetBit(TagType<T>.TagIndex);
         return tags;
     }
     
@@ -113,8 +105,8 @@ public struct Tags : IEnumerable<TagType>
         where T2 : struct, ITag
     {
         var tags = new Tags();
-        tags.SetBit(TagType<T1>.TagIndex);
-        tags.SetBit(TagType<T2>.TagIndex);
+        tags.bitSet.SetBit(TagType<T1>.TagIndex);
+        tags.bitSet.SetBit(TagType<T2>.TagIndex);
         return tags;
     }
     

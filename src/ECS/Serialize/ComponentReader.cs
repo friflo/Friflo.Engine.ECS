@@ -332,7 +332,7 @@ internal sealed class ComponentReader
                 unresolvedTagList.Add(tag);
                 continue;
             }
-            archetypeKey.tags.SetBit(tagType.tagIndex);
+            archetypeKey.tags.bitSet.SetBit(tagType.tagIndex);
         }
     }
 }

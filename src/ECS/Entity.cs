@@ -179,7 +179,7 @@ public readonly struct Entity
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
-                    public  Entity              Parent          => archetype.entityStore.GetParent(id);
+                    public  Entity              Parent          => EntityStore.GetParent(archetype.entityStore, id);
     
     /// <summary>
     /// Return all child <see cref="Entity"/>'s. Enumerate with: 
@@ -188,9 +188,9 @@ public readonly struct Entity
     /// </code>
     /// </summary>
     /// <remarks>Executes in O(1)</remarks>
-                    public  ChildEntities       ChildEntities   => archetype.entityStore.GetChildEntities(id);
+                    public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, id);
                     
-    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => archetype.entityStore.GetChildIds(id);
+    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, id);
     #endregion
     
 #region internal - fields

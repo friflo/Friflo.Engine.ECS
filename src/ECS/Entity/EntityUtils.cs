@@ -161,7 +161,7 @@ public static class EntityUtils
         if (entity.scriptIndex == NoScripts) {
             return EmptyScripts;
         }
-        return entity.archetype.entityStore.GetScripts(entity);
+        return EntityStore.GetScripts(entity); 
     }
     
     internal static Script GetScript(Entity entity, Type scriptType)
@@ -169,7 +169,7 @@ public static class EntityUtils
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        return entity.archetype.entityStore.GetScript(entity, scriptType);
+        return EntityStore.GetScript(entity, scriptType);
     }
     
     internal static Script AddScript(Entity entity, int scriptIndex, Script script)

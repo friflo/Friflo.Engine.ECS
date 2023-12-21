@@ -10,13 +10,13 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStore
 {
     // --------------------------------- script methods ---------------------------------
-    internal Script[] GetScripts(Entity entity) {
-        return entityScripts[entity.scriptIndex].scripts;
+    internal static Script[] GetScripts(Entity entity) {
+        return entity.archetype.entityStore.entityScripts[entity.scriptIndex].scripts;
     }
     
-    internal Script GetScript(Entity entity, Type scriptType)
+    internal static Script GetScript(Entity entity, Type scriptType)
     {
-        var scripts = entityScripts[entity.scriptIndex].scripts;
+        var scripts = entity.archetype.entityStore.entityScripts[entity.scriptIndex].scripts;
         foreach (var script in scripts) {
             if (script.GetType() == scriptType) {
                 return script;
