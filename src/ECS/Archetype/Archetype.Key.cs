@@ -22,7 +22,7 @@ internal sealed class ArchetypeKey
     internal                int             hash;           //  4   - hash code from components & tags
     internal readonly       Archetype       archetype;      //  8   - the result of a key lookup
 
-    public   override       string          ToString() => GetString();
+    public   override       string          ToString() => this.GetString();
     
     internal ArchetypeKey() { }
     
@@ -32,55 +32,58 @@ internal sealed class ArchetypeKey
         hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
         this.archetype  = archetype;
     }
+}
+
+internal static class ArchetypeKeyExtensions {
     
-    internal void Clear() {
-        componentTypes  = default;
-        tags            = default;
-        hash            = default;
+    internal static void Clear(this ArchetypeKey key) {
+        key.componentTypes  = default;
+        key.tags            = default;
+        key.hash            = default;
     }
     
-    internal void CalculateHashCode() {
-        hash    = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
+    internal static void CalculateHashCode(this ArchetypeKey key) {
+        key.hash            = key.componentTypes.bitSet.HashCode() ^ key.tags.bitSet.HashCode();
     }
     
-    internal void SetTagsWith(in Tags tags, int structIndex) {
-        componentTypes  = default;
-        componentTypes.SetBit(structIndex);
-        this.tags       = tags;
-        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
+    internal static void SetTagsWith(this ArchetypeKey key, in Tags tags, int structIndex) {
+        key.componentTypes  = default;
+        key.componentTypes.bitSet.SetBit(structIndex);
+        key.tags            = tags;
+        key.hash            = key.componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
-    internal void SetSignatureTags(in SignatureIndexes indexes, in Tags tags) {
-        componentTypes  = new ComponentTypes(indexes);
-        this.tags       = tags;
-        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
+    internal static void SetSignatureTags(this ArchetypeKey key, in SignatureIndexes indexes, in Tags tags) {
+        key.componentTypes  = new ComponentTypes(indexes);
+        key.tags            = tags;
+        key.hash            = key.componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
     }
     
-    internal void SetWith(Archetype archetype, int structIndex) {
-        componentTypes  = archetype.componentTypes;
-        componentTypes.SetBit(structIndex);
-        tags            = archetype.tags;
-        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
+    internal static void SetWith(this ArchetypeKey key, Archetype archetype, int structIndex) {
+        key.componentTypes  = archetype.componentTypes;
+        key.componentTypes.bitSet.SetBit(structIndex);
+        key.tags            = archetype.tags;
+        key.hash            = key.componentTypes.bitSet.HashCode() ^ key.tags.bitSet.HashCode();
     }
     
-    internal void SetWithout(Archetype archetype, int structIndex) {
-        componentTypes  = archetype.componentTypes;
-        componentTypes.ClearBit(structIndex);
-        tags            = archetype.tags;
-        hash            = componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
+    internal static void SetWithout(this ArchetypeKey key, Archetype archetype, int structIndex) {
+        key.componentTypes  = archetype.componentTypes;
+        key.componentTypes.bitSet.ClearBit(structIndex);
+        key.tags            = archetype.tags;
+        key.hash            = key.componentTypes.bitSet.HashCode() ^ key.tags.bitSet.HashCode();
     }
     
-    private string GetString()
+    internal static string GetString(this ArchetypeKey key)
     {
         var sb = new StringBuilder();
         sb.Append("Key: [");
         var hasTypes = false;
-        foreach (var componentType in componentTypes) {
+        foreach (var componentType in key.componentTypes) {
             sb.Append(componentType.name);
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in tags) {
+        foreach (var tag in key.tags) {
             sb.Append('#');
             sb.Append(tag.name);
             sb.Append(", ");
