@@ -32,7 +32,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     
     internal ComponentTypes(StructHeap[] heaps) {
         foreach (var heap in heaps) {
-            SetBit(heap.structIndex);
+            bitSet.SetBit(heap.structIndex);
         }
     }
     
@@ -47,11 +47,11 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             case 5: goto Type5;
         //  default: throw new IndexOutOfRangeException(); // unreachable - already ensured at SignatureIndexes
         }
-        Type5:   SetBit(indexes.T5);
-        Type4:   SetBit(indexes.T4);
-        Type3:   SetBit(indexes.T3);
-        Type2:   SetBit(indexes.T2);
-        Type1:   SetBit(indexes.T1);
+        Type5:   bitSet.SetBit(indexes.T5);
+        Type4:   bitSet.SetBit(indexes.T4);
+        Type3:   bitSet.SetBit(indexes.T3);
+        Type2:   bitSet.SetBit(indexes.T2);
+        Type1:   bitSet.SetBit(indexes.T1);
     }
     
     // ----------------------------------------- component getter -----------------------------------------
@@ -90,18 +90,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- mutate Mask -----------------------------------------
-    internal void SetBit(int structIndex) {
-        bitSet.SetBit(structIndex);
-    }
-    
-    internal void ClearBit(int structIndex) {
-        bitSet.ClearBit(structIndex);
-    }
-    
     public void Add<T>()
         where T : struct, IComponent
     {
-        SetBit(StructHeap<T>.StructIndex);
+        bitSet.SetBit(StructHeap<T>.StructIndex);
     }
     
     public void Add(in ComponentTypes componentTypes)
@@ -112,7 +104,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     public void Remove<T>()
         where T : struct, IComponent
     {
-        ClearBit(StructHeap<T>.StructIndex);
+        bitSet.ClearBit(StructHeap<T>.StructIndex);
     }
     
     public void Remove(in ComponentTypes componentTypes)
@@ -125,7 +117,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T : struct, IComponent
     {
         var componentTypes = new ComponentTypes();
-        componentTypes.SetBit(StructHeap<T>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T>.StructIndex);
         return componentTypes;
     }
     
@@ -134,8 +126,8 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T2 : struct, IComponent
     {
         var componentTypes = new ComponentTypes();
-        componentTypes.SetBit(StructHeap<T1>.StructIndex);
-        componentTypes.SetBit(StructHeap<T2>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
         return componentTypes;
     }
     

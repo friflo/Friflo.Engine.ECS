@@ -246,14 +246,14 @@ internal sealed class ComponentReader
             if (schemaType == unresolvedType) {
                 // case: unresolved component
                 hasComponentTypes = true;
-                componentTypes.SetBit(unresolvedType.structIndex);
+                componentTypes.bitSet.SetBit(unresolvedType.structIndex);
                 continue;
             }
             if (schemaType.kind == SchemaTypeKind.Component)
             {
                 var componentType = (ComponentType)schemaType;
                 hasComponentTypes = true;
-                componentTypes.SetBit(componentType.structIndex);
+                componentTypes.bitSet.SetBit(componentType.structIndex);
             }                
         }
         return hasComponentTypes;
@@ -328,7 +328,7 @@ internal sealed class ComponentReader
     {
         foreach (var tag in tagList) {
             if (!tagTypeByName.TryGetValue(tag, out var tagType)) {
-                archetypeKey.componentTypes.SetBit(unresolvedType.structIndex);
+                archetypeKey.componentTypes.bitSet.SetBit(unresolvedType.structIndex);
                 unresolvedTagList.Add(tag);
                 continue;
             }
