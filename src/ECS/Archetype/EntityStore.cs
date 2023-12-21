@@ -88,10 +88,10 @@ public abstract partial class EntityStoreBase
     {
         archs               = new Archetype[2];
         archSet             = new HashSet<ArchetypeKey>(ArchetypeKeyEqualityComparer.Instance);
-        var config          = GetArchetypeConfig();
+        var config          = GetArchetypeConfig(this);
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
-        AddArchetype(defaultArchetype);
+        AddArchetype(this, defaultArchetype);
     }
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);

@@ -19,13 +19,14 @@ public partial class EntityStoreBase
         return archSet.TryGetValue(searchKey, out archetypeKey);
     }
         
-    private Archetype GetArchetypeWith(Archetype current, int structIndex)
+    private static Archetype GetArchetypeWith(EntityStoreBase store, Archetype current, int structIndex)
     {
+        var searchKey = store.searchKey;
         searchKey.SetWith(current, structIndex);
-        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
-        var config          = GetArchetypeConfig();
+        var config          = GetArchetypeConfig(store);
         var schema          = Static.EntitySchema;
         var heaps           = current.Heaps();
         var componentTypes  = new List<ComponentType>(heaps.Length + 1);
@@ -34,20 +35,21 @@ public partial class EntityStoreBase
         }
         componentTypes.Add(schema.components[structIndex]);
         var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags);
-        AddArchetype(archetype);
+        AddArchetype(store, archetype);
         return archetype;
     }
     
-    private Archetype GetArchetypeWithout(Archetype archetype, int structIndex)
+    private static Archetype GetArchetypeWithout(EntityStoreBase store, Archetype archetype, int structIndex)
     {
+        var searchKey = store.searchKey;
         searchKey.SetWithout(archetype, structIndex);
-        if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var heaps           = archetype.Heaps();
         var componentCount  = heaps.Length - 1;
         var componentTypes  = new List<ComponentType>(componentCount);
-        var config          = GetArchetypeConfig();
+        var config          = GetArchetypeConfig(store);
         var schema          = Static.EntitySchema;
         foreach (var heap in heaps) {
             if (heap.structIndex == structIndex)
@@ -55,42 +57,42 @@ public partial class EntityStoreBase
             componentTypes.Add(schema.components[heap.structIndex]);
         }
         var result = Archetype.CreateWithComponentTypes(config, componentTypes, archetype.tags);
-        AddArchetype(result);
+        AddArchetype(store, result);
         return result;
     }
     
-    private Archetype GetArchetypeWithTags(Archetype archetype, in Tags tags)
+    private static Archetype GetArchetypeWithTags(EntityStoreBase store, Archetype archetype, in Tags tags)
     {
         var heaps           = archetype.Heaps();
         var componentTypes  = new List<ComponentType>(heaps.Length);
-        var config          = GetArchetypeConfig();
+        var config          = GetArchetypeConfig(store);
         var schema          = Static.EntitySchema;
         foreach (var heap in heaps) {
             componentTypes.Add(schema.components[heap.structIndex]);
         }
         var result = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
-        AddArchetype(result);
+        AddArchetype(store, result);
         return result;
     }
     
-    internal void AddArchetype (Archetype archetype)
+    internal static void AddArchetype (EntityStoreBase store, Archetype archetype)
     {
-        if (archsCount == archs.Length) {
-            var newLen = 2 * archs.Length;
-            ArrayUtils.Resize(ref archs,     newLen);
+        if (store.archsCount == store.archs.Length) {
+            var newLen = 2 * store.archs.Length;
+            ArrayUtils.Resize(ref store.archs,     newLen);
         }
-        if (archetype.archIndex != archsCount) {
-            throw new InvalidOperationException($"invalid archIndex. expect: {archsCount}, was: {archetype.archIndex}");
+        if (archetype.archIndex != store.archsCount) {
+            throw new InvalidOperationException($"invalid archIndex. expect: {store.archsCount}, was: {archetype.archIndex}");
         }
-        archs[archsCount] = archetype;
-        archsCount++;
-        archSet.Add(archetype.key);
+        store.archs[store.archsCount] = archetype;
+        store.archsCount++;
+        store.archSet.Add(archetype.key);
     }
     #endregion
     
     // ------------------------------------ add / remove component ------------------------------------
 #region add / remove component
-    internal bool AddComponent<T>(
+    internal static bool AddComponent<T>(
             int         id,
             int         structIndex,
         ref Archetype   archetype,  // possible mutation is not null
@@ -99,11 +101,12 @@ public partial class EntityStoreBase
         ref int         archIndex,
         in  T           component)      where T : struct, IComponent
     {
-        var         arch = archetype;
+        var         arch    = archetype;
+        var         store   = arch.store;   
         bool        added;
         StructHeap  structHeap;
         
-        if (arch != defaultArchetype)
+        if (arch != store.defaultArchetype)
         {
             structHeap = arch.heapMap[structIndex];
             if (structHeap != null) {
@@ -115,14 +118,14 @@ public partial class EntityStoreBase
             // removed passing typeof(T) in commit:
             //   Engine - extract EntityStoreBase.AddComponentInternal() to prepare sending events for EntityStoreBase.AddComponent<>()
             //   https://github.com/friflo/Friflo.Json.Fliox/commit/f1cf0db5a59a961fc39c30918157678d82d3573e
-            var newArchetype    = GetArchetypeWith(arch, structIndex);
-            compIndex           = arch.MoveEntityTo(id, compIndex, newArchetype);
+            var newArchetype    = GetArchetypeWith(store, arch, structIndex);
+            compIndex           = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
             archetype           = arch = newArchetype;
             added               = true;
         } else {
             // --- case: entity is assigned to default archetype    => get archetype and add entity
-            arch                = GetArchetype(arch.tags, structIndex);
-            compIndex           = arch.AddEntity(id);
+            arch                = GetArchetype(store, arch.tags, structIndex);
+            compIndex           = Archetype.AddEntity(arch, id);
             archetype           = arch;
             added               = true;
         }
@@ -133,7 +136,7 @@ public partial class EntityStoreBase
         var heap    = (StructHeap<T>)structHeap;
         heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
         // Send event. See: SEND_EVENT notes
-        componentAdded?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Add, structIndex));
+        store.componentAdded?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Add, structIndex));
         return added;
     }
 
@@ -175,7 +178,7 @@ public partial class EntityStoreBase
         return true;
     } */
     
-    internal bool RemoveComponent(
+    internal static bool RemoveComponent(
             int         id,
         ref Archetype   archetype,    // possible mutation is not null
         ref int         compIndex,
@@ -184,25 +187,26 @@ public partial class EntityStoreBase
             int         structIndex)
     {
         var arch    = archetype;
+        var store   = arch.store;
         var heap    = arch.heapMap[structIndex];
         if (heap == null) {
             return false;
         }
-        var newArchetype = GetArchetypeWithout(arch, structIndex);
-        if (newArchetype == defaultArchetype) {
+        var newArchetype = GetArchetypeWithout(store, arch, structIndex);
+        if (newArchetype == store.defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
-            archetype   = defaultArchetype;
+            archetype   = store.defaultArchetype;
             compIndex   = 0;
-            arch.MoveLastComponentsTo(removePos);
+            Archetype.MoveLastComponentsTo(arch, removePos);
         } else {
             // --- change entity archetype
             archetype   = newArchetype;
-            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+            compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         }
         archIndex   = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        componentRemoved?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Remove, structIndex));
+        store.componentRemoved?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Remove, structIndex));
         return true;
     }
     #endregion
@@ -232,13 +236,13 @@ public partial class EntityStoreBase
         if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
-            newArchetype = store.GetArchetypeWithTags(arch, searchKey.tags);
+            newArchetype = GetArchetypeWithTags(store, arch, searchKey.tags);
         }
         if (arch != store.defaultArchetype) {
             archetype   = newArchetype;
-            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+            compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         } else {
-            compIndex   = newArchetype.AddEntity(id);
+            compIndex   = Archetype.AddEntity(newArchetype, id);
             archetype   = newArchetype;
         }
         archIndex = archetype.archIndex;
@@ -269,16 +273,16 @@ public partial class EntityStoreBase
         if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
             newArchetype = archetypeKey.archetype;
         } else {
-            newArchetype = store.GetArchetypeWithTags(arch, searchKey.tags);
+            newArchetype = GetArchetypeWithTags(store, arch, searchKey.tags);
         }
         if (newArchetype == store.defaultArchetype) {
             int removePos = compIndex; 
             // --- update entity
             compIndex   = 0;
             archetype   = store.defaultArchetype;
-            arch.MoveLastComponentsTo(removePos);
+            Archetype.MoveLastComponentsTo(arch, removePos);
         } else {
-            compIndex   = arch.MoveEntityTo(id, compIndex, newArchetype);
+            compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
             archetype   = newArchetype;
         }
         archIndex = archetype.archIndex;

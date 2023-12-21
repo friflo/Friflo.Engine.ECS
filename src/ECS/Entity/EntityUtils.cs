@@ -39,7 +39,7 @@ public static class EntityUtils
     public static  bool         RemoveEntityComponent (Entity entity, ComponentType componentType)
     {
         int archIndex = 0;
-        return entity.archetype.entityStore.RemoveComponent(entity.id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
+        return EntityStoreBase.RemoveComponent(entity.id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
     }
     
     public static  bool         AddEntityComponent    (Entity entity, ComponentType componentType) {

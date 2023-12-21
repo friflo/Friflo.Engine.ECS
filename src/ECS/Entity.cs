@@ -233,14 +233,14 @@ public readonly struct Entity
     /// </remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
-        return archetype.entityStore.AddComponent<T>(id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
+        return EntityStoreBase.AddComponent<T>(id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
 
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
-        return archetype.entityStore.AddComponent(id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
+        return EntityStoreBase.AddComponent   (id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
 
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -250,7 +250,7 @@ public readonly struct Entity
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
-        return archetype.entityStore.RemoveComponent(id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
+        return EntityStoreBase.RemoveComponent(id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
 
     #endregion
@@ -357,7 +357,7 @@ public readonly struct Entity
         var entityStore = arch.entityStore;
         entityStore.DeleteNode(id); 
         if (arch != entityStore.defaultArchetype) {
-            arch.MoveLastComponentsTo(componentIndex);
+            Archetype.MoveLastComponentsTo(arch, componentIndex);
         }
     }
 

@@ -52,7 +52,7 @@ public partial class EntityStore
         var entity      = CreateEntity();
         var archetype   = original.archetype;
         if (archetype != defaultArchetype) {
-            entity.refCompIndex    = archetype.AddEntity(entity.id);
+            entity.refCompIndex    = Archetype.AddEntity(archetype, entity.id);
             entity.refArchetype    = archetype;
         }
         var isBlittable = IsBlittable(original);
@@ -61,7 +61,7 @@ public partial class EntityStore
         if (isBlittable) {
             var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
             // CopyComponents() must be used only in case all component types are blittable
-            archetype.CopyComponents(original.compIndex, entity.compIndex);
+            Archetype.CopyComponents(archetype, original.compIndex, entity.compIndex);
             // --- clone scripts
             foreach (var script in original.Scripts) {
                 var scriptType      = scriptTypeByType[script.GetType()];
@@ -178,7 +178,7 @@ public partial class EntityStore
         }
         var entity          = CreateEntity();
         entity.refArchetype = archetype;
-        entity.refCompIndex = archetype.AddEntity(entity.id);
+        entity.refCompIndex = Archetype.AddEntity(archetype, entity.id);
         return entity;
     }
 }

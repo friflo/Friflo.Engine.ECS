@@ -73,7 +73,7 @@ public sealed class RawEntityStore : EntityStoreBase
         var id              = CreateEntity();
         ref var entity      = ref entities[id]; 
         entity.archIndex    = archetype.archIndex;
-        entity.compIndex    = archetype.AddEntity(id);
+        entity.compIndex    = Archetype.AddEntity(archetype, id);
         return id;
     }
     
@@ -109,7 +109,7 @@ public sealed class RawEntityStore : EntityStoreBase
         if (archetype == defaultArchetype) {
             return;
         }
-        archetype.MoveLastComponentsTo(entity.compIndex);
+        Archetype.MoveLastComponentsTo(archetype, entity.compIndex);
         entity.archIndex = 0;
         entity.compIndex = 0;
         nodesCount--;

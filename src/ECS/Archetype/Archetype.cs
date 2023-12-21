@@ -34,7 +34,7 @@ public sealed class Archetype
 
 #region     private / internal members
                     internal readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
-    /// Store the entity id for each component. 
+    /// Store the entity id for each component.
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] internal            int                 entityCount;    //  4       - number of entities in archetype
                     private             ChunkMemory         memory;         // 16       - count & length used to store components in chunks  
@@ -144,11 +144,11 @@ public sealed class Archetype
 #region component handling
 
     /// <remarks> the component index in the <paramref name="newArchetype"/> </remarks>
-    internal int MoveEntityTo(int id, int sourceIndex, Archetype newArchetype)
+    internal static int MoveEntityTo(Archetype arch, int id, int sourceIndex, Archetype newArchetype)
     {
         // --- copy entity components to components of new newArchetype
-        var targetIndex = newArchetype.AddEntity(id);
-        foreach (var sourceHeap in structHeaps)
+        var targetIndex = AddEntity(newArchetype, id);
+        foreach (var sourceHeap in arch.structHeaps)
         {
             var targetHeap = newArchetype.heapMap[sourceHeap.structIndex];
             if (targetHeap == null) {
@@ -156,66 +156,67 @@ public sealed class Archetype
             }
             sourceHeap.CopyComponentTo(sourceIndex, targetHeap, targetIndex);
         }
-        MoveLastComponentsTo(sourceIndex);
+        MoveLastComponentsTo(arch, sourceIndex);
         return targetIndex;
     }
     
-    internal void MoveLastComponentsTo(int newIndex)
+    internal static void MoveLastComponentsTo(Archetype arch, int newIndex)
     {
-        var lastIndex = entityCount - 1;
+        var lastIndex = arch.entityCount - 1;
         // --- decrement entityCount if the newIndex is already the last entity id
         if (lastIndex == newIndex) {
-            entityCount = newIndex;
-            if (entityCount > memory.shrinkThreshold) {
+            arch.entityCount = newIndex;
+            if (arch.entityCount > arch.memory.shrinkThreshold) {
                 return;
             }
-            CheckChunkCapacity();
+            CheckChunkCapacity(arch);
             return;
         }
         // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
-        foreach (var heap in structHeaps) {
+        foreach (var heap in arch.structHeaps) {
             heap.MoveComponent(lastIndex, newIndex);
         }
-        var lastEntityId    = entityIds[lastIndex];
-        store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
+        var lastEntityId    = arch.entityIds[lastIndex];
+        arch.store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
         
-        entityIds[newIndex] = lastEntityId;
-        entityCount--;      // remove last entity id
-        if (entityCount > memory.shrinkThreshold) {
+        arch.entityIds[newIndex] = lastEntityId;
+        arch.entityCount--;      // remove last entity id
+        if (arch.entityCount > arch.memory.shrinkThreshold) {
             return;
         }
-        CheckChunkCapacity();
+        CheckChunkCapacity(arch);
     }
     
     /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.blittable"/></remarks>
-    internal void CopyComponents(int sourceIndex, int targetIndex)
+    internal static void CopyComponents(Archetype arch, int sourceIndex, int targetIndex)
     {
-        foreach (var sourceHeap in structHeaps) {
+        foreach (var sourceHeap in arch.structHeaps) {
             sourceHeap.CopyComponent(sourceIndex, targetIndex);
         }
     }
     
     /// <returns> the component index in this <see cref="Archetype"/> </returns>
-    internal int AddEntity(int id)
+    internal static int AddEntity(Archetype arch, int id)
     {
-        var index = entityCount++;
-        if (index == entityIds.Length) {
-            ArrayUtils.Resize(ref entityIds, 2 * entityIds.Length);
+        var index =  arch.entityCount++;
+        if (index == arch.entityIds.Length) {
+            ArrayUtils.Resize(ref arch.entityIds, 2 * arch.entityIds.Length);
         }
-        entityIds[index] = id;  // add entity id
-        if (index < memory.capacity) {
+        arch.entityIds[index] = id;  // add entity id
+        if (index < arch.memory.capacity) {
             return index;
         }
-        CheckChunkCapacity();
+        CheckChunkCapacity(arch);
         return index;
     }
     
-    private void CheckChunkCapacity()
+    private static void CheckChunkCapacity(Archetype arch)
     {
         //  newChunkCount(entityCount)  [   0,  512] -> 1
         //                              [ 513, 1024] -> 2
         //                              [1025, 1536] -> 3
-        var newChunkCount   = (entityCount - 1) / ChunkSize + 1;
+        ref var memory      = ref arch.memory;
+        var newChunkCount   = (arch.entityCount - 1) / ChunkSize + 1;
         var chunkCount      = memory.chunkCount;
         if (newChunkCount > chunkCount)
         {
@@ -224,7 +225,7 @@ public sealed class Archetype
             if (newChunkCount > memory.chunkLength) {
                 newChunkLength *= 2;
             }
-            SetChunkCapacity(newChunkCount, chunkCount, newChunkLength);
+            SetChunkCapacity(arch, newChunkCount, chunkCount, newChunkLength);
             return;
         }
         if (newChunkCount < chunkCount)
@@ -235,13 +236,15 @@ public sealed class Archetype
                 int newChunkLength  = memory.chunkLength / 2;
                 // Create new chunks array with half the Length of the current one.
                 // Copy newChunkLength component buffers from current to new one.
-                SetChunkCapacity(newChunkLength, newChunkLength, newChunkLength);
+                SetChunkCapacity(arch, newChunkLength, newChunkLength, newChunkLength);
             }
         }
     }
     
-    private void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength) {
-        foreach (var heap in structHeaps) {
+    private static void SetChunkCapacity(Archetype arch, int newChunkCount, int chunkCount, int newChunkLength)
+    {
+        ref var memory = ref arch.memory;
+        foreach (var heap in arch.structHeaps) {
             heap.SetChunkCapacity(newChunkCount, chunkCount, newChunkLength, memory.chunkLength);
         }
         memory.chunkCount       = newChunkCount;

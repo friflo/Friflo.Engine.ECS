@@ -33,7 +33,7 @@ public static class Test_EntityStore
         archetype.SetInternalField(nameof(archetype.archIndex), 5);
         
         var e = Throws<InvalidOperationException>(() => {
-            store.AddArchetype(archetype);
+            EntityStoreBase.AddArchetype(store, archetype);
         });
         AreEqual("invalid archIndex. expect: 2, was: 5", e!.Message);
     }

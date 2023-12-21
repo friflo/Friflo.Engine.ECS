@@ -195,9 +195,9 @@ internal sealed class ComponentReader
         {
             entity.refArchetype = newArchetype;
             if (curArchetype == store.defaultArchetype) {
-                entity.refCompIndex = newArchetype.AddEntity(entity.id);
+                entity.refCompIndex = Archetype.AddEntity   (newArchetype, entity.id);
             } else {
-                entity.refCompIndex = curArchetype.MoveEntityTo(entity.id, entity.compIndex, newArchetype);
+                entity.refCompIndex = Archetype.MoveEntityTo(curArchetype, entity.id, entity.compIndex, newArchetype);
             }
         }
         if (unresolvedTagList.Count > 0) {
@@ -264,7 +264,7 @@ internal sealed class ComponentReader
         if (store.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
-        var config = store.GetArchetypeConfig();
+        var config = EntityStoreBase.GetArchetypeConfig(store);
         componentTypes.Clear();
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
@@ -277,7 +277,7 @@ internal sealed class ComponentReader
             componentTypes.Add(unresolvedType);
         }
         var newArchetype = Archetype.CreateWithComponentTypes(config, componentTypes, searchKey.tags);
-        store.AddArchetype(newArchetype);
+        EntityStoreBase.AddArchetype(store, newArchetype);
         return newArchetype;
     }
     
