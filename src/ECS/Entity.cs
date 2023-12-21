@@ -113,13 +113,13 @@ public readonly struct Entity
 #region general - properties
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
-    public              int                 Id              => id;
+    public              int                     Id              => id;
     
-    public              long                Pid             => store.nodes[id].pid;
+    public              long                    Pid             => store.nodes[id].pid;
                     
-    public              EntityComponents    Components      => new EntityComponents(this);
+    public              EntityComponents        Components      => new EntityComponents(this);
                     
-    public     ReadOnlySpan<Script>         Scripts         => new (EntityUtils.GetScripts(this));
+    public     ReadOnlySpan<Script>             Scripts         => new (EntityUtils.GetScripts(this));
 
     /// <returns>
     /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
@@ -127,59 +127,59 @@ public readonly struct Entity
     /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<see cref="Tags"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
-    public     ref readonly Tags            Tags            => ref archetype.tags;
+    public     ref readonly Tags                Tags            => ref archetype.tags;
 
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
-    public                  Archetype       Archetype       => archetype;
+    public                  Archetype           Archetype       => archetype;
     
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
-    [Browse(Never)] public  EntityStore     Store           => archetype?.entityStore;
+    [Browse(Never)] public  EntityStore         Store           => archetype?.entityStore;
                     
     /// <remarks>If <see cref="attached"/> its <see cref="Store"/> and <see cref="Archetype"/> are not null. Otherwise null.</remarks>
-    [Browse(Never)] public  StoreOwnership  StoreOwnership  => archetype != null ? attached : detached;
+    [Browse(Never)] public  StoreOwnership      StoreOwnership  => archetype != null ? attached : detached;
     
     /// <returns>
     /// <see cref="treeNode"/> if the entity is member of the <see cref="EntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
-    [Browse(Never)] public  TreeMembership  TreeMembership  => archetype.entityStore.GetTreeMembership(id);
+    [Browse(Never)] public  TreeMembership      TreeMembership  => archetype.entityStore.GetTreeMembership(id);
     
-    [Browse(Never)] public  bool            IsNull          => store?.nodes[id].archetype == null;
+    [Browse(Never)] public  bool                IsNull          => store?.nodes[id].archetype == null;
     
     /// <summary> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </summary>
     // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
-                    public  string          DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
+                    public  string              DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
 
     #endregion
 
 #region component - properties
 
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
-    [Browse(Never)] public  ref EntityName  Name        => ref archetype.std.name.    chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref EntityName      Name        => ref archetype.std.name.    chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
 
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
-    [Browse(Never)] public  ref Position    Position    => ref archetype.std.position.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
-    [Browse(Never)] public  ref Rotation    Rotation    => ref archetype.std.rotation.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
-    [Browse(Never)] public  ref Scale3      Scale3      => ref archetype.std.scale3.  chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref Scale3          Scale3      => ref archetype.std.scale3.  chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
     
-    [Browse(Never)] public  bool            HasName     =>     archetype.std.name              != null;
-    [Browse(Never)] public  bool            HasPosition =>     archetype.std.position          != null;
-    [Browse(Never)] public  bool            HasRotation =>     archetype.std.rotation          != null;
-    [Browse(Never)] public  bool            HasScale3   =>     archetype.std.scale3            != null;
+    [Browse(Never)] public  bool                HasName     =>     archetype.std.name              != null;
+    [Browse(Never)] public  bool                HasPosition =>     archetype.std.position          != null;
+    [Browse(Never)] public  bool                HasRotation =>     archetype.std.rotation          != null;
+    [Browse(Never)] public  bool                HasScale3   =>     archetype.std.scale3            != null;
     #endregion
     
 #region child / tree - properties
-    [Browse(Never)] public  int                 ChildCount      => archetype.entityStore.nodes[id].childCount;
+    [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[id].childCount;
     
     /// <returns>
     /// null if the entity has no parent.<br/>
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
-                    public  Entity              Parent          => EntityStore.GetParent(archetype.entityStore, id);
+                    public  Entity              Parent      => EntityStore.GetParent(archetype.entityStore, id);
     
     /// <summary>
     /// Return all child <see cref="Entity"/>'s. Enumerate with: 
