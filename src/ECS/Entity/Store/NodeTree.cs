@@ -571,7 +571,8 @@ public partial class EntityStore
     internal static Entity GetParent(EntityStore store, int id)
     {
         var parentNode  = store.nodes[id].parentId;
-        return HasParent(parentNode) ? new Entity(parentNode, store) : new Entity(Static.NoParentId, store); // ENTITY_STRUCT
+        parentNode      = HasParent(parentNode) ? parentNode : Static.NoParentId;
+        return new Entity(parentNode, store); // ENTITY_STRUCT
     }
     
     internal static ChildEntities GetChildEntities(EntityStore store, int id)
