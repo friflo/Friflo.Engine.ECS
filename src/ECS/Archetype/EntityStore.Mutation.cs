@@ -27,9 +27,9 @@ public partial class EntityStoreBase
         }
         var config          = GetArchetypeConfig();
         var schema          = Static.EntitySchema;
-        var heaps           = current.Heaps;
+        var heaps           = current.Heaps();
         var componentTypes  = new List<ComponentType>(heaps.Length + 1);
-        foreach (var heap in current.Heaps) {
+        foreach (var heap in heaps) {
             componentTypes.Add(schema.components[heap.structIndex]);
         }
         componentTypes.Add(schema.components[structIndex]);
@@ -44,7 +44,7 @@ public partial class EntityStoreBase
         if (archSet.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
-        var heaps           = archetype.Heaps;
+        var heaps           = archetype.Heaps();
         var componentCount  = heaps.Length - 1;
         var componentTypes  = new List<ComponentType>(componentCount);
         var config          = GetArchetypeConfig();
@@ -61,7 +61,7 @@ public partial class EntityStoreBase
     
     private Archetype GetArchetypeWithTags(Archetype archetype, in Tags tags)
     {
-        var heaps           = archetype.Heaps;
+        var heaps           = archetype.Heaps();
         var componentTypes  = new List<ComponentType>(heaps.Length);
         var config          = GetArchetypeConfig();
         var schema          = Static.EntitySchema;

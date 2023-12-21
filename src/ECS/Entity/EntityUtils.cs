@@ -104,7 +104,7 @@ public static class EntityUtils
                 sb.Append(script.GetType().Name);
                 sb.Append(", ");
             }
-            foreach (var heap in archetype.Heaps) {
+            foreach (var heap in archetype.Heaps()) {
                 sb.Append(heap.StructType.Name);
                 sb.Append(", ");
             }

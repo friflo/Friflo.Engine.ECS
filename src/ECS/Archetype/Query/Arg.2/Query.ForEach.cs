@@ -39,7 +39,7 @@ public readonly struct QueryForEach<T1, T2>
             var heapMap     = archetype.heapMap;
             var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
             var chunks2     = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]).chunks;
-            var chunkEnd    = archetype.ChunkCount;
+            var chunkEnd    = archetype.ChunkCount();
             int chunkPos    = 0;
             for (; chunkPos < chunkEnd; chunkPos++)
             {
@@ -52,7 +52,7 @@ public readonly struct QueryForEach<T1, T2>
                     lambda(ref1, ref2);
                 }
             }
-            var componentLen = archetype.ChunkRest;
+            var componentLen = archetype.ChunkRest();
             if (componentLen == 0) {
                 continue;
             }

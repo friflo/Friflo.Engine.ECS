@@ -43,7 +43,7 @@ internal sealed class ComponentWriter
         writer.SetPretty(pretty);
         writer.ObjectStart();
         // --- write components
-        var heaps = archetype.Heaps;
+        var heaps = archetype.Heaps();
         for (int n = 0; n < heaps.Length; n++) {
             var heap = heaps[n];
             if (heap.structIndex == unresolvedIndex) {

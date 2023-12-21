@@ -28,23 +28,15 @@ public sealed class Archetype
                     public              EntityStoreBase     Store           => store;
                     public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
                     public ref readonly Tags                Tags            => ref tags;
-#endregion
-
-#region     internal properties
-    [Browse(Never)] internal ReadOnlySpan<StructHeap>       Heaps           => structHeaps;
-    [Browse(Never)] internal            int                 ChunkCount      // entity count: 0: 0   1:0   512:0   513:1, ...
-                                                                            => entityCount / ChunkSize;
-    [Browse(Never)] internal            int                 ChunkEnd        // entity count: 0:-1   1:0   512:0   513:1, ...
-                                                                            => (entityCount + ChunkSize - 1) / ChunkSize - 1;
-    [Browse(Never)] internal            int                 ChunkRest       => entityCount % ChunkSize;
+                    
                     public   override   string              ToString()      => GetString();
 #endregion
 
 #region     private / internal members
-                    private  readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
+                    internal readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
     /// Store the entity id for each component. 
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
-    [Browse(Never)] private             int                 entityCount;    //  4       - number of entities in archetype
+    [Browse(Never)] internal            int                 entityCount;    //  4       - number of entities in archetype
                     private             ChunkMemory         memory;         // 16       - count & length used to store components in chunks  
     // --- internal
     [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
@@ -293,4 +285,17 @@ public sealed class Archetype
         return "[]";
     }
     #endregion
+}
+
+internal static class ArchetypeExtensions
+{
+     internal static ReadOnlySpan<StructHeap>   Heaps       (this Archetype archetype)  => archetype.structHeaps;
+     
+     internal static                    int     ChunkCount  (this Archetype archetype)  // entity count: 0: 0   1:0   512:0   513:1, ...
+                                                => archetype.entityCount / ChunkSize;
+     
+     internal static                    int     ChunkEnd    (this Archetype archetype)  // entity count: 0:-1   1:0   512:0   513:1, ...
+                                                => (archetype.entityCount + ChunkSize - 1) / ChunkSize - 1;
+     
+     internal static                    int     ChunkRest   (this Archetype archetype)  => archetype.entityCount % ChunkSize;
 }

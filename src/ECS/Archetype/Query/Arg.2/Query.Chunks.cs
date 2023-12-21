@@ -54,21 +54,22 @@ public ref struct ChunkEnumerator<T1, T2>
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
-        chunkEnd        = archetype.ChunkCount;
+        chunkEnd        = archetype.ChunkCount();
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
     public readonly (Chunk<T1>, Chunk<T2>) Current   => (chunk1, chunk2);
     
     // --- IEnumerator
-    public bool MoveNext() {
+    public bool MoveNext()
+    {
         int componentLen;
         if (chunkPos < chunkEnd) {
             componentLen = ChunkSize;
             goto Next;
         }
         if (chunkPos == chunkEnd)  {
-            componentLen    = archetypes[archetypePos].ChunkRest;
+            componentLen    = archetypes[archetypePos].ChunkRest();
             if (componentLen > 0) {
                 goto Next;
             }
@@ -81,8 +82,8 @@ public ref struct ChunkEnumerator<T1, T2>
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
         chunkPos        = 0;
-        chunkEnd        = archetype.ChunkEnd;
-        componentLen    = chunkEnd == 0 ? archetype.ChunkRest : ChunkSize;
+        chunkEnd        = archetype.ChunkEnd();
+        componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
     Next:
         chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
         chunk2 = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen);

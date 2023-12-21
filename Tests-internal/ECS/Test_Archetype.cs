@@ -46,7 +46,7 @@ public static class Test_Archetype
         var entity      = store.CreateEntity();
         entity.AddComponent<Position>();
         var posType     = store.GetArchetype(Signature.Get<Position>());
-        StructHeap heap = posType.Heaps[0];
+        StructHeap heap = posType.Heaps()[0];
 #if DEBUG
         AreEqual("[Position] chunks - Count: 1, Length: 1, EntityCount: 1", heap.ToString());
 #else
