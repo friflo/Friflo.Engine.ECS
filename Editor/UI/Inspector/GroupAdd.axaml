@@ -6,7 +6,7 @@
              Width="200" Height="300"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
     <StackPanel>
-        <TextBox></TextBox>
+        <TextBox Margin="3" Padding="5 2" Height="22" MinHeight="1"/>
         <ListBox Name="List">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
