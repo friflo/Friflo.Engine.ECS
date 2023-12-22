@@ -1,3 +1,6 @@
+
+/*
+
 using System;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -125,11 +128,11 @@ internal static class OpenGLTest
 
     private static unsafe void OnLoad()
     {
-        /* IInputContext input = window.CreateInput();
-        for (int i = 0; i < input.Keyboards.Count; i++)
-        {
-            input.Keyboards[i].KeyDown += KeyDown;
-        }*/
+        // IInputContext input = window.CreateInput();
+        // for (int i = 0; i < input.Keyboards.Count; i++)
+        // {
+        //     input.Keyboards[i].KeyDown += KeyDown;
+        // }
 
         //Getting the opengl api for drawing to the screen.
         Gl = GL.GetApi(window);
@@ -229,12 +232,14 @@ internal static class OpenGLTest
         Gl.DeleteProgram(Shader);
     }
 
-    /*
-    private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
-    {
-        if (arg2 == Key.Escape)
-        {
-            window.Close();
-        }
-    } */
+    
+    // private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
+    // {
+    //     if (arg2 == Key.Escape)
+    //     {
+    //         window.Close();
+    //     }
+    // }
 }
+
+*/
