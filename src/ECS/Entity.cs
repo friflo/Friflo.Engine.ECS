@@ -119,7 +119,7 @@ public readonly struct Entity
                     
     public              EntityComponents        Components      => new EntityComponents(this);
                     
-    public     ReadOnlySpan<Script>             Scripts         => new (EntityUtils.GetScripts(this));
+    public              ReadOnlySpan<Script>    Scripts         => new (EntityUtils.GetScripts(this));
 
     /// <returns>
     /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
