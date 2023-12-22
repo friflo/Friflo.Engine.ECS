@@ -7,6 +7,16 @@
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
     <StackPanel>
         <TextBox></TextBox>
-        <ListBox Name="List"/>
+        <ListBox Name="List">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="5 1" />
+                    <Setter Property="Height" Value="22" />
+                </Style>
+            </ListBox.Styles>
+            <ListBoxItem Content="111"/>
+            <ListBoxItem Content="222"/>
+            <ListBoxItem Content="333"/>
+        </ListBox>
     </StackPanel>
 </UserControl>

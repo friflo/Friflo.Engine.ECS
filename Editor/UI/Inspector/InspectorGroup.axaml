@@ -19,8 +19,8 @@
                             BorderThickness="0" CornerRadius="2"
                             Margin="0" Padding="3 -1">
                         <Button.Flyout>
-                            <Flyout Placement="BottomEdgeAlignedRight">
-                                <local:GroupAdd Name="GroupAdd"/>
+                            <Flyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="InspectorFlyout">
+                                <local:GroupAdd Name="GroupAdd" />
                             </Flyout>
                         </Button.Flyout>
                     </Button>

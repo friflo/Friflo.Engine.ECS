@@ -68,6 +68,12 @@
             <Setter Property="TextDecorations"   Value="Underline"/>
         </Style>
         
+        <Style Selector="FlyoutPresenter.InspectorFlyout">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        
+        
         <!--
         Notes to:  <Style Selector="DataValidationErrors">
         [Data Validation | Avalonia UI > Customize the appearance of the validation message]

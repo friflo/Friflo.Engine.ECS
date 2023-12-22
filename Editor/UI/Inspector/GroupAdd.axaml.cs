@@ -33,27 +33,28 @@ public partial class GroupAdd : UserControl
         this.inspector  = inspector;
         GroupName       = groupName;
         var schema      = EntityStore.GetEntitySchema();
+        List.Items.Clear(); // clear example ListBoxItem's
         switch (groupName)
         {
             case "tags":
                 var tags = schema.Tags;
                 for (int n = 1; n < tags.Length; n++) {
                     var tag = tags[n];
-                    List.Items.Add(new ListBoxItem { Content = tag.tagName }); 
+                    List.Items.Add(new ListBoxItem { Content = tag.tagName });
                 }
                 break;
             case "components":
                 var components = schema.Components;
                 for (int n = 1; n < components.Length; n++) {
                     var component = components[n];
-                    List.Items.Add(new ListBoxItem { Content = component.name }); 
+                    List.Items.Add(new ListBoxItem { Content = component.name });
                 }
                 break;
             case "scripts":
                 var scripts = schema.Scripts;
                 for (int n = 1; n < scripts.Length; n++) {
                     var script = scripts[n];
-                    List.Items.Add(new ListBoxItem { Content = script.name }); 
+                    List.Items.Add(new ListBoxItem { Content = script.name });
                 }
                 break;
         }
