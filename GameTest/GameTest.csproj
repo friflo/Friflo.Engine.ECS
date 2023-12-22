@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <GenerateProgramFile>true</GenerateProgramFile>
+        <RootNamespace>GameTest</RootNamespace>
+        
+        <!-- Avalionia specific -->
+        <AssemblyName>GameTest</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\Hub\Engine.Hub.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="0.50.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <!-- Copy XML files from all PackageReferences to output dir -->
+    <Target Name="_ResolveCopyLocalNuGetPkgXmls" AfterTargets="ResolveReferences">
+        <ItemGroup>
+        <ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->'%(RootDir)%(Directory)%(Filename).xml')" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)'!='' and Exists('%(RootDir)%(Directory)%(Filename).xml')" />
+        </ItemGroup>
+    </Target>
+
+    <ItemGroup>
+      <None Remove="**/*.csproj.xml" />
+    </ItemGroup>
+    
+</Project>
