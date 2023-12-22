@@ -123,7 +123,7 @@ public static class ExplorerCommands
     {
         var indexes = TreeUtils.MoveExplorerItemsUp(selection.items, shift);
         Focus(element);
-        return indexes?.ToArray();
+        return indexes;
     }
     
     /// <summary>Return the child indexes of moved items. Is empty if no item was moved.</summary>
@@ -131,7 +131,7 @@ public static class ExplorerCommands
     {
         var indexes = TreeUtils.MoveExplorerItemsDown(selection.items, shift);
         Focus(element);
-        return indexes?.ToArray();
+        return indexes;
     }
     
     private static void Focus(IInputElement element) {
