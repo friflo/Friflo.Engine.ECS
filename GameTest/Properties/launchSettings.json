@@ -1,6 +1,6 @@
 {
     "profiles": {
-        "Editor": {
+        "GameTest": {
             "commandName": "Project",
             "dotnetRunMessages": true,
             "workingDirectory": "./",
