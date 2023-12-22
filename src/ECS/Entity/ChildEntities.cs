@@ -18,9 +18,6 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     [Browse(Never)]     public              int                 Count           => childCount;
     [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
     
-/*  /// <summary>Property <b>only used</b> to display child entities in Debugger. See <see cref="ChildEntities"/> remarks.</summary>
-    [Obsolete($"use either {nameof(ChildEntities)}[], {nameof(ChildEntities)}.{nameof(ToArray)}() or foreach (var node in entity.{nameof(ChildEntities)})")]
-    [Browse(RootHidden)]public              Entity[]            Entities_       => GetEntities(); */
                         public              Entity              this[int index] => new Entity(Ids[index], store);
                         public override     string              ToString()      => $"Count: {childCount}";
     
@@ -50,15 +47,6 @@ public readonly struct ChildEntities : IEnumerable<Entity>
             array[n] = new Entity(ids[n], store);
         }
     }
-
-    /* was used for class Entity
-    private Entity[] GetEntities() {
-        var childEntities = new Entity[childLength];
-        for (int n = 0; n < childLength; n++) {
-            childEntities[n] = new Entity(childIds[n], store);
-        }
-        return childEntities;
-    } */
 }
 
 public struct ChildEnumerator  : IEnumerator<Entity>
