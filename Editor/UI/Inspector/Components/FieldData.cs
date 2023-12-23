@@ -9,9 +9,10 @@ namespace Friflo.Editor.UI.Inspector;
 
 internal enum FieldDataKind
 {
-    None        = 0,
-    Component   = 1,
-    Member      = 2
+    None            = 0,
+    Component       = 1,
+    ComponentMember = 2,
+    ScriptMember    = 3
 }
 
 internal readonly struct FieldData
@@ -27,8 +28,15 @@ internal readonly struct FieldData
         instance    = component;
     }
     
-    internal FieldData(object instance, Var.Member member) {
-        kind            = FieldDataKind.Member;
+    internal FieldData(Entity entity, IComponent instance, Var.Member member) {
+        kind            = FieldDataKind.ComponentMember;
+        this.entity     = entity;
+        this.instance   = instance;
+        this.member     = member;
+    }
+    
+    internal FieldData(Script instance, Var.Member member) {
+        kind            = FieldDataKind.ScriptMember;
         this.instance   = instance;
         this.member     = member;
     }

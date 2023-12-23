@@ -26,29 +26,32 @@ public interface IFieldControl
 public class ComponentField
 {
 #region internal fields
-    internal readonly   string      name;
-    internal            Control     control;
-    private             FieldData   data;
-    private  readonly   Type        type;
-    private  readonly   int         index;
-    private  readonly   Var.Member  member;
+    internal readonly   string          name;
+    internal            Control         control;
+    private             FieldData       data;
+    private  readonly   ComponentType   componentType;
+    private  readonly   Type            type;
+    private  readonly   int             index;
+    private  readonly   Var.Member      member;
 
-    public   override   string      ToString() => $"'{name}', type: {type.Name}";
+    public   override   string          ToString() => $"'{name}', type: {type.Name}";
 
     #endregion
     
     private static readonly TypeStore TypeStore = new TypeStore(); // todo  use shared TypeStore
     
-    private ComponentField(string name, Type type, int index, Var.Member member) {
-        this.name       = name;
-        this.member     = member;
-        this.type       = type;
-        this.index      = index;
+    private ComponentField(string name, ComponentType componentType, Type type, int index, Var.Member member) {
+        this.name           = name;
+        this.member         = member;
+        this.componentType  = componentType;
+        this.type           = type;
+        this.index          = index;
     }
     
 #region create component fields
     private static bool AddComponentFields(
         List<ComponentField>    fields,
+        ComponentType           componentType,
         Type                    type,
         string                  fieldName,
         Var.Member              member)
@@ -57,14 +60,14 @@ public class ComponentField
             type == typeof(Scale3))
         {
             fieldName     ??= "value";
-            var field       = new ComponentField(fieldName,    type,   0, member);
+            var field       = new ComponentField(fieldName,    componentType, type,   0, member);
             field.control   = new Vector3Field { ComponentField = field };
             fields.Add(field);
             return true;
         }
         if (type == typeof(Transform)) {
-            var field0      = new ComponentField("position",   type,  0, member);
-            var field1      = new ComponentField("rotation",   type,  1, member);
+            var field0      = new ComponentField("position",   componentType, type,  0, member);
+            var field1      = new ComponentField("rotation",   componentType, type,  1, member);
             field0.control  = new Vector3Field { ComponentField = field0 };
             field1.control  = new Vector3Field { ComponentField = field1 };
             fields.Add(field0);
@@ -73,14 +76,14 @@ public class ComponentField
         }
         if (type == typeof(EntityName)) {
             fieldName     ??= nameof(EntityName.value);
-            var field       = new ComponentField(fieldName,    type, 0, member);
+            var field       = new ComponentField(fieldName,    componentType, type, 0, member);
             field.control   = new StringField { ComponentField = field };
             fields.Add(field);
             return true;
         }
         if (type == typeof(Unresolved)) {
             fieldName     ??= "unresolved";
-            var field       = new ComponentField(fieldName,    type, 0, member);
+            var field       = new ComponentField(fieldName,    componentType, type, 0, member);
             field.control   = new UnresolvedField{ ComponentField = field };
             fields.Add(field);
             return true;
@@ -91,14 +94,14 @@ public class ComponentField
     internal static void AddComponentTypeFields(List<ComponentField> fields, ComponentType componentType)
     {
         var type    = componentType.type;
-        if (AddComponentFields(fields, type, null, default)) {
+        if (AddComponentFields(fields, componentType, type, null, default)) {
             return;
         }
         // add custom struct component fields
-        AddScriptFields(fields, type);
+        AddScriptFields(fields, componentType, type);
     }
         
-    internal static void AddScriptFields(List<ComponentField> fields, Type type)
+    internal static void AddScriptFields(List<ComponentField> fields, ComponentType componentType, Type type)
     {
         var classMapper = TypeStore.GetTypeMapper(type);
         var propFields  = classMapper.PropFields.fields;
@@ -107,10 +110,10 @@ public class ComponentField
             var propField   = propFields[n];
             var fieldType   = propField.fieldType.type;
             var member      = classMapper.GetMember(propField.name);
-            if (AddComponentFields(fields, fieldType, propField.name, member)) {
+            if (AddComponentFields(fields, componentType, fieldType, propField.name, member)) {
                 continue;
             }
-            var field       = new ComponentField(propField.name, fieldType, 0, member);
+            var field       = new ComponentField(propField.name, componentType, fieldType, 0, member);
             field.control   = CreateField(fieldType, field);
             fields.Add(field);
         }
@@ -138,7 +141,7 @@ public class ComponentField
             if (field.member == null) {
                 data = new FieldData(entity, component);    
             } else {
-                data = new FieldData(component, field.member);
+                data = new FieldData(entity, component, field.member);
             }
             SetComponentField(field, data);
             field.data  = data;
@@ -234,7 +237,11 @@ public class ComponentField
             case Component:
                 SetComponentVector(data.entity, vector);
                 return;
-            case Member:
+            case ComponentMember:
+                SetScriptVector(data.instance, vector);
+                EntityUtils.AddEntityComponentValue(data.entity, componentType, data.instance);
+                return;
+            case ScriptMember:
                 SetScriptVector(data.instance, vector);
                 return;
         }
@@ -271,6 +278,7 @@ public class ComponentField
             position.value = vector;
             return;
         }
+        throw new NotImplementedException($"SetComponentVector() type: {type.Name}");
     }
     
     private void SetScriptVector(object script, in Vector3 vector)
@@ -292,6 +300,7 @@ public class ComponentField
             member.SetVar(script, var);
             return;
         }
+        throw new NotImplementedException($"SetScriptVector() type: {type.Name}");
     }
     #endregion
     
@@ -306,7 +315,11 @@ public class ComponentField
             case Component:
                 SetComponentString(data.entity, value);
                 return;
-            case Member:
+            case ComponentMember:
+                SetScriptString(data.instance, value);
+                EntityUtils.AddEntityComponentValue(data.entity, componentType, data.instance);
+                return;
+            case ScriptMember:
                 SetScriptString(data.instance, value);
                 return;
         }
@@ -322,12 +335,13 @@ public class ComponentField
             _ = 1;
             // todo
         }
+        throw new NotImplementedException($"SetComponentString() type: {type.Name}");
     }
     
     private void SetScriptString(object script, string value)
     {
         if (type == typeof(EntityName)) {
-             member.SetVar(script, new Var(value));
+            member.SetVar(script, new Var(value));
             return;
         }
         if (type == typeof(string)) {
@@ -339,6 +353,12 @@ public class ComponentField
             member.SetVar(script, new Var(i32));
             return;
         }
+        if (type == typeof(float)) {
+            var f32     = float.Parse(value);
+            member.SetVar(script, new Var(f32));
+            return;
+        }
+        throw new NotImplementedException($"SetScriptString() type: {type.Name}");
     }
     #endregion
 }
