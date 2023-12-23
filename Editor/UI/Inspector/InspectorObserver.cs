@@ -167,7 +167,9 @@ internal class InspectorObserver : EditorObserver
             if (!componentMap.TryGetValue(componentType, out var item)) {
                 var component   = new InspectorComponent { ComponentTitle = componentType.name, ComponentType = componentType };
                 var panel       = new StackPanel();
-                var fields      = AddComponentFields(componentType, panel);
+                var fields      = new List<ComponentField>();
+                ComponentField.AddComponentTypeFields(fields, componentType);
+                AddFields(fields, panel);
                 panel.Children.Add(new Separator());
                 
                 // <StackPanel IsVisible="{Binding #Comp1.Expanded}"
@@ -175,7 +177,7 @@ internal class InspectorObserver : EditorObserver
                 // ^-- same as: AvaloniaObjectExtensions.GetObservable(component, InspectorComponent.ExpandedProperty);
                 panel.Bind(Visual.IsVisibleProperty, expanded);
                 
-                item = new ComponentItem(component, panel, fields);
+                item = new ComponentItem(component, panel, fields.ToArray());
                 componentMap.Add(componentType, item);
             }          
             var instance = EntityUtils.GetEntityComponent(entity, componentType); // todo - instance is a struct -> avoid boxing
@@ -220,17 +222,6 @@ internal class InspectorObserver : EditorObserver
         }
         inspector.ScriptGroup.GroupAdd.Entity = entity;
         UpdateControls(controls);
-    }
-    
-    private static ComponentField[] AddComponentFields(ComponentType componentType, Panel panel)
-    {
-        var type    = componentType.type;
-        var fields  = new List<ComponentField>();
-        if (!ComponentField.AddComponentFields(fields, type, null, default)) {
-            ComponentField.AddScriptFields(fields, type);
-        }
-        AddFields(fields, panel);
-        return fields.ToArray();
     }
     
     private static void AddFields(List<ComponentField> fields, Panel panel)

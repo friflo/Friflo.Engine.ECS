@@ -33,7 +33,7 @@ public class ComponentField
     private  readonly   int         index;
     private  readonly   Var.Member  member;
 
-    public   override   string      ToString() => name;
+    public   override   string      ToString() => $"'{name}', type: {type.Name}";
 
     #endregion
     
@@ -47,7 +47,7 @@ public class ComponentField
     }
     
 #region create component fields
-    internal static bool AddComponentFields(
+    private static bool AddComponentFields(
         List<ComponentField>    fields,
         Type                    type,
         string                  fieldName,
@@ -87,6 +87,14 @@ public class ComponentField
         }
         return false;
     }
+    
+    internal static void AddComponentTypeFields(List<ComponentField> fields, ComponentType componentType)
+    {
+        var type    = componentType.type;
+        if (!AddComponentFields(fields, type, null, default)) {
+            AddScriptFields(fields, type);
+        }
+    }
         
     internal static void AddScriptFields(List<ComponentField> fields, Type type)
     {
@@ -122,9 +130,9 @@ public class ComponentField
 #region read component values
     internal static void SetComponentFields(ComponentField[] componentFields, Entity entity, IComponent component)
     {
-        var data = new FieldData(entity, component);
         foreach (var field in componentFields) {
             field.data  = default; // clear to prevent update calls
+            var data = new FieldData(entity, component);
             SetComponentField(field, data);
             field.data  = data;
         }
