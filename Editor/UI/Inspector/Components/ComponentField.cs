@@ -21,7 +21,7 @@ namespace Friflo.Editor.UI.Inspector;
 public interface IFieldControl
 {
     ComponentField  ComponentField { get; init; }  
-} 
+}
 
 public class ComponentField
 {
@@ -91,9 +91,11 @@ public class ComponentField
     internal static void AddComponentTypeFields(List<ComponentField> fields, ComponentType componentType)
     {
         var type    = componentType.type;
-        if (!AddComponentFields(fields, type, null, default)) {
-            AddScriptFields(fields, type);
+        if (AddComponentFields(fields, type, null, default)) {
+            return;
         }
+        // add custom struct component fields
+        AddScriptFields(fields, type);
     }
         
     internal static void AddScriptFields(List<ComponentField> fields, Type type)
@@ -132,7 +134,12 @@ public class ComponentField
     {
         foreach (var field in componentFields) {
             field.data  = default; // clear to prevent update calls
-            var data = new FieldData(entity, component);
+            FieldData data;
+            if (field.member == null) {
+                data = new FieldData(entity, component);    
+            } else {
+                data = new FieldData(component, field.member);
+            }
             SetComponentField(field, data);
             field.data  = data;
         }

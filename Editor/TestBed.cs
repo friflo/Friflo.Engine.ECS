@@ -57,7 +57,9 @@ public static class TestBed
         root.AddChild(CreateEntity(store, 4));
         root.AddChild(CreateEntity(store, 5));
         root.AddChild(CreateEntity(store, 6));
-        root.AddChild(CreateEntity(store, 7));
+        var entity7 = CreateEntity(store, 7);
+        entity7.AddComponent(new TestComponent { name = "abc", scale = new Scale3(3,3,3), start = new Position(4,4,4)});
+        root.AddChild(entity7);
         CreateManyEntities(root, "10.000",       new [] { 100, 100 });
         // CreateManyEntities(root, "1.000.000",    new [] { 100, 100, 100 });
     }

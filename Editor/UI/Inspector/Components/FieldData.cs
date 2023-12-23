@@ -27,7 +27,7 @@ internal readonly struct FieldData
         instance    = component;
     }
     
-    internal FieldData(Script instance, Var.Member member) {
+    internal FieldData(object instance, Var.Member member) {
         kind            = FieldDataKind.Member;
         this.instance   = instance;
         this.member     = member;
