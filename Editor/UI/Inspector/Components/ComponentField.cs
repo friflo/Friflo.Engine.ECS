@@ -148,11 +148,11 @@ public class ComponentField
         }
     }
     
-    internal static void SetScriptFields(ComponentField[] componentFields, Script script)
+    internal static void SetScriptFields(Entity entity, ComponentField[] componentFields, Script script)
     {
         foreach (var field in componentFields) {
             field.data  = default; // clear to prevent update calls
-            var data    = new FieldData(script, field.member);
+            var data    = new FieldData(entity, script, field.member);
             SetComponentField(field, data);
             field.data  = data;
         }
@@ -243,6 +243,7 @@ public class ComponentField
                 return;
             case ScriptMember:
                 SetScriptVector(data.instance, vector);
+                EntityUtils.AddEntityScript(data.entity, (Script)data.instance);
                 return;
         }
     }
@@ -321,6 +322,7 @@ public class ComponentField
                 return;
             case ScriptMember:
                 SetScriptString(data.instance, value);
+                EntityUtils.AddEntityScript(data.entity, (Script)data.instance);
                 return;
         }
     }

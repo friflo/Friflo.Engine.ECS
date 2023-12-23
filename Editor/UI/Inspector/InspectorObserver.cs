@@ -214,7 +214,7 @@ internal class InspectorObserver : EditorObserver
                 item = new ComponentItem(component, panel, fields.ToArray());
                 scriptMap.Add(scriptType, item);
             }
-            ComponentField.SetScriptFields(item.fields, script);
+            ComponentField.SetScriptFields(entity, item.fields, script);
             item.inspectorComponent.Entity = entity;
             
             controlList.Add(item.inspectorComponent);

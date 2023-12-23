@@ -23,9 +23,9 @@ internal readonly struct FieldData
     private  readonly   Var.Member      member;
     
     internal FieldData(Entity entity, object component) {
-        kind        = FieldDataKind.Component;
-        this.entity = entity; 
-        instance    = component;
+        kind            = FieldDataKind.Component;
+        this.entity     = entity; 
+        instance        = component;
     }
     
     internal FieldData(Entity entity, IComponent instance, Var.Member member) {
@@ -35,8 +35,9 @@ internal readonly struct FieldData
         this.member     = member;
     }
     
-    internal FieldData(Script instance, Var.Member member) {
+    internal FieldData(Entity entity, Script instance, Var.Member member) {
         kind            = FieldDataKind.ScriptMember;
+        this.entity     = entity;
         this.instance   = instance;
         this.member     = member;
     }
