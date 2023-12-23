@@ -19,7 +19,7 @@ internal readonly struct FieldData
     internal readonly   FieldDataKind   kind;
     internal readonly   Entity          entity;
     internal readonly   object          instance;
-    internal readonly   Var.Member      member;
+    private  readonly   Var.Member      member;
     
     internal FieldData(Entity entity, object component) {
         kind        = FieldDataKind.Component;

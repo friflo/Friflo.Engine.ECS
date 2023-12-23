@@ -17,7 +17,8 @@ public abstract class ComponentType : SchemaType
     public   readonly   bool        blittable;      //  4
     
     internal abstract   StructHeap  CreateHeap();
-    internal abstract   bool        AddEntityComponent(Entity entity);
+    internal abstract   bool        AddEntityComponent     (Entity entity);
+    internal abstract   bool        AddEntityComponentValue(Entity entity, object value);
     
     protected ComponentType(string componentKey, int structIndex, Type type)
         : base (componentKey, type, Component)
@@ -42,6 +43,12 @@ internal sealed class ComponentType<T> : ComponentType
     internal override bool AddEntityComponent(Entity entity) {
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(entity.id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, default);
+    }
+    
+    internal override bool AddEntityComponentValue(Entity entity, object value) {
+        int archIndex = 0;
+        var componentValue = (T)value;
+        return EntityStoreBase.AddComponent(entity.id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentValue);
     }
     
     internal override StructHeap CreateHeap() {

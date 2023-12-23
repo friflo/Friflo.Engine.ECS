@@ -2,7 +2,6 @@ using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-using static Friflo.Engine.ECS.EntityUtils;
 
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
@@ -20,29 +19,29 @@ public static class Test_Entity
         var script1Type = schema.ScriptTypeByType[typeof(TestScript1)];
         var script2Type = schema.ScriptTypeByType[typeof(TestScript2)];
         
-        AddNewEntityScript(entity, script1Type);
-        var script1     = GetEntityScript(entity, script1Type);
+        EntityUtils.AddNewEntityScript(entity, script1Type);
+        var script1     = EntityUtils.GetEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
         AreSame(typeof(TestScript1),    script1.GetType());
         
         var script2 = new TestScript2();
-        AddEntityScript(entity, script2);
-        var script2Result = GetEntityScript(entity, script2Type);
+        EntityUtils.AddEntityScript(entity, script2);
+        var script2Result = EntityUtils.GetEntityScript(entity, script2Type);
         AreSame(script2, script2Result);
         AreEqual(2,                     entity.Scripts.Length);
         
         // --- remove script1
-        RemoveEntityScript(entity, script1Type);
+        EntityUtils.RemoveEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
         // remove same script type again
-        RemoveEntityScript(entity, script1Type);
+        EntityUtils.RemoveEntityScript(entity, script1Type);
         AreEqual(1,                     entity.Scripts.Length);
         
         // --- remove script2
-        RemoveEntityScript(entity, script2Type);
+        EntityUtils.RemoveEntityScript(entity, script2Type);
         AreEqual(0,                     entity.Scripts.Length);
         // remove same script type again
-        RemoveEntityScript(entity, script1Type);
+        EntityUtils.RemoveEntityScript(entity, script1Type);
         AreEqual(0,                     entity.Scripts.Length);
     }
     
@@ -54,13 +53,19 @@ public static class Test_Entity
         var schema          = EntityStore.GetEntitySchema();
         var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
         
-        AddEntityComponent(entity, componentType);
-        var component = GetEntityComponent(entity, componentType);
+        EntityUtils.AddEntityComponent(entity, componentType);
         AreEqual(1,                     entity.Archetype.ComponentCount);
+        var component = EntityUtils.GetEntityComponent(entity, componentType);
         AreSame(typeof(EntityName),     component.GetType());
         
-        RemoveEntityComponent(entity, componentType);
+        EntityUtils.RemoveEntityComponent(entity, componentType);
         AreEqual(0,                     entity.Archetype.ComponentCount);
+        
+        EntityUtils.AddEntityComponentValue(entity, componentType, new EntityName("comp-value"));
+        AreEqual(1,                     entity.Archetype.ComponentCount);
+        component = EntityUtils.GetEntityComponent(entity, componentType);
+        var name = (EntityName)component;
+        AreEqual("comp-value", name.value);
     }
     
     
@@ -142,7 +147,7 @@ public static class Test_Entity
         IsFalse (entity1 == entity2);
         IsTrue  (entity1 != entity2);
         
-        var comparer = EqualityComparer;
+        var comparer = EntityUtils.EqualityComparer;
         IsTrue  (comparer.Equals(entity1, entity1));
         IsFalse (comparer.Equals(entity1, entity2));
         

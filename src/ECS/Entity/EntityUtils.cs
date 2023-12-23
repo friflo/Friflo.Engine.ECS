@@ -45,6 +45,10 @@ public static class EntityUtils
     public static  bool         AddEntityComponent    (Entity entity, ComponentType componentType) {
         return componentType.AddEntityComponent(entity);
     }
+    
+    public static  bool         AddEntityComponentValue(Entity entity, ComponentType componentType, object value) {
+        return componentType.AddEntityComponentValue(entity, value);
+    }
     #endregion
     
 #region non generic script - methods
