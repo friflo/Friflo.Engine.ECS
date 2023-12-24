@@ -6,34 +6,37 @@
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
 
     <StackPanel>
-
-        <TextBlock Text="tags" Margin="10 0 0 0"/>
-        <ListBox Name="Tags" Margin="20 0 0 0">
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem">
-                    <Setter Property="Padding" Value="5 0"/>
-                    <Setter Property="Margin" Value="0 1 0 0"/>
-                    <Setter Property="Height" Value="20" />
-                    <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
-                </Style>
-            </ListBox.Styles>
-            <ListBoxItem Content="TagFoo"></ListBoxItem>
-            <ListBoxItem Content="TagBar"></ListBoxItem>
-        </ListBox>
-
-        <TextBlock Text="components" Margin="10 0 0 0"/>
-        <ListBox Name="Components" Margin="20 0 0 0">
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem">
-                    <Setter Property="Padding" Value="5 0" />
-                    <Setter Property="Margin" Value="0 1 0 0"/>
-                    <Setter Property="Height" Value="20" />
-                    <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
-                </Style>
-            </ListBox.Styles>
-            <ListBoxItem Content="component-foo"></ListBoxItem>
-            <ListBoxItem Content="component-bar"></ListBoxItem>
-        </ListBox>
+        <StackPanel IsVisible="{Binding #Tags.ItemCount}">
+            <TextBlock Text="tags" Margin="10 0 0 0"/>
+            <ListBox Name="Tags" Margin="20 0 0 0">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="5 0"/>
+                        <Setter Property="Margin" Value="0 1 0 0"/>
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBoxItem Content="TagFoo"></ListBoxItem>
+                <ListBoxItem Content="TagBar"></ListBoxItem>
+            </ListBox>
+        </StackPanel>
+        
+        <StackPanel IsVisible="{Binding #Components.ItemCount}">
+            <TextBlock Text="components" Margin="10 0 0 0"/>
+            <ListBox Name="Components" Margin="20 0 0 0">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="5 0" />
+                        <Setter Property="Margin" Value="0 1 0 0"/>
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBoxItem Content="component-foo"></ListBoxItem>
+                <ListBoxItem Content="component-bar"></ListBoxItem>
+            </ListBox>
+        </StackPanel>
 
     </StackPanel>
 </UserControl>
