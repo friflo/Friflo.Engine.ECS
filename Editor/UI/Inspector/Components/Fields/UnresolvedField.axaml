@@ -8,33 +8,38 @@
     <StackPanel>
         <StackPanel IsVisible="{Binding #Tags.ItemCount}">
             <TextBlock Text="tags" Margin="10 0 0 0"/>
-            <ListBox Name="Tags" Margin="20 0 0 0">
+            <ListBox Name="Tags" Margin="20 0 0 0" Background="Transparent">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
                         <Setter Property="Padding" Value="5 0"/>
                         <Setter Property="Margin" Value="0 1 0 0"/>
                         <Setter Property="Height" Value="20" />
+                        <Setter Property="Width" Value="94" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                        <Setter Property="CornerRadius" Value="6" />
                         <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
                     </Style>
                 </ListBox.Styles>
-                <ListBoxItem Content="TagFoo"></ListBoxItem>
-                <ListBoxItem Content="TagBar"></ListBoxItem>
+                <ListBoxItem Content="FooTag"></ListBoxItem>
+                <ListBoxItem Content="BarTag"></ListBoxItem>
             </ListBox>
         </StackPanel>
         
         <StackPanel IsVisible="{Binding #Components.ItemCount}">
             <TextBlock Text="components" Margin="10 0 0 0"/>
-            <ListBox Name="Components" Margin="20 0 0 0">
+            <ListBox Name="Components" Margin="20 0 0 0" Background="Transparent">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
                         <Setter Property="Padding" Value="5 0" />
                         <Setter Property="Margin" Value="0 1 0 0"/>
                         <Setter Property="Height" Value="20" />
+                        <Setter Property="Width" Value="94" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
                         <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
                     </Style>
                 </ListBox.Styles>
-                <ListBoxItem Content="component-foo"></ListBoxItem>
-                <ListBoxItem Content="component-bar"></ListBoxItem>
+                <ListBoxItem Content="foo"></ListBoxItem>
+                <ListBoxItem Content="bar"></ListBoxItem>
             </ListBox>
         </StackPanel>
 
