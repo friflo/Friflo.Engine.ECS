@@ -229,7 +229,9 @@ internal class InspectorObserver : EditorObserver
         foreach (var field in fields)
         {
             var dock    = new DockPanel();
-            dock.Children.Add(new FieldName   { Text  = field.name } );
+            if (field.IsLabeled) {
+                dock.Children.Add(new FieldName   { Text  = field.name } );
+            }
             dock.Children.Add(field.control);
             panel.Children.Add(dock);
         }

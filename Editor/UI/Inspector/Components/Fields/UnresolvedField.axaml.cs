@@ -9,7 +9,7 @@ namespace Friflo.Editor.UI.Inspector;
 
 public partial class UnresolvedField : UserControl, IFieldControl
 {
-    public  ComponentField  ComponentField { get; init; }
+    public  ComponentField  ComponentField  { get; init; }
     
     
     internal void Set(Unresolved unresolved)
@@ -17,7 +17,7 @@ public partial class UnresolvedField : UserControl, IFieldControl
         var tags            = unresolved.tags;
         var components      = unresolved.components;
         var tagItems        = Tags.Items;
-        var componentItems = Components.Items;
+        var componentItems  = Components.Items;
         tagItems.Clear();
         componentItems.Clear();
 
@@ -28,7 +28,7 @@ public partial class UnresolvedField : UserControl, IFieldControl
         }
         if (components != null) {
             foreach (var component in components) {
-                tagItems.Add(new ListBoxItem { Content = component.key });
+                componentItems.Add(new ListBoxItem { Content = component.key });
             }
         }
     }

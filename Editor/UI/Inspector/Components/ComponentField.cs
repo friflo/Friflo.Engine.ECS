@@ -20,11 +20,13 @@ namespace Friflo.Editor.UI.Inspector;
 
 public interface IFieldControl
 {
-    ComponentField  ComponentField { get; init; }  
+    ComponentField  ComponentField  { get; init; }
 }
 
 public class ComponentField
 {
+    internal            bool            IsLabeled { get; init; } = true;
+
 #region internal fields
     internal readonly   string          name;
     internal            Control         control;
@@ -83,7 +85,7 @@ public class ComponentField
         }
         if (type == typeof(Unresolved)) {
             fieldName     ??= "unresolved";
-            var field       = new ComponentField(fieldName,    componentType, type, 0, member);
+            var field       = new ComponentField(fieldName,    componentType, type, 0, member) { IsLabeled = false };
             field.control   = new UnresolvedField{ ComponentField = field };
             fields.Add(field);
             return true;
