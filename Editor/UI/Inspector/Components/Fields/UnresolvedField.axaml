@@ -11,13 +11,13 @@
             <ListBox Name="Tags" Margin="20 0 0 0" Background="Transparent">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
-                        <Setter Property="Padding" Value="5 0"/>
-                        <Setter Property="Margin" Value="0 1 0 0"/>
-                        <Setter Property="Height" Value="20" />
-                        <Setter Property="Width" Value="94" />
-                        <Setter Property="HorizontalAlignment" Value="Left" />
-                        <Setter Property="CornerRadius" Value="6" />
-                        <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
+                        <Setter Property="Padding"              Value="5 0"/>
+                        <Setter Property="Margin"               Value="2 1 0 0"/>
+                        <Setter Property="Height"               Value="20" />
+                        <Setter Property="Width"                Value="94" />
+                        <Setter Property="HorizontalAlignment"  Value="Left" />
+                        <Setter Property="CornerRadius"         Value="6" />
+                        <Setter Property="Background"           Value="{DynamicResource ComponentBackground}" />
                     </Style>
                 </ListBox.Styles>
                 <ListBoxItem Content="FooTag"></ListBoxItem>
@@ -30,12 +30,12 @@
             <ListBox Name="Components" Margin="20 0 0 0" Background="Transparent">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
-                        <Setter Property="Padding" Value="5 0" />
-                        <Setter Property="Margin" Value="0 1 0 0"/>
-                        <Setter Property="Height" Value="20" />
-                        <Setter Property="Width" Value="94" />
-                        <Setter Property="HorizontalAlignment" Value="Left" />
-                        <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
+                        <Setter Property="Padding"              Value="5 0" />
+                        <Setter Property="Margin"               Value="2 1 0 0"/>
+                        <Setter Property="Height"               Value="20" />
+                        <Setter Property="Width"                Value="94" />
+                        <Setter Property="HorizontalAlignment"  Value="Left" />
+                        <Setter Property="Background"           Value="{DynamicResource ComponentBackground}" />
                     </Style>
                 </ListBox.Styles>
                 <ListBoxItem Content="foo"></ListBoxItem>
