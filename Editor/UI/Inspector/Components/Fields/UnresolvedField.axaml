@@ -3,15 +3,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="Friflo.Editor.UI.Inspector.UnresolvedField"
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100">
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300">
 
     <StackPanel>
-        <TextBlock Text="tags"></TextBlock>
-        <ListBox Name="Tags">
+
+        <TextBlock Text="tags" Margin="10 0 0 0"/>
+        <ListBox Name="Tags" Margin="20 0 0 0">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="5 0"/>
+                    <Setter Property="Margin" Value="0 1 0 0"/>
+                    <Setter Property="Height" Value="20" />
+                    <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
+                </Style>
+            </ListBox.Styles>
+            <ListBoxItem Content="TagFoo"></ListBoxItem>
+            <ListBoxItem Content="TagBar"></ListBoxItem>
         </ListBox>
-        
-        <TextBlock Text="components"></TextBlock>
-        <ListBox Name="Components">
+
+        <TextBlock Text="components" Margin="10 0 0 0"/>
+        <ListBox Name="Components" Margin="20 0 0 0">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="5 0" />
+                    <Setter Property="Margin" Value="0 1 0 0"/>
+                    <Setter Property="Height" Value="20" />
+                    <Setter Property="Background" Value="{DynamicResource ComponentBackground}" />
+                </Style>
+            </ListBox.Styles>
+            <ListBoxItem Content="component-foo"></ListBoxItem>
+            <ListBoxItem Content="component-bar"></ListBoxItem>
         </ListBox>
+
     </StackPanel>
 </UserControl>
