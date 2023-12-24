@@ -13,7 +13,7 @@
                     <Style Selector="ListBoxItem">
                         <Setter Property="Padding"              Value="5 0"/>
                         <Setter Property="Margin"               Value="2 1 0 0"/>
-                        <Setter Property="Height"               Value="20" />
+                        <Setter Property="Height"               Value="17" />
                         <Setter Property="Width"                Value="94" />
                         <Setter Property="HorizontalAlignment"  Value="Left" />
                         <Setter Property="CornerRadius"         Value="6" />
