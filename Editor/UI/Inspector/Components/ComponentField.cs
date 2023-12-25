@@ -260,25 +260,30 @@ public class ComponentField
                     transform.m11 = vector.X;
                     transform.m12 = vector.Y;
                     transform.m13 = vector.Z;
-                    return;
+                    break;
                 case 1:
                     transform.m21 = vector.X;
                     transform.m22 = vector.Y;
                     transform.m23 = vector.Z;
-                    return;
+                    break;
             }
+            entity.AddComponent(transform); // send ComponentChangedArgs event to update other editor controls
             return;
         }
         if (type == typeof(Position))
         {
-            ref var position = ref entity.GetComponent<Position>();
-            position.value = vector;
+            // ref var position = ref entity.GetComponent<Position>();
+            // position.value = vector;
+            var position = new Position { value = vector };
+            entity.AddComponent(position); // send ComponentChangedArgs event to update other editor controls
             return;
         }
         if (type == typeof(Scale3))
         {
-            ref var position = ref entity.GetComponent<Scale3>();
-            position.value = vector;
+            // ref var position = ref entity.GetComponent<Scale3>();
+            // position.value = vector;
+            var scale3 = new Scale3 { value = vector };
+            entity.AddComponent(scale3); // send ComponentChangedArgs event to update other editor controls
             return;
         }
         throw new NotImplementedException($"SetComponentVector() type: {type.Name}");

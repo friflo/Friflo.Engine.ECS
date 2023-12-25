@@ -33,13 +33,14 @@ public static class TestBed
     internal static void AddSampleEntities(EntityStore store)
     {
         var root    = store.StoreRoot;
+        /*
         root.AddComponent(new Transform { m11 = 1, m12 = 2, m13 = 3 });
         root.AddComponent(new EntityName("root"));
         root.AddTag<Tag1>();
         root.AddTag<Tag2>();
         root.AddScript(new Script1 { name = "Peter", spawn = new Position(3, 3, 3), target = new Position(4, 4, 4)});
         root.AddScript(new Script2 { maxHealth = 42, center = new Position(10, 10, 10)});
-        
+        */
         var child2   = CreateEntity(store, 2);
         child2.AddComponent(new Transform { m11 = 4, m12 = 5, m13 = 6 });
         child2.AddTag<Tag1>();
@@ -60,6 +61,8 @@ public static class TestBed
         var entity7 = CreateEntity(store, 7);
         entity7.AddComponent(new TestComponent { name = "abc", scale = new Scale3(3,3,3), start = new Position(4,4,4)});
         root.AddChild(entity7);
+        root.AddChild(store.CreateEntity());
+        root.AddChild(store.CreateEntity());
         CreateManyEntities(root, "10.000",       new [] { 100, 100 });
         // CreateManyEntities(root, "1.000.000",    new [] { 100, 100, 100 });
     }
