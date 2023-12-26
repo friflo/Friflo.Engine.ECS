@@ -8,13 +8,13 @@ using AP = Avalonia.AvaloniaProperty;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Editor.UI.Inspector;
 
-public partial class FieldName : UserControl
+public partial class FieldLabel : UserControl
 {
-    public static readonly StyledProperty<string>   TextProperty  = AP.Register<FieldName, string>(nameof(Text), "name");
+    public static readonly StyledProperty<string>   TextProperty  = AP.Register<FieldLabel, string>(nameof(Text), "name");
     
     public string   Text  { get => GetValue(TextProperty);  set => SetValue(TextProperty, value); }
     
-    public FieldName()
+    public FieldLabel()
     {
         InitializeComponent();
     }
