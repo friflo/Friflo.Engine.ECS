@@ -117,19 +117,19 @@
         <SubType>Code</SubType>
       </Compile>
 
-      <Compile Update="UI\Inspector\Components\Fields\StringField.axaml">
+      <Compile Update="UI\Inspector\Fields\StringField.axaml">
         <DependentUpon>StringField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Inspector\Components\Fields\ValueField.axaml.cs">
+      <Compile Update="UI\Inspector\Fields\ValueField.axaml.cs">
         <DependentUpon>ValueField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Inspector\Components\Fields\UnresolvedField.axaml.cs">
+      <Compile Update="UI\Inspector\Fields\UnresolvedField.axaml.cs">
         <DependentUpon>UnresolvedField.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Inspector\Components\Fields\Vector3Field.axaml">
+      <Compile Update="UI\Inspector\Fields\Vector3Field.axaml">
         <DependentUpon>Vector3Field.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
