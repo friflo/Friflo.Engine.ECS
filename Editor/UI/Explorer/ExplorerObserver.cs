@@ -16,7 +16,7 @@ internal class ExplorerObserver : EditorObserver
     private             ExplorerItemTree        tree;
     private static      int                     _treeCount;
         
-    internal ExplorerObserver (ExplorerTreeDataGrid grid, Editor editor) : base (editor) { this.grid = grid; }
+    internal ExplorerObserver (ExplorerTreeDataGrid grid, AppEvents appEvents) : base (appEvents) { this.grid = grid; }
         
     /// <summary>
     /// Set <see cref="HierarchicalTreeDataGridSource{TModel}.Items"/> of <see cref="ExplorerViewModel.ExplorerItemSource"/>

@@ -12,7 +12,7 @@ public class PanelControl : UserControl
 {
     internal    PanelHeader Header => header;
     
-    private     Editor      editor;
+    private     AppEvents   appEvents;
     private     PanelHeader header;
     
     protected PanelControl() {
@@ -21,18 +21,18 @@ public class PanelControl : UserControl
     
     protected override void OnGotFocus(GotFocusEventArgs e) {
         base.OnGotFocus(e);
-        editor.SetActivePanel(this);
+        appEvents.SetActivePanel(this);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e) {
         base.OnPointerPressed(e);
-        editor.SetActivePanel(this);
+        appEvents.SetActivePanel(this);
         // Focus(); - calling Focus() explicit corrupt navigation with Key.Tab
     }
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        editor = this.GetEditor();
+        appEvents = this.GetEditor();
         header = EditorUtils.FindControl<PanelHeader>(this);
     }
     

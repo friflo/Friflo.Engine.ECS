@@ -17,18 +17,18 @@ public struct EditorSelection {
 public abstract class EditorObserver
 {
 #region protected properties
-    protected           Editor      Editor  => editor;
-    protected           EntityStore Store   => editor.Store;
+    protected           AppEvents   AppEvents   => appEvents;
+    protected           EntityStore Store       => appEvents.Store;
     #endregion
         
 #region private fields
     private             bool        editorReadyFired; 
-    private   readonly  Editor      editor;
+    private   readonly  AppEvents   appEvents;
     #endregion
 
 #region construtor
-    protected EditorObserver(Editor editor) {
-        this.editor = editor;
+    protected EditorObserver(AppEvents appEvents) {
+        this.appEvents = appEvents;
     }
     #endregion
         

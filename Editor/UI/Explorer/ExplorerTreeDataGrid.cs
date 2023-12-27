@@ -30,7 +30,7 @@ namespace Friflo.Editor.UI.Explorer;
 public class ExplorerTreeDataGrid : TreeDataGrid
 {
     public  ExplorerItem    RootItem    => GetRootItem();
-    private Editor          editor;
+    private AppEvents       appEvents;
        
     // https://stackoverflow.com/questions/71815213/how-can-i-show-my-own-control-in-avalonia
     protected override Type StyleKeyOverride => typeof(TreeDataGrid);
@@ -43,8 +43,8 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        editor = this.GetEditor();
-        editor?.AddObserver(new ExplorerObserver(this, editor));
+        appEvents = this.GetEditor();
+        appEvents?.AddObserver(new ExplorerObserver(this, appEvents));
         
         // condition to view in Designer
         if (RowSelection != null) {
@@ -58,7 +58,7 @@ public class ExplorerTreeDataGrid : TreeDataGrid
     private void OnSelectionChanged(TreeSelectionModelSelectionChangedEventArgs _)
     {
         var selectedItem = RowSelection!.SelectedItem as ExplorerItem;
-        editor.SelectionChanged(new EditorSelection { item = selectedItem });
+        appEvents.SelectionChanged(new EditorSelection { item = selectedItem });
     }
     
     /*

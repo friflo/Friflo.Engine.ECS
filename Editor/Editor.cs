@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Friflo.Editor.UI.Panels;
 using Friflo.Engine.ECS;
 using Friflo.Engine.Hub;
 using Friflo.Json.Fliox.Hub.Client;
@@ -19,17 +18,9 @@ using Friflo.Json.Fliox.Hub.Remote;
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Editor;
 
-
-
 public partial class Editor : AppEvents
 {
-#region public properties
-    public              EntityStore             Store    => store;
-
-    #endregion
-
 #region private fields
-    private             EntityStore             store;
     private             StoreSync               sync;
 
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
@@ -99,19 +90,7 @@ public partial class Editor : AppEvents
     }
     #endregion
     
-    // -------------------------------------- panel / commands --------------------------------------
-    private PanelControl activePanel;
-    
-    internal void SetActivePanel(PanelControl panel)
-    {
-        if (activePanel != null) {
-            activePanel.Header.PanelActive = false;
-        }
-        activePanel = panel;
-        if (panel != null) {
-            panel.Header.PanelActive = true;
-        }
-    }
+
 
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods

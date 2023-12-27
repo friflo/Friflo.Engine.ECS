@@ -18,7 +18,7 @@ public static class EditorUtils
 {
     public static bool IsDesignMode => Design.IsDesignMode;
     
-    public static Editor GetEditor(this Visual visual)
+    public static AppEvents GetEditor(this Visual visual)
     {
         if (visual.GetVisualRoot() is MainWindow mainWindow) {
             return mainWindow.Editor;

@@ -39,7 +39,7 @@ internal class InspectorObserver : EditorObserver
     private             SchemaType                                  focusSchemaType;
     
     
-    internal InspectorObserver (InspectorControl inspector, Editor editor) : base (editor)
+    internal InspectorObserver (InspectorControl inspector, AppEvents appEvents) : base (appEvents)
     {
         this.inspector  = inspector;
         tagMap          = new Dictionary<TagType,       InspectorTag>();

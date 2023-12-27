@@ -39,8 +39,8 @@ public partial class InspectorControl : UserControl
             model.ComponentCount    = 3;
             model.ScriptCount       = 1;
         }
-        var editor  = this.GetEditor();
-        observer    = new InspectorObserver(this, editor);
-        editor?.AddObserver(observer);
+        var appEvents   = this.GetEditor();
+        observer        = new InspectorObserver(this, appEvents);
+        appEvents?.AddObserver(observer);
     }
 }
