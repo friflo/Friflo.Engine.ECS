@@ -3,14 +3,9 @@
 
 // Note! Must not using Avalonia namespaces
 
-// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
-
 using Friflo.Editor.Utils;
 
 namespace Friflo.Editor;
-
-
-
 
 public partial class Editor
 {
