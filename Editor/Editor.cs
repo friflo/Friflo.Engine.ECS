@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -216,7 +215,7 @@ public partial class Editor
         if (provider == "in-memory") {
             return new MemoryDatabase("game", schema) { Pretty = false };
         }
-        throw new InvalidEnumArgumentException($"invalid database provider: {provider}");
+        throw new ArgumentException($"invalid database provider: {provider}");
     }
     #endregion
 }

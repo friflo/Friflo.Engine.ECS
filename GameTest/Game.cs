@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ public class Game
     #region private fields
     private             EntityStore             store;
     private             StoreSync               sync;
-    private             bool                    isReady;
+//  private             bool                    isReady;
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
@@ -42,7 +41,7 @@ public class Game
         store.SetStoreRoot(root);
         
         Console.WriteLine($"--- Editor.OnReady() {Program.startTime.ElapsedMilliseconds} ms");
-        isReady = true;
+    //  isReady = true;
     //  StoreDispatcher.Post(() => {
     //      EditorObserver.CastEditorReady(observers);
     //  });
@@ -170,7 +169,7 @@ public class Game
         if (provider == "in-memory") {
             return new MemoryDatabase("game", schema) { Pretty = false };
         }
-        throw new InvalidEnumArgumentException($"invalid database provider: {provider}");
+        throw new ArgumentException($"invalid database provider: {provider}");
     }
     #endregion
 }
