@@ -14,7 +14,7 @@ public abstract class AppEvents
     protected readonly  List<EditorObserver>    observers   = new List<EditorObserver>();
     protected           bool                    isReady;
     
-    public void AddObserver(EditorObserver observer) ////
+    public void AddObserver(EditorObserver observer)
     {
         observers.Add(observer);
         if (isReady) {
@@ -22,7 +22,7 @@ public abstract class AppEvents
         }
     }
     
-    public void SelectionChanged(EditorSelection selection) {   ////
+    public void SelectionChanged(EditorSelection selection) {
         StoreDispatcher.Post(() => {
             EditorObserver.CastSelectionChanged(observers, selection);    
         });

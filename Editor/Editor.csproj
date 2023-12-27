@@ -62,15 +62,17 @@
 
     <ItemGroup>
 
+      <Compile Update="MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+
       <!-- ========================= UI\Main                    ========================= -->
       <Compile Update="UI\Main\App.axaml.cs">
         <DependentUpon>App.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="UI\Main\MainWindow.axaml.cs">
-        <DependentUpon>MainWindow.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+
       <Compile Update="UI\Main\ValidationError.axaml.cs">
         <DependentUpon>ValidationError.axaml</DependentUpon>
         <SubType>Code</SubType>
