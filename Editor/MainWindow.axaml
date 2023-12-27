@@ -2,13 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="clr-namespace:Friflo.Editor.UI.Panels"
         xmlns:openGl="clr-namespace:Friflo.Editor.OpenGL"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"
         x:Class="Friflo.Editor.UI.MainWindow"
         Background="{DynamicResource AppBackground}"
         Title="Fliox Editor"
         
+        xmlns:panels="clr-namespace:Friflo.Editor.UI.Panels;assembly=Friflo.Editor.UI"
         xmlns:customTitleBars="clr-namespace:CustomTitleBarTemplate.Views.CustomTitleBars"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="PreferSystemChrome"
@@ -62,22 +62,22 @@
             <Rectangle        Height="4"    DockPanel.Dock="Bottom" Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
             <DockPanel        Width="300"   DockPanel.Dock="Left">
-                <ui:ExplorerPanel           DockPanel.Dock="Top"
+                <panels:ExplorerPanel       DockPanel.Dock="Top"
                               Name="ExplorerPanel"
                               Height="400"/>
                 <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
-                <ui:InspectorPanel/>
+                <panels:InspectorPanel/>
             </DockPanel>
             <Rectangle        Width="4"     DockPanel.Dock="Left"   Fill="{DynamicResource AppBackground}"/>
             <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
             <DockPanel        Width="300"   DockPanel.Dock="Right" >
-                <ui:TestPanel Name="Test"   DockPanel.Dock="Top" />
+                <panels:TestPanel Name="Test"   DockPanel.Dock="Top" />
                 <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"/>
-                <ui:ExplorerPanel   DockPanel.Dock="Top" Height="200"
+                <panels:ExplorerPanel   DockPanel.Dock="Top" Height="200"
                               IsVisible="{Binding #Test.Explorer}"/>
                 <Rectangle    Height="4"    DockPanel.Dock="Top"    Fill="{DynamicResource AppBackground}"
                               IsVisible="{Binding #Test.Explorer}"/>
-                <ui:InspectorPanel/>
+                <panels:InspectorPanel/>
             </DockPanel>
             <Rectangle        Width="4"     DockPanel.Dock="Right"  Fill="{DynamicResource AppBackground}"/>
             <Border BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}">

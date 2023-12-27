@@ -1,0 +1,135 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>library</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>Friflo.Editor.UI</RootNamespace>
+        
+        <!-- Avalionia specific -->
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <AssemblyName>Friflo.Editor.UI</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\Hub\Engine.Hub.csproj" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.0.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.6" />
+        <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.2" />
+        <!--<PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />-->
+
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="**/*.csproj.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+
+      <!-- ========================= UI\Main                    ========================= -->
+      <Compile Update="UI\Main\App.axaml.cs">
+        <DependentUpon>App.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Main\ValidationError.axaml.cs">
+        <DependentUpon>ValidationError.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+
+      <!-- ========================= UI\Panels                  ========================= -->
+      <Compile Update="UI\Panels\ExplorerPanel.axaml.cs">
+        <DependentUpon>ExplorerPanel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Panels\InspectorPanel.axaml.cs">
+        <DependentUpon>InspectorPanel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Panels\PanelHeader.axaml.cs">
+        <DependentUpon>PanelHeader.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Panels\TestPanel.axaml.cs">
+        <DependentUpon>TestPanel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      
+      <!-- ========================= UI\Inspector               ========================= -->
+      <Compile Update="UI\Inspector\GroupAdd.axaml.cs">
+        <DependentUpon>GroupAdd.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\InspectorControl.axaml.cs">
+        <DependentUpon>InspectorControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\InspectorGroup.axaml.cs">
+        <DependentUpon>InspectorGroup.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Separator.axaml.cs">
+        <DependentUpon>Separator.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      
+      <!-- ========================= UI\Inspector\Components    ========================= -->
+      <Compile Update="UI\Inspector\Components\FieldLabel.axaml.cs">
+        <DependentUpon>FieldLabel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Components\InspectorComponent.axaml.cs">
+        <DependentUpon>InspectorComponent.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+
+      <!-- ========================= UI\Inspector\Fields        ========================= -->
+      <Compile Update="UI\Inspector\Fields\StringField.axaml">
+        <DependentUpon>StringField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Fields\UnresolvedField.axaml.cs">
+        <DependentUpon>UnresolvedField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Fields\ValueField.axaml.cs">
+        <DependentUpon>ValueField.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Fields\Vector3Field.axaml">
+        <DependentUpon>Vector3Field.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+
+      <!-- ========================= UI\Inspector\Tags          ========================= -->
+      <Compile Update="UI\Inspector\Tags\InspectorTag.axaml.cs">
+        <DependentUpon>InspectorTag.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Inspector\Tags\InspectorTagSet.axaml.cs">
+        <DependentUpon>InspectorTagSet.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+
+</Project>

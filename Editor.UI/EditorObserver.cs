@@ -52,7 +52,7 @@ public abstract class EditorObserver
     
     // -------------------------------------- cast methods --------------------------------------
 #region cast methods
-    internal static void CastEditorReady(List<EditorObserver> observers)
+    public static void CastEditorReady(List<EditorObserver> observers)
     {
         foreach (var observer in observers) {
             observer.SendEditorReady();

@@ -11,11 +11,10 @@ namespace Friflo.Editor.UI;
 
 public partial class MainWindow : Window
 {
-    public              Editor  Editor { get; }
+    public              Editor  Editor { get; init; }
 
     public MainWindow()
     {
-        Editor = new Editor();
         InitializeComponent();
         OpenGlControl.OpenGlReady = OpenGlReady;
     }
@@ -26,7 +25,7 @@ public partial class MainWindow : Window
         base.Show();
         StoreDispatcher.Post(() =>
         {
-            ExplorerPanel.Grid.Focus();    
+            ExplorerPanel.TreeDataGrid.Focus();    
         });
         
         // Console.WriteLine($"--- MainWindow.Show() - startup {Program.startTime.ElapsedMilliseconds} ms");

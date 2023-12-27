@@ -9,7 +9,6 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using Friflo.Editor.UI;
 
 // ReSharper disable MergeCastWithTypeCheck
 namespace Friflo.Editor.Utils;
@@ -20,13 +19,13 @@ public static class EditorUtils
     
     public static AppEvents GetEditor(this Visual visual)
     {
-        if (visual.GetVisualRoot() is MainWindow mainWindow) {
-            return mainWindow.Editor;
+        if (visual.GetVisualRoot() == AppEvents.window) {
+            return AppEvents.appEvents;
         }
         if (IsDesignMode) {
             return null;
         }
-        throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(MainWindow)} as visual root");
+        throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(AppEvents)}.{nameof(AppEvents.window)} as visual root");
     }
     
     public static void CopyToClipboard(Visual visual, string text)

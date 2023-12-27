@@ -9,9 +9,7 @@ using Friflo.Editor.Utils;
 
 namespace Friflo.Editor;
 
-public abstract class EditorCommand { }
 
-public class CopyToClipboardCommand : EditorCommand { }
 
 
 public partial class Editor

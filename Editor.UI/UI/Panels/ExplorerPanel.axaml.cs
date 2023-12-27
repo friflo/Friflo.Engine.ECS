@@ -13,6 +13,8 @@ namespace Friflo.Editor.UI.Panels;
 public partial class ExplorerPanel : PanelControl
 {
     public override string ToString() => Grid.RootItem.DebugTreeName;
+    
+    public ExplorerTreeDataGrid TreeDataGrid => Grid;
 
     public ExplorerPanel()
     {

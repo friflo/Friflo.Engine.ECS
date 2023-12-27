@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Avalonia.Controls;
 using Friflo.Editor.UI.Panels;
 using Friflo.Engine.ECS;
 
@@ -13,6 +15,16 @@ public abstract class AppEvents
     protected           EntityStore             store;
     protected readonly  List<EditorObserver>    observers   = new List<EditorObserver>();
     protected           bool                    isReady;
+
+    public static Func<Window>  createMainWindowFunc;
+    public static Window        window;
+    public static AppEvents     appEvents;
+    
+    public static Window CreateMainWindow() {
+        window = createMainWindowFunc();
+        return window;
+    }
+    
     
     public void AddObserver(EditorObserver observer)
     {

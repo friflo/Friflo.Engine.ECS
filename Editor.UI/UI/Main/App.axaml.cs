@@ -23,8 +23,8 @@ public class App : Application
         {
             desktop.Startup += (_, _) => {
                 // Console.WriteLine($"--- ApplicationLifetime - startup {Program.startTime.ElapsedMilliseconds} ms");
-            };
-            desktop.MainWindow = new MainWindow();
+            };            
+            desktop.MainWindow = AppEvents.CreateMainWindow();
         }
 
         base.OnFrameworkInitializationCompleted();

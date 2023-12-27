@@ -53,6 +53,9 @@ public static class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     private static AppBuilder BuildAvaloniaApp()
     {
+        Editor editor                   = new Editor();
+        AppEvents.appEvents             = editor;
+        AppEvents.createMainWindowFunc  = () => new MainWindow { Editor = editor };
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             // Silk.NET / OpenGL integration from: https://github.com/kekekeks/Avalonia-Silk.NET-Example
