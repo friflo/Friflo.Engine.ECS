@@ -25,18 +25,18 @@ public abstract class AppEvents
     #endregion
 
 #region static fields
-    private static      Func<Window>            _createMainWindowFunc;
+    private static      Func<Window>            _createMainWindow;
     private static      Window                  _window;
     private static      AppEvents               _appEvents;
     #endregion
     
-    public static void Init(AppEvents appEvents, Func<Window>  createMainWindowFunc) {
-        _appEvents              = appEvents;
-        _createMainWindowFunc   = createMainWindowFunc;
+    public static void Init(AppEvents appEvents, Func<Window> createMainWindow) {
+        _appEvents          = appEvents;
+        _createMainWindow   = createMainWindow;
     }
     
     public static Window CreateMainWindow() {
-        _window = _createMainWindowFunc();
+        _window = _createMainWindow();
         return _window;
     }
     

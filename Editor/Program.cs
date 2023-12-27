@@ -55,9 +55,9 @@ public static class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     private static AppBuilder BuildAvaloniaApp()
     {
-        Editor          editor                  = new Editor();
-        Func<Window>    createMainWindowFunc    = () => new MainWindow { Editor = editor };
-        AppEvents.Init(editor, createMainWindowFunc);
+        Editor          editor              = new Editor();
+        Func<Window>    createMainWindow    = () => new MainWindow { Editor = editor };
+        AppEvents.Init(editor, createMainWindow);
 
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
