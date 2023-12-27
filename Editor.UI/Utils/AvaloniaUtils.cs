@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Rendering;
 using Avalonia.VisualTree;
 
 // ReSharper disable MergeCastWithTypeCheck
@@ -19,7 +20,8 @@ public static class EditorUtils
     
     public static AppEvents GetEditor(this Visual visual)
     {
-        if (visual.GetVisualRoot() == AppEvents.Window) {
+        var renderRoot = (IRenderRoot)AppEvents.Window;
+        if (visual.GetVisualRoot() == renderRoot) {
             return AppEvents.Instance;
         }
         if (IsDesignMode) {
