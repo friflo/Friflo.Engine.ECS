@@ -21,7 +21,7 @@ public class PanelControl : UserControl
     
     protected override void OnGotFocus(GotFocusEventArgs e) {
         base.OnGotFocus(e);
-        appEvents.SetActivePanel(this);
+        appEvents?.SetActivePanel(this); // appEvents is null in designer mode
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e) {
