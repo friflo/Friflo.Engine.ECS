@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,9 @@ using Friflo.Json.Fliox.Hub.Remote;
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 namespace Friflo.Editor;
 
-public partial class Editor
+
+
+public partial class Editor : AppEvents
 {
 #region public properties
     public              EntityStore             Store    => store;
@@ -30,8 +31,7 @@ public partial class Editor
 #region private fields
     private             EntityStore             store;
     private             StoreSync               sync;
-    private  readonly   List<EditorObserver>    observers   = new List<EditorObserver>();
-    private             bool                    isReady;
+
     private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
@@ -92,23 +92,6 @@ public partial class Editor
     {
         sync.UpsertDataEntity(id);
         PostSyncChanges();
-    }
-    
-    public void AddObserver(EditorObserver observer)
-    {
-        if (observer == null) {
-            return;
-        }
-        observers.Add(observer);
-        if (isReady) {
-            observer.SendEditorReady();  // could be deferred to event loop
-        }
-    }
-    
-    public void SelectionChanged(EditorSelection selection) {
-        StoreDispatcher.Post(() => {
-            EditorObserver.CastSelectionChanged(observers, selection);    
-        });
     }
     
     internal void Shutdown() {
