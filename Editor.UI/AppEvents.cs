@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Friflo.Editor.UI.Panels;
 using Friflo.Engine.ECS;
 
+// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 namespace Friflo.Editor;
 
 public abstract class AppEvents
@@ -17,13 +18,17 @@ public abstract class AppEvents
     public   static     AppEvents               Instance    => _appEvents;
     #endregion
     
+#region protected fields
     protected           EntityStore             store;
     protected readonly  List<EditorObserver>    observers   = new List<EditorObserver>();
     protected           bool                    isReady;
+    #endregion
 
-    private static Func<Window>  _createMainWindowFunc;
-    private static Window        _window;
-    private static AppEvents     _appEvents;
+#region static fields
+    private static      Func<Window>            _createMainWindowFunc;
+    private static      Window                  _window;
+    private static      AppEvents               _appEvents;
+    #endregion
     
     public static void Init(AppEvents appEvents, Func<Window>  createMainWindowFunc) {
         _appEvents              = appEvents;

@@ -17,7 +17,6 @@ public struct EditorSelection {
 public abstract class EditorObserver
 {
 #region protected properties
-    protected           AppEvents   AppEvents   => appEvents;
     protected           EntityStore Store       => appEvents.Store;
     #endregion
         
