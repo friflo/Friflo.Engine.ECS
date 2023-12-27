@@ -19,13 +19,13 @@ public static class EditorUtils
     
     public static AppEvents GetEditor(this Visual visual)
     {
-        if (visual.GetVisualRoot() == AppEvents.window) {
-            return AppEvents.appEvents;
+        if (visual.GetVisualRoot() == AppEvents.Window) {
+            return AppEvents.Instance;
         }
         if (IsDesignMode) {
             return null;
         }
-        throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(AppEvents)}.{nameof(AppEvents.window)} as visual root");
+        throw new InvalidOperationException($"{nameof(GetEditor)}() expect {nameof(AppEvents)}.{nameof(AppEvents.Window)} as visual root");
     }
     
     public static void CopyToClipboard(Visual visual, string text)

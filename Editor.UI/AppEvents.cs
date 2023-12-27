@@ -12,20 +12,27 @@ namespace Friflo.Editor;
 public abstract class AppEvents
 {
 #region public properties
-    public              EntityStore             Store    => store;
+    public              EntityStore             Store       => store;
+    public   static     Window                  Window      => _window;
+    public   static     AppEvents               Instance    => _appEvents;
     #endregion
     
     protected           EntityStore             store;
     protected readonly  List<EditorObserver>    observers   = new List<EditorObserver>();
     protected           bool                    isReady;
 
-    public static Func<Window>  createMainWindowFunc;
-    public static Window        window;
-    public static AppEvents     appEvents;
+    private static Func<Window>  _createMainWindowFunc;
+    private static Window        _window;
+    private static AppEvents     _appEvents;
+    
+    public static void Init(AppEvents appEvents, Func<Window>  createMainWindowFunc) {
+        _appEvents              = appEvents;
+        _createMainWindowFunc   = createMainWindowFunc;
+    }
     
     public static Window CreateMainWindow() {
-        window = createMainWindowFunc();
-        return window;
+        _window = _createMainWindowFunc();
+        return _window;
     }
     
     

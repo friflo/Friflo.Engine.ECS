@@ -4,8 +4,10 @@
 using System;
 using System.Diagnostics;
 using Avalonia;
+using Avalonia.Controls;
 using Friflo.Editor.UI;
 
+// ReSharper disable ConvertToLocalFunction
 namespace Friflo.Editor;
 
 public static class Program
@@ -53,9 +55,10 @@ public static class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     private static AppBuilder BuildAvaloniaApp()
     {
-        Editor editor                   = new Editor();
-        AppEvents.appEvents             = editor;
-        AppEvents.createMainWindowFunc  = () => new MainWindow { Editor = editor };
+        Editor          editor                  = new Editor();
+        Func<Window>    createMainWindowFunc    = () => new MainWindow { Editor = editor };
+        AppEvents.Init(editor, createMainWindowFunc);
+
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             // Silk.NET / OpenGL integration from: https://github.com/kekekeks/Avalonia-Silk.NET-Example
