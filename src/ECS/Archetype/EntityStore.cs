@@ -22,6 +22,7 @@ public abstract partial class EntityStoreBase
     /// <summary>Number of all entities stored in the entity store</summary>
                     public              int                     EntityCount         => nodesCount;
                     public              int                     NodeMaxId           => nodesMaxId;
+                    public              Systems                 Systems             { get => systems; init => systems = value; }
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
@@ -58,6 +59,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] private             ComponentChangedHandler componentAdded;     //  8
     [Browse(Never)] private             ComponentChangedHandler componentRemoved;   //  8
     // --- misc
+    [Browse(Never)] public              Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion
     

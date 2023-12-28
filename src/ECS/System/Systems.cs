@@ -10,7 +10,9 @@ namespace Friflo.Engine.ECS;
 public class Systems
 {
     private readonly    List<ComponentSystem>   list;
-    
+
+    public  override    string                  ToString() => $"Count: {list.Count}";
+
     public Systems()
     {
         list    = new List<ComponentSystem>();

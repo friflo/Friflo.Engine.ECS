@@ -6,6 +6,15 @@ using Tests.Utils;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.System;
 
+
+public class AddSystem : Script
+{
+    public override void Start() {
+        var mySystem = new MySystem(Store);
+        Systems.AddSystem(mySystem);
+    }
+}
+
 public class MySystem : ComponentSystem
 {
     private readonly ArchetypeQuery<Position> query;
@@ -31,8 +40,10 @@ public static class Test_Systems
     public static void Test_Systems_create()
     {
         // --- setup test entities
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var systems = new Systems();
+        var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
         var root    = store.CreateEntity(1);
+        root.AddScript(new AddSystem());
         root.AddComponent(new Position(1, 0, 0));
         for (int n = 2; n <= 10; n++) {
             var child = store.CreateEntity(n);
@@ -41,11 +52,14 @@ public static class Test_Systems
         }
         store.SetStoreRoot(root);
 
-        // --- setup systems
-        var mySystem    = new MySystem(store);
-        var systems     = new Systems();
-        systems.AddSystem(mySystem);
-        
+        // --- start scripts to create systems
+        foreach (var entityScripts in store.EntityScripts) {
+            foreach (var script in entityScripts.Scripts) {
+                script.Start();
+            }
+        }
+
+        // --- execute systems
         systems.UpdateSystems(); // force one time allocations
         
         int count = 10; // 10_000_000 ~ 680 ms

@@ -1,23 +1,31 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Text;
-
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public struct EntityScripts
 {
-    internal readonly   int         id;         //  4   - entity containing the scripts
+#region public properties
+    public              ReadOnlySpan<Script>    Scripts     => new (scripts);
+    public   override   string                  ToString()  => GetString();
+    #endregion
+    
+#region internal fields
+                    internal readonly   int         id;         //  4   - entity containing the scripts
     /// <summary>
     /// Invariant:<br/>
     /// <see cref="id"/> == 0   :   <see cref="scripts"/> == null<br/>
     /// <see cref="id"/>  > 0   :   <see cref="scripts"/> != null  <b>and</b> its Length > 0 
     /// </summary>
-    internal            Script[]    scripts;    //  8   - scripts contained by an entity
+    [Browse(Never)] internal            Script[]    scripts;    //  8   - scripts contained by an entity
+    #endregion
     
-    public   override   string      ToString() => GetString();
 
     internal EntityScripts (int id, Script[] scripts)
     {
