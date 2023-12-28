@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -24,16 +25,19 @@ public class MySystem : ComponentSystem
         Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
     }
     
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
         int count = 0;
         foreach (var position in query.Chunks) {
             switch(count++) {
-                case 0: Mem.AreEqual(9, position.Values.Length); break;
-                case 1: Mem.AreEqual(1, position.Values.Length); break;
+                case 0:     Mem.AreEqual(512,   position.Values.Length); break;
+                case 1:     Mem.AreEqual(487,   position.Values.Length); break;
+                case 2:     Mem.AreEqual(1,     position.Values.Length); break;
+                default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(2, count);
+        Mem.AreEqual(3, count);
     }
 }
 
@@ -51,7 +55,7 @@ public static class Test_Systems
         root.AddScript(new CreateSystems());
         root.AddComponent(new Position(1, 0, 0));
         root.AddComponent<Rotation>();
-        for (int n = 2; n <= 10; n++) {
+        for (int n = 2; n <= 1000; n++) {
             var child = store.CreateEntity(n);
             child.AddComponent(new Position(n, 0, 0));
             root.AddChild(child);
