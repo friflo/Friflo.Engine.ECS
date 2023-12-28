@@ -51,13 +51,16 @@ public static class Test_Systems
         var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
         Assert.AreSame(systems, store.Systems);
         
-        var root    = store.CreateEntity(1);
+        var root    = store.CreateEntity();
         root.AddScript(new CreateSystems());
         root.AddComponent(new Position(1, 0, 0));
         root.AddComponent<Rotation>();
-        for (int n = 2; n <= 1000; n++) {
-            var child = store.CreateEntity(n);
-            child.AddComponent(new Position(n, 0, 0));
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        child.AddComponent(new Position(2, 0, 0));
+        for (int n = 3; n <= 1000; n++) {
+            child = store.CreateEntity(child.Archetype);
+            child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
         store.SetStoreRoot(root);
