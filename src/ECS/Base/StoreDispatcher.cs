@@ -28,13 +28,15 @@ public static class StoreDispatcher
     private static          IStoreDispatcher    _dispatcher         = DefaultDispatcher;
     
     
-    public static void SetDispatcher(IStoreDispatcher dispatcher) {
+    public static IStoreDispatcher SetDispatcher(IStoreDispatcher dispatcher) {
         if (dispatcher == null) throw new ArgumentNullException(nameof(dispatcher));
         dispatcher.Post(() => {
             int threadId = Environment.CurrentManagedThreadId;
             Console.WriteLine($"{nameof(StoreDispatcher)} - Set dispatcher to thread id: {threadId}");                
         });
+        var old = _dispatcher;
         _dispatcher = dispatcher;
+        return old;
     }
     
     public static   void            AssertMainThread()                               => _dispatcher.AssertMainThread();
