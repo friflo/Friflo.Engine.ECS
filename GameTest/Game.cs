@@ -10,6 +10,7 @@ using Friflo.Json.Fliox.Hub.Host;
 using Friflo.Json.Fliox.Hub.Host.Event;
 using Friflo.Json.Fliox.Hub.Remote;
 
+// ReSharper disable NotAccessedField.Local
 namespace GameTest;
 
 public class Game
