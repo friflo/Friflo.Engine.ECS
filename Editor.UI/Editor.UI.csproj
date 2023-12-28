@@ -23,7 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Hub\Engine.Hub.csproj" />
+      <ProjectReference Include="..\src\ECS\Engine.ECS.csproj" />
     </ItemGroup>
 
 
