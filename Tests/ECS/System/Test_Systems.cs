@@ -28,10 +28,12 @@ public class MySystem : ComponentSystem
     {
         int count = 0;
         foreach (var position in query.Chunks) {
-            count++;
-            Mem.AreEqual(position.Values.Length, 10);
+            switch(count++) {
+                case 0: Mem.AreEqual(9, position.Values.Length); break;
+                case 1: Mem.AreEqual(1, position.Values.Length); break;
+            }
         }
-        Mem.AreEqual(1, count);
+        Mem.AreEqual(2, count);
     }
 }
 
@@ -48,6 +50,7 @@ public static class Test_Systems
         var root    = store.CreateEntity(1);
         root.AddScript(new CreateSystems());
         root.AddComponent(new Position(1, 0, 0));
+        root.AddComponent<Rotation>();
         for (int n = 2; n <= 10; n++) {
             var child = store.CreateEntity(n);
             child.AddComponent(new Position(n, 0, 0));
