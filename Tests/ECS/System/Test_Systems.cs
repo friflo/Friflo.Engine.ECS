@@ -77,7 +77,7 @@ public static class Test_Systems
         // --- execute systems
         systems.UpdateSystems(); // force one time allocations
         
-        int count = 10; // 10_000_000 ~ 680 ms
+        int count = 10; // 10_000_000 ~ 774 ms
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
             systems.UpdateSystems();
