@@ -1,6 +1,6 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-using static NUnit.Framework.Assert;
+using Tests.Utils;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
@@ -8,21 +8,20 @@ namespace Tests.ECS.System;
 
 public class MySystem : ComponentSystem
 {
-    private readonly ArchetypeQuery<Position, Rotation> query;
+    private readonly ArchetypeQuery<Position> query;
         
     public MySystem(EntityStoreBase store) {
-        query = store.Query<Position, Rotation>();
+        query = store.Query<Position>();
     }
     
     public override void OnUpdate()
     {
         int count = 0;
-        foreach (var (position, rotation) in query.Chunks) {
+        foreach (var position in query.Chunks) {
             count++;
-            AreEqual(position.Values.Length, 10);
-            AreEqual(rotation.Values.Length, 10);
+            Mem.AreEqual(position.Values.Length, 10);
         }
-        AreEqual(1, count);
+        Mem.AreEqual(1, count);
     }
 }
 
@@ -35,11 +34,9 @@ public static class Test_Systems
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity(1);
         root.AddComponent(new Position(1, 0, 0));
-        root.AddComponent<Rotation>();
         for (int n = 2; n <= 10; n++) {
             var child = store.CreateEntity(n);
             child.AddComponent(new Position(n, 0, 0));
-            child.AddComponent<Rotation>();
             root.AddChild(child);
         }
         store.SetStoreRoot(root);
@@ -49,7 +46,14 @@ public static class Test_Systems
         var systems     = new Systems();
         systems.AddSystem(mySystem);
         
-        systems.UpdateSystems();
+        systems.UpdateSystems(); // force one time allocations
+        
+        int count = 10; // 10_000_000 ~ 680 ms
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < count; n++) {
+            systems.UpdateSystems();
+        }
+        Mem.AssertNoAlloc(start);
     }
 }
 

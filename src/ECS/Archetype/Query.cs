@@ -133,14 +133,25 @@ public class ArchetypeQuery
     #endregion
 }
 
-public sealed class ArchetypeQuery<T> : ArchetypeQuery
-    where T : struct, IComponent
+public sealed class ArchetypeQuery<T1> : ArchetypeQuery
+    where T1 : struct, IComponent
 {
-    public new ArchetypeQuery<T> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+    internal    T1[]     copyT1;
     
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T> signature)
+    public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+    
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature)
         : base(store, signature.signatureIndexes) {
     }
+    
+    public ArchetypeQuery<T1> ReadOnly<T>()
+        where T : struct, IComponent
+    {
+        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
+        return this;
+    }
+    
+    public      QueryChunks    <T1>  Chunks                                      => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
