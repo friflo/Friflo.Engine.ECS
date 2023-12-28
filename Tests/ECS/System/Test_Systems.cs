@@ -7,7 +7,7 @@ using Tests.Utils;
 namespace Tests.ECS.System;
 
 
-public class AddSystems : Script
+public class CreateSystems : Script
 {
     public override void Start() {
         var mySystem = new MySystem(Store);
@@ -46,7 +46,7 @@ public static class Test_Systems
         Assert.AreSame(systems, store.Systems);
         
         var root    = store.CreateEntity(1);
-        root.AddScript(new AddSystems());
+        root.AddScript(new CreateSystems());
         root.AddComponent(new Position(1, 0, 0));
         for (int n = 2; n <= 10; n++) {
             var child = store.CreateEntity(n);
