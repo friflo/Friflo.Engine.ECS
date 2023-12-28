@@ -40,6 +40,12 @@ public static class Test_StoreDispatcher
         });
         IsTrue(called);
     }
+    
+    [Test]
+    public static void Test_StoreDispatcher_AssertMainThread()
+    {
+        StoreDispatcher.AssertMainThread();
+    }
 
     [Test]
     public static void Test_StoreDispatcher_SetDispatcher()
