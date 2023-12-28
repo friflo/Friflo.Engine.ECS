@@ -7,7 +7,7 @@ using Tests.Utils;
 namespace Tests.ECS.System;
 
 
-public class AddSystem : Script
+public class AddSystems : Script
 {
     public override void Start() {
         var mySystem = new MySystem(Store);
@@ -43,7 +43,7 @@ public static class Test_Systems
         var systems = new Systems();
         var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
         var root    = store.CreateEntity(1);
-        root.AddScript(new AddSystem());
+        root.AddScript(new AddSystems());
         root.AddComponent(new Position(1, 0, 0));
         for (int n = 2; n <= 10; n++) {
             var child = store.CreateEntity(n);
