@@ -80,7 +80,7 @@ dotnet run --no-build
 
 ## Engine Architecture
 
-The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *depends on* `ECS`
+The arrows used in the diagrams show the dependencies. E.g. `Engine.Hub` *depends on* `Engine.ECS`
 
 ```mermaid
   graph TD;
@@ -123,8 +123,8 @@ The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *dep
         Animations
     end
 
-    subgraph Engine-Client[Engine Client];
-        Sync(Entity Sync):::implemented;
+    subgraph Engine.Hub;
+        StoreClient(StoreClient):::implemented;
         Netcode;
     end
 
@@ -134,7 +134,7 @@ The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *dep
         WebUI(Web UI):::finished
     end
 
-    subgraph ECS[ECS];
+    subgraph Engine.ECS;
         EntityStore(EntityStore):::implemented
         Systems
     end
@@ -143,36 +143,36 @@ The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *dep
     Applications    -->Backend
     Applications    -->Physics
     Applications    -->Misc
-    Applications    -->ECS
+    Applications    -->Engine.ECS
 
-    Renderer        -->ECS
-    Backend         -->ECS
-    Physics         -->ECS
+    Renderer        -->Engine.ECS
+    Backend         -->Engine.ECS
+    Physics         -->Engine.ECS
 
     Renderer        -->Assets
     Backend         -->Assets
     Physics         -->Assets
     Misc            -->Assets
 
-    Assets          -->Engine-Client
+    Assets          -->Engine.Hub
 
-    Engine-Client  -->ECS
-    Engine-Client  -->ORM
+    Engine.Hub      -->Engine.ECS
+    Engine.Hub      -->ORM
 ```
 
-## Engine Client
+## Engine.Hub
 ```mermaid
   graph TD;
     classDef finished           stroke:#090,stroke-width:2px;
     classDef implemented        stroke:#00f,stroke-width:2px;
     classDef implementedDotted  stroke:#00f,stroke-width:2px,stroke-dasharray: 5 5;
 
-    subgraph Engine-Client[Engine Client];
-        Sync(Entity Sync):::implemented;
+    subgraph Engine.Hub;
+        StoreClient(StoreClient):::implemented;
         Netcode;
     end
 
-    subgraph ECS;
+    subgraph Engine.ECS;
         EntityStore(EntityStore):::implemented
         Systems
         Queries(Queries):::implemented
@@ -243,8 +243,8 @@ The arrows used in the diagrams show the dependencies. E.g. `Engine Client` *dep
         end
     end
 
-    Engine-Client   --> ECS
-    Engine-Client   --> ORM
+    Engine.Hub      --> Engine.ECS
+    Engine.Hub      --> ORM
     ORM             --> Storage
     
 ```
