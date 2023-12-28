@@ -59,7 +59,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] private             ComponentChangedHandler componentAdded;     //  8
     [Browse(Never)] private             ComponentChangedHandler componentRemoved;   //  8
     // --- misc
-    [Browse(Never)] public              Systems                 systems;            //  8
+    [Browse(Never)] internal            Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
     #endregion
     

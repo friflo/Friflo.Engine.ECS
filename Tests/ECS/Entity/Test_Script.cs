@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -177,6 +178,41 @@ public static class Test_Script
         AreEqual(1,                         entity1.Scripts.Length);
         AreEqual(1,                         entity2.Scripts.Length);
         AreEqual(2,                         store.EntityScripts.Length);
+        
+        // --- test EntityScriptsEnumerator
+        {
+            int count = 0;
+            foreach (var entityScripts in store.EntityScripts) {
+                foreach (var _ in entityScripts) {
+                    count++;       
+                }
+            }
+            AreEqual(2, count);
+        } {
+            int count = 0;
+            foreach (var entityScripts in store.EntityScripts) {
+                IEnumerable<Script> scripts = entityScripts;
+                var enumerator = scripts.GetEnumerator();
+                while (enumerator.MoveNext()) {
+                    count++;                    
+                }
+                enumerator.Reset();
+                while (enumerator.MoveNext()) {
+                    count++;                    
+                }
+                enumerator.Dispose();
+            }
+            AreEqual(4, count);
+        } {
+            int count = 0;
+            foreach (var entityScripts in store.EntityScripts) {
+                IEnumerable scripts = entityScripts;
+                foreach (var _ in scripts) {
+                    count++;                    
+                }
+            }
+            AreEqual(2, count);
+        }
         
         NotNull (entity1.RemoveScript<TestScript1>());
         AreEqual(0,                         entity1.Scripts.Length);

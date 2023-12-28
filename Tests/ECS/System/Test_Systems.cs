@@ -21,6 +21,7 @@ public class MySystem : ComponentSystem
         
     public MySystem(EntityStoreBase store) {
         query = store.Query<Position>();
+        Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
     }
     
     public override void OnUpdate()
@@ -42,6 +43,8 @@ public static class Test_Systems
         // --- setup test entities
         var systems = new Systems();
         var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
+        Assert.AreSame(systems, store.Systems);
+        
         var root    = store.CreateEntity(1);
         root.AddScript(new AddSystems());
         root.AddComponent(new Position(1, 0, 0));
@@ -53,11 +56,13 @@ public static class Test_Systems
         store.SetStoreRoot(root);
 
         // --- start scripts to create systems
-        foreach (var entityScripts in store.EntityScripts) {
-            foreach (var script in entityScripts.Scripts) {
+        foreach (var entityScripts in store.EntityScripts)
+        {
+            foreach (var script in entityScripts) {
                 script.Start();
             }
         }
+        Assert.AreEqual("Count: 1", systems.ToString());
 
         // --- execute systems
         systems.UpdateSystems(); // force one time allocations

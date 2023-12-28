@@ -1,7 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -9,10 +10,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public struct EntityScripts
+public struct EntityScripts : IEnumerable<Script>
 {
 #region public properties
-    public              ReadOnlySpan<Script>    Scripts     => new (scripts);
     public   override   string                  ToString()  => GetString();
     #endregion
     
@@ -33,6 +33,14 @@ public struct EntityScripts
         this.scripts    = scripts;
     }
     
+    public readonly EntityScriptsEnumerator GetEnumerator()                     => new EntityScriptsEnumerator (scripts);
+
+    // --- IEnumerable
+    readonly        IEnumerator             IEnumerable.GetEnumerator()         => new EntityScriptsEnumerator (scripts);
+
+    // --- IEnumerable<>
+    readonly        IEnumerator<Script>     IEnumerable<Script>.GetEnumerator() => new EntityScriptsEnumerator (scripts);
+    
     private string GetString()
     {
         if (scripts == null) {
@@ -52,3 +60,31 @@ public struct EntityScripts
         return sb.ToString();
     }
 }
+
+public struct EntityScriptsEnumerator : IEnumerator<Script>
+{
+    private             int         index;
+    private readonly    Script[]    scripts;
+    
+    // --- IEnumerator
+    public          void            Reset()             { index = 0; }
+
+    readonly        object          IEnumerator.Current => Current;
+
+    public readonly Script          Current             => scripts[index - 1];
+    
+    internal EntityScriptsEnumerator(Script[] scripts) {
+        this.scripts    = scripts;
+    }
+    
+    // --- IEnumerator
+    public bool MoveNext() {
+        if (index < scripts.Length) {
+            index++;
+            return true;
+        }
+        return false;
+    }
+
+    public readonly void Dispose() { }
+} 
