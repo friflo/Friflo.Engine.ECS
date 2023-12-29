@@ -28,23 +28,26 @@ public class CreateSystems : Script
 
 public class MySystem_Arg1 : ComponentSystem
 {
-    private readonly ArchetypeQuery<Position> query;
+    private readonly    ArchetypeQuery<Position>    query;
+    private readonly    EntityStore                 store;
         
-    public MySystem_Arg1(EntityStoreBase store) {
-        query = store.Query<Position>();
+    public MySystem_Arg1(EntityStore store) {
+        this.store  = store;
+        query       = store.Query<Position>();
         Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int chunkCount = 0;
-        foreach (var (position, _) in query.Chunks) {
+        var childArch   = store.GetArchetype(Signature.Get<Position>());
+        int chunkCount  = 0;
+        foreach (var (position, archetype) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(1,     length);    break;
-                case 1:     Mem.AreEqual(512,   length);    break;
-                case 2:     Mem.AreEqual(487,   length);    break;
+                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
+                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -54,23 +57,26 @@ public class MySystem_Arg1 : ComponentSystem
 
 public class MySystem_Arg2 : ComponentSystem
 {
-    private readonly ArchetypeQuery<Position, Rotation> query;
+    private readonly    ArchetypeQuery<Position, Rotation>  query;
+    private readonly    EntityStore                         store;
         
-    public MySystem_Arg2(EntityStoreBase store) {
-        query = store.Query<Position, Rotation>();
+    public MySystem_Arg2(EntityStore store) {
+        this.store  = store;
+        query       = store.Query<Position, Rotation>();
         Assert.AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int chunkCount = 0;
-        foreach (var (position, _, _) in query.Chunks) {
+        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        int chunkCount  = 0;
+        foreach (var (position, _, archetype) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(1,     length);    break;
-                case 1:     Mem.AreEqual(512,   length);    break;
-                case 2:     Mem.AreEqual(487,   length);    break;
+                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
+                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -80,23 +86,26 @@ public class MySystem_Arg2 : ComponentSystem
 
 public class MySystem_Arg3 : ComponentSystem
 {
-    private readonly ArchetypeQuery<Position, Rotation, EntityName> query;
+    private readonly    ArchetypeQuery<Position, Rotation, EntityName>  query;
+    private readonly    EntityStore                                     store;
         
-    public MySystem_Arg3(EntityStoreBase store) {
-        query = store.Query<Position, Rotation, EntityName>();
+    public MySystem_Arg3(EntityStore store) {
+        this.store  = store;
+        query       = store.Query<Position, Rotation, EntityName>();
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int chunkCount = 0;
-        foreach (var (position, _, _, _) in query.Chunks) {
+        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
+        int chunkCount  = 0;
+        foreach (var (position, _, _, archetype) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(512,   length);    break;
-                case 1:     Mem.AreEqual(487,   length);    break;
-                case 2:     Mem.AreEqual(1,     length);    break;
+                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -106,23 +115,26 @@ public class MySystem_Arg3 : ComponentSystem
 
 public class MySystem_Arg4 : ComponentSystem
 {
-    private readonly ArchetypeQuery<Position, Rotation, EntityName, Scale3> query;
+    private readonly    ArchetypeQuery<Position, Rotation, EntityName, Scale3>  query;
+    private readonly    EntityStore                                             store;
         
-    public MySystem_Arg4(EntityStoreBase store) {
-        query = store.Query<Position, Rotation, EntityName, Scale3>();
+    public MySystem_Arg4(EntityStore store) {
+        this.store  = store;
+        query       = store.Query<Position, Rotation, EntityName, Scale3>();
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int chunkCount = 0;
-        foreach (var (position, _, _, _, _) in query.Chunks) {
+        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
+        int chunkCount  = 0;
+        foreach (var (position, _, _, _, archetype) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(1,     length);    break;
-                case 1:     Mem.AreEqual(512,   length);    break;
-                case 2:     Mem.AreEqual(487,   length);    break;
+                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
+                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -132,23 +144,26 @@ public class MySystem_Arg4 : ComponentSystem
 
 public class MySystem_Arg5 : ComponentSystem
 {
-    private readonly ArchetypeQuery<Position, Rotation, EntityName, Scale3, Transform> query;
+    private readonly    ArchetypeQuery<Position, Rotation, EntityName, Scale3, Transform>   query;
+    private readonly    EntityStore                                                         store;
         
-    public MySystem_Arg5(EntityStoreBase store) {
-        query = store.Query<Position, Rotation, EntityName, Scale3, Transform>();
+    public MySystem_Arg5(EntityStore store) {
+        this.store  = store;
+        query       = store.Query<Position, Rotation, EntityName, Scale3, Transform>();
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int chunkCount = 0;
-        foreach (var (position, _, _, _, _, _) in query.Chunks) {
+        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
+        int chunkCount  = 0;
+        foreach (var (position, _, _, _, _, archetype) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(512,   length);    break;
-                case 1:     Mem.AreEqual(487,   length);    break;
-                case 2:     Mem.AreEqual(1,     length);    break;
+                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
