@@ -34,7 +34,7 @@ public readonly struct QueryForEach<T1, T2>
     {
         var ref1 = new Ref<T1>();
         var ref2 = new Ref<T2>();
-        foreach (var archetype in query.GetArchetypes())
+        foreach (var archetype in query.GetArchetypesSpan())
         {
             var heapMap     = archetype.heapMap;
             var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;

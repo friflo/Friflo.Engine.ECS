@@ -22,10 +22,10 @@ public class ArchetypeQuery
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
     /// Typically there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
-                    public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypes());
+                    public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
     
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
-                    public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypes();
+                    public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
                     public override     string              ToString()  => GetString();
     #endregion
 
@@ -68,10 +68,15 @@ public class ArchetypeQuery
     // private  readonly    List<ArchetypeQuery>    queries;            // only for debugging
     // internal void        AddQuery(ArchetypeQuery query) { queries.Add(query); }
     
-    internal ReadOnlySpan<Archetype> GetArchetypes()
+    internal ReadOnlySpan<Archetype> GetArchetypesSpan() {
+        var archs = GetArchetypes();
+        return new ReadOnlySpan<Archetype>(archs.array, 0, archs.length);
+    }
+    
+    internal Archetypes GetArchetypes()
     {
         if (store.ArchetypeCount == lastArchetypeCount) {
-            return new ReadOnlySpan<Archetype>(archetypes, 0, archetypeCount);
+            return new Archetypes(archetypes, archetypeCount);
         }
         // --- update archetypes / archetypesCount: Add matching archetypes newly added to the store
         var storeArchetypes     = store.Archetypes;
@@ -98,11 +103,11 @@ public class ArchetypeQuery
         archetypes          = nextArchetypes;   // using changed (added) archetypes with old archetypeCount         => OK
         archetypeCount      = nextCount;        // archetypes already changed                                       => OK
         lastArchetypeCount  = newStoreLength;   // using old lastArchetypeCount result only in a redundant update   => OK
-        return new ReadOnlySpan<Archetype>(nextArchetypes, 0, nextCount);
+        return new Archetypes(nextArchetypes, nextCount);
     }
     
-
-
+    
+    
     private string GetString() {
         var sb          = new StringBuilder();
         var hasTypes    = false;

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
@@ -27,7 +26,7 @@ public ref struct ChunkEnumerator<T1>
     private readonly    T1[]                    copyT1;
     private readonly    int                     structIndex1;
     //
-    private readonly    ReadOnlySpan<Archetype> archetypes;
+    private readonly    Archetypes              archetypes;
     private             int                     archetypePos;
     private             Archetype               archetype; // used for debugging
     //
@@ -43,7 +42,7 @@ public ref struct ChunkEnumerator<T1>
         structIndex1    = query.signatureIndexes.T1;
         archetypes      = query.GetArchetypes();
         archetypePos    = 0;
-        archetype       = archetypes[0];
+        archetype       = archetypes.array[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunkEnd        = archetype.ChunkCount();
@@ -61,16 +60,16 @@ public ref struct ChunkEnumerator<T1>
             goto Next;
         }
         if (chunkPos == chunkEnd)  {
-            componentLen    = archetypes[archetypePos].ChunkRest();
+            componentLen    = archetypes.array[archetypePos].ChunkRest();
             if (componentLen > 0) {
                 goto Next;
             }
         }
         do {
-            if (archetypePos >= archetypes.Length - 1) {
+            if (archetypePos >= archetypes.length - 1) {
                 return false;
             }
-            archetype       = archetypes[++archetypePos];
+            archetype       = archetypes.array[++archetypePos];
             var heapMap     = archetype.heapMap;
             chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
             chunkPos        = 0;

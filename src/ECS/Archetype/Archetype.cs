@@ -14,6 +14,17 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+internal readonly struct Archetypes
+{
+    internal readonly   Archetype[] array;
+    internal readonly   int         length;
+    
+    internal Archetypes(Archetype[] array, int length) {
+        this.array  = array;
+        this.length = length;
+    }
+}
+
 public sealed class Archetype
 {
 #region     public properties
