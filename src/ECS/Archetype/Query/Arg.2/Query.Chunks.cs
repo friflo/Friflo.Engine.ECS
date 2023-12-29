@@ -75,7 +75,7 @@ public ref struct ChunkEnumerator<T1, T2>
             }
         }
         do {
-           if (archetypePos >= archetypes.length - 1) {
+           if (archetypePos >= archetypes.last) {  // last = length - 1
                return false;
            }
            archetype       = archetypes.array[++archetypePos];
