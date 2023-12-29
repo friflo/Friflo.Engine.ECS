@@ -65,6 +65,12 @@ public static class Test_Systems
         }
         store.SetStoreRoot(root);
 
+        int count = 10; // 10_000_000 ~ 774 ms
+        ExecuteSystems(store, count);
+    }
+    
+    private static void ExecuteSystems(EntityStore store, int count)
+    {
         // --- start scripts to create systems
         foreach (var entityScripts in store.EntityScripts)
         {
@@ -72,12 +78,12 @@ public static class Test_Systems
                 script.Start();
             }
         }
+        var systems = store.Systems;
         Assert.AreEqual("Count: 1", systems.ToString());
 
         // --- execute systems
         systems.UpdateSystems(); // force one time allocations
-        
-        int count = 10; // 10_000_000 ~ 774 ms
+
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
             systems.UpdateSystems();
