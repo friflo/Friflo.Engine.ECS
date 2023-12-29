@@ -74,6 +74,7 @@ public ref struct ChunkEnumerator<T1, T2>
                 goto Next;
             }
         }
+        // --- skip archetypes without entities
         do {
            if (archetypePos >= archetypes.last) {  // last = length - 1
                return false;
@@ -83,6 +84,7 @@ public ref struct ChunkEnumerator<T1, T2>
         }
         while (chunkEnd == -1);
         
+        // --- set chunks of new archetype
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
