@@ -189,7 +189,7 @@ public static class Test_Systems
             root.AddChild(child);
         }
         CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 774 ms
+        int count = 10; // 10_000_000 ~ 1575 ms
         ExecuteSystems(store.Systems, count);
     }
     
@@ -211,7 +211,7 @@ public static class Test_Systems
             root.AddChild(child);
         }
         CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 774 ms
+        int count = 10; // 10_000_000 ~ 1387 ms
         ExecuteSystems(store.Systems, count);
     }
     
@@ -234,7 +234,7 @@ public static class Test_Systems
             root.AddChild(child);
         }
         CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 774 ms
+        int count = 10; // 10_000_000 ~ 1500 ms
         ExecuteSystems(store.Systems, count);
     }
     
@@ -259,7 +259,7 @@ public static class Test_Systems
             root.AddChild(child);
         }
         CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 774 ms
+        int count = 10; // 10_000_000 ~ 1757 ms
         ExecuteSystems(store.Systems, count);
     }
     
@@ -285,7 +285,7 @@ public static class Test_Systems
             root.AddChild(child);
         }
         CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 774 ms
+        int count = 10; // 10_000_000 ~ 1847 ms
         ExecuteSystems(store.Systems, count);
     }
     
