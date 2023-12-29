@@ -26,10 +26,11 @@ public ref struct ChunkEnumerator<T1>
 {
     private readonly    T1[]                    copyT1;
     private readonly    int                     structIndex1;
-    
+    //
     private readonly    ReadOnlySpan<Archetype> archetypes;
     private             int                     archetypePos;
-    
+    private             Archetype               archetype; // used for debugging
+    //
     private             StructChunk<T1>[]       chunks1;
     private             Chunk<T1>               chunk1;
     private             int                     chunkPos;
@@ -42,7 +43,7 @@ public ref struct ChunkEnumerator<T1>
         structIndex1    = query.signatureIndexes.T1;
         archetypes      = query.GetArchetypes();
         archetypePos    = 0;
-        var archetype   = archetypes[0];
+        archetype       = archetypes[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunkEnd        = archetype.ChunkCount();
@@ -68,14 +69,14 @@ public ref struct ChunkEnumerator<T1>
         if (archetypePos >= archetypes.Length - 1) {
             return false;
         }
-        var archetype   = archetypes[++archetypePos];
+        archetype       = archetypes[++archetypePos];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunkPos        = 0;
         chunkEnd        = archetype.ChunkEnd();
         componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
     Next:
-        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen, archetype);
         chunkPos++;
         return true;  
     }

@@ -30,10 +30,11 @@ public ref struct ChunkEnumerator<T1, T2>
     private readonly    T2[]                    copyT2;
     private readonly    int                     structIndex1;
     private readonly    int                     structIndex2;
-    
+    //
     private readonly    ReadOnlySpan<Archetype> archetypes;
     private             int                     archetypePos;
-    
+    private             Archetype               archetype; // used for debugging
+    //
     private             StructChunk<T1>[]       chunks1;
     private             StructChunk<T2>[]       chunks2;
     private             Chunk<T1>               chunk1;
@@ -50,7 +51,7 @@ public ref struct ChunkEnumerator<T1, T2>
         structIndex2    = query.signatureIndexes.T2;
         archetypes      = query.GetArchetypes();
         archetypePos    = 0;
-        var archetype   = archetypes[0];
+        archetype       = archetypes[0];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
@@ -77,7 +78,7 @@ public ref struct ChunkEnumerator<T1, T2>
         if (archetypePos >= archetypes.Length - 1) {
             return false;
         }
-        var archetype   = archetypes[++archetypePos];
+        archetype       = archetypes[++archetypePos];
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
@@ -85,8 +86,8 @@ public ref struct ChunkEnumerator<T1, T2>
         chunkEnd        = archetype.ChunkEnd();
         componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
     Next:
-        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
-        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen);
+        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen, archetype);
+        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen, archetype);
         chunkPos++;
         return true;  
     }

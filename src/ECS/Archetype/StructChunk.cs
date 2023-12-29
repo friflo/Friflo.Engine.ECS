@@ -28,13 +28,15 @@ internal readonly struct StructChunk<T>
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
-    public              Span<T> Values => new(values, 0, count);
+    public              Span<T>     Values => new(values, 0, count);
 
-    private readonly    T[]     values;
-    private readonly    int     count;
+    private readonly    T[]         values;
+    private readonly    int         count;
+    public  readonly    Archetype   archetype;
     
-    internal Chunk(T[] values, T[] copy, int count) {
-        this.count  = count;
+    internal Chunk(T[] values, T[] copy, int count, Archetype archetype) {
+        this.count      = count;
+        this.archetype  = archetype;
         if (copy == null) {
             this.values = values;
         } else {

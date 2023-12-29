@@ -10,17 +10,24 @@ namespace Tests.ECS.System;
 
 public class CreateSystems : Script
 {
+    public int argCount;
+    
     public override void Start() {
-        var mySystem = new MySystem(Store);
-        Systems.AddSystem(mySystem);
+        var store = Store;
+        ComponentSystem system = argCount switch {
+            1 => new MySystem_Arg1(store),
+            2 => new MySystem_Arg2(store),
+            _ => throw new ArgumentException($"value: {argCount}", nameof(argCount))
+        };
+        Systems.AddSystem(system);
     }
 }
 
-public class MySystem : ComponentSystem
+public class MySystem_Arg1 : ComponentSystem
 {
     private readonly ArchetypeQuery<Position> query;
         
-    public MySystem(EntityStoreBase store) {
+    public MySystem_Arg1(EntityStoreBase store) {
         query = store.Query<Position>();
         Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
     }
@@ -41,20 +48,40 @@ public class MySystem : ComponentSystem
     }
 }
 
+public class MySystem_Arg2 : ComponentSystem
+{
+    private readonly ArchetypeQuery<Position, Rotation> query;
+        
+    public MySystem_Arg2(EntityStoreBase store) {
+        query = store.Query<Position, Rotation>();
+        Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
+    }
+    
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
+    public override void OnUpdate()
+    {
+        int count = 0;
+        foreach (var (position, _) in query.Chunks) {
+            switch(count++) {
+                case 0:     Mem.AreEqual(512,   position.Values.Length); break;
+                case 1:     Mem.AreEqual(487,   position.Values.Length); break;
+                case 2:     Mem.AreEqual(1,     position.Values.Length); break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        }
+        Mem.AreEqual(3, count);
+    }
+}
+
 public static class Test_Systems
 {
     [Test]
     public static void Test_Systems_create()
     {
-        // --- setup test entities
-        var systems = new Systems();
-        var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
-        Assert.AreSame(systems, store.Systems);
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new CreateSystems { argCount = 1 });
         
-        var root    = store.CreateEntity();
-        root.AddScript(new CreateSystems());
-        root.AddComponent(new Position(1, 0, 0));
-        root.AddComponent<Rotation>();
         var child = store.CreateEntity();
         root.AddChild(child);
         child.AddComponent(new Position(2, 0, 0));
@@ -63,13 +90,29 @@ public static class Test_Systems
             child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
-        store.SetStoreRoot(root);
-
+        
+        CreateSystems(store);
+        
         int count = 10; // 10_000_000 ~ 774 ms
-        ExecuteSystems(store, count);
+        ExecuteSystems(store.Systems, count);
     }
     
-    private static void ExecuteSystems(EntityStore store, int count)
+    private static EntityStore SetupTestStore() {
+        var systems = new Systems();
+        var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
+        Assert.AreSame(systems, store.Systems);
+        
+        var root    = store.CreateEntity();
+        // root.AddComponent(new EntityName("root"));
+        root.AddComponent(new Position(1, 0, 0));
+        root.AddComponent<Rotation>();
+        // root.AddComponent<Transform>();
+        // root.AddComponent<Scale3>();
+        store.SetStoreRoot(root);
+        return store;
+    }
+    
+    private static void CreateSystems(EntityStore store)
     {
         // --- start scripts to create systems
         foreach (var entityScripts in store.EntityScripts)
@@ -78,7 +121,10 @@ public static class Test_Systems
                 script.Start();
             }
         }
-        var systems = store.Systems;
+    }
+    
+    private static void ExecuteSystems(Systems systems, int count)
+    {
         Assert.AreEqual("Count: 1", systems.ToString());
 
         // --- execute systems
