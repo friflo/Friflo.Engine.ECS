@@ -60,7 +60,7 @@ public ref struct ChunkEnumerator<T1>
             goto Next;
         }
         if (chunkPos == chunkEnd)  {
-            componentLen    = archetypes.array[archetypePos].ChunkRest();
+            componentLen = archetype.ChunkRest();
             if (componentLen > 0) {
                 goto Next;
             }

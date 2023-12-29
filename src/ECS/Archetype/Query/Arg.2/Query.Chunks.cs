@@ -69,7 +69,7 @@ public ref struct ChunkEnumerator<T1, T2>
             goto Next;
         }
         if (chunkPos == chunkEnd)  {
-            componentLen    = archetypes.array[archetypePos].ChunkRest();
+            componentLen = archetype.ChunkRest();
             if (componentLen > 0) {
                 goto Next;
             }
@@ -78,8 +78,8 @@ public ref struct ChunkEnumerator<T1, T2>
            if (archetypePos >= archetypes.last) {  // last = length - 1
                return false;
            }
-           archetype       = archetypes.array[++archetypePos];
-           chunkEnd        = archetype.ChunkEnd();
+           archetype    = archetypes.array[++archetypePos];
+           chunkEnd     = archetype.ChunkEnd();
         }
         while (chunkEnd == -1);
         
