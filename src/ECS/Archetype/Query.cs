@@ -192,11 +192,26 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
+    internal    T1[]    copyT1;
+    internal    T2[]    copyT2;
+    internal    T3[]    copyT3;
+    
     public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3> signature)
         : base(store, signature.signatureIndexes) {
     }
+    
+    public ArchetypeQuery<T1, T2, T3> ReadOnly<T>()
+        where T : struct, IComponent
+    {
+        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
+        if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
+        if (typeof(T3) == typeof(T)) copyT3 = new T3[ChunkSize];
+        return this;
+    }
+    
+    public      QueryChunks    <T1, T2, T3>  Chunks         => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery

@@ -17,6 +17,7 @@ public class CreateSystems : Script
         ComponentSystem system = argCount switch {
             1 => new MySystem_Arg1(store),
             2 => new MySystem_Arg2(store),
+            3 => new MySystem_Arg3(store),
             _ => throw new ArgumentException($"value: {argCount}", nameof(argCount))
         };
         Systems.AddSystem(system);
@@ -75,6 +76,32 @@ public class MySystem_Arg2 : ComponentSystem
     }
 }
 
+public class MySystem_Arg3 : ComponentSystem
+{
+    private readonly ArchetypeQuery<Position, Rotation, EntityName> query;
+        
+    public MySystem_Arg3(EntityStoreBase store) {
+        query = store.Query<Position, Rotation, EntityName>();
+        Assert.AreEqual("Chunks: [Position, Rotation, EntityName]", query.Chunks.ToString());
+    }
+    
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
+    public override void OnUpdate()
+    {
+        int chunkCount = 0;
+        foreach (var (position, _, _) in query.Chunks) {
+            var length = position.Values.Length;
+            switch(chunkCount++) {
+                case 0:     Mem.AreEqual(512,   length);    break;
+                case 1:     Mem.AreEqual(487,   length);    break;
+                case 2:     Mem.AreEqual(1,     length);    break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        }
+        Mem.AreEqual(3, chunkCount);
+    }
+}
+
 public static class Test_Systems
 {
     [Test]
@@ -108,6 +135,29 @@ public static class Test_Systems
         root.AddChild(child);
         child.AddComponent(new Position(2, 0, 0));
         child.AddComponent(new Rotation(2, 0, 0, 0));
+        for (int n = 3; n <= 1000; n++) {
+            child = store.CreateEntity(child.Archetype);
+            child.Position = new Position(n, 0, 0);
+            child.Rotation = new Rotation(n, 0, 0, 0);
+            root.AddChild(child);
+        }
+        CreateSystems(store);
+        int count = 10; // 10_000_000 ~ 774 ms
+        ExecuteSystems(store.Systems, count);
+    }
+    
+    [Test]
+    public static void Test_Systems_query_arg_count_3()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new CreateSystems { argCount = 3 });
+        
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        child.AddComponent(new Position(2, 0, 0));
+        child.AddComponent(new Rotation(2, 0, 0, 0));
+        child.AddComponent(new EntityName("child"));
         for (int n = 3; n <= 1000; n++) {
             child = store.CreateEntity(child.Archetype);
             child.Position = new Position(n, 0, 0);
