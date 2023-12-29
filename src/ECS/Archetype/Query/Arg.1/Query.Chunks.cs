@@ -66,14 +66,17 @@ public ref struct ChunkEnumerator<T1>
                 goto Next;
             }
         }
-        if (archetypePos >= archetypes.Length - 1) {
-            return false;
+        do {
+            if (archetypePos >= archetypes.Length - 1) {
+                return false;
+            }
+            archetype       = archetypes[++archetypePos];
+            var heapMap     = archetype.heapMap;
+            chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
+            chunkPos        = 0;
+            chunkEnd        = archetype.ChunkEnd();
         }
-        archetype       = archetypes[++archetypePos];
-        var heapMap     = archetype.heapMap;
-        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-        chunkPos        = 0;
-        chunkEnd        = archetype.ChunkEnd();
+        while (chunkEnd == -1);
         componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
     Next:
         chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen, archetype);

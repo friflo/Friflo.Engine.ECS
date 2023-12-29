@@ -35,16 +35,17 @@ public class MySystem_Arg1 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int count = 0;
+        int chunkCount = 0;
         foreach (var position in query.Chunks) {
-            switch(count++) {
-                case 0:     Mem.AreEqual(512,   position.Values.Length); break;
-                case 1:     Mem.AreEqual(487,   position.Values.Length); break;
-                case 2:     Mem.AreEqual(1,     position.Values.Length); break;
+            var length = position.Values.Length;
+            switch(chunkCount++) {
+                case 0:     Mem.AreEqual(1,     length);    break;
+                case 1:     Mem.AreEqual(512,   length);    break;
+                case 2:     Mem.AreEqual(487,   length);    break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, count);
+        Mem.AreEqual(3, chunkCount);
     }
 }
 
@@ -54,29 +55,30 @@ public class MySystem_Arg2 : ComponentSystem
         
     public MySystem_Arg2(EntityStoreBase store) {
         query = store.Query<Position, Rotation>();
-        Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
+        Assert.AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        int count = 0;
+        int chunkCount = 0;
         foreach (var (position, _) in query.Chunks) {
-            switch(count++) {
-                case 0:     Mem.AreEqual(512,   position.Values.Length); break;
-                case 1:     Mem.AreEqual(487,   position.Values.Length); break;
-                case 2:     Mem.AreEqual(1,     position.Values.Length); break;
+            var length = position.Values.Length;
+            switch(chunkCount++) {
+                case 0:     Mem.AreEqual(1,     length);    break;
+                case 1:     Mem.AreEqual(512,   length);    break;
+                case 2:     Mem.AreEqual(487,   length);    break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, count);
+        Mem.AreEqual(3, chunkCount);
     }
 }
 
 public static class Test_Systems
 {
     [Test]
-    public static void Test_Systems_create()
+    public static void Test_Systems_query_arg_count_1()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -90,9 +92,29 @@ public static class Test_Systems
             child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
-        
         CreateSystems(store);
+        int count = 10; // 10_000_000 ~ 774 ms
+        ExecuteSystems(store.Systems, count);
+    }
+    
+    [Test]
+    public static void Test_Systems_query_arg_count_2()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        root.AddScript(new CreateSystems { argCount = 2 });
         
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        child.AddComponent(new Position(2, 0, 0));
+        child.AddComponent(new Rotation(2, 0, 0, 0));
+        for (int n = 3; n <= 1000; n++) {
+            child = store.CreateEntity(child.Archetype);
+            child.Position = new Position(n, 0, 0);
+            child.Rotation = new Rotation(n, 0, 0, 0);
+            root.AddChild(child);
+        }
+        CreateSystems(store);
         int count = 10; // 10_000_000 ~ 774 ms
         ExecuteSystems(store.Systems, count);
     }
@@ -103,10 +125,10 @@ public static class Test_Systems
         Assert.AreSame(systems, store.Systems);
         
         var root    = store.CreateEntity();
-        // root.AddComponent(new EntityName("root"));
+        root.AddComponent(new EntityName("root"));
         root.AddComponent(new Position(1, 0, 0));
         root.AddComponent<Rotation>();
-        // root.AddComponent<Transform>();
+        root.AddComponent<Transform>();
         // root.AddComponent<Scale3>();
         store.SetStoreRoot(root);
         return store;
