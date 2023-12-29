@@ -32,11 +32,9 @@ public readonly struct Chunk<T>
 
     private readonly    T[]         values;
     private readonly    int         count;
-    public  readonly    Archetype   archetype;
     
-    internal Chunk(T[] values, T[] copy, int count, Archetype archetype) {
+    internal Chunk(T[] values, T[] copy, int count) {
         this.count      = count;
-        this.archetype  = archetype;
         if (copy == null) {
             this.values = values;
         } else {

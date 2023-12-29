@@ -198,7 +198,7 @@ public static class Test_StructHeapRaw
         var query   = store.Query(Signature.Get<Position, Rotation>());
         for (int count = 0; count < QueryCount; count++) {
             int n = 0;
-            foreach (var (positionChunk, rotationChunk) in query.Chunks) {
+            foreach (var (positionChunk, rotationChunk, _) in query.Chunks) {
                 foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
                     if (x != n)     Mem.FailAreEqual(x, n);
@@ -287,7 +287,7 @@ public static class Test_StructHeapRaw
             stopwatch.Start();
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
-            foreach (var (component1Chunk, component2Chunk) in query.Chunks) {
+            foreach (var (component1Chunk, component2Chunk, _) in query.Chunks) {
                 foreach (var component1 in component1Chunk.Values) {
                     var x = component1.a;
                     if (x !=n)      Mem.FailAreEqual(x, n);

@@ -39,7 +39,7 @@ public class MySystem_Arg1 : ComponentSystem
     public override void OnUpdate()
     {
         int chunkCount = 0;
-        foreach (var position in query.Chunks) {
+        foreach (var (position, _) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    break;
@@ -65,7 +65,7 @@ public class MySystem_Arg2 : ComponentSystem
     public override void OnUpdate()
     {
         int chunkCount = 0;
-        foreach (var (position, _) in query.Chunks) {
+        foreach (var (position, _, _) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    break;
@@ -91,7 +91,7 @@ public class MySystem_Arg3 : ComponentSystem
     public override void OnUpdate()
     {
         int chunkCount = 0;
-        foreach (var (position, _, _) in query.Chunks) {
+        foreach (var (position, _, _, _) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(512,   length);    break;
@@ -117,7 +117,7 @@ public class MySystem_Arg4 : ComponentSystem
     public override void OnUpdate()
     {
         int chunkCount = 0;
-        foreach (var (position, _, _, _) in query.Chunks) {
+        foreach (var (position, _, _, _, _) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    break;
@@ -143,7 +143,7 @@ public class MySystem_Arg5 : ComponentSystem
     public override void OnUpdate()
     {
         int chunkCount = 0;
-        foreach (var (position, _, _, _, _) in query.Chunks) {
+        foreach (var (position, _, _, _, _, _) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(512,   length);    break;

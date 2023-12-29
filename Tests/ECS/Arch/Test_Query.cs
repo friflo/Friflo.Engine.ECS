@@ -239,7 +239,7 @@ public static class Test_Query
         var chunkCount   = 0;
         AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
         start = GetAllocatedBytes();
-        foreach (var (position, rotation) in query.Chunks) {
+        foreach (var (position, rotation, _) in query.Chunks) {
             AreEqual(3, position.Values[0].z);
             rotation.Values[0].x = 42;
             chunkCount++;
@@ -269,7 +269,7 @@ public static class Test_Query
         var chunkCount   = 0;
         AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
         var start = GetAllocatedBytes();
-        foreach (var (position, rotation) in query.Chunks) {
+        foreach (var (position, rotation, _) in query.Chunks) {
             AreEqual(1, position.Values[0].x);
             AreEqual(4, rotation.Values[0].x);
             position.Values[0].x = 42;

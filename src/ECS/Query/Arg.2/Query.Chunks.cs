@@ -58,7 +58,7 @@ public ref struct ChunkEnumerator<T1, T2>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly (Chunk<T1>, Chunk<T2>) Current   => (chunk1, chunk2);
+    public readonly (Chunk<T1>, Chunk<T2>, Archetype archetype) Current   => (chunk1, chunk2, archetype);
     
     // --- IEnumerator
     public bool MoveNext()
@@ -91,8 +91,8 @@ public ref struct ChunkEnumerator<T1, T2>
         chunkPos        = 0;
         componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
     Next:
-        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen, archetype);
-        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen, archetype);
+        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+        chunk2 = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen);
         chunkPos++;
         return true;  
     }
