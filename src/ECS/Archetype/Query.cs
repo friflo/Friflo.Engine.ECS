@@ -106,7 +106,9 @@ public class ArchetypeQuery
         return new Archetypes(nextArchetypes, nextCount);
     }
     
-    
+    internal static ArgumentException ReadOnlyException(Type type) {
+        return new ArgumentException($"Query does not contain Component type: {type.Name}");
+    }
     
     private string GetString() {
         var sb          = new StringBuilder();
@@ -152,8 +154,8 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     public ArchetypeQuery<T1> ReadOnly<T>()
         where T : struct, IComponent
     {
-        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
-        return this;
+        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
+        throw ReadOnlyException(typeof(T));
     }
     
     public      QueryChunks    <T1>  Chunks                                      => new (this);
@@ -175,9 +177,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     public ArchetypeQuery<T1, T2> ReadOnly<T>()
         where T : struct, IComponent
     {
-        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
-        if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
-        return this;
+        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
+        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
+        throw ReadOnlyException(typeof(T));
     }
     
     public      QueryChunks    <T1,T2>  Chunks                                      => new (this);
@@ -205,10 +207,10 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     public ArchetypeQuery<T1, T2, T3> ReadOnly<T>()
         where T : struct, IComponent
     {
-        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
-        if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
-        if (typeof(T3) == typeof(T)) copyT3 = new T3[ChunkSize];
-        return this;
+        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
+        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
+        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
+        throw ReadOnlyException(typeof(T));
     }
     
     public      QueryChunks    <T1, T2, T3>  Chunks         => new (this);
@@ -234,11 +236,11 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     public ArchetypeQuery<T1, T2, T3, T4> ReadOnly<T>()
         where T : struct, IComponent
     {
-        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
-        if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
-        if (typeof(T3) == typeof(T)) copyT3 = new T3[ChunkSize];
-        if (typeof(T4) == typeof(T)) copyT4 = new T4[ChunkSize];
-        return this;
+        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
+        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
+        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
+        if (typeof(T4) == typeof(T)) { copyT4 = new T4[ChunkSize]; return this; }
+        throw ReadOnlyException(typeof(T));
     }
     
     public      QueryChunks    <T1, T2, T3, T4>  Chunks         => new (this);
@@ -266,12 +268,12 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     public ArchetypeQuery<T1, T2, T3, T4, T5> ReadOnly<T>()
         where T : struct, IComponent
     {
-        if (typeof(T1) == typeof(T)) copyT1 = new T1[ChunkSize];
-        if (typeof(T2) == typeof(T)) copyT2 = new T2[ChunkSize];
-        if (typeof(T3) == typeof(T)) copyT3 = new T3[ChunkSize];
-        if (typeof(T4) == typeof(T)) copyT4 = new T4[ChunkSize];
-        if (typeof(T5) == typeof(T)) copyT5 = new T5[ChunkSize];
-        return this;
+        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
+        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
+        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
+        if (typeof(T4) == typeof(T)) { copyT4 = new T4[ChunkSize]; return this; }
+        if (typeof(T5) == typeof(T)) { copyT5 = new T5[ChunkSize]; return this; }
+        throw ReadOnlyException(typeof(T));
     }
     
     public      QueryChunks    <T1, T2, T3, T4, T5>  Chunks         => new (this);

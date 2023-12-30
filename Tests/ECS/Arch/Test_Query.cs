@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -136,6 +137,59 @@ public static class Test_Query
         AreEqual(3, query3.Archetypes.Length);
         AreEqual(2, query4.Archetypes.Length);
         AreEqual(1, query5.Archetypes.Length);
+    }
+    
+    [Test]
+    public static void Test_Signature_Query_ReadOnly()
+    {
+        var store   = new EntityStore();
+        
+        var sig1 = Signature.Get<Position>();
+        var sig2 = Signature.Get<Position, Rotation>();
+        var sig3 = Signature.Get<Position, Rotation, Scale3>();
+        var sig4 = Signature.Get<Position, Rotation, Scale3, MyComponent1>();
+        var sig5 = Signature.Get<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        //
+        var query1 =    store.Query(sig1);
+        var query2 =    store.Query(sig2);
+        var query3 =    store.Query(sig3);
+        var query4 =    store.Query(sig4);
+        var query5 =    store.Query(sig5);
+        
+        query1.ReadOnly<Position>();
+        //
+        query2.ReadOnly<Position>();
+        query2.ReadOnly<Rotation>();
+        //
+        query3.ReadOnly<Position>();
+        query3.ReadOnly<Rotation>();
+        query3.ReadOnly<Scale3>();
+        //
+        query4.ReadOnly<Position>();
+        query4.ReadOnly<Rotation>();
+        query4.ReadOnly<Scale3>();
+        query4.ReadOnly<MyComponent1>();
+        //
+        query5.ReadOnly<Position>();
+        query5.ReadOnly<Rotation>();
+        query5.ReadOnly<Scale3>();
+        query5.ReadOnly<MyComponent1>();
+        query5.ReadOnly<MyComponent2>();
+        //
+        var e = Assert.Throws<ArgumentException>(() => { query1.ReadOnly<Transform>(); });
+        AreEqual("Query does not contain Component type: Transform", e!.Message);
+        
+        e = Assert.Throws<ArgumentException>(() => { query2.ReadOnly<Transform>(); });
+        AreEqual("Query does not contain Component type: Transform", e!.Message);
+
+        e = Assert.Throws<ArgumentException>(() => { query3.ReadOnly<Transform>(); });
+        AreEqual("Query does not contain Component type: Transform", e!.Message);
+        
+        e = Assert.Throws<ArgumentException>(() => { query4.ReadOnly<Transform>(); });
+        AreEqual("Query does not contain Component type: Transform", e!.Message);
+
+        e = Assert.Throws<ArgumentException>(() => { query5.ReadOnly<Transform>(); });
+        AreEqual("Query does not contain Component type: Transform", e!.Message);
     }
     
     [Test]
