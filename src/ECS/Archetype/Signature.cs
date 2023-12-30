@@ -31,14 +31,14 @@ public static class Signature
     ///   <item>Create a query to process all entities containing the given component types with <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
-    public static Signature<T> Get<T>()
-        where T : struct, IComponent
+    public static Signature<T1> Get<T1>()
+        where T1 : struct, IComponent
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
         var indexes   = new SignatureIndexes(1,
-            T1: schema.CheckStructIndex(typeof(T), StructHeap<T>.StructIndex)
+            T1: schema.CheckStructIndex(typeof(T1), StructHeap<T1>.StructIndex)
         );
-        return new Signature<T>(indexes);
+        return new Signature<T1>(indexes);
     }
     
     /// <summary>
@@ -138,8 +138,8 @@ public static class Signature
 // ------------------------------------ generic Signature<> types ------------------------------------
 #region generic Signature<> types
 
-public readonly struct Signature<T>
-    where T : struct, IComponent
+public readonly struct Signature<T1>
+    where T1 : struct, IComponent
 {
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;

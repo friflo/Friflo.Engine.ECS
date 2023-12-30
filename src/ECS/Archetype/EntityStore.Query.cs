@@ -59,8 +59,8 @@ public partial class EntityStoreBase
         return GetArchetypeWithSignature(this, default, tags);
     }
 
-    public Archetype GetArchetype<T>(in Signature<T> signature, in Tags tags = default)
-        where T : struct, IComponent
+    public Archetype GetArchetype<T1>(in Signature<T1> signature, in Tags tags = default)
+        where T1 : struct, IComponent
     {
         return GetArchetypeWithSignature(this, signature.signatureIndexes, tags);
     }
@@ -113,16 +113,16 @@ public partial class EntityStoreBase
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
     /// </summary>
-    public ArchetypeQuery<T> Query<T> (in Signature<T> signature)
-        where T : struct, IComponent
+    public ArchetypeQuery<T1> Query<T1> (in Signature<T1> signature)
+        where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T>(this, signature);
+        return new ArchetypeQuery<T1>(this, signature);
     }
     
-    public ArchetypeQuery<T> Query<T> ()
-        where T : struct, IComponent
+    public ArchetypeQuery<T1> Query<T1> ()
+        where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T>(this, Signature.Get<T>());
+        return new ArchetypeQuery<T1>(this, Signature.Get<T1>());
     }
     
     /// <summary>
