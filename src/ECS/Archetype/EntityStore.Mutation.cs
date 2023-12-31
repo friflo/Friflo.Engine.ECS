@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
@@ -14,82 +12,6 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
-#region get / add archetype
-    internal bool TryGetValue(ArchetypeKey searchKey, out ArchetypeKey archetypeKey) {
-        return archSet.TryGetValue(searchKey, out archetypeKey);
-    }
-        
-    private static Archetype GetArchetypeWith(EntityStoreBase store, Archetype current, int structIndex)
-    {
-        var searchKey = store.searchKey;
-        searchKey.SetWith(current, structIndex);
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
-            return archetypeKey.archetype;
-        }
-        var config          = GetArchetypeConfig(store);
-        var schema          = Static.EntitySchema;
-        var heaps           = current.Heaps();
-        var componentTypes  = new List<ComponentType>(heaps.Length + 1);
-        foreach (var heap in heaps) {
-            componentTypes.Add(schema.components[heap.structIndex]);
-        }
-        componentTypes.Add(schema.components[structIndex]);
-        var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags);
-        AddArchetype(store, archetype);
-        return archetype;
-    }
-    
-    private static Archetype GetArchetypeWithout(EntityStoreBase store, Archetype archetype, int structIndex)
-    {
-        var searchKey = store.searchKey;
-        searchKey.SetWithout(archetype, structIndex);
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
-            return archetypeKey.archetype;
-        }
-        var heaps           = archetype.Heaps();
-        var componentCount  = heaps.Length - 1;
-        var componentTypes  = new List<ComponentType>(componentCount);
-        var config          = GetArchetypeConfig(store);
-        var schema          = Static.EntitySchema;
-        foreach (var heap in heaps) {
-            if (heap.structIndex == structIndex)
-                continue;
-            componentTypes.Add(schema.components[heap.structIndex]);
-        }
-        var result = Archetype.CreateWithComponentTypes(config, componentTypes, archetype.tags);
-        AddArchetype(store, result);
-        return result;
-    }
-    
-    private static Archetype GetArchetypeWithTags(EntityStoreBase store, Archetype archetype, in Tags tags)
-    {
-        var heaps           = archetype.Heaps();
-        var componentTypes  = new List<ComponentType>(heaps.Length);
-        var config          = GetArchetypeConfig(store);
-        var schema          = Static.EntitySchema;
-        foreach (var heap in heaps) {
-            componentTypes.Add(schema.components[heap.structIndex]);
-        }
-        var result = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
-        AddArchetype(store, result);
-        return result;
-    }
-    
-    internal static void AddArchetype (EntityStoreBase store, Archetype archetype)
-    {
-        if (store.archsCount == store.archs.Length) {
-            var newLen = 2 * store.archs.Length;
-            ArrayUtils.Resize(ref store.archs,     newLen);
-        }
-        if (archetype.archIndex != store.archsCount) {
-            throw new InvalidOperationException($"invalid archIndex. expect: {store.archsCount}, was: {archetype.archIndex}");
-        }
-        store.archs[store.archsCount] = archetype;
-        store.archsCount++;
-        store.archSet.Add(archetype.key);
-    }
-    #endregion
-    
     // ------------------------------------ add / remove component ------------------------------------
 #region add / remove component
     internal static bool AddComponent<T>(
