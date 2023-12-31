@@ -56,7 +56,7 @@ public partial class EntityStore
     ///   So this exception will not result in an invalid entity state.<br/>
     /// <br/> 
     /// The entity state refers to:
-    /// <list type="buttlet">
+    /// <list type="bullet">
     ///   <item><see cref="Entity.refArchetype"/></item>
     ///   <item><see cref="Entity.refCompIndex"/></item>
     ///   <item><see cref="Entity.refScriptIndex"/></item>
