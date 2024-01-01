@@ -45,8 +45,9 @@ public class MySystem_Arg1 : ComponentSystem
         foreach (var (position, entities) in query.Chunks) {
             var positions   = position.Values;
             var length      = entities.length;
-            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
+            Mem.AreEqual(length,                    position.length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -77,8 +78,9 @@ public class MySystem_Arg2 : ComponentSystem
         foreach (var (position, _, entities) in query.Chunks) {
             var positions   = position.Values;
             var length      = entities.length;
-            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
+            Mem.AreEqual(length,                    position.length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -109,8 +111,9 @@ public class MySystem_Arg3 : ComponentSystem
         foreach (var (position, _, _, entities) in query.Chunks) {
             var positions   = position.Values;
             var length      = entities.length;
-            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
+            Mem.AreEqual(length,                    position.length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -141,8 +144,9 @@ public class MySystem_Arg4 : ComponentSystem
         foreach (var (position, _, _, _, entities) in query.Chunks) {
             var positions   = position.Values;
             var length      = entities.length;
-            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
+            Mem.AreEqual(length,                    position.length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -173,8 +177,9 @@ public class MySystem_Arg5 : ComponentSystem
         foreach (var (position, _, _, _, _, entities) in query.Chunks) {
             var positions   = position.Values;
             var length      = entities.length;
-            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
+            Mem.AreEqual(length,                    position.length);
+            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;

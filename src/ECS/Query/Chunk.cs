@@ -13,7 +13,7 @@ public readonly struct Chunk<T>
     public override     string      ToString()  => $"Length: {length}";
 
     private readonly    T[]         values;     //  8
-    private readonly    int         length;     //  4
+    public  readonly    int         length;     //  4
     
     internal Chunk(T[] values, T[] copy, int length) {
         this.length      = length;
