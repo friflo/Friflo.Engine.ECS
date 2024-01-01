@@ -32,6 +32,7 @@ public ref struct ChunkEnumerator<T1>
     //
     private             StructChunk<T1>[]       chunks1;
     private             Chunk<T1>               chunk1;
+    private             ChunkEntities           chunkEntities;
     private             int                     chunkPos;
     private             int                     chunkEnd;
     
@@ -49,7 +50,7 @@ public ref struct ChunkEnumerator<T1>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly (Chunk<T1>, Archetype archetype) Current   => (chunk1, archetype);
+    public readonly (Chunk<T1>, ChunkEntities entities) Current   => (chunk1, chunkEntities);
     
     // --- IEnumerator
     public bool MoveNext()
@@ -81,7 +82,8 @@ public ref struct ChunkEnumerator<T1>
         chunkPos        = 0;
         componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
     Next:
-        chunk1 = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+        chunk1          = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+        chunkEntities   = new ChunkEntities(archetype, chunkPos, componentLen);
         chunkPos++;
         return true;  
     }

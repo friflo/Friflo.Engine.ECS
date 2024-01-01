@@ -42,12 +42,12 @@ public class MySystem_Arg1 : ComponentSystem
     {
         var childArch   = store.GetArchetype(Signature.Get<Position>());
         int chunkCount  = 0;
-        foreach (var (position, archetype) in query.Chunks) {
+        foreach (var (position, entities) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
-                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
+                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
