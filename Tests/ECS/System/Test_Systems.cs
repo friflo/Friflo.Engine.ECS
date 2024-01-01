@@ -43,7 +43,10 @@ public class MySystem_Arg1 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position>());
         int chunkCount  = 0;
         foreach (var (position, entities) in query.Chunks) {
-            var length = position.Values.Length;
+            var positions   = position.Values;
+            var length      = positions.Length;
+            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -72,7 +75,10 @@ public class MySystem_Arg2 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
         int chunkCount  = 0;
         foreach (var (position, _, entities) in query.Chunks) {
-            var length = position.Values.Length;
+            var positions   = position.Values;
+            var length      = positions.Length;
+            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -101,7 +107,10 @@ public class MySystem_Arg3 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
         int chunkCount  = 0;
         foreach (var (position, _, _, entities) in query.Chunks) {
-            var length = position.Values.Length;
+            var positions   = position.Values;
+            var length      = positions.Length;
+            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -130,7 +139,10 @@ public class MySystem_Arg4 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
         foreach (var (position, _, _, _, entities) in query.Chunks) {
-            var length = position.Values.Length;
+            var positions   = position.Values;
+            var length      = positions.Length;
+            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -159,7 +171,10 @@ public class MySystem_Arg5 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
         foreach (var (position, _, _, _, _, entities) in query.Chunks) {
-            var length = position.Values.Length;
+            var positions   = position.Values;
+            var length      = positions.Length;
+            Mem.AreEqual(positions[0].x,          entities.Ids[0]);
+            Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
