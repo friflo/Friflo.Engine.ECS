@@ -12,8 +12,8 @@ public readonly struct Chunk<T>
     public              Span<T>     Values      => new(values, 0, length);
     public override     string      ToString()  => $"Length: {length}";
 
-    private readonly    T[]         values;
-    private readonly    int         length;
+    private readonly    T[]         values;     //  8
+    private readonly    int         length;     //  4
     
     internal Chunk(T[] values, T[] copy, int length) {
         this.length      = length;

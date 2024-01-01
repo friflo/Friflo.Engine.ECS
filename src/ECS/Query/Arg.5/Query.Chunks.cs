@@ -31,34 +31,34 @@ public ref struct ChunkEnumerator<T1, T2, T3, T4, T5>
     where T4 : struct, IComponent
     where T5 : struct, IComponent
 {
-    private readonly    T1[]                    copyT1;
-    private readonly    T2[]                    copyT2;
-    private readonly    T3[]                    copyT3;
-    private readonly    T4[]                    copyT4;
-    private readonly    T5[]                    copyT5;
-    private readonly    int                     structIndex1;
-    private readonly    int                     structIndex2;
-    private readonly    int                     structIndex3;
-    private readonly    int                     structIndex4;
-    private readonly    int                     structIndex5;
+    private readonly    T1[]                    copyT1;         //  8
+    private readonly    T2[]                    copyT2;         //  8
+    private readonly    T3[]                    copyT3;         //  8
+    private readonly    T4[]                    copyT4;         //  8
+    private readonly    T5[]                    copyT5;         //  8
+    private readonly    int                     structIndex1;   //  4
+    private readonly    int                     structIndex2;   //  4
+    private readonly    int                     structIndex3;   //  4
+    private readonly    int                     structIndex4;   //  4
+    private readonly    int                     structIndex5;   //  4
     //
-    private readonly    Archetypes              archetypes;
-    private             int                     archetypePos;
-    private             Archetype               archetype; // used for debugging
+    private readonly    Archetypes              archetypes;     // 16
+    private             int                     archetypePos;   //  4
+    private             Archetype               archetype;      //  8
     //
-    private             StructChunk<T1>[]       chunks1;
-    private             StructChunk<T2>[]       chunks2;
-    private             StructChunk<T3>[]       chunks3;
-    private             StructChunk<T4>[]       chunks4;
-    private             StructChunk<T5>[]       chunks5;
-    private             Chunk<T1>               chunk1;
-    private             Chunk<T2>               chunk2;
-    private             Chunk<T3>               chunk3;
-    private             Chunk<T4>               chunk4;
-    private             Chunk<T5>               chunk5;
-    private             ChunkEntities           entities;
-    private             int                     chunkPos;
-    private             int                     chunkEnd;
+    private             StructChunk<T1>[]       chunks1;        //  8
+    private             StructChunk<T2>[]       chunks2;        //  8
+    private             StructChunk<T3>[]       chunks3;        //  8
+    private             StructChunk<T4>[]       chunks4;        //  8
+    private             StructChunk<T5>[]       chunks5;        //  8
+    private             Chunk<T1>               chunk1;         // 16
+    private             Chunk<T2>               chunk2;         // 16
+    private             Chunk<T3>               chunk3;         // 16
+    private             Chunk<T4>               chunk4;         // 16
+    private             Chunk<T5>               chunk5;         // 16
+    private             ChunkEntities           entities;       // 16
+    private             int                     chunkPos;       //  8
+    private             int                     chunkEnd;       //  8
     
     
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2, T3, T4, T5> query)

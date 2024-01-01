@@ -27,26 +27,26 @@ public ref struct ChunkEnumerator<T1, T2, T3>
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
-    private readonly    T1[]                    copyT1;
-    private readonly    T2[]                    copyT2;
-    private readonly    T3[]                    copyT3;
-    private readonly    int                     structIndex1;
-    private readonly    int                     structIndex2;
-    private readonly    int                     structIndex3;
+    private readonly    T1[]                    copyT1;         //  8
+    private readonly    T2[]                    copyT2;         //  8
+    private readonly    T3[]                    copyT3;         //  8
+    private readonly    int                     structIndex1;   //  4
+    private readonly    int                     structIndex2;   //  4
+    private readonly    int                     structIndex3;   //  4
     //
-    private readonly    Archetypes              archetypes;
-    private             int                     archetypePos;
-    private             Archetype               archetype; // used for debugging
+    private readonly    Archetypes              archetypes;     // 16
+    private             int                     archetypePos;   //  4
+    private             Archetype               archetype;      //  8
     //
-    private             StructChunk<T1>[]       chunks1;
-    private             StructChunk<T2>[]       chunks2;
-    private             StructChunk<T3>[]       chunks3;
-    private             Chunk<T1>               chunk1;
-    private             Chunk<T2>               chunk2;
-    private             Chunk<T3>               chunk3;
-    private             ChunkEntities           entities;
-    private             int                     chunkPos;
-    private             int                     chunkEnd;
+    private             StructChunk<T1>[]       chunks1;        //  8
+    private             StructChunk<T2>[]       chunks2;        //  8
+    private             StructChunk<T3>[]       chunks3;        //  8
+    private             Chunk<T1>               chunk1;         // 16
+    private             Chunk<T2>               chunk2;         // 16
+    private             Chunk<T3>               chunk3;         // 16
+    private             ChunkEntities           entities;       // 16
+    private             int                     chunkPos;       //  4
+    private             int                     chunkEnd;       //  4
     
     
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2, T3> query)

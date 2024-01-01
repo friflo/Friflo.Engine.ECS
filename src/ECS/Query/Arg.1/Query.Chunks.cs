@@ -23,18 +23,18 @@ public readonly struct QueryChunks<T1>  // : IEnumerable <>  // <- not implement
 public ref struct ChunkEnumerator<T1>
     where T1 : struct, IComponent
 {
-    private readonly    T1[]                    copyT1;
-    private readonly    int                     structIndex1;
+    private readonly    T1[]                    copyT1;         //  8
+    private readonly    int                     structIndex1;   //  4
     //
-    private readonly    Archetypes              archetypes;
-    private             int                     archetypePos;
-    private             Archetype               archetype; // used for debugging
+    private readonly    Archetypes              archetypes;     // 16
+    private             int                     archetypePos;   //  4
+    private             Archetype               archetype;      //  8
     //
-    private             StructChunk<T1>[]       chunks1;
-    private             Chunk<T1>               chunk1;
-    private             ChunkEntities           entities;
-    private             int                     chunkPos;
-    private             int                     chunkEnd;
+    private             StructChunk<T1>[]       chunks1;        //  8
+    private             Chunk<T1>               chunk1;         // 16
+    private             ChunkEntities           entities;       // 16
+    private             int                     chunkPos;       //  4
+    private             int                     chunkEnd;       //  4
     
     
     internal  ChunkEnumerator(ArchetypeQuery<T1> query)
