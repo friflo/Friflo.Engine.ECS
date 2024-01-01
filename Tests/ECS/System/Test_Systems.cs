@@ -44,7 +44,7 @@ public class MySystem_Arg1 : ComponentSystem
         int chunkCount  = 0;
         foreach (var (position, entities) in query.Chunks) {
             var positions   = position.Values;
-            var length      = positions.Length;
+            var length      = entities.length;
             Mem.AreEqual(positions[0].x,          entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
@@ -76,7 +76,7 @@ public class MySystem_Arg2 : ComponentSystem
         int chunkCount  = 0;
         foreach (var (position, _, entities) in query.Chunks) {
             var positions   = position.Values;
-            var length      = positions.Length;
+            var length      = entities.length;
             Mem.AreEqual(positions[0].x,          entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
@@ -108,7 +108,7 @@ public class MySystem_Arg3 : ComponentSystem
         int chunkCount  = 0;
         foreach (var (position, _, _, entities) in query.Chunks) {
             var positions   = position.Values;
-            var length      = positions.Length;
+            var length      = entities.length;
             Mem.AreEqual(positions[0].x,          entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
@@ -140,7 +140,7 @@ public class MySystem_Arg4 : ComponentSystem
         int chunkCount  = 0;
         foreach (var (position, _, _, _, entities) in query.Chunks) {
             var positions   = position.Values;
-            var length      = positions.Length;
+            var length      = entities.length;
             Mem.AreEqual(positions[0].x,          entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
@@ -172,7 +172,7 @@ public class MySystem_Arg5 : ComponentSystem
         int chunkCount  = 0;
         foreach (var (position, _, _, _, _, entities) in query.Chunks) {
             var positions   = position.Values;
-            var length      = positions.Length;
+            var length      = entities.length;
             Mem.AreEqual(positions[0].x,          entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x, entities.Ids[length - 1]);
             switch(chunkCount++) {
