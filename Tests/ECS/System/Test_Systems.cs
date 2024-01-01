@@ -46,8 +46,8 @@ public class MySystem_Arg1 : ComponentSystem
             var positions   = position.Values;
             var length      = entities.length;
             Mem.AreEqual(length,                    position.length);
-            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
+            Mem.AreEqual(positions[0].x,            entities[0].Id);
+            Mem.AreEqual(positions[length - 1].x,   entities[length - 1].Id);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
@@ -79,8 +79,8 @@ public class MySystem_Arg2 : ComponentSystem
             var positions   = position.Values;
             var length      = entities.length;
             Mem.AreEqual(length,                    position.length);
-            Mem.AreEqual(positions[0].x,            entities.Ids[0]);
-            Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
+            Mem.AreEqual(positions[0].x,            entities[0].Id);
+            Mem.AreEqual(positions[length - 1].x,   entities[length - 1].Id);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
