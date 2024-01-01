@@ -71,12 +71,12 @@ public class MySystem_Arg2 : ComponentSystem
     {
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
         int chunkCount  = 0;
-        foreach (var (position, _, archetype) in query.Chunks) {
+        foreach (var (position, _, entities) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
-                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
+                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -100,12 +100,12 @@ public class MySystem_Arg3 : ComponentSystem
     {
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
         int chunkCount  = 0;
-        foreach (var (position, _, _, archetype) in query.Chunks) {
+        foreach (var (position, _, _, entities) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
+                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -129,12 +129,12 @@ public class MySystem_Arg4 : ComponentSystem
     {
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
-        foreach (var (position, _, _, _, archetype) in query.Chunks) {
+        foreach (var (position, _, _, _, entities) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
-                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
+                case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
+                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
@@ -158,12 +158,12 @@ public class MySystem_Arg5 : ComponentSystem
     {
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
-        foreach (var (position, _, _, _, _, archetype) in query.Chunks) {
+        foreach (var (position, _, _, _, _, entities) in query.Chunks) {
             var length = position.Values.Length;
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  archetype); break;
-                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  archetype); break;
+                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.archetype); break;
+                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
