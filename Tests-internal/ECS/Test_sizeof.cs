@@ -89,6 +89,18 @@ public static class Test_sizeof
         
         size = sizeof(ChunkEnumerator<Position>);
         AreEqual(96, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation>);
+        AreEqual(136, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation, EntityName>);
+        AreEqual(168, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation, EntityName, Scale3>);
+        AreEqual(208, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation, EntityName, Scale3, Transform>);
+        AreEqual(240, size);
     }
     
 #if COMP_ITER
