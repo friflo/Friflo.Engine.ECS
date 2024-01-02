@@ -304,7 +304,7 @@ public static class Test_Systems
         ExecuteSystems(store.Systems, count);
     }
     
-    private static EntityStore SetupTestStore() {
+    internal static EntityStore SetupTestStore() {
         var systems = new Systems();
         var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
         Assert.AreSame(systems, store.Systems);

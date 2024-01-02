@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -16,7 +17,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   Archetype           archetype;  //  8
     public   readonly   int                 length;     //  4
     //
-    private  readonly   int                 chunkPos;   //  4
+    internal readonly   int                 chunkPos;   //  4
 
     internal ChunkEntities(Archetype archetype, int chunkPos, int componentLen) {
         this.archetype  = archetype;
@@ -53,7 +54,8 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.archetype.entityIds;
         store       = chunkEntities.archetype.entityStore;
-        length      = chunkEntities.length;
+        index       = chunkEntities.chunkPos * StructInfo.ChunkSize; 
+        length      = chunkEntities.length + index;
     }
     
     // --- IEnumerator<>
@@ -68,8 +70,9 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
         return false;  
     }
 
+    [ExcludeFromCodeCoverage]
     public void Reset() {
-        index = 0;
+        throw new NotImplementedException();
     }
     
     object IEnumerator.Current => Current;
