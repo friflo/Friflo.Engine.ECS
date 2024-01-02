@@ -11,15 +11,19 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
+#region public properties
     public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, idIndex, length);
     public   override   string              ToString()  => $"Length: {length}";
+    #endregion
 
+#region public / internal fields
     public   readonly   Archetype           archetype;  //  8
     public   readonly   int                 length;     //  4
     //
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
     internal readonly   int                 idIndex;    //  4
-
+    #endregion
+    
     internal ChunkEntities(Archetype archetype, int chunkPos, int componentLen) {
         this.archetype  = archetype;
         entityIds       = archetype.entityIds;
@@ -27,6 +31,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         idIndex         = chunkPos * StructInfo.ChunkSize;
     }
     
+#region public methods
     public int IdAt(int index) {
         if (index < length) {
             return entityIds[idIndex + index];
@@ -49,6 +54,8 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     
     // --- new
     public ChunkEntitiesEnumerator          GetEnumerator() => new ChunkEntitiesEnumerator(this);
+    
+    #endregion
 }
 
 public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
