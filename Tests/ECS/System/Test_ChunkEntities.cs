@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -43,12 +45,28 @@ public static class Test_ChunkEntities
                     Mem.AreEqual(487,           entities.length);
                     break;
             }
-            int n = 0;
-            foreach (var entity in entities) {
-                Mem.AreEqual(entity.Id, position.Values[n].x);
-                n++;
+            {
+                int count = 0;
+                foreach (var entity in entities) {
+                    Mem.AreEqual(entity.Id, position.Values[count].x);
+                    count++;
+                }
+                Mem.AreEqual(entities.length, count);
+            } {
+                IEnumerable<Entity> enumerable = entities;
+                int count = 0;
+                foreach (var _ in enumerable) {
+                    count++;
+                }
+                Mem.AreEqual(entities.length, count);
+            } {
+                IEnumerable childEntities = entities;
+                int count = 0;
+                foreach (var _ in childEntities) {
+                    count++;
+                }
+                Mem.AreEqual(entities.length, count);
             }
-            Mem.AreEqual(entities.length, n);
         }
     }
 }
