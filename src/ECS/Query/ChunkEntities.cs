@@ -21,7 +21,7 @@ namespace Friflo.Engine.ECS;
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
-    public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, idIndex, length);
+    public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, idsStart, length);
     public   override   string              ToString()  => $"Length: {length}";
     #endregion
 
@@ -30,27 +30,27 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   int                 length;     //  4
     //
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
-    internal readonly   int                 idIndex;    //  4
+    internal readonly   int                 idsStart;   //  4
     #endregion
     
     internal ChunkEntities(Archetype archetype, int chunkPos, int componentLen) {
         this.archetype  = archetype;
         entityIds       = archetype.entityIds;
         length          = componentLen;
-        idIndex         = chunkPos * StructInfo.ChunkSize;
+        idsStart        = chunkPos * StructInfo.ChunkSize;
     }
     
 #region public methods
     public int IdAt(int index) {
         if (index < length) {
-            return entityIds[idIndex + index];
+            return entityIds[idsStart + index];
         }
         throw new IndexOutOfRangeException();
     }
     
     public Entity EntityAt(int index) {
         if (index < length) {
-            return new Entity(entityIds[idIndex + index], archetype.entityStore);
+            return new Entity(entityIds[idsStart + index], archetype.entityStore);
         }
         throw new IndexOutOfRangeException();
     }
@@ -77,7 +77,7 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.entityIds;
         store       = chunkEntities.archetype.entityStore;
-        index       = chunkEntities.idIndex - 1; 
+        index       = chunkEntities.idsStart - 1; 
         last        = chunkEntities.length + index;
     }
     
