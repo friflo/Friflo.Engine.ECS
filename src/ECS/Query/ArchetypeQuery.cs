@@ -26,6 +26,9 @@ public class ArchetypeQuery
     
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
                     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
+    
+                    public EntityStore                      Store       => (EntityStore)store;                
+    
                     public override     string              ToString()  => GetString();
     #endregion
 

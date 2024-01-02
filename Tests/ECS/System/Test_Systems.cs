@@ -29,10 +29,8 @@ public class CreateSystems : Script
 public class MySystem_Arg1 : ComponentSystem
 {
     private readonly    ArchetypeQuery<Position>    query;
-    private readonly    EntityStore                 store;
         
     public MySystem_Arg1(EntityStore store) {
-        this.store  = store;
         query       = store.Query<Position>();
         Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
     }
@@ -40,6 +38,7 @@ public class MySystem_Arg1 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
+        var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position>());
         int chunkCount  = 0;
         foreach (var (position, entities) in query.Chunks) {
@@ -62,10 +61,8 @@ public class MySystem_Arg1 : ComponentSystem
 public class MySystem_Arg2 : ComponentSystem
 {
     private readonly    ArchetypeQuery<Position, Rotation>  query;
-    private readonly    EntityStore                         store;
         
     public MySystem_Arg2(EntityStore store) {
-        this.store  = store;
         query       = store.Query<Position, Rotation>();
         Assert.AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
     }
@@ -73,6 +70,7 @@ public class MySystem_Arg2 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
+        var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
         int chunkCount  = 0;
         foreach (var (position, _, entities) in query.Chunks) {
@@ -95,10 +93,8 @@ public class MySystem_Arg2 : ComponentSystem
 public class MySystem_Arg3 : ComponentSystem
 {
     private readonly    ArchetypeQuery<Position, Rotation, EntityName>  query;
-    private readonly    EntityStore                                     store;
         
     public MySystem_Arg3(EntityStore store) {
-        this.store  = store;
         query       = store.Query<Position, Rotation, EntityName>();
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName]", query.Chunks.ToString());
     }
@@ -106,6 +102,7 @@ public class MySystem_Arg3 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
+        var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
         int chunkCount  = 0;
         foreach (var (position, _, _, entities) in query.Chunks) {
@@ -128,10 +125,8 @@ public class MySystem_Arg3 : ComponentSystem
 public class MySystem_Arg4 : ComponentSystem
 {
     private readonly    ArchetypeQuery<Position, Rotation, EntityName, Scale3>  query;
-    private readonly    EntityStore                                             store;
         
     public MySystem_Arg4(EntityStore store) {
-        this.store  = store;
         query       = store.Query<Position, Rotation, EntityName, Scale3>();
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
     }
@@ -139,6 +134,7 @@ public class MySystem_Arg4 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
+        var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
         foreach (var (position, _, _, _, entities) in query.Chunks) {
@@ -161,10 +157,8 @@ public class MySystem_Arg4 : ComponentSystem
 public class MySystem_Arg5 : ComponentSystem
 {
     private readonly    ArchetypeQuery<Position, Rotation, EntityName, Scale3, Transform>   query;
-    private readonly    EntityStore                                                         store;
         
     public MySystem_Arg5(EntityStore store) {
-        this.store  = store;
         query       = store.Query<Position, Rotation, EntityName, Scale3, Transform>();
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
     }
@@ -172,6 +166,7 @@ public class MySystem_Arg5 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
+        var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
         foreach (var (position, _, _, _, _, entities) in query.Chunks) {
