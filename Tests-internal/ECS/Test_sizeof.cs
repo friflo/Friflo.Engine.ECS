@@ -73,6 +73,24 @@ public static class Test_sizeof
         AreEqual(64, size);
     }
     
+    [Test]
+    public static unsafe void Test_Query_sizeof() {
+        var size = sizeof(ChunkEntities);
+        AreEqual(24, size);
+        
+        size = sizeof(Chunk<Position>);
+        AreEqual(16, size);
+
+        size = sizeof(Archetypes);
+        AreEqual(16, size);
+        
+        size = sizeof(QueryChunks<Position>);
+        AreEqual(8, size);
+        
+        size = sizeof(ChunkEnumerator<Position>);
+        AreEqual(96, size);
+    }
+    
 #if COMP_ITER
     [Test]
     public static void Test_Ref_ToString()
