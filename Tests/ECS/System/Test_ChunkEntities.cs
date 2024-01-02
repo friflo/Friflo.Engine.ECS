@@ -27,7 +27,8 @@ public static class Test_ChunkEntities
         
         var query = store.Query<Position>();
         int chunkCount  = 0;
-        foreach (var (position, entities) in query.Chunks) {
+        foreach (var (position, entities) in query.Chunks)
+        {
             switch (chunkCount++) { 
                 case 0:
                     Mem.AreEqual("Length: 1",   position.ToString());
@@ -44,6 +45,8 @@ public static class Test_ChunkEntities
                 case 2:
                     Mem.AreEqual(487,           entities.length);
                     break;
+                case 3:
+                    throw new InvalidOperationException("unexpected");
             }
             {
                 int count = 0;
@@ -68,6 +71,7 @@ public static class Test_ChunkEntities
                 Mem.AreEqual(entities.length, count);
             }
         }
+        Mem.AreEqual(3, chunkCount);
     }
 }
 
