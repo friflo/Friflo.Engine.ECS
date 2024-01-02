@@ -32,7 +32,7 @@ public ref struct ChunkEnumerator<T1>
     //
     private             StructChunk<T1>[]       chunks1;        //  8
     private             Chunk<T1>               chunk1;         // 16
-    private             ChunkEntities           entities;       // 16
+    private             ChunkEntities           entities;       // 24
     private             int                     chunkPos;       //  4
     private             int                     chunkEnd;       //  4
     

@@ -35,7 +35,12 @@ public static class Test_ChunkEntities
                     Mem.AreEqual("Length: 1",   entities.ToString());
                     Mem.AreEqual(1,             entities.length);
                     var e = Assert.Throws<IndexOutOfRangeException>(() => {
-                        _ = entities[1];
+                        _ = entities.EntityAt(1);
+                    });
+                    Mem.AreEqual("Index was outside the bounds of the array.", e!.Message);
+                    
+                    e = Assert.Throws<IndexOutOfRangeException>(() => {
+                        _ = entities.IdAt(1);
                     });
                     Mem.AreEqual("Index was outside the bounds of the array.", e!.Message);
                     break;

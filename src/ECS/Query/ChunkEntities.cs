@@ -11,27 +11,34 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
-    public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, chunkPos * StructInfo.ChunkSize, length);
+    public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, idIndex, length);
     public   override   string              ToString()  => $"Length: {length}";
 
     public   readonly   Archetype           archetype;  //  8
     public   readonly   int                 length;     //  4
     //
-    internal readonly   int                 chunkPos;   //  4
+    internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
+    internal readonly   int                 idIndex;    //  4
 
     internal ChunkEntities(Archetype archetype, int chunkPos, int componentLen) {
         this.archetype  = archetype;
+        entityIds       = archetype.entityIds;
         length          = componentLen;
-        this.chunkPos   = chunkPos;
+        idIndex         = chunkPos * StructInfo.ChunkSize;
     }
     
-    public Entity this[int index] {
-        get {
-            if (index < length) {
-                return new Entity(archetype.entityIds[chunkPos * StructInfo.ChunkSize + index], archetype.entityStore);
-            }
-            throw new IndexOutOfRangeException();
+    public int IdAt(int index) {
+        if (index < length) {
+            return entityIds[idIndex + index];
         }
+        throw new IndexOutOfRangeException();
+    }
+    
+    public Entity EntityAt(int index) {
+        if (index < length) {
+            return new Entity(entityIds[idIndex + index], archetype.entityStore);
+        }
+        throw new IndexOutOfRangeException();
     }
     
     // --- IEnumerable<>
@@ -52,9 +59,9 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     private             int             index;          //  4
     
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
-        entityIds   = chunkEntities.archetype.entityIds;
+        entityIds   = chunkEntities.entityIds;
         store       = chunkEntities.archetype.entityStore;
-        index       = chunkEntities.chunkPos * StructInfo.ChunkSize - 1; 
+        index       = chunkEntities.idIndex - 1; 
         last        = chunkEntities.length + index;
     }
     
