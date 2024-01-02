@@ -9,6 +9,15 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide the entity id for each <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> element with <see cref="IdAt"/>.<br/>
+/// Its <see cref="length"/> is equal to the  <see cref="Chunk{T}.Values"/> Length.
+/// </summary>
+/// <remarks>
+/// It implements <see cref="IEnumerable{T}"/> only to provide comprehensive information of <see cref="Entity"/>'s in a debugger.<br/>
+/// Its unlikely to enumerate <see cref="ChunkEntities"/> in an application.<br/>
+/// The recommended methods used by an application are <see cref="IdAt"/> or <see cref="EntityAt"/>.  
+/// </remarks>
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
