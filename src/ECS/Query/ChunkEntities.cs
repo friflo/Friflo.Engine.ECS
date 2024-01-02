@@ -48,22 +48,22 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
 {
     private readonly    int[]           entityIds;      //  8
     private readonly    EntityStore     store;          //  8
-    private readonly    int             length;         //  4
+    private readonly    int             last;           //  4
     private             int             index;          //  4
     
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.archetype.entityIds;
         store       = chunkEntities.archetype.entityStore;
-        index       = chunkEntities.chunkPos * StructInfo.ChunkSize; 
-        length      = chunkEntities.length + index;
+        index       = chunkEntities.chunkPos * StructInfo.ChunkSize - 1; 
+        last        = chunkEntities.length + index;
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(entityIds[index - 1], store);
+    public readonly Entity Current   => new Entity(entityIds[index], store);
     
     // --- IEnumerator
     public bool MoveNext() {
-        if (index < length) {
+        if (index < last) {
             index++;
             return true;
         }

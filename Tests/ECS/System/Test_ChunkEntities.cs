@@ -28,6 +28,7 @@ public static class Test_ChunkEntities
         foreach (var (position, entities) in query.Chunks) {
             switch (chunkCount++) { 
                 case 0:
+                    Mem.AreEqual("Length: 1",   position.ToString());
                     Mem.AreEqual("Length: 1",   entities.ToString());
                     Mem.AreEqual(1,             entities.length);
                     var e = Assert.Throws<IndexOutOfRangeException>(() => {
@@ -47,6 +48,7 @@ public static class Test_ChunkEntities
                 Mem.AreEqual(entity.Id, position.Values[n].x);
                 n++;
             }
+            Mem.AreEqual(entities.length, n);
         }
     }
 }
