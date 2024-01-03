@@ -29,7 +29,6 @@ public readonly struct Chunk<T>
     }
 }
 
-// ReSharper disable InconsistentNaming
 public static class ChunkExtensions
 {
     public static Span<Vector3>     AsSpanVector3   (this Chunk<Position>  position)    => MemoryMarshal.Cast<Position, Vector3>    (position   .Values);
