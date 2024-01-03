@@ -29,7 +29,7 @@ public sealed class Archetype
                     public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
                     public ref readonly Tags                Tags            => ref tags;
                     
-                    public   override   string              ToString()      => GetString();
+                    public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
 #endregion
 
 #region     private / internal members
@@ -264,8 +264,8 @@ public sealed class Archetype
         return count;
     }
     
-    private string GetString() {
-        var sb          = new StringBuilder();
+    internal StringBuilder GetString(StringBuilder sb)
+    {
         var hasTypes    = false;
         sb.Append('[');
         foreach (var heap in structHeaps) {
@@ -281,11 +281,13 @@ public sealed class Archetype
         }
         if (hasTypes) {
             sb.Length -= 2;
-            sb.Append("]  Count: ");
+            sb.Append(']');
+            sb.Append("  Count: ");
             sb.Append(entityCount);
-            return sb.ToString();
+            return sb;
         }
-        return "[]";
+        sb.Append(']');
+        return sb;
     }
     #endregion
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -22,7 +23,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
     public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, idsStart, length);
-    public   override   string              ToString()  => $"Length: {length}";
+    public   override   string              ToString()  => GetString();
     #endregion
 
 #region public / internal fields
@@ -64,6 +65,15 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     // --- new
     public ChunkEntitiesEnumerator          GetEnumerator() => new ChunkEntitiesEnumerator(this);
     
+    private string GetString() {
+        var sb = new StringBuilder();
+        sb.Append("Length: ");
+        sb.Append(length);
+        sb.Append(",  Archetype: ");
+        archetype.GetString(sb);
+        return sb.ToString();
+    }
+
     #endregion
 }
 
