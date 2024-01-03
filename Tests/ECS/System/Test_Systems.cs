@@ -43,7 +43,7 @@ public class MySystem_Arg1 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position>());
         int chunkCount  = 0;
         foreach (var (position, entities) in query.Chunks) {
-            var vectors     = position.AsVector3();
+            var vectors     = position.AsSpanVector3();
             var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
@@ -79,7 +79,7 @@ public class MySystem_Arg2 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
         int chunkCount  = 0;
         foreach (var (position, rotation, entities) in query.Chunks) {
-            var vectors     = rotation.AsQuaternion();
+            var vectors     = rotation.AsSpanQuaternion();
             var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
@@ -148,7 +148,7 @@ public class MySystem_Arg4 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
         foreach (var (position, rotation, name, scale, entities) in query.Chunks) {
-            var vectors     = scale.AsVector3();
+            var vectors     = scale.AsSpanVector3();
             var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
@@ -185,7 +185,7 @@ public class MySystem_Arg5 : ComponentSystem
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
         foreach (var (position, rotation, name, scale, transform, entities) in query.Chunks) {
-            var matrix4X4   = transform.AsMatrix4x4();
+            var matrix4X4   = transform.AsSpanMatrix4x4();
             var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    matrix4X4.Length);
