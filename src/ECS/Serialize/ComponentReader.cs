@@ -79,18 +79,18 @@ internal sealed class ComponentReader
         {
             case JsonEvent.Error:
                 var error = parser.error.GetMessage();
-                return $"{error}. id: {entity.id}";
+                return $"{error}. id: {entity.Id}";
             case JsonEvent.ValueNull:
                 break;
             case JsonEvent.ObjectStart:
                 ev = ReadRawComponents();
                 if (ev != JsonEvent.ObjectEnd) {
                     // could support also scalar types in future: string, number or boolean
-                    return $"'components' element must be an object. was {ev}. id: {entity.id}, component: '{parser.key}'";
+                    return $"'components' element must be an object. was {ev}. id: {entity.Id}, component: '{parser.key}'";
                 }
                 break;
             default:
-                return $"expect 'components' == object or null. id: {entity.id}. was: {ev}";
+                return $"expect 'components' == object or null. id: {entity.Id}. was: {ev}";
         }
         return null;
     }
@@ -195,9 +195,9 @@ internal sealed class ComponentReader
         {
             entity.refArchetype = newArchetype;
             if (curArchetype == store.defaultArchetype) {
-                entity.refCompIndex = Archetype.AddEntity   (newArchetype, entity.id);
+                entity.refCompIndex = Archetype.AddEntity   (newArchetype, entity.Id);
             } else {
-                entity.refCompIndex = Archetype.MoveEntityTo(curArchetype, entity.id, entity.compIndex, newArchetype);
+                entity.refCompIndex = Archetype.MoveEntityTo(curArchetype, entity.Id, entity.compIndex, newArchetype);
             }
         }
         if (unresolvedTagList.Count > 0) {

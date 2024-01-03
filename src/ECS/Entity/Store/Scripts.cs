@@ -35,7 +35,7 @@ public partial class EntityStore
                 var newLength = Math.Max(1, 2 * lastIndex);
                 ArrayUtils.Resize(ref entityScripts, newLength);
             }
-            entityScripts[lastIndex] = new EntityScripts(entity.id, new Script[] { script });
+            entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script[] { script });
         } else {
             // case: entity already has scripts => add script to its scripts
             ref var scripts = ref entityScripts[entity.scriptIndex].scripts;
@@ -75,7 +75,7 @@ public partial class EntityStore
                 var newLength = Math.Max(1, 2 * lastIndex);
                 ArrayUtils.Resize(ref entityScripts, newLength);
             }
-            entityScripts[lastIndex] = new EntityScripts(entity.id, new Script [] { script });
+            entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script [] { script });
             currentScript   = null;
             goto SendEvent;
         }
@@ -100,7 +100,7 @@ public partial class EntityStore
         currentScript = null;
     SendEvent:        
         // Send event. See: SEND_EVENT notes
-        scriptAdded?.Invoke(new ScriptChangedArgs (entity.id, ChangedEventAction.Add, scriptType));
+        scriptAdded?.Invoke(new ScriptChangedArgs (entity.Id, ChangedEventAction.Add, scriptType));
         return currentScript;
     }
     
@@ -123,7 +123,7 @@ public partial class EntityStore
                 if (lastIndex < 1)  throw new InvalidOperationException("invariant: entityScriptCount > 0");
                 var lastEntityId    = entityScripts[lastIndex].id;
                 // Is the Script not the last in store.entityScripts?
-                if (entity.id != lastEntityId) {
+                if (entity.Id != lastEntityId) {
                     // move scriptIndex of last item in store.entityScripts to the index which will be removed
                     entityScripts[entity.scriptIndex]   = entityScripts[lastIndex];
                     nodes[lastEntityId].scriptIndex     = entity.scriptIndex;
@@ -143,7 +143,7 @@ public partial class EntityStore
             entityScript.scripts = newScripts;
         SendEvent:
             // Send event. See: SEND_EVENT notes
-            scriptRemoved?.Invoke(new ScriptChangedArgs ( entity.id, ChangedEventAction.Remove, scriptType));
+            scriptRemoved?.Invoke(new ScriptChangedArgs ( entity.Id, ChangedEventAction.Remove, scriptType));
             return script;
         }
         return null;

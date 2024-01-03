@@ -14,8 +14,8 @@ namespace Friflo.Engine.ECS;
 
 public class EntityEqualityComparer : IEqualityComparer<Entity>
 {
-    public  bool    Equals(Entity left, Entity right)   => left.id == right.id;
-    public  int     GetHashCode(Entity entity)          => entity.id;
+    public  bool    Equals(Entity left, Entity right)   => left.Id == right.Id;
+    public  int     GetHashCode(Entity entity)          => entity.Id;
 }
 
 // ReSharper disable once UnusedType.Global
@@ -39,7 +39,7 @@ public static class EntityUtils
     public static  bool         RemoveEntityComponent (Entity entity, ComponentType componentType)
     {
         int archIndex = 0;
-        return EntityStoreBase.RemoveComponent(entity.id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
+        return EntityStoreBase.RemoveComponent(entity.Id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
     }
     
     public static  bool         AddEntityComponent    (Entity entity, ComponentType componentType) {
@@ -77,7 +77,7 @@ public static class EntityUtils
         if (entity.store == null) {
             return "null";
         }
-        return EntityToString(entity.id, entity.archetype, new StringBuilder());
+        return EntityToString(entity.Id, entity.archetype, new StringBuilder());
     }
     
     internal static string EntityToString(int id, Archetype archetype, StringBuilder sb)
@@ -196,7 +196,7 @@ public static class EntityUtils
     private static  Script AddScriptInternal(Entity entity, Script script, ScriptType scriptType)
     {
         if (!script.entity.IsNull) {
-            throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.id}");
+            throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.Id}");
         }
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }

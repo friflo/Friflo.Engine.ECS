@@ -531,9 +531,9 @@ public partial class EntityStore
     
     private void SetStoreRootEntity(Entity entity) {
         if (!storeRoot.IsNull) {
-            throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.id}");
+            throw new InvalidOperationException($"EntityStore already has a {nameof(StoreRoot)}. {nameof(StoreRoot)} id: {storeRoot.Id}");
         }
-        var id = entity.id;
+        var id = entity.Id;
         ref var parentId = ref nodes[id].parentId;
         if (HasParent(parentId)) {
             throw new InvalidOperationException($"entity must not have a parent to be {nameof(StoreRoot)}. current parent id: {parentId}");

@@ -24,7 +24,7 @@ public sealed class ExplorerItem :
     INotifyPropertyChanged      //  only required to notify EntityName changes to Avalonia > TreeDataGrid
 {
 #region internal properties
-    public              int     Id              => entity.id;
+    public              int     Id              => entity.Id;
     public              Entity  Entity          => entity;
     public              bool    IsRoot          => IsRootItem();
     public              bool    AllowDrag       => !IsRootItem();
@@ -88,7 +88,7 @@ public sealed class ExplorerItem :
     }
     
     private ExplorerItem GetChildByIndex(int index) {
-        int childId = entity.ChildEntities[index].id;
+        int childId = entity.ChildEntities[index].Id;
         // Console.WriteLine($"GetChildByIndex {entity.Id} {index} - child {childId}");
         return tree.GetItemById(childId);
     }

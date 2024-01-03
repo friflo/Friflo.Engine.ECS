@@ -111,11 +111,7 @@ namespace Friflo.Engine.ECS;
 public readonly struct Entity
 {
 #region general - properties
-    /// <summary>Unique entity id.<br/>
-    /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
-    public              int                     Id              => id;
-    
-    public              long                    Pid             => store.nodes[id].pid;
+    public              long                    Pid             => store.nodes[Id].pid;
                     
     public              EntityComponents        Components      => new EntityComponents(this);
                     
@@ -141,9 +137,9 @@ public readonly struct Entity
     /// <returns>
     /// <see cref="treeNode"/> if the entity is member of the <see cref="EntityStore"/> tree graph.<br/>
     /// Otherwise <see cref="floating"/></returns>
-    [Browse(Never)] public  TreeMembership      TreeMembership  => archetype.entityStore.GetTreeMembership(id);
+    [Browse(Never)] public  TreeMembership      TreeMembership  => archetype.entityStore.GetTreeMembership(Id);
     
-    [Browse(Never)] public  bool                IsNull          => store?.nodes[id].archetype == null;
+    [Browse(Never)] public  bool                IsNull          => store?.nodes[Id].archetype == null;
     
     /// <summary> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </summary>
     // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
@@ -172,14 +168,14 @@ public readonly struct Entity
     #endregion
     
 #region child / tree - properties
-    [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[id].childCount;
+    [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[Id].childCount;
     
     /// <returns>
     /// null if the entity has no parent.<br/>
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
-                    public  Entity              Parent      => EntityStore.GetParent(archetype.entityStore, id);
+                    public  Entity              Parent      => EntityStore.GetParent(archetype.entityStore, Id);
     
     /// <summary>
     /// Return all child <see cref="Entity"/>'s. Enumerate with: 
@@ -188,20 +184,23 @@ public readonly struct Entity
     /// </code>
     /// </summary>
     /// <remarks>Executes in O(1)</remarks>
-                    public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, id);
+                    public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
                     
-    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, id);
+    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);
     #endregion
     
 #region internal - fields
-    // Note! Must not have any other fields to keep its size at 16 bytes   
-    [Browse(Never)] internal readonly   int         id;     //  4
-    [Browse(Never)] internal readonly   EntityStore store;  //  8
+    // Note! Must not have any other fields to keep its size at 16 bytes
+    /// <summary>Unique entity id.<br/>
+    /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
+    // ReSharper disable once InconsistentNaming
+    [Browse(Never)] public      readonly    int         Id;     //  4
+    [Browse(Never)] internal    readonly    EntityStore store;  //  8
     #endregion
     
 #region constructor
     internal Entity(int id, EntityStore store) {
-        this.id     = id;
+        this.Id     = id;
         this.store  = store;
     }
     #endregion
@@ -233,14 +232,14 @@ public readonly struct Entity
     /// </remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent<T>(id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
+        return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
 
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent   (id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
+        return EntityStoreBase.AddComponent   (Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
 
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -250,7 +249,7 @@ public readonly struct Entity
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.RemoveComponent(id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
+        return EntityStoreBase.RemoveComponent(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
 
     #endregion
@@ -283,22 +282,22 @@ public readonly struct Entity
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
     public bool AddTag<T>()    where T : struct, ITag {
         int index = 0;
-        return EntityStoreBase.AddTags   (archetype.store, Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.AddTags   (archetype.store, Tags.Get<T>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool AddTags(in Tags tags) {
         int index = 0;
-        return EntityStoreBase.AddTags   (archetype.store, tags,          id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.AddTags   (archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool RemoveTag<T>() where T : struct, ITag {
         int index = 0;
-        return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<T>(), id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<T>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     public bool RemoveTags(in Tags tags) {
         int index = 0;
-        return EntityStoreBase.RemoveTags(archetype.store, tags,          id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
 
     #endregion
@@ -316,7 +315,7 @@ public readonly struct Entity
     public int AddChild(Entity entity) {
         var entityStore = archetype.entityStore;
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        return entityStore.AddChild(id, entity.id);
+        return entityStore.AddChild(Id, entity.Id);
     }
     
     /// <remarks>
@@ -328,7 +327,7 @@ public readonly struct Entity
     public void InsertChild(int index, Entity entity) {
         var entityStore = archetype.entityStore;
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        entityStore.InsertChild(id, entity.id, index);
+        entityStore.InsertChild(Id, entity.Id, index);
     }
     
     /// <remarks>
@@ -339,7 +338,7 @@ public readonly struct Entity
     public bool RemoveChild(Entity entity) {
         var entityStore = archetype.entityStore;
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        return entityStore.RemoveChild(id, entity.id);
+        return entityStore.RemoveChild(Id, entity.Id);
     }
     
     /// <summary>
@@ -355,29 +354,29 @@ public readonly struct Entity
         var arch            = archetype;
         var componentIndex  = compIndex; 
         var entityStore = arch.entityStore;
-        entityStore.DeleteNode(id); 
+        entityStore.DeleteNode(Id); 
         if (arch != entityStore.defaultArchetype) {
             Archetype.MoveLastComponentsTo(arch, componentIndex);
         }
     }
 
-    public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(id, child.id);
+    public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);
     
     #endregion
 
 #region general - methods
 
-    public static   bool    operator == (Entity a, Entity b)    => a.id == b.id && a.store == b.store;
-    public static   bool    operator != (Entity a, Entity b)    => a.id != b.id || a.store != b.store;
+    public static   bool    operator == (Entity a, Entity b)    => a.Id == b.Id && a.store == b.store;
+    public static   bool    operator != (Entity a, Entity b)    => a.Id != b.Id || a.store != b.store;
 
     // --- object
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
     /// <remarks> Use <see cref="operator=="/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
-    public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(id, "==");
+    public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(Id, "==");
     
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
     /// <remarks> Use <see cref="Id"/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
-    public override int     GetHashCode()       => throw EntityUtils.NotImplemented(id, nameof(Id));
+    public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
     
     public override string  ToString()          => EntityUtils.EntityToString(this);
 
@@ -386,16 +385,16 @@ public readonly struct Entity
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
 #region internal - properties
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[id].archetype;
-    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[id].archetype;
+    [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[Id].archetype;
+    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[Id].archetype;
 
     /// <summary>The index within the <see cref="refArchetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>
-    [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[id].compIndex;
-    [Browse(Never)] internal        int            compIndex    =>     store.nodes[id].compIndex;
+    [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[Id].compIndex;
+    [Browse(Never)] internal        int            compIndex    =>     store.nodes[Id].compIndex;
     
-    [Browse(Never)] internal    ref int         refScriptIndex  => ref store.nodes[id].scriptIndex;
-    [Browse(Never)] internal        int            scriptIndex  =>     store.nodes[id].scriptIndex;
+    [Browse(Never)] internal    ref int         refScriptIndex  => ref store.nodes[Id].scriptIndex;
+    [Browse(Never)] internal        int            scriptIndex  =>     store.nodes[Id].scriptIndex;
 
     // Deprecated comment. Was valid when Entity was a class
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64

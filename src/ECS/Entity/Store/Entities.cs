@@ -52,7 +52,7 @@ public partial class EntityStore
         var entity      = CreateEntity();
         var archetype   = original.archetype;
         if (archetype != defaultArchetype) {
-            entity.refCompIndex    = Archetype.AddEntity(archetype, entity.id);
+            entity.refCompIndex    = Archetype.AddEntity(archetype, entity.Id);
             entity.refArchetype    = archetype;
         }
         var isBlittable = IsBlittable(original);
@@ -76,7 +76,7 @@ public partial class EntityStore
         converter.EntityToDataEntity(original, dataBuffer, false);
         
         // --- deserialize DataEntity
-        dataBuffer.pid      = IdToPid(entity.id);
+        dataBuffer.pid      = IdToPid(entity.Id);
         // convert will use entity created above
         converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
         AssertNoError(error);
@@ -178,7 +178,7 @@ public partial class EntityStore
         }
         var entity          = CreateEntity();
         entity.refArchetype = archetype;
-        entity.refCompIndex = Archetype.AddEntity(archetype, entity.id);
+        entity.refCompIndex = Archetype.AddEntity(archetype, entity.Id);
         return entity;
     }
 }

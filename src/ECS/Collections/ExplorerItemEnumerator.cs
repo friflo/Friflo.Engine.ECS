@@ -16,7 +16,7 @@ internal class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
         tree                = item.tree;
     }
     
-    public  ExplorerItem Current    => tree.GetItemById(entityEnumerator.Current.id);
+    public  ExplorerItem Current    => tree.GetItemById(entityEnumerator.Current.Id);
     object  IEnumerator.Current     => Current;
     
     // --- IEnumerator

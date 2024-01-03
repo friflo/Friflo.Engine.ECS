@@ -42,13 +42,13 @@ internal sealed class ComponentType<T> : ComponentType
     
     internal override bool AddEntityComponent(Entity entity) {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent<T>(entity.id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, default);
+        return EntityStoreBase.AddComponent<T>(entity.Id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, default);
     }
     
     internal override bool AddEntityComponentValue(Entity entity, object value) {
         int archIndex = 0;
         var componentValue = (T)value;
-        return EntityStoreBase.AddComponent(entity.id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentValue);
+        return EntityStoreBase.AddComponent(entity.Id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentValue);
     }
     
     internal override StructHeap CreateHeap() {

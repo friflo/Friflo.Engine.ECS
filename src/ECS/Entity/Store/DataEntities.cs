@@ -23,7 +23,7 @@ public partial class EntityStore
 #region Entity -> DataEntity
     internal void EntityToDataEntity(Entity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
-        ProcessChildren(dataEntity, nodes[entity.id]);
+        ProcessChildren(dataEntity, nodes[entity.Id]);
         
         // --- write components & scripts
         var jsonComponents = writer.Write(entity, pretty);
