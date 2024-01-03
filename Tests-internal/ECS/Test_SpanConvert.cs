@@ -20,5 +20,15 @@ public static class Test_SpanConvert
         Mem.AreEqual(positions.Length, vectors.Length);
         Mem.AreEqual(positions[0].value, vectors[0]);
         Mem.AreEqual(positions[1].value, vectors[1]);
+        
+        var floats = MemoryMarshal.Cast<Position, float>(positionSpan);
+        Mem.AreEqual(6, floats.Length);
+        Mem.AreEqual(1, floats[0]);
+        Mem.AreEqual(1, floats[1]);
+        Mem.AreEqual(1, floats[2]);
+        
+        Mem.AreEqual(2, floats[3]);
+        Mem.AreEqual(2, floats[4]);
+        Mem.AreEqual(2, floats[5]);
     }
 }
