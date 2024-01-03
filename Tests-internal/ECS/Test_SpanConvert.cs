@@ -11,7 +11,7 @@ namespace Internal.ECS;
 public static class Test_SpanConvert
 {
     [Test]
-    public static void Test_Convert_Position_to_Vectors() {
+    public static void Test_Convert_Positions_to_Vectors() {
         Span<Position> positions = new Position[] { new Position(1,1,1), new Position(2,2,2) };
         var vectors = MemoryMarshal.Cast<Position, Vector3>(positions);
         
