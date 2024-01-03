@@ -189,12 +189,12 @@ public readonly struct Entity
     [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);
     #endregion
     
-#region internal - fields
+#region public / internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
     // ReSharper disable once InconsistentNaming
-    [Browse(Never)] public      readonly    int         Id;     //  4
+                    public      readonly    int         Id;     //  4
     [Browse(Never)] internal    readonly    EntityStore store;  //  8
     #endregion
     
