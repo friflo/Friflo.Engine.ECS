@@ -66,8 +66,8 @@ public static class Mem
     /// <summary>
     /// Similar script as <see cref="Assert.AreSame(object?,object?)"/> but without memory allocation.<br/>
     /// </summary>
-    public static void AreSame(object expect, object actual) {
-        if (expect.Equals(actual)) {
+    public static void AreSame<T>(T expect, T actual) {
+        if (ReferenceEquals(expect, actual)) {
             return;
         }
         var msg = $"Expect: {expect}\n  But was:  {actual}\n";
