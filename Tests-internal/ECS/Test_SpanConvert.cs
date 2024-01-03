@@ -11,9 +11,11 @@ namespace Internal.ECS;
 public static class Test_SpanConvert
 {
     [Test]
-    public static void Test_Convert_Positions_to_Vectors() {
-        Span<Position> positions = new Position[] { new (1,1,1), new (2,2,2) };
-        var vectors = MemoryMarshal.Cast<Position, Vector3>(positions);
+    public static void Test_Convert_Positions_to_Vectors()
+    {
+        var positions = new Position[] { new (1,1,1), new (2,2,2) };
+        Span<Position> positionSpan = positions;
+        var vectors = MemoryMarshal.Cast<Position, Vector3>(positionSpan);
         
         Mem.AreEqual(positions.Length, vectors.Length);
         Mem.AreEqual(positions[0].value, vectors[0]);
