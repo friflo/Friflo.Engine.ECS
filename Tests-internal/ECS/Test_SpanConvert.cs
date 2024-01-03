@@ -12,7 +12,7 @@ public static class Test_SpanConvert
 {
     [Test]
     public static void Test_Convert_Positions_to_Vectors() {
-        Span<Position> positions = new Position[] { new Position(1,1,1), new Position(2,2,2) };
+        Span<Position> positions = new Position[] { new (1,1,1), new (2,2,2) };
         var vectors = MemoryMarshal.Cast<Position, Vector3>(positions);
         
         Mem.AreEqual(positions.Length, vectors.Length);
