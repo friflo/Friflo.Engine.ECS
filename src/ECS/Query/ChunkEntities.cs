@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Provide the entity id for each <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> element with <see cref="Ids"/> or <see cref="IdAt"/>.<br/>
-/// Its <see cref="length"/> is equal to the <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> Length.
+/// Its <see cref="Length"/> is equal to the <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> Length.
 /// </summary>
 /// <remarks>
 /// It implements <see cref="IEnumerable{T}"/> only to provide comprehensive information of <see cref="Entity"/>'s in a debugger.<br/>
@@ -22,36 +23,36 @@ namespace Friflo.Engine.ECS;
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
-    public              ReadOnlySpan<int>   Ids         => new(archetype.entityIds, idsStart, length);
+    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, idsStart, Length);
     public   override   string              ToString()  => GetString();
     #endregion
 
 #region public / internal fields
-    public   readonly   Archetype           archetype;  //  8
-    public   readonly   int                 length;     //  4
+    public   readonly   Archetype           Archetype;  //  8
+    public   readonly   int                 Length;     //  4
     //
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
     internal readonly   int                 idsStart;   //  4
     #endregion
     
     internal ChunkEntities(Archetype archetype, int chunkPos, int componentLen) {
-        this.archetype  = archetype;
-        entityIds       = archetype.entityIds;
-        length          = componentLen;
-        idsStart        = chunkPos * StructInfo.ChunkSize;
+        Archetype   = archetype;
+        entityIds   = archetype.entityIds;
+        Length      = componentLen;
+        idsStart    = chunkPos * StructInfo.ChunkSize;
     }
     
 #region public methods
     public int IdAt(int index) {
-        if (index < length) {
+        if (index < Length) {
             return entityIds[idsStart + index];
         }
         throw new IndexOutOfRangeException();
     }
     
     public Entity EntityAt(int index) {
-        if (index < length) {
-            return new Entity(entityIds[idsStart + index], archetype.entityStore);
+        if (index < Length) {
+            return new Entity(entityIds[idsStart + index], Archetype.entityStore);
         }
         throw new IndexOutOfRangeException();
     }
@@ -68,9 +69,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     private string GetString() {
         var sb = new StringBuilder();
         sb.Append("Length: ");
-        sb.Append(length);
+        sb.Append(Length);
         sb.Append(",  Archetype: ");
-        archetype.GetString(sb);
+        Archetype.GetString(sb);
         return sb.ToString();
     }
 
@@ -86,9 +87,9 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.entityIds;
-        store       = chunkEntities.archetype.entityStore;
+        store       = chunkEntities.Archetype.entityStore;
         index       = chunkEntities.idsStart - 1; 
-        last        = chunkEntities.length + index;
+        last        = chunkEntities.Length + index;
     }
     
     // --- IEnumerator<>

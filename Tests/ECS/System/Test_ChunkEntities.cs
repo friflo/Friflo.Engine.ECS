@@ -33,7 +33,7 @@ public static class Test_ChunkEntities
                 case 0:
                     Mem.AreEqual("Length: 1",   position.ToString());
                     Mem.AreEqual("Length: 1,  Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1",   entities.ToString());
-                    Mem.AreEqual(1,             entities.length);
+                    Mem.AreEqual(1,             entities.Length);
                     var e = Assert.Throws<IndexOutOfRangeException>(() => {
                         _ = entities.EntityAt(1);
                     });
@@ -45,10 +45,10 @@ public static class Test_ChunkEntities
                     Mem.AreEqual("Index was outside the bounds of the array.", e!.Message);
                     break;
                 case 1:
-                    Mem.AreEqual(512,           entities.length);
+                    Mem.AreEqual(512,           entities.Length);
                     break;
                 case 2:
-                    Mem.AreEqual(487,           entities.length);
+                    Mem.AreEqual(487,           entities.Length);
                     break;
                 case 3:
                     throw new InvalidOperationException("unexpected");
@@ -59,21 +59,21 @@ public static class Test_ChunkEntities
                     Mem.AreEqual(entity.Id, position.Values[count].x);
                     count++;
                 }
-                Mem.AreEqual(entities.length, count);
+                Mem.AreEqual(entities.Length, count);
             } {
                 IEnumerable<Entity> enumerable = entities;
                 int count = 0;
                 foreach (var _ in enumerable) {
                     count++;
                 }
-                Mem.AreEqual(entities.length, count);
+                Mem.AreEqual(entities.Length, count);
             } {
                 IEnumerable childEntities = entities;
                 int count = 0;
                 foreach (var _ in childEntities) {
                     count++;
                 }
-                Mem.AreEqual(entities.length, count);
+                Mem.AreEqual(entities.Length, count);
             }
         }
         Mem.AreEqual(3, chunkCount);

@@ -5,20 +5,21 @@ using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
-    public              Span<T>     Values      => new(values, 0, length);
-    public override     string      ToString()  => $"Length: {length}";
+    public              Span<T>     Values      => new(values, 0, Length);
+    public override     string      ToString()  => $"Length: {Length}";
 
     private readonly    T[]         values;     //  8
-    public  readonly    int         length;     //  4
+    public  readonly    int         Length;     //  4
     
     internal Chunk(T[] values, T[] copy, int length) {
-        this.length      = length;
+        Length = length;
         if (copy == null) {
             this.values = values;
         } else {
