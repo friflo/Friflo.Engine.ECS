@@ -93,7 +93,12 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
 
     // --- IDisposable
     public void Dispose() {
-        chunkArrays.Push(chunks);
+        var array = chunks;
+        // clear chunk items to reduce Chunk references 
+        for (int n = 0; n <= last; n++) {
+            array[n] = default;
+        }
+        chunkArrays.Push(array);
     }
     
     public bool MoveNext()
