@@ -31,8 +31,8 @@ public static class Test_ChunkEntities
         {
             switch (chunkCount++) { 
                 case 0:
-                    Mem.AreEqual("Length: 1",   position.ToString());
-                    Mem.AreEqual("Length: 1,  Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1",   entities.ToString());
+                    Mem.AreEqual("Position[1]",   position.ToString());
+                    Mem.AreEqual("Archetype[1]: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1",   entities.ToString());
                     Mem.AreEqual(1,             entities.Length);
                     var e = Assert.Throws<IndexOutOfRangeException>(() => {
                         _ = entities.EntityAt(1);

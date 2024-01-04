@@ -13,7 +13,7 @@ public readonly struct Chunk<T>
     where T : struct, IComponent
 {
     public              Span<T>     Values      => new(values, 0, Length);
-    public override     string      ToString()  => $"Length: {Length}";
+    public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
     private  readonly   T[]         values;     //  8
     private  readonly   T[]         source;     //  8

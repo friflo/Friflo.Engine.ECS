@@ -68,9 +68,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     
     private string GetString() {
         var sb = new StringBuilder();
-        sb.Append("Length: ");
+        sb.Append("Archetype[");
         sb.Append(Length);
-        sb.Append(",  Archetype: ");
+        sb.Append("]: ");
         Archetype.GetString(sb);
         return sb.ToString();
     }
