@@ -25,6 +25,16 @@ public readonly struct Chunk<T>
         this.values = copy ?? values;
     }
     
+    internal Chunk(T[] values, T[] copy, int length, bool copyReadOnly) {
+        Length = length;
+        if (copy == null) {
+            this.values = values;
+        } else {
+            Array.Copy(values, copy, length);
+            this.values = copy;
+        }
+    }
+    
     internal void Copy() {
         if (source == values) {
             return;

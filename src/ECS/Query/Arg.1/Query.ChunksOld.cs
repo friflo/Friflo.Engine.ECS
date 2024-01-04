@@ -103,7 +103,7 @@ public struct ChunkEnumeratorOld<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         chunkPos        = 0;
         componentLen    = chunkEnd == 0 ? archetype.ChunkRestOld() : ChunkSize;
     Next:
-        chunk1      = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);    chunk1.Copy();
+        chunk1      = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen, true);
         entities    = new ChunkEntities(archetype, chunkPos, componentLen);
         chunkPos++;
         return true;  
