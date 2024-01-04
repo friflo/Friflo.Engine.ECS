@@ -62,7 +62,8 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             {
                 var componentLen    = i < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
                 var chunk1          = new Chunk<T1>(chunks1[i].components, query.copyT1, componentLen);
-                chunks[pos++]       = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, new ChunkEntities());
+                var entities        = new ChunkEntities(archetype, i, componentLen);
+                chunks[pos++]       = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
             }
         }
         last    = pos - 1;
