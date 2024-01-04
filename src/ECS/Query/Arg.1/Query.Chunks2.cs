@@ -47,7 +47,8 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         for (int n = 0; n < archetypes.length; n++) {
             chunkCount += archs[n].ChunkEnd() + 1;
         }
-        chunks          = GetChunks(chunkArrays, chunkCount);
+        var chunkArray  = GetChunks(chunkArrays, chunkCount);
+        chunks          = chunkArray;
         int pos         = 0;
         for (int n = 0; n < archetypes.length; n++)
         {
@@ -63,7 +64,7 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
                 var componentLen    = i < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
                 var chunk1          = new Chunk<T1>(chunks1[i].components, query.copyT1, componentLen);
                 var entities        = new ChunkEntities(archetype, i, componentLen);
-                chunks[pos++]       = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
+                chunkArray[pos++]   = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
             }
         }
         last    = pos - 1;
@@ -89,7 +90,7 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         index = -1;
     }
     
-    object IEnumerator.Current => Current;
+    object IEnumerator.Current => chunks[index];
 
     // --- IDisposable
     public void Dispose() {
@@ -103,8 +104,9 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     
     public bool MoveNext()
     {
-        if (index < last) {
-            index++;
+        int i = index;
+        if (i < last) {
+            index = i + 1;
             return true;
         }
         return false;
