@@ -10,7 +10,9 @@ internal readonly struct Archetypes
     internal readonly   Archetype[] array;  //  8
     internal readonly   int         length; //  4
     internal readonly   int         last;   //  4
-    
+
+    public   override   string      ToString() => $"Length: {length}";
+
     internal Archetypes(Archetype[] array, int length) {
         this.array  = array;
         this.length = length;

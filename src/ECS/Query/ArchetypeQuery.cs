@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -146,7 +147,8 @@ public class ArchetypeQuery
 public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     where T1 : struct, IComponent
 {
-    internal    T1[]     copyT1;
+    internal readonly   Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays = new();
+    internal            T1[]                                copyT1;
     
     public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -162,6 +164,7 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     }
     
     public      QueryChunks    <T1>  Chunks                                      => new (this);
+    public      QueryChunks2   <T1>  Chunks2                                     => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
