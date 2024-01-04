@@ -1,12 +1,17 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunksOld<T1>  // : IEnumerable <>  // <- not implemented to avoid boxing
+public readonly struct QueryChunksOld<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
     private readonly ArchetypeQuery<T1> query;
@@ -17,10 +22,18 @@ public readonly struct QueryChunksOld<T1>  // : IEnumerable <>  // <- not implem
         this.query = query;
     }
     
+    // --- IEnumerable<>
+    [ExcludeFromCodeCoverage]
+    IEnumerator<(Chunk<T1>, ChunkEntities)>
+    IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    
+    // --- IEnumerable
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    
     public ChunkEnumeratorOld<T1> GetEnumerator() => new (query);
 }
 
-public ref struct ChunkEnumeratorOld<T1>
+public struct ChunkEnumeratorOld<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
     private readonly    T1[]                    copyT1;         //  8
@@ -53,6 +66,13 @@ public ref struct ChunkEnumeratorOld<T1>
     public readonly (Chunk<T1>, ChunkEntities) Current   => (chunk1, entities);
     
     // --- IEnumerator
+    [ExcludeFromCodeCoverage]
+    public void Reset()         => throw new NotImplementedException();
+
+    [ExcludeFromCodeCoverage]
+    object IEnumerator.Current  => (chunk1, entities);
+    
+    // --- IEnumerator
     public bool MoveNext()
     {
         int componentLen;
@@ -82,9 +102,12 @@ public ref struct ChunkEnumeratorOld<T1>
         chunkPos        = 0;
         componentLen    = chunkEnd == 0 ? archetype.ChunkRestOld() : ChunkSize;
     Next:
-        chunk1      = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+        chunk1      = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);    chunk1.Copy();
         entities    = new ChunkEntities(archetype, chunkPos, componentLen);
         chunkPos++;
         return true;  
     }
+    
+    // --- IDisposable
+    public void Dispose() { }
 }
