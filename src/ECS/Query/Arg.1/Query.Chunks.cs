@@ -32,15 +32,16 @@ public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities
 public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
-    private readonly    Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays;    //  8
-    private readonly    (Chunk<T1>, ChunkEntities)[]        chunks;         //  8
-    private readonly    int                                 last;           //  4
-    private             int                                 index;          //  4
+    private readonly    ArchetypeQuery<T1>                  query;  //  8
+    private readonly    (Chunk<T1>, ChunkEntities)[]        chunks; //  8
+    private readonly    int                                 last;   //  4
+    private             int                                 index;  //  4
     
     
     internal  ChunkEnumerator(ArchetypeQuery<T1> query)
     {
-        chunkArrays     = query.chunkArrays;
+        this.query      = query;
+        var chunkArrays = query.chunkArrays;
         var archetypes  = query.GetArchetypes();
         int chunkCount  = 0;
         var archs       = archetypes.array;
@@ -110,6 +111,6 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         for (int n = 0; n <= last; n++) {
             array[n] = default;
         }
-        chunkArrays.Push(array);
+        query.chunkArrays.Push(array);
     }
 }
