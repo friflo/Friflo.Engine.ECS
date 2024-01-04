@@ -84,16 +84,39 @@ public static class Test_sizeof
         size = sizeof(Archetypes);
         AreEqual(16, size);
         
+        // --- 1 arg
         size = sizeof(QueryChunks<Position>);
         AreEqual(8, size);
         
         size = sizeof(ChunkEnumerator<Position>);
         AreEqual(24, size);
         
+        // --- 2 args
         size = sizeof(QueryChunks<Position, Rotation>);
         AreEqual(8, size);
         
         size = sizeof(ChunkEnumerator<Position, Rotation>);
+        AreEqual(24, size);
+        
+        // --- 3 args
+        size = sizeof(QueryChunks<Position, Rotation, EntityName>);
+        AreEqual(8, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation, EntityName>);
+        AreEqual(24, size);
+        
+        // --- 4 args
+        size = sizeof(QueryChunks<Position, Rotation, EntityName, Scale3>);
+        AreEqual(8, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation, EntityName, Scale3>);
+        AreEqual(24, size);
+        
+        // --- 5 args
+        size = sizeof(QueryChunks<Position, Rotation, EntityName, Scale3, Transform>);
+        AreEqual(8, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation, EntityName, Scale3, Transform>);
         AreEqual(24, size);
     }
     
