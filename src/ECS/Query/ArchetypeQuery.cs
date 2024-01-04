@@ -200,6 +200,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
+    internal readonly   Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities)[]>  chunkArrays = new();
     internal    T1[]    copyT1;
     internal    T2[]    copyT2;
     internal    T3[]    copyT3;
@@ -219,7 +220,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunksOld    <T1, T2, T3>  Chunks         => new (this);
+    public      QueryChunks    <T1, T2, T3>  Chunks         => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
