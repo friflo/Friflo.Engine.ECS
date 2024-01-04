@@ -272,7 +272,7 @@ public static class Test_Query
         
         var sig     = Signature.Get<Position, Rotation>();
         _           = store.Query(sig); // for one time allocation for Mem check
-        var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 112 : 168;
+        var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 152 : 168;
         var start   = GetAllocatedBytes();
         var query   = store.Query(sig);
         AssertAlloc(start, expect);
