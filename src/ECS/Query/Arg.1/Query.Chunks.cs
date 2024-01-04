@@ -59,11 +59,11 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             }
             var heapMap     = archetype.heapMap;
             var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
-            for (int i = 0; i <= chunkEnd; i++)
+            for (int chunkPos = 0; chunkPos <= chunkEnd; chunkPos++)
             {
-                var componentLen    = i < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
-                var chunk1          = new Chunk<T1>(chunks1[i].components, query.copyT1, componentLen);
-                var entities        = new ChunkEntities(archetype, i, componentLen);
+                var componentLen    = chunkPos < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
+                var chunk1          = new Chunk<T1>(chunks1[chunkPos].components, query.copyT1, componentLen);
+                var entities        = new ChunkEntities(archetype, chunkPos, componentLen);
                 chunkArray[pos++]   = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
             }
         }
