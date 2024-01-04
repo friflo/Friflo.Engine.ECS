@@ -100,6 +100,7 @@ public struct ChunkEnumeratorOld<T1, T2, T3, T4> : IEnumerator<(Chunk<T1>, Chunk
     [ExcludeFromCodeCoverage]
     object IEnumerator.Current  => (chunk1, chunk2, chunk3, chunk4, entities);
 
+    // --- IEnumerator
     public bool MoveNext()
     {
         int componentLen;

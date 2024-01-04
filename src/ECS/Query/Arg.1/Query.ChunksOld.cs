@@ -30,6 +30,7 @@ public readonly struct QueryChunksOld<T1>  : IEnumerable <(Chunk<T1>, ChunkEntit
     // --- IEnumerable
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
+    // --- IEnumerable
     public ChunkEnumeratorOld<T1> GetEnumerator() => new (query);
 }
 

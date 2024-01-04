@@ -32,6 +32,7 @@ public readonly struct QueryChunksOld<T1, T2, T3, T4, T5>  : IEnumerable <(Chunk
     IEnumerable<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4, T5> (query);
     
     // --- IEnumerable
+     [ExcludeFromCodeCoverage]
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4, T5> (query);
     
     public ChunkEnumeratorOld<T1, T2, T3, T4, T5> GetEnumerator() => new (query);
@@ -70,8 +71,8 @@ public struct ChunkEnumeratorOld<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, C
     private             Chunk<T4>               chunk4;         // 16
     private             Chunk<T5>               chunk5;         // 16
     private             ChunkEntities           entities;       // 24
-    private             int                     chunkPos;       //  8
-    private             int                     chunkEnd;       //  8
+    private             int                     chunkPos;       //  4
+    private             int                     chunkEnd;       //  4
     
     
     internal  ChunkEnumeratorOld(ArchetypeQuery<T1, T2, T3, T4, T5> query)
@@ -108,6 +109,7 @@ public struct ChunkEnumeratorOld<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, C
     [ExcludeFromCodeCoverage]
     object IEnumerator.Current  => (chunk1, chunk2, chunk3, chunk4, chunk5, entities);
     
+    // --- IEnumerator
     public bool MoveNext()
     {
         int componentLen;
