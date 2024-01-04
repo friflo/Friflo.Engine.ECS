@@ -30,7 +30,7 @@ public readonly struct QueryChunks<T1, T2, T3, T4>  : IEnumerable <(Chunk<T1>, C
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4> (query);
     
     // --- new
-    public ChunkEnumerator<T1, T2, T3, T4>  GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4>(query);
+    public ChunkEnumerator<T1, T2, T3, T4>  GetEnumerator() => new (query);
 }
 
 public struct ChunkEnumerator<T1, T2, T3, T4> : IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>

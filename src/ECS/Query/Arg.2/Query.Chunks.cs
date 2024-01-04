@@ -28,7 +28,7 @@ public readonly struct QueryChunks<T1, T2>  : IEnumerable <(Chunk<T1>, Chunk<T2>
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2> (query);
     
     // --- new
-    public ChunkEnumerator<T1, T2>  GetEnumerator() => new ChunkEnumerator<T1, T2>(query);
+    public ChunkEnumerator<T1, T2>  GetEnumerator() => new (query);
 }
 
 public struct ChunkEnumerator<T1, T2> : IEnumerator<(Chunk<T1>, Chunk<T2>, ChunkEntities)>
