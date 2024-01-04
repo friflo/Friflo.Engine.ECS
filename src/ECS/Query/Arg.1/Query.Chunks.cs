@@ -20,13 +20,14 @@ public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities
     }
     
     // --- IEnumerable<>
-    IEnumerator<(Chunk<T1>, ChunkEntities)> IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    IEnumerator<(Chunk<T1>, ChunkEntities)>
+    IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable
-    IEnumerator                                                         IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- new
-    public ChunkEnumerator<T1>                                                      GetEnumerator() => new ChunkEnumerator<T1>(query);
+    public ChunkEnumerator<T1>  GetEnumerator() => new ChunkEnumerator<T1>(query);
 }
 
 public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
