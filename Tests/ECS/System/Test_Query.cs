@@ -28,7 +28,7 @@ public static class Test_Query
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
-        long count = 10; // 10_000_000 ~ 945 ms
+        long count = 10; // 10_000_000 ~ 1323 ms
         for (long n = 0; n < count; n++) {
             foreach (var (_, _) in query.Chunks) { }
         }
@@ -59,7 +59,7 @@ public static class Test_Query
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
-        long count = 10; // 10_000_000 ~ 945 ms
+        long count = 10; // 10_000_000 ~ 1416 ms
         for (long n = 0; n < count; n++) {
             foreach (var (_, _, _) in query.Chunks) { }
         }
@@ -91,7 +91,7 @@ public static class Test_Query
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
-        long count = 10; // 10_000_000 ~ 945 ms
+        long count = 10; // 10_000_000 ~ 1712 ms
         for (long n = 0; n < count; n++) {
             foreach (var (_, _, _, _) in query.Chunks) { }
         }
@@ -125,7 +125,7 @@ public static class Test_Query
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
-        long count = 10; // 10_000_000 ~ 945 ms
+        long count = 10; // 10_000_000 ~ 2011 ms
         for (long n = 0; n < count; n++) {
             foreach (var (_, _, _, _, _) in query.Chunks) { }
         }
@@ -160,7 +160,7 @@ public static class Test_Query
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
-        long count = 10; // 10_000_000 ~ 945 ms
+        long count = 10; // 10_000_000 ~ 2366 ms
         for (long n = 0; n < count; n++) {
             foreach (var (_, _, _, _, _, _) in query.Chunks) { }
         }
