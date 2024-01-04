@@ -22,7 +22,7 @@ internal class TreeIndexPaths
     internal            IndexPath       First   => paths[0];
     internal readonly   IndexPath[]     paths;
 
-    public   override   string          ToString() => $"Length: {paths.Length}";
+    public   override   string          ToString() => $"IndexPath[{paths.Length}]";
 
     private TreeIndexPaths(IndexPath[] paths) {
         this.paths      = paths;
