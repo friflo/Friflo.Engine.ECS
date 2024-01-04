@@ -63,7 +63,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         chunks ??= new (Chunk<T1>, ChunkEntities)[chunkCount];
         
         // --- fill chunks array
-        int pos         = 0;
+        int pos = 0;
         for (int n = 0; n < archetypes.length; n++)
         {
             var archetype   = archs[n];
@@ -71,8 +71,8 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             if (chunkEnd == -1) {
                 continue;
             }
-            var heapMap     = archetype.heapMap;
-            var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
+            var heapMap = archetype.heapMap;
+            var chunks1 = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
             for (int chunkPos = 0; chunkPos <= chunkEnd; chunkPos++)
             {
                 var componentLen    = chunkPos < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
