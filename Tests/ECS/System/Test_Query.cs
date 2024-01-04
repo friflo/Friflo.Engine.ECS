@@ -24,8 +24,7 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position>();
-        foreach (var (position, entities) in query.Chunks) {
-        }
+        foreach (var (_, _) in query.Chunks) { }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
@@ -36,9 +35,9 @@ public static class Test_Query
         Mem.AssertNoAlloc(start);
     }
     
-    /*
+
     [Test]
-    public static void Test_Systems_query_arg_count_2()
+    public static void Test_Query_arg_count_2()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -54,13 +53,21 @@ public static class Test_Query
             child.Rotation      = new Rotation(n, 0, 0, 0);
             root.AddChild(child);
         }
-        CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 1387 ms
-        ExecuteSystems(store.Systems, count);
+        // --- force one time allocations
+        var  query = store.Query<Position, Rotation>();
+        foreach (var (_, _, _) in query.Chunks) { }
+        
+        // --- run perf
+        var start = Mem.GetAllocatedBytes();
+        long count = 10; // 10_000_000 ~ 945 ms
+        for (long n = 0; n < count; n++) {
+            foreach (var (_, _, _) in query.Chunks) { }
+        }
+        Mem.AssertNoAlloc(start);
     }
 
     [Test]
-    public static void Test_Systems_query_arg_count_3()
+    public static void Test_Query_arg_count_3()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -78,13 +85,21 @@ public static class Test_Query
             child.Name.value    = "child";
             root.AddChild(child);
         }
-        CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 1500 ms
-        ExecuteSystems(store.Systems, count);
+        // --- force one time allocations
+        var  query = store.Query<Position, Rotation, EntityName>();
+        foreach (var (_, _, _, _) in query.Chunks) { }
+        
+        // --- run perf
+        var start = Mem.GetAllocatedBytes();
+        long count = 10; // 10_000_000 ~ 945 ms
+        for (long n = 0; n < count; n++) {
+            foreach (var (_, _, _, _) in query.Chunks) { }
+        }
+        Mem.AssertNoAlloc(start);
     }
     
     [Test]
-    public static void Test_Systems_query_arg_count_4()
+    public static void Test_Query_arg_count_4()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -104,13 +119,21 @@ public static class Test_Query
             child.Name.value    = "child";
             root.AddChild(child);
         }
-        CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 1757 ms
-        ExecuteSystems(store.Systems, count);
+        // --- force one time allocations
+        var  query = store.Query<Position, Rotation, Scale3, EntityName>();
+        foreach (var (_, _, _, _, _) in query.Chunks) { }
+        
+        // --- run perf
+        var start = Mem.GetAllocatedBytes();
+        long count = 10; // 10_000_000 ~ 945 ms
+        for (long n = 0; n < count; n++) {
+            foreach (var (_, _, _, _, _) in query.Chunks) { }
+        }
+        Mem.AssertNoAlloc(start);
     }
     
     [Test]
-    public static void Test_Systems_query_arg_count_5()
+    public static void Test_Query_arg_count_5()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -131,10 +154,18 @@ public static class Test_Query
             child.Name.value    = "child";
             root.AddChild(child);
         }
-        CreateSystems(store);
-        int count = 10; // 10_000_000 ~ 1847 ms
-        ExecuteSystems(store.Systems, count);
-    } */
+        // --- force one time allocations
+        var  query = store.Query<Position, Rotation, Scale3, Transform, EntityName>();
+        foreach (var (_, _, _, _, _, _) in query.Chunks) { }
+        
+        // --- run perf
+        var start = Mem.GetAllocatedBytes();
+        long count = 10; // 10_000_000 ~ 945 ms
+        for (long n = 0; n < count; n++) {
+            foreach (var (_, _, _, _, _, _) in query.Chunks) { }
+        }
+        Mem.AssertNoAlloc(start);
+    }
     
     private static EntityStore SetupTestStore() {
         var systems = new Systems();
