@@ -272,7 +272,7 @@ public static class Test_Query
         
         var sig     = Signature.Get<Position, Rotation>();
         _           = store.Query(sig); // for one time allocation for Mem check
-        var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 112 : 128;
+        var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 112 : 168;
         var start   = GetAllocatedBytes();
         var query   = store.Query(sig);
         AssertAlloc(start, expect);
@@ -292,6 +292,7 @@ public static class Test_Query
 #endif
         var chunkCount   = 0;
         AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
+        foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
         start = GetAllocatedBytes();
         foreach (var (position, rotation, _) in query.Chunks) {
             AreEqual(3, position.Values[0].z);
@@ -322,6 +323,7 @@ public static class Test_Query
 
         var chunkCount   = 0;
         AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
+        foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
         var start = GetAllocatedBytes();
         foreach (var (position, rotation, _) in query.Chunks) {
             AreEqual(1, position.Values[0].x);

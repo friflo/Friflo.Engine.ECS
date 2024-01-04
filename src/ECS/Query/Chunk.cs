@@ -15,17 +15,21 @@ public readonly struct Chunk<T>
     public              Span<T>     Values      => new(values, 0, Length);
     public override     string      ToString()  => $"Length: {Length}";
 
-    private readonly    T[]         values;     //  8
-    public  readonly    int         Length;     //  4
+    private  readonly   T[]         values;     //  8
+    private  readonly   T[]         source;     //  8
+    public   readonly   int         Length;     //  4
     
     internal Chunk(T[] values, T[] copy, int length) {
-        Length = length;
-        if (copy == null) {
-            this.values = values;
-        } else {
-            Array.Copy(values, copy, length);
-            this.values = copy;
+        Length      = length;
+        source      = values;
+        this.values = copy ?? values;
+    }
+    
+    internal void Copy() {
+        if (source == values) {
+            return;
         }
+        Array.Copy(source, values, Length);
     }
 }
 

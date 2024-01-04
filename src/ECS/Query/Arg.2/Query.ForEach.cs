@@ -52,7 +52,7 @@ public readonly struct QueryForEach<T1, T2>
                     lambda(ref1, ref2);
                 }
             }
-            var componentLen = archetype.ChunkRest();
+            var componentLen = archetype.ChunkRestOld();
             if (componentLen == 0) {
                 continue;
             }

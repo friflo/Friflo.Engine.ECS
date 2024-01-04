@@ -296,11 +296,16 @@ internal static class ArchetypeExtensions
 {
      internal static ReadOnlySpan<StructHeap>   Heaps       (this Archetype archetype)  => archetype.structHeaps;
      
-     internal static                    int     ChunkCount  (this Archetype archetype)  // entity count: 0: 0   1:0   512:0   513:1, ...
+     internal static                    int     ChunkCount  (this Archetype archetype)  // entity count: 0: 0   1:0 ... 512:0     513:1 ...
                                                 => archetype.entityCount / ChunkSize;
      
-     internal static                    int     ChunkEnd    (this Archetype archetype)  // entity count: 0:-1   1:0   512:0   513:1, ...
+     internal static                    int     ChunkEnd    (this Archetype archetype)  // entity count: 0:-1   1:0 ... 512:0     513:1 ...
                                                 => (archetype.entityCount + ChunkSize - 1) / ChunkSize - 1;
+
+     /// <summary> return remaining length in range [1, <see cref="ChunkSize"/>] </summary>
+     internal static                    int     ChunkRest   (this Archetype archetype)  // entity count: 0:0    1:1 ... 512:512   513:1   514:2 ...
+                                                => (archetype.entityCount - 1) % ChunkSize + 1;
+
+     internal static                    int     ChunkRestOld(this Archetype archetype)  => archetype.entityCount % ChunkSize;
      
-     internal static                    int     ChunkRest   (this Archetype archetype)  => archetype.entityCount % ChunkSize;
 }

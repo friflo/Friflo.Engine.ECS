@@ -170,8 +170,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     where T1 : struct, IComponent
     where T2 : struct, IComponent
 {
-    internal    T1[]    copyT1;
-    internal    T2[]    copyT2;
+    internal readonly   Stack<(Chunk<T1>, Chunk<T2>, ChunkEntities)[]>  chunkArrays = new();
+    internal            T1[]                                            copyT1;
+    internal            T2[]                                            copyT2;
     
      public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -187,7 +188,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunksOld    <T1,T2>  Chunks                                      => new (this);
+    public      QueryChunks    <T1,T2>  Chunks                                      => new (this);
 #if COMP_ITER
     public new  QueryEnumerator<T1,T2>  GetEnumerator()                             => new (this);
     public      QueryForEach   <T1,T2>  ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);

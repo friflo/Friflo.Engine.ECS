@@ -79,7 +79,7 @@ public static class Test_sizeof
         AreEqual(24, size);
         
         size = sizeof(Chunk<Position>);
-        AreEqual(16, size);
+        AreEqual(24, size);
 
         size = sizeof(Archetypes);
         AreEqual(16, size);
@@ -88,6 +88,12 @@ public static class Test_sizeof
         AreEqual(8, size);
         
         size = sizeof(ChunkEnumerator<Position>);
+        AreEqual(24, size);
+        
+        size = sizeof(QueryChunks<Position, Rotation>);
+        AreEqual(8, size);
+        
+        size = sizeof(ChunkEnumerator<Position, Rotation>);
         AreEqual(24, size);
     }
     

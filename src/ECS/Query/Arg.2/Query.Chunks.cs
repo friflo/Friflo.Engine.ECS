@@ -8,38 +8,40 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>
+public readonly struct QueryChunks<T1, T2>  : IEnumerable <(Chunk<T1>, Chunk<T2>, ChunkEntities)>
     where T1 : struct, IComponent
+    where T2 : struct, IComponent
 {
-    private readonly ArchetypeQuery<T1> query;
+    private readonly ArchetypeQuery<T1, T2> query;
 
     public  override string         ToString() => query.signatureIndexes.GetString("Chunks: ");
 
-    internal QueryChunks(ArchetypeQuery<T1> query) {
+    internal QueryChunks(ArchetypeQuery<T1, T2> query) {
         this.query = query;
     }
     
     // --- IEnumerable<>
-    IEnumerator<(Chunk<T1>, ChunkEntities)>
-    IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    IEnumerator<(Chunk<T1>, Chunk<T2>, ChunkEntities)>
+    IEnumerable<(Chunk<T1>, Chunk<T2>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1, T2> (query);
     
     // --- IEnumerable
-    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2> (query);
     
     // --- new
-    public ChunkEnumerator<T1>  GetEnumerator() => new ChunkEnumerator<T1>(query);
+    public ChunkEnumerator<T1, T2>  GetEnumerator() => new ChunkEnumerator<T1, T2>(query);
 }
 
-public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
+public struct ChunkEnumerator<T1, T2> : IEnumerator<(Chunk<T1>, Chunk<T2>, ChunkEntities)>
     where T1 : struct, IComponent
+    where T2 : struct, IComponent
 {
-    private readonly    ArchetypeQuery<T1>                  query;  //  8
-    private readonly    (Chunk<T1>, ChunkEntities)[]        chunks; //  8
-    private readonly    int                                 last;   //  4
-    private             int                                 index;  //  4
+    private readonly    ArchetypeQuery<T1, T2>                  query;  //  8
+    private readonly    (Chunk<T1>, Chunk<T2>, ChunkEntities)[] chunks; //  8
+    private readonly    int                                     last;   //  4
+    private             int                                     index;  //  4
     
     
-    internal  ChunkEnumerator(ArchetypeQuery<T1> query)
+    internal  ChunkEnumerator(ArchetypeQuery<T1, T2> query)
     {
         this.query      = query;
         var chunkArrays = query.chunkArrays;
@@ -60,7 +62,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             break;
         }
         // --- create new chunk array if none was found 
-        chunks ??= new (Chunk<T1>, ChunkEntities)[chunkCount];
+        chunks ??= new (Chunk<T1>, Chunk<T2>, ChunkEntities)[chunkCount];
         
         // --- fill chunks array
         int pos = 0;
@@ -73,12 +75,14 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             }
             var heapMap = archetype.heapMap;
             var chunks1 = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
+            var chunks2 = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]).chunks;
             for (int chunkPos = 0; chunkPos <= chunkEnd; chunkPos++)
             {
                 var componentLen    = chunkPos < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
                 var chunk1          = new Chunk<T1>(chunks1[chunkPos].components, query.copyT1, componentLen);
+                var chunk2          = new Chunk<T2>(chunks2[chunkPos].components, query.copyT2, componentLen);
                 var entities        = new ChunkEntities(archetype, chunkPos, componentLen);
-                chunks[pos++]       = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
+                chunks[pos++]       = new ValueTuple<Chunk<T1>, Chunk<T2>, ChunkEntities>(chunk1, chunk2, entities);
             }
         }
         last    = pos - 1;
@@ -86,8 +90,8 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     }
     
     // --- IEnumerator<>
-    public readonly (Chunk<T1>, ChunkEntities) Current   => chunks[index];
-    
+    public readonly (Chunk<T1>, Chunk<T2>, ChunkEntities) Current => chunks[index];
+
     // --- IEnumerator
     public void Reset() {
         index = -1;
@@ -102,6 +106,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             index = i + 1;
             ref var chunk = ref chunks[index];
             chunk.Item1.Copy();
+            chunk.Item2.Copy();
             return true;
         }
         return false;

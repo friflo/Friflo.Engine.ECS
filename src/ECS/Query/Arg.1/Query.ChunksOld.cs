@@ -61,7 +61,7 @@ public ref struct ChunkEnumeratorOld<T1>
             goto Next;
         }
         if (chunkPos == chunkEnd)  {
-            componentLen = archetype.ChunkRest();
+            componentLen = archetype.ChunkRestOld();
             if (componentLen > 0) {
                 goto Next;
             }
@@ -80,7 +80,7 @@ public ref struct ChunkEnumeratorOld<T1>
         var heapMap     = archetype.heapMap;
         chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
         chunkPos        = 0;
-        componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
+        componentLen    = chunkEnd == 0 ? archetype.ChunkRestOld() : ChunkSize;
     Next:
         chunk1      = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
         entities    = new ChunkEntities(archetype, chunkPos, componentLen);
