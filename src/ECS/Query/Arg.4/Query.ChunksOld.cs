@@ -1,13 +1,17 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-/*
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunksOld<T1, T2, T3, T4>  // : IEnumerable <>  // <- not implemented to avoid boxing
+public readonly struct QueryChunksOld<T1, T2, T3, T4>  : IEnumerable <(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
     where T3 : struct, IComponent
@@ -21,10 +25,19 @@ public readonly struct QueryChunksOld<T1, T2, T3, T4>  // : IEnumerable <>  // <
         this.query = query;
     }
     
+    // --- IEnumerable<>
+    [ExcludeFromCodeCoverage]
+    IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>
+    IEnumerable<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4> (query);
+    
+    // --- IEnumerable
+    [ExcludeFromCodeCoverage]
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4> (query);
+    
     public ChunkEnumeratorOld<T1, T2, T3, T4> GetEnumerator() => new (query);
 }
 
-public ref struct ChunkEnumeratorOld<T1, T2, T3, T4>
+public struct ChunkEnumeratorOld<T1, T2, T3, T4> : IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
     where T3 : struct, IComponent
@@ -78,9 +91,15 @@ public ref struct ChunkEnumeratorOld<T1, T2, T3, T4>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly (Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities entities) Current   => (chunk1, chunk2, chunk3, chunk4, entities);
+    public readonly (Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities) Current   => (chunk1, chunk2, chunk3, chunk4, entities);
     
     // --- IEnumerator
+    [ExcludeFromCodeCoverage]
+    public void Reset()         => throw new NotImplementedException();
+
+    [ExcludeFromCodeCoverage]
+    object IEnumerator.Current  => (chunk1, chunk2, chunk3, chunk4, entities);
+
     public bool MoveNext()
     {
         int componentLen;
@@ -121,5 +140,7 @@ public ref struct ChunkEnumeratorOld<T1, T2, T3, T4>
         chunkPos++;
         return true;  
     }
+    
+    // --- IDisposable
+    public void Dispose() { }
 }
-*/

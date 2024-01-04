@@ -72,6 +72,11 @@ public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, Chun
         
         // --- fill chunks array
         int pos = 0;
+        var copyT1 = query.copyT1;
+        var copyT2 = query.copyT2;
+        var copyT3 = query.copyT3;
+        var copyT4 = query.copyT4;
+        var copyT5 = query.copyT5;
         for (int n = 0; n < archetypes.length; n++)
         {
             var archetype   = archs[n];
@@ -88,11 +93,11 @@ public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, Chun
             for (int chunkPos = 0; chunkPos <= chunkEnd; chunkPos++)
             {
                 var componentLen    = chunkPos < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
-                var chunk1          = new Chunk<T1>(chunks1[chunkPos].components, query.copyT1, componentLen);
-                var chunk2          = new Chunk<T2>(chunks2[chunkPos].components, query.copyT2, componentLen);
-                var chunk3          = new Chunk<T3>(chunks3[chunkPos].components, query.copyT3, componentLen);
-                var chunk4          = new Chunk<T4>(chunks4[chunkPos].components, query.copyT4, componentLen);
-                var chunk5          = new Chunk<T5>(chunks5[chunkPos].components, query.copyT5, componentLen);
+                var chunk1          = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen);
+                var chunk2          = new Chunk<T2>(chunks2[chunkPos].components, copyT2, componentLen);
+                var chunk3          = new Chunk<T3>(chunks3[chunkPos].components, copyT3, componentLen);
+                var chunk4          = new Chunk<T4>(chunks4[chunkPos].components, copyT4, componentLen);
+                var chunk5          = new Chunk<T5>(chunks5[chunkPos].components, copyT5, componentLen);
                 var entities        = new ChunkEntities(archetype, chunkPos, componentLen);
                 chunks[pos++]       = new ValueTuple<Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities>(chunk1, chunk2, chunk3, chunk4, chunk5, entities);
             }
@@ -115,13 +120,13 @@ public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, Chun
     {
         int i = index;
         if (i < last) {
-            index = i + 1;
+            index = i + 1; /*
             ref var chunk = ref chunks[index];
             chunk.Item1.Copy();
             chunk.Item2.Copy();
             chunk.Item3.Copy();
             chunk.Item4.Copy();
-            chunk.Item5.Copy();
+            chunk.Item5.Copy(); */
             return true;
         }
         return false;
@@ -131,9 +136,7 @@ public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, Chun
     public void Dispose() {
         var array = chunks;
         // clear chunk items to reduce Chunk references 
-        for (int n = 0; n <= last; n++) {
-            array[n] = default;
-        }
+        Array.Clear(array, 0, last + 1);
         query.chunkArrays.Push(array);
     }
 }
