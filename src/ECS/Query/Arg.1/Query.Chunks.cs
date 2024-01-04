@@ -44,11 +44,23 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         var archetypes  = query.GetArchetypes();
         int chunkCount  = 0;
         var archs       = archetypes.array;
+        
+        // --- get final chunk count to reuse / create chunk array
         for (int n = 0; n < archetypes.length; n++) {
             chunkCount += archs[n].ChunkEnd() + 1;
         }
-        var chunkArray  = GetChunks(chunkArrays, chunkCount);
-        chunks          = chunkArray;
+        // --- try to reuse a pooled chunk array
+        while (chunkArrays.TryPop(out var chunkArray)) {
+            if (chunkArray.Length < chunkCount) {
+                continue;
+            }
+            chunks = chunkArray;
+            break;
+        }
+        // --- create new chunk array if none was found 
+        chunks ??= new (Chunk<T1>, ChunkEntities)[chunkCount];
+        
+        // --- fill chunks array
         int pos         = 0;
         for (int n = 0; n < archetypes.length; n++)
         {
@@ -64,22 +76,11 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
                 var componentLen    = chunkPos < chunkEnd ? StructInfo.ChunkSize : archetype.ChunkRest();
                 var chunk1          = new Chunk<T1>(chunks1[chunkPos].components, query.copyT1, componentLen);
                 var entities        = new ChunkEntities(archetype, chunkPos, componentLen);
-                chunkArray[pos++]   = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
+                chunks[pos++]       = new ValueTuple<Chunk<T1>, ChunkEntities>(chunk1, entities);
             }
         }
         last    = pos - 1;
         index   = -1;
-    }
-    
-    private static (Chunk<T1>, ChunkEntities)[] GetChunks(Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays, int chunkCount)
-    {
-        while (chunkArrays.TryPop(out (Chunk<T1>, ChunkEntities)[] chunks)) {
-            if (chunks.Length < chunkCount) {
-                continue;
-            }
-            return chunks;
-        }
-        return new (Chunk<T1>, ChunkEntities)[chunkCount];
     }
     
     // --- IEnumerator<>
