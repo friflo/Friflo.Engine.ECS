@@ -197,14 +197,17 @@ public static class Test_StructHeapRaw
         var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
         var query   = store.Query(Signature.Get<Position, Rotation>());
         for (int count = 0; count < QueryCount; count++) {
-            int n = 0;
-            foreach (var (positionChunk, rotationChunk, _) in query.Chunks) {
+            int chunkCount  = 0;
+            int n           = 0;
+            foreach (var (positionChunk, rotationChunk, entities) in query.Chunks) {
+                chunkCount++;
                 foreach (var position in positionChunk.Values) {
                     var x = (int)position.x;
                     if (x != n)     Mem.FailAreEqual(x, n);
                     n++;
                 }
             }
+            Mem.AreEqual(chunkCount, query.ChunkCount);
             Mem.AreEqual(count, n);
             var id = store.CreateEntity(arch1);
             store.GetEntityComponent<Position>(id).x = count;

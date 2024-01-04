@@ -24,18 +24,19 @@ public class ArchetypeQuery
     /// Typically there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
                     public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
+                    public              int                 ChunkCount  => Archetype.GetChunkCount (GetArchetypesSpan());
     
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
                     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
     
-                    public EntityStore                      Store       => (EntityStore)store;                
+                    public EntityStore                      Store       => store as EntityStore;                
     
                     public override     string              ToString()  => GetString();
     #endregion
 
 #region private / internal fields
     // --- non blittable types
-                    private  readonly   EntityStoreBase     store;              //  8
+    [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8
     [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
     // --- blittable types
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
@@ -147,8 +148,8 @@ public class ArchetypeQuery
 public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     where T1 : struct, IComponent
 {
-    internal readonly   Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays = new();
-    internal            T1[]                                copyT1;
+    [Browse(Never)] internal    Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays = new();
+    [Browse(Never)] internal    T1[]                                copyT1;
     
     public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -170,9 +171,9 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     where T1 : struct, IComponent
     where T2 : struct, IComponent
 {
-    internal readonly   Stack<(Chunk<T1>, Chunk<T2>, ChunkEntities)[]>  chunkArrays = new();
-    internal            T1[]                                            copyT1;
-    internal            T2[]                                            copyT2;
+    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, ChunkEntities)[]>  chunkArrays = new();
+    [Browse(Never)] internal    T1[]    copyT1;
+    [Browse(Never)] internal    T2[]    copyT2;
     
      public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -200,10 +201,10 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
-    internal readonly   Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities)[]>  chunkArrays = new();
-    internal    T1[]    copyT1;
-    internal    T2[]    copyT2;
-    internal    T3[]    copyT3;
+    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities)[]>  chunkArrays = new();
+    [Browse(Never)] internal    T1[]    copyT1;
+    [Browse(Never)] internal    T2[]    copyT2;
+    [Browse(Never)] internal    T3[]    copyT3;
     
     public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -229,11 +230,11 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct, IComponent
     where T4 : struct, IComponent
 {
-    internal readonly   Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)[]>  chunkArrays = new();
-    internal    T1[]    copyT1;
-    internal    T2[]    copyT2;
-    internal    T3[]    copyT3;
-    internal    T4[]    copyT4;
+    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)[]>  chunkArrays = new();
+    [Browse(Never)] internal    T1[]    copyT1;
+    [Browse(Never)] internal    T2[]    copyT2;
+    [Browse(Never)] internal    T3[]    copyT3;
+    [Browse(Never)] internal    T4[]    copyT4;
     
     public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -261,12 +262,12 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IComponent
     where T5 : struct, IComponent
 {
-    internal readonly   Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)[]>  chunkArrays = new();
-    internal    T1[]    copyT1;
-    internal    T2[]    copyT2;
-    internal    T3[]    copyT3;
-    internal    T4[]    copyT4;
-    internal    T5[]    copyT5;
+    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)[]>  chunkArrays = new();
+    [Browse(Never)] internal    T1[]    copyT1;
+    [Browse(Never)] internal    T2[]    copyT2;
+    [Browse(Never)] internal    T3[]    copyT3;
+    [Browse(Never)] internal    T4[]    copyT4;
+    [Browse(Never)] internal    T5[]    copyT5;
     
     public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     

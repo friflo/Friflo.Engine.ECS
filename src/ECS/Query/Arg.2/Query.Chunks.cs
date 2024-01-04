@@ -47,7 +47,7 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk
     internal  ChunkEnumerator(ArchetypeQuery<T1, T2> query)
     {
         this.query      = query;
-        var chunkArrays = query.chunkArrays;
+        var chunkArrays = query.chunkArrays ?? new Stack<(Chunk<T1>, Chunk<T2>, ChunkEntities)[]>();
         var archetypes  = query.GetArchetypes();
         int chunkCount  = 0;
         var archs       = archetypes.array;

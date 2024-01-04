@@ -264,6 +264,15 @@ public sealed class Archetype
         return count;
     }
     
+    internal static int GetChunkCount(ReadOnlySpan<Archetype> archetypes)
+    {
+        int count = 0;
+        foreach (var archetype in archetypes) {
+            count += archetype.ChunkEnd() + 1;
+        }
+        return count;
+    }
+    
     internal StringBuilder GetString(StringBuilder sb)
     {
         var hasTypes    = false;
