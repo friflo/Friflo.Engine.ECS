@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>  // <- not implemented to avoid boxing
+public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
     private readonly ArchetypeQuery<T1> query;
@@ -82,7 +82,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
         return new (Chunk<T1>, ChunkEntities)[chunkCount];
     }
     
-    /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
+    // --- IEnumerator<>
     public readonly (Chunk<T1>, ChunkEntities) Current   => chunks[index];
     
     // --- IEnumerator
@@ -92,16 +92,6 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     
     object IEnumerator.Current => chunks[index];
 
-    // --- IDisposable
-    public void Dispose() {
-        var array = chunks;
-        // clear chunk items to reduce Chunk references 
-        for (int n = 0; n <= last; n++) {
-            array[n] = default;
-        }
-        chunkArrays.Push(array);
-    }
-    
     public bool MoveNext()
     {
         int i = index;
@@ -110,5 +100,15 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
             return true;
         }
         return false;
+    }
+    
+    // --- IDisposable
+    public void Dispose() {
+        var array = chunks;
+        // clear chunk items to reduce Chunk references 
+        for (int n = 0; n <= last; n++) {
+            array[n] = default;
+        }
+        chunkArrays.Push(array);
     }
 }
