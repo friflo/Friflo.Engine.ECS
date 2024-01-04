@@ -4,10 +4,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[ExcludeFromCodeCoverage]
 public readonly struct QueryChunks<T1, T2, T3, T4>  : IEnumerable <(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
@@ -33,6 +35,7 @@ public readonly struct QueryChunks<T1, T2, T3, T4>  : IEnumerable <(Chunk<T1>, C
     public ChunkEnumerator<T1, T2, T3, T4>  GetEnumerator() => new (query);
 }
 
+[ExcludeFromCodeCoverage]
 public struct ChunkEnumerator<T1, T2, T3, T4> : IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)>
     where T1 : struct, IComponent
     where T2 : struct, IComponent

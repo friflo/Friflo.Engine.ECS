@@ -28,6 +28,7 @@ public readonly struct QueryChunksOld<T1>  : IEnumerable <(Chunk<T1>, ChunkEntit
     IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable
+    [ExcludeFromCodeCoverage]
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable

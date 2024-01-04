@@ -25,7 +25,8 @@ public readonly struct Chunk<T>
         this.values = copy ?? values;
     }
     
-    internal Chunk(T[] values, T[] copy, int length, bool copyReadOnly) {
+    // ReSharper disable once UnusedParameter.Local
+    internal Chunk(T[] values, T[] copy, int length, bool _) {
         Length = length;
         if (copy == null) {
             this.values = values;

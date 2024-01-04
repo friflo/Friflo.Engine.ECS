@@ -32,7 +32,7 @@ public readonly struct QueryChunksOld<T1, T2, T3, T4, T5>  : IEnumerable <(Chunk
     IEnumerable<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4, T5> (query);
     
     // --- IEnumerable
-     [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4, T5> (query);
     
     public ChunkEnumeratorOld<T1, T2, T3, T4, T5> GetEnumerator() => new (query);

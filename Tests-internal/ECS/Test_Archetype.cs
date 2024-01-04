@@ -35,6 +35,13 @@ public static class Test_Archetype
         AreEqual(expect, handle);
     }
     
+    [Test]
+    public static void Test_Archetypes_ToString()
+    {
+        var archetypes = new Archetypes(new Archetype[1], 1);
+        AreEqual("Archetype[1]", archetypes.ToString());
+    }
+    
     /// <summary>
     /// cover <see cref="StructHeap{T}.ToString"/>
     /// cover <see cref="StructChunk{T}.ToString"/>
