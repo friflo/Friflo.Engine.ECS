@@ -24,14 +24,14 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position>();
-        foreach (var (position, entities) in query.Chunks2) {
+        foreach (var (position, entities) in query.Chunks) {
         }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
         long count = 10; // 10_000_000 ~ 945 ms
         for (long n = 0; n < count; n++) {
-            foreach (var (_, _) in query.Chunks2) { }
+            foreach (var (_, _) in query.Chunks) { }
         }
         Mem.AssertNoAlloc(start);
     }

@@ -6,21 +6,21 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunks<T1>  // : IEnumerable <>  // <- not implemented to avoid boxing
+public readonly struct QueryChunksOld<T1>  // : IEnumerable <>  // <- not implemented to avoid boxing
     where T1 : struct, IComponent
 {
     private readonly ArchetypeQuery<T1> query;
 
     public  override string         ToString() => query.signatureIndexes.GetString("Chunks: ");
 
-    internal QueryChunks(ArchetypeQuery<T1> query) {
+    internal QueryChunksOld(ArchetypeQuery<T1> query) {
         this.query = query;
     }
     
-    public ChunkEnumerator<T1> GetEnumerator() => new (query);
+    public ChunkEnumeratorOld<T1> GetEnumerator() => new (query);
 }
 
-public ref struct ChunkEnumerator<T1>
+public ref struct ChunkEnumeratorOld<T1>
     where T1 : struct, IComponent
 {
     private readonly    T1[]                    copyT1;         //  8
@@ -37,7 +37,7 @@ public ref struct ChunkEnumerator<T1>
     private             int                     chunkEnd;       //  4
     
     
-    internal  ChunkEnumerator(ArchetypeQuery<T1> query)
+    internal  ChunkEnumeratorOld(ArchetypeQuery<T1> query)
     {
         copyT1          = query.copyT1;
         structIndex1    = query.signatureIndexes.T1;

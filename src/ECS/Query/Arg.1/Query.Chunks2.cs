@@ -8,28 +8,28 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunks2<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>  // <- not implemented to avoid boxing
+public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>  // <- not implemented to avoid boxing
     where T1 : struct, IComponent
 {
     private readonly ArchetypeQuery<T1> query;
 
     public  override string         ToString() => query.signatureIndexes.GetString("Chunks: ");
 
-    internal QueryChunks2(ArchetypeQuery<T1> query) {
+    internal QueryChunks(ArchetypeQuery<T1> query) {
         this.query = query;
     }
     
     // --- IEnumerable<>
-    IEnumerator<(Chunk<T1>, ChunkEntities)> IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator2<T1> (query);
+    IEnumerator<(Chunk<T1>, ChunkEntities)> IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable
-    IEnumerator                                                         IEnumerable.GetEnumerator() => new ChunkEnumerator2<T1> (query);
+    IEnumerator                                                         IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- new
-    public ChunkEnumerator2<T1>                                                     GetEnumerator() => new ChunkEnumerator2<T1>(query);
+    public ChunkEnumerator<T1>                                                      GetEnumerator() => new ChunkEnumerator<T1>(query);
 }
 
-public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
+public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
     private readonly    Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays;    //  8
@@ -38,7 +38,7 @@ public struct ChunkEnumerator2<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     private             int                                 index;          //  4
     
     
-    internal  ChunkEnumerator2(ArchetypeQuery<T1> query)
+    internal  ChunkEnumerator(ArchetypeQuery<T1> query)
     {
         chunkArrays     = query.chunkArrays;
         var archetypes  = query.GetArchetypes();

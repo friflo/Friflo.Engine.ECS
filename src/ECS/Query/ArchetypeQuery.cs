@@ -163,8 +163,7 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunks    <T1>  Chunks                                      => new (this);
-    public      QueryChunks2   <T1>  Chunks2                                     => new (this);
+    public      QueryChunks <T1>  Chunks                                      => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
@@ -188,7 +187,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunks    <T1,T2>  Chunks                                      => new (this);
+    public      QueryChunksOld    <T1,T2>  Chunks                                      => new (this);
 #if COMP_ITER
     public new  QueryEnumerator<T1,T2>  GetEnumerator()                             => new (this);
     public      QueryForEach   <T1,T2>  ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
@@ -219,7 +218,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunks    <T1, T2, T3>  Chunks         => new (this);
+    public      QueryChunksOld    <T1, T2, T3>  Chunks         => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
@@ -249,7 +248,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunks    <T1, T2, T3, T4>  Chunks         => new (this);
+    public      QueryChunksOld    <T1, T2, T3, T4>  Chunks         => new (this);
 }
 
 public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
@@ -282,7 +281,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
-    public      QueryChunks    <T1, T2, T3, T4, T5>  Chunks         => new (this);
+    public      QueryChunksOld    <T1, T2, T3, T4, T5>  Chunks         => new (this);
 }
 
 internal static class EnumeratorUtils
