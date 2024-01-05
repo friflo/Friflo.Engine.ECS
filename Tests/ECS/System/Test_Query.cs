@@ -26,7 +26,10 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position>();
-        foreach (var (_, _) in query.Chunks) { }
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1", chunk.ToString());
+        }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
@@ -57,7 +60,10 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position, Rotation>();
-        foreach (var (_, _, _) in query.Chunks) { }
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1", chunk.ToString());
+        }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
@@ -89,7 +95,10 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position, Rotation, EntityName>();
-        foreach (var (_, _, _, _) in query.Chunks) { }
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) Mem.AreEqual("Chunks[512]    Archetype: [EntityName, Position, Rotation]  Count: 999", chunk.ToString());
+        }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
@@ -123,7 +132,10 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position, Rotation, Scale3, EntityName>();
-        foreach (var (_, _, _, _, _) in query.Chunks) { }
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1", chunk.ToString());
+        }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
@@ -158,7 +170,10 @@ public static class Test_Query
         }
         // --- force one time allocations
         var  query = store.Query<Position, Rotation, Scale3, Transform, EntityName>();
-        foreach (var (_, _, _, _, _, _) in query.Chunks) { }
+        int chunkCount = 0;
+        foreach (var chunk in query.Chunks) {
+            if (chunkCount++ == 0) Mem.AreEqual("Chunks[512]    Archetype: [EntityName, Position, Rotation, Transform, Scale3]  Count: 999", chunk.ToString());
+        }
         
         // --- run perf
         var start = Mem.GetAllocatedBytes();
