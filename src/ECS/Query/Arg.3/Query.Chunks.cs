@@ -16,6 +16,7 @@ public readonly struct Chunks<T1, T2, T3>
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
+    public              int             Length => chunk1.Length;
     public readonly     Chunk<T1>       chunk1;
     public readonly     Chunk<T2>       chunk2;
     public readonly     Chunk<T3>       chunk3;

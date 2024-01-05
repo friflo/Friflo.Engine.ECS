@@ -14,8 +14,8 @@ namespace Friflo.Engine.ECS;
 public readonly struct Chunks<T1>
     where T1 : struct, IComponent
 {
+    public              int             Length => chunk1.Length;
     public readonly     Chunk<T1>       chunk1;
-
     public readonly     ChunkEntities   entities;
 
     public override     string          ToString() => entities.GetChunksString();
