@@ -40,7 +40,7 @@ public static class Test_ChunkEntities
                     Mem.AreEqual("Index was outside the bounds of the array.", e!.Message);
                     
                     e = Assert.Throws<IndexOutOfRangeException>(() => {
-                        _ = entities.IdAt(1);
+                        _ = entities[1];
                     });
                     Mem.AreEqual("Index was outside the bounds of the array.", e!.Message);
                     break;

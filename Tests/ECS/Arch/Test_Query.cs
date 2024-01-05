@@ -302,6 +302,23 @@ public static class Test_Query
         AssertNoAlloc(start);
         AreEqual(2,  chunkCount);
         AreEqual(42, entity2.Rotation.x);
+        
+        chunkCount = 0;
+        foreach (var (_, rotation, _) in query.Chunks) {
+            switch (chunkCount++) {
+                case 0:
+                    rotation[0].x = 99;
+                    break;
+                case 1:
+                    var e = Assert.Throws<IndexOutOfRangeException>(() => {
+                        rotation[1].x = 0;    
+                    });
+                    Assert.AreEqual("Index was outside the bounds of the array.", e!.Message);
+                    break;
+            }
+        }
+        AreEqual(2,  chunkCount);
+        AreEqual(99, entity2.Rotation.x);
     }
     
     [Test]

@@ -12,13 +12,13 @@ using System.Text;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Provide the entity id for each <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> element with <see cref="Ids"/> or <see cref="IdAt"/>.<br/>
+/// Provide the entity id for each <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> element with <see cref="Ids"/> or <see cref="this[int]"/>.<br/>
 /// Its <see cref="Length"/> is equal to the <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Values"/> Length.
 /// </summary>
 /// <remarks>
 /// It implements <see cref="IEnumerable{T}"/> only to provide comprehensive information of <see cref="Entity"/>'s in a debugger.<br/>
 /// Its unlikely to enumerate <see cref="ChunkEntities"/> in an application.<br/>
-/// The recommended methods used by an application are <see cref="Ids"/>, <see cref="IdAt"/> or <see cref="EntityAt"/>.  
+/// The recommended methods used by an application are <see cref="Ids"/>, <see cref="this[int]"/> or <see cref="EntityAt"/>.  
 /// </remarks>
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
@@ -43,11 +43,13 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     }
     
 #region public methods
-    public int IdAt(int index) {
-        if (index < Length) {
-            return entityIds[idsStart + index];
+    public int this[int index] {
+        get {
+            if (index < Length) {
+                return entityIds[idsStart + index];
+            }
+            throw new IndexOutOfRangeException();
         }
-        throw new IndexOutOfRangeException();
     }
     
     public Entity EntityAt(int index) {

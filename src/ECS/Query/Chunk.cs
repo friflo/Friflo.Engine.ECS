@@ -29,6 +29,16 @@ public readonly struct Chunk<T>
         }
     }
     
+    public ref T this[int index] {
+        get {
+            if (index < Length) {
+                return ref values[index];
+            }
+            throw new IndexOutOfRangeException();
+        }
+    }
+
+
     /*
     internal Chunk(T[] values, T[] copy, int length) {
         Length      = length;

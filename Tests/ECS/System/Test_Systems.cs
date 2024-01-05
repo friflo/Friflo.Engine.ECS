@@ -48,8 +48,8 @@ public class MySystem_Arg1 : ComponentSystem
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
             Mem.AreEqual(length,                    position.Length);
-            Mem.AreEqual(positions[0].x,            entities.IdAt(0));
-            Mem.AreEqual(positions[length - 1].x,   entities.IdAt(length - 1));
+            Mem.AreEqual(positions[0].x,            entities[0]);
+            Mem.AreEqual(positions[length - 1].x,   entities[length - 1]);
             Mem.AreEqual(positions[0].x,            entities.EntityAt(0).Id);
             Mem.AreEqual(positions[length - 1].x,   entities.EntityAt(length - 1).Id);
             switch(chunkCount++) {
