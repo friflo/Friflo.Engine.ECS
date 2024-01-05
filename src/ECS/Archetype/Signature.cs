@@ -132,6 +132,10 @@ public static class Signature
         );
         return new Signature<T1, T2, T3, T4, T5>(indexes);
     }
+    
+    internal static string GetSignatureString(in SignatureIndexes indexes) {
+        return indexes.GetString("Signature: ");
+    }
 }
 #endregion
 
@@ -145,7 +149,7 @@ public readonly struct Signature<T1>
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
 
-    public override string ToString() => signatureIndexes.GetString("Signature: ");
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
 
     internal Signature(in SignatureIndexes signatureIndexes) {
         this.signatureIndexes  = signatureIndexes;
@@ -160,7 +164,7 @@ public readonly struct Signature<T1, T2>
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
     
-    public override string ToString() => signatureIndexes.GetString("Signature: ");
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
     
     internal Signature(in SignatureIndexes signatureIndexes) {
         this.signatureIndexes  = signatureIndexes;
@@ -177,7 +181,7 @@ public readonly struct Signature<T1, T2, T3>
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
     
     
-    public override string ToString() => signatureIndexes.GetString("Signature: ");
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
     
     internal Signature(in SignatureIndexes signatureIndexes) {
         this.signatureIndexes = signatureIndexes;
@@ -194,7 +198,7 @@ public readonly struct Signature<T1, T2, T3, T4>
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
     
-    public override string ToString() => signatureIndexes.GetString("Signature: ");
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
     
     internal Signature(in SignatureIndexes signatureIndexes) {
         this.signatureIndexes = signatureIndexes;
@@ -212,7 +216,7 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
 
-    public override string ToString() => signatureIndexes.GetString("Signature: ");
+    public override string ToString() => Signature.GetSignatureString(signatureIndexes);
 
     internal Signature(in SignatureIndexes signatureIndexes) {
         this.signatureIndexes = signatureIndexes;

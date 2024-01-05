@@ -114,6 +114,11 @@ public class ArchetypeQuery
         return new ArgumentException($"Query does not contain Component type: {type.Name}");
     }
     
+    internal string GetChunksString() {
+
+        return signatureIndexes.GetString("Chunks: ");
+    }
+    
     private string GetString() {
         var sb          = new StringBuilder();
         var hasTypes    = false;
