@@ -16,14 +16,7 @@ public readonly struct Chunk<T>
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
     private  readonly   T[]         values;     //  8
-    private  readonly   T[]         source;     //  8
     public   readonly   int         Length;     //  4
-    
-    internal Chunk(T[] values, T[] copy, int length) {
-        Length      = length;
-        source      = values;
-        this.values = copy ?? values;
-    }
     
     // ReSharper disable once UnusedParameter.Local
     internal Chunk(T[] values, T[] copy, int length, bool _) {
@@ -36,12 +29,19 @@ public readonly struct Chunk<T>
         }
     }
     
+    /*
+    internal Chunk(T[] values, T[] copy, int length) {
+        Length      = length;
+        source      = values;
+        this.values = copy ?? values;
+    }
+    
     internal void Copy() {
         if (source == values) {
             return;
         }
         Array.Copy(source, values, Length);
-    }
+    } */
 }
 
 public static class ChunkExtensions
