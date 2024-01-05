@@ -148,8 +148,7 @@ public class ArchetypeQuery
 public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     where T1 : struct, IComponent
 {
-    [Browse(Never)] internal    Stack<(Chunk<T1>, ChunkEntities)[]> chunkArrays = new();
-    [Browse(Never)] internal    T1[]                                copyT1;
+    [Browse(Never)] internal    T1[]    copyT1;
     
     public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
     
@@ -171,7 +170,6 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     where T1 : struct, IComponent
     where T2 : struct, IComponent
 {
-    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, ChunkEntities)[]>  chunkArrays = new();
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     
@@ -201,7 +199,6 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
-    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities)[]>  chunkArrays = new();
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     [Browse(Never)] internal    T3[]    copyT3;
@@ -230,7 +227,6 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T3 : struct, IComponent
     where T4 : struct, IComponent
 {
-    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities)[]>  chunkArrays = new();
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     [Browse(Never)] internal    T3[]    copyT3;
@@ -262,7 +258,6 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     where T4 : struct, IComponent
     where T5 : struct, IComponent
 {
-    [Browse(Never)] internal    Stack<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)[]>  chunkArrays = new();
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     [Browse(Never)] internal    T3[]    copyT3;
