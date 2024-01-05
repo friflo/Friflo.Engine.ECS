@@ -76,6 +76,15 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         Archetype.GetString(sb);
         return sb.ToString();
     }
+    
+    internal string GetChunksString() {
+        var sb = new StringBuilder();
+        sb.Append("Chunks[");
+        sb.Append(Length);
+        sb.Append("]    Archetype: ");
+        Archetype.GetString(sb);
+        return sb.ToString();
+    }
 
     #endregion
 }

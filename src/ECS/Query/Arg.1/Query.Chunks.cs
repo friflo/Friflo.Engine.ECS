@@ -11,7 +11,28 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>
+public readonly struct Chunks<T1>
+    where T1 : struct, IComponent
+{
+    public readonly     Chunk<T1>       chunk1;
+
+    public readonly     ChunkEntities   entities;
+
+    public override     string          ToString() => entities.GetChunksString();
+
+    internal Chunks(Chunk<T1> chunk1, ChunkEntities entities) {
+        this.chunk1     = chunk1;
+        this.entities   = entities;
+    }
+    
+    public void Deconstruct(out Chunk<T1> chunk1, out ChunkEntities entities) {
+        chunk1      = this.chunk1;
+        entities    = this.entities;
+    }
+}
+
+
+public readonly struct QueryChunks<T1>  : IEnumerable <Chunks<T1>>
     where T1 : struct, IComponent
 {
     private readonly ArchetypeQuery<T1> query;
@@ -24,8 +45,8 @@ public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities
     
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
-    IEnumerator<(Chunk<T1>, ChunkEntities)>
-    IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
+    IEnumerator<Chunks<T1>>
+    IEnumerable<Chunks<T1>>.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable
     [ExcludeFromCodeCoverage]
@@ -35,7 +56,7 @@ public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities
     public ChunkEnumerator<T1> GetEnumerator() => new (query);
 }
 
-public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
+public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
     where T1 : struct, IComponent
 {
     private readonly    T1[]                    copyT1;         //  8
@@ -65,7 +86,7 @@ public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly (Chunk<T1>, ChunkEntities) Current   => (chunk1, entities);
+    public readonly Chunks<T1> Current   => new (chunk1, entities);
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]

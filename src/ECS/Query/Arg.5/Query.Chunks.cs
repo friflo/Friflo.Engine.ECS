@@ -11,7 +11,43 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunks<T1, T2, T3, T4, T5>  : IEnumerable <(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)>
+public readonly struct Chunks<T1, T2, T3, T4, T5>
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent
+    where T5 : struct, IComponent
+{
+    public readonly     Chunk<T1>       chunk1;
+    public readonly     Chunk<T2>       chunk2;
+    public readonly     Chunk<T3>       chunk3;
+    public readonly     Chunk<T4>       chunk4;
+    public readonly     Chunk<T5>       chunk5;
+    public readonly     ChunkEntities   entities;
+
+    public override     string          ToString() => entities.GetChunksString();
+
+    internal Chunks(Chunk<T1> chunk1, Chunk<T2> chunk2, Chunk<T3> chunk3, Chunk<T4> chunk4, Chunk<T5> chunk5, ChunkEntities entities) {
+        this.chunk1     = chunk1;
+        this.chunk2     = chunk2;
+        this.chunk3     = chunk3;
+        this.chunk4     = chunk4;
+        this.chunk5     = chunk5;
+        this.entities   = entities;
+    }
+    
+    public void Deconstruct(out Chunk<T1> chunk1, out Chunk<T2> chunk2, out Chunk<T3> chunk3, out Chunk<T4> chunk4, out Chunk<T5> chunk5, out ChunkEntities entities) {
+        chunk1      = this.chunk1;
+        chunk2      = this.chunk2;
+        chunk3      = this.chunk3;
+        chunk4      = this.chunk4;
+        chunk5      = this.chunk5;
+        entities    = this.entities;
+    }
+}
+
+
+public readonly struct QueryChunks<T1, T2, T3, T4, T5>  : IEnumerable <Chunks<T1, T2, T3, T4, T5>>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
     where T3 : struct, IComponent
@@ -28,8 +64,8 @@ public readonly struct QueryChunks<T1, T2, T3, T4, T5>  : IEnumerable <(Chunk<T1
     
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
-    IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)>
-    IEnumerable<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4, T5> (query);
+    IEnumerator<Chunks<T1, T2, T3, T4, T5>>
+    IEnumerable<Chunks<T1, T2, T3, T4, T5>>.GetEnumerator() => new ChunkEnumerator<T1, T2, T3, T4, T5> (query);
     
     // --- IEnumerable
     [ExcludeFromCodeCoverage]
@@ -38,7 +74,7 @@ public readonly struct QueryChunks<T1, T2, T3, T4, T5>  : IEnumerable <(Chunk<T1
     public ChunkEnumerator<T1, T2, T3, T4, T5> GetEnumerator() => new (query);
 }
 
-public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities)>
+public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<Chunks<T1, T2, T3, T4, T5>>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
     where T3 : struct, IComponent
@@ -100,7 +136,7 @@ public struct ChunkEnumerator<T1, T2, T3, T4, T5> : IEnumerator<(Chunk<T1>, Chun
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly (Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, Chunk<T5>, ChunkEntities) Current   => (chunk1, chunk2, chunk3, chunk4, chunk5, entities);
+    public readonly Chunks<T1, T2, T3, T4, T5> Current   => new (chunk1, chunk2, chunk3, chunk4, chunk5, entities);
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]
