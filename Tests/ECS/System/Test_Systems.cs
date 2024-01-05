@@ -35,7 +35,7 @@ public class MySystem_Arg1 : ComponentSystem
         Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
     }
     
-    /// <summary> Cover <see cref="ChunkEnumeratorOld{T1}.MoveNext"/> </summary>
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
         Mem.AreEqual(1000, query.EntityCount);
@@ -72,7 +72,7 @@ public class MySystem_Arg2 : ComponentSystem
         Assert.AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
     }
     
-    /// <summary> Cover <see cref="ChunkEnumeratorOld{T1}.MoveNext"/> </summary>
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
         var store       = query.Store;
@@ -107,7 +107,7 @@ public class MySystem_Arg3 : ComponentSystem
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName]", query.Chunks.ToString());
     }
     
-    /// <summary> Cover <see cref="ChunkEnumeratorOld{T1}.MoveNext"/> </summary>
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
         var store       = query.Store;
@@ -141,7 +141,7 @@ public class MySystem_Arg4 : ComponentSystem
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
     }
     
-    /// <summary> Cover <see cref="ChunkEnumeratorOld{T1}.MoveNext"/> </summary>
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
         var store       = query.Store;
@@ -178,7 +178,7 @@ public class MySystem_Arg5 : ComponentSystem
         Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
     }
     
-    /// <summary> Cover <see cref="ChunkEnumeratorOld{T1}.MoveNext"/> </summary>
+    /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
         var store       = query.Store;

@@ -11,31 +11,31 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct QueryChunksOld<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>
+public readonly struct QueryChunks<T1>  : IEnumerable <(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
     private readonly ArchetypeQuery<T1> query;
 
     public  override string         ToString() => query.signatureIndexes.GetString("Chunks: ");
 
-    internal QueryChunksOld(ArchetypeQuery<T1> query) {
+    internal QueryChunks(ArchetypeQuery<T1> query) {
         this.query = query;
     }
     
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
     IEnumerator<(Chunk<T1>, ChunkEntities)>
-    IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumeratorOld<T1> (query);
+    IEnumerable<(Chunk<T1>, ChunkEntities)>.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable
     [ExcludeFromCodeCoverage]
-    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumeratorOld<T1> (query);
+    IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator<T1> (query);
     
     // --- IEnumerable
-    public ChunkEnumeratorOld<T1> GetEnumerator() => new (query);
+    public ChunkEnumerator<T1> GetEnumerator() => new (query);
 }
 
-public struct ChunkEnumeratorOld<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
+public struct ChunkEnumerator<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     where T1 : struct, IComponent
 {
     private readonly    T1[]                    copyT1;         //  8
@@ -52,7 +52,7 @@ public struct ChunkEnumeratorOld<T1> : IEnumerator<(Chunk<T1>, ChunkEntities)>
     private             int                     chunkEnd;       //  4
     
     
-    internal  ChunkEnumeratorOld(ArchetypeQuery<T1> query)
+    internal  ChunkEnumerator(ArchetypeQuery<T1> query)
     {
         copyT1          = query.copyT1;
         structIndex1    = query.signatureIndexes.T1;
