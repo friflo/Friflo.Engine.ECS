@@ -115,8 +115,7 @@ public class ArchetypeQuery
     }
     
     internal string GetChunksString() {
-
-        return signatureIndexes.GetString("Chunks: ");
+        return signatureIndexes.GetString($"Chunks[{ChunkCount}]  Components: ");
     }
     
     private string GetString() {

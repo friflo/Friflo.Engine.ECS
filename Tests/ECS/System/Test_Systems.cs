@@ -32,7 +32,7 @@ public class MySystem_Arg1 : ComponentSystem
         
     public MySystem_Arg1(EntityStore store) {
         query       = store.Query<Position>();
-        Assert.AreEqual("Chunks: [Position]", query.Chunks.ToString());
+        Assert.AreEqual("Chunks[3]  Components: [Position]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -69,7 +69,7 @@ public class MySystem_Arg2 : ComponentSystem
         
     public MySystem_Arg2(EntityStore store) {
         query       = store.Query<Position, Rotation>();
-        Assert.AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
+        Assert.AreEqual("Chunks[3]  Components: [Position, Rotation]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -104,7 +104,7 @@ public class MySystem_Arg3 : ComponentSystem
         
     public MySystem_Arg3(EntityStore store) {
         query       = store.Query<Position, Rotation, EntityName>();
-        Assert.AreEqual("Chunks: [Position, Rotation, EntityName]", query.Chunks.ToString());
+        Assert.AreEqual("Chunks[3]  Components: [Position, Rotation, EntityName]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -138,7 +138,7 @@ public class MySystem_Arg4 : ComponentSystem
         
     public MySystem_Arg4(EntityStore store) {
         query       = store.Query<Position, Rotation, EntityName, Scale3>();
-        Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
+        Assert.AreEqual("Chunks[3]  Components: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -175,7 +175,7 @@ public class MySystem_Arg5 : ComponentSystem
         
     public MySystem_Arg5(EntityStore store) {
         query       = store.Query<Position, Rotation, EntityName, Scale3, Transform>();
-        Assert.AreEqual("Chunks: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
+        Assert.AreEqual("Chunks[3]  Components: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>

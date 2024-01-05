@@ -291,7 +291,7 @@ public static class Test_Query
         AreEqual(42, entity2.Rotation.x);
 #endif
         var chunkCount   = 0;
-        AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
+        AreEqual("Chunks[2]  Components: [Position, Rotation]", query.Chunks.ToString());
         foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
         start = GetAllocatedBytes();
         foreach (var (position, rotation, _) in query.Chunks) {
@@ -339,7 +339,7 @@ public static class Test_Query
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
 
         var chunkCount   = 0;
-        AreEqual("Chunks: [Position, Rotation]", query.Chunks.ToString());
+        AreEqual("Chunks[2]  Components: [Position, Rotation]", query.Chunks.ToString());
         foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
         var start = GetAllocatedBytes();
         foreach (var (position, rotation, _) in query.Chunks) {
