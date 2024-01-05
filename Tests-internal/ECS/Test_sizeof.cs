@@ -79,7 +79,7 @@ public static class Test_sizeof
         AreEqual(24, size);
         
         size = sizeof(Chunk<Position>);
-        AreEqual(24, size);
+        AreEqual(16, size);
 
         size = sizeof(Archetypes);
         AreEqual(16, size);
