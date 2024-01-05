@@ -47,7 +47,7 @@ public readonly struct QueryChunks<T1, T2, T3>  : IEnumerable <Chunks<T1, T2, T3
 {
     private readonly ArchetypeQuery<T1, T2, T3> query;
 
-    public  override string         ToString() => query.GetChunksString();
+    public  override string         ToString() => query.GetQueryChunksString();
 
     internal QueryChunks(ArchetypeQuery<T1, T2, T3> query) {
         this.query = query;
