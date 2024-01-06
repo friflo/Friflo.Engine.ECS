@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
@@ -29,7 +27,7 @@ internal abstract class StructHeap
 #endif
 
     internal  abstract  Type        StructType          { get; }
-    protected abstract  void        DebugInfo           (out int count, out int length);
+    protected abstract  void        DebugInfo           (out int length);
     internal  abstract  void        SetChunkCapacity    (int newChunkCount, int chunkCount, int newChunkLength, int chunkLength);
     internal  abstract  void        MoveComponent       (int from, int to);
     internal  abstract  void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
@@ -48,6 +46,7 @@ internal abstract class StructHeap
 #endif
     }
     
+    /*
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
     internal static void AssertChunksLength(int expect, int actual) {
         if (expect != actual) throw new InvalidOperationException($"expect chunk length: {expect}, was: {actual}");
@@ -56,16 +55,14 @@ internal abstract class StructHeap
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
     internal static void AssertChunkComponentsNull(object components) {
         if (components != null) throw new InvalidOperationException($"expect components == null");
-    }
+    } */
     
     public override string ToString() {
-        DebugInfo(out int count, out int length);
+        DebugInfo(out int length);
         var sb = new StringBuilder();
         sb.Append('[');
         sb.Append(StructType.Name);
-        sb.Append("] chunks - Count: ");
-        sb.Append(count);
-        sb.Append(", Length: ");
+        sb.Append("], Length: ");
         sb.Append(length);
 #if DEBUG
         sb.Append(", EntityCount: ");

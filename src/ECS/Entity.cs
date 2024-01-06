@@ -4,7 +4,6 @@
 using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using static Friflo.Engine.ECS.StoreOwnership;
-using static Friflo.Engine.ECS.StructInfo;
 using static Friflo.Engine.ECS.TreeMembership;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -150,16 +149,16 @@ public readonly struct Entity
 #region component - properties
 
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
-    [Browse(Never)] public  ref EntityName      Name        => ref archetype.std.name.    chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref EntityName      Name        => ref archetype.std.name.    components[compIndex];
 
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
-    [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.components[compIndex];
     
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
-    [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.components[compIndex];
     
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
-    [Browse(Never)] public  ref Scale3          Scale3      => ref archetype.std.scale3.  chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    [Browse(Never)] public  ref Scale3          Scale3      => ref archetype.std.scale3.  components[compIndex];
     
     [Browse(Never)] public  bool                HasName     =>     archetype.std.name              != null;
     [Browse(Never)] public  bool                HasPosition =>     archetype.std.position          != null;
@@ -212,7 +211,7 @@ public readonly struct Entity
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T   GetComponent<T>()   where T : struct, IComponent
-    => ref ((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex]).chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+    => ref ((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex]).components[compIndex];
     
     /// <remarks>Executes in O(1)</remarks>
     public bool     TryGetComponent<T>(out T result) where T : struct, IComponent
@@ -222,7 +221,7 @@ public readonly struct Entity
             result = default;
             return false;
         }
-        result = ((StructHeap<T>)heap).chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+        result = ((StructHeap<T>)heap).components[compIndex];
         return true;
     }
     

@@ -1,4 +1,6 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using System.Diagnostics;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 
@@ -104,8 +106,8 @@ public static class Test_Query
         int chunkCount = 0;
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 0) {
-                Mem.AreEqual(512, chunk.Length);
-                Mem.AreEqual("Chunks[512]    Archetype: [EntityName, Position, Rotation]  Count: 999", chunk.ToString());
+                Mem.AreEqual(999, chunk.Length);
+                Mem.AreEqual("Chunks[999]    Archetype: [EntityName, Position, Rotation]  Count: 999", chunk.ToString());
             }
         }
         
@@ -185,8 +187,8 @@ public static class Test_Query
         int chunkCount = 0;
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 0) {
-                Mem.AreEqual(512, chunk.Length);
-                Mem.AreEqual("Chunks[512]    Archetype: [EntityName, Position, Rotation, Transform, Scale3]  Count: 999", chunk.ToString());
+                Mem.AreEqual(999, chunk.Length);
+                Mem.AreEqual("Chunks[999]    Archetype: [EntityName, Position, Rotation, Transform, Scale3]  Count: 999", chunk.ToString());
             }
         }
         
@@ -213,6 +215,71 @@ public static class Test_Query
         root.AddComponent<MyComponent1>();
         store.SetStoreRoot(root);
         return store;
+    }
+    
+    // ReSharper disable once ConvertToConstant.Local
+    private static readonly bool skipBench = true;
+    
+    [Test]
+    public static void Test_BenchRef()
+    {
+        if (skipBench) return;
+        
+        var components = new MyComponent1[100];
+        for (long i = 0; i < 10_000_000; i++) {
+            bench_ref(components);
+        }
+        
+        // --- run perf
+        // 10_000_000 ~ 1098 ms
+        components = new MyComponent1[100_000];
+        var stopwatch = new Stopwatch(); stopwatch.Start();
+        for (long i = 0; i < 1000; i++) {
+            bench_ref(components);
+        }
+        Console.WriteLine($"ref duration: {stopwatch.ElapsedMilliseconds}");
+    }
+    
+    private static void bench_ref(MyComponent1[] components) {
+        Span<MyComponent1> comps = components;
+        for (int n = 0; n < comps.Length; n++) {
+            ++comps[n].a;
+        }
+    }
+    
+    [Test]
+    public static void Test_Bench()
+    {
+        if (skipBench) return;
+        
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var child = store.CreateEntity();
+
+        child.AddComponent(new MyComponent1());
+        // --- force one time allocations
+        var  query = store.Query<MyComponent1>();
+        for (int i = 0; i < 10_000_000; i++) {
+            bench(query);
+        }
+        
+        for (int n = 1; n < 100_000; n++) {
+            child = store.CreateEntity(child.Archetype);
+        }
+        // --- run perf
+        var stopwatch = new Stopwatch(); stopwatch.Start();
+        for (int i = 0; i < 1000; i++) {
+            bench(query);
+        }
+        Console.WriteLine($"duration: {stopwatch.ElapsedMilliseconds}");
+    }
+    
+    private static void bench(ArchetypeQuery<MyComponent1> query) {
+        foreach (var (component, _) in query.Chunks) {
+            var components = component.Values;
+            for (int n = 0; n < components.Length; n++) {
+                ++components[n].a;
+            }
+        }
     }
 }
 

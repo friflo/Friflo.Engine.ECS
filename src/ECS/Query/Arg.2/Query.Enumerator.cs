@@ -22,8 +22,6 @@ public ref struct QueryEnumerator<T1, T2>
     private  readonly   ReadOnlySpan<Archetype> archetypes;
     private             int                     archetypePos;
 
-    private             StructChunk<T1>[]       chunks1;
-    private             StructChunk<T2>[]       chunks2;
     private             int                     chunkPos;
     private  readonly   int                     chunkEnd;
         
@@ -41,14 +39,14 @@ public ref struct QueryEnumerator<T1, T2>
         archetypePos    = 0;
         var archetype   = archetypes[0];
         var heapMap     = archetype.heapMap;
-        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-        chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
+        var chunks1         = ((StructHeap<T1>)heapMap[structIndex1]);
+        var chunks2         = ((StructHeap<T2>)heapMap[structIndex2]);
         chunkEnd        = archetype.ChunkCount() - 1;
         
         componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
-        ref1.Set(chunks1[0].components, copyT1, componentLen);
+        ref1.Set(chunks1.components, copyT1, componentLen);
         ref1.pos        = -1;
-        ref2.Set(chunks2[0].components, copyT2, componentLen);
+        ref2.Set(chunks2.components, copyT2, componentLen);
         ref2.pos        = -1;
     }
     
@@ -76,17 +74,18 @@ public ref struct QueryEnumerator<T1, T2>
         if (archetypePos >= archetypes.Length - 1) {
             return false;
         }
+    Next:
         var archetype   = archetypes[++archetypePos];
         var heapMap     = archetype.heapMap;
-        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-        chunks2         = ((StructHeap<T2>)heapMap[structIndex2]).chunks;
+        var chunks1         = ((StructHeap<T1>)heapMap[structIndex1]);
+        var chunks2         = ((StructHeap<T2>)heapMap[structIndex2]);
         chunkPos        = -1;
         componentLen    = Math.Min(archetype.EntityCount, ChunkSize) - 1;
-    Next:
+
         chunkPos++;
-        ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
+        ref1.Set(chunks1.components, copyT1, componentLen);
         ref1.pos = 0;
-        ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
+        ref2.Set(chunks2.components, copyT2, componentLen);
         ref2.pos = 0;
         return true;
     }

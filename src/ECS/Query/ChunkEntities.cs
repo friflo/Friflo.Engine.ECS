@@ -23,7 +23,7 @@ namespace Friflo.Engine.ECS;
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
-    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, idsStart, Length);
+    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, 0, Length);
     public   override   string              ToString()  => GetString();
     #endregion
 
@@ -32,21 +32,19 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   int                 Length;     //  4
     //
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
-    internal readonly   int                 idsStart;   //  4
     #endregion
     
-    internal ChunkEntities(Archetype archetype, int chunkPos, int componentLen) {
+    internal ChunkEntities(Archetype archetype, int componentLen) {
         Archetype   = archetype;
         entityIds   = archetype.entityIds;
         Length      = componentLen;
-        idsStart    = chunkPos * StructInfo.ChunkSize;
     }
     
 #region public methods
     public int this[int index] {
         get {
             if (index < Length) {
-                return entityIds[idsStart + index];
+                return entityIds[index];
             }
             throw new IndexOutOfRangeException();
         }
@@ -54,7 +52,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     
     public Entity EntityAt(int index) {
         if (index < Length) {
-            return new Entity(entityIds[idsStart + index], Archetype.entityStore);
+            return new Entity(entityIds[index], Archetype.entityStore);
         }
         throw new IndexOutOfRangeException();
     }
@@ -99,8 +97,8 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.entityIds;
         store       = chunkEntities.Archetype.entityStore;
-        index       = chunkEntities.idsStart - 1; 
-        last        = chunkEntities.Length + index;
+        index       = -1; 
+        last        = chunkEntities.Length - 1;
     }
     
     // --- IEnumerator<>

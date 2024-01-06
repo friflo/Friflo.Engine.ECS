@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
 
@@ -56,7 +55,7 @@ public partial class EntityStoreBase
         
     AssignComponent:  // --- assign passed component value
         var heap    = (StructHeap<T>)structHeap;
-        heap.chunks[compIndex / ChunkSize].components[compIndex % ChunkSize] = component;
+        heap.components[compIndex] = component;
         // Send event. See: SEND_EVENT notes
         store.componentAdded?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Add, structIndex));
         return added;

@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
 
@@ -127,7 +126,7 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity  = ref entities[id];
         var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructHeap<T>.StructIndex];
-        return ref heap.chunks[entity.compIndex / ChunkSize].components[entity.compIndex % ChunkSize];
+        return ref heap.components[entity.compIndex];
     }
     
     public bool AddEntityComponent<T>(int id, in T component)

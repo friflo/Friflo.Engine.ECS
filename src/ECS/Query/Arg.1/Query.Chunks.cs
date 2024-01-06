@@ -6,7 +6,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -64,13 +63,8 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
     //
     private readonly    Archetypes              archetypes;     // 16
     private             int                     archetypePos;   //  4
-    private             Archetype               archetype;      //  8
     //
-    private             StructChunk<T1>[]       chunks1;        //  8
-    private             Chunk<T1>               chunk1;         // 16
-    private             ChunkEntities           entities;       // 24
-    private             int                     chunkPos;       //  4
-    private             int                     chunkEnd;       //  4
+    private             Chunks<T1>              chunks;         // 40
     
     
     internal  ChunkEnumerator(ArchetypeQuery<T1> query)
@@ -78,56 +72,40 @@ public struct ChunkEnumerator<T1> : IEnumerator<Chunks<T1>>
         copyT1          = query.copyT1;
         structIndex1    = query.signatureIndexes.T1;
         archetypes      = query.GetArchetypes();
-        archetypePos    = 0;
-        archetype       = archetypes.array[0];
-        var heapMap     = archetype.heapMap;
-        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-        chunkEnd        = archetype.ChunkCount();
+        archetypePos    = -1;
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly Chunks<T1> Current   => new (chunk1, entities);
+    public readonly Chunks<T1> Current   => chunks;
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]
     public void Reset()         => throw new NotImplementedException();
 
     [ExcludeFromCodeCoverage]
-    object IEnumerator.Current  => Current;
+    object IEnumerator.Current  => chunks;
     
     // --- IEnumerator
     public bool MoveNext()
     {
-        int componentLen;
-        if (chunkPos < chunkEnd) {
-            componentLen = ChunkSize;
-            goto Next;
-        }
-        if (chunkPos == chunkEnd)  {
-            componentLen = archetype.ChunkRest();
-            if (componentLen > 0) {
-                goto Next;
-            }
-        }
+        Archetype archetype;
         // --- skip archetypes without entities
         do {
             if (archetypePos >= archetypes.last) {  // last = length - 1
                 return false;
             }
             archetype   = archetypes.array[++archetypePos];
-            chunkEnd    = archetype.ChunkEnd();
         }
-        while (chunkEnd == -1);
+        while (archetype.entityCount == 0); 
         
         // --- set chunks of new archetype
         var heapMap     = archetype.heapMap;
-        chunks1         = ((StructHeap<T1>)heapMap[structIndex1]).chunks;
-        chunkPos        = 0;
-        componentLen    = chunkEnd == 0 ? archetype.ChunkRest() : ChunkSize;
-    Next:
-        chunk1      = new Chunk<T1>(chunks1[chunkPos].components, copyT1, componentLen, true);
-        entities    = new ChunkEntities(archetype, chunkPos, componentLen);
-        chunkPos++;
+        var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
+        int count       = archetype.entityCount;
+            
+        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, true);
+        var entities    = new ChunkEntities(archetype, count);
+        chunks          = new Chunks<T1>(chunk1, entities);
         return true;  
     }
     

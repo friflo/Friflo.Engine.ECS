@@ -268,7 +268,9 @@ public sealed class Archetype
     {
         int count = 0;
         foreach (var archetype in archetypes) {
-            count += archetype.ChunkEnd() + 1;
+            if (archetype.entityCount > 0) {
+                count ++;    
+            }
         }
         return count;
     }

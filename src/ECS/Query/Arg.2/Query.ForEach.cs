@@ -37,14 +37,14 @@ public readonly struct QueryForEach<T1, T2>
         foreach (var archetype in query.GetArchetypesSpan())
         {
             var heapMap     = archetype.heapMap;
-            var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]).chunks;
-            var chunks2     = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]).chunks;
+            var chunks1     = ((StructHeap<T1>)heapMap[query.signatureIndexes.T1]);
+            var chunks2     = ((StructHeap<T2>)heapMap[query.signatureIndexes.T2]);
             var chunkEnd    = archetype.ChunkCount();
             int chunkPos    = 0;
             for (; chunkPos < chunkEnd; chunkPos++)
             {
-                ref1.Set(chunks1[chunkPos].components, copyT1, ChunkSize);
-                ref2.Set(chunks2[chunkPos].components, copyT2, ChunkSize);
+                ref1.Set(chunks1.components, copyT1, ChunkSize);
+                ref2.Set(chunks2.components, copyT2, ChunkSize);
                 for (int pos = 0; pos < ChunkSize; pos++)
                 {
                     ref1.pos = pos;
@@ -56,8 +56,8 @@ public readonly struct QueryForEach<T1, T2>
             if (componentLen == 0) {
                 continue;
             }
-            ref1.Set(chunks1[chunkPos].components, copyT1, componentLen);
-            ref2.Set(chunks2[chunkPos].components, copyT2, componentLen);
+            ref1.Set(chunks1.components, copyT1, componentLen);
+            ref2.Set(chunks2.components, copyT2, componentLen);
             for (int pos = 0; pos < componentLen; pos++)
             {
                 ref1.pos = pos;

@@ -44,7 +44,6 @@ public static class Test_Archetype
     
     /// <summary>
     /// cover <see cref="StructHeap{T}.ToString"/>
-    /// cover <see cref="StructChunk{T}.ToString"/>
     /// </summary>
     [Test]
     public static void Test_Archetype_StructHeap_ToString()
@@ -57,10 +56,8 @@ public static class Test_Archetype
 #if DEBUG
         AreEqual("[Position] chunks - Count: 1, Length: 1, EntityCount: 1", heap.ToString());
 #else
-        AreEqual("[Position] chunks - Count: 1, Length: 1", heap.ToString());
+        AreEqual("[Position], Length: 512", heap.ToString());
 #endif
-        var genericHeap = (StructHeap<Position>)heap;
-        AreEqual("used", genericHeap.chunks[0].ToString());
     }
     
     [Test]

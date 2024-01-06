@@ -45,12 +45,9 @@ public static class Test_ChunkEntities
                     Mem.AreEqual("Index was outside the bounds of the array.", e!.Message);
                     break;
                 case 1:
-                    Mem.AreEqual(512,           entities.Length);
+                    Mem.AreEqual(999,           entities.Length);
                     break;
-                case 2:
-                    Mem.AreEqual(487,           entities.Length);
-                    break;
-                case 3:
+                default:
                     throw new InvalidOperationException("unexpected");
             }
             {
@@ -76,7 +73,7 @@ public static class Test_ChunkEntities
                 Mem.AreEqual(entities.Length, count);
             }
         }
-        Mem.AreEqual(3, chunkCount);
+        Mem.AreEqual(2, chunkCount);
     }
 }
 

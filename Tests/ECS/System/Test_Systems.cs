@@ -32,7 +32,7 @@ public class MySystem_Arg1 : ComponentSystem
         
     public MySystem_Arg1(EntityStore store) {
         query       = store.Query<Position>();
-        Assert.AreEqual("QueryChunks[3]  Components: [Position]", query.Chunks.ToString());
+        Assert.AreEqual("QueryChunks[2]  Components: [Position]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -54,12 +54,11 @@ public class MySystem_Arg1 : ComponentSystem
             Mem.AreEqual(positions[length - 1].x,   entities.EntityAt(length - 1).Id);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
-                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, chunkCount);
+        Mem.AreEqual(2, chunkCount);
     }
 }
 
@@ -69,7 +68,7 @@ public class MySystem_Arg2 : ComponentSystem
         
     public MySystem_Arg2(EntityStore store) {
         query       = store.Query<Position, Rotation>();
-        Assert.AreEqual("QueryChunks[3]  Components: [Position, Rotation]", query.Chunks.ToString());
+        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -89,12 +88,11 @@ public class MySystem_Arg2 : ComponentSystem
             Mem.AreEqual(positions[length - 1].x,   entities.EntityAt(length - 1).Id);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
-                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, chunkCount);
+        Mem.AreEqual(2, chunkCount);
     }
 }
 
@@ -104,7 +102,7 @@ public class MySystem_Arg3 : ComponentSystem
         
     public MySystem_Arg3(EntityStore store) {
         query       = store.Query<Position, Rotation, EntityName>();
-        Assert.AreEqual("QueryChunks[3]  Components: [Position, Rotation, EntityName]", query.Chunks.ToString());
+        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation, EntityName]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -122,13 +120,12 @@ public class MySystem_Arg3 : ComponentSystem
             Mem.AreEqual(positions[0].x,            entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
+                case 0:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, chunkCount);
+        Mem.AreEqual(2, chunkCount);
     }
 }
 
@@ -138,7 +135,7 @@ public class MySystem_Arg4 : ComponentSystem
         
     public MySystem_Arg4(EntityStore store) {
         query       = store.Query<Position, Rotation, EntityName, Scale3>();
-        Assert.AreEqual("QueryChunks[3]  Components: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
+        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -160,12 +157,11 @@ public class MySystem_Arg4 : ComponentSystem
             Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
-                case 1:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 2:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, chunkCount);
+        Mem.AreEqual(2, chunkCount);
     }
 }
 
@@ -175,7 +171,7 @@ public class MySystem_Arg5 : ComponentSystem
         
     public MySystem_Arg5(EntityStore store) {
         query       = store.Query<Position, Rotation, EntityName, Scale3, Transform>();
-        Assert.AreEqual("QueryChunks[3]  Components: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
+        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
     }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
@@ -197,13 +193,12 @@ public class MySystem_Arg5 : ComponentSystem
             Mem.AreEqual(positions[0].x,            entities.Ids[0]);
             Mem.AreEqual(positions[length - 1].x,   entities.Ids[length - 1]);
             switch(chunkCount++) {
-                case 0:     Mem.AreEqual(512,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 1:     Mem.AreEqual(487,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
-                case 2:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
+                case 0:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
+                case 1:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
                 default:    throw new InvalidOperationException("unexpected");
             }
         }
-        Mem.AreEqual(3, chunkCount);
+        Mem.AreEqual(2, chunkCount);
     }
 }
 

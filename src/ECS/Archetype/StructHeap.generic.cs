@@ -22,7 +22,8 @@ internal sealed class StructHeap<T> : StructHeap
 {
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
-    internal            StructChunk<T>[]    chunks;     // 8 - Length: 1, 2, 4, 8
+    internal            T[]                 components;   // 8
+    // internal         StructChunk<T>[]    chunks;     // 8 - Length: 1, 2, 4, 8
     private  readonly   TypeMapper<T>       typeMapper; // 8
     
     // --- static internal
@@ -33,25 +34,41 @@ internal sealed class StructHeap<T> : StructHeap
         : base (structIndex)
     {
         typeMapper  = mapper;
-        chunks      = new StructChunk<T>[1];
-        chunks[0]   = new StructChunk<T>(ChunkSize);
+        components  = new T[512];
+        // chunks      = new StructChunk<T>[1];
+        // chunks[0]   = new StructChunk<T>(ChunkSize);
     }
     
-    protected override void DebugInfo(out int count, out int length) {
-        count = 0;
+    protected override void DebugInfo(out int length) {
+        length = components.Length;
+        /* count = 0;
         foreach (var chunk in chunks) {
             if (chunk.components != null) {
                 count++;
             }
             break;
         }
-        length = chunks.Length;
+        length = chunks.Length; */
     }
     
     internal override Type  StructType => typeof(T);
     
     internal override void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength, int chunkLength)
     {
+        if (chunkLength != newChunkLength)
+        {
+            var newLength       = newChunkLength * ChunkSize;
+            var newComponents   = new T [newLength];
+            var curComponents   = components;
+            var curLength       = chunkCount     * ChunkSize;
+            for (int i = 0; i < curLength; i++) {
+                newComponents[i] = curComponents[i];
+            }
+            components = newComponents;
+        } else {
+            // throw new InvalidOperationException("expect different chunk lengths");
+        }
+        /*
         AssertChunksLength(chunks.Length, chunkLength);
         // --- set new chunks array if requested. Length values: 1, 2, 4, 8, 16, ...
         if (chunkLength != newChunkLength)
@@ -67,19 +84,18 @@ internal sealed class StructHeap<T> : StructHeap
             AssertChunkComponentsNull(chunks[n].components);
             chunks[n] = new StructChunk<T>(ChunkSize);
         }
+        */
     }
     
     internal override void MoveComponent(int from, int to)
     {
-        chunks[to   / ChunkSize].components[to   % ChunkSize] =
-        chunks[from / ChunkSize].components[from % ChunkSize];
+        components[to] = components[from];
     }
     
     internal override void CopyComponentTo(int sourcePos, StructHeap target, int targetPos)
     {
         var targetHeap = (StructHeap<T>)target;
-        targetHeap.chunks[targetPos / ChunkSize].components[targetPos % ChunkSize] =
-                   chunks[sourcePos / ChunkSize].components[sourcePos % ChunkSize];
+        targetHeap.components[targetPos] = components[sourcePos];
     }
     
     /// <remarks>
@@ -89,8 +105,7 @@ internal sealed class StructHeap<T> : StructHeap
     /// </remarks>
     internal override void CopyComponent(int sourcePos, int targetPos)
     {
-        chunks[targetPos / ChunkSize].components[targetPos % ChunkSize] =
-        chunks[sourcePos / ChunkSize].components[sourcePos % ChunkSize];
+        components[targetPos] = components[sourcePos];
     }
     
     
@@ -100,16 +115,15 @@ internal sealed class StructHeap<T> : StructHeap
     /// - it allows only reading struct values
     /// </summary>
     internal override IComponent GetComponentDebug (int compIndex) {
-        return chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+        return components[compIndex];
     }
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
-        ref var value = ref chunks[compIndex / ChunkSize].components[compIndex % ChunkSize];
+        ref var value = ref components[compIndex];
         return writer.WriteAsBytesMapper(value, typeMapper);
     }
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
-        chunks[compIndex / ChunkSize].components[compIndex % ChunkSize]
-            = reader.ReadMapper(typeMapper, json);  // todo avoid boxing within typeMapper, T is struct
+        components[compIndex] = reader.ReadMapper(typeMapper, json);  // todo avoid boxing within typeMapper, T is struct
     }
 }
