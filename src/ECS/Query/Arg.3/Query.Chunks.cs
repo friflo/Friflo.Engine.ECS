@@ -17,10 +17,10 @@ public readonly struct Chunks<T1, T2, T3>
     where T3 : struct, IComponent
 {
     public              int             Length => chunk1.Length;
-    public readonly     Chunk<T1>       chunk1;
-    public readonly     Chunk<T2>       chunk2;
-    public readonly     Chunk<T3>       chunk3;
-    public readonly     ChunkEntities   entities;
+    public readonly     Chunk<T1>       chunk1;     //  16
+    public readonly     Chunk<T2>       chunk2;     //  16
+    public readonly     Chunk<T3>       chunk3;     //  16
+    public readonly     ChunkEntities   entities;   //  24
 
     public override     string          ToString() => entities.GetChunksString();
 
