@@ -119,7 +119,7 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
     public void Reset()         => throw new NotImplementedException();
 
     [ExcludeFromCodeCoverage]
-    object IEnumerator.Current  => (chunk1, chunk2, chunk3, entities);
+    object IEnumerator.Current  => Current;
     
     // --- IEnumerator
     public bool MoveNext()
