@@ -295,8 +295,8 @@ public static class Test_Query
         foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
         start = GetAllocatedBytes();
         foreach (var (position, rotation, _) in query.Chunks) {
-            AreEqual(3, position.Values[0].z);
-            rotation.Values[0].x = 42;
+            AreEqual(3, position[0].z);
+            rotation[0].x = 42;
             chunkCount++;
         }
         AssertNoAlloc(start);
@@ -308,12 +308,6 @@ public static class Test_Query
             switch (chunkCount++) {
                 case 0:
                     rotation[0].x = 99;
-                    break;
-                case 1:
-                    var e = Assert.Throws<IndexOutOfRangeException>(() => {
-                        rotation[1].x = 0;    
-                    });
-                    Assert.AreEqual("Index was outside the bounds of the array.", e!.Message);
                     break;
             }
         }
@@ -343,10 +337,10 @@ public static class Test_Query
         foreach (var (_, _, _) in query.Chunks) { } // force one time allocations
         var start = GetAllocatedBytes();
         foreach (var (position, rotation, _) in query.Chunks) {
-            AreEqual(1, position.Values[0].x);
-            AreEqual(4, rotation.Values[0].x);
-            position.Values[0].x = 42;
-            rotation.Values[0].x = 43;
+            AreEqual(1, position[0].x);
+            AreEqual(4, rotation[0].x);
+            position[0].x = 42;
+            rotation[0].x = 43;
             chunkCount++;
         }
         AssertNoAlloc(start);

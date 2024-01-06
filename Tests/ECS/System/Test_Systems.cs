@@ -44,14 +44,13 @@ public class MySystem_Arg1 : ComponentSystem
         int chunkCount  = 0;
         foreach (var (position, entities) in query.Chunks) {
             var vectors     = position.AsSpanVector3();
-            var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
             Mem.AreEqual(length,                    position.Length);
-            Mem.AreEqual(positions[0].x,            entities[0]);
-            Mem.AreEqual(positions[length - 1].x,   entities[length - 1]);
-            Mem.AreEqual(positions[0].x,            entities.EntityAt(0).Id);
-            Mem.AreEqual(positions[length - 1].x,   entities.EntityAt(length - 1).Id);
+            Mem.AreEqual(position[0].x,             entities[0]);
+            Mem.AreEqual(position[length - 1].x,    entities[length - 1]);
+            Mem.AreEqual(position[0].x,             entities.EntityAt(0).Id);
+            Mem.AreEqual(position[length - 1].x,    entities.EntityAt(length - 1).Id);
             switch(chunkCount++) {
                 case 0:     Mem.AreEqual(1,     length);    Mem.AreSame(store.StoreRoot.Archetype,  entities.Archetype); break;
                 case 1:     Mem.AreEqual(999,   length);    Mem.AreSame(childArch,                  entities.Archetype); break;
@@ -77,13 +76,12 @@ public class MySystem_Arg2 : ComponentSystem
         var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
         int chunkCount  = 0;
-        foreach (var (position, rotation, entities) in query.Chunks) {
-            var vectors     = rotation.AsSpanQuaternion();
-            var positions   = position.Values;
+        foreach (var (positions, rotations, entities) in query.Chunks) {
+            var vectors     = rotations.AsSpanQuaternion();
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
-            Mem.AreEqual(length,                    position.Length);
-            Mem.AreEqual(length,                    rotation.Length);
+            Mem.AreEqual(length,                    positions.Length);
+            Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(positions[0].x,            entities.EntityAt(0).Id);
             Mem.AreEqual(positions[length - 1].x,   entities.EntityAt(length - 1).Id);
             switch(chunkCount++) {
@@ -111,10 +109,9 @@ public class MySystem_Arg3 : ComponentSystem
         var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
         int chunkCount  = 0;
-        foreach (var (position, rotation, name, entities) in query.Chunks) {
-            var positions   = position.Values;
+        foreach (var (positions, rotation, name, entities) in query.Chunks) {
             var length      = entities.Length;
-            Mem.AreEqual(length,                    position.Length);
+            Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    rotation.Length);
             Mem.AreEqual(length,                    name.Length);
             Mem.AreEqual(positions[0].x,            entities.Ids[0]);
@@ -144,12 +141,11 @@ public class MySystem_Arg4 : ComponentSystem
         var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
-        foreach (var (position, rotation, name, scale, entities) in query.Chunks) {
+        foreach (var (positions, rotation, name, scale, entities) in query.Chunks) {
             var vectors     = scale.AsSpanVector3();
-            var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
-            Mem.AreEqual(length,                    position.Length);
+            Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    rotation.Length);
             Mem.AreEqual(length,                    name.Length);
             Mem.AreEqual(length,                    scale.Length);
@@ -180,12 +176,11 @@ public class MySystem_Arg5 : ComponentSystem
         var store       = query.Store;
         var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
-        foreach (var (position, rotation, name, scale, transform, entities) in query.Chunks) {
+        foreach (var (positions, rotation, name, scale, transform, entities) in query.Chunks) {
             var matrix4X4   = transform.AsSpanMatrix4x4();
-            var positions   = position.Values;
             var length      = entities.Length;
             Mem.AreEqual(length,                    matrix4X4.Length);
-            Mem.AreEqual(length,                    position.Length);
+            Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    rotation.Length);
             Mem.AreEqual(length,                    name.Length);
             Mem.AreEqual(length,                    scale.Length);

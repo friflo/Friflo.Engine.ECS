@@ -275,9 +275,8 @@ public static class Test_Query
     
     private static void bench(ArchetypeQuery<MyComponent1> query) {
         foreach (var (component, _) in query.Chunks) {
-            var components = component.Values;
-            for (int n = 0; n < components.Length; n++) {
-                ++components[n].a;
+            for (int n = 0; n < component.Length; n++) {
+                ++component[n].a;
             }
         }
     }

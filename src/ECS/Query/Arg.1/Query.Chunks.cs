@@ -24,8 +24,8 @@ public readonly struct Chunks<T1>
         this.entities   = entities;
     }
     
-    public void Deconstruct(out Chunk<T1> chunk1, out ChunkEntities entities) {
-        chunk1      = this.chunk1;
+    public void Deconstruct(out Span<T1> chunk1, out ChunkEntities entities) {
+        chunk1      = this.chunk1.Values;
         entities    = this.entities;
     }
 }

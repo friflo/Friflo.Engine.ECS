@@ -30,10 +30,10 @@ public readonly struct Chunks<T1, T2, T3>
         this.entities   = entities;
     }
     
-    public void Deconstruct(out Chunk<T1> chunk1, out Chunk<T2> chunk2, out Chunk<T3> chunk3, out ChunkEntities entities) {
-        chunk1      = this.chunk1;
-        chunk2      = this.chunk2;
-        chunk3      = this.chunk3;
+    public void Deconstruct(out Span<T1> chunk1, out Span<T2> chunk2, out Span<T3> chunk3, out ChunkEntities entities) {
+        chunk1      = this.chunk1.Values;
+        chunk2      = this.chunk2.Values;
+        chunk3      = this.chunk3.Values;
         entities    = this.entities;
     }
 }
