@@ -24,7 +24,7 @@ internal readonly struct SignatureIndexes
     
     // public   StructIndexesEnumerator GetEnumerator() => new (this);
     
-    public override     string          ToString()      => GetString("StructIndexes: ");
+    public override     string          ToString()      => GetString("SignatureIndexes: ");
     
     internal SignatureIndexes (
         int length,

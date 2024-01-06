@@ -90,7 +90,7 @@ public static class Test_Archetype
         var posType = schema.GetComponentType<Position>();
         
         indexes = new SignatureIndexes(1, posType.structIndex);
-        AreEqual("StructIndexes: [Position]", indexes.ToString());
+        AreEqual("SignatureIndexes: [Position]", indexes.ToString());
     }
     
     [Test]
