@@ -61,9 +61,10 @@ internal sealed class StructHeap<T> : StructHeap
             var newComponents   = new T [newLength];
             var curComponents   = components;
             var curLength       = chunkCount     * ChunkSize;
-            for (int i = 0; i < curLength; i++) {
-                newComponents[i] = curComponents[i];
-            }
+            
+            var source = new ReadOnlySpan<T>(curComponents, 0, curLength);
+            var target = new Span<T>(newComponents);
+            source.CopyTo(target);
             components = newComponents;
         } else {
             // throw new InvalidOperationException("expect different chunk lengths");
