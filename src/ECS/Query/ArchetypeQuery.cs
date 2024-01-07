@@ -48,9 +48,9 @@ public class ArchetypeQuery
 #region methods
     public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
 
-//  public QueryChunks      Chunks                                      => new (this);
-    public QueryEnumerator  GetEnumerator()                             => new (this);
-//  public QueryForEach     ForEach(Action<Ref<T1>, Ref<T2>> lambda)    => new (this, lambda);
+
+    public      QueryEntities      Entities         => new (this);
+
 
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
     {
@@ -58,7 +58,6 @@ public class ArchetypeQuery
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
         signatureIndexes    = indexes;
-        // store.AddQuery(this);
     }
     
     /// <remarks>
@@ -69,10 +68,7 @@ public class ArchetypeQuery
         lastArchetypeCount  = 1;
     }
     
-    // private  readonly    List<ArchetypeQuery>    queries;            // only for debugging
-    // internal void        AddQuery(ArchetypeQuery query) { queries.Add(query); }
-    
-    internal ReadOnlySpan<Archetype> GetArchetypesSpan() {
+    private ReadOnlySpan<Archetype> GetArchetypesSpan() {
         var archs = GetArchetypes();
         return new ReadOnlySpan<Archetype>(archs.array, 0, archs.length);
     }

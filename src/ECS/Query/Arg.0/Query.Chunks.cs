@@ -9,53 +9,36 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct Chunks
-{
-    public              int             Length => entities.Length;
 
-    public readonly     ChunkEntities   entities;   //  24
-
-    public override     string          ToString() => entities.GetChunksString();
-
-    internal Chunks(ChunkEntities entities) {
-        this.entities   = entities;
-    }
-    
-    public void Deconstruct(out ChunkEntities entities) {
-        entities    = this.entities;
-    }
-}
-
-
-public readonly struct QueryChunks  : IEnumerable <Chunks>
+public readonly struct QueryEntities  : IEnumerable <ChunkEntities>
 {
     private readonly ArchetypeQuery query;
 
     public  override string         ToString() => query.GetQueryChunksString();
 
-    internal QueryChunks(ArchetypeQuery query) {
+    internal QueryEntities(ArchetypeQuery query) {
         this.query = query;
     }
     
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
-    IEnumerator<Chunks>
-    IEnumerable<Chunks>.GetEnumerator() => new ChunkEnumerator (query);
+    IEnumerator<ChunkEntities>
+    IEnumerable<ChunkEntities>.GetEnumerator()  => new ChunkEnumerator (query);
     
     // --- IEnumerable
     [ExcludeFromCodeCoverage]
     IEnumerator     IEnumerable.GetEnumerator() => new ChunkEnumerator (query);
     
     // --- IEnumerable
-    public ChunkEnumerator GetEnumerator() => new (query);
+    public ChunkEnumerator      GetEnumerator() => new (query);
 }
 
-public struct ChunkEnumerator : IEnumerator<Chunks>
+public struct ChunkEnumerator : IEnumerator<ChunkEntities>
 {
     private readonly    Archetypes              archetypes;     // 16
     //
     private             int                     archetypePos;   //  4
-    private             Chunks                  chunks;         // 24
+    private             ChunkEntities           entities;       // 24
     
     
     internal  ChunkEnumerator(ArchetypeQuery query)
@@ -65,17 +48,17 @@ public struct ChunkEnumerator : IEnumerator<Chunks>
     }
     
     /// <summary>return Current by reference to avoid struct copy and enable mutation in library</summary>
-    public readonly Chunks Current   => chunks;
+    public readonly ChunkEntities Current   => entities;
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]
     public void Reset() {
         archetypePos    = -1;
-        chunks          = default;
+        entities        = default;
     }
 
     [ExcludeFromCodeCoverage]
-    object IEnumerator.Current  => chunks;
+    object IEnumerator.Current  => entities;
     
     // --- IEnumerator
     public bool MoveNext()
@@ -93,8 +76,7 @@ public struct ChunkEnumerator : IEnumerator<Chunks>
         // --- set chunks of new archetype
         int count       = archetype.entityCount;
             
-        var entities    = new ChunkEntities(archetype, count);
-        chunks          = new Chunks(entities);
+        entities        = new ChunkEntities(archetype, count);
         return true;  
     }
     

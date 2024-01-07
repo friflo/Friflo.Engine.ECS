@@ -280,10 +280,10 @@ public static class Test_Tags
             var query  = store.Query().AllTags(Tags.Get<TestTag>());
             AreEqual("Query: [#TestTag]  EntityCount: 2", query.ToString());
             int count   = 0;
-            foreach (var id in query) {
+            foreach (var entities in query.Entities) {
                 switch (count) {
-                    case 0: AreEqual(1, id); break;
-                    case 1: AreEqual(2, id); break;
+                    case 0: AreEqual(1, entities[0]); break;
+                    case 1: AreEqual(2, entities[0]); break;
                 }
                 count++;
             }
@@ -292,18 +292,18 @@ public static class Test_Tags
             var query  = store.Query().AllTags(Tags.Get<TestTag2>());
             AreEqual("Query: [#TestTag2]  EntityCount: 1", query.ToString());
             int count   = 0;
-            foreach (var id in query) {
+            foreach (var entities in query.Entities) {
                 count++;
-                AreEqual(2, id);
+                AreEqual(2, entities[0]);
             }
             AreEqual(1, count);
         } { 
             var query = store.Query().AllTags(Tags.Get<TestTag, TestTag2>());
             AreEqual("Query: [#TestTag, #TestTag2]  EntityCount: 1", query.ToString());
             int count   = 0;
-            foreach (var id in query) {
+            foreach (var entities in query.Entities) {
                 count++;
-                AreEqual(2, id);
+                AreEqual(2, entities[0]);
             }
             AreEqual(1, count);
         }
