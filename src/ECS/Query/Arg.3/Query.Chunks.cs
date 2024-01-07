@@ -128,9 +128,9 @@ public struct ChunkEnumerator<T1, T2, T3> : IEnumerator<Chunks<T1, T2, T3>>
         var chunks3     = ((StructHeap<T3>)heapMap[structIndex3]);
         var count       = archetype.entityCount;
 
-        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, true);
-        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count, true);
-        var chunk3      = new Chunk<T3>(chunks3.components, copyT3, count, true);
+        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count);
+        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count);
+        var chunk3      = new Chunk<T3>(chunks3.components, copyT3, count);
         var entities    = new ChunkEntities(archetype, count);
         chunks          = new Chunks<T1, T2, T3>(chunk1, chunk2, chunk3, entities);
         return true;  
