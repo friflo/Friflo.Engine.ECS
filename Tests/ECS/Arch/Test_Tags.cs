@@ -279,6 +279,7 @@ public static class Test_Tags
         {
             var query  = store.Query().AllTags(Tags.Get<TestTag>());
             AreEqual("Query: [#TestTag]  EntityCount: 2", query.ToString());
+            AreEqual("QueryEntities[2]", query.Entities.ToString());
             int count   = 0;
             foreach (var entities in query.Entities) {
                 switch (count) {

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-// ReSharper disable once CheckNamespace
 
+using System.Diagnostics.CodeAnalysis;
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -14,6 +14,7 @@ namespace Friflo.Engine.ECS;
 /// - to enable maximum efficiency when GC iterate StructHeap{T}.chunks" for collection.
 /// </remarks>
 [Obsolete("replaced by StructHeap<T>.components")]
+[ExcludeFromCodeCoverage]
 internal readonly struct StructChunk<T>
     where T : struct, IComponent
 {

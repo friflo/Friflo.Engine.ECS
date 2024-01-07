@@ -14,7 +14,7 @@ public readonly struct QueryEntities  : IEnumerable <ChunkEntities>
 {
     private readonly ArchetypeQuery query;
 
-    public  override string         ToString() => query.GetQueryChunksString();
+    public  override string         ToString() => $"QueryEntities[{query.ChunkCount}]";
 
     internal QueryEntities(ArchetypeQuery query) {
         this.query = query;
