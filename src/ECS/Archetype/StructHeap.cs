@@ -60,14 +60,10 @@ internal abstract class StructHeap
     public override string ToString() {
         DebugInfo(out int length);
         var sb = new StringBuilder();
-        sb.Append('[');
+        sb.Append("StructHeap<");
         sb.Append(StructType.Name);
-        sb.Append("], Length: ");
+        sb.Append(">  Capacity: ");
         sb.Append(length);
-#if DEBUG
-        sb.Append(", EntityCount: ");
-        sb.Append(archetype.EntityCount);
-#endif
         return sb.ToString();
     }
 }
