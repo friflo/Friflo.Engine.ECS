@@ -147,49 +147,6 @@ public static class Test_StructHeapRaw
     /// </summary>
     private const int QueryCount = 2 * StructInfo.ChunkSize + 1;
     
-#if COMP_ITER
-    [Test]
-    public static void Test_StructHeapRaw_Query_foreach()
-    {
-        var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
-        var query   = store.Query(Signature.Get<Position, Rotation>());
-        for (int count = 0; count < QueryCount; count++) {
-            int n = 0;
-            foreach (var (position, rotation) in query) {
-                var x = (int)position.Value.x;
-                if (x != n)         Mem.FailAreEqual(x, n);
-                n++;
-            }
-            if (count != n)         Mem.FailAreEqual(count, n);
-            var id = store.CreateEntity(arch1);
-            store.GetEntityComponent<Position>(id).x = count;
-        }
-        Mem.AreEqual(QueryCount, arch1.EntityCount);
-    }
-    
-    [Test]
-    public static void Test_StructHeapRaw_Query_ForEach()
-    {
-        var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
-        var query   = store.Query(Signature.Get<Position, Rotation>());
-        for (int count = 0; count < QueryCount; count++) {
-            int n = 0;
-            var forEach     = query.ForEach((position, rotation) => {
-                var x = (int)position.Value.x;
-                if (x != n)         Mem.FailAreEqual(x, n);
-                n++;
-            });
-            forEach.Run();
-            Mem.AreEqual(count, n);
-            var id = store.CreateEntity(arch1);
-            store.GetEntityComponent<Position>(id).x = count;
-        }
-        Mem.AreEqual(QueryCount, arch1.EntityCount);
-    }
-#endif
-    
     [Test]
     public static void Test_StructHeapRaw_Query_Chunks()
     {
@@ -230,10 +187,7 @@ public static class Test_StructHeapRaw
         //      Query.ForEach()             ~   98 ms
         //      foreach Query.Chunks        ~    6 ms
         var query   = store.Query(Signature.Get<MyComponent1, MyComponent2>());
-#if COMP_ITER
-        foreach (var (position, rotation) in query) { }     // force one time allocation
-        query.ForEach((position, rotation) => {}).Run();    // warmup
-#endif
+
         foreach (var _ in query.Chunks) { }                 // warmup
         {
             // _ = store.CreateEntity(arch1); // warmup
@@ -254,38 +208,7 @@ public static class Test_StructHeapRaw
                 if (x != n - 1)     Mem.FailAreEqual(x, n - 1);
             }
             Console.WriteLine($"for GetEntityComponent<>(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        }
-#if COMP_ITER
-        {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            int n           = 0;
-            var memStart    = Mem.GetAllocatedBytes();
-            foreach (var (component1, component2) in query) {
-                var x = component1.Value.a;
-                if (x != n)         Mem.FailAreEqual(x, n);
-                n++;
-            }
-            Mem.AssertNoAlloc(memStart);
-            Mem.AreEqual(Count, n);
-            Console.WriteLine($"foreach Query(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         } {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            int n           = 0;
-            var memStart    = Mem.GetAllocatedBytes();
-            var forEach     = query.ForEach((component1, component2) => {
-                var x = component1.Value.a;
-                if (x != n)         Mem.FailAreEqual(x, n);
-                n++;
-            });
-            forEach.Run();
-            var diff = Mem.GetAllocatedBytes() - memStart;
-            Mem.AreEqual(Count, n);
-            Console.WriteLine($"Query.ForEach(). count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms.  Alloc: {diff}");
-        }
-#endif
-        {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             int n           = 0;

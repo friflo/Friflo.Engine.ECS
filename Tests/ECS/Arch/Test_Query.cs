@@ -202,60 +202,6 @@ public static class Test_Query
             _ = store.Query(sig);
         }
     }
-#if COMP_ITER
-    [Test]
-    public static void Test_Query_ForEach()
-    {
-        var store   = new EntityStore();
-        var entity  = store.CreateEntity();
-        entity.AddComponent(new Position(1,2,3));
-        entity.AddComponent(new Rotation(4,5,6,7));
-        
-        var entity3  = store.CreateEntity();
-        entity3.AddComponent(new Position(1,2,3));
-        entity3.AddComponent(new Rotation(8, 8, 8, 8));
-        entity3.AddComponent(new Scale3  (7, 7, 7));
-        
-        var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig);
-        var count   = 0;
-        var forEach = query.ForEach((position, rotation) => {
-            count++;
-            AreEqual(3, position.Value.z);
-            rotation.Value.x = 42;
-        });
-        AreEqual("ForEach: [Position, Rotation]", forEach.ToString());
-        forEach.Run();
-        AreEqual(2,     count);
-        AreEqual(42,    entity.Rotation.x);
-    }
-    
-    [Test]
-    public static void Test_Query_ForEach_RO()
-    {
-        var store   = new EntityStore();
-        var entity  = store.CreateEntity();
-        entity.AddComponent(new Position(1,2,3));
-        entity.AddComponent(new Rotation(4,5,6,7));
-        
-        var sig     = Signature.Get<Position, Rotation>();
-        var query   = store.Query(sig).ReadOnly<Position>().ReadOnly<Rotation>();
-        var count   = 0;
-        var forEach = query.ForEach((position, rotation) => {
-            // ReSharper disable once AccessToModifiedClosure
-            count++;
-            position.Value.x = 42;
-            rotation.Value.x = 43;
-        });
-        _           = query.Archetypes; // update Archetypes for subsequent Mem check
-        var start   = GetAllocatedBytes();
-        forEach.Run();
-        AssertNoAlloc(start);
-        AreEqual(1,     count);
-        AreEqual(1,     entity.Position.x);
-        AreEqual(4,     entity.Rotation.x);
-    }
-#endif
     
     [Test]
     public static void Test_Query_loop()
@@ -278,18 +224,7 @@ public static class Test_Query
         AssertAlloc(start, expect);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
-#if COMP_ITER
-        start       = GetAllocatedBytes();
-        var count   = 0;
-        foreach (var (position, rotation) in query) {
-            AreEqual(3, position.Value.z);
-            rotation.Value.x = 42;
-            count++;
-        }
-        AssertNoAlloc(start);
-        AreEqual(2,  count);
-        AreEqual(42, entity2.Rotation.x);
-#endif
+
         var chunkCount   = 0;
         AreEqual("QueryChunks[2]  Components: [Position, Rotation]", query.Chunks.ToString());
         foreach (var (_, _, _) in query.Chunks) { } // force one time allocations

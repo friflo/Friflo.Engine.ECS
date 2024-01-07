@@ -85,18 +85,6 @@ public static class Test_sizeof
         AreEqual(16, size);
     }
     
-#if COMP_ITER
-    [Test]
-    public static void Test_Ref_ToString()
-    {
-        var refPosition = new Ref<Position>();
-        var positions   = new [] { new Position(1, 2, 3) };
-        refPosition.Set(positions, null, 1);
-        refPosition.pos = 0;
-        AreEqual("1, 2, 3", refPosition.ToString());
-    }
-#endif
-    
     [Test]
     public static unsafe void Test_Scripts_sizeof()
     {
