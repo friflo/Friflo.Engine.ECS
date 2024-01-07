@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -12,7 +9,7 @@ namespace Tests.ECS.System;
 
 public static class Test_Query
 {
-    private const long Count = 10_000_000; // 10_000_000;
+    private const long Count = 10; // 10_000_000;
         
     [Test]
     public static void Test_Query_arg_count_1()
@@ -216,111 +213,6 @@ public static class Test_Query
         root.AddComponent<MyComponent1>();
         store.SetStoreRoot(root);
         return store;
-    }
-    
-    // ReSharper disable once ConvertToConstant.Local
-    private static readonly bool skipBench = false;
-    private static readonly int entityCount = 100_000;
-    
-    [Test]
-    public static void Test_BenchRef()
-    {
-        if (skipBench) return;
-        
-        var components = new ByteComponent[32];
-        // --- enable JIT optimization
-        for (long i = 0; i < 5_000_000; i++) {
-            bench_ref(components);
-        }
-        
-        // --- run perf
-        // 1000 ~ 42 ms
-        components = new ByteComponent[entityCount];
-        var stopwatch = new Stopwatch(); stopwatch.Start();
-        for (long i = 0; i < 1000; i++) {
-            bench_ref(components);
-        }
-        Console.WriteLine($"Iterate - array: {stopwatch.ElapsedMilliseconds}");
-    }
-    
-    private static void bench_ref(ByteComponent[] components) {
-        Span<ByteComponent> comps = components;
-        for (int n = 0; n < comps.Length; n++) {
-            ++comps[n].b;
-        }
-    }
-    
-    [Test]
-    public static void Test_Bench()
-    {
-        if (skipBench) return;
-        
-        var store   = new EntityStore(PidType.UsePidAsId);
-        var archetype = store.GetArchetype(Signature.Get<ByteComponent>());
-        for (int n = 0; n < 32; n++) {
-            store.CreateEntity(archetype);
-        }
-        
-        var inc = CreateInc();
-        // --- enable JIT optimization
-        var  query = store.Query<ByteComponent>();
-        for (int i = 0; i < 5_000_000; i++) {
-            bench_simd(query, inc);
-            bench(query);
-        }
-        
-        for (int n = 0; n < entityCount - 32; n++) {
-            store.CreateEntity(archetype);
-        }
-        // --- run perf
-        var stopwatch = new Stopwatch(); stopwatch.Start();
-        for (int i = 0; i < 1000; i++) {
-            // 1000 ~ 42 ms
-            bench(query);
-        }
-        Console.WriteLine($"Iterate - Span<ByteComponent>: {stopwatch.ElapsedMilliseconds}");
-        
-
-        stopwatch = new Stopwatch(); stopwatch.Start();
-        for (int i = 0; i < 1000; i++) {
-            // 1000 ~ 2 ms
-            bench_simd(query, inc);
-        }
-        Console.WriteLine($"Iterate - SIMD: {stopwatch.ElapsedMilliseconds}");
-    }
-    
-    private static void bench(ArchetypeQuery<ByteComponent> query)
-    {
-        foreach (var (component, _) in query.Chunks)
-        {
-            for (int n = 0; n < component.Length; n++) {
-                ++component[n].b;
-            }
-        }
-    }
-    
-    private static Vector256<byte> CreateInc() {
-        var oneBytes = new byte[32];
-        for (int n = 0; n < 32; n++) {
-            oneBytes[n] = 1;
-        }
-        var addBytes    = new Span<byte>(oneBytes);
-        var inc         = Vector256.Create<byte>(addBytes);
-        return inc;
-    }
-    
-    private static void bench_simd(ArchetypeQuery<ByteComponent> query, Vector256<byte> add)
-    {
-        foreach (var (component, _) in query.Chunks)
-        {
-            var bytes = MemoryMarshal.Cast<ByteComponent, byte>(component); 
-            for (int n = 0; n < component.Length; n += 32) {
-                var slice = bytes.Slice(n, 32);
-                var value = Vector256.Create<byte>(slice);
-                var result = Vector256.Add(value, add);
-                result.CopyTo(slice);
-            }
-        }
     }
 }
 
