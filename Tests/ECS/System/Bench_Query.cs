@@ -88,14 +88,13 @@ public static class Bench_Query
         }
     }
     
-    private static Vector256<byte> CreateInc() {
-        var oneBytes = new byte[32];
+    private static Vector256<byte> CreateInc()
+    {
+        Span<byte> oneBytes = stackalloc byte[32];
         for (int n = 0; n < 32; n++) {
             oneBytes[n] = 1;
         }
-        var addBytes    = new Span<byte>(oneBytes);
-        var inc         = Vector256.Create<byte>(addBytes);
-        return inc;
+        return Vector256.Create<byte>(oneBytes);
     }
     
     private static void bench_simd(ArchetypeQuery<ByteComponent> query, Vector256<byte> add)
@@ -104,9 +103,9 @@ public static class Bench_Query
         {
             var bytes = MemoryMarshal.Cast<ByteComponent, byte>(component); 
             for (int n = 0; n < component.Length; n += 32) {
-                var slice = bytes.Slice(n, 32);
-                var value = Vector256.Create<byte>(slice);
-                var result = Vector256.Add(value, add);
+                var slice   = bytes.Slice(n, 32);
+                var value   = Vector256.Create<byte>(slice);
+                var result  = Vector256.Add(value, add);
                 result.CopyTo(slice);
             }
         }
