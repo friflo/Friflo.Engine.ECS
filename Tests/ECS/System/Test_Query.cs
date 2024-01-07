@@ -18,11 +18,9 @@ public static class Test_Query
         var store = SetupTestStore();
         var root  = store.StoreRoot;
         
-        var child = store.CreateEntity();
-        root.AddChild(child);
-        child.AddComponent(new Position(2, 0, 0));
-        for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+        var archetype   = store.GetArchetype(Signature.Get<Position>());
+        for (int n = 1; n <= 1000; n++) {
+            var child = store.CreateEntity(archetype);
             child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
@@ -53,12 +51,9 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 2 });
         
-        var child = store.CreateEntity();
-        root.AddChild(child);
-        child.AddComponent(new Position(2, 0, 0));
-        child.AddComponent(new Rotation(2, 0, 0, 0));
-        for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        for (int n = 2; n <= 1000; n++) {
+            var child = store.CreateEntity(archetype);
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             root.AddChild(child);
@@ -89,13 +84,9 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 3 });
         
-        var child = store.CreateEntity();
-        root.AddChild(child);
-        child.AddComponent(new Position(2, 0, 0));
-        child.AddComponent(new Rotation(2, 0, 0, 0));
-        child.AddComponent(new EntityName("child"));
-        for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
+        for (int n = 2; n <= 1000; n++) {
+            var child = store.CreateEntity(archetype);
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Name.value    = "child";
@@ -127,14 +118,9 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 4 });
         
-        var child = store.CreateEntity();
-        root.AddChild(child);
-        child.AddComponent(new Position(2, 0, 0));
-        child.AddComponent(new Rotation(2, 0, 0, 0));
-        child.AddComponent(new Scale3  (2, 0, 0));
-        child.AddComponent(new EntityName("child"));
-        for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3, EntityName>());
+        for (int n = 2; n <= 1000; n++) {
+            var child = store.CreateEntity(archetype);
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Scale3        = new Scale3  (n, 0, 0);
@@ -167,15 +153,9 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 5 });
         
-        var child = store.CreateEntity();
-        root.AddChild(child);
-        child.AddComponent(new Position(2, 0, 0));
-        child.AddComponent(new Rotation(2, 0, 0, 0));
-        child.AddComponent(new Scale3  (2, 0, 0));
-        child.AddComponent<Transform>();
-        child.AddComponent(new EntityName("child"));
-        for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3, EntityName>());
+        for (int n = 2; n <= 1000; n++) {
+            var child = store.CreateEntity(archetype);
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Scale3        = new Scale3  (n, 0, 0);
@@ -187,8 +167,8 @@ public static class Test_Query
         int chunkCount = 0;
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 0) {
-                Mem.AreEqual(999, chunk.Length);
-                Mem.AreEqual("Chunks[999]    Archetype: [EntityName, Position, Rotation, Transform, Scale3]  Count: 999", chunk.ToString());
+                Mem.AreEqual(1, chunk.Length);
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1", chunk.ToString());
             }
         }
         
