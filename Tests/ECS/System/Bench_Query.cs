@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 
 // ReSharper disable ConvertToConstant.Local
 namespace Tests.ECS.System;
@@ -30,7 +31,7 @@ public static class Bench_Query
         for (long i = 0; i < 1000; i++) {
             bench_ref(components);
         }
-        Console.WriteLine($"Iterate - array: {stopwatch.ElapsedMilliseconds}");
+        Console.WriteLine($"Iterate - array: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
     
     private static void bench_ref(ByteComponent[] components) {
@@ -66,7 +67,7 @@ public static class Bench_Query
             // 1000 ~ 42 ms
             bench(query);
         }
-        Console.WriteLine($"Iterate - Span<ByteComponent>: {stopwatch.ElapsedMilliseconds}");
+        Console.WriteLine($"Iterate - Span<ByteComponent>: {TestUtils.StopwatchMillis(stopwatch)} ms");
         
 
         stopwatch = new Stopwatch(); stopwatch.Start();
@@ -74,7 +75,7 @@ public static class Bench_Query
             // 1000 ~ 2 ms
             bench_simd(query, inc);
         }
-        Console.WriteLine($"Iterate - SIMD: {stopwatch.ElapsedMilliseconds}");
+        Console.WriteLine($"Iterate - SIMD: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
     
     private static void bench(ArchetypeQuery<ByteComponent> query)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -22,5 +23,9 @@ public static class TestUtils
         var testAssemblyName    = "nunit.framework";
         var assemblies          = AppDomain.CurrentDomain.GetAssemblies();
         IsInUnitTest            = assemblies.Any(a => a.FullName!.StartsWith(testAssemblyName));
+    }
+    
+    public static double StopwatchMillis(Stopwatch stopwatch) {
+        return stopwatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
     }
 }
