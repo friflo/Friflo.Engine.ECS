@@ -69,8 +69,8 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     private readonly    int                     structIndex2;   //  4
     //
     private readonly    Archetypes              archetypes;     // 16
-    private             int                     archetypePos;   //  4
     //
+    private             int                     archetypePos;   //  4
     private             Chunks<T1, T2>          chunks;         // 46
     
     
@@ -89,7 +89,10 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     
     // --- IEnumerator
     [ExcludeFromCodeCoverage]
-    public void Reset()         => throw new NotImplementedException();
+    public void Reset() {
+        archetypePos    = -1;
+        chunks          = default;
+    }
 
     [ExcludeFromCodeCoverage]
     object IEnumerator.Current  => chunks;
