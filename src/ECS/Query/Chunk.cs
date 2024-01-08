@@ -16,7 +16,8 @@ public readonly struct Chunk<T>
     public              Span<T>     Span            => new(values, 0, Length);
     
     /// <summary>
-    /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/>.
+    /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/>.<br/>
+    /// It expects:  sizeof(<see cref="T"/>) == sizeof(<see cref="TTo"/>)
     /// </summary>
     /// <remarks>
     /// Example:<br/>
