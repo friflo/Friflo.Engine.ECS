@@ -21,7 +21,7 @@ public readonly struct Chunk<T>
     public   readonly   int         Length;     //  4
     
     /// <summary>
-    /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/>.<br/>
+    /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/> - which can be assigned to <see cref="Vector256{TTo}"/>'s.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector256{TTo}"/>.
     /// </summary>
     /// <remarks>
