@@ -2,9 +2,12 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -14,6 +17,9 @@ public readonly struct Chunk<T>
     where T : struct, IComponent
 {
     public              Span<T>     Span            => new(values, 0, Length);
+    
+    private  readonly   T[]         values;     //  8
+    public   readonly   int         Length;     //  4
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/>.<br/>
@@ -36,16 +42,30 @@ public readonly struct Chunk<T>
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, Length));
     
     /// <summary>
-    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector256{T}"/><br/>
-    /// <br/>
-    /// See example at <see cref="AsSpan{TTo}"/>.
+    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector128{T}"/>
+    /// <br/><br/> See example at <see cref="AsSpan{TTo}"/>.
     /// </summary>
+    [DebuggerBrowsable(Never)]
+    public              int         StepVector128   => 16 / Marshal.SizeOf<T>();
+    
+    /// <summary>
+    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector256{T}"/>
+    /// <br/><br/> See example at <see cref="AsSpan{TTo}"/>.
+    /// </summary>
+    [DebuggerBrowsable(Never)]
     public              int         StepVector256   => 32 / Marshal.SizeOf<T>();
+    
+    // ReSharper disable once InvalidXmlDocComment
+    /// <summary>
+    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector512{T}"/>
+    /// <br/><br/> See example at <see cref="AsSpan{TTo}"/>.
+    /// </summary>
+    [DebuggerBrowsable(Never)]
+    public              int         StepVector512   => 64 / Marshal.SizeOf<T>();
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
-    private  readonly   T[]         values;     //  8
-    public   readonly   int         Length;     //  4
+
     
     // ReSharper disable once UnusedParameter.Local
     internal Chunk(T[] values, T[] copy, int length) {

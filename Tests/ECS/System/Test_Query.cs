@@ -192,6 +192,7 @@ public static class Test_Query
 
         foreach (var chunk in query.Chunks) {
             var length = chunk.entities.Length;
+            
             Mem.AreEqual(length, chunk.chunk1.     AsSpanVector3().Length);
             Mem.AreEqual(length, chunk.chunk1.Span.AsSpanVector3().Length);
             //
@@ -220,6 +221,26 @@ public static class Test_Query
         root.AddComponent<MyComponent1>();
         store.SetStoreRoot(root);
         return store;
+    }
+    
+    [Test]
+    public static void Test_Query_StepVector()
+    {
+        var store = SetupTestStore();
+        var root  = store.StoreRoot;
+        
+        var archetype   = store.GetArchetype(Signature.Get<ByteComponent>());
+        for (int n = 0; n < 32; n++) {
+            var child = store.CreateEntity(archetype);
+            root.AddChild(child);
+        }
+        // --- force one time allocations
+        var  query = store.Query<ByteComponent>();
+        foreach (var (component, _) in query.Chunks) {
+            Mem.AreEqual(16, component.StepVector128);
+            Mem.AreEqual(32, component.StepVector256);
+            Mem.AreEqual(64, component.StepVector512);
+        }
     }
 }
 
