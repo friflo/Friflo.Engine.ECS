@@ -22,15 +22,18 @@ public readonly struct Chunk<T>
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/>.<br/>
-    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector128{TTo}"/>.
+    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector256{TTo}"/>.
     /// </summary>
     /// <remarks>
-    /// Example:<br/>
+    /// By adding padding elements the returned <see cref="Span{TTo}"/> can be used with <see cref="Vector256"/> operations <br/>
+    /// without the need of an additional for loop to process the elements at the tail of the <see cref="Span{T}"/>.<br/>
+    /// <br/>
+    /// <i>Example:</i><br/>
     /// <code>
     ///     foreach (var (component, _) in query.Chunks)
     ///     {    
     ///         var bytes   = component.AsSpan256&lt;byte>();
-    ///         var step    = component.StepVector256;
+    ///         var step    = component.StepSpan256;
     ///         for (int n = 0; n &lt; bytes.Length; n += step) {
     ///             var slice   = bytes.Slice(n, step);
     ///             var value   = Vector256.Create&lt;byte>(slice);
