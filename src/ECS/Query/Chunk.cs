@@ -15,10 +15,8 @@ public readonly struct Chunk<T>
 {
     public              Span<T>     Span            => new(values, 0, Length);
     
-    public              Span<byte>  SpanByte        => MemoryMarshal.Cast<T, byte>(new Span<T>(values, 0, Length));
-    
     /// <summary>
-    /// The step value in a for loop when converting the <see cref="SpanByte"/> to a <see cref="Vector256{T}"/>
+    /// Return the components as a <see cref="Span{T}"/> of <see cref="byte"/>'s.
     /// </summary>
     /// <remarks>
     /// Example:<br/>
@@ -33,6 +31,13 @@ public readonly struct Chunk<T>
     ///     } 
     /// </code>
     /// </remarks>
+    public              Span<byte>  SpanByte        => MemoryMarshal.Cast<T, byte>(new Span<T>(values, 0, Length));
+    
+    /// <summary>
+    /// The step value in a for loop when converting the <see cref="SpanByte"/> to a <see cref="Vector256{T}"/><br/>
+    /// <br/>
+    /// See example at <see cref="SpanByte"/>.
+    /// </summary>
     public              int         StepVector256   => 32 / Marshal.SizeOf<T>();
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
@@ -59,23 +64,6 @@ public readonly struct Chunk<T>
             throw new IndexOutOfRangeException();
         }
     }
-    
-    
-
-
-    /*
-    internal Chunk(T[] values, T[] copy, int length) {
-        Length      = length;
-        source      = values;
-        this.values = copy ?? values;
-    }
-    
-    internal void Copy() {
-        if (source == values) {
-            return;
-        }
-        Array.Copy(source, values, Length);
-    } */
 }
 
 public static class ChunkExtensions
