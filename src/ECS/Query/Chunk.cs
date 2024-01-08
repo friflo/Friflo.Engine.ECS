@@ -21,7 +21,7 @@ public readonly struct Chunk<T>
     /// <remarks>
     /// Example:<br/>
     /// <code>
-    ///     var bytes   = component.SpanByte;
+    ///     var bytes   = component.AsSpan&lt;byte>();
     ///     var step    = component.StepVector256;
     ///     for (int n = 0; n &lt; bytes.Length; n += step) {
     ///         var slice   = bytes.Slice(n, step);
@@ -31,12 +31,13 @@ public readonly struct Chunk<T>
     ///     } 
     /// </code>
     /// </remarks>
-    public              Span<byte>  SpanByte        => MemoryMarshal.Cast<T, byte>(new Span<T>(values, 0, Length));
+    public              Span<TTo>  AsSpan<TTo>() where TTo : struct
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, Length));
     
     /// <summary>
-    /// The step value in a for loop when converting the <see cref="SpanByte"/> to a <see cref="Vector256{T}"/><br/>
+    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector256{T}"/><br/>
     /// <br/>
-    /// See example at <see cref="SpanByte"/>.
+    /// See example at <see cref="AsSpan{TTo}"/>.
     /// </summary>
     public              int         StepVector256   => 32 / Marshal.SizeOf<T>();
 
