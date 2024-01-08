@@ -102,7 +102,7 @@ public static class Bench_Query
         {
             var bytes   = component.SpanByte;
             var step    = component.StepVector256;
-            for (int n = 0; n < component.Length; n += step) {
+            for (int n = 0; n < bytes.Length; n += step) {
                 var slice   = bytes.Slice(n, step);
                 var value   = Vector256.Create<byte>(slice);
                 var result  = Vector256.Add(value, add);

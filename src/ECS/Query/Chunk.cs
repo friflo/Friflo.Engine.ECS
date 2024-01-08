@@ -25,7 +25,7 @@ public readonly struct Chunk<T>
     /// <code>
     ///     var bytes   = component.SpanByte;
     ///     var step    = component.StepVector256;
-    ///     for (int n = 0; n &lt; component.Length; n += step) {
+    ///     for (int n = 0; n &lt; bytes.Length; n += step) {
     ///         var slice   = bytes.Slice(n, step);
     ///         var value   = Vector256.Create&lt;byte>(slice);
     ///         var result  = Vector256.Add(value, add);
