@@ -30,14 +30,15 @@ public readonly struct Chunk<T>
     /// <br/>
     /// <i>Example:</i><br/>
     /// <code>
+    ///     // e.g. using: struct ByteComponent : IComponent { public byte value; }
     ///     foreach (var (component, _) in query.Chunks)
     ///     {    
-    ///         var bytes   = component.AsSpan256&lt;byte>();
-    ///         var step    = component.StepSpan256;
+    ///         var bytes   = component.AsSpan256&lt;byte>();      // bytes.Length - multiple of 32
+    ///         var step    = component.StepSpan256;            // step = 32
     ///         for (int n = 0; n &lt; bytes.Length; n += step) {
     ///             var slice   = bytes.Slice(n, step);
     ///             var value   = Vector256.Create&lt;byte>(slice);
-    ///             var result  = Vector256.Add(value, add);
+    ///             var result  = Vector256.Add(value, add);    // execute 32 add instructions at once
     ///             result.CopyTo(slice);
     ///         }
     ///     }
