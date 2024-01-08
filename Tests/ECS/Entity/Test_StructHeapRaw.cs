@@ -158,7 +158,7 @@ public static class Test_StructHeapRaw
             int n           = 0;
             foreach (var (positions, _, entities) in query.Chunks) {
                 chunkCount++;
-                foreach (var position in positions) {
+                foreach (var position in positions.Span) {
                     var x = (int)position.x;
                     if (x != n)     Mem.FailAreEqual(x, n);
                     n++;
@@ -214,7 +214,7 @@ public static class Test_StructHeapRaw
             int n           = 0;
             var memStart    = Mem.GetAllocatedBytes();
             foreach (var (components, component2Chunk, _) in query.Chunks) {
-                foreach (var component1 in components) {
+                foreach (var component1 in components.Span) {
                     var x = component1.a;
                     if (x !=n)      Mem.FailAreEqual(x, n);
                     n++;

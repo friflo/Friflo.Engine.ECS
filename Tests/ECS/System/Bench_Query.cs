@@ -101,7 +101,7 @@ public static class Bench_Query
     {
         foreach (var (component, _) in query.Chunks)
         {
-            var bytes = MemoryMarshal.Cast<ByteComponent, byte>(component); 
+            var bytes = MemoryMarshal.Cast<ByteComponent, byte>(component.Span); 
             for (int n = 0; n < component.Length; n += 32) {
                 var slice   = bytes.Slice(n, 32);
                 var value   = Vector256.Create<byte>(slice);
