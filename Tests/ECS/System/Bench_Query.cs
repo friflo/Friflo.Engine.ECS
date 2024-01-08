@@ -11,8 +11,8 @@ namespace Tests.ECS.System;
 // ReSharper disable InconsistentNaming
 public static class Bench_Query
 {
-    private static readonly int entityCount     = 32;   // 32 /   100_000
-    private static readonly int JitLoop         = 10;   // 10 / 5_000_000
+    private static readonly int entityCount     = 100_000;   // 32 /   100_000
+    private static readonly int JitLoop         = 5_000_000;   // 10 / 5_000_000
     
     [Test]
     public static void Test_BenchRef()
@@ -105,7 +105,7 @@ public static class Bench_Query
     
     /// <summary> Alternative to create <see cref="Vector256{T}"/> with custom values </summary>
     // ReSharper disable once UnusedMember.Local
-    private static Vector256<byte> CreateInc_Alternative()
+    private static Vector256<byte> CreateVector256_Alternative()
     {
         Span<byte> oneBytes = stackalloc byte[32] {1,1,1,1,1,1,1,1,  2,2,2,2,2,2,2,2,  3,3,3,3,3,3,3,3,  4,4,4,4,4,4,4,4};
         return Vector256.Create<byte>(oneBytes);
