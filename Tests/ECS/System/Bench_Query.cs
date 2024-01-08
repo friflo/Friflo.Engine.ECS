@@ -17,15 +17,15 @@ public static class Bench_Query
     [Test]
     public static void Test_BenchRef()
     {
-        var components = new ByteComponent[32];
+        var components = new MyComponent1[32];
         // --- enable JIT optimization
         for (long i = 0; i < JitLoop; i++) {
             bench_ref(components);
         }
         
         // --- run perf
-        // 1000 ~ 42 ms
-        components = new ByteComponent[entityCount];
+        // 1000 ~ 42,1 ms - component: int,   42,1 - component: byte
+        components = new MyComponent1[entityCount];
         var stopwatch = new Stopwatch(); stopwatch.Start();
         for (long i = 0; i < 1000; i++) {
             bench_ref(components);
@@ -33,10 +33,10 @@ public static class Bench_Query
         Console.WriteLine($"Iterate - array: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
     
-    private static void bench_ref(ByteComponent[] components) {
-        Span<ByteComponent> comps = components;
+    private static void bench_ref(MyComponent1[] components) {
+        Span<MyComponent1> comps = components;
         for (int n = 0; n < comps.Length; n++) {
-            ++comps[n].b;
+            ++comps[n].a;
         }
     }
     
@@ -44,13 +44,13 @@ public static class Bench_Query
     public static void Test_Bench()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var archetype = store.GetArchetype(Signature.Get<ByteComponent>());
+        var archetype = store.GetArchetype(Signature.Get<MyComponent1>());
         for (int n = 0; n < 32; n++) {
             store.CreateEntity(archetype);
         }
         
         // --- enable JIT optimization
-        var  query = store.Query<ByteComponent>();
+        var  query = store.Query<MyComponent1>();
         for (int i = 0; i < JitLoop; i++) {
             bench_simd(query);
             bench(query);
@@ -62,41 +62,41 @@ public static class Bench_Query
         // --- run perf
         var stopwatch = new Stopwatch(); stopwatch.Start();
         for (int i = 0; i < 1000; i++) {
-            // 1000 ~ 42 ms
+            // 1000 ~ 42,1 ms - component: int,   42,1 ms - component: byte
             bench(query);
         }
-        Console.WriteLine($"Iterate - Span<ByteComponent>: {TestUtils.StopwatchMillis(stopwatch)} ms");
+        Console.WriteLine($"Iterate - Span<MyComponent1>: {TestUtils.StopwatchMillis(stopwatch)} ms");
         
 
         stopwatch = new Stopwatch(); stopwatch.Start();
         for (int i = 0; i < 1000; i++) {
-            // 1000 ~ 2 ms
+            // 1000 ~ 14,7 ms - component: int,   2,6 ms - component: byte
             bench_simd(query);
         }
         Console.WriteLine($"Iterate - SIMD: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
     
-    private static void bench(ArchetypeQuery<ByteComponent> query)
+    private static void bench(ArchetypeQuery<MyComponent1> query)
     {
         foreach (var (component, _) in query.Chunks)
         {
             var components = component.Span;
             for (int n = 0; n < components.Length; n++) {
-                ++components[n].b;
+                ++components[n].a;
             }
         }
     }
     
-    private static void bench_simd(ArchetypeQuery<ByteComponent> query)
+    private static void bench_simd(ArchetypeQuery<MyComponent1> query)
     {
-        var add = Vector256.Create<byte>(1);            // create byte[32] vector - all values = 1
+        var add = Vector256.Create<int>(1);            // create byte[32] vector - all values = 1
         foreach (var (component, _) in query.Chunks)
         {
-            var bytes   = component.AsSpan256<byte>();  // bytes.Length - multiple of 32
+            var bytes   = component.AsSpan256<int>();  // bytes.Length - multiple of 32
             var step    = component.StepSpan256;        // step = 32
             for (int n = 0; n < bytes.Length; n += step) {
                 var slice   = bytes.Slice(n, step);
-                var value   = Vector256.Create<byte>(slice);
+                var value   = Vector256.Create<int>(slice);
                 var result  = Vector256.Add(value, add); // execute 32 add instructions at once
                 result.CopyTo(slice);
             }
