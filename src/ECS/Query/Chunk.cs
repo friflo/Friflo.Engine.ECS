@@ -28,7 +28,7 @@ public readonly struct Chunk<T>
     ///         var value   = Vector256.Create&lt;byte>(slice);
     ///         var result  = Vector256.Add(value, add);
     ///         result.CopyTo(slice);
-    ///     } 
+    ///     }
     /// </code>
     /// </remarks>
     public              Span<TTo>  AsSpan<TTo>() where TTo : struct
