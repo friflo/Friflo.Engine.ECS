@@ -26,7 +26,7 @@ public readonly struct Chunk<T>
     /// </summary>
     /// <remarks>
     /// By adding padding elements the returned <see cref="Span{TTo}"/> can be used with <see cref="Vector256"/> operations <br/>
-    /// without the need of an additional for loop to process the elements at the tail of the <see cref="Span{T}"/>.<br/>
+    /// without the need of an additional <b>for</b> loop to process the elements at the tail of the <see cref="Span{T}"/>.<br/>
     /// <br/>
     /// <i>Example:</i><br/>
     /// <code>
