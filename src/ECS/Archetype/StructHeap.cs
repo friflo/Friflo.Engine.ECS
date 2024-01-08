@@ -27,7 +27,7 @@ internal abstract class StructHeap
 #endif
 
     internal  abstract  Type        StructType          { get; }
-    protected abstract  void        DebugInfo           (out int length);
+    protected abstract  int         ComponentsLength    { get; }
     internal  abstract  void        SetChunkCapacity    (int newChunkCount, int chunkCount, int newChunkLength, int chunkLength);
     internal  abstract  void        MoveComponent       (int from, int to);
     internal  abstract  void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
@@ -58,7 +58,7 @@ internal abstract class StructHeap
     } */
     
     public override string ToString() {
-        DebugInfo(out int length);
+        int length = ComponentsLength;
         var sb = new StringBuilder();
         sb.Append("StructHeap<");
         sb.Append(StructType.Name);

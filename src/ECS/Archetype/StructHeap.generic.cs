@@ -34,25 +34,12 @@ internal sealed class StructHeap<T> : StructHeap
         : base (structIndex)
     {
         typeMapper      = mapper;
-        var padCount    = ComponentType<T>.PadCount;
-        components      = new T[512 + padCount];
-        // chunks      = new StructChunk<T>[1];
-        // chunks[0]   = new StructChunk<T>(ChunkSize);
+        components      = new T[ChunkSize];
     }
     
-    protected override void DebugInfo(out int length) {
-        length = components.Length - ComponentType<T>.PadCount;
-        /* count = 0;
-        foreach (var chunk in chunks) {
-            if (chunk.components != null) {
-                count++;
-            }
-            break;
-        }
-        length = chunks.Length; */
-    }
-    
-    internal override Type  StructType => typeof(T);
+    protected override  int     ComponentsLength    => components.Length;
+
+    internal  override  Type    StructType          => typeof(T);
     
     internal override void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength, int chunkLength)
     {
