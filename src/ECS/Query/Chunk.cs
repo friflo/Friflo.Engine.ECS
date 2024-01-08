@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS;
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
-    public              Span<T>     Values      => new(values, 0, Length);
+    public              Span<T>     Span        => new(values, 0, Length);
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
     private  readonly   T[]         values;     //  8
@@ -61,8 +61,8 @@ public static class ChunkExtensions
     public static Span<Vector3>     AsSpanVector3   (this Span<Scale3>     scale)       => MemoryMarshal.Cast<Scale3,   Vector3>    (scale);
     public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Span<Transform>  transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform);
     //
-    public static Span<Vector3>     AsSpanVector3   (this Chunk<Position>  position)    => MemoryMarshal.Cast<Position, Vector3>    (position   .Values);
-    public static Span<Quaternion>  AsSpanQuaternion(this Chunk<Rotation>  rotation)    => MemoryMarshal.Cast<Rotation, Quaternion> (rotation   .Values);
-    public static Span<Vector3>     AsSpanVector3   (this Chunk<Scale3>    scale)       => MemoryMarshal.Cast<Scale3,   Vector3>    (scale      .Values);
-    public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Chunk<Transform> transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform  .Values);
+    public static Span<Vector3>     AsSpanVector3   (this Chunk<Position>  position)    => MemoryMarshal.Cast<Position, Vector3>    (position   .Span);
+    public static Span<Quaternion>  AsSpanQuaternion(this Chunk<Rotation>  rotation)    => MemoryMarshal.Cast<Rotation, Quaternion> (rotation   .Span);
+    public static Span<Vector3>     AsSpanVector3   (this Chunk<Scale3>    scale)       => MemoryMarshal.Cast<Scale3,   Vector3>    (scale      .Span);
+    public static Span<Matrix4x4>   AsSpanMatrix4x4 (this Chunk<Transform> transform)   => MemoryMarshal.Cast<Transform,Matrix4x4>  (transform  .Span);
 }

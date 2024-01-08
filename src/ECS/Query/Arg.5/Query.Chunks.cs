@@ -37,11 +37,11 @@ public readonly struct Chunks<T1, T2, T3, T4, T5>
     }
     
     public void Deconstruct(out Span<T1> chunk1, out Span<T2> chunk2, out Span<T3> chunk3, out Span<T4> chunk4, out Span<T5> chunk5, out ChunkEntities entities) {
-        chunk1      = this.chunk1.Values;
-        chunk2      = this.chunk2.Values;
-        chunk3      = this.chunk3.Values;
-        chunk4      = this.chunk4.Values;
-        chunk5      = this.chunk5.Values;
+        chunk1      = this.chunk1.Span;
+        chunk2      = this.chunk2.Span;
+        chunk3      = this.chunk3.Span;
+        chunk4      = this.chunk4.Span;
+        chunk5      = this.chunk5.Span;
         entities    = this.entities;
     }
 }
