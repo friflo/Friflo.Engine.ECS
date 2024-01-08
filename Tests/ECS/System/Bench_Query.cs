@@ -100,9 +100,10 @@ public static class Bench_Query
     {
         foreach (var (component, _) in query.Chunks)
         {
-            var bytes = component.SpanByte;
-            for (int n = 0; n < component.Length; n += 32) {
-                var slice   = bytes.Slice(n, 32);
+            var bytes   = component.SpanByte;
+            var step    = component.StepVector256;
+            for (int n = 0; n < component.Length; n += step) {
+                var slice   = bytes.Slice(n, step);
                 var value   = Vector256.Create<byte>(slice);
                 var result  = Vector256.Add(value, add);
                 result.CopyTo(slice);

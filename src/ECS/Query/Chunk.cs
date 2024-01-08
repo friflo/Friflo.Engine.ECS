@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -12,8 +13,27 @@ namespace Friflo.Engine.ECS;
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
-    public              Span<T>     Span        => new(values, 0, Length);
-    public              Span<byte>  SpanByte    => MemoryMarshal.Cast<T, byte>(new Span<T>(values, 0, Length)); 
+    public              Span<T>     Span            => new(values, 0, Length);
+    
+    public              Span<byte>  SpanByte        => MemoryMarshal.Cast<T, byte>(new Span<T>(values, 0, Length));
+    
+    /// <summary>
+    /// The step value in a for loop when converting the <see cref="SpanByte"/> to a <see cref="Vector256{T}"/>
+    /// </summary>
+    /// <remarks>
+    /// Example:<br/>
+    /// <code>
+    ///     var bytes   = component.SpanByte;
+    ///     var step    = component.StepVector256;
+    ///     for (int n = 0; n &lt; component.Length; n += step) {
+    ///         var slice   = bytes.Slice(n, step);
+    ///         var value   = Vector256.Create&lt;byte>(slice);
+    ///         var result  = Vector256.Add(value, add);
+    ///         result.CopyTo(slice);
+    ///     } 
+    /// </code>
+    /// </remarks>
+    public              int         StepVector256   => 32 / Marshal.SizeOf<T>();
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
