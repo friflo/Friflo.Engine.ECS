@@ -11,8 +11,8 @@ namespace Tests.ECS.System;
 // ReSharper disable InconsistentNaming
 public static class Bench_Query
 {
-    private static readonly int entityCount     = 32;   //   100_000
-    private static readonly int JitLoop         = 10;   // 5_000_000
+    private static readonly int entityCount     = 100_000;   //   100_000
+    private static readonly int JitLoop         = 5_000_000;   // 5_000_000
     
     [Test]
     public static void Test_BenchRef()
@@ -81,8 +81,9 @@ public static class Bench_Query
     {
         foreach (var (component, _) in query.Chunks)
         {
-            for (int n = 0; n < component.Length; n++) {
-                ++component[n].b;
+            var components = component.Span;
+            for (int n = 0; n < components.Length; n++) {
+                ++components[n].b;
             }
         }
     }
