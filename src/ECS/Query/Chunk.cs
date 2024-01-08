@@ -12,6 +12,17 @@ using static System.Diagnostics.DebuggerBrowsableState;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// A <see cref="Chunk{T}"/> is container of components of Type <typeparamref name="T"/>.<br/>
+/// <see cref="Chunk{T}"/>'s are typically returned a <see cref="ArchetypeQuery{T1}"/>.<see cref="ArchetypeQuery{T1}.Chunks"/> enumerator.<br/>
+/// <br/>
+/// Its items can be accessed or changed with <see cref="this[int]"/> or <see cref="Span"/>.<br/>
+/// The <see cref="Chunk{T}"/> implementation also support <b>vectorization</b>
+/// of <a href="https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/vectorization-guidelines.md">Vector types</a><br/>
+/// by <see cref="AsSpan128{TTo}"/>, <see cref="AsSpan256{TTo}"/> and <see cref="AsSpan512{TTo}"/>.
+/// <br/> <i>See vectorization example</i> at <see cref="AsSpan256{TTo}"/>.
+/// </summary>
+/// <typeparam name="T"><see cref="IComponent"/> type of a struct component</typeparam>
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
@@ -28,7 +39,7 @@ public readonly struct Chunk<T>
     /// By adding padding elements the returned <see cref="Span{TTo}"/> can be converted to <see cref="Vector256"/>'s <br/>
     /// without the need of an additional <b>for</b> loop to process the elements at the tail of the <see cref="Span{T}"/>.<br/>
     /// <br/>
-    /// <i>Example:</i><br/>
+    /// <i>Vectorization example:</i><br/>
     /// <code>
     ///     // e.g. using: struct ByteComponent : IComponent { public byte value; }
     ///     foreach (var (component, _) in query.Chunks)
