@@ -42,6 +42,7 @@ public readonly struct Chunk<T>
     /// <i>Vectorization example:</i><br/>
     /// <code>
     ///     // e.g. using: struct ByteComponent : IComponent { public byte value; }
+    ///     var add = Vector256.Create&lt;byte>(1);                // create 32 byte vector - all values = 1
     ///     foreach (var (component, _) in query.Chunks)
     ///     {    
     ///         var bytes   = component.AsSpan256&lt;byte>();      // bytes.Length - multiple of 32

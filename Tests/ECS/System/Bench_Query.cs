@@ -49,11 +49,10 @@ public static class Bench_Query
             store.CreateEntity(archetype);
         }
         
-        var inc = CreateInc();
         // --- enable JIT optimization
         var  query = store.Query<ByteComponent>();
         for (int i = 0; i < JitLoop; i++) {
-            bench_simd(query, inc);
+            bench_simd(query);
             bench(query);
         }
         
@@ -72,7 +71,7 @@ public static class Bench_Query
         stopwatch = new Stopwatch(); stopwatch.Start();
         for (int i = 0; i < 1000; i++) {
             // 1000 ~ 2 ms
-            bench_simd(query, inc);
+            bench_simd(query);
         }
         Console.WriteLine($"Iterate - SIMD: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
@@ -88,17 +87,9 @@ public static class Bench_Query
         }
     }
     
-    private static Vector256<byte> CreateInc()
+    private static void bench_simd(ArchetypeQuery<ByteComponent> query)
     {
-        Span<byte> oneBytes = stackalloc byte[32];
-        for (int n = 0; n < 32; n++) {
-            oneBytes[n] = 1;
-        }
-        return Vector256.Create<byte>(oneBytes);
-    }
-    
-    private static void bench_simd(ArchetypeQuery<ByteComponent> query, Vector256<byte> add)
-    {
+        var add = Vector256.Create<byte>(1);            // create 32 byte vector - all values = 1
         foreach (var (component, _) in query.Chunks)
         {
             var bytes   = component.AsSpan256<byte>();  // bytes.Length - multiple of 32
@@ -110,5 +101,13 @@ public static class Bench_Query
                 result.CopyTo(slice);
             }
         }
+    }
+    
+    /// <summary> Alternative to create <see cref="Vector256{T}"/> with custom values </summary>
+    // ReSharper disable once UnusedMember.Local
+    private static Vector256<byte> CreateInc_Alternative()
+    {
+        Span<byte> oneBytes = stackalloc byte[32] {1,1,1,1,1,1,1,1,  2,2,2,2,2,2,2,2,  3,3,3,3,3,3,3,3,  4,4,4,4,4,4,4,4};
+        return Vector256.Create<byte>(oneBytes);
     }
 }
