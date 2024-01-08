@@ -106,7 +106,7 @@ public static class Bench_Query
             for (int n = 0; n < bytes.Length; n += step) {
                 var slice   = bytes.Slice(n, step);
                 var value   = Vector256.Create<byte>(slice);
-                var result  = Vector256.Add(value, add);
+                var result  = Vector256.Add(value, add); // execute 32 add instructions at once
                 result.CopyTo(slice);
             }
         }
