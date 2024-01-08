@@ -89,7 +89,7 @@ public static class Bench_Query
     
     private static void bench_simd(ArchetypeQuery<ByteComponent> query)
     {
-        var add = Vector256.Create<byte>(1);            // create 32 byte vector - all values = 1
+        var add = Vector256.Create<byte>(1);            // create byte[32] vector - all values = 1
         foreach (var (component, _) in query.Chunks)
         {
             var bytes   = component.AsSpan256<byte>();  // bytes.Length - multiple of 32
