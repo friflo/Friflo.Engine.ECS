@@ -25,7 +25,7 @@ public readonly struct Chunk<T>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector256{TTo}"/>.
     /// </summary>
     /// <remarks>
-    /// By adding padding elements the returned <see cref="Span{TTo}"/> can be used with <see cref="Vector256"/> operations <br/>
+    /// By adding padding elements the returned <see cref="Span{TTo}"/> can be converted to <see cref="Vector256"/>'s <br/>
     /// without the need of an additional <b>for</b> loop to process the elements at the tail of the <see cref="Span{T}"/>.<br/>
     /// <br/>
     /// <i>Example:</i><br/>
