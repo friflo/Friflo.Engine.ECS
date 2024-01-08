@@ -33,7 +33,7 @@ public readonly struct Chunk<T>
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <see cref="TTo"/> - which can be assigned to <see cref="Vector256{TTo}"/>'s.<br/>
-    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector256{TTo}"/>.
+    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable safe conversion to a <see cref="Vector256{TTo}"/>.
     /// </summary>
     /// <remarks>
     /// By adding padding elements the returned <see cref="Span{TTo}"/> can be converted to <see cref="Vector256"/>'s <br/>
