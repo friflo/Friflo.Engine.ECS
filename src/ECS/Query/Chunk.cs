@@ -29,7 +29,7 @@ public readonly struct Chunk<T>
     /// <code>
     ///     foreach (var (component, _) in query.Chunks)
     ///     {    
-    ///         var bytes   = component.AsSpan&lt;byte>();
+    ///         var bytes   = component.AsSpan256&lt;byte>();
     ///         var step    = component.StepVector256;
     ///         for (int n = 0; n &lt; bytes.Length; n += step) {
     ///             var slice   = bytes.Slice(n, step);
@@ -40,30 +40,36 @@ public readonly struct Chunk<T>
     ///     }
     /// </code>
     /// </remarks>
-    public              Span<TTo>  AsSpan<TTo>() where TTo : struct
-                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, Length));
+    public              Span<TTo>  AsSpan256<TTo>() where TTo : struct
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount256) & 0x7fff_ffe0));
+    
+    public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount128) & 0x7fff_fff0));
+    
+    public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
+                        => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
-    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector128{T}"/>
-    /// <br/><br/> See example at <see cref="AsSpan{TTo}"/>.
+    /// The step value in a for loop when converting the <see cref="AsSpan256{TTo}"/> to a <see cref="Vector128{T}"/>
+    /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
-    public              int         StepVector128   => 16 / Marshal.SizeOf<T>();
+    public              int         StepSpan128 => 16 / Marshal.SizeOf<T>();
     
     /// <summary>
-    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector256{T}"/>
-    /// <br/><br/> See example at <see cref="AsSpan{TTo}"/>.
+    /// The step value in a for loop when converting the <see cref="AsSpan256{TTo}"/> to a <see cref="Vector256{T}"/>
+    /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
-    public              int         StepVector256   => 32 / Marshal.SizeOf<T>();
+    public              int         StepSpan256 => 32 / Marshal.SizeOf<T>();
     
     // ReSharper disable once InvalidXmlDocComment
     /// <summary>
-    /// The step value in a for loop when converting the <see cref="AsSpan{TTo}"/> to a <see cref="Vector512{T}"/>
-    /// <br/><br/> See example at <see cref="AsSpan{TTo}"/>.
+    /// The step value in a for loop when converting the <see cref="AsSpan256{TTo}"/> to a <see cref="Vector512{T}"/>
+    /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
-    public              int         StepVector512   => 64 / Marshal.SizeOf<T>();
+    public              int         StepSpan512 => 64 / Marshal.SizeOf<T>();
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 

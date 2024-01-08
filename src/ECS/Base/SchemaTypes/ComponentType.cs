@@ -64,7 +64,13 @@ internal sealed class ComponentType<T> : ComponentType
     /// on <see cref="StructHeap{T}"/>.<see cref="StructHeap{T}.components"/>
     /// without the need of an additional for loop to process the elements at the end of a <see cref="Span{T}"/>.
     /// </summary>
-    internal static int PadCount        => 64 / ByteSize;
+    internal static int PadCount512     => 64 / ByteSize - 1;
+    
+    /// <summary> 256 bits = 32 bytes </summary>
+    internal static int PadCount256     => 32 / ByteSize - 1;
+    
+    /// <summary> 128 bits = 16 bytes </summary>
+    internal static int PadCount128     => 16 / ByteSize - 1;
     
     private static  int ByteSize        => GetByteSize();
     

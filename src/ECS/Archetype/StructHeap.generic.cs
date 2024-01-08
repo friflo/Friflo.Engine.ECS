@@ -46,8 +46,7 @@ internal sealed class StructHeap<T> : StructHeap
         if (chunkLength != newChunkLength)
         {
             var newLength       = newChunkLength * ChunkSize;
-            var padCount        = ComponentType<T>.PadCount;
-            var newComponents   = new T [newLength + padCount];
+            var newComponents   = new T [newLength];
             var curComponents   = components;
             var curLength       = chunkCount     * ChunkSize;
             

@@ -237,13 +237,54 @@ public static class Test_Query
         // --- force one time allocations
         var  query = store.Query<ByteComponent, MyComponent1>();
         foreach (var (byteComponent, intComponent, _) in query.Chunks) {
-            Mem.AreEqual(16, byteComponent.StepVector128);
-            Mem.AreEqual(32, byteComponent.StepVector256);
-            Mem.AreEqual(64, byteComponent.StepVector512);
+            Mem.AreEqual(16, byteComponent.StepSpan128);
+            Mem.AreEqual(32, byteComponent.StepSpan256);
+            Mem.AreEqual(64, byteComponent.StepSpan512);
             
-            Mem.AreEqual(4,  intComponent.StepVector128);
-            Mem.AreEqual(8,  intComponent.StepVector256);
-            Mem.AreEqual(16, intComponent.StepVector512);
+            Mem.AreEqual(4,  intComponent.StepSpan128);
+            Mem.AreEqual(8,  intComponent.StepSpan256);
+            Mem.AreEqual(16, intComponent.StepSpan512);
+        }
+    }
+    
+    [Test]
+    public static void Test_Query_Chunk_Padding() {
+        
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var archetype   = store.GetArchetype(Signature.Get<ByteComponent>());
+        var query       = store.Query<ByteComponent>();
+        for (int n = 0; n < 200; n++) {
+            foreach (var (components, _) in query.Chunks)
+            {
+                var span128 = components.AsSpan128<byte>();
+                switch (n) {
+                    case 0:                     Assert.AreEqual(  0, span128.Length);   break;
+                    case >   0   and <=  16:    Assert.AreEqual( 16, span128.Length);   break;
+                    case >  16   and <=  32:    Assert.AreEqual( 32, span128.Length);   break;
+                    case >  32   and <=  48:    Assert.AreEqual( 48, span128.Length);   break;
+                    case >  48   and <=  64:    Assert.AreEqual( 64, span128.Length);   break;
+                }
+                
+                var span256 = components.AsSpan256<byte>();
+                // Console.WriteLine($"components - Length: {components.Length}, AsSpan256<byte>.Length: {span256.Length}");
+                switch (n) {
+                    case 0:                     Assert.AreEqual(  0, span256.Length);   break;
+                    case >   0   and <=  32:    Assert.AreEqual( 32, span256.Length);   break;
+                    case >  32   and <=  64:    Assert.AreEqual( 64, span256.Length);   break;
+                    case >  64   and <=  96:    Assert.AreEqual( 96, span256.Length);   break;
+                    case >  96   and <= 128:    Assert.AreEqual(128, span256.Length);   break;
+                }
+                
+                var span512 = components.AsSpan512<byte>();
+                switch (n) {
+                    case 0:                     Assert.AreEqual( 0,  span512.Length);   break;
+                    case >   0   and <=  64:    Assert.AreEqual( 64, span512.Length);   break;
+                    case >  64   and <= 128:    Assert.AreEqual(128, span512.Length);   break;
+                    case >  128  and <= 192:    Assert.AreEqual(192, span512.Length);   break;
+                    case >  192:                Assert.AreEqual(256, span512.Length);   break;
+                }
+            }
+            store.CreateEntity(archetype);
         }
     }
 }

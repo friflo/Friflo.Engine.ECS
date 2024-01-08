@@ -23,6 +23,7 @@ internal abstract class StructHeap
     // --- internal fields
     internal readonly   int         structIndex;    //  4
 #if DEBUG
+    // ReSharper disable once NotAccessedField.Local
     private             Archetype   archetype;      // only used for debugging
 #endif
 
