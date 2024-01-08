@@ -224,22 +224,26 @@ public static class Test_Query
     }
     
     [Test]
-    public static void Test_Query_StepVector()
+    public static void Test_Query_Chunk_StepVector()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
         
-        var archetype   = store.GetArchetype(Signature.Get<ByteComponent>());
+        var archetype   = store.GetArchetype(Signature.Get<ByteComponent, MyComponent1>());
         for (int n = 0; n < 32; n++) {
             var child = store.CreateEntity(archetype);
             root.AddChild(child);
         }
         // --- force one time allocations
-        var  query = store.Query<ByteComponent>();
-        foreach (var (component, _) in query.Chunks) {
-            Mem.AreEqual(16, component.StepVector128);
-            Mem.AreEqual(32, component.StepVector256);
-            Mem.AreEqual(64, component.StepVector512);
+        var  query = store.Query<ByteComponent, MyComponent1>();
+        foreach (var (byteComponent, intComponent, _) in query.Chunks) {
+            Mem.AreEqual(16, byteComponent.StepVector128);
+            Mem.AreEqual(32, byteComponent.StepVector256);
+            Mem.AreEqual(64, byteComponent.StepVector512);
+            
+            Mem.AreEqual(4,  intComponent.StepVector128);
+            Mem.AreEqual(8,  intComponent.StepVector256);
+            Mem.AreEqual(16, intComponent.StepVector512);
         }
     }
 }
