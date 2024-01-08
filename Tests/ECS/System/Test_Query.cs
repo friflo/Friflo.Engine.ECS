@@ -192,10 +192,17 @@ public static class Test_Query
 
         foreach (var chunk in query.Chunks) {
             var length = chunk.entities.Length;
-            Mem.AreEqual(length, chunk.chunk1.AsSpanVector3().Length);
-            Mem.AreEqual(length, chunk.chunk2.AsSpanQuaternion().Length);
-            Mem.AreEqual(length, chunk.chunk3.AsSpanVector3().Length);
-            Mem.AreEqual(length, chunk.chunk4.AsSpanMatrix4x4().Length);
+            Mem.AreEqual(length, chunk.chunk1.     AsSpanVector3().Length);
+            Mem.AreEqual(length, chunk.chunk1.Span.AsSpanVector3().Length);
+            //
+            Mem.AreEqual(length, chunk.chunk2.     AsSpanQuaternion().Length);
+            Mem.AreEqual(length, chunk.chunk2.Span.AsSpanQuaternion().Length);
+            //
+            Mem.AreEqual(length, chunk.chunk3.     AsSpanVector3().Length);
+            Mem.AreEqual(length, chunk.chunk3.Span.AsSpanVector3().Length);
+            //
+            Mem.AreEqual(length, chunk.chunk4.     AsSpanMatrix4x4().Length);
+            Mem.AreEqual(length, chunk.chunk4.Span.AsSpanMatrix4x4().Length);
         }
     }
     
