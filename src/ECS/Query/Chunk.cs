@@ -27,13 +27,16 @@ public readonly struct Chunk<T>
     /// <remarks>
     /// Example:<br/>
     /// <code>
-    ///     var bytes   = component.AsSpan&lt;byte>();
-    ///     var step    = component.StepVector256;
-    ///     for (int n = 0; n &lt; bytes.Length; n += step) {
-    ///         var slice   = bytes.Slice(n, step);
-    ///         var value   = Vector256.Create&lt;byte>(slice);
-    ///         var result  = Vector256.Add(value, add);
-    ///         result.CopyTo(slice);
+    ///     foreach (var (component, _) in query.Chunks)
+    ///     {    
+    ///         var bytes   = component.AsSpan&lt;byte>();
+    ///         var step    = component.StepVector256;
+    ///         for (int n = 0; n &lt; bytes.Length; n += step) {
+    ///             var slice   = bytes.Slice(n, step);
+    ///             var value   = Vector256.Create&lt;byte>(slice);
+    ///             var result  = Vector256.Add(value, add);
+    ///             result.CopyTo(slice);
+    ///         }
     ///     }
     /// </code>
     /// </remarks>
