@@ -26,19 +26,11 @@ internal readonly struct ArchetypeConfig
     }
 }
 
-internal struct ChunkMemory
+internal struct ArchetypeMemory
 {
-    /// <summary>
-    /// The number of <see cref="StructChunk{T}"/>'s (chunks with <see cref="StructChunk{T}"/>.<see cref="StructChunk{T}.components"/> != null)<br/>
-    /// stored in the StructHeap{T}.chunks array.
-    /// </summary>
-    internal    int     chunkCount;         //  4       - 1 <= chunkCount <= chunkLength
-    /// <summary>
-    /// The current array Length of StructHeap{T}.chunks. Values: 1, 2, 4, 8, 16, ...
-    /// </summary>
-    internal    int     chunkLength;        //  4       - 1, 2, 4, 8, 16, ...
-    // --- fields derived from chunkCount & chunkLength
-    /// <summary>The sum of allocated components in StructHeap{T}.chunks.</summary>
-    internal    int     capacity;           //  4       - multiple of chunk size
-    internal    int     shrinkThreshold;    //  4       - multiple of chunk size
+    internal const  int     MinCapacity = 512;
+    /// <summary> 512, 1024, 2048, 4096, ... </summary>
+    internal        int     capacity;
+    /// <summary>  -1,  512, 1024, 2048, ... </summary>
+    internal        int     shrinkThreshold;
 }

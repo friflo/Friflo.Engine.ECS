@@ -3,10 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using static Friflo.Engine.ECS.StructInfo;
 
 // Hard rule: this file MUST NOT use type: Entity
 
@@ -37,7 +38,7 @@ public sealed class Archetype
     /// Store the entity id for each component.
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] internal            int                 entityCount;    //  4       - number of entities in archetype
-                    private             ChunkMemory         memory;         // 16       - count & length used to store components in chunks  
+                    private             ArchetypeMemory     memory;         // 16       - count & length used to store components in chunks  
     // --- internal
     [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
     [Browse(Never)] internal readonly   ComponentTypes      componentTypes; // 32       - component types of archetype
@@ -74,16 +75,14 @@ public sealed class Archetype
     /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
-        memory.capacity         = ChunkSize;
+        memory.capacity         = ArchetypeMemory.MinCapacity;
         memory.shrinkThreshold  = -1;
-        memory.chunkCount       = 1;
-        memory.chunkLength      = 1;
         store           = config.store;
         entityStore     = store as EntityStore;
         archIndex       = config.archetypeIndex;
         componentCount  = heaps.Length;
         structHeaps     = heaps;
-        entityIds       = new int [1];
+        entityIds       = new int [memory.capacity];
         heapMap         = new StructHeap[config.maxStructIndex];
         componentTypes  = new ComponentTypes(heaps);
         this.tags       = tags;
@@ -169,7 +168,7 @@ public sealed class Archetype
             if (arch.entityCount > arch.memory.shrinkThreshold) {
                 return;
             }
-            CheckChunkCapacity(arch);
+            ResizeShrink(arch);
             return;
         }
         // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
@@ -184,7 +183,7 @@ public sealed class Archetype
         if (arch.entityCount > arch.memory.shrinkThreshold) {
             return;
         }
-        CheckChunkCapacity(arch);
+        ResizeShrink(arch);
     }
     
     /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.blittable"/></remarks>
@@ -198,60 +197,43 @@ public sealed class Archetype
     /// <returns> the component index in this <see cref="Archetype"/> </returns>
     internal static int AddEntity(Archetype arch, int id)
     {
-        var index =  arch.entityCount++;
-        if (index == arch.entityIds.Length) {
-            ArrayUtils.Resize(ref arch.entityIds, 2 * arch.entityIds.Length);
+        var index =  arch.entityCount;
+        if (index == arch.memory.capacity) {
+            ResizeGrow(arch);
         }
+        arch.entityCount++;
         arch.entityIds[index] = id;  // add entity id
-        if (index < arch.memory.capacity) {
-            return index;
-        }
-        CheckChunkCapacity(arch);
         return index;
     }
     
-    private static void CheckChunkCapacity(Archetype arch)
+    private static void ResizeGrow  (Archetype arch) => Resize(arch, 2 * arch.memory.capacity);
+    private static void ResizeShrink(Archetype arch) => Resize(arch, 2 * arch.memory.shrinkThreshold);
+    
+    private static void Resize(Archetype arch, int capacity)
     {
-        //  newChunkCount(entityCount)  [   0,  512] -> 1
-        //                              [ 513, 1024] -> 2
-        //                              [1025, 1536] -> 3
-        ref var memory      = ref arch.memory;
-        var newChunkCount   = (arch.entityCount - 1) / ChunkSize + 1;
-        var chunkCount      = memory.chunkCount;
-        if (newChunkCount > chunkCount)
-        {
-            int newChunkLength = memory.chunkLength;
-            // --- double Length of chunks array if needed
-            if (newChunkCount > memory.chunkLength) {
-                newChunkLength *= 2;
-            }
-            SetChunkCapacity(arch, newChunkCount, chunkCount, newChunkLength);
-            return;
+        AssertCapacity(capacity);
+        int shrinkThreshold = capacity / 4;
+        if (shrinkThreshold < ArchetypeMemory.MinCapacity) {
+            shrinkThreshold = -1;
         }
-        if (newChunkCount < chunkCount)
-        {
-            // --- halve Length of chunks array if newChunkCount is significant less than (1/4) of current chunks length 
-            if (newChunkCount <=  memory.chunkLength / 4)
-            {
-                int newChunkLength  = memory.chunkLength / 2;
-                // Create new chunks array with half the Length of the current one.
-                // Copy newChunkLength component buffers from current to new one.
-                SetChunkCapacity(arch, newChunkLength, newChunkLength, newChunkLength);
-            }
+        arch.memory.shrinkThreshold = shrinkThreshold;
+        arch.memory.capacity        = capacity;
+        
+        var count = arch.entityCount;
+        ArrayUtils.Resize(ref arch.entityIds, capacity, count);
+        foreach (var heap in arch.structHeaps) {
+            heap.ResizeComponents(capacity, count);
         }
     }
     
-    private static void SetChunkCapacity(Archetype arch, int newChunkCount, int chunkCount, int newChunkLength)
-    {
-        ref var memory = ref arch.memory;
-        foreach (var heap in arch.structHeaps) {
-            heap.SetChunkCapacity(newChunkCount, chunkCount, newChunkLength, memory.chunkLength);
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    private static void AssertCapacity(int capacity) {
+        var multiple = capacity / ArchetypeMemory.MinCapacity;
+        if (multiple * ArchetypeMemory.MinCapacity != capacity) {
+            throw new InvalidOperationException($"invalid capacity. Expect multiple of: {ArchetypeMemory.MinCapacity} - was: {capacity}");
         }
-        memory.chunkCount       = newChunkCount;
-        memory.chunkLength      = newChunkLength;
-        memory.capacity         = newChunkCount * ChunkSize;        // 512, 1024, 1536, 2048, ...
-        memory.shrinkThreshold  = memory.capacity - ChunkSize * 2;  // -512, 0, 512, 1024, ...
     }
+    
     #endregion
     
 #region internal methods

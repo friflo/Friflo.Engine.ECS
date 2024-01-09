@@ -29,7 +29,7 @@ internal abstract class StructHeap
 
     internal  abstract  Type        StructType          { get; }
     protected abstract  int         ComponentsLength    { get; }
-    internal  abstract  void        SetChunkCapacity    (int newChunkCount, int chunkCount, int newChunkLength, int chunkLength);
+    internal  abstract  void        ResizeComponents    (int capacity, int count);
     internal  abstract  void        MoveComponent       (int from, int to);
     internal  abstract  void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
     internal  abstract  void        CopyComponent       (int sourcePos, int targetPos);

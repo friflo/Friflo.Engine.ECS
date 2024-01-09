@@ -17,11 +17,24 @@ internal static class TypeExtensions
 
 internal static class ArrayUtils
 {
-    internal static void Resize<T>(ref T[] array, int len) {
+    internal static void Resize<T>(ref T[] array, int len)
+    {
         var newArray = new T[len];
         if (array != null) {
-            Array.Copy(array, newArray, array.Length);
+            var curLength   = array.Length;
+            var source      = new ReadOnlySpan<T>(array, 0, curLength);
+            var target      = new Span<T>(newArray,      0, curLength);
+            source.CopyTo(target);
         }
+        array = newArray;
+    }
+    
+    internal static void Resize<T>(ref T[] array, int capacity, int count)
+    {
+        var newArray    = new T[capacity];
+        var source      = new ReadOnlySpan<T>(array, 0, count);
+        var target      = new Span<T>(newArray,      0, count);
+        source.CopyTo(target);
         array = newArray;
     }
 }

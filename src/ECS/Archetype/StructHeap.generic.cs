@@ -41,39 +41,13 @@ internal sealed class StructHeap<T> : StructHeap
 
     internal  override  Type    StructType          => typeof(T);
     
-    internal override void SetChunkCapacity(int newChunkCount, int chunkCount, int newChunkLength, int chunkLength)
-    {
-        if (chunkLength != newChunkLength)
-        {
-            var newLength       = newChunkLength * ChunkSize;
-            var newComponents   = new T [newLength];
-            var curComponents   = components;
-            var curLength       = chunkCount     * ChunkSize;
-            
-            var source = new ReadOnlySpan<T>(curComponents, 0, curLength);
-            var target = new Span<T>(newComponents);
-            source.CopyTo(target);
-            components = newComponents;
-        } else {
-            // throw new InvalidOperationException("expect different chunk lengths");
-        }
-        /*
-        AssertChunksLength(chunks.Length, chunkLength);
-        // --- set new chunks array if requested. Length values: 1, 2, 4, 8, 16, ...
-        if (chunkLength != newChunkLength)
-        {
-            var newChunks = new StructChunk<T>[newChunkLength];
-            for (int n = 0; n < chunkCount; n++) {
-                newChunks[n] = chunks[n];
-            }
-            chunks = newChunks;
-        }
-        // --- add new chunks if needed
-        for (int n = chunkCount; n < newChunkCount; n++) {
-            AssertChunkComponentsNull(chunks[n].components);
-            chunks[n] = new StructChunk<T>(ChunkSize);
-        }
-        */
+    internal override void ResizeComponents    (int capacity, int count) {
+        var newComponents   = new T[capacity];
+        var curComponents   = components;
+        var source          = new ReadOnlySpan<T>(curComponents, 0, count);
+        var target          = new Span<T>(newComponents);
+        source.CopyTo(target);
+        components = newComponents;
     }
     
     internal override void MoveComponent(int from, int to)
