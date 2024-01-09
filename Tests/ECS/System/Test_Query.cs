@@ -258,30 +258,30 @@ public static class Test_Query
             {
                 var span128 = components.AsSpan128<byte>();
                 switch (n) {
-                    case 0:                     Assert.AreEqual(  0, span128.Length);   break;
-                    case >   0   and <=  16:    Assert.AreEqual( 16, span128.Length);   break;
-                    case >  16   and <=  32:    Assert.AreEqual( 32, span128.Length);   break;
-                    case >  32   and <=  48:    Assert.AreEqual( 48, span128.Length);   break;
-                    case >  48   and <=  64:    Assert.AreEqual( 64, span128.Length);   break;
+                    case 0:                     Mem.AreEqual(  0, span128.Length);  break;
+                    case >   0   and <=  16:    Mem.AreEqual( 16, span128.Length);  break;
+                    case >  16   and <=  32:    Mem.AreEqual( 32, span128.Length);  break;
+                    case >  32   and <=  48:    Mem.AreEqual( 48, span128.Length);  break;
+                    case >  48   and <=  64:    Mem.AreEqual( 64, span128.Length);  break;
                 }
                 
                 var span256 = components.AsSpan256<byte>();
                 // Console.WriteLine($"components - Length: {components.Length}, AsSpan256<byte>.Length: {span256.Length}");
                 switch (n) {
-                    case 0:                     Assert.AreEqual(  0, span256.Length);   break;
-                    case >   0   and <=  32:    Assert.AreEqual( 32, span256.Length);   break;
-                    case >  32   and <=  64:    Assert.AreEqual( 64, span256.Length);   break;
-                    case >  64   and <=  96:    Assert.AreEqual( 96, span256.Length);   break;
-                    case >  96   and <= 128:    Assert.AreEqual(128, span256.Length);   break;
+                    case 0:                     Mem.AreEqual(  0, span256.Length);  break;
+                    case >   0   and <=  32:    Mem.AreEqual( 32, span256.Length);  break;
+                    case >  32   and <=  64:    Mem.AreEqual( 64, span256.Length);  break;
+                    case >  64   and <=  96:    Mem.AreEqual( 96, span256.Length);  break;
+                    case >  96   and <= 128:    Mem.AreEqual(128, span256.Length);  break;
                 }
                 
                 var span512 = components.AsSpan512<byte>();
                 switch (n) {
-                    case 0:                     Assert.AreEqual( 0,  span512.Length);   break;
-                    case >   0   and <=  64:    Assert.AreEqual( 64, span512.Length);   break;
-                    case >  64   and <= 128:    Assert.AreEqual(128, span512.Length);   break;
-                    case >  128  and <= 192:    Assert.AreEqual(192, span512.Length);   break;
-                    case >  192:                Assert.AreEqual(256, span512.Length);   break;
+                    case 0:                     Mem.AreEqual(  0, span512.Length);  break;
+                    case >   0   and <=  64:    Mem.AreEqual( 64, span512.Length);  break;
+                    case >  64   and <= 128:    Mem.AreEqual(128, span512.Length);  break;
+                    case >  128  and <= 192:    Mem.AreEqual(192, span512.Length);  break;
+                    case >  192:                Mem.AreEqual(256, span512.Length);  break;
                 }
             }
             store.CreateEntity(archetype);
