@@ -357,7 +357,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
 
-        const int count = 10; // 5_000_000 ~ #PC: 8.090 ms   todo check degradation from 3.528 ms
+        const int count = 10; // 5_000_000 ~ #PC: 2.301 ms
         for (int n = 0; n < count; n++) {
             converter.DataEntityToEntity(rootNode, store, out _);
         }
