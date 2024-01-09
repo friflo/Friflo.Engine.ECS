@@ -184,7 +184,7 @@ public static class Test_EntityConverter
         var store       = new EntityStore(PidType.UsePidAsId);
         var converter   = EntityConverter.Default;
         
-        int count       = 10; // 10_000_000 ~ 2.199 ms
+        int count       = 10; // 10_000_000 ~ #PC: 2.199 ms
         var entity = new DataEntity();
         for (int n = 1; n <= count; n++) {
             entity.pid = n;

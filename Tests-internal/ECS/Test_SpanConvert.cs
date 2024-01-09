@@ -31,7 +31,7 @@ public static class Test_SpanConvert
         Mem.AreEqual(2, floats[4]);
         Mem.AreEqual(2, floats[5]);
         
-        long count = 10; // 10_000_000_000L ~ 2447 ms
+        long count = 10; // 10_000_000_000L ~ #PC: 2447 ms
         for (long n = 0; n < count; n++) {
             MemoryMarshal.Cast<Position, Vector3>(positionSpan);
         }

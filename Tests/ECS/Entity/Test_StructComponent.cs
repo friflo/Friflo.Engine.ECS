@@ -129,7 +129,7 @@ public static class Test_StructComponent
         AreEqual(10f, entity1.Position.x);
         AreEqual(11f, entity1.Position.y);
         
-        long count = 10; // 1_000_000_000L ~ 967 ms
+        long count = 10; // 1_000_000_000L ~ #PC: 967 ms
         for (var n = 0; n < count; n++) {
             // _ = player1.GetComponentValue<Position>();
             _ = entity1.Position;
@@ -200,7 +200,7 @@ public static class Test_StructComponent
         AreEqual(NoParentId,node.ParentId);
         AreEqual("Count: 2", store.ToString());
         
-        long count = 10; // 1_000_000_000L ~ 969 ms
+        long count = 10; // 1_000_000_000L ~ #PC: 969 ms
         for (var n = 0; n < count; n++) {
             // _ = player1.GetComponentValue<Position>();
             _ = player1.Position;
@@ -214,7 +214,7 @@ public static class Test_StructComponent
         player.AddComponent(new Position());
         IsTrue(player.HasPosition);
         
-        const long count = 10; // 10_000_000_000L ~ 2.374 ms
+        const long count = 10; // 10_000_000_000L ~ #PC: 2.374 ms
         for (long n = 0; n < count; n++) {
             _ = player.HasPosition;
         }
@@ -227,7 +227,7 @@ public static class Test_StructComponent
         player.AddComponent(new MyComponent1());
         IsTrue(player.HasComponent<MyComponent1>());
         
-        const long count = 10; // 10_000_000_000L ~ 5.556 ms
+        const long count = 10; // 10_000_000_000L ~ #PC: 5.556 ms
         for (long n = 0; n < count; n++) {
             _ = player.HasComponent<MyComponent1>();
         }
@@ -236,7 +236,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_GetPositionField() {
         var player = new PlayerRef();
-        long count = 10; // 1_000_000_000L ~ 386 ms
+        long count = 10; // 1_000_000_000L ~ #PC: 386 ms
         for (var n = 0; n < count; n++) {
             _ = player.position;
         }
@@ -430,7 +430,7 @@ public static class Test_StructComponent
         entity.AddComponent<Position>();    // force resize type1.entityIds
         
         var start = Mem.GetAllocatedBytes();
-        int count = 10; // 100_000_000 ~ 6.300 ms
+        int count = 10; // 100_000_000 ~ #PC: 6.300 ms
         for (var n = 0; n < count; n++) {
             entity.AddComponent<Position>();
             entity.RemoveComponent<Position>();
@@ -468,7 +468,7 @@ public static class Test_StructComponent
         _ = new EntityStore();
         var stopwatch =  new Stopwatch();
         stopwatch.Start();
-        int count = 10; // 1_000_000 ~ 454 ms
+        int count = 10; // 1_000_000 ~ #PC: 454 ms
         for (int n = 0; n < count; n++) {
             _ = new EntityStore();
         }

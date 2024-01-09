@@ -165,7 +165,7 @@ public static class Test_BitSet
     public static void Test_BitSet_HashCode_Perf()
     {
         var bitSet = new BitSet(new [] { 1, 10, 20, 30, 60, 64, 100, 110, 120, 170, 180, 200, 240, 250});
-        var count = 10; // 10_000_000_000 ~ 2.355 ms
+        var count = 10; // 10_000_000_000 ~ #PC: 2.355 ms
         for (long n = 0; n < count; n++)
         {
             _ = bitSet.HashCode();

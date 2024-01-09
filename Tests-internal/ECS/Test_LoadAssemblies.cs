@@ -15,7 +15,7 @@ public static class Test_LoadAssemblies
         var result  = Assembly.Load(first.FullName!);
         Assert.AreSame(first, result);
         // loading an already loaded assembly is nearly instant
-        int count = 1; // 100_000 ~ 266 ms
+        int count = 1; // 100_000 ~ #PC: 266 ms
         for (int n = 0; n < count; n++) {
             result = Assembly.Load(first.FullName!);
             Assert.AreSame(first, result);

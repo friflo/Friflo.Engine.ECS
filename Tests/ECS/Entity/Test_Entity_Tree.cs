@@ -696,7 +696,7 @@ public static class Test_Entity_Tree
         var store   = new EntityStore();
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        long count  = 10; // 10_000_000L ~ 3.425 ms
+        long count  = 10; // 10_000_000L ~ #PC: 3.425 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
@@ -710,7 +710,7 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        long count  = 10; // 10_000_000L ~ 1.473 ms
+        long count  = 10; // 10_000_000L ~ #PC: 1.473 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
@@ -722,7 +722,7 @@ public static class Test_Entity_Tree
     public static void Test_Math_Perf()
     {
         var rand = new Random();
-        var count = 10; // 10_000_000 ~  39 ms
+        var count = 10; // 10_000_000 ~ #PC: 39 ms
         for (int n = 0; n < count; n++) {
             rand.Next();
         }

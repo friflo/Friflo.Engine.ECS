@@ -255,7 +255,7 @@ public static class Test_Script
         player.AddScript(new TestScript1());
         NotNull(player.GetScript<TestScript1>());
         
-        const int count = 10; // 1_000_000_000 ~ 5.398 ms
+        const int count = 10; // 1_000_000_000 ~ #PC: 5.398 ms
         for (long n = 0; n < count; n++) {
             player.GetScript<TestScript1>();
         }
@@ -267,7 +267,7 @@ public static class Test_Script
         var player  = store.CreateEntity();
         AreEqual("id: 1  []", player.ToString());
         
-        const int count = 10; // 100_000_000 ~ 3.038 ms
+        const int count = 10; // 100_000_000 ~ #PC: 3.038 ms
         for (long n = 0; n < count; n++) {
             var script1 = new TestScript1();
             player.AddScript(script1);

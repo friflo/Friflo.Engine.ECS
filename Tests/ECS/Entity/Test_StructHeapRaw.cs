@@ -19,7 +19,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 16384 ~ 4 ms    8388608 ~ 372 ms
+        int count       = 16384; // 16384 ~ #PC: 4 ms    8388608 ~ 372 ms
         var ids         = new int[count];
         var stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -47,7 +47,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 16384 ~ 0-1 ms     8388608 ~ 190 ms
+        int count       = 16384; // 16384 ~ #PC: 0-1 ms     8388608 ~ 190 ms
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
@@ -83,10 +83,10 @@ public static class Test_StructHeapRaw
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             int count       = 1000;
-            //   1_000_000 ~   29 ms
-            //  10_000_000 ~  274 ms
-            // 100_000_000 ~ 1739 ms
-            // 500_000_000 ~ 8259 ms
+            //   1_000_000 ~ #PC:   29 ms
+            //  10_000_000 ~ #PC:  274 ms
+            // 100_000_000 ~ #PC: 1739 ms
+            // 500_000_000 ~ #PC: 8259 ms
             for (int n = 0; n < count; n++) {
                 _ = store.CreateEntity(arch1);
             }
@@ -100,7 +100,7 @@ public static class Test_StructHeapRaw
     {
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position>());
-        int count   = 10; // 10_000_000 ~ 244 ms
+        int count   = 10; // 10_000_000 ~ #PC: 244 ms
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
@@ -124,7 +124,7 @@ public static class Test_StructHeapRaw
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         var i = 0;
-        // 10_000_000 ~ 9 ms
+        // 10_000_000 ~ #PC: 9 ms
         for (int n = 0; n < Count; n++) {
             var x = (int)positions[n].x;
             if (x != n)             Mem.FailAreEqual(x, n);
@@ -181,9 +181,9 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1, MyComponent2>());
         // Count: 10_000_000
-        //      CreateEntity()              ~  408 ms
-        //      for GetEntityComponent<>()  ~   40 ms (good performance only, because archetypes remain unchanged after e 
-        //      foreach Query.Chunks        ~    4 ms
+        //      CreateEntity()              ~ #PC:  408 ms
+        //      for GetEntityComponent<>()  ~ #PC:   40 ms (good performance only, because archetypes remain unchanged after e 
+        //      foreach Query.Chunks        ~ #PC:    4 ms
         var query   = store.Query(Signature.Get<MyComponent1, MyComponent2>());
 
         foreach (var _ in query.Chunks) { }                 // warmup

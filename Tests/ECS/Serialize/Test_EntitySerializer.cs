@@ -210,7 +210,7 @@ public static class Test_Serializer
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
 
-        int count = 10;  // 1_000_000 ~ 1.227 ms
+        int count = 10;  // 1_000_000 ~ #PC: 1.227 ms
         for (int n = 0; n < count; n++) {
         var entity  = store.CreateEntity();
             entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
@@ -231,7 +231,7 @@ public static class Test_Serializer
     [Test]
     public static void Test_Serializer_read_into_store_Perf()
     {
-        int entityCount = 100; // 1_000_000 ~ 2367 ms
+        int entityCount = 100; // 1_000_000 ~ #PC: 2367 ms
         var stream      = new MemoryStream();
         // --- create JSON store file with EntitySerializer
         {

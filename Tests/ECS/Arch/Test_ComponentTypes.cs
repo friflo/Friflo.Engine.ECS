@@ -164,7 +164,7 @@ public static class Test_ComponentTypes
         var start   = Mem.GetAllocatedBytes();
         var types   = type1.ComponentTypes;
         var tags    = type1.Tags;
-        var count   = 10; // 100_000_000 ~ 1.707 ms
+        var count   = 10; // 100_000_000 ~ #PC: 1.707 ms
         for (int n = 0; n < count; n++)
         {
             store.FindArchetype(types, tags);

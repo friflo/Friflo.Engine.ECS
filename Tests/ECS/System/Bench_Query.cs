@@ -24,7 +24,7 @@ public static class Bench_Query
         }
         
         // --- run perf
-        // 1000 ~ 42,1 ms - component: int,   42,1 - component: byte
+        // 1000 ~ #PC: 42,1 ms - component: int,   42,1 - component: byte
         components = new MyComponent1[entityCount];
         var stopwatch = new Stopwatch(); stopwatch.Start();
         for (long i = 0; i < 1000; i++) {
@@ -62,7 +62,7 @@ public static class Bench_Query
         // --- run perf
         var stopwatch = new Stopwatch(); stopwatch.Start();
         for (int i = 0; i < 1000; i++) {
-            // 1000 ~ 42,1 ms - component: int,   42,1 ms - component: byte
+            // 1000 ~ #PC: 42,1 ms - component: int,   42,1 ms - component: byte
             bench(query);
         }
         Console.WriteLine($"Iterate - Span<MyComponent1>: {TestUtils.StopwatchMillis(stopwatch)} ms");
@@ -70,7 +70,7 @@ public static class Bench_Query
 
         stopwatch = new Stopwatch(); stopwatch.Start();
         for (int i = 0; i < 1000; i++) {
-            // 1000 ~ 14,7 ms - component: int,   2,6 ms - component: byte
+            // 1000 ~ #PC: 14,7 ms - component: int,   2,6 ms - component: byte
             Bench_SIMD(query);
         }
         Console.WriteLine($"Iterate - SIMD: {TestUtils.StopwatchMillis(stopwatch)} ms");

@@ -197,7 +197,7 @@ public static class Test_Query
     {
         var store   = new EntityStore();
         var sig     = Signature.Get<Position, Rotation>();
-        var count   = 10; // 100_000_000 ~ 1.897 ms
+        var count   = 10; // 100_000_000 ~ #PC: 1.897 ms
         for (int n = 0; n < count; n++) {
             _ = store.Query(sig);
         }

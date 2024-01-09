@@ -113,7 +113,7 @@ var expect =
         entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
         entity.AddScript(new TestScript1 { val1 = 10 });
 
-        int count = 10; // 2_000_000 ~ 1.935 ms
+        int count = 10; // 2_000_000 ~ #PC: 1.935 ms
         DataEntity dataEntity = null;
         for (int n = 0; n < count; n++) {
             dataEntity = converter.EntityToDataEntity(entity, null, false);

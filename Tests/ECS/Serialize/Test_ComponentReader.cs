@@ -311,7 +311,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataEntity { pid = 10, components = RootComponents, children = new List<long> { 11 } };
         
-        const int count = 10; // 1_000_000 ~ 2.639 ms (bottleneck parsing JSON to structs)
+        const int count = 10; // 1_000_000 ~ #PC: 2.639 ms (bottleneck parsing JSON to structs)
         for (int n = 0; n < count; n++)
         {
             var root = converter.DataEntityToEntity(rootNode, store, out _);
@@ -357,7 +357,7 @@ public static class Test_ComponentReader
         
         var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
 
-        const int count = 10; // 5_000_000 ~ 8.090 ms   todo check degradation from 3.528 ms
+        const int count = 10; // 5_000_000 ~ #PC: 8.090 ms   todo check degradation from 3.528 ms
         for (int n = 0; n < count; n++) {
             converter.DataEntityToEntity(rootNode, store, out _);
         }

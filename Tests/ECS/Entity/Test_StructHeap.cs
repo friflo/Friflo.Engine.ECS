@@ -93,7 +93,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        int count   = 10; // 10_000_000 (UsePidAsId) ~ 488 ms
+        int count   = 10; // 10_000_000 (UsePidAsId) ~ #PC: 488 ms
         // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
@@ -114,7 +114,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()
     {
-        int count = 10; // 100_000 (UsePidAsId) ~ 328 ms
+        int count = 10; // 100_000 (UsePidAsId) ~ #PC: 328 ms
         // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
