@@ -34,12 +34,12 @@ The Editor can be build and launched on Windows, macOS (both tested) and Linux (
 
 ### Dependency
 
-**.NET SDK 7.0**  
-1. Download and install SDK [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+**.NET SDK 8.0**  
+1. Download and install SDK [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 2. Check if .NET SDK CLI is available by requesting its version.  
    If installed properly it returns  
-   `7.0.404`  
+   `8.0.100`  
    or a higher version if using a newer .NET SDK.
 ```cmd
 dotnet --version

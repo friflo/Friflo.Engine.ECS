@@ -10,7 +10,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Editor/bin/Debug/net7.0/Editor.dll",
+            "program": "${workspaceFolder}/Editor/bin/Debug/net8.0/Editor.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Editor",
             "console": "internalConsole",
