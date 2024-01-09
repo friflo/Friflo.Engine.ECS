@@ -179,25 +179,22 @@ public sealed class Archetype
     internal static void MoveLastComponentsTo(Archetype arch, int newIndex)
     {
         var lastIndex = arch.entityCount - 1;
-        // --- decrement entityCount if the newIndex is already the last entity id
-        if (lastIndex == newIndex) {
-            arch.entityCount = newIndex;
-            if (arch.entityCount > arch.memory.shrinkThreshold) {
-                return;
+        if (lastIndex != newIndex) {
+            // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
+            foreach (var heap in arch.structHeaps) {
+                heap.MoveComponent(lastIndex, newIndex);
             }
-            ResizeShrink(arch);
-            return;
-        }
-        // --- move components of last entity to the index where the entity is currently placed to avoid unused entries
-        foreach (var heap in arch.structHeaps) {
-            heap.MoveComponent(lastIndex, newIndex);
-        }
-        var lastEntityId    = arch.entityIds[lastIndex];
-        arch.store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
+            var lastEntityId = arch.entityIds[lastIndex];
+            arch.store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
         
-        arch.entityIds[newIndex] = lastEntityId;
-        arch.entityCount--;      // remove last entity id
-        if (arch.entityCount > arch.memory.shrinkThreshold) {
+            arch.entityIds[newIndex] = lastEntityId;
+            arch.entityCount = lastIndex;      
+        }   // ReSharper disable once RedundantIfElseBlock
+        else {
+            // --- case: newIndex is already the last entity => only decrement entityCount
+        }
+        arch.entityCount = lastIndex;  // remove last entity id
+        if (lastIndex > arch.memory.shrinkThreshold) {
             return;
         }
         ResizeShrink(arch);
