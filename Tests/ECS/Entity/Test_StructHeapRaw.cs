@@ -145,7 +145,7 @@ public static class Test_StructHeapRaw
     /// 2 * <see cref="StructInfo.ChunkSize"/> <br/>
     /// 2 * <see cref="StructInfo.ChunkSize"/> + 1 <br/>
     /// </summary>
-    private const int QueryCount = 2 * StructInfo.ChunkSize + 1;
+    private const int QueryCount = 2 * Archetype.MinCapacity + 1;
     
     [Test]
     public static void Test_StructHeapRaw_Query_Chunks()

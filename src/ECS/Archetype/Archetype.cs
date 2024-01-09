@@ -31,6 +31,8 @@ public sealed class Archetype
                     public ref readonly Tags                Tags            => ref tags;
                     
                     public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
+                    
+                    public   const      int                 MinCapacity     = 512;
 #endregion
 
 #region     private / internal members
@@ -75,7 +77,7 @@ public sealed class Archetype
     /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
-        memory.capacity         = ArchetypeMemory.MinCapacity;
+        memory.capacity         = MinCapacity;
         memory.shrinkThreshold  = -1;
         store           = config.store;
         entityStore     = store as EntityStore;
@@ -213,7 +215,7 @@ public sealed class Archetype
     {
         AssertCapacity(capacity);
         int shrinkThreshold = capacity / 4;
-        if (shrinkThreshold < ArchetypeMemory.MinCapacity) {
+        if (shrinkThreshold < MinCapacity) {
             shrinkThreshold = -1;
         }
         arch.memory.shrinkThreshold = shrinkThreshold;
@@ -228,9 +230,9 @@ public sealed class Archetype
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
     private static void AssertCapacity(int capacity) {
-        var multiple = capacity / ArchetypeMemory.MinCapacity;
-        if (multiple * ArchetypeMemory.MinCapacity != capacity) {
-            throw new InvalidOperationException($"invalid capacity. Expect multiple of: {ArchetypeMemory.MinCapacity} - was: {capacity}");
+        var multiple = capacity / MinCapacity;
+        if (multiple * MinCapacity != capacity) {
+            throw new InvalidOperationException($"invalid capacity. Expect multiple of: {MinCapacity} - was: {capacity}");
         }
     }
     

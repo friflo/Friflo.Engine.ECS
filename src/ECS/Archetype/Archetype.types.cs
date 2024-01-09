@@ -28,7 +28,6 @@ internal readonly struct ArchetypeConfig
 
 internal struct ArchetypeMemory
 {
-    internal const  int     MinCapacity = 512;
     /// <summary> 512, 1024, 2048, 4096, ... </summary>
     internal        int     capacity;
     /// <summary>  -1,  512, 1024, 2048, ... </summary>
