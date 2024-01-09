@@ -76,7 +76,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        int count   = 10; // 10_000_000 (UsePidAsId) ~ 992 ms
+        int count   = 10; // 10_000_000 (UsePidAsId) ~ 834 ms
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
@@ -94,7 +94,7 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()
     {
-        int count = 10; // 100_000 (UsePidAsId) ~ 628 ms
+        int count = 10; // 100_000 (UsePidAsId) ~ 661 ms
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();

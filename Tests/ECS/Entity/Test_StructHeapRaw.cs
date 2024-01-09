@@ -19,7 +19,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 16384 ~ 6 ms    8388608 ~ 384 ms
+        int count       = 16384; // 16384 ~ 4 ms    8388608 ~ 372 ms
         var ids         = new int[count];
         var stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -47,7 +47,7 @@ public static class Test_StructHeapRaw
     {
         var store       = new RawEntityStore();
         var arch        = store.GetArchetype(Signature.Get<Position>());
-        int count       = 16384; // 16384 ~ 0-1 ms     8388608 ~ 192 ms
+        int count       = 16384; // 16384 ~ 0-1 ms     8388608 ~ 190 ms
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
         {
@@ -83,10 +83,10 @@ public static class Test_StructHeapRaw
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             int count       = 1000;
-            //   1_000_000 ~   24 ms
-            //  10_000_000 ~  276 ms
-            // 100_000_000 ~ 1862 ms
-            // 500_000_000 ~ 9257 ms
+            //   1_000_000 ~   29 ms
+            //  10_000_000 ~  274 ms
+            // 100_000_000 ~ 1739 ms
+            // 500_000_000 ~ 8259 ms
             for (int n = 0; n < count; n++) {
                 _ = store.CreateEntity(arch1);
             }
@@ -100,7 +100,7 @@ public static class Test_StructHeapRaw
     {
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<Position>());
-        int count   = 10; // 10_000_000 ~ 217 ms
+        int count   = 10; // 10_000_000 ~ 244 ms
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
@@ -180,12 +180,10 @@ public static class Test_StructHeapRaw
     {
         var store   = new RawEntityStore();
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1, MyComponent2>());
-         // 10_000_000
-        //      CreateEntity()              ~  390 ms
-        //      for GetEntityComponent<>()  ~   52 ms (good performance only, because archetypes remain unchanged after e 
-        //      foreach Query()             ~  144 ms
-        //      Query.ForEach()             ~   98 ms
-        //      foreach Query.Chunks        ~    6 ms
+        // Count: 10_000_000
+        //      CreateEntity()              ~  408 ms
+        //      for GetEntityComponent<>()  ~   40 ms (good performance only, because archetypes remain unchanged after e 
+        //      foreach Query.Chunks        ~    4 ms
         var query   = store.Query(Signature.Get<MyComponent1, MyComponent2>());
 
         foreach (var _ in query.Chunks) { }                 // warmup
