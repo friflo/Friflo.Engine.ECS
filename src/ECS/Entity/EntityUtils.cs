@@ -7,6 +7,7 @@ using System.Text;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
 
+// ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace

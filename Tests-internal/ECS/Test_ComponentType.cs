@@ -4,6 +4,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
 

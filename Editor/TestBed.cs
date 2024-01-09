@@ -1,5 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 
+// ReSharper disable RedundantTypeDeclarationBody
 namespace Friflo.Editor;
 
 public struct  TestComponent : IComponent

@@ -5,6 +5,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace

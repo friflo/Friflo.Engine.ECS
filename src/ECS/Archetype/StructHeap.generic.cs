@@ -6,7 +6,6 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
-using static Friflo.Engine.ECS.StructInfo;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace

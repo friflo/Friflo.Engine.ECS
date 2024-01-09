@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
 
