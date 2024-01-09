@@ -20,7 +20,7 @@ public static class Bench_Query
         var components = new MyComponent1[32];
         // --- enable JIT optimization
         for (long i = 0; i < JitLoop; i++) {
-            bench_ref(components);
+            Bench_Reference(components);
         }
         
         // --- run perf
@@ -28,12 +28,12 @@ public static class Bench_Query
         components = new MyComponent1[entityCount];
         var stopwatch = new Stopwatch(); stopwatch.Start();
         for (long i = 0; i < 1000; i++) {
-            bench_ref(components);
+            Bench_Reference(components);
         }
         Console.WriteLine($"Iterate - array: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
     
-    private static void bench_ref(MyComponent1[] components) {
+    private static void Bench_Reference(MyComponent1[] components) {
         Span<MyComponent1> comps = components;
         for (int n = 0; n < comps.Length; n++) {
             ++comps[n].a;
@@ -52,7 +52,7 @@ public static class Bench_Query
         // --- enable JIT optimization
         var  query = store.Query<MyComponent1>();
         for (int i = 0; i < JitLoop; i++) {
-            bench_simd(query);
+            Bench_SIMD(query);
             bench(query);
         }
         
@@ -71,7 +71,7 @@ public static class Bench_Query
         stopwatch = new Stopwatch(); stopwatch.Start();
         for (int i = 0; i < 1000; i++) {
             // 1000 ~ 14,7 ms - component: int,   2,6 ms - component: byte
-            bench_simd(query);
+            Bench_SIMD(query);
         }
         Console.WriteLine($"Iterate - SIMD: {TestUtils.StopwatchMillis(stopwatch)} ms");
     }
@@ -87,8 +87,10 @@ public static class Bench_Query
         }
     }
     
-    private static void bench_simd(ArchetypeQuery<MyComponent1> query)
+    private static void Bench_SIMD(ArchetypeQuery<MyComponent1> query)
     {
+        // Requires .NET 8 to enable SIMD on ARM (Apple Silicon).
+        // See: [What's new in .NET 8] https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#systemnumerics-and-systemruntimeintrinsics
         var add = Vector256.Create<int>(1);            // create byte[32] vector - all values = 1
         foreach (var (component, _) in query.Chunks)
         {
