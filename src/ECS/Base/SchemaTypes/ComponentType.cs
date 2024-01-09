@@ -62,7 +62,7 @@ internal sealed class ComponentType<T> : ComponentType
     private static              int GetByteSize()   => Unsafe.SizeOf<T>();
 
     // ReSharper disable StaticMemberInGenericType
-    private static  readonly    int ByteSize        = GetByteSize();
+    internal static readonly    int ByteSize        = GetByteSize();
 
     /// <summary>
     /// The returned padding enables using <see cref="Vector128"/>, <see cref="Vector256"/> and Vector512 (512 bits = 64 bytes) operations <br/>

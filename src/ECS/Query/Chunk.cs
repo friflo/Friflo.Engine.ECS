@@ -80,14 +80,14 @@ public readonly struct Chunk<T>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
-    public              int         StepSpan128 => 16 / Marshal.SizeOf<T>();
+    public              int         StepSpan128 => 16 / ComponentType<T>.ByteSize;
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan256{TTo}"/> value to a <see cref="Vector256{T}"/>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
-    public              int         StepSpan256 => 32 / Marshal.SizeOf<T>();
+    public              int         StepSpan256 => 32 / ComponentType<T>.ByteSize;
     
     // ReSharper disable once InvalidXmlDocComment
     /// <summary>
@@ -95,7 +95,7 @@ public readonly struct Chunk<T>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
-    public              int         StepSpan512 => 64 / Marshal.SizeOf<T>();
+    public              int         StepSpan512 => 64 / ComponentType<T>.ByteSize;
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
