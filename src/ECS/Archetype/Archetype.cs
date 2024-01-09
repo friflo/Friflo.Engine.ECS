@@ -218,7 +218,7 @@ public sealed class Archetype
         if (index == arch.memory.capacity) {
             ResizeGrow(arch);
         }
-        arch.entityCount++;
+        arch.entityCount = index + 1;
         arch.entityIds[index] = id;  // add entity id
         return index;
     }
