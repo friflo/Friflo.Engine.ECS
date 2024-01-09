@@ -6,7 +6,8 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public static class StructInfo
+// class is obsolete
+internal static class StructInfo
 {
     /// <summary> Is a multiple of 64. See <see cref="ComponentType{T}.PadCount512"/> </summary>
     internal const  int     ChunkSize           = 512; // check 64 - can be removed
