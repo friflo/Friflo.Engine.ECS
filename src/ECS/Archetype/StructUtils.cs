@@ -9,7 +9,7 @@ namespace Friflo.Engine.ECS;
 public static class StructInfo
 {
     /// <summary> Is a multiple of 64. See <see cref="ComponentType{T}.PadCount512"/> </summary>
-    public   const  int     ChunkSize           = 512; // check 64
+    internal const  int     ChunkSize           = 512; // check 64 - can be removed
     internal const  int     MissingAttribute    = 0;
 }
 
