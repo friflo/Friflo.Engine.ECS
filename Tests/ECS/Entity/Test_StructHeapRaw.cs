@@ -138,12 +138,12 @@ public static class Test_StructHeapRaw
     /// Test cases that need to be covered: <br/>
     /// 0 <br/>
     /// 1 <br/>
-    /// <see cref="StructInfo.ChunkSize"/> - 1<br/>
-    /// <see cref="StructInfo.ChunkSize"/> <br/>
-    /// <see cref="StructInfo.ChunkSize"/> + 1 <br/>
-    /// 2 * <see cref="StructInfo.ChunkSize"/> - 1<br/>
-    /// 2 * <see cref="StructInfo.ChunkSize"/> <br/>
-    /// 2 * <see cref="StructInfo.ChunkSize"/> + 1 <br/>
+    /// <see cref="Archetype.MinCapacity"/> - 1<br/>
+    /// <see cref="Archetype.MinCapacity"/> <br/>
+    /// <see cref="Archetype.MinCapacity"/> + 1 <br/>
+    /// 2 * <see cref="Archetype.MinCapacity"/> - 1<br/>
+    /// 2 * <see cref="Archetype.MinCapacity"/> <br/>
+    /// 2 * <see cref="Archetype.MinCapacity"/> + 1 <br/>
     /// </summary>
     private const int QueryCount = 2 * Archetype.MinCapacity + 1;
     
@@ -172,7 +172,7 @@ public static class Test_StructHeapRaw
         Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
     
-    /// use greater than <see cref="StructInfo.ChunkSize"/> for coverage
+    /// use greater than <see cref="Archetype.MinCapacity"/> for coverage
     private const int Count = 10_000; // 10_000  /  10_000_000
     
     [Test]

@@ -32,6 +32,8 @@ public sealed class Archetype
                     
                     public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
                     
+                    /// <summary> Minimum: 64 to support padding for vectorization.</summary>
+                    /// <remarks> Could be less than 64 if using <see cref="ComponentType{T}.ByteSize"/> for <see cref="StructHeap{T}.components"/> </remarks>
                     public   const      int                 MinCapacity     = 512;
 #endregion
 
