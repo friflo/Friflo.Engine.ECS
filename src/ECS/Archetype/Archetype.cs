@@ -55,6 +55,19 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
                     internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     #endregion
+    
+#region public methods
+    /// <returns>the number of entities that can be added without reallocation </returns>
+    public int EnsureCapacity(int capacity) {
+        var available = memory.capacity - entityCount;
+        if (capacity <= available) {
+            return available;
+        }
+        var newCapacity = GetUpperPowerOfTwo(entityCount + capacity);
+        Resize(this, newCapacity);
+        return memory.capacity - entityCount;
+    }
+    #endregion
 
 #region initialize
     /// <summary>Create an instance of an <see cref="EntityStoreBase.defaultArchetype"/></summary>
@@ -241,6 +254,18 @@ public sealed class Archetype
     #endregion
     
 #region internal methods
+    private static int GetUpperPowerOfTwo(int value)
+    {
+        value--;
+        value |= value >> 1;
+        value |= value >> 2;
+        value |= value >> 4;
+        value |= value >> 8;
+        value |= value >> 16;
+        value++;
+        return value;
+    }
+
     internal static int GetEntityCount(ReadOnlySpan<Archetype> archetypes)
     {
         int count = 0;

@@ -14,6 +14,7 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStore
 {
     // --------------------------------- tree node methods ---------------------------------
+    /// <returns>the number of entities that can be added without reallocation </returns>
     public int EnsureCapacity(int capacity)
     {
         var curLength   = nodes.Length;

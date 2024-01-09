@@ -58,7 +58,7 @@ public static class Test_StructHeap
     }
     
     [Test]
-    public static void Test_StructHeap_EnsureCapacity()
+    public static void Test_StructHeap_EntityStore_EnsureCapacity()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         Mem.AreEqual(1, store.EnsureCapacity(0)); // 1 => default capacity
@@ -74,14 +74,34 @@ public static class Test_StructHeap
     }
     
     [Test]
+    public static void Test_StructHeap_Archetype_EnsureCapacity()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+        Mem.AreEqual(512, arch1.EnsureCapacity(0)); // 1 => default capacity
+        store.CreateEntity(arch1);
+        Mem.AreEqual(511, arch1.EnsureCapacity(0));
+        
+        Mem.AreEqual(1023, arch1.EnsureCapacity(1000));
+        for (int n = 0; n < 1023; n++) {
+            Mem.AreEqual(1023 - n, arch1.EnsureCapacity(0));
+            store.CreateEntity(arch1);
+        }
+        Mem.AreEqual(0, arch1.EnsureCapacity(0));
+    }
+    
+    [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        int count   = 10; // 10_000_000 (UsePidAsId) ~ 834 ms
+        int count   = 10; // 10_000_000 (UsePidAsId) ~ 488 ms
+        // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+        arch1.EnsureCapacity(count);
         _ = store.CreateEntity(arch1); // warmup
         
+        // --- perf
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int n = 0; n < count; n++) {
@@ -94,15 +114,22 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()
     {
-        int count = 10; // 100_000 (UsePidAsId) ~ 661 ms
+        int count = 10; // 100_000 (UsePidAsId) ~ 328 ms
+        // --- warmup
+        var store   = new EntityStore(PidType.UsePidAsId);
+        store.EnsureCapacity(count);
+        var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+        arch1.EnsureCapacity(count);
+        store.CreateEntity(arch1);
         
+        // --- perf
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int i = 0; i < 100; i++) {
-            var store   = new EntityStore(PidType.UsePidAsId);
+            store   = new EntityStore(PidType.UsePidAsId);
             store.EnsureCapacity(count);
-
-            var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+            arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+            arch1.EnsureCapacity(count);
             for (int n = 0; n < count; n++) {
                 _ = store.CreateEntity(arch1);
             }
