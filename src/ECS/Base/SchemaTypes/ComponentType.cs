@@ -59,20 +59,21 @@ internal sealed class ComponentType<T> : ComponentType
         return new StructHeap<T>(structIndex, typeMapper);
     }
     
+    private static              int GetByteSize()   => Unsafe.SizeOf<T>();
+
+    // ReSharper disable StaticMemberInGenericType
+    private static  readonly    int ByteSize        = GetByteSize();
+
     /// <summary>
     /// The returned padding enables using <see cref="Vector128"/>, <see cref="Vector256"/> and Vector512 (512 bits = 64 bytes) operations <br/>
     /// on <see cref="StructHeap{T}"/>.<see cref="StructHeap{T}.components"/>
     /// without the need of an additional for loop to process the elements at the end of a <see cref="Span{T}"/>.
     /// </summary>
-    internal static int PadCount512     => 64 / ByteSize - 1;
+    internal static readonly    int PadCount512     = 64 / ByteSize - 1;
     
     /// <summary> 256 bits = 32 bytes </summary>
-    internal static int PadCount256     => 32 / ByteSize - 1;
+    internal static readonly    int PadCount256     = 32 / ByteSize - 1;
     
     /// <summary> 128 bits = 16 bytes </summary>
-    internal static int PadCount128     => 16 / ByteSize - 1;
-    
-    private static  int ByteSize        => GetByteSize();
-    
-    private static  int GetByteSize()   => Unsafe.SizeOf<T>();
+    internal static readonly    int PadCount128     = 16 / ByteSize - 1;
 }
