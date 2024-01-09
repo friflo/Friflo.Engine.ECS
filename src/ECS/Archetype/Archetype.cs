@@ -188,7 +188,6 @@ public sealed class Archetype
             arch.store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
         
             arch.entityIds[newIndex] = lastEntityId;
-            arch.entityCount = lastIndex;      
         }   // ReSharper disable once RedundantIfElseBlock
         else {
             // --- case: newIndex is already the last entity => only decrement entityCount
