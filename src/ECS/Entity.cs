@@ -109,6 +109,7 @@ namespace Friflo.Engine.ECS;
 [CLSCompliant(true)]
 public readonly struct Entity
 {
+    // ----------------------------------- general properties -----------------------------------
 #region general - properties
     public              long                    Pid             => store.nodes[Id].pid;
                     
@@ -143,9 +144,11 @@ public readonly struct Entity
     /// <summary> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </summary>
     // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
                     public  string              DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
-
     #endregion
 
+
+
+    // ---------------------------------- component properties ----------------------------------
 #region component - properties
 
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
@@ -165,7 +168,10 @@ public readonly struct Entity
     [Browse(Never)] public  bool                HasRotation =>     archetype.std.rotation          != null;
     [Browse(Never)] public  bool                HasScale3   =>     archetype.std.scale3            != null;
     #endregion
-    
+
+
+
+    // --------------------------------- child / tree properties ---------------------------------
 #region child / tree - properties
     [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[Id].childCount;
     
@@ -187,7 +193,10 @@ public readonly struct Entity
                     
     [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);
     #endregion
-    
+
+
+
+    // ------------------------------------------ fields -----------------------------------------
 #region public / internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes
     /// <summary>Unique entity id.<br/>
@@ -203,6 +212,8 @@ public readonly struct Entity
         this.store  = store;
     }
     #endregion
+
+
 
     // ------------------------------------ component methods ------------------------------------
 #region component - methods
@@ -250,9 +261,10 @@ public readonly struct Entity
         int archIndex = 0;
         return EntityStoreBase.RemoveComponent(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
-
     #endregion
-    
+
+
+
     // ------------------------------------ script methods -------------------------------------
 #region script - methods
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
@@ -272,10 +284,11 @@ public readonly struct Entity
     
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative</remarks>
-    public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);
-    
+    public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);    
     #endregion
-    
+
+
+
     // ------------------------------------ entity tag methods -----------------------------------
 #region tag - methods
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
@@ -298,9 +311,10 @@ public readonly struct Entity
         int index = 0;
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
-
     #endregion
-    
+
+
+
     // ------------------------------------ tree methods -----------------------------------------
 #region child / tree - methods
     /// <remarks>
@@ -359,12 +373,13 @@ public readonly struct Entity
         }
     }
 
-    public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);
-    
+    public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);    
     #endregion
 
-#region general - methods
 
+
+    // ------------------------------------ general methods -------------------------------------
+#region general - methods
     public static   bool    operator == (Entity a, Entity b)    => a.Id == b.Id && a.store == b.store;
     public static   bool    operator != (Entity a, Entity b)    => a.Id != b.Id || a.store != b.store;
 
@@ -378,9 +393,11 @@ public readonly struct Entity
     public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
     
     public override string  ToString()          => EntityUtils.EntityToString(this);
-
     #endregion
-    
+
+
+
+    // ------------------------------------ internal properties -------------------------------------
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
 #region internal - properties
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
