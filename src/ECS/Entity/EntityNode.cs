@@ -67,7 +67,7 @@ public struct EntityNode
     [Browse(Never)] internal            NodeFlags   flags;          //  4 (1)
     /// <remarks> Is set to null only in <see cref="EntityStore.DeleteNode"/>. </remarks>
     [Browse(Never)] internal            Archetype   archetype;      //  8   can be null. Could use int to relieve GC tracing reference types 
-    [Browse(Never)] internal            int         compIndex;      //  4   index within Archetype entityIds & StructHeap<>.components
+    [Browse(Never)] internal            int         compIndex;      //  4   index within Archetype.entityIds & StructHeap<>.components
     [Browse(Never)] internal            int         scriptIndex;    //  4   0 if entity has no scripts
     #endregion
     
