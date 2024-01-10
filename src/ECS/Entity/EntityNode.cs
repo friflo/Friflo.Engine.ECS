@@ -58,17 +58,17 @@ public struct EntityNode
     #endregion
     
 #region internal fields
-    [Browse(Never)] internal            int         id;             //  4   is not readonly for perf. If readonly EnsureCapacity() & EnsureNodesLength() must call its constructor.  
-    [Browse(Never)] internal            long        pid;            //  8
-    [Browse(Never)] internal            int         parentId;       //  4
-                    internal            int[]       childIds;       //  8   can be null.
-    [Browse(Never)] internal            int         childCount;     //  4
+    [Browse(Never)] internal            int         id;             //  4   not readonly for perf. If readonly EnsureCapacity() & EnsureNodesLength() must call its constructor.  
+    [Browse(Never)] internal            long        pid;            //  8   permanent id used for serialization
+    [Browse(Never)] internal            int         parentId;       //  4   0 if entity has no parent
+                    internal            int[]       childIds;       //  8   null if entity has no child entities
+    [Browse(Never)] internal            int         childCount;     //  4   count of child entities
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal            NodeFlags   flags;          //  4 (1)
     /// <remarks> Is set to null only in <see cref="EntityStore.DeleteNode"/>. </remarks>
     [Browse(Never)] internal            Archetype   archetype;      //  8   can be null. Could use int to relieve GC tracing reference types 
-    [Browse(Never)] internal            int         compIndex;      //  4
-    [Browse(Never)] internal            int         scriptIndex;    //  4
+    [Browse(Never)] internal            int         compIndex;      //  4   index within Archetype entityIds & StructHeap<>.components
+    [Browse(Never)] internal            int         scriptIndex;    //  4   0 if entity has no scripts
     #endregion
     
 #region internal getter
