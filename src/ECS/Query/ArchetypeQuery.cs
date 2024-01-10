@@ -48,7 +48,10 @@ public class ArchetypeQuery
 #region methods
     public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
 
-
+    /// <summary>
+    /// Return the <see cref="ArchetypeQuery"/> entities mainly for debugging.<br/>
+    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
+    /// </summary>
     public      QueryEntities      Entities         => new (this);
 
 

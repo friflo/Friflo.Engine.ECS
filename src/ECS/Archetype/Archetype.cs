@@ -31,7 +31,7 @@ public sealed class Archetype
                     public ref readonly Tags                Tags            => ref tags;
                     /// <summary>
                     /// Return the <see cref="Archetype"/> entities mainly for debugging.<br/>
-                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the <b><c>Query()</c></b> methods. 
+                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
                     /// </summary>
                     public              ChunkEntities       Entities        => new ChunkEntities(this, entityCount);
                     
