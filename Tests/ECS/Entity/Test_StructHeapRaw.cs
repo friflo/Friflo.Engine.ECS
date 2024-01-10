@@ -138,14 +138,14 @@ public static class Test_StructHeapRaw
     /// Test cases that need to be covered: <br/>
     /// 0 <br/>
     /// 1 <br/>
-    /// <see cref="Archetype.MinCapacity"/> - 1<br/>
-    /// <see cref="Archetype.MinCapacity"/> <br/>
-    /// <see cref="Archetype.MinCapacity"/> + 1 <br/>
-    /// 2 * <see cref="Archetype.MinCapacity"/> - 1<br/>
-    /// 2 * <see cref="Archetype.MinCapacity"/> <br/>
-    /// 2 * <see cref="Archetype.MinCapacity"/> + 1 <br/>
+    /// <see cref="ArchetypeUtils.MinCapacity"/> - 1<br/>
+    /// <see cref="ArchetypeUtils.MinCapacity"/> <br/>
+    /// <see cref="ArchetypeUtils.MinCapacity"/> + 1 <br/>
+    /// 2 * <see cref="ArchetypeUtils.MinCapacity"/> - 1<br/>
+    /// 2 * <see cref="ArchetypeUtils.MinCapacity"/> <br/>
+    /// 2 * <see cref="ArchetypeUtils.MinCapacity"/> + 1 <br/>
     /// </summary>
-    private const int QueryCount = 2 * Archetype.MinCapacity + 1;
+    private const int QueryCount = 2 * ArchetypeUtils.MinCapacity + 1;
     
     [Test]
     public static void Test_StructHeapRaw_Query_Chunks()

@@ -33,7 +33,7 @@ internal sealed class StructHeap<T> : StructHeap
         : base (structIndex)
     {
         typeMapper      = mapper;
-        components      = new T[Archetype.MinCapacity];
+        components      = new T[ArchetypeUtils.MinCapacity];
     }
     
     protected override  int     ComponentsLength    => components.Length;

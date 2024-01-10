@@ -31,10 +31,6 @@ public sealed class Archetype
                     public ref readonly Tags                Tags            => ref tags;
                     
                     public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
-                    
-                    /// <summary> Minimum: 64 to support padding for vectorization.</summary>
-                    /// <remarks> Could be less than 64 if using <see cref="ComponentType{T}.ByteSize"/> for <see cref="StructHeap{T}.components"/> </remarks>
-                    public   const      int                 MinCapacity     = 512;
 #endregion
 
 #region     private / internal members
@@ -42,7 +38,7 @@ public sealed class Archetype
     /// Store the entity id for each component.
     [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
     [Browse(Never)] internal            int                 entityCount;    //  4       - number of entities in archetype
-                    private             ArchetypeMemory     memory;         // 16       - count & length used to store components in chunks  
+    [Browse(Never)] private             ArchetypeMemory     memory;         // 16       - count & length used to store components in chunks  
     // --- internal
     [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
     [Browse(Never)] internal readonly   ComponentTypes      componentTypes; // 32       - component types of archetype
@@ -53,7 +49,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8       - containing EntityStoreBase
     [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
-                    internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
+    [Browse(Never)] internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
     #endregion
     
 #region public methods
@@ -92,7 +88,7 @@ public sealed class Archetype
     /// </summary>
     private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
     {
-        memory.capacity         = MinCapacity;
+        memory.capacity         = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
         store           = config.store;
         entityStore     = store as EntityStore;
@@ -226,7 +222,7 @@ public sealed class Archetype
     {
         AssertCapacity(capacity);
         int shrinkThreshold = capacity / 4;
-        if (shrinkThreshold < MinCapacity) {
+        if (shrinkThreshold < ArchetypeUtils.MinCapacity) {
             shrinkThreshold = -1;
         }
         arch.memory.shrinkThreshold = shrinkThreshold;
@@ -241,9 +237,9 @@ public sealed class Archetype
     
     [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
     private static void AssertCapacity(int capacity) {
-        var multiple = capacity / MinCapacity;
-        if (multiple * MinCapacity != capacity) {
-            throw new InvalidOperationException($"invalid capacity. Expect multiple of: {MinCapacity} - was: {capacity}");
+        var multiple = capacity / ArchetypeUtils.MinCapacity;
+        if (multiple * ArchetypeUtils.MinCapacity != capacity) {
+            throw new InvalidOperationException($"invalid capacity. Expect multiple of: {ArchetypeUtils.MinCapacity} - was: {capacity}");
         }
     }
     
@@ -310,6 +306,14 @@ public sealed class Archetype
     #endregion
 }
 
+public static class ArchetypeUtils
+{
+    /// <summary> Minimum: 64 to support padding for vectorization.</summary>
+    /// <remarks> Could be less than 64 if using <see cref="ComponentType{T}.ByteSize"/> for <see cref="StructHeap{T}.components"/> </remarks>
+    public   const      int                 MinCapacity     = 512;
+}
+    
+    
 internal static class ArchetypeExtensions
 {
      internal static ReadOnlySpan<StructHeap>   Heaps       (this Archetype archetype)  => archetype.structHeaps;
