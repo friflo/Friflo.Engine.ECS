@@ -29,7 +29,10 @@ public sealed class Archetype
                     public              EntityStoreBase     Store           => store;
                     public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
                     public ref readonly Tags                Tags            => ref tags;
-                    
+                    /// <summary>
+                    /// Return the <see cref="Archetype"/> entities mainly for debugging.<br/>
+                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the <b><c>Query()</c></b> methods. 
+                    /// </summary>
                     public              ChunkEntities       Entities        => new ChunkEntities(this, entityCount);
                     
                     public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
