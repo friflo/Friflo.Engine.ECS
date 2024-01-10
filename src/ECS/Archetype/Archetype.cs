@@ -30,6 +30,8 @@ public sealed class Archetype
                     public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
                     public ref readonly Tags                Tags            => ref tags;
                     
+                    public              ChunkEntities       Entities        => new ChunkEntities(this, entityCount);
+                    
                     public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
 #endregion
 

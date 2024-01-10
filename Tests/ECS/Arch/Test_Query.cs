@@ -286,6 +286,22 @@ public static class Test_Query
         AreEqual(4, entity3.Rotation.x);
     }
     
+    [Test]
+    public static void Test_Query_Archetype_Entities()
+    {
+        var store   = new EntityStore();
+        var archetype = store.GetArchetype(Signature.Get<Position>());
+        for (int n = 0; n < 10; n++) {
+            store.CreateEntity(archetype);
+        }
+        AreEqual(10, archetype.Entities.Length);
+        int count = 0;
+        foreach (var _ in archetype.Entities) {
+            count++;
+        }
+        AreEqual(10, count);
+    }
+    
     // [Test]
     public static void Test_Position_array_Perf() {
         var positions = new Position[10_000_000];
