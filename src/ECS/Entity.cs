@@ -148,6 +148,7 @@ public readonly struct Entity
 
 
 
+
     // ---------------------------------- component properties ----------------------------------
 #region component - properties
 
@@ -168,6 +169,7 @@ public readonly struct Entity
     [Browse(Never)] public  bool                HasRotation =>     archetype.std.rotation          != null;
     [Browse(Never)] public  bool                HasScale3   =>     archetype.std.scale3            != null;
     #endregion
+
 
 
 
@@ -196,6 +198,7 @@ public readonly struct Entity
 
 
 
+
     // ------------------------------------------ fields -----------------------------------------
 #region public / internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes
@@ -212,6 +215,7 @@ public readonly struct Entity
         this.store  = store;
     }
     #endregion
+
 
 
 
@@ -265,6 +269,7 @@ public readonly struct Entity
 
 
 
+
     // ------------------------------------ script methods -------------------------------------
 #region script - methods
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
@@ -286,6 +291,7 @@ public readonly struct Entity
     /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative</remarks>
     public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);    
     #endregion
+
 
 
 
@@ -312,6 +318,7 @@ public readonly struct Entity
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
     #endregion
+
 
 
 
@@ -375,6 +382,7 @@ public readonly struct Entity
 
     public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);    
     #endregion
+
 
 
 
