@@ -58,10 +58,18 @@ public static class Test_ChunkEntities
                 Mem.AreEqual(entities.Length, count);
             } {
                 IEnumerable<Entity> enumerable = entities;
+                var enumerator = enumerable.GetEnumerator();
                 int count = 0;
+                while (enumerator.MoveNext()) {
+                    count++;
+                }
+                Mem.AreEqual(entities.Length, count);
+                enumerator.Reset();
+                count = 0;
                 foreach (var _ in enumerable) {
                     count++;
                 }
+                enumerator.Dispose();
                 Mem.AreEqual(entities.Length, count);
             } {
                 IEnumerable childEntities = entities;

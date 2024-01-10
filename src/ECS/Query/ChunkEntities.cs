@@ -97,8 +97,8 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.entityIds;
         store       = chunkEntities.Archetype.entityStore;
-        index       = -1; 
         last        = chunkEntities.Length - 1;
+        index       = -1;
     }
     
     // --- IEnumerator<>
@@ -113,9 +113,8 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
         return false;  
     }
 
-    [ExcludeFromCodeCoverage]
     public void Reset() {
-        throw new NotImplementedException();
+        index = -1;
     }
     
     object IEnumerator.Current => Current;
