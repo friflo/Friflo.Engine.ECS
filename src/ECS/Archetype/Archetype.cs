@@ -33,9 +33,9 @@ public sealed class Archetype
                     /// Return the <see cref="Archetype"/> entities mainly for debugging.<br/>
                     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
                     /// </summary>
-                    public              ChunkEntities       Entities        => new ChunkEntities(this, entityCount);
+                    public              ChunkEntities       Entities        => new (this, entityCount);
                     
-                    public   override   string              ToString()      => GetString(new StringBuilder()).ToString();
+                    public   override   string              ToString()      => GetString();
 #endregion
 
 #region     private / internal members
@@ -283,7 +283,9 @@ public sealed class Archetype
         return count;
     }
     
-    internal StringBuilder GetString(StringBuilder sb)
+    private string GetString() => AppendString(new StringBuilder()).ToString();
+    
+    internal StringBuilder AppendString(StringBuilder sb)
     {
         var hasTypes    = false;
         sb.Append('[');

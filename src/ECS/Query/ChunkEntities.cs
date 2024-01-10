@@ -71,7 +71,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         sb.Append("Entity[");
         sb.Append(Length);
         sb.Append("]    Archetype: ");
-        Archetype.GetString(sb);
+        Archetype.AppendString(sb);
         return sb.ToString();
     }
     
@@ -80,7 +80,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         sb.Append("Chunks[");
         sb.Append(Length);
         sb.Append("]    Archetype: ");
-        Archetype.GetString(sb);
+        Archetype.AppendString(sb);
         return sb.ToString();
     }
 
