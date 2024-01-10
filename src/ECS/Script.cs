@@ -8,7 +8,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// To enable adding a script class to an <see cref="ECS.Entity"/> it need to extend <see cref="Script"/>.<br/>
-/// A <b><see cref="Script"/></b> is a reference type (a class) which contains data <b>and</b> script / methods.<br/> 
+/// A <b><see cref="Script"/></b> is a reference type - a class-  which contains data <b>and</b> behavior - aka scripts / methods.<br/> 
 /// An <see cref="ECS.Entity"/> can contain multiple <see cref="Script"/>'s but only one of each type.
 /// </summary>
 /// <remarks>
