@@ -118,7 +118,7 @@
           <TranslateTransform X="-33"
                               Y="0"></TranslateTransform>
         </StackPanel.RenderTransform>
-        <Image Source="/Assets/Images/Icon.ico"
+        <Image Source="/Assets/Avalonia/Images/Icon.ico"
                Height="25"
                Width="25"></Image>
         <TextBlock Text="Fliox Editor"

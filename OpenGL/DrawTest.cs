@@ -43,7 +43,7 @@ public class DrawTest
         Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 7, 0);
         Vao.VertexAttributePointer(1, 4, VertexAttribPointerType.Float, 7, 3);
 
-        Shader = new Shader(Gl, "OpenGL/Shader/shader.vert", "OpenGL/Shader/shader.frag");
+        Shader = new Shader(Gl, "Assets/Shader/shader.vert", "Assets/Shader/shader.frag");
     }
 
     public void OpenGlDeinit()

@@ -16,7 +16,7 @@
         <StackPanel Orientation="Horizontal"
                     DockPanel.Dock="Left"
                     Spacing="0">
-          <Image Source="/Assets/Images/Icon.ico"
+          <Image Source="/Assets/Avalonia/Images/Icon.ico"
                  Height="20"
                  Width="20"
                  VerticalAlignment="Center"

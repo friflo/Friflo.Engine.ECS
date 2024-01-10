@@ -35,7 +35,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AvaloniaResource Include="Assets\**" />
+      <AvaloniaResource Include="Assets\Avalonia\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Assets\Shader\**\*.*">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
