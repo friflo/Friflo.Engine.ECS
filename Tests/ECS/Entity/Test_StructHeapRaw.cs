@@ -172,7 +172,7 @@ public static class Test_StructHeapRaw
         Mem.AreEqual(QueryCount, arch1.EntityCount);
     }
     
-    /// use greater than <see cref="Archetype.MinCapacity"/> for coverage
+    /// use greater than <see cref="ArchetypeUtils.MinCapacity"/> for coverage
     private const int Count = 10_000; // 10_000  /  10_000_000
     
     [Test]
