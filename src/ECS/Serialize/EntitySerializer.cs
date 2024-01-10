@@ -20,7 +20,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Engine.ECS.Serialize;
 
-public class EntitySerializer
+public sealed class EntitySerializer
 {
 #region private fields
     private             Bytes               componentBuf;

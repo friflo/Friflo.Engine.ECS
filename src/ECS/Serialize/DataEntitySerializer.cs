@@ -9,7 +9,7 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Serialize;
 
-public class DataEntitySerializer
+public sealed class DataEntitySerializer
 {
     private readonly    DataEntity      dataEntity;      
     private readonly    ObjectWriter    objectWriter;

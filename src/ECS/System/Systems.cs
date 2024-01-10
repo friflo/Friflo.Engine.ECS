@@ -7,7 +7,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public class Systems
+public sealed class Systems
 {
     private readonly    List<ComponentSystem>   list;
 

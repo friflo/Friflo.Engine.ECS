@@ -8,7 +8,7 @@ using System.Collections.Specialized;
 // ReSharper disable InlineTemporaryVariable
 namespace Friflo.Engine.ECS.Collections;
 
-public class ExplorerItemTree
+public sealed class ExplorerItemTree
 {
 #region internal properties
     public              ExplorerItem                    RootItem    => rootItem;

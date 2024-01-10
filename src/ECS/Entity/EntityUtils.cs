@@ -13,7 +13,7 @@ using Friflo.Json.Fliox;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public class EntityEqualityComparer : IEqualityComparer<Entity>
+public sealed class EntityEqualityComparer : IEqualityComparer<Entity>
 {
     public  bool    Equals(Entity left, Entity right)   => left.Id == right.Id;
     public  int     GetHashCode(Entity entity)          => entity.Id;

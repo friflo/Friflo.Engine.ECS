@@ -18,7 +18,7 @@ namespace Friflo.Engine.Hub;
 /// <summary>
 /// Implementation of <see cref="StoreClient"/> commands.
 /// </summary>
-public class StoreCommands : IServiceCommands
+public sealed class StoreCommands : IServiceCommands
 {
     /// <remarks> Must be accessed only from main thread. See <see cref="StoreDispatcher"/>.</remarks>
     private readonly EntityStore    store;

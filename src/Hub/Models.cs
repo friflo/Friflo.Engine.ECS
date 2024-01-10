@@ -12,13 +12,13 @@ using Friflo.Json.Fliox;
 namespace Friflo.Engine.Hub;
 
 // --------------------------------------- command models ---------------------------------------
-public class AddEntities
+public sealed class AddEntities
 {
                 public  long                targetEntity;
     [Required]  public  List<DataEntity>    entities;
 }
 
-public class AddEntitiesResult
+public sealed class AddEntitiesResult
 {
     /// <summary> Number of entities requested to add. </summary>
                 public  int             count;
@@ -28,12 +28,12 @@ public class AddEntitiesResult
     [Required]  public  List<long>      newPids;
 }
 
-public class GetEntities
+public sealed class GetEntities
 {
     [Required]  public  List<long>  ids;
 }
 
-public class GetEntitiesResult
+public sealed class GetEntitiesResult
 {
     /// <summary> Number of returned entities. </summary>
                 public  int         count;

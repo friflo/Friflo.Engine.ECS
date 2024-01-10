@@ -55,7 +55,7 @@ public interface IStoreDispatcher
     public  Task<TResult>   InvokeAsync<TResult>(Func<Task<TResult>>    action);
 }
 
-internal class DefaultDispatcher : IStoreDispatcher
+internal sealed class DefaultDispatcher : IStoreDispatcher
 {
     public void          AssertMainThread    ()                             { }
     public void          Post                (Action              action)   => action();

@@ -309,14 +309,14 @@ public static class TreeUtils
 }
 
 
-public class AddDataEntitiesResult
+public sealed class AddDataEntitiesResult
 {
     public  List<int>       indexes;
     /// <summary> contains errors detected when executing <see cref="TreeUtils.AddDataEntitiesToEntity"/> </summary>
     public  List<string>    errors;
 }
 
-public class JsonEntities
+public sealed class JsonEntities
 {
     public  int             count;
     public  JsonValue       entities;

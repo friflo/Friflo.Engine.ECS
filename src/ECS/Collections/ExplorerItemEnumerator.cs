@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Friflo.Engine.ECS.Collections;
 
-internal class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
+internal sealed class ExplorerItemEnumerator : IEnumerator<ExplorerItem>
 {
     private             ChildEnumerator     entityEnumerator;
     private readonly    ExplorerItemTree    tree;

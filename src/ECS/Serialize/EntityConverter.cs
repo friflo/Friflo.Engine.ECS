@@ -6,7 +6,7 @@ using System;
 
 namespace Friflo.Engine.ECS.Serialize;
 
-public class EntityConverter
+public sealed class EntityConverter
 {
     private  readonly   ComponentReader reader;
     private  readonly   ComponentWriter writer;
