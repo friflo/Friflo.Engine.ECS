@@ -100,8 +100,6 @@ public readonly struct Chunk<T>
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
 
 
-    
-    // ReSharper disable once UnusedParameter.Local
     internal Chunk(T[] values, T[] copy, int length) {
         Length = length;
         if (copy == null) {
