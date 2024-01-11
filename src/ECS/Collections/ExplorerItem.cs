@@ -18,11 +18,24 @@ namespace Friflo.Engine.ECS.Collections;
 /// <br/>
 /// This enables displaying and mutation of <see cref="Entity"/>'s in a
 /// <a href="https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid">Avalonia.Controls.TreeDataGrid</a>.<br/>
-/// A specialized implementation of this control is the <b>ExplorerTreeDataGrid</b> in this repository.<br/>
-/// <br/>
-/// It seems a common and reasonable approach that other UI frameworks like <b>MAUI</b> or <b>UNO Platform</b> provide<br/>
-/// TreeView controls by using TreeView items implementing <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/>.
+/// A specialized implementation of this control is the <b>ExplorerTreeDataGrid</b> in this repository.
 /// </summary>
+/// <remarks>
+/// It seems a common and reasonable approach that other UI frameworks like <b>MAUI</b> or <b>UNO Platform</b> provide<br/>
+/// TreeView controls by using TreeView items implementing <see cref="INotifyCollectionChanged"/> and
+/// optionally <see cref="INotifyPropertyChanged"/>.<br/>
+/// <br/>
+/// Major advantages of this approach.
+/// <list type="bullet">
+///   <item>
+///     Support millions of items within a TreeView hierarchy without any UI stuttering.
+///   </item>
+///   <item>
+///     Enabling binding hierarchical data to a UI without the need of 3rd party libraries in the data layer.<br/>
+///     <see cref="INotifyCollectionChanged"/> and optionally <see cref="INotifyPropertyChanged"/> of the BCL are sufficient.
+///   </item>
+/// </list>
+/// </remarks>
 public sealed class ExplorerItem :
     IList<ExplorerItem>,
     IList,
