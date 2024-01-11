@@ -14,7 +14,14 @@ namespace Friflo.Engine.ECS.Collections;
 
 /// <summary>
 /// Implements same interfaces as <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/> to act as a replacement
-/// for <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/> with generic type <see cref="ExplorerItem"/>.
+/// for this container class using the generic type <see cref="ExplorerItem"/>.<br/>
+/// <br/>
+/// This enables displaying and mutation of <see cref="Entity"/>'s in a
+/// <a href="https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid">Avalonia.Controls.TreeDataGrid</a>.<br/>
+/// A specialized implementation of this control is the <b>ExplorerTreeDataGrid</b> in this repository.<br/>
+/// <br/>
+/// It seems a common and reasonable approach that other UI frameworks like <b>MAUI</b> or <b>UNO Platform</b> provide<br/>
+/// TreeView controls by using TreeView items implementing <see cref="System.Collections.ObjectModel.ObservableCollection{T}"/>.
 /// </summary>
 public sealed class ExplorerItem :
     IList<ExplorerItem>,
