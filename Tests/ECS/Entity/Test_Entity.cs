@@ -181,7 +181,7 @@ public static class Test_Entity
             object obj = entity1;
             _ = obj.Equals(entity2);
         });
-        AreEqual("to avoid excessive boxing. Use == or EntityUtils.EqualityComparer. id: 1", e!.Message);
+        AreEqual("to avoid excessive boxing. Use == Equals(Entity) or EntityUtils.EqualityComparer. id: 1", e!.Message);
     }
 }
 

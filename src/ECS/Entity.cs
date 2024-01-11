@@ -397,7 +397,7 @@ public readonly struct Entity : IEquatable<Entity>
     // --- object
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
     /// <remarks> Use <see cref="operator=="/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
-    public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(Id, "==");
+    public override bool    Equals(object obj)  => throw EntityUtils.NotImplemented(Id, "== Equals(Entity)");
     
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
     /// <remarks> Use <see cref="Id"/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
