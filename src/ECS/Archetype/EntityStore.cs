@@ -33,11 +33,11 @@ public abstract partial class EntityStoreBase
 
 #region event handler
     // --- tags: changed
-    public  TagsChangedHandler      TagsChanged         { get => tagsChanged;       set => tagsChanged      = value; }
+    [Browse(Never)] public  TagsChangedHandler      TagsChanged         { get => tagsChanged;       set => tagsChanged      = value; }
     
     // --- component: added / removed
-    public  ComponentChangedHandler ComponentAdded      { get => componentAdded;    set => componentAdded   = value; }
-    public  ComponentChangedHandler ComponentRemoved    { get => componentRemoved;  set => componentRemoved = value; }
+    [Browse(Never)] public  ComponentChangedHandler ComponentAdded      { get => componentAdded;    set => componentAdded   = value; }
+    [Browse(Never)] public  ComponentChangedHandler ComponentRemoved    { get => componentRemoved;  set => componentRemoved = value; }
 
 
     #endregion
