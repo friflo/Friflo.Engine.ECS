@@ -19,6 +19,8 @@ Additional features:
 - Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
   in [AvaloniaUI](https://avaloniaui.net/).
 
+More at **Friflo.Engine** [README.md](https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine)
+
 
 ## Links
 
