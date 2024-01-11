@@ -27,7 +27,7 @@ public static class Signature
     /// Returns a <see cref="Signature{T1}"/> containing the given component types.<br/>
     /// <see cref="Signature{T1}"/> features:
     /// <list type="bullet">
-    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1}"/>.</item>
+    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStoreBase.GetArchetype{T1}"/>.</item>
     ///   <item>Create a query to process all entities containing the given component types with <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
@@ -45,7 +45,7 @@ public static class Signature
     /// Returns a <see cref="Signature{T1,T2}"/> containing the given component types.<br/>
     /// <see cref="Signature{T1,T2}"/> features:
     /// <list type="bullet">
-    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2}"/>.</item>
+    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStoreBase.GetArchetype{T1,T2}"/>.</item>
     ///   <item>Create a query to process all entities containing the given component types with <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
@@ -65,7 +65,7 @@ public static class Signature
     /// Returns a <see cref="Signature{T1,T2,T3}"/> containing the given component types.<br/>
     /// <see cref="Signature{T1,T2,T3}"/> features:
     /// <list type="bullet">
-    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2,T3}"/>.</item>
+    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStoreBase.GetArchetype{T1,T2,T3}"/>.</item>
     ///   <item>Create a query to process all entities containing the given component types <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
@@ -87,7 +87,7 @@ public static class Signature
     /// Returns a <see cref="Signature{T1,T2,T3,T4}"/> containing the given component types.<br/>
     /// <see cref="Signature{T1,T2,T3,T4}"/> features:
     /// <list type="bullet">
-    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2,T3,T4}"/>.</item>
+    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStoreBase.GetArchetype{T1,T2,T3,T4}"/>.</item>
     ///   <item>Create a query to process all entities containing the given component types <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>
@@ -111,7 +111,7 @@ public static class Signature
     /// Returns a <see cref="Signature{T1,T2,T3,T4,T5}"/> containing the given component types.<br/>
     /// <see cref="Signature{T1,T2,T3,T4,T5}"/> features:
     /// <list type="bullet">
-    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStore.GetArchetype{T1,T2,T3,T4,T5}"/>.</item>
+    ///   <item>Get the <see cref="Archetype"/> of an <see cref="EntityStore"/> using <see cref="EntityStoreBase.GetArchetype{T1,T2,T3,T4,T5}"/>.</item>
     ///   <item>Create a query to process all entities containing the given component types <see cref="EntityStore"/>.Query() methods.</item>
     /// </list> 
     /// </summary>

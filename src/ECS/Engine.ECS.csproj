@@ -7,7 +7,50 @@
     <Nullable>disable</Nullable>
     <RootNamespace>Friflo.Engine.ECS</RootNamespace>
     <AssemblyName>Friflo.Engine.ECS</AssemblyName>
+    <LangVersion>12.0</LangVersion>
+
+    <!-- packaging -->
+    <PackageVersion>0.0.0</PackageVersion>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <FileVersion>0.0.0.0</FileVersion>
+
+    <Title>Friflo Engine ECS</Title>
+    <Authors>Ullrich Praetz</Authors>
+    <Description>Entity Component System - ECS - optimized for performance and cache locality</Description>
+    <Copyright>Ullrich Praetz</Copyright>
+    <PackageProjectUrl>https://github.com/friflo/Friflo.Json.Fliox</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/friflo/Friflo.Json.Fliox</RepositoryUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>package-icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>false</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedAllSources>true</EmbedAllSources>
+    <!-- packaging: end -->
   </PropertyGroup>
+
+  <!-- packaging -->
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\package-icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+  </PropertyGroup>
+  <!-- packaging: end -->
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
