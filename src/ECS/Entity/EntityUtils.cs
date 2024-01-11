@@ -70,7 +70,7 @@ public static class EntityUtils
     }
     
     internal static Exception NotImplemented(int id, string use) {
-        var msg = $"to avoid excessive boxing. Use {use} or {nameof(EntityUtils)}.{nameof(EntityUtils.EqualityComparer)}. id: {id}";
+        var msg = $"to avoid excessive boxing. Use {use} or {nameof(EntityUtils)}.{nameof(EqualityComparer)}. id: {id}";
         return new NotImplementedException(msg);
     }
     
