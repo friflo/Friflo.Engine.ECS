@@ -12,7 +12,6 @@
         <AssemblyName>GameTest</AssemblyName>
 
         <!-- packaging -->
-        <IncludeBuildOutput>false</IncludeBuildOutput>
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
         <!-- packaging: end -->
     </PropertyGroup>

@@ -13,7 +13,6 @@
         <AssemblyName>Friflo.Editor.UI</AssemblyName>
 
         <!-- packaging -->
-        <IncludeBuildOutput>false</IncludeBuildOutput>
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
         <!-- packaging: end -->
     </PropertyGroup>
