@@ -9,6 +9,7 @@
     <AssemblyName>Friflo.Engine.Hub</AssemblyName>
 
     <!-- packaging -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <PublishRepositoryUrl>false</PublishRepositoryUrl>
     <!-- packaging: end -->
   </PropertyGroup>

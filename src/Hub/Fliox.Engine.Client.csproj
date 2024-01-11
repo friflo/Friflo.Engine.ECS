@@ -8,6 +8,7 @@
     <RootNamespace>Friflo.Fliox.Engine.Client</RootNamespace>
 
     <!-- packaging -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <PublishRepositoryUrl>false</PublishRepositoryUrl>
     <!-- packaging: end -->
   </PropertyGroup>

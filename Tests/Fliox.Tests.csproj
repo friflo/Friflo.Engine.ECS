@@ -8,6 +8,7 @@
         <GenerateProgramFile>true</GenerateProgramFile>
 
         <!-- packaging -->
+        <IncludeBuildOutput>false</IncludeBuildOutput>
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
         <!-- packaging: end -->
     </PropertyGroup>
