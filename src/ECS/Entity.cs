@@ -392,7 +392,7 @@ public readonly struct Entity : IEquatable<Entity>
     public static   bool    operator != (Entity a, Entity b)    => a.Id != b.Id || a.store != b.store;
 
     // --- IEquatable<T>
-    public bool Equals(Entity other) => Id == other.Id && store == other.store;
+    public          bool    Equals(Entity other)                => Id == other.Id && store == other.store;
 
     // --- object
     /// <summary> Note: Not implemented to avoid excessive boxing. </summary>
