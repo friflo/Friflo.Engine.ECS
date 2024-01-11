@@ -62,8 +62,8 @@ public static class Test_Script
                 default:    Fail("unexpected event");                                                   return;
             }
         });
-        store.ScriptAdded    += addHandler;
-        store.ScriptRemoved  += removeHandler;
+        store.OnScriptAdded    += addHandler;
+        store.OnScriptRemoved  += removeHandler;
         
         // --- add script type: TestScript1
         var script1 = new TestScript1 { val1 = 1 };
@@ -109,8 +109,8 @@ public static class Test_Script
         player.RemoveScript<TestScript2>();
         AreEqual(1,             player.Scripts.Length); // no event sent
         
-        store.ScriptAdded    -= addHandler;
-        store.ScriptRemoved  -= removeHandler;
+        store.OnScriptAdded    -= addHandler;
+        store.OnScriptRemoved  -= removeHandler;
         
         for (long n = 0; n < Count; n++) {
             _ = player.GetScript<TestScript1>();

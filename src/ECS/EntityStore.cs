@@ -46,14 +46,14 @@ public sealed partial class EntityStore : EntityStoreBase
     
 #region event handler
     /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
-    /// <remarks>Event handlers previously added with <see cref="ChildEntitiesChanged"/> are removed.</remarks>
-    [Browse(Never)] public  ChildEntitiesChangedHandler ChildEntitiesChanged    { get => childEntitiesChanged;  set => childEntitiesChanged = value; }
+    /// <remarks>Event handlers previously added with <see cref="OnChildEntitiesChanged"/> are removed.</remarks>
+    [Browse(Never)] public  ChildEntitiesChangedHandler OnChildEntitiesChanged  { get => childEntitiesChanged;  set => childEntitiesChanged = value; }
     
     // --- script:   added / removed
-    [Browse(Never)] public  ScriptChangedHandler        ScriptAdded             { get => scriptAdded;           set => scriptAdded          = value; }
-    [Browse(Never)] public  ScriptChangedHandler        ScriptRemoved           { get => scriptRemoved;         set => scriptRemoved        = value; }
+    [Browse(Never)] public  ScriptChangedHandler        OnScriptAdded           { get => scriptAdded;           set => scriptAdded          = value; }
+    [Browse(Never)] public  ScriptChangedHandler        OnScriptRemoved         { get => scriptRemoved;         set => scriptRemoved        = value; }
     
-    [Browse(Never)] public  EntitiesChangedHandler      EntitiesChanged         { get => entitiesChanged;       set => entitiesChanged      = value; }
+    [Browse(Never)] public  EntitiesChangedHandler      OnEntitiesChanged       { get => entitiesChanged;       set => entitiesChanged      = value; }
     
     #endregion
     

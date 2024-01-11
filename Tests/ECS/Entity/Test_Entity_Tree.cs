@@ -457,7 +457,7 @@ public static class Test_Entity_Tree
         
         
         var start = Mem.GetAllocatedBytes();
-        store.ChildEntitiesChanged = null;
+        store.OnChildEntitiesChanged = null;
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.EntityCount);
@@ -540,7 +540,7 @@ public static class Test_Entity_Tree
         AreEqual(-1, root.GetChildIndex(entity2));
     }
     
-    /// <summary>Cover <see cref="EntityStore.ChildEntitiesChanged"/></summary>
+    /// <summary>Cover <see cref="EntityStore.OnChildEntitiesChanged"/></summary>
     [Test]
     public static void Test_EntityStore_ChildEntitiesChanged()
     {
@@ -555,12 +555,12 @@ public static class Test_Entity_Tree
             AreEqual("entity: 1 - Add ChildIds[0] = 2", args.ToString());
             eventCount++;
         };
-        store.ChildEntitiesChanged += handler;
-        AreSame(store.ChildEntitiesChanged, handler);
+        store.OnChildEntitiesChanged += handler;
+        AreSame(store.OnChildEntitiesChanged, handler);
         root.AddChild(child2);
         AreEqual(1, eventCount);
         
-        store.ChildEntitiesChanged -= handler;
+        store.OnChildEntitiesChanged -= handler;
         root.AddChild(child3);
         AreEqual(1, eventCount); // no event fired
     }

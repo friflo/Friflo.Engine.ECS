@@ -119,7 +119,7 @@ public static class Test_StoreSync
         entity.AddTag<TestTag>();
         
         var child   = store.CreateEntity(11);
-        store.ChildEntitiesChanged = (object _, in ChildEntitiesChangedArgs args) => {
+        store.OnChildEntitiesChanged = (object _, in ChildEntitiesChangedArgs args) => {
             AreEqual("entity: 10 - Add ChildIds[0] = 11", args.ToString());
         };
         entity.AddChild(child);

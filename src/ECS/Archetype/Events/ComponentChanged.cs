@@ -5,9 +5,9 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStoreBase.ComponentAdded"/> get events on <see cref="Entity.AddComponent{T}()"/><br/>
+/// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStoreBase.OnComponentAdded"/> get events on <see cref="Entity.AddComponent{T}()"/><br/>
 /// <br/>
-/// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStoreBase.ComponentRemoved"/> get events on <see cref="Entity.RemoveComponent{T}()"/>
+/// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStoreBase.OnComponentRemoved"/> get events on <see cref="Entity.RemoveComponent{T}()"/>
 /// </summary>
 public delegate void   ComponentChangedHandler    (in ComponentChangedArgs e);
 

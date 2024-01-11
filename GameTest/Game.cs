@@ -65,14 +65,14 @@ public class Game
         }
     //  TestBed.AddSampleEntities(store);
         if (SyncDatabase) {
-            store.ComponentAdded     += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
-            store.ComponentRemoved   += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
-            store.ScriptAdded        += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
-            store.ScriptRemoved      += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
-            store.TagsChanged        += (in TagsChangedArgs      args) => SyncEntity(args.entityId);
+            store.OnComponentAdded     += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
+            store.OnComponentRemoved   += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
+            store.OnScriptAdded        += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
+            store.OnScriptRemoved      += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
+            store.OnTagsChanged        += (in TagsChangedArgs      args) => SyncEntity(args.entityId);
             await sync.StoreEntitiesAsync();
         }
-        store.ChildEntitiesChanged += ChildEntitiesChangedHandler;
+        store.OnChildEntitiesChanged += ChildEntitiesChangedHandler;
         
         StoreDispatcher.AssertMainThread();
         // --- run server

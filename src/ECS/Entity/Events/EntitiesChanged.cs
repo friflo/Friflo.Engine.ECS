@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A <see cref="EntitiesChangedHandler"/> added to <see cref="EntityStore.EntitiesChanged"/> get events in
+/// A <see cref="EntitiesChangedHandler"/> added to <see cref="EntityStore.OnEntitiesChanged"/> get events in
 /// case an <see cref="Entity"/> changed.
 /// </summary>
 public delegate void   EntitiesChangedHandler    (in EntitiesChangedArgs e);

@@ -5,7 +5,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A <see cref="TagsChangedHandler"/> added to <see cref="EntityStoreBase.TagsChanged"/> get events on
+/// A <see cref="TagsChangedHandler"/> added to <see cref="EntityStoreBase.OnTagsChanged"/> get events on
 /// <list type="bullet">
 ///   <item><see cref="Entity.AddTag{T}"/></item>
 ///   <item><see cref="Entity.AddTags"/></item>

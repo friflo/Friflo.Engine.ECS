@@ -26,11 +26,11 @@ public sealed class ExplorerItemTree
 #region public methods
     public ExplorerItemTree (Entity rootEntity, string debugName)
     {
-        this.debugName              = debugName ?? "ExplorerTree";
-        store                       = rootEntity.Store;
-        items                       = new Dictionary<int, ExplorerItem>();
-        store.ChildEntitiesChanged += ChildEntitiesChangedHandler;
-        rootItem                    = CreateExplorerItem(rootEntity);
+        this.debugName                  = debugName ?? "ExplorerTree";
+        store                           = rootEntity.Store;
+        items                           = new Dictionary<int, ExplorerItem>();
+        store.OnChildEntitiesChanged   += ChildEntitiesChangedHandler;
+        rootItem                        = CreateExplorerItem(rootEntity);
     }
     
     /// <summary>Get <see cref="ExplorerItem"/> by id</summary>

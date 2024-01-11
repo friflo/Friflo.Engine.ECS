@@ -5,7 +5,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A <see cref="ChildEntitiesChangedHandler"/> added to <see cref="EntityStore.ChildEntitiesChanged"/> get events on
+/// A <see cref="ChildEntitiesChangedHandler"/> added to <see cref="EntityStore.OnChildEntitiesChanged"/> get events on
 /// <list type="bullet">
 ///   <item><see cref="Entity.AddChild"/></item>
 ///   <item><see cref="Entity.InsertChild"/></item>

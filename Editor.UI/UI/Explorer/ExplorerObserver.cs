@@ -32,10 +32,10 @@ internal class ExplorerObserver : EditorObserver
         var root        = tree.RootItem; 
         root.IsExpanded = true; 
         source.Items    = new []{ root };
-        
-        store.ComponentAdded    += PostEntityUpdate;
-        store.ComponentRemoved  += PostEntityUpdate;
-        store.EntitiesChanged   += EntitiesChanged;
+
+        store.OnComponentAdded      += PostEntityUpdate;
+        store.OnComponentRemoved    += PostEntityUpdate;
+        store.OnEntitiesChanged     += EntitiesChanged;
         // select RootItem
         grid.RowSelection!.Select(0);
     }
