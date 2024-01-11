@@ -25,5 +25,5 @@ More at **Friflo.Engine** [README.md](https://github.com/friflo/Friflo.Json.Flio
 ## Links
 
 - [Homepage](https://github.com/friflo/Friflo.Json.Fliox)
-- [NuGet Package](https://www.nuget.org/packages/Friflo.Json.Fliox)
+- [NuGet Package](https://www.nuget.org/packages/Friflo.Engine.ECS/)
 - [License](https://github.com/friflo/Friflo.Json.Fliox/blob/main/LICENSE)
