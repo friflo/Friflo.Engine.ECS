@@ -10,6 +10,10 @@
         
         <!-- Avalionia specific -->
         <AssemblyName>GameTest</AssemblyName>
+
+        <!-- packaging -->
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <!-- packaging: end -->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

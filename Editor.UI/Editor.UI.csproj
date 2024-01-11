@@ -11,6 +11,10 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyName>Friflo.Editor.UI</AssemblyName>
+
+        <!-- packaging -->
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <!-- packaging: end -->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

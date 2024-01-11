@@ -13,6 +13,10 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyName>Friflo.Editor</AssemblyName>
+
+        <!-- packaging -->
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <!-- packaging: end -->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

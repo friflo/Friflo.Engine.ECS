@@ -7,6 +7,10 @@
         <Nullable>disable</Nullable>
         <GenerateProgramFile>true</GenerateProgramFile>
         <RootNamespace>Internal</RootNamespace>
+
+        <!-- packaging -->
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <!-- packaging: end -->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

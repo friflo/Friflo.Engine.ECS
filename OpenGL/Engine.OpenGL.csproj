@@ -7,6 +7,10 @@
     <Nullable>disable</Nullable>
     <RootNamespace>Friflo.Engine.OpenGL</RootNamespace>
     <AssemblyName>Friflo.Engine.OpenGL</AssemblyName>
+
+    <!-- packaging -->
+    <PublishRepositoryUrl>false</PublishRepositoryUrl>
+    <!-- packaging: end -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

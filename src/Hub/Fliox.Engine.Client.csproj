@@ -6,6 +6,10 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <RootNamespace>Friflo.Fliox.Engine.Client</RootNamespace>
+
+    <!-- packaging -->
+    <PublishRepositoryUrl>false</PublishRepositoryUrl>
+    <!-- packaging: end -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
