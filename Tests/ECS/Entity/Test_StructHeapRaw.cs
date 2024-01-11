@@ -28,7 +28,7 @@ public static class Test_StructHeapRaw
             var id  = store.CreateEntity(arch);
             ids[n]  = id;
             var entityArch = store.GetEntityArchetype(id);
-            if (arch != entityArch)             Mem.FailAreEqual(arch, entityArch);
+            if (arch != entityArch)             Mem.AreSame(arch, entityArch);
             if (n + 1 != arch.EntityCount)      Mem.FailAreEqual(n + 1, arch.EntityCount);
             ref var pos = ref store.GetEntityComponent<Position>(id);
             if (default != pos)                 Mem.FailAreEqual(default, pos);

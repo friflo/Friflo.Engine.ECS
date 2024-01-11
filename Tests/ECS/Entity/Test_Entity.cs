@@ -1,6 +1,7 @@
 using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InlineOutVariableDeclaration
@@ -144,23 +145,41 @@ public static class Test_Entity
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         
-        IsFalse (entity1 == entity2);
-        IsTrue  (entity1 != entity2);
-        
         var comparer = EntityUtils.EqualityComparer;
         IsTrue  (comparer.Equals(entity1, entity1));
         IsFalse (comparer.Equals(entity1, entity2));
         
         AreEqual(1, comparer.GetHashCode(entity1));
         AreEqual(2, comparer.GetHashCode(entity2));
+    }
+    
+    [Test]
+    public static void Test_Entity_Equality()
+    {
+        var store       = new EntityStore();
+        var entity1     = store.CreateEntity(1);
+        var entity2     = store.CreateEntity(2);
         
+        // --- operator ==, !=
+        IsFalse (entity1 == entity2);
+        IsTrue  (entity1 != entity2);
+        
+        // --- IEquatable<Entity>
+        var start = Mem.GetAllocatedBytes();
+        Mem.AreEqual (false, entity1.Equals(entity2));
+        Mem.AreEqual (true,  entity1.Equals(entity1));
+        Mem.AssertNoAlloc(start);
+        
+        // --- object.GetHashCode()
         var e = Throws<NotImplementedException>(() => {
             _ = entity1.GetHashCode();
         });
         AreEqual("to avoid excessive boxing. Use Id or EntityUtils.EqualityComparer. id: 1", e!.Message);
         
+        // --- object.Equals()
         e = Throws<NotImplementedException>(() => {
-            _ = entity1.Equals(entity2);
+            object obj = entity1;
+            _ = obj.Equals(entity2);
         });
         AreEqual("to avoid excessive boxing. Use == or EntityUtils.EqualityComparer. id: 1", e!.Message);
     }
