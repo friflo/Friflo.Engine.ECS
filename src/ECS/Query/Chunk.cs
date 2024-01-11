@@ -91,7 +91,7 @@ public readonly struct Chunk<T>
     
     // ReSharper disable once InvalidXmlDocComment
     /// <summary>
-    /// The step value in a for loop when converting a <see cref="AsSpan512{TTo}"/> value to a <see cref="Vector512{T}"/>
+    /// The step value in a for loop when converting a <see cref="AsSpan512{TTo}"/> value to a <c>Vector512{T}</c>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
