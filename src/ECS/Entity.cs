@@ -109,7 +109,7 @@ namespace Friflo.Engine.ECS;
 [CLSCompliant(true)]
 public readonly struct Entity
 {
-    // ----------------------------------- general properties -----------------------------------
+    // ----------------------------------- general properties -------------------------------------
 #region general - properties
     public              long                    Pid             => store.nodes[Id].pid;
                     
@@ -149,7 +149,7 @@ public readonly struct Entity
 
 
 
-    // ---------------------------------- component properties ----------------------------------
+    // ------------------------------------ component properties ----------------------------------
 #region component - properties
 
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
@@ -173,7 +173,7 @@ public readonly struct Entity
 
 
 
-    // --------------------------------- child / tree properties ---------------------------------
+    // ------------------------------------ child / tree properties -------------------------------
 #region child / tree - properties
     [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[Id].childCount;
     
@@ -199,7 +199,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------------ fields -----------------------------------------
+    // ------------------------------------ fields ------------------------------------------------
 #region public / internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes
     /// <summary>Unique entity id.<br/>
@@ -219,7 +219,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------ component methods ------------------------------------
+    // ------------------------------------ component methods -------------------------------------
 #region component - methods
     public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructHeap<T>.StructIndex] != null;
 
@@ -270,7 +270,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------ script methods -------------------------------------
+    // ------------------------------------ script methods ----------------------------------------
 #region script - methods
     /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative</remarks> 
@@ -295,7 +295,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------ entity tag methods -----------------------------------
+    // ------------------------------------ tag methods -------------------------------------------
 #region tag - methods
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
     public bool AddTag<T>()    where T : struct, ITag {
@@ -322,7 +322,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------ tree methods -----------------------------------------
+    // ------------------------------------ child / tree methods ----------------------------------
 #region child / tree - methods
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
@@ -386,7 +386,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------ general methods -------------------------------------
+    // ------------------------------------ general methods ---------------------------------------
 #region general - methods
     public static   bool    operator == (Entity a, Entity b)    => a.Id == b.Id && a.store == b.store;
     public static   bool    operator != (Entity a, Entity b)    => a.Id != b.Id || a.store != b.store;
@@ -405,7 +405,7 @@ public readonly struct Entity
 
 
 
-    // ------------------------------------ internal properties -------------------------------------
+    // ------------------------------------ internal properties -----------------------------------
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
 #region internal - properties
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
