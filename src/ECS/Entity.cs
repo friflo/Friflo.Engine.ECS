@@ -410,10 +410,10 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ event methods -----------------------------------------
 #region event - methods
     [Obsolete("Experimental")]
-    public void TagsChanged (Action<TagsChangedArgs> handler) => EntityStoreBase.AddEntityTagsChangedHandler(store, Id, handler);
+    public void OnTagsChanged   (Action<TagsChangedArgs> handler) => EntityStoreBase.AddEntityTagsChangedHandler(store, Id, handler);
 
     [Obsolete("Experimental")]
-    public void On<TEvent>  (Action<TEvent>          handler) where TEvent : struct  {  }
+    public void On<TEvent>      (Action<TEvent>          handler) where TEvent : struct  {  }
     #endregion
 
     // ------------------------------------ internal properties -----------------------------------
