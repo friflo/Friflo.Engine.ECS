@@ -30,7 +30,7 @@ public partial class EntityStoreBase
             entityHandler = store.internBase.entityTagsChanged = new Dictionary<int, Action<TagsChangedArgs>[]>();
         }
         if (entityHandler.Count == 0) {
-            store.OnTagsChanged += store.EntityTagsChanged;
+            store.internBase.tagsChanged += store.EntityTagsChanged;
         }
         if (entityHandler.TryGetValue(entityId, out var handlers)) {
             var newHandlers = new Action<TagsChangedArgs>[handlers.Length + 1];
@@ -56,7 +56,7 @@ public partial class EntityStoreBase
         var newLength = handlers.Length - 1;
         if (newLength > 0) {
             var newHandler  = new Action<TagsChangedArgs>[newLength];
-            // --- remove handler as index
+            // --- remove handler at index
             for (int n = 0; n < index; n++) {
                 newHandler[n] = handlers[n];
             }
@@ -68,7 +68,7 @@ public partial class EntityStoreBase
         }
         entityHandler.Remove(entityId);
         if (entityHandler.Count == 0) {
-            store.OnTagsChanged -= store.EntityTagsChanged;
+            store.internBase.tagsChanged -= store.EntityTagsChanged;
         }
     }
     #endregion
