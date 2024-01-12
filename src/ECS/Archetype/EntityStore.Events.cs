@@ -54,7 +54,9 @@ public partial class EntityStoreBase
             addEventHandler = true;
         }
         if (entityHandler.TryGetValue(entityId, out var handlers)) {
-            var newHandlers = new Action<TagsChangedArgs>[handlers.Length + 1];
+            // --- add handler to newHandlers[]
+            var newHandlers = new Action<TArgs>[handlers.Length + 1];
+            newHandlers[handlers.Length] = handler;
             handlers.CopyTo(newHandlers, 0);
             return addEventHandler;
         }
