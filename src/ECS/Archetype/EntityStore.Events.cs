@@ -18,9 +18,7 @@ public partial class EntityStoreBase
         if (!internBase.entityTagsChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
         }
-        foreach (var handler in handlers) {
-            handler(args);
-        }
+        handlers.action?.Invoke(args);
     }
     
     internal static void AddEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChangedArgs> handler)
@@ -46,9 +44,7 @@ public partial class EntityStoreBase
         if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
         }
-        foreach (var handler in handlers) {
-            handler(args);
-        }
+        handlers.action?.Invoke(args);
     }
     
     internal static void AddComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChangedArgs> handler)
@@ -71,34 +67,33 @@ public partial class EntityStoreBase
     
     
 #region generic add / remove event handler - experimental
-    protected static bool AddEntityHandler<TArgs>(
-            int                                 entityId,
-            Action<TArgs>                       handler,
-        ref Dictionary<int, Action<TArgs>[]>    entityHandlerMap) where TArgs : struct
+    internal static bool AddEntityHandler<TArgs>(
+            int                             entityId,
+            Action<TArgs>                   handler,
+        ref Dictionary<int, Actions<TArgs>> entityHandlerMap) where TArgs : struct
     {
         bool addEventHandler = false;
         var entityHandler = entityHandlerMap;
         if (entityHandler == null) {
-            entityHandler = entityHandlerMap = new Dictionary<int, Action<TArgs>[]>();
+            entityHandler = entityHandlerMap = new Dictionary<int, Actions<TArgs>>();
         }
         if (entityHandler.Count == 0) {
             addEventHandler = true;
         }
         if (entityHandler.TryGetValue(entityId, out var handlers)) {
-            // --- add handler to newHandlers[]
-            var newHandlers = new Action<TArgs>[handlers.Length + 1];
-            newHandlers[handlers.Length] = handler;
-            handlers.CopyTo(newHandlers, 0);
+            handlers.action += handler;
+            entityHandler[entityId] = handlers;
             return addEventHandler;
         }
-        entityHandler.Add(entityId, [handler]);
+        var actions = new Actions<TArgs> { action = handler };
+        entityHandler.Add(entityId, actions);
         return addEventHandler;
     }
     
-    protected static bool RemoveEntityHandler<TArgs>(
+    internal static bool RemoveEntityHandler<TArgs>(
         int                                 entityId,
         Action<TArgs>                       handler,
-        Dictionary<int, Action<TArgs>[]>    entityHandler) where TArgs : struct
+        Dictionary<int, Actions<TArgs>>     entityHandler) where TArgs : struct
     {
         if (entityHandler == null) {
             return false;
@@ -106,25 +101,19 @@ public partial class EntityStoreBase
         if (!entityHandler.TryGetValue(entityId, out var handlers)) {
             return false;
         }
-        int index = Array.FindIndex(handlers, item => item == handler);
-        if (index == -1) {
-            return false;
-        }
-        var newLength = handlers.Length - 1;
-        if (newLength > 0) {
-            var newHandler  = new Action<TArgs>[newLength];
-            // --- remove handler at index
-            for (int n = 0; n < index; n++) {
-                newHandler[n] = handlers[n];
-            }
-            for (int n = index + 1; n <= newLength; n++) {
-                newHandler[n - 1] = handlers[n];
-            }
-            entityHandler[entityId] = newHandler;
+        handlers.action -= handler;
+        if (handlers.action != null) {
+            entityHandler[entityId] = handlers;
             return false;
         }
         entityHandler.Remove(entityId);
         return entityHandler.Count == 0;
     }
     #endregion
+}
+
+
+internal struct Actions<TArg> where TArg : struct
+{
+    internal Action<TArg> action;
 }
