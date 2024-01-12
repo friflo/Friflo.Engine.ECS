@@ -403,16 +403,18 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks> Use <see cref="Id"/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
     public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
     
-    [Obsolete("Experimental")]
-    public void On          (Action<TagsChangedArgs> handler)                        { EntityStoreBase.AddEntityTagsChangedHandler(store, Id, handler); }
-
-    [Obsolete("Experimental")]
-    public void On<TEvent>  (Action<TEvent>          handler) where TEvent : struct  {  }
-    
     public override string  ToString()          => EntityUtils.EntityToString(this);
     #endregion
 
+    
+    // ------------------------------------ event methods -----------------------------------------
+#region event - methods
+    [Obsolete("Experimental")]
+    public void TagsChanged (Action<TagsChangedArgs> handler) => EntityStoreBase.AddEntityTagsChangedHandler(store, Id, handler);
 
+    [Obsolete("Experimental")]
+    public void On<TEvent>  (Action<TEvent>          handler) where TEvent : struct  {  }
+    #endregion
 
     // ------------------------------------ internal properties -----------------------------------
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
