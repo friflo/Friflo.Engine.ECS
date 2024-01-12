@@ -47,12 +47,12 @@ public sealed partial class EntityStore : EntityStoreBase
 #region events
     /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="OnChildEntitiesChanged"/> are removed.</remarks>
-    public  event   ChildEntitiesChangedHandler OnChildEntitiesChanged  { add => intern.childEntitiesChanged += value;   remove => intern.childEntitiesChanged -= value; }
+    public  event   ChildEntitiesChangedHandler OnChildEntitiesChanged  { add => intern.childEntitiesChanged+= value;   remove => intern.childEntitiesChanged -= value; }
     
     // --- script:   added / removed
-    public  event   ScriptChangedHandler        OnScriptAdded           { add => intern.scriptAdded          += value;   remove => intern.scriptAdded    -= value; }
-    public  event   ScriptChangedHandler        OnScriptRemoved         { add => intern.scriptRemoved        += value;   remove => intern.scriptRemoved  -= value; }
-    public  event   EntitiesChangedHandler      OnEntitiesChanged       { add => intern.entitiesChanged      += value;   remove => intern.entitiesChanged-= value; }
+    public  event   ScriptChangedHandler        OnScriptAdded           { add => intern.scriptAdded         += value;   remove => intern.scriptAdded    -= value; }
+    public  event   ScriptChangedHandler        OnScriptRemoved         { add => intern.scriptRemoved       += value;   remove => intern.scriptRemoved  -= value; }
+    public  event   EntitiesChangedHandler      OnEntitiesChanged       { add => intern.entitiesChanged     += value;   remove => intern.entitiesChanged-= value; }
     
     public  void    CastEntitiesChanged(EntitiesChangedArgs args) => intern.entitiesChanged?.Invoke(args);
     #endregion
@@ -60,10 +60,6 @@ public sealed partial class EntityStore : EntityStoreBase
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
     [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes   - acts also id2pid
-
-    [Browse(Never)] private  readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
-    [Browse(Never)] private             Random                  randPid;            //  8               - null if using pid == id
-                    private  readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
     [Browse(Never)] private             Entity                  storeRoot;          // 16               - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
     [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8               - invariant: entityScripts[0] = 0
@@ -78,14 +74,28 @@ public sealed partial class EntityStore : EntityStoreBase
                     private             Intern                  intern;             // 32
                     
     private struct Intern {
-                    internal             int                     sequenceId;         //  4               - incrementing id used for next new entity
+                    internal readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
+                    internal            Random                  randPid;            //  8               - null if using pid == id
+                    internal readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
+
+                    internal            int                     sequenceId;         //  4               - incrementing id used for next new entity
         // --- delegates
                     internal        ChildEntitiesChangedHandler childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
         //
                     internal        ScriptChangedHandler        scriptAdded;        //  8
                     internal        ScriptChangedHandler        scriptRemoved;      //  8
         //
-                    internal        EntitiesChangedHandler      entitiesChanged;    //  8 
+                    internal        EntitiesChangedHandler      entitiesChanged;    //  8
+                    
+        internal Intern(PidType pidType)
+        {
+            this.pidType    = pidType;
+            sequenceId      = Static.MinNodeId;
+            if (pidType == PidType.RandomPids) {
+                pid2Id  = new Dictionary<long, int>();
+                randPid = new Random();
+            }
+        }
     }
     #endregion
     
@@ -94,14 +104,9 @@ public sealed partial class EntityStore : EntityStoreBase
     
     public EntityStore(PidType pidType)
     {
-        this.pidType        = pidType;
+        intern              = new Intern(pidType);
         nodes               = Array.Empty<EntityNode>();
-        intern.sequenceId   = Static.MinNodeId;
         EnsureNodesLength(2);
-        if (pidType == PidType.RandomPids) {
-            pid2Id  = new Dictionary<long, int>();
-            randPid = new Random();
-        }
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
         entityScriptCount   = 1;
         idBuffer            = new int[1];
@@ -117,7 +122,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
     /// as this method performs a <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
-    public  int             PidToId(long pid)   => pid2Id != null ? pid2Id[pid] : (int)pid;
+    public  int             PidToId(long pid)   => intern.pid2Id != null ? intern.pid2Id[pid] : (int)pid;
         
     public  long            IdToPid(int id)     => nodes[id].pid;
     #endregion
@@ -136,15 +141,15 @@ public sealed partial class EntityStore : EntityStoreBase
     }
     
     public  Entity  GetEntityByPid(long pid) {
-        if (pid2Id != null) {
-            return new Entity(pid2Id[pid], this);
+        if (intern.pid2Id != null) {
+            return new Entity(intern.pid2Id[pid], this);
         }
         return new Entity((int)pid, this);
     }
     
     public  bool  TryGetEntityByPid(long pid, out Entity value) {
-        if (pid2Id != null) {
-            if (pid2Id.TryGetValue(pid,out int id)) {
+        if (intern.pid2Id != null) {
+            if (intern.pid2Id.TryGetValue(pid,out int id)) {
                 value = new Entity(id, this);
                 return true;
             }

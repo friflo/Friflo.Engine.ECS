@@ -49,11 +49,11 @@ public partial class EntityStore
     }
     
     public void SetRandomSeed(int seed) {
-        randPid = new Random(seed);
+        intern.randPid = new Random(seed);
     }
     
     private long GeneratePid(int id) {
-        return pidType == PidType.UsePidAsId ? id : GenerateRandomPidForId(id);
+        return intern.pidType == PidType.UsePidAsId ? id : GenerateRandomPidForId(id);
     }
     
     private long GenerateRandomPidForId(int id)
@@ -61,8 +61,8 @@ public partial class EntityStore
         while(true) {
             // generate random int to have numbers with small length e.g. 2147483647 (max int)
             // could also generate long which requires more memory when persisting entities
-            long pid = randPid.Next();
-            if (pid2Id.TryAdd(pid, id)) {
+            long pid = intern.randPid.Next();
+            if (intern.pid2Id.TryAdd(pid, id)) {
                 return pid;
             }
         }

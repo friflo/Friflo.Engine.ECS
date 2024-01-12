@@ -89,7 +89,7 @@ public partial class EntityStore
     internal Entity DataEntityToEntity(DataEntity dataEntity, out string error, ComponentReader reader)
     {
         Entity entity;
-        if (pidType == PidType.UsePidAsId) {
+        if (intern.pidType == PidType.UsePidAsId) {
             entity = CreateFromDataEntityUsePidAsId(dataEntity);
         } else {
             entity = CreateFromDataEntityRandomPid (dataEntity);
@@ -102,7 +102,7 @@ public partial class EntityStore
     {
         // --- map pid to id
         var pid     = dataEntity.pid;
-        var pidMap  = pid2Id;
+        var pidMap  = intern.pid2Id;
         if (!pidMap.TryGetValue(pid, out int id)) {
             id = NewId();
             pidMap.Add(pid, id);
