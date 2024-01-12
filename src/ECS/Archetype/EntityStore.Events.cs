@@ -42,8 +42,7 @@ public partial class EntityStoreBase
     private static bool AddEntityHandler<TArgs>(
             int                                 entityId,
             Action<TArgs>                       handler,
-        ref Dictionary<int, Action<TArgs>[]>    entityHandlerMap
-        )
+        ref Dictionary<int, Action<TArgs>[]>    entityHandlerMap) where TArgs : struct
     {
         bool addEventHandler = false;
         var entityHandler = entityHandlerMap;
@@ -67,7 +66,7 @@ public partial class EntityStoreBase
     private static bool RemoveEntityHandler<TArgs>(
         int                                 entityId,
         Action<TArgs>                       handler,
-        Dictionary<int, Action<TArgs>[]>    entityHandler)
+        Dictionary<int, Action<TArgs>[]>    entityHandler) where TArgs : struct
     {
         if (entityHandler == null) {
             return false;
