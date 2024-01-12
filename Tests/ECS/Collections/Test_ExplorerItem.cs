@@ -139,7 +139,7 @@ public static class Test_ExplorerItem
         var rootItem    = tree.RootItem;
         
         var addCount       = 0;
-        store.OnComponentAdded += (in ComponentChangedArgs args) => {
+        ComponentChangedHandler componentAdded = (in ComponentChangedArgs args) => {
             var argsStr = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
@@ -151,8 +151,9 @@ public static class Test_ExplorerItem
                 default:    Fail("unexpected event");                                               return;
             }
         };
+        store.OnComponentAdded += componentAdded;
         var removeCount       = 0;
-        store.OnComponentRemoved += (in ComponentChangedArgs args) => {
+        ComponentChangedHandler componentRemoved = (in ComponentChangedArgs args) => {
             var argsStr = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
@@ -164,6 +165,7 @@ public static class Test_ExplorerItem
                 default:    Fail("unexpected event");                                               return;
             }
         };
+        store.OnComponentRemoved += componentRemoved;
         
         var defaultName = "entity";
         
@@ -182,6 +184,12 @@ public static class Test_ExplorerItem
         
         rootItem.Name = null;
         AreEqual(defaultName,   rootItem.Name); // no event sent. name is already removed
+        
+        // --- cover remove event handler
+        store.OnComponentAdded      -= componentAdded;
+        store.OnComponentRemoved    -= componentRemoved;
+        rootItem.Name = "removed";  // fires no event
+        rootItem.Name = null;       // fires no event
         
         AreEqual(1, addCount);
         AreEqual(1, removeCount);
