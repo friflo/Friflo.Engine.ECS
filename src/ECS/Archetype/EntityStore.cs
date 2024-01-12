@@ -63,10 +63,10 @@ public abstract partial class EntityStoreBase
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
-
     // --- misc
     [Browse(Never)] internal  readonly  Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
+    // --- internal
                     private             InternBase              internBase;         // 40
                     
     private struct InternBase {
