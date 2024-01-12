@@ -65,7 +65,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Fire events in case an <see cref="Entity"/> changed. </summary>
     public  event   EventHandler<EntitiesChangedArgs>      OnEntitiesChanged       { add => intern.entitiesChanged     += value;   remove => intern.entitiesChanged-= value; }
     
-    public  void    CastEntitiesChanged(EntitiesChangedArgs args) => intern.entitiesChanged?.Invoke(null, args);
+    public  void    CastEntitiesChanged(object sender, EntitiesChangedArgs args) => intern.entitiesChanged?.Invoke(sender, args);
     #endregion
     
 #region internal fields

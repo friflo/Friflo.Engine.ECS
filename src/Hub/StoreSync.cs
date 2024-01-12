@@ -152,7 +152,7 @@ public sealed class StoreSync
         }
         // Send event. See: SEND_EVENT notes
         var args = new EntitiesChangedArgs(idSet);
-        store.CastEntitiesChanged(args);
+        store.CastEntitiesChanged(null, args);
     }
     
     public void UpsertDataEntity(int entityId)
