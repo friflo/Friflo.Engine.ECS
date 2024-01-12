@@ -410,15 +410,17 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ event methods -----------------------------------------
 #region event - methods
     [Obsolete("Experimental")]
-    public event Action<TagsChangedArgs>        OnTagsChanged       { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
-                                                                      remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
+    public event Action<TagsChangedArgs>            OnTagsChanged           { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
+                                                                              remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
     [Obsolete("Experimental")]
-    public event Action<ComponentChangedArgs>   OnComponentChanged  { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);
-                                                                      remove => EntityStoreBase.RemoveComponentChangedHandler   (store, Id, value);  }
+    public event Action<ComponentChangedArgs>       OnComponentChanged      { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);
+                                                                              remove => EntityStoreBase.RemoveComponentChangedHandler   (store, Id, value);  }
     [Obsolete("Experimental")]
-    public event Action<ScriptChangedArgs>      OnScriptChanged     { add    => EntityStore.    AddScriptChangedHandler         (store, Id, value);
-                                                                      remove => EntityStore.    RemoveScriptChangedHandler      (store, Id, value);  }
-    
+    public event Action<ScriptChangedArgs>          OnScriptChanged         { add    => EntityStore.AddScriptChangedHandler             (store, Id, value);
+                                                                              remove => EntityStore.RemoveScriptChangedHandler          (store, Id, value);  }
+    [Obsolete("Experimental")]
+    public event Action<ChildEntitiesChangedArgs>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
+                                                                              remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     [Obsolete("Experimental")]
     public void AddHandler   <TEvent> (Action<TEvent> handler) where TEvent : struct  {  }
     

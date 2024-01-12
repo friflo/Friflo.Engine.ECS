@@ -92,6 +92,7 @@ public sealed partial class EntityStore : EntityStoreBase
                     internal            int                         sequenceId;         //  4               - incrementing id used for next new entity
         // --- delegates
         internal EventHandler          <ChildEntitiesChangedArgs>   childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
+        internal Dictionary<int, Action<ChildEntitiesChangedArgs>[]>entityChildEntitiesChanged;//  8
         //
         internal EventHandler          <ScriptChangedArgs>          scriptAdded;        //  8
         internal EventHandler          <ScriptChangedArgs>          scriptRemoved;      //  8
