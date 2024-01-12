@@ -33,13 +33,11 @@ public abstract partial class EntityStoreBase
 
 #region events
     // --- tags: changed
-    public event    TagsChangedHandler      OnTagsChanged       { add => tagsChanged        += value;   remove => tagsChanged      -= value; }
+    public event    TagsChangedHandler      OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
     
     // --- component: added / removed
-    public event    ComponentChangedHandler OnComponentAdded    { add => componentAdded     += value;   remove => componentAdded   -= value; }
-    public event    ComponentChangedHandler OnComponentRemoved  { add => componentRemoved   += value;   remove => componentRemoved -= value; }
-
-
+    public event    ComponentChangedHandler OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
+    public event    ComponentChangedHandler OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
     #endregion
     
 #region private / internal fields
@@ -53,14 +51,19 @@ public abstract partial class EntityStoreBase
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
-    // --- delegates
-    [Browse(Never)] private             TagsChangedHandler      tagsChanged;        //  8
-    //
-    [Browse(Never)] private             ComponentChangedHandler componentAdded;     //  8
-    [Browse(Never)] private             ComponentChangedHandler componentRemoved;   //  8
+
     // --- misc
     [Browse(Never)] internal  readonly  Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
+                    private             InternBase              internBase;         // 24
+                    
+    private struct InternBase {
+        // --- delegates
+                    internal            TagsChangedHandler      tagsChanged;        //  8
+        //
+                    internal            ComponentChangedHandler componentAdded;     //  8
+                    internal            ComponentChangedHandler componentRemoved;   //  8
+    }
     #endregion
     
 #region static fields

@@ -228,7 +228,7 @@ public partial class EntityStore
     
     private void SetChildNodes(int parentId, ReadOnlySpan<int> newChildIds)
     {
-        if (childEntitiesChanged != null) {
+        if (intern.childEntitiesChanged != null) {
             // case: childNodesChanged handler exists       => assign new child ids one by one to send events
             SetChildNodesWithEvents(parentId, newChildIds);
             return;
@@ -547,20 +547,20 @@ public partial class EntityStore
     // ---------------------------------- child nodes change notification ----------------------------------
     private void OnChildNodeAdd(int parentId, int childId, int childIndex)
     {
-        if (childEntitiesChanged == null) {
+        if (intern.childEntitiesChanged == null) {
             return;
         }
         var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Add, parentId, childId, childIndex);
-        childEntitiesChanged(this, args);
+        intern.childEntitiesChanged(this, args);
     }
     
     private void OnChildNodeRemove(int parentId, int childId, int childIndex)
     {
-        if (childEntitiesChanged == null) {
+        if (intern.childEntitiesChanged == null) {
             return;
         }
         var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Remove, parentId, childId, childIndex);
-        childEntitiesChanged(this, args);
+        intern.childEntitiesChanged(this, args);
     }
     
     

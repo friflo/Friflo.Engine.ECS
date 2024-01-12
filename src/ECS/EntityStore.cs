@@ -47,15 +47,14 @@ public sealed partial class EntityStore : EntityStoreBase
 #region events
     /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="OnChildEntitiesChanged"/> are removed.</remarks>
-    public  event   ChildEntitiesChangedHandler OnChildEntitiesChanged  { add => childEntitiesChanged += value;   remove => childEntitiesChanged -= value; }
+    public  event   ChildEntitiesChangedHandler OnChildEntitiesChanged  { add => intern.childEntitiesChanged += value;   remove => intern.childEntitiesChanged -= value; }
     
     // --- script:   added / removed
-    public  event   ScriptChangedHandler        OnScriptAdded           { add => scriptAdded          += value;   remove => scriptAdded    -= value; }
-    public  event   ScriptChangedHandler        OnScriptRemoved         { add => scriptRemoved        += value;   remove => scriptRemoved  -= value; }
-    public  event   EntitiesChangedHandler      OnEntitiesChanged       { add => entitiesChanged      += value;   remove => entitiesChanged-= value; }
+    public  event   ScriptChangedHandler        OnScriptAdded           { add => intern.scriptAdded          += value;   remove => intern.scriptAdded    -= value; }
+    public  event   ScriptChangedHandler        OnScriptRemoved         { add => intern.scriptRemoved        += value;   remove => intern.scriptRemoved  -= value; }
+    public  event   EntitiesChangedHandler      OnEntitiesChanged       { add => intern.entitiesChanged      += value;   remove => intern.entitiesChanged-= value; }
     
-    public  void    CastEntitiesChanged(EntitiesChangedArgs args) => entitiesChanged?.Invoke(args);
-    
+    public  void    CastEntitiesChanged(EntitiesChangedArgs args) => intern.entitiesChanged?.Invoke(args);
     #endregion
     
 #region internal fields
@@ -77,14 +76,17 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
 
-    // --- delegates
-    [Browse(Never)] private         ChildEntitiesChangedHandler childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
-    //
-    [Browse(Never)] private         ScriptChangedHandler        scriptAdded;        //  8
-    [Browse(Never)] private         ScriptChangedHandler        scriptRemoved;      //  8
-    //
-    [Browse(Never)] internal        EntitiesChangedHandler      entitiesChanged;    //  8
-    
+                    private             Intern                  intern;             // 32
+                    
+    private struct Intern {
+        // --- delegates
+                    internal        ChildEntitiesChangedHandler childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
+        //
+                    internal        ScriptChangedHandler        scriptAdded;        //  8
+                    internal        ScriptChangedHandler        scriptRemoved;      //  8
+        //
+                    internal        EntitiesChangedHandler      entitiesChanged;    //  8 
+    }
     #endregion
     
 #region initialize
