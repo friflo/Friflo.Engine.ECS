@@ -40,7 +40,7 @@ public partial class EntityStoreBase
     
     
     
-#region add / temove component events - experimental
+#region add / remove component events - experimental
     private void ComponentChanged(object sender, ComponentChangedArgs args)
     {
         if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
@@ -71,7 +71,7 @@ public partial class EntityStoreBase
     
     
 #region generic add / remove event handler - experimental
-    private static bool AddEntityHandler<TArgs>(
+    protected static bool AddEntityHandler<TArgs>(
             int                                 entityId,
             Action<TArgs>                       handler,
         ref Dictionary<int, Action<TArgs>[]>    entityHandlerMap) where TArgs : struct
@@ -95,7 +95,7 @@ public partial class EntityStoreBase
         return addEventHandler;
     }
     
-    private static bool RemoveEntityHandler<TArgs>(
+    protected static bool RemoveEntityHandler<TArgs>(
         int                                 entityId,
         Action<TArgs>                       handler,
         Dictionary<int, Action<TArgs>[]>    entityHandler) where TArgs : struct

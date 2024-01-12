@@ -85,18 +85,19 @@ public sealed partial class EntityStore : EntityStoreBase
                     private             Intern                  intern;             // 56
                     
     private struct Intern {
-                    internal readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
-                    internal            Random                  randPid;            //  8               - null if using pid == id
-                    internal readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
+                    internal readonly   PidType                     pidType;            //  4               - pid != id  /  pid == id
+                    internal            Random                      randPid;            //  8               - null if using pid == id
+                    internal readonly   Dictionary<long, int>       pid2Id;             //  8 + Map<pid,id> - null if using pid == id
 
-                    internal            int                     sequenceId;         //  4               - incrementing id used for next new entity
+                    internal            int                         sequenceId;         //  4               - incrementing id used for next new entity
         // --- delegates
-                    internal        EventHandler<ChildEntitiesChangedArgs> childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
+        internal EventHandler          <ChildEntitiesChangedArgs>   childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
         //
-                    internal        EventHandler<ScriptChangedArgs>        scriptAdded;        //  8
-                    internal        EventHandler<ScriptChangedArgs>        scriptRemoved;      //  8
+        internal EventHandler          <ScriptChangedArgs>          scriptAdded;        //  8
+        internal EventHandler          <ScriptChangedArgs>          scriptRemoved;      //  8
+        internal Dictionary<int, Action<ScriptChangedArgs>[]>       entityScriptChanged;//  8
         //
-                    internal        EventHandler<EntitiesChangedArgs>      entitiesChanged;    //  8
+        internal EventHandler          <EntitiesChangedArgs>        entitiesChanged;    //  8
                     
         internal Intern(PidType pidType)
         {
