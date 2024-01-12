@@ -406,9 +406,11 @@ public readonly struct Entity : IEquatable<Entity>
     public override string  ToString()          => EntityUtils.EntityToString(this);
     #endregion
 
-    
-    // ------------------------------------ event methods -----------------------------------------
-#region event - methods
+
+
+
+    // ------------------------------------ events ------------------------------------------------
+#region events
     [Obsolete("Experimental")]
     public event Action<TagsChangedArgs>            OnTagsChanged           { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
                                                                               remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
@@ -427,6 +429,9 @@ public readonly struct Entity : IEquatable<Entity>
     [Obsolete("Experimental")]
     public void RemoveHandler<TEvent> (Action<TEvent> handler) where TEvent : struct  {  }
     #endregion
+
+
+
 
     // ------------------------------------ internal properties -----------------------------------
 // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
