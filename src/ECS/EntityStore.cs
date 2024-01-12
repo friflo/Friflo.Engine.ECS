@@ -45,16 +45,27 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
     
 #region events
-    /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
-    /// <remarks>Event handlers previously added with <see cref="OnChildEntitiesChanged"/> are removed.</remarks>
-    public  event   ChildEntitiesChangedHandler OnChildEntitiesChanged  { add => intern.childEntitiesChanged+= value;   remove => intern.childEntitiesChanged -= value; }
+    /// <summary>
+    /// Fire events on
+    /// <list type="bullet">
+    ///   <item><see cref="Entity.AddChild"/></item>
+    ///   <item><see cref="Entity.InsertChild"/></item>
+    ///   <item><see cref="Entity.RemoveChild"/></item>
+    ///   <item><see cref="Entity.DeleteEntity"/></item>
+    /// </list>
+    /// </summary>
+    public  event   EventHandler<ChildEntitiesChangedArgs> OnChildEntitiesChanged  { add => intern.childEntitiesChanged+= value;   remove => intern.childEntitiesChanged -= value; }
     
     // --- script:   added / removed
-    public  event   ScriptChangedHandler        OnScriptAdded           { add => intern.scriptAdded         += value;   remove => intern.scriptAdded    -= value; }
-    public  event   ScriptChangedHandler        OnScriptRemoved         { add => intern.scriptRemoved       += value;   remove => intern.scriptRemoved  -= value; }
-    public  event   EntitiesChangedHandler      OnEntitiesChanged       { add => intern.entitiesChanged     += value;   remove => intern.entitiesChanged-= value; }
+    /// <summary> Fire events on <see cref="Entity.AddScript{T}"/> </summary>
+    public  event   EventHandler<ScriptChangedArgs>        OnScriptAdded           { add => intern.scriptAdded         += value;   remove => intern.scriptAdded    -= value; }
+    /// <summary> Fire events on <see cref="Entity.RemoveScript{T}"/> </summary>
+    public  event   EventHandler<ScriptChangedArgs>        OnScriptRemoved         { add => intern.scriptRemoved       += value;   remove => intern.scriptRemoved  -= value; }
     
-    public  void    CastEntitiesChanged(EntitiesChangedArgs args) => intern.entitiesChanged?.Invoke(args);
+    /// <summary> Fire events in case an <see cref="Entity"/> changed. </summary>
+    public  event   EventHandler<EntitiesChangedArgs>      OnEntitiesChanged       { add => intern.entitiesChanged     += value;   remove => intern.entitiesChanged-= value; }
+    
+    public  void    CastEntitiesChanged(EntitiesChangedArgs args) => intern.entitiesChanged?.Invoke(null, args);
     #endregion
     
 #region internal fields
@@ -80,12 +91,12 @@ public sealed partial class EntityStore : EntityStoreBase
 
                     internal            int                     sequenceId;         //  4               - incrementing id used for next new entity
         // --- delegates
-                    internal        ChildEntitiesChangedHandler childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
+                    internal        EventHandler<ChildEntitiesChangedArgs> childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
         //
-                    internal        ScriptChangedHandler        scriptAdded;        //  8
-                    internal        ScriptChangedHandler        scriptRemoved;      //  8
+                    internal        EventHandler<ScriptChangedArgs>        scriptAdded;        //  8
+                    internal        EventHandler<ScriptChangedArgs>        scriptRemoved;      //  8
         //
-                    internal        EntitiesChangedHandler      entitiesChanged;    //  8
+                    internal        EventHandler<EntitiesChangedArgs>      entitiesChanged;    //  8
                     
         internal Intern(PidType pidType)
         {

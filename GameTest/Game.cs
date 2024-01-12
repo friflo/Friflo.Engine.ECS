@@ -65,11 +65,11 @@ public class Game
         }
     //  TestBed.AddSampleEntities(store);
         if (SyncDatabase) {
-            store.OnComponentAdded     += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
-            store.OnComponentRemoved   += (in ComponentChangedArgs args) => SyncEntity(args.entityId); 
-            store.OnScriptAdded        += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
-            store.OnScriptRemoved      += (in ScriptChangedArgs    args) => SyncEntity(args.entityId); 
-            store.OnTagsChanged        += (in TagsChangedArgs      args) => SyncEntity(args.entityId);
+            store.OnComponentAdded     += (_, args) => SyncEntity(args.entityId); 
+            store.OnComponentRemoved   += (_, args) => SyncEntity(args.entityId); 
+            store.OnScriptAdded        += (_, args) => SyncEntity(args.entityId); 
+            store.OnScriptRemoved      += (_, args) => SyncEntity(args.entityId); 
+            store.OnTagsChanged        += (_, args) => SyncEntity(args.entityId);
             await sync.StoreEntitiesAsync();
         }
         store.OnChildEntitiesChanged += ChildEntitiesChangedHandler;
@@ -88,7 +88,7 @@ public class Game
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="StoreSync"/></summary>
-    private void ChildEntitiesChangedHandler (object sender, in ChildEntitiesChangedArgs args)
+    private void ChildEntitiesChangedHandler (object sender, ChildEntitiesChangedArgs args)
     {
         StoreDispatcher.AssertMainThread();
         switch (args.action)

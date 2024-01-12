@@ -57,7 +57,7 @@ public partial class EntityStoreBase
         var heap    = (StructHeap<T>)structHeap;
         heap.components[compIndex] = component;
         // Send event. See: SEND_EVENT notes
-        store.internBase.componentAdded?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Add, structIndex));
+        store.internBase.componentAdded?.Invoke(null, new ComponentChangedArgs (id, ChangedEventAction.Add, structIndex));
         return added;
     }
 
@@ -127,7 +127,7 @@ public partial class EntityStoreBase
         }
         archIndex   = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.componentRemoved?.Invoke(new ComponentChangedArgs (id, ChangedEventAction.Remove, structIndex));
+        store.internBase.componentRemoved?.Invoke(null, new ComponentChangedArgs (id, ChangedEventAction.Remove, structIndex));
         return true;
     }
     #endregion
@@ -168,7 +168,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags));
         return true;
     }
     
@@ -208,7 +208,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(new TagsChangedArgs(id, tags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags));
         return true;
     }
     #endregion

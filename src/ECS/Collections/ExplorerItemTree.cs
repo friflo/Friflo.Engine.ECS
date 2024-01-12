@@ -64,7 +64,7 @@ public sealed class ExplorerItemTree
     /// given <see cref="ChildEntitiesChangedArgs"/>.
     /// </summary>
     // only internal because of unit test
-    internal void ChildEntitiesChangedHandler(object sender, in ChildEntitiesChangedArgs args)
+    internal void ChildEntitiesChangedHandler(object sender, ChildEntitiesChangedArgs args)
     {
         var treeItems = items;
         if (!treeItems.TryGetValue(args.parentId, out var parent)) {

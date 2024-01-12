@@ -4,13 +4,6 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-/// <summary>
-/// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStoreBase.OnComponentAdded"/> get events on <see cref="Entity.AddComponent{T}()"/><br/>
-/// <br/>
-/// A <see cref="ComponentChangedHandler"/> added to <see cref="EntityStoreBase.OnComponentRemoved"/> get events on <see cref="Entity.RemoveComponent{T}()"/>
-/// </summary>
-public delegate void   ComponentChangedHandler    (in ComponentChangedArgs e);
-
 public enum ChangedEventAction
 {
     Add     = 0,

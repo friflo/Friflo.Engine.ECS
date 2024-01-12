@@ -52,11 +52,11 @@ internal class InspectorObserver : EditorObserver
     
     protected override void OnEditorReady() {
         var store = Store;
-        store.OnComponentAdded      += (in ComponentChangedArgs args) => PostSetEntity(args.entityId); 
-        store.OnComponentRemoved    += (in ComponentChangedArgs args) => PostSetEntity(args.entityId); 
-        store.OnScriptAdded         += (in ScriptChangedArgs    args) => PostSetEntity(args.entityId); 
-        store.OnScriptRemoved       += (in ScriptChangedArgs    args) => PostSetEntity(args.entityId); 
-        store.OnTagsChanged         += (in TagsChangedArgs      args) => PostSetEntity(args.entityId);
+        store.OnComponentAdded      += (_, args) => PostSetEntity(args.entityId); 
+        store.OnComponentRemoved    += (_, args) => PostSetEntity(args.entityId); 
+        store.OnTagsChanged         += (_, args) => PostSetEntity(args.entityId);
+        store.OnScriptAdded         += (_, args) => PostSetEntity(args.entityId);
+        store.OnScriptRemoved       += (_, args) => PostSetEntity(args.entityId); 
         store.OnEntitiesChanged     += EntitiesChanged;
     }
     
@@ -70,7 +70,7 @@ internal class InspectorObserver : EditorObserver
         });
     }
     
-    private void EntitiesChanged(in EntitiesChangedArgs args) {
+    private void EntitiesChanged(object sender, EntitiesChangedArgs args) {
         if (!args.EntityIds.Contains(entityId)) {
             return;
         }

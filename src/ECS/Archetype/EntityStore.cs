@@ -33,11 +33,23 @@ public abstract partial class EntityStoreBase
 
 #region events
     // --- tags: changed
-    public event    TagsChangedHandler      OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
+    /// <summary>
+    /// Fire events on
+    /// <list type="bullet">
+    ///   <item><see cref="Entity.AddTag{T}"/></item>
+    ///   <item><see cref="Entity.AddTags"/></item>
+    ///   <item><see cref="Entity.RemoveTag{T}"/></item>
+    ///   <item><see cref="Entity.RemoveTags"/></item>
+    /// </list>
+    /// </summary>
+    public event    EventHandler<TagsChangedArgs>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
     
     // --- component: added / removed
-    public event    ComponentChangedHandler OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
-    public event    ComponentChangedHandler OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
+    /// <summary> Fire events on <see cref="Entity.AddComponent{T}()"/> </summary>
+    public event    EventHandler<ComponentChangedArgs>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
+    
+    /// <summary> Fire events on <see cref="Entity.RemoveComponent{T}()"/> </summary>
+    public event    EventHandler<ComponentChangedArgs>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
     #endregion
     
 #region private / internal fields
@@ -59,10 +71,10 @@ public abstract partial class EntityStoreBase
                     
     private struct InternBase {
         // --- delegates
-                    internal            TagsChangedHandler      tagsChanged;        //  8
+                    internal EventHandler<TagsChangedArgs>      tagsChanged;        //  8
         //
-                    internal            ComponentChangedHandler componentAdded;     //  8
-                    internal            ComponentChangedHandler componentRemoved;   //  8
+                    internal EventHandler<ComponentChangedArgs> componentAdded;     //  8
+                    internal EventHandler<ComponentChangedArgs> componentRemoved;   //  8
     }
     #endregion
     

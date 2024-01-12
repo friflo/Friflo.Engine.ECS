@@ -8,16 +8,16 @@ using static NUnit.Framework.Assert;
 namespace Tests.Utils;
 
 internal class ChildEntitiesChangedEvents {
-    internal    int                         Seq => seq;
-    private     int                         seq;
-    private     ChildEntitiesChangedHandler handler;
-    private     EntityStore                 store;
+    internal    int                                     Seq => seq;
+    private     int                                     seq;
+    private     EventHandler<ChildEntitiesChangedArgs>  handler;
+    private     EntityStore                             store;
     
     internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
     {
         var events = new ChildEntitiesChangedEvents();
         events.store = store;
-        store.OnChildEntitiesChanged += events.handler = (object _, in ChildEntitiesChangedArgs args) => {
+        store.OnChildEntitiesChanged += events.handler = (_, args) => {
             events.seq++;
             action(args);
         };
@@ -27,7 +27,7 @@ internal class ChildEntitiesChangedEvents {
     internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
     {
         var events = new ChildEntitiesChangedEvents();
-        store.OnChildEntitiesChanged += events.handler = (object _, in ChildEntitiesChangedArgs args) => {
+        store.OnChildEntitiesChanged += events.handler = (_, args) => {
             action(args, events.seq++);
         };
         return events;
@@ -40,19 +40,11 @@ internal class ChildEntitiesChangedEvents {
 
 internal static class Events
 {
-    /// <summary>
-    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
-    /// See: <see cref="Test_ObservableCollection_Reference"/>
-    /// </summary>
     internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
     {
         return ChildEntitiesChangedEvents.AddHandler(store, action);
     }
     
-    /// <summary>
-    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
-    /// See: <see cref="Test_ObservableCollection_Reference"/>
-    /// </summary>
     internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
     {
         return ChildEntitiesChangedEvents.SetHandlerSeq(store, action);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -178,7 +179,7 @@ public static class Test_Tags
         var testTag2    = Tags.Get<TestTag2>();
         
         var eventCount  = 0;
-        var handler     = new TagsChangedHandler((in TagsChangedArgs args) => {
+        EventHandler<TagsChangedArgs> handler     = (_, args) => {
             var str = args.ToString();
             switch (eventCount++) {
                 case 0:     AreEqual(1,                     args.entityId);
@@ -192,7 +193,7 @@ public static class Test_Tags
                 case 4:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
                 default:    Fail("unexpected event");                                       return;
             }
-        });
+        };
         store.OnTagsChanged += handler;
         
         entity.AddTag<TestTag>();

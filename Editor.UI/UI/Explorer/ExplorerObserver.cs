@@ -40,7 +40,7 @@ internal class ExplorerObserver : EditorObserver
         grid.RowSelection!.Select(0);
     }
     
-    private void PostEntityUpdate(in ComponentChangedArgs args)
+    private void PostEntityUpdate(object _, ComponentChangedArgs args)
     {
         if (args.componentType.type != typeof(EntityName)) {
             return;
@@ -51,12 +51,12 @@ internal class ExplorerObserver : EditorObserver
         StoreDispatcher.Post(() => {
             if (Log) Console.WriteLine($"tree: {tree} - name update {_count++}");
             
-            var args = new PropertyChangedEventArgs("name");
-            item.propertyChangedHandler?.Invoke(grid, args);
+            var changedEventArgs = new PropertyChangedEventArgs("name");
+            item.propertyChangedHandler?.Invoke(grid, changedEventArgs);
         });
     }
     
-    private void EntitiesChanged(in EntitiesChangedArgs args)
+    private void EntitiesChanged(object _, EntitiesChangedArgs args)
     {
         foreach (var id in args.EntityIds) {
             if (!tree.TryGetItem(id, out var item)) {

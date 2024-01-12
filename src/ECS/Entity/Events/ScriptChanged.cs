@@ -4,13 +4,6 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-/// <summary>
-/// A <see cref="ScriptChangedHandler"/> added to <see cref="EntityStore.OnScriptAdded"/> get events on <see cref="Entity.AddScript{T}"/><br/>
-/// <br/>
-/// A <see cref="ScriptChangedHandler"/> added to <see cref="EntityStore.OnScriptRemoved"/> get events on <see cref="Entity.RemoveScript{T}"/>
-/// </summary>
-public delegate void   ScriptChangedHandler    (in ScriptChangedArgs e);
-
 public readonly struct  ScriptChangedArgs
 {
     /// <remarks>

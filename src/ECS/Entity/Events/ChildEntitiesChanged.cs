@@ -4,17 +4,6 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-/// <summary>
-/// A <see cref="ChildEntitiesChangedHandler"/> added to <see cref="EntityStore.OnChildEntitiesChanged"/> get events on
-/// <list type="bullet">
-///   <item><see cref="Entity.AddChild"/></item>
-///   <item><see cref="Entity.InsertChild"/></item>
-///   <item><see cref="Entity.RemoveChild"/></item>
-///   <item><see cref="Entity.DeleteEntity"/></item>
-/// </list>
-/// </summary>
-public delegate void   ChildEntitiesChangedHandler(object sender, in ChildEntitiesChangedArgs e);
-
 public readonly struct ChildEntitiesChangedArgs
 {
     public readonly ChildEntitiesChangedAction  action;     //  4

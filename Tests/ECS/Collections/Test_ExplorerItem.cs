@@ -139,7 +139,7 @@ public static class Test_ExplorerItem
         var rootItem    = tree.RootItem;
         
         var addCount       = 0;
-        ComponentChangedHandler componentAdded = (in ComponentChangedArgs args) => {
+        EventHandler<ComponentChangedArgs> componentAdded = (_, args) => {
             var argsStr = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
@@ -153,7 +153,7 @@ public static class Test_ExplorerItem
         };
         store.OnComponentAdded += componentAdded;
         var removeCount       = 0;
-        ComponentChangedHandler componentRemoved = (in ComponentChangedArgs args) => {
+        EventHandler<ComponentChangedArgs> componentRemoved = (_, args) => {
             var argsStr = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.entityId);

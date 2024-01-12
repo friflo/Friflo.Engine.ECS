@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -12,10 +11,6 @@ internal class ExplorerEvents
 {
     internal int seq;
     
-    /// <summary>
-    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
-    /// See: <see cref="Test_ObservableCollection_Reference"/>
-    /// </summary>
     internal static ExplorerEvents AddHandler(ExplorerItem item, Action<NotifyCollectionChangedEventArgs> action)
     {
         var events = new ExplorerEvents();
@@ -27,10 +22,6 @@ internal class ExplorerEvents
         return events;
     }
     
-    /// <summary>
-    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
-    /// See: <see cref="Test_ObservableCollection_Reference"/>
-    /// </summary>
     internal static ExplorerEvents AddHandlerSeq(ExplorerItem item, Action<NotifyCollectionChangedEventArgs, int> action)
     {
         var events = new ExplorerEvents();
