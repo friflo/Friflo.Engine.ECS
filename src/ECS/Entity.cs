@@ -414,7 +414,10 @@ public readonly struct Entity : IEquatable<Entity>
                                                                 remove  => EntityStoreBase.RemoveEntityTagsChangedHandler(store, Id, value);  }
 
     [Obsolete("Experimental")]
-    public void On<TEvent>      (Action<TEvent>          handler) where TEvent : struct  {  }
+    public void AddHandler   <TEvent> (Action<TEvent> handler) where TEvent : struct  {  }
+    
+    [Obsolete("Experimental")]
+    public void RemoveHandler<TEvent> (Action<TEvent> handler) where TEvent : struct  {  }
     #endregion
 
     // ------------------------------------ internal properties -----------------------------------
