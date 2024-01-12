@@ -82,7 +82,7 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
 
-                    private             Intern                  intern;             // 56
+                    private             Intern                  intern;             // 72
                     
     private struct Intern {
                     internal readonly   PidType                     pidType;            //  4               - pid != id  /  pid == id

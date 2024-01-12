@@ -67,7 +67,7 @@ public abstract partial class EntityStoreBase
     // --- misc
     [Browse(Never)] internal  readonly  Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
-                    private             InternBase              internBase;         // 24
+                    private             InternBase              internBase;         // 40
                     
     private struct InternBase {
         // --- delegates
