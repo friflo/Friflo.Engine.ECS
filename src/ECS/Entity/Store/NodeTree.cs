@@ -18,7 +18,7 @@ public partial class EntityStore
     public int EnsureCapacity(int capacity)
     {
         var curLength   = nodes.Length;
-        var last        = sequenceId;
+        var last        = intern.sequenceId;
         var curCapacity = curLength - last;
         if (curCapacity >= capacity) {
             return curCapacity;
@@ -471,7 +471,7 @@ public partial class EntityStore
     {
         var localNodes  = nodes;
         var max         = localNodes.Length;
-        int id          = sequenceId;
+        int id          = intern.sequenceId;
         for (; id < max; id++)
         {
             if ((localNodes[id].flags & Created) != 0) {
@@ -479,7 +479,7 @@ public partial class EntityStore
             }
             break;
         }
-        sequenceId = id + 1;
+        intern.sequenceId = id + 1;
         return id;
     }
     
