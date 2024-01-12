@@ -7,37 +7,56 @@ using static NUnit.Framework.Assert;
 
 namespace Tests.Utils;
 
-internal class Events
-{
-    internal int seq;
+internal class ChildEntitiesChangedEvents {
+    internal    int                         Seq => seq;
+    private     int                         seq;
+    private     ChildEntitiesChangedHandler handler;
+    private     EntityStore                 store;
     
-    /// <summary>
-    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
-    /// See: <see cref="Test_ObservableCollection_Reference"/>
-    /// </summary>
-    internal static Events SetHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
+    internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
     {
-        var events = new Events();
-        store.OnChildEntitiesChanged = (object _, in ChildEntitiesChangedArgs args) => {
+        var events = new ChildEntitiesChangedEvents();
+        events.store = store;
+        store.OnChildEntitiesChanged += events.handler = (object _, in ChildEntitiesChangedArgs args) => {
             events.seq++;
             action(args);
         };
         return events;
     }
     
-    /// <summary>
-    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
-    /// See: <see cref="Test_ObservableCollection_Reference"/>
-    /// </summary>
-    internal static Events SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
+    internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
     {
-        var events = new Events();
-        store.OnChildEntitiesChanged = (object _, in ChildEntitiesChangedArgs args) => {
+        var events = new ChildEntitiesChangedEvents();
+        store.OnChildEntitiesChanged += events.handler = (object _, in ChildEntitiesChangedArgs args) => {
             action(args, events.seq++);
         };
         return events;
     }
     
+    internal void RemoveHandler() {
+        store.OnChildEntitiesChanged -= handler;
+    }
+}
+
+internal static class Events
+{
+    /// <summary>
+    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
+    /// See: <see cref="Test_ObservableCollection_Reference"/>
+    /// </summary>
+    internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
+    {
+        return ChildEntitiesChangedEvents.AddHandler(store, action);
+    }
+    
+    /// <summary>
+    /// <see cref="ChildEntitiesChangedHandler"/>'s are used to create <see cref="NotifyCollectionChangedEventArgs"/> events.<br/>
+    /// See: <see cref="Test_ObservableCollection_Reference"/>
+    /// </summary>
+    internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
+    {
+        return ChildEntitiesChangedEvents.SetHandlerSeq(store, action);
+    }
         
     [Test]
     public static void Test_ObservableCollection_Reference()

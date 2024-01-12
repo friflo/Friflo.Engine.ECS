@@ -31,13 +31,13 @@ public abstract partial class EntityStoreBase
                     public   override   string                  ToString()          => $"Count: {nodesCount}";
     #endregion
 
-#region event handler
+#region events
     // --- tags: changed
-    [Browse(Never)] public  TagsChangedHandler      OnTagsChanged       { get => tagsChanged;       set => tagsChanged      = value; }
+    public event    TagsChangedHandler      OnTagsChanged       { add => tagsChanged        += value;   remove => tagsChanged      -= value; }
     
     // --- component: added / removed
-    [Browse(Never)] public  ComponentChangedHandler OnComponentAdded    { get => componentAdded;    set => componentAdded   = value; }
-    [Browse(Never)] public  ComponentChangedHandler OnComponentRemoved  { get => componentRemoved;  set => componentRemoved = value; }
+    public event    ComponentChangedHandler OnComponentAdded    { add => componentAdded     += value;   remove => componentAdded   -= value; }
+    public event    ComponentChangedHandler OnComponentRemoved  { add => componentRemoved   += value;   remove => componentRemoved -= value; }
 
 
     #endregion

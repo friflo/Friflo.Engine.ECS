@@ -116,7 +116,7 @@ public static class Test_ComponentReader
             }
         });
         ComponentReader_read_children(store);
-        AreEqual(10, events.seq);
+        AreEqual(10, events.Seq);
     }
 
     private static void ComponentReader_read_children(EntityStore store)

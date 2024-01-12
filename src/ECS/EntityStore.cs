@@ -44,16 +44,17 @@ public sealed partial class EntityStore : EntityStoreBase
     public ReadOnlySpan<EntityScripts>  EntityScripts           => new (entityScripts, 1, entityScriptCount - 1);
     #endregion
     
-#region event handler
+#region events
     /// <summary>Set or clear a <see cref="ChildEntitiesChangedHandler"/> to get events on add, insert, remove or delete <see cref="Entity"/>'s.</summary>
     /// <remarks>Event handlers previously added with <see cref="OnChildEntitiesChanged"/> are removed.</remarks>
-    [Browse(Never)] public  ChildEntitiesChangedHandler OnChildEntitiesChanged  { get => childEntitiesChanged;  set => childEntitiesChanged = value; }
+    public  event   ChildEntitiesChangedHandler OnChildEntitiesChanged  { add => childEntitiesChanged += value;   remove => childEntitiesChanged -= value; }
     
     // --- script:   added / removed
-    [Browse(Never)] public  ScriptChangedHandler        OnScriptAdded           { get => scriptAdded;           set => scriptAdded          = value; }
-    [Browse(Never)] public  ScriptChangedHandler        OnScriptRemoved         { get => scriptRemoved;         set => scriptRemoved        = value; }
+    public  event   ScriptChangedHandler        OnScriptAdded           { add => scriptAdded          += value;   remove => scriptAdded    -= value; }
+    public  event   ScriptChangedHandler        OnScriptRemoved         { add => scriptRemoved        += value;   remove => scriptRemoved  -= value; }
+    public  event   EntitiesChangedHandler      OnEntitiesChanged       { add => entitiesChanged      += value;   remove => entitiesChanged-= value; }
     
-    [Browse(Never)] public  EntitiesChangedHandler      OnEntitiesChanged       { get => entitiesChanged;       set => entitiesChanged      = value; }
+    public  void    CastEntitiesChanged(EntitiesChangedArgs args) => entitiesChanged?.Invoke(args);
     
     #endregion
     
@@ -82,7 +83,7 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private         ScriptChangedHandler        scriptAdded;        //  8
     [Browse(Never)] private         ScriptChangedHandler        scriptRemoved;      //  8
     //
-    [Browse(Never)] private         EntitiesChangedHandler      entitiesChanged;    //  8
+    [Browse(Never)] internal        EntitiesChangedHandler      entitiesChanged;    //  8
     
     #endregion
     
