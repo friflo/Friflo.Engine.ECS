@@ -38,6 +38,38 @@ public partial class EntityStoreBase
     }
     #endregion
     
+    
+    
+#region add / temove component events - experimental
+    private void ComponentChanged(object sender, ComponentChangedArgs args)
+    {
+        if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
+            return;
+        }
+        foreach (var handler in handlers) {
+            handler(args);
+        }
+    }
+    
+    internal static void AddComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChangedArgs> handler)
+    {
+        if (AddEntityHandler(entityId, handler, ref store.internBase.entityComponentChanged)) {
+            store.internBase.componentAdded     += store.ComponentChanged;
+            store.internBase.componentRemoved   += store.ComponentChanged;
+        }
+    }
+    
+    internal static void RemoveComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChangedArgs> handler)
+    {
+        if (RemoveEntityHandler(entityId, handler, store.internBase.entityComponentChanged)) {
+            store.internBase.componentAdded     -= store.ComponentChanged;
+            store.internBase.componentRemoved   -= store.ComponentChanged;
+        }
+    }
+    #endregion
+    
+    
+    
 #region generic add / remove event handler - experimental
     private static bool AddEntityHandler<TArgs>(
             int                                 entityId,
