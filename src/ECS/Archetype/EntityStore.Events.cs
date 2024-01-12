@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
-#region entity events - experimental
+#region entity tag events - experimental
     private void EntityTagsChanged(object sender, TagsChangedArgs args)
     {
         if (!internBase.entityTagsChanged.TryGetValue(args.entityId, out var handlers)) {
@@ -25,37 +25,61 @@ public partial class EntityStoreBase
     
     internal static void AddEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChangedArgs> handler)
     {
-        var entityHandler = store.internBase.entityTagsChanged;
-        if (entityHandler == null) {
-            entityHandler = store.internBase.entityTagsChanged = new Dictionary<int, Action<TagsChangedArgs>[]>();
-        }
-        if (entityHandler.Count == 0) {
+        if (AddEntityHandler(entityId, handler, ref store.internBase.entityTagsChanged)) {
             store.internBase.tagsChanged += store.EntityTagsChanged;
         }
-        if (entityHandler.TryGetValue(entityId, out var handlers)) {
-            var newHandlers = new Action<TagsChangedArgs>[handlers.Length + 1];
-            handlers.CopyTo(newHandlers, 0);
-            return;
-        }
-        entityHandler.Add(entityId, [handler]);
     }
     
     internal static void RemoveEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChangedArgs> handler)
     {
-        var entityHandler = store.internBase.entityTagsChanged;
+        if (RemoveEntityHandler(entityId, handler, store.internBase.entityTagsChanged)) {
+            store.internBase.tagsChanged -= store.EntityTagsChanged;
+        }
+    }
+    #endregion
+    
+#region generic add / remove event handler - experimental
+    private static bool AddEntityHandler<TArgs>(
+            int                                 entityId,
+            Action<TArgs>                       handler,
+        ref Dictionary<int, Action<TArgs>[]>    entityHandlerMap
+        )
+    {
+        bool addEventHandler = false;
+        var entityHandler = entityHandlerMap;
         if (entityHandler == null) {
-            return;
+            entityHandler = entityHandlerMap = new Dictionary<int, Action<TArgs>[]>();
+        }
+        if (entityHandler.Count == 0) {
+            addEventHandler = true;
+        }
+        if (entityHandler.TryGetValue(entityId, out var handlers)) {
+            var newHandlers = new Action<TagsChangedArgs>[handlers.Length + 1];
+            handlers.CopyTo(newHandlers, 0);
+            return addEventHandler;
+        }
+        entityHandler.Add(entityId, [handler]);
+        return addEventHandler;
+    }
+    
+    private static bool RemoveEntityHandler<TArgs>(
+        int                                 entityId,
+        Action<TArgs>                       handler,
+        Dictionary<int, Action<TArgs>[]>    entityHandler)
+    {
+        if (entityHandler == null) {
+            return false;
         }
         if (!entityHandler.TryGetValue(entityId, out var handlers)) {
-            return;
+            return false;
         }
         int index = Array.FindIndex(handlers, item => item == handler);
         if (index == -1) {
-            return;
+            return false;
         }
         var newLength = handlers.Length - 1;
         if (newLength > 0) {
-            var newHandler  = new Action<TagsChangedArgs>[newLength];
+            var newHandler  = new Action<TArgs>[newLength];
             // --- remove handler at index
             for (int n = 0; n < index; n++) {
                 newHandler[n] = handlers[n];
@@ -64,12 +88,10 @@ public partial class EntityStoreBase
                 newHandler[n - 1] = handlers[n];
             }
             entityHandler[entityId] = newHandler;
-            return;
+            return false;
         }
         entityHandler.Remove(entityId);
-        if (entityHandler.Count == 0) {
-            store.internBase.tagsChanged -= store.EntityTagsChanged;
-        }
+        return entityHandler.Count == 0;
     }
     #endregion
 }
