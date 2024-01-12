@@ -71,7 +71,8 @@ public abstract partial class EntityStoreBase
                     
     private struct InternBase {
         // --- delegates
-                    internal EventHandler<TagsChangedArgs>      tagsChanged;        //  8
+        internal       EventHandler          <TagsChangedArgs>  tagsChanged;        //  8
+        internal       Dictionary<int, Action<TagsChangedArgs>> entityTagsChanged;  //  8
         //
                     internal EventHandler<ComponentChangedArgs> componentAdded;     //  8
                     internal EventHandler<ComponentChangedArgs> componentRemoved;   //  8

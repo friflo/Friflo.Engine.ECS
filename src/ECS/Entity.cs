@@ -403,6 +403,15 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks> Use <see cref="Id"/> or <see cref="EntityUtils.EqualityComparer"/> </remarks>
     public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
     
+#if NET8_0
+    [System.Diagnostics.CodeAnalysis.Experimental("may be removed")]
+#endif
+    public void On          (Action<TagsChangedArgs> handler)                        { EntityStoreBase.AddEntityTagsChangedHandler(store, Id, handler); }
+#if NET8_0
+    [System.Diagnostics.CodeAnalysis.Experimental("may be removed")]
+#endif
+    public void On<TEvent>  (Action<TEvent>          handler) where TEvent : struct  {  }
+    
     public override string  ToString()          => EntityUtils.EntityToString(this);
     #endregion
 
