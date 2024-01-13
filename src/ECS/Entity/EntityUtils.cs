@@ -99,18 +99,24 @@ public static class EntityUtils
                 return sb.ToString();
             }
         }
-        if (entity.ComponentCount() == 0) {
+        var typeCount = archetype.componentCount + archetype.tags.Count + entity.Scripts.Length; 
+        if (typeCount == 0) {
             sb.Append("  []");
         } else {
             sb.Append("  [");
+            foreach (var heap in archetype.Heaps()) {
+                sb.Append(heap.StructType.Name);
+                sb.Append(", ");
+            }
+            foreach (var tag in archetype.Tags) {
+                sb.Append('#');
+                sb.Append(tag.name);
+                sb.Append(", ");
+            }
             var scripts = GetScripts(entity);
             foreach (var script in scripts) {
                 sb.Append('*');
                 sb.Append(script.GetType().Name);
-                sb.Append(", ");
-            }
-            foreach (var heap in archetype.Heaps()) {
-                sb.Append(heap.StructType.Name);
                 sb.Append(", ");
             }
             sb.Length -= 2;

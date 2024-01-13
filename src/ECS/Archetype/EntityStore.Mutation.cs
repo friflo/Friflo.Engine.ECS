@@ -168,7 +168,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags, archTags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(store, id, tags, archTags));
         return true;
     }
     
@@ -208,7 +208,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags, archTags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(store, id, tags, archTags));
         return true;
     }
     #endregion

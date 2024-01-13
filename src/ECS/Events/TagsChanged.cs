@@ -6,13 +6,12 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct  TagsChangedArgs
 {
-    /// <remarks>
-    /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
-    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
-    /// </remarks>
-    public readonly     int     entityId;   //  4
-    public readonly     Tags    tags;       // 32
-    public readonly     Tags    oldTags;    // 32
+    public  readonly    EntityStore store;      //  8
+    public  readonly    int         entityId;   //  4
+    public  readonly    Tags        tags;       // 32
+    public  readonly    Tags        oldTags;    // 32
+    
+    public              Entity      Entity      => new Entity(entityId, store);
 
     public Tags AddedTags { get {
         var result = new Tags();
@@ -30,8 +29,9 @@ public readonly struct  TagsChangedArgs
 
     public override     string              ToString() => $"entity: {entityId} - tags change: {tags}";
 
-    internal TagsChangedArgs(int entityId, in Tags tags, in Tags oldTags)
+    internal TagsChangedArgs(EntityStoreBase store, int entityId, in Tags tags, in Tags oldTags)
     {
+        this.store      = store as EntityStore;
         this.entityId   = entityId;
         this.tags       = tags;
         this.oldTags    = oldTags;
