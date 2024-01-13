@@ -182,22 +182,24 @@ public static class Test_Tags
         EventHandler<TagsChangedArgs> handler     = (_, args) => {
             var str = args.ToString();
             switch (eventCount++) {
-                case 0:     AreEqual(1,                     args.entityId);
-                            AreEqual("Tags: [#TestTag]",    args.tags.          ToString());
-                            AreEqual("Tags: []",            args.oldTags.       ToString());
-                            AreEqual("Tags: []",            args.RemovedTags.   ToString());
-                            AreEqual("Tags: [#TestTag]",    args.AddedTags.     ToString());
+                case 0:     AreEqual(1,                             args.entityId);
+                            AreEqual("Tags: [#TestTag]",            args.tags.          ToString());
+                            AreEqual("Tags: []",                    args.oldTags.       ToString());
+                            AreEqual("Tags: []",                    args.RemovedTags.   ToString());
+                            AreEqual("Tags: [#TestTag]",            args.AddedTags.     ToString());
+                            AreEqual("Tags: [#TestTag]",            args.ChangedTags.   ToString());
                             // Ensure entity is in new Archetype
-                            AreEqual("[#TestTag]  Count: 1",args.Entity.Archetype.ToString());
+                            AreEqual("[#TestTag]  Count: 1",        args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);
-                            AreEqual("id: 1  [#TestTag]",   args.Entity.ToString());
-                            AreSame (store,                 args.store);
+                            AreEqual("id: 1  [#TestTag]",           args.Entity.ToString());
+                            AreSame (store,                         args.store);
                             return;
                 
-                case 1:     AreEqual("Tags: [#TestTag2]",   args.tags.          ToString());
-                            AreEqual("Tags: [#TestTag]",    args.oldTags.       ToString());
-                            AreEqual("Tags: [#TestTag]",    args.RemovedTags.   ToString());
-                            AreEqual("Tags: [#TestTag2]",   args.AddedTags.     ToString());
+                case 1:     AreEqual("Tags: [#TestTag2]",           args.tags.          ToString());
+                            AreEqual("Tags: [#TestTag]",            args.oldTags.       ToString());
+                            AreEqual("Tags: [#TestTag]",            args.RemovedTags.   ToString());
+                            AreEqual("Tags: [#TestTag2]",           args.AddedTags.     ToString());
+                            AreEqual("Tags: [#TestTag, #TestTag2]", args.ChangedTags.   ToString());
                             AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);
                             return;
                 
