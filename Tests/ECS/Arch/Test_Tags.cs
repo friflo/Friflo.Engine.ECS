@@ -211,9 +211,7 @@ public static class Test_Tags
         };
         store.OnTagsChanged += handler;
 #pragma warning disable CS0618 // Type or member is obsolete
-        var tagsChanged = (TagsChangedArgs args)    => { };
         var testEvent   = (TestTag tag)             => { }; 
-        entity.OnTagsChanged += tagsChanged;
         entity.AddHandler(testEvent);
 #pragma warning restore CS0618 // Type or member is obsolete
         
@@ -252,7 +250,6 @@ public static class Test_Tags
         
         store.OnTagsChanged -= handler;
 #pragma warning disable CS0618 // Type or member is obsolete
-        entity.OnTagsChanged -= tagsChanged;
         entity.RemoveHandler(testEvent);
 #pragma warning restore CS0618 // Type or member is obsolete
         
