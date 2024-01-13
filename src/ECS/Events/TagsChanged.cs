@@ -12,25 +12,12 @@ public readonly struct  TagsChangedArgs
     public  readonly    Tags        oldTags;    // 32
     
     public              Entity      Entity      => new Entity(entityId, store);
+    
+    public              Tags        AddedTags   => new(~oldTags.bitSet.value &  tags.bitSet.value);
+    public              Tags        RemovedTags => new( oldTags.bitSet.value & ~tags.bitSet.value);
+    public              Tags        ChangedTags => new( oldTags.bitSet.value ^  tags.bitSet.value);
+    
     public override     string      ToString()  => $"entity: {entityId} - tags change: {tags}";
-
-    public Tags AddedTags { get {
-        var result = new Tags();
-        result.bitSet.value = ~oldTags.bitSet.value &  tags.bitSet.value;
-        return result;
-    } }
-    
-    public Tags RemovedTags { get {
-        var result = new Tags();
-        result.bitSet.value =  oldTags.bitSet.value & ~tags.bitSet.value;
-        return result;
-    } }
-    
-    public Tags ChangedTags { get {
-        var result = new Tags();
-        result.bitSet.value =  oldTags.bitSet.value ^ tags.bitSet.value;
-        return result;
-    } }
 
     internal TagsChangedArgs(EntityStoreBase store, int entityId, in Tags tags, in Tags oldTags)
     {
