@@ -7,12 +7,13 @@ This package is part of the project described below.
 
 ## Project
 
-`Friflo.Engine.ECS` is an Entity Component System - ECS - optimized for performance and cache locality.  
+`Friflo.Engine.ECS` is an Entity Component System - ECS - optimized for performance and cache locality.
+
 Additional features:
 - JSON Serialization
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Efficient component queries minimizing L1 cache misses with support for Vectorization (SIMD).
-- Minimize times required for GC collection by using struct's for entities and components.  
+- Minimize times required for GC collection by using struct types for entities and components.  
   GC.Collect(1) < 0.8 ms when using 10.000.000 entities.
 - Support tagging of entities and use them as a filter in queries.
 - Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
