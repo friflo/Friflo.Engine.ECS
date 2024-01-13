@@ -18,7 +18,7 @@ public partial class EntityStoreBase
         if (!internBase.entityTagsChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
         }
-        handlers.action?.Invoke(args);
+        handlers.Invoke(args);
     }
     
     internal static void AddEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChangedArgs> handler)
@@ -44,7 +44,7 @@ public partial class EntityStoreBase
         if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
         }
-        handlers.action?.Invoke(args);
+        handlers.Invoke(args);
     }
     
     internal static void AddComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChangedArgs> handler)
@@ -70,30 +70,29 @@ public partial class EntityStoreBase
     internal static bool AddEntityHandler<TArgs>(
             int                             entityId,
             Action<TArgs>                   handler,
-        ref Dictionary<int, Actions<TArgs>> entityHandlerMap) where TArgs : struct
+        ref Dictionary<int, Action<TArgs>>  entityHandlerMap) where TArgs : struct
     {
         bool addEventHandler = false;
         var entityHandler = entityHandlerMap;
         if (entityHandler == null) {
-            entityHandler = entityHandlerMap = new Dictionary<int, Actions<TArgs>>();
+            entityHandler = entityHandlerMap = new Dictionary<int, Action<TArgs>>();
         }
         if (entityHandler.Count == 0) {
             addEventHandler = true;
         }
         if (entityHandler.TryGetValue(entityId, out var handlers)) {
-            handlers.action += handler;
+            handlers += handler;
             entityHandler[entityId] = handlers;
             return addEventHandler;
         }
-        var actions = new Actions<TArgs> { action = handler };
-        entityHandler.Add(entityId, actions);
+        entityHandler.Add(entityId, handler);
         return addEventHandler;
     }
     
     internal static bool RemoveEntityHandler<TArgs>(
-        int                                 entityId,
-        Action<TArgs>                       handler,
-        Dictionary<int, Actions<TArgs>>     entityHandler) where TArgs : struct
+        int                             entityId,
+        Action<TArgs>                   handler,
+        Dictionary<int, Action<TArgs>>  entityHandler) where TArgs : struct
     {
         if (entityHandler == null) {
             return false;
@@ -101,8 +100,8 @@ public partial class EntityStoreBase
         if (!entityHandler.TryGetValue(entityId, out var handlers)) {
             return false;
         }
-        handlers.action -= handler;
-        if (handlers.action != null) {
+        handlers -= handler;
+        if (handlers != null) {
             entityHandler[entityId] = handlers;
             return false;
         }
@@ -110,10 +109,4 @@ public partial class EntityStoreBase
         return entityHandler.Count == 0;
     }
     #endregion
-}
-
-
-internal struct Actions<TArg> where TArg : struct
-{
-    internal Action<TArg> action;
 }

@@ -15,7 +15,7 @@ public partial class EntityStore
         if (!intern.entityScriptChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
         }
-        handlers.action?.Invoke(args);
+        handlers.Invoke(args);
     }
     
     internal static void AddScriptChangedHandler(EntityStore store, int entityId, Action<ScriptChangedArgs> handler)
@@ -44,7 +44,7 @@ public partial class EntityStore
         if (!intern.entityChildEntitiesChanged.TryGetValue(args.parentId, out var handlers)) {
             return;
         }
-        handlers.action?.Invoke(args);
+        handlers.Invoke(args);
     }
     
     internal static void AddChildEntitiesChangedHandler   (EntityStore store, int entityId, Action<ChildEntitiesChangedArgs> handler)
