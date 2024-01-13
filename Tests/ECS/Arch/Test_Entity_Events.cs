@@ -1,5 +1,6 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
@@ -58,7 +59,6 @@ public static class Test_Entity_Events
         var onComponentChanged = (ComponentChangedArgs args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - Add component: 'pos' [Position]", args.ToString()); break;
-                default:    Fail("unexpected"); break;
             }
         };
         entity1.OnComponentChanged += onComponentChanged; 
@@ -66,11 +66,15 @@ public static class Test_Entity_Events
         entity1.AddComponent<Position>();
         entity2.AddComponent<Position>();
         
+        var start = Mem.GetAllocatedBytes();
+        entity1.AddComponent<Position>(); // event handler invocation executes without allocation
+        Mem.AssertNoAlloc(start);
+        
         entity1.OnComponentChanged -= onComponentChanged; 
         
         entity1.AddComponent<Rotation>();
         
-        AreEqual(1, entity1EventCount);
+        AreEqual(2, entity1EventCount);
     }
     
     [Test]
