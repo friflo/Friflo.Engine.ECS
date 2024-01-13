@@ -190,23 +190,23 @@ public static class Test_Tags
                             AreEqual("Tags: [#TestTag]",            args.ChangedTags.   ToString());
                             // Ensure entity is in new Archetype
                             AreEqual("[#TestTag]  Count: 1",        args.Entity.Archetype.ToString());
-                            AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);
                             AreEqual("id: 1  [#TestTag]",           args.Entity.ToString());
                             AreSame (store,                         args.store);
+                            AreEqual("entity: 1 - added Tags: [#TestTag]",            str);
                             return;
                 
-                case 1:     AreEqual("Tags: [#TestTag2]",           args.tags.          ToString());
+                case 1:     AreEqual("Tags: [#TestTag, #TestTag2]", args.tags.          ToString());
                             AreEqual("Tags: [#TestTag]",            args.oldTags.       ToString());
-                            AreEqual("Tags: [#TestTag]",            args.RemovedTags.   ToString());
+                            AreEqual("Tags: []",                    args.RemovedTags.   ToString());
                             AreEqual("Tags: [#TestTag2]",           args.AddedTags.     ToString());
-                            AreEqual("Tags: [#TestTag, #TestTag2]", args.ChangedTags.   ToString());
-                            AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);
+                            AreEqual("Tags: [#TestTag2]",           args.ChangedTags.   ToString());
+                            AreEqual("entity: 1 - added Tags: [#TestTag2]",             str);
                             return;
                 
-                case 2:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
-                case 3:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
-                case 4:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
-                default:    Fail("unexpected event");                                       return;
+                case 2:     AreEqual("entity: 1 - removed Tags: [#TestTag]",            str);   return;
+                case 3:     AreEqual("entity: 1 - removed Tags: [#TestTag2]",           str);   return;
+                case 4:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",       str);   return;
+                default:    Fail("unexpected event");                                           return;
             }
         };
         store.OnTagsChanged += handler;

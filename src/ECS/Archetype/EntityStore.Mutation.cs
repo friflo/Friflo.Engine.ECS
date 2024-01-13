@@ -144,14 +144,14 @@ public partial class EntityStoreBase
         ref int         archIndex)
     {
         var arch        = archetype;
-        var archTags    = arch.tags;
-        var tagsValue   = tags.bitSet.value;
-        if (archTags.bitSet.value == tagsValue) {
+        var curTags     = arch.tags;
+        var newTags     = new Tags (curTags.bitSet.value | tags.bitSet.value);
+        if (newTags.bitSet.value == curTags.bitSet.value) {
             return false;
         }
         var searchKey = store.searchKey;
         searchKey.componentTypes    = arch.componentTypes;
-        searchKey.tags.bitSet.value = archTags.bitSet.value | tagsValue;
+        searchKey.tags              = newTags;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
         if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -168,7 +168,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(store, id, tags, archTags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(store, id, newTags, curTags));
         return true;
     }
     
@@ -180,15 +180,15 @@ public partial class EntityStoreBase
         ref int         compIndex,
         ref int         archIndex)
     {
-        var arch            = archetype;
-        var archTags        = arch.tags;
-        var archTagsRemoved = archTags.bitSet.value & ~tags.bitSet.value;
-        if (archTagsRemoved == archTags.bitSet.value) {
+        var arch        = archetype;
+        var curTags     = arch.tags;
+        var newTags     = new Tags (curTags.bitSet.value & ~tags.bitSet.value);
+        if (newTags.bitSet.value == curTags.bitSet.value) {
             return false;
         }
         var searchKey = store.searchKey;
         searchKey.componentTypes    = arch.componentTypes;
-        searchKey.tags.bitSet.value = archTagsRemoved;
+        searchKey.tags              = newTags;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
         if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -208,7 +208,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(store, id, tags, archTags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(store, id, newTags, curTags));
         return true;
     }
     #endregion

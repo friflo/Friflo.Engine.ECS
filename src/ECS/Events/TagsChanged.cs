@@ -2,6 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+
+using System.Text;
+
 namespace Friflo.Engine.ECS;
 
 public readonly struct  TagsChangedArgs
@@ -17,7 +20,7 @@ public readonly struct  TagsChangedArgs
     public              Tags        RemovedTags => new( oldTags.bitSet.value & ~tags.bitSet.value);
     public              Tags        ChangedTags => new( oldTags.bitSet.value ^  tags.bitSet.value);
     
-    public override     string      ToString()  => $"entity: {entityId} - tags change: {tags}";
+    public override     string      ToString()  => GetString();
 
     internal TagsChangedArgs(EntityStoreBase store, int entityId, in Tags tags, in Tags oldTags)
     {
@@ -25,5 +28,22 @@ public readonly struct  TagsChangedArgs
         this.entityId   = entityId;
         this.tags       = tags;
         this.oldTags    = oldTags;
+    }
+    
+    private string GetString() {
+        var sb = new StringBuilder();
+        sb.Append("entity: ");
+        sb.Append(entityId);
+        var added = AddedTags;
+        if (added.bitSet.value != default) {
+            sb.Append(" - added ");
+            sb.Append(added.ToString());
+        }
+        var removed = RemovedTags;
+        if (removed.bitSet.value != default) {
+            sb.Append(" - removed ");
+            sb.Append(removed.ToString());
+        }
+        return sb.ToString();
     }
 }

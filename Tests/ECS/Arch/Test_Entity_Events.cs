@@ -21,7 +21,7 @@ public static class Test_Entity_Events
         var entity1EventCount = 0;
         var tagsChanged1 = (TagsChangedArgs args)    => {
             switch (entity1EventCount++) {
-                case 0:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]", args.ToString()); break;
+                case 0:     AreEqual("entity: 1 - added Tags: [#TestTag]", args.ToString()); break;
                 default:    Fail("unexpected"); break;
             }
         };
