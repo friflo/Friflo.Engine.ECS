@@ -40,7 +40,7 @@ internal class ExplorerObserver : EditorObserver
         grid.RowSelection!.Select(0);
     }
     
-    private void PostEntityUpdate(object _, ComponentChangedArgs args)
+    private void PostEntityUpdate(ComponentChangedArgs args)
     {
         if (args.componentType.type != typeof(EntityName)) {
             return;

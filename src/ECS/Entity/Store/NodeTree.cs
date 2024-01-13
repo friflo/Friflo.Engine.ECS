@@ -551,7 +551,7 @@ public partial class EntityStore
             return;
         }
         var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Add, this, parentId, childId, childIndex);
-        intern.childEntitiesChanged(this, args);
+        intern.childEntitiesChanged(args);
     }
     
     private void OnChildNodeRemove(int parentId, int childId, int childIndex)
@@ -560,7 +560,7 @@ public partial class EntityStore
             return;
         }
         var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Remove, this, parentId, childId, childIndex);
-        intern.childEntitiesChanged(this, args);
+        intern.childEntitiesChanged(args);
     }
     
     

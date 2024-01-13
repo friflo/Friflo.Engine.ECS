@@ -13,7 +13,7 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStoreBase
 {
 #region entity tag events - experimental
-    private void EntityTagsChanged(object sender, TagsChangedArgs args)
+    private void EntityTagsChanged(TagsChangedArgs args)
     {
         if (!internBase.entityTagsChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
@@ -39,7 +39,7 @@ public partial class EntityStoreBase
     
     
 #region add / remove component events - experimental
-    private void ComponentChanged(object sender, ComponentChangedArgs args)
+    private void ComponentChanged(ComponentChangedArgs args)
     {
         if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
             return;

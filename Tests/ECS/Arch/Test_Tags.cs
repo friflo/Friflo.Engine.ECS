@@ -179,7 +179,7 @@ public static class Test_Tags
         var testTag2    = Tags.Get<TestTag2>();
         
         var eventCount  = 0;
-        EventHandler<TagsChangedArgs> handler     = (_, args) => {
+        Action<TagsChangedArgs> handler     = args => {
             var str = args.ToString();
             switch (eventCount++) {
                 case 0:     AreEqual(1,                             args.entityId);

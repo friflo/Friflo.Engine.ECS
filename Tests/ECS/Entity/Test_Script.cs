@@ -34,7 +34,7 @@ public static class Test_Script
         
         // --- add script handler
         var addCount    = 0;
-        var addHandler  = new EventHandler<ScriptChangedArgs>((_, args) => {
+        var addHandler  = new Action<ScriptChangedArgs>(args => {
             var str = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.entity.Id);
@@ -50,7 +50,7 @@ public static class Test_Script
         });
         // --- add script handler
         var removeCount    = 0;
-        var removeHandler  = new EventHandler<ScriptChangedArgs>((_, args) => {
+        var removeHandler  = new Action<ScriptChangedArgs>(args => {
             var str = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.entity.Id);

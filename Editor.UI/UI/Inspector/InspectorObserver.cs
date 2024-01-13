@@ -52,11 +52,11 @@ internal class InspectorObserver : EditorObserver
     
     protected override void OnEditorReady() {
         var store = Store;
-        store.OnComponentAdded      += (_, args) => PostSetEntity(args.entityId); 
-        store.OnComponentRemoved    += (_, args) => PostSetEntity(args.entityId); 
-        store.OnTagsChanged         += (_, args) => PostSetEntity(args.entityId);
-        store.OnScriptAdded         += (_, args) => PostSetEntity(args.entity.Id);
-        store.OnScriptRemoved       += (_, args) => PostSetEntity(args.entity.Id); 
+        store.OnComponentAdded      += args => PostSetEntity(args.entityId); 
+        store.OnComponentRemoved    += args => PostSetEntity(args.entityId); 
+        store.OnTagsChanged         += args => PostSetEntity(args.entityId);
+        store.OnScriptAdded         += args => PostSetEntity(args.entity.Id);
+        store.OnScriptRemoved       += args => PostSetEntity(args.entity.Id); 
         store.OnEntitiesChanged     += EntitiesChanged;
     }
     

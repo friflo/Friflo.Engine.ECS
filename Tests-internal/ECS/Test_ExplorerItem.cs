@@ -24,7 +24,7 @@ public static class Test_ExplorerItem
         };
         var args = new ChildEntitiesChangedArgs((ChildEntitiesChangedAction)99, store, 1, 2, 0);
         var e = Throws<InvalidOperationException>(() => {
-            tree.ChildEntitiesChangedHandler(null, args);    
+            tree.ChildEntitiesChangedHandler(args);
         });
         AreEqual("unexpected action: 99", e!.Message);
     }

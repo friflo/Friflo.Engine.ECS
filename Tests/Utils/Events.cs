@@ -8,16 +8,16 @@ using static NUnit.Framework.Assert;
 namespace Tests.Utils;
 
 internal class ChildEntitiesChangedEvents {
-    internal    int                                     Seq => seq;
-    private     int                                     seq;
-    private     EventHandler<ChildEntitiesChangedArgs>  handler;
-    private     EntityStore                             store;
+    internal    int                                 Seq => seq;
+    private     int                                 seq;
+    private     Action<ChildEntitiesChangedArgs>    handler;
+    private     EntityStore                         store;
     
     internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
     {
         var events = new ChildEntitiesChangedEvents();
         events.store = store;
-        store.OnChildEntitiesChanged += events.handler = (_, args) => {
+        store.OnChildEntitiesChanged += events.handler = args => {
             events.seq++;
             action(args);
         };
@@ -27,7 +27,7 @@ internal class ChildEntitiesChangedEvents {
     internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
     {
         var events = new ChildEntitiesChangedEvents();
-        store.OnChildEntitiesChanged += events.handler = (_, args) => {
+        store.OnChildEntitiesChanged += events.handler = args => {
             action(args, events.seq++);
         };
         return events;

@@ -42,14 +42,14 @@ public abstract partial class EntityStoreBase
     ///   <item><see cref="Entity.RemoveTags"/></item>
     /// </list>
     /// </summary>
-    public event    EventHandler<TagsChangedArgs>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
+    public event    Action<TagsChangedArgs>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
     
     // --- component: added / removed
     /// <summary> Fire events on <see cref="Entity.AddComponent{T}()"/> </summary>
-    public event    EventHandler<ComponentChangedArgs>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
+    public event    Action<ComponentChangedArgs>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
     
     /// <summary> Fire events on <see cref="Entity.RemoveComponent{T}()"/> </summary>
-    public event    EventHandler<ComponentChangedArgs>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
+    public event    Action<ComponentChangedArgs>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
     #endregion
     
 #region private / internal fields
@@ -71,11 +71,11 @@ public abstract partial class EntityStoreBase
                     
     private struct InternBase {
         // --- delegates
-        internal    EventHandler          <TagsChangedArgs>         tagsChanged;            //  8
+        internal    Action                <TagsChangedArgs>         tagsChanged;            //  8
         internal    Dictionary<int, Action<TagsChangedArgs>>        entityTagsChanged;      //  8
         //
-        internal    EventHandler          <ComponentChangedArgs>    componentAdded;         //  8
-        internal    EventHandler          <ComponentChangedArgs>    componentRemoved;       //  8
+        internal    Action                <ComponentChangedArgs>    componentAdded;         //  8
+        internal    Action                <ComponentChangedArgs>    componentRemoved;       //  8
         internal    Dictionary<int, Action<ComponentChangedArgs>>   entityComponentChanged; //  8
     }
     #endregion

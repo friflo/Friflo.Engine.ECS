@@ -65,11 +65,11 @@ public partial class Editor : AppEvents
         }
         TestBed.AddSampleEntities(store);
         if (SyncDatabase) {
-            store.OnComponentAdded     += (_, args) => SyncEntity(args.entityId); 
-            store.OnComponentRemoved   += (_, args) => SyncEntity(args.entityId); 
-            store.OnScriptAdded        += (_, args) => SyncEntity(args.entity.Id); 
-            store.OnScriptRemoved      += (_, args) => SyncEntity(args.entity.Id); 
-            store.OnTagsChanged        += (_, args) => SyncEntity(args.entityId);
+            store.OnComponentAdded     += args => SyncEntity(args.entityId); 
+            store.OnComponentRemoved   += args => SyncEntity(args.entityId); 
+            store.OnScriptAdded        += args => SyncEntity(args.entity.Id); 
+            store.OnScriptRemoved      += args => SyncEntity(args.entity.Id); 
+            store.OnTagsChanged        += args => SyncEntity(args.entityId);
             await sync.StoreEntitiesAsync();
         }
         store.OnChildEntitiesChanged += ChildEntitiesChangedHandler;
@@ -95,7 +95,7 @@ public partial class Editor : AppEvents
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="StoreSync"/></summary>
-    private void ChildEntitiesChangedHandler (object sender, ChildEntitiesChangedArgs args)
+    private void ChildEntitiesChangedHandler (ChildEntitiesChangedArgs args)
     {
         StoreDispatcher.AssertMainThread();
         switch (args.action)
