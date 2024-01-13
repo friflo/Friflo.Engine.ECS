@@ -143,15 +143,15 @@ public partial class EntityStoreBase
         ref int         compIndex,
         ref int         archIndex)
     {
-        var arch            = archetype;
-        var archTagsValue   = arch.tags.bitSet.value;
-        var tagsValue       = tags.bitSet.value;
-        if (archTagsValue == tagsValue) {
+        var arch        = archetype;
+        var archTags    = arch.tags;
+        var tagsValue   = tags.bitSet.value;
+        if (archTags.bitSet.value == tagsValue) {
             return false;
         }
         var searchKey = store.searchKey;
         searchKey.componentTypes    = arch.componentTypes;
-        searchKey.tags.bitSet.value = archTagsValue | tagsValue;
+        searchKey.tags.bitSet.value = archTags.bitSet.value | tagsValue;
         searchKey.CalculateHashCode();
         Archetype newArchetype;
         if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
@@ -168,7 +168,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags, archTags));
         return true;
     }
     
@@ -181,9 +181,9 @@ public partial class EntityStoreBase
         ref int         archIndex)
     {
         var arch            = archetype;
-        var archTags        = arch.tags.bitSet.value;
-        var archTagsRemoved = archTags & ~tags.bitSet.value;
-        if (archTagsRemoved == archTags) {
+        var archTags        = arch.tags;
+        var archTagsRemoved = archTags.bitSet.value & ~tags.bitSet.value;
+        if (archTagsRemoved == archTags.bitSet.value) {
             return false;
         }
         var searchKey = store.searchKey;
@@ -208,7 +208,7 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags));
+        store.internBase.tagsChanged?.Invoke(null, new TagsChangedArgs(id, tags, archTags));
         return true;
     }
     #endregion

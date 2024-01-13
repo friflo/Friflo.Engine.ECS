@@ -12,13 +12,28 @@ public readonly struct  TagsChangedArgs
     /// </remarks>
     public readonly     int     entityId;   //  4
     public readonly     Tags    tags;       // 32
+    public readonly     Tags    oldTags;    // 32
 
+    public Tags AddedTags { get {
+        var result = new Tags();
+        result.bitSet.value = ~oldTags.bitSet.value &  tags.bitSet.value; 
+        return result;
+    } }
     
+    
+    public Tags RemovedTags { get {
+        var result = new Tags();
+        result.bitSet.value =  oldTags.bitSet.value & ~tags.bitSet.value; 
+        return result; 
+    } }
+
+
     public override     string              ToString() => $"entity: {entityId} - tags change: {tags}";
 
-    internal TagsChangedArgs(int entityId, in Tags tags)
+    internal TagsChangedArgs(int entityId, in Tags tags, in Tags oldTags)
     {
-        this.entityId       = entityId;
-        this.tags           = tags;
+        this.entityId   = entityId;
+        this.tags       = tags;
+        this.oldTags    = oldTags;
     }
 }

@@ -183,11 +183,20 @@ public static class Test_Tags
             var str = args.ToString();
             switch (eventCount++) {
                 case 0:     AreEqual(1,                     args.entityId);
-                            AreEqual("Tags: [#TestTag]",    args.tags.ToString());
+                            AreEqual("Tags: [#TestTag]",    args.tags.          ToString());
+                            AreEqual("Tags: []",            args.oldTags.       ToString());
+                            AreEqual("Tags: []",            args.RemovedTags.   ToString());
+                            AreEqual("Tags: [#TestTag]",    args.AddedTags.     ToString());
                             // Ensure entity is in new Archetype
                             AreEqual("[#TestTag]  Count: 1",  store.GetEntityById(args.entityId).Archetype.ToString());
                             AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
-                case 1:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
+                
+                case 1:     AreEqual("Tags: [#TestTag2]",   args.tags.          ToString());
+                            AreEqual("Tags: [#TestTag]",    args.oldTags.       ToString());
+                            AreEqual("Tags: [#TestTag]",    args.RemovedTags.   ToString());
+                            AreEqual("Tags: [#TestTag2]",   args.AddedTags.     ToString());
+                            AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
+                
                 case 2:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
                 case 3:     AreEqual("entity: 1 - tags change: Tags: [#TestTag2]",  str);   return;
                 case 4:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);   return;
