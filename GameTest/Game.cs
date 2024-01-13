@@ -67,8 +67,8 @@ public class Game
         if (SyncDatabase) {
             store.OnComponentAdded     += (_, args) => SyncEntity(args.entityId); 
             store.OnComponentRemoved   += (_, args) => SyncEntity(args.entityId); 
-            store.OnScriptAdded        += (_, args) => SyncEntity(args.entityId); 
-            store.OnScriptRemoved      += (_, args) => SyncEntity(args.entityId); 
+            store.OnScriptAdded        += (_, args) => SyncEntity(args.entity.Id); 
+            store.OnScriptRemoved      += (_, args) => SyncEntity(args.entity.Id); 
             store.OnTagsChanged        += (_, args) => SyncEntity(args.entityId);
             await sync.StoreEntitiesAsync();
         }

@@ -6,19 +6,15 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct  ScriptChangedArgs
 {
-    /// <remarks>
-    /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
-    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
-    /// </remarks>
-    public readonly     int                 entityId;   //  4
+    public readonly     Entity              entity;     // 16
     public readonly     ChangedEventAction  action;     //  4
     public readonly     ScriptType          scriptType; //  8
     
-    public override     string              ToString() => $"entity: {entityId} - {action} {scriptType}";
+    public override     string              ToString() => $"entity: {entity.Id} - {action} {scriptType}";
 
-    internal ScriptChangedArgs(int entityId, ChangedEventAction action, ScriptType scriptType)
+    internal ScriptChangedArgs(Entity entity, ChangedEventAction action, ScriptType scriptType)
     {
-        this.entityId       = entityId;
+        this.entity         = entity;
         this.action         = action;
         this.scriptType     = scriptType;
     }

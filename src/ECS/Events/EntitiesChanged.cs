@@ -11,13 +11,13 @@ public readonly struct  EntitiesChangedArgs
 {
     /// <remarks>
     /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
-    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
+    /// <code>      var entity = store.GetEntityById(args.EntityIds[]);       </code>
     /// </remarks>
     public              IReadOnlySet<int>   EntityIds   => entityIds;
     
     private readonly    HashSet<int>        entityIds;  //  8
     
-    public  override    string              ToString() => $"entities changed. Count: {entityIds.Count}";
+    public  override    string              ToString()  => $"entities changed. Count: {entityIds.Count}";
 
     public EntitiesChangedArgs(HashSet<int> entityIds)
     {

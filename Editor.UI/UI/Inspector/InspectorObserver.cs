@@ -55,8 +55,8 @@ internal class InspectorObserver : EditorObserver
         store.OnComponentAdded      += (_, args) => PostSetEntity(args.entityId); 
         store.OnComponentRemoved    += (_, args) => PostSetEntity(args.entityId); 
         store.OnTagsChanged         += (_, args) => PostSetEntity(args.entityId);
-        store.OnScriptAdded         += (_, args) => PostSetEntity(args.entityId);
-        store.OnScriptRemoved       += (_, args) => PostSetEntity(args.entityId); 
+        store.OnScriptAdded         += (_, args) => PostSetEntity(args.entity.Id);
+        store.OnScriptRemoved       += (_, args) => PostSetEntity(args.entity.Id); 
         store.OnEntitiesChanged     += EntitiesChanged;
     }
     

@@ -37,11 +37,11 @@ public static class Test_Script
         var addHandler  = new EventHandler<ScriptChangedArgs>((_, args) => {
             var str = args.ToString();
             switch (addCount++) {
-                case 0:     AreEqual(1,                         args.entityId);
+                case 0:     AreEqual(1,                         args.entity.Id);
                             AreEqual(ChangedEventAction.Add,    args.action);
                             AreEqual(typeof(TestScript1),       args.scriptType.type);
                             // Ensure Scripts are updated
-                            AreEqual(1, store.GetEntityById(args.entityId).Scripts.Length);
+                            AreEqual(1,                         args.entity.Scripts.Length);
                             AreEqual("entity: 1 - Add script: 'script1' [*TestScript1]",     str);  return;
                 case 1:     AreEqual("entity: 1 - Add script: 'script2' [*TestScript2]",     str);  return;
                 case 2:     AreEqual("entity: 1 - Add script: 'script2' [*TestScript2]",     str);  return;
@@ -53,11 +53,11 @@ public static class Test_Script
         var removeHandler  = new EventHandler<ScriptChangedArgs>((_, args) => {
             var str = args.ToString();
             switch (removeCount++) {
-                case 0:     AreEqual(1,                         args.entityId);
+                case 0:     AreEqual(1,                         args.entity.Id);
                             AreEqual(ChangedEventAction.Remove, args.action);
                             AreEqual(typeof(TestScript2),       args.scriptType.type);
                             // Ensure Scripts are updated                            
-                            AreEqual(1, store.GetEntityById(args.entityId).Scripts.Length);
+                            AreEqual(1, store.GetEntityById(args.entity.Id).Scripts.Length);
                             AreEqual("entity: 1 - Remove script: 'script2' [*TestScript2]",   str);     return;
                 default:    Fail("unexpected event");                                                   return;
             }

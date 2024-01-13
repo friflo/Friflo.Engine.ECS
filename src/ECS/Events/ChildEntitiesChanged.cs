@@ -7,27 +7,25 @@ namespace Friflo.Engine.ECS;
 public readonly struct ChildEntitiesChangedArgs
 {
     public readonly ChildEntitiesChangedAction  action;     //  4
-    /// <remarks>
-    /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
-    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
-    /// </remarks>
+    public readonly EntityStore                 store;      //  8
     public readonly int                         parentId;   //  4
-    /// <remarks>
-    /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.
-    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
-    /// </remarks>
     public readonly int                         childId;    //  4
     public readonly int                         childIndex; //  4
+    
+    public          Entity                      Parent      => new Entity(parentId, store);
+    public          Entity                      Child       => new Entity(childId,  store);
 
-    public override string                      ToString() => $"entity: {parentId} - {action} ChildIds[{childIndex}] = {childId}";
+    public override string                      ToString()  => $"entity: {parentId} - {action} ChildIds[{childIndex}] = {childId}";
 
     internal ChildEntitiesChangedArgs(
         ChildEntitiesChangedAction  action,
+        EntityStore                 store,
         int                         parentId,
         int                         childId,
         int                         childIndex)
     {
         this.action     = action;
+        this.store      = store;
         this.parentId   = parentId;
         this.childId    = childId;
         this.childIndex = childIndex;

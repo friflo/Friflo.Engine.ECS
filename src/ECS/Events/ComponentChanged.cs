@@ -12,18 +12,18 @@ public enum ChangedEventAction
 
 public readonly struct  ComponentChangedArgs
 {
-    /// <remarks>
-    /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
-    /// <code>      var entity = store.GetEntityById(args.entityId);       </code>
-    /// </remarks>
+    public readonly     EntityStore         store;          //  8
     public readonly     int                 entityId;       //  4
     public readonly     ChangedEventAction  action;         //  4
     public readonly     ComponentType       componentType;  //  8
     
-    public override     string              ToString() => $"entity: {entityId} - {action} {componentType}";
+    public              Entity              Entity      => new Entity(entityId, store);
+    
+    public override     string              ToString()  => $"entity: {entityId} - {action} {componentType}";
 
-    internal ComponentChangedArgs(int entityId, ChangedEventAction action, int structIndex)
+    internal ComponentChangedArgs(EntityStoreBase store, int entityId, ChangedEventAction action, int structIndex)
     {
+        this.store          = store as EntityStore; 
         this.entityId       = entityId;
         this.action         = action;
         this.componentType  = EntityStoreBase.Static.EntitySchema.components[structIndex];

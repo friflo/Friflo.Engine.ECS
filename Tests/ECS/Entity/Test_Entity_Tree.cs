@@ -191,8 +191,11 @@ public static class Test_Entity_Tree
         var root    = store.CreateEntity(1);
         var events = SetHandlerSeq(store, (args, seq) => {
             AreEqual(1,                                 args.parentId);
+            AreEqual(1,                                 args.Parent.Id);
+            AreSame (store,                             args.store);
             AreEqual(seq,                               args.childIndex);
             AreEqual(seq + 2,                           args.childId);
+            AreEqual(seq + 2,                           args.Child.Id);
             AreEqual(ChildEntitiesChangedAction.Add,    args.action);
             AreEqual(seq + 1,                           root.ChildCount);
         });

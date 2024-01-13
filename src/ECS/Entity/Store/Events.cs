@@ -12,7 +12,7 @@ public partial class EntityStore
 #region add / remove script events - experimental
     private void ScriptChanged(object sender, ScriptChangedArgs args)
     {
-        if (!intern.entityScriptChanged.TryGetValue(args.entityId, out var handlers)) {
+        if (!intern.entityScriptChanged.TryGetValue(args.entity.Id, out var handlers)) {
             return;
         }
         handlers.Invoke(args);

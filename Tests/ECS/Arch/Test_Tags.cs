@@ -188,7 +188,7 @@ public static class Test_Tags
                             AreEqual("Tags: []",            args.RemovedTags.   ToString());
                             AreEqual("Tags: [#TestTag]",    args.AddedTags.     ToString());
                             // Ensure entity is in new Archetype
-                            AreEqual("[#TestTag]  Count: 1",  store.GetEntityById(args.entityId).Archetype.ToString());
+                            AreEqual("[#TestTag]  Count: 1",args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - tags change: Tags: [#TestTag]",   str);
                             AreEqual("id: 1  [#TestTag]",   args.Entity.ToString());
                             AreSame (store,                 args.store);
