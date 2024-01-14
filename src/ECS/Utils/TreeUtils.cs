@@ -252,7 +252,7 @@ public static class TreeUtils
     [ExcludeFromCodeCoverage]
     private static void LogMove(Entity parent, int newIndex, Entity entity) {
         if (!Log) return;
-        var msg = $"parent id: {parent.Id} - Move child: ChildIds[{newIndex}] = {entity.Id}";
+        var msg = $"parent id: {parent.Id} - Move child: Child[{newIndex}] = {entity.Id}";
         Console.WriteLine(msg);
     }
 

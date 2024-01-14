@@ -42,10 +42,10 @@ public static class Test_Script
                             AreEqual(typeof(TestScript1),       args.scriptType.type);
                             // Ensure Scripts are updated
                             AreEqual(1,                         args.entity.Scripts.Length);
-                            AreEqual("entity: 1 - Add Script: [*TestScript1]",     str);  return;
-                case 1:     AreEqual("entity: 1 - Add Script: [*TestScript2]",     str);  return;
-                case 2:     AreEqual("entity: 1 - Add Script: [*TestScript2]",     str);  return;
-                default:    Fail("unexpected event");                                     return;
+                            AreEqual("entity: 1 - event > Add Script: [*TestScript1]",  str);   return;
+                case 1:     AreEqual("entity: 1 - event > Add Script: [*TestScript2]",  str);   return;
+                case 2:     AreEqual("entity: 1 - event > Add Script: [*TestScript2]",  str);   return;
+                default:    Fail("unexpected event");                                           return;
             }
         });
         // --- add script handler
@@ -58,8 +58,8 @@ public static class Test_Script
                             AreEqual(typeof(TestScript2),       args.scriptType.type);
                             // Ensure Scripts are updated                            
                             AreEqual(1, store.GetEntityById(args.entity.Id).Scripts.Length);
-                            AreEqual("entity: 1 - Remove Script: [*TestScript2]",   str);   return;
-                default:    Fail("unexpected event");                                       return;
+                            AreEqual("entity: 1 - event > Remove Script: [*TestScript2]",   str);   return;
+                default:    Fail("unexpected event");                                               return;
             }
         });
         store.OnScriptAdded    += addHandler;

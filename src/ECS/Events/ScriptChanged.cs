@@ -10,7 +10,7 @@ public readonly struct  ScriptChangedArgs
     public readonly     ChangedEventAction  action;     //  4
     public readonly     ScriptType          scriptType; //  8
     
-    public override     string              ToString() => $"entity: {entity.Id} - {action} {scriptType}";
+    public override     string              ToString() => $"entity: {entity.Id} - event > {action} {scriptType}";
 
     internal ScriptChangedArgs(Entity entity, ChangedEventAction action, ScriptType scriptType)
     {

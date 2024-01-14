@@ -99,20 +99,21 @@ public static class Test_ComponentReader
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var events  = Events.SetHandlerSeq(store, (args, seq) => {
+            var str = args.ToString();
             switch (seq) {
                 // --- initial children: [2, 3, 4, 5]
-                case 0:     AreEqual("entity: 1 - Add ChildIds[0] = 2",     args.ToString());   return;
-                case 1:     AreEqual("entity: 1 - Add ChildIds[1] = 3",     args.ToString());   return;
-                case 2:     AreEqual("entity: 1 - Add ChildIds[2] = 4",     args.ToString());   return;
-                case 3:     AreEqual("entity: 1 - Add ChildIds[3] = 5",     args.ToString());   return;
+                case 0:     AreEqual("entity: 1 - event > Add Child[0] = 2",     str);   return;
+                case 1:     AreEqual("entity: 1 - event > Add Child[1] = 3",     str);   return;
+                case 2:     AreEqual("entity: 1 - event > Add Child[2] = 4",     str);   return;
+                case 3:     AreEqual("entity: 1 - event > Add Child[3] = 5",     str);   return;
                 // --- changed children: [6, 4, 2, 5]
-                case 4:     AreEqual("entity: 1 - Remove ChildIds[1] = 3",  args.ToString());   return;
-                case 5:     AreEqual("entity: 1 - Add ChildIds[0] = 6",     args.ToString());   return;
-                case 6:     AreEqual("entity: 1 - Remove ChildIds[2] = 4",  args.ToString());   return;
-                case 7:     AreEqual("entity: 1 - Remove ChildIds[1] = 2",  args.ToString());   return;
-                case 8:     AreEqual("entity: 1 - Add ChildIds[1] = 4",     args.ToString());   return;
-                case 9:     AreEqual("entity: 1 - Add ChildIds[2] = 2",     args.ToString());   return;
-                default:    Fail($"unexpected seq: {seq}");                                     return;
+                case 4:     AreEqual("entity: 1 - event > Remove Child[1] = 3",  str);   return;
+                case 5:     AreEqual("entity: 1 - event > Add Child[0] = 6",     str);   return;
+                case 6:     AreEqual("entity: 1 - event > Remove Child[2] = 4",  str);   return;
+                case 7:     AreEqual("entity: 1 - event > Remove Child[1] = 2",  str);   return;
+                case 8:     AreEqual("entity: 1 - event > Add Child[1] = 4",     str);   return;
+                case 9:     AreEqual("entity: 1 - event > Add Child[2] = 2",     str);   return;
+                default:    Fail($"unexpected seq: {seq}");                              return;
             }
         });
         ComponentReader_read_children(store);

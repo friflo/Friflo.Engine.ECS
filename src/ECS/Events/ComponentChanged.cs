@@ -19,7 +19,7 @@ public readonly struct  ComponentChangedArgs
     
     public              Entity              Entity      => new Entity(entityId, store);
     
-    public override     string              ToString()  => $"entity: {entityId} - {action} {componentType}";
+    public override     string              ToString()  => $"entity: {entityId} - event > {action} {componentType}";
 
     internal ComponentChangedArgs(EntityStoreBase store, int entityId, ChangedEventAction action, int structIndex)
     {

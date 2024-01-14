@@ -192,7 +192,7 @@ public static class Test_Tags
                             AreEqual("[#TestTag]  Count: 1",        args.Entity.Archetype.ToString());
                             AreEqual("id: 1  [#TestTag]",           args.Entity.ToString());
                             AreSame (store,                         args.store);
-                            AreEqual("entity: 1 - added Tags: [#TestTag]",            str);
+                            AreEqual("entity: 1 - event > Add Tags: [#TestTag]",            str);
                             return;
                 
                 case 1:     AreEqual("Tags: [#TestTag, #TestTag2]", args.tags.          ToString());
@@ -200,13 +200,13 @@ public static class Test_Tags
                             AreEqual("Tags: []",                    args.RemovedTags.   ToString());
                             AreEqual("Tags: [#TestTag2]",           args.AddedTags.     ToString());
                             AreEqual("Tags: [#TestTag2]",           args.ChangedTags.   ToString());
-                            AreEqual("entity: 1 - added Tags: [#TestTag2]",             str);
+                            AreEqual("entity: 1 - event > Add Tags: [#TestTag2]",           str);
                             return;
                 
-                case 2:     AreEqual("entity: 1 - removed Tags: [#TestTag]",            str);   return;
-                case 3:     AreEqual("entity: 1 - removed Tags: [#TestTag2]",           str);   return;
-                case 4:     AreEqual("entity: 1 - tags change: Tags: [#TestTag]",       str);   return;
-                default:    Fail("unexpected event");                                           return;
+                case 2:     AreEqual("entity: 1 - event > Remove Tags: [#TestTag]",         str);   return;
+                case 3:     AreEqual("entity: 1 - event > Remove Tags: [#TestTag2]",        str);   return;
+                case 4:     AreEqual("entity: 1 - event > tags change: Tags: [#TestTag]",   str);   return;
+                default:    Fail("unexpected event");                                               return;
             }
         };
         store.OnTagsChanged += handler;

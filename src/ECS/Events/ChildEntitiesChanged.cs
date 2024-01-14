@@ -15,7 +15,7 @@ public readonly struct ChildEntitiesChangedArgs
     public          Entity                      Parent      => new Entity(parentId, store);
     public          Entity                      Child       => new Entity(childId,  store);
 
-    public override string                      ToString()  => $"entity: {parentId} - {action} ChildIds[{childIndex}] = {childId}";
+    public override string                      ToString()  => $"entity: {parentId} - event > {action} Child[{childIndex}] = {childId}";
 
     internal ChildEntitiesChangedArgs(
         ChildEntitiesChangedAction  action,

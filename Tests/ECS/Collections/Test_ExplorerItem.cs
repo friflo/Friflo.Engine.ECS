@@ -24,18 +24,18 @@ public static class Test_ExplorerItem
         
         var rootEvents  = ExplorerEvents.AddHandlerSeq(tree.RootItem, (args, seq) => {
             switch (seq) {
-                case 0:     AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
-                case 1:     AreEqual("Add ChildIds[1] = 4",     args.AsString());   return;
-                default:    Fail("unexpected");                                     return;
+                case 0:     AreEqual("Add Child[0] = 2",     args.AsString());   return;
+                case 1:     AreEqual("Add Child[1] = 4",     args.AsString());   return;
+                default:    Fail("unexpected");                                  return;
             }
         });
         var child2          = store.CreateEntity(2);
         var child2Item      = tree.GetItemById(child2.Id);
         var child2Events    = ExplorerEvents.AddHandlerSeq(child2Item, (args, seq) => {
             switch (seq) {
-                case 0:     AreEqual("Add ChildIds[0] = 3",     args.AsString());   return;
-                case 1:     AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
-                default:    Fail("unexpected");                                     return;
+                case 0:     AreEqual("Add Child[0] = 3",     args.AsString());   return;
+                case 1:     AreEqual("Remove Child[0] = 3",  args.AsString());   return;
+                default:    Fail("unexpected");                                  return;
             }
         });
         root.AddChild(child2);
@@ -75,7 +75,7 @@ public static class Test_ExplorerItem
         var seq = 0;
         NotifyCollectionChangedEventHandler handler = (_, args) => {
             seq++;
-            AreEqual("Add ChildIds[0] = 2", args.AsString());
+            AreEqual("Add Child[0] = 2", args.AsString());
         };
         rootItem.CollectionChanged += handler;
         
@@ -147,7 +147,7 @@ public static class Test_ExplorerItem
                             AreEqual(typeof(EntityName),        args.componentType.type);
                             // ensure entity is in new Archetype 
                             AreEqual("[EntityName]  Count: 1",  args.Entity.Archetype.ToString());
-                            AreEqual("entity: 1 - Add Component: [EntityName]", argsStr);
+                            AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
                             AreSame (store, args.store);
                             return;
                 default:    Fail("unexpected event");
@@ -164,8 +164,8 @@ public static class Test_ExplorerItem
                             AreEqual(typeof(EntityName),        args.componentType.type);
                             // ensure entity is in new Archetype
                             AreEqual("[]",                      store.GetEntityById(args.entityId).Archetype.ToString());
-                            AreEqual("entity: 1 - Remove Component: [EntityName]", argsStr);    return;
-                default:    Fail("unexpected event");                                           return;
+                            AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;
+                default:    Fail("unexpected event");                                                   return;
             }
         };
         store.OnComponentRemoved += componentRemoved;
@@ -219,17 +219,17 @@ public static class Test_ExplorerItem
         
         var rootEvents  = ExplorerEvents.AddHandlerSeq(rootItem, (args, seq) => {
             switch (seq) {
-                case 0: AreEqual("Add ChildIds[0] = 2",     args.AsString());   return;
-                case 1: AreEqual("Add ChildIds[1] = 3",     args.AsString());   return;
-                case 2: AreEqual("Add ChildIds[2] = 4",     args.AsString());   return;
-                case 3: AreEqual("Add ChildIds[3] = 5",     args.AsString());   return;
-                case 4: AreEqual("Add ChildIds[4] = 6",     args.AsString());   return;
+                case 0: AreEqual("Add Child[0] = 2",     args.AsString());   return;
+                case 1: AreEqual("Add Child[1] = 3",     args.AsString());   return;
+                case 2: AreEqual("Add Child[2] = 4",     args.AsString());   return;
+                case 3: AreEqual("Add Child[3] = 5",     args.AsString());   return;
+                case 4: AreEqual("Add Child[4] = 6",     args.AsString());   return;
                 //
-                case 5: AreEqual("Remove ChildIds[0] = 2",  args.AsString());   return;
-                case 6: AreEqual("Remove ChildIds[0] = 3",  args.AsString());   return;
-                case 7: AreEqual("Remove ChildIds[0] = 4",  args.AsString());   return;
-                case 8: AreEqual("Remove ChildIds[0] = 5",  args.AsString());   return;
-                case 9: AreEqual("Remove ChildIds[0] = 6",  args.AsString());   return;
+                case 5: AreEqual("Remove Child[0] = 2",  args.AsString());   return;
+                case 6: AreEqual("Remove Child[0] = 3",  args.AsString());   return;
+                case 7: AreEqual("Remove Child[0] = 4",  args.AsString());   return;
+                case 8: AreEqual("Remove Child[0] = 5",  args.AsString());   return;
+                case 9: AreEqual("Remove Child[0] = 6",  args.AsString());   return;
                 default: Fail("unexpected");                                    return;
             }
         });
@@ -369,10 +369,10 @@ public static class Test_ExplorerItem
         switch (args.Action) {
             case NotifyCollectionChangedAction.Add:
                 var newItem     = args.NewItems![0] as ExplorerItem;
-                return $"Add ChildIds[{args.NewStartingIndex}] = {newItem!.Id}";
+                return $"Add Child[{args.NewStartingIndex}] = {newItem!.Id}";
             case NotifyCollectionChangedAction.Remove:
                 var removeItem = args.OldItems![0] as ExplorerItem;
-                return $"Remove ChildIds[{args.OldStartingIndex}] = {removeItem!.Id}";
+                return $"Remove Child[{args.OldStartingIndex}] = {removeItem!.Id}";
             default:
                 throw new InvalidOperationException("unexpected");
         }

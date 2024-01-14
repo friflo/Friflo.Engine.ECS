@@ -34,14 +34,15 @@ public readonly struct  TagsChangedArgs
         var sb = new StringBuilder();
         sb.Append("entity: ");
         sb.Append(entityId);
+        sb.Append(" - event >");
         var added = AddedTags;
         if (added.bitSet.value != default) {
-            sb.Append(" - added ");
+            sb.Append(" Add ");
             sb.Append(added.ToString());
         }
         var removed = RemovedTags;
         if (removed.bitSet.value != default) {
-            sb.Append(" - removed ");
+            sb.Append(" Remove ");
             sb.Append(removed.ToString());
         }
         return sb.ToString();
