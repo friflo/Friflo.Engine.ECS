@@ -36,7 +36,12 @@ public partial class EntityStore
 #region custom events
     internal static void EmitEvent<TEvent>(EntityStore store, int entityId, TEvent ev) where TEvent : struct
     {
-        var emitter = GetEmitter<TEvent>(store);
+        var emitterIndex    = EventEmitter<TEvent>.EventIndex;
+        var emitters        = store.intern.eventEmitters;
+        if (emitterIndex >= emitters.Length) {
+            return;
+        }
+        var emitter = (EventEmitter<TEvent>)emitters[emitterIndex];
         if (!emitter.entityEvents.TryGetValue(entityId, out var handlers)) {
             return;
         }
@@ -76,12 +81,17 @@ public partial class EntityStore
         var emitterIndex    = EventEmitter<TEvent>.EventIndex;
         var emitters        = store.intern.eventEmitters;
         if (emitterIndex < emitters.Length) {
-            return (EventEmitter<TEvent>)emitters[emitterIndex];
+            var emitter = emitters[emitterIndex];
+            if (emitter != null) {
+                return (EventEmitter<TEvent>)emitters[emitterIndex];
+            }
+        } else {
+            emitters = store.intern.eventEmitters = new EventEmitter[emitterIndex + 1];
         }
-        emitters = store.intern.eventEmitters = new EventEmitter[emitterIndex + 1];
-        var emitter = new EventEmitter<TEvent>();
-        emitters[emitterIndex] = emitter;
-        return emitter;
+        var typedEmitter = new EventEmitter<TEvent>();
+        emitters[emitterIndex] = typedEmitter;
+        return typedEmitter;
+
     }
     #endregion
 }
