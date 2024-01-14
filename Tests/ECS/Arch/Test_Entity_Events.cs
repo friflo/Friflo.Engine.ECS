@@ -19,13 +19,13 @@ public static class Test_Entity_Events
         var entity2     = store.CreateEntity(2);
         
         var entity1EventCount = 0;
-        var tagsChanged1 = (TagsChangedArgs args)    => {
+        var tagsChanged1 = (TagsChanged args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Tags: [#TestTag]", args.ToString()); break;
                 default:    Fail("unexpected"); break;
             }
         };
-        var tagsChanged2 = (TagsChangedArgs args)    => { };
+        var tagsChanged2 = (TagsChanged args)    => { };
         
         entity1.OnTagsChanged -= tagsChanged1;  // remove event handler not added before. 
         entity1.OnTagsChanged += tagsChanged1;
@@ -56,7 +56,7 @@ public static class Test_Entity_Events
         var entity2     = store.CreateEntity(2);
 
         var entity1EventCount = 0;
-        var onComponentChanged = (ComponentChangedArgs args)    => {
+        var onComponentChanged = (ComponentChanged args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Component: [Position]", args.ToString()); break;
             }
@@ -85,7 +85,7 @@ public static class Test_Entity_Events
         var entity2     = store.CreateEntity(2);
 
         var entity1EventCount = 0;
-        var onScriptChanged = (ScriptChangedArgs args)    => {
+        var onScriptChanged = (ScriptChanged args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Script: [*TestScript1]", args.ToString()); break;
                 default:    Fail("unexpected"); break;
@@ -114,7 +114,7 @@ public static class Test_Entity_Events
         var child12     = store.CreateEntity(12);
 
         var entity1EventCount = 0;
-        var onChildEntitiesChanged = (ChildEntitiesChangedArgs args)    => {
+        var onChildEntitiesChanged = (ChildEntitiesChanged args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Child[0] = 10", args.ToString()); break;
                 default:    Fail("unexpected"); break;

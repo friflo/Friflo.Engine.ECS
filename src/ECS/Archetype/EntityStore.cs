@@ -42,14 +42,14 @@ public abstract partial class EntityStoreBase
     ///   <item><see cref="Entity.RemoveTags"/></item>
     /// </list>
     /// </summary>
-    public event    Action<TagsChangedArgs>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
+    public event    Action<TagsChanged>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
     
     // --- component: added / removed
     /// <summary> Fire events on <see cref="Entity.AddComponent{T}()"/> </summary>
-    public event    Action<ComponentChangedArgs>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
+    public event    Action<ComponentChanged>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
     
     /// <summary> Fire events on <see cref="Entity.RemoveComponent{T}()"/> </summary>
-    public event    Action<ComponentChangedArgs>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
+    public event    Action<ComponentChanged>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
     #endregion
     
 #region private / internal fields
@@ -71,12 +71,12 @@ public abstract partial class EntityStoreBase
                     
     private struct InternBase {
         // --- delegates
-        internal    Action                <TagsChangedArgs>         tagsChanged;            //  8
-        internal    Dictionary<int, Action<TagsChangedArgs>>        entityTagsChanged;      //  8
+        internal    Action                <TagsChanged>         tagsChanged;            //  8
+        internal    Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8
         //
-        internal    Action                <ComponentChangedArgs>    componentAdded;         //  8
-        internal    Action                <ComponentChangedArgs>    componentRemoved;       //  8
-        internal    Dictionary<int, Action<ComponentChangedArgs>>   entityComponentChanged; //  8
+        internal    Action                <ComponentChanged>    componentAdded;         //  8
+        internal    Action                <ComponentChanged>    componentRemoved;       //  8
+        internal    Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8
     }
     #endregion
     

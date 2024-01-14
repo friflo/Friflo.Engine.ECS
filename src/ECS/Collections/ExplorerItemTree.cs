@@ -61,10 +61,10 @@ public sealed class ExplorerItemTree
     
     /// <summary>
     /// Fires a <see cref="INotifyCollectionChanged.CollectionChanged"/> event based on the
-    /// given <see cref="ChildEntitiesChangedArgs"/>.
+    /// given <see cref="ChildEntitiesChanged"/>.
     /// </summary>
     // only internal because of unit test
-    internal void ChildEntitiesChangedHandler(ChildEntitiesChangedArgs args)
+    internal void ChildEntitiesChangedHandler(ChildEntitiesChanged args)
     {
         var treeItems = items;
         if (!treeItems.TryGetValue(args.parentId, out var parent)) {
@@ -103,7 +103,7 @@ public sealed class ExplorerItemTree
         collectionChanged(parent, eventArgs);
     }
     
-    private static Exception InvalidActionException(in ChildEntitiesChangedArgs args) {
+    private static Exception InvalidActionException(in ChildEntitiesChanged args) {
         
         return new InvalidOperationException($"unexpected action: {args.action}");
     }

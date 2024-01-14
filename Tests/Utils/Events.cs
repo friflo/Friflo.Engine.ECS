@@ -8,12 +8,12 @@ using static NUnit.Framework.Assert;
 namespace Tests.Utils;
 
 internal class ChildEntitiesChangedEvents {
-    internal    int                                 Seq => seq;
-    private     int                                 seq;
-    private     Action<ChildEntitiesChangedArgs>    handler;
-    private     EntityStore                         store;
+    internal    int                             Seq => seq;
+    private     int                             seq;
+    private     Action<ChildEntitiesChanged>    handler;
+    private     EntityStore                     store;
     
-    internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
+    internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChanged> action)
     {
         var events = new ChildEntitiesChangedEvents();
         events.store = store;
@@ -24,7 +24,7 @@ internal class ChildEntitiesChangedEvents {
         return events;
     }
     
-    internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
+    internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChanged, int> action)
     {
         var events = new ChildEntitiesChangedEvents();
         store.OnChildEntitiesChanged += events.handler = args => {
@@ -40,12 +40,12 @@ internal class ChildEntitiesChangedEvents {
 
 internal static class Events
 {
-    internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChangedArgs> action)
+    internal static ChildEntitiesChangedEvents AddHandler(EntityStore store, Action<ChildEntitiesChanged> action)
     {
         return ChildEntitiesChangedEvents.AddHandler(store, action);
     }
     
-    internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChangedArgs, int> action)
+    internal static ChildEntitiesChangedEvents SetHandlerSeq(EntityStore store, Action<ChildEntitiesChanged, int> action)
     {
         return ChildEntitiesChangedEvents.SetHandlerSeq(store, action);
     }

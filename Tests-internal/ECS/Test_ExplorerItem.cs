@@ -22,7 +22,7 @@ public static class Test_ExplorerItem
         rootItem.CollectionChanged += (_, _) => {
             Fail("unexpected)");
         };
-        var args = new ChildEntitiesChangedArgs((ChildEntitiesChangedAction)99, store, 1, 2, 0);
+        var args = new ChildEntitiesChanged((ChildEntitiesChangedAction)99, store, 1, 2, 0);
         var e = Throws<InvalidOperationException>(() => {
             tree.ChildEntitiesChangedHandler(args);
         });

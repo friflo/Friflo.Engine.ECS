@@ -550,7 +550,7 @@ public partial class EntityStore
         if (intern.childEntitiesChanged == null) {
             return;
         }
-        var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Add, this, parentId, childId, childIndex);
+        var args = new ChildEntitiesChanged(ChildEntitiesChangedAction.Add, this, parentId, childId, childIndex);
         intern.childEntitiesChanged(args);
     }
     
@@ -559,7 +559,7 @@ public partial class EntityStore
         if (intern.childEntitiesChanged == null) {
             return;
         }
-        var args = new ChildEntitiesChangedArgs(ChildEntitiesChangedAction.Remove, this, parentId, childId, childIndex);
+        var args = new ChildEntitiesChanged(ChildEntitiesChangedAction.Remove, this, parentId, childId, childIndex);
         intern.childEntitiesChanged(args);
     }
     

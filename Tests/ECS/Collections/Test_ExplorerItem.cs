@@ -139,7 +139,7 @@ public static class Test_ExplorerItem
         var rootItem    = tree.RootItem;
         
         var addCount       = 0;
-        Action<ComponentChangedArgs> componentAdded = args => {
+        Action<ComponentChanged> componentAdded = args => {
             var argsStr = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.entityId);
@@ -156,7 +156,7 @@ public static class Test_ExplorerItem
         };
         store.OnComponentAdded += componentAdded;
         var removeCount       = 0;
-        Action<ComponentChangedArgs> componentRemoved = args => {
+        Action<ComponentChanged> componentRemoved = args => {
             var argsStr = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.entityId);

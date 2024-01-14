@@ -151,7 +151,7 @@ public sealed class StoreSync
             entity.DeleteEntity();
         }
         // Send event. See: SEND_EVENT notes
-        var args = new EntitiesChangedArgs(idSet);
+        var args = new EntitiesChanged(idSet);
         store.CastEntitiesChanged(null, args);
     }
     

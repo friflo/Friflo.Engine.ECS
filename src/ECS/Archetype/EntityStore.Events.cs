@@ -13,7 +13,7 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStoreBase
 {
 #region entity tag events - experimental
-    private void EntityTagsChanged(TagsChangedArgs args)
+    private void EntityTagsChanged(TagsChanged args)
     {
         if (!internBase.entityTagsChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
@@ -21,14 +21,14 @@ public partial class EntityStoreBase
         handlers.Invoke(args);
     }
     
-    internal static void AddEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChangedArgs> handler)
+    internal static void AddEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChanged> handler)
     {
         if (AddEntityHandler(entityId, handler, ref store.internBase.entityTagsChanged)) {
             store.internBase.tagsChanged += store.EntityTagsChanged;
         }
     }
     
-    internal static void RemoveEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChangedArgs> handler)
+    internal static void RemoveEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChanged> handler)
     {
         if (RemoveEntityHandler(entityId, handler, store.internBase.entityTagsChanged)) {
             store.internBase.tagsChanged -= store.EntityTagsChanged;
@@ -39,7 +39,7 @@ public partial class EntityStoreBase
     
     
 #region add / remove component events - experimental
-    private void ComponentChanged(ComponentChangedArgs args)
+    private void ComponentChanged(ComponentChanged args)
     {
         if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
             return;
@@ -47,7 +47,7 @@ public partial class EntityStoreBase
         handlers.Invoke(args);
     }
     
-    internal static void AddComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChangedArgs> handler)
+    internal static void AddComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChanged> handler)
     {
         if (AddEntityHandler(entityId, handler, ref store.internBase.entityComponentChanged)) {
             store.internBase.componentAdded     += store.ComponentChanged;
@@ -55,7 +55,7 @@ public partial class EntityStoreBase
         }
     }
     
-    internal static void RemoveComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChangedArgs> handler)
+    internal static void RemoveComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChanged> handler)
     {
         if (RemoveEntityHandler(entityId, handler, store.internBase.entityComponentChanged)) {
             store.internBase.componentAdded     -= store.ComponentChanged;

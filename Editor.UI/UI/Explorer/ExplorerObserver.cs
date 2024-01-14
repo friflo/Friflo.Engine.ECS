@@ -40,7 +40,7 @@ internal class ExplorerObserver : EditorObserver
         grid.RowSelection!.Select(0);
     }
     
-    private void PostEntityUpdate(ComponentChangedArgs args)
+    private void PostEntityUpdate(ComponentChanged args)
     {
         if (args.componentType.type != typeof(EntityName)) {
             return;
@@ -56,7 +56,7 @@ internal class ExplorerObserver : EditorObserver
         });
     }
     
-    private void EntitiesChanged(object _, EntitiesChangedArgs args)
+    private void EntitiesChanged(object _, EntitiesChanged args)
     {
         foreach (var id in args.EntityIds) {
             if (!tree.TryGetItem(id, out var item)) {

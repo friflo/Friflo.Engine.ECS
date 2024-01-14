@@ -569,7 +569,7 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("root"));
         int eventCount = 0;
         
-        Action<ChildEntitiesChangedArgs> handler = args => {
+        Action<ChildEntitiesChanged> handler = args => {
             AreEqual("entity: 1 - event > Add Child[0] = 2", args.ToString());
             eventCount++;
         };

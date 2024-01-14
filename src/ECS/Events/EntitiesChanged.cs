@@ -7,7 +7,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct  EntitiesChangedArgs
+public readonly struct  EntitiesChanged
 {
     /// <remarks>
     /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
@@ -19,7 +19,7 @@ public readonly struct  EntitiesChangedArgs
     
     public  override    string              ToString()  => $"entities changed. Count: {entityIds.Count}";
 
-    public EntitiesChangedArgs(HashSet<int> entityIds)
+    public EntitiesChanged(HashSet<int> entityIds)
     {
         this.entityIds = entityIds;
     }

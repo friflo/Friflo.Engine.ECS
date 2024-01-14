@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct  ScriptChangedArgs
+public readonly struct  ScriptChanged
 {
     public readonly     Entity              entity;     // 16
     public readonly     ChangedEventAction  action;     //  4
@@ -12,7 +12,7 @@ public readonly struct  ScriptChangedArgs
     
     public override     string              ToString() => $"entity: {entity.Id} - event > {action} {scriptType}";
 
-    internal ScriptChangedArgs(Entity entity, ChangedEventAction action, ScriptType scriptType)
+    internal ScriptChanged(Entity entity, ChangedEventAction action, ScriptType scriptType)
     {
         this.entity         = entity;
         this.action         = action;

@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct ChildEntitiesChangedArgs
+public readonly struct ChildEntitiesChanged
 {
     public readonly ChildEntitiesChangedAction  action;     //  4
     public readonly EntityStore                 store;      //  8
@@ -17,7 +17,7 @@ public readonly struct ChildEntitiesChangedArgs
 
     public override string                      ToString()  => $"entity: {parentId} - event > {action} Child[{childIndex}] = {childId}";
 
-    internal ChildEntitiesChangedArgs(
+    internal ChildEntitiesChanged(
         ChildEntitiesChangedAction  action,
         EntityStore                 store,
         int                         parentId,

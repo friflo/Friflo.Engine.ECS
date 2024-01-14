@@ -10,7 +10,7 @@ public enum ChangedEventAction
     Remove  = 1,
 }
 
-public readonly struct  ComponentChangedArgs
+public readonly struct  ComponentChanged
 {
     public readonly     EntityStore         store;          //  8
     public readonly     int                 entityId;       //  4
@@ -21,7 +21,7 @@ public readonly struct  ComponentChangedArgs
     
     public override     string              ToString()  => $"entity: {entityId} - event > {action} {componentType}";
 
-    internal ComponentChangedArgs(EntityStoreBase store, int entityId, ChangedEventAction action, int structIndex)
+    internal ComponentChanged(EntityStoreBase store, int entityId, ChangedEventAction action, int structIndex)
     {
         this.store          = store as EntityStore; 
         this.entityId       = entityId;

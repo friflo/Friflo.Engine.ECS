@@ -7,7 +7,7 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public readonly struct  TagsChangedArgs
+public readonly struct  TagsChanged
 {
     public  readonly    EntityStore store;      //  8
     public  readonly    int         entityId;   //  4
@@ -22,7 +22,7 @@ public readonly struct  TagsChangedArgs
     
     public override     string      ToString()  => GetString();
 
-    internal TagsChangedArgs(EntityStoreBase store, int entityId, in Tags tags, in Tags oldTags)
+    internal TagsChanged(EntityStoreBase store, int entityId, in Tags tags, in Tags oldTags)
     {
         this.store      = store as EntityStore;
         this.entityId   = entityId;

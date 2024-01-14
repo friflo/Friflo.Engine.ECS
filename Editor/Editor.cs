@@ -95,7 +95,7 @@ public partial class Editor : AppEvents
     // ---------------------------------------- private methods ----------------------------------------
 #region private methods
     /// <summary>SYNC: <see cref="Entity"/> -> <see cref="StoreSync"/></summary>
-    private void ChildEntitiesChangedHandler (ChildEntitiesChangedArgs args)
+    private void ChildEntitiesChangedHandler (ChildEntitiesChanged args)
     {
         StoreDispatcher.AssertMainThread();
         switch (args.action)

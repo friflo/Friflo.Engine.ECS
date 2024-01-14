@@ -70,7 +70,7 @@ internal class InspectorObserver : EditorObserver
         });
     }
     
-    private void EntitiesChanged(object sender, EntitiesChangedArgs args) {
+    private void EntitiesChanged(object sender, EntitiesChanged args) {
         if (!args.EntityIds.Contains(entityId)) {
             return;
         }
