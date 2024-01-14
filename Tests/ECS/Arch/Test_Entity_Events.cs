@@ -142,8 +142,13 @@ public static class Test_Entity_Events
         var entity1EventCount = 0;
         var onMyEvent = (EventArgs<MyEvent> args)    => {
             switch (entity1EventCount++) {
-                case 0:     AreEqual("entity: 1 - event > Add MyEvent", args.ToString()); break;
-                default:    Fail("unexpected"); break;
+                case 0:
+                    AreEqual(1,                             args.Entity.Id);
+                    AreEqual("MyEvent",                     args.Event.GetType().Name);
+                    AreEqual("entity: 1 - event > MyEvent", args.ToString());
+                    break;
+                default:
+                    Fail("unexpected"); break;
             }
         };
         entity1.AddEventHandler(onMyEvent); 
