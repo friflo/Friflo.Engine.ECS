@@ -431,7 +431,7 @@ public readonly struct Entity : IEquatable<Entity>
     public void  RemoveSignalHandler<TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct => EntityStore.RemoveSignalHandler(store, Id, handler);
     
     [Obsolete("Experimental")]
-    public void  EmitSignal<TEvent> (TEvent ev)                               where TEvent : struct => EntityStore.EmitSignal         (store, Id, ev);
+    public void  EmitSignal<TEvent>          (in TEvent ev)                   where TEvent : struct => EntityStore.EmitSignal         (store, Id, ev);
     #endregion
 
 

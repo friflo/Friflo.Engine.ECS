@@ -34,7 +34,7 @@ internal class SignalHandler<TEvent> : SignalHandler where TEvent : struct
 public partial class EntityStore
 {
 #region custom events
-    internal static void EmitSignal<TEvent>(EntityStore store, int entityId, TEvent ev) where TEvent : struct
+    internal static void EmitSignal<TEvent>(EntityStore store, int entityId, in TEvent ev) where TEvent : struct
     {
         var signalIndex    = SignalHandler<TEvent>.EventIndex;
         var signalHandlers = store.intern.signalHandlers;
