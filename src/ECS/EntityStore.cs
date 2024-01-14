@@ -84,11 +84,11 @@ public sealed partial class EntityStore : EntityStoreBase
                     private             Intern                  intern;             // 72
                     
     private struct Intern {
-                    internal readonly   PidType                     pidType;            //  4               - pid != id  /  pid == id
-                    internal            Random                      randPid;            //  8               - null if using pid == id
-                    internal readonly   Dictionary<long, int>       pid2Id;             //  8 + Map<pid,id> - null if using pid == id
+                    internal readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
+                    internal            Random                  randPid;            //  8               - null if using pid == id
+                    internal readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
 
-                    internal            int                         sequenceId;         //  4               - incrementing id used for next new entity
+                    internal            int                     sequenceId;         //  4               - incrementing id used for next new entity
         // --- delegates
         internal Action                <ChildEntitiesChanged>   childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
         internal Dictionary<int, Action<ChildEntitiesChanged>>  entityChildEntitiesChanged;//  8
