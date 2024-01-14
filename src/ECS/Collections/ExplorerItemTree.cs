@@ -67,7 +67,7 @@ public sealed class ExplorerItemTree
     internal void ChildEntitiesChangedHandler(ChildEntitiesChanged args)
     {
         var treeItems = items;
-        if (!treeItems.TryGetValue(args.parentId, out var parent)) {
+        if (!treeItems.TryGetValue(args.ParentId, out var parent)) {
             return;
         }
         // Console.WriteLine($"ExplorerTree event: {args}       parent: {parent}");
@@ -76,15 +76,15 @@ public sealed class ExplorerItemTree
             return;
         }
         ExplorerItem explorerItem;
-        switch (args.action) {
+        switch (args.Action) {
             case ChildEntitiesChangedAction.Add:
-                if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
-                    var entity      = store.GetEntityById(args.childId);
+                if (!treeItems.TryGetValue(args.ChildId, out explorerItem)) {
+                    var entity      = store.GetEntityById(args.ChildId);
                     explorerItem    = CreateExplorerItem(entity);
                 }
                 break;
             case ChildEntitiesChangedAction.Remove:
-                if (!treeItems.TryGetValue(args.childId, out explorerItem)) {
+                if (!treeItems.TryGetValue(args.ChildId, out explorerItem)) {
                     return;
                 }
                 // Note: Don't remove from treeItems to preserve UI ExplorerItem state. E.g. the state of a checkbox. 
@@ -95,8 +95,8 @@ public sealed class ExplorerItemTree
                 throw InvalidActionException(args);
         }
         // explorerItem never null - see above
-        var action      = (NotifyCollectionChangedAction)args.action;
-        var eventArgs   = new NotifyCollectionChangedEventArgs(action, (object)explorerItem, args.childIndex);
+        var action      = (NotifyCollectionChangedAction)args.Action;
+        var eventArgs   = new NotifyCollectionChangedEventArgs(action, (object)explorerItem, args.ChildIndex);
         // NOTE:
         // Passing parent as NotifyCollectionChangedEventHandler.sender enables the Avalonia UI event handlers called
         // below to check if the change event (Add / Remove) is caused by the containing Control or other code.  
@@ -105,7 +105,7 @@ public sealed class ExplorerItemTree
     
     private static Exception InvalidActionException(in ChildEntitiesChanged args) {
         
-        return new InvalidOperationException($"unexpected action: {args.action}");
+        return new InvalidOperationException($"unexpected action: {args.Action}");
     }
     
     #endregion

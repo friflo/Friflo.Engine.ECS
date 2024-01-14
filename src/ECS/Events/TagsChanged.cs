@@ -4,36 +4,37 @@
 
 using System.Text;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public readonly struct  TagsChanged
 {
-    public  readonly    EntityStore store;      //  8
-    public  readonly    int         entityId;   //  4
-    public  readonly    Tags        tags;       // 32
-    public  readonly    Tags        oldTags;    // 32
+    public  readonly    EntityStore Store;      //  8
+    public  readonly    int         EntityId;   //  4
+    public  readonly    Tags        Tags;       // 32
+    public  readonly    Tags        OldTags;    // 32
     
-    public              Entity      Entity      => new Entity(entityId, store);
+    public              Entity      Entity      => new Entity(EntityId, Store);
     
-    public              Tags        AddedTags   => new(~oldTags.bitSet.value &  tags.bitSet.value);
-    public              Tags        RemovedTags => new( oldTags.bitSet.value & ~tags.bitSet.value);
-    public              Tags        ChangedTags => new( oldTags.bitSet.value ^  tags.bitSet.value);
+    public              Tags        AddedTags   => new(~OldTags.bitSet.value &  Tags.bitSet.value);
+    public              Tags        RemovedTags => new( OldTags.bitSet.value & ~Tags.bitSet.value);
+    public              Tags        ChangedTags => new( OldTags.bitSet.value ^  Tags.bitSet.value);
     
     public override     string      ToString()  => GetString();
 
     internal TagsChanged(EntityStoreBase store, int entityId, in Tags tags, in Tags oldTags)
     {
-        this.store      = store as EntityStore;
-        this.entityId   = entityId;
-        this.tags       = tags;
-        this.oldTags    = oldTags;
+        this.Store      = store as EntityStore;
+        this.EntityId   = entityId;
+        this.Tags       = tags;
+        this.OldTags    = oldTags;
     }
     
     private string GetString() {
         var sb = new StringBuilder();
         sb.Append("entity: ");
-        sb.Append(entityId);
+        sb.Append(EntityId);
         sb.Append(" - event >");
         var added = AddedTags;
         if (added.bitSet.value != default) {

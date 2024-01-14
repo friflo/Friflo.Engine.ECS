@@ -2,20 +2,21 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
 
 public readonly struct ChildEntitiesChanged
 {
-    public readonly ChildEntitiesChangedAction  action;     //  4
-    public readonly EntityStore                 store;      //  8
-    public readonly int                         parentId;   //  4
-    public readonly int                         childId;    //  4
-    public readonly int                         childIndex; //  4
+    public readonly ChildEntitiesChangedAction  Action;     //  4
+    public readonly EntityStore                 Store;      //  8
+    public readonly int                         ParentId;   //  4
+    public readonly int                         ChildId;    //  4
+    public readonly int                         ChildIndex; //  4
     
-    public          Entity                      Parent      => new Entity(parentId, store);
-    public          Entity                      Child       => new Entity(childId,  store);
+    public          Entity                      Parent      => new Entity(ParentId, Store);
+    public          Entity                      Child       => new Entity(ChildId,  Store);
 
-    public override string                      ToString()  => $"entity: {parentId} - event > {action} Child[{childIndex}] = {childId}";
+    public override string                      ToString()  => $"entity: {ParentId} - event > {Action} Child[{ChildIndex}] = {ChildId}";
 
     internal ChildEntitiesChanged(
         ChildEntitiesChangedAction  action,
@@ -24,10 +25,10 @@ public readonly struct ChildEntitiesChanged
         int                         childId,
         int                         childIndex)
     {
-        this.action     = action;
-        this.store      = store;
-        this.parentId   = parentId;
-        this.childId    = childId;
-        this.childIndex = childIndex;
+        this.Action     = action;
+        this.Store      = store;
+        this.ParentId   = parentId;
+        this.ChildId    = childId;
+        this.ChildIndex = childIndex;
     }
 }

@@ -42,10 +42,10 @@ internal class ExplorerObserver : EditorObserver
     
     private void PostEntityUpdate(ComponentChanged args)
     {
-        if (args.componentType.type != typeof(EntityName)) {
+        if (args.ComponentType.type != typeof(EntityName)) {
             return;
         }
-        if (!tree.TryGetItem(args.entityId, out var item)) {
+        if (!tree.TryGetItem(args.EntityId, out var item)) {
             return;
         }
         StoreDispatcher.Post(() => {

@@ -65,11 +65,11 @@ public class Game
         }
     //  TestBed.AddSampleEntities(store);
         if (SyncDatabase) {
-            store.OnComponentAdded     += args => SyncEntity(args.entityId); 
-            store.OnComponentRemoved   += args => SyncEntity(args.entityId); 
-            store.OnScriptAdded        += args => SyncEntity(args.entity.Id); 
-            store.OnScriptRemoved      += args => SyncEntity(args.entity.Id); 
-            store.OnTagsChanged        += args => SyncEntity(args.entityId);
+            store.OnComponentAdded     += args => SyncEntity(args.EntityId); 
+            store.OnComponentRemoved   += args => SyncEntity(args.EntityId); 
+            store.OnScriptAdded        += args => SyncEntity(args.Entity.Id); 
+            store.OnScriptRemoved      += args => SyncEntity(args.Entity.Id); 
+            store.OnTagsChanged        += args => SyncEntity(args.EntityId);
             await sync.StoreEntitiesAsync();
         }
         store.OnChildEntitiesChanged += ChildEntitiesChangedHandler;
@@ -91,14 +91,14 @@ public class Game
     private void ChildEntitiesChangedHandler (ChildEntitiesChanged args)
     {
         StoreDispatcher.AssertMainThread();
-        switch (args.action)
+        switch (args.Action)
         {
             case ChildEntitiesChangedAction.Add:
-                sync?.UpsertDataEntity(args.parentId);
+                sync?.UpsertDataEntity(args.ParentId);
                 PostSyncChanges();
                 break;
             case ChildEntitiesChangedAction.Remove:
-                sync?.UpsertDataEntity(args.parentId);
+                sync?.UpsertDataEntity(args.ParentId);
                 PostSyncChanges();
                 break;
         }

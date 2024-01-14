@@ -15,7 +15,7 @@ public partial class EntityStoreBase
 #region entity tag events - experimental
     private void EntityTagsChanged(TagsChanged args)
     {
-        if (!internBase.entityTagsChanged.TryGetValue(args.entityId, out var handlers)) {
+        if (!internBase.entityTagsChanged.TryGetValue(args.EntityId, out var handlers)) {
             return;
         }
         handlers.Invoke(args);
@@ -41,7 +41,7 @@ public partial class EntityStoreBase
 #region add / remove component events - experimental
     private void ComponentChanged(ComponentChanged args)
     {
-        if (!internBase.entityComponentChanged.TryGetValue(args.entityId, out var handlers)) {
+        if (!internBase.entityComponentChanged.TryGetValue(args.EntityId, out var handlers)) {
             return;
         }
         handlers.Invoke(args);

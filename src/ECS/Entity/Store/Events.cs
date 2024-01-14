@@ -12,7 +12,7 @@ public partial class EntityStore
 #region add / remove script events - experimental
     private void ScriptChanged(ScriptChanged args)
     {
-        if (!intern.entityScriptChanged.TryGetValue(args.entity.Id, out var handlers)) {
+        if (!intern.entityScriptChanged.TryGetValue(args.Entity.Id, out var handlers)) {
             return;
         }
         handlers.Invoke(args);
@@ -41,7 +41,7 @@ public partial class EntityStore
 #region add / remove child entity events - experimental
     private void ChildEntitiesChanged(ChildEntitiesChanged args)
     {
-        if (!intern.entityChildEntitiesChanged.TryGetValue(args.parentId, out var handlers)) {
+        if (!intern.entityChildEntitiesChanged.TryGetValue(args.ParentId, out var handlers)) {
             return;
         }
         handlers.Invoke(args);

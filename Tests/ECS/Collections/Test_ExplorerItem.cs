@@ -142,13 +142,13 @@ public static class Test_ExplorerItem
         Action<ComponentChanged> componentAdded = args => {
             var argsStr = args.ToString();
             switch (addCount++) {
-                case 0:     AreEqual(1,                         args.entityId);
-                            AreEqual(ChangedEventAction.Add,    args.action);
-                            AreEqual(typeof(EntityName),        args.componentType.type);
+                case 0:     AreEqual(1,                         args.EntityId);
+                            AreEqual(ChangedEventAction.Add,    args.Action);
+                            AreEqual(typeof(EntityName),        args.ComponentType.type);
                             // ensure entity is in new Archetype 
                             AreEqual("[EntityName]  Count: 1",  args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
-                            AreSame (store, args.store);
+                            AreSame (store, args.Store);
                             return;
                 default:    Fail("unexpected event");
                             return;
@@ -159,11 +159,11 @@ public static class Test_ExplorerItem
         Action<ComponentChanged> componentRemoved = args => {
             var argsStr = args.ToString();
             switch (removeCount++) {
-                case 0:     AreEqual(1,                         args.entityId);
-                            AreEqual(ChangedEventAction.Remove,args.action);
-                            AreEqual(typeof(EntityName),        args.componentType.type);
+                case 0:     AreEqual(1,                         args.EntityId);
+                            AreEqual(ChangedEventAction.Remove, args.Action);
+                            AreEqual(typeof(EntityName),        args.ComponentType.type);
                             // ensure entity is in new Archetype
-                            AreEqual("[]",                      store.GetEntityById(args.entityId).Archetype.ToString());
+                            AreEqual("[]",                      args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;
                 default:    Fail("unexpected event");                                                   return;
             }
