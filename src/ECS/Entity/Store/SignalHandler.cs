@@ -34,23 +34,20 @@ internal class SignalHandler<TEvent> : SignalHandler where TEvent : struct
 public partial class EntityStore
 {
 #region custom events
-    internal static void EmitSignal<TEvent>(EntityStore store, int entityId, in TEvent ev) where TEvent : struct
+    internal static Action<Signal<TEvent>> GetSignalHandler<TEvent>(EntityStore store, int entityId) where TEvent : struct
     {
         var signalIndex    = SignalHandler<TEvent>.EventIndex;
         var signalHandlers = store.intern.signalHandlers;
         if (signalIndex >= signalHandlers.Length) {
-            return;
+            return null;
         }
         var signalHandler = signalHandlers[signalIndex];
         if (signalHandler == null) {
-            return;
+            return null;
         }
         var typedHandler = (SignalHandler<TEvent>)signalHandler;
-        if (!typedHandler.entityEvents.TryGetValue(entityId, out var handlers)) {
-            return;
-        }
-        var signal = new Signal<TEvent>(new Entity(entityId, store), ev);
-        handlers.Invoke(signal);
+        typedHandler.entityEvents.TryGetValue(entityId, out var handlers);
+        return handlers;
     }
 
     internal static void AddSignalHandler<TEvent>(EntityStore store, int entityId, Action<Signal<TEvent>> handler) where TEvent : struct

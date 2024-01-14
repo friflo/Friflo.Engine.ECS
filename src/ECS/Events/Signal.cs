@@ -7,12 +7,16 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct Signal<TEvent> where TEvent : struct 
 {
-    public readonly Entity     Entity;
-    public readonly TEvent     Event;
+    public readonly     EntityStore Store;
+    public readonly     int         EntityId;
+    public readonly     TEvent      Event;
     
-    internal Signal(Entity entity, in TEvent ev) {
-        Entity  = entity;
-        Event   = ev;
+    public              Entity      Entity => new Entity(EntityId, Store);
+    
+    internal Signal(EntityStore store, int id, in TEvent ev) {
+        Store       = store;
+        EntityId    = id;
+        Event       = ev;
     }
 
     // "entity: 1 - event > Add Script: [*TestScript1]"

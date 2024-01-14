@@ -156,6 +156,8 @@ public static class Test_Entity_Events
             switch (entity1SignalCount++) {
                 case 0:
                     AreEqual(1,                                 signal.Entity.Id);
+                    AreEqual(1,                                 signal.EntityId);
+                    AreSame (store,                             signal.Store);
                     AreEqual("MyEvent2",                        signal.Event.GetType().Name);
                     AreEqual("entity: 1 - signal > MyEvent2",   signal.ToString());
                     break;
