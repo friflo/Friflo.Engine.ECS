@@ -41,8 +41,12 @@ public partial class EntityStore
         if (signalIndex >= signalHandlers.Length) {
             return;
         }
-        var signalHandler = (SignalHandler<TEvent>)signalHandlers[signalIndex];
-        if (!signalHandler.entityEvents.TryGetValue(entityId, out var handlers)) {
+        var signalHandler = signalHandlers[signalIndex];
+        if (signalHandler == null) {
+            return;
+        }
+        var typedHandler = (SignalHandler<TEvent>)signalHandler;
+        if (!typedHandler.entityEvents.TryGetValue(entityId, out var handlers)) {
             return;
         }
         var signal = new Signal<TEvent>(new Entity(entityId, store), ev);
@@ -73,7 +77,7 @@ public partial class EntityStore
             entityEvents.Remove(entityId);
             return;
         }
-        entityEvents[entityId] = handler;
+        entityEvents[entityId] = handlers;
     }
     
     private static SignalHandler<TEvent> GetSignalHandler<TEvent>(EntityStore store) where TEvent : struct

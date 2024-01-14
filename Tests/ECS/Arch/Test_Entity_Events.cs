@@ -133,35 +133,60 @@ public static class Test_Entity_Events
         AreEqual(1, entity1EventCount);
     }
     
+    /// <summary>
+    /// Note: Add signal handlers with different event types in specified order<b/>
+    /// to cover null items in <see cref="EntityStore.Intern.signalHandlers"/>
+    /// </summary>
     [Test]
-    public static void Test_Entity_Events_CustomEvent()
+    public static void Test_Entity_Signals()
     {
+        {
+            // --- See: Note
+            var store2 = new EntityStore();
+            var entity = store2.CreateEntity();
+            entity.AddSignalHandler<MyEvent1>(_ => { });
+            entity.AddSignalHandler<MyEvent2>(_ => { });
+            entity.AddSignalHandler<MyEvent3>(_ => { });
+        }
         var store       = new EntityStore();
         var entity1     = store.CreateEntity(1);
 
         var entity1SignalCount = 0;
-        var onMyEvent = (Signal<MyEvent> signal)    => {
+        var onMyEvent = (Signal<MyEvent2> signal)    => {
             switch (entity1SignalCount++) {
                 case 0:
                     AreEqual(1,                                 signal.Entity.Id);
-                    AreEqual("MyEvent",                         signal.Event.GetType().Name);
-                    AreEqual("entity: 1 - signal > MyEvent",    signal.ToString());
+                    AreEqual("MyEvent2",                        signal.Event.GetType().Name);
+                    AreEqual("entity: 1 - signal > MyEvent2",   signal.ToString());
                     break;
                 default:
-                    Fail("unexpected"); break;
+                    Fail("unexpected");
+                    break;
             }
         };
-        entity1.AddSignalHandler(onMyEvent); 
-        entity1.EmitSignal(new MyEvent());
+        var onMyEvent2 = (Signal<MyEvent2> signal) => { };
+
+        entity1.AddSignalHandler(onMyEvent);
+        entity1.AddSignalHandler(onMyEvent2);
+        entity1.EmitSignal(new MyEvent2());
 
         entity1.RemoveSignalHandler(onMyEvent);
-        entity1.EmitSignal(new MyEvent());
+        entity1.RemoveSignalHandler(onMyEvent2);
+        entity1.RemoveSignalHandler(onMyEvent); // remove already removed handler
+        entity1.EmitSignal(new MyEvent2());
         
         AreEqual(1, entity1SignalCount);
+        
+        entity1.EmitSignal(new MyEvent1()); // no signal handler added
+        entity1.EmitSignal(new MyEvent3()); // no signal handler added
+        
+        entity1.AddSignalHandler<MyEvent1>(_ => { });
     }
 }
 
-struct MyEvent { }
+internal struct MyEvent1 { }
+internal struct MyEvent2 { }
+internal struct MyEvent3 { }
 
 #pragma warning restore CS0618 // Type or member is obsolete
 
