@@ -140,22 +140,22 @@ public static class Test_Entity_Events
         var entity1     = store.CreateEntity(1);
 
         var entity1EventCount = 0;
-        var onMyEvent = (EventArgs<MyEvent> args)    => {
+        var onMyEvent = (Signal<MyEvent> signal)    => {
             switch (entity1EventCount++) {
                 case 0:
-                    AreEqual(1,                             args.Entity.Id);
-                    AreEqual("MyEvent",                     args.Event.GetType().Name);
-                    AreEqual("entity: 1 - event > MyEvent", args.ToString());
+                    AreEqual(1,                             signal.Entity.Id);
+                    AreEqual("MyEvent",                     signal.Event.GetType().Name);
+                    AreEqual("entity: 1 - event > MyEvent", signal.ToString());
                     break;
                 default:
                     Fail("unexpected"); break;
             }
         };
-        entity1.AddEventHandler(onMyEvent); 
-        entity1.EmitEvent(new MyEvent());
+        entity1.AddSignalHandler(onMyEvent); 
+        entity1.EmitSignal(new MyEvent());
 
-        entity1.RemoveEventHandler(onMyEvent);
-        entity1.EmitEvent(new MyEvent());
+        entity1.RemoveSignalHandler(onMyEvent);
+        entity1.EmitSignal(new MyEvent());
         
         AreEqual(1, entity1EventCount);
     }

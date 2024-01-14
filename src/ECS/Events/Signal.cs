@@ -5,12 +5,12 @@
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
 
-public readonly struct EventArgs<TEvent> where TEvent : struct 
+public readonly struct Signal<TEvent> where TEvent : struct 
 {
     public readonly Entity     Entity;
     public readonly TEvent     Event;
     
-    internal EventArgs(Entity entity, TEvent ev) {
+    internal Signal(Entity entity, TEvent ev) {
         Entity  = entity;
         Event   = ev;
     }
