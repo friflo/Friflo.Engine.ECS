@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch;
@@ -131,7 +132,32 @@ public static class Test_Entity_Events
         
         AreEqual(1, entity1EventCount);
     }
+    
+    [Test]
+    public static void Test_Entity_Events_CustomEvent()
+    {
+        var store       = new EntityStore();
+        var entity1     = store.CreateEntity(1);
+
+        var entity1EventCount = 0;
+        var onMyEvent = (MyEvent ev)    => {
+            switch (entity1EventCount++) {
+                case 0:     AreEqual("Tests.ECS.Arch.MyEvent", ev.ToString()); break;
+            //  case 0:     AreEqual("entity: 1 - event > Add Script: [*TestScript1]", ev.ToString()); break;  todo
+                default:    Fail("unexpected"); break;
+            }
+        };
+        entity1.AddEventHandler(onMyEvent); 
+        entity1.EmitEvent(new MyEvent());
+
+        entity1.RemoveEventHandler(onMyEvent);
+        entity1.EmitEvent(new MyEvent());
+        
+        AreEqual(1, entity1EventCount);
+    }
 }
+
+struct MyEvent { }
 
 #pragma warning restore CS0618 // Type or member is obsolete
 

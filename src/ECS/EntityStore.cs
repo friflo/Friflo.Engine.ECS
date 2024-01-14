@@ -81,7 +81,7 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
     // --- internal
-                    private             Intern                  intern;             // 72
+                    private             Intern                  intern;             // 80
                     
     private struct Intern {
                     internal readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
@@ -97,6 +97,8 @@ public sealed partial class EntityStore : EntityStoreBase
         internal Action                <ScriptChanged>          scriptRemoved;      //  8
         internal Dictionary<int, Action<ScriptChanged>>         entityScriptChanged;//  8
         //
+        internal EventEmitter[]                                 eventEmitters;      //  8
+        //
         internal EventHandler          <EntitiesChanged>        entitiesChanged;    //  8
                     
         internal Intern(PidType pidType)
@@ -107,6 +109,7 @@ public sealed partial class EntityStore : EntityStoreBase
                 pid2Id  = new Dictionary<long, int>();
                 randPid = new Random();
             }
+            eventEmitters = Array.Empty<EventEmitter>();
         }
     }
     #endregion

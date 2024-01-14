@@ -209,11 +209,7 @@ public static class Test_Tags
             }
         };
         store.OnTagsChanged += handler;
-#pragma warning disable CS0618 // Type or member is obsolete
-        var testEvent   = (TestTag tag)             => { }; 
-        entity.AddHandler(testEvent);
-#pragma warning restore CS0618 // Type or member is obsolete
-        
+       
         entity.AddTag<TestTag>();
 
         AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
@@ -248,9 +244,6 @@ public static class Test_Tags
         AreEqual(4,                                 store.Archetypes.Length);
         
         store.OnTagsChanged -= handler;
-#pragma warning disable CS0618 // Type or member is obsolete
-        entity.RemoveHandler(testEvent);
-#pragma warning restore CS0618 // Type or member is obsolete
         
         // Execute previous operations again. All required archetypes are now present
         const int count = 10; // 10_000_000 ~ #PC: 1.349 ms
