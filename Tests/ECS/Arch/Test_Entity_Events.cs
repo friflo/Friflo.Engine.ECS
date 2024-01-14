@@ -155,11 +155,14 @@ public static class Test_Entity_Events
         var onMyEvent = (Signal<MyEvent2> signal)    => {
             switch (entity1SignalCount++) {
                 case 0:
-                    AreEqual(1,                                 signal.Entity.Id);
-                    AreEqual(1,                                 signal.EntityId);
-                    AreSame (store,                             signal.Store);
-                    AreEqual("MyEvent2",                        signal.Event.GetType().Name);
-                    AreEqual("entity: 1 - signal > MyEvent2",   signal.ToString());
+                    Mem.AreEqual(1,                                 signal.Entity.Id);
+                    Mem.AreEqual(1,                                 signal.EntityId);
+                    Mem.AreSame (store,                             signal.Store);
+                    Mem.AreEqual(42,                                signal.Event.value);
+                    Mem.AreEqual("entity: 1 - signal > MyEvent2",   signal.ToString());
+                    break;
+                case 1:
+                    Mem.AreEqual(43,                                signal.Event.value);
                     break;
                 default:
                     Fail("unexpected");
@@ -170,14 +173,18 @@ public static class Test_Entity_Events
 
         entity1.AddSignalHandler(onMyEvent);
         entity1.AddSignalHandler(onMyEvent2);
-        entity1.EmitSignal(new MyEvent2());
+        
+        entity1.EmitSignal(new MyEvent2 { value = 42 });    // handler allocates memory for assertion
+        var start = Mem.GetAllocatedBytes();
+        entity1.EmitSignal(new MyEvent2 { value = 43 });
+        Mem.AssertNoAlloc(start);
 
         entity1.RemoveSignalHandler(onMyEvent);
         entity1.RemoveSignalHandler(onMyEvent2);
         entity1.RemoveSignalHandler(onMyEvent); // remove already removed handler
-        entity1.EmitSignal(new MyEvent2());
+        entity1.EmitSignal(new MyEvent2 { value = 13 });
         
-        AreEqual(1, entity1SignalCount);
+        AreEqual(2, entity1SignalCount);
         
         entity1.EmitSignal(new MyEvent1()); // no signal handler added
         entity1.EmitSignal(new MyEvent3()); // no signal handler added
@@ -187,7 +194,7 @@ public static class Test_Entity_Events
 }
 
 internal struct MyEvent1 { }
-internal struct MyEvent2 { }
+internal struct MyEvent2 { internal int value; }
 internal struct MyEvent3 { }
 
 #pragma warning restore CS0618 // Type or member is obsolete
