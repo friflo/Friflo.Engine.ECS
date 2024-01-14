@@ -205,7 +205,6 @@ public static class Test_Tags
                 
                 case 2:     AreEqual("entity: 1 - event > Remove Tags: [#TestTag]",         str);   return;
                 case 3:     AreEqual("entity: 1 - event > Remove Tags: [#TestTag2]",        str);   return;
-                case 4:     AreEqual("entity: 1 - event > tags change: Tags: [#TestTag]",   str);   return;
                 default:    Fail("unexpected event");                                               return;
             }
         };
