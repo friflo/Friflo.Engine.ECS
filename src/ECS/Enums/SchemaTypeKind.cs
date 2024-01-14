@@ -6,7 +6,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Declares the <see cref="SchemaType.kind"/> of a <see cref="SchemaType"/> 
+/// Declares the <see cref="SchemaType.Kind"/> of a <see cref="SchemaType"/> 
 /// </summary>
 public enum SchemaTypeKind
 {

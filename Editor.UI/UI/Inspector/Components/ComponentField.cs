@@ -95,7 +95,7 @@ public class ComponentField
     
     internal static void AddComponentTypeFields(List<ComponentField> fields, ComponentType componentType)
     {
-        var type    = componentType.type;
+        var type    = componentType.Type;
         if (AddComponentFields(fields, componentType, type, null, default)) {
             return;
         }

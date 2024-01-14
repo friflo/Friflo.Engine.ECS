@@ -42,7 +42,7 @@ internal class ExplorerObserver : EditorObserver
     
     private void PostEntityUpdate(ComponentChanged args)
     {
-        if (args.ComponentType.type != typeof(EntityName)) {
+        if (args.ComponentType.Type != typeof(EntityName)) {
             return;
         }
         if (!tree.TryGetItem(args.EntityId, out var item)) {

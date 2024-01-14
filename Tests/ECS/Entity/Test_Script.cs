@@ -39,7 +39,7 @@ public static class Test_Script
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.Entity.Id);
                             AreEqual(ChangedEventAction.Add,    args.Action);
-                            AreEqual(typeof(TestScript1),       args.ScriptType.type);
+                            AreEqual(typeof(TestScript1),       args.ScriptType.Type);
                             // Ensure Scripts are updated
                             AreEqual(1,                         args.Entity.Scripts.Length);
                             AreEqual("entity: 1 - event > Add Script: [*TestScript1]",  str);   return;
@@ -55,7 +55,7 @@ public static class Test_Script
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.Entity.Id);
                             AreEqual(ChangedEventAction.Remove, args.Action);
-                            AreEqual(typeof(TestScript2),       args.ScriptType.type);
+                            AreEqual(typeof(TestScript2),       args.ScriptType.Type);
                             // Ensure Scripts are updated                            
                             AreEqual(1,                         args.Entity.Scripts.Length);
                             AreEqual("entity: 1 - event > Remove Script: [*TestScript2]",   str);   return;

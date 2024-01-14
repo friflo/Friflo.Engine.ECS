@@ -29,7 +29,7 @@ public struct Tags : IEnumerable<TagType>
     // ----------------------------------- specialized constructor  -----------------------------------
     public Tags(TagType type)
     {
-        bitSet.SetBit(type.tagIndex);
+        bitSet.SetBit(type.TagIndex);
     }
     
     public Tags(in Vector256<long> value)
@@ -124,7 +124,7 @@ public struct Tags : IEnumerable<TagType>
         foreach (var index in bitSet) {
             var tagType = EntityStoreBase.Static.EntitySchema.GetTagAt(index);
             sb.Append('#');
-            sb.Append(tagType.name);
+            sb.Append(tagType.Name);
             sb.Append(", ");
             hasTypes = true;
         }

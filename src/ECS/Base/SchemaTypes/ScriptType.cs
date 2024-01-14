@@ -7,6 +7,7 @@ using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -17,8 +18,8 @@ public abstract class ScriptType : SchemaType
     /// <summary>
     /// Ihe index in <see cref="EntitySchema.Scripts"/>.<br/>
     /// </summary>
-    public   readonly   int             scriptIndex;    //  4
-    public   readonly   bool            blittable;      //  4
+    public   readonly   int             ScriptIndex;    //  4
+    public   readonly   bool            IsBlittable;    //  4
     private  readonly   CloneScript     cloneScript;    //  8
     
     internal abstract   Script          CreateScript();
@@ -27,9 +28,9 @@ public abstract class ScriptType : SchemaType
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
-        this.scriptIndex    = scriptIndex;
-        blittable           = IsBlittableType(type);
-        if (blittable) {
+        ScriptIndex = scriptIndex;
+        IsBlittable   = IsBlittableType(type);
+        if (IsBlittable) {
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod;
             var methodInfo      = type.GetMethod("MemberwiseClone", flags);
             // Create a delegate representing an 'open instance method'.

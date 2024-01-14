@@ -79,13 +79,13 @@ internal static class ArchetypeKeyExtensions {
         sb.Append("Key: [");
         var hasTypes = false;
         foreach (var componentType in key.componentTypes) {
-            sb.Append(componentType.name);
+            sb.Append(componentType.Name);
             sb.Append(", ");
             hasTypes = true;
         }
         foreach (var tag in key.tags) {
             sb.Append('#');
-            sb.Append(tag.name);
+            sb.Append(tag.Name);
             sb.Append(", ");
             hasTypes = true;
         }

@@ -70,7 +70,7 @@ public static class Test_Tags
         int count = 0;
         foreach (var tag in tags) {
             count++;
-            AreSame(typeof(TestTag), tag.type);
+            AreSame(typeof(TestTag), tag.Type);
         }
         AreEqual(1, count);
     }

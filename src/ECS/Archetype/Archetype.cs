@@ -200,7 +200,7 @@ public sealed class Archetype
         ResizeShrink(arch);
     }
     
-    /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.blittable"/></remarks>
+    /// <remarks>Must be used only on case all <see cref="ComponentTypes"/> are <see cref="ComponentType.IsBlittable"/></remarks>
     internal static void CopyComponents(Archetype arch, int sourceIndex, int targetIndex)
     {
         foreach (var sourceHeap in arch.structHeaps) {
@@ -296,7 +296,7 @@ public sealed class Archetype
         }
         foreach (var tag in tags) {
             sb.Append('#');
-            sb.Append(tag.name);
+            sb.Append(tag.Name);
             sb.Append(", ");
             hasTypes = true;
         }

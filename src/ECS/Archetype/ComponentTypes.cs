@@ -138,7 +138,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         var hasTypes    = false;
         foreach (var index in bitSet) {
             var structType = EntityStoreBase.Static.EntitySchema.components[index];
-            sb.Append(structType.name);
+            sb.Append(structType.Name);
             sb.Append(", ");
             hasTypes = true;
         }

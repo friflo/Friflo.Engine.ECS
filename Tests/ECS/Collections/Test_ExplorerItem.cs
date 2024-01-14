@@ -144,7 +144,7 @@ public static class Test_ExplorerItem
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.EntityId);
                             AreEqual(ChangedEventAction.Add,    args.Action);
-                            AreEqual(typeof(EntityName),        args.ComponentType.type);
+                            AreEqual(typeof(EntityName),        args.ComponentType.Type);
                             // ensure entity is in new Archetype 
                             AreEqual("[EntityName]  Count: 1",  args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
@@ -161,7 +161,7 @@ public static class Test_ExplorerItem
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.EntityId);
                             AreEqual(ChangedEventAction.Remove, args.Action);
-                            AreEqual(typeof(EntityName),        args.ComponentType.type);
+                            AreEqual(typeof(EntityName),        args.ComponentType.Type);
                             // ensure entity is in new Archetype
                             AreEqual("[]",                      args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;

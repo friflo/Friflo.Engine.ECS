@@ -4,23 +4,24 @@
 using System;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public sealed class TagType : SchemaType 
 {
-    public   readonly   string          tagName;        //  8
+    public   readonly   string  TagName;        //  8
     /// <summary>
     /// The index in <see cref="EntitySchema.Tags"/>.<br/>
     /// </summary>
-    public   readonly   int             tagIndex;       //  4
+    public   readonly   int     TagIndex;       //  4
     
-    public  override    string  ToString() => $"tag: [#{name}]";
+    public  override    string  ToString() => $"tag: [#{Name}]";
     
     internal TagType(string tagName, Type type, int tagIndex)
         : base(null, type, Tag)
     {
-        this.tagName    = tagName;
-        this.tagIndex   = tagIndex;
+        TagName    = tagName;
+        TagIndex   = tagIndex;
     }
 }

@@ -29,7 +29,7 @@ internal sealed class ComponentWriter
         var schema          = EntityStoreBase.Static.EntitySchema;
         structTypes         = schema.components;
         scriptTypeByType    = schema.scriptTypeByType;
-        unresolvedIndex     = schema.unresolvedType.structIndex;
+        unresolvedIndex     = schema.unresolvedType.StructIndex;
     }
     
     internal JsonValue Write(Entity entity, bool pretty)

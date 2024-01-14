@@ -49,7 +49,7 @@ public partial class EntityStore
                 tags.Clear();
             }
             foreach (var tag in entity.Tags) {
-                tags.Add(tag.tagName);
+                tags.Add(tag.TagName);
             }
         }
         if (!entity.TryGetComponent<Unresolved>(out var unresolved)) {

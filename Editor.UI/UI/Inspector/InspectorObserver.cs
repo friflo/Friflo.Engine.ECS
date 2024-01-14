@@ -148,7 +148,7 @@ internal class InspectorObserver : EditorObserver
         {
             if (!tagMap.TryGetValue(tagType, out var item)) {
                 var tag = new Tags(tagType);
-                item = new InspectorTag { TagName = tagType.tagName, EntityTag = tag };
+                item = new InspectorTag { TagName = tagType.TagName, EntityTag = tag };
                 tagMap.Add(tagType, item);
             }
             item.Entity = entity;
@@ -165,7 +165,7 @@ internal class InspectorObserver : EditorObserver
         foreach (var componentType in archetype.ComponentTypes)
         {
             if (!componentMap.TryGetValue(componentType, out var item)) {
-                var component   = new InspectorComponent { ComponentTitle = componentType.name, ComponentType = componentType };
+                var component   = new InspectorComponent { ComponentTitle = componentType.Name, ComponentType = componentType };
                 var panel       = new StackPanel();
                 var fields      = new List<ComponentField>();
                 ComponentField.AddComponentTypeFields(fields, componentType);

@@ -61,9 +61,9 @@ internal sealed class StructHeap<T> : StructHeap
     }
     
     /// <remarks>
-    /// Copying a component using an assignment can only be done for <see cref="ComponentType.blittable"/>
+    /// Copying a component using an assignment can only be done for <see cref="ComponentType.IsBlittable"/>
     /// <see cref="ComponentType"/>'s.<br/>
-    /// If not <see cref="ComponentType.blittable"/> serialization must be used.
+    /// If not <see cref="ComponentType.IsBlittable"/> serialization must be used.
     /// </remarks>
     internal override void CopyComponent(int sourcePos, int targetPos)
     {

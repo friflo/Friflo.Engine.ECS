@@ -77,7 +77,7 @@ public readonly struct EntityComponent
     /// To access a component use <see cref="Entity.GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
-    public              object          Value       => entity.archetype.heapMap[type.structIndex].GetComponentDebug(entity.compIndex);
+    public              object          Value       => entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
     public              ComponentType   Type        => type;
     
     public  override    string          ToString()  => type.ToString();

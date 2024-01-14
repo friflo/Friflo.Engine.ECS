@@ -35,7 +35,7 @@ internal static class SchemaUtils
         {
             foreach (var type in dependant.Types)
             {
-                switch (type.kind) {
+                switch (type.Kind) {
                     case SchemaTypeKind.Script:      scripts.   Add((ScriptType)    type);  break;
                     case SchemaTypeKind.Component:   components.Add((ComponentType) type);  break;
                     case SchemaTypeKind.Tag:         tags.      Add((TagType)       type);  break;

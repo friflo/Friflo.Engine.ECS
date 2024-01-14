@@ -57,7 +57,7 @@ public static class Test_ComponentTypes
         AreEqual("Friflo.Engine.ECS.dll",   engine.ToString());
         AreEqual(6,                         engine.Types.Length);
         foreach (var type in engine.Types) {
-            AreSame(engine.Assembly, type.type.Assembly);
+            AreSame(engine.Assembly, type.Type.Assembly);
         }
         
         var testStructType  = schema.ComponentTypeByType[typeof(Position)];
@@ -143,10 +143,10 @@ public static class Test_ComponentTypes
         AreEqual(2, tags.Count);
         var enumerator =  tags.GetEnumerator();
         IsTrue(enumerator.MoveNext());
-        AreEqual(typeof(TestTag2), enumerator.Current!.type);
+        AreEqual(typeof(TestTag2), enumerator.Current!.Type);
         
         IsTrue(enumerator.MoveNext());
-        AreEqual(typeof(TestTag3), enumerator.Current!.type);
+        AreEqual(typeof(TestTag3), enumerator.Current!.Type);
         
         IsFalse(enumerator.MoveNext());
         enumerator.Dispose();

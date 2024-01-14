@@ -9,42 +9,42 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public abstract class SchemaType
 {
     /// <summary>
-    /// If <see cref="kind"/> is a <see cref="Component"/> or a <see cref="Script"/>
+    /// If <see cref="Kind"/> is a <see cref="Component"/> or a <see cref="Script"/>
     /// the key assigned in <see cref="ComponentKeyAttribute"/>
     /// </summary>
-    public   readonly   string          componentKey;   //  8
+    public   readonly   string          ComponentKey;       //  8
     
     /// <returns>
     /// <see cref="Script"/> if the type is a <see cref="Script"/><br/>
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="ITag"/><br/>
     /// </returns>
-    public   readonly   SchemaTypeKind  kind;           //  4
+    public   readonly   SchemaTypeKind  Kind;               //  4
     
     /// <summary>
-    /// If <see cref="kind"/> == <see cref="Tag"/> the type of a component struct implementing <see cref="ITag"/><br/>
-    /// If <see cref="kind"/> == <see cref="Component"/> the type of a component struct implementing <see cref="IComponent"/><br/>
-    /// If <see cref="kind"/> == <see cref="Script"/> the type of a script class extending <see cref="Script"/><br/>
+    /// If <see cref="Kind"/> == <see cref="Tag"/> the type of a component struct implementing <see cref="ITag"/><br/>
+    /// If <see cref="Kind"/> == <see cref="Component"/> the type of a component struct implementing <see cref="IComponent"/><br/>
+    /// If <see cref="Kind"/> == <see cref="Script"/> the type of a script class extending <see cref="Script"/><br/>
     /// </summary>
-    public   readonly   Type            type;           //  8
+    public   readonly   Type            Type;               //  8
     
-    public   readonly   string          name;           //  8
+    public   readonly   string          Name;               //  8
     
-    
-    internal readonly   Bytes           componentKeyBytes;
+    internal readonly   Bytes           componentKeyBytes;  // 16
         
     internal SchemaType(string componentKey, Type type, SchemaTypeKind kind)
     {
-        this.componentKey   = componentKey;
-        this.kind           = kind;
-        this.type           = type;
-        name                = type.Name;
+        ComponentKey    = componentKey;
+        Kind            = kind;
+        Type            = type;
+        Name            = type.Name;
         if (componentKey != null) {
             componentKeyBytes = new Bytes(componentKey);   
         }

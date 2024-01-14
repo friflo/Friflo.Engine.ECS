@@ -86,7 +86,7 @@ public partial class EntityStore
         for (int n = 0; n < len; n++)
         {
             var current = scripts[n]; 
-            if (current.GetType() == scriptType.type) {
+            if (current.GetType() == scriptType.Type) {
                 // case: scripts contains a script of the given scriptType => replace current script
                 scripts[n] = script;
                 current.entity  = default;
@@ -112,7 +112,7 @@ public partial class EntityStore
         for (int n = 0; n < len; n++)
         {
             var script = scripts[n];
-            if (script.GetType() != scriptType.type) {
+            if (script.GetType() != scriptType.Type) {
                 continue;
             }
             // case: found script in entity scripts

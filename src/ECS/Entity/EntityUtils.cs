@@ -34,13 +34,13 @@ public static class EntityUtils
     /// So avoid using this method whenever possible. Use <see cref="Entity.GetComponent{T}"/> instead.
     /// </summary>
     public static  IComponent   GetEntityComponent    (Entity entity, ComponentType componentType) {
-        return entity.archetype.heapMap[componentType.structIndex].GetComponentDebug(entity.compIndex);
+        return entity.archetype.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
 
     public static  bool         RemoveEntityComponent (Entity entity, ComponentType componentType)
     {
         int archIndex = 0;
-        return EntityStoreBase.RemoveComponent(entity.Id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.structIndex);
+        return EntityStoreBase.RemoveComponent(entity.Id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.StructIndex);
     }
     
     public static  bool         AddEntityComponent    (Entity entity, ComponentType componentType) {
@@ -53,7 +53,7 @@ public static class EntityUtils
     #endregion
     
 #region non generic script - methods
-    public static   Script      GetEntityScript    (Entity entity, ScriptType scriptType) => GetScript       (entity, scriptType.type);
+    public static   Script      GetEntityScript    (Entity entity, ScriptType scriptType) => GetScript       (entity, scriptType.Type);
     
     public static   Script      RemoveEntityScript (Entity entity, ScriptType scriptType) => RemoveScriptType(entity, scriptType);
     
@@ -110,7 +110,7 @@ public static class EntityUtils
             }
             foreach (var tag in archetype.Tags) {
                 sb.Append('#');
-                sb.Append(tag.name);
+                sb.Append(tag.Name);
                 sb.Append(", ");
             }
             var scripts = GetScripts(entity);

@@ -95,7 +95,7 @@ public partial class EntityStore
     {
         foreach (var componentType in original.Archetype.componentTypes)
         {
-            if (!componentType.blittable) {
+            if (!componentType.IsBlittable) {
                 return false;
             }
         }
@@ -104,7 +104,7 @@ public partial class EntityStore
         foreach (var script in scripts)
         {
             var scriptType = scriptTypeByType[script.GetType()];
-            if (!scriptType.blittable) {
+            if (!scriptType.IsBlittable) {
                 return false;
             }    
         }

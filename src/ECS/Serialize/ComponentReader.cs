@@ -113,7 +113,7 @@ internal sealed class ComponentReader
                 unresolvedComponentList.Add(new UnresolvedComponent(component.rawKey.key, json));
                 continue;
             }
-            switch (schemaType.kind) {
+            switch (schemaType.Kind) {
                 case SchemaTypeKind.Script:
                     // --- read script
                     var scriptType = (ScriptType)schemaType;
@@ -122,7 +122,7 @@ internal sealed class ComponentReader
                     break;
                 case SchemaTypeKind.Component:
                     var componentType   = (ComponentType)schemaType;
-                    var heap            = entity.archetype.heapMap[componentType.structIndex]; // no range or null check required
+                    var heap            = entity.archetype.heapMap[componentType.StructIndex]; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
                     break;
@@ -246,14 +246,14 @@ internal sealed class ComponentReader
             if (schemaType == unresolvedType) {
                 // case: unresolved component
                 hasComponentTypes = true;
-                componentTypes.bitSet.SetBit(unresolvedType.structIndex);
+                componentTypes.bitSet.SetBit(unresolvedType.StructIndex);
                 continue;
             }
-            if (schemaType.kind == SchemaTypeKind.Component)
+            if (schemaType.Kind == SchemaTypeKind.Component)
             {
                 var componentType = (ComponentType)schemaType;
                 hasComponentTypes = true;
-                componentTypes.bitSet.SetBit(componentType.structIndex);
+                componentTypes.bitSet.SetBit(componentType.StructIndex);
             }                
         }
         return hasComponentTypes;
@@ -269,7 +269,7 @@ internal sealed class ComponentReader
         for (int n = 0; n < componentCount; n++) {
             ref var component = ref components[n];
             var schemaType = component.rawKey.schemaType;
-            if (schemaType.kind == SchemaTypeKind.Component) {
+            if (schemaType.Kind == SchemaTypeKind.Component) {
                 componentTypes.Add((ComponentType)schemaType);
             }
         }
@@ -328,11 +328,11 @@ internal sealed class ComponentReader
     {
         foreach (var tag in tagList) {
             if (!tagTypeByName.TryGetValue(tag, out var tagType)) {
-                archetypeKey.componentTypes.bitSet.SetBit(unresolvedType.structIndex);
+                archetypeKey.componentTypes.bitSet.SetBit(unresolvedType.StructIndex);
                 unresolvedTagList.Add(tag);
                 continue;
             }
-            archetypeKey.tags.bitSet.SetBit(tagType.tagIndex);
+            archetypeKey.tags.bitSet.SetBit(tagType.TagIndex);
         }
     }
 }
@@ -342,7 +342,7 @@ internal readonly struct RawKey
     internal  readonly  string      key;            // never null
     internal  readonly  SchemaType  schemaType;     // never null
 
-    public    override  string      ToString() => $"{key} - {schemaType.type.Name}";
+    public    override  string      ToString() => $"{key} - {schemaType.Type.Name}";
     
     internal RawKey(string key, SchemaType schemaType) {
         this.key        = key;

@@ -7,6 +7,8 @@ using System.Runtime.Intrinsics;
 using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
+// ReSharper disable ConvertToPrimaryConstructor
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -15,9 +17,9 @@ public abstract class ComponentType : SchemaType
     /// <summary>
     /// The index in <see cref="EntitySchema.Components"/>.<br/>
     /// </summary>
-    public   readonly   int         structIndex;    //  4
-    public   readonly   bool        blittable;      //  4
-    public   readonly   int         byteSize;       //  4
+    public   readonly   int         StructIndex;    //  4
+    public   readonly   bool        IsBlittable;    //  4
+    public   readonly   int         StructSize;     //  4
     
     internal abstract   StructHeap  CreateHeap();
     internal abstract   bool        AddEntityComponent     (Entity entity);
@@ -26,9 +28,9 @@ public abstract class ComponentType : SchemaType
     protected ComponentType(string componentKey, int structIndex, Type type, int byteSize)
         : base (componentKey, type, Component)
     {
-        this.structIndex    = structIndex;
-        blittable           = IsBlittableType(type);
-        this.byteSize       = byteSize;
+        StructIndex = structIndex;
+        IsBlittable = IsBlittableType(type);
+        StructSize  = byteSize;
     }
 }
 
@@ -46,17 +48,17 @@ internal sealed class ComponentType<T> : ComponentType
     
     internal override bool AddEntityComponent(Entity entity) {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent<T>(entity.Id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, default);
+        return EntityStoreBase.AddComponent<T>(entity.Id, StructIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, default);
     }
     
     internal override bool AddEntityComponentValue(Entity entity, object value) {
         int archIndex = 0;
         var componentValue = (T)value;
-        return EntityStoreBase.AddComponent(entity.Id, structIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentValue);
+        return EntityStoreBase.AddComponent(entity.Id, StructIndex, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentValue);
     }
     
     internal override StructHeap CreateHeap() {
-        return new StructHeap<T>(structIndex, typeMapper);
+        return new StructHeap<T>(StructIndex, typeMapper);
     }
     
     private static              int GetByteSize()   => Unsafe.SizeOf<T>();

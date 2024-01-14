@@ -19,19 +19,19 @@ public sealed class EntitySchema
     public   ReadOnlySpan<EngineDependant>              EngineDependants    => new (engineDependants);
     /// <summary>return all <b>component</b> types - structs implementing <see cref="IComponent"/></summary>
     /// <remarks>
-    /// <see cref="ComponentType.structIndex"/> is equal to the array index<br/>
+    /// <see cref="ComponentType.StructIndex"/> is equal to the array index<br/>
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                Components          => new (components);
     /// <summary>return all <see cref="Script"/> types - classes extending <see cref="Script"/></summary>
     /// <remarks>
-    /// <see cref="ScriptType.scriptIndex"/> is equal to the array index<br/>
+    /// <see cref="ScriptType.ScriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ScriptType>                   Scripts             => new (scripts);
     /// <summary>return all <b>Tag</b> types - structs implementing <see cref="ITag"/></summary>
     /// <remarks>
-    /// <see cref="TagType.tagIndex"/> is equal to the array index<br/>
+    /// <see cref="TagType.TagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<TagType>                      Tags                => new (tags);
@@ -89,20 +89,20 @@ public sealed class EntitySchema
         //     System.ArgumentException: An item with the same key has already been added.
         // => so for now use Dictionary<,> index operator
         foreach (var componentType in componentList) {
-            schemaTypeByKey         [componentType.componentKey] =  componentType;  // SHOULD_USE_ADD
-            componentTypeByType.Add (componentType.type,            componentType);
-            components              [componentType.structIndex] =   componentType;
+            schemaTypeByKey         [componentType.ComponentKey] =  componentType;  // SHOULD_USE_ADD
+            componentTypeByType.Add (componentType.Type,            componentType);
+            components              [componentType.StructIndex] =   componentType;
         }
         unresolvedType = components[StructHeap<Unresolved>.StructIndex];
         foreach (var scriptType in scriptList) {
-            schemaTypeByKey         [scriptType.componentKey] =     scriptType;    // SHOULD_USE_ADD
-            scriptTypeByType.Add    (scriptType.type,               scriptType);
-            scripts                 [scriptType.scriptIndex] =      scriptType;
+            schemaTypeByKey         [scriptType.ComponentKey] =     scriptType;    // SHOULD_USE_ADD
+            scriptTypeByType.Add    (scriptType.Type,               scriptType);
+            scripts                 [scriptType.ScriptIndex] =      scriptType;
         }
         foreach (var tagType in tagList) {
-            tagTypeByName           [tagType.tagName] =             tagType;        // SHOULD_USE_ADD
-            tagTypeByType.Add       (tagType.type,                  tagType);
-            tags                    [tagType.tagIndex] =            tagType;
+            tagTypeByName           [tagType.TagName] =             tagType;        // SHOULD_USE_ADD
+            tagTypeByType.Add       (tagType.Type,                  tagType);
+            tags                    [tagType.TagIndex] =            tagType;
         }
     }
     

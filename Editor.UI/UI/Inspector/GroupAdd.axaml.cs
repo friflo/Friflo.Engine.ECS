@@ -41,24 +41,24 @@ public partial class GroupAdd : UserControl
                 var tags = schema.Tags;
                 for (int n = 1; n < tags.Length; n++) {
                     var tag = tags[n];
-                    List.Items.Add(new ListBoxItem { Content = tag.tagName, Name = tag.tagName });
+                    List.Items.Add(new ListBoxItem { Content = tag.TagName, Name = tag.TagName });
                 }
                 break;
             case "components":
                 var components = schema.Components;
                 for (int n = 1; n < components.Length; n++) {
                     var component = components[n];
-                    if (component.type == typeof(Unresolved)) {
+                    if (component.Type == typeof(Unresolved)) {
                         continue;
                     }
-                    List.Items.Add(new ListBoxItem { Content = component.name, Name = component.componentKey });
+                    List.Items.Add(new ListBoxItem { Content = component.Name, Name = component.ComponentKey });
                 }
                 break;
             case "scripts":
                 var scripts = schema.Scripts;
                 for (int n = 1; n < scripts.Length; n++) {
                     var script = scripts[n];
-                    List.Items.Add(new ListBoxItem { Content = script.name, Name = script.componentKey });
+                    List.Items.Add(new ListBoxItem { Content = script.Name, Name = script.ComponentKey });
                 }
                 break;
         }
@@ -77,7 +77,7 @@ public partial class GroupAdd : UserControl
                 break;
             case "components":
                 var componentType = (ComponentType)schema.SchemaTypeByKey[key];
-                if (componentType.type == typeof(EntityName)) {
+                if (componentType.Type == typeof(EntityName)) {
                     if (entity.TryGetComponent<EntityName>(out var name)) {
                         entity.AddComponent(name);
                     } else {
