@@ -16,5 +16,5 @@ public readonly struct Signal<TEvent> where TEvent : struct
     }
 
     // "entity: 1 - event > Add Script: [*TestScript1]"
-    public override string ToString() => $"entity: {Entity.Id} - event > {typeof(TEvent).Name}";
+    public override string ToString() => $"entity: {Entity.Id} - signal > {typeof(TEvent).Name}";
 }
