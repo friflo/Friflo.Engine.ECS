@@ -140,10 +140,9 @@ public static class Test_Entity_Events
         var entity1     = store.CreateEntity(1);
 
         var entity1EventCount = 0;
-        var onMyEvent = (MyEvent ev)    => {
+        var onMyEvent = (EventArgs<MyEvent> args)    => {
             switch (entity1EventCount++) {
-                case 0:     AreEqual("Tests.ECS.Arch.MyEvent", ev.ToString()); break;
-            //  case 0:     AreEqual("entity: 1 - event > Add Script: [*TestScript1]", ev.ToString()); break;  todo
+                case 0:     AreEqual("entity: 1 - event > Add MyEvent", args.ToString()); break;
                 default:    Fail("unexpected"); break;
             }
         };

@@ -425,13 +425,13 @@ public readonly struct Entity : IEquatable<Entity>
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
     [Obsolete("Experimental")]
-    public void     AddEventHandler   <TEvent> (Action<TEvent> handler) where TEvent : struct => EntityStore.AddEventHandler   (store, Id, handler);
+    public void     AddEventHandler   <TEvent> (Action<EventArgs<TEvent>> handler) where TEvent : struct => EntityStore.AddEventHandler   (store, Id, handler);
     
     [Obsolete("Experimental")]
-    public void     RemoveEventHandler<TEvent> (Action<TEvent> handler) where TEvent : struct => EntityStore.RemoveEventHandler(store, Id, handler);
+    public void     RemoveEventHandler<TEvent> (Action<EventArgs<TEvent>> handler) where TEvent : struct => EntityStore.RemoveEventHandler(store, Id, handler);
     
     [Obsolete("Experimental")]
-    public void     EmitEvent<TEvent> (TEvent ev)                       where TEvent : struct => EntityStore.EmitEvent         (store, Id, ev);
+    public void     EmitEvent<TEvent> (TEvent ev)                       where TEvent : struct => EntityStore.EmitEvent              (store, Id, ev);
     #endregion
 
 

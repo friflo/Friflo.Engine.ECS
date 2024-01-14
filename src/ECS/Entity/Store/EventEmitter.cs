@@ -20,11 +20,11 @@ internal class EventEmitter
 
 internal class EventEmitter<TEvent> : EventEmitter where TEvent : struct 
 {
-    internal readonly   Dictionary<int, Action<TEvent>>  entityEvents; //  8
+    internal readonly   Dictionary<int, Action<EventArgs<TEvent>>>  entityEvents; //  8
     
     internal EventEmitter()
     {
-        entityEvents = new Dictionary<int, Action<TEvent>>();
+        entityEvents = new Dictionary<int, Action<EventArgs<TEvent>>>();
     }
     
     internal static readonly    int     EventIndex  = NewEventIndex(typeof(TEvent));
@@ -40,10 +40,11 @@ public partial class EntityStore
         if (!emitter.entityEvents.TryGetValue(entityId, out var handlers)) {
             return;
         }
-        handlers.Invoke(ev);
+        var args = new EventArgs<TEvent>(new Entity(entityId, store), ev);
+        handlers.Invoke(args);
     }
 
-    internal static void AddEventHandler<TEvent>(EntityStore store, int entityId, Action<TEvent> handler) where TEvent : struct
+    internal static void AddEventHandler<TEvent>(EntityStore store, int entityId, Action<EventArgs<TEvent>> handler) where TEvent : struct
     {
         var emitter = GetEmitter<TEvent>(store);
         var events  = emitter.entityEvents;
@@ -55,7 +56,7 @@ public partial class EntityStore
         events.Add(entityId, handler);
     }
     
-    internal static void RemoveEventHandler<TEvent>(EntityStore store, int entityId, Action<TEvent> handler) where TEvent : struct
+    internal static void RemoveEventHandler<TEvent>(EntityStore store, int entityId, Action<EventArgs<TEvent>> handler) where TEvent : struct
     {
         var emitter = GetEmitter<TEvent>(store);
         var events  = emitter.entityEvents;
