@@ -268,13 +268,13 @@ public static class Test_StructComponent
 #pragma warning disable CS0618 // Type or member is obsolete
             switch (count++) {
                 case 0:
-                    AreEqual("component: 'rot' [Rotation]", component.ToString());
-                    AreEqual("component: 'rot' [Rotation]", component.Type.ToString());
-                    AreEqual("1, 2, 0, 0",                  component.Value.ToString());    break;
+                    AreEqual("Component: [Rotation]",   component.ToString());
+                    AreEqual("Component: [Rotation]",   component.Type.ToString());
+                    AreEqual("1, 2, 0, 0",              component.Value.ToString());    break;
                 case 1:
-                    AreEqual("component: 'scl3' [Scale3]",  component.ToString());
-                    AreEqual("component: 'scl3' [Scale3]",  component.Type.ToString());
-                    AreEqual("3, 4, 0",                     component.Value.ToString());    break;
+                    AreEqual("Component: [Scale3]",     component.ToString());
+                    AreEqual("Component: [Scale3]",     component.Type.ToString());
+                    AreEqual("3, 4, 0",                 component.Value.ToString());    break;
             }
 #pragma warning restore CS0618 // Type or member is obsolete
         }

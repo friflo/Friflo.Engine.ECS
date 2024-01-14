@@ -71,8 +71,8 @@ public static class Test_ComponentSchema
             AreEqual(typeof(TestComponent), schemaType.type);
         } {
             var componentType = schema.GetComponentType<MyComponent1>();
-            AreEqual("my1",                                 componentType.componentKey);
-            AreEqual("component: 'my1' [MyComponent1]",     componentType.ToString());
+            AreEqual("my1",                             componentType.componentKey);
+            AreEqual("Component: [MyComponent1]",       componentType.ToString());
         }
         // --- Engine.ECS types
         AssertBlittableComponent<Position>      (schema, true);
@@ -123,8 +123,8 @@ public static class Test_ComponentSchema
         }
         
         var scriptType = schema.GetScriptType<TestComponent>();
-        AreEqual("test",                                scriptType.componentKey);
-        AreEqual("script: 'test' [*TestComponent]",     scriptType.ToString());
+        AreEqual("test",                        scriptType.componentKey);
+        AreEqual("Script: [*TestComponent]",    scriptType.ToString());
         
         AreEqual(typeof(Position),  schema.SchemaTypeByKey["pos"].type);
         AreEqual("test",            schema.ScriptTypeByType[typeof(TestComponent)].componentKey);

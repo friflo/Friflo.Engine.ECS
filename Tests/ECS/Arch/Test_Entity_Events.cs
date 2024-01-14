@@ -58,7 +58,7 @@ public static class Test_Entity_Events
         var entity1EventCount = 0;
         var onComponentChanged = (ComponentChangedArgs args)    => {
             switch (entity1EventCount++) {
-                case 0:     AreEqual("entity: 1 - Add component: 'pos' [Position]", args.ToString()); break;
+                case 0:     AreEqual("entity: 1 - Add Component: [Position]", args.ToString()); break;
             }
         };
         entity1.OnComponentChanged += onComponentChanged; 
@@ -87,7 +87,7 @@ public static class Test_Entity_Events
         var entity1EventCount = 0;
         var onScriptChanged = (ScriptChangedArgs args)    => {
             switch (entity1EventCount++) {
-                case 0:     AreEqual("entity: 1 - Add script: 'script1' [*TestScript1]", args.ToString()); break;
+                case 0:     AreEqual("entity: 1 - Add Script: [*TestScript1]", args.ToString()); break;
                 default:    Fail("unexpected"); break;
             }
         };
