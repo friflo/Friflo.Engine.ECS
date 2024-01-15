@@ -109,7 +109,7 @@ namespace Friflo.Engine.ECS;
 [CLSCompliant(true)]
 public readonly struct Entity : IEquatable<Entity>
 {
-    // ----------------------------------- general properties -------------------------------------
+    // ------------------------------------ general properties ------------------------------------
 #region general properties
     public              long                    Pid             => store.nodes[Id].pid;
                     
