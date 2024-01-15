@@ -75,14 +75,14 @@ public partial class EntityStore
         var entityScriptChanged = store.intern.entityScriptChanged;
         if (entityScriptChanged != null) {
             if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(nameof(Entity.OnScriptChanged), typeof(ScriptChanged), handlers.GetInvocationList());
+                var handler = new EventHandler(nameof(ScriptChanged), typeof(ScriptChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
         var childEntitiesChanged = store.intern.entityChildEntitiesChanged;
         if (childEntitiesChanged != null) {
             if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(nameof(Entity.OnChildEntitiesChanged), typeof(ChildEntitiesChanged), handlers.GetInvocationList());
+                var handler = new EventHandler(nameof(ChildEntitiesChanged), typeof(ChildEntitiesChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }

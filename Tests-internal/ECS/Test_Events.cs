@@ -32,11 +32,11 @@ public static class Test_Events
         AreEqual(typeof(ChildEntitiesChanged),  handlers[3].Type);
         AreEqual(typeof(MyEvent),               handlers[4].Type);
         
-        AreEqual("OnComponentChanged - Count: 1",       handlers[0].ToString());
-        AreEqual("OnTagsChanged - Count: 1",            handlers[1].ToString());
-        AreEqual("OnScriptChanged - Count: 1",          handlers[2].ToString());
-        AreEqual("OnChildEntitiesChanged - Count: 1",   handlers[3].ToString());
-        AreEqual("Signal: MyEvent - Count: 1",          handlers[4].ToString());
+        AreEqual("ComponentChanged - Count: 1",       handlers[0].ToString());
+        AreEqual("TagsChanged - Count: 1",            handlers[1].ToString());
+        AreEqual("ScriptChanged - Count: 1",          handlers[2].ToString());
+        AreEqual("ChildEntitiesChanged - Count: 1",   handlers[3].ToString());
+        AreEqual("Signal: MyEvent - Count: 1",        handlers[4].ToString());
     }
     
     private struct MyEvent { }

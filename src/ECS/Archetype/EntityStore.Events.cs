@@ -115,14 +115,14 @@ public partial class EntityStoreBase
         var entityComponentChanged = store.internBase.entityComponentChanged;
         if (entityComponentChanged != null) {
             if (entityComponentChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(nameof(Entity.OnComponentChanged), typeof(ComponentChanged), handlers.GetInvocationList());
+                var handler = new EventHandler(nameof(ComponentChanged), typeof(ComponentChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
         var entityTagsChanged = store.internBase.entityTagsChanged;
         if (entityTagsChanged != null) {
             if (entityTagsChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(nameof(Entity.OnTagsChanged), typeof(TagsChanged), handlers.GetInvocationList());
+                var handler = new EventHandler(nameof(TagsChanged), typeof(TagsChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
