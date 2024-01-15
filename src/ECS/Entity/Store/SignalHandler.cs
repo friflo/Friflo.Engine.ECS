@@ -48,12 +48,12 @@ public partial class EntityStore
 #region custom events
     internal static Action<Signal<TEvent>> GetSignalHandler<TEvent>(EntityStore store, int entityId) where TEvent : struct
     {
-        var signalIndex    = SignalHandler<TEvent>.EventIndex;
-        var signalHandlers = store.intern.signalHandlers;
-        if (signalIndex >= signalHandlers.Length) {
+        var signalIndex = SignalHandler<TEvent>.EventIndex;
+        var map         = store.intern.signalHandlerMap;
+        if (signalIndex >= map.Length) {
             return null;
         }
-        var signalHandler = signalHandlers[signalIndex];
+        var signalHandler = map[signalIndex];
         if (signalHandler == null) {
             return null;
         }
@@ -91,20 +91,21 @@ public partial class EntityStore
     
     private static SignalHandler<TEvent> GetSignalHandler<TEvent>(EntityStore store) where TEvent : struct
     {
-        var signalIndex     = SignalHandler<TEvent>.EventIndex;
-        var signalHandlers  = store.intern.signalHandlers;
-        if (signalIndex < signalHandlers.Length) {
-            var signalHandler = signalHandlers[signalIndex];
+        var signalIndex = SignalHandler<TEvent>.EventIndex;
+        var map         = store.intern.signalHandlerMap;
+        if (signalIndex < map.Length) {
+            var signalHandler = map[signalIndex];
             if (signalHandler != null) {
-                return (SignalHandler<TEvent>)signalHandlers[signalIndex];
+                return (SignalHandler<TEvent>)map[signalIndex];
             }
         } else {
-            signalHandlers = store.intern.signalHandlers = new SignalHandler[signalIndex + 1];
+            map = store.intern.signalHandlerMap = new SignalHandler[signalIndex + 1];
         }
-        var typedHandler = new SignalHandler<TEvent>();
-        signalHandlers[signalIndex] = typedHandler;
+        var typedHandler    = new SignalHandler<TEvent>();
+        var list            = store.intern.signalHandlers ??= new List<SignalHandler>();
+        list.Add(typedHandler); 
+        map[signalIndex] = typedHandler;
         return typedHandler;
-
     }
     #endregion
 }

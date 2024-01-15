@@ -87,11 +87,14 @@ public partial class EntityStore
                 eventHandlers.Add(handler);
             }
         }
-        foreach (var signalHandler in store.intern.signalHandlers)
-        {
-            var handlers = signalHandler?.GetEntityEventHandlers(entityId);
-            if (handlers != null) {
-                eventHandlers.Add(new EntityEventHandler(EntityEventKind.Signal, signalHandler.Type, handlers));
+        var list = store.intern.signalHandlers;
+        if (list != null) {
+            foreach (var signalHandler in store.intern.signalHandlers)
+            {
+                var handlers = signalHandler.GetEntityEventHandlers(entityId);
+                if (handlers != null) {
+                    eventHandlers.Add(new EntityEventHandler(EntityEventKind.Signal, signalHandler.Type, handlers));
+                }
             }
         }
         return new EntityEventHandlers(eventHandlers);
