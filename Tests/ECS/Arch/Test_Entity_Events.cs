@@ -35,6 +35,17 @@ public static class Test_Entity_Events
 
         entity1.OnTagsChanged += tagsChanged1;
         entity1.OnTagsChanged += tagsChanged2;  // cover adding action to Dictionary<int, Action<TArgs>>
+        
+        var handlers = entity1.DebugEventHandlers;
+        AreEqual("event types: 1, handlers: 2", handlers.ToString());
+        AreEqual(1,                             handlers.TypeCount);
+        AreEqual(2,                             handlers.HandlerCount);
+        var handler0 = handlers[0]; 
+        AreEqual("TagsChanged - Count: 2",      handler0.ToString());
+        AreEqual(2,                             handler0.Count);
+        AreEqual(typeof(TagsChanged),           handler0.Type);
+        AreEqual(EntityEventKind.Event,         handler0.Kind);
+
 
         entity1.AddTag<TestTag>();
         entity2.AddTag<TestTag>();

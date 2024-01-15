@@ -68,22 +68,22 @@ public partial class EntityStore
     #endregion
     
 #region subscribed event / signal delegates 
-    internal static EventHandlers GetEventHandlers(EntityStore store, int entityId)
+    internal static EntityEventHandlers GetEventHandlers(EntityStore store, int entityId)
     {
-        var eventHandlers = new List<EventHandler>();
+        var eventHandlers = new List<EntityEventHandler>();
         AddEventHandlers(eventHandlers, store, entityId);
         
         var entityScriptChanged = store.intern.entityScriptChanged;
         if (entityScriptChanged != null) {
             if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(false, typeof(ScriptChanged), handlers.GetInvocationList());
+                var handler = new EntityEventHandler(EntityEventKind.Event, typeof(ScriptChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
         var childEntitiesChanged = store.intern.entityChildEntitiesChanged;
         if (childEntitiesChanged != null) {
             if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(false, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
+                var handler = new EntityEventHandler(EntityEventKind.Event, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
@@ -91,27 +91,27 @@ public partial class EntityStore
         {
             var handlers = signalHandler?.GetEntityEventHandlers(entityId);
             if (handlers != null) {
-                eventHandlers.Add(new EventHandler(true, signalHandler.Type, handlers));
+                eventHandlers.Add(new EntityEventHandler(EntityEventKind.Signal, signalHandler.Type, handlers));
             }
         }
-        return new EventHandlers(eventHandlers);
+        return new EntityEventHandlers(eventHandlers);
     }
     #endregion
 }
 
 // ReSharper disable InconsistentNaming
-public readonly struct EventHandlers
+public readonly struct EntityEventHandlers
 {
-    [Browse(Never)]     public          int             TypeCount       => Array.Length;
-    [Browse(Never)]     public          int             HandlerCount    => GetHandlerCount();
-    [Browse(RootHidden)]public readonly EventHandler[]  Array;
+    [Browse(Never)]     public          int                     TypeCount       => Array.Length;
+    [Browse(Never)]     public          int                     HandlerCount    => GetHandlerCount();
+    [Browse(RootHidden)]public readonly EntityEventHandler[]    Array;
 
-                        public override string          ToString()      => $"event types: {TypeCount}, handlers: {HandlerCount}";
+                        public override string                  ToString()      => $"event types: {TypeCount}, handlers: {HandlerCount}";
 
-    public EventHandler this[int index] => Array[index];
+    public EntityEventHandler this[int index] => Array[index];
 
 
-    internal EventHandlers(List<EventHandler> eventHandlers) {
+    internal EntityEventHandlers(List<EntityEventHandler> eventHandlers) {
         Array = eventHandlers.ToArray();    
     }
     
@@ -124,27 +124,34 @@ public readonly struct EventHandlers
     }
 }
 
-public readonly struct EventHandler
+public enum EntityEventKind
 {
-    [Browse(Never)]     public   readonly   Type        Type;
-    [Browse(Never)]     private  readonly   bool        isSignal;
+    Event   = 0,
+    Signal  = 1
+}
+
+public readonly struct EntityEventHandler
+{
+    [Browse(Never)]     public   readonly   Type            Type;
+    [Browse(Never)]     public   readonly   EntityEventKind Kind;
+    [Browse(Never)]     public              int             Count => handlers.Length;
     /// <remarks>
     /// Note! must not be public.<br/>
     /// Otherwise the <see cref="handlers"/> can be called without the event never happened.
     /// </remarks>
-    [Browse(RootHidden)]internal readonly   Delegate[]  handlers;
+    [Browse(RootHidden)]internal readonly   Delegate[]      handlers;
 
-                        public   override   string      ToString() => GetString();
+                        public   override   string          ToString() => GetString();
 
-    internal EventHandler(bool isSignal, Type type, Delegate[] handlers) {
-        this.isSignal   = isSignal;
+    internal EntityEventHandler(EntityEventKind kind, Type type, Delegate[] handlers) {
+        Kind            = kind;
         Type            = type;
         this.handlers   = handlers;
     }
     
     private string GetString() {
         var sb = new StringBuilder();
-        if (isSignal) {
+        if (Kind == EntityEventKind.Signal) {
             sb.Append("Signal: ");
         }
         sb.Append(Type.Name);
