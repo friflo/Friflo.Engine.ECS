@@ -152,20 +152,20 @@ public sealed partial class EntityStore : EntityStoreBase
 #region get Entity by id / pid
 
     public  Entity  GetEntityById(int id) {
-        return new Entity(id, this);
+        return new Entity(this, id);
     }
     
     public  Entity  GetEntityByPid(long pid) {
         if (intern.pid2Id != null) {
-            return new Entity(intern.pid2Id[pid], this);
+            return new Entity(this, intern.pid2Id[pid]);
         }
-        return new Entity((int)pid, this);
+        return new Entity(this, (int)pid);
     }
     
     public  bool  TryGetEntityByPid(long pid, out Entity value) {
         if (intern.pid2Id != null) {
             if (intern.pid2Id.TryGetValue(pid,out int id)) {
-                value = new Entity(id, this);
+                value = new Entity(this, id);
                 return true;
             }
             value = default;
@@ -174,7 +174,7 @@ public sealed partial class EntityStore : EntityStoreBase
         if (0 < pid && pid <= nodesMaxId) {
             var id = (int)pid;
             if (nodes[id].Is(NodeFlags.Created)) {
-                value = new Entity(id, this);
+                value = new Entity(this, id);
                 return true;
             }
         }

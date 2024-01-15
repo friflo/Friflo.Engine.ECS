@@ -18,7 +18,7 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     [Browse(Never)]     public              int                 Count           => childCount;
     [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
     
-                        public              Entity              this[int index] => new Entity(Ids[index], store);
+                        public              Entity              this[int index] => new Entity(store, Ids[index]);
                         public override     string              ToString()      => $"Count: {childCount}";
     
     // --- internal fields
@@ -44,7 +44,7 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     public void ToArray(Entity[] array) {
         var ids = Ids;
         for (int n = 0; n < childCount; n++) {
-            array[n] = new Entity(ids[n], store);
+            array[n] = new Entity(store, ids[n]);
         }
     }
 }
@@ -59,7 +59,7 @@ public struct ChildEnumerator  : IEnumerator<Entity>
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(childEntities.childIds[index - 1], childEntities.store);
+    public readonly Entity Current   => new Entity(childEntities.store, childEntities.childIds[index - 1]);
     
     // --- IEnumerator
     public bool MoveNext() {

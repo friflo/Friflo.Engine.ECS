@@ -51,7 +51,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     
     public Entity EntityAt(int index) {
         if (index < Length) {
-            return new Entity(entityIds[index], Archetype.entityStore);
+            return new Entity(Archetype.entityStore, entityIds[index]);
         }
         throw new IndexOutOfRangeException();
     }
@@ -101,7 +101,7 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     }
     
     // --- IEnumerator<>
-    public readonly Entity Current   => new Entity(entityIds[index], store);
+    public readonly Entity Current   => new Entity(store, entityIds[index]);
     
     // --- IEnumerator
     public bool MoveNext() {

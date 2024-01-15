@@ -11,7 +11,7 @@ public readonly struct Signal<TEvent> where TEvent : struct
     public readonly     int         EntityId;
     public readonly     TEvent      Event;
     
-    public              Entity      Entity => new Entity(EntityId, Store);
+    public              Entity      Entity => new Entity(Store, EntityId);
     
     internal Signal(EntityStore store, int id, in TEvent ev) {
         Store       = store;

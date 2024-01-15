@@ -15,7 +15,7 @@ public readonly struct  TagsChanged
     public  readonly    Tags        Tags;       // 32
     public  readonly    Tags        OldTags;    // 32
     
-    public              Entity      Entity      => new Entity(EntityId, Store);
+    public              Entity      Entity      => new Entity(Store, EntityId);
     
     public              Tags        AddedTags   => new(~OldTags.bitSet.value &  Tags.bitSet.value);
     public              Tags        RemovedTags => new( OldTags.bitSet.value & ~Tags.bitSet.value);

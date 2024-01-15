@@ -13,8 +13,8 @@ public readonly struct ChildEntitiesChanged
     public readonly int                         ChildId;    //  4
     public readonly int                         ChildIndex; //  4
     
-    public          Entity                      Parent      => new Entity(ParentId, Store);
-    public          Entity                      Child       => new Entity(ChildId,  Store);
+    public          Entity                      Parent      => new Entity(Store, ParentId);
+    public          Entity                      Child       => new Entity(Store, ChildId);
 
     public override string                      ToString()  => $"entity: {ParentId} - event > {Action} Child[{ChildIndex}] = {ChildId}";
 

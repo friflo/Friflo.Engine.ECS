@@ -89,7 +89,7 @@ public static class EntityUtils
             sb.Append("  (detached)");
             return sb.ToString();
         }
-        var entity = new Entity(id, archetype.entityStore);
+        var entity = new Entity(archetype.entityStore, id);
         if (entity.HasName) {
             var name = entity.Name.value;
             if (name != null) {

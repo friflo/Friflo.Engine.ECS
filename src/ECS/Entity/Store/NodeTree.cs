@@ -573,7 +573,7 @@ public partial class EntityStore
     {
         var parentNode  = store.nodes[id].parentId;
         parentNode      = HasParent(parentNode) ? parentNode : Static.NoParentId;
-        return new Entity(parentNode, store); // ENTITY_STRUCT
+        return new Entity(store, parentNode); // ENTITY_STRUCT
     }
     
     internal static ChildEntities GetChildEntities(EntityStore store, int id)

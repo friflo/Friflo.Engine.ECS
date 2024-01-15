@@ -202,17 +202,17 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ fields ------------------------------------------------
 #region public / internal - fields
     // Note! Must not have any other fields to keep its size at 16 bytes
+    [Browse(Never)] internal    readonly    EntityStore store;  //  8
     /// <summary>Unique entity id.<br/>
     /// Uniqueness relates to the <see cref="Entity"/>'s stored in its <see cref="EntityStore"/></summary>
     // ReSharper disable once InconsistentNaming
                     public      readonly    int         Id;     //  4
-    [Browse(Never)] internal    readonly    EntityStore store;  //  8
     #endregion
     
 #region constructor
-    internal Entity(int id, EntityStore store) {
-        this.Id     = id;
+    internal Entity(EntityStore store, int id) {
         this.store  = store;
+        this.Id     = id;
     }
     #endregion
 

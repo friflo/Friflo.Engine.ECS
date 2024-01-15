@@ -18,7 +18,7 @@ public readonly struct  ComponentChanged
     public readonly     ChangedEventAction  Action;         //  4
     public readonly     ComponentType       ComponentType;  //  8
     
-    public              Entity              Entity      => new Entity(EntityId, Store);
+    public              Entity              Entity      => new Entity(Store, EntityId);
     
     public override     string              ToString()  => $"entity: {EntityId} - event > {Action} {ComponentType}";
 

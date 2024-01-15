@@ -142,7 +142,7 @@ public partial class EntityStore
         ref var node = ref nodes[id];
         if ((node.flags & Created) != 0) {
             AssertPid(node.pid, pid);
-            return new Entity(id, this);
+            return new Entity(this, id);
         }
         nodesCount++;
         if (nodesMaxId < id) {
@@ -155,7 +155,7 @@ public partial class EntityStore
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
-        return new Entity(id, this);
+        return new Entity(this, id);
     }
     
     public void SetStoreRoot(Entity entity) {
