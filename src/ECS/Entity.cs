@@ -110,7 +110,7 @@ namespace Friflo.Engine.ECS;
 public readonly struct Entity : IEquatable<Entity>
 {
     // ----------------------------------- general properties -------------------------------------
-#region general - properties
+#region general properties
     public              long                    Pid             => store.nodes[Id].pid;
                     
     public              EntityComponents        Components      => new EntityComponents(this);
@@ -200,7 +200,7 @@ public readonly struct Entity : IEquatable<Entity>
 
 
     // ------------------------------------ fields ------------------------------------------------
-#region public / internal - fields
+#region fields
     // Note! Must not have any other fields to keep its size at 16 bytes
     [Browse(Never)] internal    readonly    EntityStore store;  //  8
     /// <summary>Unique entity id.<br/>
@@ -437,8 +437,8 @@ public readonly struct Entity : IEquatable<Entity>
 
 
     // ------------------------------------ internal properties -----------------------------------
-// ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
-#region internal - properties
+#region internal properties
+    // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
     [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[Id].archetype;
     [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[Id].archetype;
