@@ -4,7 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable once CheckNamespace
@@ -66,21 +67,23 @@ public partial class EntityStore
     #endregion
     
 #region subscribed event / signal delegates 
-    internal static EventHandlers[] GetEventHandlers(EntityStore store, int entityId)
+    internal static EventHandlers GetEventHandlers(EntityStore store, int entityId)
     {
-        var eventDelegates = new List<EventHandlers>();
-        AddEventHandlers(eventDelegates, store, entityId);
+        var eventHandlers = new List<EventHandler>();
+        AddEventHandlers(eventHandlers, store, entityId);
         
         var entityScriptChanged = store.intern.entityScriptChanged;
         if (entityScriptChanged != null) {
             if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
-                eventDelegates.Add(new EventHandlers(nameof(Entity.OnScriptChanged), handlers.GetInvocationList()));
+                var handler = new EventHandler(nameof(Entity.OnScriptChanged), typeof(ScriptChanged), handlers.GetInvocationList());
+                eventHandlers.Add(handler);
             }
         }
         var childEntitiesChanged = store.intern.entityChildEntitiesChanged;
         if (childEntitiesChanged != null) {
             if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
-                eventDelegates.Add(new EventHandlers(nameof(Entity.OnChildEntitiesChanged), handlers.GetInvocationList()));
+                var handler = new EventHandler(nameof(Entity.OnChildEntitiesChanged), typeof(ChildEntitiesChanged), handlers.GetInvocationList());
+                eventHandlers.Add(handler);
             }
         }
         foreach (var signalHandler in store.intern.signalHandlers)
@@ -88,26 +91,41 @@ public partial class EntityStore
             var handlers = signalHandler?.GetEntityEventHandlers(entityId);
             if (handlers != null) {
                 var name = $"Signal: {signalHandler.Type.Name}";
-                eventDelegates.Add(new EventHandlers(name, handlers));
+                eventHandlers.Add(new EventHandler(name, signalHandler.Type, handlers));
             }
         }
-        return eventDelegates.Count == 0 ? null : eventDelegates.ToArray();
+        return new EventHandlers(eventHandlers);
     }
     #endregion
 }
 
-internal readonly struct EventHandlers
+public readonly struct EventHandlers
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private  readonly   string      name;
-    
-    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    private  readonly   Delegate[]  handlers;
+    [Browse(Never)]     public          int             Count => array.Length;
+    [Browse(RootHidden)]public readonly EventHandler[]  array;
 
-    public   override   string      ToString() => $"{name} - Count: {handlers.Length}";
+                        public override string          ToString() => $"EventHandler[{array.Length}]";
 
-    internal EventHandlers(string name, Delegate[] handlers) {
-        this.name       = name;
+    public EventHandler this[int index] => array[index];
+
+
+    internal EventHandlers(List<EventHandler> eventHandlers) {
+        array = eventHandlers.ToArray();    
+    }
+}
+
+// ReSharper disable InconsistentNaming
+public readonly struct EventHandler
+{
+    [Browse(Never)]     public   readonly   Type        Type;
+    [Browse(Never)]     private  readonly   string      Name;
+    [Browse(RootHidden)]private  readonly   Delegate[]  handlers;
+
+                        public   override   string      ToString() => $"{Name} - Count: {handlers.Length}";
+
+    internal EventHandler(string name, Type type, Delegate[] handlers) {
+        Name            = name;
+        Type            = type;
         this.handlers   = handlers;
     }
 }

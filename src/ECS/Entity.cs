@@ -430,7 +430,7 @@ public readonly struct Entity : IEquatable<Entity>
         signalHandler?.Invoke(new Signal<TEvent>(store, Id, ev));
     }
     /// <remarks> return event handlers only for debugging </remarks>
-    internal EventHandlers[] EventHandlers => EntityStore.GetEventHandlers(store, Id);
+    internal     EventHandlers                  DebugEventHandlers => EntityStore.GetEventHandlers(store, Id);
     #endregion
 
 

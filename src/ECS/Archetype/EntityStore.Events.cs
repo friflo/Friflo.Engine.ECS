@@ -110,18 +110,20 @@ public partial class EntityStoreBase
     }
     #endregion
     
-    internal static void AddEventHandlers(List<EventHandlers> eventHandlers, EntityStore store, int entityId)
+    internal static void AddEventHandlers(List<EventHandler> eventHandlers, EntityStore store, int entityId)
     {
         var entityComponentChanged = store.internBase.entityComponentChanged;
         if (entityComponentChanged != null) {
             if (entityComponentChanged.TryGetValue(entityId, out var handlers)) {
-                eventHandlers.Add(new EventHandlers(nameof(Entity.OnComponentChanged), handlers.GetInvocationList()));
+                var handler = new EventHandler(nameof(Entity.OnComponentChanged), typeof(ComponentChanged), handlers.GetInvocationList());
+                eventHandlers.Add(handler);
             }
         }
         var entityTagsChanged = store.internBase.entityTagsChanged;
         if (entityTagsChanged != null) {
             if (entityTagsChanged.TryGetValue(entityId, out var handlers)) {
-                eventHandlers.Add(new EventHandlers(nameof(Entity.OnTagsChanged), handlers.GetInvocationList()));
+                var handler = new EventHandler(nameof(Entity.OnTagsChanged), typeof(TagsChanged), handlers.GetInvocationList());
+                eventHandlers.Add(handler);
             }
         }
     }

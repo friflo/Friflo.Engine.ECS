@@ -13,7 +13,7 @@ public static class Test_Events
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
-        IsNull(entity.EventHandlers);
+        AreEqual("EventHandler[0]", entity.DebugEventHandlers.ToString());
         
         entity.OnComponentChanged     += _ => { };
         entity.OnTagsChanged          += _ => { };
@@ -21,8 +21,16 @@ public static class Test_Events
         entity.OnChildEntitiesChanged += _ => { };
         entity.AddSignalHandler<MyEvent>(_ => { });
         
-        var handlers = entity.EventHandlers;
-        AreEqual(5, handlers.Length);
+        var handlers = entity.DebugEventHandlers;
+        AreEqual(5, handlers.Count);
+        AreEqual(5, handlers.array.Length);
+        AreEqual("EventHandler[5]", entity.DebugEventHandlers.ToString());
+        
+        AreEqual(typeof(ComponentChanged),      handlers[0].Type);
+        AreEqual(typeof(TagsChanged),           handlers[1].Type);
+        AreEqual(typeof(ScriptChanged),         handlers[2].Type);
+        AreEqual(typeof(ChildEntitiesChanged),  handlers[3].Type);
+        AreEqual(typeof(MyEvent),               handlers[4].Type);
         
         AreEqual("OnComponentChanged - Count: 1",       handlers[0].ToString());
         AreEqual("OnTagsChanged - Count: 1",            handlers[1].ToString());
