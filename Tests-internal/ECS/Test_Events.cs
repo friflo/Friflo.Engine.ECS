@@ -16,6 +16,7 @@ public static class Test_Events
         AreEqual("event types: 0, handlers: 0", entity.DebugEventHandlers.ToString());
         
         entity.OnComponentChanged     += _ => { };
+        entity.OnComponentChanged     += _ => { };
         entity.OnTagsChanged          += _ => { };
         entity.OnScriptChanged        += _ => { };
         entity.OnChildEntitiesChanged += _ => { };
@@ -23,9 +24,9 @@ public static class Test_Events
         
         var handlers = entity.DebugEventHandlers;
         AreEqual(5, handlers.TypeCount);
-        AreEqual(5, handlers.HandlerCount);
+        AreEqual(6, handlers.HandlerCount);
         AreEqual(5, handlers.Array.Length);
-        AreEqual("event types: 5, handlers: 5", entity.DebugEventHandlers.ToString());
+        AreEqual("event types: 5, handlers: 6", entity.DebugEventHandlers.ToString());
         
         AreEqual(typeof(ComponentChanged),      handlers[0].Type);
         AreEqual(typeof(TagsChanged),           handlers[1].Type);
@@ -33,7 +34,7 @@ public static class Test_Events
         AreEqual(typeof(ChildEntitiesChanged),  handlers[3].Type);
         AreEqual(typeof(MyEvent),               handlers[4].Type);
         
-        AreEqual("ComponentChanged - Count: 1",       handlers[0].ToString());
+        AreEqual("ComponentChanged - Count: 2",       handlers[0].ToString());
         AreEqual("TagsChanged - Count: 1",            handlers[1].ToString());
         AreEqual("ScriptChanged - Count: 1",          handlers[2].ToString());
         AreEqual("ChildEntitiesChanged - Count: 1",   handlers[3].ToString());
