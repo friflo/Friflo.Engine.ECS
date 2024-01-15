@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Friflo.Json.Fliox.Transform.Query.Ops;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -92,7 +91,6 @@ public partial class EntityStore
         {
             var handlers = signalHandler?.GetEntityEventHandlers(entityId);
             if (handlers != null) {
-                var name = $"Signal: {signalHandler.Type.Name}";
                 eventHandlers.Add(new EventHandler(true, signalHandler.Type, handlers));
             }
         }

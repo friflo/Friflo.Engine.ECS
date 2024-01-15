@@ -29,7 +29,7 @@ public static class Test_Events
         AreEqual(5, handlers.TypeCount);
         AreEqual(6, handlers.HandlerCount);
         AreEqual(5, handlers.Array.Length);
-        AreEqual("event types: 5, handlers: 6", entity.DebugEventHandlers.ToString());
+        AreEqual("event types: 5, handlers: 6", handlers.ToString());
         
         AreEqual(typeof(ComponentChanged),      handlers[0].Type);
         AreEqual(typeof(TagsChanged),           handlers[1].Type);
