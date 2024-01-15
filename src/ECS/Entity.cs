@@ -208,13 +208,6 @@ public readonly struct Entity : IEquatable<Entity>
     // ReSharper disable once InconsistentNaming
                     public      readonly    int         Id;     //  4
     #endregion
-    
-#region constructor
-    internal Entity(EntityStore store, int id) {
-        this.store  = store;
-        this.Id     = id;
-    }
-    #endregion
 
 
 
@@ -404,6 +397,11 @@ public readonly struct Entity : IEquatable<Entity>
     public override int     GetHashCode()       => throw EntityUtils.NotImplemented(Id, nameof(Id));
     
     public override string  ToString()          => EntityUtils.EntityToString(this);
+    
+    internal Entity(EntityStore store, int id) {
+        this.store  = store;
+        this.Id     = id;
+    }
     #endregion
 
 
