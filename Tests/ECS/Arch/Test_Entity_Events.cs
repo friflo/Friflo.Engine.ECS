@@ -39,6 +39,7 @@ public static class Test_Entity_Events
         var handlers = entity1.DebugEventHandlers;
         AreEqual("event types: 1, handlers: 2", handlers.ToString());
         AreEqual(1,                             handlers.TypeCount);
+        AreEqual(1,                             handlers.Array.Length);
         AreEqual(2,                             handlers.HandlerCount);
         var handler0 = handlers[0]; 
         AreEqual("TagsChanged - Count: 2",      handler0.ToString());
@@ -46,12 +47,14 @@ public static class Test_Entity_Events
         AreEqual(typeof(TagsChanged),           handler0.Type);
         AreEqual(EntityEventKind.Event,         handler0.Kind);
 
-
         entity1.AddTag<TestTag>();
         entity2.AddTag<TestTag>();
         
         entity1.OnTagsChanged -= tagsChanged1;
         entity1.OnTagsChanged -= tagsChanged2;
+        
+        AreEqual("event types: 0, handlers: 0", entity1.DebugEventHandlers.ToString());
+        AreEqual("event types: 0, handlers: 0", entity2.DebugEventHandlers.ToString());
         
         entity1.AddTag<TestTag>();
         entity2.AddTag<TestTag>();
