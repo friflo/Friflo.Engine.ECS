@@ -91,7 +91,7 @@ public partial class EntityStore
                 eventDelegates.Add(new EventHandlers(name, handlers));
             }
         }
-        return eventDelegates.ToArray();
+        return eventDelegates.Count == 0 ? null : eventDelegates.ToArray();
     }
     #endregion
 }

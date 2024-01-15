@@ -13,6 +13,7 @@ public static class Test_Events
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
+        IsNull(entity.EventHandlers);
         
         entity.OnComponentChanged     += _ => { };
         entity.OnTagsChanged          += _ => { };
