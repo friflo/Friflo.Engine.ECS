@@ -128,6 +128,10 @@ public readonly struct EventHandler
 {
     [Browse(Never)]     public   readonly   Type        Type;
     [Browse(Never)]     private  readonly   bool        isSignal;
+    /// <remarks>
+    /// Note! must not be public.<br/>
+    /// Otherwise the <see cref="handlers"/> can be called without the event never happened.
+    /// </remarks>
     [Browse(RootHidden)]internal readonly   Delegate[]  handlers;
 
                         public   override   string      ToString() => GetString();
