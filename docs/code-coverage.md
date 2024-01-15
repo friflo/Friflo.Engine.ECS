@@ -49,7 +49,7 @@ reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:Report"
     - name: Install  dotnet-coverage (.NET CLI Tool)
       run: dotnet tool install --global dotnet-coverage
 
-    - name: Run Tests to create coverage file
+    - name: Run Test to create coverage file
       working-directory: ./Engine
       run: dotnet-coverage collect -f cobertura -o "coverage.cobertura.xml" "dotnet test"
 ```
