@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -14,26 +15,26 @@ public readonly struct Chunks<T1, T2, T3>
     where T2 : struct, IComponent
     where T3 : struct, IComponent
 {
-    public              int             Length => chunk1.Length;
-    public readonly     Chunk<T1>       chunk1;     //  16
-    public readonly     Chunk<T2>       chunk2;     //  16
-    public readonly     Chunk<T3>       chunk3;     //  16
-    public readonly     ChunkEntities   entities;   //  24
+    public              int             Length => Chunk1.Length;
+    public readonly     Chunk<T1>       Chunk1;     //  16
+    public readonly     Chunk<T2>       Chunk2;     //  16
+    public readonly     Chunk<T3>       Chunk3;     //  16
+    public readonly     ChunkEntities   Entities;   //  24
 
-    public override     string          ToString() => entities.GetChunksString();
+    public override     string          ToString() => Entities.GetChunksString();
 
     internal Chunks(Chunk<T1> chunk1, Chunk<T2> chunk2, Chunk<T3> chunk3, ChunkEntities entities) {
-        this.chunk1     = chunk1;
-        this.chunk2     = chunk2;
-        this.chunk3     = chunk3;
-        this.entities   = entities;
+        Chunk1     = chunk1;
+        Chunk2     = chunk2;
+        Chunk3     = chunk3;
+        Entities   = entities;
     }
     
     public void Deconstruct(out Chunk<T1> chunk1, out Chunk<T2> chunk2, out Chunk<T3> chunk3, out ChunkEntities entities) {
-        chunk1      = this.chunk1;
-        chunk2      = this.chunk2;
-        chunk3      = this.chunk3;
-        entities    = this.entities;
+        chunk1      = Chunk1;
+        chunk2      = Chunk2;
+        chunk3      = Chunk3;
+        entities    = Entities;
     }
 }
 

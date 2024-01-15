@@ -30,7 +30,7 @@ public static class Test_Query
             if (chunkCount++ == 0) {
                 Mem.AreEqual(1, chunk.Length);
                 Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Transform, Scale3, MyComponent1]  Count: 1", chunk.ToString());
-                var positions = chunk.chunk1;
+                var positions = chunk.Chunk1;
                 Mem.AreEqual("Position[1]", positions.ToString());
                 Mem.AreEqual(1, positions[0].x);
                 var e = Assert.Throws<IndexOutOfRangeException>(() => {
@@ -191,19 +191,19 @@ public static class Test_Query
     private static void AssertChunkExtensions(ArchetypeQuery<Position, Rotation, Scale3, Transform, EntityName> query) {
 
         foreach (var chunk in query.Chunks) {
-            var length = chunk.entities.Length;
+            var length = chunk.Entities.Length;
             
-            Mem.AreEqual(length, chunk.chunk1.     AsSpanVector3().Length);
-            Mem.AreEqual(length, chunk.chunk1.Span.AsSpanVector3().Length);
+            Mem.AreEqual(length, chunk.Chunk1.     AsSpanVector3().Length);
+            Mem.AreEqual(length, chunk.Chunk1.Span.AsSpanVector3().Length);
             //
-            Mem.AreEqual(length, chunk.chunk2.     AsSpanQuaternion().Length);
-            Mem.AreEqual(length, chunk.chunk2.Span.AsSpanQuaternion().Length);
+            Mem.AreEqual(length, chunk.Chunk2.     AsSpanQuaternion().Length);
+            Mem.AreEqual(length, chunk.Chunk2.Span.AsSpanQuaternion().Length);
             //
-            Mem.AreEqual(length, chunk.chunk3.     AsSpanVector3().Length);
-            Mem.AreEqual(length, chunk.chunk3.Span.AsSpanVector3().Length);
+            Mem.AreEqual(length, chunk.Chunk3.     AsSpanVector3().Length);
+            Mem.AreEqual(length, chunk.Chunk3.Span.AsSpanVector3().Length);
             //
-            Mem.AreEqual(length, chunk.chunk4.     AsSpanMatrix4x4().Length);
-            Mem.AreEqual(length, chunk.chunk4.Span.AsSpanMatrix4x4().Length);
+            Mem.AreEqual(length, chunk.Chunk4.     AsSpanMatrix4x4().Length);
+            Mem.AreEqual(length, chunk.Chunk4.Span.AsSpanMatrix4x4().Length);
         }
     }
     

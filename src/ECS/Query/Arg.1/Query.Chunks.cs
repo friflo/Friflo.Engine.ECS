@@ -6,26 +6,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public readonly struct Chunks<T1>
     where T1 : struct, IComponent
 {
-    public              int             Length => chunk1.Length;
-    public readonly     Chunk<T1>       chunk1;     //  16
-    public readonly     ChunkEntities   entities;   //  24
+    public              int             Length => Chunk1.Length;
+    public readonly     Chunk<T1>       Chunk1;     //  16
+    public readonly     ChunkEntities   Entities;   //  24
 
-    public override     string          ToString() => entities.GetChunksString();
+    public override     string          ToString() => Entities.GetChunksString();
 
     internal Chunks(Chunk<T1> chunk1, ChunkEntities entities) {
-        this.chunk1     = chunk1;
-        this.entities   = entities;
+        Chunk1     = chunk1;
+        Entities   = entities;
     }
     
     public void Deconstruct(out Chunk<T1> chunk1, out ChunkEntities entities) {
-        chunk1      = this.chunk1;
-        entities    = this.entities;
+        chunk1      = Chunk1;
+        entities    = Entities;
     }
 }
 
