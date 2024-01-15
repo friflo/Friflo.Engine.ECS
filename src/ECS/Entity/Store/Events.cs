@@ -102,10 +102,11 @@ public partial class EntityStore
 // ReSharper disable InconsistentNaming
 public readonly struct EventHandlers
 {
-    [Browse(Never)]     public          int             Count => Array.Length;
+    [Browse(Never)]     public          int             TypeCount       => Array.Length;
+    [Browse(Never)]     public          int             HandlerCount    => GetHandlerCount();
     [Browse(RootHidden)]public readonly EventHandler[]  Array;
 
-                        public override string          ToString() => $"EventHandler[{Array.Length}]";
+                        public override string          ToString()      => $"event types: {TypeCount}, handlers: {HandlerCount}";
 
     public EventHandler this[int index] => Array[index];
 
@@ -113,13 +114,21 @@ public readonly struct EventHandlers
     internal EventHandlers(List<EventHandler> eventHandlers) {
         Array = eventHandlers.ToArray();    
     }
+    
+    private int GetHandlerCount() {
+        int count = 0;
+        foreach (var handler in Array) {
+            count += handler.handlers.Length;
+        }
+        return count;
+    }
 }
 
 public readonly struct EventHandler
 {
     [Browse(Never)]     public   readonly   Type        Type;
     [Browse(Never)]     private  readonly   string      Name;
-    [Browse(RootHidden)]private  readonly   Delegate[]  handlers;
+    [Browse(RootHidden)]internal readonly   Delegate[]  handlers;
 
                         public   override   string      ToString() => $"{Name} - Count: {handlers.Length}";
 
