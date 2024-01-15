@@ -16,3 +16,9 @@ Editor/DB/
 ## used when create a copy of:
 ## Fliox.Editor.csproj.xml as Fliox.Editor.csproj
 Editor/Fliox.Editor.csproj
+
+## Test Coverage file
+coverage.cobertura.xml
+
+## Test Coverage Rport folder
+Report/
