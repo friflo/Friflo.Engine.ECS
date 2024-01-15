@@ -36,7 +36,8 @@ dotnet-coverage collect -f cobertura -o "coverage.cobertura.xml" "dotnet test"
 ```
 
 Create html files from `coverage.cobertura.xml`.  
-Html files a generated in `Report` folder.  
+Html files a generated in `./Report` folder.  
+Index page: `./Report/index.html`  
 *Executes in ~ 1 second.*
 ```
 reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:Report"
