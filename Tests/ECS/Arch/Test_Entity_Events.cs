@@ -141,14 +141,14 @@ public static class Test_Entity_Events
     {
         {
             // --- See: Note
-            var store2 = new EntityStore();
-            var entity = store2.CreateEntity();
-            entity.AddSignalHandler<MyEvent1>(_ => { });
-            entity.AddSignalHandler<MyEvent2>(_ => { });
-            entity.AddSignalHandler<MyEvent3>(_ => { });
+            var store2  = new EntityStore();
+            var entity2 = store2.CreateEntity();
+            entity2.AddSignalHandler<MyEvent1>(_ => { });
+            entity2.AddSignalHandler<MyEvent2>(_ => { });
+            entity2.AddSignalHandler<MyEvent3>(_ => { });
         }
-        var store       = new EntityStore();
-        var entity1     = store.CreateEntity(1);
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(1);
 
         var entity1SignalCount = 0;
         var onMyEvent = (Signal<MyEvent2> signal)    => {
@@ -169,26 +169,25 @@ public static class Test_Entity_Events
             }
         };
         var onMyEvent2 = (Signal<MyEvent2> signal) => { };
-
-        entity1.AddSignalHandler(onMyEvent);
-        entity1.AddSignalHandler(onMyEvent2);
+        entity.AddSignalHandler(onMyEvent);
+        entity.AddSignalHandler(onMyEvent2);
         
-        entity1.EmitSignal(new MyEvent2 { value = 42 });    // handler allocates memory for assertion
+        entity.EmitSignal(new MyEvent2 { value = 42 });    // handler allocates memory for assertion
         var start = Mem.GetAllocatedBytes();
-        entity1.EmitSignal(new MyEvent2 { value = 43 });
+        entity.EmitSignal(new MyEvent2 { value = 43 });
         Mem.AssertNoAlloc(start);
 
-        entity1.RemoveSignalHandler(onMyEvent);
-        entity1.RemoveSignalHandler(onMyEvent2);
-        entity1.RemoveSignalHandler(onMyEvent); // remove already removed handler
-        entity1.EmitSignal(new MyEvent2 { value = 13 });
+        entity.RemoveSignalHandler(onMyEvent);
+        entity.RemoveSignalHandler(onMyEvent2);
+        entity.RemoveSignalHandler(onMyEvent); // remove already removed handler
+        entity.EmitSignal(new MyEvent2 { value = 13 });
         
         AreEqual(2, entity1SignalCount);
         
-        entity1.EmitSignal(new MyEvent1()); // no signal handler added
-        entity1.EmitSignal(new MyEvent3()); // no signal handler added
+        entity.EmitSignal(new MyEvent1()); // no signal handler added
+        entity.EmitSignal(new MyEvent3()); // no signal handler added
         
-        entity1.AddSignalHandler<MyEvent1>(_ => { });
+        entity.AddSignalHandler<MyEvent1>(_ => { });
     }
 }
 
