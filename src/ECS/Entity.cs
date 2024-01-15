@@ -411,26 +411,22 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ events ------------------------------------------------
 #region events
-    [Obsolete("Experimental")]
     public event Action<TagsChanged>            OnTagsChanged           { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
-    [Obsolete("Experimental")]
+    
     public event Action<ComponentChanged>       OnComponentChanged      { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveComponentChangedHandler   (store, Id, value);  }
-    [Obsolete("Experimental")]
+    
     public event Action<ScriptChanged>          OnScriptChanged         { add    => EntityStore.AddScriptChangedHandler             (store, Id, value);
                                                                           remove => EntityStore.RemoveScriptChangedHandler          (store, Id, value);  }
-    [Obsolete("Experimental")]
+    
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
-    [Obsolete("Experimental")]
     public void  AddSignalHandler   <TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct => EntityStore.AddSignalHandler   (store, Id, handler);
     
-    [Obsolete("Experimental")]
     public void  RemoveSignalHandler<TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct => EntityStore.RemoveSignalHandler(store, Id, handler);
     
-    [Obsolete("Experimental")]
     public void  EmitSignal<TEvent> (in TEvent ev) where TEvent : struct {
         var signalHandler = EntityStore.GetSignalHandler<TEvent>(store, Id);
         signalHandler?.Invoke(new Signal<TEvent>(store, Id, ev));

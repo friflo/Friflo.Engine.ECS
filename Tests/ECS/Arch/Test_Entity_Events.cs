@@ -8,7 +8,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch;
 
-#pragma warning disable CS0618 // Type or member is obsolete
 
 public static class Test_Entity_Events
 {
@@ -196,6 +195,4 @@ public static class Test_Entity_Events
 internal struct MyEvent1 { }
 internal struct MyEvent2 { internal int value; }
 internal struct MyEvent3 { }
-
-#pragma warning restore CS0618 // Type or member is obsolete
 
