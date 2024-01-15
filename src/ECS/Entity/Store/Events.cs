@@ -3,7 +3,10 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
+// ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -61,4 +64,50 @@ public partial class EntityStore
         }
     }
     #endregion
+    
+#region subscribed event / signal delegates 
+    internal static EventHandlers[] GetEventHandlers(EntityStore store, int entityId)
+    {
+        var eventDelegates = new List<EventHandlers>();
+        AddEventHandlers(eventDelegates, store, entityId);
+        
+        var entityScriptChanged = store.intern.entityScriptChanged;
+        if (entityScriptChanged != null) {
+            if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
+                eventDelegates.Add(new EventHandlers(nameof(Entity.OnScriptChanged), handlers.GetInvocationList()));
+            }
+        }
+        var childEntitiesChanged = store.intern.entityChildEntitiesChanged;
+        if (childEntitiesChanged != null) {
+            if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
+                eventDelegates.Add(new EventHandlers(nameof(Entity.OnChildEntitiesChanged), handlers.GetInvocationList()));
+            }
+        }
+        foreach (var signalHandler in store.intern.signalHandlers)
+        {
+            var handlers = signalHandler?.GetEntityEventHandlers(entityId);
+            if (handlers != null) {
+                var name = $"Signal: {signalHandler.Type.Name}";
+                eventDelegates.Add(new EventHandlers(name, handlers));
+            }
+        }
+        return eventDelegates.ToArray();
+    }
+    #endregion
+}
+
+internal readonly struct EventHandlers
+{
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private  readonly   string      name;
+    
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    private  readonly   Delegate[]  handlers;
+
+    public   override   string      ToString() => $"{name} - Count: {handlers.Length}";
+
+    internal EventHandlers(string name, Delegate[] handlers) {
+        this.name       = name;
+        this.handlers   = handlers;
+    }
 }

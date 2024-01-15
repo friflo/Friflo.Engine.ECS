@@ -109,4 +109,20 @@ public partial class EntityStoreBase
         return entityHandler.Count == 0;
     }
     #endregion
+    
+    internal static void AddEventHandlers(List<EventHandlers> eventHandlers, EntityStore store, int entityId)
+    {
+        var entityComponentChanged = store.internBase.entityComponentChanged;
+        if (entityComponentChanged != null) {
+            if (entityComponentChanged.TryGetValue(entityId, out var handlers)) {
+                eventHandlers.Add(new EventHandlers(nameof(Entity.OnComponentChanged), handlers.GetInvocationList()));
+            }
+        }
+        var entityTagsChanged = store.internBase.entityTagsChanged;
+        if (entityTagsChanged != null) {
+            if (entityTagsChanged.TryGetValue(entityId, out var handlers)) {
+                eventHandlers.Add(new EventHandlers(nameof(Entity.OnTagsChanged), handlers.GetInvocationList()));
+            }
+        }
+    }
 }

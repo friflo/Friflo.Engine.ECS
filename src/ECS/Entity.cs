@@ -428,7 +428,9 @@ public readonly struct Entity : IEquatable<Entity>
     public void  EmitSignal<TEvent> (in TEvent ev) where TEvent : struct {
         var signalHandler = EntityStore.GetSignalHandler<TEvent>(store, Id);
         signalHandler?.Invoke(new Signal<TEvent>(store, Id, ev));
-    }    
+    }
+    /// <remarks> return event handlers only for debugging </remarks>
+    internal EventHandlers[] EventHandlers => EntityStore.GetEventHandlers(store, Id);
     #endregion
 
 

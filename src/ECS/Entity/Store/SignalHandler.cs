@@ -8,9 +8,12 @@ using System.Collections.Generic;
 namespace Friflo.Engine.ECS;
 
 
-internal class SignalHandler
+internal abstract class SignalHandler
 {
-    private  static             int     _nextEventIndex             = 1;
+    private  static     int     _nextEventIndex             = 1;
+    
+    internal abstract   Type        Type { get; }
+    internal abstract   Delegate[]  GetEntityEventHandlers(int entityId);
     
     internal static int NewEventIndex(Type type)
     {
@@ -25,6 +28,15 @@ internal class SignalHandler<TEvent> : SignalHandler where TEvent : struct
     internal SignalHandler()
     {
         entityEvents = new Dictionary<int, Action<Signal<TEvent>>>();
+    }
+    
+    internal override  Type         Type    => typeof(TEvent);
+    internal override  Delegate[]   GetEntityEventHandlers(int entityId)
+    {
+        if (!entityEvents.TryGetValue(entityId, out var handlers)) {
+            return null;
+        }
+        return handlers.GetInvocationList();
     }
     
     internal static readonly    int     EventIndex  = NewEventIndex(typeof(TEvent));
