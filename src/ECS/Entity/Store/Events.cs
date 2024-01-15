@@ -99,22 +99,22 @@ public partial class EntityStore
     #endregion
 }
 
+// ReSharper disable InconsistentNaming
 public readonly struct EventHandlers
 {
-    [Browse(Never)]     public          int             Count => array.Length;
-    [Browse(RootHidden)]public readonly EventHandler[]  array;
+    [Browse(Never)]     public          int             Count => Array.Length;
+    [Browse(RootHidden)]public readonly EventHandler[]  Array;
 
-                        public override string          ToString() => $"EventHandler[{array.Length}]";
+                        public override string          ToString() => $"EventHandler[{Array.Length}]";
 
-    public EventHandler this[int index] => array[index];
+    public EventHandler this[int index] => Array[index];
 
 
     internal EventHandlers(List<EventHandler> eventHandlers) {
-        array = eventHandlers.ToArray();    
+        Array = eventHandlers.ToArray();    
     }
 }
 
-// ReSharper disable InconsistentNaming
 public readonly struct EventHandler
 {
     [Browse(Never)]     public   readonly   Type        Type;
