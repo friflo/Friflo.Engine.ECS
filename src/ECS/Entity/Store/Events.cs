@@ -9,7 +9,7 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStore
 {
-#region add / remove script events - experimental
+#region add / remove script events
     private void ScriptChanged(ScriptChanged args)
     {
         if (!intern.entityScriptChanged.TryGetValue(args.Entity.Id, out var handlers)) {
@@ -38,7 +38,7 @@ public partial class EntityStore
 
 
     
-#region add / remove child entity events - experimental
+#region add / remove child entity events
     private void ChildEntitiesChanged(ChildEntitiesChanged args)
     {
         if (!intern.entityChildEntitiesChanged.TryGetValue(args.ParentId, out var handlers)) {
