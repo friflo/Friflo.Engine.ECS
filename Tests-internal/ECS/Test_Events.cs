@@ -23,6 +23,7 @@ public static class Test_Events
         
         var handlers = entity.DebugEventHandlers;
         AreEqual(5, handlers.TypeCount);
+        AreEqual(5, handlers.HandlerCount);
         AreEqual(5, handlers.Array.Length);
         AreEqual("event types: 5, handlers: 5", entity.DebugEventHandlers.ToString());
         

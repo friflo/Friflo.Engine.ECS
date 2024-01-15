@@ -4,6 +4,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
+using Friflo.Json.Fliox.Transform.Query.Ops;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -75,14 +77,14 @@ public partial class EntityStore
         var entityScriptChanged = store.intern.entityScriptChanged;
         if (entityScriptChanged != null) {
             if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(nameof(ScriptChanged), typeof(ScriptChanged), handlers.GetInvocationList());
+                var handler = new EventHandler(false, typeof(ScriptChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
         var childEntitiesChanged = store.intern.entityChildEntitiesChanged;
         if (childEntitiesChanged != null) {
             if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new EventHandler(nameof(ChildEntitiesChanged), typeof(ChildEntitiesChanged), handlers.GetInvocationList());
+                var handler = new EventHandler(false, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
                 eventHandlers.Add(handler);
             }
         }
@@ -91,7 +93,7 @@ public partial class EntityStore
             var handlers = signalHandler?.GetEntityEventHandlers(entityId);
             if (handlers != null) {
                 var name = $"Signal: {signalHandler.Type.Name}";
-                eventHandlers.Add(new EventHandler(name, signalHandler.Type, handlers));
+                eventHandlers.Add(new EventHandler(true, signalHandler.Type, handlers));
             }
         }
         return new EventHandlers(eventHandlers);
@@ -127,14 +129,25 @@ public readonly struct EventHandlers
 public readonly struct EventHandler
 {
     [Browse(Never)]     public   readonly   Type        Type;
-    [Browse(Never)]     private  readonly   string      Name;
+    [Browse(Never)]     private  readonly   bool        isSignal;
     [Browse(RootHidden)]internal readonly   Delegate[]  handlers;
 
-                        public   override   string      ToString() => $"{Name} - Count: {handlers.Length}";
+                        public   override   string      ToString() => GetString();
 
-    internal EventHandler(string name, Type type, Delegate[] handlers) {
-        Name            = name;
+    internal EventHandler(bool isSignal, Type type, Delegate[] handlers) {
+        this.isSignal   = isSignal;
         Type            = type;
         this.handlers   = handlers;
+    }
+    
+    private string GetString() {
+        var sb = new StringBuilder();
+        if (isSignal) {
+            sb.Append("Signal: ");
+        }
+        sb.Append(Type.Name);
+        sb.Append(" - Count: ");
+        sb.Append(handlers.Length);
+        return sb.ToString();
     }
 }
