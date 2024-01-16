@@ -18,7 +18,7 @@ public readonly struct DebugEventHandlers
     [Browse(Never)]     public          int                 HandlerCount    => GetHandlerCount();
     [Browse(RootHidden)]public readonly DebugEventHandler[] Array;
 
-                        public override string              ToString()      => $"event types: {TypeCount}, handlers: {HandlerCount}";
+                        public override string              ToString()      => GetString();
 
     public DebugEventHandler this[int index] => Array[index];
 
@@ -37,6 +37,13 @@ public readonly struct DebugEventHandlers
             count += handler.handlers.Length;
         }
         return count;
+    }
+    
+    private string GetString() {
+        if (TypeCount == 0) {
+            return "event types: 0, handlers: 0";
+        }
+        return $"event types: {TypeCount}, handlers: {HandlerCount}";
     }
 }
 
