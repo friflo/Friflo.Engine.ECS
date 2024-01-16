@@ -70,12 +70,12 @@ public sealed partial class EntityStore : EntityStoreBase
     
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
-    [Browse(Never)] internal            EntityNode[]            nodes;              //  8 + all nodes   - acts also id2pid
-    [Browse(Never)] private             Entity                  storeRoot;          // 16               - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] internal            EntityNode[]            nodes;              //  8   - acts also id2pid
+    [Browse(Never)] private             Entity                  storeRoot;          // 16   - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
-    [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8               - invariant: entityScripts[0] = 0
+    [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8   - invariant: entityScripts[0] = 0
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
-    [Browse(Never)] private             int                     entityScriptCount;  //  4               - invariant: > 0  and  <= entityScripts.Length
+    [Browse(Never)] private             int                     entityScriptCount;  //  4   - invariant: > 0  and  <= entityScripts.Length
     // --- buffers
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
@@ -84,23 +84,23 @@ public sealed partial class EntityStore : EntityStoreBase
                     private             Intern                  intern;             // 88
                     
     private struct Intern {
-                    internal readonly   PidType                 pidType;            //  4               - pid != id  /  pid == id
-                    internal            Random                  randPid;            //  8               - null if using pid == id
-                    internal readonly   Dictionary<long, int>   pid2Id;             //  8 + Map<pid,id> - null if using pid == id
+                    internal readonly   PidType                 pidType;            //  4   - pid != id  /  pid == id
+                    internal            Random                  randPid;            //  8   - null if using pid == id
+                    internal readonly   Dictionary<long, int>   pid2Id;             //  8   - null if using pid == id
 
-                    internal            int                     sequenceId;         //  4               - incrementing id used for next new entity
+                    internal            int                     sequenceId;         //  4   - incrementing id used for next new entity
         // --- delegates
-        internal Action                <ChildEntitiesChanged>   childEntitiesChanged;// 8               - fire events on add, insert, remove or delete an Entity
+        internal Action                <ChildEntitiesChanged>   childEntitiesChanged;// 8   - fires event on add, insert, remove or delete an Entity
         internal Dictionary<int, Action<ChildEntitiesChanged>>  entityChildEntitiesChanged;//  8
         //
-        internal Action                <ScriptChanged>          scriptAdded;        //  8
-        internal Action                <ScriptChanged>          scriptRemoved;      //  8
-        internal Dictionary<int, Action<ScriptChanged>>         entityScriptChanged;//  8
+        internal Action                <ScriptChanged>          scriptAdded;        //  8   - fires event on add script
+        internal Action                <ScriptChanged>          scriptRemoved;      //  8   - fires event on remove script
+        internal Dictionary<int, Action<ScriptChanged>>         entityScriptChanged;//  8   - entity event handlers for add/remove script
         //
         internal SignalHandler[]                                signalHandlerMap;   //  8
-        internal List<SignalHandler>                            signalHandlers;     //  8
+        internal List<SignalHandler>                            signalHandlers;     //  8 
         //
-        internal EventHandler          <EntitiesChanged>        entitiesChanged;    //  8
+        internal EventHandler          <EntitiesChanged>        entitiesChanged;    //  8   - fires event to notify changes of multiple entities
                     
         internal Intern(PidType pidType)
         {

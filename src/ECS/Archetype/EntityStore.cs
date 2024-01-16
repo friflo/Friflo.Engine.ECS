@@ -54,29 +54,29 @@ public abstract partial class EntityStoreBase
     
 #region private / internal fields
     // --- archetypes
-    [Browse(Never)] protected           Archetype[]             archs;              //  8 + archetypes      - array of all archetypes. never null
-    [Browse(Never)] private             int                     archsCount;         //  4                   - number of archetypes
-    [Browse(Never)] private  readonly   HashSet<ArchetypeKey>   archSet;            //  8 + Set<Key>'s      - Set<> to get archetypes by key
+    [Browse(Never)] protected           Archetype[]             archs;              //  8   - array of all archetypes. never null
+    [Browse(Never)] private             int                     archsCount;         //  4   - number of archetypes
+    [Browse(Never)] private  readonly   HashSet<ArchetypeKey>   archSet;            //  8   - Set<> to get archetypes by key
     /// <summary>The default <see cref="Archetype"/> has no <see cref="Archetype.ComponentTypes"/> and <see cref="Archetype.Tags"/>.<br/>
     /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
-    [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8                   - default archetype. has no components & tags
+    [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8   - default archetype. has no components & tags
     // --- nodes
-    [Browse(Never)] protected           int                     nodesMaxId;         //  4                   - highest entity id
-    [Browse(Never)] protected           int                     nodesCount;         //  4                   - number of all entities
+    [Browse(Never)] protected           int                     nodesMaxId;         //  4   - highest entity id
+    [Browse(Never)] protected           int                     nodesCount;         //  4   - number of all entities
     // --- misc
     [Browse(Never)] internal  readonly  Systems                 systems;            //  8
-    [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8 (+76)             - key buffer to find archetypes by key
+    [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
     // --- internal
                     private             InternBase              internBase;         // 40
                     
     private struct InternBase {
         // --- delegates
-        internal    Action                <TagsChanged>         tagsChanged;            //  8
-        internal    Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8
+        internal    Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed
+        internal    Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8   - entity event handlers for add/remove Tags
         //
-        internal    Action                <ComponentChanged>    componentAdded;         //  8
-        internal    Action                <ComponentChanged>    componentRemoved;       //  8
-        internal    Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8
+        internal    Action                <ComponentChanged>    componentAdded;         //  8   - fires event on add component
+        internal    Action                <ComponentChanged>    componentRemoved;       //  8   - fires event on remove component
+        internal    Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
     }
     #endregion
     
