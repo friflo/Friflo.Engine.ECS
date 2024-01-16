@@ -209,7 +209,11 @@ public static class Test_Entity_Events
         entity.EmitSignal(new MyEvent1()); // no signal handler added
         entity.EmitSignal(new MyEvent3()); // no signal handler added
         
-        entity.AddSignalHandler<MyEvent1>(_ => { });
+        // --- check allocation for common use case: entity has no event / signal handlers
+        var start2      = Mem.GetAllocatedBytes();
+        var handlers    = entity.DebugEventHandlers;
+        Mem.AreEqual(0, handlers.HandlerCount);
+        Mem.AssertNoAlloc(start2);
     }
 }
 
