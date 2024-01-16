@@ -425,6 +425,8 @@ public readonly struct Entity : IEquatable<Entity>
     
     public void  RemoveSignalHandler<TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct => EntityStore.RemoveSignalHandler(store, Id, handler);
     
+    /// <summary> Emits the passed signal event to all signal handlers added with <see cref="AddSignalHandler{TEvent}"/>. </summary>
+    /// <remarks> It executes in ~10 nano seconds per signal handler. </remarks>
     public void  EmitSignal<TEvent> (in TEvent ev) where TEvent : struct {
         var signalHandler = EntityStore.GetSignalHandler<TEvent>(store, Id);
         signalHandler?.Invoke(new Signal<TEvent>(store, Id, ev));
