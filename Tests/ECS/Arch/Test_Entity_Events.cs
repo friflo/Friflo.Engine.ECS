@@ -156,7 +156,7 @@ public static class Test_Entity_Events
         {
             // --- See: Note
             var store2  = new EntityStore();
-            var entity2 = store2.CreateEntity();
+            var entity2 = store2.CreateEntity(2);
             entity2.RemoveSignalHandler<MyEvent1>(_ => { });
             
             entity2.AddSignalHandler<MyEvent1>(_ => { });
@@ -164,7 +164,7 @@ public static class Test_Entity_Events
             entity2.AddSignalHandler<MyEvent3>(_ => { });
             AreEqual("event types: 3, handlers: 3", entity2.DebugEventHandlers.ToString());
             
-            var entity3 = store2.CreateEntity();
+            var entity3 = store2.CreateEntity(3);
             entity3.AddSignalHandler   <MyEvent2>(_ => { });
             entity3.RemoveSignalHandler<MyEvent1>(_ => { });
             AreEqual("event types: 1, handlers: 1", entity3.DebugEventHandlers.ToString());
