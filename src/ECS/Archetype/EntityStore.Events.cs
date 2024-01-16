@@ -116,6 +116,25 @@ public partial class EntityStoreBase
     }
     #endregion
     
+    internal static void RemoveAllEntityEventHandlers(EntityStore store, int entityId, HasEventFlags hasEvent)
+    {
+        if ((hasEvent & HasEventFlags.ComponentChanged) != 0) {
+            var handlerMap = store.internBase.entityComponentChanged;
+            handlerMap.Remove(entityId);
+            if (handlerMap.Count == 0) {
+                store.internBase.componentAdded     -= store.ComponentChanged;
+                store.internBase.componentRemoved   -= store.ComponentChanged;    
+            }
+        }
+        if ((hasEvent & HasEventFlags.TagsChanged) != 0) {
+            var handlerMap = store.internBase.entityTagsChanged;
+            handlerMap.Remove(entityId);
+            if (handlerMap.Count == 0) {
+                store.internBase.tagsChanged        -= store.EntityTagsChanged;
+            }
+        }
+    }
+    
     internal static void AddEventHandlers(ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId, HasEventFlags hasEvent)
     {
         if ((hasEvent & HasEventFlags.ComponentChanged) != 0) {

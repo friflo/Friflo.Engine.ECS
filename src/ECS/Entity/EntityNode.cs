@@ -70,8 +70,8 @@ public struct EntityNode
     [Browse(Never)] internal    int             compIndex;      //  4   index within Archetype.entityIds & StructHeap<>.components
     [Browse(Never)] internal    int             scriptIndex;    //  4   0 if entity has no scripts
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
-    [Browse(Never)] internal    byte            signalTypeCount;//  1   number of different signal types attached to the entity. 
-    [Browse(Never)] internal    HasEventFlags   hasEvent;       //  1   bit is 1 in case an event handler is attached to the entity. 
+                    internal    byte            signalTypeCount;//  1   number of different signal types attached to the entity. 
+                    internal    HasEventFlags   hasEvent;       //  1   bit is 1 in case an event handler is attached to the entity. 
     #endregion
     
 #region internal getter

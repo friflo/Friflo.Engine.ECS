@@ -66,6 +66,36 @@ public partial class EntityStore
     }
     #endregion
     
+    private static void RemoveAllEntityEventHandlers(EntityStore store, ref EntityNode node)
+    {
+        var entityId    = node.id;
+        var hasEvent    = node.hasEvent;
+        RemoveAllEntityEventHandlers(store, entityId, hasEvent);
+        if ((hasEvent & HasEventFlags.ScriptChanged) != 0) {
+            var handlerMap = store.intern.entityScriptChanged;
+            handlerMap.Remove(entityId);
+            if (handlerMap.Count == 0) {
+                store.intern.scriptAdded            -= store.ScriptChanged;
+                store.intern.scriptRemoved          -= store.ScriptChanged;
+            }
+        }
+        if ((hasEvent & HasEventFlags.ChildEntitiesChanged) != 0) {
+            var handlerMap = store.intern.entityChildEntitiesChanged;
+            handlerMap.Remove(entityId);
+            if (handlerMap.Count == 0) {
+                store.intern.childEntitiesChanged   -= store.ChildEntitiesChanged;
+            }
+        }
+        if (node.signalTypeCount > 0) {
+            var list = store.intern.signalHandlers;
+            if (list != null) {
+                foreach (var signalHandler in list) {
+                    signalHandler.RemoveAllSignalHandlers(entityId);
+                }
+            }
+        }
+    } 
+    
 #region subscribed event / signal delegates 
     internal static DebugEventHandlers GetEventHandlers(EntityStore store, int entityId)
     {
@@ -85,22 +115,15 @@ public partial class EntityStore
             eventHandlers ??= new List<DebugEventHandler>();
             eventHandlers.Add(handler);
         }
-        AddSignalHandlers(ref eventHandlers, store, entityId);
-        return new DebugEventHandlers(eventHandlers);
-    }
-    
-    private static void AddSignalHandlers (ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId)
-    {
         var list = store.intern.signalHandlers;
-        if (list == null) {
-            return;
+        if (list != null) {
+            if (store.nodes[entityId].signalTypeCount > 0) {
+                foreach (var signalHandler in list) {
+                    signalHandler.AddSignalHandler(entityId, ref eventHandlers);
+                }
+            }
         }
-        if (store.nodes[entityId].signalTypeCount == 0) {
-            return;
-        }
-        foreach (var signalHandler in list) {
-            signalHandler.AddSignalHandler(ref eventHandlers, entityId);
-        }
+        return new DebugEventHandlers(eventHandlers);
     }
     #endregion
 }

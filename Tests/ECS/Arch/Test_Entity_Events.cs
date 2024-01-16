@@ -262,9 +262,28 @@ public static class Test_Entity_Events
         Console.WriteLine($"EmitSignal - count: {count}, duration: {stopwatch.ElapsedMilliseconds}");
     }
     
-    private struct MyEvent { }
+    [Test]
+    public static void Test_Events_RemoveHandlersOnDelete()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity();
+        
+        entity.OnComponentChanged     += _ => { Fail("unexpected"); };
+        entity.OnComponentChanged     += _ => { Fail("unexpected"); };
+        entity.OnTagsChanged          += _ => { Fail("unexpected"); };
+        entity.OnScriptChanged        += _ => { Fail("unexpected"); };
+        entity.OnChildEntitiesChanged += _ => { Fail("unexpected"); };
+        entity.AddSignalHandler<MyEvent>(_ => { Fail("unexpected"); });
+       
+        entity.DeleteEntity();
+        
+        AreEqual("event types: 0, handlers: 0", entity.DebugEventHandlers.ToString());
+        
+        entity.EmitSignal(new MyEvent());
+    }
 }
 
+internal struct MyEvent  { }
 internal struct MyEvent1 { }
 internal struct MyEvent2 { internal int value; }
 internal struct MyEvent3 { }
