@@ -71,6 +71,7 @@ public partial class EntityStore
             entityEvents[entityId] = handlers;
             return;
         }
+        store.nodes[entityId].signalTypeCount++;
         entityEvents.Add(entityId, handler);
     }
     
@@ -92,6 +93,7 @@ public partial class EntityStore
         handlers -= handler;
         if (handlers == null) {
             entityEvents.Remove(entityId);
+            store.nodes[entityId].signalTypeCount--;
             return;
         }
         entityEvents[entityId] = handlers;

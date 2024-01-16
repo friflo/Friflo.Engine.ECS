@@ -24,7 +24,11 @@ public readonly struct DebugEventHandlers
 
 
     internal DebugEventHandlers(List<DebugEventHandler> eventHandlers) {
-        Array = eventHandlers.ToArray();    
+        if (eventHandlers == null) {
+            Array = System.Array.Empty<DebugEventHandler>();
+            return;
+        }
+        Array = eventHandlers.ToArray();
     }
     
     private int GetHandlerCount() {

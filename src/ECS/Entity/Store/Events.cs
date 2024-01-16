@@ -5,7 +5,8 @@
 using System;
 using System.Collections.Generic;
 
-
+// ReSharper disable UseCollectionExpression
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -68,13 +69,14 @@ public partial class EntityStore
 #region subscribed event / signal delegates 
     internal static DebugEventHandlers GetEventHandlers(EntityStore store, int entityId)
     {
-        var eventHandlers = new List<DebugEventHandler>();
-        AddEventHandlers(eventHandlers, store, entityId);
+        List<DebugEventHandler> eventHandlers = null;
+        AddEventHandlers(ref eventHandlers, store, entityId);
         
         var entityScriptChanged = store.intern.entityScriptChanged;
         if (entityScriptChanged != null) {
             if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
                 var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ScriptChanged), handlers.GetInvocationList());
+                eventHandlers ??= new List<DebugEventHandler>();
                 eventHandlers.Add(handler);
             }
         }
@@ -82,20 +84,30 @@ public partial class EntityStore
         if (childEntitiesChanged != null) {
             if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
                 var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
+                eventHandlers ??= new List<DebugEventHandler>();
                 eventHandlers.Add(handler);
             }
         }
+        AddSignalHandlers(ref eventHandlers, store, entityId);
+        return new DebugEventHandlers(eventHandlers);
+    }
+    
+    private static void AddSignalHandlers (ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId)
+    {
         var list = store.intern.signalHandlers;
-        if (list != null) {
-            foreach (var signalHandler in list)
-            {
-                var handlers = signalHandler.GetEntityEventHandlers(entityId);
-                if (handlers != null) {
-                    eventHandlers.Add(new DebugEventHandler(DebugEntityEventKind.Signal, signalHandler.Type, handlers));
-                }
+        if (list == null) {
+            return;
+        }
+        if (store.nodes[entityId].signalTypeCount == 0) {
+            return;
+        }
+        foreach (var signalHandler in list) {
+            var handlers = signalHandler.GetEntityEventHandlers(entityId);
+            if (handlers != null) {
+                eventHandlers ??= new List<DebugEventHandler>();
+                eventHandlers.Add(new DebugEventHandler(DebugEntityEventKind.Signal, signalHandler.Type, handlers));
             }
         }
-        return new DebugEventHandlers(eventHandlers);
     }
     #endregion
 }
