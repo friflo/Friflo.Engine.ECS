@@ -14,11 +14,11 @@ namespace Friflo.Engine.ECS;
 // ReSharper disable InconsistentNaming
 public readonly struct DebugEventHandlers
 {
-    [Browse(Never)]     public          int                     TypeCount       => Array.Length;
-    [Browse(Never)]     public          int                     HandlerCount    => GetHandlerCount();
-    [Browse(RootHidden)]public readonly DebugEventHandler[]    Array;
+    [Browse(Never)]     public          int                 TypeCount       => Array.Length;
+    [Browse(Never)]     public          int                 HandlerCount    => GetHandlerCount();
+    [Browse(RootHidden)]public readonly DebugEventHandler[] Array;
 
-                        public override string                  ToString()      => $"event types: {TypeCount}, handlers: {HandlerCount}";
+                        public override string              ToString()      => $"event types: {TypeCount}, handlers: {HandlerCount}";
 
     public DebugEventHandler this[int index] => Array[index];
 
