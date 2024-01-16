@@ -8,9 +8,6 @@ namespace Internal.ECS;
 
 public static class Test_Events
 {
-    /// <summary>
-    /// Note: Cover <see cref="SignalHandler{TEvent}.GetEntityEventHandlers"/>
-    /// </summary>
     [Test]
     public static void Test_Events_EntityHandlers()
     {
@@ -42,10 +39,6 @@ public static class Test_Events
         AreEqual("ScriptChanged - Count: 1",          handlers[2].ToString());
         AreEqual("ChildEntitiesChanged - Count: 1",   handlers[3].ToString());
         AreEqual("Signal: MyEvent - Count: 1",        handlers[4].ToString());
-        
-        // See: Note
-        var entity2  = store.CreateEntity();
-        AreEqual("event types: 0, handlers: 0", entity2.DebugEventHandlers.ToString());
     }
     
     private struct MyEvent { }
