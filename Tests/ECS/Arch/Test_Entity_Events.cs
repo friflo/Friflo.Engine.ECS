@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -249,6 +251,15 @@ public static class Test_Entity_Events
         AreEqual("ScriptChanged - Count: 1",          handlers[2].ToString());
         AreEqual("ChildEntitiesChanged - Count: 1",   handlers[3].ToString());
         AreEqual("Signal: MyEvent - Count: 1",        handlers[4].ToString());
+        
+        
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var count = 10; // 100_000_000 ~ #PC: 728 ms
+        for (int n = 0; n < count; n++) {
+            entity.EmitSignal(new MyEvent());
+        }
+        Console.WriteLine($"EmitSignal - count: {count}, duration: {stopwatch.ElapsedMilliseconds}");
     }
     
     private struct MyEvent { }
