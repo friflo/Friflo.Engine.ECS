@@ -102,11 +102,7 @@ public partial class EntityStore
             return;
         }
         foreach (var signalHandler in list) {
-            var handlers = signalHandler.GetEntityEventHandlers(entityId);
-            if (handlers != null) {
-                eventHandlers ??= new List<DebugEventHandler>();
-                eventHandlers.Add(new DebugEventHandler(DebugEntityEventKind.Signal, signalHandler.Type, handlers));
-            }
+            signalHandler.AddSignalHandler(ref eventHandlers, entityId);
         }
     }
     #endregion

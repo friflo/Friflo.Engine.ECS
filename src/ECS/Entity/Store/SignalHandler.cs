@@ -12,8 +12,7 @@ internal abstract class SignalHandler
 {
     private  static     int     _nextEventIndex             = 1;
     
-    internal abstract   Type        Type { get; }
-    internal abstract   Delegate[]  GetEntityEventHandlers(int entityId);
+    internal abstract   void    AddSignalHandler(ref List<DebugEventHandler> eventHandlers, int entityId);
     
     internal static int NewEventIndex(Type type)
     {
@@ -29,14 +28,13 @@ internal class SignalHandler<TEvent> : SignalHandler where TEvent : struct
     {
         entityEvents = new Dictionary<int, Action<Signal<TEvent>>>();
     }
-    
-    internal override  Type         Type    => typeof(TEvent);
-    internal override  Delegate[]   GetEntityEventHandlers(int entityId)
-    {
-        if (!entityEvents.TryGetValue(entityId, out var handlers)) {
-            return null;
+
+    internal override void AddSignalHandler(ref List<DebugEventHandler> eventHandlers, int entityId) {
+        if (entityEvents.TryGetValue(entityId, out var handlers)) {
+            eventHandlers       ??= new List<DebugEventHandler>();
+            var invocationList    = handlers.GetInvocationList();
+            eventHandlers.Add(new DebugEventHandler(DebugEntityEventKind.Signal, typeof(TEvent), invocationList));
         }
-        return handlers.GetInvocationList();
     }
     
     internal static readonly    int     EventIndex  = NewEventIndex(typeof(TEvent));
