@@ -430,7 +430,10 @@ public readonly struct Entity : IEquatable<Entity>
         signalHandler?.Invoke(new Signal<TEvent>(store, Id, ev));
     }
     /// <summary> Return event and signal handlers added to the entity.</summary>
-    /// <remarks> <b>Note</b>: Should be used only for debugging as allocates multiple objects, arrays and do multiple Dictionary lookups. </remarks>
+    /// <remarks> <b>Note</b>:
+    /// Should be used only for debugging as it allocates arrays and do multiple Dictionary lookups.<br/>
+    /// No allocations or lookups are made in case <see cref="ECS.DebugEventHandlers.TypeCount"/> is 0.
+    /// </remarks>
     public       DebugEventHandlers             DebugEventHandlers => EntityStore.GetEventHandlers(store, Id);
     #endregion
 
