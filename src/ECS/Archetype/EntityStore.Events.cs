@@ -119,18 +119,16 @@ public partial class EntityStoreBase
     internal static void AddEventHandlers(ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId, HasEventFlags hasEvent)
     {
         if ((hasEvent & HasEventFlags.ComponentChanged) != 0) {
-            if (store.internBase.entityComponentChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ComponentChanged), handlers.GetInvocationList());
-                eventHandlers ??= new List<DebugEventHandler>();
-                eventHandlers.Add(handler);
-            }
+            var handlers    = store.internBase.entityComponentChanged[entityId];
+            var handler     = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ComponentChanged), handlers.GetInvocationList());
+            eventHandlers ??= new List<DebugEventHandler>();
+            eventHandlers.Add(handler);
         }
         if ((hasEvent & HasEventFlags.TagsChanged) != 0) {
-            if (store.internBase.entityTagsChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(TagsChanged), handlers.GetInvocationList());
-                eventHandlers ??= new List<DebugEventHandler>();
-                eventHandlers.Add(handler);
-            }
+            var handlers    = store.internBase.entityTagsChanged[entityId];
+            var handler     = new DebugEventHandler(DebugEntityEventKind.Event, typeof(TagsChanged), handlers.GetInvocationList());
+            eventHandlers ??= new List<DebugEventHandler>();
+            eventHandlers.Add(handler);
         }
     }
 }

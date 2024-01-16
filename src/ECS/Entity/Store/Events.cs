@@ -74,18 +74,16 @@ public partial class EntityStore
         AddEventHandlers(ref eventHandlers, store, entityId, hasEvent);
         
         if ((hasEvent & HasEventFlags.ScriptChanged) != 0) {
-            if (store.intern.entityScriptChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ScriptChanged), handlers.GetInvocationList());
-                eventHandlers ??= new List<DebugEventHandler>();
-                eventHandlers.Add(handler);
-            }
+            var handlers    = store.intern.entityScriptChanged[entityId];
+            var handler     = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ScriptChanged), handlers.GetInvocationList());
+            eventHandlers ??= new List<DebugEventHandler>();
+            eventHandlers.Add(handler);
         }
         if ((hasEvent & HasEventFlags.ChildEntitiesChanged) != 0) {
-            if (store.intern.entityChildEntitiesChanged.TryGetValue(entityId, out var handlers)) {
-                var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
-                eventHandlers ??= new List<DebugEventHandler>();
-                eventHandlers.Add(handler);
-            }
+            var handlers    = store.intern.entityChildEntitiesChanged[entityId];
+            var handler     = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
+            eventHandlers ??= new List<DebugEventHandler>();
+            eventHandlers.Add(handler);
         }
         AddSignalHandlers(ref eventHandlers, store, entityId);
         return new DebugEventHandlers(eventHandlers);
