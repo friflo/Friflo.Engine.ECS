@@ -67,7 +67,7 @@ public partial class EntityStore
     }
     #endregion
     
-    private static void RemoveAllEntityEventHandlers(EntityStore store, ref EntityNode node)
+    private static void RemoveAllEntityEventHandlers(EntityStore store, in EntityNode node)
     {
         var entityId    = node.id;
         var hasEvent    = node.hasEvent;

@@ -495,7 +495,7 @@ public partial class EntityStore
         foreach (var childId in node.ChildIds) {
             localNodes[childId].parentId = Static.NoParentId;
         }
-        RemoveAllEntityEventHandlers(this, ref node);
+        RemoveAllEntityEventHandlers(this, node);
         var parentId    = node.parentId;
         // --- clear node entry.
         //     Set node.archetype = null
