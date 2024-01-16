@@ -87,7 +87,7 @@ public partial class EntityStore
         }
         var list = store.intern.signalHandlers;
         if (list != null) {
-            foreach (var signalHandler in store.intern.signalHandlers)
+            foreach (var signalHandler in list)
             {
                 var handlers = signalHandler.GetEntityEventHandlers(entityId);
                 if (handlers != null) {
