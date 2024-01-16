@@ -66,9 +66,10 @@ public abstract partial class EntityStoreBase
     // --- misc
     [Browse(Never)] internal  readonly  Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
-    // --- internal
+    
                     private             InternBase              internBase;         // 40
-                    
+    /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development => remove noise in debugger.</summary>
+    // MUST be private by all means 
     private struct InternBase {
         // --- delegates
         internal    Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed

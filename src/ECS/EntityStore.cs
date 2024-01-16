@@ -80,9 +80,10 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
     [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
-    // --- internal
+
                     private             Intern                  intern;             // 88
-                    
+    /// <summary>Contains state of <see cref="EntityStore"/> not relevant for application development => remove noise in debugger.</summary>
+    // MUST be private by all means 
     private struct Intern {
                     internal readonly   PidType                 pidType;            //  4   - pid != id  /  pid == id
                     internal            Random                  randPid;            //  8   - null if using pid == id
