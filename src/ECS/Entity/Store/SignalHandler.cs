@@ -104,7 +104,7 @@ public partial class EntityStore
         if (signalIndex < map.Length) {
             var signalHandler = map[signalIndex];
             if (signalHandler != null) {
-                return (SignalHandler<TEvent>)map[signalIndex];
+                return (SignalHandler<TEvent>)signalHandler;
             }
         } else {
             map = store.intern.signalHandlerMap = new SignalHandler[signalIndex + 1];
