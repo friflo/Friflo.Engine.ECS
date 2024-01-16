@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UseCollectionExpression
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -94,7 +95,15 @@ public partial class EntityStore
                 }
             }
         }
-    } 
+    }
+    
+    [ExcludeFromCodeCoverage]
+    internal new static void AssertEventDelegatesNull(EntityStore store)
+    {
+        if (store.intern.scriptAdded            != null) throw new InvalidOperationException("expect null");
+        if (store.intern.scriptRemoved          != null) throw new InvalidOperationException("expect null");
+        if (store.intern.childEntitiesChanged   != null) throw new InvalidOperationException("expect null");
+    }
     
 #region subscribed event / signal delegates 
     internal static DebugEventHandlers GetEventHandlers(EntityStore store, int entityId)

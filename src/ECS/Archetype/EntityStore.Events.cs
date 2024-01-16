@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -133,6 +134,14 @@ public partial class EntityStoreBase
                 store.internBase.tagsChanged        -= store.EntityTagsChanged;
             }
         }
+    }
+    
+    [ExcludeFromCodeCoverage]
+    internal static void AssertEventDelegatesNull(EntityStore store)
+    {
+        if (store.internBase.componentAdded     != null) throw new InvalidOperationException("expect null");
+        if (store.internBase.componentRemoved   != null) throw new InvalidOperationException("expect null");
+        if (store.internBase.tagsChanged        != null) throw new InvalidOperationException("expect null");
     }
     
     internal static void AddEventHandlers(ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId, HasEventFlags hasEvent)

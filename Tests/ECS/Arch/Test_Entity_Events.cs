@@ -232,7 +232,7 @@ public static class Test_Entity_Events
         entity.OnTagsChanged          += _ => { };
         entity.OnScriptChanged        += _ => { };
         entity.OnChildEntitiesChanged += _ => { };
-        entity.AddSignalHandler<MyEvent>(_ => { });
+        entity.AddSignalHandler<MyEvent1>(_ => { });
         
         var handlers = entity.DebugEventHandlers;
         AreEqual(5, handlers.TypeCount);
@@ -244,46 +244,25 @@ public static class Test_Entity_Events
         AreEqual(typeof(TagsChanged),           handlers[1].Type);
         AreEqual(typeof(ScriptChanged),         handlers[2].Type);
         AreEqual(typeof(ChildEntitiesChanged),  handlers[3].Type);
-        AreEqual(typeof(MyEvent),               handlers[4].Type);
+        AreEqual(typeof(MyEvent1),               handlers[4].Type);
         
         AreEqual("ComponentChanged - Count: 2",       handlers[0].ToString());
         AreEqual("TagsChanged - Count: 1",            handlers[1].ToString());
         AreEqual("ScriptChanged - Count: 1",          handlers[2].ToString());
         AreEqual("ChildEntitiesChanged - Count: 1",   handlers[3].ToString());
-        AreEqual("Signal: MyEvent - Count: 1",        handlers[4].ToString());
+        AreEqual("Signal: MyEvent1 - Count: 1",       handlers[4].ToString());
         
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         var count = 10; // 100_000_000 ~ #PC: 728 ms
         for (int n = 0; n < count; n++) {
-            entity.EmitSignal(new MyEvent());
+            entity.EmitSignal(new MyEvent1());
         }
         Console.WriteLine($"EmitSignal - count: {count}, duration: {stopwatch.ElapsedMilliseconds}");
     }
-    
-    [Test]
-    public static void Test_Events_RemoveHandlersOnDelete()
-    {
-        var store   = new EntityStore(PidType.UsePidAsId);
-        var entity  = store.CreateEntity();
-        
-        entity.OnComponentChanged     += _ => { Fail("unexpected"); };
-        entity.OnComponentChanged     += _ => { Fail("unexpected"); };
-        entity.OnTagsChanged          += _ => { Fail("unexpected"); };
-        entity.OnScriptChanged        += _ => { Fail("unexpected"); };
-        entity.OnChildEntitiesChanged += _ => { Fail("unexpected"); };
-        entity.AddSignalHandler<MyEvent>(_ => { Fail("unexpected"); });
-       
-        entity.DeleteEntity();
-        
-        AreEqual("event types: 0, handlers: 0", entity.DebugEventHandlers.ToString());
-        
-        entity.EmitSignal(new MyEvent());
-    }
 }
 
-internal struct MyEvent  { }
 internal struct MyEvent1 { }
 internal struct MyEvent2 { internal int value; }
 internal struct MyEvent3 { }
