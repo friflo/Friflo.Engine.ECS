@@ -45,7 +45,7 @@ public static class Test_Entity_Events
         AreEqual("TagsChanged - Count: 2",      handler0.ToString());
         AreEqual(2,                             handler0.Count);
         AreEqual(typeof(TagsChanged),           handler0.Type);
-        AreEqual(EntityEventKind.Event,         handler0.Kind);
+        AreEqual(DebugEntityEventKind.Event,    handler0.Kind);
 
         entity1.AddTag<TestTag>();
         entity2.AddTag<TestTag>();

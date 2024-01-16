@@ -431,7 +431,7 @@ public readonly struct Entity : IEquatable<Entity>
     }
     /// <summary> Return event and signal handlers added to the entity.</summary>
     /// <remarks> <b>Note</b>: Should be used only for debugging as allocates multiple objects, arrays and do multiple Dictionary lookups. </remarks>
-    public       EntityEventHandlers            DebugEventHandlers => EntityStore.GetEventHandlers(store, Id);
+    public       DebugEventHandlers             DebugEventHandlers => EntityStore.GetEventHandlers(store, Id);
     #endregion
 
 
