@@ -24,7 +24,7 @@ public partial class EntityStore
     
     internal static void AddScriptChangedHandler(EntityStore store, int entityId, Action<ScriptChanged> handler)
     {
-        if (AddEntityHandler(entityId, handler, ref store.intern.entityScriptChanged)) {
+        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ScriptChanged ,ref store.intern.entityScriptChanged)) {
             store.intern.scriptAdded     += store.ScriptChanged;
             store.intern.scriptRemoved   += store.ScriptChanged;
         }
@@ -32,7 +32,7 @@ public partial class EntityStore
     
     internal static void RemoveScriptChangedHandler(EntityStore store, int entityId, Action<ScriptChanged> handler)
     {
-        if (RemoveEntityHandler(entityId, handler, store.intern.entityScriptChanged)) {
+        if (RemoveEntityHandler(store, entityId, handler,  HasEventFlags.ScriptChanged, store.intern.entityScriptChanged)) {
             store.intern.scriptAdded     -= store.ScriptChanged;
             store.intern.scriptRemoved   -= store.ScriptChanged;
         }
@@ -53,14 +53,14 @@ public partial class EntityStore
     
     internal static void AddChildEntitiesChangedHandler   (EntityStore store, int entityId, Action<ChildEntitiesChanged> handler)
     {
-        if (AddEntityHandler(entityId, handler, ref store.intern.entityChildEntitiesChanged)) {
+        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ChildEntitiesChanged, ref store.intern.entityChildEntitiesChanged)) {
             store.intern.childEntitiesChanged     += store.ChildEntitiesChanged;
         }
     }
     
     internal static void RemoveChildEntitiesChangedHandler(EntityStore store, int entityId, Action<ChildEntitiesChanged> handler)
     {
-        if (RemoveEntityHandler(entityId, handler, store.intern.entityChildEntitiesChanged)) {
+        if (RemoveEntityHandler(store, entityId, handler, HasEventFlags.ChildEntitiesChanged, store.intern.entityChildEntitiesChanged)) {
             store.intern.childEntitiesChanged     -= store.ChildEntitiesChanged;
         }
     }
@@ -70,19 +70,18 @@ public partial class EntityStore
     internal static DebugEventHandlers GetEventHandlers(EntityStore store, int entityId)
     {
         List<DebugEventHandler> eventHandlers = null;
-        AddEventHandlers(ref eventHandlers, store, entityId);
+        var hasEvent = store.nodes[entityId].hasEvent;
+        AddEventHandlers(ref eventHandlers, store, entityId, hasEvent);
         
-        var entityScriptChanged = store.intern.entityScriptChanged;
-        if (entityScriptChanged != null) {
-            if (entityScriptChanged.TryGetValue(entityId, out var handlers)) {
+        if ((hasEvent & HasEventFlags.ScriptChanged) != 0) {
+            if (store.intern.entityScriptChanged.TryGetValue(entityId, out var handlers)) {
                 var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ScriptChanged), handlers.GetInvocationList());
                 eventHandlers ??= new List<DebugEventHandler>();
                 eventHandlers.Add(handler);
             }
         }
-        var childEntitiesChanged = store.intern.entityChildEntitiesChanged;
-        if (childEntitiesChanged != null) {
-            if (childEntitiesChanged.TryGetValue(entityId, out var handlers)) {
+        if ((hasEvent & HasEventFlags.ChildEntitiesChanged) != 0) {
+            if (store.intern.entityChildEntitiesChanged.TryGetValue(entityId, out var handlers)) {
                 var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
                 eventHandlers ??= new List<DebugEventHandler>();
                 eventHandlers.Add(handler);

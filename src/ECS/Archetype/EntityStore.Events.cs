@@ -23,14 +23,14 @@ public partial class EntityStoreBase
     
     internal static void AddEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChanged> handler)
     {
-        if (AddEntityHandler(entityId, handler, ref store.internBase.entityTagsChanged)) {
+        if (AddEntityHandler(store, entityId, handler, HasEventFlags.TagsChanged, ref store.internBase.entityTagsChanged)) {
             store.internBase.tagsChanged += store.EntityTagsChanged;
         }
     }
     
     internal static void RemoveEntityTagsChangedHandler(EntityStoreBase store, int entityId, Action<TagsChanged> handler)
     {
-        if (RemoveEntityHandler(entityId, handler, store.internBase.entityTagsChanged)) {
+        if (RemoveEntityHandler(store, entityId, handler, HasEventFlags.TagsChanged, store.internBase.entityTagsChanged)) {
             store.internBase.tagsChanged -= store.EntityTagsChanged;
         }
     }
@@ -47,17 +47,17 @@ public partial class EntityStoreBase
         handlers.Invoke(args);
     }
     
-    internal static void AddComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChanged> handler)
+    internal static void AddComponentChangedHandler(EntityStore store, int entityId, Action<ComponentChanged> handler)
     {
-        if (AddEntityHandler(entityId, handler, ref store.internBase.entityComponentChanged)) {
+        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ComponentChanged,ref store.internBase.entityComponentChanged)) {
             store.internBase.componentAdded     += store.ComponentChanged;
             store.internBase.componentRemoved   += store.ComponentChanged;
         }
     }
     
-    internal static void RemoveComponentChangedHandler(EntityStoreBase store, int entityId, Action<ComponentChanged> handler)
+    internal static void RemoveComponentChangedHandler(EntityStore store, int entityId, Action<ComponentChanged> handler)
     {
-        if (RemoveEntityHandler(entityId, handler, store.internBase.entityComponentChanged)) {
+        if (RemoveEntityHandler(store, entityId, handler, HasEventFlags.ComponentChanged, store.internBase.entityComponentChanged)) {
             store.internBase.componentAdded     -= store.ComponentChanged;
             store.internBase.componentRemoved   -= store.ComponentChanged;
         }
@@ -68,8 +68,10 @@ public partial class EntityStoreBase
     
 #region generic add / remove event handler
     internal static bool AddEntityHandler<TArgs>(
+            EntityStoreBase                 store,
             int                             entityId,
             Action<TArgs>                   handler,
+            HasEventFlags                   hasEvent,
         ref Dictionary<int, Action<TArgs>>  entityHandlerMap) where TArgs : struct
     {
         bool addEventHandler = false;
@@ -85,13 +87,16 @@ public partial class EntityStoreBase
             entityHandler[entityId] = handlers;
             return addEventHandler;
         }
+        ((EntityStore)store).nodes[entityId].hasEvent |= hasEvent;
         entityHandler.Add(entityId, handler);
         return addEventHandler;
     }
     
     internal static bool RemoveEntityHandler<TArgs>(
+        EntityStoreBase                 store,
         int                             entityId,
         Action<TArgs>                   handler,
+        HasEventFlags                   hasEvent,
         Dictionary<int, Action<TArgs>>  entityHandler) where TArgs : struct
     {
         if (entityHandler == null) {
@@ -105,24 +110,23 @@ public partial class EntityStoreBase
             entityHandler[entityId] = handlers;
             return false;
         }
+        ((EntityStore)store).nodes[entityId].hasEvent &= ~hasEvent;
         entityHandler.Remove(entityId);
         return entityHandler.Count == 0;
     }
     #endregion
     
-    internal static void AddEventHandlers(ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId)
+    internal static void AddEventHandlers(ref List<DebugEventHandler> eventHandlers, EntityStore store, int entityId, HasEventFlags hasEvent)
     {
-        var entityComponentChanged = store.internBase.entityComponentChanged;
-        if (entityComponentChanged != null) {
-            if (entityComponentChanged.TryGetValue(entityId, out var handlers)) {
+        if ((hasEvent & HasEventFlags.ComponentChanged) != 0) {
+            if (store.internBase.entityComponentChanged.TryGetValue(entityId, out var handlers)) {
                 var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ComponentChanged), handlers.GetInvocationList());
                 eventHandlers ??= new List<DebugEventHandler>();
                 eventHandlers.Add(handler);
             }
         }
-        var entityTagsChanged = store.internBase.entityTagsChanged;
-        if (entityTagsChanged != null) {
-            if (entityTagsChanged.TryGetValue(entityId, out var handlers)) {
+        if ((hasEvent & HasEventFlags.TagsChanged) != 0) {
+            if (store.internBase.entityTagsChanged.TryGetValue(entityId, out var handlers)) {
                 var handler = new DebugEventHandler(DebugEntityEventKind.Event, typeof(TagsChanged), handlers.GetInvocationList());
                 eventHandlers ??= new List<DebugEventHandler>();
                 eventHandlers.Add(handler);
