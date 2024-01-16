@@ -76,8 +76,16 @@ public partial class EntityStore
     
     internal static void RemoveSignalHandler<TEvent>(EntityStore store, int entityId, Action<Signal<TEvent>> handler) where TEvent : struct
     {
-        var signalHandler   = GetSignalHandler<TEvent>(store);
-        var entityEvents    = signalHandler.entityEvents;
+        var signalIndex = SignalHandler<TEvent>.EventIndex;
+        var map         = store.intern.signalHandlerMap;
+        if (signalIndex >= map.Length) {
+            return;
+        }
+        var signalHandler = map[signalIndex];
+        if (signalHandler == null) {
+            return;
+        }
+        var entityEvents = ((SignalHandler<TEvent>)signalHandler).entityEvents;
         if (!entityEvents.TryGetValue(entityId, out var handlers)) {
             return;
         }
