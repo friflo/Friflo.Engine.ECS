@@ -212,7 +212,9 @@ public static class Test_Entity_Events
         // --- check allocation for common use case: entity has no event / signal handlers
         var start2      = Mem.GetAllocatedBytes();
         var handlers    = entity.DebugEventHandlers;
-        Mem.AreEqual(0, handlers.HandlerCount);
+        Mem.AreEqual(0,                             handlers.TypeCount);
+        Mem.AreEqual(0,                             handlers.HandlerCount);
+        Mem.AreEqual("event types: 0, handlers: 0", handlers.ToString());
         Mem.AssertNoAlloc(start2);
     }
 }
