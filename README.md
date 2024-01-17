@@ -40,9 +40,10 @@ The core feature of an Entity Component System are:
 - Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
   in [AvaloniaUI](https://avaloniaui.net/).
 
+<br/><br/>
 
 
-## Examples
+# Examples
 
 Examples using **Friflo.Engine.ECS** are part of the unit tests see: [Tests/ECS/Examples.cs](Tests/ECS/Examples.cs)
 
@@ -130,7 +131,7 @@ public static void AddChildEntities()
 
 If changing an entity by adding or removing components, tags, scripts or child entities events are emitted.  
 An application can subscribe to these events like shown in the example.  
-Emitting these type of events increase code decoupling.
+Emitting these type of events increase code decoupling.  
 Without events these modifications need to be notified by direct method calls.
 
 ```csharp
@@ -152,7 +153,7 @@ public static void AddEventHandlers()
 
 ### Add signal handlers to an entity
 
-Similar to event are `Signal`'s. They are used to send and receive custom events on entity level in an application.  
+`Signal`s are similar to events. They are used to send and receive custom events on entity level in an application.  
 They have the same characteristics as events described in the section above.
 
 ```csharp
@@ -169,7 +170,7 @@ public static void AddSignalHandler()
 
 ### Create entity queries
 
-As described in the intro queries a fundamental feature of an ECS.  
+As described in the intro queries are a fundamental feature of an ECS.  
 **Friflo.Engine.ECS** support queries by any combination of component types and tags.
 
 ```csharp
@@ -206,7 +207,7 @@ public static void EntityQueries()
 }
 ```
 
-### Enumerate the chunks of an entity query
+### Enumerate the `Chunks` of an entity query
 
 Also as described in the intro enumeration of a query result is fundamental for an ECS.  
 Components are returned as `Chunks` and are suitable for
