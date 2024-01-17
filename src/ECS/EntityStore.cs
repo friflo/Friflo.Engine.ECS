@@ -85,23 +85,23 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary>Contains state of <see cref="EntityStore"/> not relevant for application development => remove noise in debugger.</summary>
     // MUST be private by all means 
     private struct Intern {
-                    internal readonly   PidType                 pidType;            //  4   - pid != id  /  pid == id
-                    internal            Random                  randPid;            //  8   - null if using pid == id
-                    internal readonly   Dictionary<long, int>   pid2Id;             //  8   - null if using pid == id
+                        internal readonly   PidType                 pidType;                //  4   - pid != id  /  pid == id
+                        internal            Random                  randPid;                //  8   - null if using pid == id
+                        internal readonly   Dictionary<long, int>   pid2Id;                 //  8   - null if using pid == id
 
-                    internal            int                     sequenceId;         //  4   - incrementing id used for next new entity
+                        internal            int                     sequenceId;             //  4   - incrementing id used for next new entity
         // --- delegates
-        internal Action                <ChildEntitiesChanged>   childEntitiesChanged;// 8   - fires event on add, insert, remove or delete an Entity
-        internal Dictionary<int, Action<ChildEntitiesChanged>>  entityChildEntitiesChanged;//  8
+        internal    Action                <ChildEntitiesChanged>    childEntitiesChanged;   // 8   - fires event on add, insert, remove or delete an Entity
+        internal    Dictionary<int, Action<ChildEntitiesChanged>>   entityChildEntitiesChanged;//  8
         //
-        internal Action                <ScriptChanged>          scriptAdded;        //  8   - fires event on add script
-        internal Action                <ScriptChanged>          scriptRemoved;      //  8   - fires event on remove script
-        internal Dictionary<int, Action<ScriptChanged>>         entityScriptChanged;//  8   - entity event handlers for add/remove script
+        internal    Action                <ScriptChanged>           scriptAdded;            //  8   - fires event on add script
+        internal    Action                <ScriptChanged>           scriptRemoved;          //  8   - fires event on remove script
+        internal    Dictionary<int, Action<ScriptChanged>>          entityScriptChanged;    //  8   - entity event handlers for add/remove script
         //
-        internal SignalHandler[]                                signalHandlerMap;   //  8
-        internal List<SignalHandler>                            signalHandlers;     //  8 
+        internal    SignalHandler[]                                 signalHandlerMap;       //  8
+        internal    List<SignalHandler>                             signalHandlers;         //  8 
         //
-        internal EventHandler          <EntitiesChanged>        entitiesChanged;    //  8   - fires event to notify changes of multiple entities
+        internal    EventHandler          <EntitiesChanged>         entitiesChanged;        //  8   - fires event to notify changes of multiple entities
                     
         internal Intern(PidType pidType)
         {
