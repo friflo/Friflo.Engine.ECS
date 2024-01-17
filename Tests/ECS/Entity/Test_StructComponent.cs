@@ -454,7 +454,7 @@ public static class Test_StructComponent
         AreEqual("EntityName: 'Hello'", entity.GetComponent<EntityName>().ToString());
         IsTrue(entity.HasName);
         IsTrue(entity.HasComponent<EntityName>());
-        AreEqual("id: 1  \"Hello\"",    entity.ToString());
+        AreEqual("id: 1  \"Hello\"  [EntityName]",    entity.ToString());
         
         AreEqual("Hello",               entity.Name.value);
         AreEqual("Hello",               Encoding.UTF8.GetString(entity.Name.Utf8));

@@ -96,7 +96,6 @@ public static class EntityUtils
                 sb.Append("  \"");
                 sb.Append(name);
                 sb.Append('\"');
-                return sb.ToString();
             }
         }
         var typeCount = archetype.componentCount + archetype.tags.Count + entity.Scripts.Length; 
