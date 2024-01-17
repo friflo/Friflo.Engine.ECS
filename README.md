@@ -1,15 +1,51 @@
 # [![JSON Fliox](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/Json-Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine)    **Friflo.Engine.ECS** ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
 
-
-# Friflo Engine
-
 [![nuget](https://img.shields.io/nuget/v/Friflo.Engine.ECS.svg?color=blue)](https://www.nuget.org/packages/Friflo.Engine.ECS) 
 [![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml) 
 [![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml) 
 
 
-Examples using `Friflo.EngineECS` are part of the unit test see: [Tests/ECS/Examples.cs](Tests/ECS/Examples.cs)
+The package **Friflo.Engine.ECS** is part of an in-development Game Editor which is documented at [Architecture.md](Architecture.md).
 
+**Friflo.Engine.ECS** implements an [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system).
+
+The core feature of an Entity Component System - ECS - are:
+
+1. Data is organized by a set of entities containing components.  
+  Components can be added / removed to / from an entities at any time.  
+  This software pattern is used to avoid deep class inheritance -
+  a characteristic specific to [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming).
+
+2. Entity queries from an entity container are fast and efficient compared to queries in an OOP architecture.  
+  E.g. The runtime complexity of a query returning 100 entities is **O(100)**.  
+  Independent from the amount of entities in stored in a container. E.g. 1.000.000.  
+  The trivial approach in OOP would be **O(1.000.000)** in this case.
+
+3. Entity components are stored as `struct`s in continuous memory.   
+  This improves query enumeration performance as L1 cache misses are very unlikely and  
+  all the memory store in L1 cache lines are utilized.  
+  Also the returned components are
+
+## Additional features
+
+- JSON Serialization
+- Build a hierarchy of entities typically used in Games and Game Editors.
+- Support for Vectorization (SIMD) of components returned by queries.
+- Minimize times required for GC collection by using struct types for entities and components.  
+  GC.Collect(1) < 0.8 ms when using 10.000.000 entities.
+- Support tagging of entities and use them as a filter in queries.
+- Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
+- Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
+  in [AvaloniaUI](https://avaloniaui.net/).
+
+
+
+## Examples
+
+Examples using **Friflo.Engine.ECS** are part of the unit tests see: [Tests/ECS/Examples.cs](Tests/ECS/Examples.cs)
+
+
+### Add components to an entity
 
 ```csharp
 public struct MyComponent : IComponent {
@@ -27,6 +63,8 @@ public static void AddComponents()
 ```
 
 
+### Add tags to an entity
+
 ```csharp
 public struct MyTag1 : ITag { };
 public struct MyTag2 : ITag { };
@@ -42,6 +80,8 @@ public static void AddTags()
 ```
 
 
+### Add scripts to an entity
+
 ```csharp
 public class MyScript : Script { } 
 
@@ -54,6 +94,7 @@ public static void AddScript()
 }
 ```
 
+### Add entities as children to an entity
 
 ```csharp
 public static void AddChildEntities()
@@ -68,6 +109,7 @@ public static void AddChildEntities()
 }
 ```
 
+### Add event handlers to an entity
 
 ```csharp
 public static void AddEventHandlers()
@@ -86,6 +128,7 @@ public static void AddEventHandlers()
 }
 ```
 
+### Add signal handlers to an entity
 
 ```csharp
 public readonly struct MySignal { } 
@@ -99,6 +142,7 @@ public static void AddSignalHandler()
 }
 ```
 
+### Create entity queries
 
 ```csharp
 public static void EntityQueries()
@@ -134,6 +178,7 @@ public static void EntityQueries()
 }
 ```
 
+### Enumerate the chunks of an entity query
 
 ```csharp
 public static void EnumerateQueryChunks()
