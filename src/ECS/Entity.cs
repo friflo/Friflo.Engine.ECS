@@ -54,8 +54,7 @@ namespace Friflo.Engine.ECS;
 ///     <item><see cref="Pid"/></item>
 ///     <item><see cref="Archetype"/></item>
 ///     <item><see cref="Store"/></item>
-///     <item><see cref="StoreOwnership"/></item>
-///     <item><see cref="TreeMembership"/></item>
+///     <item><see cref="DebugJSON"/></item>
 /// </list>
 /// <b>components</b> · generic
 /// <list type="bullet">
@@ -93,7 +92,7 @@ namespace Friflo.Engine.ECS;
 ///     <item><see cref="RemoveTag{T}"/></item>
 ///     <item><see cref="RemoveTags"/></item>
 /// </list>
-/// <b>tree nodes</b>
+/// <b>child entities</b>
 /// <list type="bullet">
 ///     <item><see cref="Parent"/></item>
 ///     <item><see cref="ChildEntities"/></item>
@@ -104,6 +103,17 @@ namespace Friflo.Engine.ECS;
 ///     <item><see cref="RemoveChild"/></item>
 ///     <item><see cref="DeleteEntity"/></item>
 ///     <item><see cref="GetChildIndex"/></item>
+/// </list>
+/// <b>events</b>
+/// <list type="bullet">
+///     <item><see cref="OnTagsChanged"/></item>
+///     <item><see cref="OnComponentChanged"/></item>
+///     <item><see cref="OnScriptChanged"/></item>
+///     <item><see cref="OnChildEntitiesChanged"/></item>
+///     <item><see cref="AddSignalHandler{TEvent}"/></item>
+///     <item><see cref="RemoveSignalHandler{TEvent}"/></item>
+///     <item><see cref="EmitSignal{TEvent}"/></item>
+///     <item><see cref="DebugEventHandlers"/></item>
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
