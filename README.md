@@ -41,6 +41,27 @@ The core feature of an Entity Component System are:
 - Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
   in [AvaloniaUI](https://avaloniaui.net/).
 
+
+## Development
+
+The library can integrated on all **.NET** supported platforms.  
+It is tested on Windows, macOS and Linux.
+
+The library can be build on all platforms a .NET SDK is available.  
+Build options:
+- `dotnet` CLI       - Windows, macOS, Linux
+- Rider              - Windows, macOS, Linux (untested)
+- Visual Studio 2022 - Windows
+- Visual Studio Code - Windows, macOS, Linux (untested)
+
+Library:
+- Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds  
+- Code coverage of the unit tests: 99,9%.  
+- Unit test execution: ~ 1 second.  
+- Size of `Friflo.Engine.ECS.dll` ~ 135 kb.  
+- No 3rd party dependencies.  
+- It requires **Friflo.Json.Fliox** which is part of this repository.
+
 <br/><br/>
 
 
