@@ -18,11 +18,11 @@ namespace Friflo.Engine.ECS;
 /// <typeparam name="TEvent">The event type containing the fields of a custom event.</typeparam>
 public readonly struct Signal<TEvent> where TEvent : struct 
 {
-    /// <summary>The <see cref="EntityStore"/> containg the <see cref="Entity"/> that emitted the <see cref="Event"/>.</summary>
+    /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the <see cref="Event"/>.</summary>
     public readonly     EntityStore Store;
     /// <summary>The id of the <see cref="Entity"/> that emitted the <see cref="Event"/> with <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public readonly     int         EntityId;
-    /// <summary>The <see cref="Event"/> containg event specific data passed to <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
+    /// <summary>The <see cref="Event"/> containing event specific data passed to <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public readonly     TEvent      Event;
     /// <summary>The <see cref="Entity"/> that emitted the <see cref="Event"/> with <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public              Entity      Entity => new Entity(Store, EntityId);

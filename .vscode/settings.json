@@ -31,6 +31,7 @@
         "blittable",
         "Browsable",
         "Dependants",
+        "MemberwiseClone",
         "Netcode",
         "nunit",
         "Pids",
