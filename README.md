@@ -9,7 +9,9 @@ The package **Friflo.Engine.ECS** is part of an in-development Game Editor which
 
 **Friflo.Engine.ECS** implements an [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system).
 
-The core feature of an Entity Component System - ECS - are:
+## Entity Component System - ECS
+
+The core feature of an Entity Component System are:
 
 1. Data is organized by a set of entities containing components.  
   Components can be added / removed to / from an entities at any time.  
@@ -23,10 +25,10 @@ The core feature of an Entity Component System - ECS - are:
 
 3. Entity components are stored as `struct`s in continuous memory.   
   This improves query enumeration performance as L1 cache misses are very unlikely and  
-  all the memory store in L1 cache lines are utilized.  
-  Also the returned components are
+  all the memory stored in L1 cache lines are utilized.  
 
-## Additional features
+
+## Additional library features
 
 - JSON Serialization
 - Build a hierarchy of entities typically used in Games and Game Editors.
@@ -47,6 +49,9 @@ Examples using **Friflo.Engine.ECS** are part of the unit tests see: [Tests/ECS/
 
 ### Add components to an entity
 
+`Components` are `struct`s used to store data for entity / fields.  
+Multiple components can be added / removed to / from an entity.  
+
 ```csharp
 public struct MyComponent : IComponent {
     public int value;
@@ -65,6 +70,9 @@ public static void AddComponents()
 
 ### Add tags to an entity
 
+`Tags` are `struct`s similar to components - except they store no data.  
+They can be utilized in queries similar as components to restrict the amount of entities returned by a query. 
+
 ```csharp
 public struct MyTag1 : ITag { };
 public struct MyTag2 : ITag { };
@@ -82,6 +90,13 @@ public static void AddTags()
 
 ### Add scripts to an entity
 
+`Script`s are similar to components and can be added / removed to / from entities.  
+`Script`s are classes and can be used to store data.  
+Additional to components they enable adding behavior in the common OOP style.
+
+In case dealing only with a few thousands of entities `Script`s are fine.  
+If dealing with a multiple of 100.000 components show be used for efficiency / performance.
+
 ```csharp
 public class MyScript : Script { } 
 
@@ -95,6 +110,8 @@ public static void AddScript()
 ```
 
 ### Add entities as children to an entity
+
+A typical use case in Games or Editor is to build up a hierarchy of entities.  
 
 ```csharp
 public static void AddChildEntities()
@@ -110,6 +127,11 @@ public static void AddChildEntities()
 ```
 
 ### Add event handlers to an entity
+
+If changing an entity by adding or removing components, tags, scripts or child entities events are emitted.  
+An application can subscribe to these events like shown in the example.  
+Emitting these type of events increase code decoupling.
+Without events these modifications need to be notified by direct method calls.
 
 ```csharp
 public static void AddEventHandlers()
@@ -130,6 +152,9 @@ public static void AddEventHandlers()
 
 ### Add signal handlers to an entity
 
+Similar to event are `Signal`'s. They are used to send and receive custom events on entity level in an application.  
+They have the same characteristics as events described in the section above.
+
 ```csharp
 public readonly struct MySignal { } 
 
@@ -143,6 +168,9 @@ public static void AddSignalHandler()
 ```
 
 ### Create entity queries
+
+As described in the intro queries a fundamental feature of an ECS.  
+**Friflo.Engine.ECS** support queries by any combination of component types and tags.
 
 ```csharp
 public static void EntityQueries()
@@ -179,6 +207,10 @@ public static void EntityQueries()
 ```
 
 ### Enumerate the chunks of an entity query
+
+Also as described in the intro enumeration of a query result is fundamental for an ECS.  
+Components are returned as `Chunks` and are suitable for
+[Vectorization - SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data)
 
 ```csharp
 public static void EnumerateQueryChunks()
