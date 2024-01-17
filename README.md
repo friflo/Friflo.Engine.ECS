@@ -32,7 +32,7 @@ The core feature of an Entity Component System are:
 ## Additional library features
 
 - JSON Serialization
-- Developer friendly / OOP like API by exposing the [Entity](/src/ECS/Entity.cs) struct as the main interface.  
+- Developer friendly / OOP like API by exposing the [Entity](src/ECS/Entity.cs) struct as the main interface.  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Support for Vectorization (SIMD) of components returned by queries.
