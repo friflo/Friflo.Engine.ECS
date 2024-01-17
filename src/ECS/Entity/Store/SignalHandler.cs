@@ -76,28 +76,29 @@ public partial class EntityStore
         entityEvents.Add(entityId, handler);
     }
     
-    internal static void RemoveSignalHandler<TEvent>(EntityStore store, int entityId, Action<Signal<TEvent>> handler) where TEvent : struct
+    internal static bool RemoveSignalHandler<TEvent>(EntityStore store, int entityId, Action<Signal<TEvent>> handler) where TEvent : struct
     {
         var signalIndex = SignalHandler<TEvent>.EventIndex;
         var map         = store.intern.signalHandlerMap;
         if (signalIndex >= map.Length) {
-            return;
+            return false;
         }
         var signalHandler = map[signalIndex];
         if (signalHandler == null) {
-            return;
+            return false;
         }
         var entityEvents = ((SignalHandler<TEvent>)signalHandler).entityEvents;
         if (!entityEvents.TryGetValue(entityId, out var handlers)) {
-            return;
+            return false;
         }
         handlers -= handler;
         if (handlers == null) {
             entityEvents.Remove(entityId);
             store.nodes[entityId].signalTypeCount--;
-            return;
+            return true;
         }
         entityEvents[entityId] = handlers;
+        return true;
     }
     
     private static SignalHandler<TEvent> GetSignalHandler<TEvent>(EntityStore store) where TEvent : struct

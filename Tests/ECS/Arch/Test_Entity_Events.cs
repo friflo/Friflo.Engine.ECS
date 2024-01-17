@@ -193,17 +193,17 @@ public static class Test_Entity_Events
             }
         };
         var onMyEvent2 = (Signal<MyEvent2> signal) => { };
-        entity.AddSignalHandler(onMyEvent);
-        entity.AddSignalHandler(onMyEvent2);
+        AreSame(onMyEvent,  entity.AddSignalHandler(onMyEvent));
+        AreSame(onMyEvent2, entity.AddSignalHandler(onMyEvent2));
         
         entity.EmitSignal(new MyEvent2 { value = 42 });    // handler allocates memory for assertion
         var start = Mem.GetAllocatedBytes();
         entity.EmitSignal(new MyEvent2 { value = 43 });
         Mem.AssertNoAlloc(start);
 
-        entity.RemoveSignalHandler(onMyEvent);
-        entity.RemoveSignalHandler(onMyEvent2);
-        entity.RemoveSignalHandler(onMyEvent); // remove already removed handler
+        IsTrue (entity.RemoveSignalHandler(onMyEvent));
+        IsTrue (entity.RemoveSignalHandler(onMyEvent2));
+        IsFalse(entity.RemoveSignalHandler(onMyEvent)); // remove already removed handler
         entity.EmitSignal(new MyEvent2 { value = 13 });
         
         AreEqual(2, entity1SignalCount);

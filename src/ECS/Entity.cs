@@ -421,10 +421,18 @@ public readonly struct Entity : IEquatable<Entity>
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
-    public void  AddSignalHandler   <TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct => EntityStore.AddSignalHandler   (store, Id, handler);
+    /// <returns>The the signal handler added to the entity.<br/>
+    /// Practical when passing a lambda that can be removed later with <see cref="RemoveSignalHandler{TEvent}"/>.</returns>
+    public Action<Signal<TEvent>>  AddSignalHandler   <TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct {
+        EntityStore.AddSignalHandler   (store, Id, handler);
+        return handler;
+    }
     
-    public void  RemoveSignalHandler<TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct => EntityStore.RemoveSignalHandler(store, Id, handler);
-    
+    /// <returns><c>true</c> in case the the passed signal handler was found.</returns>
+    public bool  RemoveSignalHandler<TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct {
+        return EntityStore.RemoveSignalHandler(store, Id, handler);
+    }
+
     /// <summary> Emits the passed signal event to all signal handlers added with <see cref="AddSignalHandler{TEvent}"/>. </summary>
     /// <remarks> It executes in ~10 nano seconds per signal handler. </remarks>
     public void  EmitSignal<TEvent> (in TEvent ev) where TEvent : struct {
