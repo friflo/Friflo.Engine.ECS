@@ -12,7 +12,7 @@ public enum ChangedEventAction
 }
 
 /// <summary>
-/// is the event for event handlers added to <see cref="Entity.OnComponentChanged"/>,
+/// Is the event for event handlers added to <see cref="Entity.OnComponentChanged"/>,
 /// <see cref="EntityStore.OnComponentAdded"/> or <see cref="EntityStore.OnComponentRemoved"/>.<br/>
 /// <br/>
 /// These events are fired on:
