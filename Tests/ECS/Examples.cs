@@ -108,7 +108,7 @@ public static class Examples
     }
     
     [Test]
-    public static void EnumerateQuery()
+    public static void EnumerateQueryChunks()
     {
         var store   = new EntityStore();
         var root    = store.CreateEntity();
