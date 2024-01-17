@@ -68,7 +68,8 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
     
                     private             InternBase              internBase;         // 40
-    /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development => remove noise in debugger.</summary>
+    /// <summary>Contains state of <see cref="EntityStoreBase"/> not relevant for application development.</summary>
+    /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     // MUST be private by all means 
     private struct InternBase {
         // --- delegates
