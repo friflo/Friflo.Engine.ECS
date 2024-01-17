@@ -13,9 +13,9 @@ namespace Friflo.Engine.ECS;
 /// on entity level in the engine. 
 /// <br/>
 /// It enables decoupling the code used for emitting events from a specific entity (aka subject / publisher)<br/>
-/// to multiple subscribers consuming the event by their <see cref="Signal{TEvent}"/> handlers. 
+/// to multiple subscribers (aka observers) consuming the event by their <see cref="Signal{TEvent}"/> handlers. 
 /// </summary>
-/// <typeparam name="TEvent">The event type containing event specific fields.</typeparam>
+/// <typeparam name="TEvent">The event type containing the fields of a custom event.</typeparam>
 public readonly struct Signal<TEvent> where TEvent : struct 
 {
     /// <summary>The <see cref="EntityStore"/> containg the <see cref="Entity"/> that emitted the <see cref="Event"/>.</summary>
