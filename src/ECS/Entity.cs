@@ -121,12 +121,16 @@ public readonly struct Entity : IEquatable<Entity>
 {
     // ------------------------------------ general properties ------------------------------------
 #region general properties
+    /// <summary>Returns the permanent entity id used for serialization.</summary>
     public              long                    Pid             => store.nodes[Id].pid;
-                    
+
+    /// <summary>Return the components added to the entity.</summary>
     public              EntityComponents        Components      => new EntityComponents(this);
-                    
+
+    /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
     public              ReadOnlySpan<Script>    Scripts         => new (EntityUtils.GetScripts(this));
 
+    /// <summary>Return the <see cref="Tags"/> added to the entity.</summary>
     /// <returns>
     /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
     /// <br/>
@@ -135,9 +139,11 @@ public readonly struct Entity : IEquatable<Entity>
     /// </returns>
     public     ref readonly Tags                Tags            => ref archetype.tags;
 
+    /// <summary>Returns the <see cref="Archetype"/> that contains the entity.</summary>
     /// <remarks>The <see cref="Archetype"/> the entity is stored.<br/>Return null if the entity is <see cref="detached"/></remarks>
     public                  Archetype           Archetype       => archetype;
     
+    /// <summary>Returns the <see cref="EntityStore"/> that contains the entity.</summary>
     /// <remarks>The <see cref="Store"/> the entity is <see cref="attached"/> to. Returns null if <see cref="detached"/></remarks>
     [Browse(Never)] public  EntityStore         Store           => archetype?.entityStore;
                     
@@ -185,8 +191,10 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ child / tree properties -------------------------------
 #region child / tree - properties
+    /// <summary>Return the number of child entities.</summary>
     [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[Id].childCount;
     
+    /// <summary>Returns the parent entity that contains the entity.</summary>
     /// <returns>
     /// null if the entity has no parent.<br/>
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
@@ -202,7 +210,8 @@ public readonly struct Entity : IEquatable<Entity>
     /// </summary>
     /// <remarks>Executes in O(1)</remarks>
                     public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
-                    
+    
+    /// <summary>Return the ids of the child entities.</summary>
     [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);
     #endregion
 
@@ -224,8 +233,12 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ component methods -------------------------------------
 #region component - methods
+    /// <summary>Return true if the entity contains a component of the given type.</summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructHeap<T>.StructIndex] != null;
 
+    /// <summary>Return the component of the given type as a reference.</summary>
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T   GetComponent<T>()   where T : struct, IComponent
@@ -242,7 +255,7 @@ public readonly struct Entity : IEquatable<Entity>
         result = ((StructHeap<T>)heap).components[compIndex];
         return true;
     }
-    
+    /// <summary>Add a component of the given type to the entity.</summary>
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)<br/>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
@@ -251,14 +264,14 @@ public readonly struct Entity : IEquatable<Entity>
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
-
+    /// <summary>Add the given <see cref="component"/> to the entity.</summary>
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.AddComponent   (Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
-
+    /// <summary>Remove the component of the given type from the entity.</summary>
     /// <returns>true if entity contained a component of the given type before</returns>
     /// <remarks>
     /// Executes in O(1)<br/>
@@ -275,24 +288,26 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ script methods ----------------------------------------
 #region script - methods
-    /// <returns>The <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</returns>
+    /// <summary>Returns the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</summary>
     /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative</remarks> 
-    public T    GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
+    public T        GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
     
     /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
-    public bool TryGetScript<T>(out T result)
+    public bool     TryGetScript<T>(out T result)
         where T : Script
     {
         result = (T)EntityUtils.GetScript(this, typeof(T));
         return result != null;
     }
+    /// <summary>Add the given <see cref="script"/> to the entity.</summary>
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative</remarks>
-    public T AddScript<T>(T script)   where T : Script  => (T)EntityUtils.AddScript    (this, ClassType<T>.ScriptIndex, script);
+    public TScript  AddScript<TScript>(TScript script)   where TScript : Script  => (TScript)EntityUtils.AddScript    (this, ClassType<TScript>.ScriptIndex, script);
     
-    /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
+    /// <summary>Remove the script with the given type from the entity.</summary>
+    /// <returns>The <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative</remarks>
-    public T RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);    
+    public T        RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);    
     #endregion
 
 
@@ -301,21 +316,22 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ tag methods -------------------------------------------
 #region tag - methods
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
-    public bool AddTag<T>()    where T : struct, ITag {
+    /// <summary>Add the given <typeparamref name="TTag"/> to the entity.</summary>
+    public bool AddTag<TTag>()    where TTag : struct, ITag {
         int index = 0;
-        return EntityStoreBase.AddTags   (archetype.store, Tags.Get<T>(), Id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.AddTags   (archetype.store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
-
+    /// <summary>Add the given <see cref="tags"/> to the entity.</summary>
     public bool AddTags(in Tags tags) {
         int index = 0;
         return EntityStoreBase.AddTags   (archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
-
-    public bool RemoveTag<T>() where T : struct, ITag {
+    /// <summary>Add the given <typeparamref name="TTag"/> from the entity.</summary>
+    public bool RemoveTag<TTag>() where TTag : struct, ITag {
         int index = 0;
-        return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<T>(), Id, ref refArchetype, ref refCompIndex, ref index);
+        return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
-
+    /// <summary>Remove the given <see cref="tags"/> from the entity.</summary>
     public bool RemoveTags(in Tags tags) {
         int index = 0;
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
@@ -327,6 +343,7 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ child / tree methods ----------------------------------
 #region child / tree - methods
+    /// <summary>Add the given <see cref="entity"/> as a child to the entity.</summary>
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
@@ -340,7 +357,7 @@ public readonly struct Entity : IEquatable<Entity>
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return entityStore.AddChild(Id, entity.Id);
     }
-    
+    /// <summary>Insert the given <see cref="entity"/> as a child to the entity at the passed <see cref="index"/>.</summary>
     /// <remarks>
     /// Executes in O(1) in case <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
     /// Otherwise O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
@@ -352,7 +369,7 @@ public readonly struct Entity : IEquatable<Entity>
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         entityStore.InsertChild(Id, entity.Id, index);
     }
-    
+    /// <summary>Remove the given child <see cref="entity"/> from the entity.</summary>
     /// <remarks>
     /// Executes in O(N) to search the entity. N = <see cref="ChildCount"/><br/>
     /// If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
@@ -365,7 +382,7 @@ public readonly struct Entity : IEquatable<Entity>
     }
     
     /// <summary>
-    /// Remove the entity from its <see cref="EntityStore"/>.<br/>
+    /// Delete the entity from its <see cref="EntityStore"/>.<br/>
     /// The deleted instance is in <see cref="detached"/> state.
     /// Calling <see cref="Entity"/> methods result in <see cref="NullReferenceException"/>'s
     /// </summary>
@@ -382,7 +399,9 @@ public readonly struct Entity : IEquatable<Entity>
             Archetype.MoveLastComponentsTo(arch, componentIndex);
         }
     }
-
+    /// <summary>Return the position of the given <see cref="child"/> in the entity.</summary>
+    /// <param name="child"></param>
+    /// <returns></returns>
     public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);    
     #endregion
 
@@ -419,15 +438,20 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ events ------------------------------------------------
 #region events
+    /// <summary>add / remove an event an event handler that is called on:<br/>
+    /// <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> and <see cref="RemoveTags"/>.</summary>
     public event Action<TagsChanged>            OnTagsChanged           { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
-    
+    /// <summary>add / remove an event an event handler that is called on:<br/>
+    /// <see cref="AddComponent{T}()"/> and <see cref="RemoveComponent{T}"/>.</summary>
     public event Action<ComponentChanged>       OnComponentChanged      { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveComponentChangedHandler   (store, Id, value);  }
-    
+    /// <summary>add / remove an event an event handler that is called on:<br/>
+    /// <see cref="AddScript{T}"/> and <see cref="RemoveScript{T}"/>.</summary>
     public event Action<ScriptChanged>          OnScriptChanged         { add    => EntityStore.AddScriptChangedHandler             (store, Id, value);
                                                                           remove => EntityStore.RemoveScriptChangedHandler          (store, Id, value);  }
-    
+    /// <summary>add / remove an event an event handler that is called on:<br/>
+    /// <see cref="AddChild"/>, <see cref="InsertChild"/> and <see cref="RemoveChild"/>.</summary>
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
