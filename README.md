@@ -62,7 +62,7 @@ Build options:
 
 Library:
 - Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds  
-- Code coverage of the unit tests: 99,9%.  
+- Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md)  
 - Unit test execution: ~ 1 second.  
 - Size of `Friflo.Engine.ECS.dll` ~ 135 kb.  
 - No 3rd party dependencies.  
