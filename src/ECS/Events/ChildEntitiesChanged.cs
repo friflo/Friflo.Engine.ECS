@@ -5,6 +5,17 @@
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Is the event for event handlers added to <see cref="Entity.OnChildEntitiesChanged"/>
+/// or <see cref="EntityStore.OnChildEntitiesChanged"/>.<br/>
+/// <br/>
+/// These events are fired on:
+/// <list type="bullet">
+///     <item><see cref="Entity.AddChild"/></item>
+///     <item><see cref="Entity.InsertChild"/></item>
+///     <item><see cref="Entity.RemoveChild"/></item>
+/// </list>
+/// </summary>
 public readonly struct ChildEntitiesChanged
 {
     public readonly ChildEntitiesChangedAction  Action;     //  4

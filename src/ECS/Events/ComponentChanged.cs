@@ -11,6 +11,16 @@ public enum ChangedEventAction
     Remove  = 1,
 }
 
+/// <summary>
+/// is the event for event handlers added to <see cref="Entity.OnComponentChanged"/>,
+/// <see cref="EntityStore.OnComponentAdded"/> or <see cref="EntityStore.OnComponentRemoved"/>.<br/>
+/// <br/>
+/// These events are fired on:
+/// <list type="bullet">
+///     <item><see cref="Entity.AddComponent{T}()"/></item>
+///     <item><see cref="Entity.RemoveComponent{T}()"/></item>
+/// </list>
+/// </summary>
 public readonly struct  ComponentChanged
 {
     public readonly     EntityStore         Store;          //  8

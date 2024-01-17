@@ -5,6 +5,16 @@
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Is the event for event handlers added to <see cref="ECS.Entity.OnScriptChanged"/>,
+/// <see cref="EntityStore.OnScriptAdded"/> or <see cref="EntityStore.OnScriptRemoved"/>.<br/>
+/// <br/>
+/// These events are fired on:
+/// <list type="bullet">
+///     <item><see cref="Entity.AddScript{TScript}"/></item>
+///     <item><see cref="Entity.RemoveScript{T}"/></item>
+/// </list>
+/// </summary>
 public readonly struct  ScriptChanged
 {
     public readonly     Entity              Entity;     // 16

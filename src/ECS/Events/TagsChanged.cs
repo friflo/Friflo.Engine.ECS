@@ -8,6 +8,18 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Is the event for event handlers added to <see cref="Entity.OnTagsChanged"/> or
+/// <see cref="EntityStore.OnTagsChanged"/>.<br/>
+/// <br/>
+/// These events are fired on:
+/// <list type="bullet">
+///     <item><see cref="Entity.AddTag{TTag}"/></item>
+///     <item><see cref="Entity.AddTags"/></item>
+///     <item><see cref="Entity.RemoveTag{TTag}"/></item>
+///     <item><see cref="Entity.RemoveTags"/></item>
+/// </list>
+/// </summary>
 public readonly struct  TagsChanged
 {
     public  readonly    EntityStore Store;      //  8
