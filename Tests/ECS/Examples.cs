@@ -32,7 +32,7 @@ public static class Examples
         var entity  = store.CreateEntity();
         entity.AddTag<MyTag1>();
         entity.AddTag<MyTag2>();
-        Console.WriteLine($"entity: {entity}"); // entity: id: 1  [#MyTag1, #MyTag2]
+        Console.WriteLine($"entity: {entity}");     // entity: id: 1  [#MyTag1, #MyTag2]
     }
     
     public class MyScript : Script { } 
@@ -43,7 +43,7 @@ public static class Examples
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
         entity.AddScript(new MyScript());
-        Console.WriteLine($"entity: {entity}"); // entity: id: 1  [*MyScript]
+        Console.WriteLine($"entity: {entity}");     // entity: id: 1  [*MyScript]
     }
     
     [Test]
@@ -63,15 +63,26 @@ public static class Examples
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity();
-        entity.OnComponentChanged     += args => { Console.WriteLine(args); }; // entity: 1 - event > Add Component: [MyComponent]
-        entity.OnTagsChanged          += args => { Console.WriteLine(args); }; // entity: 1 - event > Add Tags: [#MyTag1]
-        entity.OnScriptChanged        += args => { Console.WriteLine(args); }; // entity: 1 - event > Add Script: [*MyScript]
-        entity.OnChildEntitiesChanged += args => { Console.WriteLine(args); }; // entity: 1 - event > Add Child[0] = 2
+        entity.OnComponentChanged     += ev => { Console.WriteLine(ev); }; // entity: 1 - event > Add Component: [MyComponent]
+        entity.OnTagsChanged          += ev => { Console.WriteLine(ev); }; // entity: 1 - event > Add Tags: [#MyTag1]
+        entity.OnScriptChanged        += ev => { Console.WriteLine(ev); }; // entity: 1 - event > Add Script: [*MyScript]
+        entity.OnChildEntitiesChanged += ev => { Console.WriteLine(ev); }; // entity: 1 - event > Add Child[0] = 2
 
         entity.AddComponent(new MyComponent());
         entity.AddTag<MyTag1>();
         entity.AddScript(new MyScript());
         entity.AddChild(store.CreateEntity());
+    }
+    
+    public readonly struct MySignal { } 
+    
+    [Test]
+    public static void AddSignalHandler()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddSignalHandler<MySignal>(signal => { Console.WriteLine(signal); }); // entity: 1 - signal > MySignal    
+        entity.EmitSignal(new MySignal());
     }
     
     [Test]
@@ -111,11 +122,9 @@ public static class Examples
     public static void EnumerateQueryChunks()
     {
         var store   = new EntityStore();
-        var root    = store.CreateEntity();
         for (int n = 0; n < 3; n++) {
-            var child = store.CreateEntity();
-            child.AddComponent(new MyComponent{ value = n + 42 });
-            root.AddChild(child);
+            var entity = store.CreateEntity();
+            entity.AddComponent(new MyComponent{ value = n + 42 });
         }
         var queryMyComponents = store.Query<MyComponent>();
         foreach (var (components, _) in queryMyComponents.Chunks)
