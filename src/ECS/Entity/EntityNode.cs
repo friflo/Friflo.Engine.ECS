@@ -128,13 +128,13 @@ public struct EntityNode
 [Flags]
 internal enum HasEventFlags : byte
 {
-    /// <summary> Bit = 1 - <see cref="EntityStoreBase.InternBase.entityComponentChanged"/>.Count > 0<br/> </summary>
+    /// <summary> Bit is set - <see cref="EntityStoreBase.InternBase.entityComponentChanged"/>.Count > 0<br/> </summary>
     ComponentChanged        = 1,
-    /// <summary> Bit = 1 - <see cref="EntityStoreBase.InternBase.entityTagsChanged"/>.Count > 0<br/> </summary>
+    /// <summary> Bit is set - <see cref="EntityStoreBase.InternBase.entityTagsChanged"/>.Count > 0<br/> </summary>
     TagsChanged             = 2,
-    /// <summary> Bit = 1 - <see cref="EntityStore.Intern.entityScriptChanged"/>.Count > 0<br/> </summary>
+    /// <summary> Bit is set - <see cref="EntityStore.Intern.entityScriptChanged"/>.Count > 0<br/> </summary>
     ScriptChanged           = 4,
-    /// <summary> Bit = 1 - <see cref="EntityStore.Intern.entityChildEntitiesChanged"/>.Count > 0<br/> </summary>
+    /// <summary> Bit is set - <see cref="EntityStore.Intern.entityChildEntitiesChanged"/>.Count > 0<br/> </summary>
     ChildEntitiesChanged    = 8,
 }
 
