@@ -43,6 +43,10 @@ The core feature of an Entity Component System are:
 - Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
   in [AvaloniaUI](https://avaloniaui.net/).
 
+<br/><br/>
+<img src="docs/images/entity-debugger.png" width="593" height="270">  
+*Screenshot:* All relevant entity data is directly available in the debugger.
+
 
 ## Development
 

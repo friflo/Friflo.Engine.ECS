@@ -11,7 +11,8 @@ This package is part of the project described below.
 
 Additional features:
 - JSON Serialization
-- Developer friendly / OOP like API by exposing the [Entity](/src/ECS/Entity.cs) struct as the main interface.  
+- Developer friendly / OOP like API by exposing the [Entity](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/src/ECS/Entity.cs)
+  struct as the main interface.  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Efficient component queries minimizing L1 cache misses with support for Vectorization (SIMD).
