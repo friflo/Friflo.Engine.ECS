@@ -73,12 +73,12 @@ public abstract partial class EntityStoreBase
     // MUST be private by all means 
     private struct InternBase {
         // --- delegates
-        internal    Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed
-        internal    Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8   - entity event handlers for add/remove Tags
+        internal        Action                <TagsChanged>         tagsChanged;            //  8   - fires event if entity Tags are changed
+        internal        Dictionary<int, Action<TagsChanged>>        entityTagsChanged;      //  8   - entity event handlers for add/remove Tags
         //
-        internal    Action                <ComponentChanged>    componentAdded;         //  8   - fires event on add component
-        internal    Action                <ComponentChanged>    componentRemoved;       //  8   - fires event on remove component
-        internal    Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
+        internal        Action                <ComponentChanged>    componentAdded;         //  8   - fires event on add component
+        internal        Action                <ComponentChanged>    componentRemoved;       //  8   - fires event on remove component
+        internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
     }
     #endregion
     
