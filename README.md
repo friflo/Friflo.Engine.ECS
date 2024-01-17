@@ -17,21 +17,23 @@ The core feature of an Entity Component System are:
   Components can be added / removed to / from an entities at any time.  
   This software pattern is used to avoid deep class inheritance -
   a characteristic specific to [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming).  
-  It also simplifies the creation of decoupled code which is harder to achieve in OOP.
+  It simplifies the creation of decoupled code which is harder to achieve in OOP.
 
 2. Entity queries from an entity container are fast and efficient compared to queries in an OOP architecture.  
   E.g. The runtime complexity of a query returning 100 entities is **O(100)**.  
-  Independent from the amount of entities in stored in a container. E.g. 1.000.000.  
-  The trivial approach in OOP would be **O(1.000.000)** in this case.
+  Independent from the amount of entities stored in a container. E.g. 1.000.000.  
+  The trivial approach in OOP would be **O(1.000.000)**.
 
 3. Entity components are stored as `struct`s in continuous memory.   
   This improves query enumeration performance as L1 cache misses are very unlikely and  
-  all the memory stored in L1 cache lines are utilized.  
+  all bytes stored in L1 cache lines - typically 64 or 128 - are utilized.  
 
 
 ## Additional library features
 
 - JSON Serialization
+- Developer friendly / OOP like API by exposing the [Entity](/src/ECS/Entity.cs) struct as the main interface.  
+  The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Support for Vectorization (SIMD) of components returned by queries.
 - Minimize times required for GC collection by using struct types for entities and components.  
