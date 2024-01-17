@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Is the event for event handlers added to <see cref="Entity.OnTagsChanged"/> or
-/// <see cref="EntityStore.OnTagsChanged"/>.<br/>
+/// <see cref="EntityStoreBase.OnTagsChanged"/>.<br/>
 /// <br/>
 /// These events are fired on:
 /// <list type="bullet">

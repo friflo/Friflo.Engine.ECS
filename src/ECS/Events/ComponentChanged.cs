@@ -13,7 +13,7 @@ public enum ChangedEventAction
 
 /// <summary>
 /// Is the event for event handlers added to <see cref="Entity.OnComponentChanged"/>,
-/// <see cref="EntityStore.OnComponentAdded"/> or <see cref="EntityStore.OnComponentRemoved"/>.<br/>
+/// <see cref="EntityStoreBase.OnComponentAdded"/> or <see cref="EntityStoreBase.OnComponentRemoved"/>.<br/>
 /// <br/>
 /// These events are fired on:
 /// <list type="bullet">

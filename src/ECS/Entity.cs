@@ -264,7 +264,7 @@ public readonly struct Entity : IEquatable<Entity>
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
-    /// <summary>Add the given <see cref="component"/> to the entity.</summary>
+    /// <summary>Add the given <paramref name="component"/> to the entity.</summary>
     /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
@@ -299,7 +299,7 @@ public readonly struct Entity : IEquatable<Entity>
         result = (T)EntityUtils.GetScript(this, typeof(T));
         return result != null;
     }
-    /// <summary>Add the given <see cref="script"/> to the entity.</summary>
+    /// <summary>Add the given <paramref name="script"/> to the entity.</summary>
     /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative</remarks>
     public TScript  AddScript<TScript>(TScript script)   where TScript : Script  => (TScript)EntityUtils.AddScript    (this, ClassType<TScript>.ScriptIndex, script);
@@ -321,7 +321,7 @@ public readonly struct Entity : IEquatable<Entity>
         int index = 0;
         return EntityStoreBase.AddTags   (archetype.store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
-    /// <summary>Add the given <see cref="tags"/> to the entity.</summary>
+    /// <summary>Add the given <paramref name="tags"/> to the entity.</summary>
     public bool AddTags(in Tags tags) {
         int index = 0;
         return EntityStoreBase.AddTags   (archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
@@ -331,7 +331,7 @@ public readonly struct Entity : IEquatable<Entity>
         int index = 0;
         return EntityStoreBase.RemoveTags(archetype.store, Tags.Get<TTag>(), Id, ref refArchetype, ref refCompIndex, ref index);
     }
-    /// <summary>Remove the given <see cref="tags"/> from the entity.</summary>
+    /// <summary>Remove the given <paramref name="tags"/> from the entity.</summary>
     public bool RemoveTags(in Tags tags) {
         int index = 0;
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
@@ -343,7 +343,7 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ child / tree methods ----------------------------------
 #region child / tree - methods
-    /// <summary>Add the given <see cref="entity"/> as a child to the entity.</summary>
+    /// <summary>Add the given <paramref name="entity"/> as a child to the entity.</summary>
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
@@ -357,7 +357,7 @@ public readonly struct Entity : IEquatable<Entity>
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         return entityStore.AddChild(Id, entity.Id);
     }
-    /// <summary>Insert the given <see cref="entity"/> as a child to the entity at the passed <see cref="index"/>.</summary>
+    /// <summary>Insert the given <paramref name="entity"/> as a child to the entity at the passed <paramref name="index"/>.</summary>
     /// <remarks>
     /// Executes in O(1) in case <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
     /// Otherwise O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
@@ -369,7 +369,7 @@ public readonly struct Entity : IEquatable<Entity>
         if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         entityStore.InsertChild(Id, entity.Id, index);
     }
-    /// <summary>Remove the given child <see cref="entity"/> from the entity.</summary>
+    /// <summary>Remove the given child <paramref name="entity"/> from the entity.</summary>
     /// <remarks>
     /// Executes in O(N) to search the entity. N = <see cref="ChildCount"/><br/>
     /// If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
@@ -399,7 +399,7 @@ public readonly struct Entity : IEquatable<Entity>
             Archetype.MoveLastComponentsTo(arch, componentIndex);
         }
     }
-    /// <summary>Return the position of the given <see cref="child"/> in the entity.</summary>
+    /// <summary>Return the position of the given <paramref name="child"/> in the entity.</summary>
     /// <param name="child"></param>
     /// <returns></returns>
     public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);    
