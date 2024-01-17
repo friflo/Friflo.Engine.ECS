@@ -97,7 +97,7 @@ public static void AddTags()
 Additional to components they enable adding behavior in the common OOP style.
 
 In case dealing only with a few thousands of entities `Script`s are fine.  
-If dealing with a multiple of 100.000 components show be used for efficiency / performance.
+If dealing with a multiple of 10.000 components should be used for efficiency / performance.
 
 ```csharp
 public class MyScript : Script { } 
