@@ -5,12 +5,26 @@
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// <see cref="Signal{TEvent}"/>'s are used to emit custom events from an entity to <see cref="Signal{TEvent}"/> handlers<br/>
+/// added with <see cref="ECS.Entity.AddSignalHandler{TEvent}"/>.<br/>
+/// <br/>
+/// It it used to implement the <a href="https://en.wikipedia.org/wiki/Observer_pattern">Observer pattern</a>
+/// on entity level in the engine. 
+/// <br/>
+/// It enables decoupling the code used for emitting events from a specific entity (aka subject / publisher)<br/>
+/// to multiple subscribers consuming the event by their <see cref="Signal{TEvent}"/> handlers. 
+/// </summary>
+/// <typeparam name="TEvent">The event type containing event specific fields.</typeparam>
 public readonly struct Signal<TEvent> where TEvent : struct 
 {
+    /// <summary>The <see cref="EntityStore"/> containg the <see cref="Entity"/> that emitted the <see cref="Event"/>.</summary>
     public readonly     EntityStore Store;
+    /// <summary>The id of the <see cref="Entity"/> that emitted the <see cref="Event"/> with <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public readonly     int         EntityId;
+    /// <summary>The <see cref="Event"/> containg event specific data passed to <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public readonly     TEvent      Event;
-    
+    /// <summary>The <see cref="Entity"/> that emitted the <see cref="Event"/> with <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public              Entity      Entity => new Entity(Store, EntityId);
     
     internal Signal(EntityStore store, int id, in TEvent ev) {

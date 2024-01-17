@@ -455,13 +455,14 @@ public readonly struct Entity : IEquatable<Entity>
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
+    /// <summary>Add the given <see cref="Signal{TEvent}"/> handler to the entity.</summary>
     /// <returns>The the signal handler added to the entity.<br/>
     /// Practical when passing a lambda that can be removed later with <see cref="RemoveSignalHandler{TEvent}"/>.</returns>
     public Action<Signal<TEvent>>  AddSignalHandler   <TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct {
         EntityStore.AddSignalHandler   (store, Id, handler);
         return handler;
     }
-    
+    /// <summary>Remove the given <see cref="Signal{TEvent}"/> handler from the entity.</summary>
     /// <returns><c>true</c> in case the the passed signal handler was found.</returns>
     public bool  RemoveSignalHandler<TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct {
         return EntityStore.RemoveSignalHandler(store, Id, handler);
