@@ -13,10 +13,11 @@ The package **Friflo.Engine.ECS** is part of an in-development Game Editor which
 
 The core feature of an Entity Component System are:
 
-1. Data is organized by a set of entities containing components.  
+1. Data is organized by a set of entities. Each entity contains an arbitrary set of components.  
   Components can be added / removed to / from an entities at any time.  
   This software pattern is used to avoid deep class inheritance -
-  a characteristic specific to [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming).
+  a characteristic specific to [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming).  
+  It also simplifies the creation of decoupled code which is harder to achieve in OOP.
 
 2. Entity queries from an entity container are fast and efficient compared to queries in an OOP architecture.  
   E.g. The runtime complexity of a query returning 100 entities is **O(100)**.  
@@ -132,7 +133,8 @@ public static void AddChildEntities()
 If changing an entity by adding or removing components, tags, scripts or child entities events are emitted.  
 An application can subscribe to these events like shown in the example.  
 Emitting these type of events increase code decoupling.  
-Without events these modifications need to be notified by direct method calls.
+Without events these modifications need to be notified by direct method calls.  
+The *build-in* events can be subscribed on `EntityStore` and on `Entity` level like shown in the example below.  
 
 ```csharp
 public static void AddEventHandlers()
@@ -154,7 +156,7 @@ public static void AddEventHandlers()
 ### Add signal handlers to an entity
 
 `Signal`s are similar to events. They are used to send and receive custom events on entity level in an application.  
-They have the same characteristics as events described in the section above.
+They have the same characteristics as events described in the section above.  
 
 ```csharp
 public readonly struct MySignal { } 
