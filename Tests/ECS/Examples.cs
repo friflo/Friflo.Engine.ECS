@@ -15,8 +15,8 @@ public static class Examples
     [Test]
     public static void AddComponents()
     {
-        var store = new EntityStore();
-        var entity = store.CreateEntity();
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
         entity.AddComponent(new EntityName("Hello World!"));
         entity.AddComponent(new MyComponent { value = 42 });
         Console.WriteLine($"entity: {entity}"); // entity: id: 1  "Hello World!"  [EntityName, Position]
@@ -28,8 +28,8 @@ public static class Examples
     [Test]
     public static void AddTags()
     {
-        var store = new EntityStore();
-        var entity = store.CreateEntity();
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
         entity.AddTag<MyTag1>();
         entity.AddTag<MyTag2>();
         Console.WriteLine($"entity: {entity}"); // entity: id: 1  [#MyTag1, #MyTag2]
@@ -40,8 +40,8 @@ public static class Examples
     [Test]
     public static void AddScript()
     {
-        var store = new EntityStore();
-        var entity = store.CreateEntity();
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
         entity.AddScript(new MyScript());
         Console.WriteLine($"entity: {entity}"); // entity: id: 1  [*MyScript]
     }
@@ -74,4 +74,58 @@ public static class Examples
         entity.AddChild(store.CreateEntity());
     }
     
+    [Test]
+    public static void EntityQueries()
+    {
+        var store   = new EntityStore();
+        
+        var entity1 = store.CreateEntity();
+        entity1.AddComponent(new EntityName("test"));
+        entity1.AddTag<MyTag1>();
+        
+        var entity2 = store.CreateEntity();
+        entity2.AddComponent(new MyComponent { value = 42 });
+        entity2.AddTag<MyTag1>();
+        
+        var entity3 = store.CreateEntity();
+        entity3.AddComponent(new MyComponent { value = 1337 });
+        entity3.AddTag<MyTag1>();
+        entity3.AddTag<MyTag2>();
+        
+        // --- query components
+        var queryEntityNames = store.Query<EntityName>();
+        Console.WriteLine(queryEntityNames);    // Query: [EntityName]  EntityCount: 1
+
+        var queryMyComponents = store.Query<MyComponent>();
+        Console.WriteLine(queryMyComponents);   // Query: [MyComponent]  EntityCount: 2
+        
+        // --- query tags
+        var queryTag  = store.Query().AllTags(Tags.Get<MyTag1>());
+        Console.WriteLine(queryTag);            // Query: [#MyTag1]  EntityCount: 3
+        
+        var queryTags = store.Query().AllTags(Tags.Get<MyTag1, MyTag2>());
+        Console.WriteLine(queryTags);           // Query: [#MyTag1, #MyTag2]  EntityCount: 1
+    }
+    
+    [Test]
+    public static void EnumerateQuery()
+    {
+        var store   = new EntityStore();
+        var root    = store.CreateEntity();
+        for (int n = 0; n < 3; n++) {
+            var child = store.CreateEntity();
+            child.AddComponent(new MyComponent{ value = n + 42 });
+            root.AddChild(child);
+        }
+        var queryMyComponents = store.Query<MyComponent>();
+        foreach (var (components, _) in queryMyComponents.Chunks)
+        {
+            foreach (var component in components.Span) {
+                Console.WriteLine($"MyComponent.value: {component.value}");
+                // MyComponent.value: 42
+                // MyComponent.value: 43
+                // MyComponent.value: 44
+            }
+        }
+    }
 }
