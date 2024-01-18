@@ -8,6 +8,38 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    [Obsolete("experimental")]
+    public Entity GetEntityWithUniqueName(string name)
+    {
+        var query = internBase.uniqueNameQuery;
+        if (query == null) {
+            query = internBase.uniqueNameQuery = Query<UniqueName>();
+        }
+        // --- enumerate entities with unique names
+        var foundId = -1;
+        foreach (var (uniqueName, entities) in query.Chunks)
+        {
+            var uniqueNames = uniqueName.Span;
+            for (int n = 0; n < uniqueNames.Length; n++) {
+                if (uniqueNames[n].value != name) {
+                    continue;
+                }
+                if (foundId != -1) {
+                    throw MultipleEntitiesWithSameName(name);
+                }
+                foundId = entities[n];
+            }
+        }
+        if (foundId != -1) {
+            return new Entity((EntityStore)this, foundId);
+        }
+        throw new InvalidOperationException($"found no entity with {nameof(UniqueName)}: \"{name}\"");
+    }
+    
+    private static InvalidOperationException MultipleEntitiesWithSameName(string name) {
+        return new InvalidOperationException($"found multiple entities with same {nameof(UniqueName)}: \"{name}\"");
+    }
+    
     /// <summary>
     /// Return the entity matching the given <paramref name="allTags"/>.<br/>
     /// <br/>

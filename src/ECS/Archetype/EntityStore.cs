@@ -81,6 +81,8 @@ public abstract partial class EntityStoreBase
         internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
         //
         internal        ArchetypeQuery                              findQuery;              //  8   - reused query for FindEntity() methods
+        ///  reused query for <see cref="EntityStoreBase.GetEntityWithUniqueName"/>
+        internal        ArchetypeQuery<UniqueName>                  uniqueNameQuery;        //  8
     }
     #endregion
     
