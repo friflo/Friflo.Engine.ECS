@@ -27,18 +27,18 @@ public static class Test_Find
         var find1 = store.FindEntity(default, ComponentTypes.Get<EntityName>());
         Mem.AreEqual(entity3.Id, find1.Id);
 
-        var find2 = store.FindEntity(Tags.Get<TestTag>());
+        var find2 = store.FindEntityWithTags(Tags.Get<TestTag>());
         Mem.AreEqual(entity4.Id, find2.Id);
         
         int count = 10;     // 100_000_000 ~ #PC: 2719 ms
         for (int n = 0; n < count; n++) {
-            store.FindEntity(Tags.Get<TestTag>());
+            store.FindEntityWithTags(Tags.Get<TestTag>());
         }
         
         // --- test heap allocations
         var start = Mem.GetAllocatedBytes();
         store.FindEntity(default, ComponentTypes.Get<EntityName>());
-        store.FindEntity(Tags.Get<TestTag>());
+        store.FindEntityWithTags(Tags.Get<TestTag>());
         Mem.AssertNoAlloc(start);
     }
     

@@ -8,19 +8,32 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    /// <summary>
+    /// Return the entity matching the given <paramref name="allTags"/>.<br/>
+    /// <br/>
+    /// Use Tags.Get&lt;>() to get filter tags.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
     [Obsolete("experimental")]
-    public Entity FindEntity (in Tags withAllTags)
+    public Entity FindEntityWithTags (in Tags allTags)
     {
         var query = internBase.findQuery ??= new ArchetypeQuery(this);
-        query.Set(default, withAllTags);
+        query.Set(default, allTags);
         return FindSingleEntity(query);
     }
     
+    /// <summary>
+    /// Return the entity matching the given <paramref name="allTags"/>
+    /// and the given <paramref name="requiredComponents"/>.<br/>
+    /// <br/>
+    /// Use Tags.Get&lt;>() to get filter tags.<br/>
+    /// </summary>
+    /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
     [Obsolete("experimental")]
-    public Entity FindEntity (in Tags withAllTags, in ComponentTypes requiredComponents)
+    public Entity FindEntity (in Tags allTags, in ComponentTypes requiredComponents)
     {
         var query = internBase.findQuery ??= new ArchetypeQuery(this);
-        query.Set(requiredComponents, withAllTags);
+        query.Set(requiredComponents, allTags);
         return FindSingleEntity(query);
     }
 
