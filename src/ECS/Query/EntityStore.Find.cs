@@ -27,6 +27,7 @@ public partial class EntityStoreBase
     /// and the given <paramref name="requiredComponents"/>.<br/>
     /// <br/>
     /// Use Tags.Get&lt;>() to get filter tags.<br/>
+    /// Use ComponentTypes.Get&lt;>() to get component types.<br/>
     /// </summary>
     /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
     [Obsolete("experimental")]

@@ -23,12 +23,16 @@ public static class Test_Find
         var entity2 = store.CreateEntity(archetype2);
         var entity3 = store.CreateEntity(archetype3);
         var entity4 = store.CreateEntity(archetype4);
+        entity2.AddTag<TestTag2>();
         
         var find1 = store.FindEntity(default, ComponentTypes.Get<EntityName>());
         Mem.AreEqual(entity3.Id, find1.Id);
 
         var find2 = store.FindEntityWithTags(Tags.Get<TestTag>());
         Mem.AreEqual(entity4.Id, find2.Id);
+        
+        var find3 = store.FindEntity(Tags.Get<TestTag2>(), ComponentTypes.Get<Position>());
+        Mem.AreEqual(entity2.Id, find3.Id);
         
         int count = 10;     // 100_000_000 ~ #PC: 2719 ms
         for (int n = 0; n < count; n++) {
