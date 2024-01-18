@@ -60,5 +60,24 @@ public static class Test_Find
         });
         Assert.AreEqual("found no UniqueEntity with name: \"Foo\"", e!.Message);
     }
+    
+    [Test]
+    public static void Test_Find_UniqueEntity_perf()
+    {
+        var store       = new EntityStore();
+        var archetype1  = store.GetArchetype(Signature.Get<Position>());
+        
+        for (int n = 0; n < 100; n++) {
+            var entity = store.CreateEntity(archetype1);
+            entity.AddComponent(new UniqueEntity(n.ToString())); // create names with < 3 characters
+        }
+        var player = store.CreateEntity(archetype1);
+        player.AddComponent(new UniqueEntity("xxx"));
+        
+        int count = 10;     // 100_000_000 ~ #PC: 1998 ms
+        for (int n = 0; n < count; n++) {
+            store.GetUniqueEntity("xxx"); // find name with 3 characters
+        }
+    }
 }
 
