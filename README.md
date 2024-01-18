@@ -63,6 +63,7 @@ Library:
 - Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md)  
 - Unit test execution: ~ 1 second.  
 - Size of `Friflo.Engine.ECS.dll` ~ 135 kb.  
+- Pure C# implementation - no C/C++ bindings slowing down runtime / development performance
 - No 3rd party dependencies.  
 - It requires **Friflo.Json.Fliox** which is part of this repository.
 
