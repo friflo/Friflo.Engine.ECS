@@ -8,6 +8,12 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    /// <summary>
+    /// Return the entity with a <see cref="UniqueEntity"/> component and its <see cref="UniqueEntity.name"/> == <paramref name="name"/>
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// In case none or more than 1 <see cref="UniqueEntity"/> with the given <paramref name="name"/> found.
+    /// </exception>
     [Obsolete("experimental")]
     public Entity GetUniqueEntity(string name)
     {
