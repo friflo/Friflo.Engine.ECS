@@ -41,11 +41,9 @@ The core feature of an Entity Component System are:
 - Support tagging of entities and use them as a filter in queries.
 - Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
 - Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
-  in [AvaloniaUI](https://avaloniaui.net/).
+  in [AvaloniaUI](https://avaloniaui.net/). Sreenshot below:    
+<img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
 
-<br/><br/>
-<img src="docs/images/entity-debugger.png" width="593" height="270">  
-*Screenshot:* All relevant entity data is directly available in the debugger.
 
 
 ## Development
@@ -74,6 +72,11 @@ Library:
 # Examples
 
 Examples using **Friflo.Engine.ECS** are part of the unit tests see: [Tests/ECS/Examples.cs](Tests/ECS/Examples.cs)
+
+When testing the examples use a debugger to check entity state changes while stepping throw the code.
+
+<img src="docs/images/entity-debugger.png" width="593" height="270"></img>  
+*Screenshot:* All relevant entity data is directly available in the debugger.
 
 
 ### Add components to an entity
