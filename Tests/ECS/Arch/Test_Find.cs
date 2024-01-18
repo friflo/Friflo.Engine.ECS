@@ -64,12 +64,6 @@ public static class Test_Find
         
         var find2 = store.FindEntities(Tags.Get<TestTag>(), ComponentTypes.Get<Position>());
         Assert.AreEqual(2, find2.Count());
-        
-        // --- test heap allocations
-        var start = Mem.GetAllocatedBytes();
-        store.FindEntitiesWithTags(Tags.Get<TestTag>());
-        store.FindEntities(default, ComponentTypes.Get<Position>());
-        Mem.AssertNoAlloc(start);
     }
     
     [Test]

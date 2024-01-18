@@ -45,11 +45,11 @@ public partial class EntityStoreBase
     /// </summary>
     /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
     [Obsolete("experimental")]
-    public QueryEntities FindEntities (in Tags allTags, in ComponentTypes requiredComponents)
+    public Entity[] FindEntities (in Tags allTags, in ComponentTypes requiredComponents)
     {
         var query = internBase.findQuery ??= new ArchetypeQuery(this);
         query.Set(requiredComponents, allTags);
-        return new QueryEntities(query);
+        return GetFindEntities(query);
     }
     
     /// <summary>
@@ -59,11 +59,11 @@ public partial class EntityStoreBase
     /// </summary>
     /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
     [Obsolete("experimental")]
-    public QueryEntities FindEntitiesWithTags(in Tags allTags)
+    public Entity[] FindEntitiesWithTags(in Tags allTags)
     {
         var query = internBase.findQuery ??= new ArchetypeQuery(this);
         query.Set(default, allTags);
-        return new QueryEntities(query);
+        return GetFindEntities(query);
     }
 
     private Entity FindSingleEntity (ArchetypeQuery findQuery)
@@ -89,5 +89,19 @@ public partial class EntityStoreBase
         }
         var entityId = archetype!.entityIds[0];
         return new Entity((EntityStore)this, entityId);
+    }
+    
+    private Entity[] GetFindEntities (ArchetypeQuery findQuery)
+    {
+        var entities        = new Entity[findQuery.EntityCount];
+        var queryEntities   = new QueryEntities(findQuery);
+        int n = 0;
+        var store = (EntityStore)this;
+        foreach (var chunkEntities in queryEntities) {
+            foreach (var id in chunkEntities.Ids) {
+                entities[n++] = new Entity(store, id);
+            }
+        }
+        return entities;
     }
 }
