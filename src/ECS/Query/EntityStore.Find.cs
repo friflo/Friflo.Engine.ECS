@@ -117,7 +117,7 @@ public partial class EntityStoreBase
         var queryEntityCount = findQuery.EntityCount;
         switch (queryEntityCount) {
             case 0:
-                throw new InvalidOperationException("found no matching entities");
+                throw new InvalidOperationException("found no matching entity");
             case > 1:
                 throw new InvalidOperationException($"found multiple matching entities. found: {queryEntityCount}");
         }
