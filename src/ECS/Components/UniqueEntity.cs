@@ -12,6 +12,7 @@ namespace Friflo.Engine.ECS;
 /// This entity can be retrieved with <see cref="EntityStore.GetUniqueEntity"/>.<br/>
 /// It basically acts as a singleton within an <see cref="EntityStore"/>. 
 /// </summary>
+[ComponentKey("unique")]
 public struct UniqueEntity : IComponent
 {
     public          string  name;  //  8
