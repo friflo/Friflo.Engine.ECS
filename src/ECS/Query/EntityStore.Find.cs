@@ -14,7 +14,6 @@ public partial class EntityStoreBase
     /// <exception cref="InvalidOperationException">
     /// In case none or more than one <see cref="UniqueEntity"/> with the given <paramref name="name"/> found.
     /// </exception>
-    [Obsolete("experimental")]
     public Entity GetUniqueEntity(string name)
     {
         var query = internBase.uniqueEntityQuery;

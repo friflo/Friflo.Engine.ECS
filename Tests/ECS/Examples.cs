@@ -22,6 +22,19 @@ public static class Examples
         entity.AddComponent(new MyComponent { value = 42 });
         Console.WriteLine($"entity: {entity}");     // > entity: id: 1  "Hello World!"  [EntityName, Position]
     }
+    
+    [Test]
+    public static void GetUniqueEntity()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new UniqueEntity("Player")); // UniqueEntity is a build-in component
+        
+        // GetUniqueEntity() is used to reduce code coupling.
+        // It enables access to a unique entity without the need to pass the entity by external code.   
+        store.GetUniqueEntity("Player");
+        Console.WriteLine($"entity: {entity}");     // entity: id: 1  [UniqueEntity]
+    }
 
     public struct MyTag1 : ITag { };
     public struct MyTag2 : ITag { };
