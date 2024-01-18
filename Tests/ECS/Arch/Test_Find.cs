@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -43,6 +44,31 @@ public static class Test_Find
         var start = Mem.GetAllocatedBytes();
         store.FindEntity(default, ComponentTypes.Get<EntityName>());
         store.FindEntityWithTags(Tags.Get<TestTag>());
+        Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
+    public static void Test_Find_Entities()
+    {
+        var store       = new EntityStore();
+        var archetype1  = store.GetArchetype(Signature.Get<Position>());
+        var archetype2  = store.GetArchetype(Signature.Get<Position, Rotation>());
+        
+        var entity1 = store.CreateEntity(archetype1);
+        var entity2 = store.CreateEntity(archetype2);
+        entity1.AddTag<TestTag>();
+        entity2.AddTag<TestTag>();
+
+        var find1 = store.FindEntitiesWithTags(Tags.Get<TestTag>());
+        Assert.AreEqual(2, find1.Count());
+        
+        var find2 = store.FindEntities(Tags.Get<TestTag>(), ComponentTypes.Get<Position>());
+        Assert.AreEqual(2, find2.Count());
+        
+        // --- test heap allocations
+        var start = Mem.GetAllocatedBytes();
+        store.FindEntitiesWithTags(Tags.Get<TestTag>());
+        store.FindEntities(default, ComponentTypes.Get<Position>());
         Mem.AssertNoAlloc(start);
     }
     

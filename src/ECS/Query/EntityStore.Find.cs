@@ -37,6 +37,34 @@ public partial class EntityStoreBase
         query.Set(requiredComponents, allTags);
         return FindSingleEntity(query);
     }
+    
+    /// <summary>
+    /// Return the entity matching the given <paramref name="allTags"/>.<br/>
+    /// <br/>
+    /// Use Tags.Get&lt;>() to get filter tags.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
+    [Obsolete("experimental")]
+    public QueryEntities FindEntities (in Tags allTags, in ComponentTypes requiredComponents)
+    {
+        var query = internBase.findQuery ??= new ArchetypeQuery(this);
+        query.Set(requiredComponents, allTags);
+        return new QueryEntities(query);
+    }
+    
+    /// <summary>
+    /// Return the entity matching the given <paramref name="allTags"/>.<br/>
+    /// <br/>
+    /// Use Tags.Get&lt;>() to get filter tags.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"> in case none or more than 1 matching entities found.</exception>
+    [Obsolete("experimental")]
+    public QueryEntities FindEntitiesWithTags(in Tags allTags)
+    {
+        var query = internBase.findQuery ??= new ArchetypeQuery(this);
+        query.Set(default, allTags);
+        return new QueryEntities(query);
+    }
 
     private Entity FindSingleEntity (ArchetypeQuery findQuery)
     {
