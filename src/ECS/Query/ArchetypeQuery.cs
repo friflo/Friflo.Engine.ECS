@@ -41,6 +41,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
                     private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
+    [Browse(Never)] private             ComponentTypes      requiredComponents; // 32
     [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
                     
     #endregion
@@ -54,6 +55,11 @@ public class ArchetypeQuery
     /// </summary>
     public      QueryEntities      Entities         => new (this);
 
+    internal ArchetypeQuery(EntityStoreBase store) {
+        this.store          = store;
+        archetypes          = Array.Empty<Archetype>();
+        lastArchetypeCount  = 1;
+    }
 
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
     {
@@ -61,6 +67,15 @@ public class ArchetypeQuery
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
         signatureIndexes    = indexes;
+        requiredComponents  = new ComponentTypes(signatureIndexes);
+    }
+    
+    internal void Set (in ComponentTypes requiredComponents, in Tags requiredTags)
+    {
+        this.requiredComponents = requiredComponents;
+        this.requiredTags       = requiredTags;
+        archetypeCount          = 0;
+        lastArchetypeCount      = 1;
     }
     
     /// <remarks>
@@ -86,13 +101,12 @@ public class ArchetypeQuery
         var newStoreLength      = storeArchetypes.Length;
         var nextArchetypes      = archetypes;
         var nextCount           = archetypeCount;
-        var requiredComponents  = new ComponentTypes(signatureIndexes);
         
         for (int n = lastArchetypeCount; n < newStoreLength; n++)
         {
             var archetype         = storeArchetypes[n];
             var hasRequiredTypes  = archetype.componentTypes.HasAll(requiredComponents) &&
-                                    archetype.tags.   HasAll(requiredTags);
+                                    archetype.tags.          HasAll(requiredTags);
             if (!hasRequiredTypes) {
                 continue;
             }

@@ -24,20 +24,20 @@ public static class Test_Find
         var entity3 = store.CreateEntity(archetype3);
         var entity4 = store.CreateEntity(archetype4);
         
-        var find1 = store.FindEntity<EntityName>();
+        var find1 = store.FindEntity(default, ComponentTypes.Get<EntityName>());
         Mem.AreEqual(entity3.Id, find1.Id);
 
         var find2 = store.FindEntity(Tags.Get<TestTag>());
         Mem.AreEqual(entity4.Id, find2.Id);
         
-        int count = 10;     // 100_000_000 ~ #PC: 3642 ms
+        int count = 10;     // 100_000_000 ~ #PC: 2719 ms
         for (int n = 0; n < count; n++) {
             store.FindEntity(Tags.Get<TestTag>());
         }
         
         // --- test heap allocations
         var start = Mem.GetAllocatedBytes();
-        store.FindEntity<EntityName>();
+        store.FindEntity(default, ComponentTypes.Get<EntityName>());
         store.FindEntity(Tags.Get<TestTag>());
         Mem.AssertNoAlloc(start);
     }
@@ -52,19 +52,19 @@ public static class Test_Find
         var archetype4  = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Transform, MyComponent1>());
         {
             var entity  = store.CreateEntity(archetype1);
-            var find    = store.FindEntity<Position, Rotation>();
+            var find    = store.FindEntity(default, ComponentTypes.Get<Position, Rotation>());
             Mem.AreEqual(entity.Id, find.Id);
         } {
             var entity  = store.CreateEntity(archetype2);
-            var find    = store.FindEntity<Position, Rotation, EntityName>();
+            var find    = store.FindEntity(default, ComponentTypes.Get<Position, Rotation, EntityName>());
             Mem.AreEqual(entity.Id, find.Id);
         } {
             var entity  = store.CreateEntity(archetype3);
-            var find    = store.FindEntity<Position, Rotation, EntityName, Transform>();
+            var find    = store.FindEntity(default, ComponentTypes.Get<Position, Rotation, EntityName, Transform>());
             Mem.AreEqual(entity.Id, find.Id);
         } {
             var entity  = store.CreateEntity(archetype4);
-            var find    = store.FindEntity<Position, Rotation, EntityName, Transform, MyComponent1>();
+            var find    = store.FindEntity(default, ComponentTypes.Get<Position, Rotation, EntityName, Transform, MyComponent1>());
             Mem.AreEqual(entity.Id, find.Id);
         }
     }
@@ -80,12 +80,12 @@ public static class Test_Find
         store.CreateEntity(archetype2);
         
         var e = Assert.Throws<InvalidOperationException>(() => {
-            store.FindEntity<Position>();
+            store.FindEntity(default, ComponentTypes.Get<Position>());
         });
         Assert.AreEqual("found multiple matching entities. found: 2", e!.Message);
         
         e = Assert.Throws<InvalidOperationException>(() => {
-            store.FindEntity<EntityName>();
+            store.FindEntity(default, ComponentTypes.Get<EntityName>());
         });
         Assert.AreEqual("found no matching entity", e!.Message);
     }

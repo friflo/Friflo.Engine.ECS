@@ -131,6 +131,48 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
+    public static ComponentTypes Get<T1, T2, T3>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+    {
+        var componentTypes = new ComponentTypes();
+        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T3>.StructIndex);
+        return componentTypes;
+    }
+    
+    public static ComponentTypes Get<T1, T2, T3, T4>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+    {
+        var componentTypes = new ComponentTypes();
+        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T3>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T4>.StructIndex);
+        return componentTypes;
+    }
+    
+    public static ComponentTypes Get<T1, T2, T3, T4, T5>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+    {
+        var componentTypes = new ComponentTypes();
+        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T3>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T4>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T5>.StructIndex);
+        return componentTypes;
+    }
+    
     internal string GetString()
     {
         var sb = new StringBuilder();

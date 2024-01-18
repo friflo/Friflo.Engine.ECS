@@ -79,6 +79,8 @@ public abstract partial class EntityStoreBase
         internal        Action                <ComponentChanged>    componentAdded;         //  8   - fires event on add component
         internal        Action                <ComponentChanged>    componentRemoved;       //  8   - fires event on remove component
         internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
+        //
+        internal        ArchetypeQuery                              findQuery;              //  8   - reused query for FindEntity() methods
     }
     #endregion
     
