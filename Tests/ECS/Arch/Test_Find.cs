@@ -12,54 +12,54 @@ namespace Tests.ECS.Arch;
 public static class Test_Find
 {
     [Test]
-    public static void Test_Find_WithUniqueName()
+    public static void Test_Find_UniqueEntity()
     {
         var store   = new EntityStore();
         
         var entity1 = store.CreateEntity();
-        entity1.AddComponent(new UniqueName("Player"));
+        entity1.AddComponent(new UniqueEntity("Player"));
         
         var entity2 = store.CreateEntity();
-        entity2.AddComponent(new UniqueName("Enemy-1"));
+        entity2.AddComponent(new UniqueEntity("Enemy-1"));
         
         var entity3 = store.CreateEntity();
-        entity3.AddComponent(new UniqueName("Enemy-2"));
+        entity3.AddComponent(new UniqueEntity("Enemy-2"));
         
-        var find1 = store.GetEntityWithUniqueName("Player");
+        var find1 = store.GetUniqueEntity("Player");
         Mem.AreEqual(entity1.Id, find1.Id);
         
         int count = 10;     // 100_000_000 ~ #PC: 2742 ms
         for (int n = 0; n < count; n++) {
-            store.GetEntityWithUniqueName("Player");
+            store.GetUniqueEntity("Player");
         }
         
         // --- test heap allocations
         var start = Mem.GetAllocatedBytes();
-        store.GetEntityWithUniqueName("Player");
+        store.GetUniqueEntity("Player");
         Mem.AssertNoAlloc(start);
     }
     
     [Test]
-    public static void Test_Find_WithUniqueName_error()
+    public static void Test_Find_UniqueEntity_error()
     {
         var store       = new EntityStore();
         var archetype1  = store.GetArchetype(Signature.Get<Position>());
         
         var entity1 = store.CreateEntity(archetype1);
-        entity1.AddComponent(new UniqueName("Player"));
+        entity1.AddComponent(new UniqueEntity("Player"));
         
         var entity2 = store.CreateEntity(archetype1);
-        entity2.AddComponent(new UniqueName("Player"));
+        entity2.AddComponent(new UniqueEntity("Player"));
         
         var e = Assert.Throws<InvalidOperationException>(() => {
-            store.GetEntityWithUniqueName("Player");
+            store.GetUniqueEntity("Player");
         });
-        Assert.AreEqual("found multiple entities with same UniqueName: \"Player\"", e!.Message);
+        Assert.AreEqual("found multiple UniqueEntity's with name: \"Player\"", e!.Message);
         
         e = Assert.Throws<InvalidOperationException>(() => {
-            store.GetEntityWithUniqueName("Foo");
+            store.GetUniqueEntity("Foo");
         });
-        Assert.AreEqual("found no entity with UniqueName: \"Foo\"", e!.Message);
+        Assert.AreEqual("found no UniqueEntity with name: \"Foo\"", e!.Message);
     }
     
     [Test]

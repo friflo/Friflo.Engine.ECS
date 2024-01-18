@@ -9,19 +9,19 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStoreBase
 {
     [Obsolete("experimental")]
-    public Entity GetEntityWithUniqueName(string name)
+    public Entity GetUniqueEntity(string name)
     {
-        var query = internBase.uniqueNameQuery;
+        var query = internBase.uniqueEntityQuery;
         if (query == null) {
-            query = internBase.uniqueNameQuery = Query<UniqueName>();
+            query = internBase.uniqueEntityQuery = Query<UniqueEntity>();
         }
         // --- enumerate entities with unique names
         var foundId = -1;
-        foreach (var (uniqueName, entities) in query.Chunks)
+        foreach (var (uniqueEntity, entities) in query.Chunks)
         {
-            var uniqueNames = uniqueName.Span;
-            for (int n = 0; n < uniqueNames.Length; n++) {
-                if (uniqueNames[n].value != name) {
+            var uniqueEntities = uniqueEntity.Span;
+            for (int n = 0; n < uniqueEntities.Length; n++) {
+                if (uniqueEntities[n].name != name) {
                     continue;
                 }
                 if (foundId != -1) {
@@ -33,11 +33,11 @@ public partial class EntityStoreBase
         if (foundId != -1) {
             return new Entity((EntityStore)this, foundId);
         }
-        throw new InvalidOperationException($"found no entity with {nameof(UniqueName)}: \"{name}\"");
+        throw new InvalidOperationException($"found no {nameof(UniqueEntity)} with name: \"{name}\"");
     }
     
     private static InvalidOperationException MultipleEntitiesWithSameName(string name) {
-        return new InvalidOperationException($"found multiple entities with same {nameof(UniqueName)}: \"{name}\"");
+        return new InvalidOperationException($"found multiple {nameof(UniqueEntity)}'s with name: \"{name}\"");
     }
     
     /// <summary>

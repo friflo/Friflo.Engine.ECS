@@ -7,13 +7,13 @@
 namespace Friflo.Engine.ECS;
 
 
-public struct UniqueName : IComponent
+public struct UniqueEntity : IComponent
 {
-    public          string  value;  //  8
+    public          string  name;  //  8
     
-    public override string  ToString() => $"UniqueName: '{value}'";
+    public override string  ToString() => $"UniqueEntity: '{name}'";
 
-    public UniqueName (string value) {
-        this.value = value;
+    public UniqueEntity (string name) {
+        this.name = name;
     }
 }
