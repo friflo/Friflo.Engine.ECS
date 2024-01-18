@@ -74,7 +74,7 @@ public static class Test_Find
         var player = store.CreateEntity(archetype1);
         player.AddComponent(new UniqueEntity("xxx"));
         
-        int count = 10;     // 100_000_000 ~ #PC: 1998 ms
+        int count = 10;     // 10_000_000 ~ #PC: 2132 ms
         for (int n = 0; n < count; n++) {
             store.GetUniqueEntity("xxx"); // find name with 3 characters
         }
