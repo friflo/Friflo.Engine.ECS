@@ -13,6 +13,8 @@ public static class Test_Find
     [Test]
     public static void Test_Find_UniqueEntity()
     {
+        Assert.AreEqual("UniqueEntity: 'test'", new UniqueEntity("test").ToString());
+        
         var store   = new EntityStore();
         
         var entity1 = store.CreateEntity();
