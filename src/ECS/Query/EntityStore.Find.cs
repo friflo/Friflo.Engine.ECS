@@ -91,6 +91,10 @@ public partial class EntityStoreBase
         return new Entity((EntityStore)this, entityId);
     }
     
+    /// <remarks>
+    /// Cannot return <see cref="QueryEntities"/> in <see cref="FindEntities"/> as <see cref="InternBase.findQuery"/><br/>
+    /// is reused and may change before <see cref="QueryEntities"/> is enumerated.
+    /// </remarks>
     private Entity[] GetFindEntities (ArchetypeQuery findQuery)
     {
         var entities        = new Entity[findQuery.EntityCount];
