@@ -474,5 +474,25 @@ public static class Test_StructComponent
         }
         Console.WriteLine($"EntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
+    
+        
+    [Test]
+    public static void Test_StructComponent_Store_Entities() {
+        var store = new EntityStore();
+                    store.GetArchetype(Signature.Get<Position>());
+        var arch2 = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var arch3 = store.GetArchetype(Signature.Get<Position, Rotation, MyComponent1>());
+        
+        store.CreateEntity(arch2);
+        store.CreateEntity(arch3);
+        store.CreateEntity(arch3);
+        
+        int count = 0;
+        foreach (var _ in store.Entities) {
+            count++;
+        }
+        AreEqual(3, count);
+        AreEqual(3, store.Entities.Count);
+    }
 }
 

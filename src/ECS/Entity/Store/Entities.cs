@@ -181,4 +181,9 @@ public partial class EntityStore
         entity.refCompIndex = Archetype.AddEntity(archetype, entity.Id);
         return entity;
     }
+    
+    private QueryEntities GetEntities() {
+        var query = intern.entityQuery ??= new ArchetypeQuery(this, new ComponentTypes());
+        return query.Entities;
+    }
 }

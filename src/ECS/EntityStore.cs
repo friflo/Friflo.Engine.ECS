@@ -40,8 +40,14 @@ namespace Friflo.Engine.ECS;
 public sealed partial class EntityStore : EntityStoreBase
 {
 #region public properties
+    /// <summary> Return the root <see cref="Entity"/> of the store.</summary>
     public              Entity          StoreRoot               => storeRoot; // null if no graph origin set
+    
+    /// <summary> Return all <see cref="Script"/>'s added to <see cref="Entity"/>'s in the <see cref="EntityStore"/>. </summary>
     public ReadOnlySpan<EntityScripts>  EntityScripts           => new (entityScripts, 1, entityScriptCount - 1);
+    
+    /// <summary> Return all <see cref="Entity"/>'s stored in the <see cref="EntityStore"/>. </summary>
+    public              QueryEntities   Entities                => GetEntities();
     #endregion
     
 #region events
@@ -103,6 +109,8 @@ public sealed partial class EntityStore : EntityStoreBase
         internal    List<SignalHandler>                             signalHandlers;         //  8 
         //
         internal    EventHandler          <EntitiesChanged>         entitiesChanged;        //  8   - fires event to notify changes of multiple entities
+        //
+        internal    ArchetypeQuery                                  entityQuery;            //  8
                     
         internal Intern(PidType pidType)
         {
