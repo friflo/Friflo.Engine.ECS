@@ -46,7 +46,7 @@ public static class Bench_Query
         var store   = new EntityStore(PidType.UsePidAsId);
         var archetype = store.GetArchetype(Signature.Get<MyComponent1>());
         for (int n = 0; n < 32; n++) {
-            store.CreateEntity(archetype);
+            archetype.CreateEntity();
         }
         
         // --- enable JIT optimization
@@ -57,7 +57,7 @@ public static class Bench_Query
         }
         
         for (int n = 0; n < entityCount - 32; n++) {
-            store.CreateEntity(archetype);
+            archetype.CreateEntity();
         }
         // --- run perf
         var stopwatch = new Stopwatch(); stopwatch.Start();

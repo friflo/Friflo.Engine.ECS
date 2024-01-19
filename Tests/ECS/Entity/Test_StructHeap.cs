@@ -19,7 +19,7 @@ public static class Test_StructHeap
         var entities    = new Entity[count];
         for (int n = 0; n < count; n++)
         {
-            var entity = store.CreateEntity(arch1);
+            var entity = arch1.CreateEntity();
             entities[n] = entity;
             Mem.AreSame(arch1,              entity.Archetype);
             Mem.AreEqual(n + 1,             arch1.EntityCount);
@@ -41,7 +41,7 @@ public static class Test_StructHeap
         var entities    = new Entity[count];
         for (int n = 0; n < count; n++)
         {
-            var entity = store.CreateEntity(arch1);
+            var entity = arch1.CreateEntity();
             entities[n] = entity;
             entity.Position.x = n;
         }
@@ -79,13 +79,13 @@ public static class Test_StructHeap
         var store   = new EntityStore(PidType.UsePidAsId);
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
         Mem.AreEqual(512, arch1.EnsureCapacity(0)); // 1 => default capacity
-        store.CreateEntity(arch1);
+        arch1.CreateEntity();
         Mem.AreEqual(511, arch1.EnsureCapacity(0));
         
         Mem.AreEqual(1023, arch1.EnsureCapacity(1000));
         for (int n = 0; n < 1023; n++) {
             Mem.AreEqual(1023 - n, arch1.EnsureCapacity(0));
-            store.CreateEntity(arch1);
+            arch1.CreateEntity();
         }
         Mem.AreEqual(0, arch1.EnsureCapacity(0));
     }
@@ -99,13 +99,13 @@ public static class Test_StructHeap
         store.EnsureCapacity(count);
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
         arch1.EnsureCapacity(count);
-        _ = store.CreateEntity(arch1); // warmup
+        _ = arch1.CreateEntity(); // warmup
         
         // --- perf
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int n = 0; n < count; n++) {
-            _ = store.CreateEntity(arch1);
+            _ = arch1.CreateEntity();
         }
         Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(count + 1, arch1.EntityCount);
@@ -120,7 +120,7 @@ public static class Test_StructHeap
         store.EnsureCapacity(count);
         var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
         arch1.EnsureCapacity(count);
-        store.CreateEntity(arch1);
+        arch1.CreateEntity();
         
         // --- perf
         var stopwatch = new Stopwatch();
@@ -131,23 +131,11 @@ public static class Test_StructHeap
             arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
             arch1.EnsureCapacity(count);
             for (int n = 0; n < count; n++) {
-                _ = store.CreateEntity(arch1);
+                _ = arch1.CreateEntity();
             }
             Mem.AreEqual(count, arch1.EntityCount);
         }
         Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-    }
-    
-    [Test]
-    public static void Test_StructHeap_invalid_store()
-    {
-        var store1      = new EntityStore();
-        var store2      = new EntityStore();
-        var arch1       = store1.GetArchetype(Signature.Get<Position>());
-        var e = Assert.Throws<ArgumentException>(() => {
-            store2.CreateEntity(arch1);
-        });
-        Mem.AreEqual("entity is owned by a different store (Parameter 'archetype')", e!.Message);
     }
 }
 

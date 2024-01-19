@@ -19,7 +19,7 @@ public static class Test_Query
         
         var archetype   = store.GetArchetype(Signature.Get<Position>());
         for (int n = 1; n <= 1000; n++) {
-            var child = store.CreateEntity(archetype);
+            var child = archetype.CreateEntity();
             child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
@@ -59,7 +59,7 @@ public static class Test_Query
         
         var archetype   = store.GetArchetype(Signature.Get<Position, Rotation>());
         for (int n = 2; n <= 1000; n++) {
-            var child = store.CreateEntity(archetype);
+            var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             root.AddChild(child);
@@ -92,7 +92,7 @@ public static class Test_Query
         
         var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
         for (int n = 2; n <= 1000; n++) {
-            var child = store.CreateEntity(archetype);
+            var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Name.value    = "child";
@@ -126,7 +126,7 @@ public static class Test_Query
         
         var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3, EntityName>());
         for (int n = 2; n <= 1000; n++) {
-            var child = store.CreateEntity(archetype);
+            var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Scale3        = new Scale3  (n, 0, 0);
@@ -161,7 +161,7 @@ public static class Test_Query
         
         var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3, EntityName>());
         for (int n = 2; n <= 1000; n++) {
-            var child = store.CreateEntity(archetype);
+            var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Scale3        = new Scale3  (n, 0, 0);
@@ -231,7 +231,7 @@ public static class Test_Query
         
         var archetype   = store.GetArchetype(Signature.Get<ByteComponent, MyComponent1>());
         for (int n = 0; n < 32; n++) {
-            var child = store.CreateEntity(archetype);
+            var child = archetype.CreateEntity();
             root.AddChild(child);
         }
         // --- force one time allocations
@@ -284,7 +284,7 @@ public static class Test_Query
                     case >  192:                Mem.AreEqual(256, span512.Length);  break;
                 }
             }
-            store.CreateEntity(archetype);
+            archetype.CreateEntity();
         }
     }
 }

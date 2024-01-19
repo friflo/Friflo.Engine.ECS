@@ -59,6 +59,14 @@ public sealed class Archetype
     #endregion
     
 #region public methods
+    public Entity CreateEntity()
+    {
+        var entity          = entityStore.CreateEntity();
+        entity.refArchetype = this;
+        entity.refCompIndex = AddEntity(this, entity.Id);
+        return entity;
+    }
+    
     /// <returns>the number of entities that can be added without reallocation </returns>
     public int EnsureCapacity(int capacity) {
         var available = memory.capacity - entityCount;

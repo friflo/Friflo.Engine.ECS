@@ -292,7 +292,7 @@ public static class Test_Query
         var store   = new EntityStore();
         var archetype = store.GetArchetype(Signature.Get<Position>());
         for (int n = 0; n < 10; n++) {
-            store.CreateEntity(archetype);
+            archetype.CreateEntity();
         }
         AreEqual(10, archetype.Entities.Count);
         int count = 0;

@@ -168,20 +168,6 @@ public partial class EntityStore
         SetStoreRootEntity(entity);
     }
     
-    /// <summary>
-    /// Creates a new entity with the components and tags of the given <paramref name="archetype"/>
-    /// </summary>
-    public Entity CreateEntity(Archetype archetype)
-    {
-        if (this != archetype.store) {
-            throw InvalidStoreException(nameof(archetype));
-        }
-        var entity          = CreateEntity();
-        entity.refArchetype = archetype;
-        entity.refCompIndex = Archetype.AddEntity(archetype, entity.Id);
-        return entity;
-    }
-    
     private QueryEntities GetEntities() {
         var query = intern.entityQuery ??= new ArchetypeQuery(this, new ComponentTypes());
         return query.Entities;

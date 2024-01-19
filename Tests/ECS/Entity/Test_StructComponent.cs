@@ -115,10 +115,10 @@ public static class Test_StructComponent
         IsFalse(entity1.AddComponent(new Position { x = 10, y = 11 }));
         
         // Create dummy entities. See Note above
-        store.CreateEntity(entity1.Archetype);
-        store.CreateEntity(entity1.Archetype);
-        store.CreateEntity(entity1.Archetype);
-        store.CreateEntity(entity1.Archetype);
+        entity1.Archetype.CreateEntity();
+        entity1.Archetype.CreateEntity();
+        entity1.Archetype.CreateEntity();
+        entity1.Archetype.CreateEntity();
         
         var start = Mem.GetAllocatedBytes();
         var entity2 = store.CreateEntity();
@@ -483,9 +483,9 @@ public static class Test_StructComponent
         var arch2 = store.GetArchetype(Signature.Get<Position, Rotation>());
         var arch3 = store.GetArchetype(Signature.Get<Position, Rotation, MyComponent1>());
         
-        store.CreateEntity(arch2);
-        store.CreateEntity(arch3);
-        store.CreateEntity(arch3);
+        arch2.CreateEntity();
+        arch3.CreateEntity();
+        arch3.CreateEntity();
         
         int count = 0;
         foreach (var _ in store.Entities) {

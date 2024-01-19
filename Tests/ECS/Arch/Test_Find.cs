@@ -46,10 +46,10 @@ public static class Test_Find
         var store       = new EntityStore();
         var archetype1  = store.GetArchetype(Signature.Get<Position>());
         
-        var entity1 = store.CreateEntity(archetype1);
+        var entity1 = archetype1.CreateEntity();
         entity1.AddComponent(new UniqueEntity("Player"));
         
-        var entity2 = store.CreateEntity(archetype1);
+        var entity2 = archetype1.CreateEntity();
         entity2.AddComponent(new UniqueEntity("Player"));
         
         var e = Assert.Throws<InvalidOperationException>(() => {
@@ -70,10 +70,10 @@ public static class Test_Find
         var archetype1  = store.GetArchetype(Signature.Get<Position>());
         
         for (int n = 0; n < 100; n++) {
-            var entity = store.CreateEntity(archetype1);
+            var entity = archetype1.CreateEntity();
             entity.AddComponent(new UniqueEntity(n.ToString())); // create names with < 3 characters
         }
-        var player = store.CreateEntity(archetype1);
+        var player = archetype1.CreateEntity();
         player.AddComponent(new UniqueEntity("xxx"));
         
         Assert.AreEqual(101, store.UniqueEntities.Count);

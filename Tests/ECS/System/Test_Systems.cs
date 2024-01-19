@@ -210,7 +210,7 @@ public static class Test_Systems
         root.AddChild(child);
         child.AddComponent(new Position(2, 0, 0));
         for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+            child = child.Archetype.CreateEntity();
             child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
@@ -231,7 +231,7 @@ public static class Test_Systems
         child.AddComponent(new Position(2, 0, 0));
         child.AddComponent(new Rotation(2, 0, 0, 0));
         for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+            child = child.Archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             root.AddChild(child);
@@ -254,7 +254,7 @@ public static class Test_Systems
         child.AddComponent(new Rotation(2, 0, 0, 0));
         child.AddComponent(new EntityName("child"));
         for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+            child = child.Archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Name.value    = "child";
@@ -279,7 +279,7 @@ public static class Test_Systems
         child.AddComponent(new Scale3  (2, 0, 0));
         child.AddComponent(new EntityName("child"));
         for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+            child = child.Archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Scale3        = new Scale3  (n, 0, 0);
@@ -306,7 +306,7 @@ public static class Test_Systems
         child.AddComponent<Transform>();
         child.AddComponent(new EntityName("child"));
         for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+            child = child.Archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
             child.Rotation      = new Rotation(n, 0, 0, 0);
             child.Scale3        = new Scale3  (n, 0, 0);

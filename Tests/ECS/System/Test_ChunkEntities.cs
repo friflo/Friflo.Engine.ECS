@@ -20,7 +20,7 @@ public static class Test_ChunkEntities
         root.AddChild(child);
         child.AddComponent(new Position(2, 0, 0));
         for (int n = 3; n <= 1000; n++) {
-            child = store.CreateEntity(child.Archetype);
+            child = child.Archetype.CreateEntity();
             child.Position = new Position(n, 0, 0);
             root.AddChild(child);
         }
