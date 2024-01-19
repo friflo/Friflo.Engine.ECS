@@ -5,9 +5,11 @@
 | Friflo Engine                             | Unity                                     | Godot                                     |
 | ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
 | • `Entity` **struct**                     | • `GameObject` **class**                                                              |
-|   **General properties**                                                                                                          |
+|   **General components**                                                                                                          |
+| *Existence: optional*                     | *Existence: always present*               |                                           |
 | Entity.Id                                 | GameObject.GetInstanceID()                |                                           |
 | Entity.Name                               | GameObject.name                           |                                           |
+| Entity.Transform                          | GameObject.transform                      |                                           |
 | Entity.Position                           | GameObject.transform.position             |                                           |
 | Entity.Rotation                           | GameObject.transform.rotation             |                                           |
 | Entity.Scale3                             | GameObject.transform.localScale           |                                           |
