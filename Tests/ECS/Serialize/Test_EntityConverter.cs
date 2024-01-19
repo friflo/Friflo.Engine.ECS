@@ -28,10 +28,11 @@ public static class Test_EntityConverter
         var converter   = EntityConverter.Default;
         var entity2 = converter.DataEntityToEntity(new DataEntity { pid = 2 }, store, out _);
         
-        AreEqual(2, entity2.Id);
-        AreEqual(0, entity2.ChildEntities.Count);
-        AreEqual(1, store.EntityCount);
-        AreEqual("Count: 0", entity2.ChildEntities.ToString());
+        AreEqual(2,             entity2.Id);
+        AreEqual(0,             entity2.ChildEntities.Count);
+        AreEqual(1,             store.EntityCount);
+        AreEqual("Entity[0]",   entity2.ChildEntities.ToString());
+        AreEqual("entities: 1", store.ToString());
     }
     
     [Test]

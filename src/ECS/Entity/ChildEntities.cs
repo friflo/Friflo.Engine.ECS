@@ -19,7 +19,7 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
     
                         public              Entity              this[int index] => new Entity(store, Ids[index]);
-                        public override     string              ToString()      => $"Count: {childCount}";
+                        public override     string              ToString()      => $"Entity[{childCount}]";
     
     // --- internal fields
     [Browse(Never)]     internal readonly   int                 childCount;     //  4

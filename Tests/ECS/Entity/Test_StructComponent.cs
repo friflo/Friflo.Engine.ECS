@@ -198,7 +198,7 @@ public static class Test_StructComponent
         AreEqual(0,         node.ChildCount);
         AreEqual(0,         node.ChildIds.Length);
         AreEqual(NoParentId,node.ParentId);
-        AreEqual("Count: 2", store.ToString());
+        AreEqual("entities: 2", store.ToString());
         
         long count = 10; // 1_000_000_000L ~ #PC: 969 ms
         for (var n = 0; n < count; n++) {

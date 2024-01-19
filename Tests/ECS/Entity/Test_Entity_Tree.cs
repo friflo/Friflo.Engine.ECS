@@ -61,16 +61,18 @@ public static class Test_Entity_Tree
         AreEqual(4,         child.Id);
         child.AddComponent(new EntityName("child"));
         AddHandler(store, args => AreEqual("entity: 1 - event > Add Child[0] = 4", args.ToString()));
-        AreEqual(0,         root.AddChild(child));
+        AreEqual(0,             root.AddChild(child));
+        AreEqual("Entity[1]",   root.ChildEntities.ToString());
+        AreEqual("entities: 2", store.ToString());
         
-        IsTrue(root ==      child.Parent);
-        AreEqual(attached,  child.StoreOwnership);
-        var childEntities = root.ChildEntities;
-        AreEqual(1,         childEntities.Ids.Length);
-        AreEqual(4,         childEntities.Ids[0]);
-        AreEqual(1,         root.ChildCount);
-        AreEqual(1,         childEntities.Count);
-        IsTrue(child ==     childEntities[0]);
+        IsTrue(root ==          child.Parent);
+        AreEqual(attached,      child.StoreOwnership);
+        var childEntities =     root.ChildEntities;
+        AreEqual(1,             childEntities.Ids.Length);
+        AreEqual(4,             childEntities.Ids[0]);
+        AreEqual(1,             root.ChildCount);
+        AreEqual(1,             childEntities.Count);
+        IsTrue(child ==         childEntities[0]);
         int count = 0;
         foreach (var childEntity in root.ChildEntities) {
             count++;
@@ -218,9 +220,11 @@ public static class Test_Entity_Tree
         var child3      = store.CreateEntity(3);
         var subChild4   = store.CreateEntity(4);
         
-        AreEqual(0, root.AddChild(child2));
-        AreEqual(1, root.AddChild(child3));
-        AreEqual(0, child2.AddChild(subChild4));
+        AreEqual(0,             root.AddChild(child2));
+        AreEqual(1,             root.AddChild(child3));
+        AreEqual(0,             child2.AddChild(subChild4));
+        AreEqual("Entity[2]",   root.ChildEntities.ToString());
+        AreEqual("entities: 4", store.ToString());
         
         var events = SetHandlerSeq(store, (args, seq) => {
             switch (seq) {

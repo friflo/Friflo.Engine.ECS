@@ -31,7 +31,7 @@ public abstract partial class EntityStoreBase
     /// <summary>Return all <see cref="UniqueEntity"/>'s in the entity store </summary>
                     public              QueryEntities           UniqueEntities      => GetUniqueEntities();
 
-                    public   override   string                  ToString()          => $"Count: {nodesCount}";
+                    public   override   string                  ToString()          => $"entities: {nodesCount}";
     #endregion
 
 #region events
