@@ -19,10 +19,8 @@ public partial class EntityStoreBase
     /// </remarks>
     public Entity GetUniqueEntity(string uid)
     {
-        var query = internBase.uniqueEntityQuery;
-        if (query == null) {
-            query = internBase.uniqueEntityQuery = Query<UniqueEntity>();
-        }
+        var query = internBase.uniqueEntityQuery ??= Query<UniqueEntity>();
+
         // --- enumerate entities with unique names
         var foundId = 0;
         foreach (var (uniqueEntity, entities) in query.Chunks)
