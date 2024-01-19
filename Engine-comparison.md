@@ -11,6 +11,7 @@
 | Entity.Rotation                           | GameObject.transform.rotation             |                                           |
 | Entity.Scale3                             | GameObject.transform.localScale           |                                           |
 | Entity.Store                              | GameObject.scene                          |                                           |
+|                                                                                                                                   |
 |   **Component methods**                                                                                                           |
 | • `IComponent` struct                     | • n/a                                                                                 |
 | Entity.Components                         | n/a                                       |                                           |
@@ -20,6 +21,7 @@
 | Entity.TryGetComponent<T>()               | n/a                                       |                                           |
 | Entity.HasComponent<T>()                  | n/a                                       |                                           |
 | n/a                                       | n/a                                       |                                           |
+|                                                                                                                                   |
 |   **Script methods**                                                                                                              |
 | • `Script` class                          | • `MonoBehavior` class                                                                |
 | Entity.Scripts                            | n/a                                       |                                           |
@@ -28,6 +30,7 @@
 | Entity.GetScript<T>()                     | GameObject.GetComponent<>()               |                                           |
 | Entity.TryGetScript<T>()                  | GameObject.TryGetComponent<>()            |                                           |
 | n/a                                       | GameObject.GetComponents<>()              |                                           |
+|                                                                                                                                   |
 |   **Tag methods**                         |                                                                                       |
 | • `ITag` struct                           | • `string`                                                                            |
 | Entity.Tags                               | n/a                                       |                                           |
@@ -36,17 +39,20 @@
 | Entity.AddTags()                          | n/a                                       |                                           |
 | Entity.RemoveTag<>()                      | n/a                                       |                                           |
 | Entity.RemoveTags()                       | n/a                                       |                                           |
-|   **Child properties** ()                                                                                                         |
+|                                                                                                                                   |
+|   **Child properties**                                                                                                            |
 | • `Entity` struct                         | • `GameObject` class                                                                  |
 | Entity.ChildCount                         | GameObject.transform.childCount           |                                           |
 | Entity.ChildEntities                      | n/a                                       |                                           |
 | Entity.ChildIds                           | n/a                                       |                                           |
 | Entity.Parent                             | GameObject.transform.parent               |                                           |
+|                                                                                                                                   |
 |   **Child methods**                                                                                                               |
 | Entity.AddChild(child)                    | child.parent = parent                     |                                           |
 | Entity.RemoveChild(child)                 | child.parent = null                       |                                           |
 | Entity.InsertChild()                      | n/a                                       |                                           |
 | Entity.DeleteEntity()                     | UnityEngine.Destroy(gameObject)           |                                           |
+|                                                                                                                                   |
 |   **Events**                                                                                                                      |
 | Entity.OnComponentChanged                 | n/a                                       |                                           |
 | Entity.OnTagsChanged                      | n/a                                       |                                           |
@@ -55,6 +61,7 @@
 | Entity.AddSignalHandler()                 | n/a                                       |                                           |
 | Entity.RemoveSignalHandler()              | n/a                                       |                                           |
 | Entity.RemoveSignalHandler()              | n/a                                       |                                           |
+|                                                                                                                                   |
 |   **Debug properties**                                                                                                            |
 | Entity.DebugJSON                          |                                           |                                           |
 | Entity.DebugEventHandlers                 |                                           |                                           |
