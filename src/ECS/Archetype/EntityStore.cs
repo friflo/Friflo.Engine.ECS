@@ -20,7 +20,7 @@ public abstract partial class EntityStoreBase
 {
 #region public properties
     /// <summary>Number of all entities stored in the entity store</summary>
-                    public              int                     EntityCount         => nodesCount;
+    [Browse(Never)] public              int                     EntityCount         => nodesCount;
     [Browse(Never)] public              int                     NodeMaxId           => nodesMaxId;
                     public              Systems                 Systems             { get => systems; init => systems = value; }
 
