@@ -4,7 +4,9 @@
 
 | Friflo Engine                             | Unity                                     | Godot                                     |
 | ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
-| • `Entity` **struct**                     | • `GameObject` **class**                                                              |
+|   **Type**                                                                                                                        |
+| • `Entity` **struct**                     | `GameObject` **class**                    | `Node` **class**                          |
+|                                                                                                                                   |
 |   **General** properties                                                                                                          |
 | *Existence: optional*                     | *Existence: always present*               |                                           |
 | Entity.Id                                 | GameObject.GetInstanceID()                |                                           |
@@ -16,7 +18,7 @@
 | Entity.Store                              | GameObject.scene                          |                                           |
 |                                                                                                                                   |
 |   **Component** methods                                                                                                           |
-| • `IComponent` **struct**                 | • n/a                                                                                 |
+| • `IComponent` **struct**                 | • n/a                                     |                                           |
 | Entity.Components                         | n/a                                       |                                           |
 | Entity.AddComponent<T>()                  | n/a                                       | n/a engine is OOP                         |
 | Entity.RemoveComponent<T>()               | n/a                                       |                                           |
@@ -26,7 +28,7 @@
 | n/a                                       | n/a                                       |                                           |
 |                                                                                                                                   |
 |   **Script** methods                                                                                                              |
-| • `Script` **class**                      | • `MonoBehavior` **class**                                                            |
+| • `Script` **class**                      | • `MonoBehavior` **class**                |                                           |
 | Entity.Scripts                            | n/a                                       |                                           |
 | Entity.AddScript<T>()                     | GameObject.AddComponent<T>()              |                                           |
 | Entity.RemoveScript<T>()                  | UnityEngine.Destroy(object)               |                                           |
@@ -34,8 +36,8 @@
 | Entity.TryGetScript<T>()                  | GameObject.TryGetComponent<T>()           |                                           |
 | n/a                                       | GameObject.GetComponents<T>()             |                                           |
 |                                                                                                                                   |
-|   **Tag** methods                         |                                                                                       |
-| • `ITag` **struct**                       | • **`string`**                                                                        |
+|   **Tag** methods                                                                                                                 |
+| • `ITag` **struct**                       | • **`string`**                            |                                           |
 | Entity.Tags                               | n/a                                       |                                           |
 | n/a                                       | GameObject.tag                            |                                           |
 | Entity.Tags.Has<`ITag`>()                 | GameObject.tag == `string`                |                                           |
@@ -45,7 +47,7 @@
 | Entity.RemoveTags()                       | n/a                                       |                                           |
 |                                                                                                                                   |
 |   **Child** properties                                                                                                            |
-| • `Entity` **struct**                     | • `GameObject` **class**                                                              |
+| • `Entity` **struct**                     | • `GameObject` **class**                  |                                           |
 | Entity.ChildCount                         | GameObject.transform.childCount           |                                           |
 | Entity.ChildEntities                      | n/a                                       |                                           |
 | Entity.ChildIds                           | n/a                                       |                                           |
