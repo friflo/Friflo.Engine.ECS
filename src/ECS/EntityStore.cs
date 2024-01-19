@@ -46,7 +46,9 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Return all <see cref="Script"/>'s added to <see cref="Entity"/>'s in the <see cref="EntityStore"/>. </summary>
     public ReadOnlySpan<EntityScripts>  EntityScripts           => new (entityScripts, 1, entityScriptCount - 1);
     
-    /// <summary> Return all <see cref="Entity"/>'s stored in the <see cref="EntityStore"/>. </summary>
+    /// <summary> Return all <see cref="Entity"/>'s stored in the <see cref="EntityStore"/>.</summary>
+    /// <remarks>Property is mainly used for debugging.<br/>
+    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
     public              QueryEntities   Entities                => GetEntities();
     #endregion
     

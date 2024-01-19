@@ -29,10 +29,9 @@ public sealed class Archetype
                     public              EntityStoreBase     Store           => store;
                     public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
                     public ref readonly Tags                Tags            => ref tags;
-                    /// <summary>
-                    /// Return the <see cref="Archetype"/> entities mainly for debugging.<br/>
-                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
-                    /// </summary>
+                    /// <summary>Return all <see cref="Entity"/>'s stored in the <see cref="Archetype"/>.</summary>
+                    /// <remarks>Property is mainly used for debugging.<br/>
+                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
                     public              QueryEntities       Entities        => GetEntities();
                     
                     public   override   string              ToString()      => GetString();
