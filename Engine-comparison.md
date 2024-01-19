@@ -11,28 +11,33 @@
 | Entity.Rotation                           | GameObject.transform.rotation             |                                           |
 | Entity.Scale3                             | GameObject.transform.localScale           |                                           |
 | Entity.Store                              | GameObject.scene                          |                                           |
+|   **Component methods**                                                                                                           |
+| • `IComponent` struct                     | • n/a                                                                                 |
 | Entity.Components                         | n/a                                       |                                           |
-| Entity.Tags                               | GameObject.tag                            |                                           |
-| Entity.Scripts                            | n/a                                       |                                           |
-|   **Component methods** (`struct`)                                                                                                |
 | Entity.AddComponent<T>()                  | n/a                                       | n/a engine is OOP                         |
 | Entity.RemoveComponent<T>()               | n/a                                       |                                           |
 | Entity.GetComponent<T>()                  | n/a                                       |                                           |
 | Entity.TryGetComponent<T>()               | n/a                                       |                                           |
 | Entity.HasComponent<T>()                  | n/a                                       |                                           |
 | n/a                                       | n/a                                       |                                           |
-|   **`Script` methods** (`class`)          | `MonoBehavior`                                                                        |
+|   **Script methods**                                                                                                              |
+| • `Script` class                          | • `MonoBehavior` class                                                                |
+| Entity.Scripts                            | n/a                                       |                                           |
 | Entity.AddScript<T>()                     | GameObject.AddComponent<>()               |                                           |
 | Entity.RemoveScript<T>()                  | UnityEngine.Destroy(object)               |                                           |
 | Entity.GetScript<T>()                     | GameObject.GetComponent<>()               |                                           |
 | Entity.TryGetScript<T>()                  | GameObject.TryGetComponent<>()            |                                           |
 | n/a                                       | GameObject.GetComponents<>()              |                                           |
-|   **Tag methods**                                                                                                                 |
+|   **Tag methods**                         |                                                                                       |
+| • `ITag` struct                           | • `string`                                                                            |
+| Entity.Tags                               | n/a                                       |                                           |
+| n/a                                       | GameObject.tag                            |                                           |
 | Entity.AddTag<T>()                        | n/a                                       |                                           |
 | Entity.AddTags()                          | n/a                                       |                                           |
 | Entity.RemoveTag<>()                      | n/a                                       |                                           |
 | Entity.RemoveTags()                       | n/a                                       |                                           |
-|   **Child properties**                                                                                                            |
+|   **Child properties** ()                                                                                                         |
+| • `Entity` struct                         | • `GameObject` class                                                                  |
 | Entity.ChildCount                         | GameObject.transform.childCount           |                                           |
 | Entity.ChildEntities                      | n/a                                       |                                           |
 | Entity.ChildIds                           | n/a                                       |                                           |
