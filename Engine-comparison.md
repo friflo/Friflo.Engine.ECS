@@ -62,7 +62,6 @@
 | Entity.OnChildEntitiesChanged             | n/a                                       |                                           |
 | Entity.AddSignalHandler()                 | n/a                                       |                                           |
 | Entity.RemoveSignalHandler()              | n/a                                       |                                           |
-| Entity.RemoveSignalHandler()              | n/a                                       |                                           |
 |                                                                                                                                   |
 |   **Debug properties**                                                                                                            |
 | Entity.DebugJSON                          |                                           |                                           |
