@@ -4,6 +4,7 @@
 
 | Friflo Engine                             | Unity                                     | Godot                                     |
 | ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
+| • `Entity` **struct**                     | • `GameObject` **class**                                                              |
 |   **General properties**                                                                                                          |
 | Entity.Id                                 | GameObject.GetInstanceID()                |                                           |
 | Entity.Name                               | GameObject.name                           |                                           |
@@ -25,23 +26,24 @@
 |   **Script methods**                                                                                                              |
 | • `Script` **class**                      | • `MonoBehavior` **class**                                                            |
 | Entity.Scripts                            | n/a                                       |                                           |
-| Entity.AddScript<T>()                     | GameObject.AddComponent<>()               |                                           |
+| Entity.AddScript<T>()                     | GameObject.AddComponent<T>()              |                                           |
 | Entity.RemoveScript<T>()                  | UnityEngine.Destroy(object)               |                                           |
-| Entity.GetScript<T>()                     | GameObject.GetComponent<>()               |                                           |
-| Entity.TryGetScript<T>()                  | GameObject.TryGetComponent<>()            |                                           |
-| n/a                                       | GameObject.GetComponents<>()              |                                           |
+| Entity.GetScript<T>()                     | GameObject.GetComponent<T>()              |                                           |
+| Entity.TryGetScript<T>()                  | GameObject.TryGetComponent<T>()           |                                           |
+| n/a                                       | GameObject.GetComponents<T>()             |                                           |
 |                                                                                                                                   |
 |   **Tag methods**                         |                                                                                       |
 | • `ITag` **struct**                       | • **`string`**                                                                        |
 | Entity.Tags                               | n/a                                       |                                           |
 | n/a                                       | GameObject.tag                            |                                           |
+| Entity.Tags.Has<`ITag`>()                 | GameObject.tag == `string`                |                                           |
 | Entity.AddTag<T>()                        | n/a                                       |                                           |
 | Entity.AddTags()                          | n/a                                       |                                           |
-| Entity.RemoveTag<>()                      | n/a                                       |                                           |
+| Entity.RemoveTag<T>()                     | n/a                                       |                                           |
 | Entity.RemoveTags()                       | n/a                                       |                                           |
 |                                                                                                                                   |
 |   **Child properties**                                                                                                            |
-| • `Entity` **struct**                     | • `GameObject` **class**                                                                  |
+| • `Entity` **struct**                     | • `GameObject` **class**                                                              |
 | Entity.ChildCount                         | GameObject.transform.childCount           |                                           |
 | Entity.ChildEntities                      | n/a                                       |                                           |
 | Entity.ChildIds                           | n/a                                       |                                           |
