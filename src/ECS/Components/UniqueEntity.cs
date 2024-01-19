@@ -8,18 +8,19 @@ namespace Friflo.Engine.ECS;
 
 
 /// <summary>
-/// A <see cref="UniqueEntity"/> component is intended to be added to exactly on entity within an <see cref="EntityStore"/>.<br/>
-/// This entity can be retrieved with <see cref="EntityStore.GetUniqueEntity"/>.<br/>
+/// <see cref="UniqueEntity"/> is used to assign a unique <c>string</c> to an entity within an <see cref="EntityStore"/>.<br/>
+/// <br/>
+/// To find a <see cref="UniqueEntity"/> within an <see cref="EntityStore"/> use <see cref="EntityStore.GetUniqueEntity"/>.<br/>
 /// It basically acts as a singleton within an <see cref="EntityStore"/>. 
 /// </summary>
 [ComponentKey("unique")]
 public struct UniqueEntity : IComponent
 {
-    public          string  name;  //  8
+    public          string  uid;  //  8
     
-    public override string  ToString() => $"UniqueEntity: '{name}'";
+    public override string  ToString() => $"UniqueEntity: '{uid}'";
 
-    public UniqueEntity (string name) {
-        this.name = name;
+    public UniqueEntity (string uid) {
+        this.uid = uid;
     }
 }

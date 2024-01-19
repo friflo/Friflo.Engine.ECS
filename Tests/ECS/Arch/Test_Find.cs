@@ -55,12 +55,12 @@ public static class Test_Find
         var e = Assert.Throws<InvalidOperationException>(() => {
             store.GetUniqueEntity("Player");
         });
-        Assert.AreEqual("found multiple UniqueEntity's with name: \"Player\"", e!.Message);
+        Assert.AreEqual("found multiple UniqueEntity's with uid: \"Player\"", e!.Message);
         
         e = Assert.Throws<InvalidOperationException>(() => {
             store.GetUniqueEntity("Foo");
         });
-        Assert.AreEqual("found no UniqueEntity with name: \"Foo\"", e!.Message);
+        Assert.AreEqual("found no UniqueEntity with uid: \"Foo\"", e!.Message);
     }
     
     [Test]

@@ -9,12 +9,12 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStoreBase
 {
     /// <summary>
-    /// Return the entity with a <see cref="UniqueEntity"/> component and its <see cref="UniqueEntity.name"/> == <paramref name="name"/>
+    /// Return the entity with a <see cref="UniqueEntity"/> component and its <see cref="UniqueEntity.uid"/> == <paramref name="uid"/>
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    /// In case none or more than one <see cref="UniqueEntity"/> with the given <paramref name="name"/> found.
+    /// In case none or more than one <see cref="UniqueEntity"/> with the given <paramref name="uid"/> found.
     /// </exception>
-    public Entity GetUniqueEntity(string name)
+    public Entity GetUniqueEntity(string uid)
     {
         var query = internBase.uniqueEntityQuery;
         if (query == null) {
@@ -26,11 +26,11 @@ public partial class EntityStoreBase
         {
             var uniqueEntities = uniqueEntity.Span;
             for (int n = 0; n < uniqueEntities.Length; n++) {
-                if (uniqueEntities[n].name != name) {
+                if (uniqueEntities[n].uid != uid) {
                     continue;
                 }
                 if (foundId != -1) {
-                    throw MultipleEntitiesWithSameName(name);
+                    throw MultipleEntitiesWithSameName(uid);
                 }
                 foundId = entities[n];
             }
@@ -38,10 +38,10 @@ public partial class EntityStoreBase
         if (foundId != -1) {
             return new Entity((EntityStore)this, foundId);
         }
-        throw new InvalidOperationException($"found no {nameof(UniqueEntity)} with name: \"{name}\"");
+        throw new InvalidOperationException($"found no {nameof(UniqueEntity)} with uid: \"{uid}\"");
     }
     
     private static InvalidOperationException MultipleEntitiesWithSameName(string name) {
-        return new InvalidOperationException($"found multiple {nameof(UniqueEntity)}'s with name: \"{name}\"");
+        return new InvalidOperationException($"found multiple {nameof(UniqueEntity)}'s with uid: \"{name}\"");
     }
 }
