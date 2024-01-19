@@ -28,6 +28,8 @@ public abstract partial class EntityStoreBase
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
                     public ReadOnlySpan<Archetype>              Archetypes          => new (archs, 0, archsCount);
     [Browse(Never)] public              int                     ArchetypeCount      => archsCount;
+                    public              QueryEntities           UniqueEntities      => GetUniqueEntities();
+
                     public   override   string                  ToString()          => $"Count: {nodesCount}";
     #endregion
 

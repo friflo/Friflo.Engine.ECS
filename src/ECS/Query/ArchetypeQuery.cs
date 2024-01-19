@@ -28,7 +28,13 @@ public class ArchetypeQuery
     /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
                     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
     
-                    public EntityStore                      Store       => store as EntityStore;                
+                    public              EntityStore         Store       => store as EntityStore;
+                    
+                    /// <summary>
+                    /// Return the <see cref="ArchetypeQuery"/> entities mainly for debugging.<br/>
+                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
+                    /// </summary>
+                    public              QueryEntities       Entities    => new (this);
     
                     public override     string              ToString()  => GetString();
     #endregion
@@ -43,25 +49,26 @@ public class ArchetypeQuery
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      requiredComponents; // 32
     [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
-                    
     #endregion
 
 #region methods
     public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
-
-    /// <summary>
-    /// Return the <see cref="ArchetypeQuery"/> entities mainly for debugging.<br/>
-    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
-    /// </summary>
-    public      QueryEntities      Entities         => new (this);
 
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
     {
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
+        requiredComponents  = new ComponentTypes(indexes);
         signatureIndexes    = indexes;
-        requiredComponents  = new ComponentTypes(signatureIndexes);
+    }
+    
+    internal ArchetypeQuery(EntityStoreBase store, in ComponentTypes componentTypes)
+    {
+        this.store          = store;
+        archetypes          = Array.Empty<Archetype>();
+        lastArchetypeCount  = 1;
+        requiredComponents  = componentTypes;
     }
     
     /// <remarks>

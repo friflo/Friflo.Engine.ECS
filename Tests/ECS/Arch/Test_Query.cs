@@ -294,9 +294,9 @@ public static class Test_Query
         for (int n = 0; n < 10; n++) {
             store.CreateEntity(archetype);
         }
-        AreEqual(10, archetype.Entities.Length);
+        AreEqual(10, archetype.Entities.Count);
         int count = 0;
-        foreach (var _ in archetype.Entities) {
+        foreach (Entity _ in archetype.Entities) {
             count++;
         }
         AreEqual(10, count);

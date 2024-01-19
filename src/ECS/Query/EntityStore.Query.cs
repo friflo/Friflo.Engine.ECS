@@ -17,7 +17,7 @@ public partial class EntityStoreBase
     /// </summary>
     public ArchetypeQuery Query ()
     {
-        return new ArchetypeQuery(this, default);
+        return new ArchetypeQuery(this, new ComponentTypes());
     }
 
     /// <summary>

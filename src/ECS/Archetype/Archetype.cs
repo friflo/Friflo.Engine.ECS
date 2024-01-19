@@ -33,7 +33,7 @@ public sealed class Archetype
                     /// Return the <see cref="Archetype"/> entities mainly for debugging.<br/>
                     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
                     /// </summary>
-                    public              ChunkEntities       Entities        => new (this, entityCount);
+                    public              QueryEntities       Entities        => GetEntities();
                     
                     public   override   string              ToString()      => GetString();
 #endregion
@@ -55,6 +55,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
     [Browse(Never)] internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
+    [Browse(Never)] internal            ArchetypeQuery      query;          //  8
     #endregion
     
 #region public methods
@@ -251,6 +252,11 @@ public sealed class Archetype
     #endregion
     
 #region internal methods
+    private QueryEntities GetEntities() {
+        query ??= new ArchetypeQuery(store, componentTypes);
+        return query.Entities;
+    }
+    
     private static int GetUpperPowerOfTwo(int value)
     {
         value--;

@@ -21,7 +21,7 @@ public partial class EntityStoreBase
             query = internBase.uniqueEntityQuery = Query<UniqueEntity>();
         }
         // --- enumerate entities with unique names
-        var foundId = -1;
+        var foundId = 0;
         foreach (var (uniqueEntity, entities) in query.Chunks)
         {
             var uniqueEntities = uniqueEntity.Span;
@@ -29,16 +29,22 @@ public partial class EntityStoreBase
                 if (uniqueEntities[n].uid != uid) {
                     continue;
                 }
-                if (foundId != -1) {
+                if (foundId != 0) {
                     throw MultipleEntitiesWithSameName(uid);
                 }
                 foundId = entities[n];
             }
         }
-        if (foundId != -1) {
+        if (foundId != 0) {
             return new Entity((EntityStore)this, foundId);
         }
         throw new InvalidOperationException($"found no {nameof(UniqueEntity)} with uid: \"{uid}\"");
+    }
+    
+    private QueryEntities GetUniqueEntities()
+    {
+        var query = internBase.uniqueEntityQuery ??= Query<UniqueEntity>();
+        return query.Entities;
     }
     
     private static InvalidOperationException MultipleEntitiesWithSameName(string name) {
