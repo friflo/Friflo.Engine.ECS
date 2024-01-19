@@ -178,7 +178,7 @@ public static class Test_StructComponent
         AreEqual(1f,        player1.Position.x);
         AreEqual(1,         posType.EntityCount);
         AreEqual(1,         posType.EntityIds.Length);
-        AreEqual("[Position]  Count: 1", posType.ToString());
+        AreEqual("[Position]  entities: 1", posType.ToString());
         
         
         player1.AddComponent<Rotation>(); // changes Archetype of player1

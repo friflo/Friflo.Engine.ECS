@@ -316,7 +316,7 @@ public sealed class Archetype
         if (hasTypes) {
             sb.Length -= 2;
             sb.Append(']');
-            sb.Append("  Count: ");
+            sb.Append("  entities: ");
             sb.Append(entityCount);
             return sb;
         }

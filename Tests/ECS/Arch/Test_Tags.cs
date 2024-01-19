@@ -189,7 +189,7 @@ public static class Test_Tags
                             AreEqual("Tags: [#TestTag]",            args.AddedTags.     ToString());
                             AreEqual("Tags: [#TestTag]",            args.ChangedTags.   ToString());
                             // Ensure entity is in new Archetype
-                            AreEqual("[#TestTag]  Count: 1",        args.Entity.Archetype.ToString());
+                            AreEqual("[#TestTag]  entities: 1",     args.Entity.Archetype.ToString());
                             AreEqual("id: 1  [#TestTag]",           args.Entity.ToString());
                             AreSame (store,                         args.Store);
                             AreEqual("entity: 1 - event > Add Tags: [#TestTag]",            str);
@@ -212,36 +212,36 @@ public static class Test_Tags
        
         entity.AddTag<TestTag>();
 
-        AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
-        AreEqual(1,                                 store.EntityCount);
-        AreEqual(2,                                 store.Archetypes.Length);
+        AreEqual("[#TestTag]  entities: 1",            entity.Archetype.ToString());
+        AreEqual(1,                                     store.EntityCount);
+        AreEqual(2,                                     store.Archetypes.Length);
         
         // add same tag again
         entity.AddTag<TestTag>(); // no event sent
-        AreEqual("[#TestTag]  Count: 1",            entity.Archetype.ToString());
-        AreEqual(1,                                 store.EntityCount);
-        AreEqual(2,                                 store.Archetypes.Length);
+        AreEqual("[#TestTag]  entities: 1",             entity.Archetype.ToString());
+        AreEqual(1,                                     store.EntityCount);
+        AreEqual(2,                                     store.Archetypes.Length);
         
         entity.AddTags(testTag2);
-        AreEqual("[#TestTag, #TestTag2]  Count: 1",  entity.Archetype.ToString());
-        AreEqual(1,                                 store.EntityCount);
-        AreEqual(3,                                 store.Archetypes.Length);
+        AreEqual("[#TestTag, #TestTag2]  entities: 1",  entity.Archetype.ToString());
+        AreEqual(1,                                     store.EntityCount);
+        AreEqual(3,                                     store.Archetypes.Length);
         
         entity.RemoveTag<TestTag>();
-        AreEqual("[#TestTag2]  Count: 1",           entity.Archetype.ToString());
-        AreEqual(1,                                 store.EntityCount);
-        AreEqual(4,                                 store.Archetypes.Length);
+        AreEqual("[#TestTag2]  entities: 1",            entity.Archetype.ToString());
+        AreEqual(1,                                     store.EntityCount);
+        AreEqual(4,                                     store.Archetypes.Length);
         
         entity.RemoveTags(testTag2);
-        AreEqual("[]",                              entity.Archetype.ToString());
-        AreEqual(1,                                 store.EntityCount);
-        AreEqual(4,                                 store.Archetypes.Length);
+        AreEqual("[]",                                  entity.Archetype.ToString());
+        AreEqual(1,                                     store.EntityCount);
+        AreEqual(4,                                     store.Archetypes.Length);
         
         // remove same tag again
         entity.RemoveTags(testTag2); // no event sent
-        AreEqual("[]",                              entity.Archetype.ToString());
-        AreEqual(1,                                 store.EntityCount);
-        AreEqual(4,                                 store.Archetypes.Length);
+        AreEqual("[]",                                  entity.Archetype.ToString());
+        AreEqual(1,                                     store.EntityCount);
+        AreEqual(4,                                     store.Archetypes.Length);
         
         store.OnTagsChanged -= handler;
         
@@ -286,12 +286,12 @@ public static class Test_Tags
         entity1.AddTag<TestTag>();
         entity2.AddTag<TestTag>();
         entity2.AddTag<TestTag2>();
-        AreEqual("[#TestTag]  Count: 1",            entity1.Archetype.ToString());
-        AreEqual("[#TestTag, #TestTag2]  Count: 1", entity2.Archetype.ToString());
-        AreEqual(2,                                 store.EntityCount);
-        AreEqual(3,                                 store.Archetypes.Length);
-        AreEqual(1,                                 archTestTag.EntityCount);
-        AreEqual(1,                                 archTestTagAll.EntityCount);
+        AreEqual("[#TestTag]  entities: 1",             entity1.Archetype.ToString());
+        AreEqual("[#TestTag, #TestTag2]  entities: 1",  entity2.Archetype.ToString());
+        AreEqual(2,                                     store.EntityCount);
+        AreEqual(3,                                     store.Archetypes.Length);
+        AreEqual(1,                                     archTestTag.EntityCount);
+        AreEqual(1,                                     archTestTagAll.EntityCount);
         {
             var query  = store.Query().AllTags(Tags.Get<TestTag>());
             AreEqual("Query: [#TestTag]  EntityCount: 2",   query.ToString());

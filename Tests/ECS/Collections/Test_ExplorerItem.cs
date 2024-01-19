@@ -142,11 +142,11 @@ public static class Test_ExplorerItem
         Action<ComponentChanged> componentAdded = args => {
             var argsStr = args.ToString();
             switch (addCount++) {
-                case 0:     AreEqual(1,                         args.EntityId);
-                            AreEqual(ChangedEventAction.Add,    args.Action);
-                            AreEqual(typeof(EntityName),        args.ComponentType.Type);
+                case 0:     AreEqual(1,                             args.EntityId);
+                            AreEqual(ChangedEventAction.Add,        args.Action);
+                            AreEqual(typeof(EntityName),            args.ComponentType.Type);
                             // ensure entity is in new Archetype 
-                            AreEqual("[EntityName]  Count: 1",  args.Entity.Archetype.ToString());
+                            AreEqual("[EntityName]  entities: 1",   args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
                             AreSame (store, args.Store);
                             return;
