@@ -14,6 +14,9 @@ public partial class EntityStoreBase
     /// <exception cref="InvalidOperationException">
     /// In case none or more than one <see cref="UniqueEntity"/> with the given <paramref name="uid"/> found.
     /// </exception>
+    /// <remarks>
+    /// To Get all <see cref="UniqueEntity"/>'s of the store use <see cref="UniqueEntities"/>.
+    /// </remarks>
     public Entity GetUniqueEntity(string uid)
     {
         var query = internBase.uniqueEntityQuery;
