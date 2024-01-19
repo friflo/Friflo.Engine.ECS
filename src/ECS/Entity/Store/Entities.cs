@@ -173,3 +173,10 @@ public partial class EntityStore
         return query.Entities;
     }
 }
+
+/// <summary>
+/// Reserved symbol name.
+/// If exposing public it need to store an array of <see cref="Entity"/>'s.<br/>
+/// Similar to <see cref="Archetypes"/>.
+/// </summary>
+internal struct Entities;
