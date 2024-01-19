@@ -49,8 +49,8 @@ The core feature of an Entity Component System are:
 
 ## Development
 
-The library can integrated on all **.NET** supported platforms.  
-It is tested on Windows, macOS and Linux.
+The library can be integrated on all **.NET** supported platforms:  
+Tested: Windows, macOS and Linux. Untested: Android, iOS and tvOS.
 
 The library can be build on all platforms a .NET SDK is available.  
 Build options:
