@@ -3,6 +3,9 @@
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable InconsistentNaming
+
+using System;
+
 namespace Friflo.Engine.ECS;
 
 /// <summary>
@@ -56,7 +59,10 @@ public readonly struct  ScriptChanged
     /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public readonly     EntityStore         Store => Entity.store;
     
-    public override     string              ToString() => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
+    /// <summary>The <see cref="System.Type"/> of the added / removed script.</summary>
+    public              Type                Type        => ScriptType.Type;
+    
+    public override     string              ToString()  => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
 
     internal ScriptChanged(Entity entity, ScriptChangedAction action, Script script, Script oldScript, ScriptType scriptType)
     {

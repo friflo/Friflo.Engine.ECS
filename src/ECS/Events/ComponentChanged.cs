@@ -49,6 +49,7 @@ public readonly struct  ComponentChanged
     public  readonly    ComponentChangedAction  Action;         //  4
     
     /// <summary>The <see cref="ECS.ComponentType"/> of the added / removed component.</summary>
+    [Browse(Never)]
     public  readonly    ComponentType           ComponentType;  //  8
     
     [Browse(Never)]
@@ -58,6 +59,9 @@ public readonly struct  ComponentChanged
 #region properties
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public              Entity                  Entity              => new Entity(Store, EntityId);
+    
+    /// <summary>The <see cref="System.Type"/> of the added / removed component.</summary>
+    public              Type                    Type                => ComponentType.Type;
     
     // --- public properties
     /// <summary> Return the current <see cref="IComponent"/> for debugging.<br/>

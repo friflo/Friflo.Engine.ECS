@@ -130,6 +130,16 @@ public static class Test_ExplorerItem
         AreEqual(5, n);
     }
     
+    private static void OnComponentChanged(ComponentChanged args)
+    {
+        switch (args.Type) {
+            case Type _ when args.Type == typeof(EntityName):
+                break;
+            case Type _ when args.Type == typeof(Position):
+                break;
+        }
+    }
+    
     [Test]
     public static void Test_ExplorerItem_Name()
     {
@@ -149,6 +159,7 @@ public static class Test_ExplorerItem
                 case 0:     AreEqual(1,                             args.EntityId);
                             AreEqual(ComponentChangedAction.Add,    args.Action);
                             AreEqual(typeof(EntityName),            args.ComponentType.Type);
+                            AreEqual(typeof(EntityName),            args.Type);
                             AreEqual("test",                        args.Component<EntityName>().value);
                             IsNull  (                               old);
                             AreEqual("test",                        cur.Value.value);
@@ -179,6 +190,7 @@ public static class Test_ExplorerItem
             }
         };
         store.OnComponentAdded += componentAdded;
+        store.OnComponentAdded += OnComponentChanged;
         var removeCount       = 0;
         Action<ComponentChanged> componentRemoved = args => {
             var argsStr = args.ToString();
