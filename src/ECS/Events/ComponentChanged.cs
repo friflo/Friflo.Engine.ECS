@@ -65,23 +65,27 @@ public readonly struct  ComponentChanged
     
     /// <summary>
     /// Returns the old component value before executing the <see cref="ComponentChangedAction.Update"/>
-    /// or <see cref="ComponentChangedAction.Remove"/> component.
+    /// or <see cref="ComponentChangedAction.Remove"/> component.<br/>
+    /// <br/>
+    /// <b>Note</b>: The <see cref="OldComponent{T}"/> value is only valid within the event handler call.<br/>
+    /// A copy of <see cref="ComponentChanged"/> return an invalid value when using it outside the event handler call.<br/>
+    /// Instead store the value returned by <see cref="OldComponent{T}"/> whin the handler when using is after the event handler returns.
     /// </summary>.
-    /// <typeparam name="TComponent"> The component type of the changed component.</typeparam>
+    /// <typeparam name="T"> The component type of the changed component.</typeparam>
     /// <exception cref="InvalidOperationException">
     /// In case the <see cref="Action"/> was an <see cref="ComponentChangedAction.Add"/> component.
     /// </exception>
-    public TComponent OldComponent<TComponent>() where TComponent : struct, IComponent
+    public T OldComponent<T>() where T : struct, IComponent
     {
         switch (Action)
         {
             case ComponentChangedAction.Update:
             case ComponentChangedAction.Remove: 
-                if (typeof(TComponent) == ComponentType.Type) {
-                    return ((StructHeap<TComponent>)heap).componentStash;
+                if (typeof(T) == ComponentType.Type) {
+                    return ((StructHeap<T>)heap).componentStash;
                 }
-                throw new InvalidOperationException($"OldComponent<T>() - expect component Type: {ComponentType.Type.Name}. T: {typeof(TComponent).Name}");
+                throw new InvalidOperationException($"OldComponent<T>() - expect component Type: {ComponentType.Type.Name}. T: {typeof(T).Name}");
         }
-        throw new InvalidOperationException($"OldComponent<T>() - component is newly added. T: {typeof(TComponent).Name}");
+        throw new InvalidOperationException($"OldComponent<T>() - component is newly added. T: {typeof(T).Name}");
     }
 }
