@@ -103,15 +103,15 @@ public partial class EntityStore
         currentScript = null;
     SendEvent:        
         // Send event. See: SEND_EVENT notes
-        intern.scriptAdded?.Invoke(new ScriptChanged (entity, action, script, scriptType));
+        intern.scriptAdded?.Invoke(new ScriptChanged (entity, action, script, currentScript, scriptType));
         return currentScript;
     }
     
     internal Script RemoveScript(Entity entity, ScriptType scriptType)
     {
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
-        var scripts             = entityScript.scripts;
-        var len                 = scripts.Length;
+        var     scripts         = entityScript.scripts;
+        var     len             = scripts.Length;
         for (int n = 0; n < len; n++)
         {
             var script = scripts[n];
@@ -146,7 +146,7 @@ public partial class EntityStore
             entityScript.scripts = newScripts;
         SendEvent:
             // Send event. See: SEND_EVENT notes
-            intern.scriptRemoved?.Invoke(new ScriptChanged (entity, ScriptChangedAction.Remove, script, scriptType));
+            intern.scriptRemoved?.Invoke(new ScriptChanged (entity, ScriptChangedAction.Remove, null, script, scriptType));
             return script;
         }
         return null;

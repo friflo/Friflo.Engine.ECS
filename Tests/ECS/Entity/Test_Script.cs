@@ -62,7 +62,8 @@ public static class Test_Script
                 case 0:     AreEqual(1,                         args.Entity.Id);
                             AreEqual(ScriptChangedAction.Remove,args.Action);
                             AreEqual(typeof(TestScript2),       args.ScriptType.Type);
-                            AreSame (script3,                   args.Script);
+                            IsNull  (                           args.Script);
+                            AreSame (script3,                   args.OldScript);
                             IsNull  (script3.Store);
                             // Ensure Scripts are updated                            
                             AreEqual(1,                         args.Entity.Scripts.Length);
