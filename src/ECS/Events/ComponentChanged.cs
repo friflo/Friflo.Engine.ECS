@@ -36,6 +36,7 @@ public enum ComponentChangedAction
 /// </summary>
 public readonly struct  ComponentChanged
 {
+#region fields
     /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public  readonly    EntityStore             Store;          //  8
     
@@ -52,8 +53,9 @@ public readonly struct  ComponentChanged
     
     [Browse(Never)]
     private readonly    StructHeap              oldHeap;        //  8
+    #endregion
     
-    // --- properties
+#region properties
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public              Entity                  Entity              => new Entity(Store, EntityId);
     
@@ -71,14 +73,16 @@ public readonly struct  ComponentChanged
     public              IComponent              DebugOldComponent   => GetDebugOldComponent();
     
     public override     string                  ToString()          => $"entity: {EntityId} - event > {Action} {ComponentType}";
+    #endregion
 
+#region methods
     internal ComponentChanged(EntityStoreBase store, int entityId, ComponentChangedAction action, int structIndex, StructHeap oldHeap)
     {
         Store           = store as EntityStore; 
         EntityId        = entityId;
         Action          = action;
         ComponentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
-        this.oldHeap       = oldHeap;
+        this.oldHeap    = oldHeap;
     }
     
     /// <summary>
@@ -159,4 +163,5 @@ public readonly struct  ComponentChanged
     private InvalidOperationException TypeException(string message, Type type) {
         return new InvalidOperationException($"{message}{ComponentType.Type.Name}. T: {type.Name}");
     }
+    #endregion
 }
