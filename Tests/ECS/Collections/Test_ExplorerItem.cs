@@ -141,8 +141,10 @@ public static class Test_ExplorerItem
         var addCount       = 0;
         Action<ComponentChanged> componentAdded = args => {
             var argsStr = args.ToString();
+#pragma warning disable CS0618 // Type or member is obsolete
             var old     = (EntityName?)args.DebugOldComponent;
             var cur     = (EntityName?)args.DebugComponent;
+#pragma warning restore CS0618 // Type or member is obsolete
             switch (addCount++) {
                 case 0:     AreEqual(1,                             args.EntityId);
                             AreEqual(ComponentChangedAction.Add,    args.Action);
@@ -178,8 +180,10 @@ public static class Test_ExplorerItem
         var removeCount       = 0;
         Action<ComponentChanged> componentRemoved = args => {
             var argsStr = args.ToString();
+#pragma warning disable CS0618 // Type or member is obsolete
             var old     = (EntityName?)args.DebugOldComponent;
             var cur     = (EntityName?)args.DebugComponent;
+#pragma warning restore CS0618 // Type or member is obsolete
             switch (removeCount++) {
                 case 0:     AreEqual(1,                             args.EntityId);
                             AreEqual(ComponentChangedAction.Remove, args.Action);

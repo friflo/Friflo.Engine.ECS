@@ -57,8 +57,17 @@ public readonly struct  ComponentChanged
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public              Entity                  Entity              => new Entity(Store, EntityId);
     
+    // --- public properties
+    /// <summary> Return the current <see cref="IComponent"/> for debugging.<br/>
+    /// It has poor performance as is boxes the returned component. </summary>
+    /// <remarks> To access the current component use <see cref="Entity.GetComponent{T}"/> </remarks>
+    [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access the current component")]
     public              IComponent              DebugComponent      => GetDebugComponent();
     
+    /// <summary> Return the old <see cref="IComponent"/> for debugging.<br/>
+    /// It has poor performance as is boxes the returned component. </summary>
+    /// <remarks> To access the old component use <see cref="OldComponent{T}"/> </remarks>
+    [Obsolete($"use {nameof(OldComponent)}<T>() to access the old component")]
     public              IComponent              DebugOldComponent   => GetDebugOldComponent();
     
     public override     string                  ToString()          => $"entity: {EntityId} - event > {Action} {ComponentType}";
