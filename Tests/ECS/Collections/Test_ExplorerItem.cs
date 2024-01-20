@@ -131,11 +131,12 @@ public static class Test_ExplorerItem
     }
     
     private static void OnComponentChanged(ComponentChanged args)
-    {
-        switch (args.Type) {
-            case Type _ when args.Type == typeof(EntityName):
+    {        
+        var type = args.Type;
+        switch (true) {
+            case true when type == typeof(EntityName):
                 break;
-            case Type _ when args.Type == typeof(Position):
+            case true when type == typeof(Position):
                 break;
         }
     }

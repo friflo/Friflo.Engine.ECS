@@ -61,6 +61,19 @@ public readonly struct  ComponentChanged
     public              Entity                  Entity              => new Entity(Store, EntityId);
     
     /// <summary>The <see cref="System.Type"/> of the added / removed component.</summary>
+    /// <remarks>
+    /// Use the following code snippet to switch on <see cref="Type"/>:
+    /// <br/>
+    /// <code>
+    ///     var type = args.Type;
+    ///     switch (true) {
+    ///         case true when type == typeof(EntityName):
+    ///             break;
+    ///         case true when type == typeof(Position):
+    ///             break;
+    ///     }
+    /// </code> 
+    /// </remarks>
     public              Type                    Type                => ComponentType.Type;
     
     // --- public properties

@@ -1,12 +1,14 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-// ReSharper disable once CheckNamespace
-// ReSharper disable InconsistentNaming
 
 using System;
 
+// ReSharper disable once CheckNamespace
+// ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 /// <summary>
 /// The type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/> script.
@@ -53,6 +55,7 @@ public readonly struct  ScriptChanged
     public readonly     Script              OldScript;  //  8
     
     /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
+    [Browse(Never)]
     public readonly     ScriptType          ScriptType; //  8
     
     // --- properties
@@ -60,6 +63,19 @@ public readonly struct  ScriptChanged
     public readonly     EntityStore         Store => Entity.store;
     
     /// <summary>The <see cref="System.Type"/> of the added / removed script.</summary>
+    /// <remarks>
+    /// Use the following code snippet to switch on <see cref="Type"/>:
+    /// <br/>
+    /// <code>
+    ///     var type = args.Type;
+    ///     switch (true) {
+    ///         case true when type == typeof(EntityName):
+    ///             break;
+    ///         case true when type == typeof(Position):
+    ///             break;
+    ///     }
+    /// </code> 
+    /// </remarks>
     public              Type                Type        => ScriptType.Type;
     
     public override     string              ToString()  => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
