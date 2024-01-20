@@ -149,7 +149,7 @@ public static class Test_ExplorerItem
                 case 0:     AreEqual(1,                             args.EntityId);
                             AreEqual(ComponentChangedAction.Add,    args.Action);
                             AreEqual(typeof(EntityName),            args.ComponentType.Type);
-                            AreEqual("test",                        args.Entity.GetComponent<EntityName>().value);
+                            AreEqual("test",                        args.Component<EntityName>().value);
                             IsNull  (                               old);
                             AreEqual("test",                        cur.Value.value);
                             var e = Throws<InvalidOperationException>(() => {

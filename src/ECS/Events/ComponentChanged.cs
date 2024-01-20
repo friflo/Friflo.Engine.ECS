@@ -60,8 +60,8 @@ public readonly struct  ComponentChanged
     // --- public properties
     /// <summary> Return the current <see cref="IComponent"/> for debugging.<br/>
     /// It has poor performance as is boxes the returned component. </summary>
-    /// <remarks> To access the current component use <see cref="Entity.GetComponent{T}"/> </remarks>
-    [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access the current component")]
+    /// <remarks> To access the current component use <see cref="Component{T}"/> </remarks>
+    [Obsolete($"use {nameof(Component)}<T>() to access the current component")]
     public              IComponent              DebugComponent      => GetDebugComponent();
     
     /// <summary> Return the old <see cref="IComponent"/> for debugging.<br/>
@@ -79,6 +79,18 @@ public readonly struct  ComponentChanged
         Action          = action;
         ComponentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
         this.oldHeap       = oldHeap;
+    }
+    
+    public T Component<T>() where T : struct, IComponent
+    {
+        switch (Action)
+        {
+            case ComponentChangedAction.Add: 
+            case ComponentChangedAction.Update:
+                var entity = Entity;
+                return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).components[entity.compIndex];
+        }
+        throw new InvalidOperationException($"OldComponent<T>() - component is newly added. T: {typeof(T).Name}");
     }
     
     /// <summary>
