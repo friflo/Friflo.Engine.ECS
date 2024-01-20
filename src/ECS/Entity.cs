@@ -256,18 +256,16 @@ public readonly struct Entity : IEquatable<Entity>
         return true;
     }
     /// <summary>Add a component of the given type to the entity.</summary>
-    /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)<br/>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
-    public bool AddComponent<T>()               where T : struct, IComponent {
+    public ComponentChangedAction AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
     /// <summary>Add the given <paramref name="component"/> to the entity.</summary>
-    /// <returns>true if component is newly added to the entity</returns>
     /// <remarks>Executes in O(1)</remarks>
-    public bool AddComponent<T>(in T component) where T : struct, IComponent {
+    public ComponentChangedAction AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.AddComponent   (Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
@@ -279,7 +277,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.RemoveComponent(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
+        return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
     }
     #endregion
 

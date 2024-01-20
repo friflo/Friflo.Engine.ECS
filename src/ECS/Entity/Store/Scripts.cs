@@ -65,11 +65,13 @@ public partial class EntityStore
     /// </remarks>
     internal Script AddScript(Entity entity, Script script, ScriptType scriptType)
     {
-        Script currentScript;
+        Script              currentScript;
+        ScriptChangedAction action;
         script.entity = entity;
         if (entity.scriptIndex == EntityUtils.NoScripts)
         {
             // case: entity has not scripts => add new Scripts entry
+            action = ScriptChangedAction.Add;
             var lastIndex = entity.refScriptIndex = entityScriptCount++;
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
@@ -80,6 +82,7 @@ public partial class EntityStore
             goto SendEvent;
         }
         // case: entity has already scripts => add / replace script to / in scripts
+        action = ScriptChangedAction.Replace;
         ref var entityScript    = ref entityScripts[entity.scriptIndex];
         var scripts             = entityScript.scripts;
         var len                 = scripts.Length;
@@ -100,7 +103,7 @@ public partial class EntityStore
         currentScript = null;
     SendEvent:        
         // Send event. See: SEND_EVENT notes
-        intern.scriptAdded?.Invoke(new ScriptChanged (entity, ChangedEventAction.Add, script, scriptType));
+        intern.scriptAdded?.Invoke(new ScriptChanged (entity, action, script, scriptType));
         return currentScript;
     }
     
@@ -143,7 +146,7 @@ public partial class EntityStore
             entityScript.scripts = newScripts;
         SendEvent:
             // Send event. See: SEND_EVENT notes
-            intern.scriptRemoved?.Invoke(new ScriptChanged (entity, ChangedEventAction.Remove, script, scriptType));
+            intern.scriptRemoved?.Invoke(new ScriptChanged (entity, ScriptChangedAction.Remove, script, scriptType));
             return script;
         }
         return null;

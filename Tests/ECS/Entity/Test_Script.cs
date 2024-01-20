@@ -43,14 +43,14 @@ public static class Test_Script
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.Entity.Id);
                             AreSame (store,                     args.Store);
-                            AreEqual(ChangedEventAction.Add,    args.Action);
+                            AreEqual(ScriptChangedAction.Add,   args.Action);
                             AreSame (script1,                   args.Script);
                             AreEqual(typeof(TestScript1),       args.ScriptType.Type);
                             // Ensure Scripts are updated
                             AreEqual(1,                         args.Entity.Scripts.Length);
                             AreEqual("entity: 1 - event > Add Script: [*TestScript1]",  str);   return;
-                case 1:     AreEqual("entity: 1 - event > Add Script: [*TestScript2]",  str);   return;
-                case 2:     AreEqual("entity: 1 - event > Add Script: [*TestScript2]",  str);   return;
+                case 1:     AreEqual("entity: 1 - event > Replace Script: [*TestScript2]",  str);return;
+                case 2:     AreEqual("entity: 1 - event > Replace Script: [*TestScript2]",  str);return;
                 default:    Fail("unexpected event");                                           return;
             }
         });
@@ -60,7 +60,7 @@ public static class Test_Script
             var str = args.ToString();
             switch (removeCount++) {
                 case 0:     AreEqual(1,                         args.Entity.Id);
-                            AreEqual(ChangedEventAction.Remove, args.Action);
+                            AreEqual(ScriptChangedAction.Remove,args.Action);
                             AreEqual(typeof(TestScript2),       args.ScriptType.Type);
                             AreSame (script3,                   args.Script);
                             IsNull  (script3.Store);

@@ -21,9 +21,9 @@ internal sealed class StructHeap<T> : StructHeap
 {
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
-    internal            T[]                 components;   // 8
-    // internal         StructChunk<T>[]    chunks;     // 8 - Length: 1, 2, 4, 8
-    private  readonly   TypeMapper<T>       typeMapper; // 8
+    internal            T[]             components;     //  8
+    private  readonly   TypeMapper<T>   typeMapper;     //  8
+    internal            T               componentStash; //  sizeof(T)
     
     // --- static internal
     internal static readonly    int     StructIndex  = StructUtils.NewStructIndex(typeof(T), out StructKey);
@@ -36,6 +36,11 @@ internal sealed class StructHeap<T> : StructHeap
         components      = new T[ArchetypeUtils.MinCapacity];
     }
     
+    internal void StashComponent(int compIndex) {
+        componentStash = components[compIndex];
+    }
+    
+    // --- StructHeap
     protected override  int     ComponentsLength    => components.Length;
 
     internal  override  Type    StructType          => typeof(T);

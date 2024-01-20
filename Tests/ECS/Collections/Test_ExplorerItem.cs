@@ -143,14 +143,28 @@ public static class Test_ExplorerItem
             var argsStr = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                             args.EntityId);
-                            AreEqual(ChangedEventAction.Add,        args.Action);
+                            AreEqual(ComponentChangedAction.Add,    args.Action);
                             AreEqual(typeof(EntityName),            args.ComponentType.Type);
+                            AreEqual("test",                        args.Entity.GetComponent<EntityName>().value);
+                            var e = Throws<InvalidOperationException>(() => {
+                                args.OldComponent<EntityName>();
+                            });
+                            AreEqual("OldComponent<T>() - component is newly added. T: EntityName", e!.Message);
                             // ensure entity is in new Archetype 
                             AreEqual("[EntityName]  entities: 1",   args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
                             AreSame (store, args.Store);
                             return;
-                default:    Fail("unexpected event");
+                case 1:
+                            AreEqual(ComponentChangedAction.Update, args.Action);
+                            AreEqual("test-update",                 args.Entity.GetComponent<EntityName>().value);
+                            AreEqual("test",                        args.OldComponent<EntityName>().value);
+                            e = Throws<InvalidOperationException>(() => {
+                                args.OldComponent<Position>();
+                            });
+                            AreEqual("OldComponent<T>() - expect component Type: EntityName. T: Position", e!.Message);
+                            return;
+                default:
                             return;
             }
         };
@@ -159,11 +173,12 @@ public static class Test_ExplorerItem
         Action<ComponentChanged> componentRemoved = args => {
             var argsStr = args.ToString();
             switch (removeCount++) {
-                case 0:     AreEqual(1,                         args.EntityId);
-                            AreEqual(ChangedEventAction.Remove, args.Action);
-                            AreEqual(typeof(EntityName),        args.ComponentType.Type);
+                case 0:     AreEqual(1,                             args.EntityId);
+                            AreEqual(ComponentChangedAction.Remove, args.Action);
+                            AreEqual(typeof(EntityName),            args.ComponentType.Type);
+                            AreEqual("test-update",                 args.OldComponent<EntityName>().value);
                             // ensure entity is in new Archetype
-                            AreEqual("[]",                      args.Entity.Archetype.ToString());
+                            AreEqual("[]",                          args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;
                 default:    Fail("unexpected event");                                                   return;
             }
@@ -181,6 +196,10 @@ public static class Test_ExplorerItem
         rootItem.Name = "test";
         AreEqual("test",        rootItem.Name); // no event sent. name is already "test"
         
+        // --- update Name
+        rootItem.Name = "test-update";
+        AreEqual("test-update", rootItem.Name);
+        
         // --- remove Name
         rootItem.Name = null;
         AreEqual(defaultName,   rootItem.Name);
@@ -194,7 +213,7 @@ public static class Test_ExplorerItem
         rootItem.Name = "removed";  // fires no event
         rootItem.Name = null;       // fires no event
         
-        AreEqual(1, addCount);
+        AreEqual(2, addCount);
         AreEqual(1, removeCount);
     }
     

@@ -129,7 +129,7 @@ public sealed class RawEntityStore : EntityStoreBase
         return ref heap.components[entity.compIndex];
     }
     
-    public bool AddEntityComponent<T>(int id, in T component)
+    public ComponentChangedAction AddEntityComponent<T>(int id, in T component)
         where T : struct, IComponent
     {
         ref var entity      = ref entities[id];
@@ -143,7 +143,7 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        return RemoveComponent(id, ref archetype, ref entity.compIndex, ref entity.archIndex, StructHeap<T>.StructIndex);
+        return RemoveComponent<T>(id, ref archetype, ref entity.compIndex, ref entity.archIndex, StructHeap<T>.StructIndex);
     }
     #endregion
     

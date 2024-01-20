@@ -37,17 +37,16 @@ public static class EntityUtils
         return entity.archetype.heapMap[componentType.StructIndex].GetComponentDebug(entity.compIndex);
     }
 
-    public static  bool         RemoveEntityComponent (Entity entity, ComponentType componentType)
+    public static  bool RemoveEntityComponent (Entity entity, ComponentType componentType)
     {
-        int archIndex = 0;
-        return EntityStoreBase.RemoveComponent(entity.Id, ref entity.refArchetype, ref entity.refCompIndex, ref archIndex, componentType.StructIndex);
+        return componentType.RemoveEntityComponent(entity);
     }
     
-    public static  bool         AddEntityComponent    (Entity entity, ComponentType componentType) {
+    public static  ComponentChangedAction AddEntityComponent    (Entity entity, ComponentType componentType) {
         return componentType.AddEntityComponent(entity);
     }
     
-    public static  bool         AddEntityComponentValue(Entity entity, ComponentType componentType, object value) {
+    public static  ComponentChangedAction AddEntityComponentValue(Entity entity, ComponentType componentType, object value) {
         return componentType.AddEntityComponentValue(entity, value);
     }
     #endregion

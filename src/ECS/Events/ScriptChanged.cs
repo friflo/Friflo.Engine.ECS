@@ -6,6 +6,19 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
+/// The type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/>
+/// </summary>
+public enum ScriptChangedAction
+{
+    /// <summary> A <see cref="Script"/> was removed from an <see cref="Entity"/>. </summary>
+    Remove  = 0,
+    /// <summary> A <see cref="Script"/> was added to an <see cref="Entity"/>. </summary>
+    Add     = 1,
+    /// <summary> An <see cref="Entity"/> <see cref="Script"/> was replaced. </summary>
+    Replace = 2,
+}
+
+/// <summary>
 /// Is the event for event handlers added to <see cref="ECS.Entity.OnScriptChanged"/>,
 /// <see cref="EntityStore.OnScriptAdded"/> or <see cref="EntityStore.OnScriptRemoved"/>.<br/>
 /// <br/>
@@ -20,7 +33,7 @@ public readonly struct  ScriptChanged
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public readonly     Entity              Entity;     // 16
     /// <summary>The executed entity change: Add / Remove script.</summary>
-    public readonly     ChangedEventAction  Action;     //  4
+    public readonly     ScriptChangedAction Action;     //  4
     /// <summary>The added / removed <see cref="Script"/>.</summary>
     public readonly     Script              Script;     //  8
     /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
@@ -32,7 +45,7 @@ public readonly struct  ScriptChanged
     
     public override     string              ToString() => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
 
-    internal ScriptChanged(Entity entity, ChangedEventAction action, Script script, ScriptType scriptType)
+    internal ScriptChanged(Entity entity, ScriptChangedAction action, Script script, ScriptType scriptType)
     {
         Entity      = entity;
         Action      = action;
