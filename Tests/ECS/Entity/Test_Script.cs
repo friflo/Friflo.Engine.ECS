@@ -38,6 +38,7 @@ public static class Test_Script
             var str = args.ToString();
             switch (addCount++) {
                 case 0:     AreEqual(1,                         args.Entity.Id);
+                            AreSame (store,                     args.Store);
                             AreEqual(ChangedEventAction.Add,    args.Action);
                             AreEqual(typeof(TestScript1),       args.ScriptType.Type);
                             // Ensure Scripts are updated

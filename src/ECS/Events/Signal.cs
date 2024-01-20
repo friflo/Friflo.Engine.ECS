@@ -24,7 +24,9 @@ public readonly struct Signal<TEvent> where TEvent : struct
     public readonly     int         EntityId;
     /// <summary>The <see cref="Event"/> containing event specific data passed to <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
     public readonly     TEvent      Event;
-    /// <summary>The <see cref="Entity"/> that emitted the <see cref="Event"/> with <see cref="ECS.Entity.EmitSignal{TEvent}"/>.</summary>
+    
+    // --- properties
+    /// <summary>The <see cref="Entity"/> that emitted the <see cref="Event"/> with <see cref="ECS.Entity.EmitSignal{TEvent}"/> - aka the publisher.</summary>
     public              Entity      Entity => new Entity(Store, EntityId);
     
     internal Signal(EntityStore store, int id, in TEvent ev) {

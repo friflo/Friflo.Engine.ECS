@@ -18,27 +18,35 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public readonly struct ChildEntitiesChanged
 {
+    
     public readonly ChildEntitiesChangedAction  Action;     //  4
+    /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public readonly EntityStore                 Store;      //  8
-    public readonly int                         ParentId;   //  4
+    /// <summary>The <c>Id</c> of the <see cref="Entity"/> that emitted the event.</summary>
+    public readonly int                         EntityId;   //  4
+    /// <summary>The <c>Id</c> of the added / removed child entity</summary>
     public readonly int                         ChildId;    //  4
+    /// <summary>The child position of the added / removed child entity in the parent <see cref="Entity"/>.</summary>
     public readonly int                         ChildIndex; //  4
     
-    public          Entity                      Parent      => new Entity(Store, ParentId);
+    // --- properties
+    /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher</summary>
+    public          Entity                      Entity      => new Entity(Store, EntityId);
+    /// <summary>The added / removed child entity</summary>
     public          Entity                      Child       => new Entity(Store, ChildId);
 
-    public override string                      ToString()  => $"entity: {ParentId} - event > {Action} Child[{ChildIndex}] = {ChildId}";
+    public override string                      ToString()  => $"entity: {EntityId} - event > {Action} Child[{ChildIndex}] = {ChildId}";
 
     internal ChildEntitiesChanged(
         ChildEntitiesChangedAction  action,
         EntityStore                 store,
-        int                         parentId,
+        int                         entityId,
         int                         childId,
         int                         childIndex)
     {
         this.Action     = action;
         this.Store      = store;
-        this.ParentId   = parentId;
+        this.EntityId   = entityId;
         this.ChildId    = childId;
         this.ChildIndex = childIndex;
     }

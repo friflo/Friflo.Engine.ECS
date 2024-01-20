@@ -17,9 +17,16 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public readonly struct  ScriptChanged
 {
+    /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public readonly     Entity              Entity;     // 16
+    /// <summary>The executed entity change: Add / Remove script.</summary>
     public readonly     ChangedEventAction  Action;     //  4
+    /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
     public readonly     ScriptType          ScriptType; //  8
+    
+    // --- properties
+    /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
+    public readonly     EntityStore         Store => Entity.store;
     
     public override     string              ToString() => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
 

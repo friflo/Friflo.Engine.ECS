@@ -67,7 +67,7 @@ public sealed class ExplorerItemTree
     internal void ChildEntitiesChangedHandler(ChildEntitiesChanged args)
     {
         var treeItems = items;
-        if (!treeItems.TryGetValue(args.ParentId, out var parent)) {
+        if (!treeItems.TryGetValue(args.EntityId, out var parent)) {
             return;
         }
         // Console.WriteLine($"ExplorerTree event: {args}       parent: {parent}");

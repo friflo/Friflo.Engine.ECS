@@ -94,11 +94,11 @@ public class Game
         switch (args.Action)
         {
             case ChildEntitiesChangedAction.Add:
-                sync?.UpsertDataEntity(args.ParentId);
+                sync?.UpsertDataEntity(args.EntityId);
                 PostSyncChanges();
                 break;
             case ChildEntitiesChangedAction.Remove:
-                sync?.UpsertDataEntity(args.ParentId);
+                sync?.UpsertDataEntity(args.EntityId);
                 PostSyncChanges();
                 break;
         }

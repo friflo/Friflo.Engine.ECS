@@ -22,15 +22,23 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public readonly struct  TagsChanged
 {
+    /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public  readonly    EntityStore Store;      //  8
+    /// <summary>The <c>Id</c> of the <see cref="Entity"/> that emitted the event.</summary>
     public  readonly    int         EntityId;   //  4
+    /// <summary>The new state of the <see cref="Entity"/> <see cref="ECS.Entity.Tags"/>.</summary>
     public  readonly    Tags        Tags;       // 32
+    /// <summary>The old state of the <see cref="Entity"/> <see cref="ECS.Entity.Tags"/> before the change.</summary>
     public  readonly    Tags        OldTags;    // 32
     
+    // --- properties
+    /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public              Entity      Entity      => new Entity(Store, EntityId);
-    
+    /// <summary>The <see cref="ECS.Tags"/> added to the <see cref="Entity"/>.</summary>
     public              Tags        AddedTags   => new(~OldTags.bitSet.value &  Tags.bitSet.value);
+    /// <summary>The <see cref="ECS.Tags"/> removed from the <see cref="Entity"/>.</summary>
     public              Tags        RemovedTags => new( OldTags.bitSet.value & ~Tags.bitSet.value);
+    /// <summary>The changed (removed / added) entity <see cref="ECS.Tags"/>.</summary>
     public              Tags        ChangedTags => new( OldTags.bitSet.value ^  Tags.bitSet.value);
     
     public override     string      ToString()  => GetString();

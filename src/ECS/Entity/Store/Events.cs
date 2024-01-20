@@ -46,7 +46,7 @@ public partial class EntityStore
 #region add / remove child entity events
     private void ChildEntitiesChanged(ChildEntitiesChanged args)
     {
-        if (!intern.entityChildEntitiesChanged.TryGetValue(args.ParentId, out var handlers)) {
+        if (!intern.entityChildEntitiesChanged.TryGetValue(args.EntityId, out var handlers)) {
             return;
         }
         handlers.Invoke(args);
