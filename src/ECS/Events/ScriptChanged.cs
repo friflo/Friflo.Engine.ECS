@@ -21,6 +21,8 @@ public readonly struct  ScriptChanged
     public readonly     Entity              Entity;     // 16
     /// <summary>The executed entity change: Add / Remove script.</summary>
     public readonly     ChangedEventAction  Action;     //  4
+    /// <summary>The added / removed <see cref="Script"/>.</summary>
+    public readonly     Script              Script;     //  8
     /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
     public readonly     ScriptType          ScriptType; //  8
     
@@ -30,10 +32,11 @@ public readonly struct  ScriptChanged
     
     public override     string              ToString() => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
 
-    internal ScriptChanged(Entity entity, ChangedEventAction action, ScriptType scriptType)
+    internal ScriptChanged(Entity entity, ChangedEventAction action, Script script, ScriptType scriptType)
     {
-        this.Entity         = entity;
-        this.Action         = action;
-        this.ScriptType     = scriptType;
+        Entity      = entity;
+        Action      = action;
+        Script      = script;
+        ScriptType  = scriptType;
     }
 }
