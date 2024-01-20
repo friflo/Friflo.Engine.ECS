@@ -20,7 +20,7 @@ public enum ComponentChangedAction
     Remove  = 0,
     /// <summary> An <see cref="IComponent"/> was added to an <see cref="Entity"/>. </summary>
     Add     = 1,
-    /// <summary> An <see cref="IComponent"/> of an <see cref="Entity"/> was updated. </summary>
+    /// <summary> An <see cref="IComponent"/> of an <see cref="Entity"/> was updated with <see cref="Entity.AddComponent{T}()"/>. </summary>
     Update  = 2,
 }
 
@@ -81,6 +81,14 @@ public readonly struct  ComponentChanged
         this.oldHeap       = oldHeap;
     }
     
+    /// <summary>
+    /// Returns the current component value after executing the <see cref="ComponentChangedAction.Add"/>
+    /// or <see cref="ComponentChangedAction.Update"/> component.<br/>
+    /// </summary>.
+    /// <typeparam name="T"> The component type of the changed component.</typeparam>
+    /// <exception cref="InvalidOperationException">
+    /// In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Remove"/> component.
+    /// </exception>
     public T Component<T>() where T : struct, IComponent
     {
         switch (Action)
@@ -91,10 +99,9 @@ public readonly struct  ComponentChanged
                     var entity = Entity;
                     return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).components[entity.compIndex];
                 }
-                throw new InvalidOperationException($"Component<T>() - expect component Type: {ComponentType.Type.Name}. T: {typeof(T).Name}");
-
+                throw TypeException("Component<T>() - expect component Type: ", typeof(T));
         }
-        throw new InvalidOperationException($"Component<T>() - component was removed. T: {typeof(T).Name}");
+        throw ActionException("Component<T>() - component was removed. T: ", typeof(T));
     }
     
     /// <summary>
@@ -107,7 +114,7 @@ public readonly struct  ComponentChanged
     /// </summary>.
     /// <typeparam name="T"> The component type of the changed component.</typeparam>
     /// <exception cref="InvalidOperationException">
-    /// In case the <see cref="Action"/> was an <see cref="ComponentChangedAction.Add"/> component.
+    /// In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Add"/> component.
     /// </exception>
     public T OldComponent<T>() where T : struct, IComponent
     {
@@ -118,9 +125,9 @@ public readonly struct  ComponentChanged
                 if (typeof(T) == ComponentType.Type) {
                     return ((StructHeap<T>)oldHeap).componentStash;
                 }
-                throw new InvalidOperationException($"OldComponent<T>() - expect component Type: {ComponentType.Type.Name}. T: {typeof(T).Name}");
+                throw TypeException("OldComponent<T>() - expect component Type: ", typeof(T));
         }
-        throw new InvalidOperationException($"OldComponent<T>() - component is newly added. T: {typeof(T).Name}");
+        throw ActionException("OldComponent<T>() - component is newly added. T: ", typeof(T));
     }
     
     
@@ -143,5 +150,13 @@ public readonly struct  ComponentChanged
                 return oldHeap.GetComponentStashDebug();
         }
         return null;
+    }
+    
+    private static InvalidOperationException ActionException(string message, Type type) {
+        return new InvalidOperationException (message + type.Name);
+    }
+    
+    private InvalidOperationException TypeException(string message, Type type) {
+        return new InvalidOperationException($"{message}{ComponentType.Type.Name}. T: {type.Name}");
     }
 }
