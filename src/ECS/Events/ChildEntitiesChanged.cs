@@ -20,18 +20,23 @@ public readonly struct ChildEntitiesChanged
 {
     
     public readonly ChildEntitiesChangedAction  Action;     //  4
+    
     /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public readonly EntityStore                 Store;      //  8
+    
     /// <summary>The <c>Id</c> of the <see cref="Entity"/> that emitted the event.</summary>
     public readonly int                         EntityId;   //  4
+    
     /// <summary>The <c>Id</c> of the added / removed child entity</summary>
     public readonly int                         ChildId;    //  4
+    
     /// <summary>The child position of the added / removed child entity in the parent <see cref="Entity"/>.</summary>
     public readonly int                         ChildIndex; //  4
     
     // --- properties
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher</summary>
     public          Entity                      Entity      => new Entity(Store, EntityId);
+    
     /// <summary>The added / removed child entity</summary>
     public          Entity                      Child       => new Entity(Store, ChildId);
 

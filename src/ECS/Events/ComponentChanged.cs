@@ -9,7 +9,7 @@ using System;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// The type of a <see cref="ComponentChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Update"/>
+/// The type of a <see cref="ComponentChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Update"/> component.
 /// </summary>
 public enum ComponentChangedAction
 {
@@ -35,10 +35,14 @@ public readonly struct  ComponentChanged
 {
     /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public  readonly    EntityStore             Store;          //  8
+    
     /// <summary>The <c>Id</c> of the <see cref="Entity"/> that emitted the event.</summary>
     public  readonly    int                     EntityId;       //  4
-    /// <summary>The executed entity change: Add / Remove component.</summary>
+    
+    /// <summary>The executed entity change: <see cref="ComponentChangedAction.Remove"/>,
+    /// <see cref="ComponentChangedAction.Add"/> or <see cref="ComponentChangedAction.Remove"/> component.</summary>
     public  readonly    ComponentChangedAction  Action;         //  4
+    
     /// <summary>The <see cref="ECS.ComponentType"/> of the added / removed component.</summary>
     public  readonly    ComponentType           ComponentType; //  8
     

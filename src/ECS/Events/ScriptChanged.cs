@@ -32,18 +32,22 @@ public readonly struct  ScriptChanged
 {
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public readonly     Entity              Entity;     // 16
+    
     /// <summary>The executed entity change: Add / Remove script.</summary>
     public readonly     ScriptChangedAction Action;     //  4
+    
     /// <summary>
     /// The new <see cref="ECS.Script"/> after executing <see cref="ScriptChangedAction.Add"/> or <see cref="ScriptChangedAction.Replace"/>.<br/>
     /// Is null in case of <see cref="ScriptChangedAction.Remove"/>
     /// </summary>
     public readonly     Script              Script;     //  8
+    
     /// <summary>
     /// The <see cref="ECS.Script"/> before executing <see cref="ScriptChangedAction.Remove"/> or <see cref="ScriptChangedAction.Replace"/>.<br/>
     /// Is null in case of <see cref="ScriptChangedAction.Add"/>
     /// </summary>
     public readonly     Script              OldScript;  //  8
+    
     /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
     public readonly     ScriptType          ScriptType; //  8
     
