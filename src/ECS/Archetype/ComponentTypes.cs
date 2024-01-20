@@ -55,10 +55,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- component getter -----------------------------------------
-    public readonly bool    Has<T> ()
-        where T : struct, IComponent
+    public readonly bool    Has<T1> ()
+        where T1 : struct, IComponent
     {
-        return bitSet.Has(StructHeap<T>.StructIndex);
+        return bitSet.Has(StructHeap<T1>.StructIndex);
     }
     
     public readonly bool    Has<T1, T2> ()
@@ -113,11 +113,11 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- static methods -----------------------------------------    
-    public static ComponentTypes Get<T>()
-        where T : struct, IComponent
+    public static ComponentTypes Get<T1>()
+        where T1 : struct, IComponent
     {
         var componentTypes = new ComponentTypes();
-        componentTypes.bitSet.SetBit(StructHeap<T>.StructIndex);
+        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
         return componentTypes;
     }
     
