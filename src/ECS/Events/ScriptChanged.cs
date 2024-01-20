@@ -63,19 +63,6 @@ public readonly struct  ScriptChanged
     public readonly     EntityStore         Store => Entity.store;
     
     /// <summary>The <see cref="System.Type"/> of the added / removed script.</summary>
-    /// <remarks>
-    /// Use the following code snippet to switch on <see cref="Type"/>:
-    /// <br/>
-    /// <code>
-    ///     var type = args.Type;
-    ///     switch (true) {
-    ///         case true when type == typeof(EntityName):
-    ///             break;
-    ///         case true when type == typeof(Position):
-    ///             break;
-    ///     }
-    /// </code> 
-    /// </remarks>
     public              Type                Type        => ScriptType.Type;
     
     public override     string              ToString()  => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
