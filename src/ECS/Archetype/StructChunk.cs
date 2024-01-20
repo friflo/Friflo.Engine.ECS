@@ -19,9 +19,9 @@ internal readonly struct StructChunk<T>
     where T : struct, IComponent
 {
     // Note! Must not contain any other field. See <remarks>
-    internal readonly   T[]     components;   // 8
+    private readonly    T[]     components;   // 8
     
-    public   override   string  ToString() => components == null ? "" : "used";
+    public  override    string  ToString() => components == null ? "" : "used";
     
     internal StructChunk (int chunkSize) {
         components  = new T[chunkSize];

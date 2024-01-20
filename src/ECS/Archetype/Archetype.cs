@@ -54,7 +54,7 @@ public sealed class Archetype
     [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8       - containing EntityStore
     [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
     [Browse(Never)] internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
-    [Browse(Never)] internal            ArchetypeQuery      query;          //  8
+    [Browse(Never)] private             ArchetypeQuery      query;          //  8
     #endregion
     
 #region public methods
