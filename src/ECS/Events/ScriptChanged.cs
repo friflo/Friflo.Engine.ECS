@@ -3,12 +3,13 @@
 
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
-using static System.Diagnostics.DebuggerBrowsableState;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 /// <summary>
 /// The type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/> script.
@@ -67,15 +68,15 @@ public readonly struct  ScriptChanged
     public readonly     Script              OldScript;  //  8
     
     /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
-    [Browse(Never)]
     public readonly     ScriptType          ScriptType; //  8
     
     // --- properties
     /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>
     public readonly     EntityStore         Store => Entity.store;
     
-    /// <summary>The <see cref="System.Type"/> of the added / removed script.</summary>
-    public              Type                Type        => ScriptType.Type;
+    /// <remarks>Intentionally not exposed to direct using <see cref="Script"/> instead.</remarks>
+    [Browse(Never)][ExcludeFromCodeCoverage]
+    private             Type                Type        => ScriptType.Type;
     
     public override     string              ToString()  => $"entity: {Entity.Id} - event > {Action} {ScriptType}";
 

@@ -5,6 +5,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable UnusedVariable
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
@@ -56,7 +57,6 @@ public static class Test_Script
                             AreEqual(ScriptChangedAction.Add,   args.Action);
                             AreSame (script1,                   args.Script);
                             AreEqual(typeof(TestScript1),       args.ScriptType.Type);
-                            AreEqual(typeof(TestScript1),       args.Type);
                             // Ensure Scripts are updated
                             AreEqual(1,                         args.Entity.Scripts.Length);
                             AreEqual("entity: 1 - event > Add Script: [*TestScript1]",  str);   return;
