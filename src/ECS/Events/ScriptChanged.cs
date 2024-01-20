@@ -6,7 +6,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// The type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/>
+/// The type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/> script.
 /// </summary>
 public enum ScriptChangedAction
 {
@@ -33,7 +33,8 @@ public readonly struct  ScriptChanged
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public readonly     Entity              Entity;     // 16
     
-    /// <summary>The executed entity change: Add / Remove script.</summary>
+    /// <summary>The executed entity change: <see cref="ScriptChangedAction.Remove"/>,
+    /// <see cref="ScriptChangedAction.Add"/> or <see cref="ScriptChangedAction.Replace"/> script.</summary>
     public readonly     ScriptChangedAction Action;     //  4
     
     /// <summary>
