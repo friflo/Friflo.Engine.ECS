@@ -46,6 +46,18 @@ public readonly struct  ScriptChanged
     /// The new <see cref="ECS.Script"/> after executing <see cref="ScriptChangedAction.Add"/> or <see cref="ScriptChangedAction.Replace"/>.<br/>
     /// Is null in case of <see cref="ScriptChangedAction.Remove"/>
     /// </summary>
+    /// <remarks>
+    /// Use the following code snippet to switch on <see cref="Script"/> type:
+    /// <br/>
+    /// <code>
+    ///     switch (args.Script) {
+    ///         case TestScript1 script1:
+    ///             break;
+    ///         case TestScript2 script2:
+    ///             break;
+    ///     }
+    /// </code>
+    /// </remarks>
     public readonly     Script              Script;     //  8
     
     /// <summary>

@@ -24,6 +24,16 @@ public static class Test_Script
         AreEqual(0, entity.Scripts.Length);
     }
     
+    private static void OnScriptAdded(ScriptChanged args)
+    {
+        switch (args.Script) {
+            case TestScript1 script1:
+                break;
+            case TestScript2 script2:
+                break;
+        }
+    }
+    
     [Test]
     public static void Test_1_add_remove_Script()
     {
@@ -73,6 +83,7 @@ public static class Test_Script
             }
         });
         store.OnScriptAdded    += addHandler;
+        store.OnScriptAdded    += OnScriptAdded;
         store.OnScriptRemoved  += removeHandler;
         
         // --- add script type: TestScript1
