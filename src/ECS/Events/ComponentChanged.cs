@@ -113,7 +113,8 @@ public readonly struct  ComponentChanged
         {
             case ComponentChangedAction.Add: 
             case ComponentChangedAction.Update:
-                return Entity.archetype.heapMap[ComponentType.StructIndex].GetComponentDebug(Entity.compIndex);
+                var entity = Entity;
+                return entity.archetype.heapMap[ComponentType.StructIndex].GetComponentDebug(entity.compIndex);
         }
         return null;
     }
