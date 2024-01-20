@@ -75,15 +75,20 @@ internal sealed class StructHeap<T> : StructHeap
         components[targetPos] = components[sourcePos];
     }
     
+    /// <summary>
+    /// Method only available for debugging. Reasons:<br/>
+    /// - it boxes struct values to return them as objects<br/>
+    /// - it allows only reading struct values
+    /// </summary>
+    internal override IComponent GetComponentStashDebug() => componentStash;
     
     /// <summary>
     /// Method only available for debugging. Reasons:<br/>
     /// - it boxes struct values to return them as objects<br/>
     /// - it allows only reading struct values
     /// </summary>
-    internal override IComponent GetComponentDebug (int compIndex) {
-        return components[compIndex];
-    }
+    internal override IComponent GetComponentDebug(int compIndex) => components[compIndex];
+    
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
         ref var value = ref components[compIndex];

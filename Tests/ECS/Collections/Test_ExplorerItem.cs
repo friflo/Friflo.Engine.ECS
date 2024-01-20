@@ -141,11 +141,15 @@ public static class Test_ExplorerItem
         var addCount       = 0;
         Action<ComponentChanged> componentAdded = args => {
             var argsStr = args.ToString();
+            var old     = (EntityName?)args.DebugOldComponent;
+            var cur     = (EntityName?)args.DebugComponent;
             switch (addCount++) {
                 case 0:     AreEqual(1,                             args.EntityId);
                             AreEqual(ComponentChangedAction.Add,    args.Action);
                             AreEqual(typeof(EntityName),            args.ComponentType.Type);
                             AreEqual("test",                        args.Entity.GetComponent<EntityName>().value);
+                            IsNull  (                               old);
+                            AreEqual("test",                        cur.Value.value);
                             var e = Throws<InvalidOperationException>(() => {
                                 args.OldComponent<EntityName>();
                             });
@@ -159,6 +163,8 @@ public static class Test_ExplorerItem
                             AreEqual(ComponentChangedAction.Update, args.Action);
                             AreEqual("test-update",                 args.Entity.GetComponent<EntityName>().value);
                             AreEqual("test",                        args.OldComponent<EntityName>().value);
+                            AreEqual("test",                        old.Value.value);
+                            AreEqual("test-update",                 cur.Value.value);
                             e = Throws<InvalidOperationException>(() => {
                                 args.OldComponent<Position>();
                             });
@@ -172,11 +178,15 @@ public static class Test_ExplorerItem
         var removeCount       = 0;
         Action<ComponentChanged> componentRemoved = args => {
             var argsStr = args.ToString();
+            var old     = (EntityName?)args.DebugOldComponent;
+            var cur     = (EntityName?)args.DebugComponent;
             switch (removeCount++) {
                 case 0:     AreEqual(1,                             args.EntityId);
                             AreEqual(ComponentChangedAction.Remove, args.Action);
                             AreEqual(typeof(EntityName),            args.ComponentType.Type);
                             AreEqual("test-update",                 args.OldComponent<EntityName>().value);
+                            AreEqual("test-update",                 old.Value.value);
+                            IsNull  (                               cur);
                             // ensure entity is in new Archetype
                             AreEqual("[]",                          args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;

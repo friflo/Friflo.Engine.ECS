@@ -3,7 +3,10 @@
 
 
 using System;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
 // ReSharper disable once CheckNamespace
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
@@ -37,6 +40,7 @@ public readonly struct  ComponentChanged
     public  readonly    EntityStore             Store;          //  8
     
     /// <summary>The <c>Id</c> of the <see cref="Entity"/> that emitted the event.</summary>
+    [Browse(Never)]
     public  readonly    int                     EntityId;       //  4
     
     /// <summary>The executed entity change: <see cref="ComponentChangedAction.Remove"/>,
@@ -44,23 +48,28 @@ public readonly struct  ComponentChanged
     public  readonly    ComponentChangedAction  Action;         //  4
     
     /// <summary>The <see cref="ECS.ComponentType"/> of the added / removed component.</summary>
-    public  readonly    ComponentType           ComponentType; //  8
+    public  readonly    ComponentType           ComponentType;  //  8
     
-    private readonly    StructHeap              heap;          //  8
+    [Browse(Never)]
+    private readonly    StructHeap              oldHeap;        //  8
     
     // --- properties
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
-    public              Entity                  Entity      => new Entity(Store, EntityId);
+    public              Entity                  Entity              => new Entity(Store, EntityId);
     
-    public override     string                  ToString()  => $"entity: {EntityId} - event > {Action} {ComponentType}";
+    public              IComponent              DebugComponent      => GetDebugComponent();
+    
+    public              IComponent              DebugOldComponent   => GetDebugOldComponent();
+    
+    public override     string                  ToString()          => $"entity: {EntityId} - event > {Action} {ComponentType}";
 
-    internal ComponentChanged(EntityStoreBase store, int entityId, ComponentChangedAction action, int structIndex, StructHeap heap)
+    internal ComponentChanged(EntityStoreBase store, int entityId, ComponentChangedAction action, int structIndex, StructHeap oldHeap)
     {
         Store           = store as EntityStore; 
         EntityId        = entityId;
         Action          = action;
         ComponentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
-        this.heap       = heap;
+        this.oldHeap       = oldHeap;
     }
     
     /// <summary>
@@ -79,13 +88,34 @@ public readonly struct  ComponentChanged
     {
         switch (Action)
         {
-            case ComponentChangedAction.Update:
             case ComponentChangedAction.Remove: 
+            case ComponentChangedAction.Update:
                 if (typeof(T) == ComponentType.Type) {
-                    return ((StructHeap<T>)heap).componentStash;
+                    return ((StructHeap<T>)oldHeap).componentStash;
                 }
                 throw new InvalidOperationException($"OldComponent<T>() - expect component Type: {ComponentType.Type.Name}. T: {typeof(T).Name}");
         }
         throw new InvalidOperationException($"OldComponent<T>() - component is newly added. T: {typeof(T).Name}");
+    }
+    
+    
+    private IComponent GetDebugComponent() {
+        switch (Action)
+        {
+            case ComponentChangedAction.Add: 
+            case ComponentChangedAction.Update:
+                return Entity.archetype.heapMap[ComponentType.StructIndex].GetComponentDebug(Entity.compIndex);
+        }
+        return null;
+    }
+    
+    private IComponent GetDebugOldComponent() {
+        switch (Action)
+        {
+            case ComponentChangedAction.Remove: 
+            case ComponentChangedAction.Update:
+                return oldHeap.GetComponentStashDebug();
+        }
+        return null;
     }
 }

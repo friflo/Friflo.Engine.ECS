@@ -27,15 +27,16 @@ internal abstract class StructHeap
     private             Archetype   archetype;      // only used for debugging
 #endif
 
-    internal  abstract  Type        StructType          { get; }
-    protected abstract  int         ComponentsLength    { get; }
-    internal  abstract  void        ResizeComponents    (int capacity, int count);
-    internal  abstract  void        MoveComponent       (int from, int to);
-    internal  abstract  void        CopyComponentTo     (int sourcePos, StructHeap target, int targetPos);
-    internal  abstract  void        CopyComponent       (int sourcePos, int targetPos);
-    internal  abstract  IComponent  GetComponentDebug   (int compIndex);
-    internal  abstract  Bytes       Write               (ObjectWriter writer, int compIndex);
-    internal  abstract  void        Read                (ObjectReader reader, int compIndex, JsonValue json);
+    internal  abstract  Type        StructType              { get; }
+    protected abstract  int         ComponentsLength        { get; }
+    internal  abstract  void        ResizeComponents        (int capacity, int count);
+    internal  abstract  void        MoveComponent           (int from, int to);
+    internal  abstract  void        CopyComponentTo         (int sourcePos, StructHeap target, int targetPos);
+    internal  abstract  void        CopyComponent           (int sourcePos, int targetPos);
+    internal  abstract  IComponent  GetComponentStashDebug  ();
+    internal  abstract  IComponent  GetComponentDebug       (int compIndex);
+    internal  abstract  Bytes       Write                   (ObjectWriter writer, int compIndex);
+    internal  abstract  void        Read                    (ObjectReader reader, int compIndex, JsonValue json);
 
     internal StructHeap(int structIndex) {
         this.structIndex    = structIndex;
