@@ -152,10 +152,13 @@ public static class Test_ExplorerItem
                             AreEqual("test",                        args.Component<EntityName>().value);
                             IsNull  (                               old);
                             AreEqual("test",                        cur.Value.value);
-                            var e = Throws<InvalidOperationException>(() => {
-                                args.OldComponent<EntityName>();
-                            });
+                            
+                            var e = Throws<InvalidOperationException>(() => { args.OldComponent<EntityName>(); });
                             AreEqual("OldComponent<T>() - component is newly added. T: EntityName", e!.Message);
+                            
+                            e = Throws<InvalidOperationException>(() => { args.Component<Position>(); });
+                            AreEqual("Component<T>() - expect component Type: EntityName. T: Position", e!.Message);
+                            
                             // ensure entity is in new Archetype 
                             AreEqual("[EntityName]  entities: 1",   args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
@@ -167,9 +170,8 @@ public static class Test_ExplorerItem
                             AreEqual("test",                        args.OldComponent<EntityName>().value);
                             AreEqual("test",                        old.Value.value);
                             AreEqual("test-update",                 cur.Value.value);
-                            e = Throws<InvalidOperationException>(() => {
-                                args.OldComponent<Position>();
-                            });
+                            
+                            e = Throws<InvalidOperationException>(() => { args.OldComponent<Position>(); });
                             AreEqual("OldComponent<T>() - expect component Type: EntityName. T: Position", e!.Message);
                             return;
                 default:
@@ -191,6 +193,10 @@ public static class Test_ExplorerItem
                             AreEqual("test-update",                 args.OldComponent<EntityName>().value);
                             AreEqual("test-update",                 old.Value.value);
                             IsNull  (                               cur);
+                            
+                            var e = Throws<InvalidOperationException>(() => { args.Component<EntityName>(); });
+                            AreEqual("Component<T>() - component was removed. T: EntityName", e!.Message);
+                            
                             // ensure entity is in new Archetype
                             AreEqual("[]",                          args.Entity.Archetype.ToString());
                             AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;

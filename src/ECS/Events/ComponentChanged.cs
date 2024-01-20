@@ -87,10 +87,14 @@ public readonly struct  ComponentChanged
         {
             case ComponentChangedAction.Add: 
             case ComponentChangedAction.Update:
-                var entity = Entity;
-                return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).components[entity.compIndex];
+                if (typeof(T) == ComponentType.Type) {
+                    var entity = Entity;
+                    return ((StructHeap<T>)entity.archetype.heapMap[ComponentType.StructIndex]).components[entity.compIndex];
+                }
+                throw new InvalidOperationException($"Component<T>() - expect component Type: {ComponentType.Type.Name}. T: {typeof(T).Name}");
+
         }
-        throw new InvalidOperationException($"OldComponent<T>() - component is newly added. T: {typeof(T).Name}");
+        throw new InvalidOperationException($"Component<T>() - component was removed. T: {typeof(T).Name}");
     }
     
     /// <summary>
