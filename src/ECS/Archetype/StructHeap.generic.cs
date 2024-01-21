@@ -22,8 +22,8 @@ internal sealed class StructHeap<T> : StructHeap
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
     internal            T[]             components;     //  8
-    private  readonly   TypeMapper<T>   typeMapper;     //  8
     internal            T               componentStash; //  sizeof(T)
+    private  readonly   TypeMapper<T>   typeMapper;     //  8
     
     // --- static internal
     internal static readonly    int     StructIndex  = StructUtils.NewStructIndex(typeof(T), out StructKey);

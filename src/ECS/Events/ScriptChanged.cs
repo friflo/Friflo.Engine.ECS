@@ -45,7 +45,7 @@ public readonly struct  ScriptChanged
     
     /// <summary>
     /// The new <see cref="ECS.Script"/> after executing <see cref="ScriptChangedAction.Add"/> or <see cref="ScriptChangedAction.Replace"/>.<br/>
-    /// Is null in case of <see cref="ScriptChangedAction.Remove"/>
+    /// Is null in case of <see cref="ScriptChangedAction.Remove"/>.
     /// </summary>
     /// <remarks>
     /// Use the following code snippet to switch on <see cref="Script"/> type:
@@ -63,11 +63,11 @@ public readonly struct  ScriptChanged
     
     /// <summary>
     /// The <see cref="ECS.Script"/> before executing <see cref="ScriptChangedAction.Remove"/> or <see cref="ScriptChangedAction.Replace"/>.<br/>
-    /// Is null in case of <see cref="ScriptChangedAction.Add"/>
+    /// Is null in case of <see cref="ScriptChangedAction.Add"/>.
     /// </summary>
     public readonly     Script              OldScript;  //  8
     
-    /// <summary>The <see cref="ECS.ScriptType"/> of the added / removed script.</summary>
+    /// <summary>The <see cref="ECS.ScriptType"/> of the remove, added or replaced script.</summary>
     public readonly     ScriptType          ScriptType; //  8
     
     // --- properties

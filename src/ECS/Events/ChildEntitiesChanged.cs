@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
+
 // ReSharper disable once CheckNamespace
 // ReSharper disable InconsistentNaming
 namespace Friflo.Engine.ECS;
@@ -25,9 +28,11 @@ public readonly struct ChildEntitiesChanged
     public readonly EntityStore                 Store;      //  8
     
     /// <summary>The <c>Id</c> of the <see cref="Entity"/> that emitted the event.</summary>
+    [Browse(Never)]
     public readonly int                         EntityId;   //  4
     
     /// <summary>The <c>Id</c> of the added / removed child entity</summary>
+    [Browse(Never)]
     public readonly int                         ChildId;    //  4
     
     /// <summary>The child position of the added / removed child entity in the parent <see cref="Entity"/>.</summary>
