@@ -13,16 +13,19 @@ using static System.Diagnostics.DebuggerBrowsableState;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A <see cref="Chunk{T}"/> is container of components of Type <typeparamref name="T"/>.<br/>
+/// A <see cref="Chunk{T}"/> is container of <b>struct</b> components of Type <typeparamref name="T"/>.
+/// </summary>
+/// <remarks>
 /// <see cref="Chunk{T}"/>'s are typically returned a <see cref="ArchetypeQuery{T1}"/>.<see cref="ArchetypeQuery{T1}.Chunks"/> enumerator.<br/>
 /// <br/>
 /// Its items can be accessed or changed with <see cref="this[int]"/> or <see cref="Span"/>.<br/>
 /// The <see cref="Chunk{T}"/> implementation also support <b>vectorization</b>
 /// of <a href="https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/vectorization-guidelines.md">Vector types</a><br/>
 /// by <see cref="AsSpan128{TTo}"/>, <see cref="AsSpan256{TTo}"/> and <see cref="AsSpan512{TTo}"/>.
+/// <br/>
 /// <br/> <i>See vectorization example</i> at <see cref="AsSpan256{TTo}"/>.
-/// </summary>
-/// <typeparam name="T"><see cref="IComponent"/> type of a struct component</typeparam>
+/// </remarks>
+/// <typeparam name="T"><see cref="IComponent"/> type of a struct component.</typeparam>
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {

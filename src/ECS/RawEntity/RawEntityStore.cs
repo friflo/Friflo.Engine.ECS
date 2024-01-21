@@ -11,13 +11,13 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A <see cref="RawEntityStore"/> enables using an entity store without using <see cref="Entity"/>'s.<br/>
-/// <br/>
+/// </summary>
+/// <remarks>
 /// The focus of the this entity store implementation is performance.<br/>
 /// The key is to minimize heap consumption required by <see cref="EntityNode"/>'s - 48 bytes<br/>
 /// A <see cref="RawEntityStore"/> stores only an array of blittable <see cref="RawEntity"/>'s -
-/// structs having no reference type fields<br/>
-/// </summary>
-/// <remarks>
+/// structs having no reference type fields.<br/>
+/// <br/>
 /// The downside of this approach are:<br/>
 /// <list type="bullet">
 ///   <item>Entities can be created only programmatically but not within the editor which requires (managed) <see cref="Entity"/>'s.</item>

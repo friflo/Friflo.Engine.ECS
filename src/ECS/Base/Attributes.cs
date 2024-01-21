@@ -18,12 +18,15 @@ public sealed class TagNameAttribute : Attribute {
 }
 
 /// <summary>
-/// Assign a custom key used for JSON serialization of<br/>
+/// Assign a custom key used for JSON serialization for annotated <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
+/// </summary>
+/// <remarks>
+/// The attribute is used for:
 /// - annotated structs implementing <see cref="IComponent"/>.<br/>
 /// - annotated classes extending <see cref="Script"/>.<br/>
 /// <br/>
 /// This enables changing a struct / class name in code without changing the JSON serialization format.  
-/// </summary>
+/// </remarks>
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class ComponentKeyAttribute : Attribute {
     public ComponentKeyAttribute (string key) { }

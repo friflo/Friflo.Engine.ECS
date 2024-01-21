@@ -7,11 +7,11 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// To enable adding a script class to an <see cref="ECS.Entity"/> it need to extend <see cref="Script"/>.<br/>
-/// A <b><see cref="Script"/></b> is a reference type - a class-  which contains data <b>and</b> behavior - aka scripts / methods.<br/> 
-/// An <see cref="ECS.Entity"/> can contain multiple <see cref="Script"/>'s but only one of each type.
+/// To enable adding a script class to an <see cref="ECS.Entity"/> it need to extend <see cref="Script"/>.
 /// </summary>
 /// <remarks>
+/// A <see cref="Script"/> is a reference type - a class-  which contains data <b>and</b> behavior - aka scripts / methods.<br/> 
+/// An <see cref="ECS.Entity"/> can contain multiple <see cref="Script"/>'s but only one of each type.<br/>
 /// <see cref="Script"/>'s can be used if <b>OPP</b> programming approach is preferred
 /// while dealing with a small amount (&lt; 100) of <see cref="ECS.Entity"/>'s.<br/>
 /// <br/>

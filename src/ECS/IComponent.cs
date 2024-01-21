@@ -7,11 +7,11 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// To enable adding a struct component to an <see cref="Entity"/> it need to implement <see cref="IComponent"/>.<br/>
-/// <br/> 
-/// <see cref="IComponent"/> types are <b><c>struct</c></b>'s which only contains data <b>but no</b> script / methods.<br/>
-/// An <see cref="Entity"/> can contain multiple components but only one of each type.<br/>
+/// <see cref="IComponent"/> types are <b>struct</b>s which only contains data <b>but no</b> script / methods.<br/>
 /// </summary>
 /// <remarks>
+/// An <see cref="Entity"/> can contain multiple components but only one of each type.<br/>
+/// <br/>
 /// Common game specific <see cref="IComponent"/> types defined by the Engine:
 /// <list type="bullet">
 ///     <item><see cref="EntityName"/></item>

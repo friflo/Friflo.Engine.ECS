@@ -6,15 +6,16 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// <see cref="Signal{TEvent}"/>'s are used to emit custom events from an entity to <see cref="Signal{TEvent}"/> handlers<br/>
-/// added with <see cref="ECS.Entity.AddSignalHandler{TEvent}"/>.<br/>
-/// <br/>
-/// It it used to implement the <a href="https://en.wikipedia.org/wiki/Observer_pattern">Observer pattern</a>
-/// on entity level in the engine. 
+/// <see cref="Signal{TEvent}"/>'s are used to emit custom events from an entity to <see cref="Signal{TEvent}"/> handlers.
+/// </summary>
+/// <remarks>
+/// <see cref="Signal{TEvent}"/> handlers are added with <see cref="ECS.Entity.AddSignalHandler{TEvent}"/>.<br/>
+/// They are used to implement the <a href="https://en.wikipedia.org/wiki/Observer_pattern">Observer pattern</a>
+/// on entity level in the engine.<br/>
 /// <br/>
 /// It enables decoupling the code used for emitting events from a specific entity (aka subject / publisher)<br/>
 /// to multiple subscribers (aka observers) consuming the event by their <see cref="Signal{TEvent}"/> handlers. 
-/// </summary>
+/// </remarks>
 /// <typeparam name="TEvent">The event type containing the fields of a custom event.</typeparam>
 public readonly struct Signal<TEvent> where TEvent : struct 
 {

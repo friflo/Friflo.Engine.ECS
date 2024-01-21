@@ -11,6 +11,9 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a game scene.<br/>
+/// Is is the <b>main API</b> when dealing with entities in the engine.
+/// </summary>
+/// <remarks>
 /// Every <see cref="Entity"/> has an <see cref="Id"/> and is a container of
 /// <see cref="ECS.Tags"/>, <see cref="IComponent"/>'s, <see cref="Script"/>'s and other child <see cref="Entity"/>'s.<br/>
 /// <br/>
@@ -46,8 +49,7 @@ namespace Friflo.Engine.ECS;
 /// <see cref="Tags"/> can be added to an <see cref="Entity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
 /// these <see cref="Tags"/>.
-/// </summary>
-/// <remarks>
+///
 /// <b>general</b>
 /// <list type="bullet">
 ///     <item><see cref="Id"/></item>
