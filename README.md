@@ -32,7 +32,7 @@ The core feature of an Entity Component System are:
 ## Additional library features
 
 - JSON Serialization
-- Developer friendly / OOP like API by exposing the [Entity](src/ECS/Entity.cs) struct as the main interface.  
+- Developer friendly / OOP like API by exposing the [Entity](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md) struct as the main interface.  
   To get an overview of the `Entity` interface see [Engine-comparison.md](Engine-comparison.md).  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
