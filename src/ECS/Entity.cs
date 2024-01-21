@@ -48,50 +48,50 @@ namespace Friflo.Engine.ECS;
 /// <br/>
 /// <see cref="Tags"/> can be added to an <see cref="Entity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
-/// these <see cref="Tags"/>.
-///
+/// these <see cref="Tags"/>.<br/>
+/// <br/>
 /// <b>Properties and Methods by category</b>
 /// <list type="bullet">
-/// <item> <b>general</b> <br/>
+/// <item>  <b>general</b>      <br/>
 ///     <see cref="Id"/>        <br/>
 ///     <see cref="Pid"/>       <br/>
 ///     <see cref="Archetype"/> <br/>
 ///     <see cref="Store"/>     <br/>
 ///     <see cref="DebugJSON"/> <br/>
 /// </item>
-/// <item> <b>components</b> · generic <br/>
+/// <item>  <b>components</b> · generic             <br/>
 ///     <see cref="HasComponent{T}"/>               <br/>
 ///     <see cref="GetComponent{T}"/> - read / write<br/>
 ///     <see cref="TryGetComponent{T}"/>            <br/>
 ///     <see cref="AddComponent{T}()"/>             <br/>
 ///     <see cref="RemoveComponent{T}"/>            <br/>
 /// </item>
-/// <item> <b>components</b> · common <br/>
-///     <see cref="Components"/>        <br/>
-///     <see cref="Name"/>              <br/>
-///     <see cref="Position"/>          <br/>
-///     <see cref="Rotation"/>          <br/>
-///     <see cref="Scale3"/>            <br/>
-///     <see cref="HasName"/>           <br/>
-///     <see cref="HasPosition"/>       <br/>
-///     <see cref="HasRotation"/>       <br/>
-///     <see cref="HasScale3"/>         <br/>
+/// <item>  <b>components</b> · common              <br/>
+///     <see cref="Components"/>                    <br/>
+///     <see cref="Name"/>                          <br/>
+///     <see cref="Position"/>                      <br/>
+///     <see cref="Rotation"/>                      <br/>
+///     <see cref="Scale3"/>                        <br/>
+///     <see cref="HasName"/>                       <br/>
+///     <see cref="HasPosition"/>                   <br/>
+///     <see cref="HasRotation"/>                   <br/>
+///     <see cref="HasScale3"/>                     <br/>
 /// </item>
-/// <item> <b>scripts</b><br/>
+/// <item>  <b>scripts</b>              <br/>
 ///     <see cref="Scripts"/>           <br/>
 ///     <see cref="GetScript{T}"/>      <br/>
 ///     <see cref="TryGetScript{T}"/>   <br/>
 ///     <see cref="AddScript{T}"/>      <br/>
 ///     <see cref="RemoveScript{T}"/>   <br/>
 /// </item>
-/// <item> <b>tags</b> <br/>
+/// <item>  <b>tags</b>                 <br/>
 ///     <see cref="Tags"/>              <br/>
 ///     <see cref="AddTag{T}"/>         <br/>
 ///     <see cref="AddTags"/>           <br/>
 ///     <see cref="RemoveTag{T}"/>      <br/>
 ///     <see cref="RemoveTags"/>        <br/>
 /// </item>
-/// <item> <b>child entities</b> <br/>
+/// <item>  <b>child entities</b>       <br/>
 ///     <see cref="Parent"/>            <br/>
 ///     <see cref="ChildEntities"/>     <br/>
 ///     <see cref="ChildIds"/>          <br/>
@@ -102,13 +102,13 @@ namespace Friflo.Engine.ECS;
 ///     <see cref="DeleteEntity"/>      <br/>
 ///     <see cref="GetChildIndex"/>     <br/>
 /// </item>
-/// <item> <b>events</b> <br/>
+/// <item>  <b>events</b>                           <br/>
 ///     <see cref="OnTagsChanged"/>                 <br/>
 ///     <see cref="OnComponentChanged"/>            <br/>
 ///     <see cref="OnScriptChanged"/>               <br/>
 ///     <see cref="OnChildEntitiesChanged"/>        <br/>
 /// </item>
-/// <item> <b>signals</b> <br/>
+/// <item>  <b>signals</b>                          <br/>
 ///     <see cref="AddSignalHandler{TEvent}"/>      <br/>
 ///     <see cref="RemoveSignalHandler{TEvent}"/>   <br/>
 ///     <see cref="EmitSignal{TEvent}"/>            <br/>
