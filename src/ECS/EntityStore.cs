@@ -27,16 +27,16 @@ namespace Friflo.Engine.ECS;
 ///   <see cref="Entity"/>'s have the states below:<br/>
 ///   <list type="bullet">
 ///     <item>
-///       <b><see cref="StoreOwnership"/>:</b> <see cref="attached"/> / <see cref="detached"/><br/>
-///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="Entity"/> methods.
+///       <see cref="StoreOwnership"/>: <see cref="attached"/> / <see cref="detached"/><br/>
+///       if <see cref="detached"/> - <see cref="NullReferenceException"/> are thrown by <see cref="Entity"/> properties and methods.
 ///     </item>
 ///     <item>
-///       <b><see cref="TreeMembership"/>:</b> <see cref="treeNode"/> / <see cref="floating"/> node (not part of the <see cref="EntityStore"/> tree graph).<br/>
+///       <see cref="TreeMembership"/>: <see cref="treeNode"/> / <see cref="floating"/> node (not part of the <see cref="EntityStore"/> tree graph).<br/>
 ///       All children of a <see cref="treeNode"/> are <see cref="treeNode"/>'s themselves.
 ///     </item>
 ///     </list>
 ///   </item>
-///   <item>Manage a tree graph of entities which starts with the <see cref="StoreRoot"/> entity to build up a scene graph</item>
+///   <item>Manage a tree graph of entities which starts with the <see cref="StoreRoot"/> entity to build up a scene graph.</item>
 ///   <item>Store the data of <see cref="IComponent"/>'s and <see cref="Script"/>'s.</item>
 /// </list>
 /// </remarks>
