@@ -37,7 +37,8 @@ public struct Tags : IEnumerable<TagType>
         bitSet.value = value;
     }
     
-    // ----------------------------------------- read Tags ----------------------------------------- 
+    // ----------------------------------------- read Tags -----------------------------------------
+    /// <summary>Return the number of <see cref="ITag"/>'s contained in the <see cref="Tags"/>.</summary>
     public readonly int     Count => bitSet.GetBitCount();
     
     /// <summary>Return true if the <see cref="Tags"/> contain the passed tag <typeparamref name="T"/>.</summary>
@@ -73,35 +74,41 @@ public struct Tags : IEnumerable<TagType>
         return bitSet.HasAll(tags.bitSet);
     }
     
+    /// <summary>Return true if the <see cref="Tags"/> contain any of the passed <paramref name="tags"/>.</summary>
     public readonly bool HasAny (in Tags tags)
     {
         return bitSet.HasAny(tags.bitSet);
     }
     
     // ----------------------------------------- mutate Tags -----------------------------------------
+    /// <summary> Add the passed <see cref="ITag"/> to <see cref="Tags"/>.</summary>
     public void Add<T>()
         where T : struct, ITag
     {
         bitSet.SetBit(TagType<T>.TagIndex);
     }
     
+    /// <summary> Add the passed <paramref name="tags"/> to <see cref="Tags"/>.</summary>
     public void Add(in Tags tags)
     {
         bitSet.value |= tags.bitSet.value;
     }
     
+    /// <summary> Removes the passed <see cref="ITag"/> from <see cref="Tags"/>.</summary>
     public void Remove<T>()
         where T : struct, ITag
     {
         bitSet.ClearBit(TagType<T>.TagIndex);
     }
     
+    /// <summary> Removes the passed <paramref name="tags"/> from <see cref="Tags"/>.</summary>
     public void Remove(in Tags tags)
     {
         bitSet.value &= ~tags.bitSet.value;
     }
         
-    // ----------------------------------------- static methods -----------------------------------------    
+    // ----------------------------------------- static methods -----------------------------------------
+    /// <summary>Create <see cref="Tags"/> containging the given <see cref="ITag"/></summary>
     public static Tags Get<T>()
         where T : struct, ITag
     {
@@ -110,6 +117,7 @@ public struct Tags : IEnumerable<TagType>
         return tags;
     }
     
+    /// <summary>Create <see cref="Tags"/> containging the given <see cref="ITag"/>'s </summary>
     public static Tags Get<T1, T2>()
         where T1 : struct, ITag
         where T2 : struct, ITag

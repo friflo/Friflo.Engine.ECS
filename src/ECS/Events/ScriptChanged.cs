@@ -26,17 +26,19 @@ public enum ScriptChangedAction
 
 /// <summary>
 /// Is the event for event handlers added to <see cref="ECS.Entity.OnScriptChanged"/>,
-/// <see cref="EntityStore.OnScriptAdded"/> or <see cref="EntityStore.OnScriptRemoved"/>.<br/>
+/// <see cref="EntityStore.OnScriptAdded"/> or <see cref="EntityStore.OnScriptRemoved"/>.
+/// </summary>
+/// <remarks>
 /// <br/>
 /// These events are fired on:
 /// <list type="bullet">
 ///     <item><see cref="Entity.AddScript{TScript}"/></item>
 ///     <item><see cref="Entity.RemoveScript{T}"/></item>
 /// </list>
-/// </summary>
+/// </remarks>
 public readonly struct  ScriptChanged
 {
-    /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
+    /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher / subject.</summary>
     public readonly     Entity              Entity;     // 16
     
     /// <summary>The executed entity change: <see cref="ScriptChangedAction.Remove"/>,

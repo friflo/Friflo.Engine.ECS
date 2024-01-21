@@ -10,9 +10,15 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Return the <see cref="Script"/>'s added to an <see cref="Entity"/>.
+/// </summary>
 public struct EntityScripts : IEnumerable<Script>
 {
 #region public properties
+    /// <summary>Return the number of <see cref="Script"/>'s of an entity.</summary>
+    public              int                     Count       => scripts.Length;
+    
     public   override   string                  ToString()  => GetString();
     #endregion
     

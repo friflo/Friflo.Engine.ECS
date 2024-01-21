@@ -202,12 +202,15 @@ public static class Test_Script
         // --- test EntityScriptsEnumerator
         {
             int count = 0;
+            int count2 = 0;
             foreach (var entityScripts in store.EntityScripts) {
+                count2 += entityScripts.Count;
                 foreach (var _ in entityScripts) {
                     count++;       
                 }
             }
             AreEqual(2, count);
+            AreEqual(2, count2);
         } {
             int count = 0;
             foreach (var entityScripts in store.EntityScripts) {

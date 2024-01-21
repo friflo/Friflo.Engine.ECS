@@ -443,20 +443,20 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ events ------------------------------------------------
 #region events
-    /// <summary>Add / remove an event handler that is called on:<br/>
-    /// <see cref="AddTag{T}"/>,<br/> <see cref="AddTags"/>,<br/> <see cref="RemoveTag{T}"/> and <br/> <see cref="RemoveTags"/>.</summary>
+    /// <summary>Add / remove an event handler for <see cref="TagsChanged"/> events triggered by:<br/>
+    /// <see cref="AddTag{T}"/> <br/> <see cref="AddTags"/> <br/> <see cref="RemoveTag{T}"/> <br/> <see cref="RemoveTags"/>.</summary>
     public event Action<TagsChanged>            OnTagsChanged           { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
-    /// <summary>Add / remove an event handler that is called on:<br/>
-    /// <see cref="AddComponent{T}()"/> and <br/> <see cref="RemoveComponent{T}"/>.</summary>
+    /// <summary>Add / remove an event handler for <see cref="ComponentChanged"/> events triggered by: <br/>
+    /// <see cref="AddComponent{T}()"/> <br/> <see cref="RemoveComponent{T}"/>.</summary>
     public event Action<ComponentChanged>       OnComponentChanged      { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveComponentChangedHandler   (store, Id, value);  }
-    /// <summary>Add / remove an event handler that is called on:<br/>
-    /// <see cref="AddScript{T}"/> and <br/> <see cref="RemoveScript{T}"/>.</summary>
+    /// <summary>Add / remove an event handler for <see cref="ScriptChanged"/> events triggered by:<br/>
+    /// <see cref="AddScript{T}"/> <br/> <see cref="RemoveScript{T}"/>.</summary>
     public event Action<ScriptChanged>          OnScriptChanged         { add    => EntityStore.AddScriptChangedHandler             (store, Id, value);
                                                                           remove => EntityStore.RemoveScriptChangedHandler          (store, Id, value);  }
-    /// <summary>Add / remove an event handler that is called on:<br/>
-    /// <see cref="AddChild"/>,<br/> <see cref="InsertChild"/> and <br/> <see cref="RemoveChild"/>.</summary>
+    /// <summary>Add / remove an event handler for <see cref="ChildEntitiesChanged"/> events triggered by:<br/>
+    /// <see cref="AddChild"/> <br/> <see cref="InsertChild"/> <br/> <see cref="RemoveChild"/>.</summary>
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     

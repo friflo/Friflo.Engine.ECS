@@ -10,11 +10,15 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Return the <see cref="IComponent"/>'s added to an <see cref="Entity"/>.
+/// </summary>
 public readonly struct EntityComponents : IEnumerable<EntityComponent>
 {
     // --- internal fields
     private  readonly   Entity  entity;     // 16
 
+    /// <summary>Return the number of <see cref="IComponent"/>'s of an entity.</summary>
     public              int     Count       => entity.archetype.componentCount;
     public   override   string  ToString()  => entity.archetype.componentTypes.GetString();
 
@@ -61,7 +65,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     public void Dispose() { }
 }
 
-
+/// <summary>An item in <see cref="EntityComponents"/> containing a <see cref="IComponent"/>.</summary>
 public readonly struct EntityComponent
 {
     // --- public fields
