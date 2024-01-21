@@ -40,12 +40,14 @@ public struct Tags : IEnumerable<TagType>
     // ----------------------------------------- read Tags ----------------------------------------- 
     public readonly int     Count => bitSet.GetBitCount();
     
+    /// <summary>Return true if the <see cref="Tags"/> contain the passed tag <typeparamref name="T"/>.</summary>
     public readonly bool    Has<T> ()
         where T : struct, ITag
     {
         return bitSet.Has(TagType<T>.TagIndex);
     }
 
+    /// <summary>Return true if the <see cref="Tags"/> contain the passed tags.</summary>
     public readonly bool    Has<T1, T2> ()
         where T1 : struct, ITag
         where T2 : struct, ITag
@@ -54,6 +56,7 @@ public struct Tags : IEnumerable<TagType>
                bitSet.Has(TagType<T2>.TagIndex);
     }
 
+    /// <summary>Return true if the <see cref="Tags"/> contain the passed tags.</summary>
     public readonly bool    Has<T1, T2, T3> ()
         where T1 : struct, ITag
         where T2 : struct, ITag
@@ -64,6 +67,7 @@ public struct Tags : IEnumerable<TagType>
                bitSet.Has(TagType<T3>.TagIndex);
     }
     
+    /// <summary>Return true if the <see cref="Tags"/> contain all passed <paramref name="tags"/>.</summary>
     public readonly bool HasAll (in Tags tags)
     {
         return bitSet.HasAll(tags.bitSet);

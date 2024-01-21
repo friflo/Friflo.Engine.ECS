@@ -10,7 +10,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a game scene.<br/>
+/// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a cube in a game scene.<br/>
 /// Is is the <b>main API</b> when dealing with entities in the engine.
 /// </summary>
 /// <remarks>
@@ -50,72 +50,69 @@ namespace Friflo.Engine.ECS;
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
 /// these <see cref="Tags"/>.
 ///
-/// <b>general</b>
 /// <list type="bullet">
-///     <item><see cref="Id"/></item>
-///     <item><see cref="Pid"/></item>
-///     <item><see cref="Archetype"/></item>
-///     <item><see cref="Store"/></item>
-///     <item><see cref="DebugJSON"/></item>
-/// </list>
-/// <b>components</b> · generic
-/// <list type="bullet">
-///     <item><see cref="HasComponent{T}"/></item>
-///     <item><see cref="GetComponent{T}"/> - read / write</item>
-///     <item><see cref="TryGetComponent{T}"/></item>
-///     <item><see cref="AddComponent{T}()"/></item>
-///     <item><see cref="RemoveComponent{T}"/></item>
-/// </list>
-/// <b>components</b> · common
-/// <list type="bullet">
-///     <item><see cref="Components"/></item>
-///     <item><see cref="Name"/></item>
-///     <item><see cref="Position"/></item>
-///     <item><see cref="Rotation"/></item>
-///     <item><see cref="Scale3"/></item>
-///     <item><see cref="HasName"/></item>
-///     <item><see cref="HasPosition"/></item>
-///     <item><see cref="HasRotation"/></item>
-///     <item><see cref="HasScale3"/></item>
-/// </list>
-/// <b>scripts</b> · generic
-/// <list type="bullet">
-///     <item><see cref="Scripts"/></item>
-///     <item><see cref="GetScript{T}"/></item>
-///     <item><see cref="TryGetScript{T}"/></item>
-///     <item><see cref="AddScript{T}"/></item>
-///     <item><see cref="RemoveScript{T}"/></item>
-/// </list>
-/// <b>tags</b>
-/// <list type="bullet">
-///     <item><see cref="Tags"/></item>
-///     <item><see cref="AddTag{T}"/></item>
-///     <item><see cref="AddTags"/></item>
-///     <item><see cref="RemoveTag{T}"/></item>
-///     <item><see cref="RemoveTags"/></item>
-/// </list>
-/// <b>child entities</b>
-/// <list type="bullet">
-///     <item><see cref="Parent"/></item>
-///     <item><see cref="ChildEntities"/></item>
-///     <item><see cref="ChildIds"/></item>
-///     <item><see cref="ChildCount"/></item>
-///     <item><see cref="AddChild"/></item>
-///     <item><see cref="InsertChild"/></item>
-///     <item><see cref="RemoveChild"/></item>
-///     <item><see cref="DeleteEntity"/></item>
-///     <item><see cref="GetChildIndex"/></item>
-/// </list>
-/// <b>events</b>
-/// <list type="bullet">
-///     <item><see cref="OnTagsChanged"/></item>
-///     <item><see cref="OnComponentChanged"/></item>
-///     <item><see cref="OnScriptChanged"/></item>
-///     <item><see cref="OnChildEntitiesChanged"/></item>
-///     <item><see cref="AddSignalHandler{TEvent}"/></item>
-///     <item><see cref="RemoveSignalHandler{TEvent}"/></item>
-///     <item><see cref="EmitSignal{TEvent}"/></item>
-///     <item><see cref="DebugEventHandlers"/></item>
+/// <item> <b>general</b> <br/>
+///     <see cref="Id"/><br/>
+///     <see cref="Pid"/><br/>
+///     <see cref="Archetype"/><br/>
+///     <see cref="Store"/><br/>
+///     <see cref="DebugJSON"/><br/>
+/// </item>
+/// <item> <b>components</b> · generic <br/>
+///     <see cref="HasComponent{T}"/><br/>
+///     <see cref="GetComponent{T}"/> - read / write<br/>
+///     <see cref="TryGetComponent{T}"/><br/>
+///     <see cref="AddComponent{T}()"/><br/>
+///     <see cref="RemoveComponent{T}"/><br/>
+/// </item>
+/// <item> <b>components</b> · common <br/>
+///     <see cref="Components"/><br/>
+///     <see cref="Name"/><br/>
+///     <see cref="Position"/><br/>
+///     <see cref="Rotation"/><br/>
+///     <see cref="Scale3"/><br/>
+///     <see cref="HasName"/><br/>
+///     <see cref="HasPosition"/><br/>
+///     <see cref="HasRotation"/><br/>
+///     <see cref="HasScale3"/><br/>
+/// </item>
+/// <item> <b>scripts</b> · generic <br/>
+///     <see cref="Scripts"/><br/>
+///     <see cref="GetScript{T}"/><br/>
+///     <see cref="TryGetScript{T}"/><br/>
+///     <see cref="AddScript{T}"/><br/>
+///     <see cref="RemoveScript{T}"/><br/>
+/// </item>
+/// <item> <b>tags</b> <br/>
+///     <see cref="Tags"/><br/>
+///     <see cref="AddTag{T}"/><br/>
+///     <see cref="AddTags"/><br/>
+///     <see cref="RemoveTag{T}"/><br/>
+///     <see cref="RemoveTags"/><br/>
+/// </item>
+/// <item> <b>child entities</b> <br/>
+///     <see cref="Parent"/><br/>
+///     <see cref="ChildEntities"/><br/>
+///     <see cref="ChildIds"/><br/>
+///     <see cref="ChildCount"/><br/>
+///     <see cref="AddChild"/><br/>
+///     <see cref="InsertChild"/><br/>
+///     <see cref="RemoveChild"/><br/>
+///     <see cref="DeleteEntity"/><br/>
+///     <see cref="GetChildIndex"/><br/>
+/// </item>
+/// <item> <b>events</b> <br/>
+///     <see cref="OnTagsChanged"/><br/>
+///     <see cref="OnComponentChanged"/><br/>
+///     <see cref="OnScriptChanged"/><br/>
+///     <see cref="OnChildEntitiesChanged"/><br/>
+/// </item>
+/// <item> <b>signals</b> <br/>
+///     <see cref="AddSignalHandler{TEvent}"/><br/>
+///     <see cref="RemoveSignalHandler{TEvent}"/><br/>
+///     <see cref="EmitSignal{TEvent}"/><br/>
+///     <see cref="DebugEventHandlers"/><br/>
+/// </item>
 /// </list>
 /// </remarks>
 [CLSCompliant(true)]
@@ -126,17 +123,17 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Returns the permanent entity id used for serialization.</summary>
     public              long                    Pid             => store.nodes[Id].pid;
 
-    /// <summary>Return the components added to the entity.</summary>
+    /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
     public              EntityComponents        Components      => new EntityComponents(this);
 
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
     public              ReadOnlySpan<Script>    Scripts         => new (EntityUtils.GetScripts(this));
 
-    /// <summary>Return the <see cref="Tags"/> added to the entity.</summary>
+    /// <summary>Return the <see cref="ECS.Tags"/> added to the entity.</summary>
     /// <returns>
     /// A copy of the <see cref="Tags"/> assigned to the <see cref="Entity"/>.<br/>
     /// <br/>
-    /// Modifying the returned <see cref="Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<see cref="Tags"/>.<br/>
+    /// Modifying the returned <see cref="ECS.Tags"/> value does <b>not</b> affect the <see cref="Entity"/>.<br/>
     /// Therefore use <see cref="AddTag{T}"/>, <see cref="AddTags"/>, <see cref="RemoveTag{T}"/> or <see cref="RemoveTags"/>.
     /// </returns>
     public     ref readonly Tags                Tags            => ref archetype.tags;
@@ -159,7 +156,8 @@ public readonly struct Entity : IEquatable<Entity>
     
     [Browse(Never)] public  bool                IsNull          => store?.nodes[Id].archetype == null;
     
-    /// <summary> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </summary>
+    /// <summary> Return the <b>JSON</b> representation of an entity. </summary>
+    /// <remarks> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </remarks>
     // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
                     public  string              DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
     #endregion
@@ -169,22 +167,29 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ component properties ----------------------------------
 #region component - properties
-
+    /// <summary>Returns the <see cref="ECS.EntityName"/> referene of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName      Name        => ref archetype.std.name.    components[compIndex];
 
+    /// <summary>Returns the <see cref="ECS.Position"/> referene of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
     [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.components[compIndex];
     
+    /// <summary>Returns the <see cref="ECS.Position"/> referene of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
     [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.components[compIndex];
     
+    /// <summary>Returns the <see cref="ECS.Scale3"/> referene of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
     [Browse(Never)] public  ref Scale3          Scale3      => ref archetype.std.scale3.  components[compIndex];
     
+    /// <summary>Returns true if the entity has an <see cref="ECS.EntityName"/>.</summary>
     [Browse(Never)] public  bool                HasName     =>     archetype.std.name              != null;
+    /// <summary>Returns true if the entity has a <see cref="ECS.Position"/>.</summary>
     [Browse(Never)] public  bool                HasPosition =>     archetype.std.position          != null;
+    /// <summary>Returns true if the entity has a <see cref="ECS.Rotation"/>.</summary>
     [Browse(Never)] public  bool                HasRotation =>     archetype.std.rotation          != null;
+    /// <summary>Returns true if the entity has a <see cref="ECS.Scale3"/>.</summary>
     [Browse(Never)] public  bool                HasScale3   =>     archetype.std.scale3            != null;
     #endregion
 
@@ -204,13 +209,13 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks>Executes in O(1)</remarks> 
                     public  Entity              Parent      => EntityStore.GetParent(archetype.entityStore, Id);
     
-    /// <summary>
-    /// Return all child <see cref="Entity"/>'s. Enumerate with: 
+    /// <summary>Return all child entities of an entity.</summary>
+    /// <remarks>
+    /// Return all child entities of an entity. Enumerate with: 
     /// <code>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
-    /// </summary>
-    /// <remarks>Executes in O(1)</remarks>
+    /// Executes in O(1)</remarks>
                     public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
     
     /// <summary>Return the ids of the child entities.</summary>
