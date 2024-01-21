@@ -36,6 +36,9 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     }
 }
 
+/// <summary>
+/// Enumerate the components of an entity by iterating <see cref="EntityComponents"/>. 
+/// </summary>
 public struct ComponentEnumerator : IEnumerator<EntityComponent>
 {
     // --- internal fields

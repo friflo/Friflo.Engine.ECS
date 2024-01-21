@@ -13,11 +13,15 @@ using Friflo.Engine.ECS.Utils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// <see cref="ComponentTypes"/> define a set of <see cref="IComponent"/>'s used to list the component types of an <see cref="Archetype"/>.
+/// </summary>
 [CLSCompliant(true)]
 public struct ComponentTypes : IEnumerable<ComponentType>
 {
     internal        BitSet  bitSet;     // 32
     
+    /// <summary>Return the number of contained <see cref="IComponent"/>'s.</summary>
     public readonly int                         Count                                       => bitSet.GetBitCount();
    
     public readonly ComponentTypesEnumerator    GetEnumerator()                             => new ComponentTypesEnumerator (this);
@@ -192,6 +196,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     }
 }
 
+/// <summary>
+/// Return the <see cref="IComponent"/>'s of <see cref="ComponentTypes"/>.
+/// </summary>
 public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
 {
     internal BitSetEnumerator       bitSetEnumerator;   // 48

@@ -41,7 +41,7 @@ public struct Tags : IEnumerable<TagType>
     }
     
     // ----------------------------------------- read Tags -----------------------------------------
-    /// <summary>Return the number of <see cref="ITag"/>'s contained in the <see cref="Tags"/>.</summary>
+    /// <summary>Return the number of contained <see cref="ITag"/>'s.</summary>
     public readonly int     Count => bitSet.GetBitCount();
     
     /// <summary>Return true if the <see cref="Tags"/> contain the passed tag <typeparamref name="T"/>.</summary>

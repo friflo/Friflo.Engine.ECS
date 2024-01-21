@@ -77,6 +77,7 @@ public readonly struct  ScriptChanged
     public readonly     EntityStore         Store => Entity.store;
     
     /// <remarks>Intentionally not exposed to direct using <see cref="Script"/> instead.</remarks>
+    // ReSharper disable once UnusedMember.Local
     [Browse(Never)][ExcludeFromCodeCoverage]
     private             Type                Type        => ScriptType.Type;
     
