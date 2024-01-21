@@ -15,23 +15,45 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// An <see cref="Archetype"/> store entities with a specific set of <see cref="IComponent"/> and <see cref="ITag"/> types.
+/// </summary>
+/// <remarks>
+/// E.g. all entities with a <see cref="Position"/> and <see cref="Rotation"/> componet are store in the same archetype.<br/>
+/// In case of removing one of these components or adding a new one from / to an <see cref="Entity"/> the entity is moved to a different archetype.<br/>
+/// <br/>
+/// This is the basic pattern for an archetype base ECS. This approach enables efficient entity / component queries.<br/>
+/// A query result is simply the union of all archetypes having the requested components.<br/>
+/// <br/>
+/// Queries can be created via generic <see cref="EntityStoreBase"/>.<c>Query()</c> methods.<br/>
+/// </remarks>
 public sealed class Archetype
 {
 #region     public properties
-    /// <summary>Number of entities stored in the <see cref="Archetype"/></summary>
+    /// <summary>Number of entities / components stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
+    
+    /// <summary>Number of <see cref="ComponentTypes"/> managed by the archetype.</summary>
     [Browse(Never)] public              int                 ComponentCount  => componentCount;
+    
+    /// <summary>The current capacity reserved to store entity components.</summary>
                     public              int                 Capacity        => memory.capacity;
 
-    /// <summary>The entity ids store in the <see cref="Archetype"/></summary>
+    /// <summary>The list of entity ids stored in the archetype.</summary>
                     public              ReadOnlySpan<int>   EntityIds       => new (entityIds, 0, entityCount);
     
+    /// <summary>The <see cref="EntityStore"/> owning the archetype.</summary>
                     public              EntityStoreBase     Store           => store;
+    
+    /// <summary>The <see cref="IComponent"/> types managed by the archetype.</summary>
                     public ref readonly ComponentTypes      ComponentTypes  => ref componentTypes;
+    
+    /// <summary>The <see cref="ITag"/> types managed by the archetype.</summary>
                     public ref readonly Tags                Tags            => ref tags;
-                    /// <summary>Return all <see cref="Entity"/>'s stored in the <see cref="Archetype"/>.</summary>
-                    /// <remarks>Property is mainly used for debugging.<br/>
-                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
+    
+    /// <summary>Return all <see cref="Entity"/>'s stored in the <see cref="Archetype"/>.</summary>
+    /// <remarks>Property is mainly used for debugging.<br/>
+    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
                     public              QueryEntities       Entities        => GetEntities();
                     
                     public   override   string              ToString()      => GetString();
@@ -58,6 +80,9 @@ public sealed class Archetype
     #endregion
     
 #region public methods
+    /// <summary>
+    /// Create an <see cref="Entity"/> with the <see cref="ComponentTypes"/> and <see cref="Tags"/> managed by the archetype.
+    /// </summary>
     public Entity CreateEntity()
     {
         var entity          = entityStore.CreateEntity();
@@ -66,6 +91,7 @@ public sealed class Archetype
         return entity;
     }
     
+    /// <summary>Allocates memory for entity components to enable adding / creating entities without reallocation.</summary>
     /// <returns>the number of entities that can be added without reallocation </returns>
     public int EnsureCapacity(int capacity) {
         var available = memory.capacity - entityCount;
