@@ -12,15 +12,17 @@ namespace Friflo.Engine.ECS;
 /// <remarks>
 /// An <see cref="Entity"/> can contain multiple components but only one of each type.<br/>
 /// <br/>
+/// Optionally attribute the implementing struct with <see cref="ComponentKeyAttribute"/><br/>
+/// to assign a custom component key name used for JSON serialization.<br/>
+/// <br/>
 /// Common game specific <see cref="IComponent"/> types defined by the Engine:
 /// <list type="bullet">
 ///     <item><see cref="EntityName"/></item>
+///     <item><see cref="UniqueEntity"/></item>
 ///     <item><see cref="Position"/></item>
 ///     <item><see cref="Rotation"/></item>
 ///     <item><see cref="Scale3"/></item>
 ///     <item><see cref="Transform"/></item>
 /// </list>
-/// Optionally attribute the implementing struct with <see cref="ComponentKeyAttribute"/><br/>
-/// to assign a custom component key name used for JSON serialization.
 /// </remarks>
 public interface IComponent { }
