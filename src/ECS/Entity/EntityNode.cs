@@ -14,10 +14,13 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
-/// The tree graph is stored in an <see cref="EntityStore"/> starting with a single <see cref="EntityStore.StoreRoot"/> entity. 
-/// </summary>
+/// Used by the <see cref="EntityStore"/> to store <see cref="Entity"/> components, scripts, tags and child entities
+/// internally as an array of nodes. 
+/// </summary> 
 /// <remarks>
+/// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
+/// The tree graph is stored in an <see cref="EntityStore"/> starting with a single <see cref="EntityStore.StoreRoot"/> entity.<br/> 
+/// <br/>
 /// It provide the properties listed below
 /// <list type="bullet">
 ///   <item><see cref="Id"/> to identify an entity in its <see cref="EntityStore"/></item>

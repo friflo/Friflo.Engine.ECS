@@ -9,16 +9,16 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Is the event for event handlers added to <see cref="Entity.OnChildEntitiesChanged"/>
-/// or <see cref="EntityStore.OnChildEntitiesChanged"/>.<br/>
-/// <br/>
+/// Is the event for event handlers added to <see cref="Entity.OnChildEntitiesChanged"/> or <see cref="EntityStore.OnChildEntitiesChanged"/>.
+/// </summary>
+/// <remarks>
 /// These events are fired on:
 /// <list type="bullet">
 ///     <item><see cref="Entity.AddChild"/></item>
 ///     <item><see cref="Entity.InsertChild"/></item>
 ///     <item><see cref="Entity.RemoveChild"/></item>
 /// </list>
-/// </summary>
+/// </remarks>
 public readonly struct ChildEntitiesChanged
 {
     

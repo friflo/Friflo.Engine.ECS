@@ -11,6 +11,9 @@ using Friflo.Engine.ECS.Utils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// <see cref="Tags"/> define a set of <see cref="ITag"/>'s used to query entities in an <see cref="EntityStoreBase"/>.
+/// </summary>
 [CLSCompliant(true)]
 public struct Tags : IEnumerable<TagType>
 {

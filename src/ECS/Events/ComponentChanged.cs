@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// The type of a <see cref="ComponentChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Update"/> component.
+/// The modification type of a <see cref="ComponentChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Update"/> component.
 /// </summary>
 public enum ComponentChangedAction
 {
@@ -27,14 +27,15 @@ public enum ComponentChangedAction
 
 /// <summary>
 /// Is the event for event handlers added to <see cref="Entity.OnComponentChanged"/>,
-/// <see cref="EntityStoreBase.OnComponentAdded"/> or <see cref="EntityStoreBase.OnComponentRemoved"/>.<br/>
-/// <br/>
+/// <see cref="EntityStoreBase.OnComponentAdded"/> or <see cref="EntityStoreBase.OnComponentRemoved"/>.
+/// </summary>
+/// <remarks>
 /// These events are fired on:
 /// <list type="bullet">
 ///     <item><see cref="Entity.AddComponent{T}()"/></item>
 ///     <item><see cref="Entity.RemoveComponent{T}()"/></item>
 /// </list>
-/// </summary>
+/// </remarks>
 public readonly struct  ComponentChanged
 {
 #region fields

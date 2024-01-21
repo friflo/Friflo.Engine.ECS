@@ -12,6 +12,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Return the child entities of an <see cref="Entity"/>.
+/// </summary>
 public readonly struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties

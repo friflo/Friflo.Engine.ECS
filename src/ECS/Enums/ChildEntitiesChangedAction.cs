@@ -6,6 +6,9 @@ using System.Collections.Specialized;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// The modification type of an <see cref="ChildEntitiesChanged"/> event: <see cref="Add"/> or <see cref="Remove"/>.
+/// </summary>
 public enum ChildEntitiesChangedAction
 {
     Add     = NotifyCollectionChangedAction.Add,

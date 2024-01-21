@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// The type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/> script.
+/// The modification type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/> script.
 /// </summary>
 public enum ScriptChangedAction
 {

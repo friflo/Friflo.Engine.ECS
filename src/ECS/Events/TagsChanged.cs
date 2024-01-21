@@ -9,9 +9,9 @@ using System.Text;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Is the event for event handlers added to <see cref="Entity.OnTagsChanged"/> or
-/// <see cref="EntityStoreBase.OnTagsChanged"/>.<br/>
-/// <br/>
+/// Is the event for event handlers added to <see cref="Entity.OnTagsChanged"/> or <see cref="EntityStoreBase.OnTagsChanged"/>.
+/// </summary>
+/// <remarks>
 /// These events are fired on:
 /// <list type="bullet">
 ///     <item><see cref="Entity.AddTag{TTag}"/></item>
@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 ///     <item><see cref="Entity.RemoveTag{TTag}"/></item>
 ///     <item><see cref="Entity.RemoveTags"/></item>
 /// </list>
-/// </summary>
+/// </remarks>
 public readonly struct  TagsChanged
 {
     /// <summary>The <see cref="EntityStore"/> containing the <see cref="Entity"/> that emitted the event.</summary>

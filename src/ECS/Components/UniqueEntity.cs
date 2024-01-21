@@ -8,11 +8,12 @@ namespace Friflo.Engine.ECS;
 
 
 /// <summary>
-/// <see cref="UniqueEntity"/> is used to assign a unique <c>string</c> to an entity within an <see cref="EntityStore"/>.<br/>
-/// <br/>
+/// A <see cref="UniqueEntity"/> is used to assign a unique <c>string</c> to an entity within an <see cref="EntityStore"/>.
+/// </summary>
+/// <remarks>
 /// To find a <see cref="UniqueEntity"/> within an <see cref="EntityStore"/> use <see cref="EntityStoreBase.GetUniqueEntity"/>.<br/>
 /// It basically acts as a singleton within an <see cref="EntityStore"/>. 
-/// </summary>
+/// </remarks>
 [ComponentKey("unique")]
 public struct UniqueEntity : IComponent
 {

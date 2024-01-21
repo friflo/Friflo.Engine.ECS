@@ -9,7 +9,10 @@ using Friflo.Json.Fliox;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// An <see cref="Unresolved"/> component is added to an <see cref="Entity"/> by <see cref="EntityConverter"/>.<see cref="EntityConverter.DataEntityToEntity"/> if:<br/>
+/// <see cref="Unresolved"/> is a container for unresolved entity components.
+/// </summary>
+/// <remarks>
+/// An <see cref="Unresolved"/> component is added to an <see cref="Entity"/> by <see cref="EntityConverter.DataEntityToEntity"/> if:<br/>
 /// <list type="bullet">
 ///   <item>
 ///     A component in <see cref="DataEntity"/>.<see cref="DataEntity.components"/> cannot be resolved to an <see cref="IComponent"/> or <see cref="Script"/> type. 
@@ -18,8 +21,6 @@ namespace Friflo.Engine.ECS;
 ///     A tag in <see cref="DataEntity"/>.<see cref="DataEntity.tags"/>  cannot be resolved to an <see cref="ITag"/> type.
 ///   </item>
 /// </list>
-/// </summary>
-/// <remarks>
 /// The <see cref="Unresolved"/> component enables conversion of a <see cref="DataEntity"/> to an <see cref="Entity"/> and vice versa<br/>
 /// with components or tags that cannot be resolved to <see cref="ITag"/>, <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
 /// <br/>
@@ -77,6 +78,9 @@ public struct Unresolved : IComponent
     }
 }
 
+/// <summary>
+/// Is used an item in <see cref="Unresolved"/>.<see cref="Unresolved.components"/> to store an unresolved entity component.
+/// </summary>
 public readonly struct UnresolvedComponent
 {
     public readonly     string      key;
