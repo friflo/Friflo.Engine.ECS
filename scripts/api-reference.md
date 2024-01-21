@@ -10,6 +10,24 @@ Reasons:
 - mddocs: path of markdown files are stable. The are the concatenation of: namespace/class/[constructor|fields|methods|properties]
 
 
+## **DefaultDocumentation**
+
+[Doraku/DefaultDocumentation](https://github.com/Doraku/DefaultDocumentation)
+
+Install DefaultDocumentation .NET tool
+```
+dotnet tool install DefaultDocumentation.Console -g
+```
+
+Generate Markdown
+```
+cd Tests/bin/Release/net8.0
+defaultdocumentation -a Friflo.Engine.ECS.dll -o defaultDoc -s Public --FileNameFactory Name --IncludeUndocumentedItems
+```
+
+The documentation is generated in folder: `defaultDoc`
+
+
 
 ## **mddocs**
 
