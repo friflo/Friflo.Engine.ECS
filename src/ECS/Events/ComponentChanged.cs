@@ -16,11 +16,12 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public enum ComponentChangedAction
 {
-    /// <summary> An <see cref="IComponent"/> was removed from an <see cref="Entity"/>. </summary>
+    /// <summary> An <see cref="IComponent"/> is removed from an <see cref="Entity"/>. </summary>
     Remove  = 0,
-    /// <summary> An <see cref="IComponent"/> was added to an <see cref="Entity"/>. </summary>
+    /// <summary> An <see cref="IComponent"/> is added to an <see cref="Entity"/>. </summary>
     Add     = 1,
-    /// <summary> An <see cref="IComponent"/> of an <see cref="Entity"/> was updated with <see cref="Entity.AddComponent{T}()"/>. </summary>
+    /// <summary> An <see cref="IComponent"/> of an <see cref="Entity"/> is updated when calling
+    /// <see cref="Entity.AddComponent{T}()"/> on an entity already having a component of a specific type. </summary>
     Update  = 2,
 }
 
@@ -78,13 +79,13 @@ public readonly struct  ComponentChanged
     
     // --- public properties
     /// <summary> Return the current <see cref="IComponent"/> for debugging.<br/>
-    /// It has poor performance as is boxes the returned component. </summary>
+    /// It degrades performance as it boxes the returned component. </summary>
     /// <remarks> To access the current component use <see cref="Component{T}"/> </remarks>
     [Obsolete($"use {nameof(Component)}<T>() to access the current component")]
     public              IComponent              DebugComponent      => GetDebugComponent();
     
     /// <summary> Return the old <see cref="IComponent"/> for debugging.<br/>
-    /// It has poor performance as is boxes the returned component. </summary>
+    /// It degrades performance as it boxes the returned component. </summary>
     /// <remarks> To access the old component use <see cref="OldComponent{T}"/> </remarks>
     [Obsolete($"use {nameof(OldComponent)}<T>() to access the old component")]
     public              IComponent              DebugOldComponent   => GetDebugOldComponent();
@@ -107,9 +108,8 @@ public readonly struct  ComponentChanged
     /// or <see cref="ComponentChangedAction.Update"/> component.<br/>
     /// </summary>.
     /// <typeparam name="T"> The component type of the changed component.</typeparam>
-    /// <exception cref="InvalidOperationException">
-    /// In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Remove"/> component.
-    /// </exception>
+    /// <exception cref="InvalidOperationException"> In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Remove"/> component. </exception>
+    /// <exception cref="ArgumentException"> In case the component is accessed with the wrong generic type. </exception>
     public T Component<T>() where T : struct, IComponent
     {
         switch (Action)
@@ -126,17 +126,18 @@ public readonly struct  ComponentChanged
     }
     
     /// <summary>
-    /// Returns the old component value before executing the <see cref="ComponentChangedAction.Update"/>
+    /// Returns the old component value before executing <see cref="ComponentChangedAction.Update"/>
     /// or <see cref="ComponentChangedAction.Remove"/> component.<br/>
     /// <br/>
-    /// <b>Note</b>: The <see cref="OldComponent{T}"/> value is only valid within the event handler call.<br/>
-    /// A copy of <see cref="ComponentChanged"/> return an invalid value when using it outside the event handler call.<br/>
-    /// Instead store the value returned by <see cref="OldComponent{T}"/> whin the handler when using is after the event handler returns.
+    /// <b>Note</b>:
+    /// The <see cref="OldComponent{T}"/> return value is only valid within the event handler call.<br/>
+    /// <see cref="ComponentChanged"/> may return an invalid value when calling it outside the event handler scope.<br/>
+    /// Instead store the value returned by <see cref="OldComponent{T}"/> within the handler when using it after the event handler returns.<br/>
+    /// Reason: For performance there is only one field per component type storing the old component value.<br/> 
     /// </summary>.
     /// <typeparam name="T"> The component type of the changed component.</typeparam>
-    /// <exception cref="InvalidOperationException">
-    /// In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Add"/> component.
-    /// </exception>
+    /// <exception cref="InvalidOperationException"> In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Add"/> component. </exception>
+    /// <exception cref="ArgumentException"> In case the component is accessed with the wrong generic type. </exception>
     public T OldComponent<T>() where T : struct, IComponent
     {
         switch (Action)
@@ -177,8 +178,8 @@ public readonly struct  ComponentChanged
         return new InvalidOperationException (message + type.Name);
     }
     
-    private InvalidOperationException TypeException(string message, Type type) {
-        return new InvalidOperationException($"{message}{ComponentType.Type.Name}. T: {type.Name}");
+    private ArgumentException TypeException(string message, Type type) {
+        return new ArgumentException($"{message}{ComponentType.Type.Name}. T: {type.Name}");
     }
     #endregion
 }
