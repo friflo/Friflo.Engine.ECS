@@ -168,19 +168,19 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ component properties ----------------------------------
 #region component - properties
-    /// <summary>Returns the <see cref="ECS.EntityName"/> referene of an entity.</summary>
+    /// <summary>Returns the <see cref="ECS.EntityName"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="EntityName"/></exception>
     [Browse(Never)] public  ref EntityName      Name        => ref archetype.std.name.    components[compIndex];
 
-    /// <summary>Returns the <see cref="ECS.Position"/> referene of an entity.</summary>
+    /// <summary>Returns the <see cref="ECS.Position"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
     [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.components[compIndex];
     
-    /// <summary>Returns the <see cref="ECS.Rotation"/> referene of an entity.</summary>
+    /// <summary>Returns the <see cref="ECS.Rotation"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
     [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.components[compIndex];
     
-    /// <summary>Returns the <see cref="ECS.Scale3"/> referene of an entity.</summary>
+    /// <summary>Returns the <see cref="ECS.Scale3"/> reference of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Scale3"/></exception>
     [Browse(Never)] public  ref Scale3          Scale3      => ref archetype.std.scale3.  components[compIndex];
     
