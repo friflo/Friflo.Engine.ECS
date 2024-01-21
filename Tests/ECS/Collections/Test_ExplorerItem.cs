@@ -157,38 +157,39 @@ public static class Test_ExplorerItem
             var cur     = (EntityName?)args.DebugComponent;
 #pragma warning restore CS0618 // Type or member is obsolete
             switch (addCount++) {
-                case 0:     AreEqual(1,                             args.EntityId);
-                            AreEqual(ComponentChangedAction.Add,    args.Action);
-                            AreEqual(typeof(EntityName),            args.ComponentType.Type);
-                            AreEqual(typeof(EntityName),            args.Type);
-                            AreEqual("test",                        args.Component<EntityName>().value);
-                            IsNull  (                               old);
-                            AreEqual("test",                        cur.Value.value);
-                            {
-                            var e = Throws<InvalidOperationException>(() => { args.OldComponent<EntityName>(); });
-                            AreEqual("OldComponent<T>() - component is newly added. T: EntityName", e!.Message);
-                            } {   
-                                var e = Throws<ArgumentException>(() => { args.Component<Position>(); });
-                                AreEqual("Component<T>() - expect component Type: EntityName. T: Position", e!.Message);
-                            }
-                            // ensure entity is in new Archetype 
-                            AreEqual("[EntityName]  entities: 1",   args.Entity.Archetype.ToString());
-                            AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
-                            AreSame (store, args.Store);
-                            return;
+                case 0:
+                    AreEqual(1,                             args.EntityId);
+                    AreEqual(ComponentChangedAction.Add,    args.Action);
+                    AreEqual(typeof(EntityName),            args.ComponentType.Type);
+                    AreEqual(typeof(EntityName),            args.Type);
+                    AreEqual("test",                        args.Component<EntityName>().value);
+                    IsNull  (                               old);
+                    AreEqual("test",                        cur.Value.value);
+                    {
+                    var e = Throws<InvalidOperationException>(() => { args.OldComponent<EntityName>(); });
+                    AreEqual("OldComponent<T>() - component is newly added. T: EntityName", e!.Message);
+                    } {   
+                        var e = Throws<ArgumentException>(() => { args.Component<Position>(); });
+                        AreEqual("Component<T>() - expect component Type: EntityName. T: Position", e!.Message);
+                    }
+                    // ensure entity is in new Archetype 
+                    AreEqual("[EntityName]  entities: 1",   args.Entity.Archetype.ToString());
+                    AreEqual("entity: 1 - event > Add Component: [EntityName]", argsStr);
+                    AreSame (store, args.Store);
+                    return;
                 case 1:
-                            AreEqual(ComponentChangedAction.Update, args.Action);
-                            AreEqual("test-update",                 args.Entity.GetComponent<EntityName>().value);
-                            AreEqual("test",                        args.OldComponent<EntityName>().value);
-                            AreEqual("test",                        old.Value.value);
-                            AreEqual("test-update",                 cur.Value.value);
-                            {
-                                var e = Throws<ArgumentException >(() => { args.OldComponent<Position>(); });
-                                AreEqual("OldComponent<T>() - expect component Type: EntityName. T: Position", e!.Message);
-                            }
-                            return;
+                    AreEqual(ComponentChangedAction.Update, args.Action);
+                    AreEqual("test-update",                 args.Entity.GetComponent<EntityName>().value);
+                    AreEqual("test",                        args.OldComponent<EntityName>().value);
+                    AreEqual("test",                        old.Value.value);
+                    AreEqual("test-update",                 cur.Value.value);
+                    {
+                        var e = Throws<ArgumentException >(() => { args.OldComponent<Position>(); });
+                        AreEqual("OldComponent<T>() - expect component Type: EntityName. T: Position", e!.Message);
+                    }
+                    return;
                 default:
-                            return;
+                    return;
             }
         };
         store.OnComponentAdded += componentAdded;
@@ -201,20 +202,24 @@ public static class Test_ExplorerItem
             var cur     = (EntityName?)args.DebugComponent;
 #pragma warning restore CS0618 // Type or member is obsolete
             switch (removeCount++) {
-                case 0:     AreEqual(1,                             args.EntityId);
-                            AreEqual(ComponentChangedAction.Remove, args.Action);
-                            AreEqual(typeof(EntityName),            args.ComponentType.Type);
-                            AreEqual("test-update",                 args.OldComponent<EntityName>().value);
-                            AreEqual("test-update",                 old.Value.value);
-                            IsNull  (                               cur);
-                            
-                            var e = Throws<InvalidOperationException>(() => { args.Component<EntityName>(); });
-                            AreEqual("Component<T>() - component was removed. T: EntityName", e!.Message);
-                            
-                            // ensure entity is in new Archetype
-                            AreEqual("[]",                          args.Entity.Archetype.ToString());
-                            AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);    return;
-                default:    Fail("unexpected event");                                                   return;
+                case 0:     
+                    AreEqual(1,                             args.EntityId);
+                    AreEqual(ComponentChangedAction.Remove, args.Action);
+                    AreEqual(typeof(EntityName),            args.ComponentType.Type);
+                    AreEqual("test-update",                 args.OldComponent<EntityName>().value);
+                    AreEqual("test-update",                 old.Value.value);
+                    IsNull  (                               cur);
+                    
+                    var e = Throws<InvalidOperationException>(() => { args.Component<EntityName>(); });
+                    AreEqual("Component<T>() - component was removed. T: EntityName", e!.Message);
+                    
+                    // ensure entity is in new Archetype
+                    AreEqual("[]",                          args.Entity.Archetype.ToString());
+                    AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);
+                    return;
+                default:
+                    Fail("unexpected event");
+                    return;
             }
         };
         store.OnComponentRemoved += componentRemoved;
