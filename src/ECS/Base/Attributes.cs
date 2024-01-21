@@ -8,10 +8,11 @@ using System;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Assign a custom tag name used for JSON serialization of the annotated structs implementing <see cref="ITag"/>.<br/>
-/// <br/>
-/// This enables changing a struct name in code without changing the JSON serialization format.  
+/// Assign a custom tag name used for JSON serialization for annotated <b>struct</b>s implementing <see cref="ITag"/>.
 /// </summary>
+/// <remarks>
+/// This enables changing a struct name in code without changing the JSON serialization format.
+/// </remarks> 
 [AttributeUsage(AttributeTargets.Struct)]
 public sealed class TagNameAttribute : Attribute {
     public TagNameAttribute (string name) { }

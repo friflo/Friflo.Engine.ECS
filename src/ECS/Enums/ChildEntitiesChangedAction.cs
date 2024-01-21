@@ -7,7 +7,7 @@ using System.Collections.Specialized;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// The modification type of an <see cref="ChildEntitiesChanged"/> event: <see cref="Add"/> or <see cref="Remove"/>.
+/// The modification type of an <see cref="ChildEntitiesChanged"/> event: <see cref="Add"/> or <see cref="Remove"/> entity.
 /// </summary>
 public enum ChildEntitiesChangedAction
 {

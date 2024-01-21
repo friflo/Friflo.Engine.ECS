@@ -9,6 +9,9 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide the result set of an <see cref="ArchetypeQuery"/> as a list of <see cref="Entity"/>'s.
+/// </summary>
 public readonly struct QueryEntities  : IEnumerable <Entity>
 {
     public              int             Count       => query.EntityCount;
@@ -32,7 +35,9 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
     public EntitiesEnumerator               GetEnumerator() => new (query);
 }
 
-
+/// <summary>
+/// Used to enumerate the <see cref="ArchetypeQuery.Entities"/> of an  <see cref="ArchetypeQuery"/>.
+/// </summary>
 public struct EntitiesEnumerator : IEnumerator<Entity>
 {
     private readonly    EntityStore store;          //  8

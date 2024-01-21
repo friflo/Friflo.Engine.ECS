@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Contains methods like <see cref="Post"/> or <see cref="Invoke{TResult}"/> to dispatch execution<br/>
-/// of <see cref="Action"/>'s or <see cref="Func{TResult}"/>'s to the main thread.<br/>
-/// <br/>
-/// These methods are required to access an <see cref="ECS.EntityStore"/> as instances of this class are not thread safe. 
+/// Contains methods to dispatch execution of <see cref="Action"/>'s or <see cref="Func{TResult}"/>'s to the main thread.
 /// </summary>
 /// <remarks>
+/// These methods are required to access an <see cref="ECS.EntityStore"/> as instances of this class are not thread safe. 
 /// Note: This file may be moved to project: <see cref="Friflo.Engine.ECS"/>
 /// Method mapping for various UI application libraries.
 /// <list type="bullet">

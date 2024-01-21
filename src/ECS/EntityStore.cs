@@ -15,6 +15,10 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
+/// An <see cref="EntityStore"/> is a container for <see cref="Entity"/>'s their components, scripts, tags
+/// and their tree structure.
+/// </summary>
+/// <remarks>
 /// The <see cref="EntityStore"/> provide the features listed below
 /// <list type="bullet">
 ///   <item>
@@ -35,7 +39,7 @@ namespace Friflo.Engine.ECS;
 ///   <item>Manage a tree graph of entities which starts with the <see cref="StoreRoot"/> entity to build up a scene graph</item>
 ///   <item>Store the data of <see cref="IComponent"/>'s and <see cref="Script"/>'s.</item>
 /// </list>
-/// </summary>
+/// </remarks>
 [CLSCompliant(true)]
 public sealed partial class EntityStore : EntityStoreBase
 {
