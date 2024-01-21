@@ -6,7 +6,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// <see cref="Signal{TEvent}"/>'s are used to emit custom events from an entity to <see cref="Signal{TEvent}"/> handlers.
+/// <see cref="Signal{TEvent}"/>'s are used to emit custom events from an entity to custom <see cref="Signal{TEvent}"/> handlers.
 /// </summary>
 /// <remarks>
 /// <see cref="Signal{TEvent}"/> handlers are added with <see cref="ECS.Entity.AddSignalHandler{TEvent}"/>.<br/>

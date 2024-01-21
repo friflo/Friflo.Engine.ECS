@@ -79,7 +79,7 @@ public struct Unresolved : IComponent
 }
 
 /// <summary>
-/// Is used an item in <see cref="Unresolved"/>.<see cref="Unresolved.components"/> to store an unresolved entity component.
+/// Is used as item type for <see cref="Unresolved"/>.<see cref="Unresolved.components"/> storing unresolved entity components.
 /// </summary>
 public readonly struct UnresolvedComponent
 {

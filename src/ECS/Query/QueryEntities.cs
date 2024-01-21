@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Provide the result set of an <see cref="ArchetypeQuery"/> as a list of <see cref="Entity"/>'s.
+/// Provide the result set of an <see cref="ArchetypeQuery"/> as a set of <see cref="Entity"/>'s.
 /// </summary>
 public readonly struct QueryEntities  : IEnumerable <Entity>
 {

@@ -68,7 +68,7 @@ public struct ComponentEnumerator : IEnumerator<EntityComponent>
     public void Dispose() { }
 }
 
-/// <summary>An item in <see cref="EntityComponents"/> containing a <see cref="IComponent"/>.</summary>
+/// <summary>An item in <see cref="EntityComponents"/> containing an entity <see cref="IComponent"/>.</summary>
 public readonly struct EntityComponent
 {
     // --- public fields
@@ -85,6 +85,8 @@ public readonly struct EntityComponent
     /// </remarks>
     [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
     public              object          Value       => entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
+    
+    /// <summary>Return the <see cref="System.Type"/> of an entity component.</summary>
     public              ComponentType   Type        => type;
     
     public  override    string          ToString()  => type.ToString();

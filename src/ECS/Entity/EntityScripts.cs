@@ -67,6 +67,9 @@ public struct EntityScripts : IEnumerable<Script>
     }
 }
 
+/// <summary>
+/// Used to enumerate the <see cref="Script"/>'s added to an <see cref="Entity"/>.
+/// </summary>
 public struct EntityScriptsEnumerator : IEnumerator<Script>
 {
     private             int         index;

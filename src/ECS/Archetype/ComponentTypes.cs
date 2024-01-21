@@ -14,7 +14,8 @@ using Friflo.Engine.ECS.Utils;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// <see cref="ComponentTypes"/> define a set of <see cref="IComponent"/>'s used to list the component types of an <see cref="Archetype"/>.
+/// <see cref="ComponentTypes"/> define a set of <see cref="IComponent"/>'s used to list the
+/// component <see cref="System.Type"/>'s of an <see cref="Archetype"/>.
 /// </summary>
 [CLSCompliant(true)]
 public struct ComponentTypes : IEnumerable<ComponentType>

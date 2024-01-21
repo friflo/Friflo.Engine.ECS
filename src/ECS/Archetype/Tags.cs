@@ -151,6 +151,9 @@ public struct Tags : IEnumerable<TagType>
     }
 }
 
+/// <summary>
+/// Used to enumerate the <see cref="ITag"/>'s stored in <see cref="Tags"/>.
+/// </summary>
 public struct TagsEnumerator : IEnumerator<TagType>
 {
     private BitSetEnumerator    bitSetEnumerator;   // 48

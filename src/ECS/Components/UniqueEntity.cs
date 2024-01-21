@@ -17,6 +17,7 @@ namespace Friflo.Engine.ECS;
 [ComponentKey("unique")]
 public struct UniqueEntity : IComponent
 {
+    /// <summary>Unique string identifier assigned to specific <see cref="Entity"/></summary>
     public          string  uid;  //  8
     
     public override string  ToString() => $"UniqueEntity: '{uid}'";

@@ -52,7 +52,10 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     }
 }
 
-public struct ChildEnumerator  : IEnumerator<Entity>
+/// <summary>
+/// Use to enumerate the child entities stored in <see cref="Entity"/>.<see cref="Entity.ChildEntities"/>.  
+/// </summary>
+public struct ChildEnumerator : IEnumerator<Entity>
 {
     private             int             index;          //  4
     private readonly    ChildEntities   childEntities;  // 20

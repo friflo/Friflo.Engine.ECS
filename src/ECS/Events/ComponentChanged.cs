@@ -80,13 +80,13 @@ public readonly struct  ComponentChanged
     
     // --- public properties
     /// <summary> Return the current <see cref="IComponent"/> for debugging.<br/>
-    /// It degrades performance as it boxes the returned component. </summary>
+    /// <b>Note</b>: It degrades performance as it boxes the returned component. </summary>
     /// <remarks> To access the current component use <see cref="Component{T}"/> </remarks>
     [Obsolete($"use {nameof(Component)}<T>() to access the current component")]
     public              IComponent              DebugComponent      => GetDebugComponent();
     
     /// <summary> Return the old <see cref="IComponent"/> for debugging.<br/>
-    /// It degrades performance as it boxes the returned component. </summary>
+    /// <b>Note</b>: It degrades performance as it boxes the returned component. </summary>
     /// <remarks> To access the old component use <see cref="OldComponent{T}"/> </remarks>
     [Obsolete($"use {nameof(OldComponent)}<T>() to access the old component")]
     public              IComponent              DebugOldComponent   => GetDebugOldComponent();
@@ -128,14 +128,15 @@ public readonly struct  ComponentChanged
     
     /// <summary>
     /// Returns the old component value before executing <see cref="ComponentChangedAction.Update"/>
-    /// or <see cref="ComponentChangedAction.Remove"/> component.<br/>
-    /// <br/>
+    /// or <see cref="ComponentChangedAction.Remove"/> component.<br/> <b>Note</b>: See Remarks for restrictions.
+    /// </summary>.
+    /// <remarks>
     /// <b>Note</b>:
     /// The <see cref="OldComponent{T}"/> return value is only valid within the event handler call.<br/>
     /// <see cref="ComponentChanged"/> may return an invalid value when calling it outside the event handler scope.<br/>
     /// Instead store the value returned by <see cref="OldComponent{T}"/> within the handler when using it after the event handler returns.<br/>
     /// Reason: For performance there is only one field per component type storing the old component value.<br/> 
-    /// </summary>.
+    /// </remarks>
     /// <typeparam name="T"> The component type of the changed component.</typeparam>
     /// <exception cref="InvalidOperationException"> In case the <see cref="Action"/> was <see cref="ComponentChangedAction.Add"/> component. </exception>
     /// <exception cref="ArgumentException"> In case the component is accessed with the wrong generic type. </exception>
