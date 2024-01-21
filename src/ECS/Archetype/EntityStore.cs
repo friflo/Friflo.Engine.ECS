@@ -35,23 +35,16 @@ public abstract partial class EntityStoreBase
     #endregion
 
 #region events
-    // --- tags: changed
-    /// <summary>
-    /// Fire events on
-    /// <list type="bullet">
-    ///   <item><see cref="Entity.AddTag{T}"/></item>
-    ///   <item><see cref="Entity.AddTags"/></item>
-    ///   <item><see cref="Entity.RemoveTag{T}"/></item>
-    ///   <item><see cref="Entity.RemoveTags"/></item>
-    /// </list>
-    /// </summary>
+    /// <summary>Add / remove an event handler for <see cref="ECS.TagsChanged"/> events triggered by:<br/>
+    /// <see cref="Entity.AddTag{T}"/> <br/> <see cref="Entity.AddTags"/> <br/> <see cref="Entity.RemoveTag{T}"/> <br/> <see cref="Entity.RemoveTags"/>.</summary>
     public event    Action<TagsChanged>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
     
-    // --- component: added / removed
-    /// <summary> Fire events on <see cref="Entity.AddComponent{T}()"/> </summary>
+    /// <summary>Add / remove an event handler for <see cref="ECS.ComponentChanged"/> events triggered by: <br/>
+    /// <see cref="Entity.AddComponent{T}()"/>.</summary>
     public event    Action<ComponentChanged>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
     
-    /// <summary> Fire events on <see cref="Entity.RemoveComponent{T}()"/> </summary>
+    /// <summary>Add / remove an event handler for <see cref="ECS.ComponentChanged"/> events triggered by: <br/>
+    /// <see cref="Entity.RemoveComponent{T}()"/>.</summary>
     public event    Action<ComponentChanged>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
     #endregion
     

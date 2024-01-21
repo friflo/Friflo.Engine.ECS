@@ -53,21 +53,16 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
     
 #region events
-    /// <summary>
-    /// Fire events on
-    /// <list type="bullet">
-    ///   <item><see cref="Entity.AddChild"/></item>
-    ///   <item><see cref="Entity.InsertChild"/></item>
-    ///   <item><see cref="Entity.RemoveChild"/></item>
-    ///   <item><see cref="Entity.DeleteEntity"/></item>
-    /// </list>
-    /// </summary>
+    /// <summary>Add / remove an event handler for <see cref="ECS.ChildEntitiesChanged"/> events triggered by:<br/>
+    /// <see cref="Entity.AddChild"/> <br/> <see cref="Entity.InsertChild"/> <br/> <see cref="Entity.RemoveChild"/>.</summary>
     public  event   Action<ChildEntitiesChanged>    OnChildEntitiesChanged  { add => intern.childEntitiesChanged+= value;   remove => intern.childEntitiesChanged -= value; }
     
-    // --- script:   added / removed
-    /// <summary> Fire events on <see cref="Entity.AddScript{T}"/> </summary>
+    /// <summary>Add / remove an event handler for <see cref="ECS.ScriptChanged"/> events triggered by:<br/>
+    /// <see cref="Entity.AddScript{T}"/>.</summary>
     public  event   Action<ScriptChanged>           OnScriptAdded           { add => intern.scriptAdded         += value;   remove => intern.scriptAdded    -= value; }
-    /// <summary> Fire events on <see cref="Entity.RemoveScript{T}"/> </summary>
+    
+    /// <summary>Add / remove an event handler for <see cref="ECS.ScriptChanged"/> events triggered by:<br/>
+    /// <see cref="Entity.RemoveScript{T}"/> .</summary>
     public  event   Action<ScriptChanged>           OnScriptRemoved         { add => intern.scriptRemoved       += value;   remove => intern.scriptRemoved  -= value; }
     
     /// <summary> Fire events in case an <see cref="Entity"/> changed. </summary>
