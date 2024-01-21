@@ -14,6 +14,7 @@ namespace Friflo.Engine.ECS;
 /// Is is the <b>main API</b> when dealing with entities in the engine.
 /// </summary>
 /// <remarks>
+/// <para>
 /// Every <see cref="Entity"/> has an <see cref="Id"/> and is a container of
 /// <see cref="ECS.Tags"/>, <see cref="IComponent"/>'s, <see cref="Script"/>'s and other child <see cref="Entity"/>'s.<br/>
 /// <br/>
@@ -34,22 +35,77 @@ namespace Friflo.Engine.ECS;
 ///         In contrast to this engine or Unity it has no ECS architecture - Entity Component System.
 ///     </item>
 /// </list>
+/// </para>
+/// <para>
+/// <b>Components</b>
 /// <br/>
 /// An <see cref="Entity"/> is typically an object that can be rendered on screen like a cube, sphere, capsule, mesh, sprite, ... .<br/>
 /// Therefore a renderable component needs to be added with <see cref="AddComponent{T}()"/> to an <see cref="Entity"/>.<br/>
+/// <br/>
+/// <b>Child entities</b>
 /// <br/>
 /// An <see cref="Entity"/> can be added to another <see cref="Entity"/> using <see cref="AddChild"/>.<br/>
 /// The added <see cref="Entity"/> becomes a child of the <see cref="Entity"/> it is added to - its <see cref="Parent"/>.<br/>
 /// This enables to build up a complex game scene with a hierarchy of <see cref="Entity"/>'s.<br/>
 /// The order of children contained by an entity is the insertion order.<br/>  
 /// <br/>
+/// <b>Scripts</b>
+/// <br/>
 /// A <see cref="Script"/>'s can be added to an <see cref="Entity"/> to add custom logic (script) and data to an entity.<br/>
 /// <see cref="Script"/>'s are added or removed with <see cref="AddScript{T}"/> / <see cref="RemoveScript{T}"/>.<br/>
+/// <br/>
+/// <b>Tags</b>
 /// <br/>
 /// <see cref="Tags"/> can be added to an <see cref="Entity"/> to enable filtering entities in queries.<br/>
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
 /// these <see cref="Tags"/>.<br/>
 /// <br/>
+/// <b>Events</b>
+/// <br/>
+/// All entity changes - aka mutations - can be observed for specific <see cref="Entity"/>'s and the whole <see cref="EntityStore"/>.<br/>
+/// In detail the following changes can be observed.
+/// <list type="table">
+///   <listheader>
+///     <term>type</term>
+///     <term>entity event</term>
+///     <term>event argument</term>
+///     <term>action</term>
+///   </listheader>
+///   <item>
+///     <description>component</description>
+///     <description><see cref="OnComponentChanged"/></description>
+///     <description><see cref="ComponentChanged"/></description>
+///     <description>
+///       <see cref="ComponentChangedAction.Add"/>, <see cref="ComponentChangedAction.Update"/>, <see cref="ComponentChangedAction.Remove"/>
+///     </description>
+///   </item>
+///   <item>
+///     <description>script</description>
+///     <description><see cref="OnScriptChanged"/></description>
+///     <description><see cref="ScriptChanged"/></description>
+///     <description>
+///       <see cref="ScriptChangedAction.Remove"/>, <see cref="ScriptChangedAction.Add"/>, <see cref="ScriptChangedAction.Replace"/>
+///     </description>
+///   </item>
+///   <item>
+///     <description>tags</description>
+///     <description><see cref="OnTagsChanged"/></description>
+///     <description><see cref="TagsChanged"/></description>
+///     <description>
+///       <see cref="TagsChanged.AddedTags"/>, <see cref="TagsChanged.RemovedTags"/>
+///     </description>
+///   </item>
+///   <item>
+///     <description>child entity</description>
+///     <description><see cref="OnChildEntitiesChanged"/></description>
+///     <description><see cref="ChildEntitiesChanged"/></description>
+///     <description>
+///       <see cref="ChildEntitiesChangedAction.Add"/>, <see cref="ChildEntitiesChangedAction.Remove"/>
+///     </description>
+///   </item>
+/// </list>
+/// </para>
+/// <para>
 /// <b>Properties and Methods by category</b>
 /// <list type="bullet">
 /// <item>  <b>general</b>      <br/>
@@ -115,6 +171,7 @@ namespace Friflo.Engine.ECS;
 ///     <see cref="DebugEventHandlers"/>            <br/>
 /// </item>
 /// </list>
+/// </para>
 /// </remarks>
 [CLSCompliant(true)]
 public readonly struct Entity : IEquatable<Entity>

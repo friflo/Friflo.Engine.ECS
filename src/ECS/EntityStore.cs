@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// An <see cref="EntityStore"/> is a container for <see cref="Entity"/>'s their components, scripts, tags
-/// and their tree structure.
+/// and the tree structure.
 /// </summary>
 /// <remarks>
 /// The <see cref="EntityStore"/> provide the features listed below
