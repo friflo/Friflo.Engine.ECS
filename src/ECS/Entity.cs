@@ -50,68 +50,69 @@ namespace Friflo.Engine.ECS;
 /// By adding <see cref="Tags"/> to an <see cref="ArchetypeQuery"/> it can be restricted to return only entities matching the
 /// these <see cref="Tags"/>.
 ///
+/// <b>Properties and Methods by category</b>
 /// <list type="bullet">
 /// <item> <b>general</b> <br/>
-///     <see cref="Id"/><br/>
-///     <see cref="Pid"/><br/>
-///     <see cref="Archetype"/><br/>
-///     <see cref="Store"/><br/>
-///     <see cref="DebugJSON"/><br/>
+///     <see cref="Id"/>        <br/>
+///     <see cref="Pid"/>       <br/>
+///     <see cref="Archetype"/> <br/>
+///     <see cref="Store"/>     <br/>
+///     <see cref="DebugJSON"/> <br/>
 /// </item>
 /// <item> <b>components</b> · generic <br/>
-///     <see cref="HasComponent{T}"/><br/>
+///     <see cref="HasComponent{T}"/>               <br/>
 ///     <see cref="GetComponent{T}"/> - read / write<br/>
-///     <see cref="TryGetComponent{T}"/><br/>
-///     <see cref="AddComponent{T}()"/><br/>
-///     <see cref="RemoveComponent{T}"/><br/>
+///     <see cref="TryGetComponent{T}"/>            <br/>
+///     <see cref="AddComponent{T}()"/>             <br/>
+///     <see cref="RemoveComponent{T}"/>            <br/>
 /// </item>
 /// <item> <b>components</b> · common <br/>
-///     <see cref="Components"/><br/>
-///     <see cref="Name"/><br/>
-///     <see cref="Position"/><br/>
-///     <see cref="Rotation"/><br/>
-///     <see cref="Scale3"/><br/>
-///     <see cref="HasName"/><br/>
-///     <see cref="HasPosition"/><br/>
-///     <see cref="HasRotation"/><br/>
-///     <see cref="HasScale3"/><br/>
+///     <see cref="Components"/>        <br/>
+///     <see cref="Name"/>              <br/>
+///     <see cref="Position"/>          <br/>
+///     <see cref="Rotation"/>          <br/>
+///     <see cref="Scale3"/>            <br/>
+///     <see cref="HasName"/>           <br/>
+///     <see cref="HasPosition"/>       <br/>
+///     <see cref="HasRotation"/>       <br/>
+///     <see cref="HasScale3"/>         <br/>
 /// </item>
-/// <item> <b>scripts</b> · generic <br/>
-///     <see cref="Scripts"/><br/>
-///     <see cref="GetScript{T}"/><br/>
-///     <see cref="TryGetScript{T}"/><br/>
-///     <see cref="AddScript{T}"/><br/>
-///     <see cref="RemoveScript{T}"/><br/>
+/// <item> <b>scripts</b><br/>
+///     <see cref="Scripts"/>           <br/>
+///     <see cref="GetScript{T}"/>      <br/>
+///     <see cref="TryGetScript{T}"/>   <br/>
+///     <see cref="AddScript{T}"/>      <br/>
+///     <see cref="RemoveScript{T}"/>   <br/>
 /// </item>
 /// <item> <b>tags</b> <br/>
-///     <see cref="Tags"/><br/>
-///     <see cref="AddTag{T}"/><br/>
-///     <see cref="AddTags"/><br/>
-///     <see cref="RemoveTag{T}"/><br/>
-///     <see cref="RemoveTags"/><br/>
+///     <see cref="Tags"/>              <br/>
+///     <see cref="AddTag{T}"/>         <br/>
+///     <see cref="AddTags"/>           <br/>
+///     <see cref="RemoveTag{T}"/>      <br/>
+///     <see cref="RemoveTags"/>        <br/>
 /// </item>
 /// <item> <b>child entities</b> <br/>
-///     <see cref="Parent"/><br/>
-///     <see cref="ChildEntities"/><br/>
-///     <see cref="ChildIds"/><br/>
-///     <see cref="ChildCount"/><br/>
-///     <see cref="AddChild"/><br/>
-///     <see cref="InsertChild"/><br/>
-///     <see cref="RemoveChild"/><br/>
-///     <see cref="DeleteEntity"/><br/>
-///     <see cref="GetChildIndex"/><br/>
+///     <see cref="Parent"/>            <br/>
+///     <see cref="ChildEntities"/>     <br/>
+///     <see cref="ChildIds"/>          <br/>
+///     <see cref="ChildCount"/>        <br/>
+///     <see cref="AddChild"/>          <br/>
+///     <see cref="InsertChild"/>       <br/>
+///     <see cref="RemoveChild"/>       <br/>
+///     <see cref="DeleteEntity"/>      <br/>
+///     <see cref="GetChildIndex"/>     <br/>
 /// </item>
 /// <item> <b>events</b> <br/>
-///     <see cref="OnTagsChanged"/><br/>
-///     <see cref="OnComponentChanged"/><br/>
-///     <see cref="OnScriptChanged"/><br/>
-///     <see cref="OnChildEntitiesChanged"/><br/>
+///     <see cref="OnTagsChanged"/>                 <br/>
+///     <see cref="OnComponentChanged"/>            <br/>
+///     <see cref="OnScriptChanged"/>               <br/>
+///     <see cref="OnChildEntitiesChanged"/>        <br/>
 /// </item>
 /// <item> <b>signals</b> <br/>
-///     <see cref="AddSignalHandler{TEvent}"/><br/>
-///     <see cref="RemoveSignalHandler{TEvent}"/><br/>
-///     <see cref="EmitSignal{TEvent}"/><br/>
-///     <see cref="DebugEventHandlers"/><br/>
+///     <see cref="AddSignalHandler{TEvent}"/>      <br/>
+///     <see cref="RemoveSignalHandler{TEvent}"/>   <br/>
+///     <see cref="EmitSignal{TEvent}"/>            <br/>
+///     <see cref="DebugEventHandlers"/>            <br/>
 /// </item>
 /// </list>
 /// </remarks>
@@ -175,7 +176,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Position"/></exception>
     [Browse(Never)] public  ref Position        Position    => ref archetype.std.position.components[compIndex];
     
-    /// <summary>Returns the <see cref="ECS.Position"/> referene of an entity.</summary>
+    /// <summary>Returns the <see cref="ECS.Rotation"/> referene of an entity.</summary>
     /// <exception cref="NullReferenceException"> if entity has no <see cref="Rotation"/></exception>
     [Browse(Never)] public  ref Rotation        Rotation    => ref archetype.std.rotation.components[compIndex];
     
