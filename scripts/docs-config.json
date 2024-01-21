@@ -1,0 +1,16 @@
+{
+  "AssemblyFilePath": "../Tests/bin/Release/net8.0/Friflo.Engine.ECS.dll",
+  "OutputDirectoryPath": "defaultDoc",
+  "GeneratedAccessModifiers": "Public",
+  "IncludeUndocumentedItems": true,
+  "FileNameFactory": "Name",
+  "UrlFactories": [
+    "DocItem",
+    "DotnetApi"
+  ],
+  "Sections": [
+    "Header",
+    "Default"
+  ],
+  "Markdown.IgnoreLineBreak": true
+}

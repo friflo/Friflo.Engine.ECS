@@ -21,8 +21,7 @@ dotnet tool install DefaultDocumentation.Console -g
 
 Generate Markdown
 ```
-cd Tests/bin/Release/net8.0
-defaultdocumentation -a Friflo.Engine.ECS.dll -o defaultDoc -s Public --FileNameFactory Name --IncludeUndocumentedItems
+defaultdocumentation -j ./scripts/docs-config.json
 ```
 
 The documentation is generated in folder: `defaultDoc`
