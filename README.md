@@ -60,13 +60,14 @@ Build options:
 - Visual Studio Code - Windows, macOS, Linux (untested)
 
 Library:
-- Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds  
-- Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md)  
-- Unit test execution: ~ 1 second.  
-- Size of `Friflo.Engine.ECS.dll` ~ 135 kb.  
-- Pure C# implementation - no C/C++ bindings slowing down runtime / development performance
-- No 3rd party dependencies.  
+- Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
+- Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
+- Unit test execution: ~ 1 second.
+- Size of `Friflo.Engine.ECS.dll`: ~ 140 kb. The implementation: ~ 10.000 LOC.
+- Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
+- No 3rd party dependencies.
 - It requires **Friflo.Json.Fliox** which is part of this repository.
+- The library C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks)
 
 <br/><br/>
 
