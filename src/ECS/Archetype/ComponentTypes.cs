@@ -60,12 +60,19 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     }
     
     // ----------------------------------------- component getter -----------------------------------------
+    /// <summary>
+    /// Return true if it contains the passed <see cref="IComponent"/> type <typeparamref name="T1"/>.
+    /// </summary>
     public readonly bool    Has<T1> ()
         where T1 : struct, IComponent
     {
         return bitSet.Has(StructHeap<T1>.StructIndex);
     }
     
+    /// <summary>
+    /// Return true if it contains all passed <see cref="IComponent"/> types
+    /// <typeparamref name="T1"/> and <typeparamref name="T2"/>.
+    /// </summary>
     public readonly bool    Has<T1, T2> ()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -74,6 +81,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
                bitSet.Has(StructHeap<T2>.StructIndex);
     }
 
+    /// <summary>
+    /// Return true if it contains all passed <see cref="IComponent"/> types
+    /// <typeparamref name="T1"/>, <typeparamref name="T2"/> and <typeparamref name="T3"/>.
+    /// </summary>
     public readonly bool    Has<T1, T2, T3> ()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -84,40 +95,61 @@ public struct ComponentTypes : IEnumerable<ComponentType>
                bitSet.Has(StructHeap<T3>.StructIndex);
     }
     
+    /// <summary>
+    /// Return true if it contains all passed <paramref name="componentTypes"/>.
+    /// </summary>
     public readonly bool HasAll (in ComponentTypes componentTypes)
     {
         return bitSet.HasAll(componentTypes.bitSet);
     }
     
+    /// <summary>
+    /// Return true if it contains any of the passed <paramref name="componentTypes"/>.
+    /// </summary>
     public readonly bool HasAny (in ComponentTypes componentTypes)
     {
         return bitSet.HasAny(componentTypes.bitSet);
     }
     
     // ----------------------------------------- mutate Mask -----------------------------------------
+    /// <summary>
+    /// Add the passed <see cref="IComponent"/> type <typeparamref name="T"/>.
+    /// </summary>
     public void Add<T>()
         where T : struct, IComponent
     {
         bitSet.SetBit(StructHeap<T>.StructIndex);
     }
     
+    /// <summary>
+    /// Add all passed <paramref name="componentTypes"/>.
+    /// </summary>
     public void Add(in ComponentTypes componentTypes)
     {
         bitSet.value |= componentTypes.bitSet.value;
     }
     
+    /// <summary>
+    /// Add the passed <see cref="IComponent"/> type <typeparamref name="T"/>.
+    /// </summary>
     public void Remove<T>()
         where T : struct, IComponent
     {
         bitSet.ClearBit(StructHeap<T>.StructIndex);
     }
     
+    /// <summary>
+    /// Remove all passed  <paramref name="componentTypes"/>.
+    /// </summary>
     public void Remove(in ComponentTypes componentTypes)
     {
         bitSet.value &= ~componentTypes.bitSet.value;
     }
     
-    // ----------------------------------------- static methods -----------------------------------------    
+    // ----------------------------------------- static methods -----------------------------------------
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> type <typeparamref name="T1"/>.
+    /// </summary>
     public static ComponentTypes Get<T1>()
         where T1 : struct, IComponent
     {
@@ -126,6 +158,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> types
+    /// <typeparamref name="T1"/> and <typeparamref name="T2"/>.
+    /// </summary>
     public static ComponentTypes Get<T1, T2>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -136,6 +172,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> types
+    /// <typeparamref name="T1"/>, <typeparamref name="T2"/> and <typeparamref name="T3"/>.
+    /// </summary>
     public static ComponentTypes Get<T1, T2, T3>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -148,6 +188,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> types
+    /// <typeparamref name="T1"/>, <typeparamref name="T2"/>, <typeparamref name="T3"/> and <typeparamref name="T4"/>.
+    /// </summary>
     public static ComponentTypes Get<T1, T2, T3, T4>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -162,6 +206,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
+    /// <summary>
+    /// Create an instance containing the passed <see cref="IComponent"/> types <typeparamref name="T1"/>,
+    /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>  and <typeparamref name="T4"/>.
+    /// </summary>
     public static ComponentTypes Get<T1, T2, T3, T4, T5>()
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -198,7 +246,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
 }
 
 /// <summary>
-/// Return the <see cref="IComponent"/>'s of <see cref="ComponentTypes"/>.
+/// Return the <see cref="IComponent"/> types of <see cref="ComponentTypes"/>.
 /// </summary>
 public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
 {
