@@ -10,8 +10,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// An <see cref="Entity"/> represent an object in an <see cref="EntityStore"/> - e.g. a cube in a game scene.<br/>
-/// Is is the <b>main API</b> when dealing with entities in the engine.
+/// Represent an object in an <see cref="EntityStore"/> - e.g. a cube in a game scene.<br/>
+/// It is the <b>main API</b> to deal with entities in the engine.
 /// </summary>
 /// <remarks>
 /// <para>
