@@ -89,17 +89,31 @@ When testing the examples use a debugger to check entity state changes while ste
 Multiple components can be added / removed to / from an entity.  
 
 ```csharp
+[ComponentKey("my-component")]
 public struct MyComponent : IComponent {
     public int value;
-};
+}
 
 public static void AddComponents()
 {
-    var store   = new EntityStore();
+    var store   = new EntityStore(PidType.UsePidAsId);
     var entity  = store.CreateEntity();
     entity.AddComponent(new EntityName("Hello World!")); // EntityName is a build-in component
     entity.AddComponent(new MyComponent { value = 42 });
-    Console.WriteLine($"entity: {entity}");     // entity: id: 1  "Hello World!"  [EntityName, MyComponent]
+    Console.WriteLine($"entity: {entity}");     // > entity: id: 1  "Hello World!"  [EntityName, Position]
+    // Serialize the entity to JSON
+    Console.WriteLine(entity.DebugJSON);
+}
+```
+
+Result of `entity.DebugJSON`:
+```json
+{
+    "id": 1,
+    "components": {
+        "name": {"value":"Hello World!"},
+        "my-component": {"value":42}
+    }
 }
 ```
 
@@ -129,8 +143,8 @@ public static void GetUniqueEntity()
 They can be utilized in queries similar as components to restrict the amount of entities returned by a query. 
 
 ```csharp
-public struct MyTag1 : ITag { };
-public struct MyTag2 : ITag { };
+public struct MyTag1 : ITag { }
+public struct MyTag2 : ITag { }
 
 public static void AddTags()
 {
@@ -153,7 +167,7 @@ In case dealing only with a few thousands of entities `Script`s are fine.
 If dealing with a multiple of 10.000 components should be used for efficiency / performance.
 
 ```csharp
-public class MyScript : Script { } 
+public class MyScript : Script { }
 
 public static void AddScript()
 {

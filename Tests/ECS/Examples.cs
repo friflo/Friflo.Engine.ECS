@@ -9,18 +9,21 @@ namespace Tests.ECS;
 
 public static class Examples
 {
+    [ComponentKey("my-component")]
     public struct MyComponent : IComponent {
         public int value;
-    };
+    }
     
     [Test]
     public static void AddComponents()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
         entity.AddComponent(new EntityName("Hello World!")); // EntityName is a build-in component
         entity.AddComponent(new MyComponent { value = 42 });
         Console.WriteLine($"entity: {entity}");     // > entity: id: 1  "Hello World!"  [EntityName, Position]
+        // Serialize the entity to JSON
+        Console.WriteLine(entity.DebugJSON);
     }
     
     /// <summary>
@@ -38,8 +41,8 @@ public static class Examples
         Console.WriteLine($"entity: {player}");     // entity: id: 1  [UniqueEntity]
     }
 
-    public struct MyTag1 : ITag { };
-    public struct MyTag2 : ITag { };
+    public struct MyTag1 : ITag { }
+    public struct MyTag2 : ITag { }
 
     [Test]
     public static void AddTags()
@@ -51,7 +54,7 @@ public static class Examples
         Console.WriteLine($"entity: {entity}");     // > entity: id: 1  [#MyTag1, #MyTag2]
     }
     
-    public class MyScript : Script { } 
+    public class MyScript : Script { }
     
     [Test]
     public static void AddScript()
@@ -90,7 +93,7 @@ public static class Examples
         entity.AddChild(store.CreateEntity());
     }
     
-    public readonly struct MySignal { } 
+    public readonly struct MySignal { }
     
     [Test]
     public static void AddSignalHandler()
