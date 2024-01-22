@@ -91,8 +91,10 @@ public sealed class Archetype
         return entity;
     }
     
-    /// <summary>Allocates memory for entity components to enable adding / creating entities without reallocation.</summary>
-    /// <returns>the number of entities that can be added without reallocation </returns>
+    /// <summary>
+    /// Allocates memory for entity components in the archetype to enable adding entity components without reallocation.
+    /// </summary>
+    /// <returns>The number of entities that can be added without reallocation. </returns>
     public int EnsureCapacity(int capacity) {
         var available = memory.capacity - entityCount;
         if (capacity <= available) {

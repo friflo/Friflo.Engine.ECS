@@ -144,18 +144,26 @@ public sealed partial class EntityStore : EntityStoreBase
     
 
 #region id / pid conversion
+    /// <summary>
+    /// Return the <see cref="Entity.Id"/> for the passed entity <paramref name="pid"/>.
+    /// </summary>
     /// <remarks>
     /// Avoid using this method if store is initialized with <see cref="PidType.RandomPids"/>.<br/>
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
     /// as this method performs a <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
     public  int             PidToId(long pid)   => intern.pid2Id != null ? intern.pid2Id[pid] : (int)pid;
-        
+
+    /// <summary>
+    /// Return the <see cref="Entity.Pid"/> for the passed entity <paramref name="id"/>.
+    /// </summary>
     public  long            IdToPid(int id)     => nodes[id].pid;
     #endregion
     
 #region get EntityNode by id
-
+    /// <summary>
+    /// Return the internal node for the passed entity <paramref name="id"/>. 
+    /// </summary>
     public  ref readonly  EntityNode  GetEntityNode(int id) {
         return ref nodes[id];
     }
@@ -163,10 +171,16 @@ public sealed partial class EntityStore : EntityStoreBase
 
 #region get Entity by id / pid
 
+    /// <summary>
+    /// Return the <see cref="Entity"/> with the passed entity <paramref name="id"/>.
+    /// </summary>
     public  Entity  GetEntityById(int id) {
         return new Entity(this, id);
     }
     
+    /// <summary>
+    /// Return the <see cref="Entity"/> with the passed entity <paramref name="pid"/>.
+    /// </summary>
     public  Entity  GetEntityByPid(long pid) {
         if (intern.pid2Id != null) {
             return new Entity(this, intern.pid2Id[pid]);
@@ -174,6 +188,9 @@ public sealed partial class EntityStore : EntityStoreBase
         return new Entity(this, (int)pid);
     }
     
+    /// <summary>
+    /// Try to return the <see cref="Entity"/> with the passed entity <paramref name="pid"/>.<br/>
+    /// </summary>
     public  bool  TryGetEntityByPid(long pid, out Entity value) {
         if (intern.pid2Id != null) {
             if (intern.pid2Id.TryGetValue(pid,out int id)) {

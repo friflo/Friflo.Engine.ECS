@@ -24,6 +24,9 @@ public partial class EntityStore
 {
     public static     EntitySchema         GetEntitySchema()=> Static.EntitySchema;
     
+    /// <summary>
+    /// Create and return new <see cref="Entity"/> in the entity store.
+    /// </summary>
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()
     {
@@ -33,6 +36,9 @@ public partial class EntityStore
         return CreateEntityNode(id, pid);
     }
     
+    /// <summary>
+    /// Create and return new <see cref="Entity"/> with the passed <paramref name="id"/> in the entity store.
+    /// </summary>
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity(int id)
     {
@@ -47,40 +53,44 @@ public partial class EntityStore
         return CreateEntityNode(id, pid);
     }
     
-    public Entity CloneEntity(Entity original)
+    /// <summary>
+    /// Create and return a clone of the of the passed <paramref name="entity"/> in the store.
+    /// </summary>
+    /// <returns></returns>
+    public Entity CloneEntity(Entity entity)
     {
-        var entity      = CreateEntity();
-        var archetype   = original.archetype;
+        var clone      = CreateEntity();
+        var archetype   = entity.archetype;
         if (archetype != defaultArchetype) {
-            entity.refCompIndex    = Archetype.AddEntity(archetype, entity.Id);
-            entity.refArchetype    = archetype;
+            clone.refCompIndex    = Archetype.AddEntity(archetype, clone.Id);
+            clone.refArchetype    = archetype;
         }
-        var isBlittable = IsBlittable(original);
+        var isBlittable = IsBlittable(entity);
 
         // todo optimize - serialize / deserialize only non blittable components and scripts
         if (isBlittable) {
             var scriptTypeByType    = Static.EntitySchema.ScriptTypeByType;
             // CopyComponents() must be used only in case all component types are blittable
-            Archetype.CopyComponents(archetype, original.compIndex, entity.compIndex);
+            Archetype.CopyComponents(archetype, entity.compIndex, clone.compIndex);
             // --- clone scripts
-            foreach (var script in original.Scripts) {
+            foreach (var script in entity.Scripts) {
                 var scriptType      = scriptTypeByType[script.GetType()];
                 var scriptClone     = scriptType.CloneScript(script);
-                scriptClone.entity  = entity;
-                AddScript(entity, scriptClone, scriptType);
+                scriptClone.entity  = clone;
+                AddScript(clone, scriptClone, scriptType);
             }
-            return entity;
+            return clone;
         }
         // --- serialize entity
         var converter       = EntityConverter.Default;
-        converter.EntityToDataEntity(original, dataBuffer, false);
+        converter.EntityToDataEntity(entity, dataBuffer, false);
         
         // --- deserialize DataEntity
-        dataBuffer.pid      = IdToPid(entity.Id);
+        dataBuffer.pid      = IdToPid(clone.Id);
         // convert will use entity created above
         converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
         AssertNoError(error);
-        return entity;
+        return clone;
     }
     
     [ExcludeFromCodeCoverage]
@@ -158,6 +168,9 @@ public partial class EntityStore
         return new Entity(this, id);
     }
     
+    /// <summary>
+    /// Set the passed <paramref name="entity"/> as the <see cref="StoreRoot"/> entity.
+    /// </summary>
     public void SetStoreRoot(Entity entity) {
         if (entity.IsNull) {
             throw new ArgumentNullException(nameof(entity));
