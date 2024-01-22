@@ -362,8 +362,9 @@ public readonly struct Entity : IEquatable<Entity>
         result = (T)EntityUtils.GetScript(this, typeof(T));
         return result != null;
     }
-    /// <summary>Add the given <paramref name="script"/> to the entity.</summary>
-    /// <returns>the <see cref="Script"/> previously added to the entity.</returns>
+    /// <summary>Add the given <paramref name="script"/> to the entity.<br/>
+    /// If the entity contains a <see cref="Script"/> of the same type it is replaced.</summary>
+    /// <returns>The <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative</remarks>
     public TScript  AddScript<TScript>(TScript script)   where TScript : Script  => (TScript)EntityUtils.AddScript    (this, ClassType<TScript>.ScriptIndex, script);
     
