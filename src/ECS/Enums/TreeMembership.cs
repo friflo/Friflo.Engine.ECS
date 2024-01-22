@@ -13,8 +13,8 @@ namespace Friflo.Engine.ECS;
 /// <remarks>Requirement: The entity must be <see cref="attached"/> to an <see cref="EntityStore"/></remarks>
 public enum TreeMembership
 {
-    /// <summary>The entity is not member of the <see cref="EntityStore"/> tree graph</summary>
+    /// <summary> The entity is not member of the <see cref="EntityStore"/> tree graph. </summary>
     floating    = 0,
-    /// <summary>The entity is member of the <see cref="EntityStore"/> tree graph</summary>
+    /// <summary> The entity is member of the <see cref="EntityStore"/> tree graph. </summary>
     treeNode    = 1,
 }

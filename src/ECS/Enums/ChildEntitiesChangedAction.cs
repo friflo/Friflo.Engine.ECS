@@ -11,7 +11,9 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public enum ChildEntitiesChangedAction
 {
+    /// <summary> An entity was added as a child to another <see cref="Entity"/>. </summary>
     Add     = NotifyCollectionChangedAction.Add,
+    /// <summary> A child entity was removed from an <see cref="Entity"/>. </summary>
     Remove  = NotifyCollectionChangedAction.Remove,
 //  Replace = NotifyCollectionChangedAction.Replace,
 //  Move    = NotifyCollectionChangedAction.Move,

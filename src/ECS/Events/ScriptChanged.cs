@@ -20,7 +20,7 @@ public enum ScriptChangedAction
     Remove  = 0,
     /// <summary> A <see cref="Script"/> was added to an <see cref="Entity"/>. </summary>
     Add     = 1,
-    /// <summary> An <see cref="Entity"/> <see cref="Script"/> was replaced. </summary>
+    /// <summary> An entity <see cref="Script"/> was replaced by another script. </summary>
     Replace = 2,
 }
 
