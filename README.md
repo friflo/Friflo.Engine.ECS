@@ -82,8 +82,21 @@ When testing the examples use a debugger to check entity state changes while ste
 <img src="docs/images/entity-debugger.png" width="593" height="270"></img>  
 *Screenshot:* All relevant entity data is directly available in the debugger.
 
+Examples with code snippets:
 
-### Add components to an entity
+- [Component](#component)
+- [Unique entity](#unique-entity)
+- [Tag](#tag)
+- [Script](#script)
+- [Child entities](#child-entities)
+- [Event handler](#event-handler)
+- [Signal handler](#signal-handler)
+- [Query](#query)
+- [Enumerate Query Chunks](#enumerate-query-chunks)
+
+
+
+## Component
 
 `Components` are `struct`s used to store data for entity / fields.  
 Multiple components can be added / removed to / from an entity.  
@@ -118,7 +131,7 @@ Result of `entity.DebugJSON`:
 ```
 
 
-### Mark an entity as a unique entity
+## Unique entity
 
 Add a `UniqueEntity` component to an entity to mark it as a *"singleton"* with a unique `string` id.  
 The entity can than be retrieved with `EntityStore.GetUniqueEntity()` to reduce code coupling.  
@@ -137,7 +150,7 @@ public static void GetUniqueEntity()
 ```
 
 
-### Add tags to an entity
+## Tag
 
 `Tags` are `struct`s similar to components - except they store no data.  
 They can be utilized in queries similar as components to restrict the amount of entities returned by a query. 
@@ -157,7 +170,7 @@ public static void AddTags()
 ```
 
 
-### Add scripts to an entity
+## Script
 
 `Script`s are similar to components and can be added / removed to / from entities.  
 `Script`s are classes and can be used to store data.  
@@ -178,7 +191,8 @@ public static void AddScript()
 }
 ```
 
-### Add entities as children to an entity
+
+## Child entities
 
 A typical use case in Games or Editor is to build up a hierarchy of entities.  
 
@@ -195,7 +209,8 @@ public static void AddChildEntities()
 }
 ```
 
-### Add event handlers to an entity
+
+## Event handler
 
 If changing an entity by adding or removing components, tags, scripts or child entities events are emitted.  
 An application can subscribe to these events like shown in the example.  
@@ -220,7 +235,7 @@ public static void AddEventHandlers()
 }
 ```
 
-### Add signal handlers to an entity
+## Signal handler
 
 `Signal`s are similar to events. They are used to send and receive custom events on entity level in an application.  
 They have the same characteristics as events described in the section above.  
@@ -237,7 +252,8 @@ public static void AddSignalHandler()
 }
 ```
 
-### Create entity queries
+
+## Query
 
 As described in the intro queries are a fundamental feature of an ECS.  
 **Friflo.Engine.ECS** support queries by any combination of component types and tags.
@@ -276,7 +292,8 @@ public static void EntityQueries()
 }
 ```
 
-### Enumerate the `Chunks` of an entity query
+
+## Enumerate Query Chunks
 
 Also as described in the intro enumeration of a query result is fundamental for an ECS.  
 Components are returned as `Chunks` and are suitable for
