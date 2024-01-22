@@ -23,6 +23,10 @@ public static class Examples
         Console.WriteLine($"entity: {entity}");     // > entity: id: 1  "Hello World!"  [EntityName, Position]
     }
     
+    /// <summary>
+    /// <see cref="EntityStoreBase.GetUniqueEntity"/> is used to reduce code coupling.
+    /// It enables access to a unique entity without the need to pass the entity by external code.   
+    /// </summary>
     [Test]
     public static void GetUniqueEntity()
     {
@@ -30,10 +34,8 @@ public static class Examples
         var entity  = store.CreateEntity();
         entity.AddComponent(new UniqueEntity("Player")); // UniqueEntity is a build-in component
         
-        // GetUniqueEntity() is used to reduce code coupling.
-        // It enables access to a unique entity without the need to pass the entity by external code.   
-        store.GetUniqueEntity("Player");
-        Console.WriteLine($"entity: {entity}");     // entity: id: 1  [UniqueEntity]
+        var player  = store.GetUniqueEntity("Player");
+        Console.WriteLine($"entity: {player}");     // entity: id: 1  [UniqueEntity]
     }
 
     public struct MyTag1 : ITag { };

@@ -99,7 +99,26 @@ public static void AddComponents()
     var entity  = store.CreateEntity();
     entity.AddComponent(new EntityName("Hello World!")); // EntityName is a build-in component
     entity.AddComponent(new MyComponent { value = 42 });
-    Console.WriteLine($"entity: {entity}");     // > entity: id: 1  "Hello World!"  [EntityName, Position]
+    Console.WriteLine($"entity: {entity}");     // entity: id: 1  "Hello World!"  [EntityName, MyComponent]
+}
+```
+
+
+### Mark an entity as a unique entity
+
+Add a `UniqueEntity` component to an entity to mark it as a *"singleton"* with a unique `string` id.  
+The entity can than be retrieved with `EntityStore.GetUniqueEntity()` to reduce code coupling.  
+It enables access to a unique entity without the need to pass an entity by external code.   
+
+```csharp
+public static void GetUniqueEntity()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    entity.AddComponent(new UniqueEntity("Player")); // UniqueEntity is a build-in component
+    
+    var player  = store.GetUniqueEntity("Player");
+    Console.WriteLine($"entity: {player}");     // entity: id: 1  [UniqueEntity]
 }
 ```
 
@@ -158,7 +177,7 @@ public static void AddChildEntities()
     var child2  = store.CreateEntity();
     root.AddChild(child1);
     root.AddChild(child2);
-    Console.WriteLine($"child entities: {root.ChildEntities}"); // > child entities: Count: 2
+    Console.WriteLine($"child entities: {root.ChildEntities}"); // > child entities: Entity[2]
 }
 ```
 
