@@ -4,6 +4,9 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Specify the way how <see cref="Entity.Pid"/>'s are generated.
+/// </summary>
 public enum PidType
 {
     /// <summary>

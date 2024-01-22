@@ -8,6 +8,9 @@ using static Friflo.Engine.ECS.TreeMembership;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Flags assigned to <see cref="EntityNode"/>'s internally stored in an <see cref="EntityStore"/>.
+/// </summary>
 [Flags]
 public enum NodeFlags : byte
 {
