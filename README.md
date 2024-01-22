@@ -7,7 +7,7 @@
 
 The package **Friflo.Engine.ECS** is part of an in-development Game Editor which is documented at [Architecture.md](Architecture.md).
 
-**Friflo.Engine.ECS** implements an [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system).
+**Friflo.Engine.ECS** implements an [Entity Component System - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).
 
 # Entity Component System - ECS
 
@@ -16,7 +16,7 @@ The core feature of an Entity Component System are:
 1. Data is organized by a set of entities. Each entity contains an arbitrary set of components.  
   Components can be added / removed to / from an entities at any time.  
   This software pattern is used to avoid deep class inheritance -
-  a characteristic specific to [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming).  
+  a characteristic specific to [OOP - Wikipedia](https://en.wikipedia.org/wiki/Object-oriented_programming).  
   It simplifies the creation of decoupled code which is harder to achieve in OOP.
 
 2. Entity queries from an entity container are fast and efficient compared to queries in an OOP architecture.  
@@ -32,8 +32,9 @@ The core feature of an Entity Component System are:
 ## Additional library features
 
 - JSON Serialization
-- Developer friendly / OOP like API by exposing the [Entity](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md) struct as the main interface.  
-  To get an overview of the `Entity` interface see [Engine-comparison.md](Engine-comparison.md).  
+- Developer friendly / OOP like API by exposing the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
+  **struct** as the main interface.  
+  Or compare the `Entity` API with other API's at [Engine-comparison.md](Engine-comparison.md).  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Support for Vectorization (SIMD) of components returned by queries.
@@ -42,8 +43,8 @@ The core feature of an Entity Component System are:
 - Support tagging of entities and use them as a filter in queries.
 - Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
 - Support observing entity changes by event handlers triggered by adding / removing: components, tags, scripts and child entities.
-- Enable binding an entity hierarchy to a [TreeDataGrid](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
-  in [AvaloniaUI](https://avaloniaui.net/). Screenshot below:    
+- Enable binding an entity hierarchy to a [TreeDataGrid - GitHub](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
+  in [AvaloniaUI - Website](https://avaloniaui.net/). Screenshot below:    
 <img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
 
 
@@ -82,7 +83,7 @@ When testing the examples use a debugger to check entity state changes while ste
 <img src="docs/images/entity-debugger.png" width="593" height="270"></img>  
 *Screenshot:* All relevant entity data is directly available in the debugger.
 
-Examples with code snippets:
+Examples showing typical use cases of the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
 
 - [Component](#component)
 - [Unique entity](#unique-entity)
