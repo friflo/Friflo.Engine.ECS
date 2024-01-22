@@ -11,25 +11,29 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide type information about all <see cref="ITag"/>, <see cref="IComponent"/> and <see cref="Script"/> types
+/// available in the application.
+/// </summary>
 [CLSCompliant(true)]
 public sealed class EntitySchema
 {
 #region public properties
-    /// <summary>List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency.</summary>
+    /// <summary> List of <see cref="Assembly"/>'s referencing the <b>Fliox.Engine</b> assembly as dependency. </summary>
     public   ReadOnlySpan<EngineDependant>              EngineDependants    => new (engineDependants);
-    /// <summary>return all <b>component</b> types - structs implementing <see cref="IComponent"/></summary>
+    /// <summary> Return all <b>component</b> types - structs implementing <see cref="IComponent"/>. </summary>
     /// <remarks>
     /// <see cref="ComponentType.StructIndex"/> is equal to the array index<br/>
     /// <see cref="Components"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ComponentType>                Components          => new (components);
-    /// <summary>return all <see cref="Script"/> types - classes extending <see cref="Script"/></summary>
+    /// <summary> Return all <see cref="Script"/> types - classes extending <see cref="Script"/></summary>
     /// <remarks>
     /// <see cref="ScriptType.ScriptIndex"/> is equal to the array index<br/>
     /// <see cref="Scripts"/>[0] is always null
     /// </remarks>
     public   ReadOnlySpan<ScriptType>                   Scripts             => new (scripts);
-    /// <summary>return all <b>Tag</b> types - structs implementing <see cref="ITag"/></summary>
+    /// <summary> Return all <b>Tag</b> types - structs implementing <see cref="ITag"/>. </summary>
     /// <remarks>
     /// <see cref="TagType.TagIndex"/> is equal to the array index<br/>
     /// <see cref="Tags"/>[0] is always null
@@ -37,11 +41,20 @@ public sealed class EntitySchema
     public   ReadOnlySpan<TagType>                      Tags                => new (tags);
     
     // --- lookup: components / scripts
+    /// <summary> A map to lookup <see cref="ComponentType"/>'s and <see cref="ScriptType"/>'s by <see cref="SchemaType.ComponentKey"/>. </summary>
     public   IReadOnlyDictionary<string, SchemaType>    SchemaTypeByKey     => schemaTypeByKey;
+    
+    /// <summary> A map to lookup <see cref="ScriptType"/>'s by <see cref="System.Type"/>. </summary>
     public   IReadOnlyDictionary<Type,   ScriptType>    ScriptTypeByType    => scriptTypeByType;
+    
+    /// <summary> A map to lookup <see cref="ComponentType"/>'s by <see cref="System.Type"/>. </summary>
     public   IReadOnlyDictionary<Type,   ComponentType> ComponentTypeByType => componentTypeByType;
+    
     // --- lookup: tags
+    /// <summary> A map to lookup <see cref="TagType"/>'s by <see cref="TagType.TagName"/>. </summary>
     public   IReadOnlyDictionary<string, TagType>       TagTypeByName       => tagTypeByName;
+    
+    /// <summary> A map to lookup <see cref="TagType"/>'s by <see cref="System.Type"/>. </summary>
     public   IReadOnlyDictionary<Type,   TagType>       TagTypeByType       => tagTypeByType;
 
     public   override string                            ToString()          => GetString();
@@ -107,7 +120,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return teh <see cref="ComponentType"/> of a struct implementing <see cref="IComponent"/>.
+    /// Return the <see cref="ComponentType"/> of a struct implementing <see cref="IComponent"/>.
     /// </summary>
     public ComponentType GetComponentType<T>()
         where T : struct, IComponent
@@ -117,7 +130,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return the <see cref="ScriptType"/> of a class extending <see cref="Script"/>.
+    /// Return the <see cref="ScriptType"/> of a class extending <see cref="Script"/>.
     /// </summary>
     public ScriptType GetScriptType<T>()
         where T : Script
@@ -127,7 +140,7 @@ public sealed class EntitySchema
     }
     
     /// <summary>
-    /// return the <see cref="TagType"/> of a struct implementing <see cref="ITag"/>.
+    /// Return the <see cref="TagType"/> of a struct implementing <see cref="ITag"/>.
     /// </summary>
     public TagType GetTagType<T>()
         where T : struct, ITag
