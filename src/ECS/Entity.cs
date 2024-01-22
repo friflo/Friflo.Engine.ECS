@@ -163,12 +163,12 @@ namespace Friflo.Engine.ECS;
 ///     <see cref="OnComponentChanged"/>            <br/>
 ///     <see cref="OnScriptChanged"/>               <br/>
 ///     <see cref="OnChildEntitiesChanged"/>        <br/>
+///     <see cref="DebugEventHandlers"/>            <br/>
 /// </item>
 /// <item>  <b>signals</b>                          <br/>
 ///     <see cref="AddSignalHandler{TEvent}"/>      <br/>
 ///     <see cref="RemoveSignalHandler{TEvent}"/>   <br/>
 ///     <see cref="EmitSignal{TEvent}"/>            <br/>
-///     <see cref="DebugEventHandlers"/>            <br/>
 /// </item>
 /// </list>
 /// </para>
