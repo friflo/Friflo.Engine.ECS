@@ -13,12 +13,14 @@ namespace Friflo.Engine.ECS;
 
 internal delegate object CloneScript(object instance);
 
+/// <summary>
+/// Provide meta data for a <see cref="Script"/> class. 
+/// </summary>
 public abstract class ScriptType : SchemaType
 {
-    /// <summary>
-    /// Ihe index in <see cref="EntitySchema.Scripts"/>.<br/>
-    /// </summary>
+    /// <summary> Ihe index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Scripts"/>. </summary>
     public   readonly   int             ScriptIndex;    //  4
+    /// <summary> Return true if <see cref="Script"/>'s of this type can be copied. </summary>
     public   readonly   bool            IsBlittable;    //  4
     private  readonly   CloneScript     cloneScript;    //  8
     

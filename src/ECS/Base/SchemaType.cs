@@ -13,14 +13,18 @@ using static Friflo.Engine.ECS.SchemaTypeKind;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide meta data for <see cref="Script"/> classes and <see cref="IComponent"/> / <see cref="ITag"/> structs. 
+/// </summary>
 public abstract class SchemaType
 {
     /// <summary>
     /// If <see cref="Kind"/> is a <see cref="Component"/> or a <see cref="Script"/>
-    /// the key assigned in <see cref="ComponentKeyAttribute"/>
+    /// the key assigned with <see cref="ComponentKeyAttribute"/>.
     /// </summary>
     public   readonly   string          ComponentKey;       //  8
     
+    /// <summary>Returns the <see cref="SchemaTypeKind"/> of the type.</summary>
     /// <returns>
     /// <see cref="Script"/> if the type is a <see cref="Script"/><br/>
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
@@ -29,12 +33,13 @@ public abstract class SchemaType
     public   readonly   SchemaTypeKind  Kind;               //  4
     
     /// <summary>
-    /// If <see cref="Kind"/> == <see cref="Tag"/> the type of a component struct implementing <see cref="ITag"/><br/>
-    /// If <see cref="Kind"/> == <see cref="Component"/> the type of a component struct implementing <see cref="IComponent"/><br/>
-    /// If <see cref="Kind"/> == <see cref="Script"/> the type of a script class extending <see cref="Script"/><br/>
+    /// If <see cref="Kind"/> == <see cref="Tag"/> the type of a <b>tag</b> struct implementing <see cref="ITag"/>.<br/>
+    /// If <see cref="Kind"/> == <see cref="Component"/> the type of a <b>component</b> struct implementing <see cref="IComponent"/>.<br/>
+    /// If <see cref="Kind"/> == <see cref="Script"/> the type of a <b>script</b> class extending <see cref="Script"/>.<br/>
     /// </summary>
     public   readonly   Type            Type;               //  8
     
+    /// <summary>Returns the <see cref="System.Type"/> name of the struct / class. </summary>
     public   readonly   string          Name;               //  8
     
     internal readonly   Bytes           componentKeyBytes;  // 16

@@ -12,13 +12,16 @@ using static Friflo.Engine.ECS.SchemaTypeKind;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide meta data for an <see cref="IComponent"/> struct.
+/// </summary>
 public abstract class ComponentType : SchemaType
 {
-    /// <summary>
-    /// The index in <see cref="EntitySchema.Components"/>.<br/>
-    /// </summary>
+    /// <summary> The index in <see cref="EntitySchema"/>.<see cref="EntitySchema.Components"/>. </summary>
     public   readonly   int         StructIndex;    //  4
+    /// <summary> Return true if <see cref="IComponent"/>'s of this type can be copied. </summary>
     public   readonly   bool        IsBlittable;    //  4
+    /// <summary> The size in bytes of the <see cref="IComponent"/> struct. </summary>
     public   readonly   int         StructSize;     //  4
     
     internal abstract   StructHeap  CreateHeap();
