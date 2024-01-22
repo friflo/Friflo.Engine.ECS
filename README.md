@@ -89,8 +89,8 @@ Examples with code snippets:
 - [Tag](#tag)
 - [Script](#script)
 - [Child entities](#child-entities)
-- [Event handler](#event-handler)
-- [Signal handler](#signal-handler)
+- [Event](#event)
+- [Signal](#signal)
 - [Query](#query)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
 
@@ -210,7 +210,7 @@ public static void AddChildEntities()
 ```
 
 
-## Event handler
+## Event
 
 If changing an entity by adding or removing components, tags, scripts or child entities events are emitted.  
 An application can subscribe to these events like shown in the example.  
@@ -235,7 +235,7 @@ public static void AddEventHandlers()
 }
 ```
 
-## Signal handler
+## Signal
 
 `Signal`s are similar to events. They are used to send and receive custom events on entity level in an application.  
 They have the same characteristics as events described in the section above.  
