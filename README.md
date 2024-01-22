@@ -9,7 +9,7 @@ The package **Friflo.Engine.ECS** is part of an in-development Game Editor which
 
 **Friflo.Engine.ECS** implements an [Entity Component System](https://en.wikipedia.org/wiki/Entity_component_system).
 
-## Entity Component System - ECS
+# Entity Component System - ECS
 
 The core feature of an Entity Component System are:
 
