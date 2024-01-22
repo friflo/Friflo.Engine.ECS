@@ -18,8 +18,8 @@
     <Authors>Ullrich Praetz</Authors>
     <Description>Entity Component System - ECS - optimized for performance and cache locality</Description>
     <Copyright>Ullrich Praetz</Copyright>
-    <PackageProjectUrl>https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md</RepositoryUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
     <RepositoryType>git</RepositoryType>

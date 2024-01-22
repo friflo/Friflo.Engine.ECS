@@ -144,7 +144,7 @@ public class Game
     
     private static HttpServer RunServer(FlioxHub hub)
     {
-        hub.Info.Set ("Editor", "dev", "https://github.com/friflo/Friflo.Json.Fliox/tree/main/Engine", "rgb(91,21,196)"); // optional
+        hub.Info.Set ("Editor", "dev", "https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md", "rgb(91,21,196)"); // optional
         hub.UseClusterDB(); // required by HubExplorer
 
         // --- create HttpHost
