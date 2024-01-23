@@ -91,15 +91,15 @@ public static class Bench_Query
     {
         // Requires .NET 8 to enable SIMD on ARM (Apple Silicon).
         // See: [What's new in .NET 8] https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#systemnumerics-and-systemruntimeintrinsics
-        var add = Vector256.Create<int>(1);            // create byte[32] vector - all values = 1
+        var add = Vector256.Create<int>(1);                 // create byte[32] vector - all values = 1
         foreach (var (component, _) in query.Chunks)
         {
-            var bytes   = component.AsSpan256<int>();  // bytes.Length - multiple of 32
-            var step    = component.StepSpan256;        // step = 32
+            var bytes   = component.AsSpan256<int>();       // bytes.Length - multiple of 32
+            var step    = component.StepSpan256;            // step = 32
             for (int n = 0; n < bytes.Length; n += step) {
                 var slice   = bytes.Slice(n, step);
                 var value   = Vector256.Create<int>(slice);
-                var result  = Vector256.Add(value, add); // execute 32 add instructions at once
+                var result  = Vector256.Add(value, add);    // execute 32 add instructions at once
                 result.CopyTo(slice);
             }
         }

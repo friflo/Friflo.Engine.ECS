@@ -35,7 +35,7 @@ public readonly struct Chunk<T>
     public   readonly   int         Length;     //  4
     
     /// <summary>
-    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparam name="TTo"/> - which can be assigned to <see cref="Vector256{TTo}"/>'s.<br/>
+    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to <see cref="Vector256{TTo}"/>'s.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable safe conversion to a <see cref="Vector256{TTo}"/>.
     /// </summary>
     /// <remarks>
@@ -63,7 +63,7 @@ public readonly struct Chunk<T>
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount256) & 0x7fff_ffe0));
     
     /// <summary>
-    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparam name="TTo"/>.<br/>
+    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector128{TTo}"/>.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
@@ -71,7 +71,7 @@ public readonly struct Chunk<T>
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount128) & 0x7fff_fff0));
     
     /// <summary>
-    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparam name="TTo"/>.<br/>
+    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to Vector512.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
