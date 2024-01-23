@@ -329,7 +329,8 @@ public readonly struct Entity : IEquatable<Entity>
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
-    /// <summary>Add the given <paramref name="component"/> to the entity.</summary>
+    /// <summary>Add the given <paramref name="component"/> to the entity.<br/>
+    /// If the entity contains a component of the same type it is updated.</summary>
     /// <remarks>Executes in O(1)</remarks>
     public ComponentChangedAction AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
