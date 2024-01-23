@@ -320,7 +320,8 @@ public readonly struct Entity : IEquatable<Entity>
         result = ((StructHeap<T>)heap).components[compIndex];
         return true;
     }
-    /// <summary>Add a component of the given type to the entity.</summary>
+    /// <summary>Add a component of the given type <typeparamref name="T"/> to the entity.<br/>
+    /// If the entity contains a component of the same type it is updated.</summary>
     /// <remarks>Executes in O(1)<br/>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     /// </remarks>
