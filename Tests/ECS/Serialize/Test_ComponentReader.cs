@@ -34,7 +34,7 @@ public static class Test_ComponentReader
         var child       = converter.DataEntityToEntity(childNode, store, out _);
         AssertRootEntity(root, 2);
         AssertChildEntity(child);
-        var type = store.GetArchetype(Signature.Get<Position, Scale3>());
+        var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
         AreEqual(2,     type.EntityCount);
         AreEqual(2,     store.EntityCount);
         

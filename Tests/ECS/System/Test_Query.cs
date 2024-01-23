@@ -17,7 +17,7 @@ public static class Test_Query
         var store = SetupTestStore();
         var root  = store.StoreRoot;
         
-        var archetype   = store.GetArchetype(Signature.Get<Position>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position>());
         for (int n = 1; n <= 1000; n++) {
             var child = archetype.CreateEntity();
             child.Position = new Position(n, 0, 0);
@@ -57,7 +57,7 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 2 });
         
-        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         for (int n = 2; n <= 1000; n++) {
             var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
@@ -90,7 +90,7 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 3 });
         
-        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName>());
         for (int n = 2; n <= 1000; n++) {
             var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
@@ -124,7 +124,7 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 4 });
         
-        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3, EntityName>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, Scale3, EntityName>());
         for (int n = 2; n <= 1000; n++) {
             var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
@@ -159,7 +159,7 @@ public static class Test_Query
         var root  = store.StoreRoot;
         root.AddScript(new CreateSystems { argCount = 5 });
         
-        var archetype   = store.GetArchetype(Signature.Get<Position, Rotation, Scale3, EntityName>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, Scale3, EntityName>());
         for (int n = 2; n <= 1000; n++) {
             var child = archetype.CreateEntity();
             child.Position      = new Position(n, 0, 0);
@@ -229,7 +229,7 @@ public static class Test_Query
         var store = SetupTestStore();
         var root  = store.StoreRoot;
         
-        var archetype   = store.GetArchetype(Signature.Get<ByteComponent, MyComponent1>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<ByteComponent, MyComponent1>());
         for (int n = 0; n < 32; n++) {
             var child = archetype.CreateEntity();
             root.AddChild(child);
@@ -251,7 +251,7 @@ public static class Test_Query
     public static void Test_Query_Chunk_Padding() {
         
         var store       = new EntityStore(PidType.UsePidAsId);
-        var archetype   = store.GetArchetype(Signature.Get<ByteComponent>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<ByteComponent>());
         var query       = store.Query<ByteComponent>();
         for (int n = 0; n < 200; n++) {
             foreach (var (components, _) in query.Chunks)

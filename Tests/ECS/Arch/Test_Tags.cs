@@ -270,15 +270,15 @@ public static class Test_Tags
         entity.AddComponent<Position>();
         entity.AddTag<TestTag>();
         
-        var archetype = store.GetArchetype(Signature.Get<Position>(), Tags.Get<TestTag>());
+        var archetype = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
         AreEqual(1, archetype.EntityCount);
     }
     
     [Test]
     public static void Test_Tags_Query() {
         var store           = new EntityStore();
-        var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
-        var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
+        var archTestTag     = store.GetArchetype(default, Tags.Get<TestTag>());
+        var archTestTagAll  = store.GetArchetype(default, Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);
         
         var entity1     = store.CreateEntity(1);

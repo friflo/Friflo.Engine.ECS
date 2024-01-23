@@ -40,7 +40,7 @@ public class MySystem_Arg1 : ComponentSystem
     {
         Mem.AreEqual(1000, query.EntityCount);
         var store       = query.Store;
-        var childArch   = store.GetArchetype(Signature.Get<Position>());
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position>());
         int chunkCount  = 0;
         foreach (var (position, entities) in query.Chunks) {
             var vectors     = position.AsSpanVector3();
@@ -74,7 +74,7 @@ public class MySystem_Arg2 : ComponentSystem
     public override void OnUpdate()
     {
         var store       = query.Store;
-        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         int chunkCount  = 0;
         foreach (var (positions, rotations, entities) in query.Chunks) {
             var vectors     = rotations.AsSpanQuaternion();
@@ -107,7 +107,7 @@ public class MySystem_Arg3 : ComponentSystem
     public override void OnUpdate()
     {
         var store       = query.Store;
-        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName>());
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName>());
         int chunkCount  = 0;
         foreach (var (positions, rotation, name, entities) in query.Chunks) {
             var length      = entities.Length;
@@ -139,7 +139,7 @@ public class MySystem_Arg4 : ComponentSystem
     public override void OnUpdate()
     {
         var store       = query.Store;
-        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3>());
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
         foreach (var (positions, rotation, name, scale, entities) in query.Chunks) {
             var vectors     = scale.AsSpanVector3();
@@ -174,7 +174,7 @@ public class MySystem_Arg5 : ComponentSystem
     public override void OnUpdate()
     {
         var store       = query.Store;
-        var childArch   = store.GetArchetype(Signature.Get<Position, Rotation, EntityName, Scale3, Transform>());
+        var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
         foreach (var (positions, rotation, name, scale, transform, entities) in query.Chunks) {
             var matrix4X4   = transform.AsSpanMatrix4x4();

@@ -276,7 +276,7 @@ internal sealed class ComponentReader
         if (unresolvedTagList.Count > 0) {
             componentTypes.Add(unresolvedType);
         }
-        var newArchetype = Archetype.CreateWithComponentTypes(config, componentTypes, searchKey.tags);
+        var newArchetype = Archetype.CreateWithComponentTypeList(config, componentTypes, searchKey.tags);
         EntityStoreBase.AddArchetype(store, newArchetype);
         return newArchetype;
     }

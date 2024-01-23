@@ -14,7 +14,7 @@ public static class Test_StructHeap
     public static void Test_StructHeap_increase_entity_capacity()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var arch1       = store.GetArchetype(Signature.Get<Position>());
+        var arch1       = store.GetArchetype(ComponentTypes.Get<Position>());
         int count       = 2000;
         var entities    = new Entity[count];
         for (int n = 0; n < count; n++)
@@ -36,7 +36,7 @@ public static class Test_StructHeap
     public static void Test_StructHeap_shrink_entity_capacity() // ENTITY_STRUCT
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var arch1       = store.GetArchetype(Signature.Get<Position>());
+        var arch1       = store.GetArchetype(ComponentTypes.Get<Position>());
         int count       = 2000;
         var entities    = new Entity[count];
         for (int n = 0; n < count; n++)
@@ -77,7 +77,7 @@ public static class Test_StructHeap
     public static void Test_StructHeap_Archetype_EnsureCapacity()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+        var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         Mem.AreEqual(512, arch1.EnsureCapacity(0)); // 1 => default capacity
         arch1.CreateEntity();
         Mem.AreEqual(511, arch1.EnsureCapacity(0));
@@ -97,7 +97,7 @@ public static class Test_StructHeap
         // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
-        var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+        var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         arch1.EnsureCapacity(count);
         _ = arch1.CreateEntity(); // warmup
         
@@ -118,7 +118,7 @@ public static class Test_StructHeap
         // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
-        var arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+        var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         arch1.EnsureCapacity(count);
         arch1.CreateEntity();
         
@@ -128,7 +128,7 @@ public static class Test_StructHeap
         for (int i = 0; i < 1000; i++) {
             store   = new EntityStore(PidType.UsePidAsId);
             store.EnsureCapacity(count);
-            arch1   = store.GetArchetype(Signature.Get<MyComponent1>());
+            arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
             arch1.EnsureCapacity(count);
             for (int n = 0; n < count; n++) {
                 _ = arch1.CreateEntity();

@@ -18,7 +18,7 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_increase_entity_capacity()
     {
         var store       = new RawEntityStore();
-        var arch        = store.GetArchetype(Signature.Get<Position>());
+        var arch        = store.GetArchetype(ComponentTypes.Get<Position>());
         int count       = 16384; // 16384 ~ #PC: 4 ms    8388608 ~ 372 ms
         var ids         = new int[count];
         var stopwatch = new Stopwatch();
@@ -46,7 +46,7 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_shrink_entity_capacity()
     {
         var store       = new RawEntityStore();
-        var arch        = store.GetArchetype(Signature.Get<Position>());
+        var arch        = store.GetArchetype(ComponentTypes.Get<Position>());
         int count       = 16384; // 16384 ~ #PC: 0-1 ms     8388608 ~ 190 ms
         var ids         = new int[count];
         for (int n = 0; n < count; n++)
@@ -77,7 +77,7 @@ public static class Test_StructHeapRaw
     {
         for (int o = 0; o < 1; o++) {
             var store   = new RawEntityStore();
-            var arch1   = store.GetArchetype(Signature.Get<ByteComponent>());
+            var arch1   = store.GetArchetype(ComponentTypes.Get<ByteComponent>());
             _ = store.CreateEntity(arch1); // warmup
             
             var stopwatch = new Stopwatch();
@@ -99,7 +99,7 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_DeleteEntity_Perf()
     {
         var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<Position>());
+        var arch1   = store.GetArchetype(ComponentTypes.Get<Position>());
         int count   = 10; // 10_000_000 ~ #PC: 244 ms
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
@@ -151,7 +151,7 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_Query_Chunks()
     {
         var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var arch1   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         var query   = store.Query(Signature.Get<Position, Rotation>());
         for (int count = 0; count < QueryCount; count++) {
             int chunkCount  = 0;
@@ -179,7 +179,7 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_Query_Perf()
     {
         var store   = new RawEntityStore();
-        var arch1   = store.GetArchetype(Signature.Get<MyComponent1, MyComponent2>());
+        var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2>());
         // Count: 10_000_000
         //      CreateEntity()              ~ #PC:  408 ms
         //      for GetEntityComponent<>()  ~ #PC:   40 ms (good performance only, because archetypes remain unchanged after e 
@@ -228,7 +228,7 @@ public static class Test_StructHeapRaw
     public static void Test_StructHeapRaw_DeleteEntity_twice()
     {
         var store   = new RawEntityStore();
-        var arch    = store.GetArchetype(Signature.Get<Position>());
+        var arch    = store.GetArchetype(ComponentTypes.Get<Position>());
         var entity  = store.CreateEntity(arch);
         Mem.AreEqual(1,     store.EntityCount);
         Mem.AreEqual(1,     arch.EntityCount);
@@ -245,7 +245,7 @@ public static class Test_StructHeapRaw
     {
         var store1      = new RawEntityStore();
         var store2      = new RawEntityStore();
-        var arch1       = store1.GetArchetype(Signature.Get<Position>());
+        var arch1       = store1.GetArchetype(ComponentTypes.Get<Position>());
         var e = Assert.Throws<ArgumentException>(() => {
             store2.CreateEntity(arch1);
         });

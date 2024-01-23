@@ -44,7 +44,7 @@ public static class Bench_Query
     public static void Test_Bench()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var archetype = store.GetArchetype(Signature.Get<MyComponent1>());
+        var archetype = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         for (int n = 0; n < 32; n++) {
             archetype.CreateEntity();
         }

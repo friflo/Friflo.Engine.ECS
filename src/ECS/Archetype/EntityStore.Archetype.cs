@@ -36,16 +36,17 @@ public partial class EntityStoreBase
         return new ArchetypeConfig (store, store.archsCount);
     }
     
-    private static Archetype GetArchetypeWithSignature(EntityStoreBase store, in SignatureIndexes indexes, in Tags tags)
+    public Archetype GetArchetype(in ComponentTypes componentTypes, in Tags tags = default)
     {
-        var searchKey = store.searchKey;
-        searchKey.SetSignatureTags(indexes, tags);
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
-            return archetypeKey.archetype;
+        searchKey.componentTypes    = componentTypes;
+        searchKey.tags              = tags;
+        searchKey.CalculateHashCode();
+        if (archSet.TryGetValue(searchKey, out var key)) {
+            return key.archetype;
         }
-        var config      = GetArchetypeConfig(store);
-        var archetype   = Archetype.CreateWithSignatureTypes(config, indexes, tags);
-        AddArchetype(store, archetype);
+        var config      = GetArchetypeConfig(this);
+        var archetype   = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
+        AddArchetype(this, archetype);
         return archetype;
     }
     
@@ -55,51 +56,6 @@ public partial class EntityStoreBase
         searchKey.CalculateHashCode();
         archSet.TryGetValue(searchKey, out var actualValue);
         return actualValue?.archetype;
-    }
-    
-    public Archetype GetArchetype(in Tags tags)
-    {
-        return GetArchetypeWithSignature(this, default, tags);
-    }
-
-    public Archetype GetArchetype<T1>(in Signature<T1> signature, in Tags tags = default)
-        where T1 : struct, IComponent
-    {
-        return GetArchetypeWithSignature(this, signature.signatureIndexes, tags);
-    }
-    
-    public Archetype GetArchetype<T1, T2>(in Signature<T1, T2> signature, in Tags tags = default)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-    {
-        return GetArchetypeWithSignature(this, signature.signatureIndexes, tags);
-    }
-    
-    public Archetype GetArchetype<T1, T2, T3>(in Signature<T1, T2, T3> signature, in Tags tags = default)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-    {
-        return GetArchetypeWithSignature(this, signature.signatureIndexes, tags);
-    }
-    
-    public Archetype GetArchetype<T1, T2, T3, T4>(in Signature<T1, T2, T3, T4> signature, in Tags tags = default)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-    {
-        return GetArchetypeWithSignature(this, signature.signatureIndexes, tags);
-    }
-    
-    public Archetype GetArchetype<T1, T2, T3, T4, T5>(in Signature<T1, T2, T3, T4, T5> signature, in Tags tags = default)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
-    {
-        return GetArchetypeWithSignature(this, signature.signatureIndexes, tags);
     }
     #endregion
     
@@ -123,7 +79,7 @@ public partial class EntityStoreBase
             componentTypes.Add(schema.components[heap.structIndex]);
         }
         componentTypes.Add(schema.components[structIndex]);
-        var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags);
+        var archetype = Archetype.CreateWithComponentTypeList(config, componentTypes, current.tags);
         AddArchetype(store, archetype);
         return archetype;
     }
@@ -145,7 +101,7 @@ public partial class EntityStoreBase
                 continue;
             componentTypes.Add(schema.components[heap.structIndex]);
         }
-        var result = Archetype.CreateWithComponentTypes(config, componentTypes, archetype.tags);
+        var result = Archetype.CreateWithComponentTypeList(config, componentTypes, archetype.tags);
         AddArchetype(store, result);
         return result;
     }
@@ -159,7 +115,7 @@ public partial class EntityStoreBase
         foreach (var heap in heaps) {
             componentTypes.Add(schema.components[heap.structIndex]);
         }
-        var result = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
+        var result = Archetype.CreateWithComponentTypeList(config, componentTypes, tags);
         AddArchetype(store, result);
         return result;
     }

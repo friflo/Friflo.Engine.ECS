@@ -14,8 +14,8 @@ public static class Test_Archetype
     public static void Test_Archetype_Key()
     {
         var store       = new EntityStore();
-        var posType     = store.GetArchetype(Signature.Get<Position>());
-        var posRotType  = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
+        var posRotType  = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         
         AreEqual(1,                             posType.ComponentTypes.Count);
         AreEqual(2,                             posRotType.ComponentTypes.Count);
@@ -51,7 +51,7 @@ public static class Test_Archetype
         var store       = new EntityStore();
         var entity      = store.CreateEntity();
         entity.AddComponent<Position>();
-        var posType     = store.GetArchetype(Signature.Get<Position>());
+        var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
         StructHeap heap = posType.Heaps()[0];
         AreEqual("StructHeap<Position>  Capacity: 512", heap.ToString());
     }
@@ -60,8 +60,8 @@ public static class Test_Archetype
     public static void Test_Archetype_Tags_Query()
     {
         var store           = new EntityStore();
-        var archTestTag     = store.GetArchetype(Tags.Get<TestTag>());
-        var archTestTagAll  = store.GetArchetype(Tags.Get<TestTag, TestTag2>());
+        var archTestTag     = store.GetArchetype(default, Tags.Get<TestTag>());
+        var archTestTagAll  = store.GetArchetype(default, Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);
         AreEqual("Key: [#TestTag]",             archTestTag.key.ToString());
         AreEqual("Key: [#TestTag, #TestTag2]",  archTestTagAll.key.ToString());

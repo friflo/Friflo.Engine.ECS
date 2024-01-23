@@ -28,7 +28,7 @@ public static class Test_EntityStore
     [Test]
     public static void Test_Tags_cover_AddArchetype() {
         var store       = new EntityStore();
-        var archetype   = store.GetArchetype(Signature.Get<Position>());
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position>());
         
         archetype.SetInternalField(nameof(archetype.archIndex), 5);
         

@@ -290,7 +290,7 @@ public static class Test_Query
     public static void Test_Query_Archetype_Entities()
     {
         var store   = new EntityStore();
-        var archetype = store.GetArchetype(Signature.Get<Position>());
+        var archetype = store.GetArchetype(ComponentTypes.Get<Position>());
         for (int n = 0; n < 10; n++) {
             archetype.CreateEntity();
         }

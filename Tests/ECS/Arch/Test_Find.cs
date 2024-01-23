@@ -44,7 +44,7 @@ public static class Test_Find
     public static void Test_Find_UniqueEntity_error()
     {
         var store       = new EntityStore();
-        var archetype1  = store.GetArchetype(Signature.Get<Position>());
+        var archetype1  = store.GetArchetype(ComponentTypes.Get<Position>());
         
         var entity1 = archetype1.CreateEntity();
         entity1.AddComponent(new UniqueEntity("Player"));
@@ -67,7 +67,7 @@ public static class Test_Find
     public static void Test_Find_UniqueEntity_perf()
     {
         var store       = new EntityStore();
-        var archetype1  = store.GetArchetype(Signature.Get<Position>());
+        var archetype1  = store.GetArchetype(ComponentTypes.Get<Position>());
         
         for (int n = 0; n < 100; n++) {
             var entity = archetype1.CreateEntity();

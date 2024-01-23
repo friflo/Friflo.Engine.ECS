@@ -16,8 +16,8 @@ public static class Test_RawEntities
     public static void Test_RawEntities_Components()
     {
         var store   = new RawEntityStore();
-        var type1 = store.GetArchetype(Signature.Get<Position>());
-        var type2 = store.GetArchetype(Signature.Get<Position, Rotation>());
+        var type1 = store.GetArchetype(ComponentTypes.Get<Position>());
+        var type2 = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         
         var entity1  = store.CreateEntity(1);
         store.AddEntityComponent(entity1, new Position { x = 1 });
@@ -65,9 +65,9 @@ public static class Test_RawEntities
         var testTag     = Tags.Get<TestTag>();
         var testTag2    = Tags.Get<TestTag2>();
         var testTag12   = Tags.Get<TestTag, TestTag2>();
-        var tags1       = store.GetArchetype(testTag);
-        var tags2       = store.GetArchetype(testTag2);
-        var tags12      = store.GetArchetype(testTag12);
+        var tags1       = store.GetArchetype(default, testTag);
+        var tags2       = store.GetArchetype(default, testTag2);
+        var tags12      = store.GetArchetype(default, testTag12);
         
         var entity     = store.CreateEntity(1);
         
