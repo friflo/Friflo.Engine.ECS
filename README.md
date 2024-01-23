@@ -32,10 +32,11 @@ The core feature of an Entity Component System are:
 ## Additional library features
 
 - Performance
-    - Use array buffers and cache query instances => no memory allocations after buffers are large enough.
+    - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
     - High memory locality by storing components in continuous memory.
     - Optimize for high L1 cache line hit rate.
-    - *TODO* Add support for multithreading.
+    - Very good benchmark results at: [Ecs.CSharp.Benchmark - GitHub](https://github.com/Doraku/Ecs.CSharp.Benchmark).
+    - *TODO*: Add support for multithreading.
 - Developer friendly / OOP like API by exposing the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
   **struct** as the main interface.  
   Or compare the `Entity` API with other API's at [Engine-comparison.md](Engine-comparison.md).  
