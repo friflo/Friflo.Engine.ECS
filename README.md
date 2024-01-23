@@ -31,11 +31,16 @@ The core feature of an Entity Component System are:
 
 ## Additional library features
 
-- JSON Serialization
+- Performance
+    - Use array buffers and cache query instances => no memory allocations after buffers are large enough.
+    - High memory locality by storing components in continuous memory.
+    - Optimize for high L1 cache line hit rate.
+    - *TODO* Add support for multithreading.
 - Developer friendly / OOP like API by exposing the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
   **struct** as the main interface.  
   Or compare the `Entity` API with other API's at [Engine-comparison.md](Engine-comparison.md).  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
+- JSON Serialization
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Support for Vectorization (SIMD) of components returned by queries.
 - Minimize times required for GC collection by using struct types for entities and components.  
