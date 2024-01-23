@@ -13,7 +13,7 @@ namespace Friflo.Engine.ECS;
 /// A <see cref="Script"/> is a reference type - a class-  which contains data <b>and</b> behavior - aka scripts / methods.<br/> 
 /// An <see cref="ECS.Entity"/> can contain multiple <see cref="Script"/>'s but only one of each type.<br/>
 /// <see cref="Script"/>'s can be used if <b>OPP</b> programming approach is preferred
-/// while dealing with a small amount (&lt; 100) of <see cref="ECS.Entity"/>'s.<br/>
+/// and dealing with less than a few 1.000 instances.<br/>
 /// <br/>
 /// Optionally attribute the extended class with <see cref="ComponentKeyAttribute"/><br/>
 /// to assign a custom component key name used for JSON serialization.<br/>
