@@ -112,10 +112,18 @@ public static void AddComponents()
 {
     var store   = new EntityStore(PidType.UsePidAsId);
     var entity  = store.CreateEntity();
-    entity.AddComponent(new EntityName("Hello World!")); // EntityName is a build-in component
+    
+    // add components
+    entity.AddComponent(new EntityName("Hello World!"));// EntityName is a build-in component
     entity.AddComponent(new MyComponent { value = 42 });
-    Console.WriteLine($"entity: {entity}");     // > entity: id: 1  "Hello World!"  [EntityName, Position]
-    // Serialize the entity to JSON
+    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  "Hello World!"  [EntityName, Position]
+    
+    // get component
+    Console.WriteLine($"name: {entity.Name.value}");    // > name: Hello World!
+    var value = entity.GetComponent<MyComponent>().value;
+    Console.WriteLine($"MyComponent: {value}");         // > MyComponent: 42
+    
+    // Serialize entity to JSON
     Console.WriteLine(entity.DebugJSON);
 }
 ```
@@ -143,10 +151,10 @@ public static void GetUniqueEntity()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
-    entity.AddComponent(new UniqueEntity("Player")); // UniqueEntity is a build-in component
+    entity.AddComponent(new UniqueEntity("Player"));    // UniqueEntity is a build-in component
     
     var player  = store.GetUniqueEntity("Player");
-    Console.WriteLine($"entity: {player}");     // entity: id: 1  [UniqueEntity]
+    Console.WriteLine($"entity: {player}");             // > entity: id: 1  [UniqueEntity]
 }
 ```
 
@@ -164,9 +172,15 @@ public static void AddTags()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
+    
+    // add tags
     entity.AddTag<MyTag1>();
     entity.AddTag<MyTag2>();
-    Console.WriteLine($"entity: {entity}");     // > entity: id: 1  [#MyTag1, #MyTag2]
+    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [#MyTag1, #MyTag2]
+    
+    // get tag
+    var tag1 = entity.Tags.Has<MyTag1>();
+    Console.WriteLine($"tag1: {tag1}");                 // > tag1: True
 }
 ```
 
@@ -187,8 +201,14 @@ public static void AddScript()
 {
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
-    entity.AddScript(new MyScript());
-    Console.WriteLine($"entity: {entity}");     // > entity: id: 1  [*MyScript]
+    
+    // add script
+    entity.AddScript(new MyScript{ data = 123 });
+    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [*MyScript]
+    
+    // get script
+    var myScript = entity.GetScript<MyScript>();
+    Console.WriteLine($"data: {myScript.data}");        // > data: 123
 }
 ```
 
@@ -204,9 +224,12 @@ public static void AddChildEntities()
     var root    = store.CreateEntity();
     var child1  = store.CreateEntity();
     var child2  = store.CreateEntity();
+    
+    // add child entities
     root.AddChild(child1);
     root.AddChild(child2);
-    Console.WriteLine($"child entities: {root.ChildEntities}"); // > child entities: Entity[2]
+    
+    Console.WriteLine($"child entities: {root.ChildEntities}"); // > child entities: Count: 2
 }
 ```
 
@@ -262,8 +285,6 @@ As described in the intro queries are a fundamental feature of an ECS.
 ```csharp
 public static void EntityQueries()
 {
-    var store   = new EntityStore();
-    
     var entity1 = store.CreateEntity();
     entity1.AddComponent(new EntityName("test"));
     entity1.AddTag<MyTag1>();
@@ -279,17 +300,17 @@ public static void EntityQueries()
     
     // --- query components
     var queryEntityNames = store.Query<EntityName>();
-    Console.WriteLine(queryEntityNames);    // > Query: [EntityName]  EntityCount: 1
+    Console.WriteLine(queryEntityNames);                // > Query: [EntityName]  EntityCount: 1
 
     var queryMyComponents = store.Query<MyComponent>();
-    Console.WriteLine(queryMyComponents);   // > Query: [MyComponent]  EntityCount: 2
+    Console.WriteLine(queryMyComponents);               // > Query: [MyComponent]  EntityCount: 2
     
     // --- query tags
     var queryTag  = store.Query().AllTags(Tags.Get<MyTag1>());
-    Console.WriteLine(queryTag);            // > Query: [#MyTag1]  EntityCount: 3
+    Console.WriteLine(queryTag);                        // > Query: [#MyTag1]  EntityCount: 3
     
     var queryTags = store.Query().AllTags(Tags.Get<MyTag1, MyTag2>());
-    Console.WriteLine(queryTags);           // > Query: [#MyTag1, #MyTag2]  EntityCount: 1
+    Console.WriteLine(queryTags);                       // > Query: [#MyTag1, #MyTag2]  EntityCount: 1
 }
 ```
 
