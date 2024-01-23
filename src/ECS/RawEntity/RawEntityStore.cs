@@ -129,7 +129,7 @@ public sealed class RawEntityStore : EntityStoreBase
         return ref heap.components[entity.compIndex];
     }
     
-    public ComponentChangedAction AddEntityComponent<T>(int id, in T component)
+    public bool AddEntityComponent<T>(int id, in T component)
         where T : struct, IComponent
     {
         ref var entity      = ref entities[id];

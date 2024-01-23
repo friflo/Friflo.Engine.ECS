@@ -42,11 +42,11 @@ public static class EntityUtils
         return componentType.RemoveEntityComponent(entity);
     }
     
-    public static  ComponentChangedAction AddEntityComponent    (Entity entity, ComponentType componentType) {
+    public static  bool AddEntityComponent    (Entity entity, ComponentType componentType) {
         return componentType.AddEntityComponent(entity);
     }
     
-    public static  ComponentChangedAction AddEntityComponentValue(Entity entity, ComponentType componentType, object value) {
+    public static  bool AddEntityComponentValue(Entity entity, ComponentType componentType, object value) {
         return componentType.AddEntityComponentValue(entity, value);
     }
     #endregion

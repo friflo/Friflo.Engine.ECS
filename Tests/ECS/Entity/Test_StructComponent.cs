@@ -26,14 +26,14 @@ public static class Test_StructComponent
         var store   = new EntityStore();
         
         var player1 = store.CreateEntity();
-        AreEqual(ComponentChangedAction.Add, player1.AddComponent<Scale3>());
+        IsTrue(player1.AddComponent<Scale3>());
         
         var player2 = store.CreateEntity();
         var myComponent1 = new MyComponent1 { a = 1 };
-        AreEqual(ComponentChangedAction.Add, player2.AddComponent(myComponent1));
+        IsTrue(player2.AddComponent(myComponent1));
         
         var position = new Position { x = 2 };
-        AreEqual(ComponentChangedAction.Add, player2.AddComponent(position));
+        IsTrue(player2.AddComponent(position));
 
         var count = player2.Archetype.ComponentCount;
         AreEqual(2, count);
@@ -79,8 +79,8 @@ public static class Test_StructComponent
     public static void Test_2_add_remove_struct_component() {
         var store  = new EntityStore();
         var player = store.CreateEntity();
-        AreEqual(ComponentChangedAction.Add, player.AddComponent(new MyComponent1()));
-        AreEqual(ComponentChangedAction.Add, player.AddComponent(new Position()));
+        IsTrue(player.AddComponent(new MyComponent1()));
+        IsTrue(player.AddComponent(new Position()));
         AreEqual(2,     player.Archetype.ComponentCount);
 
         // remove in same order to force creation of new Archetype based on exiting
@@ -111,8 +111,8 @@ public static class Test_StructComponent
     {
         var store = new EntityStore();
         var entity1 = store.CreateEntity();
-        AreEqual(ComponentChangedAction.Add,    entity1.AddComponent(new Position { x = 1,  y = 2 }));
-        AreEqual(ComponentChangedAction.Update, entity1.AddComponent(new Position { x = 10, y = 11 }));
+        IsTrue (entity1.AddComponent(new Position { x = 1,  y = 2 }));
+        IsFalse(entity1.AddComponent(new Position { x = 10, y = 11 }));
         
         // Create dummy entities. See Note above
         entity1.Archetype.CreateEntity();

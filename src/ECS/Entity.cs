@@ -322,17 +322,16 @@ public readonly struct Entity : IEquatable<Entity>
     }
     /// <summary>Add a component of the given type <typeparamref name="T"/> to the entity.<br/>
     /// If the entity contains a component of the same type it is updated.</summary>
-    /// <remarks>Executes in O(1)<br/>
+    /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
-    /// </remarks>
-    public ComponentChangedAction AddComponent<T>()               where T : struct, IComponent {
+    public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
     /// <summary>Add the given <paramref name="component"/> to the entity.<br/>
     /// If the entity contains a component of the same type it is updated.</summary>
-    /// <remarks>Executes in O(1)</remarks>
-    public ComponentChangedAction AddComponent<T>(in T component) where T : struct, IComponent {
+    /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
+    public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
         return EntityStoreBase.AddComponent   (Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }

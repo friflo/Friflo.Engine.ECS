@@ -13,7 +13,7 @@ public partial class EntityStoreBase
 {
     // ------------------------------------ add / remove component ------------------------------------
 #region add / remove component
-    internal static ComponentChangedAction AddComponent<T>(
+    internal static bool AddComponent<T>(
             int         id,
             int         structIndex,
         ref Archetype   archetype,  // possible mutation is not null
@@ -27,6 +27,7 @@ public partial class EntityStoreBase
         StructHeap              structHeap;
         StructHeap              oldHeap;
         ComponentChangedAction  action;
+        bool                    added;
         if (arch != store.defaultArchetype)
         {
             structHeap  = arch.heapMap[structIndex];
@@ -34,6 +35,7 @@ public partial class EntityStoreBase
             if (structHeap != null) {
                 // --- case: archetype contains the component type  => archetype remains unchanged
                 ((StructHeap<T>)oldHeap).StashComponent(compIndex);
+                added   = false;
                 action  = ComponentChangedAction.Update;
                 goto AssignComponent;
             }
@@ -44,6 +46,7 @@ public partial class EntityStoreBase
             var newArchetype    = GetArchetypeWith(store, arch, structIndex);
             compIndex           = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
             archetype           = arch = newArchetype;
+            added               = true;
             action              = ComponentChangedAction.Add;
         } else {
             // --- case: entity is assigned to default archetype    => get archetype with component and add entity
@@ -51,6 +54,7 @@ public partial class EntityStoreBase
             arch                = GetArchetype(store, arch.tags, structIndex);
             compIndex           = Archetype.AddEntity(arch, id);
             archetype           = arch;
+            added               = true;
             action              = ComponentChangedAction.Add;
         }
         archIndex   = arch.archIndex;
@@ -61,7 +65,7 @@ public partial class EntityStoreBase
         heap.components[compIndex] = component;
         // Send event. See: SEND_EVENT notes
         store.internBase.componentAdded?.Invoke(new ComponentChanged (store, id, action, structIndex, oldHeap));
-        return action;
+        return added;
     }
     
     internal static bool RemoveComponent<T>(
