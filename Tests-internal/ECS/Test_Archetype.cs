@@ -75,9 +75,9 @@ public static class Test_Archetype
             _ = new SignatureIndexes (6);
         });
         
-        var indexes = new SignatureIndexes(0);
+        var indexes = new SignatureIndexes(1);
         Throws<IndexOutOfRangeException>(() => {
-            indexes.GetStructIndex(0);
+            indexes.GetStructIndex(1);
         });
         var schema  = EntityStore.GetEntitySchema();
         var posType = schema.GetComponentType<Position>();

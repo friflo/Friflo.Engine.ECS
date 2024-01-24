@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -34,15 +35,20 @@ internal readonly struct SignatureIndexes
         int T4  = 0,
         int T5  = 0
     ) {
-        if (length > 5) {
-            throw new IndexOutOfRangeException();
-        }
+        AssertLength(length);
         this.length = length;
         this.T1     = T1;
         this.T2     = T2;
         this.T3     = T3;
         this.T4     = T4;
         this.T5     = T5;
+    }
+    
+    [ExcludeFromCodeCoverage]
+    private static void AssertLength(int length) {
+        if (length is < 1 or > 5) {
+            throw new IndexOutOfRangeException();
+        }
     }
     
     internal readonly int GetStructIndex(int index) {
