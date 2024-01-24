@@ -21,7 +21,7 @@ internal static class TagUtils
 {
     internal static int NewTagIndex(Type type)
     {
-        var schema = EntityStore.GetEntitySchema();
+        var schema = EntityStoreBase.Static.EntitySchema;
         return schema.TagTypeByType[type].TagIndex;
     }
 }

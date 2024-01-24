@@ -19,7 +19,7 @@ internal static class ClassUtils
     
     internal static int NewClassIndex(Type type)
     {
-        var schema = EntityStore.GetEntitySchema();
+        var schema = EntityStoreBase.Static.EntitySchema;
         return schema.scriptTypeByType[type].ScriptIndex;
     }
 }

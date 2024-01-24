@@ -18,7 +18,7 @@ internal static class StructUtils
 {
     internal static int NewStructIndex(Type type)
     {
-        var schema = EntityStore.GetEntitySchema();
+        var schema = EntityStoreBase.Static.EntitySchema;
         return schema.ComponentTypeByType[type].StructIndex;
     }
 }
