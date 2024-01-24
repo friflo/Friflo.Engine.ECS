@@ -96,24 +96,24 @@ public sealed class EntitySchema
         scripts                 = new ScriptType[scriptList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
 
-        // --- SHOULD_USE_ADD
+        // --- Solved workaround. But leave it here for record. SHOULD_USE_ADD
         // Commented methods should use Dictionary<,>.Add()
         // But doing so will throw the exception below in Avalonia Designer
         //     System.ArgumentException: An item with the same key has already been added.
         // => so for now use Dictionary<,> index operator
         foreach (var componentType in componentList) {
-            schemaTypeByKey         [componentType.ComponentKey] =  componentType;  // SHOULD_USE_ADD
+            schemaTypeByKey.    Add (componentType.ComponentKey,    componentType); // SHOULD_USE_ADD
             componentTypeByType.Add (componentType.Type,            componentType);
             components              [componentType.StructIndex] =   componentType;
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];
         foreach (var scriptType in scriptList) {
-            schemaTypeByKey         [scriptType.ComponentKey] =     scriptType;    // SHOULD_USE_ADD
+            schemaTypeByKey. Add    (scriptType.ComponentKey,       scriptType);    // SHOULD_USE_ADD
             scriptTypeByType.Add    (scriptType.Type,               scriptType);
             scripts                 [scriptType.ScriptIndex] =      scriptType;
         }
         foreach (var tagType in tagList) {
-            tagTypeByName           [tagType.TagName] =             tagType;        // SHOULD_USE_ADD
+            tagTypeByName.Add       (tagType.TagName,               tagType);       // SHOULD_USE_ADD
             tagTypeByType.Add       (tagType.Type,                  tagType);
             tags                    [tagType.TagIndex] =            tagType;
         }
