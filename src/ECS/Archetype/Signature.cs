@@ -14,16 +14,22 @@ namespace Friflo.Engine.ECS;
 #region generic Signature<> creation
 
 /// <summary>
-/// A <see cref="Signature"/> is used to query entities of an <see cref="EntityStore"/>
+/// A <see cref="Signature"/> specify the <see cref="IComponent"/> types used to query entity components<br/>
+/// using the <see cref="EntityStore"/>.Query(<see cref="Signature"/>) methods.
 /// </summary>
+/// <remarks>
+/// In contrast to <see cref="ComponentTypes"/> the order of <see cref="IComponent"/>'s stored in a signature is
+/// relevant for queries.<br/>
+/// The maximum number of <see cref="IComponent"/>'s stored in a signature is currently 5.<br/>
+/// </remarks>
 [CLSCompliant(true)]
 public static class Signature
 {
     /// <summary>
-    /// Returns a query <see cref="Signature{T1}"/> containing the given component type.<br/>
+    /// Returns a query <see cref="Signature{T1}"/> containing the specified component type.<br/>
     /// </summary>
     /// <remarks>
-    /// It can be used to query entities with the given component type with <see cref="EntityStore"/>.Query() methods.
+    /// It can be used to query entities with the specified component type with <see cref="EntityStore"/>.Query() methods.
     /// </remarks>
     public static Signature<T1> Get<T1>()
         where T1 : struct, IComponent
@@ -36,10 +42,10 @@ public static class Signature
     }
     
     /// <summary>
-    /// Returns a query <see cref="Signature{T1, T2}"/> containing the given component types.<br/>
+    /// Returns a query <see cref="Signature{T1, T2}"/> containing the specified component types.<br/>
     /// </summary>
     /// <remarks>
-    /// It can be used to query entities with the given component types with <see cref="EntityStore"/>.Query() methods.
+    /// It can be used to query entities with the specified component types with <see cref="EntityStore"/>.Query() methods.
     /// </remarks>
     public static Signature<T1, T2> Get<T1, T2>()
         where T1 : struct, IComponent
@@ -54,10 +60,10 @@ public static class Signature
     }
     
     /// <summary>
-    /// Returns a query <see cref="Signature{T1,T2,T3}"/> containing the given component types.<br/>
+    /// Returns a query <see cref="Signature{T1,T2,T3}"/> containing the specified component types.<br/>
     /// </summary>
     /// <remarks>
-    /// It can be used to query entities with the given component types with <see cref="EntityStore"/>.Query() methods.
+    /// It can be used to query entities with the specified component types with <see cref="EntityStore"/>.Query() methods.
     /// </remarks>
     public static Signature<T1, T2, T3> Get<T1, T2, T3>()
         where T1 : struct, IComponent
@@ -74,10 +80,10 @@ public static class Signature
     }
     
     /// <summary>
-    /// Returns a query <see cref="Signature{T1,T2,T3,T4}"/> containing the given component types.<br/>
+    /// Returns a query <see cref="Signature{T1,T2,T3,T4}"/> containing the specified component types.<br/>
     /// </summary>
     /// <remarks>
-    /// It can be used to query entities with the given component types with <see cref="EntityStore"/>.Query() methods.
+    /// It can be used to query entities with the specified component types with <see cref="EntityStore"/>.Query() methods.
     /// </remarks>
     public static Signature<T1, T2, T3, T4> Get<T1, T2, T3, T4>()
         where T1 : struct, IComponent
@@ -96,10 +102,10 @@ public static class Signature
     }
     
     /// <summary>
-    /// Returns a query <see cref="Signature{T1,T2,T3,T4,T5}"/> containing the given component types.<br/>
+    /// Returns a query <see cref="Signature{T1,T2,T3,T4,T5}"/> containing the specified component types.<br/>
     /// </summary>
     /// <remarks>
-    /// It can be used to query entities with the given component types with <see cref="EntityStore"/>.Query() methods.
+    /// It can be used to query entities with the specified component types with <see cref="EntityStore"/>.Query() methods.
     /// </remarks>
     public static Signature<T1, T2, T3, T4, T5> Get<T1, T2, T3, T4, T5>()
         where T1 : struct, IComponent
