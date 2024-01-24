@@ -11,7 +11,7 @@ using System.Text;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Provide the entity id for each <see cref="Chunk{T}"/>.<see cref="Chunk{T}"/> element with <see cref="Ids"/> or <see cref="this[int]"/>.<br/>
+/// Provide the entity <see cref="Entity.Id"/>'s for <see cref="Chunk{T}"/> components using <see cref="Ids"/> or <see cref="this[int]"/>.<br/>
 /// </summary>
 /// <remarks>
 /// Its <see cref="Length"/> is equal to the <see cref="Chunk{T}"/>.<see cref="Chunk{T}.Length"/>.<br/>
