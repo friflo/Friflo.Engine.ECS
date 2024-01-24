@@ -66,7 +66,7 @@ public sealed class EntitySchema
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] internal readonly   ComponentType[]                     components;
     [Browse(Never)] internal readonly   ScriptType[]                        scripts;
-    [Browse(Never)] private  readonly   TagType[]                           tags;
+    [Browse(Never)] internal readonly   TagType[]                           tags;
     [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
     // --- lookup: component / script
     [Browse(Never)] internal readonly   Dictionary<string, SchemaType>      schemaTypeByKey;

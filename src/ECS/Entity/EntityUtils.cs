@@ -163,8 +163,10 @@ public static class EntityUtils
     }
     
     // ---------------------------------- Script utils ----------------------------------
-    private  static readonly Script[]       EmptyScripts  = Array.Empty<Script>();
-    internal const  int                     NoScripts     = 0;  
+    private  static readonly Script[]                       EmptyScripts        = Array.Empty<Script>();
+    internal const  int                                     NoScripts           = 0;  
+    private  static readonly ScriptType[]                   ScriptTypes         = EntityStoreBase.Static.EntitySchema.scripts;
+    private  static readonly Dictionary<Type, ScriptType>   ScriptTypeByType    = EntityStoreBase.Static.EntitySchema.scriptTypeByType;
     
     internal static Script[] GetScripts(Entity entity) {
         if (entity.scriptIndex == NoScripts) {
@@ -183,7 +185,7 @@ public static class EntityUtils
     
     internal static Script AddScript(Entity entity, int scriptIndex, Script script)
     {
-        var scriptType = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
+        var scriptType = ScriptTypes[scriptIndex];
         return AddScriptInternal(entity, script, scriptType);
     }
     
@@ -194,7 +196,7 @@ public static class EntityUtils
     }
     
     private static Script AddScript (Entity entity, Script script) {
-        var scriptType = EntityStoreBase.Static.EntitySchema.ScriptTypeByType[script.GetType()];
+        var scriptType = ScriptTypeByType[script.GetType()];
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }
     
@@ -210,7 +212,7 @@ public static class EntityUtils
         if (entity.scriptIndex == NoScripts) {
             return null;
         }
-        var scriptType  = EntityStoreBase.Static.EntitySchema.scripts[scriptIndex];
+        var scriptType  = ScriptTypes[scriptIndex];
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     

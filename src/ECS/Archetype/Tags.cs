@@ -173,14 +173,15 @@ public struct Tags : IEnumerable<TagType>
 /// </summary>
 public struct TagsEnumerator : IEnumerator<TagType>
 {
-    private BitSetEnumerator    bitSetEnumerator;   // 48
+    private                 BitSetEnumerator    bitSetEnumerator;   // 48
+    private static readonly TagType[]           TagTypes = EntityStoreBase.Static.EntitySchema.tags;
 
     // --- IEnumerator
-    public          void        Reset()             => bitSetEnumerator.Reset();
+    public          void    Reset()             => bitSetEnumerator.Reset();
 
-           readonly object      IEnumerator.Current => Current;
+           readonly object  IEnumerator.Current => Current;
 
-    public readonly TagType     Current             => EntityStoreBase.Static.EntitySchema.GetTagAt(bitSetEnumerator.Current);
+    public readonly TagType Current             => TagTypes[bitSetEnumerator.Current];
     
     internal TagsEnumerator(in Tags tags) {
         bitSetEnumerator = new BitSetEnumerator(tags.bitSet);
