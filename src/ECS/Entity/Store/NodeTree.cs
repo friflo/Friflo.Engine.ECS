@@ -555,20 +555,22 @@ public partial class EntityStore
     // ---------------------------------- child nodes change notification ----------------------------------
     private void OnChildNodeAdd(int parentId, int childId, int childIndex)
     {
-        if (intern.childEntitiesChanged == null) {
+        var childEntitiesChanged = intern.childEntitiesChanged;
+        if (childEntitiesChanged == null) {
             return;
         }
         var args = new ChildEntitiesChanged(ChildEntitiesChangedAction.Add, this, parentId, childId, childIndex);
-        intern.childEntitiesChanged(args);
+        childEntitiesChanged(args);
     }
     
     private void OnChildNodeRemove(int parentId, int childId, int childIndex)
     {
-        if (intern.childEntitiesChanged == null) {
+        var childEntitiesChanged = intern.childEntitiesChanged;
+        if (childEntitiesChanged == null) {
             return;
         }
         var args = new ChildEntitiesChanged(ChildEntitiesChangedAction.Remove, this, parentId, childId, childIndex);
-        intern.childEntitiesChanged(args);
+        childEntitiesChanged(args);
     }
     
     

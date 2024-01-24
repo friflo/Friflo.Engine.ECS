@@ -7,6 +7,7 @@
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
+// ReSharper disable UseNullPropagation
 namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
@@ -64,7 +65,11 @@ public partial class EntityStoreBase
         var heap    = (StructHeap<T>)structHeap;
         heap.components[compIndex] = component;
         // Send event. See: SEND_EVENT notes
-        store.internBase.componentAdded?.Invoke(new ComponentChanged (store, id, action, structIndex, oldHeap));
+        var componentAdded = store.internBase.componentAdded;
+        if (componentAdded == null) {
+            return added;
+        }
+        componentAdded.Invoke(new ComponentChanged (store, id, action, structIndex, oldHeap));
         return added;
     }
     
@@ -97,7 +102,11 @@ public partial class EntityStoreBase
         }
         archIndex   = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.componentRemoved?.Invoke(new ComponentChanged (store, id, ComponentChangedAction.Remove, structIndex, heap));
+        var componentRemoved = store.internBase.componentRemoved;
+        if (componentRemoved == null) {
+            return true;
+        }
+        componentRemoved.Invoke(new ComponentChanged (store, id, ComponentChangedAction.Remove, structIndex, heap));
         return true;
     }
     #endregion
@@ -138,7 +147,11 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(new TagsChanged(store, id, newTags, curTags));
+        var tagsChanged = store.internBase.tagsChanged;
+        if (tagsChanged == null) {
+            return true;
+        }
+        tagsChanged.Invoke(new TagsChanged(store, id, newTags, curTags));
         return true;
     }
     
@@ -178,7 +191,11 @@ public partial class EntityStoreBase
         }
         archIndex = archetype.archIndex;
         // Send event. See: SEND_EVENT notes
-        store.internBase.tagsChanged?.Invoke(new TagsChanged(store, id, newTags, curTags));
+        var tagsChanged = store.internBase.tagsChanged;
+        if (tagsChanged == null) {
+            return true;
+        }
+        tagsChanged.Invoke(new TagsChanged(store, id, newTags, curTags));
         return true;
     }
     #endregion

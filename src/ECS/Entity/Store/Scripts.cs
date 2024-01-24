@@ -103,7 +103,11 @@ public partial class EntityStore
         currentScript = null;
     SendEvent:        
         // Send event. See: SEND_EVENT notes
-        intern.scriptAdded?.Invoke(new ScriptChanged (entity, action, script, currentScript, scriptType));
+        var scriptAdded = intern.scriptAdded;
+        if (scriptAdded == null) {
+            return currentScript;
+        }
+        scriptAdded.Invoke(new ScriptChanged (entity, action, script, currentScript, scriptType));
         return currentScript;
     }
     
@@ -146,7 +150,11 @@ public partial class EntityStore
             entityScript.scripts = newScripts;
         SendEvent:
             // Send event. See: SEND_EVENT notes
-            intern.scriptRemoved?.Invoke(new ScriptChanged (entity, ScriptChangedAction.Remove, null, script, scriptType));
+            var scriptRemoved = intern.scriptRemoved;
+            if (scriptRemoved == null) {
+                return script;
+            }
+            scriptRemoved.Invoke(new ScriptChanged (entity, ScriptChangedAction.Remove, null, script, scriptType));
             return script;
         }
         return null;
