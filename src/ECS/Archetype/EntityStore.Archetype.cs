@@ -4,7 +4,6 @@
 // Hard rule: this file MUST NOT use type: Entity
 
 using System;
-using System.Collections.Generic;
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation
