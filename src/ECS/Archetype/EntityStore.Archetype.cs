@@ -104,14 +104,8 @@ public partial class EntityStoreBase
     
     private static Archetype GetArchetypeWithTags(EntityStoreBase store, Archetype archetype, in Tags tags)
     {
-        var heaps           = archetype.Heaps();
-        var componentTypes  = new List<ComponentType>(heaps.Length);
-        var config          = GetArchetypeConfig(store);
-        var schema          = Static.EntitySchema;
-        foreach (var heap in heaps) {
-            componentTypes.Add(schema.components[heap.structIndex]);
-        }
-        var result = Archetype.CreateWithComponentTypeList(config, componentTypes, tags);
+        var config  = GetArchetypeConfig(store);
+        var result  = Archetype.CreateWithComponentTypes(config, archetype.componentTypes, tags);
         AddArchetype(store, result);
         return result;
     }
