@@ -172,6 +172,7 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
+    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>. </summary> 
     public      QueryChunks <T1>  Chunks                                      => new (this);
 }
 
@@ -196,6 +197,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
         throw ReadOnlyException(typeof(T));
     }
     
+    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2}"/>. </summary> 
     public      QueryChunks    <T1,T2>  Chunks                                      => new (this);
 }
 
@@ -223,6 +225,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
+    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3}"/>. </summary>
     public      QueryChunks    <T1, T2, T3>  Chunks         => new (this);
 }
 
@@ -253,6 +256,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
+    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4}"/>. </summary>
     public      QueryChunks    <T1, T2, T3, T4>  Chunks         => new (this);
 }
 
@@ -286,6 +290,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
+    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}"/>. </summary>
     public      QueryChunks    <T1, T2, T3, T4, T5>  Chunks         => new (this);
 }
 

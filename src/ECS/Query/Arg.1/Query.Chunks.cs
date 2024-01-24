@@ -30,7 +30,9 @@ public readonly struct Chunks<T1>
     }
 }
 
-
+/// <summary>
+/// Contains the <see cref="Chunk{T}"/>'s storing components and entities of an <see cref="ArchetypeQuery{T1}"/>.
+/// </summary>
 public readonly struct QueryChunks<T1>  : IEnumerable <Chunks<T1>>
     where T1 : struct, IComponent
 {
