@@ -162,10 +162,6 @@ public sealed class EntitySchema
         return structIndex;
     }
     
-    internal TagType GetTagAt(int index) {
-        return tags[index];
-    }
-    
     private string GetString() {
         return $"components: {components.Length - 1}  scripts: {scripts.Length - 1}  entity tags: {tags.Length - 1}";
     } 

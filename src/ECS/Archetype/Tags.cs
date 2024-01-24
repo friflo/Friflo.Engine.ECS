@@ -153,8 +153,9 @@ public struct Tags : IEnumerable<TagType>
         var sb          = new StringBuilder();
         var hasTypes    = false;
         sb.Append("Tags: [");
+        var tagTypes    = EntityStoreBase.Static.EntitySchema.tags;
         foreach (var index in bitSet) {
-            var tagType = EntityStoreBase.Static.EntitySchema.GetTagAt(index);
+            var tagType = tagTypes[index];
             sb.Append('#');
             sb.Append(tagType.Name);
             sb.Append(", ");

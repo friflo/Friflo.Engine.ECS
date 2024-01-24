@@ -56,6 +56,11 @@ public readonly struct  ComponentChanged
     
     [Browse(Never)]
     private readonly    StructHeap              oldHeap;        //  8
+
+    // use nested class to minimize noise in debugger
+    private static class Static {
+        internal static readonly ComponentType[] ComponentTypes = EntityStoreBase.Static.EntitySchema.components;
+    }
     #endregion
     
 #region properties
@@ -100,7 +105,7 @@ public readonly struct  ComponentChanged
         Store           = store as EntityStore; 
         EntityId        = entityId;
         Action          = action;
-        ComponentType   = EntityStoreBase.Static.EntitySchema.components[structIndex];
+        ComponentType   = Static.ComponentTypes[structIndex];
         this.oldHeap    = oldHeap;
     }
     
