@@ -80,9 +80,14 @@ public partial class EntityStoreBase
             return archetypeKey.archetype;
         }
         var config          = GetArchetypeConfig(store);
-        var componentTypes  = current.componentTypes;
-        componentTypes.bitSet.SetBit(structIndex);
-        var archetype = Archetype.CreateWithComponentTypes(config, componentTypes, current.tags);
+        var schema          = Static.EntitySchema;
+        var heaps           = current.Heaps();
+        var componentTypes  = new List<ComponentType>(heaps.Length + 1);
+        foreach (var heap in heaps) {
+            componentTypes.Add(schema.components[heap.structIndex]);
+        }
+        componentTypes.Add(schema.components[structIndex]);
+        var archetype = Archetype.CreateWithComponentTypeList(config, componentTypes, current.tags);
         AddArchetype(store, archetype);
         return archetype;
     }
