@@ -29,9 +29,12 @@ namespace Friflo.Engine.ECS;
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
+    /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
     public              Span<T>     Span            => new(values, 0, Length);
     
     private  readonly   T[]         values;     //  8
+    
+    /// <summary> Return the number of components in a <see cref="Chunk{T}"/>. </summary>
     public   readonly   int         Length;     //  4
     
     /// <summary>
@@ -113,6 +116,7 @@ public readonly struct Chunk<T>
         }
     }
     
+    /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>
     public ref T this[int index] {
         get {
             if (index < Length) {

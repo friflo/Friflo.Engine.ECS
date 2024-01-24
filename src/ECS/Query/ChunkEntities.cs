@@ -23,12 +23,16 @@ namespace Friflo.Engine.ECS;
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
+    /// <summary> Return the entity <see cref="Entity.Id"/>'s for the components in a <see cref="Chunk{T}"/>. </summary>
     public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, 0, Length);
     public   override   string              ToString()  => GetString();
     #endregion
 
 #region public / internal fields
+    /// <summary> The <see cref="Archetype"/> containing the <see cref="Chunk{T}"/> components. </summary>
     public   readonly   Archetype           Archetype;  //  8
+    
+    /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
     //
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
@@ -41,6 +45,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     }
     
 #region public methods
+    /// <summary>
+    /// Return the entity <see cref="Entity.Id"/> for a <see cref="Chunk{T}"/> component at the given <paramref name="index"/>.
+    /// </summary>
     public int this[int index] {
         get {
             if (index < Length) {
@@ -50,6 +57,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         }
     }
     
+    /// <summary>
+    /// Return the <see cref="Entity"/> for a <see cref="Chunk{T}"/> component at the given <paramref name="index"/>.
+    /// </summary>
     public Entity EntityAt(int index) {
         if (index < Length) {
             return new Entity(Archetype.entityStore, entityIds[index]);
@@ -87,6 +97,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     #endregion
 }
 
+/// <summary>
+/// Used to enumerate the <see cref="Entity"/>'s of <see cref="ChunkEntities"/>.
+/// </summary>
 public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
 {
     private readonly    int[]           entityIds;      //  8
@@ -102,6 +115,7 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     }
     
     // --- IEnumerator<>
+    /// <summary> The current <see cref="Entity"/> of the enumerator. </summary>
     public readonly Entity Current   => new Entity(store, entityIds[index]);
     
     // --- IEnumerator
