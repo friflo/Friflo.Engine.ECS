@@ -44,7 +44,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     internal ComponentTypes(in SignatureIndexes indexes)
     {
         switch (indexes.length) {
-            case 0: return;
+        //  case 0: return;     cannot happen: length is > 0
             case 1: goto Type1;
             case 2: goto Type2;
             case 3: goto Type3;
