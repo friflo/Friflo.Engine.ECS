@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -164,12 +166,17 @@ public static class Test_ComponentTypes
         var start   = Mem.GetAllocatedBytes();
         var types   = type1.ComponentTypes;
         var tags    = type1.Tags;
-        var count   = 10; // 100_000_000 ~ #PC: 1.356 ms
+        store.FindArchetype(types, tags);
+        Mem.AssertNoAlloc(start);
+        
+        var sw = new Stopwatch();
+        var count   = 10; // 100_000_000 ~ #PC: 1.163 ms
+        sw.Start();
         for (int n = 0; n < count; n++)
         {
             store.FindArchetype(types, tags);
         }
-        Mem.AssertNoAlloc(start);
+        Console.WriteLine($"FindArchetype - duration: {sw.ElapsedMilliseconds} ms");
     }
 }
 
