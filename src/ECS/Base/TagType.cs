@@ -14,25 +14,15 @@ internal static class TagType<T>
     where T : struct, ITag
 {
     // ReSharper disable once StaticMemberInGenericType
-    internal static readonly    int     TagIndex  = TagUtils.NewTagIndex(typeof(T), out TagName);
-    internal static readonly    string  TagName;
+    internal static readonly    int     TagIndex  = TagUtils.NewTagIndex(typeof(T));
 }
 
 internal static class TagUtils
 {
     private  static             int     _nextTagIndex             = 1;
 
-    internal static int NewTagIndex(Type type, out string tagName)
+    internal static int NewTagIndex(Type type)
     {
-        foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(TagNameAttribute)) {
-                continue;
-            }
-            var arg = attr.ConstructorArguments;
-            tagName = (string) arg[0].Value;
-            return _nextTagIndex++;
-        }
-        tagName = type.Name;
         return _nextTagIndex++;
     }
 }

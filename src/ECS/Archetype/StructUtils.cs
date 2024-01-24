@@ -18,17 +18,8 @@ internal static class StructUtils
 {
     private static  int     _nextStructIndex    = 1;
     
-    internal static int NewStructIndex(Type type, out string structKey)
+    internal static int NewStructIndex(Type type)
     {
-        foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(ComponentKeyAttribute)) {
-                continue;
-            }
-            var arg     = attr.ConstructorArguments;
-            structKey   = (string) arg[0].Value;
-            return _nextStructIndex++;
-        }
-        structKey = type.Name;
         return _nextStructIndex++;
     }
 }

@@ -10,8 +10,7 @@ namespace Friflo.Engine.ECS;
 internal static class ClassType<T>
     where T : Script
 {
-    internal static readonly    int     ScriptIndex  = ClassUtils.NewClassIndex(typeof(T), out ScriptKey);
-    internal static readonly    string  ScriptKey;
+    internal static readonly    int     ScriptIndex  = ClassUtils.NewClassIndex(typeof(T));
 }
 
 internal static class ClassUtils
@@ -20,17 +19,8 @@ internal static class ClassUtils
 
 //  private  const      int     MissingAttribute    = 0;
     
-    internal static int NewClassIndex(Type type, out string classKey)
+    internal static int NewClassIndex(Type type)
     {
-        foreach (var attr in type.CustomAttributes) {
-            if (attr.AttributeType != typeof(ComponentKeyAttribute)) {
-                continue;
-            }
-            var arg     = attr.ConstructorArguments;
-            classKey    = (string) arg[0].Value;
-            return _nextScriptIndex++;
-        }
-        classKey = type.Name;
         return _nextScriptIndex++;
     }
 }

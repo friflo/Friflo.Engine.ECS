@@ -94,7 +94,7 @@ internal static class SchemaUtils
         where T : struct, IComponent
     {
         var structIndex     = StructHeap<T>.StructIndex;
-        var componentKey    = StructHeap<T>.StructKey;
+        var componentKey    = GetComponentKey(typeof(T));
         var typeMapper      = typeStore.GetTypeMapper<T>();
         return new ComponentType<T>(componentKey, structIndex, typeMapper);
     }
@@ -103,16 +103,40 @@ internal static class SchemaUtils
         where T : Script, new()
     {
         var scriptIndex = ClassType<T>.ScriptIndex;
-        var scriptKey   = ClassType<T>.ScriptKey;
+        var scriptKey   = GetComponentKey(typeof(T));
         var typeMapper  = typeStore.GetTypeMapper<T>();
         return new ScriptType<T>(scriptKey, scriptIndex, typeMapper);
+    }
+    
+    private static string GetComponentKey(Type type)
+    {
+        foreach (var attr in type.CustomAttributes) {
+            if (attr.AttributeType != typeof(ComponentKeyAttribute)) {
+                continue;
+            }
+            var arg     = attr.ConstructorArguments;
+            return (string) arg[0].Value;
+        }
+        return type.Name;
     }
     
     internal static TagType CreateTagType<T>()
         where T : struct, ITag
     {
         var tagIndex    = TagType<T>.TagIndex;
-        var tagName     = TagType<T>.TagName;
+        var tagName     = GetTagName(typeof(T));
         return new TagType(tagName, typeof(T), tagIndex);
     }
+    
+    private static string GetTagName(Type type)
+    {
+        foreach (var attr in type.CustomAttributes) {
+            if (attr.AttributeType != typeof(TagNameAttribute)) {
+                continue;
+            }
+            var arg     = attr.ConstructorArguments;
+            return (string) arg[0].Value;
+        }
+        return type.Name;
+    }    
 }
