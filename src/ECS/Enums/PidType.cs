@@ -5,7 +5,7 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Specify the way how <see cref="Entity.Pid"/>'s are generated.
+/// Specify the way how an <see cref="EntityStore"/> generates entity <see cref="Entity.Pid"/>'s.
 /// </summary>
 public enum PidType
 {

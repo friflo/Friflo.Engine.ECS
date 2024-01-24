@@ -36,6 +36,10 @@ public partial class EntityStoreBase
         return new ArchetypeConfig (store, store.archsCount);
     }
     
+    /// <summary>
+    /// Return the <see cref="Archetype"/> storing the specified <paramref name="componentTypes"/> and <paramref name="tags"/>.<br/>
+    /// The <see cref="Archetype"/> is created if not already present.
+    /// </summary>
     public Archetype GetArchetype(in ComponentTypes componentTypes, in Tags tags = default)
     {
         searchKey.componentTypes    = componentTypes;
@@ -50,6 +54,10 @@ public partial class EntityStoreBase
         return archetype;
     }
     
+    /// <summary>
+    /// Return the <see cref="Archetype"/> storing the specified <paramref name="componentTypes"/> and <paramref name="tags"/>.<br/>
+    /// </summary>
+    /// <returns> null if the <see cref="Archetype"/> is not present. </returns>
     public Archetype FindArchetype(in ComponentTypes componentTypes, in Tags tags) {
         searchKey.componentTypes    = componentTypes;
         searchKey.tags              = tags;

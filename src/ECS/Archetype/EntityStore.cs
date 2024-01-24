@@ -15,19 +15,33 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Store the <see cref="IComponent"/>s and <see cref="ITag"/> for the <see cref="Entity"/>'s of an <see cref="EntityStore"/>.  
+/// </summary>
+/// <remarks>
+/// <see cref="EntityStoreBase"/> is separated as a base from <see cref="EntityStore"/> as is can be used for<br/>
+/// different entity store implementations like the <see cref="RawEntityStore"/>.
+/// </remarks>
 [CLSCompliant(true)]
 public abstract partial class EntityStoreBase
 {
 #region public properties
     /// <summary>Number of all entities stored in the entity store</summary>
     [Browse(Never)] public              int                     EntityCount         => nodesCount;
+    
+    /// <summary> Return the largest entity <see cref="Entity.Id"/> store in the entity store. </summary>
     [Browse(Never)] public              int                     NodeMaxId           => nodesMaxId;
+    
+    /// <summary> Return the <see cref="ECS.Systems"/> instance attached to the entity store. </summary>
                     public              Systems                 Systems             { get => systems; init => systems = value; }
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
                     public ReadOnlySpan<Archetype>              Archetypes          => new (archs, 0, archsCount);
+    
+    /// <summary> Returns the current number of <see cref="Archetypes"/> managed by the entity store. </summary>
     [Browse(Never)] public              int                     ArchetypeCount      => archsCount;
+    
     /// <summary>Return all <see cref="UniqueEntity"/>'s in the entity store </summary>
                     public              QueryEntities           UniqueEntities      => GetUniqueEntities();
 

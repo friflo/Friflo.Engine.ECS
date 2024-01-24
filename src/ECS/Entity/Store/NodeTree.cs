@@ -51,6 +51,10 @@ public partial class EntityStore
         }
     }
     
+    /// <summary>
+    /// Set the seed used to create random entity <see cref="Entity.Pid"/>'s for an entity store <br/>
+    /// created with <see cref="PidType"/> == <see cref="PidType.RandomPids"/>.
+    /// </summary>
     public void SetRandomSeed(int seed) {
         intern.randPid = new Random(seed);
     }
