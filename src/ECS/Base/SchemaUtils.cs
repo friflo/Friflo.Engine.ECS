@@ -6,8 +6,16 @@ using System.Collections.Generic;
 using System.Reflection;
 using Friflo.Json.Fliox.Mapper;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
+
+internal class SchemaTypes
+{
+    internal readonly   List<ComponentType> components  = new ();
+    internal readonly   List<ScriptType>    scripts     = new ();
+    internal readonly   List<TagType>       tags        = new ();
+}
 
 internal static class SchemaUtils
 {
@@ -17,52 +25,43 @@ internal static class SchemaUtils
         var assemblies      = assemblyLoader.GetEngineDependants();
         
         var dependants  = assemblyLoader.dependants;
+        var schemaTypes = new SchemaTypes();
         foreach (var assembly in assemblies) {
             var types           = AssemblyLoader.GetComponentTypes(assembly);
-            var schemaTypes     = new List<SchemaType>();
+            var engineTypes     = new List<SchemaType>();
             foreach (var type in types) {
-                var schemaType = CreateSchemaType(type, typeStore);
-                schemaTypes.Add(schemaType);
+                var schemaType = CreateSchemaType(type, typeStore, schemaTypes);
+                engineTypes.Add(schemaType);
             }
-            dependants.Add(new EngineDependant (assembly, schemaTypes));
+            dependants.Add(new EngineDependant (assembly, engineTypes));
         }
         Console.WriteLine(assemblyLoader);
-        
-        var components  = new List<ComponentType>();
-        var scripts     = new List<ScriptType>();
-        var tags        = new List<TagType>();
-        foreach (var dependant in dependants)
-        {
-            foreach (var type in dependant.Types)
-            {
-                switch (type.Kind) {
-                    case SchemaTypeKind.Script:      scripts.   Add((ScriptType)    type);  break;
-                    case SchemaTypeKind.Component:   components.Add((ComponentType) type);  break;
-                    case SchemaTypeKind.Tag:         tags.      Add((TagType)       type);  break;
-                }
-            }
-        }
-        return new EntitySchema(dependants, components, scripts, tags);
+        return new EntitySchema(dependants, schemaTypes);
     }
     
-    internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore)
+    internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore, SchemaTypes schemaTypes)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         
         if (type.IsValueType) {
             if (typeof(ITag).IsAssignableFrom(type))
             {
+                var tagIndex        = schemaTypes.tags.Count + 1;
+                var createParams    = new object[] { tagIndex };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
-                var tagType         = (TagType)genericMethod.Invoke(null, null);
+                var tagType         = (TagType)genericMethod.Invoke(null, createParams);
+                schemaTypes.tags.Add(tagType);
                 return tagType;
             }
             if (typeof(IComponent).IsAssignableFrom(type))
             {
-                var createParams    = new object[] { typeStore };
+                var structIndex     = schemaTypes.components.Count + 1;
+                var createParams    = new object[] { typeStore, structIndex };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
+                schemaTypes.components.Add(componentType);
                 return componentType;
             }
         } else {
@@ -80,29 +79,29 @@ internal static class SchemaUtils
             } */
             if (type.IsClass && type.IsSubclassOf(typeof(Script)))
             {
-                var createParams    = new object[] { typeStore };
+                var scriptIndex     = schemaTypes.scripts.Count + 1;
+                var createParams    = new object[] { typeStore, scriptIndex };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);
+                schemaTypes.scripts.Add(scriptType);
                 return scriptType;
             }
         }
         throw new InvalidOperationException($"Cannot create SchemaType for Type: {type}");
     }
     
-    internal static ComponentType CreateComponentType<T>(TypeStore typeStore)
+    internal static ComponentType CreateComponentType<T>(TypeStore typeStore, int structIndex)
         where T : struct, IComponent
     {
-        var structIndex     = StructHeap<T>.StructIndex;
         var componentKey    = GetComponentKey(typeof(T));
         var typeMapper      = typeStore.GetTypeMapper<T>();
         return new ComponentType<T>(componentKey, structIndex, typeMapper);
     }
     
-    internal static ScriptType CreateScriptType<T>(TypeStore typeStore)
+    internal static ScriptType CreateScriptType<T>(TypeStore typeStore, int scriptIndex)
         where T : Script, new()
     {
-        var scriptIndex = ClassType<T>.ScriptIndex;
         var scriptKey   = GetComponentKey(typeof(T));
         var typeMapper  = typeStore.GetTypeMapper<T>();
         return new ScriptType<T>(scriptKey, scriptIndex, typeMapper);
@@ -120,11 +119,10 @@ internal static class SchemaUtils
         return type.Name;
     }
     
-    internal static TagType CreateTagType<T>()
+    internal static TagType CreateTagType<T>(int tagIndex)
         where T : struct, ITag
     {
-        var tagIndex    = TagType<T>.TagIndex;
-        var tagName     = GetTagName(typeof(T));
+        var tagName = GetTagName(typeof(T));
         return new TagType(tagName, typeof(T), tagIndex);
     }
     

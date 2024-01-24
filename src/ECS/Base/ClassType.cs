@@ -15,12 +15,11 @@ internal static class ClassType<T>
 
 internal static class ClassUtils
 {
-    private  static     int     _nextScriptIndex    = 1;
-
 //  private  const      int     MissingAttribute    = 0;
     
     internal static int NewClassIndex(Type type)
     {
-        return _nextScriptIndex++;
+        var schema = EntityStore.GetEntitySchema();
+        return schema.scriptTypeByType[type].ScriptIndex;
     }
 }

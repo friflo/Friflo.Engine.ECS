@@ -19,10 +19,9 @@ internal static class TagType<T>
 
 internal static class TagUtils
 {
-    private  static             int     _nextTagIndex             = 1;
-
     internal static int NewTagIndex(Type type)
     {
-        return _nextTagIndex++;
+        var schema = EntityStore.GetEntitySchema();
+        return schema.TagTypeByType[type].TagIndex;
     }
 }

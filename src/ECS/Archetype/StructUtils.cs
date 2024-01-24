@@ -16,10 +16,9 @@ internal static class StructInfo
 
 internal static class StructUtils
 {
-    private static  int     _nextStructIndex    = 1;
-    
     internal static int NewStructIndex(Type type)
     {
-        return _nextStructIndex++;
+        var schema = EntityStore.GetEntitySchema();
+        return schema.ComponentTypeByType[type].StructIndex;
     }
 }

@@ -78,12 +78,12 @@ public sealed class EntitySchema
     #endregion
     
 #region internal methods
-    internal EntitySchema(
-        List<EngineDependant>   dependants,
-        List<ComponentType>     componentList,
-        List<ScriptType>        scriptList,
-        List<TagType>           tagList)
+    internal EntitySchema(List<EngineDependant> dependants, SchemaTypes schemaTypes)
     {
+        var componentList   = schemaTypes.components;
+        var scriptList      = schemaTypes.scripts;
+        var tagList         = schemaTypes.tags;
+        
         engineDependants        = dependants.ToArray();
         int count               = componentList.Count + scriptList.Count;
         schemaTypeByKey         = new Dictionary<string, SchemaType>(count);
@@ -106,7 +106,7 @@ public sealed class EntitySchema
             componentTypeByType.Add (componentType.Type,            componentType);
             components              [componentType.StructIndex] =   componentType;
         }
-        unresolvedType = components[StructHeap<Unresolved>.StructIndex];
+        unresolvedType = componentTypeByType[typeof(Unresolved)];
         foreach (var scriptType in scriptList) {
             schemaTypeByKey         [scriptType.ComponentKey] =     scriptType;    // SHOULD_USE_ADD
             scriptTypeByType.Add    (scriptType.Type,               scriptType);
