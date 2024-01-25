@@ -73,6 +73,8 @@ public static class Test_ComponentSchema
             var componentType = schema.GetComponentType<MyComponent1>();
             AreEqual("my1",                             componentType.ComponentKey);
             AreEqual("Component: [MyComponent1]",       componentType.ToString());
+            AreEqual(4,                                 componentType.StructSize);
+            IsTrue  (                                   componentType.IsBlittable);
         }
         // --- Engine.ECS types
         AssertBlittableComponent<Position>      (schema, true);
