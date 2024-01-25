@@ -353,7 +353,7 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ script methods ----------------------------------------
 #region script - methods
     /// <summary>Get the script of the passed <typeparamref name="TScript"/> <see cref="Type"/>.</summary>
-    /// <returns>null if the entity has no script of the passed <see cref="TScript"/> <see cref="Type"/>.</returns>
+    /// <returns>null if the entity has no script of the passed <typeparamref name="TScript"/> <see cref="Type"/>.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative.</remarks> 
     public TScript        GetScript<TScript>()        where TScript : Script, new() {
         return (TScript)EntityUtils.GetScript(this, typeof(TScript));
