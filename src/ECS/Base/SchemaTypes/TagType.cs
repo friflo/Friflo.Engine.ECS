@@ -26,4 +26,18 @@ public sealed class TagType : SchemaType
         TagName    = tagName;
         TagIndex   = tagIndex;
     }
+    
+    internal static int NewTagIndex(Type type)
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        return schema.TagTypeByType[type].TagIndex;
+    }
 }
+
+internal static class TagType<T>
+    where T : struct, ITag
+{
+    // ReSharper disable once StaticMemberInGenericType
+    internal static readonly    int     TagIndex  = TagType.NewTagIndex(typeof(T));
+}
+
