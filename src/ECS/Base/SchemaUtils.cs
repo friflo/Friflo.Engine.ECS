@@ -46,6 +46,7 @@ internal static class SchemaUtils
         if (type.IsValueType) {
             if (typeof(ITag).IsAssignableFrom(type))
             {
+                // type: ITag
                 var tagIndex        = schemaTypes.tags.Count + 1;
                 var createParams    = new object[] { tagIndex };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateTagType), flags);
@@ -56,6 +57,7 @@ internal static class SchemaUtils
             }
             if (typeof(IComponent).IsAssignableFrom(type))
             {
+                // type: IComponent
                 var structIndex     = schemaTypes.components.Count + 1;
                 var createParams    = new object[] { typeStore, structIndex };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateComponentType), flags);
@@ -65,20 +67,9 @@ internal static class SchemaUtils
                 return componentType;
             }
         } else {
-            /* foreach (var attr in type.CustomAttributes)
-            {
-                var attributeType = attr.AttributeType;
-                if (attributeType == typeof(ScriptAttribute))
-                {
-                    var createParams    = new object[] { typeStore };
-                    var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);
-                    var genericMethod   = method!.MakeGenericMethod(type);
-                    var scriptType      = (ScriptType)genericMethod.Invoke(null, createParams);
-                    return scriptType;
-                }
-            } */
             if (type.IsClass && type.IsSubclassOf(typeof(Script)))
             {
+                // type: Script
                 var scriptIndex     = schemaTypes.scripts.Count + 1;
                 var createParams    = new object[] { typeStore, scriptIndex };
                 var method          = typeof(SchemaUtils).GetMethod(nameof(CreateScriptType), flags);

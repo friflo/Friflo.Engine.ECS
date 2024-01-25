@@ -82,6 +82,6 @@ class TestComponent : Script
 }
 
 /// <summary> Used only to cover <see cref="TagUtils.NewTagIndex"/>,
-/// <see cref="StructUtils.NewStructIndex"/> and <see cref="ClassUtils.NewClassIndex"/></summary>
+/// <see cref="StructUtils.NewStructIndex"/> and <see cref="ScriptType.NewScriptIndex"/></summary>
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }

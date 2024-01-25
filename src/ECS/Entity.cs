@@ -354,11 +354,12 @@ public readonly struct Entity : IEquatable<Entity>
 #region script - methods
     /// <summary>Returns the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</summary>
     /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative</remarks> 
-    public T        GetScript<T>()        where T : Script  => (T)EntityUtils.GetScript(this, typeof(T));
-    
+    public T        GetScript<T>()        where T : Script, new() {
+        return (T)EntityUtils.GetScript(this, typeof(T));
+    }
     /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
     public bool     TryGetScript<T>(out T result)
-        where T : Script
+        where T : Script, new()
     {
         result = (T)EntityUtils.GetScript(this, typeof(T));
         return result != null;
@@ -367,12 +368,15 @@ public readonly struct Entity : IEquatable<Entity>
     /// If the entity contains a <see cref="Script"/> of the same type it is replaced.</summary>
     /// <returns>The <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative</remarks>
-    public TScript  AddScript<TScript>(TScript script)   where TScript : Script  => (TScript)EntityUtils.AddScript    (this, ClassType<TScript>.ScriptIndex, script);
-    
+    public TScript  AddScript<TScript>(TScript script)   where TScript : Script, new() {
+        return (TScript)EntityUtils.AddScript    (this, ScriptType<TScript>.Index, script);
+    }
     /// <summary>Remove the script with the given type from the entity.</summary>
     /// <returns>The <see cref="Script"/> previously added to the entity.</returns>
     /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative</remarks>
-    public T        RemoveScript<T>()        where T : Script  => (T)EntityUtils.RemoveScript (this, ClassType<T>.ScriptIndex);    
+    public T        RemoveScript<T>()        where T : Script, new() {
+        return (T)EntityUtils.RemoveScript (this, ScriptType<T>.Index);
+    }
     #endregion
 
 

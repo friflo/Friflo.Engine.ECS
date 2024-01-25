@@ -133,7 +133,7 @@ public sealed class EntitySchema
     /// Return the <see cref="ScriptType"/> of a class extending <see cref="Script"/>.
     /// </summary>
     public ScriptType GetScriptType<T>()
-        where T : Script
+        where T : Script, new()
     {
         scriptTypeByType.TryGetValue(typeof(T), out var result);
         return result;
