@@ -10,7 +10,7 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal class SchemaTypes
+internal sealed class SchemaTypes
 {
     internal readonly   List<ComponentType> components  = new ();
     internal readonly   List<ScriptType>    scripts     = new ();

@@ -21,7 +21,7 @@ internal abstract class SignalHandler
     }
 }
 
-internal class SignalHandler<TEvent> : SignalHandler where TEvent : struct 
+internal sealed class SignalHandler<TEvent> : SignalHandler where TEvent : struct 
 {
     internal readonly   Dictionary<int, Action<Signal<TEvent>>>  entityEvents; //  8
     
