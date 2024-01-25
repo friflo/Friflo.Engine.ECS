@@ -352,30 +352,41 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ script methods ----------------------------------------
 #region script - methods
-    /// <summary>Returns the <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise null</summary>
-    /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative</remarks> 
-    public T        GetScript<T>()        where T : Script, new() {
-        return (T)EntityUtils.GetScript(this, typeof(T));
+    /// <summary>Get the script of the passed <typeparamref name="TScript"/> <see cref="Type"/>.</summary>
+    /// <returns>null if the entity has no script of the passed <see cref="TScript"/> <see cref="Type"/>.</returns>
+    /// <remarks>Note: Use <see cref="EntityUtils.GetEntityScript"/> as non generic alternative.</remarks> 
+    public TScript        GetScript<TScript>()        where TScript : Script, new() {
+        return (TScript)EntityUtils.GetScript(this, typeof(TScript));
     }
-    /// <returns>true if the entity has a <see cref="Script"/> of Type <typeparamref name="T"/>. Otherwise false</returns>
-    public bool     TryGetScript<T>(out T result)
-        where T : Script, new()
+    /// <summary>Gets the script with the passed <typeparamref name="TScript"/> <see cref="Type"/>.</summary>
+    /// <returns>
+    /// Returns true if the entity has a script the passed <typeparamref name="TScript"/> <see cref="Type"/>.<br/>
+    /// Otherwise false.
+    /// </returns>
+    public bool     TryGetScript<TScript>(out TScript result)
+        where TScript : Script, new()
     {
-        result = (T)EntityUtils.GetScript(this, typeof(T));
+        result = (TScript)EntityUtils.GetScript(this, typeof(TScript));
         return result != null;
     }
     /// <summary>Add the given <paramref name="script"/> to the entity.<br/>
-    /// If the entity contains a <see cref="Script"/> of the same type it is replaced.</summary>
-    /// <returns>The <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative</remarks>
+    /// If the entity contains a script of the same <typeparamref name="TScript"/> <see cref="Type"/> it is replaced.</summary>
+    /// <returns>
+    /// The script with the passed <typeparamref name="TScript"/> <see cref="Type"/> previously added to the entity.<br/>
+    /// Return null if the entity had no script with the passed <typeparamref name="TScript"/> <see cref="Type"/>.
+    /// </returns>
+    /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative.</remarks>
     public TScript  AddScript<TScript>(TScript script)   where TScript : Script, new() {
         return (TScript)EntityUtils.AddScript    (this, ScriptType<TScript>.Index, script);
     }
-    /// <summary>Remove the script with the given type from the entity.</summary>
-    /// <returns>The <see cref="Script"/> previously added to the entity.</returns>
-    /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative</remarks>
-    public T        RemoveScript<T>()        where T : Script, new() {
-        return (T)EntityUtils.RemoveScript (this, ScriptType<T>.Index);
+    /// <summary>Remove the script with the given <typeparamref name="TScript"/> <see cref="Type"/> from the entity.</summary>
+    /// <returns>
+    /// The script the script with the passed <typeparamref name="TScript"/> <see cref="Type"/> previously added to the entity.<br/>
+    /// Or null if the entity has no script with the passed <typeparamref name="TScript"/> <see cref="Type"/>.
+    /// </returns>
+    /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative.</remarks>
+    public TScript        RemoveScript<TScript>()        where TScript : Script, new() {
+        return (TScript)EntityUtils.RemoveScript (this, ScriptType<TScript>.Index);
     }
     #endregion
 
