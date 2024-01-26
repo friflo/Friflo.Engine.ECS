@@ -48,14 +48,14 @@ public sealed class EntityCommandBuffer
         var store               = entityChanges.store;
         var nodes               = store.nodes;
         var defaultArchetype    = store.defaultArchetype;
-        foreach (var (entityId, change) in entityChanges.entities)
+        foreach (var (entityId, componentTypes) in entityChanges.entities)
         {
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value) {
+            if (curArchetype.componentTypes.bitSet.value == componentTypes.bitSet.value) {
                 continue;
             }
-            var newArchetype = store.GetArchetype(change.componentTypes);
+            var newArchetype = store.GetArchetype(componentTypes);
             if (curArchetype == defaultArchetype) {
                 node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
             } else {

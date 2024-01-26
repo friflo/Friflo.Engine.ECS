@@ -10,22 +10,15 @@ namespace Friflo.Engine.ECS;
 
 #pragma warning disable CS0618 // Type or member is obsolete  TODO remove
 
-internal struct ComponentChange
-{
-    internal        ComponentTypes  componentTypes; // 32
-    internal        int             lastCommand;    //  4
-
-    public override string          ToString() => $"change {componentTypes}";
-}
 
 internal readonly struct EntityChanges
 {
-    internal readonly   EntityStore                         store;
-    internal readonly   Dictionary<int, ComponentChange>    entities;
+    internal readonly   EntityStore                     store;
+    internal readonly   Dictionary<int, ComponentTypes> entities;
     
     internal EntityChanges(EntityStore store) {
         this.store  = store;
-        entities    = new Dictionary<int, ComponentChange>();
+        entities    = new Dictionary<int, ComponentTypes>();
     }
 }
 
@@ -61,31 +54,33 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         for (int n = 0; n < count; n++)
         {
             ref var command = ref commands[n];
-            entities.TryGetValue(command.entityId, out var change);
+            entities.TryGetValue(command.entityId, out var componentTypes);
             switch (command.change) {
-                case Remove:    change.componentTypes.bitSet.ClearBit(index);   break;
-                case Add:       change.componentTypes.bitSet.SetBit  (index);   break;
-                case Update:                                                    break;
+                case Remove:    componentTypes.bitSet.ClearBit(index);  break;
+                case Add:       componentTypes.bitSet.SetBit  (index);  break;
+                case Update:                                            break;
             }
-            change.lastCommand          = n;
-            entities[command.entityId]  = change;
+            entities[command.entityId]  = componentTypes;
         }
     }
         
     internal override void ExecuteCommands(EntityChanges changes)
     {
         var index       = structIndex;
-        var entities    = changes.entities;
         var commands    = componentCommands;
         var nodes       = changes.store.nodes;
-        // --- set new component values
-        foreach (var (entityId, change) in entities)
+        var count       = commandCount;
+        
+        // --- set new component values from: Add & Update commands
+        //     skip                           Remove commands
+        for (int n = 0; n < count; n++)
         {
-            ref var command = ref commands[change.lastCommand];
-            ref var node    = ref nodes[entityId];
+            ref var command = ref commands[n];
+            if (command.change == Remove) {
+                continue;
+            }
+            ref var node    = ref nodes[command.entityId]; 
             switch (command.change) {
-                case Remove:
-                    break;
                 case Add:
                     ((StructHeap<T>)node.archetype.heapMap[index]).components[node.compIndex] = command.component;
                     break;
