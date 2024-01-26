@@ -10,15 +10,22 @@ namespace Friflo.Engine.ECS;
 
 #pragma warning disable CS0618 // Type or member is obsolete  TODO remove
 
+internal struct ComponentChange
+{
+    internal        ComponentTypes  componentTypes; // 32
+    internal        int             lastCommand;    //  4
+
+    public override string          ToString() => $"change {componentTypes}";
+}
 
 internal readonly struct EntityChanges
 {
-    internal readonly   EntityStore                     store;
-    internal readonly   Dictionary<int, ComponentTypes> entities;
+    internal readonly   EntityStore                         store;
+    internal readonly   Dictionary<int, ComponentChange>    entities;
     
     internal EntityChanges(EntityStore store) {
         this.store  = store;
-        entities    = new Dictionary<int, ComponentTypes>();
+        entities    = new Dictionary<int, ComponentChange>();
     }
 }
 
@@ -50,30 +57,32 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         var count       = commandCount;
         
         // --- get new component types for changed entities
+        //     store the last command for an entity to execute
         for (int n = 0; n < count; n++)
         {
             ref var command = ref commands[n];
-            entities.TryGetValue(command.entityId, out var componentTypes);
+            entities.TryGetValue(command.entityId, out var change);
             switch (command.change) {
-                case Remove:    componentTypes.bitSet.ClearBit(index);  break;
-                case Add:       componentTypes.bitSet.SetBit  (index);  break;
-                case Update:    componentTypes.bitSet.SetBit  (index);  break;
+                case Remove:    change.componentTypes.bitSet.ClearBit(index);   break;
+                case Add:       change.componentTypes.bitSet.SetBit  (index);   break;
+                case Update:                                                    break;
             }
-            entities[command.entityId] = componentTypes;
+            change.lastCommand          = n;
+            entities[command.entityId]  = change;
         }
 
         // --- move changed entities to new archetype
         var store               = changes.store;
         var nodes               = store.nodes;
         var defaultArchetype    = store.defaultArchetype;
-        foreach (var (entityId, componentTypes) in changes.entities)
+        foreach (var (entityId, change) in changes.entities)
         {
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.value == componentTypes.bitSet.value) {
+            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value) {
                 continue;
             }
-            var newArchetype = store.GetArchetype(componentTypes);
+            var newArchetype = store.GetArchetype(change.componentTypes);
             if (curArchetype == defaultArchetype) {
                 node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
             } else {
@@ -83,10 +92,10 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         }
         
         // --- set new component values
-        for (int n = 0; n < count; n++)
+        foreach (var (entityId, change) in entities)
         {
-            ref var command = ref commands[n];
-            ref var node    = ref nodes[command.entityId];
+            ref var command = ref commands[change.lastCommand];
+            ref var node    = ref nodes[entityId];
             switch (command.change) {
                 case Remove:
                     break;

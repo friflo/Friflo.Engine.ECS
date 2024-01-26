@@ -17,8 +17,8 @@ public static class Test_CommandBuffer
         var ecb     = new EntityCommandBuffer(store);
         
         ecb.AddComponent(entity, new Position());
-        ecb.RemoveComponent<Position>(entity);
         ecb.SetComponent(entity, new Position());
+        // ecb.RemoveComponent<Position>(entity);
         
         ecb.Playback();
         
