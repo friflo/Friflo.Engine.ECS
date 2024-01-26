@@ -18,6 +18,7 @@ public sealed class EntityCommandBuffer
     private static readonly int             MaxStructIndex = EntityStoreBase.Static.EntitySchema.maxStructIndex;
     private static readonly ComponentType[] ComponentTypes = EntityStoreBase.Static.EntitySchema.components;
     
+#region general methods
     public EntityCommandBuffer(EntityStore store)
     {
         entityChanges       = new EntityChanges(store);
@@ -70,7 +71,7 @@ public sealed class EntityCommandBuffer
         }
     }
     
-    internal void Reset()
+    private void Reset()
     {
         var commands = componentCommands;
         foreach (var componentType in changedComponents)
@@ -80,6 +81,7 @@ public sealed class EntityCommandBuffer
         entityChanges.entities.Clear();
         changedComponents = default;
     }
+    #endregion
         
 #region component
     public void AddComponent<T>(int entityId, in T component)
