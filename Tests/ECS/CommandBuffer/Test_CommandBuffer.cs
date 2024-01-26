@@ -44,7 +44,7 @@ public static class Test_CommandBuffer
         IsFalse(entity.HasComponent<Position>());
         
         // --- archetype changes
-        /*
+
         entity.AddComponent(new Rotation());
         
         ecb.AddComponent(1, pos1);
@@ -52,6 +52,5 @@ public static class Test_CommandBuffer
         
         AreEqual(2, entity.Components.Count);
         AreEqual(1, entity.Position.x);
-        */
     }
 }

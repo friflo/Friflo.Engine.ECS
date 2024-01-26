@@ -50,6 +50,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         var entities    = changes.entities;
         var commands    = componentCommands;
         var count       = commandCount;
+        var nodes       = changes.store.nodes;
         
         // --- set new entity component types for Add/Remove commands
         for (int n = 0; n < count; n++)
@@ -59,8 +60,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 continue;
             }
             var entityId = command.entityId;
-            entities.TryGetValue(entityId, out var componentTypes);
-            
+            if (!entities.TryGetValue(entityId, out var componentTypes)) {
+                componentTypes = nodes[entityId].archetype.componentTypes;
+            }
             if (command.change == Remove) {
                 componentTypes.bitSet.ClearBit(index);
             } else {
