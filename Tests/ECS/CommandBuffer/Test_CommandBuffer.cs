@@ -1,4 +1,6 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using System.Diagnostics;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -57,19 +59,23 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_IncreaseCommands()
     {
-        int count       = 10;
+        int count       = 10; // 1_000_000 ~ #PC: 215 ms
         var store       = new EntityStore(PidType.UsePidAsId);
         var ecb         = new EntityCommandBuffer(store);
         var entities    = new Entity[count];
+        store.EnsureCapacity(count);
         for (int n = 0; n < count; n++) {
             entities[n] = store.CreateEntity();
         }
-        for (int n = 0; n < 10; n++) {
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int n = 0; n < count; n++) {
             ecb.AddComponent<Position>(n + 1, new Position(n + 1, 0, 0));    
         }
         ecb.Playback();
+        Console.WriteLine($"EntityCommandBuffer.AddComponent() - duration: {sw.ElapsedMilliseconds} ms");
         
-        for (int n = 0; n < 10; n++) {
+        for (int n = 0; n < count; n++) {
             AreEqual(n + 1, entities[n].Position.x);
         }
     }
