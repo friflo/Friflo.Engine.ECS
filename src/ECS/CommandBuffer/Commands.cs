@@ -55,21 +55,18 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         for (int n = 0; n < count; n++)
         {
             ref var command = ref commands[n];
-            var entityId    = command.entityId;
-            entities.TryGetValue(entityId, out var componentTypes);
-            switch (command.change)
-            {
-                case Remove:
-                    componentTypes.bitSet.ClearBit(index);
-                    entities[entityId] = componentTypes;
-                    break;
-                case Add:
-                    componentTypes.bitSet.SetBit  (index);
-                    entities[entityId] = componentTypes;
-                    break;
-                case Update:
-                    break;
+            if (command.change == Update) {
+                continue;
             }
+            var entityId = command.entityId;
+            entities.TryGetValue(entityId, out var componentTypes);
+            
+            if (command.change == Remove) {
+                componentTypes.bitSet.ClearBit(index);
+            } else {
+                componentTypes.bitSet.SetBit  (index);
+            }
+            entities[entityId] = componentTypes;
         }
     }
         
