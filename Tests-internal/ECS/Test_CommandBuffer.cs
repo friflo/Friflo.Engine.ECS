@@ -22,22 +22,5 @@ public static class Test_CommandBuffer
         var commands        = componentType.CreateComponentCommands();
         AreEqual("[Position] commands - Count: 0", commands.ToString());
     }
-    
-    #pragma warning disable CS0618 // Type or member is obsolete  TODO remove
-    [Test]
-    public static void Test_CommandBuffer_IncreaseCommands()
-    {
-        int count   = 10;
-        var store   = new EntityStore(PidType.UsePidAsId);
-        for (int n = 0; n < count; n++) {
-            store.CreateEntity();
-        }
-        var ecb     = new EntityCommandBuffer(store);
-        
-        for (int n = 0; n < 10; n++) {
-            ecb.AddComponent<Position>(n + 1);    
-        }
-        
-    }
 }
 

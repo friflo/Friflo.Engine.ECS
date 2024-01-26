@@ -55,10 +55,29 @@ public static class Test_CommandBuffer
     }
     
     [Test]
+    public static void Test_CommandBuffer_IncreaseCommands()
+    {
+        int count       = 10;
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var ecb         = new EntityCommandBuffer(store);
+        var entities    = new Entity[count];
+        for (int n = 0; n < count; n++) {
+            entities[n] = store.CreateEntity();
+        }
+        for (int n = 0; n < 10; n++) {
+            ecb.AddComponent<Position>(n + 1, new Position(n + 1, 0, 0));    
+        }
+        ecb.Playback();
+        
+        for (int n = 0; n < 10; n++) {
+            AreEqual(n + 1, entities[n].Position.x);
+        }
+    }
+    
+    [Test]
     public static void Test_CommandBuffer_tags()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var entity  = store.CreateEntity(1);
         var ecb     = new EntityCommandBuffer(store);
         
         // TODO not implemented
