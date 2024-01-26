@@ -29,6 +29,8 @@ public abstract class ComponentType : SchemaType
     internal abstract   bool        AddEntityComponent     (Entity entity);
     internal abstract   bool        AddEntityComponentValue(Entity entity, object value);
     
+    internal abstract   ComponentCommands  CreateComponentCommands();
+    
     protected ComponentType(string componentKey, int structIndex, Type type, int byteSize)
         : base (componentKey, type, Component)
     {
@@ -68,6 +70,14 @@ internal sealed class ComponentType<T> : ComponentType
     
     internal override StructHeap CreateHeap() {
         return new StructHeap<T>(StructIndex, typeMapper);
+    }
+    
+    internal override ComponentCommands CreateComponentCommands()
+    {
+        var commands = new ComponentCommands<T>(StructIndex) {
+            componentCommands = new ComponentCommand<T>[4]
+        };
+        return commands;
     }
     
     private static              int GetByteSize()   => Unsafe.SizeOf<T>();
