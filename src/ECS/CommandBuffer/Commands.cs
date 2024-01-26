@@ -34,11 +34,11 @@ internal abstract class ComponentCommands
     internal            int             commandCount;       //  4
     internal readonly   int             structIndex;        //  4
     
-    internal abstract void Playback(EntityChanges changes);
+    internal abstract void UpdateComponentTypes (EntityChanges changes);
+    internal abstract void ExecuteCommands      (EntityChanges changes);
     
     internal ComponentCommands(int structIndex) {
         this.structIndex = structIndex;
-        
     }
 }
 
@@ -49,14 +49,14 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     
     internal ComponentCommands(int structIndex) : base(structIndex) { }
     
-    internal override void Playback(EntityChanges changes)
+    internal override void UpdateComponentTypes(EntityChanges changes)
     {
         var index       = structIndex;
         var entities    = changes.entities;
         var commands    = componentCommands;
         var count       = commandCount;
         
-        // --- get new component types for changed entities
+        // --- set new component types for changed entities
         //     store the last command for an entity to execute
         for (int n = 0; n < count; n++)
         {
@@ -70,27 +70,14 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             change.lastCommand          = n;
             entities[command.entityId]  = change;
         }
-
-        // --- move changed entities to new archetype
-        var store               = changes.store;
-        var nodes               = store.nodes;
-        var defaultArchetype    = store.defaultArchetype;
-        foreach (var (entityId, change) in changes.entities)
-        {
-            ref var node        = ref nodes[entityId];
-            var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value) {
-                continue;
-            }
-            var newArchetype = store.GetArchetype(change.componentTypes);
-            if (curArchetype == defaultArchetype) {
-                node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
-            } else {
-                node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
-            }
-            node.archetype  = newArchetype;
-        }
+    }
         
+    internal override void ExecuteCommands(EntityChanges changes)
+    {
+        var index       = structIndex;
+        var entities    = changes.entities;
+        var commands    = componentCommands;
+        var nodes       = changes.store.nodes;
         // --- set new component values
         foreach (var (entityId, change) in entities)
         {

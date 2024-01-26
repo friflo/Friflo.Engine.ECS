@@ -32,7 +32,36 @@ public sealed class EntityCommandBuffer
         foreach (var componentType in changedComponents)
         {
             var commands = componentCommands[componentType.StructIndex];
-            commands.Playback(entityChanges);
+            commands.UpdateComponentTypes(entityChanges);
+        }
+        MoveEntitiesToNewArchetypes();
+        
+        foreach (var componentType in changedComponents)
+        {
+            var commands = componentCommands[componentType.StructIndex];
+            commands.ExecuteCommands(entityChanges);
+        }
+    }
+    
+    private void MoveEntitiesToNewArchetypes()
+    {
+        var store               = entityChanges.store;
+        var nodes               = store.nodes;
+        var defaultArchetype    = store.defaultArchetype;
+        foreach (var (entityId, change) in entityChanges.entities)
+        {
+            ref var node        = ref nodes[entityId];
+            var curArchetype    = node.Archetype;
+            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value) {
+                continue;
+            }
+            var newArchetype = store.GetArchetype(change.componentTypes);
+            if (curArchetype == defaultArchetype) {
+                node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
+            } else {
+                node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
+            }
+            node.archetype  = newArchetype;
         }
     }
     
