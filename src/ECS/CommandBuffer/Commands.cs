@@ -49,8 +49,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         var commands    = componentCommands;
         var count       = commandCount;
         
-        // --- set new component types for changed entities
-        //     store the last command for an entity to execute
+        // --- set new entity component types for Add/Remove commands
         for (int n = 0; n < count; n++)
         {
             ref var command = ref commands[n];
