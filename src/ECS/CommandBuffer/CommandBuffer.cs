@@ -92,45 +92,30 @@ public sealed class EntityCommandBuffer
     public void AddComponent<T>(int entityId)
         where T : struct, IComponent
     {
-        AddComponent<T>(entityId, default);
+        ChangeComponent<T>(default, entityId,ComponentChangedAction.Add);
     }
     
     public void AddComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
-        var structIndex = StructHeap<T>.StructIndex;
-        _changedComponents.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
-        var count       = commands.commandCount; 
-        if (count == commands.componentCommands.Length) {
-            ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
-        }
-        commands.commandCount   = count + 1;
-        ref var command         = ref commands.componentCommands[count];
-        command.change          = ComponentChangedAction.Add;
-        command.entityId        = entityId;
-        command.component       = component;
-    }
-    
-    public void RemoveComponent<T>(int entityId)
-        where T : struct, IComponent
-    {
-        var structIndex = StructHeap<T>.StructIndex;
-        _changedComponents.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
-        var count       = commands.commandCount; 
-        if (count == commands.componentCommands.Length) {
-            ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
-        }
-        commands.commandCount   = count + 1;
-        ref var command         = ref commands.componentCommands[count];
-        command.change          = ComponentChangedAction.Remove;
-        command.entityId        = entityId;
+        ChangeComponent(component,  entityId, ComponentChangedAction.Add);
     }
     
     public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
+        ChangeComponent(component,  entityId, ComponentChangedAction.Update);
+    }
+    
+    public void RemoveComponent<T>(int entityId)
+        where T : struct, IComponent
+    {
+        ChangeComponent<T>(default, entityId, ComponentChangedAction.Remove);
+    }
+    
+    private void ChangeComponent<T>(in T component, int entityId, ComponentChangedAction change)
+        where T : struct, IComponent
+    {
         var structIndex = StructHeap<T>.StructIndex;
         _changedComponents.bitSet.SetBit(structIndex);
         var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
@@ -140,7 +125,7 @@ public sealed class EntityCommandBuffer
         }
         commands.commandCount   = count + 1;
         ref var command         = ref commands.componentCommands[count];
-        command.change          = ComponentChangedAction.Update;
+        command.change          = change;
         command.entityId        = entityId;
         command.component       = component;
     }
