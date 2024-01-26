@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS;
 public sealed class EntityCommandBuffer
 {
     private readonly    ComponentCommands[] _componentCommands;
-    private             ComponentTypes      changedComponents;
+    private             ComponentTypes      _changedComponents;
     private readonly    EntityChanges       entityChanges;
 
     
@@ -31,7 +31,8 @@ public sealed class EntityCommandBuffer
     
     public void Playback()
     {
-        var componentCommands = _componentCommands;
+        var componentCommands   = _componentCommands;
+        var changedComponents   = _changedComponents;
         foreach (var componentType in changedComponents)
         {
             var commands = componentCommands[componentType.StructIndex];
@@ -76,12 +77,12 @@ public sealed class EntityCommandBuffer
     private void Reset()
     {
         var commands = _componentCommands;
-        foreach (var componentType in changedComponents)
+        foreach (var componentType in _changedComponents)
         {
             commands[componentType.StructIndex].commandCount = 0;
         }
         entityChanges.entities.Clear();
-        changedComponents = default;
+        _changedComponents = default;
     }
     #endregion
         
@@ -90,7 +91,7 @@ public sealed class EntityCommandBuffer
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        changedComponents.bitSet.SetBit(structIndex);
+        _changedComponents.bitSet.SetBit(structIndex);
         var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
@@ -107,7 +108,7 @@ public sealed class EntityCommandBuffer
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        changedComponents.bitSet.SetBit(structIndex);
+        _changedComponents.bitSet.SetBit(structIndex);
         var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
@@ -123,7 +124,7 @@ public sealed class EntityCommandBuffer
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        changedComponents.bitSet.SetBit(structIndex);
+        _changedComponents.bitSet.SetBit(structIndex);
         var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
