@@ -67,6 +67,7 @@ public sealed class EntityCommandBuffer
             } else {
                 if (newArchetype == defaultArchetype) {
                     Archetype.MoveLastComponentsTo(curArchetype, node.compIndex);
+                    node.compIndex = 0;
                 } else {
                     node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
                 }
