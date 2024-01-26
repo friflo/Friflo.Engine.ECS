@@ -86,15 +86,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             if (command.change == Remove) {
                 continue;
             }
+            // set new component value for Add & Update command
             ref var node    = ref nodes[command.entityId]; 
-            switch (command.change) {
-                case Add:
-                    ((StructHeap<T>)node.archetype.heapMap[index]).components[node.compIndex] = command.component;
-                    break;
-                case Update:
-                    ((StructHeap<T>)node.archetype.heapMap[index]).components[node.compIndex] = command.component;
-                    break;
-            }
+            ((StructHeap<T>)node.archetype.heapMap[index]).components[node.compIndex] = command.component;
         }
     }
 }
