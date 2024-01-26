@@ -41,6 +41,7 @@ public sealed class EntityCommandBuffer
             var commands = componentCommands[componentType.StructIndex];
             commands.ExecuteCommands(entityChanges);
         }
+        Reset();
     }
     
     private void MoveEntitiesToNewArchetypes()
@@ -59,7 +60,11 @@ public sealed class EntityCommandBuffer
             if (curArchetype == defaultArchetype) {
                 node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
             } else {
-                node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
+                if (newArchetype == defaultArchetype) {
+                    Archetype.MoveLastComponentsTo(curArchetype, node.compIndex);
+                } else {
+                    node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
+                }
             }
             node.archetype  = newArchetype;
         }
@@ -77,7 +82,7 @@ public sealed class EntityCommandBuffer
     }
         
 #region component
-    public void AddComponent<T>(Entity entity, in T component)
+    public void AddComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -90,11 +95,11 @@ public sealed class EntityCommandBuffer
         commands.commandCount   = count + 1;
         ref var command         = ref commands.componentCommands[count];
         command.change          = ComponentChangedAction.Add;
-        command.entityId        = entity.Id;
+        command.entityId        = entityId;
         command.component       = component;
     }
     
-    public void RemoveComponent<T>(Entity entity)
+    public void RemoveComponent<T>(int entityId)
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -107,10 +112,10 @@ public sealed class EntityCommandBuffer
         commands.commandCount   = count + 1;
         ref var command         = ref commands.componentCommands[count];
         command.change          = ComponentChangedAction.Remove;
-        command.entityId        = entity.Id;
+        command.entityId        = entityId;
     }
     
-    public void SetComponent<T>(Entity entity, in T component)
+    public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -123,7 +128,7 @@ public sealed class EntityCommandBuffer
         commands.commandCount   = count + 1;
         ref var command         = ref commands.componentCommands[count];
         command.change          = ComponentChangedAction.Update;
-        command.entityId        = entity.Id;
+        command.entityId        = entityId;
         command.component       = component;
     }
     #endregion
