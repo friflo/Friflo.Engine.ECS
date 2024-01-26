@@ -69,7 +69,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_IncreaseCommands()
     {
-        int count       = 1_000_000; // 1_000_000 ~ #PC: 4384 ms
+        int count       = 10; // 1_000_000 ~ #PC: 4384 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];

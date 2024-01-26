@@ -24,9 +24,13 @@ public partial class EntityStore
     
     internal StoreCommandBuffers GetCommandBuffers()
     {
-        if (commandBufferPool.TryPop(out var buffers)) {
-            return buffers;
+        lock (commandBufferPool)
+        {
+            if (commandBufferPool.TryPop(out var buffers)) {
+                return buffers;
+            }
         }
+
         var commands = new ComponentCommands[StoreCommandBuffers.MaxStructIndex];
         for (int n = 1; n < StoreCommandBuffers.MaxStructIndex; n++) {
             commands[n] = StoreCommandBuffers.ComponentTypes[n].CreateComponentCommands();
@@ -39,9 +43,11 @@ public partial class EntityStore
     
     internal void ReturnCommandBuffers(ComponentCommands[] componentCommands, in EntityChanges entityChanges)
     {
-        commandBufferPool.Push(new StoreCommandBuffers {
-            componentCommands   = componentCommands,
-            entityChanges       = entityChanges
-        });
+        lock (commandBufferPool) {
+            commandBufferPool.Push(new StoreCommandBuffers {
+                componentCommands   = componentCommands,
+                entityChanges       = entityChanges
+            });
+        }
     }
 }
