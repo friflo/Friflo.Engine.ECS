@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -76,7 +77,7 @@ public static class Test_CommandBuffer
         Console.WriteLine($"EntityCommandBuffer.AddComponent() - duration: {sw.ElapsedMilliseconds} ms");
         
         for (int n = 0; n < count; n++) {
-            AreEqual(n + 1, entities[n].Position.x);
+            Mem.AreEqual(n + 1, entities[n].Position.x);
         }
     }
     
