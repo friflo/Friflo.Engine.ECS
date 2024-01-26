@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+// ReSharper disable InconsistentNaming
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
@@ -10,7 +11,7 @@ namespace Friflo.Engine.ECS;
 [Obsolete("Experimental")]
 public sealed class EntityCommandBuffer
 {
-    private readonly    ComponentCommands[] componentCommands;
+    private readonly    ComponentCommands[] _componentCommands;
     private             ComponentTypes      changedComponents;
     private readonly    EntityChanges       entityChanges;
 
@@ -22,14 +23,15 @@ public sealed class EntityCommandBuffer
     public EntityCommandBuffer(EntityStore store)
     {
         entityChanges       = new EntityChanges(store);
-        componentCommands   = new ComponentCommands[MaxStructIndex];
+        _componentCommands   = new ComponentCommands[MaxStructIndex];
         for (int n = 1; n < MaxStructIndex; n++) {
-            componentCommands[n] = ComponentTypes[n].CreateComponentCommands();
+            _componentCommands[n] = ComponentTypes[n].CreateComponentCommands();
         }
     }
     
     public void Playback()
     {
+        var componentCommands = _componentCommands;
         foreach (var componentType in changedComponents)
         {
             var commands = componentCommands[componentType.StructIndex];
@@ -73,7 +75,7 @@ public sealed class EntityCommandBuffer
     
     private void Reset()
     {
-        var commands = componentCommands;
+        var commands = _componentCommands;
         foreach (var componentType in changedComponents)
         {
             commands[componentType.StructIndex].commandCount = 0;
@@ -89,7 +91,7 @@ public sealed class EntityCommandBuffer
     {
         var structIndex = StructHeap<T>.StructIndex;
         changedComponents.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)componentCommands[structIndex];
+        var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
@@ -106,7 +108,7 @@ public sealed class EntityCommandBuffer
     {
         var structIndex = StructHeap<T>.StructIndex;
         changedComponents.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)componentCommands[structIndex];
+        var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
@@ -122,7 +124,7 @@ public sealed class EntityCommandBuffer
     {
         var structIndex = StructHeap<T>.StructIndex;
         changedComponents.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)componentCommands[structIndex];
+        var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
