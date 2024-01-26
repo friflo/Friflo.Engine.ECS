@@ -16,12 +16,15 @@ public static class Test_CommandBuffer
         var entity  = store.CreateEntity();
         var ecb     = new EntityCommandBuffer(store);
         
-        ecb.AddComponent(entity, new Position());
-        ecb.SetComponent(entity, new Position());
+        var pos1 = new Position(1, 1, 1);
+        var pos2 = new Position(2, 2, 2);
+        ecb.AddComponent(entity, pos1);
+        ecb.SetComponent(entity, pos2);
         // ecb.RemoveComponent<Position>(entity);
         
         ecb.Playback();
         
-        AreSame(entity.Archetype, store.GetArchetype(ComponentTypes.Get<Position>()));
+        AreEqual(pos2.x,            entity.GetComponent<Position>().x);
+        AreSame(entity.Archetype,   store.GetArchetype(ComponentTypes.Get<Position>()));
     }
 }
