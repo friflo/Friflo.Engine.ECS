@@ -9,25 +9,22 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+#pragma warning disable CS0618 // Type or member is obsolete
+
+
 [Obsolete("Experimental")]
-public sealed class EntityCommandBuffer
+public struct EntityCommandBuffer
 {
     private readonly    ComponentCommands[] _componentCommands;
-    private             ComponentTypes      _changedComponents;
     private readonly    EntityChanges       entityChanges;
-
-    
-    private static readonly int             MaxStructIndex = EntityStoreBase.Static.EntitySchema.maxStructIndex;
-    private static readonly ComponentType[] ComponentTypes = EntityStoreBase.Static.EntitySchema.components;
+    private             ComponentTypes      _changedComponents;
     
 #region general methods
     public EntityCommandBuffer(EntityStore store)
     {
-        entityChanges       = new EntityChanges(store);
-        _componentCommands   = new ComponentCommands[MaxStructIndex];
-        for (int n = 1; n < MaxStructIndex; n++) {
-            _componentCommands[n] = ComponentTypes[n].CreateComponentCommands();
-        }
+        var buffers         = store.GetCommandBuffers();
+        entityChanges       = buffers.entityChanges;
+        _componentCommands  = buffers.componentCommands;
     }
     
     public void Playback()
@@ -47,6 +44,7 @@ public sealed class EntityCommandBuffer
             commands.ExecuteCommands(entityChanges);
         }
         Reset();
+        entityChanges.store.ReturnCommandBuffers(componentCommands, entityChanges);
     }
     
     private void MoveEntitiesToNewArchetypes()
