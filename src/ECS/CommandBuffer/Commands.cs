@@ -24,8 +24,8 @@ internal readonly struct EntityChanges
 
 internal abstract class ComponentCommands
 {
-    internal            int     commandCount;
-    internal readonly   int     structIndex;
+    internal            int             commandCount;       //  4
+    internal readonly   int             structIndex;        //  4
     
     internal abstract void Playback(EntityChanges changes);
     
@@ -38,7 +38,7 @@ internal abstract class ComponentCommands
 internal sealed class ComponentCommands<T> : ComponentCommands
     where T : struct, IComponent
 {
-    internal    ComponentCommand<T>[]   componentCommands;
+    internal    ComponentCommand<T>[]   componentCommands;  //  8
     
     internal ComponentCommands(int structIndex) : base(structIndex) { }
     
@@ -63,8 +63,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         }
 
         // --- move changed entities to new archetype
-        var store = changes.store;
-        var nodes = store.nodes;
+        var store               = changes.store;
+        var nodes               = store.nodes;
+        var defaultArchetype    = store.defaultArchetype;
         foreach (var (entityId, componentTypes) in changes.entities)
         {
             ref var node        = ref nodes[entityId];
@@ -73,7 +74,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 continue;
             }
             var newArchetype = store.GetArchetype(componentTypes);
-            if (curArchetype == store.defaultArchetype) {
+            if (curArchetype == defaultArchetype) {
                 node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
             } else {
                 node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
@@ -104,9 +105,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
 internal struct ComponentCommand<T>
     where T : struct, IComponent
 {
-    internal    ComponentChangedAction  change;
-    internal    int                     entityId;
-    internal    T                       component;
+    internal    ComponentChangedAction  change;     //  4
+    internal    int                     entityId;   //  4
+    internal    T                       component;  //  sizeof(T)
 
     public override string ToString() => $"entity: {entityId} - {change} {typeof(T).Name}";
 }
