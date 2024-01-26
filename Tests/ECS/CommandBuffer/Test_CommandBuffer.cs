@@ -26,7 +26,7 @@ public static class Test_CommandBuffer
         AreEqual(pos2.x,            entity.GetComponent<Position>().x);
         AreSame(entity.Archetype,   store.GetArchetype(ComponentTypes.Get<Position>()));
         
-        ecb.AddComponent(1, pos1);
+        ecb.AddComponent   <Position>(1);
         ecb.RemoveComponent<Position>(1);
         
         ecb.Playback();

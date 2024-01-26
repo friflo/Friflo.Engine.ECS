@@ -88,6 +88,12 @@ public sealed class EntityCommandBuffer
     #endregion
         
 #region component
+    public void AddComponent<T>(int entityId)
+        where T : struct, IComponent
+    {
+        AddComponent<T>(entityId, default);
+    }
+    
     public void AddComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
