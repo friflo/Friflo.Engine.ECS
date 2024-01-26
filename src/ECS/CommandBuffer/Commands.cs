@@ -8,8 +8,6 @@ using static Friflo.Engine.ECS.ComponentChangedAction;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-#pragma warning disable CS0618 // Type or member is obsolete  TODO remove
-
 
 internal readonly struct EntityChanges
 {

@@ -5,12 +5,12 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.CommandBuffer;
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete TODO remove
 
 public static class Test_CommandBuffer
 {
     [Test]
-    public static void Test_CommandBuffer_queue_commands()
+    public static void Test_CommandBuffer_components()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity(1);
@@ -52,5 +52,17 @@ public static class Test_CommandBuffer
         
         AreEqual(2, entity.Components.Count);
         AreEqual(1, entity.Position.x);
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_tags()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity(1);
+        var ecb     = new EntityCommandBuffer(store);
+        
+        // TODO not implemented
+        ecb.AddTag   <TestTag>(1);
+        ecb.RemoveTag<TestTag>(1);
     }
 }

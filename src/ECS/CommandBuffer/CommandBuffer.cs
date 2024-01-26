@@ -133,13 +133,13 @@ public sealed class EntityCommandBuffer
     
 #region tag
     
-    public void AddTag<T>(Entity entity)
+    public void AddTag<T>(int entityId)
         where T : struct, ITag
     {
         
     }
     
-    public void RemoveTag<T>(Entity entity)
+    public void RemoveTag<T>(int entityId)
         where T : struct, ITag
     {
         
