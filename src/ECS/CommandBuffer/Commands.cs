@@ -85,8 +85,13 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 continue;
             }
             // set new component value for Add & Update commands
-            ref var node    = ref nodes[command.entityId]; 
-            ((StructHeap<T>)node.archetype.heapMap[index]).components[node.compIndex] = command.component;
+            ref var node    = ref nodes[command.entityId];
+            var heap        = node.archetype.heapMap[index];
+            if (heap == null) {
+                // case: RemoveComponent<>() was called after AddComponent<>() or SetComponent<>() on same entity
+                continue;
+            }
+            ((StructHeap<T>)heap).components[node.compIndex] = command.component;
         }
     }
 }
