@@ -2,8 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-// ReSharper disable InconsistentNaming
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
