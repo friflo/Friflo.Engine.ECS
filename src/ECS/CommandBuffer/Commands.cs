@@ -78,15 +78,14 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         var nodes       = changes.store.nodes;
         var count       = commandCount;
         
-        // --- set new component values from: Add & Update commands
-        //     skip                           Remove commands
         for (int n = 0; n < count; n++)
         {
             ref var command = ref commands[n];
             if (command.change == Remove) {
+                // skip Remove commands
                 continue;
             }
-            // set new component value for Add & Update command
+            // set new component value for Add & Update commands
             ref var node    = ref nodes[command.entityId]; 
             ((StructHeap<T>)node.archetype.heapMap[index]).components[node.compIndex] = command.component;
         }
