@@ -39,7 +39,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     where T : struct, IComponent
 {
     internal    ComponentCommand<T>[]   componentCommands;  //  8
-    
+
+    public override string              ToString() => $"[{typeof(T).Name}] commands - Count: {commandCount}";
+
     internal ComponentCommands(int structIndex) : base(structIndex) { }
     
     internal override void UpdateComponentTypes(EntityChanges changes)
