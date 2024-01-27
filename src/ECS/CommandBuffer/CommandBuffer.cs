@@ -48,28 +48,30 @@ public struct CommandBuffer
             return;
         }
         var playback = store.GetPlayback();
-        
-        ExecuteTagCommands(playback, tagCommands);
+        try {
+            ExecuteTagCommands(playback, tagCommands);
 
-        var changedComponents   = _changedComponents;
-        
-        foreach (var componentType in changedComponents)
-        {
-            var commands = componentCommands[componentType.StructIndex];
-            commands.UpdateComponentTypes(playback);
+            var changedComponents   = _changedComponents;
+            
+            foreach (var componentType in changedComponents)
+            {
+                var commands = componentCommands[componentType.StructIndex];
+                commands.UpdateComponentTypes(playback);
+            }
+            
+            MoveEntitiesToNewArchetypes(playback);
+            
+            foreach (var componentType in changedComponents)
+            {
+                var commands = componentCommands[componentType.StructIndex];
+                commands.ExecuteCommands(playback);
+            }
         }
-        
-        MoveEntitiesToNewArchetypes(playback);
-        
-        foreach (var componentType in changedComponents)
-        {
-            var commands = componentCommands[componentType.StructIndex];
-            commands.ExecuteCommands(playback);
+        finally {
+            Reset(componentCommands);
+            playback.entityChanges.Clear();
+            store.ReturnCommandBuffers(componentCommands, tagCommands);
         }
-
-        Reset(componentCommands);
-        playback.entityChanges.Clear();
-        store.ReturnCommandBuffers(componentCommands, tagCommands);
     }
     
     private void ExecuteTagCommands(Playback playback, TagCommand[] tagCommands)
