@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
@@ -76,10 +77,12 @@ public struct CommandBuffer
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan(); 
         var commands        = tagCommands.AsSpan(0, _tagCommandsCount);
+        
         foreach (var tagCommand in commands)
         {
             var entityId = tagCommand.entityId;
-            if (!entityChanges.TryGetValue(entityId, out var change)) {
+            ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool exists);
+            if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
@@ -89,7 +92,6 @@ public struct CommandBuffer
             } else {
                 change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
-            entityChanges[entityId] = change;
         }
     }
     

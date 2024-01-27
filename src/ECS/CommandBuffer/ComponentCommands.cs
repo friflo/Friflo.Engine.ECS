@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 using static Friflo.Engine.ECS.ComponentChangedAction;
 
 // ReSharper disable once CheckNamespace
@@ -43,7 +44,8 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 continue;
             }
             var entityId = command.entityId;
-            if (!entityChanges.TryGetValue(entityId, out var change)) {
+            ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool exists);
+            if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
@@ -53,7 +55,6 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             } else {
                 change.componentTypes.bitSet.SetBit  (index);
             }
-            entityChanges[entityId] = change;
         }
     }
         

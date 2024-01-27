@@ -78,7 +78,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_component_commands()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 5278 ms
+        int count       = 10; // 1_000_000 ~ #PC: 4892 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];
@@ -141,7 +141,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_tag_commands()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 3885 ms
+        int count       = 10; // 1_000_000 ~ #PC: 3568 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];
@@ -157,7 +157,7 @@ public static class Test_CommandBuffer
             QueueTagCommands(store, count);
         }
         Mem.AssertNoAlloc(start);
-        Console.WriteLine($"EntityCommandBuffer.AddComponent() - duration: {sw.ElapsedMilliseconds} ms");
+        Console.WriteLine($"EntityCommandBuffer.AddTag() - duration: {sw.ElapsedMilliseconds} ms");
         
         for (int n = 0; n < count; n++) {
             Mem.IsTrue(entities[n].Tags.Has<TestTag>());
