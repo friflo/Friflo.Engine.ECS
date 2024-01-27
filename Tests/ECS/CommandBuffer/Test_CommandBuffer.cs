@@ -119,5 +119,8 @@ public static class Test_CommandBuffer
         // TODO not implemented
         ecb.AddTag   <TestTag>(1);
         ecb.RemoveTag<TestTag>(1);
+        
+        ecb.AddTags   (1, Tags.Get<TestTag2>());
+        ecb.RemoveTags(1, Tags.Get<TestTag2>());
     }
 }

@@ -154,10 +154,24 @@ public struct CommandBuffer
         ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Add);
     }
     
+    public void AddTags(int entityId, in Tags tags)
+    {
+        foreach (var tag in tags) {
+            ChangeTag(entityId, tag.TagIndex, TagChange.Add);
+        }
+    }
+    
     public void RemoveTag<T>(int entityId)
         where T : struct, ITag
     {
         ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Remove);
+    }
+    
+    public void RemoveTags(int entityId, in Tags tags)
+    {
+        foreach (var tag in tags) {
+            ChangeTag(entityId, tag.TagIndex, TagChange.Remove);
+        }
     }
     
     private void ChangeTag(int entityId, int tagIndex, TagChange change)
