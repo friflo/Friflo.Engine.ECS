@@ -54,7 +54,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         var index           = structIndex;
         var commands        = componentCommands.AsSpan(0, commandCount);
         var entityChanges   = playback.entityChanges;
-        var nodes           = playback.store.nodes;
+        var nodes           = playback.store.nodes.AsSpan();
         
         // --- set new entity component types for Add/Remove commands
         foreach (ref var command in commands)
@@ -81,7 +81,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     {
         var index       = structIndex;
         var commands    = componentCommands.AsSpan(0, commandCount);
-        var nodes       = playback.store.nodes;
+        var nodes       = playback.store.nodes.AsSpan();
         
         foreach (ref var command in commands)
         {

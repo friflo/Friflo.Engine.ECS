@@ -74,7 +74,7 @@ public struct CommandBuffer
     private void ExecuteTagCommands(Playback playback, TagCommand[] tagCommands)
     {
         var entityChanges   = playback.entityChanges;
-        var nodes           = playback.store.nodes; 
+        var nodes           = playback.store.nodes.AsSpan(); 
         var commands        = tagCommands.AsSpan(0, _tagCommandsCount);
         foreach (var tagCommand in commands)
         {
@@ -96,7 +96,7 @@ public struct CommandBuffer
     private static void MoveEntitiesToNewArchetypes(Playback playback)
     {
         var store               = playback.store;
-        var nodes               = store.nodes;
+        var nodes               = store.nodes.AsSpan();
         var defaultArchetype    = store.defaultArchetype;
         foreach (var (entityId, change) in playback.entityChanges)
         {
