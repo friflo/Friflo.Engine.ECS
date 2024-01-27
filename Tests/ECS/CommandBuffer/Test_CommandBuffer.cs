@@ -114,13 +114,27 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_tags()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
-        
-        // TODO not implemented
-        ecb.AddTag   <TestTag>(1);
-        ecb.RemoveTag<TestTag>(1);
-        
-        ecb.AddTags   (1, Tags.Get<TestTag2>());
-        ecb.RemoveTags(1, Tags.Get<TestTag2>());
+        var entity  = store.CreateEntity();
+        {
+            var ecb     = new CommandBuffer(store);
+            ecb.AddTag   <TestTag>(1);
+            ecb.Playback();
+            IsTrue(entity.Tags.Has<TestTag>());
+        } {
+            var ecb     = new CommandBuffer(store);
+            ecb.RemoveTag   <TestTag>(1);
+            ecb.Playback();
+            IsFalse(entity.Tags.Has<TestTag>());
+        } {
+            var ecb     = new CommandBuffer(store);
+            ecb.AddTags   (1, Tags.Get<TestTag2>());
+            ecb.Playback();
+            IsTrue(entity.Tags.Has<TestTag2>());
+        } {
+            var ecb     = new CommandBuffer(store);
+            ecb.RemoveTags(1, Tags.Get<TestTag2>());
+            ecb.Playback();
+            IsFalse(entity.Tags.Has<TestTag2>());
+        }
     }
 }
