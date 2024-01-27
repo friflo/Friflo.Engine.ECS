@@ -29,25 +29,31 @@ public struct CommandBuffer
     
     public void Playback()
     {
-        var entityChanges       = store.GetPlayback();
+        // early out if there is nothing to change
+        if (_changedComponents.Count == 0) {
+            store.ReturnCommandBuffers(_componentCommands);
+            return;
+        }
+        var playback            = store.GetPlayback();
         var componentCommands   = _componentCommands;
         var changedComponents   = _changedComponents;
         
         foreach (var componentType in changedComponents)
         {
             var commands = componentCommands[componentType.StructIndex];
-            commands.UpdateComponentTypes(entityChanges);
+            commands.UpdateComponentTypes(playback);
         }
-        MoveEntitiesToNewArchetypes(entityChanges);
+        
+        MoveEntitiesToNewArchetypes(playback);
         
         foreach (var componentType in changedComponents)
         {
             var commands = componentCommands[componentType.StructIndex];
-            commands.ExecuteCommands(entityChanges);
+            commands.ExecuteCommands(playback);
         }
         Reset();
-        entityChanges.entities.Clear();
-        entityChanges.store.ReturnCommandBuffers(componentCommands);
+        playback.entities.Clear();
+        store.ReturnCommandBuffers(componentCommands);
     }
     
     private static void MoveEntitiesToNewArchetypes(Playback playback)

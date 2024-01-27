@@ -18,6 +18,14 @@ public static class Test_CommandBuffer
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity(1);
+
+        // --- empty ECB
+        {
+            var ecb = new CommandBuffer(store);
+            ecb.Playback();
+            AreEqual(1, store.EntityCount);
+        }
+        
         var pos1 = new Position(1, 1, 1);
         var pos2 = new Position(2, 2, 2);
         {
