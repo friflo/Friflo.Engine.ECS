@@ -245,4 +245,39 @@ public static class Test_CommandBuffer
             AreEqual(0, store.EntityCount);
         }
     }
+    
+    [Test]
+    public static void Test_CommandBuffer_grow_CreateEntity()
+    {
+        int count       = 10; // 1_000_000 ~ #PC: 5002 ms
+        var store       = new EntityStore(PidType.UsePidAsId);
+
+        store.EnsureCapacity(count);
+        QueueEntityCommands(store, count);
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int i = 0; i < 100; i++)
+        { 
+            var store2   = new EntityStore(PidType.UsePidAsId);
+            store2.EnsureCapacity(count);
+            // var start   = Mem.GetAllocatedBytes();
+            QueueEntityCommands(store2, count);
+            // Mem.AssertNoAlloc(start);  TODO check allocation
+        }
+        Console.WriteLine($"EntityCommandBuffer.AddTag() - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    private static void QueueEntityCommands(EntityStore store, int count) {
+
+        var ecb     = new CommandBuffer(store);
+        for (int n = 0; n < count; n++) {
+            ecb.CreateEntity();    
+        }
+        for (int n = 0; n < count; n++) {
+            ecb.DeleteEntity(n + 1);    
+        }
+        ecb.Playback();
+        Mem.AreEqual(0, store.EntityCount);
+    }
 }
