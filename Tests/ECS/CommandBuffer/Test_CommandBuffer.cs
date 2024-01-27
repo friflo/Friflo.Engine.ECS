@@ -6,7 +6,8 @@ using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.CommandBuffer;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS.Buffer;
 
 #pragma warning disable CS0618 // Type or member is obsolete TODO remove
 
@@ -20,7 +21,7 @@ public static class Test_CommandBuffer
         var pos1 = new Position(1, 1, 1);
         var pos2 = new Position(2, 2, 2);
         {
-            var ecb = new EntityCommandBuffer(store);
+            var ecb = new CommandBuffer(store);
             
             // --- structural change: add Position
             ecb.AddComponent(1, pos1);
@@ -34,7 +35,7 @@ public static class Test_CommandBuffer
         
         // --- handle remove after add
         {
-            var ecb = new EntityCommandBuffer(store);
+            var ecb = new CommandBuffer(store);
             ecb.AddComponent   <Position>(1);
             ecb.RemoveComponent<Position>(1);
             
@@ -45,7 +46,7 @@ public static class Test_CommandBuffer
         
         // --- no structural change
         {
-            var ecb = new EntityCommandBuffer(store);
+            var ecb = new CommandBuffer(store);
             ecb.AddComponent   <Position>(1);
             ecb.RemoveComponent<Position>(1);
             
@@ -57,7 +58,7 @@ public static class Test_CommandBuffer
         // --- archetype changes
         {
             entity.AddComponent(new Rotation());
-            var ecb = new EntityCommandBuffer(store);
+            var ecb = new CommandBuffer(store);
             ecb.AddComponent(1, pos1);
             ecb.Playback();
             
@@ -94,7 +95,7 @@ public static class Test_CommandBuffer
     
     private static void QueueCommands(EntityStore store, int count) {
 
-        var ecb = new EntityCommandBuffer(store);
+        var ecb = new CommandBuffer(store);
         for (int n = 0; n < count; n++) {
             ecb.AddComponent(n + 1, new Position(n + 1, 0, 0));    
         }
@@ -105,7 +106,7 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_tags()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new EntityCommandBuffer(store);
+        var ecb     = new CommandBuffer(store);
         
         // TODO not implemented
         ecb.AddTag   <TestTag>(1);

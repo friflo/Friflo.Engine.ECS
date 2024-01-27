@@ -13,14 +13,14 @@ namespace Friflo.Engine.ECS;
 
 
 [Obsolete("Experimental")]
-public struct EntityCommandBuffer
+public struct CommandBuffer
 {
     private readonly    ComponentCommands[] _componentCommands;
     private readonly    EntityChanges       entityChanges;
     private             ComponentTypes      _changedComponents;
     
 #region general methods
-    public EntityCommandBuffer(EntityStore store)
+    public CommandBuffer(EntityStore store)
     {
         var buffers         = store.GetCommandBuffers();
         entityChanges       = buffers.entityChanges;
