@@ -6,8 +6,8 @@ namespace Friflo.Engine.ECS;
 
 internal enum EntityCommandAction
 {
-    Add     = 0,
-    Remove  = 1
+    Create  = 0,
+    Delete  = 1
 }
 
 internal struct EntityCommand

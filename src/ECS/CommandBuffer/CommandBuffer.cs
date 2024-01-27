@@ -107,7 +107,7 @@ public struct CommandBuffer
         foreach (var command in commands)
         {
             var entityId = command.entityId;
-            if (command.action == EntityCommandAction.Add) {
+            if (command.action == EntityCommandAction.Create) {
                 store.CreateEntity(entityId);
                 continue;
             }
@@ -304,7 +304,7 @@ public struct CommandBuffer
         _entityCommandCount = count + 1;
         ref var command     = ref _entityCommands[count];
         command.entityId    = id;
-        command.action      = EntityCommandAction.Add;
+        command.action      = EntityCommandAction.Create;
         return id;
     }
     
@@ -317,7 +317,7 @@ public struct CommandBuffer
         _entityCommandCount = count + 1;
         ref var command     = ref _entityCommands[count];
         command.entityId    = entityId;
-        command.action      = EntityCommandAction.Remove;
+        command.action      = EntityCommandAction.Delete;
     }
     #endregion
 }
