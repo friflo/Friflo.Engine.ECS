@@ -2,12 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 
-using System.Collections.Generic;
-using static Friflo.Engine.ECS.ComponentChangedAction;
-
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
-
 
 internal enum TagChange : byte
 {

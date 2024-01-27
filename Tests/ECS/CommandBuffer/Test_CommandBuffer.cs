@@ -76,7 +76,7 @@ public static class Test_CommandBuffer
     }
     
     [Test]
-    public static void Test_CommandBuffer_IncreaseCommands()
+    public static void Test_CommandBuffer_grow_component_commands()
     {
         int count       = 10; // 1_000_000 ~ #PC: 4384 ms
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -86,12 +86,12 @@ public static class Test_CommandBuffer
         for (int n = 0; n < count; n++) {
             entities[n] = store.CreateEntity();
         }
-        QueueCommands(store, count);
+        QueueComponentCommands(store, count);
         var sw = new Stopwatch();
         sw.Start();
         var start = Mem.GetAllocatedBytes();
         for (int i = 0; i < 100; i++) {
-            QueueCommands(store, count);
+            QueueComponentCommands(store, count);
         }
         Mem.AssertNoAlloc(start);
         Console.WriteLine($"EntityCommandBuffer.AddComponent() - duration: {sw.ElapsedMilliseconds} ms");
@@ -101,7 +101,7 @@ public static class Test_CommandBuffer
         }
     }
     
-    private static void QueueCommands(EntityStore store, int count) {
+    private static void QueueComponentCommands(EntityStore store, int count) {
 
         var ecb = new CommandBuffer(store);
         for (int n = 0; n < count; n++) {
@@ -136,6 +136,41 @@ public static class Test_CommandBuffer
             ecb.Playback();
             IsFalse(entity.Tags.Has<TestTag2>());
         }
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_grow_tag_commands()
+    {
+        int count       = 10; // 1_000_000 ~ #PC: 3885 ms
+        var store       = new EntityStore(PidType.UsePidAsId);
+
+        var entities    = new Entity[count];
+        store.EnsureCapacity(count);
+        for (int n = 0; n < count; n++) {
+            entities[n] = store.CreateEntity();
+        }
+        QueueTagCommands(store, count);
+        var sw = new Stopwatch();
+        sw.Start();
+        var start = Mem.GetAllocatedBytes();
+        for (int i = 0; i < 100; i++) {
+            QueueTagCommands(store, count);
+        }
+        Mem.AssertNoAlloc(start);
+        Console.WriteLine($"EntityCommandBuffer.AddComponent() - duration: {sw.ElapsedMilliseconds} ms");
+        
+        for (int n = 0; n < count; n++) {
+            Mem.IsTrue(entities[n].Tags.Has<TestTag>());
+        }
+    }
+    
+    private static void QueueTagCommands(EntityStore store, int count) {
+
+        var ecb = new CommandBuffer(store);
+        for (int n = 0; n < count; n++) {
+            ecb.AddTag<TestTag>(n + 1);    
+        }
+        ecb.Playback();
     }
     
     [Test]
