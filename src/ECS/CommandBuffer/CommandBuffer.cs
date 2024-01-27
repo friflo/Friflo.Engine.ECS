@@ -61,28 +61,27 @@ public struct CommandBuffer
             commands.ExecuteCommands(playback);
         }
         Reset();
-        playback.entities.Clear();
-        playback.tags.Clear();
+        playback.entityChanges.Clear();
         store.ReturnCommandBuffers(componentCommands, _tagCommands);
     }
     
     private void ExecuteTagCommands(Playback playback)
     {
-        var entityTags  = playback.tags;
-        var nodes       = playback.store.nodes; 
-        var tagCommands = _tagCommands.AsSpan(0, _tagCommandsCount);
+        var entityChanges   = playback.entityChanges;
+        var nodes           = playback.store.nodes; 
+        var tagCommands     = _tagCommands.AsSpan(0, _tagCommandsCount);
         foreach (var tagCommand in tagCommands)
         {
             var entityId = tagCommand.entityId;
-            if (!entityTags.TryGetValue(entityId, out var tags)) {
-                tags = nodes[entityId].archetype.tags;
+            if (!entityChanges.TryGetValue(entityId, out var change)) {
+                change.tags = nodes[entityId].archetype.tags;
             }
             if (tagCommand.change == TagChange.Add) {
-                tags.bitSet.SetBit(tagCommand.tagIndex);
+                change.tags.bitSet.SetBit(tagCommand.tagIndex);
             } else {
-                tags.bitSet.ClearBit(tagCommand.tagIndex);
+                change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
-            entityTags[entityId] = tags;
+            entityChanges[entityId] = change;
         }
     }
     
@@ -91,14 +90,14 @@ public struct CommandBuffer
         var store               = playback.store;
         var nodes               = store.nodes;
         var defaultArchetype    = store.defaultArchetype;
-        foreach (var (entityId, componentTypes) in playback.entities)
+        foreach (var (entityId, change) in playback.entityChanges)
         {
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.value == componentTypes.bitSet.value) {
+            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value) {
                 continue;
             }
-            var newArchetype = store.GetArchetype(componentTypes);
+            var newArchetype = store.GetArchetype(change.componentTypes);
             if (curArchetype == defaultArchetype) {
                 node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
             } else {

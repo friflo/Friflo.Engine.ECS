@@ -9,16 +9,20 @@ using static Friflo.Engine.ECS.ComponentChangedAction;
 namespace Friflo.Engine.ECS;
 
 
+internal struct EntityChange
+{
+    internal ComponentTypes componentTypes;
+    internal Tags           tags;
+}
+
 internal readonly struct Playback
 {
-    internal readonly   EntityStore                     store;      //  8
-    internal readonly   Dictionary<int, ComponentTypes> entities;   //  8
-    internal readonly   Dictionary<int, Tags>           tags;       //  8
+    internal readonly   EntityStore                     store;          //  8
+    internal readonly   Dictionary<int, EntityChange>   entityChanges;  //  8
     
     internal Playback(EntityStore store) {
-        this.store  = store;
-        entities    = new Dictionary<int, ComponentTypes>();
-        tags        = new Dictionary<int, Tags>();
+        this.store      = store;
+        entityChanges   = new Dictionary<int, EntityChange>();
     }
 }
 
@@ -46,11 +50,11 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     
     internal override void UpdateComponentTypes(Playback playback)
     {
-        var index       = structIndex;
-        var commands    = componentCommands;
-        var count       = commandCount;
-        var entities    = playback.entities;
-        var nodes       = playback.store.nodes;
+        var index           = structIndex;
+        var commands        = componentCommands;
+        var count           = commandCount;
+        var entityChanges   = playback.entityChanges;
+        var nodes           = playback.store.nodes;
         
         // --- set new entity component types for Add/Remove commands
         for (int n = 0; n < count; n++)
@@ -60,15 +64,15 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 continue;
             }
             var entityId = command.entityId;
-            if (!entities.TryGetValue(entityId, out var componentTypes)) {
-                componentTypes = nodes[entityId].archetype.componentTypes;
+            if (!entityChanges.TryGetValue(entityId, out var change)) {
+                change.componentTypes = nodes[entityId].archetype.componentTypes;
             }
             if (command.change == Remove) {
-                componentTypes.bitSet.ClearBit(index);
+                change.componentTypes.bitSet.ClearBit(index);
             } else {
-                componentTypes.bitSet.SetBit  (index);
+                change.componentTypes.bitSet.SetBit  (index);
             }
-            entities[entityId] = componentTypes;
+            entityChanges[entityId] = change;
         }
     }
         
