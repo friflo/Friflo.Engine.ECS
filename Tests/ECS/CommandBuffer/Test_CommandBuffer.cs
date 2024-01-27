@@ -22,6 +22,7 @@ public static class Test_CommandBuffer
         // --- empty ECB
         {
             var ecb = new CommandBuffer(store);
+            AreEqual(0, ecb.ComponentCommandsCount);
             ecb.Playback();
             AreEqual(1, store.EntityCount);
         }
@@ -33,9 +34,13 @@ public static class Test_CommandBuffer
             
             // --- structural change: add Position
             ecb.AddComponent(1, pos1);
+            AreEqual(1, ecb.ComponentCommandsCount);
             ecb.SetComponent(1, pos2);
+            AreEqual(2, ecb.ComponentCommandsCount);
+            AreEqual("component commands: 2  tag commands: 0", ecb.ToString());
             //
             ecb.Playback();
+            AreEqual(0, ecb.ComponentCommandsCount);
         }
         
         AreEqual(pos2.x,            entity.GetComponent<Position>().x);
@@ -117,8 +122,11 @@ public static class Test_CommandBuffer
         var entity  = store.CreateEntity();
         {
             var ecb     = new CommandBuffer(store);
+            AreEqual(0, ecb.TagCommandsCount);
             ecb.AddTag   <TestTag>(1);
+            AreEqual(1, ecb.TagCommandsCount);
             ecb.Playback();
+            AreEqual(0, ecb.TagCommandsCount);
             IsTrue(entity.Tags.Has<TestTag>());
         } {
             var ecb     = new CommandBuffer(store);

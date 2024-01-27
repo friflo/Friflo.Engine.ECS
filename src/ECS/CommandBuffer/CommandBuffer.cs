@@ -4,6 +4,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -17,6 +18,15 @@ namespace Friflo.Engine.ECS;
 [Obsolete("Experimental")]
 public struct CommandBuffer
 {
+#region public properties
+    public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommands);
+    public              int                 TagCommandsCount        => _tagCommandsCount;
+    
+    public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}"; 
+
+    #endregion
+    
+#region private fields
     private             ComponentTypes      _changedComponents;
     private             ComponentCommands[] _componentCommands;
     //
@@ -25,6 +35,7 @@ public struct CommandBuffer
     private             int                 _tagCommandsCount;
     //
     private readonly    EntityStore         store;
+    #endregion
     
 #region general methods
     public CommandBuffer(EntityStore store)
@@ -144,6 +155,14 @@ public struct CommandBuffer
         _changedComponents  = default;
         _changedTags        = default;
         _tagCommandsCount   = 0;
+    }
+    
+    private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {
+        int count = 0;
+        foreach (var componentType in _changedComponents) {
+            count += componentCommands[componentType.StructIndex].commandCount;
+        }
+        return count;
     }
     #endregion
         
