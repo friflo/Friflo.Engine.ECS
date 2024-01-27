@@ -18,20 +18,27 @@ public struct CommandBuffer
 {
     private readonly    ComponentCommands[] _componentCommands;
     private             ComponentTypes      _changedComponents;
+    //
+    private             ComponentTypes      _changedTags;
+    private             TagCommand[]        _tagCommands;
+    private             int                 _tagCommandsCount;
+    //
     private readonly    EntityStore         store;
     
 #region general methods
     public CommandBuffer(EntityStore store)
     {
         this.store          = store;
-        _componentCommands  = store.GetCommandBuffers();
+        var buffers         = store.GetCommandBuffers();
+        _componentCommands  = buffers.componentCommands;
+        _tagCommands        = buffers.tagCommands;
     }
     
     public void Playback()
     {
         // early out if there is nothing to change
-        if (_changedComponents.Count == 0) {
-            store.ReturnCommandBuffers(_componentCommands);
+        if (_changedComponents.Count == 0 && _changedTags.Count == 0) {
+            store.ReturnCommandBuffers(_componentCommands, _tagCommands);
             return;
         }
         var playback            = store.GetPlayback();
@@ -53,7 +60,7 @@ public struct CommandBuffer
         }
         Reset();
         playback.entities.Clear();
-        store.ReturnCommandBuffers(componentCommands);
+        store.ReturnCommandBuffers(componentCommands, _tagCommands);
     }
     
     private static void MoveEntitiesToNewArchetypes(Playback playback)
@@ -90,7 +97,9 @@ public struct CommandBuffer
         {
             commands[componentType.StructIndex].commandCount = 0;
         }
-        _changedComponents = default;
+        _changedComponents  = default;
+        _changedTags        = default;
+        _tagCommandsCount   = 0;
     }
     #endregion
         
@@ -142,14 +151,31 @@ public struct CommandBuffer
     public void AddTag<T>(int entityId)
         where T : struct, ITag
     {
-        
+        ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Add);
     }
     
     public void RemoveTag<T>(int entityId)
         where T : struct, ITag
     {
-        
+        ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Add);
     }
+    
+    private void ChangeTag(int entityId, int tagIndex, TagChange change)
+    {
+        _changedTags.bitSet.SetBit(tagIndex);
+        
+        var count = _tagCommandsCount; 
+        if (count == _tagCommands.Length) {
+            ArrayUtils.Resize(ref _tagCommands, 2 * count);
+        }
+        _tagCommandsCount   = count + 1;
+        ref var tagCommand  = ref _tagCommands[count];
+        tagCommand.tagIndex = (byte)tagIndex;
+        tagCommand.entityId = entityId;
+        tagCommand.change   = TagChange.Add;
+    }
+    
+    
 #endregion
 }
 

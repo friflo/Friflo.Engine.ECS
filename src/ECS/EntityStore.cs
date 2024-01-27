@@ -113,7 +113,7 @@ public sealed partial class EntityStore : EntityStoreBase
         //
         internal    ArchetypeQuery                                  entityQuery;            //  8
         //
-        internal    Stack<ComponentCommands[]>                      commandBufferPool;      //  8
+        internal    Stack<CommandBuffers>                           commandBufferPool;      //  8
         internal    Playback                                        playback;               // 16
 
                     
