@@ -226,6 +226,18 @@ public static class Test_CommandBuffer
     }
     
     [Test]
+    public static void Test_CommandBuffer_entity_error()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = new CommandBuffer(store);
+        ecb.DeleteEntity(42);
+        var e = Throws<InvalidOperationException>(() => {
+            ecb.Playback();    
+        });
+        AreEqual("Playback - entity not found. Delete entity, entity: 42", e!.Message);
+    }
+    
+    [Test]
     public static void Test_CommandBuffer_CreateEntity()
     {
         var store   = new EntityStore(PidType.UsePidAsId);

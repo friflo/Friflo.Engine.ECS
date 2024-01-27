@@ -106,12 +106,18 @@ public struct CommandBuffer
         var commands        = entityCommands.AsSpan(0, count);
         foreach (var command in commands)
         {
+            var entityId = command.entityId;
             if (command.action == EntityCommandAction.Add) {
-                store.CreateEntity(command.entityId);
-            } else {
+                store.CreateEntity(entityId);
+                continue;
+            }
+            var nodes = store.nodes;
+            if (entityId < nodes.Length && nodes[entityId].Flags.HasFlag(NodeFlags.Created)) {
                 var entity = store.GetEntityById(command.entityId);
                 entity.DeleteEntity();
+                continue;
             }
+            throw new InvalidOperationException($"Playback - entity not found. Delete entity, entity: {entityId}");
         }
     }
     
