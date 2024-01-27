@@ -183,5 +183,9 @@ public static class Test_CommandBuffer
         Throws<NullReferenceException>(() => {
             ecb.AddComponent<Position>(1);
         });
+        
+        Throws<NullReferenceException>(() => {
+            ecb.AddTag<TestTag>(1);
+        });
     }
 }
