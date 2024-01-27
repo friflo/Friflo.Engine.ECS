@@ -158,13 +158,16 @@ public static class Test_CommandBuffer
             entities[n] = store.CreateEntity();
         }
         QueueTagCommands(store, count);
+        
+        var start = Mem.GetAllocatedBytes();
+        QueueTagCommands(store, count);
+        Mem.AssertNoAlloc(start);
+        
         var sw = new Stopwatch();
         sw.Start();
-        var start = Mem.GetAllocatedBytes();
         for (int i = 0; i < 100; i++) {
             QueueTagCommands(store, count);
         }
-        Mem.AssertNoAlloc(start);
         Console.WriteLine($"EntityCommandBuffer.AddTag() - duration: {sw.ElapsedMilliseconds} ms");
         
         for (int n = 0; n < count; n++) {
@@ -172,8 +175,8 @@ public static class Test_CommandBuffer
         }
     }
     
-    private static void QueueTagCommands(EntityStore store, int count) {
-
+    private static void QueueTagCommands(EntityStore store, int count)
+    {
         var ecb = new CommandBuffer(store);
         for (int n = 0; n < count; n++) {
             ecb.AddTag<TestTag>(n + 1);    
