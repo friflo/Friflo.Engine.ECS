@@ -109,8 +109,11 @@ public struct CommandBuffer
         var store               = playback.store;
         var nodes               = store.nodes.AsSpan();
         var defaultArchetype    = store.defaultArchetype;
-        foreach (var (entityId, change) in playback.entityChanges)
+        var entityChanges       = playback.entityChanges;
+        
+        foreach (var entityId in entityChanges.Keys)
         {
+            ref var change      = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool _);
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
             if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value &&
