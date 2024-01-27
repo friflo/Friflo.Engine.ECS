@@ -42,6 +42,7 @@ public struct CommandBuffer
             return;
         }
         var playback = store.GetPlayback();
+        
         ExecuteTagCommands(playback);
 
         var componentCommands   = _componentCommands;
@@ -74,7 +75,9 @@ public struct CommandBuffer
         {
             var entityId = tagCommand.entityId;
             if (!entityChanges.TryGetValue(entityId, out var change)) {
-                change.tags = nodes[entityId].archetype.tags;
+                var archetype           = nodes[entityId].archetype;
+                change.componentTypes   = archetype.componentTypes;
+                change.tags             = archetype.tags;
             }
             if (tagCommand.change == TagChange.Add) {
                 change.tags.bitSet.SetBit(tagCommand.tagIndex);
@@ -94,10 +97,11 @@ public struct CommandBuffer
         {
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value) {
+            if (curArchetype.componentTypes.bitSet.value == change.componentTypes.bitSet.value &&
+                curArchetype.tags.          bitSet.value == change.tags.          bitSet.value) {
                 continue;
             }
-            var newArchetype = store.GetArchetype(change.componentTypes);
+            var newArchetype = store.GetArchetype(change.componentTypes, change.tags);
             if (curArchetype == defaultArchetype) {
                 node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
             } else {

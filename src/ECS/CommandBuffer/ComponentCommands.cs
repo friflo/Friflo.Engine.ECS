@@ -65,7 +65,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             }
             var entityId = command.entityId;
             if (!entityChanges.TryGetValue(entityId, out var change)) {
-                change.componentTypes = nodes[entityId].archetype.componentTypes;
+                var archetype           = nodes[entityId].archetype;
+                change.componentTypes   = archetype.componentTypes;
+                change.tags             = archetype.tags;
             }
             if (command.change == Remove) {
                 change.componentTypes.bitSet.ClearBit(index);
