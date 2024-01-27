@@ -13,10 +13,12 @@ internal readonly struct Playback
 {
     internal readonly   EntityStore                     store;      //  8
     internal readonly   Dictionary<int, ComponentTypes> entities;   //  8
+    internal readonly   Dictionary<int, Tags>           tags;       //  8
     
     internal Playback(EntityStore store) {
         this.store  = store;
         entities    = new Dictionary<int, ComponentTypes>();
+        tags        = new Dictionary<int, Tags>();
     }
 }
 

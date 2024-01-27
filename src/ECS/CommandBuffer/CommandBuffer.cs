@@ -41,7 +41,9 @@ public struct CommandBuffer
             store.ReturnCommandBuffers(_componentCommands, _tagCommands);
             return;
         }
-        var playback            = store.GetPlayback();
+        var playback = store.GetPlayback();
+        ExecuteTagCommands(playback);
+
         var componentCommands   = _componentCommands;
         var changedComponents   = _changedComponents;
         
@@ -60,7 +62,28 @@ public struct CommandBuffer
         }
         Reset();
         playback.entities.Clear();
+        playback.tags.Clear();
         store.ReturnCommandBuffers(componentCommands, _tagCommands);
+    }
+    
+    private void ExecuteTagCommands(Playback playback)
+    {
+        var entityTags  = playback.tags;
+        var nodes       = playback.store.nodes; 
+        var tagCommands = _tagCommands.AsSpan(0, _tagCommandsCount);
+        foreach (var tagCommand in tagCommands)
+        {
+            var entityId = tagCommand.entityId;
+            if (!entityTags.TryGetValue(entityId, out var tags)) {
+                tags = nodes[entityId].archetype.tags;
+            }
+            if (tagCommand.change == TagChange.Add) {
+                tags.bitSet.SetBit(tagCommand.tagIndex);
+            } else {
+                tags.bitSet.ClearBit(tagCommand.tagIndex);
+            }
+            entityTags[entityId] = tags;
+        }
     }
     
     private static void MoveEntitiesToNewArchetypes(Playback playback)
