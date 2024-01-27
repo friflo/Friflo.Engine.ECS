@@ -87,7 +87,7 @@ public struct CommandBuffer
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 if (archetype == null) {
-                    throw EntityNotFound(tagCommand.ToString());
+                    throw EntityNotFound(tagCommand);
                 }
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
@@ -100,7 +100,7 @@ public struct CommandBuffer
         }
     }
     
-    private static InvalidOperationException EntityNotFound(string command) {
+    private static InvalidOperationException EntityNotFound(TagCommand command) {
         return new InvalidOperationException($"CommandBuffer - entity not found. command: {command}");
     }
     
