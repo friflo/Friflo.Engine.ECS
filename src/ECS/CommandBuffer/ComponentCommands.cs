@@ -62,7 +62,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     }
     
     private static InvalidOperationException EntityNotFound(string command) {
-        return new InvalidOperationException($"CommandBuffer - entity not found. command: {command}");
+        return new InvalidOperationException($"Playback - entity not found. command: {command}");
     }
         
     internal override void ExecuteCommands(Playback playback)

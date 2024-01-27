@@ -101,7 +101,7 @@ public struct CommandBuffer
     }
     
     private static InvalidOperationException EntityNotFound(TagCommand command) {
-        return new InvalidOperationException($"CommandBuffer - entity not found. command: {command}");
+        return new InvalidOperationException($"Playback - entity not found. command: {command}");
     }
     
     private static void MoveEntitiesToNewArchetypes(Playback playback)

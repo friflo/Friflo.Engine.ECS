@@ -198,7 +198,7 @@ public static class Test_CommandBuffer
         var e = Throws<InvalidOperationException>(() => {
             ecb.Playback();    
         });
-        AreEqual("CommandBuffer - entity not found. command: entity: 1 - Add [Position]", e!.Message);
+        AreEqual("Playback - entity not found. command: entity: 1 - Add [Position]", e!.Message);
     }
     
     [Test]
@@ -210,6 +210,6 @@ public static class Test_CommandBuffer
         var e = Throws<InvalidOperationException>(() => {
             ecb.Playback();    
         });
-        AreEqual("CommandBuffer - entity not found. command: entity: 1 - Add [#TestTag]", e!.Message);
+        AreEqual("Playback - entity not found. command: entity: 1 - Add [#TestTag]", e!.Message);
     }
 }
