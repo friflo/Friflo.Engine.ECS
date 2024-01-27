@@ -102,6 +102,13 @@ public static class Test_sizeof
     
     class TestScript : Script { }
     
+    [Test]
+    public static void Test_sizeof_TagCommand() {
+        var type = typeof(TagCommand);
+        var size = Marshal.SizeOf(type!);
+        AreEqual(8, size);
+    }
+    
     // ---------------------------------------- Tests project types ------------------------------------------
     [Test]
     public static unsafe void Test_sizeof_ByteComponent() {
