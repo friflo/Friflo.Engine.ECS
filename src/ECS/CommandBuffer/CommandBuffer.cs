@@ -16,8 +16,8 @@ namespace Friflo.Engine.ECS;
 [Obsolete("Experimental")]
 public struct CommandBuffer
 {
-    private readonly    ComponentCommands[] _componentCommands;
     private             ComponentTypes      _changedComponents;
+    private             ComponentCommands[] _componentCommands;
     //
     private             ComponentTypes      _changedTags;
     private             TagCommand[]        _tagCommands;
@@ -36,16 +36,20 @@ public struct CommandBuffer
     
     public void Playback()
     {
+        var tagCommands         = _tagCommands;
+        var componentCommands   = _componentCommands;
+        _tagCommands            = null;
+        _componentCommands      = null;
+
         // early out if there is nothing to change
         if (_changedComponents.Count == 0 && _changedTags.Count == 0) {
-            store.ReturnCommandBuffers(_componentCommands, _tagCommands);
+            store.ReturnCommandBuffers(componentCommands, tagCommands);
             return;
         }
         var playback = store.GetPlayback();
         
-        ExecuteTagCommands(playback);
+        ExecuteTagCommands(playback, tagCommands);
 
-        var componentCommands   = _componentCommands;
         var changedComponents   = _changedComponents;
         
         foreach (var componentType in changedComponents)
@@ -61,17 +65,18 @@ public struct CommandBuffer
             var commands = componentCommands[componentType.StructIndex];
             commands.ExecuteCommands(playback);
         }
-        Reset();
+
+        Reset(componentCommands);
         playback.entityChanges.Clear();
-        store.ReturnCommandBuffers(componentCommands, _tagCommands);
+        store.ReturnCommandBuffers(componentCommands, tagCommands);
     }
     
-    private void ExecuteTagCommands(Playback playback)
+    private void ExecuteTagCommands(Playback playback, TagCommand[] tagCommands)
     {
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes; 
-        var tagCommands     = _tagCommands.AsSpan(0, _tagCommandsCount);
-        foreach (var tagCommand in tagCommands)
+        var commands        = tagCommands.AsSpan(0, _tagCommandsCount);
+        foreach (var tagCommand in commands)
         {
             var entityId = tagCommand.entityId;
             if (!entityChanges.TryGetValue(entityId, out var change)) {
@@ -116,12 +121,11 @@ public struct CommandBuffer
         }
     }
     
-    private void Reset()
+    private void Reset(ComponentCommands[] componentCommands)
     {
-        var commands = _componentCommands;
         foreach (var componentType in _changedComponents)
         {
-            commands[componentType.StructIndex].commandCount = 0;
+            componentCommands[componentType.StructIndex].commandCount = 0;
         }
         _changedComponents  = default;
         _changedTags        = default;

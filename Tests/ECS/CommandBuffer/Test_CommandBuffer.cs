@@ -137,4 +137,16 @@ public static class Test_CommandBuffer
             IsFalse(entity.Tags.Has<TestTag2>());
         }
     }
+    
+    [Test]
+    public static void Test_CommandBuffer_prevent_reuse()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = new CommandBuffer(store);
+        ecb.Playback();
+        
+        Throws<NullReferenceException>(() => {
+            ecb.AddComponent<Position>(1);
+        });
+    }
 }
