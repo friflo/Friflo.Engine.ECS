@@ -75,7 +75,7 @@ internal sealed class ComponentType<T> : ComponentType
     internal override ComponentCommands CreateComponentCommands()
     {
         var commands = new ComponentCommands<T>(StructIndex) {
-            componentCommands = new ComponentCommand<T>[4]
+            componentCommands = Array.Empty<ComponentCommand<T>>()
         };
         return commands;
     }

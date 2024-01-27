@@ -234,7 +234,7 @@ public struct CommandBuffer
         var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
-            ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
+            ArrayUtils.Resize(ref commands.componentCommands, Math.Max(4, 2 * count));
         }
         commands.commandCount   = count + 1;
         ref var command         = ref commands.componentCommands[count];
@@ -277,7 +277,7 @@ public struct CommandBuffer
         
         var count = _tagCommandsCount; 
         if (count == _tagCommands.Length) {
-            ArrayUtils.Resize(ref _tagCommands, 2 * count);
+            ArrayUtils.Resize(ref _tagCommands, Math.Max(4, 2 * count));
         }
         _tagCommandsCount   = count + 1;
         ref var tagCommand  = ref _tagCommands[count];
@@ -293,7 +293,7 @@ public struct CommandBuffer
         var id = store.NewId();
         var count = _entityCommandCount; 
         if (count == _entityCommands.Length) {
-            ArrayUtils.Resize(ref _entityCommands, 2 * count);
+            ArrayUtils.Resize(ref _entityCommands, Math.Max(4, 2 * count));
         }
         _entityCommandCount = count + 1;
         ref var command     = ref _entityCommands[count];
@@ -306,7 +306,7 @@ public struct CommandBuffer
     {
         var count = _entityCommandCount; 
         if (count == _entityCommands.Length) {
-            ArrayUtils.Resize(ref _entityCommands, 2 * count);
+            ArrayUtils.Resize(ref _entityCommands, Math.Max(4, 2 * count));
         }
         _entityCommandCount = count + 1;
         ref var command     = ref _entityCommands[count];
