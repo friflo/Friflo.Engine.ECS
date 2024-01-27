@@ -112,6 +112,10 @@ public sealed partial class EntityStore : EntityStoreBase
         internal    EventHandler          <EntitiesChanged>         entitiesChanged;        //  8   - fires event to notify changes of multiple entities
         //
         internal    ArchetypeQuery                                  entityQuery;            //  8
+        //
+        internal    Stack<ComponentCommands[]>                      commandBufferPool;      //  8
+        internal    Playback                                        playback;               // 16
+
                     
         internal Intern(PidType pidType)
         {

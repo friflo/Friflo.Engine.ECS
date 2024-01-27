@@ -8,46 +8,41 @@ namespace Friflo.Engine.ECS;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 
-
-internal struct StoreCommandBuffers
-{
-    internal    ComponentCommands[] componentCommands;
-    internal    EntityChanges       entityChanges;
-    
-    internal static readonly int            MaxStructIndex = EntityStoreBase.Static.EntitySchema.maxStructIndex;
-    internal static readonly ComponentType[] ComponentTypes = EntityStoreBase.Static.EntitySchema.components;
-}
-
 public partial class EntityStore
 {
-    private readonly Stack<StoreCommandBuffers> commandBufferPool = new ();
-    
-    internal StoreCommandBuffers GetCommandBuffers()
+    internal ComponentCommands[] GetCommandBuffers()
     {
-        lock (commandBufferPool)
+        var pool = intern.commandBufferPool ??= new Stack<ComponentCommands[]>();
+        lock (pool)
         {
-            if (commandBufferPool.TryPop(out var buffers)) {
+            if (pool.TryPop(out var buffers)) {
                 return buffers;
             }
         }
+        var schema          = Static.EntitySchema;
+        var maxStructIndex  = schema.maxStructIndex;
+        var componentTypes  = schema.components;
 
-        var commands = new ComponentCommands[StoreCommandBuffers.MaxStructIndex];
-        for (int n = 1; n < StoreCommandBuffers.MaxStructIndex; n++) {
-            commands[n] = StoreCommandBuffers.ComponentTypes[n].CreateComponentCommands();
+        var commands = new ComponentCommands[maxStructIndex];
+        for (int n = 1; n < maxStructIndex; n++) {
+            commands[n] = componentTypes[n].CreateComponentCommands();
         }
-        return new StoreCommandBuffers {
-            componentCommands   = commands,
-            entityChanges       = new EntityChanges(this)
-        };
+        return commands;
     }
     
-    internal void ReturnCommandBuffers(ComponentCommands[] componentCommands, in EntityChanges entityChanges)
+    internal void ReturnCommandBuffers(ComponentCommands[] componentCommands)
     {
-        lock (commandBufferPool) {
-            commandBufferPool.Push(new StoreCommandBuffers {
-                componentCommands   = componentCommands,
-                entityChanges       = entityChanges
-            });
+        var pool = intern.commandBufferPool;
+        lock (pool) {
+            pool.Push(componentCommands);
         }
+    }
+    
+    internal Playback GetPlayback()
+    {
+        if (intern.playback.entities == null) {
+            intern.playback = new Playback(this);
+        }
+        return intern.playback;
     }
 }

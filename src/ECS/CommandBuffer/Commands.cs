@@ -9,12 +9,12 @@ using static Friflo.Engine.ECS.ComponentChangedAction;
 namespace Friflo.Engine.ECS;
 
 
-internal readonly struct EntityChanges
+internal readonly struct Playback
 {
-    internal readonly   EntityStore                     store;
-    internal readonly   Dictionary<int, ComponentTypes> entities;
+    internal readonly   EntityStore                     store;      //  8
+    internal readonly   Dictionary<int, ComponentTypes> entities;   //  8
     
-    internal EntityChanges(EntityStore store) {
+    internal Playback(EntityStore store) {
         this.store  = store;
         entities    = new Dictionary<int, ComponentTypes>();
     }
@@ -25,8 +25,8 @@ internal abstract class ComponentCommands
     internal            int             commandCount;       //  4
     internal readonly   int             structIndex;        //  4
     
-    internal abstract void UpdateComponentTypes (EntityChanges changes);
-    internal abstract void ExecuteCommands      (EntityChanges changes);
+    internal abstract void UpdateComponentTypes (Playback playback);
+    internal abstract void ExecuteCommands      (Playback playback);
     
     internal ComponentCommands(int structIndex) {
         this.structIndex = structIndex;
@@ -42,13 +42,13 @@ internal sealed class ComponentCommands<T> : ComponentCommands
 
     internal ComponentCommands(int structIndex) : base(structIndex) { }
     
-    internal override void UpdateComponentTypes(EntityChanges changes)
+    internal override void UpdateComponentTypes(Playback playback)
     {
         var index       = structIndex;
-        var entities    = changes.entities;
         var commands    = componentCommands;
         var count       = commandCount;
-        var nodes       = changes.store.nodes;
+        var entities    = playback.entities;
+        var nodes       = playback.store.nodes;
         
         // --- set new entity component types for Add/Remove commands
         for (int n = 0; n < count; n++)
@@ -70,12 +70,12 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         }
     }
         
-    internal override void ExecuteCommands(EntityChanges changes)
+    internal override void ExecuteCommands(Playback playback)
     {
         var index       = structIndex;
         var commands    = componentCommands;
-        var nodes       = changes.store.nodes;
         var count       = commandCount;
+        var nodes       = playback.store.nodes;
         
         for (int n = 0; n < count; n++)
         {

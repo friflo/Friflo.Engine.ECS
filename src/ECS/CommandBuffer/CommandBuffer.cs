@@ -3,6 +3,7 @@
 
 using System;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable ConvertConstructorToMemberInitializers
@@ -16,27 +17,28 @@ namespace Friflo.Engine.ECS;
 public struct CommandBuffer
 {
     private readonly    ComponentCommands[] _componentCommands;
-    private readonly    EntityChanges       entityChanges;
     private             ComponentTypes      _changedComponents;
+    private readonly    EntityStore         store;
     
 #region general methods
     public CommandBuffer(EntityStore store)
     {
-        var buffers         = store.GetCommandBuffers();
-        entityChanges       = buffers.entityChanges;
-        _componentCommands  = buffers.componentCommands;
+        this.store          = store;
+        _componentCommands  = store.GetCommandBuffers();
     }
     
     public void Playback()
     {
+        var entityChanges       = store.GetPlayback();
         var componentCommands   = _componentCommands;
         var changedComponents   = _changedComponents;
+        
         foreach (var componentType in changedComponents)
         {
             var commands = componentCommands[componentType.StructIndex];
             commands.UpdateComponentTypes(entityChanges);
         }
-        MoveEntitiesToNewArchetypes();
+        MoveEntitiesToNewArchetypes(entityChanges);
         
         foreach (var componentType in changedComponents)
         {
@@ -44,15 +46,16 @@ public struct CommandBuffer
             commands.ExecuteCommands(entityChanges);
         }
         Reset();
-        entityChanges.store.ReturnCommandBuffers(componentCommands, entityChanges);
+        entityChanges.entities.Clear();
+        entityChanges.store.ReturnCommandBuffers(componentCommands);
     }
     
-    private void MoveEntitiesToNewArchetypes()
+    private static void MoveEntitiesToNewArchetypes(Playback playback)
     {
-        var store               = entityChanges.store;
+        var store               = playback.store;
         var nodes               = store.nodes;
         var defaultArchetype    = store.defaultArchetype;
-        foreach (var (entityId, componentTypes) in entityChanges.entities)
+        foreach (var (entityId, componentTypes) in playback.entities)
         {
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
@@ -81,7 +84,6 @@ public struct CommandBuffer
         {
             commands[componentType.StructIndex].commandCount = 0;
         }
-        entityChanges.entities.Clear();
         _changedComponents = default;
     }
     #endregion
