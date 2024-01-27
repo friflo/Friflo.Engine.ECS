@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -714,14 +715,17 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Add_Child_Entities_UseRandomPids_Perf()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        long count  = 10; // 10_000_000L ~ #PC: 3.425 ms
+        var sw = new Stopwatch();
+        sw.Start();
+        long count  = 10; // 10_000_000L ~ #PC: 3.087 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
         }
+        Console.WriteLine($"CreateEntity(idType.RandomPids) - count: {count}, duration: {sw.ElapsedMilliseconds}");
         AreEqual(count, root.ChildCount);
     }
     
@@ -731,11 +735,14 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        long count  = 10; // 10_000_000L ~ #PC: 1.473 ms
+        var sw = new Stopwatch();
+        sw.Start();
+        long count  = 10; // 10_000_000L ~ #PC: 1.178 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
         }
+        Console.WriteLine($"CreateEntity(PidType.UsePidAsId) - count: {count}, duration: {sw.ElapsedMilliseconds}");
         AreEqual(count, root.ChildCount);
     }
     
