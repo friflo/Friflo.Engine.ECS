@@ -58,6 +58,7 @@ public struct CommandBuffer
         var entityCommands      = _entityCommands;
         _tagCommands            = null;
         _componentCommands      = null;
+        _entityCommands         = null;
 
         // early out if there is nothing to change
         if (_changedComponents.Count    == 0 &&

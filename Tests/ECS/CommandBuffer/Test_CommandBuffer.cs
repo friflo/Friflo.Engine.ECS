@@ -195,6 +195,10 @@ public static class Test_CommandBuffer
         Throws<NullReferenceException>(() => {
             ecb.AddTag<TestTag>(1);
         });
+        
+        Throws<NullReferenceException>(() => {
+            ecb.CreateEntity();
+        });
     }
     
     [Test]
@@ -225,9 +229,9 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_CreateEntity()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
         int id;
         {
+            var ecb     = new CommandBuffer(store);
             id = ecb.CreateEntity();
             AreEqual(1, ecb.EntityCommandsCount);
             ecb.AddComponent<Position>(id);
@@ -238,6 +242,7 @@ public static class Test_CommandBuffer
             AreEqual(0, ecb.EntityCommandsCount);
             AreEqual(1, store.EntityCount);
         } {
+            var ecb     = new CommandBuffer(store);
             ecb.DeleteEntity(id);
             ecb.Playback();
             
