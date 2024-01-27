@@ -121,7 +121,7 @@ public partial class EntityStore
             }
             ids[n] = childId;
         }
-        EnsureNodesLength(intern.sequenceId);
+        EnsureNodesLength(intern.sequenceId + 1);
         var entity  = CreateEntityNode(id, pid);
 
         if (ids.Length > 0) {

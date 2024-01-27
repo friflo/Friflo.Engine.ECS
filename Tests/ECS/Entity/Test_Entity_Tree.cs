@@ -720,7 +720,7 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("Root"));
         var sw = new Stopwatch();
         sw.Start();
-        long count  = 10; // 10_000_000L ~ #PC: 3.087 ms
+        long count  = 10; // 10_000_000L ~ #PC: 3.101 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);
@@ -737,7 +737,7 @@ public static class Test_Entity_Tree
         root.AddComponent(new EntityName("Root"));
         var sw = new Stopwatch();
         sw.Start();
-        long count  = 10; // 10_000_000L ~ #PC: 1.178 ms
+        long count  = 10; // 10_000_000L ~ #PC: 1.215 ms
         for (long n = 0; n < count; n++) {
             var child = store.CreateEntity();
             root.AddChild(child);

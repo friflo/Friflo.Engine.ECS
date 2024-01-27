@@ -120,7 +120,7 @@ public sealed partial class EntityStore : EntityStoreBase
         internal Intern(PidType pidType)
         {
             this.pidType    = pidType;
-            sequenceId      = Static.MinNodeId;
+            sequenceId      = Static.MinNodeId - 1;
             if (pidType == PidType.RandomPids) {
                 pid2Id  = new Dictionary<long, int>();
                 randPid = new Random();

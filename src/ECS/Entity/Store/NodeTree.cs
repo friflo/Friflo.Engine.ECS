@@ -3,6 +3,7 @@
 
 using System;
 using System.Text;
+using System.Threading;
 using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable InlineTemporaryVariable
@@ -21,7 +22,7 @@ public partial class EntityStore
     public int EnsureCapacity(int capacity)
     {
         var curLength   = nodes.Length;
-        var last        = intern.sequenceId;
+        var last        = intern.sequenceId + 1;
         var curCapacity = curLength - last;
         if (curCapacity >= capacity) {
             return curCapacity;
@@ -478,15 +479,15 @@ public partial class EntityStore
     {
         var localNodes  = nodes;
         var max         = localNodes.Length;
-        int id          = intern.sequenceId;
-        for (; id < max; id++)
+        var id          = Interlocked.Increment(ref intern.sequenceId);
+        for (; id < max;)
         {
             if ((localNodes[id].flags & Created) != 0) {
+                id = Interlocked.Increment(ref intern.sequenceId);
                 continue;
             }
             break;
         }
-        intern.sequenceId = id + 1;
         return id;
     }
     
