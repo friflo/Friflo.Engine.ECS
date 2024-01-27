@@ -15,7 +15,7 @@ public static class Test_CommandBuffer
             change      = ComponentChangedAction.Add,
             entityId    = 1
         };
-        AreEqual("entity: 1 - Add Position", command.ToString());
+        AreEqual("entity: 1 - Add [Position]", command.ToString());
         
         var schema          = EntityStore.GetEntitySchema();
         var componentType   = schema.GetComponentType<Position>();

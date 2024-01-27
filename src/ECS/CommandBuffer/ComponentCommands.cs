@@ -47,6 +47,9 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool exists);
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
+                if (archetype == null) {
+                    throw EntityNotFound(command.ToString());
+                }
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
             }
@@ -56,6 +59,10 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 change.componentTypes.bitSet.SetBit  (index);
             }
         }
+    }
+    
+    private static InvalidOperationException EntityNotFound(string command) {
+        return new InvalidOperationException($"CommandBuffer - entity not found. command: {command}");
     }
         
     internal override void ExecuteCommands(Playback playback)
@@ -90,5 +97,5 @@ internal struct ComponentCommand<T>
     internal    int                     entityId;   //  4
     internal    T                       component;  //  sizeof(T)
 
-    public override string ToString() => $"entity: {entityId} - {change} {typeof(T).Name}";
+    public override string ToString() => $"entity: {entityId} - {change} [{typeof(T).Name}]";
 }

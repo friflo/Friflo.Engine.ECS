@@ -84,6 +84,9 @@ public struct CommandBuffer
             ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool exists);
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
+                if (archetype == null) {
+                    throw EntityNotFound(tagCommand.ToString());
+                }
                 change.componentTypes   = archetype.componentTypes;
                 change.tags             = archetype.tags;
             }
@@ -93,6 +96,10 @@ public struct CommandBuffer
                 change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
         }
+    }
+    
+    private static InvalidOperationException EntityNotFound(string command) {
+        return new InvalidOperationException($"CommandBuffer - entity not found. command: {command}");
     }
     
     private static void MoveEntitiesToNewArchetypes(Playback playback)

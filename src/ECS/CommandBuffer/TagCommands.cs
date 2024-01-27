@@ -16,4 +16,6 @@ internal struct TagCommand
     internal    byte        tagIndex;   //  1
     internal    TagChange   change;     //  1
     internal    int         entityId;   //  4
+
+    public override string ToString() => $"entity: {entityId} - {change} [#{EntityStoreBase.Static.EntitySchema.tags[tagIndex].Name}]";
 }

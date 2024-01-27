@@ -188,4 +188,28 @@ public static class Test_CommandBuffer
             ecb.AddTag<TestTag>(1);
         });
     }
+    
+    [Test]
+    public static void Test_CommandBuffer_command_error()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = new CommandBuffer(store);
+        ecb.AddComponent<Position>(1);
+        var e = Throws<InvalidOperationException>(() => {
+            ecb.Playback();    
+        });
+        AreEqual("CommandBuffer - entity not found. command: entity: 1 - Add [Position]", e!.Message);
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_tag_error()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = new CommandBuffer(store);
+        ecb.AddTag<TestTag>(1);
+        var e = Throws<InvalidOperationException>(() => {
+            ecb.Playback();    
+        });
+        AreEqual("CommandBuffer - entity not found. command: entity: 1 - Add [#TestTag]", e!.Message);
+    }
 }
