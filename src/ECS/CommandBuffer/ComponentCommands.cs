@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System;
 using System.Collections.Generic;
 using static Friflo.Engine.ECS.ComponentChangedAction;
 
@@ -51,15 +52,13 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     internal override void UpdateComponentTypes(Playback playback)
     {
         var index           = structIndex;
-        var commands        = componentCommands;
-        var count           = commandCount;
+        var commands        = componentCommands.AsSpan(0, commandCount);
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes;
         
         // --- set new entity component types for Add/Remove commands
-        for (int n = 0; n < count; n++)
+        foreach (ref var command in commands)
         {
-            ref var command = ref commands[n];
             if (command.change == Update) {
                 continue;
             }
@@ -81,13 +80,11 @@ internal sealed class ComponentCommands<T> : ComponentCommands
     internal override void ExecuteCommands(Playback playback)
     {
         var index       = structIndex;
-        var commands    = componentCommands;
-        var count       = commandCount;
+        var commands    = componentCommands.AsSpan(0, commandCount);
         var nodes       = playback.store.nodes;
         
-        for (int n = 0; n < count; n++)
+        foreach (ref var command in commands)
         {
-            ref var command = ref commands[n];
             if (command.change == Remove) {
                 // skip Remove commands
                 continue;
