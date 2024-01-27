@@ -21,6 +21,7 @@ public struct CommandBuffer
 #region public properties
     public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommands);
     public              int                 TagCommandsCount        => _tagCommandsCount;
+    public              int                 EntityCommandsCount     => _entityCommandCount;
     
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}"; 
 
@@ -34,6 +35,9 @@ public struct CommandBuffer
     private             TagCommand[]        _tagCommands;
     private             int                 _tagCommandsCount;
     //
+    private             EntityCommand[]     _entityCommands;
+    private             int                 _entityCommandCount;
+    //
     private readonly    EntityStore         store;
     #endregion
     
@@ -44,25 +48,32 @@ public struct CommandBuffer
         var buffers         = store.GetCommandBuffers();
         _componentCommands  = buffers.componentCommands;
         _tagCommands        = buffers.tagCommands;
+        _entityCommands     = buffers.entityCommands;
     }
     
     public void Playback()
     {
         var tagCommands         = _tagCommands;
         var componentCommands   = _componentCommands;
+        var entityCommands      = _entityCommands;
         _tagCommands            = null;
         _componentCommands      = null;
 
         // early out if there is nothing to change
-        if (_changedComponents.Count == 0 && _changedTags.Count == 0) {
-            store.ReturnCommandBuffers(componentCommands, tagCommands);
+        if (_changedComponents.Count    == 0 &&
+            _changedTags.Count          == 0 &&
+            _entityCommandCount         == 0)
+        {
+            store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
             return;
         }
         var playback = store.GetPlayback();
         try {
+            ExecuteEntityCommands(entityCommands);
+                
             ExecuteTagCommands(playback, tagCommands);
 
-            var changedComponents   = _changedComponents;
+            var changedComponents = _changedComponents;
             
             foreach (var componentType in changedComponents)
             {
@@ -81,15 +92,37 @@ public struct CommandBuffer
         finally {
             Reset(componentCommands);
             playback.entityChanges.Clear();
-            store.ReturnCommandBuffers(componentCommands, tagCommands);
+            store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
+        }
+    }
+    
+    private void ExecuteEntityCommands(EntityCommand[] entityCommands)
+    {
+        int count = _entityCommandCount;
+        if (count == 0) {
+            return;
+        }
+        var commands        = entityCommands.AsSpan(0, count);
+        foreach (var command in commands)
+        {
+            if (command.action == EntityCommandAction.Add) {
+                store.CreateEntity(command.entityId);
+            } else {
+                var entity = store.GetEntityById(command.entityId);
+                entity.DeleteEntity();
+            }
         }
     }
     
     private void ExecuteTagCommands(Playback playback, TagCommand[] tagCommands)
     {
+        var count = _tagCommandsCount;
+        if (count == 0) {
+            return;
+        }
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan(); 
-        var commands        = tagCommands.AsSpan(0, _tagCommandsCount);
+        var commands        = tagCommands.AsSpan(0, count);
         
         foreach (var tagCommand in commands)
         {
@@ -155,6 +188,7 @@ public struct CommandBuffer
         _changedComponents  = default;
         _changedTags        = default;
         _tagCommandsCount   = 0;
+        _entityCommandCount = 0;
     }
     
     private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {
@@ -210,7 +244,6 @@ public struct CommandBuffer
     #endregion
     
 #region tag
-    
     public void AddTag<T>(int entityId)
         where T : struct, ITag
     {
@@ -252,5 +285,33 @@ public struct CommandBuffer
         tagCommand.change   = change;
     }
 #endregion
+
+#region entity
+    public int CreateEntity()
+    {
+        var id = store.NewId();
+        var count = _entityCommandCount; 
+        if (count == _entityCommands.Length) {
+            ArrayUtils.Resize(ref _entityCommands, 2 * count);
+        }
+        _entityCommandCount = count + 1;
+        ref var command     = ref _entityCommands[count];
+        command.entityId    = id;
+        command.action      = EntityCommandAction.Add;
+        return id;
+    }
+    
+    public void DeleteEntity(int entityId)
+    {
+        var count = _entityCommandCount; 
+        if (count == _entityCommands.Length) {
+            ArrayUtils.Resize(ref _entityCommands, 2 * count);
+        }
+        _entityCommandCount = count + 1;
+        ref var command     = ref _entityCommands[count];
+        command.entityId    = entityId;
+        command.action      = EntityCommandAction.Remove;
+    }
+    #endregion
 }
 

@@ -220,4 +220,29 @@ public static class Test_CommandBuffer
         });
         AreEqual("Playback - entity not found. command: entity: 1 - Add [#TestTag]", e!.Message);
     }
+    
+    [Test]
+    public static void Test_CommandBuffer_CreateEntity()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = new CommandBuffer(store);
+        int id;
+        {
+            id = ecb.CreateEntity();
+            AreEqual(1, ecb.EntityCommandsCount);
+            ecb.AddComponent<Position>(id);
+            ecb.Playback();
+            
+            var entity = store.GetEntityById(id);
+            IsTrue(     entity.HasComponent<Position>());
+            AreEqual(0, ecb.EntityCommandsCount);
+            AreEqual(1, store.EntityCount);
+        } {
+            ecb.DeleteEntity(id);
+            ecb.Playback();
+            
+            AreEqual(0, ecb.EntityCommandsCount);
+            AreEqual(0, store.EntityCount);
+        }
+    }
 }

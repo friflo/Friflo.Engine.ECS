@@ -475,7 +475,7 @@ public partial class EntityStore
         nodes[id].compIndex = compIndex;
     }
     
-    private int NewId()
+    internal int NewId()
     {
         var localNodes  = nodes;
         var max         = localNodes.Length;

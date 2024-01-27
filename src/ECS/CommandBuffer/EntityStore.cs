@@ -11,6 +11,7 @@ internal struct CommandBuffers
 {
     internal    ComponentCommands[] componentCommands;
     internal    TagCommand[]        tagCommands;
+    internal    EntityCommand[]     entityCommands;
 }
 
 public partial class EntityStore
@@ -34,17 +35,22 @@ public partial class EntityStore
         }
         return new CommandBuffers {
             componentCommands   = commands,
-            tagCommands         = new TagCommand[4]
+            tagCommands         = new TagCommand[4],
+            entityCommands      = new EntityCommand[4]
         };
     }
     
-    internal void ReturnCommandBuffers(ComponentCommands[] componentCommands, TagCommand[] tagCommands)
+    internal void ReturnCommandBuffers(
+        ComponentCommands[] componentCommands,
+        TagCommand[]        tagCommands,
+        EntityCommand[]     entityCommands)    
     {
         var pool = intern.commandBufferPool;
         lock (pool) {
             pool.Push(new CommandBuffers {
                 componentCommands   = componentCommands,
-                tagCommands         = tagCommands
+                tagCommands         = tagCommands,
+                entityCommands      = entityCommands
             });
         }
     }
