@@ -60,35 +60,13 @@ public struct CommandBuffer
         _componentCommands      = null;
         _entityCommands         = null;
 
-        // early out if there is nothing to change
-        if (_changedComponents.Count    == 0 &&
-            _changedTags.Count          == 0 &&
-            _entityCommandCount         == 0)
-        {
-            store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
-            return;
-        }
         var playback = store.GetPlayback();
         try {
-            ExecuteEntityCommands(entityCommands);
-                
-            ExecuteTagCommands(playback, tagCommands);
-
-            var changedComponents = _changedComponents;
-            
-            foreach (var componentType in changedComponents)
-            {
-                var commands = componentCommands[componentType.StructIndex];
-                commands.UpdateComponentTypes(playback);
-            }
-            
-            MoveEntitiesToNewArchetypes(playback);
-            
-            foreach (var componentType in changedComponents)
-            {
-                var commands = componentCommands[componentType.StructIndex];
-                commands.ExecuteCommands(playback);
-            }
+            ExecuteEntityCommands   (entityCommands);
+            ExecuteTagCommands      (playback, tagCommands);
+            PrepareComponentCommands(playback, componentCommands);
+            UpdateEntityArchetypes  (playback);
+            ExecuteComponentCommands(playback, componentCommands);
         }
         finally {
             Reset(componentCommands);
@@ -151,11 +129,29 @@ public struct CommandBuffer
         }
     }
     
+    private void PrepareComponentCommands(Playback playback, ComponentCommands[] componentCommands)
+    {
+        foreach (var componentType in _changedComponents)
+        {
+            var commands = componentCommands[componentType.StructIndex];
+            commands.UpdateComponentTypes(playback);
+        }
+    }
+    
+    private void ExecuteComponentCommands(Playback playback, ComponentCommands[] componentCommands)
+    {
+        foreach (var componentType in _changedComponents)
+        {
+            var commands = componentCommands[componentType.StructIndex];
+            commands.ExecuteCommands(playback);
+        }
+    }
+    
     private static InvalidOperationException EntityNotFound(TagCommand command) {
         return new InvalidOperationException($"Playback - entity not found. command: {command}");
     }
     
-    private static void MoveEntitiesToNewArchetypes(Playback playback)
+    private static void UpdateEntityArchetypes(Playback playback)
     {
         var store               = playback.store;
         var nodes               = store.nodes.AsSpan();
