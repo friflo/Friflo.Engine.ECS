@@ -9,7 +9,6 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStore
 {
-#pragma warning disable CS0618 // Type or member is obsolete
     public CommandBuffer GetCommandBuffer()
     {
         var pool = intern.commandBufferPool ??= new Stack<CommandBuffer>();

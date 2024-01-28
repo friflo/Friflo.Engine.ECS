@@ -10,8 +10,6 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
-#pragma warning disable CS0618 // Type or member is obsolete
-
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming

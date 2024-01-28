@@ -9,8 +9,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS.Buffer;
 
-#pragma warning disable CS0618 // Type or member is obsolete TODO remove
-
 public static class Test_CommandBuffer
 {
     [Test]

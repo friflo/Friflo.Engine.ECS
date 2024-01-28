@@ -14,10 +14,7 @@ using System.Runtime.InteropServices;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-#pragma warning disable CS0618 // Type or member is obsolete
 
-
-[Obsolete("Experimental")]
 // Note: CommandBuffer is not a struct. Reasons:
 // - struct need to be passed as a ref parameter => easy to forget
 // - ref parameters cannot be used in lambdas

@@ -95,12 +95,6 @@ public static class Test_Entity_Tree
         var array = new Entity[childEntities.Count];
         childEntities.ToArray(array);
         IsTrue(child == array[0]);
-
-        
-/*  was used for class Entity  
-#pragma warning disable CS0618 // Type or member is obsolete
-        AreEqual(1,                                 childEntities.Entities_.Length);
-#pragma warning restore CS0618 // Type or member is obsolete */
     }
     
     [Test]

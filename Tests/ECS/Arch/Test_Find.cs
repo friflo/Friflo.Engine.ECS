@@ -3,7 +3,6 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 
-#pragma warning disable CS0618 // Type or member is obsolete
 
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch;

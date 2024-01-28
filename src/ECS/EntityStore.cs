@@ -113,7 +113,6 @@ public sealed partial class EntityStore : EntityStoreBase
         //
         internal    ArchetypeQuery                                  entityQuery;            //  8
         //
-#pragma warning disable CS0618 // Type or member is obsolete
         internal    Stack<CommandBuffer>                            commandBufferPool;      //  8
         internal    Playback                                        playback;               // 16
 
