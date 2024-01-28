@@ -42,6 +42,7 @@ The core feature of an Entity Component System are:
   Or compare the `Entity` API with other API's at [Engine-comparison.md](Engine-comparison.md).  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - JSON Serialization
+- Record entity changes on arbitrary threads using [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Support for Vectorization (SIMD) of components returned by queries.
 - Minimize times required for GC collection by using struct types for entities and components.  
