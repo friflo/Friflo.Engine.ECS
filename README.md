@@ -360,10 +360,10 @@ Recording commands with a `CommandBuffer` instance can be done on **any** thread
 `Playback()` must be called on the **main** thread.  
 Available commands are in the [CommandBuffer - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md).  
 
-This enables entity changes in multi threaded application using entity systems / queries.  
-In these cases enumeration of query results run on multiple worker threads.  
+This enables recording entity changes in multi threaded application using entity systems / queries.  
+In this case enumerations of query results run on multiple worker threads.  
 Within these enumerations entity changes are recorded with a `CommandBuffer`.  
-After the query thread has finished the changes are execute with `Playback()` on the **main** thread.
+After a query thread has finished these changes are executed with `Playback()` on the **main** thread.
 
 ```csharp
 public static void CommandBuffer()
