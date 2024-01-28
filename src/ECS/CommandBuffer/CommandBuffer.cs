@@ -41,7 +41,8 @@ public struct CommandBuffer
     private             int                 _entityCommandCount;
     //
     private readonly    EntityStore         store;
-    private bool        reuseBuffer;
+    private             bool                reuseBuffer;
+    private             bool                returnedBuffers;
     #endregion
     
 #region general methods
@@ -81,15 +82,19 @@ public struct CommandBuffer
         finally {
             Reset(componentCommands);
             playback.entityChanges.Clear();
-            if (!reuseBuffer) {
+            if (!returnedBuffers && !reuseBuffer) {
                 store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
+                returnedBuffers = true;
             }
         }
     }
     
     public void ReturnBuffer()
     {
-        store.ReturnCommandBuffers(_componentCommandTypes, _tagCommands, _entityCommands);
+        if (!returnedBuffers) {
+            store.ReturnCommandBuffers(_componentCommandTypes, _tagCommands, _entityCommands);
+            returnedBuffers = true;
+        }
         _tagCommands            = null;
         _componentCommandTypes  = null;
         _entityCommands         = null;
@@ -221,8 +226,11 @@ public struct CommandBuffer
         return count;
     }
     
-    private static InvalidOperationException CannotReuseCommandBuffer() {
-        return new InvalidOperationException("Cannot reuse CommandBuffer after Playback()");
+    private InvalidOperationException CannotReuseCommandBuffer() {
+        if (returnedBuffers && reuseBuffer) {
+            return new InvalidOperationException("CommandBuffer - buffers returned to store");    
+        }
+        return new InvalidOperationException($"Reused CommandBuffer after Playback(). ReuseBuffer: {reuseBuffer}");
     }
     #endregion
         
@@ -256,11 +264,10 @@ public struct CommandBuffer
     {
         var structIndex = StructHeap<T>.StructIndex;
         _changedComponentTypes.bitSet.SetBit(structIndex);
-        var types = _componentCommandTypes;
-        if (types == null) {
+        if (returnedBuffers) {
             throw CannotReuseCommandBuffer();   
         }
-        var commands    = (ComponentCommands<T>)types[structIndex];
+        var commands    = (ComponentCommands<T>)_componentCommandTypes[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, Math.Max(4, 2 * count));
@@ -303,7 +310,7 @@ public struct CommandBuffer
     private void ChangeTag(int entityId, int tagIndex, TagChange change)
     {
         var count = _tagCommandsCount;
-        if (_tagCommands == null) {
+        if (returnedBuffers) {
             throw CannotReuseCommandBuffer();
         }
         if (count == _tagCommands.Length) {
@@ -322,7 +329,7 @@ public struct CommandBuffer
     {
         var id = store.NewId();
         var count = _entityCommandCount; 
-        if (_entityCommands == null) {
+        if (returnedBuffers) {
             throw CannotReuseCommandBuffer();
         }
         if (count == _entityCommands.Length) {
