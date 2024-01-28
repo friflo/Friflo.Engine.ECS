@@ -1,58 +1,34 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 
-internal struct CommandBuffers
-{
-    internal    ComponentCommands[] componentCommands;
-    internal    TagCommand[]        tagCommands;
-    internal    EntityCommand[]     entityCommands;
-}
-
 public partial class EntityStore
 {
-    internal CommandBuffers GetCommandBuffers()
+#pragma warning disable CS0618 // Type or member is obsolete
+    public CommandBuffer GetCommandBuffer()
     {
-        var pool = intern.commandBufferPool ??= new Stack<CommandBuffers>();
+        var pool = intern.commandBufferPool ??= new Stack<CommandBuffer>();
         lock (pool)
         {
-            if (pool.TryPop(out var buffers)) {
-                return buffers;
+            if (pool.TryPop(out var buffer)) {
+                buffer.returnedBuffer   = false;
+                buffer.reuseBuffer      = false;
+                return buffer;
             }
         }
-        var schema          = Static.EntitySchema;
-        var maxStructIndex  = schema.maxStructIndex;
-        var componentTypes  = schema.components;
-
-        var commands = new ComponentCommands[maxStructIndex];
-        for (int n = 1; n < maxStructIndex; n++) {
-            commands[n] = componentTypes[n].CreateComponentCommands();
-        }
-        return new CommandBuffers {
-            componentCommands   = commands,
-            tagCommands         = Array.Empty<TagCommand>(),
-            entityCommands      = Array.Empty<EntityCommand>()
-        };
+        return new CommandBuffer(this);
     }
     
-    internal void ReturnCommandBuffers(
-        ComponentCommands[] componentCommands,
-        TagCommand[]        tagCommands,
-        EntityCommand[]     entityCommands)    
+    internal void ReturnCommandBuffer(CommandBuffer commandBuffer)
     {
         var pool = intern.commandBufferPool;
         lock (pool) {
-            pool.Push(new CommandBuffers {
-                componentCommands   = componentCommands,
-                tagCommands         = tagCommands,
-                entityCommands      = entityCommands
-            });
+            pool.Push(commandBuffer);
         }
     }
     

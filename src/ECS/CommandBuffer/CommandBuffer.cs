@@ -18,7 +18,10 @@ namespace Friflo.Engine.ECS;
 
 
 [Obsolete("Experimental")]
-public struct CommandBuffer
+// Note: CommandBuffer is not a struct. Reasons:
+// - struct need to be passed as a ref parameter => easy to forget
+// - ref parameters cannot be used in lambdas
+public sealed class CommandBuffer
 {
 #region public properties
     public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommandTypes);
@@ -41,18 +44,25 @@ public struct CommandBuffer
     private             int                 _entityCommandCount;
     //
     private readonly    EntityStore         store;
-    private             bool                reuseBuffer;
-    private             bool                returnedBuffers;
+    internal            bool                reuseBuffer;
+    internal            bool                returnedBuffer;
     #endregion
     
 #region general methods
-    public CommandBuffer(EntityStore store)
+    internal CommandBuffer(EntityStore store)
     {
-        this.store              = store;
-        var buffers             = store.GetCommandBuffers();
-        _componentCommandTypes  = buffers.componentCommands;
-        _tagCommands            = buffers.tagCommands;
-        _entityCommands         = buffers.entityCommands;
+        this.store          = store;
+        var schema          = EntityStoreBase.Static.EntitySchema;
+        var maxStructIndex  = schema.maxStructIndex;
+        var componentTypes  = schema.components;
+
+        var commands = new ComponentCommands[maxStructIndex];
+        for (int n = 1; n < maxStructIndex; n++) {
+            commands[n] = componentTypes[n].CreateComponentCommands();
+        }
+        _componentCommandTypes  = commands;
+        _tagCommands            = Array.Empty<TagCommand>();
+        _entityCommands         = Array.Empty<EntityCommand>();
     }
     
     public void Playback()
@@ -83,9 +93,9 @@ public struct CommandBuffer
     
     public void ReturnBuffer()
     {
-        if (!returnedBuffers) {
-            store.ReturnCommandBuffers(_componentCommandTypes, _tagCommands, _entityCommands);
-            returnedBuffers = true;
+        if (!returnedBuffer) {
+            store.ReturnCommandBuffer(this);
+            returnedBuffer = true;
         }
     }
     
@@ -252,7 +262,7 @@ public struct CommandBuffer
     private void ChangeComponent<T>(in T component, int entityId, ComponentChangedAction change)
         where T : struct, IComponent
     {
-        if (returnedBuffers) {
+        if (returnedBuffer) {
             throw CannotReuseCommandBuffer();   
         }
         var structIndex = StructHeap<T>.StructIndex;
@@ -299,7 +309,7 @@ public struct CommandBuffer
     
     private void ChangeTag(int entityId, int tagIndex, TagChange change)
     {
-        if (returnedBuffers) {
+        if (returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
         var count = _tagCommandsCount;
@@ -317,7 +327,7 @@ public struct CommandBuffer
 #region entity
     public int CreateEntity()
     {
-        if (returnedBuffers) {
+        if (returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
         var id = store.NewId();
@@ -335,7 +345,7 @@ public struct CommandBuffer
     
     public void DeleteEntity(int entityId)
     {
-        if (returnedBuffers) {
+        if (returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
         var count = _entityCommandCount; 

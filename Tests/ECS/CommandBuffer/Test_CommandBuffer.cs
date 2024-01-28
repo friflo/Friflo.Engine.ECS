@@ -21,7 +21,7 @@ public static class Test_CommandBuffer
 
         // --- empty ECB
         {
-            var ecb = new CommandBuffer(store);
+            var ecb = store.GetCommandBuffer();
             AreEqual(0, ecb.ComponentCommandsCount);
             ecb.Playback();
             AreEqual(1, store.EntityCount);
@@ -30,7 +30,7 @@ public static class Test_CommandBuffer
         var pos1 = new Position(1, 1, 1);
         var pos2 = new Position(2, 2, 2);
         {
-            var ecb = new CommandBuffer(store);
+            var ecb = store.GetCommandBuffer();
             
             // --- structural change: add Position
             ecb.AddComponent(1, pos1);
@@ -48,7 +48,7 @@ public static class Test_CommandBuffer
         
         // --- handle remove after add
         {
-            var ecb = new CommandBuffer(store);
+            var ecb = store.GetCommandBuffer();
             ecb.AddComponent   <Position>(1);
             ecb.RemoveComponent<Position>(1);
             
@@ -59,7 +59,7 @@ public static class Test_CommandBuffer
         
         // --- no structural change
         {
-            var ecb = new CommandBuffer(store);
+            var ecb = store.GetCommandBuffer();
             ecb.AddComponent   <Position>(1);
             ecb.RemoveComponent<Position>(1);
             
@@ -71,7 +71,7 @@ public static class Test_CommandBuffer
         // --- archetype changes
         {
             entity.AddComponent(new Rotation());
-            var ecb = new CommandBuffer(store);
+            var ecb = store.GetCommandBuffer();
             ecb.AddComponent(1, pos1);
             ecb.Playback();
             
@@ -83,7 +83,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_component_commands()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 4633 ms
+        int count       = 10; // 1_000_000 ~ #PC: 4665 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];
@@ -108,7 +108,7 @@ public static class Test_CommandBuffer
     
     private static void QueueComponentCommands(EntityStore store, int count) {
 
-        var ecb = new CommandBuffer(store);
+        var ecb = store.GetCommandBuffer();
         for (int n = 0; n < count; n++) {
             ecb.AddComponent(n + 1, new Position(n + 1, 0, 0));    
         }
@@ -121,7 +121,7 @@ public static class Test_CommandBuffer
         var store   = new EntityStore(PidType.UsePidAsId);
         var entity  = store.CreateEntity();
         {
-            var ecb     = new CommandBuffer(store);
+            var ecb     = store.GetCommandBuffer();
             AreEqual(0, ecb.TagCommandsCount);
             ecb.AddTag   <TestTag>(1);
             AreEqual(1, ecb.TagCommandsCount);
@@ -129,17 +129,17 @@ public static class Test_CommandBuffer
             AreEqual(0, ecb.TagCommandsCount);
             IsTrue(entity.Tags.Has<TestTag>());
         } {
-            var ecb     = new CommandBuffer(store);
+            var ecb     = store.GetCommandBuffer();
             ecb.RemoveTag   <TestTag>(1);
             ecb.Playback();
             IsFalse(entity.Tags.Has<TestTag>());
         } {
-            var ecb     = new CommandBuffer(store);
+            var ecb     = store.GetCommandBuffer();
             ecb.AddTags   (1, Tags.Get<TestTag2>());
             ecb.Playback();
             IsTrue(entity.Tags.Has<TestTag2>());
         } {
-            var ecb     = new CommandBuffer(store);
+            var ecb     = store.GetCommandBuffer();
             ecb.RemoveTags(1, Tags.Get<TestTag2>());
             ecb.Playback();
             IsFalse(entity.Tags.Has<TestTag2>());
@@ -149,7 +149,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_tag_commands()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 3383 ms
+        int count       = 10; // 1_000_000 ~ #PC: 3351 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];
@@ -177,7 +177,7 @@ public static class Test_CommandBuffer
     
     private static void QueueTagCommands(EntityStore store, int count)
     {
-        var ecb = new CommandBuffer(store);
+        var ecb = store.GetCommandBuffer();
         for (int n = 0; n < count; n++) {
             ecb.AddTag<TestTag>(n + 1);    
         }
@@ -188,7 +188,7 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_reuse()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
+        var ecb     = store.GetCommandBuffer();
         ecb.ReuseBuffer = true;
         IsTrue(ecb.ReuseBuffer);
         ecb.Playback();
@@ -220,7 +220,7 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_reuse_exceptions()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
+        var ecb     = store.GetCommandBuffer();
         ecb.Playback();
         
         var e = Throws<InvalidOperationException>(() => {
@@ -248,7 +248,7 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_command_error()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
+        var ecb     = store.GetCommandBuffer();
         ecb.AddComponent<Position>(1);
         var e = Throws<InvalidOperationException>(() => {
             ecb.Playback();    
@@ -260,7 +260,7 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_tag_error()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
+        var ecb     = store.GetCommandBuffer();
         ecb.AddTag<TestTag>(1);
         var e = Throws<InvalidOperationException>(() => {
             ecb.Playback();    
@@ -272,7 +272,7 @@ public static class Test_CommandBuffer
     public static void Test_CommandBuffer_entity_error()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var ecb     = new CommandBuffer(store);
+        var ecb     = store.GetCommandBuffer();
         ecb.DeleteEntity(42);
         var e = Throws<InvalidOperationException>(() => {
             ecb.Playback();    
@@ -286,7 +286,7 @@ public static class Test_CommandBuffer
         var store   = new EntityStore(PidType.UsePidAsId);
         int id;
         {
-            var ecb     = new CommandBuffer(store);
+            var ecb     = store.GetCommandBuffer();
             id = ecb.CreateEntity();
             AreEqual(1, ecb.EntityCommandsCount);
             ecb.AddComponent<Position>(id);
@@ -297,7 +297,7 @@ public static class Test_CommandBuffer
             AreEqual(0, ecb.EntityCommandsCount);
             AreEqual(1, store.EntityCount);
         } {
-            var ecb     = new CommandBuffer(store);
+            var ecb     = store.GetCommandBuffer();
             ecb.DeleteEntity(id);
             ecb.Playback();
             
@@ -330,7 +330,7 @@ public static class Test_CommandBuffer
     
     private static void QueueEntityCommands(EntityStore store, int count) {
 
-        var ecb     = new CommandBuffer(store);
+        var ecb     = store.GetCommandBuffer();
         for (int n = 0; n < count; n++) {
             ecb.CreateEntity();    
         }
