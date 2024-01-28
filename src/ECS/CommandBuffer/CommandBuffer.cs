@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 public struct CommandBuffer
 {
 #region public properties
-    public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommands);
+    public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommandTypes);
     public              int                 TagCommandsCount        => _tagCommandsCount;
     public              int                 EntityCommandsCount     => _entityCommandCount;
     
@@ -29,7 +29,7 @@ public struct CommandBuffer
     
 #region private fields
     private             ComponentTypes      _changedComponentTypes;
-    private             ComponentCommands[] _componentCommands;
+    private             ComponentCommands[] _componentCommandTypes;
     //
     private             TagCommand[]        _tagCommands;
     private             int                 _tagCommandsCount;
@@ -43,20 +43,20 @@ public struct CommandBuffer
 #region general methods
     public CommandBuffer(EntityStore store)
     {
-        this.store          = store;
-        var buffers         = store.GetCommandBuffers();
-        _componentCommands  = buffers.componentCommands;
-        _tagCommands        = buffers.tagCommands;
-        _entityCommands     = buffers.entityCommands;
+        this.store              = store;
+        var buffers             = store.GetCommandBuffers();
+        _componentCommandTypes  = buffers.componentCommands;
+        _tagCommands            = buffers.tagCommands;
+        _entityCommands         = buffers.entityCommands;
     }
     
     public void Playback()
     {
         var tagCommands         = _tagCommands;
-        var componentCommands   = _componentCommands;
+        var componentCommands   = _componentCommandTypes;
         var entityCommands      = _entityCommands;
         _tagCommands            = null;
-        _componentCommands      = null;
+        _componentCommandTypes  = null;
         _entityCommands         = null;
 
         var playback = store.GetPlayback();
@@ -205,6 +205,10 @@ public struct CommandBuffer
         }
         return count;
     }
+    
+    private static InvalidOperationException CannotReuseCommandBuffer() {
+        return new InvalidOperationException("Cannot reuse CommandBuffer after Playback()");
+    }
     #endregion
         
 #region component
@@ -237,7 +241,11 @@ public struct CommandBuffer
     {
         var structIndex = StructHeap<T>.StructIndex;
         _changedComponentTypes.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
+        var types = _componentCommandTypes;
+        if (types == null) {
+            throw CannotReuseCommandBuffer();   
+        }
+        var commands    = (ComponentCommands<T>)types[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, Math.Max(4, 2 * count));
@@ -279,7 +287,10 @@ public struct CommandBuffer
     
     private void ChangeTag(int entityId, int tagIndex, TagChange change)
     {
-        var count = _tagCommandsCount; 
+        var count = _tagCommandsCount;
+        if (_tagCommands == null) {
+            throw CannotReuseCommandBuffer();
+        }
         if (count == _tagCommands.Length) {
             ArrayUtils.Resize(ref _tagCommands, Math.Max(4, 2 * count));
         }
@@ -296,6 +307,9 @@ public struct CommandBuffer
     {
         var id = store.NewId();
         var count = _entityCommandCount; 
+        if (_entityCommands == null) {
+            throw CannotReuseCommandBuffer();
+        }
         if (count == _entityCommands.Length) {
             ArrayUtils.Resize(ref _entityCommands, Math.Max(4, 2 * count));
         }

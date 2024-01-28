@@ -191,17 +191,20 @@ public static class Test_CommandBuffer
         var ecb     = new CommandBuffer(store);
         ecb.Playback();
         
-        Throws<NullReferenceException>(() => {
+        var e = Throws<InvalidOperationException>(() => {
             ecb.AddComponent<Position>(1);
         });
+        AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
         
-        Throws<NullReferenceException>(() => {
+        e = Throws<InvalidOperationException>(() => {
             ecb.AddTag<TestTag>(1);
         });
+        AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
         
-        Throws<NullReferenceException>(() => {
+        e = Throws<InvalidOperationException>(() => {
             ecb.CreateEntity();
         });
+        AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
     }
     
     [Test]
