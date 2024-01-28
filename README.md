@@ -357,6 +357,7 @@ A `CommandBuffer` is used to record changes on multiple entities. E.g. `AddCompo
 These changes are applied to entities when calling `Playback()`.    
 Recording commands with a `CommandBuffer` instance can be done on **any** thread.  
 `Playback()` must be called on the **main** thread.  
+Available commands are in the [CommandBuffer - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md).  
 
 This enables entity changes in multi threaded application using entity systems / queries.  
 In these cases enumeration of query results run on multiple worker threads.  
