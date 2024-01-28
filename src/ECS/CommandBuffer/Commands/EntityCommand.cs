@@ -12,6 +12,6 @@ internal enum EntityCommandAction
 
 internal struct EntityCommand
 {
-    internal EntityCommandAction    action;
-    internal int                    entityId;
+    internal EntityCommandAction    action;     //  4
+    internal int                    entityId;   //  4
 }

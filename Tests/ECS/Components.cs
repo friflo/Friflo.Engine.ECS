@@ -32,6 +32,8 @@ public struct BlittableBigInteger       : IComponent { public BigInteger    bigI
 [ComponentKey("byte")]
 public struct ByteComponent : IComponent { public byte b; }
 
+public struct LongComponent : IComponent { public long b; }
+
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
 public static class MyEntityExtensions
 {

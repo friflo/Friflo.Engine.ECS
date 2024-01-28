@@ -103,10 +103,16 @@ public static class Test_sizeof
     class TestScript : Script { }
     
     [Test]
-    public static void Test_sizeof_TagCommand() {
-        var type = typeof(TagCommand);
-        var size = Marshal.SizeOf(type!);
+    public static unsafe void Test_sizeof_CommandBuffer_structs()
+    {
+        var size = sizeof(TagCommand);
         AreEqual(8, size);
+        
+        size = sizeof(EntityCommand);
+        AreEqual(8, size);
+        
+        size = sizeof(ComponentCommand<LongComponent>);
+        AreEqual(16, size);
     }
     
     // ---------------------------------------- Tests project types ------------------------------------------
