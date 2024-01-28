@@ -32,7 +32,7 @@ public struct CommandBuffer
     
 #region private fields
     private             ComponentTypes      _changedComponentTypes;
-    private             ComponentCommands[] _componentCommandTypes;
+    private readonly    ComponentCommands[] _componentCommandTypes;
     //
     private             TagCommand[]        _tagCommands;
     private             int                 _tagCommandsCount;
