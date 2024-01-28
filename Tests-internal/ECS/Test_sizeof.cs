@@ -113,6 +113,9 @@ public static class Test_sizeof
         
         size = sizeof(ComponentCommand<LongComponent>);
         AreEqual(16, size);
+        
+        size = sizeof(EntityChange);
+        AreEqual(64, size);
     }
     
     // ---------------------------------------- Tests project types ------------------------------------------
