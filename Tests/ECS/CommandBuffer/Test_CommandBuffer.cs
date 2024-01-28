@@ -81,7 +81,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_component_commands()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 4665 ms
+        int count       = 10; // 1_000_000 (* 100) ~ #PC: 4665 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];
@@ -147,7 +147,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_tag_commands()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 3351 ms
+        int count       = 10; // 1_000_000 (* 100) ~ #PC: 3351 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         var entities    = new Entity[count];
@@ -307,7 +307,7 @@ public static class Test_CommandBuffer
     [Test]
     public static void Test_CommandBuffer_grow_CreateEntity()
     {
-        int count       = 10; // 1_000_000 ~ #PC: 5002 ms
+        int count       = 10; // 1_000_000 (* 100) ~ #PC: 5002 ms
         var store       = new EntityStore(PidType.UsePidAsId);
 
         store.EnsureCapacity(count);
