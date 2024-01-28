@@ -4,6 +4,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+// ReSharper disable ConvertToAutoPropertyWhenPossible
+// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
@@ -22,6 +24,7 @@ public struct CommandBuffer
     public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommandTypes);
     public              int                 TagCommandsCount        => _tagCommandsCount;
     public              int                 EntityCommandsCount     => _entityCommandCount;
+    public              bool                ReuseBuffer             { get => reuseBuffer; set => reuseBuffer = value; }
     
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}"; 
 
@@ -38,6 +41,7 @@ public struct CommandBuffer
     private             int                 _entityCommandCount;
     //
     private readonly    EntityStore         store;
+    private bool        reuseBuffer;
     #endregion
     
 #region general methods
@@ -55,10 +59,11 @@ public struct CommandBuffer
         var tagCommands         = _tagCommands;
         var componentCommands   = _componentCommandTypes;
         var entityCommands      = _entityCommands;
-        _tagCommands            = null;
-        _componentCommandTypes  = null;
-        _entityCommands         = null;
-
+        if (!reuseBuffer) {
+            _tagCommands            = null;
+            _componentCommandTypes  = null;
+            _entityCommands         = null;
+        }
         var playback = store.GetPlayback();
         try {
             bool hasComponentChanges = _changedComponentTypes.Count > 0;
@@ -76,8 +81,18 @@ public struct CommandBuffer
         finally {
             Reset(componentCommands);
             playback.entityChanges.Clear();
-            store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
+            if (!reuseBuffer) {
+                store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
+            }
         }
+    }
+    
+    public void ReturnBuffer()
+    {
+        store.ReturnCommandBuffers(_componentCommandTypes, _tagCommands, _entityCommands);
+        _tagCommands            = null;
+        _componentCommandTypes  = null;
+        _entityCommands         = null;
     }
     
     private void ExecuteEntityCommands(EntityCommand[] entityCommands)
@@ -194,8 +209,8 @@ public struct CommandBuffer
             componentCommands[componentType.StructIndex].commandCount = 0;
         }
         _changedComponentTypes  = default;
-        _tagCommandsCount   = 0;
-        _entityCommandCount = 0;
+        _tagCommandsCount       = 0;
+        _entityCommandCount     = 0;
     }
     
     private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {

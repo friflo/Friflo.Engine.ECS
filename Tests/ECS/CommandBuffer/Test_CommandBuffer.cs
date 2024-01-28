@@ -185,24 +185,46 @@ public static class Test_CommandBuffer
     }
     
     [Test]
-    public static void Test_CommandBuffer_prevent_reuse()
+    public static void Test_CommandBuffer_reuse()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = new CommandBuffer(store);
+        ecb.ReuseBuffer = true;
+        IsTrue(ecb.ReuseBuffer);
+        ecb.Playback();
+
+        ecb.CreateEntity();
+        ecb.AddComponent<Position>(1);
+        ecb.AddTag<TestTag>(1);
+        ecb.Playback();
+        
+        ecb.ReturnBuffer();
+        Assert_CommandBuffer_reuse_exceptions(ecb);
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_reuse_exceptions()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var ecb     = new CommandBuffer(store);
         ecb.Playback();
-        
+        Assert_CommandBuffer_reuse_exceptions(ecb);
+    }
+    
+    private static void Assert_CommandBuffer_reuse_exceptions(CommandBuffer ecb)
+    {
         var e = Throws<InvalidOperationException>(() => {
+            ecb.CreateEntity();
+        });
+        AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
             ecb.AddComponent<Position>(1);
         });
         AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
             ecb.AddTag<TestTag>(1);
-        });
-        AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
-        
-        e = Throws<InvalidOperationException>(() => {
-            ecb.CreateEntity();
         });
         AreEqual("Cannot reuse CommandBuffer after Playback()", e!.Message);
     }
