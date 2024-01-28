@@ -229,6 +229,11 @@ public static class Test_CommandBuffer
         AreEqual("Reused CommandBuffer after Playback(). ReuseBuffer: False", e!.Message);
         
         e = Throws<InvalidOperationException>(() => {
+            ecb.DeleteEntity(42);
+        });
+        AreEqual("Reused CommandBuffer after Playback(). ReuseBuffer: False", e!.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
             ecb.AddComponent<Position>(1);
         });
         AreEqual("Reused CommandBuffer after Playback(). ReuseBuffer: False", e!.Message);

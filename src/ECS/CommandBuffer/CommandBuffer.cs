@@ -57,20 +57,13 @@ public struct CommandBuffer
     
     public void Playback()
     {
-        var tagCommands         = _tagCommands;
         var componentCommands   = _componentCommandTypes;
-        var entityCommands      = _entityCommands;
-        if (!reuseBuffer) {
-            _tagCommands            = null;
-            _componentCommandTypes  = null;
-            _entityCommands         = null;
-        }
-        var playback = store.GetPlayback();
+        var playback            = store.GetPlayback();
         try {
-            bool hasComponentChanges = _changedComponentTypes.Count > 0;
+            var hasComponentChanges = _changedComponentTypes.Count > 0;
             
-            ExecuteEntityCommands(entityCommands);
-            ExecuteTagCommands(playback, tagCommands);
+            ExecuteEntityCommands(_entityCommands);
+            ExecuteTagCommands(playback, _tagCommands);
             if (hasComponentChanges) {
                 PrepareComponentCommands(playback, componentCommands);
             }
@@ -82,9 +75,8 @@ public struct CommandBuffer
         finally {
             Reset(componentCommands);
             playback.entityChanges.Clear();
-            if (!returnedBuffers && !reuseBuffer) {
-                store.ReturnCommandBuffers(componentCommands, tagCommands, entityCommands);
-                returnedBuffers = true;
+            if (!reuseBuffer) {
+                ReturnBuffer();
             }
         }
     }
@@ -95,9 +87,6 @@ public struct CommandBuffer
             store.ReturnCommandBuffers(_componentCommandTypes, _tagCommands, _entityCommands);
             returnedBuffers = true;
         }
-        _tagCommands            = null;
-        _componentCommandTypes  = null;
-        _entityCommands         = null;
     }
     
     private void ExecuteEntityCommands(EntityCommand[] entityCommands)
@@ -226,8 +215,9 @@ public struct CommandBuffer
         return count;
     }
     
-    private InvalidOperationException CannotReuseCommandBuffer() {
-        if (returnedBuffers && reuseBuffer) {
+    private InvalidOperationException CannotReuseCommandBuffer()
+    {
+        if (reuseBuffer) {
             return new InvalidOperationException("CommandBuffer - buffers returned to store");    
         }
         return new InvalidOperationException($"Reused CommandBuffer after Playback(). ReuseBuffer: {reuseBuffer}");
@@ -262,11 +252,11 @@ public struct CommandBuffer
     private void ChangeComponent<T>(in T component, int entityId, ComponentChangedAction change)
         where T : struct, IComponent
     {
-        var structIndex = StructHeap<T>.StructIndex;
-        _changedComponentTypes.bitSet.SetBit(structIndex);
         if (returnedBuffers) {
             throw CannotReuseCommandBuffer();   
         }
+        var structIndex = StructHeap<T>.StructIndex;
+        _changedComponentTypes.bitSet.SetBit(structIndex);
         var commands    = (ComponentCommands<T>)_componentCommandTypes[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
@@ -309,10 +299,10 @@ public struct CommandBuffer
     
     private void ChangeTag(int entityId, int tagIndex, TagChange change)
     {
-        var count = _tagCommandsCount;
         if (returnedBuffers) {
             throw CannotReuseCommandBuffer();
         }
+        var count = _tagCommandsCount;
         if (count == _tagCommands.Length) {
             ArrayUtils.Resize(ref _tagCommands, Math.Max(4, 2 * count));
         }
@@ -327,11 +317,12 @@ public struct CommandBuffer
 #region entity
     public int CreateEntity()
     {
-        var id = store.NewId();
-        var count = _entityCommandCount; 
         if (returnedBuffers) {
             throw CannotReuseCommandBuffer();
         }
+        var id = store.NewId();
+        var count = _entityCommandCount; 
+
         if (count == _entityCommands.Length) {
             ArrayUtils.Resize(ref _entityCommands, Math.Max(4, 2 * count));
         }
@@ -344,6 +335,9 @@ public struct CommandBuffer
     
     public void DeleteEntity(int entityId)
     {
+        if (returnedBuffers) {
+            throw CannotReuseCommandBuffer();
+        }
         var count = _entityCommandCount; 
         if (count == _entityCommands.Length) {
             ArrayUtils.Resize(ref _entityCommands, Math.Max(4, 2 * count));
