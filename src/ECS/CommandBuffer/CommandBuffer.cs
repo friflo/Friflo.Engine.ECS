@@ -14,16 +14,25 @@ using System.Runtime.InteropServices;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-
+/// <summary>
+/// A command buffer enables recording entity changes on <b>arbitrary</b> threads.<br/>
+/// These changes are executed by calling <see cref="Playback"/> on the <b>main</b> thread.
+/// </summary>
 // Note: CommandBuffer is not a struct. Reasons:
 // - struct need to be passed as a ref parameter => easy to forget
 // - ref parameters cannot be used in lambdas
 public sealed class CommandBuffer
 {
 #region public properties
+    /// <summary> Return the number of recorded components commands. </summary>
     public              int                 ComponentCommandsCount  => GetComponentCommandsCount(_componentCommandTypes);
+    /// <summary> Return the number of recorded tag commands. </summary>
     public              int                 TagCommandsCount        => _tagCommandsCount;
+    /// <summary> Return the number of recorded entity commands. </summary>
     public              int                 EntityCommandsCount     => _entityCommandCount;
+    /// <summary>
+    /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.
+    /// </summary>
     public              bool                ReuseBuffer             { get => reuseBuffer; set => reuseBuffer = value; }
     
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}"; 
@@ -62,6 +71,13 @@ public sealed class CommandBuffer
         _entityCommands         = Array.Empty<EntityCommand>();
     }
     
+    /// <summary>
+    /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread. 
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// When recording commands after calling <see cref="Playback"/>.<br/>
+    /// To reuse a <see cref="CommandBuffer"/> instance set <see cref="ReuseBuffer"/> = true.
+    /// </exception>
     public void Playback()
     {
         var componentCommands   = _componentCommandTypes;
@@ -88,6 +104,9 @@ public sealed class CommandBuffer
         }
     }
     
+    /// <summary>
+    /// Return the resources of the <see cref="CommandBuffer"/> to the <see cref="EntityStore"/>.
+    /// </summary>
     public void ReturnBuffer()
     {
         if (!returnedBuffer) {
@@ -232,24 +251,36 @@ public sealed class CommandBuffer
     #endregion
         
 #region component
+    /// <summary>
+    /// Add the <see cref="IComponent"/> with type <typeparamref name="T"/> to the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void AddComponent<T>(int entityId)
         where T : struct, IComponent
     {
         ChangeComponent<T>(default, entityId,ComponentChangedAction.Add);
     }
     
+    /// <summary>
+    /// Add the given <paramref name="component"/> with type <typeparamref name="T"/> to the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void AddComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
         ChangeComponent(component,  entityId, ComponentChangedAction.Add);
     }
     
+    /// <summary>
+    /// Set the given <paramref name="component"/> with type <typeparamref name="T"/> of the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void SetComponent<T>(int entityId, in T component)
         where T : struct, IComponent
     {
         ChangeComponent(component,  entityId, ComponentChangedAction.Update);
     }
     
+    /// <summary>
+    /// Remove the <see cref="IComponent"/> with type <typeparamref name="T"/> from the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void RemoveComponent<T>(int entityId)
         where T : struct, IComponent
     {
@@ -278,12 +309,18 @@ public sealed class CommandBuffer
     #endregion
     
 #region tag
+    /// <summary>
+    /// Add the <see cref="ITag"/> with type <typeparamref name="T"/> to the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void AddTag<T>(int entityId)
         where T : struct, ITag
     {
         ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Add);
     }
     
+    /// <summary>
+    /// Add the <paramref name="tags"/> to the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void AddTags(int entityId, in Tags tags)
     {
         foreach (var tag in tags) {
@@ -291,12 +328,18 @@ public sealed class CommandBuffer
         }
     }
     
+    /// <summary>
+    /// Remove the <see cref="ITag"/> with type <typeparamref name="T"/> from the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void RemoveTag<T>(int entityId)
         where T : struct, ITag
     {
         ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Remove);
     }
     
+    /// <summary>
+    /// Remove the <paramref name="tags"/> from the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
     public void RemoveTags(int entityId, in Tags tags)
     {
         foreach (var tag in tags) {
@@ -322,6 +365,9 @@ public sealed class CommandBuffer
 #endregion
 
 #region entity
+    /// <summary>
+    /// Creates a new entity on <see cref="Playback"/> which will have the returned entity id.
+    /// </summary>
     public int CreateEntity()
     {
         if (returnedBuffer) {
@@ -340,6 +386,9 @@ public sealed class CommandBuffer
         return id;
     }
     
+    /// <summary>
+    /// Deletes the entity with the passed <paramref name="entityId"/> on <see cref="Playback"/>.
+    /// </summary>
     public void DeleteEntity(int entityId)
     {
         if (returnedBuffer) {

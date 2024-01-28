@@ -180,4 +180,28 @@ public static class Examples
             }
         }
     }
+    
+    [Test]
+    public static void CommandBuffer()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        entity1.AddComponent<Position>();
+        
+        CommandBuffer cb = store.GetCommandBuffer();
+        var newEntity = cb.CreateEntity();
+        cb.DeleteEntity  (entity2.Id);
+        cb.AddComponent  (newEntity, new EntityName("new entity"));
+        cb.RemoveComponent<Position>(entity1.Id);        
+        cb.AddComponent  (entity1.Id, new EntityName("changed entity"));
+        cb.AddTag<MyTag1>(entity1.Id);
+        
+        cb.Playback();
+        
+        var entity3 = store.GetEntityById(newEntity);
+        Console.WriteLine(entity1);                         // > id: 1  "changed entity"  [EntityName, #MyTag1]
+        Console.WriteLine(entity2);                         // > id: 2  (detached)
+        Console.WriteLine(entity3);                         // > id: 3  "new entity"  [EntityName]
+    }
 }

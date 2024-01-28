@@ -101,6 +101,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Signal](#signal)
 - [Query](#query)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
+- [CommandBuffer](#commandbuffer)
 
 
 
@@ -346,5 +347,43 @@ public static void EnumerateQueryChunks()
             // > MyComponent.value: 44
         }
     }
+}
+```
+
+
+## CommandBuffer
+
+A `CommandBuffer` is used to record changes on multiple entities. E.g. `AddComponent()`.  
+These changes are applied to entities when calling `Playback()`.    
+Recording commands with a `CommandBuffer` instance can be done on **any** thread.  
+`Playback()` must be called on the **main** thread.  
+
+This enables entity changes in multi threaded application using entity systems / queries.  
+In these cases enumeration of query results run on multiple worker threads.  
+Within these enumerations entity changes are recorded with a `CommandBuffer`.  
+After the query thread has finished the changes are execute with `Playback()` on the **main** thread.
+
+```csharp
+public static void CommandBuffer()
+{
+    var store   = new EntityStore(PidType.UsePidAsId);
+    var entity1 = store.CreateEntity();
+    var entity2 = store.CreateEntity();
+    entity1.AddComponent<Position>();
+    
+    CommandBuffer cb = store.GetCommandBuffer();
+    var newEntity = cb.CreateEntity();
+    cb.DeleteEntity  (entity2.Id);
+    cb.AddComponent  (newEntity, new EntityName("new entity"));
+    cb.RemoveComponent<Position>(entity1.Id);        
+    cb.AddComponent  (entity1.Id, new EntityName("changed entity"));
+    cb.AddTag<MyTag1>(entity1.Id);
+    
+    cb.Playback();
+    
+    var entity3 = store.GetEntityById(newEntity);
+    Console.WriteLine(entity1);                         // > id: 1  "changed entity"  [EntityName, #MyTag1]
+    Console.WriteLine(entity2);                         // > id: 2  (detached)
+    Console.WriteLine(entity3);                         // > id: 3  "new entity"  [EntityName]
 }
 ```
