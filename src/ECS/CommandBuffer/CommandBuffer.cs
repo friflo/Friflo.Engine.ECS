@@ -28,10 +28,9 @@ public struct CommandBuffer
     #endregion
     
 #region private fields
-    private             ComponentTypes      _changedComponents;
+    private             ComponentTypes      _changedComponentTypes;
     private             ComponentCommands[] _componentCommands;
     //
-    private             ComponentTypes      _changedTags;
     private             TagCommand[]        _tagCommands;
     private             int                 _tagCommandsCount;
     //
@@ -62,11 +61,17 @@ public struct CommandBuffer
 
         var playback = store.GetPlayback();
         try {
-            ExecuteEntityCommands   (entityCommands);
-            ExecuteTagCommands      (playback, tagCommands);
-            PrepareComponentCommands(playback, componentCommands);
+            bool hasComponentChanges = _changedComponentTypes.Count > 0;
+            
+            ExecuteEntityCommands(entityCommands);
+            ExecuteTagCommands(playback, tagCommands);
+            if (hasComponentChanges) {
+                PrepareComponentCommands(playback, componentCommands);
+            }
             UpdateEntityArchetypes  (playback);
-            ExecuteComponentCommands(playback, componentCommands);
+            if (hasComponentChanges) {
+                ExecuteComponentCommands(playback, componentCommands);
+            }
         }
         finally {
             Reset(componentCommands);
@@ -131,7 +136,7 @@ public struct CommandBuffer
     
     private void PrepareComponentCommands(Playback playback, ComponentCommands[] componentCommands)
     {
-        foreach (var componentType in _changedComponents)
+        foreach (var componentType in _changedComponentTypes)
         {
             var commands = componentCommands[componentType.StructIndex];
             commands.UpdateComponentTypes(playback);
@@ -140,7 +145,7 @@ public struct CommandBuffer
     
     private void ExecuteComponentCommands(Playback playback, ComponentCommands[] componentCommands)
     {
-        foreach (var componentType in _changedComponents)
+        foreach (var componentType in _changedComponentTypes)
         {
             var commands = componentCommands[componentType.StructIndex];
             commands.ExecuteCommands(playback);
@@ -184,19 +189,18 @@ public struct CommandBuffer
     
     private void Reset(ComponentCommands[] componentCommands)
     {
-        foreach (var componentType in _changedComponents)
+        foreach (var componentType in _changedComponentTypes)
         {
             componentCommands[componentType.StructIndex].commandCount = 0;
         }
-        _changedComponents  = default;
-        _changedTags        = default;
+        _changedComponentTypes  = default;
         _tagCommandsCount   = 0;
         _entityCommandCount = 0;
     }
     
     private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {
         int count = 0;
-        foreach (var componentType in _changedComponents) {
+        foreach (var componentType in _changedComponentTypes) {
             count += componentCommands[componentType.StructIndex].commandCount;
         }
         return count;
@@ -232,7 +236,7 @@ public struct CommandBuffer
         where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        _changedComponents.bitSet.SetBit(structIndex);
+        _changedComponentTypes.bitSet.SetBit(structIndex);
         var commands    = (ComponentCommands<T>)_componentCommands[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
@@ -275,8 +279,6 @@ public struct CommandBuffer
     
     private void ChangeTag(int entityId, int tagIndex, TagChange change)
     {
-        _changedTags.bitSet.SetBit(tagIndex);
-        
         var count = _tagCommandsCount; 
         if (count == _tagCommands.Length) {
             ArrayUtils.Resize(ref _tagCommands, Math.Max(4, 2 * count));
