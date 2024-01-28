@@ -246,7 +246,7 @@ public sealed class CommandBuffer
         if (reuseBuffer) {
             return new InvalidOperationException("CommandBuffer - buffers returned to store");    
         }
-        return new InvalidOperationException($"Reused CommandBuffer after Playback(). ReuseBuffer: {reuseBuffer}");
+        return new InvalidOperationException("Reused CommandBuffer after Playback(). ReuseBuffer: false");
     }
     #endregion
         
