@@ -28,10 +28,8 @@ internal sealed class EventRecorder
     [Browse(Never)] internal            long            allEventsCount;
     [Browse(Never)] private             bool            enabled;
     [Browse(Never)] private  readonly   EntityStore     entityStore;
-                    internal readonly   EntityEvents[]  componentAdded;
-                    internal readonly   EntityEvents[]  componentRemoved;
-                    internal readonly   EntityEvents[]  tagAdded;
-                    internal readonly   EntityEvents[]  tagRemoved;
+                    internal readonly   EntityEvents[]  componentEvents;
+                    internal readonly   EntityEvents[]  tagEvents;
     #endregion
     
 #region general methods
@@ -39,32 +37,25 @@ internal sealed class EventRecorder
     {
         entityStore         = store;
         var schema          = EntityStoreBase.Static.EntitySchema;
-        componentAdded      = CreateEntityEvents(schema.components);
-        componentRemoved    = CreateEntityEvents(schema.components);
-        tagAdded            = CreateEntityEvents(schema.tags);
-        tagRemoved          = CreateEntityEvents(schema.tags);
+        componentEvents     = CreateEntityEvents(schema.components);
+        tagEvents           = CreateEntityEvents(schema.components);
     }
     
-    public ReadOnlySpan<int> ComponentAddedEntities  <T>() where T : struct, IComponent => componentAdded  [StructHeap<T>.StructIndex].EntityIds;
-    public ReadOnlySpan<int> ComponentRemovedEntities<T>() where T : struct, IComponent => componentRemoved[StructHeap<T>.StructIndex].EntityIds;
-    
-    public ReadOnlySpan<int> TagAddedEntities  <T>() where T : struct, ITag => tagAdded  [TagType<T>.TagIndex].EntityIds;
-    public ReadOnlySpan<int> TagRemovedEntities<T>() where T : struct, ITag => tagRemoved[TagType<T>.TagIndex].EntityIds;
+    public ReadOnlySpan<EntityEvent> ComponentEvents<T>() where T : struct, IComponent => componentEvents[StructHeap<T>.StructIndex].Events;
+    public ReadOnlySpan<EntityEvent> TagEvents      <T>() where T : struct, ITag       => componentEvents[TagType<T>.   TagIndex].   Events;
     
     public void Reset()
     {
-        ResetEvents(componentAdded);
-        ResetEvents(componentRemoved);
-        ResetEvents(tagAdded);
-        ResetEvents(tagRemoved);
+        ResetEvents(componentEvents);
+        ResetEvents(tagEvents);
     }
     
     private static void ResetEvents(EntityEvents[] eventsArray)
     {
         // todo could use bit mask to reset events only if necessary
         foreach (ref var events in eventsArray.AsSpan()) {
-            events.entitySet?.Clear();
-            events.entityIdCount = 0;
+            events.entityMap?.Clear();
+            events.eventCount = 0;
             events.entitySetPos = 0;
         }
     }
@@ -92,7 +83,7 @@ internal sealed class EventRecorder
         var length      = types.Length;
         var eventsArray = new EntityEvents[length];
         for (int n = 1; n < length; n++) {
-            var events = new EntityEvents(types[n]) { entityIds = Array.Empty<int>() };
+            var events = new EntityEvents(types[n]) { events = Array.Empty<EntityEvent>() };
             eventsArray[n] = events;
         }
         return eventsArray;
@@ -110,13 +101,13 @@ internal sealed class EventRecorder
     private void OnComponentAdded(ComponentChanged change)
     {
         allEventsCount++;
-        AddEvent(componentAdded, change.StructIndex, change.EntityId);
+        AddEvent(componentEvents, change.StructIndex, change.EntityId, EntityEventAction.Added);
     }
     
     private void OnComponentRemoved(ComponentChanged change)
     {
         allEventsCount++;
-        AddEvent(componentRemoved, change.StructIndex, change.EntityId);
+        AddEvent(componentEvents, change.StructIndex, change.EntityId, EntityEventAction.Removed);
     }
     
     private void OnTagsChanged(TagsChanged change)
@@ -125,27 +116,30 @@ internal sealed class EventRecorder
         if (addedCount > 0) {
             allEventsCount += addedCount;
             foreach (var tag in change.AddedTags) {
-                AddEvent(tagAdded, tag.TagIndex, change.EntityId);
+                AddEvent(tagEvents, tag.TagIndex, change.EntityId, EntityEventAction.Added);
             }
         }
         var removedCount = change.RemovedTags.Count;
         if (removedCount > 0) {
             allEventsCount += removedCount;
             foreach (var tag in change.RemovedTags) {
-                AddEvent(tagRemoved, tag.TagIndex, change.EntityId);
+                AddEvent(tagEvents, tag.TagIndex, change.EntityId, EntityEventAction.Removed);
             }
         }
     }
     
-    private static void AddEvent(EntityEvents[] typeEvents, int typeIndex, int entityId)
+    private static void AddEvent(EntityEvents[] typeEvents, int typeIndex, int entityId, EntityEventAction action)
     {
         ref var events  = ref typeEvents[typeIndex];
-        int count       = events.entityIdCount; 
-        if (count == events.entityIds.Length) {
-            ArrayUtils.Resize(ref events.entityIds, Math.Max(4, 2 * count));
+        int count       = events.eventCount; 
+        if (count == events.events.Length) {
+            ArrayUtils.Resize(ref events.events, Math.Max(4, 2 * count));
         }
-        events.entityIdCount    = count + 1;
-        events.entityIds[count] = entityId;
+        events.eventCount    = count + 1;
+        ref var ev  = ref events.events[count];
+        ev.id       = entityId;
+        ev.action   = action;
+        // events.events[count] = entityId;
     }
     #endregion
 }

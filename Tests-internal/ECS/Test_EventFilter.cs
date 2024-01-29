@@ -36,21 +36,21 @@ public static class Test_EventFilter
         
         positionAdded.  ComponentAdded  <Position>();
         positionRemoved.ComponentRemoved<Position>();
-        tagAdded.  TagAdded  <TestTag>();
-        tagRemoved.TagRemoved<TestTag>();
+        tagAdded.       TagAdded        <TestTag>();
+        tagRemoved.     TagRemoved      <TestTag>();
         
-        AreEqual("added: [Position]",   positionAdded.ToString());
-        AreEqual("removed: [Position]", positionRemoved.ToString());
-        AreEqual("added: [#TestTag]",   tagAdded.ToString());
-        AreEqual("removed: [#TestTag]", tagRemoved.ToString());
+        AreEqual("added: [Position]  removed: []",   positionAdded.ToString());
+        AreEqual("added: []  removed: [Position]", positionRemoved.ToString());
+        AreEqual("added: [#TestTag]  removed: []",   tagAdded.ToString());
+        AreEqual("added: []  removed: [#TestTag]", tagRemoved.ToString());
         
         var filter = new EventFilter(recorder);
-        filter.ComponentAdded  <Position>();
-        filter.ComponentRemoved<Position>();
-        filter.TagAdded  <TestTag>();
-        filter.TagRemoved<TestTag>();
+        filter.ComponentAdded   <Position>();
+        filter.ComponentRemoved <Position>();
+        filter.TagAdded         <TestTag>();
+        filter.TagRemoved       <TestTag>();
         
-        AreEqual("added: [Position, #TestTag],  removed: [Position, #TestTag]", filter.ToString());
+        AreEqual("added: [Position, #TestTag]  removed: [Position, #TestTag]", filter.ToString());
     }
     
     [Test]
@@ -70,22 +70,23 @@ public static class Test_EventFilter
         
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
-        entity1.AddComponent<Position>();
-        entity1.AddTag<TestTag>();
+        entity1.AddComponent    <Position>();
+        entity1.AddTag          <TestTag>();
         
-        entity2.AddComponent<Position>();
-        entity2.RemoveComponent<Position>();
-        entity2.AddTag<TestTag>();
-        entity2.RemoveTag<TestTag>();
+        entity2.AddComponent    <Position>();
+        entity2.RemoveComponent <Position>();
+        entity2.AddTag          <TestTag>();
+        entity2.RemoveTag       <TestTag>();
         
-        var positionAdded = recorder.ComponentAddedEntities<Position>();
-        AreEqual(2, positionAdded.Length);
-        AreEqual(1, positionAdded[0]);
-        AreEqual(2, positionAdded[1]);
+        var positionEvents = recorder.ComponentEvents<Position>();
+        AreEqual(3, positionEvents.Length);
+        AreEqual(1, positionEvents[0].id);
+        AreEqual(2, positionEvents[1].id);
+        AreEqual(2, positionEvents[2].id);
         
-        AreEqual(1, recorder.ComponentRemovedEntities<Position>().Length);
-        AreEqual(2, recorder.TagAddedEntities<TestTag>().Length);
-        AreEqual(1, recorder.TagRemovedEntities<TestTag>().Length);
+        AreEqual(3, recorder.ComponentEvents<Position>().Length);
+        AreEqual(3, recorder.TagEvents<TestTag>().Length);
+
         
         AreEqual(6, recorder.AllEventsCount);
         AreEqual("All events: 6", recorder.ToString());
@@ -98,10 +99,8 @@ public static class Test_EventFilter
         recorder.Reset();
         entity2.AddComponent<Position>();
         
-        AreEqual(0, recorder.ComponentAddedEntities<Position>().Length);
-        AreEqual(0, recorder.ComponentRemovedEntities<Position>().Length);
-        AreEqual(0, recorder.TagAddedEntities<TestTag>().Length);
-        AreEqual(0, recorder.TagRemovedEntities<TestTag>().Length);
+        AreEqual(0, recorder.ComponentEvents<Position>().Length);
+        AreEqual(0, recorder.TagEvents<TestTag>().Length);
         AreEqual(6, recorder.AllEventsCount);
     }
     
@@ -119,20 +118,20 @@ public static class Test_EventFilter
         
         positionAdded.  ComponentAdded  <Position>();
         positionRemoved.ComponentRemoved<Position>();
-        tagAdded.  TagAdded  <TestTag>();
-        tagRemoved.TagRemoved<TestTag>();
+        tagAdded.       TagAdded        <TestTag>();
+        tagRemoved.     TagRemoved      <TestTag>();
         
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         var entity3 = store.CreateEntity();
         
-        entity2.AddComponent<Position>();
-        entity2.AddTag<TestTag>();
+        entity2.AddComponent    <Position>();
+        entity2.AddTag          <TestTag>();
         
-        entity3.AddComponent   <Position>();
-        entity3.RemoveComponent<Position>();
-        entity3.AddTag   <TestTag>();
-        entity3.RemoveTag<TestTag>();
+        entity3.AddComponent    <Position>();
+        entity3.RemoveComponent <Position>();
+        entity3.AddTag          <TestTag>();
+        entity3.RemoveTag       <TestTag>();
         
         IsFalse(positionAdded.  Filter(entity1.Id));
         IsFalse(positionRemoved.Filter(entity1.Id));
@@ -144,9 +143,9 @@ public static class Test_EventFilter
         IsTrue (tagAdded.       Filter(entity2.Id));
         IsFalse(tagRemoved.     Filter(entity2.Id));
         
-        IsTrue (positionAdded.  Filter(entity3.Id));
+        IsFalse(positionAdded.  Filter(entity3.Id));
         IsTrue (positionRemoved.Filter(entity3.Id));
-        IsTrue (tagAdded.       Filter(entity3.Id));
+        IsFalse(tagAdded.       Filter(entity3.Id));
         IsTrue (tagRemoved.     Filter(entity3.Id));
     }
 }

@@ -28,52 +28,46 @@ internal sealed class EventFilter
                     private             long            _lastEventCount;
                     private readonly    EventRecorder   _recorder;
                     //
-                    private             EventFilters    componentsAdded     = new EventFilters { action = EventFilterAction.Added };
-                    private             EventFilters    componentsRemoved   = new EventFilters { action = EventFilterAction.Removed };
-                    private             EventFilters    tagsAdded           = new EventFilters { action = EventFilterAction.Added };
-                    private             EventFilters    tagsRemoved         = new EventFilters { action = EventFilterAction.Removed };
+                    private             EventFilters    componentFilters;
+                    private             EventFilters    tagFilters;
     
-    [Browse(Never)] private readonly    EntityEvents[]  eventsComponentAdded;
-    [Browse(Never)] private readonly    EntityEvents[]  eventsComponentRemoved;
-    [Browse(Never)] private readonly    EntityEvents[]  eventsTagAdded;
-    [Browse(Never)] private readonly    EntityEvents[]  eventsTagRemoved;
+    [Browse(Never)] private readonly    EntityEvents[]  componentEvents;
+    [Browse(Never)] private readonly    EntityEvents[]  tagEvents;
     #endregion
     
     
     internal EventFilter(EventRecorder recorder)
     {
-        this._recorder           = recorder;
-        eventsComponentAdded    = recorder.componentAdded;
-        eventsComponentRemoved  = recorder.componentRemoved;
-        eventsTagAdded          = recorder.tagAdded;
-        eventsTagRemoved        = recorder.tagRemoved;
+        _recorder       = recorder;
+        componentEvents = recorder.componentEvents;
+        tagEvents       = recorder.tagEvents;
     }
     
     public void ComponentAdded<T>()
         where T : struct, IComponent
     {
-        AddFilter(ref componentsAdded, StructHeap<T>.StructIndex, SchemaTypeKind.Component);
+        AddFilter(ref componentFilters, StructHeap<T>.StructIndex, SchemaTypeKind.Component, EntityEventAction.Added);
     }
     
     public void ComponentRemoved<T>()
         where T : struct, IComponent
     {
-        AddFilter(ref componentsRemoved, StructHeap<T>.StructIndex, SchemaTypeKind.Component);
+        AddFilter(ref componentFilters, StructHeap<T>.StructIndex, SchemaTypeKind.Component, EntityEventAction.Removed);
     }
     
     public void TagAdded<T>()
         where T : struct, ITag
     {
-        AddFilter(ref tagsAdded, TagType<T>.TagIndex, SchemaTypeKind.Tag);
+        AddFilter(ref tagFilters, TagType<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Added);
     }
     
     public void TagRemoved<T>()
         where T : struct, ITag
     {
-        AddFilter(ref tagsRemoved, TagType<T>.TagIndex, SchemaTypeKind.Tag);
+        AddFilter(ref tagFilters, TagType<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Removed);
     }
     
-    private static void AddFilter(ref EventFilters filters, int typeIndex, SchemaTypeKind kind)
+    private static void AddFilter(ref EventFilters filters, int typeIndex, SchemaTypeKind kind, EntityEventAction action)
     {
         if (filters.items == null || filters.count == filters.items.Length) {
             ArrayUtils.Resize(ref filters.items, Math.Max(4, 2 * filters.count));
@@ -81,16 +75,14 @@ internal sealed class EventFilter
         ref var filter  = ref filters.items[filters.count++];
         filter.index    = typeIndex;
         filter.kind     = kind; 
+        filter.action   = action;
     }
-    
     
     private void InitFilter()
     {
         _lastEventCount = _recorder.allEventsCount;
-        InitTypeFilter(componentsAdded,   eventsComponentAdded);
-        InitTypeFilter(componentsRemoved, eventsComponentRemoved);
-        InitTypeFilter(tagsAdded,         eventsTagAdded);
-        InitTypeFilter(tagsRemoved,       eventsTagRemoved);
+        InitTypeFilter(componentFilters,    componentEvents);
+        InitTypeFilter(tagFilters,          tagEvents);
     }
     
     private static void InitTypeFilter(in EventFilters filters, EntityEvents[] events)
@@ -98,10 +90,10 @@ internal sealed class EventFilter
         for (int n = 0; n < filters.count; n++)
         {
             ref var entityEvents = ref events[filters.items[n].index];
-            if (entityEvents.entityIdCount == entityEvents.entitySetPos) {
+            if (entityEvents.eventCount == entityEvents.entitySetPos) {
                 continue;
             }
-            entityEvents.entitySet ??= new HashSet<int>();
+            entityEvents.entityMap ??= new Dictionary<int, EntityEventAction>();
             entityEvents.UpdateHashSet();
         }
     }
@@ -111,10 +103,8 @@ internal sealed class EventFilter
         if (_lastEventCount != _recorder.allEventsCount) {
             InitFilter();
         }
-        if (componentsAdded  .items != null && Contains(componentsAdded,   eventsComponentAdded,   entityId)) return true;
-        if (componentsRemoved.items != null && Contains(componentsRemoved, eventsComponentRemoved, entityId)) return true;
-        if (tagsAdded        .items != null && Contains(tagsAdded,         eventsTagAdded,         entityId)) return true;
-        if (tagsRemoved      .items != null && Contains(tagsRemoved,       eventsTagRemoved,       entityId)) return true;
+        if (componentFilters.items != null && Contains(componentFilters, componentEvents, entityId)) return true;
+        if (tagFilters      .items != null && Contains(tagFilters,       tagEvents,       entityId)) return true;
         return false;
     }
     
@@ -122,7 +112,12 @@ internal sealed class EventFilter
     {
         for (int n = 0; n < filters.count; n++)
         {
-            if (events[filters.items[n].index].entitySet.Contains(entityId)) {
+            ref var filter  = ref filters.items[n];
+            var     map     = events[filter.index].entityMap;
+            if (!map.TryGetValue(entityId, out var action)) {
+                continue;
+            }
+            if (action == filter.action) {
                 return true;
             }
         }
@@ -132,21 +127,22 @@ internal sealed class EventFilter
     private string GetString()
     {
         var sb = new StringBuilder();
-        if (componentsAdded.count > 0 || tagsAdded.count > 0) {
-            sb.Append("added: [");
-            componentsAdded.AppendString(sb);
-            tagsAdded.      AppendString(sb);
-            sb.Length -= 2;
-            sb.Append(']');
-        }
-        if (componentsRemoved.count > 0 || tagsRemoved.count > 0) {
-            if (sb.Length > 0) sb.Append(",  ");
-            sb.Append("removed: [");
-            componentsRemoved.AppendString(sb);
-            tagsRemoved.      AppendString(sb);
-            sb.Length -= 2;
-            sb.Append(']');
-        }
+
+        sb.Append("added: [");
+        var start = sb.Length;
+        componentFilters.AppendString(sb, EntityEventAction.Added);
+        tagFilters.      AppendString(sb, EntityEventAction.Added);
+        if (start != sb.Length) sb.Length -= 2;
+        sb.Append(']');
+
+        if (sb.Length > 0) sb.Append("  ");
+        sb.Append("removed: [");
+        start = sb.Length;
+        componentFilters.AppendString(sb, EntityEventAction.Removed);
+        tagFilters.      AppendString(sb, EntityEventAction.Removed);
+        if (start != sb.Length) sb.Length -= 2;
+        sb.Append(']');
+
         return sb.ToString();
     }
 }

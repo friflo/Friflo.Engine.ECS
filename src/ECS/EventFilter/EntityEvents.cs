@@ -13,18 +13,18 @@ namespace Friflo.Engine.ECS;
 internal struct EntityEvents
 {
 #region properties
-    internal        ReadOnlySpan<int>   EntityIds   => new (entityIds, 0, entityIdCount);
+    internal        ReadOnlySpan<EntityEvent>   Events   => new (events, 0, eventCount);
 
-    public override string              ToString()  => GetString();
+    public override string                      ToString()  => GetString();
 
     #endregion
     
 #region fields
-    internal            int[]           entityIds;      //  8   - never null
-    internal            int             entityIdCount;  //  4
-    internal            HashSet<int>    entitySet;      //  8   - can be null. Created / updated on demand.
-    internal            int             entitySetPos;   //  4
-    private  readonly   SchemaType      type;           //  8
+    internal            EntityEvent[]                       events;         //  8   - never null
+    internal            int                                 eventCount;     //  4
+    internal            Dictionary<int, EntityEventAction>  entityMap;      //  8   - can be null. Created / updated on demand.
+    internal            int                                 entitySetPos;   //  4
+    private  readonly   SchemaType                          type;           //  8
     #endregion
     
     internal EntityEvents(SchemaType type) {
@@ -33,22 +33,22 @@ internal struct EntityEvents
     
     internal bool ContainsId(int entityId)
     {
-        var idCount = entityIdCount;
-        var set     = entitySet ??= new HashSet<int>(idCount);
+        var idCount = eventCount;
+        var map     = entityMap ??= new Dictionary<int, EntityEventAction>(idCount);
         if (entitySetPos < idCount) {
             UpdateHashSet();
         }
-        return set.Contains(entityId);
+        return map.ContainsKey(entityId);
     }
     
     internal void UpdateHashSet()
     {
-        var set = entitySet;
-        var ids = new ReadOnlySpan<int>(entityIds, entitySetPos, entityIdCount - entitySetPos);
-        foreach (var id in ids) {
-            set.Add(id);
+        var set = entityMap;
+        var eventSpan = new ReadOnlySpan<EntityEvent>(events, entitySetPos, eventCount - entitySetPos);
+        foreach (var ev in eventSpan) {
+            set[ev.id] = ev.action;
         }
-        entitySetPos = entityIdCount;
+        entitySetPos = eventCount;
     }
     
     private string GetString() {
@@ -56,7 +56,7 @@ internal struct EntityEvents
             return "";
         }
         string marker = type.Kind == SchemaTypeKind.Component ? "" : "#";
-        return $"[{marker}{type.Name}] events: {entityIdCount}";
+        return $"[{marker}{type.Name}] events: {eventCount}";
     }
 }
 

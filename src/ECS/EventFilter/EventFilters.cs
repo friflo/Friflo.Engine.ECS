@@ -8,11 +8,19 @@ namespace Friflo.Engine.ECS;
 
 internal struct TypeFilter
 {
-    internal    int             index;
-    internal    SchemaTypeKind  kind;
+    internal    int                 index;
+    internal    SchemaTypeKind      kind;
+    internal    EntityEventAction   action;
 }
 
-internal enum EventFilterAction
+internal struct EntityEvent {
+    internal    int                 id;
+    internal    EntityEventAction   action;
+
+    public override string ToString() => $"id: {id} - {action}";
+}
+
+internal enum EntityEventAction : byte
 {
     Removed = 0,
     Added   = 1
@@ -22,7 +30,6 @@ internal struct EventFilters
 {
     internal    TypeFilter[]        items;
     internal    int                 count;
-    internal    EventFilterAction   action;
 
     public override string  ToString() => GetString();
     
@@ -32,26 +39,29 @@ internal struct EventFilters
             return "[]";
         }
         var sb = new StringBuilder();
-        if (action == EventFilterAction.Added) {
-            sb.Append("added: ");
-        } else {
-            sb.Append("removed: ");
-        }
-        sb.Append('[');
-        if (count > 0) {
-            AppendString(sb);
-            sb.Length -= 2;
-        }
+        sb.Append("added: [");
+        var start = sb.Length;
+        AppendString(sb, EntityEventAction.Added);
+        if (sb.Length > start) sb.Length -= 2;
+        sb.Append("]  ");
+        
+        sb.Append("removed: [");
+        start = sb.Length;
+        AppendString(sb, EntityEventAction.Removed);
+        if (sb.Length > start) sb.Length -= 2;
         sb.Append(']');
         return sb.ToString();
     }
     
-    internal void AppendString(StringBuilder sb)
+    internal void AppendString(StringBuilder sb, EntityEventAction action)
     {
         var schema  = EntityStoreBase.Static.EntitySchema;
         for (int n = 0; n < count; n++)
         {
-            var filter = items[n];
+            TypeFilter filter = items[n];
+            if (filter.action != action) {
+                continue;
+            }
             if (filter.kind == SchemaTypeKind.Component) {
                 var type = schema.components[filter.index];
                 sb.Append(type.Name);
