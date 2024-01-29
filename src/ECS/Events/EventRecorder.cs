@@ -40,11 +40,18 @@ internal sealed class EventRecorder
         
     }
     
-    internal void ObserveStore (EntityStore store)
+    internal void AddEventHandlers (EntityStore store)
     {
         store.OnComponentAdded      += OnComponentAdded;
         store.OnComponentRemoved    += OnComponentRemoved;
         store.OnTagsChanged         += OnTagsChanged;
+    }
+    
+    internal void RemoveEventHandlers (EntityStore store)
+    {
+        store.OnComponentAdded      -= OnComponentAdded;
+        store.OnComponentRemoved    -= OnComponentRemoved;
+        store.OnTagsChanged         -= OnTagsChanged;
     }
     
     private static EntityEvents[] CreateEntityEvents(int length)
