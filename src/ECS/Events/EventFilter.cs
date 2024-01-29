@@ -2,8 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable ParameterTypeCanBeEnumerable.Local
@@ -71,20 +73,39 @@ internal sealed class EventFilter
         filter[count++] = typeIndex;
     }
     
+    
+    public void InitFilter()
+    {
+        InitTypeFilter(addedComponents,   addedComponentsCount,   componentAdded);
+        InitTypeFilter(removedComponents, removedComponentsCount, componentRemoved);
+        InitTypeFilter(addedTags,         addedTagsCount,         tagAdded);
+        InitTypeFilter(removedTags,       removedTagsCount,       tagRemoved);
+    }
+    
+    private static void InitTypeFilter(int[] indexes, int count, EntityEvents[] events)
+    {
+        for (int n = 0; n < count; n++)
+        {
+            var entityEvents = events[indexes[n]];
+            entityEvents.entitySet ??= new HashSet<int>();
+            entityEvents.UpdateHashSet();
+        }
+    }
+    
     public bool Filter(int entityId)
     {
-        if (addedComponents   != null && Contains(addedComponents,   componentAdded,     entityId))  return true;
-        if (removedComponents != null && Contains(removedComponents, componentRemoved,   entityId))  return true;
-        if (addedTags         != null && Contains(addedTags,         tagAdded,           entityId))  return true;
-        if (removedTags       != null && Contains(removedTags,       tagRemoved,         entityId))  return true;
+        if (addedComponents   != null && Contains(addedComponents,   addedComponentsCount,   componentAdded,   entityId))  return true;
+        if (removedComponents != null && Contains(removedComponents, removedComponentsCount, componentRemoved, entityId))  return true;
+        if (addedTags         != null && Contains(addedTags,         addedTagsCount,         tagAdded,         entityId))  return true;
+        if (removedTags       != null && Contains(removedTags,       removedTagsCount,       tagRemoved,       entityId))  return true;
         return false;
     }
     
-    private static bool Contains(int[] indexes, EntityEvents[] events, int entityId)
+    private static bool Contains(int[] indexes, int count, EntityEvents[] events, int entityId)
     {
-        foreach (var index in indexes)
+        for (int n = 0; n < count; n++)
         {
-            if (events[index].entitySet.Contains(entityId)) {
+            if (events[indexes[n]].entitySet.Contains(entityId)) {
                 return true;
             }
         }
