@@ -18,8 +18,11 @@ namespace Friflo.Engine.ECS;
 internal sealed class EventRecorder
 {
 #region properties
-    public              long AllEventsCount => allEventsCount;
-    public              bool Enabled        { get => enabled; set => SetEnabled(value); }
+    public          long AllEventsCount => allEventsCount;
+    public          bool Enabled        { get => enabled; set => SetEnabled(value); }
+
+    public override string ToString()   => $"All events: {AllEventsCount}";
+
     #endregion
     
 #region fields
