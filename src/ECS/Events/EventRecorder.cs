@@ -115,17 +115,18 @@ internal struct EntityEvents
     #endregion
     
     
-    internal bool ContainsId(int id)
+    internal bool ContainsId(int entityId)
     {
-        entitySet ??= new HashSet<int>(entityIdCount);
-        if (entitySetPos < entityIdCount)
+        var idCount = entityIdCount;
+        var set     = entitySet ??= new HashSet<int>(idCount);
+        if (entitySetPos < idCount)
         {
-            var count       = entityIdCount;
-            entitySetPos    = count;
-            for (int n = entitySetPos; n < count; n++) {
-                entitySet.Add(entityIds[n]);
+            entitySetPos    = idCount;
+            var ids         = new ReadOnlySpan<int>(entityIds, entitySetPos, idCount - entitySetPos);
+            foreach (var id in ids) {
+                set.Add(id);
             }
         }
-        return entitySet.Contains(id);
+        return set.Contains(entityId);
     }
 }
