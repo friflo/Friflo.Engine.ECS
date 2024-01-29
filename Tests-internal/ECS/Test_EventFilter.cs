@@ -30,20 +30,45 @@ public static class Test_EventFilter
         var recorder    = store.EventRecorder;
         
         IsFalse(recorder.Enabled);
+        
+        // --- enable event recording
         recorder.Enabled = true;
         IsTrue(recorder.Enabled);
         
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         entity1.AddComponent<Position>();
-        entity2.AddComponent<Position>();
+        entity1.AddTag<TestTag>();
         
-        AreEqual(2, recorder.AllEventsCount);
+        entity2.AddComponent<Position>();
+        entity2.RemoveComponent<Position>();
+        entity2.AddTag<TestTag>();
+        entity2.RemoveTag<TestTag>();
+        
         var positionAdded = recorder.ComponentAddedEntities<Position>();
         AreEqual(2, positionAdded.Length);
         AreEqual(1, positionAdded[0]);
         AreEqual(2, positionAdded[1]);
         
-        AreEqual("All events: 2", recorder.ToString());
+        AreEqual(1, recorder.ComponentRemovedEntities<Position>().Length);
+        AreEqual(2, recorder.TagAddedEntities<TestTag>().Length);
+        AreEqual(1, recorder.TagRemovedEntities<TestTag>().Length);
+        
+        AreEqual(6, recorder.AllEventsCount);
+        AreEqual("All events: 6", recorder.ToString());
+        
+        
+        // --- disable event recording
+        recorder.Enabled = false;
+        IsFalse(recorder.Enabled);
+        
+        recorder.Reset();
+        entity2.AddComponent<Position>();
+        
+        AreEqual(0, recorder.ComponentAddedEntities<Position>().Length);
+        AreEqual(0, recorder.ComponentRemovedEntities<Position>().Length);
+        AreEqual(0, recorder.TagAddedEntities<TestTag>().Length);
+        AreEqual(0, recorder.TagRemovedEntities<TestTag>().Length);
+        AreEqual(6, recorder.AllEventsCount);
     }
 }

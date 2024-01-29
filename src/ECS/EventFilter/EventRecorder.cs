@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
