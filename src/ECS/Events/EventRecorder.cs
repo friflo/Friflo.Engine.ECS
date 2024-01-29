@@ -36,8 +36,21 @@ internal sealed class EventRecorder
         tagRemoved          = CreateEntityEvents(schema.tags.Length);
     }
     
-    public void Reset() {
-        
+    public void Reset()
+    {
+        ResetEvents(componentAdded);
+        ResetEvents(componentRemoved);
+        ResetEvents(tagAdded);
+        ResetEvents(tagRemoved);
+    }
+    
+    private static void ResetEvents(EntityEvents[] eventsArray)
+    {
+        foreach (ref var events in eventsArray.AsSpan()) {
+            events.entitySet?.Clear();
+            events.entityIdCount = 0;
+            events.entitySetPos = 0;
+        }
     }
     
     internal void AddEventHandlers (EntityStore store)
