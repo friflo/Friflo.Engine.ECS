@@ -12,19 +12,26 @@ namespace Friflo.Engine.ECS;
 /// Experimental POC
 /// </summary>
 [ExcludeFromCodeCoverage]
-internal class EventRecorder
+internal sealed class EventRecorder
 {
+#region fields
     private readonly    EntityEvents[]  componentAdded;
     private readonly    EntityEvents[]  componentRemoved;
     private readonly    EntityEvents[]  tagAdded;
     private readonly    EntityEvents[]  tagRemoved;
-        
+    #endregion
+    
+#region general methods
     public EventRecorder() {
         var schema          = EntityStoreBase.Static.EntitySchema;
         componentAdded      = CreateEntityEvents(schema.components.Length);
         componentRemoved    = CreateEntityEvents(schema.components.Length);
         tagAdded            = CreateEntityEvents(schema.tags.Length);
         tagRemoved          = CreateEntityEvents(schema.tags.Length);
+    }
+    
+    public void Reset() {
+        
     }
     
     internal void ObserveStore (EntityStore store)
@@ -44,11 +51,9 @@ internal class EventRecorder
         }
         return events;
     }
+    #endregion
     
-    public void Reset() {
-        
-    }
-    
+#region event handler
     private void OnComponentAdded(ComponentChanged change)
     {
         ref var events  = ref componentAdded[change.StructIndex];
@@ -94,15 +99,22 @@ internal class EventRecorder
             events.entityIds[count] = change.EntityId;
         }
     }
+    #endregion
 }
 
 [ExcludeFromCodeCoverage]
 internal struct EntityEvents
 {
+#region properties
+    internal    ReadOnlySpan<int>   EntityIds => new (entityIds, 0, entityIdCount);
+    #endregion
+    
+#region fields
     internal    int[]           entityIds;      //  8   - never null
     internal    int             entityIdCount;  //  4
-    private     HashSet<int>    entitySet;      //  8   - can be null
+    private     HashSet<int>    entitySet;      //  8   - can be null. Created on demand.
     private     int             entitySetPos;   //  4
+    #endregion
     
     
     internal bool ContainsId(int id)
