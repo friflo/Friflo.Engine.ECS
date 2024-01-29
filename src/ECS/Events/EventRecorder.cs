@@ -112,7 +112,7 @@ internal struct EntityEvents
     internal    int[]           entityIds;      //  8   - never null
     internal    int             entityIdCount;  //  4
     internal    HashSet<int>    entitySet;      //  8   - can be null. Created / updated on demand.
-    private     int             entitySetPos;   //  4
+    internal    int             entitySetPos;   //  4
     #endregion
     
     

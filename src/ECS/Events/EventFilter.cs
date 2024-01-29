@@ -91,7 +91,10 @@ internal sealed class EventFilter
     {
         for (int n = 0; n < count; n++)
         {
-            var entityEvents = events[indexes[n]];
+            ref var entityEvents = ref events[indexes[n]];
+            if (entityEvents.entityIdCount == entityEvents.entitySetPos) {
+                continue;
+            }
             entityEvents.entitySet ??= new HashSet<int>();
             entityEvents.UpdateHashSet();
         }
