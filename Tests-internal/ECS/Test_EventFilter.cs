@@ -24,7 +24,7 @@ public static class Test_EventFilter
     }
     
     [Test]
-    public static void Test_EventFilter_Init()
+    public static void Test_EventFilter_create_recorder()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         _               = store.EventRecorder;
@@ -73,5 +73,49 @@ public static class Test_EventFilter
         AreEqual(0, recorder.TagAddedEntities<TestTag>().Length);
         AreEqual(0, recorder.TagRemovedEntities<TestTag>().Length);
         AreEqual(6, recorder.AllEventsCount);
+    }
+    
+    [Test]
+    public static void Test_EventFilter_filter()
+    {
+        var store           = new EntityStore(PidType.UsePidAsId);
+        var recorder        = store.EventRecorder;
+        var positionAdded   = new EventFilter(recorder);
+        var positionRemoved = new EventFilter(recorder);
+        var tagAdded        = new EventFilter(recorder);
+        var tagRemoved      = new EventFilter(recorder);
+        recorder.Enabled = true;
+        
+        positionAdded.  ComponentAdded  <Position>();
+        positionRemoved.ComponentRemoved<Position>();
+        tagAdded.  TagAdded  <TestTag>();
+        tagRemoved.TagRemoved<TestTag>();
+        
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        var entity3 = store.CreateEntity();
+        
+        entity2.AddComponent<Position>();
+        entity2.AddTag<TestTag>();
+        
+        entity3.AddComponent   <Position>();
+        entity3.RemoveComponent<Position>();
+        entity3.AddTag   <TestTag>();
+        entity3.RemoveTag<TestTag>();
+        
+        IsFalse(positionAdded.  Filter(entity1.Id));
+        IsFalse(positionRemoved.Filter(entity1.Id));
+        IsFalse(tagAdded.       Filter(entity1.Id));
+        IsFalse(tagRemoved.     Filter(entity1.Id));
+        
+        IsTrue (positionAdded.  Filter(entity2.Id));
+        IsFalse(positionRemoved.Filter(entity2.Id));
+        IsTrue (tagAdded.       Filter(entity2.Id));
+        IsFalse(tagRemoved.     Filter(entity2.Id));
+        
+        IsTrue (positionAdded.  Filter(entity3.Id));
+        IsTrue (positionRemoved.Filter(entity3.Id));
+        IsTrue (tagAdded.       Filter(entity3.Id));
+        IsTrue (tagRemoved.     Filter(entity3.Id));
     }
 }
