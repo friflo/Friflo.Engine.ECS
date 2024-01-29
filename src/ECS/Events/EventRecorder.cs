@@ -36,6 +36,12 @@ internal sealed class EventRecorder
         tagRemoved          = CreateEntityEvents(schema.tags.Length);
     }
     
+    public ReadOnlySpan<int> ComponentAddedEntities  <T>() where T : struct, IComponent => componentAdded  [StructHeap<T>.StructIndex].entityIds;
+    public ReadOnlySpan<int> ComponentRemovedEntities<T>() where T : struct, IComponent => componentRemoved[StructHeap<T>.StructIndex].entityIds;
+    
+    public ReadOnlySpan<int> TagAddedEntities  <T>() where T : struct, ITag => tagAdded  [TagType<T>.TagIndex].entityIds;
+    public ReadOnlySpan<int> TagRemovedEntities<T>() where T : struct, ITag => tagRemoved[TagType<T>.TagIndex].entityIds;
+    
     public void Reset()
     {
         ResetEvents(componentAdded);
