@@ -45,9 +45,7 @@ internal sealed class EventRecorder
     {
         var events = new EntityEvents[length];
         for (int n = 1; n < length; n++) {
-            events[n] = new EntityEvents {
-                entityIds = Array.Empty<int>()
-            };
+            events[n].entityIds = Array.Empty<int>();
         }
         return events;
     }
