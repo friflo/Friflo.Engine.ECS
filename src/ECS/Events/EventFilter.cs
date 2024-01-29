@@ -15,6 +15,8 @@ namespace Friflo.Engine.ECS;
 [ExcludeFromCodeCoverage]
 internal sealed class EventFilter
 {
+    private             long            lastEventCount;
+    //
     private             int[]           addedComponents;
     private             int             addedComponentsCount;
     //
@@ -27,6 +29,7 @@ internal sealed class EventFilter
     private             int[]           removedTags;
     private             int             removedTagsCount;
     
+    private readonly    EventRecorder   recorder;
     private readonly    EntityEvents[]  componentAdded;
     private readonly    EntityEvents[]  componentRemoved;
     private readonly    EntityEvents[]  tagAdded;
@@ -35,6 +38,7 @@ internal sealed class EventFilter
     
     internal EventFilter(EventRecorder recorder)
     {
+        this.recorder       = recorder;
         componentAdded      = recorder.componentAdded;
         componentRemoved    = recorder.componentRemoved;
         tagAdded            = recorder.tagAdded;
@@ -74,8 +78,9 @@ internal sealed class EventFilter
     }
     
     
-    public void InitFilter()
+    private void InitFilter()
     {
+        lastEventCount = recorder.allEventsCount;
         InitTypeFilter(addedComponents,   addedComponentsCount,   componentAdded);
         InitTypeFilter(removedComponents, removedComponentsCount, componentRemoved);
         InitTypeFilter(addedTags,         addedTagsCount,         tagAdded);
@@ -94,6 +99,9 @@ internal sealed class EventFilter
     
     public bool Filter(int entityId)
     {
+        if (lastEventCount != recorder.allEventsCount) {
+            InitFilter();
+        }
         if (addedComponents   != null && Contains(addedComponents,   addedComponentsCount,   componentAdded,   entityId))  return true;
         if (removedComponents != null && Contains(removedComponents, removedComponentsCount, componentRemoved, entityId))  return true;
         if (addedTags         != null && Contains(addedTags,         addedTagsCount,         tagAdded,         entityId))  return true;

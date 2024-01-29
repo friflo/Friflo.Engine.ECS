@@ -15,7 +15,12 @@ namespace Friflo.Engine.ECS;
 [ExcludeFromCodeCoverage]
 internal sealed class EventRecorder
 {
+#region properties
+    public              long AllEventsCount => allEventsCount;
+    #endregion
+    
 #region fields
+    internal            long            allEventsCount;
     internal readonly   EntityEvents[]  componentAdded;
     internal readonly   EntityEvents[]  componentRemoved;
     internal readonly   EntityEvents[]  tagAdded;
@@ -55,21 +60,31 @@ internal sealed class EventRecorder
 #region event handler
     private void OnComponentAdded(ComponentChanged change)
     {
+        allEventsCount++;
         AddEvent(componentAdded, change.StructIndex, change.EntityId);
     }
     
     private void OnComponentRemoved(ComponentChanged change)
     {
+        allEventsCount++;
         AddEvent(componentRemoved, change.StructIndex, change.EntityId);
     }
     
     private void OnTagsChanged(TagsChanged change)
     {
-        foreach (var tag in change.AddedTags) {
-            AddEvent(tagAdded, tag.TagIndex, change.EntityId);
+        var addedCount = change.AddedTags.Count;
+        if (addedCount > 0) {
+            allEventsCount += addedCount;
+            foreach (var tag in change.AddedTags) {
+                AddEvent(tagAdded, tag.TagIndex, change.EntityId);
+            }
         }
-        foreach (var tag in change.RemovedTags) {
-            AddEvent(tagRemoved, tag.TagIndex, change.EntityId);
+        var removedCount = change.RemovedTags.Count;
+        if (removedCount > 0) {
+            allEventsCount += removedCount;
+            foreach (var tag in change.RemovedTags) {
+                AddEvent(tagRemoved, tag.TagIndex, change.EntityId);
+            }
         }
     }
     
