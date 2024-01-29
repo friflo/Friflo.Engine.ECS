@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -54,48 +55,33 @@ internal sealed class EventRecorder
 #region event handler
     private void OnComponentAdded(ComponentChanged change)
     {
-        ref var events  = ref componentAdded[change.StructIndex];
-        int count       = events.entityIdCount; 
-        if (count == events.entityIds.Length) {
-            ArrayUtils.Resize(ref events.entityIds, Math.Max(4, 2 * count));
-        }
-        events.entityIdCount    = count + 1;
-        events.entityIds[count] = change.EntityId;
+        AddEvent(componentAdded, change.StructIndex, change.EntityId);
     }
     
     private void OnComponentRemoved(ComponentChanged change)
     {
-        ref var events  = ref componentRemoved[change.StructIndex];
+        AddEvent(componentRemoved, change.StructIndex, change.EntityId);
+    }
+    
+    private void OnTagsChanged(TagsChanged change)
+    {
+        foreach (var tag in change.AddedTags) {
+            AddEvent(tagAdded, tag.TagIndex, change.EntityId);
+        }
+        foreach (var tag in change.RemovedTags) {
+            AddEvent(tagRemoved, tag.TagIndex, change.EntityId);
+        }
+    }
+    
+    private static void AddEvent(EntityEvents[] typeEvents, int typeIndex, int entityId)
+    {
+        ref var events  = ref typeEvents[typeIndex];
         int count       = events.entityIdCount; 
         if (count == events.entityIds.Length) {
             ArrayUtils.Resize(ref events.entityIds, Math.Max(4, 2 * count));
         }
         events.entityIdCount    = count + 1;
-        events.entityIds[count] = change.EntityId;
-    }
-    
-    private void OnTagsChanged(TagsChanged change)
-    {
-        foreach (var tag in change.AddedTags)
-        {
-            ref var events  = ref tagAdded[tag.TagIndex];
-            int count       = events.entityIdCount; 
-            if (count == events.entityIds.Length) {
-                ArrayUtils.Resize(ref events.entityIds, Math.Max(4, 2 * count));
-            }
-            events.entityIdCount    = count + 1;
-            events.entityIds[count] = change.EntityId;
-        }
-        foreach (var tag in change.RemovedTags)
-        {
-            ref var events  = ref tagRemoved[tag.TagIndex];
-            int count       = events.entityIdCount; 
-            if (count == events.entityIds.Length) {
-                ArrayUtils.Resize(ref events.entityIds, Math.Max(4, 2 * count));
-            }
-            events.entityIdCount    = count + 1;
-            events.entityIds[count] = change.EntityId;
-        }
+        events.entityIds[count] = entityId;
     }
     #endregion
 }

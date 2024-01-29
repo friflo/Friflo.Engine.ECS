@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Friflo.Engine.ECS;
 
 [ExcludeFromCodeCoverage]
-internal class EventFilter
+internal sealed class EventFilter
 {
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
     private readonly    int[]           addedComponents;
