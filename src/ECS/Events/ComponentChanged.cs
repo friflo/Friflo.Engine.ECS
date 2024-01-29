@@ -50,9 +50,8 @@ public readonly struct  ComponentChanged
     /// <see cref="ComponentChangedAction.Add"/> or <see cref="ComponentChangedAction.Remove"/> component.</summary>
     public  readonly    ComponentChangedAction  Action;         //  4
     
-    /// <summary>The <see cref="ECS.ComponentType"/> of the added / removed component.</summary>
     [Browse(Never)]
-    public  readonly    ComponentType           ComponentType;  //  8
+    public  readonly    int                     StructIndex;    //  4
     
     [Browse(Never)]
     private readonly    StructHeap              oldHeap;        //  8
@@ -66,6 +65,10 @@ public readonly struct  ComponentChanged
 #region properties
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public              Entity                  Entity              => new Entity(Store, EntityId);
+    
+    /// <summary>The <see cref="ECS.ComponentType"/> of the added / removed component.</summary>
+    [Browse(Never)]
+    public              ComponentType           ComponentType       => Static.ComponentTypes[StructIndex];
     
     /// <summary>The <see cref="System.Type"/> of the added / removed component.</summary>
     /// <remarks>
@@ -105,7 +108,7 @@ public readonly struct  ComponentChanged
         Store           = store as EntityStore; 
         EntityId        = entityId;
         Action          = action;
-        ComponentType   = Static.ComponentTypes[structIndex];
+        StructIndex     = structIndex;     
         this.oldHeap    = oldHeap;
     }
     
