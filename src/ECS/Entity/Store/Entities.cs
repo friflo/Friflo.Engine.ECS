@@ -22,6 +22,10 @@ namespace Friflo.Engine.ECS;
 // EntityStore remarks.
 public partial class EntityStore
 {
+    /// <summary>
+    /// Return the <see cref="EntitySchema"/> containing all available
+    /// <see cref="IComponent"/>, <see cref="ITag"/> and <see cref="Script"/> types.
+    /// </summary>
     public static     EntitySchema         GetEntitySchema()=> Static.EntitySchema;
     
     /// <summary>

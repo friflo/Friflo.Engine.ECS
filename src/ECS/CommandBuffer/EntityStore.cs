@@ -9,6 +9,9 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStore
 {
+    /// <summary>
+    /// Returns a <see cref="CommandBuffer"/> used to record and <see cref="CommandBuffer.Playback"/> entity changes. 
+    /// </summary>
     public CommandBuffer GetCommandBuffer()
     {
         var pool = intern.commandBufferPool ??= new Stack<CommandBuffer>();
