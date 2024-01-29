@@ -22,14 +22,14 @@ internal sealed class EventRecorder
     public          long AllEventsCount => allEventsCount;
     public          bool Enabled        { get => enabled; set => SetEnabled(value); }
 
-    public override string ToString()   => $"All events: {AllEventsCount}";
+    public override string ToString()   => GetString();
 
     #endregion
     
 #region fields
     [Browse(Never)] internal            long            allEventsCount;
     [Browse(Never)] private             bool            enabled;
-                    private  readonly   EntityStore     entityStore;
+    [Browse(Never)] private  readonly   EntityStore     entityStore;
                     internal readonly   EntityEvents[]  componentAdded;
                     internal readonly   EntityEvents[]  componentRemoved;
                     internal readonly   EntityEvents[]  tagAdded;
@@ -98,6 +98,13 @@ internal sealed class EventRecorder
             eventsArray[n] = events;
         }
         return eventsArray;
+    }
+    
+    private string GetString() {
+        if (enabled) {
+            return $"All events: {AllEventsCount}";
+        }
+        return "disabled";
     }
     #endregion
     

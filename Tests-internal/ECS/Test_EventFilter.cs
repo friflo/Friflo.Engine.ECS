@@ -30,6 +30,7 @@ public static class Test_EventFilter
         var recorder    = store.EventRecorder;
         
         IsFalse(recorder.Enabled);
+        AreEqual("disabled", recorder.ToString());
         
         // --- enable event recording
         recorder.Enabled = true;
