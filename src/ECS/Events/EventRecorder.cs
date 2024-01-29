@@ -15,10 +15,10 @@ namespace Friflo.Engine.ECS;
 internal sealed class EventRecorder
 {
 #region fields
-    private readonly    EntityEvents[]  componentAdded;
-    private readonly    EntityEvents[]  componentRemoved;
-    private readonly    EntityEvents[]  tagAdded;
-    private readonly    EntityEvents[]  tagRemoved;
+    internal readonly   EntityEvents[]  componentAdded;
+    internal readonly   EntityEvents[]  componentRemoved;
+    internal readonly   EntityEvents[]  tagAdded;
+    internal readonly   EntityEvents[]  tagRemoved;
     #endregion
     
 #region general methods
@@ -110,7 +110,7 @@ internal struct EntityEvents
 #region fields
     internal    int[]           entityIds;      //  8   - never null
     internal    int             entityIdCount;  //  4
-    private     HashSet<int>    entitySet;      //  8   - can be null. Created on demand.
+    internal    HashSet<int>    entitySet;      //  8   - can be null. Created / updated on demand.
     private     int             entitySetPos;   //  4
     #endregion
     
@@ -119,14 +119,19 @@ internal struct EntityEvents
     {
         var idCount = entityIdCount;
         var set     = entitySet ??= new HashSet<int>(idCount);
-        if (entitySetPos < idCount)
-        {
-            var ids         = new ReadOnlySpan<int>(entityIds, entitySetPos, idCount - entitySetPos);
-            foreach (var id in ids) {
-                set.Add(id);
-            }
-            entitySetPos = idCount;
+        if (entitySetPos < idCount) {
+            UpdateHashSet();
         }
         return set.Contains(entityId);
+    }
+    
+    internal void UpdateHashSet()
+    {
+        var set = entitySet;
+        var ids = new ReadOnlySpan<int>(entityIds, entitySetPos, entityIdCount - entitySetPos);
+        foreach (var id in ids) {
+            set.Add(id);
+        }
+        entitySetPos = entityIdCount;
     }
 }
