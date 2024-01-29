@@ -24,6 +24,36 @@ public static class Test_EventFilter
     }
     
     [Test]
+    public static void Test_EventFilter_filter_ToString()
+    {
+        var store           = new EntityStore(PidType.UsePidAsId);
+        var recorder        = store.EventRecorder;
+        
+        var positionAdded   = new EventFilter(recorder);
+        var positionRemoved = new EventFilter(recorder);
+        var tagAdded        = new EventFilter(recorder);
+        var tagRemoved      = new EventFilter(recorder);
+        
+        positionAdded.  ComponentAdded  <Position>();
+        positionRemoved.ComponentRemoved<Position>();
+        tagAdded.  TagAdded  <TestTag>();
+        tagRemoved.TagRemoved<TestTag>();
+        
+        AreEqual("added: [Position]",   positionAdded.ToString());
+        AreEqual("removed: [Position]", positionRemoved.ToString());
+        AreEqual("added: [#TestTag]",   tagAdded.ToString());
+        AreEqual("removed: [#TestTag]", tagRemoved.ToString());
+        
+        var filter = new EventFilter(recorder);
+        filter.ComponentAdded  <Position>();
+        filter.ComponentRemoved<Position>();
+        filter.TagAdded  <TestTag>();
+        filter.TagRemoved<TestTag>();
+        
+        AreEqual("added: [Position, #TestTag],  removed: [Position, #TestTag]", filter.ToString());
+    }
+    
+    [Test]
     public static void Test_EventFilter_create_recorder()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -76,10 +106,11 @@ public static class Test_EventFilter
     }
     
     [Test]
-    public static void Test_EventFilter_filter()
+    public static void Test_EventFilter_filter_events()
     {
         var store           = new EntityStore(PidType.UsePidAsId);
         var recorder        = store.EventRecorder;
+        
         var positionAdded   = new EventFilter(recorder);
         var positionRemoved = new EventFilter(recorder);
         var tagAdded        = new EventFilter(recorder);

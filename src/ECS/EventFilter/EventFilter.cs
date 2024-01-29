@@ -4,7 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable UseCollectionExpression
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable SuggestBaseTypeForParameter
@@ -12,86 +16,88 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+
 [ExcludeFromCodeCoverage]
 internal sealed class EventFilter
 {
-    private             long            lastEventCount;
-    //
-    private             int[]           addedComponents;
-    private             int             addedComponentsCount;
-    //
-    private             int[]           removedComponents;
-    private             int             removedComponentsCount;
-    //
-    private             int[]           addedTags;
-    private             int             addedTagsCount;
-    //
-    private             int[]           removedTags;
-    private             int             removedTagsCount;
+#region properties
+    public override string  ToString() => GetString();
+    #endregion
     
-    private readonly    EventRecorder   recorder;
-    private readonly    EntityEvents[]  componentAdded;
-    private readonly    EntityEvents[]  componentRemoved;
-    private readonly    EntityEvents[]  tagAdded;
-    private readonly    EntityEvents[]  tagRemoved;
+#region fields
+                    private             long            _lastEventCount;
+                    private readonly    EventRecorder   _recorder;
+                    //
+                    private             EventFilters    componentsAdded     = new EventFilters { action = EventFilterAction.Added };
+                    private             EventFilters    componentsRemoved   = new EventFilters { action = EventFilterAction.Removed };
+                    private             EventFilters    tagsAdded           = new EventFilters { action = EventFilterAction.Added };
+                    private             EventFilters    tagsRemoved         = new EventFilters { action = EventFilterAction.Removed };
+    
+    [Browse(Never)] private readonly    EntityEvents[]  eventsComponentAdded;
+    [Browse(Never)] private readonly    EntityEvents[]  eventsComponentRemoved;
+    [Browse(Never)] private readonly    EntityEvents[]  eventsTagAdded;
+    [Browse(Never)] private readonly    EntityEvents[]  eventsTagRemoved;
+    #endregion
     
     
     internal EventFilter(EventRecorder recorder)
     {
-        this.recorder       = recorder;
-        componentAdded      = recorder.componentAdded;
-        componentRemoved    = recorder.componentRemoved;
-        tagAdded            = recorder.tagAdded;
-        tagRemoved          = recorder.tagRemoved;
+        this._recorder           = recorder;
+        eventsComponentAdded    = recorder.componentAdded;
+        eventsComponentRemoved  = recorder.componentRemoved;
+        eventsTagAdded          = recorder.tagAdded;
+        eventsTagRemoved        = recorder.tagRemoved;
     }
     
     public void ComponentAdded<T>()
         where T : struct, IComponent
     {
-        AddFilter(ref addedComponents, ref addedComponentsCount, StructHeap<T>.StructIndex);
+        AddFilter(ref componentsAdded, StructHeap<T>.StructIndex, SchemaTypeKind.Component);
     }
     
     public void ComponentRemoved<T>()
         where T : struct, IComponent
     {
-        AddFilter(ref removedComponents, ref removedComponentsCount, StructHeap<T>.StructIndex);
+        AddFilter(ref componentsRemoved, StructHeap<T>.StructIndex, SchemaTypeKind.Component);
     }
     
     public void TagAdded<T>()
         where T : struct, ITag
     {
-        AddFilter(ref addedTags, ref addedTagsCount, TagType<T>.TagIndex);
+        AddFilter(ref tagsAdded, TagType<T>.TagIndex, SchemaTypeKind.Tag);
     }
     
     public void TagRemoved<T>()
         where T : struct, ITag
     {
-        AddFilter(ref removedTags, ref removedTagsCount, TagType<T>.TagIndex);
+        AddFilter(ref tagsRemoved, TagType<T>.TagIndex, SchemaTypeKind.Tag);
     }
     
-    private static void AddFilter(ref int[] filter, ref int count, int typeIndex)
+    private static void AddFilter(ref EventFilters filters, int typeIndex, SchemaTypeKind kind)
     {
-        if (filter == null || count == filter.Length) {
-            ArrayUtils.Resize(ref filter, Math.Max(4, 2 * count));
+        if (filters.items == null || filters.count == filters.items.Length) {
+            ArrayUtils.Resize(ref filters.items, Math.Max(4, 2 * filters.count));
         }
-        filter[count++] = typeIndex;
+        ref var filter  = ref filters.items[filters.count++];
+        filter.index    = typeIndex;
+        filter.kind     = kind; 
     }
     
     
     private void InitFilter()
     {
-        lastEventCount = recorder.allEventsCount;
-        InitTypeFilter(addedComponents,   addedComponentsCount,   componentAdded);
-        InitTypeFilter(removedComponents, removedComponentsCount, componentRemoved);
-        InitTypeFilter(addedTags,         addedTagsCount,         tagAdded);
-        InitTypeFilter(removedTags,       removedTagsCount,       tagRemoved);
+        _lastEventCount = _recorder.allEventsCount;
+        InitTypeFilter(componentsAdded,   eventsComponentAdded);
+        InitTypeFilter(componentsRemoved, eventsComponentRemoved);
+        InitTypeFilter(tagsAdded,         eventsTagAdded);
+        InitTypeFilter(tagsRemoved,       eventsTagRemoved);
     }
     
-    private static void InitTypeFilter(int[] indexes, int count, EntityEvents[] events)
+    private static void InitTypeFilter(in EventFilters filters, EntityEvents[] events)
     {
-        for (int n = 0; n < count; n++)
+        for (int n = 0; n < filters.count; n++)
         {
-            ref var entityEvents = ref events[indexes[n]];
+            ref var entityEvents = ref events[filters.items[n].index];
             if (entityEvents.entityIdCount == entityEvents.entitySetPos) {
                 continue;
             }
@@ -102,24 +108,45 @@ internal sealed class EventFilter
     
     public bool Filter(int entityId)
     {
-        if (lastEventCount != recorder.allEventsCount) {
+        if (_lastEventCount != _recorder.allEventsCount) {
             InitFilter();
         }
-        if (addedComponents   != null && Contains(addedComponents,   addedComponentsCount,   componentAdded,   entityId))  return true;
-        if (removedComponents != null && Contains(removedComponents, removedComponentsCount, componentRemoved, entityId))  return true;
-        if (addedTags         != null && Contains(addedTags,         addedTagsCount,         tagAdded,         entityId))  return true;
-        if (removedTags       != null && Contains(removedTags,       removedTagsCount,       tagRemoved,       entityId))  return true;
+        if (componentsAdded  .items != null && Contains(componentsAdded,   eventsComponentAdded,   entityId)) return true;
+        if (componentsRemoved.items != null && Contains(componentsRemoved, eventsComponentRemoved, entityId)) return true;
+        if (tagsAdded        .items != null && Contains(tagsAdded,         eventsTagAdded,         entityId)) return true;
+        if (tagsRemoved      .items != null && Contains(tagsRemoved,       eventsTagRemoved,       entityId)) return true;
         return false;
     }
     
-    private static bool Contains(int[] indexes, int count, EntityEvents[] events, int entityId)
+    private static bool Contains(EventFilters filters, EntityEvents[] events, int entityId)
     {
-        for (int n = 0; n < count; n++)
+        for (int n = 0; n < filters.count; n++)
         {
-            if (events[indexes[n]].entitySet.Contains(entityId)) {
+            if (events[filters.items[n].index].entitySet.Contains(entityId)) {
                 return true;
             }
         }
         return false;
+    }
+    
+    private string GetString()
+    {
+        var sb = new StringBuilder();
+        if (componentsAdded.count > 0 || tagsAdded.count > 0) {
+            sb.Append("added: [");
+            componentsAdded.AppendString(sb);
+            tagsAdded.      AppendString(sb);
+            sb.Length -= 2;
+            sb.Append(']');
+        }
+        if (componentsRemoved.count > 0 || tagsRemoved.count > 0) {
+            if (sb.Length > 0) sb.Append(",  ");
+            sb.Append("removed: [");
+            componentsRemoved.AppendString(sb);
+            tagsRemoved.      AppendString(sb);
+            sb.Length -= 2;
+            sb.Append(']');
+        }
+        return sb.ToString();
     }
 }
