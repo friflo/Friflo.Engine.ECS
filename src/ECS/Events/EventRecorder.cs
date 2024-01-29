@@ -46,6 +46,7 @@ internal sealed class EventRecorder
     
     private static void ResetEvents(EntityEvents[] eventsArray)
     {
+        // todo could use bit mask to reset events only if necessary
         foreach (ref var events in eventsArray.AsSpan()) {
             events.entitySet?.Clear();
             events.entityIdCount = 0;
