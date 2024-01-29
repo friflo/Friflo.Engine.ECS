@@ -2,9 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable CoVariantArrayConversion
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -17,30 +19,35 @@ internal sealed class EventRecorder
 {
 #region properties
     public              long AllEventsCount => allEventsCount;
+    public              bool Enabled        { get => enabled; set => SetEnabled(value); }
     #endregion
     
 #region fields
-    internal            long            allEventsCount;
-    internal readonly   EntityEvents[]  componentAdded;
-    internal readonly   EntityEvents[]  componentRemoved;
-    internal readonly   EntityEvents[]  tagAdded;
-    internal readonly   EntityEvents[]  tagRemoved;
+    [Browse(Never)] internal            long            allEventsCount;
+    [Browse(Never)] private             bool            enabled;
+                    private  readonly   EntityStore     entityStore;
+                    internal readonly   EntityEvents[]  componentAdded;
+                    internal readonly   EntityEvents[]  componentRemoved;
+                    internal readonly   EntityEvents[]  tagAdded;
+                    internal readonly   EntityEvents[]  tagRemoved;
     #endregion
     
 #region general methods
-    public EventRecorder() {
+    public EventRecorder(EntityStore store)
+    {
+        entityStore         = store;
         var schema          = EntityStoreBase.Static.EntitySchema;
-        componentAdded      = CreateEntityEvents(schema.components.Length);
-        componentRemoved    = CreateEntityEvents(schema.components.Length);
-        tagAdded            = CreateEntityEvents(schema.tags.Length);
-        tagRemoved          = CreateEntityEvents(schema.tags.Length);
+        componentAdded      = CreateEntityEvents(schema.components);
+        componentRemoved    = CreateEntityEvents(schema.components);
+        tagAdded            = CreateEntityEvents(schema.tags);
+        tagRemoved          = CreateEntityEvents(schema.tags);
     }
     
-    public ReadOnlySpan<int> ComponentAddedEntities  <T>() where T : struct, IComponent => componentAdded  [StructHeap<T>.StructIndex].entityIds;
-    public ReadOnlySpan<int> ComponentRemovedEntities<T>() where T : struct, IComponent => componentRemoved[StructHeap<T>.StructIndex].entityIds;
+    public ReadOnlySpan<int> ComponentAddedEntities  <T>() where T : struct, IComponent => componentAdded  [StructHeap<T>.StructIndex].EntityIds;
+    public ReadOnlySpan<int> ComponentRemovedEntities<T>() where T : struct, IComponent => componentRemoved[StructHeap<T>.StructIndex].EntityIds;
     
-    public ReadOnlySpan<int> TagAddedEntities  <T>() where T : struct, ITag => tagAdded  [TagType<T>.TagIndex].entityIds;
-    public ReadOnlySpan<int> TagRemovedEntities<T>() where T : struct, ITag => tagRemoved[TagType<T>.TagIndex].entityIds;
+    public ReadOnlySpan<int> TagAddedEntities  <T>() where T : struct, ITag => tagAdded  [TagType<T>.TagIndex].EntityIds;
+    public ReadOnlySpan<int> TagRemovedEntities<T>() where T : struct, ITag => tagRemoved[TagType<T>.TagIndex].EntityIds;
     
     public void Reset()
     {
@@ -60,27 +67,33 @@ internal sealed class EventRecorder
         }
     }
     
-    internal void AddEventHandlers (EntityStore store)
+    private void SetEnabled(bool enabled)
     {
-        store.OnComponentAdded      += OnComponentAdded;
-        store.OnComponentRemoved    += OnComponentRemoved;
-        store.OnTagsChanged         += OnTagsChanged;
-    }
-    
-    internal void RemoveEventHandlers (EntityStore store)
-    {
+        if (this.enabled == enabled) {
+            return;
+        }
+        this.enabled    = enabled;
+        var store       = entityStore;
+        if (enabled) {
+            store.OnComponentAdded      += OnComponentAdded;
+            store.OnComponentRemoved    += OnComponentRemoved;
+            store.OnTagsChanged         += OnTagsChanged;
+            return;
+        }
         store.OnComponentAdded      -= OnComponentAdded;
         store.OnComponentRemoved    -= OnComponentRemoved;
         store.OnTagsChanged         -= OnTagsChanged;
     }
     
-    private static EntityEvents[] CreateEntityEvents(int length)
+    private static EntityEvents[] CreateEntityEvents(SchemaType[] types)
     {
-        var events = new EntityEvents[length];
+        var length      = types.Length;
+        var eventsArray = new EntityEvents[length];
         for (int n = 1; n < length; n++) {
-            events[n].entityIds = Array.Empty<int>();
+            var events = new EntityEvents(types[n]) { entityIds = Array.Empty<int>() };
+            eventsArray[n] = events;
         }
-        return events;
+        return eventsArray;
     }
     #endregion
     
@@ -126,40 +139,4 @@ internal sealed class EventRecorder
         events.entityIds[count] = entityId;
     }
     #endregion
-}
-
-[ExcludeFromCodeCoverage]
-internal struct EntityEvents
-{
-#region properties
-    internal    ReadOnlySpan<int>   EntityIds => new (entityIds, 0, entityIdCount);
-    #endregion
-    
-#region fields
-    internal    int[]           entityIds;      //  8   - never null
-    internal    int             entityIdCount;  //  4
-    internal    HashSet<int>    entitySet;      //  8   - can be null. Created / updated on demand.
-    internal    int             entitySetPos;   //  4
-    #endregion
-    
-    
-    internal bool ContainsId(int entityId)
-    {
-        var idCount = entityIdCount;
-        var set     = entitySet ??= new HashSet<int>(idCount);
-        if (entitySetPos < idCount) {
-            UpdateHashSet();
-        }
-        return set.Contains(entityId);
-    }
-    
-    internal void UpdateHashSet()
-    {
-        var set = entitySet;
-        var ids = new ReadOnlySpan<int>(entityIds, entitySetPos, entityIdCount - entitySetPos);
-        foreach (var id in ids) {
-            set.Add(id);
-        }
-        entitySetPos = entityIdCount;
-    }
 }

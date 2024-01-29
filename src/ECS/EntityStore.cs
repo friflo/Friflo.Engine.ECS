@@ -54,6 +54,8 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <remarks>Property is mainly used for debugging.<br/>
     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
     public              QueryEntities   Entities                => GetEntities();
+    
+    internal            EventRecorder   EventRecorder           => GetEventRecorder();
     #endregion
     
 #region events
@@ -115,6 +117,7 @@ public sealed partial class EntityStore : EntityStoreBase
         //
         internal    Stack<CommandBuffer>                            commandBufferPool;      //  8
         internal    Playback                                        playback;               // 16
+        internal    EventRecorder                                   eventRecorder;          //  8
 
                     
         internal Intern(PidType pidType)
