@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -15,7 +14,6 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Experimental POC
 /// </summary>
-[ExcludeFromCodeCoverage]
 internal sealed class EventRecorder
 {
 #region properties

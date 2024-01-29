@@ -27,13 +27,15 @@ public static class Test_EventFilter
     public static void Test_EventFilter_Init()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
-        var recorder    = store.EventRecorder;
+        _               = store.EventRecorder;
+        var recorder    = store.EventRecorder; // cover getting already instantiated recorder
         
         IsFalse(recorder.Enabled);
         AreEqual("disabled", recorder.ToString());
         
         // --- enable event recording
         recorder.Enabled = true;
+        recorder.Enabled = true;    // cover enabling if already enabled
         IsTrue(recorder.Enabled);
         
         var entity1 = store.CreateEntity();
