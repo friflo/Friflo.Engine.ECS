@@ -121,11 +121,11 @@ internal struct EntityEvents
         var set     = entitySet ??= new HashSet<int>(idCount);
         if (entitySetPos < idCount)
         {
-            entitySetPos    = idCount;
             var ids         = new ReadOnlySpan<int>(entityIds, entitySetPos, idCount - entitySetPos);
             foreach (var id in ids) {
                 set.Add(id);
             }
+            entitySetPos = idCount;
         }
         return set.Contains(entityId);
     }
