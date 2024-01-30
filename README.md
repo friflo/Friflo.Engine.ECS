@@ -359,7 +359,7 @@ An alternative to process entity changes - see section [Event](#event) - are `Ev
 All events that need to be filtered - like added/removed components/tags - can be added to the `EventFilter`.  
 E.g. `ComponentAdded<Position>()` or `TagAdded<MyTag1>`.
 
-```
+```csharp
 public static void FilterEntityEvents()
 {
     var store   = new EntityStore();
