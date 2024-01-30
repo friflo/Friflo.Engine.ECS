@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 namespace Internal.ECS;
@@ -188,4 +190,38 @@ public static class Test_EventFilter
         IsFalse(nameAdded.      Filter(entity3.Id));
         IsFalse(tag2Added.      Filter(entity3.Id));
     }
+    
+    [Test]
+    public static void Test_EventFilter_filter_events_perf()
+    {
+        int count = 10;
+        // 10_000_000   EventRecorder ~ #PC:  677 ms
+        //              EventFilter   ~ #PC: 1123 ms
+        var store           = new EntityStore(PidType.UsePidAsId);
+        var recorder        = store.EventRecorder;
+        recorder.Enabled    = true;
+        
+        for (int n = 0; n < count; n++) {
+            store.CreateEntity();
+        } {
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int n = 1; n < count; n++) {
+                var entity = store.GetEntityById(n);
+                entity.AddComponent<Position>();
+            }
+            Console.WriteLine($"EvenRecorder - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
+        } {
+            var positionAdded = new EventFilter(recorder);
+            positionAdded.ComponentAdded<Position>();
+            var sw = new Stopwatch();
+            sw.Start();
+
+            for (int n = 1; n < count; n++) {
+                Mem.IsTrue(positionAdded.Filter(n));
+            }
+            Console.WriteLine($"EventFilter - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
+        }
+    }
 }
+
