@@ -128,26 +128,78 @@ public static class Test_EventFilter
         entity3.AddTag          <TestTag>();
         entity3.RemoveTag       <TestTag>();
         
-        IsFalse(positionAdded.  Filter(entity1.Id));
-        IsFalse(positionRemoved.Filter(entity1.Id));
-        IsFalse(tagAdded.       Filter(entity1.Id));
-        IsFalse(tagRemoved.     Filter(entity1.Id));
-        IsFalse(nameAdded.      Filter(entity1.Id));
-        IsFalse(tag2Added.      Filter(entity1.Id));
+        IsFalse(positionAdded.  HasEvent(entity1.Id));
+        IsFalse(positionRemoved.HasEvent(entity1.Id));
+        IsFalse(tagAdded.       HasEvent(entity1.Id));
+        IsFalse(tagRemoved.     HasEvent(entity1.Id));
+        IsFalse(nameAdded.      HasEvent(entity1.Id));
+        IsFalse(tag2Added.      HasEvent(entity1.Id));
         
-        IsTrue (positionAdded.  Filter(entity2.Id));
-        IsFalse(positionRemoved.Filter(entity2.Id));
-        IsTrue (tagAdded.       Filter(entity2.Id));
-        IsFalse(tagRemoved.     Filter(entity2.Id));
-        IsFalse(nameAdded.      Filter(entity2.Id));
-        IsFalse(tag2Added.      Filter(entity2.Id));
+        IsTrue (positionAdded.  HasEvent(entity2.Id));
+        IsFalse(positionRemoved.HasEvent(entity2.Id));
+        IsTrue (tagAdded.       HasEvent(entity2.Id));
+        IsFalse(tagRemoved.     HasEvent(entity2.Id));
+        IsFalse(nameAdded.      HasEvent(entity2.Id));
+        IsFalse(tag2Added.      HasEvent(entity2.Id));
         
-        IsFalse(positionAdded.  Filter(entity3.Id));
-        IsTrue (positionRemoved.Filter(entity3.Id));
-        IsFalse(tagAdded.       Filter(entity3.Id));
-        IsTrue (tagRemoved.     Filter(entity3.Id));
-        IsFalse(nameAdded.      Filter(entity3.Id));
-        IsFalse(tag2Added.      Filter(entity3.Id));
+        IsFalse(positionAdded.  HasEvent(entity3.Id));
+        IsTrue (positionRemoved.HasEvent(entity3.Id));
+        IsFalse(tagAdded.       HasEvent(entity3.Id));
+        IsTrue (tagRemoved.     HasEvent(entity3.Id));
+        IsFalse(nameAdded.      HasEvent(entity3.Id));
+        IsFalse(tag2Added.      HasEvent(entity3.Id));
+    }
+    
+    [Test]
+    public static void Test_EventFilter_query_filter()
+    {
+        var store           = new EntityStore(PidType.UsePidAsId);
+        
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        var entity3 = store.CreateEntity();
+        var entity4 = store.CreateEntity();
+
+        var query = store.Query();
+        query.EventFilter.ComponentAdded<Position>();
+        query.EventFilter.ComponentRemoved<Position>();
+        query.EventFilter.TagAdded<TestTag>();
+        query.EventFilter.TagRemoved<TestTag>();
+        
+        store.EventRecorder.Enabled = true;
+        
+        entity1.AddComponent    <Position>();
+        entity2.AddComponent    <Position>();
+        entity3.AddComponent    <Position>();
+        entity3.RemoveComponent <Position>();
+        
+        entity1.AddTag          <TestTag>();
+        entity2.AddTag          <TestTag>();
+        entity3.AddTag          <TestTag>();
+        entity3.RemoveTag       <TestTag>();
+        entity3.AddTag          <TestTag2>();
+        
+        entity4.AddComponent    <Rotation>();
+        entity4.AddTag          <TestTag2>();
+
+        AreEqual(4, query.Entities.Count);
+        
+        foreach (var entity in query.Entities)
+        {
+            bool hasEvent = query.HasEvent(entity.Id);
+            switch (entity.Id) {
+                case 1:
+                case 2:
+                case 3:
+                    IsTrue(hasEvent);
+                    continue;
+                case 4:
+                    IsFalse(hasEvent);
+                    continue;
+                default:
+                    throw new InvalidOperationException($"unexpected entity: {entity.Id}");
+            }
+        }
     }
     
     [Test]
@@ -178,7 +230,7 @@ public static class Test_EventFilter
             sw.Start();
 
             for (int n = 1; n <= count; n++) {
-                Mem.IsTrue(positionAdded.Filter(n));
+                Mem.IsTrue(positionAdded.HasEvent(n));
             }
             Console.WriteLine($"EventFilter - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
         }

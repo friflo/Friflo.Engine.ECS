@@ -23,15 +23,15 @@ public sealed class EventFilter
     #endregion
     
 #region fields
-                    private             long            _lastEventCount;
-                    private readonly    EventRecorder   _recorder;
-    [Browse(Never)] private readonly    EntityStore     _store;
+                    internal            long            _lastEventCount;
+                    internal readonly   EventRecorder   _recorder;
+    [Browse(Never)] private  readonly   EntityStore     _store;
                     //
                     internal            EventFilters    componentFilters;
                     internal            EventFilters    tagFilters;
     
-    [Browse(Never)] private readonly    EntityEvents    componentEvents;
-    [Browse(Never)] private readonly    EntityEvents    tagEvents;
+    [Browse(Never)] private  readonly   EntityEvents    componentEvents;
+    [Browse(Never)] private  readonly   EntityEvents    tagEvents;
     #endregion
     
     
@@ -78,7 +78,7 @@ public sealed class EventFilter
         filter.action   = action;
     }
     
-    private void InitFilter()
+    internal void InitFilter()
     {
         _lastEventCount = _recorder.allEventsCount;
         InitTypeFilter(componentEvents);
@@ -93,7 +93,7 @@ public sealed class EventFilter
         events.UpdateHashSet();
     }
     
-    public bool Filter(int entityId)
+    public bool HasEvent(int entityId)
     {
         if (_lastEventCount != _recorder.allEventsCount) {
             InitFilter();
@@ -103,7 +103,7 @@ public sealed class EventFilter
         return false;
     }
     
-    private bool ContainsComponentEvent(int entityId)
+    internal bool ContainsComponentEvent(int entityId)
     {
         if (!componentEvents.entityChanges.TryGetValue(entityId, out var bitSet)) {
             return false;
@@ -125,7 +125,7 @@ public sealed class EventFilter
         return false;
     }
     
-    private bool ContainsTagEvent(int entityId)
+    internal bool ContainsTagEvent(int entityId)
     {
         if (!tagEvents.entityChanges.TryGetValue(entityId, out var bitSet)) {
             return false;

@@ -35,6 +35,8 @@ public class ArchetypeQuery
                     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
                     /// </summary>
                     public              QueryEntities       Entities    => new (this);
+                    
+                    public              EventFilter         EventFilter => GetEventFilter();
     
                     public override     string              ToString()  => GetString();
     #endregion
@@ -49,11 +51,27 @@ public class ArchetypeQuery
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      requiredComponents; // 32
     [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
+    [Browse(Never)] private             EventFilter         eventFilter;        //  8   used to filter component/tag add/remove events
     #endregion
 
 #region methods
     public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
-
+    
+    /// <summary>
+    /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.<br/>
+    /// The component / tag of interest need to be added to the <see cref="EventFilter"/>.  
+    /// </summary>
+    public bool HasEvent(int entityId)
+    {
+        var filter = eventFilter;
+        if (filter._lastEventCount != filter._recorder.allEventsCount) {
+            filter.InitFilter();
+        }
+        if (filter.componentFilters.items != null && filter.ContainsComponentEvent(entityId)) return true;
+        if (filter.tagFilters      .items != null && filter.ContainsTagEvent      (entityId)) return true;
+        return false;
+    }
+    
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
     {
         this.store          = store;
@@ -150,6 +168,14 @@ public class ArchetypeQuery
         sb.Append("  EntityCount: ");
         sb.Append(EntityCount);
         return sb.ToString();
+    }
+    
+    private EventFilter GetEventFilter()
+    {
+        if (eventFilter != null) {
+            return eventFilter;
+        }
+        return eventFilter = new EventFilter(Store.EventRecorder);
     }
     #endregion
 }
