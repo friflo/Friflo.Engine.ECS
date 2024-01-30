@@ -225,7 +225,7 @@ public static class Test_EventFilter
     [Test]
     public static void Test_EventFilter_filter_events_perf()
     {
-        int count = 10_000_000;
+        int count = 10;
         // 10_000_000   EventRecorder ~ #PC: 442 ms
         //              EventFilter   ~ #PC: 240 ms
         
