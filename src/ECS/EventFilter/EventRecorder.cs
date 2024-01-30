@@ -43,8 +43,8 @@ public sealed class EventRecorder
                     internal            long            allEventsCountMapUpdate;
     [Browse(Never)] private             bool            enabled;
                     internal readonly   EntityStore     entityStore;
-                    internal readonly   EntityEvents    componentEvents;
-                    internal readonly   EntityEvents    tagEvents;
+    [Browse(Never)] internal readonly   EntityEvents    componentEvents;
+    [Browse(Never)] internal readonly   EntityEvents    tagEvents;
     #endregion
     
 #region general methods

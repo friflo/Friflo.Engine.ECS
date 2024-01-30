@@ -128,8 +128,8 @@ public sealed class EventFilter
         if (eventCount != recorder.allEventsCount) {
             UpdateFilter();
         }
-        if (componentFilters.items != null && ContainsComponentEvent(entityId)) return true;
-        if (tagFilters      .items != null && ContainsTagEvent      (entityId)) return true;
+        if (componentFilters.count > 0 && ContainsComponentEvent(entityId)) return true;
+        if (tagFilters      .count > 0 && ContainsTagEvent      (entityId)) return true;
         return false;
     }
     
