@@ -28,7 +28,7 @@ internal sealed class EventRecorder
 #region fields
     [Browse(Never)] internal            long            allEventsCount;
     [Browse(Never)] private             bool            enabled;
-    [Browse(Never)] internal readonly   EntityStore     entityStore;
+                    internal readonly   EntityStore     entityStore;
                     internal readonly   EntityEvents    componentEvents;
                     internal readonly   EntityEvents    tagEvents;
     #endregion
@@ -87,13 +87,21 @@ internal sealed class EventRecorder
     private void OnComponentAdded(ComponentChanged change)
     {
         allEventsCount++;
-        AddEvent(componentEvents, change.StructIndex, change.EntityId, EntityEventAction.Added);
+        ref var ev      = ref AddEvent(componentEvents);
+        ev.id           = change.EntityId;
+        ev.action       = EntityEventAction.Added;
+        ev.typeIndex    = (byte)change.StructIndex;
+        ev.kind         = SchemaTypeKind.Component;
     }
     
     private void OnComponentRemoved(ComponentChanged change)
     {
         allEventsCount++;
-        AddEvent(componentEvents, change.StructIndex, change.EntityId, EntityEventAction.Removed);
+        ref var ev      = ref AddEvent(componentEvents);
+        ev.id           = change.EntityId;
+        ev.action       = EntityEventAction.Removed;
+        ev.typeIndex    = (byte)change.StructIndex;
+        ev.kind         = SchemaTypeKind.Component;
     }
     
     private void OnTagsChanged(TagsChanged change)
@@ -101,30 +109,37 @@ internal sealed class EventRecorder
         var addedCount = change.AddedTags.Count;
         if (addedCount > 0) {
             allEventsCount += addedCount;
-            foreach (var tag in change.AddedTags) {
-                AddEvent(tagEvents, tag.TagIndex, change.EntityId, EntityEventAction.Added);
+            foreach (var tag in change.AddedTags)
+            {
+                ref var ev      = ref AddEvent(tagEvents);
+                ev.id           = change.EntityId;
+                ev.action       = EntityEventAction.Added;
+                ev.typeIndex    = (byte)tag.TagIndex;
+                ev.kind         = SchemaTypeKind.Tag;
             }
         }
         var removedCount = change.RemovedTags.Count;
         if (removedCount > 0) {
             allEventsCount += removedCount;
-            foreach (var tag in change.RemovedTags) {
-                AddEvent(tagEvents, tag.TagIndex, change.EntityId, EntityEventAction.Removed);
+            foreach (var tag in change.RemovedTags)
+            {
+                ref var ev      = ref AddEvent(tagEvents);
+                ev.id           = change.EntityId;
+                ev.action       = EntityEventAction.Removed;
+                ev.typeIndex    = (byte)tag.TagIndex;
+                ev.kind         = SchemaTypeKind.Tag;
             }
         }
     }
     
-    private static void AddEvent(EntityEvents events, int typeIndex, int entityId, EntityEventAction action)
+    private static ref EntityEvent AddEvent(EntityEvents events)
     {
         int count = events.eventCount; 
         if (count == events.events.Length) {
             ArrayUtils.Resize(ref events.events, Math.Max(4, 2 * count));
         }
         events.eventCount   = count + 1;
-        ref var ev          = ref events.events[count];
-        ev.id               = entityId;
-        ev.action           = action;
-        ev.typeIndex        = (byte)typeIndex;
+        return ref events.events[count];
     }
     #endregion
 }

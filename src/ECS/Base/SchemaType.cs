@@ -30,7 +30,7 @@ public abstract class SchemaType
     /// <see cref="Component"/> if the type is a <see cref="IComponent"/><br/>
     /// <see cref="Tag"/> if the type is an <see cref="ITag"/><br/>
     /// </returns>
-    public   readonly   SchemaTypeKind  Kind;               //  4
+    public   readonly   SchemaTypeKind  Kind;               //  1
     
     /// <summary>
     /// If <see cref="Kind"/> == <see cref="Tag"/> the type of a <b>tag</b> struct implementing <see cref="ITag"/>.<br/>

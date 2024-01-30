@@ -28,7 +28,7 @@ internal sealed class EventFilter
 #region fields
                     private             long            _lastEventCount;
                     private readonly    EventRecorder   _recorder;
-                    private readonly    EntityStore     _store;
+    [Browse(Never)] private readonly    EntityStore     _store;
                     //
                     private             EventFilters    componentFilters;
                     private             EventFilters    tagFilters;

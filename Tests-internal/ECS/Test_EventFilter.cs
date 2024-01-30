@@ -14,6 +14,26 @@ public static class Test_EventFilter
     {
         var componentEvents = new EntityEvents();
         AreEqual("events: 0", componentEvents.ToString());
+        
+        var schema = EntityStore.GetEntitySchema();
+        
+        var positionType = schema.ComponentTypeByType[typeof(Position)];
+        var ev = new EntityEvent {
+            id          = 1,
+            typeIndex   = (byte)positionType.StructIndex,
+            action      = EntityEventAction.Added,
+            kind        = SchemaTypeKind.Component
+        };
+        AreEqual("id: 1 - Added [Position]", ev.ToString());
+        
+        var tagType = schema.TagTypeByType[typeof(TestTag)];
+        ev = new EntityEvent {
+            id          = 2,
+            typeIndex   = (byte)tagType.TagIndex,
+            action      = EntityEventAction.Removed,
+            kind        = SchemaTypeKind.Tag
+        };
+        AreEqual("id: 2 - Removed [#TestTag]", ev.ToString());
     }
     
     [Test]
@@ -71,15 +91,17 @@ public static class Test_EventFilter
         entity2.AddTag          <TestTag>();
         entity2.RemoveTag       <TestTag>();
         
-        var positionEvents = recorder.ComponentEvents;
-        AreEqual(3, positionEvents.Length);
-        AreEqual(1, positionEvents[0].id);
-        AreEqual(2, positionEvents[1].id);
-        AreEqual(2, positionEvents[2].id);
+        var componentEvents = recorder.ComponentEvents;
+        AreEqual(3, componentEvents.Length);
+        AreEqual("id: 1 - Added [Position]",    componentEvents[0].ToString());
+        AreEqual("id: 2 - Added [Position]",    componentEvents[1].ToString());
+        AreEqual("id: 2 - Removed [Position]",  componentEvents[2].ToString());
         
-        // AreEqual(3, recorder.ComponentEvents<Position>().Length);
-        // AreEqual(3, recorder.TagEvents<TestTag>().Length);
-
+        var tagEvents = recorder.TagEvents;
+        AreEqual(3, tagEvents.Length);
+        AreEqual("id: 1 - Added [#TestTag]",    tagEvents[0].ToString());
+        AreEqual("id: 2 - Added [#TestTag]",    tagEvents[1].ToString());
+        AreEqual("id: 2 - Removed [#TestTag]",  tagEvents[2].ToString());
         
         AreEqual(6, recorder.AllEventsCount);
         AreEqual("All events: 6", recorder.ToString());

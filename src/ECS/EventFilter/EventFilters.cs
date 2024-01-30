@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -9,16 +10,29 @@ namespace Friflo.Engine.ECS;
 internal struct TypeFilter
 {
     internal    int                 index;      //  4
-    internal    SchemaTypeKind      kind;       //  4
+    internal    SchemaTypeKind      kind;       //  1
     internal    EntityEventAction   action;     //  1
 }
 
 internal struct EntityEvent {
     internal    int                 id;         //  4
-    internal    EntityEventAction   action;     //  1  
+    internal    EntityEventAction   action;     //  1
     internal    byte                typeIndex;  //  1
+    internal    SchemaTypeKind      kind;       //  1
 
-    public override string ToString() => $"id: {id} - {action}";
+    public override string          ToString() => GetString();
+    
+    private string GetString()
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        switch (kind) {
+            case SchemaTypeKind.Component:
+                return $"id: {id} - {action} [{schema.components[typeIndex].Name}]";
+            case SchemaTypeKind.Tag:
+                return $"id: {id} - {action} [#{schema.tags[typeIndex].Name}]";
+        }
+        throw new InvalidOperationException("unexpected kind");
+    }
 }
 
 internal enum EntityEventAction : byte

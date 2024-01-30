@@ -8,7 +8,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Declares the <see cref="SchemaType.Kind"/> of a <see cref="SchemaType"/> 
 /// </summary>
-public enum SchemaTypeKind
+public enum SchemaTypeKind : byte
 {
     /// <summary> Declare a <see cref="ComponentType"/> is an <see cref="IComponent"/>. </summary>
     Component   = 0,
