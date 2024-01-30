@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Friflo.Engine.ECS.Utils;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
