@@ -18,23 +18,23 @@ public static class Test_EventFilter
         
         var positionType = schema.ComponentTypeByType[typeof(Position)];
         var ev = new EntityEvent {
-            id          = 1,
-            typeIndex   = (byte)positionType.StructIndex,
-            action      = EntityEventAction.Added,
-            kind        = SchemaTypeKind.Component
+            Id          = 1,
+            TypeIndex   = (byte)positionType.StructIndex,
+            Action      = EntityEventAction.Added,
+            Kind        = SchemaTypeKind.Component
         };
         AreEqual("id: 1 - Added [Position]", ev.ToString());
         
         var tagType = schema.TagTypeByType[typeof(TestTag)];
         ev = new EntityEvent {
-            id          = 2,
-            typeIndex   = (byte)tagType.TagIndex,
-            action      = EntityEventAction.Removed,
-            kind        = SchemaTypeKind.Tag
+            Id          = 2,
+            TypeIndex   = (byte)tagType.TagIndex,
+            Action      = EntityEventAction.Removed,
+            Kind        = SchemaTypeKind.Tag
         };
         AreEqual("id: 2 - Removed [#TestTag]", ev.ToString());
         
-        ev.kind = (SchemaTypeKind)99;
+        ev.Kind = (SchemaTypeKind)99;
         Throws<InvalidOperationException>(() => {
             _ = ev.ToString();
         });

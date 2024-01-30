@@ -86,20 +86,20 @@ public sealed class EventRecorder
     {
         allEventsCount++;
         ref var ev      = ref AddEvent(componentEvents);
-        ev.id           = change.EntityId;
-        ev.action       = EntityEventAction.Added;
-        ev.typeIndex    = (byte)change.StructIndex;
-        ev.kind         = SchemaTypeKind.Component;
+        ev.Id           = change.EntityId;
+        ev.Action       = EntityEventAction.Added;
+        ev.TypeIndex    = (byte)change.StructIndex;
+        ev.Kind         = SchemaTypeKind.Component;
     }
     
     private void OnComponentRemoved(ComponentChanged change)
     {
         allEventsCount++;
         ref var ev      = ref AddEvent(componentEvents);
-        ev.id           = change.EntityId;
-        ev.action       = EntityEventAction.Removed;
-        ev.typeIndex    = (byte)change.StructIndex;
-        ev.kind         = SchemaTypeKind.Component;
+        ev.Id           = change.EntityId;
+        ev.Action       = EntityEventAction.Removed;
+        ev.TypeIndex    = (byte)change.StructIndex;
+        ev.Kind         = SchemaTypeKind.Component;
     }
     
     private void OnTagsChanged(TagsChanged change)
@@ -111,10 +111,10 @@ public sealed class EventRecorder
             foreach (var tag in addedTags)
             {
                 ref var ev      = ref AddEvent(tagEvents);
-                ev.id           = change.EntityId;
-                ev.action       = EntityEventAction.Added;
-                ev.typeIndex    = (byte)tag.TagIndex;
-                ev.kind         = SchemaTypeKind.Tag;
+                ev.Id           = change.EntityId;
+                ev.Action       = EntityEventAction.Added;
+                ev.TypeIndex    = (byte)tag.TagIndex;
+                ev.Kind         = SchemaTypeKind.Tag;
             }
         }
         var removedTags     = change.RemovedTags;
@@ -124,10 +124,10 @@ public sealed class EventRecorder
             foreach (var tag in removedTags)
             {
                 ref var ev      = ref AddEvent(tagEvents);
-                ev.id           = change.EntityId;
-                ev.action       = EntityEventAction.Removed;
-                ev.typeIndex    = (byte)tag.TagIndex;
-                ev.kind         = SchemaTypeKind.Tag;
+                ev.Id           = change.EntityId;
+                ev.Action       = EntityEventAction.Removed;
+                ev.TypeIndex    = (byte)tag.TagIndex;
+                ev.Kind         = SchemaTypeKind.Tag;
             }
         }
     }

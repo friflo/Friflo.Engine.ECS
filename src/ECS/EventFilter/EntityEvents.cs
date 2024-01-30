@@ -47,8 +47,8 @@ internal sealed class EntityEvents
         var changes     = entityChanges;
         var eventSpan   = new ReadOnlySpan<EntityEvent>(events, entityChangesPos, eventCount - entityChangesPos);
         foreach (var ev in eventSpan) {
-            ref var value = ref CollectionsMarshal.GetValueRefOrAddDefault(changes, ev.id, out _);
-            value.SetBit(ev.typeIndex);
+            ref var value = ref CollectionsMarshal.GetValueRefOrAddDefault(changes, ev.Id, out _);
+            value.SetBit(ev.TypeIndex);
         }
         entityChangesPos = eventCount;
     }
