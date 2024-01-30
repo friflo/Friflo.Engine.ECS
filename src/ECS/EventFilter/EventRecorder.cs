@@ -29,10 +29,10 @@ public sealed class EventRecorder
 #region fields
     [Browse(Never)] internal            long            allEventsCount;
     /// <remarks>
-    /// If <see cref="allEventsCount"/> != <see cref="allEventCountMapUpdate"/>
+    /// If <see cref="allEventsCount"/> != <see cref="allEventsCountMapUpdate"/>
     /// the <see cref="EntityEvents.entityChanges"/> must be updated when using an <see cref="EventFilter"/>.
     /// </remarks>
-                    internal            long            allEventCountMapUpdate;
+                    internal            long            allEventsCountMapUpdate;
     [Browse(Never)] private             bool            enabled;
                     internal readonly   EntityStore     entityStore;
                     internal readonly   EntityEvents    componentEvents;

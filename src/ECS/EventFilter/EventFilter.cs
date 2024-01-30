@@ -85,7 +85,7 @@ public sealed class EventFilter
         {
             InitTypeFilter(componentEvents);
             InitTypeFilter(tagEvents);
-            Interlocked.Exchange(ref _recorder.allEventCountMapUpdate, _recorder.allEventsCount);
+            Interlocked.Exchange(ref _recorder.allEventsCountMapUpdate, _recorder.allEventsCount);
         }
     }
     
@@ -105,12 +105,12 @@ public sealed class EventFilter
     /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.<br/>
     /// <br/>
     /// <b>Note</b>: <see cref="HasEvent"/> can be called from any thread.<br/>
-    /// Adding / removing components/tags must not be executed at the same time by another thread.
+    /// No structural changes like adding / removing components/tags must not be executed at the same time by another thread.
     /// </remarks>
     public bool HasEvent(int entityId)
     {
         var recorder = _recorder;
-        var eventCount = Interlocked.Read(ref recorder.allEventCountMapUpdate);
+        var eventCount = Interlocked.Read(ref recorder.allEventsCountMapUpdate);
         if (eventCount != recorder.allEventsCount) {
             InitFilter();
         }
