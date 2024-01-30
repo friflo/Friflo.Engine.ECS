@@ -91,7 +91,6 @@ internal sealed class EventFilter
         if (events.eventCount == events.entityChangesPos) {
             return;
         }
-        events.entityChanges ??= new Dictionary<int, BitSet>();
         events.UpdateHashSet();
     }
     

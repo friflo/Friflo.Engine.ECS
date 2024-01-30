@@ -50,7 +50,7 @@ internal sealed class EventRecorder
     
     private static void ResetEvents(EntityEvents events)
     {
-        events.entityChanges?.Clear();
+        events.entityChanges.Clear();
         events.eventCount       = 0;
         events.entityChangesPos = 0;
     }

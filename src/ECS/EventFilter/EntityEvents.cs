@@ -23,23 +23,23 @@ internal class EntityEvents
 #region fields
     internal            EntityEvent[]           events;             //  8   - never null
     internal            int                     eventCount;         //  4
-    internal            Dictionary<int, BitSet> entityChanges;      //  8   - can be null. Created / updated on demand.
+    internal readonly   Dictionary<int, BitSet> entityChanges;      //  8   - can be null. Created / updated on demand.
     internal            int                     entityChangesPos;   //  4
     #endregion
     
     internal EntityEvents() {
-        events = Array.Empty<EntityEvent>();
+        events          = Array.Empty<EntityEvent>();
+        entityChanges   = new Dictionary<int, BitSet>();
     }
     
     [ExcludeFromCodeCoverage]
     internal bool ContainsId(int entityId)
     {
         var idCount = eventCount;
-        var changes = entityChanges ??= new Dictionary<int, BitSet>(idCount);
         if (entityChangesPos < idCount) {
             UpdateHashSet();
         }
-        return changes.ContainsKey(entityId);
+        return entityChanges.ContainsKey(entityId);
     }
     
     internal void UpdateHashSet()
