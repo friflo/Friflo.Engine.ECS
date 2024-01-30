@@ -15,32 +15,6 @@ internal struct TypeFilter
     internal    EntityEventAction   action;     //  1
 }
 
-public struct EntityEvent {
-    public      int                 Id;         //  4
-    public      EntityEventAction   Action;     //  1
-    public      byte                TypeIndex;  //  1
-    public      SchemaTypeKind      Kind;       //  1   - used only for ToString()
-
-    public override string          ToString() => GetString();
-    
-    private string GetString()
-    {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        switch (Kind) {
-            case SchemaTypeKind.Component:
-                return $"id: {Id} - {Action} [{schema.components[TypeIndex].Name}]";
-            case SchemaTypeKind.Tag:
-                return $"id: {Id} - {Action} [#{schema.tags[TypeIndex].Name}]";
-        }
-        throw new InvalidOperationException("unexpected kind");
-    }
-}
-
-public enum EntityEventAction : byte
-{
-    Removed = 0,
-    Added   = 1
-}
 
 internal struct EventFilters
 {

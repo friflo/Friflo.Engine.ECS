@@ -11,6 +11,36 @@ using Friflo.Engine.ECS.Utils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+
+public enum EntityEventAction : byte
+{
+    Removed = 0,
+    Added   = 1
+}
+
+
+public struct EntityEvent {
+    public      int                 Id;         //  4
+    public      EntityEventAction   Action;     //  1
+    public      byte                TypeIndex;  //  1
+    public      SchemaTypeKind      Kind;       //  1   - used only for ToString()
+
+    public override string          ToString() => GetString();
+    
+    private string GetString()
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        switch (Kind) {
+            case SchemaTypeKind.Component:
+                return $"id: {Id} - {Action} [{schema.components[TypeIndex].Name}]";
+            case SchemaTypeKind.Tag:
+                return $"id: {Id} - {Action} [#{schema.tags[TypeIndex].Name}]";
+        }
+        throw new InvalidOperationException("unexpected kind");
+    }
+}
+
+
 internal sealed class EntityEvents
 {
 #region properties
