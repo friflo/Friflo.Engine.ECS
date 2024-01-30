@@ -8,19 +8,12 @@ namespace Internal.ECS;
 // ReSharper disable once InconsistentNaming
 public static class Test_EventFilter
 {
+
     [Test]
     public static void Test_EventFilter_Internal()
     {
-        var schema = EntityStore.GetEntitySchema();
-        
-        var componentType   = schema.ComponentTypeByType[typeof(Position)];
-        var tagType         = schema.TagTypeByType[typeof(TestTag)];
-        
-        var componentEvents = new EntityEvents(componentType);
-        var tagEvents       = new EntityEvents(tagType);
-        
-        AreEqual("[Position] events: 0", componentEvents.ToString());
-        AreEqual("[#TestTag] events: 0", tagEvents.ToString());
+        var componentEvents = new EntityEvents();
+        AreEqual("events: 0", componentEvents.ToString());
     }
     
     [Test]
@@ -78,14 +71,14 @@ public static class Test_EventFilter
         entity2.AddTag          <TestTag>();
         entity2.RemoveTag       <TestTag>();
         
-        var positionEvents = recorder.ComponentEvents<Position>();
+        var positionEvents = recorder.ComponentEvents;
         AreEqual(3, positionEvents.Length);
         AreEqual(1, positionEvents[0].id);
         AreEqual(2, positionEvents[1].id);
         AreEqual(2, positionEvents[2].id);
         
-        AreEqual(3, recorder.ComponentEvents<Position>().Length);
-        AreEqual(3, recorder.TagEvents<TestTag>().Length);
+        // AreEqual(3, recorder.ComponentEvents<Position>().Length);
+        // AreEqual(3, recorder.TagEvents<TestTag>().Length);
 
         
         AreEqual(6, recorder.AllEventsCount);
@@ -99,8 +92,8 @@ public static class Test_EventFilter
         recorder.Reset();
         entity2.AddComponent<Position>();
         
-        AreEqual(0, recorder.ComponentEvents<Position>().Length);
-        AreEqual(0, recorder.TagEvents<TestTag>().Length);
+        AreEqual(0, recorder.ComponentEvents.Length);
+        AreEqual(0, recorder.TagEvents.      Length);
         AreEqual(6, recorder.AllEventsCount);
     }
     

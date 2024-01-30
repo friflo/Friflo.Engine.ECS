@@ -116,6 +116,9 @@ public static class Test_sizeof
         
         size = sizeof(EntityChange);
         AreEqual(64, size);
+        
+        size = sizeof(EntityEvent);
+        AreEqual(8, size);
     }
     
     // ---------------------------------------- Tests project types ------------------------------------------

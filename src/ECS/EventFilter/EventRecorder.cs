@@ -5,6 +5,7 @@ using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable SuggestBaseTypeForParameter
@@ -27,22 +28,21 @@ internal sealed class EventRecorder
 #region fields
     [Browse(Never)] internal            long            allEventsCount;
     [Browse(Never)] private             bool            enabled;
-    [Browse(Never)] private  readonly   EntityStore     entityStore;
-                    internal readonly   EntityEvents[]  componentEvents;
-                    internal readonly   EntityEvents[]  tagEvents;
+    [Browse(Never)] internal readonly   EntityStore     entityStore;
+                    internal readonly   EntityEvents    componentEvents;
+                    internal readonly   EntityEvents    tagEvents;
     #endregion
     
 #region general methods
     public EventRecorder(EntityStore store)
     {
         entityStore         = store;
-        var schema          = EntityStoreBase.Static.EntitySchema;
-        componentEvents     = CreateEntityEvents(schema.components);
-        tagEvents           = CreateEntityEvents(schema.components);
+        componentEvents     = new EntityEvents();
+        tagEvents           = new EntityEvents();
     }
     
-    public ReadOnlySpan<EntityEvent> ComponentEvents<T>() where T : struct, IComponent => componentEvents[StructHeap<T>.StructIndex].Events;
-    public ReadOnlySpan<EntityEvent> TagEvents      <T>() where T : struct, ITag       => componentEvents[TagType<T>.   TagIndex].   Events;
+    public ReadOnlySpan<EntityEvent> ComponentEvents => componentEvents.Events;
+    public ReadOnlySpan<EntityEvent> TagEvents       => tagEvents.      Events;
     
     public void Reset()
     {
@@ -50,14 +50,11 @@ internal sealed class EventRecorder
         ResetEvents(tagEvents);
     }
     
-    private static void ResetEvents(EntityEvents[] eventsArray)
+    private static void ResetEvents(EntityEvents events)
     {
-        // todo could use bit mask to reset events only if necessary
-        foreach (ref var events in eventsArray.AsSpan()) {
-            events.entityMap?.Clear();
-            events.eventCount = 0;
-            events.entitySetPos = 0;
-        }
+        events.entityChanges?.Clear();
+        events.eventCount       = 0;
+        events.entityChangesPos = 0;
     }
     
     private void SetEnabled(bool enabled)
@@ -76,17 +73,6 @@ internal sealed class EventRecorder
         store.OnComponentAdded      -= OnComponentAdded;
         store.OnComponentRemoved    -= OnComponentRemoved;
         store.OnTagsChanged         -= OnTagsChanged;
-    }
-    
-    private static EntityEvents[] CreateEntityEvents(SchemaType[] types)
-    {
-        var length      = types.Length;
-        var eventsArray = new EntityEvents[length];
-        for (int n = 1; n < length; n++) {
-            var events = new EntityEvents(types[n]) { events = Array.Empty<EntityEvent>() };
-            eventsArray[n] = events;
-        }
-        return eventsArray;
     }
     
     private string GetString() {
@@ -128,18 +114,17 @@ internal sealed class EventRecorder
         }
     }
     
-    private static void AddEvent(EntityEvents[] typeEvents, int typeIndex, int entityId, EntityEventAction action)
+    private static void AddEvent(EntityEvents events, int typeIndex, int entityId, EntityEventAction action)
     {
-        ref var events  = ref typeEvents[typeIndex];
-        int count       = events.eventCount; 
+        int count = events.eventCount; 
         if (count == events.events.Length) {
             ArrayUtils.Resize(ref events.events, Math.Max(4, 2 * count));
         }
-        events.eventCount    = count + 1;
-        ref var ev  = ref events.events[count];
-        ev.id       = entityId;
-        ev.action   = action;
-        // events.events[count] = entityId;
+        events.eventCount   = count + 1;
+        ref var ev          = ref events.events[count];
+        ev.id               = entityId;
+        ev.action           = action;
+        ev.typeIndex        = (byte)typeIndex;
     }
     #endregion
 }

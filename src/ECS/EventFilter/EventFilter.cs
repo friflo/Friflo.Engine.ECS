@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Friflo.Engine.ECS.Utils;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -27,18 +28,20 @@ internal sealed class EventFilter
 #region fields
                     private             long            _lastEventCount;
                     private readonly    EventRecorder   _recorder;
+                    private readonly    EntityStore     _store;
                     //
                     private             EventFilters    componentFilters;
                     private             EventFilters    tagFilters;
     
-    [Browse(Never)] private readonly    EntityEvents[]  componentEvents;
-    [Browse(Never)] private readonly    EntityEvents[]  tagEvents;
+    [Browse(Never)] private readonly    EntityEvents    componentEvents;
+    [Browse(Never)] private readonly    EntityEvents    tagEvents;
     #endregion
     
     
     internal EventFilter(EventRecorder recorder)
     {
         _recorder       = recorder;
+        _store          = recorder.entityStore;
         componentEvents = recorder.componentEvents;
         tagEvents       = recorder.tagEvents;
     }
@@ -81,21 +84,17 @@ internal sealed class EventFilter
     private void InitFilter()
     {
         _lastEventCount = _recorder.allEventsCount;
-        InitTypeFilter(componentFilters,    componentEvents);
-        InitTypeFilter(tagFilters,          tagEvents);
+        InitTypeFilter(componentEvents);
+        InitTypeFilter(tagEvents);
     }
     
-    private static void InitTypeFilter(in EventFilters filters, EntityEvents[] events)
+    private static void InitTypeFilter(EntityEvents events)
     {
-        for (int n = 0; n < filters.count; n++)
-        {
-            ref var entityEvents = ref events[filters.items[n].index];
-            if (entityEvents.eventCount == entityEvents.entitySetPos) {
-                continue;
-            }
-            entityEvents.entityMap ??= new Dictionary<int, EntityEventAction>();
-            entityEvents.UpdateHashSet();
+        if (events.eventCount == events.entityChangesPos) {
+            return;
         }
+        events.entityChanges ??= new Dictionary<int, BitSet>();
+        events.UpdateHashSet();
     }
     
     public bool Filter(int entityId)
@@ -103,21 +102,49 @@ internal sealed class EventFilter
         if (_lastEventCount != _recorder.allEventsCount) {
             InitFilter();
         }
-        if (componentFilters.items != null && Contains(componentFilters, componentEvents, entityId)) return true;
-        if (tagFilters      .items != null && Contains(tagFilters,       tagEvents,       entityId)) return true;
+        if (componentFilters.items != null && ContainsComponentEvent(entityId)) return true;
+        if (tagFilters      .items != null && ContainsTagEvent      (entityId)) return true;
         return false;
     }
     
-    private static bool Contains(EventFilters filters, EntityEvents[] events, int entityId)
+    private bool ContainsComponentEvent(int entityId)
     {
+        if (!componentEvents.entityChanges.TryGetValue(entityId, out var bitSet)) {
+            return false;
+        }
+        var componentTypes  = _store.nodes[entityId].archetype.componentTypes;
+        var filters         = componentFilters;
         for (int n = 0; n < filters.count; n++)
         {
-            ref var filter  = ref filters.items[n];
-            var     map     = events[filter.index].entityMap;
-            if (!map.TryGetValue(entityId, out var action)) {
+            TypeFilter filter = filters.items[n];
+            if (!bitSet.Has(filter.index)) {
                 continue;
             }
-            if (action == filter.action) {
+            bool hasComponent   = componentTypes.bitSet.Has(filter.index);
+            bool addedFilter    = filter.action == EntityEventAction.Added;
+            if (hasComponent == addedFilter) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool ContainsTagEvent(int entityId)
+    {
+        if (!tagEvents.entityChanges.TryGetValue(entityId, out var bitSet)) {
+            return false;
+        }
+        var tags    = _store.nodes[entityId].archetype.tags;
+        var filters = tagFilters;
+        for (int n = 0; n < filters.count; n++)
+        {
+            var filter = filters.items[n];
+            if (!bitSet.Has(filter.index)) {
+                continue;
+            }
+            bool hasTag         = tags.bitSet.Has(filter.index);
+            bool addedFilter    = filter.action == EntityEventAction.Added;
+            if (hasTag == addedFilter) {
                 return true;
             }
         }

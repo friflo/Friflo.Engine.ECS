@@ -4,13 +4,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 [ExcludeFromCodeCoverage]
-internal struct EntityEvents
+internal class EntityEvents
 {
 #region properties
     internal        ReadOnlySpan<EntityEvent>   Events   => new (events, 0, eventCount);
@@ -20,43 +22,39 @@ internal struct EntityEvents
     #endregion
     
 #region fields
-    internal            EntityEvent[]                       events;         //  8   - never null
-    internal            int                                 eventCount;     //  4
-    internal            Dictionary<int, EntityEventAction>  entityMap;      //  8   - can be null. Created / updated on demand.
-    internal            int                                 entitySetPos;   //  4
-    private  readonly   SchemaType                          type;           //  8
+    internal            EntityEvent[]           events;             //  8   - never null
+    internal            int                     eventCount;         //  4
+    internal            Dictionary<int, BitSet> entityChanges;      //  8   - can be null. Created / updated on demand.
+    internal            int                     entityChangesPos;   //  4
     #endregion
     
-    internal EntityEvents(SchemaType type) {
-        this.type = type;
+    internal EntityEvents() {
+        events = Array.Empty<EntityEvent>();
     }
     
     internal bool ContainsId(int entityId)
     {
         var idCount = eventCount;
-        var map     = entityMap ??= new Dictionary<int, EntityEventAction>(idCount);
-        if (entitySetPos < idCount) {
+        var changes = entityChanges ??= new Dictionary<int, BitSet>(idCount);
+        if (entityChangesPos < idCount) {
             UpdateHashSet();
         }
-        return map.ContainsKey(entityId);
+        return changes.ContainsKey(entityId);
     }
     
     internal void UpdateHashSet()
     {
-        var set = entityMap;
-        var eventSpan = new ReadOnlySpan<EntityEvent>(events, entitySetPos, eventCount - entitySetPos);
+        var changes     = entityChanges;
+        var eventSpan   = new ReadOnlySpan<EntityEvent>(events, entityChangesPos, eventCount - entityChangesPos);
         foreach (var ev in eventSpan) {
-            set[ev.id] = ev.action;
+            ref var value = ref CollectionsMarshal.GetValueRefOrAddDefault(changes, ev.id, out _);
+            value.SetBit(ev.typeIndex);
         }
-        entitySetPos = eventCount;
+        entityChangesPos = eventCount;
     }
     
     private string GetString() {
-        if (type == null) {
-            return "";
-        }
-        string marker = type.Kind == SchemaTypeKind.Component ? "" : "#";
-        return $"[{marker}{type.Name}] events: {eventCount}";
+        return $"events: {eventCount}";
     }
 }
 

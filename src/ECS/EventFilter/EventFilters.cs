@@ -8,14 +8,15 @@ namespace Friflo.Engine.ECS;
 
 internal struct TypeFilter
 {
-    internal    int                 index;
-    internal    SchemaTypeKind      kind;
-    internal    EntityEventAction   action;
+    internal    int                 index;      //  4
+    internal    SchemaTypeKind      kind;       //  4
+    internal    EntityEventAction   action;     //  1
 }
 
 internal struct EntityEvent {
-    internal    int                 id;
-    internal    EntityEventAction   action;
+    internal    int                 id;         //  4
+    internal    EntityEventAction   action;     //  1  
+    internal    byte                typeIndex;  //  1
 
     public override string ToString() => $"id: {id} - {action}";
 }
