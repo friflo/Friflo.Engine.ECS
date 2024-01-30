@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -79,6 +80,11 @@ public sealed class EventFilter
         filter.action   = action;
     }
     
+    /// <remarks>
+    /// The <see cref="componentEvents"/> lock ensures that the <see cref="EntityEvents.entityChanges"/> Dictionary
+    /// is updated from a single thread only.<br/>
+    /// See remarks as <see cref="HasEvent"/>
+    /// </remarks>
     private void UpdateFilter()
     {
         lock (componentEvents)
