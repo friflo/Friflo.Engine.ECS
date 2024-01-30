@@ -79,22 +79,22 @@ public sealed class EventFilter
         filter.action   = action;
     }
     
-    private void InitFilter()
+    private void UpdateFilter()
     {
         lock (componentEvents)
         {
-            InitTypeFilter(componentEvents);
-            InitTypeFilter(tagEvents);
+            UpdateEntityChanges(componentEvents);
+            UpdateEntityChanges(tagEvents);
             Interlocked.Exchange(ref _recorder.allEventsCountMapUpdate, _recorder.allEventsCount);
         }
     }
     
-    private static void InitTypeFilter(EntityEvents events)
+    private static void UpdateEntityChanges(EntityEvents events)
     {
         if (events.eventCount == events.entityChangesPos) {
             return;
         }
-        events.UpdateHashSet();
+        events.UpdateEntityChanges();
     }
     
     /// <summary>
@@ -112,7 +112,7 @@ public sealed class EventFilter
         var recorder = _recorder;
         var eventCount = Interlocked.Read(ref recorder.allEventsCountMapUpdate);
         if (eventCount != recorder.allEventsCount) {
-            InitFilter();
+            UpdateFilter();
         }
         if (componentFilters.items != null && ContainsComponentEvent(entityId)) return true;
         if (tagFilters      .items != null && ContainsTagEvent      (entityId)) return true;

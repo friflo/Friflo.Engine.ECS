@@ -67,12 +67,12 @@ internal sealed class EntityEvents
     internal bool ContainsId(int entityId)
     {
         if (entityChangesPos < eventCount) {
-            UpdateHashSet();
+            UpdateEntityChanges();
         }
         return entityChanges.ContainsKey(entityId);
     }
     
-    internal void UpdateHashSet()
+    internal void UpdateEntityChanges()
     {
         var changes     = entityChanges;
         var eventSpan   = new ReadOnlySpan<EntityEvent>(events, entityChangesPos, eventCount - entityChangesPos);
