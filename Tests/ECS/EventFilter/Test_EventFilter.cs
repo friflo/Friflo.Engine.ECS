@@ -203,6 +203,26 @@ public static class Test_EventFilter
     }
     
     [Test]
+    public static void Test_EventFilter_query_empty_filter()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity1 = store.CreateEntity();
+
+        var query = store.Query();
+        store.EventRecorder.Enabled = true;
+        entity1.AddComponent    <Position>();
+        AreEqual(1, store.EventRecorder.AllEventsCount);
+        
+        int count = 0;
+        foreach (var entity in query.Entities)
+        {
+            count++;
+            IsFalse(query.HasEvent(entity.Id));
+        }
+        AreEqual(1, count);
+    }
+    
+    [Test]
     public static void Test_EventFilter_filter_events_perf()
     {
         int count = 10;

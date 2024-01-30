@@ -59,11 +59,15 @@ public class ArchetypeQuery
     
     /// <summary>
     /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.<br/>
-    /// The component / tag of interest need to be added to the <see cref="EventFilter"/>.  
+    /// Therefore <see cref="EntityStore.EventRecorder"/> needs to be enabled and<br/> 
+    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.  
     /// </summary>
     public bool HasEvent(int entityId)
     {
-        return eventFilter.HasEvent(entityId);
+        if (eventFilter != null) {
+            return eventFilter.HasEvent(entityId);
+        }
+        return false;
     }
     
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
