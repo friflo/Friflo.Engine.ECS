@@ -53,9 +53,9 @@ internal sealed class EntityEvents
     
 #region fields
     internal            EntityEvent[]           events;             //  8   - never null
-    internal            int                     eventCount;         //  4
-    internal readonly   Dictionary<int, BitSet> entityChanges;      //  8   - can be null. Created / updated on demand.
-    internal            int                     entityChangesPos;   //  4
+    internal            int                     eventCount;         //  4   - number of recorded events
+    internal readonly   Dictionary<int, BitSet> entityChanges;      //  8   - never null
+    internal            int                     entityChangesPos;   //  4   - last event in events[] added to entityChanges map
     #endregion
     
     internal EntityEvents() {
