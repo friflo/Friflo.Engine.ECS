@@ -106,10 +106,11 @@ internal sealed class EventRecorder
     
     private void OnTagsChanged(TagsChanged change)
     {
-        var addedCount = change.AddedTags.Count;
+        var addedTags   = change.AddedTags;
+        var addedCount  = addedTags.Count;
         if (addedCount > 0) {
             allEventsCount += addedCount;
-            foreach (var tag in change.AddedTags)
+            foreach (var tag in addedTags)
             {
                 ref var ev      = ref AddEvent(tagEvents);
                 ev.id           = change.EntityId;
@@ -118,10 +119,11 @@ internal sealed class EventRecorder
                 ev.kind         = SchemaTypeKind.Tag;
             }
         }
-        var removedCount = change.RemovedTags.Count;
+        var removedTags     = change.RemovedTags;
+        var removedCount    = removedTags.Count;
         if (removedCount > 0) {
             allEventsCount += removedCount;
-            foreach (var tag in change.RemovedTags)
+            foreach (var tag in removedTags)
             {
                 ref var ev      = ref AddEvent(tagEvents);
                 ev.id           = change.EntityId;
