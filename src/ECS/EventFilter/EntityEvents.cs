@@ -35,7 +35,7 @@ public struct EntityEvent
     /// <summary>The change type - add / remove - of a component / tag. </summary>
     public      EntityEventAction   Action;     //  1
     
-    /// <summary> The index in <see cref="EntitySchema.components"/> or <see cref="EntitySchema.tags"/>. </summary>
+    /// <summary> The index in <see cref="EntitySchema"/> properties <see cref="EntitySchema.Components"/> or <see cref="EntitySchema.Tags"/>. </summary>
     public      byte                TypeIndex;  //  1
     
     /// <summary> The kind - component / tag - of the structural change. </summary>
