@@ -93,6 +93,13 @@ public sealed class EventFilter
         events.UpdateHashSet();
     }
     
+    /// <summary>
+    /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.
+    /// </summary>
+    /// <remarks>
+    /// Therefore <see cref="EntityStore.EventRecorder"/> needs to be enabled and<br/> 
+    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.
+    /// </remarks>
     public bool HasEvent(int entityId)
     {
         var recorder = _recorder; 

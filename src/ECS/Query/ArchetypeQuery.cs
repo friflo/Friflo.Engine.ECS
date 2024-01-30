@@ -58,10 +58,12 @@ public class ArchetypeQuery
     public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
     
     /// <summary>
-    /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.<br/>
-    /// Therefore <see cref="EntityStore.EventRecorder"/> needs to be enabled and<br/> 
-    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.  
+    /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.
     /// </summary>
+    /// <remarks>
+    /// Therefore <see cref="EntityStore.EventRecorder"/> needs to be enabled and<br/> 
+    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.
+    /// </remarks>
     public bool HasEvent(int entityId)
     {
         if (eventFilter != null) {
