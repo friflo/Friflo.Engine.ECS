@@ -85,7 +85,7 @@ public static class Test_EventFilter
         recorder.Enabled = false;
         IsFalse(recorder.Enabled);
         
-        recorder.Reset();
+        recorder.ClearEvents();
         entity2.AddComponent<Position>();
         
         AreEqual(0, recorder.ComponentEvents.Length);

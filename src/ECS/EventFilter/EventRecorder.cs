@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 public sealed class EventRecorder
 {
 #region properties
-    /// <summary> Return the number of all recorded events.<br/> Calling <see cref="Reset"/> does not affect the counter.</summary>
+    /// <summary> Return the number of all recorded events.<br/> Calling <see cref="ClearEvents"/> does not affect the counter.</summary>
     public                  long            AllEventsCount  => allEventsCount;
     
     /// <summary> Record component / tag events if true.<br/> It is required when using an <see cref="EventFilter"/>.</summary>
@@ -58,13 +58,13 @@ public sealed class EventRecorder
     /// <summary>
     /// Clear all  <see cref="ComponentEvents"/> and <see cref="TagEvents"/>.
     /// </summary>
-    public void Reset()
+    public void ClearEvents()
     {
-        ResetEvents(componentEvents);
-        ResetEvents(tagEvents);
+        Clear(componentEvents);
+        Clear(tagEvents);
     }
     
-    private static void ResetEvents(EntityEvents events)
+    private static void Clear(EntityEvents events)
     {
         events.entityChanges.Clear();
         events.eventCount       = 0;
