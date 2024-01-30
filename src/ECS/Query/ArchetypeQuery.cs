@@ -62,7 +62,10 @@ public class ArchetypeQuery
     /// </summary>
     /// <remarks>
     /// Therefore <see cref="EntityStore.EventRecorder"/> needs to be enabled and<br/> 
-    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.
+    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.<br/>
+    /// <br/>
+    /// <b>Note</b>: <see cref="HasEvent"/> can be called from any thread.<br/>
+    /// Adding / removing components/tags must not be executed at the same time by another thread.
     /// </remarks>
     public bool HasEvent(int entityId)
     {

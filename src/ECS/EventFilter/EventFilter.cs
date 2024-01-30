@@ -3,6 +3,7 @@
 
 using System;
 using System.Text;
+using System.Threading;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -80,9 +81,12 @@ public sealed class EventFilter
     
     private void InitFilter()
     {
-        InitTypeFilter(componentEvents);
-        InitTypeFilter(tagEvents);
-        _recorder.allEventCountMapUpdate = _recorder.allEventsCount;
+        lock (componentEvents)
+        {
+            InitTypeFilter(componentEvents);
+            InitTypeFilter(tagEvents);
+            Interlocked.Exchange(ref _recorder.allEventCountMapUpdate, _recorder.allEventsCount);
+        }
     }
     
     private static void InitTypeFilter(EntityEvents events)
@@ -98,12 +102,16 @@ public sealed class EventFilter
     /// </summary>
     /// <remarks>
     /// Therefore <see cref="EntityStore.EventRecorder"/> needs to be enabled and<br/> 
-    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.
+    /// the component / tag (add / remove) events of interest need to be added to the <see cref="EventFilter"/>.<br/>
+    /// <br/>
+    /// <b>Note</b>: <see cref="HasEvent"/> can be called from any thread.<br/>
+    /// Adding / removing components/tags must not be executed at the same time by another thread.
     /// </remarks>
     public bool HasEvent(int entityId)
     {
-        var recorder = _recorder; 
-        if (recorder.allEventCountMapUpdate != recorder.allEventsCount) {
+        var recorder = _recorder;
+        var eventCount = Interlocked.Read(ref recorder.allEventCountMapUpdate);
+        if (eventCount != recorder.allEventsCount) {
             InitFilter();
         }
         if (componentFilters.items != null && ContainsComponentEvent(entityId)) return true;
