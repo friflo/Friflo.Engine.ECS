@@ -206,18 +206,19 @@ public static class Test_EventFilter
         } {
             var sw = new Stopwatch();
             sw.Start();
-            for (int n = 1; n < count; n++) {
+            for (int n = 1; n <= count; n++) {
                 var entity = store.GetEntityById(n);
                 entity.AddComponent<Position>();
             }
             Console.WriteLine($"EvenRecorder - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
+            AreEqual(count, recorder.AllEventsCount);
         } {
             var positionAdded = new EventFilter(recorder);
             positionAdded.ComponentAdded<Position>();
             var sw = new Stopwatch();
             sw.Start();
 
-            for (int n = 1; n < count; n++) {
+            for (int n = 1; n <= count; n++) {
                 Mem.IsTrue(positionAdded.Filter(n));
             }
             Console.WriteLine($"EventFilter - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
