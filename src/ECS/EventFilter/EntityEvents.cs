@@ -11,7 +11,7 @@ using Friflo.Engine.ECS.Utils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal class EntityEvents
+internal sealed class EntityEvents
 {
 #region properties
     internal        ReadOnlySpan<EntityEvent>   Events   => new (events, 0, eventCount);
