@@ -18,7 +18,10 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-
+/// <summary>
+/// Used to filter structural changes made to an entity like added / removed components / tags using <see cref="HasEvent"/>.<br/>
+/// The <see cref="EntityStore.EventRecorder"/> mus be enabled to get add / remove events.
+/// </summary>
 public sealed class EventFilter
 {
 #region properties
@@ -36,7 +39,9 @@ public sealed class EventFilter
     [Browse(Never)] private  readonly   EntityEvents    tagEvents;
     #endregion
     
-    
+    /// <summary>
+    /// Create and event filter for the passed <see cref="EventRecorder"/>. 
+    /// </summary>
     public EventFilter(EventRecorder recorder)
     {
         _recorder       = recorder;
@@ -45,24 +50,28 @@ public sealed class EventFilter
         tagEvents       = recorder.tagEvents;
     }
     
+    /// <summary> Enable filtering add component events of the given <see cref="IComponent"/> type <typeparamref name="T"/>.</summary>
     public void ComponentAdded<T>()
         where T : struct, IComponent
     {
         AddFilter(ref componentFilters, StructHeap<T>.StructIndex, SchemaTypeKind.Component, EntityEventAction.Added);
     }
     
+    /// <summary> Enable filtering remove component events of the given <see cref="IComponent"/> type <typeparamref name="T"/>.</summary>
     public void ComponentRemoved<T>()
         where T : struct, IComponent
     {
         AddFilter(ref componentFilters, StructHeap<T>.StructIndex, SchemaTypeKind.Component, EntityEventAction.Removed);
     }
     
+    /// <summary> Enable filtering add tag events of the given <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
     public void TagAdded<T>()
         where T : struct, ITag
     {
         AddFilter(ref tagFilters, TagType<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Added);
     }
     
+    /// <summary> Enable filtering remove tag events of the given <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
     public void TagRemoved<T>()
         where T : struct, ITag
     {

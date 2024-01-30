@@ -56,8 +56,8 @@ public sealed partial class EntityStore : EntityStoreBase
                     public              QueryEntities   Entities        => GetEntities();
     
     /// <summary>
-    /// Records adding/removing of components/tags to/from entities if <see cref="ECS.EventRecorder.Enabled"/> is true.<br/>
-    /// This is required to filter these events using an <see cref="EventFilter"/>.
+    /// Record adding/removing of components/tags to/from entities if <see cref="ECS.EventRecorder.Enabled"/> is true.<br/>
+    /// It is required to filter these events using an <see cref="EventFilter"/>.
     /// </summary>
     [Browse(Never)] public              EventRecorder   EventRecorder   => GetEventRecorder();
     #endregion

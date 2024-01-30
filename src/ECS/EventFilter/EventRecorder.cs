@@ -13,14 +13,22 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Experimental POC
+/// Used to record events of structural changes like add/remove component/tag.<br/>
+/// The recorder is required to filter these events using an <see cref="EventFilter"/>.
 /// </summary>
 public sealed class EventRecorder
 {
 #region properties
+    /// <summary> Return the number of all recorded events.<br/> Calling <see cref="Reset"/> does not affect the counter.</summary>
     public                  long            AllEventsCount  => allEventsCount;
+    
+    /// <summary> Record component / tag events if true.<br/> It is required when using an <see cref="EventFilter"/>.</summary>
     public                  bool            Enabled         { get => enabled; set => SetEnabled(value); }
+    
+    /// <summary>The list of all recorded component events.</summary>
     public     ReadOnlySpan<EntityEvent>    ComponentEvents => componentEvents.Events;
+    
+    /// <summary>The list of all recorded tag events.</summary>
     public     ReadOnlySpan<EntityEvent>    TagEvents       => tagEvents.      Events;
 
     public override string ToString()   => GetString();
@@ -47,6 +55,9 @@ public sealed class EventRecorder
         tagEvents           = new EntityEvents();
     }
     
+    /// <summary>
+    /// Clear all  <see cref="ComponentEvents"/> and <see cref="TagEvents"/>.
+    /// </summary>
     public void Reset()
     {
         ResetEvents(componentEvents);

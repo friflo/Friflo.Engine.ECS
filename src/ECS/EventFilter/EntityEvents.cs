@@ -13,17 +13,32 @@ using Friflo.Engine.ECS.Utils;
 namespace Friflo.Engine.ECS;
 
 
+/// <summary>
+/// The type of an entity change in <see cref="EntityEvent"/>. 
+/// </summary>
 public enum EntityEventAction : byte
 {
+    /// <summary> A component / tag was removed </summary>
     Removed = 0,
+    /// <summary> A component / tag was added </summary>
     Added   = 1
 }
 
-
-public struct EntityEvent {
+/// <summary>
+/// The information about a structural change recorded by the <see cref="EventRecorder"/>.
+/// </summary>
+public struct EntityEvent
+{
+    /// <summary>The id of the changed entity.</summary>
     public      int                 Id;         //  4
+    
+    /// <summary>The change type - add / remove - of a component / tag. </summary>
     public      EntityEventAction   Action;     //  1
+    
+    /// <summary> The index in <see cref="EntitySchema.components"/> or <see cref="EntitySchema.tags"/>. </summary>
     public      byte                TypeIndex;  //  1
+    
+    /// <summary> The kind - component / tag - of the structural change. </summary>
     public      SchemaTypeKind      Kind;       //  1   - used only for ToString()
 
     public override string          ToString() => GetString();
