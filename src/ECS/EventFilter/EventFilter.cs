@@ -20,7 +20,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Used to filter structural changes made to an entity like added / removed components / tags using <see cref="HasEvent"/>.<br/>
-/// The <see cref="EntityStore.EventRecorder"/> mus be enabled to get add / remove events.
+/// The <see cref="EntityStore.EventRecorder"/> must be enabled to get add / remove events.
 /// </summary>
 public sealed class EventFilter
 {
