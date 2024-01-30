@@ -23,8 +23,7 @@ public sealed class EventFilter
     #endregion
     
 #region fields
-                    internal            long            _lastEventCount;
-                    internal readonly   EventRecorder   _recorder;
+                    private  readonly   EventRecorder   _recorder;
     [Browse(Never)] private  readonly   EntityStore     _store;
                     //
                     internal            EventFilters    componentFilters;
@@ -78,11 +77,11 @@ public sealed class EventFilter
         filter.action   = action;
     }
     
-    internal void InitFilter()
+    private void InitFilter()
     {
-        _lastEventCount = _recorder.allEventsCount;
         InitTypeFilter(componentEvents);
         InitTypeFilter(tagEvents);
+        _recorder.allEventCountMapUpdate = _recorder.allEventsCount;
     }
     
     private static void InitTypeFilter(EntityEvents events)
@@ -95,7 +94,8 @@ public sealed class EventFilter
     
     public bool HasEvent(int entityId)
     {
-        if (_lastEventCount != _recorder.allEventsCount) {
+        var recorder = _recorder; 
+        if (recorder.allEventCountMapUpdate != recorder.allEventsCount) {
             InitFilter();
         }
         if (componentFilters.items != null && ContainsComponentEvent(entityId)) return true;
@@ -103,7 +103,7 @@ public sealed class EventFilter
         return false;
     }
     
-    internal bool ContainsComponentEvent(int entityId)
+    private bool ContainsComponentEvent(int entityId)
     {
         if (!componentEvents.entityChanges.TryGetValue(entityId, out var bitSet)) {
             return false;
@@ -125,7 +125,7 @@ public sealed class EventFilter
         return false;
     }
     
-    internal bool ContainsTagEvent(int entityId)
+    private bool ContainsTagEvent(int entityId)
     {
         if (!tagEvents.entityChanges.TryGetValue(entityId, out var bitSet)) {
             return false;

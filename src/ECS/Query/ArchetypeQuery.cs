@@ -63,13 +63,7 @@ public class ArchetypeQuery
     /// </summary>
     public bool HasEvent(int entityId)
     {
-        var filter = eventFilter;
-        if (filter._lastEventCount != filter._recorder.allEventsCount) {
-            filter.InitFilter();
-        }
-        if (filter.componentFilters.items != null && filter.ContainsComponentEvent(entityId)) return true;
-        if (filter.tagFilters      .items != null && filter.ContainsTagEvent      (entityId)) return true;
-        return false;
+        return eventFilter.HasEvent(entityId);
     }
     
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
