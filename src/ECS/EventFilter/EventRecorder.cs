@@ -35,7 +35,7 @@ public sealed class EventRecorder
     #endregion
     
 #region general methods
-    public EventRecorder(EntityStore store)
+    internal EventRecorder(EntityStore store)
     {
         entityStore         = store;
         componentEvents     = new EntityEvents();
