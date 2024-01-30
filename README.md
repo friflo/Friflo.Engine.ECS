@@ -102,6 +102,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Signal](#signal)
 - [Query](#query)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
+- [EventFilter](#eventfilter)
 - [CommandBuffer](#commandbuffer)
 
 
@@ -351,6 +352,41 @@ public static void EnumerateQueryChunks()
 }
 ```
 
+## EventFilter
+
+An alternative to process entity changes - see section [Event](#event) - are `EventFilter`'s.  
+`EventFilter`'s can be used on its own or within a query like in the example below.  
+All events that need to be filtered - like added/removed components/tags - can be added to the `EventFilter`.  
+E.g. `ComponentAdded<Position>()` or `TagAdded<MyTag1>`.
+
+```
+public static void FilterEntityEvents()
+{
+    var store   = new EntityStore();
+    store.EventRecorder.Enabled = true; // required for EventFilter
+    
+    var entity1 = store.CreateEntity();
+    entity1.AddComponent<MyComponent>();
+    entity1.AddComponent<Position>();
+    
+    var entity2 = store.CreateEntity();
+    entity2.AddComponent<MyComponent>();
+    entity2.AddTag   <MyTag1>();
+    
+    var query = store.Query<MyComponent>();
+    query.EventFilter.ComponentAdded<Position>();
+    query.EventFilter.TagAdded<MyTag1>();
+    
+    foreach (var (myComponent, entities) in query.Chunks) {
+        foreach (var entity in entities) {
+            bool hasEvent = query.HasEvent(entity.Id);
+            Console.WriteLine($"{entity} - hasEvent: {hasEvent}");                   
+        }
+    }
+    // > id: 1  [Position, MyComponent] - hasEvent: True
+    // > id: 2  [MyComponent, #MyTag1] - hasEvent: True
+}
+```
 
 ## CommandBuffer
 

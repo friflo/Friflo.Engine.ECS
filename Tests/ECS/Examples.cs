@@ -2,6 +2,7 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 
+// ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable UnusedVariable
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable RedundantTypeDeclarationBody
@@ -179,6 +180,34 @@ public static class Examples
                 // > MyComponent.value: 44
             }
         }
+    }
+    
+    [Test]
+    public static void FilterEntityEvents()
+    {
+        var store   = new EntityStore();
+        store.EventRecorder.Enabled = true; // required for EventFilter
+        
+        var entity1 = store.CreateEntity();
+        entity1.AddComponent<MyComponent>();
+        entity1.AddComponent<Position>();
+        
+        var entity2 = store.CreateEntity();
+        entity2.AddComponent<MyComponent>();
+        entity2.AddTag   <MyTag1>();
+        
+        var query = store.Query<MyComponent>();
+        query.EventFilter.ComponentAdded<Position>();
+        query.EventFilter.TagAdded<MyTag1>();
+        
+        foreach (var (myComponent, entities) in query.Chunks) {
+            foreach (var entity in entities) {
+                bool hasEvent = query.HasEvent(entity.Id);
+                Console.WriteLine($"{entity} - hasEvent: {hasEvent}");                   
+            }
+        }
+        // > id: 1  [Position, MyComponent] - hasEvent: True
+        // > id: 2  [MyComponent, #MyTag1] - hasEvent: True
     }
     
     [Test]
