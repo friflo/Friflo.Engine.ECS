@@ -6,6 +6,7 @@ using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
 // ReSharper disable UseCollectionExpression
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -15,7 +16,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 
-internal sealed class EventFilter
+public sealed class EventFilter
 {
 #region properties
     public override string  ToString() => GetString();
@@ -34,7 +35,7 @@ internal sealed class EventFilter
     #endregion
     
     
-    internal EventFilter(EventRecorder recorder)
+    public EventFilter(EventRecorder recorder)
     {
         _recorder       = recorder;
         _store          = recorder.entityStore;

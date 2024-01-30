@@ -55,7 +55,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
                     public              QueryEntities   Entities        => GetEntities();
     
-    [Browse(Never)] internal            EventRecorder   EventRecorder   => GetEventRecorder();
+    [Browse(Never)] public              EventRecorder   EventRecorder   => GetEventRecorder();
     #endregion
     
 #region events

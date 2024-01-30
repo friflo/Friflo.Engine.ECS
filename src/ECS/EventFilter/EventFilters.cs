@@ -14,11 +14,11 @@ internal struct TypeFilter
     internal    EntityEventAction   action;     //  1
 }
 
-internal struct EntityEvent {
-    internal    int                 id;         //  4
-    internal    EntityEventAction   action;     //  1
-    internal    byte                typeIndex;  //  1
-    internal    SchemaTypeKind      kind;       //  1   - used only for ToString()
+public struct EntityEvent {
+    public      int                 id;         //  4
+    public      EntityEventAction   action;     //  1
+    public      byte                typeIndex;  //  1
+    public      SchemaTypeKind      kind;       //  1   - used only for ToString()
 
     public override string          ToString() => GetString();
     
@@ -35,7 +35,7 @@ internal struct EntityEvent {
     }
 }
 
-internal enum EntityEventAction : byte
+public enum EntityEventAction : byte
 {
     Removed = 0,
     Added   = 1

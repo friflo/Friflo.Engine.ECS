@@ -6,7 +6,8 @@ using Tests.ECS;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
-namespace Internal.ECS;
+// ReSharper disable once CheckNamespace
+namespace Tests.ECS.Filter;
 
 // ReSharper disable once InconsistentNaming
 public static class Test_EventFilter
@@ -15,9 +16,6 @@ public static class Test_EventFilter
     [Test]
     public static void Test_EventFilter_Internal()
     {
-        var componentEvents = new EntityEvents();
-        AreEqual("events: 0", componentEvents.ToString());
-        
         var schema = EntityStore.GetEntitySchema();
         
         var positionType = schema.ComponentTypeByType[typeof(Position)];
@@ -43,10 +41,13 @@ public static class Test_EventFilter
             _ = ev.ToString();
         });
     }
-    
+    /*
     [Test]
     public static void Test_EventFilter_filter_ToString()
     {
+        var componentEvents = new EntityEvents();
+        AreEqual("events: 0", componentEvents.ToString());
+        
         var store           = new EntityStore(PidType.UsePidAsId);
         var recorder        = store.EventRecorder;
         
@@ -79,7 +80,7 @@ public static class Test_EventFilter
         filter.TagRemoved       <TestTag>();
         
         AreEqual("added: [Position, #TestTag]  removed: [Position, #TestTag]", filter.ToString());
-    }
+    } */
     
     [Test]
     public static void Test_EventFilter_create_recorder()

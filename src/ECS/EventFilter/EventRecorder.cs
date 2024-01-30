@@ -15,7 +15,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Experimental POC
 /// </summary>
-internal sealed class EventRecorder
+public sealed class EventRecorder
 {
 #region properties
     public                  long            AllEventsCount  => allEventsCount;
