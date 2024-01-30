@@ -1,4 +1,5 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
@@ -34,6 +35,11 @@ public static class Test_EventFilter
             kind        = SchemaTypeKind.Tag
         };
         AreEqual("id: 2 - Removed [#TestTag]", ev.ToString());
+        
+        ev.kind = (SchemaTypeKind)99;
+        Throws<InvalidOperationException>(() => {
+            _ = ev.ToString();
+        });
     }
     
     [Test]
@@ -52,10 +58,17 @@ public static class Test_EventFilter
         tagAdded.       TagAdded        <TestTag>();
         tagRemoved.     TagRemoved      <TestTag>();
         
-        AreEqual("added: [Position]  removed: []",   positionAdded.ToString());
-        AreEqual("added: []  removed: [Position]", positionRemoved.ToString());
-        AreEqual("added: [#TestTag]  removed: []",   tagAdded.ToString());
-        AreEqual("added: []  removed: [#TestTag]", tagRemoved.ToString());
+        AreEqual("added: [Position]  removed: []",  positionAdded.ToString());
+        AreEqual("added: []  removed: [Position]",  positionRemoved.ToString());
+        AreEqual("added: [#TestTag]  removed: []",  tagAdded.ToString());
+        AreEqual("added: []  removed: [#TestTag]",  tagRemoved.ToString());
+        
+        AreEqual("added: [Position]  removed: []",  positionAdded.componentFilters.ToString());
+        AreEqual("added: []  removed: [Position]",  positionRemoved.componentFilters.ToString());
+        AreEqual("added: [#TestTag]  removed: []",  tagAdded.tagFilters.ToString());
+        AreEqual("added: []  removed: [#TestTag]",  tagRemoved.tagFilters.ToString());
+        
+        AreEqual("[]",                              positionAdded.tagFilters.ToString());
         
         var filter = new EventFilter(recorder);
         filter.ComponentAdded   <Position>();

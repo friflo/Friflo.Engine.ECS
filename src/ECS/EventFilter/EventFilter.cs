@@ -30,8 +30,8 @@ internal sealed class EventFilter
                     private readonly    EventRecorder   _recorder;
     [Browse(Never)] private readonly    EntityStore     _store;
                     //
-                    private             EventFilters    componentFilters;
-                    private             EventFilters    tagFilters;
+                    internal            EventFilters    componentFilters;
+                    internal            EventFilters    tagFilters;
     
     [Browse(Never)] private readonly    EntityEvents    componentEvents;
     [Browse(Never)] private readonly    EntityEvents    tagEvents;

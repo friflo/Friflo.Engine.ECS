@@ -18,7 +18,7 @@ internal struct EntityEvent {
     internal    int                 id;         //  4
     internal    EntityEventAction   action;     //  1
     internal    byte                typeIndex;  //  1
-    internal    SchemaTypeKind      kind;       //  1
+    internal    SchemaTypeKind      kind;       //  1   - used only for ToString()
 
     public override string          ToString() => GetString();
     
