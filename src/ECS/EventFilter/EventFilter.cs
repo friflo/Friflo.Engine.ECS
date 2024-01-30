@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Friflo.Engine.ECS.Utils;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -18,7 +17,6 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 
-[ExcludeFromCodeCoverage]
 internal sealed class EventFilter
 {
 #region properties
@@ -138,7 +136,7 @@ internal sealed class EventFilter
         var filters = tagFilters;
         for (int n = 0; n < filters.count; n++)
         {
-            var filter = filters.items[n];
+            TypeFilter filter = filters.items[n];
             if (!bitSet.Has(filter.index)) {
                 continue;
             }

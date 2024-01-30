@@ -11,7 +11,6 @@ using Friflo.Engine.ECS.Utils;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-[ExcludeFromCodeCoverage]
 internal class EntityEvents
 {
 #region properties
@@ -32,6 +31,7 @@ internal class EntityEvents
         events = Array.Empty<EntityEvent>();
     }
     
+    [ExcludeFromCodeCoverage]
     internal bool ContainsId(int entityId)
     {
         var idCount = eventCount;

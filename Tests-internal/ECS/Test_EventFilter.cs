@@ -140,14 +140,20 @@ public static class Test_EventFilter
         
         var positionAdded   = new EventFilter(recorder);
         var positionRemoved = new EventFilter(recorder);
+        var nameAdded       = new EventFilter(recorder);
+        
         var tagAdded        = new EventFilter(recorder);
         var tagRemoved      = new EventFilter(recorder);
+        var tag2Added       = new EventFilter(recorder);
         recorder.Enabled = true;
         
         positionAdded.  ComponentAdded  <Position>();
         positionRemoved.ComponentRemoved<Position>();
+        nameAdded.      ComponentAdded  <EntityName>();
+        
         tagAdded.       TagAdded        <TestTag>();
         tagRemoved.     TagRemoved      <TestTag>();
+        tag2Added.      TagAdded        <TestTag2>();
         
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
@@ -165,15 +171,21 @@ public static class Test_EventFilter
         IsFalse(positionRemoved.Filter(entity1.Id));
         IsFalse(tagAdded.       Filter(entity1.Id));
         IsFalse(tagRemoved.     Filter(entity1.Id));
+        IsFalse(nameAdded.      Filter(entity1.Id));
+        IsFalse(tag2Added.      Filter(entity1.Id));
         
         IsTrue (positionAdded.  Filter(entity2.Id));
         IsFalse(positionRemoved.Filter(entity2.Id));
         IsTrue (tagAdded.       Filter(entity2.Id));
         IsFalse(tagRemoved.     Filter(entity2.Id));
+        IsFalse(nameAdded.      Filter(entity2.Id));
+        IsFalse(tag2Added.      Filter(entity2.Id));
         
         IsFalse(positionAdded.  Filter(entity3.Id));
         IsTrue (positionRemoved.Filter(entity3.Id));
         IsFalse(tagAdded.       Filter(entity3.Id));
         IsTrue (tagRemoved.     Filter(entity3.Id));
+        IsFalse(nameAdded.      Filter(entity3.Id));
+        IsFalse(tag2Added.      Filter(entity3.Id));
     }
 }
