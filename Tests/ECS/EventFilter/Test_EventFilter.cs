@@ -225,34 +225,46 @@ public static class Test_EventFilter
     [Test]
     public static void Test_EventFilter_filter_events_perf()
     {
-        int count = 10;
-        // 10_000_000   EventRecorder ~ #PC:  677 ms
-        //              EventFilter   ~ #PC: 1123 ms
+        int count = 10_000_000;
+        // 10_000_000   EventRecorder ~ #PC: 442 ms
+        //              EventFilter   ~ #PC: 240 ms
+        
         var store           = new EntityStore(PidType.UsePidAsId);
         var recorder        = store.EventRecorder;
         recorder.Enabled    = true;
-        
         for (int n = 0; n < count; n++) {
             store.CreateEntity();
-        } {
+        }
+        
+        // i: 0 is warmup
+        for (int i = 0; i < 2; i++)
+        {
+            for (int n = 1; n <= count; n++) {
+                var entity = store.GetEntityById(n);
+                entity.RemoveComponent<Position>();
+            }
+            recorder.ClearEvents();
+            
+            // --- add components
             var sw = new Stopwatch();
             sw.Start();
             for (int n = 1; n <= count; n++) {
                 var entity = store.GetEntityById(n);
                 entity.AddComponent<Position>();
             }
-            Console.WriteLine($"EvenRecorder - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
-            AreEqual(count, recorder.AllEventsCount);
-        } {
+            if (i == 1) Console.WriteLine($"EvenRecorder - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
+            AreEqual(count, recorder.ComponentEvents.Length);
+        
+            // --- filter component events
             var positionAdded = new EventFilter(recorder);
             positionAdded.ComponentAdded<Position>();
-            var sw = new Stopwatch();
-            sw.Start();
+            var sw2 = new Stopwatch();
+            sw2.Start();
 
             for (int n = 1; n <= count; n++) {
                 Mem.IsTrue(positionAdded.HasEvent(n));
             }
-            Console.WriteLine($"EventFilter - count: {count},  duration: {sw.ElapsedMilliseconds} ms");
+            if (i == 1) Console.WriteLine($"EventFilter  - count: {count},  duration: {sw2.ElapsedMilliseconds} ms\n");
         }
     }
 }
