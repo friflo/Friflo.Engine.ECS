@@ -66,8 +66,7 @@ internal sealed class EntityEvents
     [ExcludeFromCodeCoverage]
     internal bool ContainsId(int entityId)
     {
-        var idCount = eventCount;
-        if (entityChangesPos < idCount) {
+        if (entityChangesPos < eventCount) {
             UpdateHashSet();
         }
         return entityChanges.ContainsKey(entityId);
