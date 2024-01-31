@@ -274,19 +274,12 @@ public sealed class CommandBuffer
     
     private ComponentCommands[] GetComponentCommands()
     {
-        int count = 0;
-        foreach (var commandTypes in intern._componentCommandTypes) {
-            if (commandTypes != null && commandTypes.commandCount > 0) {
-                count++;
-            }
-        }
-        var commands = new ComponentCommands[count];
-        int pos = 0;
-        foreach (var commandTypes in intern._componentCommandTypes) {
-            if (commandTypes == null || commandTypes.commandCount == 0) {
-                continue;
-            }
-            commands[pos++] = commandTypes;
+        var commands    = new ComponentCommands[intern._changedComponentTypes.Count];
+        int pos         = 0;
+        var commandTypes =  intern._componentCommandTypes;
+        foreach (var commandType in intern._changedComponentTypes)
+        {
+            commands[pos++] = commandTypes[commandType.StructIndex];
         }
         return commands;
     }
