@@ -2,12 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-using static Friflo.Engine.ECS.StructInfo;
+
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -31,7 +29,6 @@ public class ArchetypeQuery
     public              int                 ChunkCount  => Archetype.GetChunkCount (GetArchetypesSpan());
     
     /// <summary> Returns the set of <see cref="Archetype"/>'s matching the query.</summary>
-    [DebuggerBrowsable(Never)]
     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
 
     /// <summary> The <see cref="EntityStore"/> on which the query operates. </summary>
@@ -79,9 +76,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             EventFilter         eventFilter;            //  8   used to filter component/tag add/remove events
     #endregion
 
-#region methods
-    // --- tags
-    
+#region tags
     /// <summary> A query result will contain only entities having all passed <paramref name="tags"/>. </summary>
     /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AllTags         (in Tags tags) { SetHasAllTags(tags); return this; }
@@ -98,9 +93,31 @@ public class ArchetypeQuery
     /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
+    internal void SetHasAllTags(in Tags tags) {
+        allTags         = tags;
+        allTagsCount    = tags.Count;
+        Reset();
+    }
     
-    // --- components
+    internal void SetHasAnyTags(in Tags tags) {
+        anyTags         = tags;
+        anyTagsCount    = tags.Count;
+        Reset();
+    }
     
+    internal void SetWithoutAllTags(in Tags tags) {
+        withoutAllTags      = tags;
+        withoutAllTagsCount = tags.Count;
+        Reset();
+    }
+    
+    internal void SetWithoutAnyTags(in Tags tags) {
+        withoutAnyTags      = tags;
+        Reset();
+    }
+    #endregion
+    
+#region components
     /// <summary> A query result will contain only entities having all passed <paramref name="componentTypes"/>. </summary>
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AllComponents         (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes); return this; }
@@ -117,7 +134,31 @@ public class ArchetypeQuery
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
+    internal void SetHasAllComponents(in ComponentTypes types) {
+        allComponents         = types;
+        allComponentsCount    = types.Count;
+        Reset();
+    }
     
+    internal void SetHasAnyComponents(in ComponentTypes types) {
+        anyComponents         = types;
+        anyComponentsCount    = types.Count;
+        Reset();
+    }
+    
+    internal void SetWithoutAllComponents(in ComponentTypes types) {
+        withoutAllComponents      = types;
+        withoutAllComponentsCount = types.Count;
+        Reset();
+    }
+    
+    internal void SetWithoutAnyComponents(in ComponentTypes types) {
+        withoutAnyComponents      = types;
+        Reset();
+    }
+    #endregion
+    
+#region general
     /// <summary>
     /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.
     /// </summary>
@@ -160,54 +201,6 @@ public class ArchetypeQuery
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
         archetypeCount      = 0;
-    }
-    
-    // --- tags
-    internal void SetHasAllTags(in Tags tags) {
-        allTags         = tags;
-        allTagsCount    = tags.Count;
-        Reset();
-    }
-    
-    internal void SetHasAnyTags(in Tags tags) {
-        anyTags         = tags;
-        anyTagsCount    = tags.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAllTags(in Tags tags) {
-        withoutAllTags      = tags;
-        withoutAllTagsCount = tags.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAnyTags(in Tags tags) {
-        withoutAnyTags      = tags;
-        Reset();
-    }
-    
-    // --- components
-    internal void SetHasAllComponents(in ComponentTypes types) {
-        allComponents         = types;
-        allComponentsCount    = types.Count;
-        Reset();
-    }
-    
-    internal void SetHasAnyComponents(in ComponentTypes types) {
-        anyComponents         = types;
-        anyComponentsCount    = types.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAllComponents(in ComponentTypes types) {
-        withoutAllComponents      = types;
-        withoutAllComponentsCount = types.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAnyComponents(in ComponentTypes types) {
-        withoutAnyComponents      = types;
-        Reset();
     }
     
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {
@@ -350,192 +343,4 @@ public class ArchetypeQuery
         return eventFilter = new EventFilter(Store.EventRecorder);
     }
     #endregion
-}
-
-public sealed class ArchetypeQuery<T1> : ArchetypeQuery
-    where T1 : struct, IComponent
-{
-    [Browse(Never)] internal    T1[]    copyT1;
-    
-    public new ArchetypeQuery<T1> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
-    public new ArchetypeQuery<T1> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
-    public new ArchetypeQuery<T1> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
-    public new ArchetypeQuery<T1> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
-    
-    public new ArchetypeQuery<T1> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
-    public new ArchetypeQuery<T1> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
-    
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature)
-        : base(store, signature.signatureIndexes) {
-    }
-    
-    public ArchetypeQuery<T1> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
-    }
-    
-    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>. </summary> 
-    public      QueryChunks <T1>  Chunks                                      => new (this);
-}
-
-public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <>  // <- not implemented to avoid boxing
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-{
-    [Browse(Never)] internal    T1[]    copyT1;
-    [Browse(Never)] internal    T2[]    copyT2;
-    
-     public new ArchetypeQuery<T1, T2> AllTags       (in Tags tags) { SetHasAllTags(tags);      return this; }
-     public new ArchetypeQuery<T1, T2> AnyTags       (in Tags tags) { SetHasAnyTags(tags);      return this; }
-     public new ArchetypeQuery<T1, T2> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);  return this; }
-     public new ArchetypeQuery<T1, T2> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);  return this; }
-     
-     public new ArchetypeQuery<T1, T2> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
-     public new ArchetypeQuery<T1, T2> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
-     public new ArchetypeQuery<T1, T2> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
-     public new ArchetypeQuery<T1, T2> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
-    
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature)
-        : base(store, signature.signatureIndexes) {
-    }
-    
-    public ArchetypeQuery<T1, T2> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
-    }
-    
-    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2}"/>. </summary> 
-    public      QueryChunks    <T1,T2>  Chunks                                      => new (this);
-}
-
-public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-{
-    [Browse(Never)] internal    T1[]    copyT1;
-    [Browse(Never)] internal    T2[]    copyT2;
-    [Browse(Never)] internal    T3[]    copyT3;
-    
-    public new ArchetypeQuery<T1, T2, T3> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
-    public new ArchetypeQuery<T1, T2, T3> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
-    public new ArchetypeQuery<T1, T2, T3> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
-    public new ArchetypeQuery<T1, T2, T3> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
-    
-    public new ArchetypeQuery<T1, T2, T3> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1, T2, T3> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1, T2, T3> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
-    public new ArchetypeQuery<T1, T2, T3> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
-    
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3> signature)
-        : base(store, signature.signatureIndexes) {
-    }
-    
-    public ArchetypeQuery<T1, T2, T3> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
-        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
-    }
-    
-    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3}"/>. </summary>
-    public      QueryChunks    <T1, T2, T3>  Chunks         => new (this);
-}
-
-public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
-{
-    [Browse(Never)] internal    T1[]    copyT1;
-    [Browse(Never)] internal    T2[]    copyT2;
-    [Browse(Never)] internal    T3[]    copyT3;
-    [Browse(Never)] internal    T4[]    copyT4;
-    
-    public new ArchetypeQuery<T1, T2, T3, T4> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
-    
-    public new ArchetypeQuery<T1, T2, T3, T4> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
-    
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4> signature)
-        : base(store, signature.signatureIndexes) {
-    }
-    
-    public ArchetypeQuery<T1, T2, T3, T4> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
-        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
-        if (typeof(T4) == typeof(T)) { copyT4 = new T4[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
-    }
-    
-    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4}"/>. </summary>
-    public      QueryChunks    <T1, T2, T3, T4>  Chunks         => new (this);
-}
-
-public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
-    where T1 : struct, IComponent
-    where T2 : struct, IComponent
-    where T3 : struct, IComponent
-    where T4 : struct, IComponent
-    where T5 : struct, IComponent
-{
-    [Browse(Never)] internal    T1[]    copyT1;
-    [Browse(Never)] internal    T2[]    copyT2;
-    [Browse(Never)] internal    T3[]    copyT3;
-    [Browse(Never)] internal    T4[]    copyT4;
-    [Browse(Never)] internal    T5[]    copyT5;
-    
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
-    
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
-    
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature)
-        : base(store, signature.signatureIndexes) {
-    }
-    
-    public ArchetypeQuery<T1, T2, T3, T4, T5> ReadOnly<T>()
-        where T : struct, IComponent
-    {
-        if (typeof(T1) == typeof(T)) { copyT1 = new T1[ChunkSize]; return this; }
-        if (typeof(T2) == typeof(T)) { copyT2 = new T2[ChunkSize]; return this; }
-        if (typeof(T3) == typeof(T)) { copyT3 = new T3[ChunkSize]; return this; }
-        if (typeof(T4) == typeof(T)) { copyT4 = new T4[ChunkSize]; return this; }
-        if (typeof(T5) == typeof(T)) { copyT5 = new T5[ChunkSize]; return this; }
-        throw ReadOnlyException(typeof(T));
-    }
-    
-    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4,T5}"/>. </summary>
-    public      QueryChunks    <T1, T2, T3, T4, T5>  Chunks         => new (this);
-}
-
-internal static class EnumeratorUtils
-{
-    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
-    internal static void AssertComponentLenGreater0 (int componentLen) {
-        if (componentLen <= 0) throw new InvalidOperationException("expect componentLen > 0");
-    }
 }
