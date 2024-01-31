@@ -13,7 +13,7 @@ using static Friflo.Engine.ECS.StructInfo;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// <see cref="ArchetypeQuery"/> an all its generic implementation are immutable and designed to reuse its instances.
+/// <see cref="ArchetypeQuery"/> and all its generic implementations are designed to be reused.
 /// </summary>
 public class ArchetypeQuery
 {
@@ -51,23 +51,32 @@ public class ArchetypeQuery
 
 #region private / internal fields
     // --- non blittable types
-    [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8
-    [Browse(Never)] private             Archetype[]         archetypes;         //  8   current list of matching archetypes, can grow
+    [Browse(Never)] private  readonly   EntityStoreBase     store;                  //  8
+    [Browse(Never)] private             Archetype[]         archetypes;             //  8   current list of matching archetypes, can grow
     // --- blittable types
-    [Browse(Never)] private             int                 archetypeCount;     //  4   current number archetypes 
-    [Browse(Never)] private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
-    [Browse(Never)] private  readonly   ComponentTypes      requiredComponents; // 32
+    [Browse(Never)] private             int                 archetypeCount;         //  4   current number archetypes 
+    [Browse(Never)] private             int                 lastArchetypeCount;     //  4   number of archetypes the EntityStore had on last check
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;       // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
+    [Browse(Never)] private  readonly   ComponentTypes      requiredComponents;     // 32
     
-                    private             Tags                allTags;            // 32   entity must have all tags
-                    private             Tags                anyTags;            // 32   entity must have any tag
-                    private             Tags                withoutAllTags;     // 32   entity must not have all tags
-                    private             Tags                withoutAnyTags;     // 32   entity must not have any tag
+                    private             Tags                allTags;                // 32   entity must have all tags
+                    private             Tags                anyTags;                // 32   entity must have any tag
+                    private             Tags                withoutAllTags;         // 32   entity must not have all tags
+                    private             Tags                withoutAnyTags;         // 32   entity must not have any tag
+                    
+                    private             ComponentTypes      allComponents;          // 32   entity must have all component types
+                    private             ComponentTypes      anyComponents;          // 32   entity must have any component types
+                    private             ComponentTypes      withoutAllComponents;   // 32   entity must not have all component types
+                    private             ComponentTypes      withoutAnyComponents;   // 32   entity must not have any component types
     
-    [Browse(Never)] private             int                 withoutAllTagsCount;//  8
-    [Browse(Never)] private             int                 anyTagsCount;       //  8
-    [Browse(Never)] private             int                 allTagsCount;       //  8
-    [Browse(Never)] private             EventFilter         eventFilter;        //  8   used to filter component/tag add/remove events
+    [Browse(Never)] private             int                 withoutAllTagsCount;    //  8
+    [Browse(Never)] private             int                 anyTagsCount;           //  8
+    [Browse(Never)] private             int                 allTagsCount;           //  8
+    
+    [Browse(Never)] private             int                 withoutAllComponentsCount;  //  8
+    [Browse(Never)] private             int                 anyComponentsCount;         //  8
+    [Browse(Never)] private             int                 allComponentsCount;         //  8
+    [Browse(Never)] private             EventFilter         eventFilter;            //  8   used to filter component/tag add/remove events
     #endregion
 
 #region methods
@@ -82,6 +91,13 @@ public class ArchetypeQuery
     
     /// <summary> Entities having any of the passed <paramref name="tags"/> are excluded from query result. </summary>
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
+    
+    
+    public ArchetypeQuery   AllComponents         (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes); return this; }
+    public ArchetypeQuery   AnyComponents         (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes); return this; }
+    public ArchetypeQuery   WithoutAllComponents  (in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes); return this; }
+    public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
+    
     
     /// <summary>
     /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.
@@ -118,15 +134,16 @@ public class ArchetypeQuery
         requiredComponents  = componentTypes;
     }
     
+    /// <remarks>
+    /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
+    /// </remarks>
     private void Reset () {
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
         archetypeCount      = 0;
     }
     
-    /// <remarks>
-    /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
-    /// </remarks>
+    // --- tags
     internal void SetHasAllTags(in Tags tags) {
         allTags         = tags;
         allTagsCount    = tags.Count;
@@ -147,6 +164,30 @@ public class ArchetypeQuery
     
     internal void SetWithoutAnyTags(in Tags tags) {
         withoutAnyTags      = tags;
+        Reset();
+    }
+    
+    // --- components
+    internal void SetHasAllComponents(in ComponentTypes types) {
+        allComponents         = types;
+        allComponentsCount    = types.Count;
+        Reset();
+    }
+    
+    internal void SetHasAnyComponents(in ComponentTypes types) {
+        anyComponents         = types;
+        anyComponentsCount    = types.Count;
+        Reset();
+    }
+    
+    internal void SetWithoutAllComponents(in ComponentTypes types) {
+        withoutAllComponents      = types;
+        withoutAllComponentsCount = types.Count;
+        Reset();
+    }
+    
+    internal void SetWithoutAnyComponents(in ComponentTypes types) {
+        withoutAnyComponents      = types;
         Reset();
     }
     
@@ -271,6 +312,11 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     public new ArchetypeQuery<T1> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
     public new ArchetypeQuery<T1> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
     public new ArchetypeQuery<T1> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
+    
+    public new ArchetypeQuery<T1> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
+    public new ArchetypeQuery<T1> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
+    public new ArchetypeQuery<T1> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
+    public new ArchetypeQuery<T1> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature)
         : base(store, signature.signatureIndexes) {
