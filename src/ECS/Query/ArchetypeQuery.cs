@@ -59,10 +59,10 @@ public class ArchetypeQuery
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      requiredComponents; // 32
     
-                    private             Tags                allTags;            // 32   entity tags an Archetype must have
-                    private             Tags                anyTags;            // 32
-                    private             Tags                withoutAllTags;     // 32
-                    private             Tags                withoutAnyTags;     // 32
+                    private             Tags                allTags;            // 32   entity must have all tags
+                    private             Tags                anyTags;            // 32   entity must have any tag
+                    private             Tags                withoutAllTags;     // 32   entity must not have all tags
+                    private             Tags                withoutAnyTags;     // 32   entity must not have any tag
     
     [Browse(Never)] private             int                 withoutAllTagsCount;//  8
     [Browse(Never)] private             int                 anyTagsCount;       //  8
