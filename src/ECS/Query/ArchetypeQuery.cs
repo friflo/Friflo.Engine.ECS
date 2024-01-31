@@ -80,22 +80,41 @@ public class ArchetypeQuery
     #endregion
 
 #region methods
+    // --- tags
+    
     /// <summary> A query result will contain only entities having all passed <paramref name="tags"/>. </summary>
+    /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AllTags         (in Tags tags) { SetHasAllTags(tags); return this; }
     
     /// <summary> A query result will contain only entities having any of the the passed <paramref name="tags"/>. </summary>
+    /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AnyTags         (in Tags tags) { SetHasAnyTags(tags); return this; }
     
     /// <summary> Entities having all passed <paramref name="tags"/> are excluded from query result. </summary>
+    /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAllTags  (in Tags tags) { SetWithoutAllTags(tags); return this; }
     
     /// <summary> Entities having any of the passed <paramref name="tags"/> are excluded from query result. </summary>
+    /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
     
+    // --- components
+    
+    /// <summary> A query result will contain only entities having all passed <paramref name="componentTypes"/>. </summary>
+    /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AllComponents         (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes); return this; }
+    
+    /// <summary> A query result will contain only entities having any of the the passed <paramref name="componentTypes"/>. </summary>
+    /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AnyComponents         (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes); return this; }
+    
+    /// <summary> Entities having all passed <paramref name="componentTypes"/> are excluded from query result. </summary>
+    /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAllComponents  (in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes); return this; }
+    
+    /// <summary> Entities having any of the passed <paramref name="componentTypes"/> are excluded from query result. </summary>
+    /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
     
