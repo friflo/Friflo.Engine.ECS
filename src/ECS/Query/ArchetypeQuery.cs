@@ -57,13 +57,15 @@ public class ArchetypeQuery
                     private             int                 lastArchetypeCount; //  4   number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      requiredComponents; // 32
-    [Browse(Never)] private             Tags                requiredTags;       // 32   entity tags an Archetype must have
+    [Browse(Never)] private             Tags                hasAllTags;         // 32   entity tags an Archetype must have
+    [Browse(Never)] private             Tags                hasAnyTags;         // 32
     [Browse(Never)] private             EventFilter         eventFilter;        //  8   used to filter component/tag add/remove events
     #endregion
 
 #region methods
     /// <summary> A query result will contain only entities having all passed <paramref name="tags"/>. </summary>
-    public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
+    public ArchetypeQuery   AllTags(in Tags tags) { SetHasAllTags(tags); return this; }
+    public ArchetypeQuery   AnyTags(in Tags tags) { SetHasAnyTags(tags); return this; }
     
     /// <summary>
     /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.
@@ -103,8 +105,13 @@ public class ArchetypeQuery
     /// <remarks>
     /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
     /// </remarks>
-    internal void SetRequiredTags(in Tags tags) {
-        requiredTags        = tags;
+    internal void SetHasAllTags(in Tags tags) {
+        hasAllTags          = tags;
+        lastArchetypeCount  = 1;
+    }
+    
+    internal void SetHasAnyTags(in Tags tags) {
+        hasAnyTags          = tags;
         lastArchetypeCount  = 1;
     }
     
@@ -128,7 +135,7 @@ public class ArchetypeQuery
         {
             var archetype         = storeArchetypes[n];
             var hasRequiredTypes  = archetype.componentTypes.HasAll(requiredComponents) &&
-                                    archetype.tags.          HasAll(requiredTags);
+                                    archetype.tags.          HasAll(hasAllTags);
             if (!hasRequiredTypes) {
                 continue;
             }
@@ -166,7 +173,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in requiredTags) {
+        foreach (var tag in hasAllTags) {
             sb.Append('#');
             sb.Append(tag.Name);
             sb.Append(", ");
@@ -196,7 +203,8 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
 {
     [Browse(Never)] internal    T1[]    copyT1;
     
-    public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+    public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
+    public new ArchetypeQuery<T1> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature)
         : base(store, signature.signatureIndexes) {
@@ -220,7 +228,8 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     
-     public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+     public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
+     public new ArchetypeQuery<T1, T2> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature)
         : base(store, signature.signatureIndexes) {
@@ -247,7 +256,8 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     [Browse(Never)] internal    T2[]    copyT2;
     [Browse(Never)] internal    T3[]    copyT3;
     
-    public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3> signature)
         : base(store, signature.signatureIndexes) {
@@ -277,7 +287,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     [Browse(Never)] internal    T3[]    copyT3;
     [Browse(Never)] internal    T4[]    copyT4;
     
-    public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4> signature)
         : base(store, signature.signatureIndexes) {
@@ -310,7 +321,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     [Browse(Never)] internal    T4[]    copyT4;
     [Browse(Never)] internal    T5[]    copyT5;
     
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetRequiredTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature.signatureIndexes) {
