@@ -53,6 +53,31 @@ public static class Test_QueryTags
         query = query.AnyTags(Tags.Get<TestTag5>());
         AreEqual("6, 10",           query.Ids());
     }
+
+    [Test]
+    public static void Test_Tags_AnyTags_AllTags()
+    {
+        var store   = CreateTestStore();
+        var sig     = Signature.Get<Position>();
+        var query   = store.Query(sig);
+
+        var allTags = Tags.Get<TestTag2, TestTag3>(); // entities: 8, 9, 10
+        
+        query = query.AnyTags(Tags.Get<TestTag>()).AllTags(allTags);
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        
+        query = query.AnyTags(Tags.Get<TestTag2>()).AllTags(allTags);
+        AreEqual("3, 7, 8, 9, 10",  query.Ids());
+        
+        query = query.AnyTags(Tags.Get<TestTag3>()).AllTags(allTags);
+        AreEqual("4, 8, 9, 10",     query.Ids());
+        
+        query = query.AnyTags(Tags.Get<TestTag4>()).AllTags(allTags);
+        AreEqual("5, 8, 9, 10",     query.Ids());
+
+        query = query.AnyTags(Tags.Get<TestTag5>()).AllTags(allTags);
+        AreEqual("6, 8, 9, 10",     query.Ids());
+    }
     
     [Test]
     public static void Test_Tags_WithoutAnyTags()
