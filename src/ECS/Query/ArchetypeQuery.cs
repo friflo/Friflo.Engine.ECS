@@ -74,10 +74,13 @@ public class ArchetypeQuery
     /// <summary> A query result will contain only entities having all passed <paramref name="tags"/>. </summary>
     public ArchetypeQuery   AllTags         (in Tags tags) { SetHasAllTags(tags); return this; }
     
+    /// <summary> A query result will contain only entities having any of the the passed <paramref name="tags"/>. </summary>
     public ArchetypeQuery   AnyTags         (in Tags tags) { SetHasAnyTags(tags); return this; }
     
+    /// <summary> Entities having all passed <paramref name="tags"/> are excluded from query result. </summary>
     public ArchetypeQuery   WithoutAllTags  (in Tags tags) { SetWithoutAllTags(tags); return this; }
     
+    /// <summary> Entities having any of the passed <paramref name="tags"/> are excluded from query result. </summary>
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
     /// <summary>
