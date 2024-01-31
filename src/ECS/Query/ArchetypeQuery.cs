@@ -50,6 +50,8 @@ public class ArchetypeQuery
     // --- non blittable types
     [Browse(Never)] private  readonly   EntityStoreBase     store;                  //  8
     [Browse(Never)] private             Archetype[]         archetypes;             //  8   current list of matching archetypes, can grow
+    [Browse(Never)] private             EventFilter         eventFilter;            //  8   used to filter component/tag add/remove events
+    
     // --- blittable types
     [Browse(Never)] private             int                 archetypeCount;         //  4   current number archetypes 
     [Browse(Never)] private             int                 lastArchetypeCount;     //  4   number of archetypes the EntityStore had on last check
@@ -66,14 +68,13 @@ public class ArchetypeQuery
                     private             ComponentTypes      withoutAllComponents;   // 32   entity must not have all component types
                     private             ComponentTypes      withoutAnyComponents;   // 32   entity must not have any component types
     
-    [Browse(Never)] private             int                 withoutAllTagsCount;    //  8
-    [Browse(Never)] private             int                 anyTagsCount;           //  8
-    [Browse(Never)] private             int                 allTagsCount;           //  8
+    [Browse(Never)] private             int                 withoutAllTagsCount;        //  8
+    [Browse(Never)] private             int                 anyTagsCount;               //  8
+    [Browse(Never)] private             int                 allTagsCount;               //  8
     
     [Browse(Never)] private             int                 withoutAllComponentsCount;  //  8
     [Browse(Never)] private             int                 anyComponentsCount;         //  8
     [Browse(Never)] private             int                 allComponentsCount;         //  8
-    [Browse(Never)] private             EventFilter         eventFilter;            //  8   used to filter component/tag add/remove events
     #endregion
 
 #region tags
