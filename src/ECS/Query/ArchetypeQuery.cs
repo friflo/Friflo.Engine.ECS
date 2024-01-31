@@ -62,8 +62,10 @@ public class ArchetypeQuery
     [Browse(Never)] private             Tags                hasAnyTags;         // 32
     [Browse(Never)] private             Tags                withoutAllTags;     // 32
     [Browse(Never)] private             Tags                withoutAnyTags;     // 32
+    
     [Browse(Never)] private             int                 withoutAllTagsCount;//  8
     [Browse(Never)] private             int                 hasAnyTagsCount;    //  8
+    [Browse(Never)] private             int                 hasAllTagsCount;    //  8
     [Browse(Never)] private             EventFilter         eventFilter;        //  8   used to filter component/tag add/remove events
     #endregion
 
@@ -123,6 +125,7 @@ public class ArchetypeQuery
     /// </remarks>
     internal void SetHasAllTags(in Tags tags) {
         hasAllTags          = tags;
+        hasAllTagsCount     = tags.Count;
         Reset();
     }
     
@@ -150,8 +153,18 @@ public class ArchetypeQuery
     
     private bool IsTagsMatch(in Tags tags)
     {
-        if (!tags.HasAny(hasAnyTags))
+        if (hasAnyTagsCount > 0)
         {
+            if (!tags.HasAny(hasAnyTags))
+            {
+                if (hasAllTagsCount == 0) {
+                    return false;
+                }
+                if (!tags.HasAll(hasAllTags)) {
+                    return false;
+                }
+            }
+        } else {
             if (!tags.HasAll(hasAllTags)) {
                 return false;
             }

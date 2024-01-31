@@ -39,19 +39,19 @@ public static class Test_QueryTags
         var query   = store.Query(sig);
         
         query = query.AnyTags(Tags.Get<TestTag>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
         
         query = query.AnyTags(Tags.Get<TestTag2>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
+        AreEqual("3, 7, 8, 9, 10",  query.Ids());
         
         query = query.AnyTags(Tags.Get<TestTag3>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
+        AreEqual("4, 8, 9, 10",     query.Ids());
         
         query = query.AnyTags(Tags.Get<TestTag4>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
+        AreEqual("5, 9, 10",        query.Ids());
 
         query = query.AnyTags(Tags.Get<TestTag5>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
+        AreEqual("6, 10",           query.Ids());
     }
     
     [Test]
