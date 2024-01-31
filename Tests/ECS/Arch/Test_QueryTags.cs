@@ -125,6 +125,36 @@ public static class Test_QueryTags
         AreEqual("1, 2, 3, 4, 5, 7, 8, 9",  query.Ids());
     }
     
+    [Test]
+    public static void Test_Tags_WithoutAnyTags_WithoutAllTags()
+    {
+        var store   = CreateTestStore();
+        var sig     = Signature.Get<Position>();
+        var query   = store.Query(sig);
+        
+        var allTags = Tags.Get<TestTag2, TestTag3>(); // entities: 8, 9, 10
+        
+        // without: 1, 3, 4, 5, 6
+        query = query.WithoutAnyTags(Tags.Get<TestTag>()).WithoutAllTags(allTags);
+        AreEqual("1, 3, 4, 5, 6",           query.Ids());
+        
+        // without: 1, 2, 4, 5, 6
+        query = query.WithoutAnyTags(Tags.Get<TestTag2>()).WithoutAllTags(allTags);
+        AreEqual("1, 2, 4, 5, 6",           query.Ids());
+        
+        // without: 1, 2, 3, 5, 6, 7
+        query = query.WithoutAnyTags(Tags.Get<TestTag3>()).WithoutAllTags(allTags);
+        AreEqual("1, 2, 3, 5, 6, 7",        query.Ids());
+        
+        // without: 1, 2, 3, 4, 6, 7, 8
+        query = query.WithoutAnyTags(Tags.Get<TestTag4>()).WithoutAllTags(allTags);
+        AreEqual("1, 2, 3, 4, 6, 7",        query.Ids());
+
+        // without: 1, 2, 3, 4, 5, 7, 8, 9
+        query = query.WithoutAnyTags(Tags.Get<TestTag5>()).WithoutAllTags(allTags);
+        AreEqual("1, 2, 3, 4, 5, 7",        query.Ids());
+    }
+    
     private static EntityStore CreateTestStore()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
