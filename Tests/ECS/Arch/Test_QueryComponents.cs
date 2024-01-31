@@ -7,7 +7,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Arch;
 
-[Ignore("wip")]
 public static class Test_QueryComponents
 {
     private struct Comp1 : IComponent { }
@@ -203,7 +202,7 @@ public static class Test_QueryComponents
         return string.Join(", ", list);
     }
     
-    /*
+
     [Test]
     public static void Test_QueryComponents_overloads_AllComponents_AnyComponents()
     {
@@ -251,6 +250,5 @@ public static class Test_QueryComponents
         query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().WithoutAllComponents(allTags).WithoutAnyComponents(anyTags);
         AreEqual("1, 3, 4, 5, 6",  query.Ids());
     }
-    */
 }
 
