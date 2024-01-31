@@ -177,6 +177,10 @@ public static class Test_QueryTags
     {
         var entity = store.CreateEntity(id);
         entity.AddComponent<Position>();
+        entity.AddComponent<Rotation>();
+        entity.AddComponent<EntityName>();
+        entity.AddComponent<Scale3>();
+        entity.AddComponent<MyComponent1>();
         entity.AddTags(tags);
     }
     
@@ -187,6 +191,54 @@ public static class Test_QueryTags
             list.Add(entity.Id);
         }
         return string.Join(", ", list);
+    }
+    
+    [Test]
+    public static void Test_Tags_overloads_AllTags_AnyTags()
+    {
+        var store = CreateTestStore();
+        
+        var allTags = Tags.Get<TestTag2, TestTag3>(); // entities: 8, 9, 10
+        var anyTags = Tags.Get<TestTag>();
+        
+        var query = store.Query().AllTags(allTags).AnyTags(anyTags);
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        
+        query = store.Query<Position, Rotation>().AllTags(allTags).AnyTags(anyTags);
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+    
+        query = store.Query<Position, Rotation, EntityName>().AllTags(allTags).AnyTags(anyTags);
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+
+        query = store.Query<Position, Rotation, EntityName, Scale3>().AllTags(allTags).AnyTags(anyTags);
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        
+        query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().AllTags(allTags).AnyTags(anyTags);
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+    }
+    
+    [Test]
+    public static void Test_Tags_overloads_WithoutAllTags_WithoutAnyTags()
+    {
+        var store = CreateTestStore();
+        
+        var allTags = Tags.Get<TestTag2, TestTag3>(); // entities: 8, 9, 10
+        var anyTags = Tags.Get<TestTag>();
+        
+        var query = store.Query().WithoutAllTags(allTags).WithoutAnyTags(anyTags);
+        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        
+        query = store.Query<Position, Rotation>().WithoutAllTags(allTags).WithoutAnyTags(anyTags);
+        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+    
+        query = store.Query<Position, Rotation, EntityName>().WithoutAllTags(allTags).WithoutAnyTags(anyTags);
+        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+
+        query = store.Query<Position, Rotation, EntityName, Scale3>().WithoutAllTags(allTags).WithoutAnyTags(anyTags);
+        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        
+        query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().WithoutAllTags(allTags).WithoutAnyTags(anyTags);
+        AreEqual("1, 3, 4, 5, 6",  query.Ids());
     }
 }
 

@@ -29,6 +29,9 @@ public static class Test_Tags
         IsFalse(tags.HasAll(twoTags));
         IsFalse(tags.HasAny(twoTags));
         
+        tags.Add<TestTag>();
+        AreEqual("Tags: [#TestTag]",            tags.ToString());
+        
         tags = Tags.Get<TestTag>();
         AreEqual(1, tags.Count);
         IsTrue (tags.Has<TestTag>());
