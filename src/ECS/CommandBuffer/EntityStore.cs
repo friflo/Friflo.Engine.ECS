@@ -18,8 +18,7 @@ public partial class EntityStore
         lock (pool)
         {
             if (pool.TryPop(out var buffer)) {
-                buffer.returnedBuffer   = false;
-                buffer.reuseBuffer      = false;
+                buffer.Reuse();
                 return buffer;
             }
         }
