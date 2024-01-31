@@ -292,6 +292,8 @@ public static void AddSignalHandler()
 As described in the intro queries are a fundamental feature of an ECS.  
 **Friflo.Engine.ECS** support queries by any combination of component types and tags.
 
+See [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md) for available query filters.
+
 ```csharp
 public static void EntityQueries()
 {
