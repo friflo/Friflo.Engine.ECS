@@ -60,7 +60,7 @@ The core feature of an Entity Component System are:
 Features in this list are also explained in the Examples.
 
 - 1.10.0 Add support for [CommandBuffer - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)s.  
-  Example: [CommandBuffer](commandbuffer)
+  Example: [CommandBuffer](#commandbuffer)
 
 - 1.11.0 Support to filter entity changes - like adding/removing components/tags - in queries using an
   [EventFilter - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
