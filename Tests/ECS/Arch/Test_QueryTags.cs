@@ -16,19 +16,19 @@ public static class Test_QueryTags
         var query   = store.Query(sig);
         
         query = query.AllTags(Tags.Get<TestTag>());
-        AreEqual("2, 7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("2, 7, 8, 9, 10",  query.Ids());
         
         query = query.AllTags(Tags.Get<TestTag, TestTag2>());
-        AreEqual("7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("7, 8, 9, 10",     query.Ids());
         
         query = query.AllTags(Tags.Get<TestTag, TestTag2, TestTag3>());
-        AreEqual("8, 9, 10", query.Entities.Ids());
+        AreEqual("8, 9, 10",        query.Ids());
         
         query = query.AllTags(Tags.Get<TestTag, TestTag2, TestTag3, TestTag4>());
-        AreEqual("9, 10", query.Entities.Ids());
+        AreEqual("9, 10",           query.Ids());
 
         query = query.AllTags(Tags.Get<TestTag, TestTag2, TestTag3, TestTag4, TestTag5>());
-        AreEqual("10", query.Entities.Ids());
+        AreEqual("10",              query.Ids());
     }
     
     [Test]
@@ -39,19 +39,19 @@ public static class Test_QueryTags
         var query   = store.Query(sig);
         
         query = query.AnyTags(Tags.Get<TestTag>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
         
         query = query.AnyTags(Tags.Get<TestTag2>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
         
         query = query.AnyTags(Tags.Get<TestTag3>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
         
         query = query.AnyTags(Tags.Get<TestTag4>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
 
         query = query.AnyTags(Tags.Get<TestTag5>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9, 10", query.Ids());
     }
     
     [Test]
@@ -63,19 +63,19 @@ public static class Test_QueryTags
         
         // --- WithoutAnyTags()
         query = query.WithoutAnyTags(Tags.Get<TestTag>());
-        AreEqual("1, 3, 4, 5, 6", query.Entities.Ids());
+        AreEqual("1, 3, 4, 5, 6",           query.Ids());
         
         query = query.WithoutAnyTags(Tags.Get<TestTag2>());
-        AreEqual("1, 2, 4, 5, 6", query.Entities.Ids());
+        AreEqual("1, 2, 4, 5, 6",           query.Ids());
         
         query = query.WithoutAnyTags(Tags.Get<TestTag3>());
-        AreEqual("1, 2, 3, 5, 6, 7", query.Entities.Ids());
+        AreEqual("1, 2, 3, 5, 6, 7",        query.Ids());
         
         query = query.WithoutAnyTags(Tags.Get<TestTag4>());
-        AreEqual("1, 2, 3, 4, 6, 7, 8", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 6, 7, 8",     query.Ids());
 
         query = query.WithoutAnyTags(Tags.Get<TestTag5>());
-        AreEqual("1, 2, 3, 4, 5, 7, 8, 9", query.Entities.Ids());
+        AreEqual("1, 2, 3, 4, 5, 7, 8, 9",  query.Ids());
     }
     
     private static EntityStore CreateTestStore()
@@ -103,10 +103,10 @@ public static class Test_QueryTags
         entity.AddTags(tags);
     }
     
-    private static string Ids(this QueryEntities entities)
+    private static string Ids(this ArchetypeQuery entities)
     {
         var list = new List<int>();
-        foreach (var entity in entities) {
+        foreach (var entity in entities.Entities) {
             list.Add(entity.Id);
         }
         return string.Join(", ", list);

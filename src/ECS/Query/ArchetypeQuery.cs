@@ -63,6 +63,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             Tags                withoutAllTags;     // 32
     [Browse(Never)] private             Tags                withoutAnyTags;     // 32
     [Browse(Never)] private             int                 withoutAllTagsCount;//  8
+    [Browse(Never)] private             int                 hasAnyTagsCount;    //  8
     [Browse(Never)] private             EventFilter         eventFilter;        //  8   used to filter component/tag add/remove events
     #endregion
 
@@ -127,6 +128,7 @@ public class ArchetypeQuery
     
     internal void SetHasAnyTags(in Tags tags) {
         hasAnyTags          = tags;
+        hasAnyTagsCount     = tags.Count;
         Reset();
     }
     
@@ -146,6 +148,23 @@ public class ArchetypeQuery
         return new ReadOnlySpan<Archetype>(archs.array, 0, archs.length);
     }
     
+    private bool IsTagsMatch(in Tags tags)
+    {
+        if (!tags.HasAny(hasAnyTags))
+        {
+            if (!tags.HasAll(hasAllTags)) {
+                return false;
+            }
+        }
+        if (tags.HasAny(withoutAnyTags)) {
+            return false;
+        }
+        if (withoutAllTagsCount > 0 && tags.HasAll(withoutAllTags)) {
+            return false;
+        }
+        return true;
+    }
+    
     internal Archetypes GetArchetypes()
     {
         if (store.ArchetypeCount == lastArchetypeCount) {
@@ -155,20 +174,16 @@ public class ArchetypeQuery
         var storeArchetypes     = store.Archetypes;
         var newStoreLength      = storeArchetypes.Length;
         var nextArchetypes      = archetypes;
+        var lastCount           = lastArchetypeCount;
         var nextCount           = archetypeCount;
         
-        for (int n = lastArchetypeCount; n < newStoreLength; n++)
+        for (int n = lastCount; n < newStoreLength; n++)
         {
             var archetype = storeArchetypes[n];
-            var isMatch = archetype.componentTypes.HasAll(requiredComponents) &&
-                         (archetype.tags.HasAny(hasAnyTags) || archetype.tags.HasAll(hasAllTags)); 
-            if (!isMatch) {
+            if (!archetype.componentTypes.HasAll(requiredComponents)) {
                 continue;
             }
-            if (archetype.tags.HasAny(withoutAnyTags)) {
-                continue;
-            }
-            if (withoutAllTagsCount > 0 && archetype.tags.HasAll(withoutAllTags)) {
+            if (!IsTagsMatch(archetype.tags)) {
                 continue;
             }
             if (nextCount == nextArchetypes.Length) {

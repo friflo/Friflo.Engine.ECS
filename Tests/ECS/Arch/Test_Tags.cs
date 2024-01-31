@@ -29,7 +29,7 @@ public static class Test_Tags
         IsFalse(tags.HasAll(twoTags));
         IsFalse(tags.HasAny(twoTags));
         
-        tags.Add<TestTag>();
+        tags = Tags.Get<TestTag>();
         AreEqual(1, tags.Count);
         IsTrue (tags.Has<TestTag>());
         IsFalse(tags.HasAll(twoTags));
@@ -37,13 +37,14 @@ public static class Test_Tags
         
         AreEqual("Tags: [#TestTag]",            tags.ToString());
         
-        tags.Add<TestTag2>();
+        tags = Tags.Get<TestTag, TestTag2>();
         AreEqual(2, tags.Count);
         AreEqual("Tags: [#TestTag, #TestTag2]", tags.ToString());
         IsTrue (tags.Has<TestTag, TestTag2>());
         IsFalse(tags.Has<TestTag, TestTag2, TestTag3>());
         IsTrue (tags.HasAll(twoTags));
         IsTrue (tags.HasAny(twoTags));
+        IsTrue (tags.HasAny(Tags.Get<TestTag2>()));
 
         var copy = new Tags();
         copy.Add(tags);
