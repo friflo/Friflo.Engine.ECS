@@ -148,6 +148,61 @@ public struct Tags : IEnumerable<TagType>
         return tags;
     }
     
+    /// <summary>
+    /// Create an instance containing the given <see cref="ITag"/> types
+    /// <typeparamref name="T1"/>, <typeparamref name="T2"/> and <typeparamref name="T3"/>.
+    /// </summary>
+    public static Tags Get<T1, T2, T3>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagType<T1>.TagIndex);
+        tags.bitSet.SetBit(TagType<T2>.TagIndex);
+        tags.bitSet.SetBit(TagType<T3>.TagIndex);
+        return tags;
+    }
+    
+    /// <summary>
+    /// Create an instance containing the given <see cref="ITag"/> types
+    /// <typeparamref name="T1"/>, <typeparamref name="T2"/>, <typeparamref name="T3"/> and <typeparamref name="T4"/>.
+    /// </summary>
+    public static Tags Get<T1, T2, T3, T4>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagType<T1>.TagIndex);
+        tags.bitSet.SetBit(TagType<T2>.TagIndex);
+        tags.bitSet.SetBit(TagType<T3>.TagIndex);
+        tags.bitSet.SetBit(TagType<T4>.TagIndex);
+        return tags;
+    }
+    
+    /// <summary>
+    /// Create an instance containing the given <see cref="ITag"/> types
+    /// <typeparamref name="T1"/>, <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/> and
+    /// <typeparamref name="T5"/>.
+    /// </summary>
+    public static Tags Get<T1, T2, T3, T4, T5>()
+        where T1 : struct, ITag
+        where T2 : struct, ITag
+        where T3 : struct, ITag
+        where T4 : struct, ITag
+        where T5 : struct, ITag
+    {
+        var tags = new Tags();
+        tags.bitSet.SetBit(TagType<T1>.TagIndex);
+        tags.bitSet.SetBit(TagType<T2>.TagIndex);
+        tags.bitSet.SetBit(TagType<T3>.TagIndex);
+        tags.bitSet.SetBit(TagType<T4>.TagIndex);
+        tags.bitSet.SetBit(TagType<T5>.TagIndex);
+        return tags;
+    }
+    
     private readonly string GetString()
     {
         var sb          = new StringBuilder();

@@ -31,6 +31,7 @@ public class ArchetypeQuery
     public              int                 ChunkCount  => Archetype.GetChunkCount (GetArchetypesSpan());
     
     /// <summary> Returns the set of <see cref="Archetype"/>'s matching the query.</summary>
+    [DebuggerBrowsable(Never)]
     public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
 
     /// <summary> The <see cref="EntityStore"/> on which the query operates. </summary>
@@ -110,28 +111,34 @@ public class ArchetypeQuery
         requiredComponents  = componentTypes;
     }
     
+    private void Reset () {
+        archetypes          = Array.Empty<Archetype>();
+        lastArchetypeCount  = 1;
+        archetypeCount      = 0;
+    }
+    
     /// <remarks>
     /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
     /// </remarks>
     internal void SetHasAllTags(in Tags tags) {
         hasAllTags          = tags;
-        lastArchetypeCount  = 1;
+        Reset();
     }
     
     internal void SetHasAnyTags(in Tags tags) {
         hasAnyTags          = tags;
-        lastArchetypeCount  = 1;
+        Reset();
     }
     
     internal void SetWithoutAllTags(in Tags tags) {
         withoutAllTags      = tags;
         withoutAllTagsCount = tags.Count;
-        lastArchetypeCount  = 1;
+        Reset();
     }
     
     internal void SetWithoutAnyTags(in Tags tags) {
         withoutAnyTags      = tags;
-        lastArchetypeCount  = 1;
+        Reset();
     }
     
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {

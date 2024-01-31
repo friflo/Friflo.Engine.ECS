@@ -56,6 +56,10 @@ public struct TestTag2 : ITag { }
 // Intentionally without [Tag("test-tag3")] attribute for testing
 public struct TestTag3 : ITag { }
 
+public struct TestTag4 : ITag { }
+
+public struct TestTag5 : ITag { }
+
 
 // ------------------------------------------------ scripts
 [CodeCoverageTest]
