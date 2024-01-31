@@ -55,6 +55,22 @@ The core feature of an Entity Component System are:
 <img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
 
 
+## Latest features
+
+Features in this list are also explained in the Examples.
+
+- 1.10.0 Add support for [CommandBuffer - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)s.  
+  Example: [CommandBuffer](commandbuffer)
+
+- 1.11.0 Support to filter entity changes - like adding/removing components/tags - in queries using an
+  [EventFilter - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
+  Example: [EventFilter](#eventfilter)
+
+- 1.12.0 Add additional query filters like `WithoutAnyTags()` using an
+  [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
+  Example: [Query](#query)
+
+
 
 ## Development
 
@@ -292,7 +308,9 @@ public static void AddSignalHandler()
 As described in the intro queries are a fundamental feature of an ECS.  
 **Friflo.Engine.ECS** support queries by any combination of component types and tags.
 
-See [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md) for available query filters.
+See [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md)
+for available query filters to reduce the number of entities / components returned by a query.
+
 
 ```csharp
 public static void EntityQueries()
@@ -324,6 +342,14 @@ public static void EntityQueries()
     var queryTags = store.Query().AllTags(Tags.Get<MyTag1, MyTag2>());
     Console.WriteLine(queryTags);                       // > Query: [#MyTag1, #MyTag2]  EntityCount: 1
 }
+```
+
+Some optional filter snippets used to shrink the result set returned by a query.
+
+```csharp
+    .AllTags(Tags.Get<MyTag1>());                   // query will contain only entities having all given tags
+    .WithoutAnyTags(Tags.Get<MyTag1, MyTag2>());    // entities having any of the given tags are excluded from query
+    .AllComponents(ComponentTypes.Get<Position>);   // query will contain only entities having all given components
 ```
 
 
