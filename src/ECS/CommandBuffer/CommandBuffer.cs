@@ -26,17 +26,19 @@ public sealed class CommandBuffer
 #region public properties
     /// <summary> Return the number of recorded components commands. </summary>
     public              int                 ComponentCommandsCount  => GetComponentCommandsCount(intern._componentCommandTypes);
+    
     /// <summary> Return the number of recorded tag commands. </summary>
     public              int                 TagCommandsCount        => intern._tagCommandsCount;
+    
     /// <summary> Return the number of recorded entity commands. </summary>
     public              int                 EntityCommandsCount     => intern._entityCommandCount;
+    
     /// <summary>
     /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.
     /// </summary>
     public              bool                ReuseBuffer             { get => intern.reuseBuffer; set => intern.reuseBuffer = value; }
     
-    public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}"; 
-
+    public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}";
     #endregion
     
 #region interal debugging properties
@@ -46,9 +48,9 @@ public sealed class CommandBuffer
     #endregion
     
 #region private fields
-
-    private             Intern              intern;
+    private  Intern intern;
     
+    // MUST be private by all means. Used to reduce noise of fields in debugger.
     private struct Intern {
         internal            ComponentTypes      _changedComponentTypes;
         internal readonly   ComponentCommands[] _componentCommandTypes;

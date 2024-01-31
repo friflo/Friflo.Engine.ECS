@@ -97,7 +97,7 @@ public sealed partial class EntityStore : EntityStoreBase
                     private             Intern                  intern;             // 88
     /// <summary>Contains state of <see cref="EntityStore"/> not relevant for application development.</summary>
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
-    // MUST be private by all means 
+    // MUST be private by all means.
     private struct Intern {
                         internal readonly   PidType                 pidType;                //  4   - pid != id  /  pid == id
                         internal            Random                  randPid;                //  8   - null if using pid == id
