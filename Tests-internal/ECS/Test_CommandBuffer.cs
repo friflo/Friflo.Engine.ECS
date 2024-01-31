@@ -1,5 +1,6 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
@@ -21,6 +22,28 @@ public static class Test_CommandBuffer
         var componentType   = schema.GetComponentType<Position>();
         var commands        = componentType.CreateComponentCommands();
         AreEqual("[Position] commands - Count: 0", commands.ToString());
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_debug_properties()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        
+        var ecb = store.GetCommandBuffer();
+        ecb.CreateEntity();
+        
+        ecb.AddTag          <TestTag>(1);
+        ecb.AddComponent    <Position>(1);
+        ecb.RemoveComponent <Position>(1);
+        
+        var componentCommands = (ComponentCommands<Position>)ecb.ComponentCommands[0];
+        AreEqual("[Position] commands - Count: 2",  componentCommands.ToString());
+        AreEqual(2,                                 componentCommands.Commands.Length);
+        AreEqual("entity: 1 - Add [Position]",      componentCommands.Commands[0].ToString());
+        AreEqual("entity: 1 - Remove [Position]",   componentCommands.Commands[1].ToString());
+        
+        AreEqual("entity: 1 - Add [#TestTag]",      ecb.TagCommands[0].ToString());
+        AreEqual("Create entity - id: 1",           ecb.EntityCommands[0].ToString());
     }
 }
 

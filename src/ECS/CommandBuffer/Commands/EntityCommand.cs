@@ -14,4 +14,6 @@ internal struct EntityCommand
 {
     internal EntityCommandAction    action;     //  4
     internal int                    entityId;   //  4
+
+    public override string ToString() => $"{action} entity - id: {entityId}";
 }

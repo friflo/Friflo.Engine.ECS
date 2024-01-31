@@ -3,8 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using static System.Diagnostics.DebuggerBrowsableState;
-using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -39,6 +37,12 @@ public sealed class CommandBuffer
     
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}"; 
 
+    #endregion
+    
+#region interal debugging properties
+    internal ReadOnlySpan<TagCommand>       TagCommands             => new (intern._tagCommands,    0, intern._tagCommandsCount);
+    internal ReadOnlySpan<EntityCommand>    EntityCommands          => new (intern._entityCommands, 0, intern._entityCommandCount);
+    internal ComponentCommands[]            ComponentCommands       => GetComponentCommands();
     #endregion
     
 #region private fields
@@ -267,6 +271,26 @@ public sealed class CommandBuffer
         }
         return new InvalidOperationException("Reused CommandBuffer after Playback(). ReuseBuffer: false");
     }
+    
+    private ComponentCommands[] GetComponentCommands()
+    {
+        int count = 0;
+        foreach (var commandTypes in intern._componentCommandTypes) {
+            if (commandTypes != null && commandTypes.commandCount > 0) {
+                count++;
+            }
+        }
+        var commands = new ComponentCommands[count];
+        int pos = 0;
+        foreach (var commandTypes in intern._componentCommandTypes) {
+            if (commandTypes == null || commandTypes.commandCount == 0) {
+                continue;
+            }
+            commands[pos++] = commandTypes;
+        }
+        return commands;
+    }
+    
     #endregion
         
 #region component

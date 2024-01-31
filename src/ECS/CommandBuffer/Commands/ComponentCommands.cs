@@ -4,14 +4,16 @@
 using System;
 using System.Runtime.InteropServices;
 using static Friflo.Engine.ECS.ComponentChangedAction;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 internal abstract class ComponentCommands
 {
-    internal            int             commandCount;       //  4
-    internal readonly   int             structIndex;        //  4
+    [Browse(Never)] internal            int             commandCount;       //  4
+    [Browse(Never)] internal readonly   int             structIndex;        //  4
     
     internal abstract void UpdateComponentTypes (Playback playback);
     internal abstract void ExecuteCommands      (Playback playback);
@@ -24,9 +26,11 @@ internal abstract class ComponentCommands
 internal sealed class ComponentCommands<T> : ComponentCommands
     where T : struct, IComponent
 {
-    internal    ComponentCommand<T>[]   componentCommands;  //  8
+    internal       ReadOnlySpan<ComponentCommand<T>>    Commands    => new (componentCommands, 0, commandCount);
+    public   override           string                  ToString()  => $"[{typeof(T).Name}] commands - Count: {commandCount}";
+    
+    [Browse(Never)] internal    ComponentCommand<T>[]   componentCommands;  //  8
 
-    public override string              ToString() => $"[{typeof(T).Name}] commands - Count: {commandCount}";
 
     internal ComponentCommands(int structIndex) : base(structIndex) { }
     

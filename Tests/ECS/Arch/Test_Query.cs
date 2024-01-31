@@ -4,6 +4,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static Tests.Utils.Mem;
 
+// ReSharper disable ConditionalTernaryEqualBranch
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
