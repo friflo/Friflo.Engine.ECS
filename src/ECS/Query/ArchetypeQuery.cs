@@ -59,13 +59,21 @@ public class ArchetypeQuery
     [Browse(Never)] private  readonly   ComponentTypes      requiredComponents; // 32
     [Browse(Never)] private             Tags                hasAllTags;         // 32   entity tags an Archetype must have
     [Browse(Never)] private             Tags                hasAnyTags;         // 32
+    [Browse(Never)] private             Tags                withoutAllTags;     // 32
+    [Browse(Never)] private             Tags                withoutAnyTags;     // 32
+    [Browse(Never)] private             int                 withoutAllTagsCount;//  8
     [Browse(Never)] private             EventFilter         eventFilter;        //  8   used to filter component/tag add/remove events
     #endregion
 
 #region methods
     /// <summary> A query result will contain only entities having all passed <paramref name="tags"/>. </summary>
-    public ArchetypeQuery   AllTags(in Tags tags) { SetHasAllTags(tags); return this; }
-    public ArchetypeQuery   AnyTags(in Tags tags) { SetHasAnyTags(tags); return this; }
+    public ArchetypeQuery   AllTags         (in Tags tags) { SetHasAllTags(tags); return this; }
+    
+    public ArchetypeQuery   AnyTags         (in Tags tags) { SetHasAnyTags(tags); return this; }
+    
+    public ArchetypeQuery   WithoutAllTags  (in Tags tags) { SetWithoutAllTags(tags); return this; }
+    
+    public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
     /// <summary>
     /// Returns true if a component or tag was added / removed to / from the entity with the passed <paramref name="entityId"/>.
@@ -115,6 +123,17 @@ public class ArchetypeQuery
         lastArchetypeCount  = 1;
     }
     
+    internal void SetWithoutAllTags(in Tags tags) {
+        withoutAllTags      = tags;
+        withoutAllTagsCount = tags.Count;
+        lastArchetypeCount  = 1;
+    }
+    
+    internal void SetWithoutAnyTags(in Tags tags) {
+        withoutAnyTags      = tags;
+        lastArchetypeCount  = 1;
+    }
+    
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {
         var archs = GetArchetypes();
         return new ReadOnlySpan<Archetype>(archs.array, 0, archs.length);
@@ -133,10 +152,16 @@ public class ArchetypeQuery
         
         for (int n = lastArchetypeCount; n < newStoreLength; n++)
         {
-            var archetype         = storeArchetypes[n];
-            var hasRequiredTypes  = archetype.componentTypes.HasAll(requiredComponents) &&
-                                    archetype.tags.          HasAll(hasAllTags);
-            if (!hasRequiredTypes) {
+            var archetype = storeArchetypes[n];
+            var isMatch = archetype.componentTypes.HasAll(requiredComponents) &&
+                         (archetype.tags.HasAny(hasAnyTags) || archetype.tags.HasAll(hasAllTags)); 
+            if (!isMatch) {
+                continue;
+            }
+            if (archetype.tags.HasAny(withoutAnyTags)) {
+                continue;
+            }
+            if (withoutAllTagsCount > 0 && archetype.tags.HasAll(withoutAllTags)) {
                 continue;
             }
             if (nextCount == nextArchetypes.Length) {
@@ -203,8 +228,10 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
 {
     [Browse(Never)] internal    T1[]    copyT1;
     
-    public new ArchetypeQuery<T1> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
-    public new ArchetypeQuery<T1> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
+    public new ArchetypeQuery<T1> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
+    public new ArchetypeQuery<T1> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    public new ArchetypeQuery<T1> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
+    public new ArchetypeQuery<T1> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature)
         : base(store, signature.signatureIndexes) {
@@ -228,8 +255,10 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     
-     public new ArchetypeQuery<T1, T2> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
-     public new ArchetypeQuery<T1, T2> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
+     public new ArchetypeQuery<T1, T2> AllTags       (in Tags tags) { SetHasAllTags(tags);      return this; }
+     public new ArchetypeQuery<T1, T2> AnyTags       (in Tags tags) { SetHasAnyTags(tags);      return this; }
+     public new ArchetypeQuery<T1, T2> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);  return this; }
+     public new ArchetypeQuery<T1, T2> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);  return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature)
         : base(store, signature.signatureIndexes) {
@@ -256,8 +285,10 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     [Browse(Never)] internal    T2[]    copyT2;
     [Browse(Never)] internal    T3[]    copyT3;
     
-    public new ArchetypeQuery<T1, T2, T3> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
-    public new ArchetypeQuery<T1, T2, T3> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
+    public new ArchetypeQuery<T1, T2, T3> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3> signature)
         : base(store, signature.signatureIndexes) {
@@ -287,8 +318,10 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     [Browse(Never)] internal    T3[]    copyT3;
     [Browse(Never)] internal    T4[]    copyT4;
     
-    public new ArchetypeQuery<T1, T2, T3, T4> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4> signature)
         : base(store, signature.signatureIndexes) {
@@ -321,8 +354,10 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery
     [Browse(Never)] internal    T4[]    copyT4;
     [Browse(Never)] internal    T5[]    copyT5;
     
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags (in Tags tags) { SetHasAllTags(tags); return this; }
-    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyTags (in Tags tags) { SetHasAnyTags(tags); return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4, T5> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4, T5> signature)
         : base(store, signature.signatureIndexes) {
