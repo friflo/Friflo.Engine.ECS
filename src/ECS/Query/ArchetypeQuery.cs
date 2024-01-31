@@ -18,27 +18,34 @@ namespace Friflo.Engine.ECS;
 public class ArchetypeQuery
 {
 #region public properties
+    /// <summary>
+    /// Return the number of entities matching the query.
+    /// </summary>
     /// <remarks>
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
     /// Typically there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
-                    public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
-                    public              int                 ChunkCount  => Archetype.GetChunkCount (GetArchetypesSpan());
+    public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
     
-    /// <returns>A set of <see cref="Archetype"/>'s matching the <see cref="ArchetypeQuery"/></returns>
-                    public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
+    /// <summary> Return the number of <c>Chunks</c> returned by the query. </summary>
+    public              int                 ChunkCount  => Archetype.GetChunkCount (GetArchetypesSpan());
     
-                    public              EntityStore         Store       => store as EntityStore;
-                    
-                    /// <summary>
-                    /// Return the <see cref="ArchetypeQuery"/> entities mainly for debugging.<br/>
-                    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. 
-                    /// </summary>
-                    public              QueryEntities       Entities    => new (this);
-                    
-                    public              EventFilter         EventFilter => GetEventFilter();
+    /// <summary> Returns the set of <see cref="Archetype"/>'s matching the query.</summary>
+    public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
+
+    /// <summary> The <see cref="EntityStore"/> on which the query operates. </summary>
+    public              EntityStore         Store       => store as EntityStore;
     
-                    public override     string              ToString()  => GetString();
+    /// <summary>
+    /// Return the <see cref="ArchetypeQuery"/> entities mainly for debugging.<br/>
+    /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <c>EntityStore.Query()</c> methods. 
+    /// </summary>
+    public              QueryEntities       Entities    => new (this);
+    
+    /// <summary> An <see cref="ECS.EventFilter"/> used to filter the query result for added/removed components/tags. </summary>
+    public              EventFilter         EventFilter => GetEventFilter();
+
+    public override     string              ToString()  => GetString();
     #endregion
 
 #region private / internal fields
@@ -55,6 +62,7 @@ public class ArchetypeQuery
     #endregion
 
 #region methods
+    /// <summary> A query result will contain only entities having all passed <paramref name="tags"/>. </summary>
     public ArchetypeQuery   AllTags(in Tags tags) { SetRequiredTags(tags); return this; }
     
     /// <summary>
