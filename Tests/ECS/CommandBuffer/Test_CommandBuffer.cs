@@ -319,9 +319,7 @@ public static class Test_CommandBuffer
         { 
             var store2   = new EntityStore(PidType.UsePidAsId);
             store2.EnsureCapacity(count);
-            // var start   = Mem.GetAllocatedBytes();
             QueueEntityCommands(store2, count);
-            // Mem.AssertNoAlloc(start);  TODO check allocation
         }
         Console.WriteLine($"EntityCommandBuffer.AddTag() - duration: {sw.ElapsedMilliseconds} ms");
     }
