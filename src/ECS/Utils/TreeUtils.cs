@@ -22,7 +22,7 @@ public static class TreeUtils
     {
         var serializer      = new EntitySerializer();
         var stream          = new MemoryStream(jsonArray.Count);
-        stream.Write(jsonArray.AsReadOnlySpan());
+        stream.Write(jsonArray.AsByteArray(), jsonArray.start, jsonArray.Count);
         stream.Position     = 0;
         var result          = serializer.ReadEntities(dataEntities, stream);
         // Console.WriteLine($"Paste - entities: {result.entityCount}, error: {result.error}");

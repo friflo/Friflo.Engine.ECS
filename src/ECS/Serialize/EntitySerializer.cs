@@ -57,7 +57,7 @@ public sealed class EntitySerializer
 
     public async Task WriteStoreAsync(EntityStore store, Stream stream)
     {
-        await stream.WriteAsync(ArrayStart);
+        await stream.WriteAsync(ArrayStart, 0 , ArrayStart.Length);
         writer.SetPretty(true);
         isFirst     = true;
         var nodeMax = store.NodeMaxId;
@@ -68,15 +68,15 @@ public sealed class EntitySerializer
                 continue;
             }
             WriteEntityInternal(entity);
-            var memory = new ReadOnlyMemory<byte>(writer.json.buffer, 0, writer.json.end);
-            await stream.WriteAsync(memory);
+            var json = writer.json;
+            await stream.WriteAsync(json.buffer, json.start, json.end - json.start);
         }
-        await stream.WriteAsync(ArrayEnd);
+        await stream.WriteAsync(ArrayEnd, 0, ArrayEnd.Length);
     }
     
     public void WriteStore(EntityStore store, Stream stream)
     {
-        stream.Write(ArrayStart);
+        stream.Write(ArrayStart, 0, ArrayStart.Length);
         writer.SetPretty(true);
         isFirst     = true;
         var nodeMax = store.NodeMaxId;
@@ -87,14 +87,15 @@ public sealed class EntitySerializer
                 continue;
             }
             WriteEntityInternal(entity);
-            stream.Write(writer.json.AsSpan());
+            var json = writer.json;
+            stream.Write(json.buffer, json.start, json.end - json.start);
         }
-        stream.Write(ArrayEnd);
+        stream.Write(ArrayEnd, 0, ArrayEnd.Length);
     }
     
     public void WriteEntities(IEnumerable<Entity> entities, Stream stream)
     {
-        stream.Write(ArrayStart);
+        stream.Write(ArrayStart, 0, ArrayStart.Length);
         writer.SetPretty(true);
         isFirst     = true;
         foreach (var entity in entities)
@@ -103,9 +104,10 @@ public sealed class EntitySerializer
                 continue;
             }
             WriteEntityInternal(entity);
-            stream.Write(writer.json.AsSpan());
+            var json = writer.json;
+            stream.Write(json.buffer, json.start, json.end - json.start);
         }
-        stream.Write(ArrayEnd);
+        stream.Write(ArrayEnd, 0, ArrayEnd.Length);
     }
     
     public string WriteEntity(Entity entity)
@@ -235,7 +237,7 @@ public sealed class EntitySerializer
         }
         var readStream = CreateReadBuffers(stream);
         int read;
-        while((read = await stream.ReadAsync(readBuffer)) > 0) {
+        while((read = await stream.ReadAsync(readBuffer, 0, readBuffer.Length)) > 0) {
             readStream.Write (readBuffer, 0, read);
         }
         return ReadIntoStoreSync(store, readStream);
@@ -248,7 +250,7 @@ public sealed class EntitySerializer
         }
         var readStream = CreateReadBuffers(stream);
         int read;
-        while((read = stream.Read (readBuffer)) > 0) {
+        while((read = stream.Read (readBuffer, 0, readBuffer.Length)) > 0) {
             readStream.Write(readBuffer, 0, read);
         }
         return ReadIntoStoreSync(store, readStream);
@@ -320,7 +322,7 @@ public sealed class EntitySerializer
         }
         var readStream = CreateReadBuffers(stream);
         int read;
-        while((read = stream.Read (readBuffer)) > 0) {
+        while((read = stream.Read (readBuffer, 0 , readBuffer.Length)) > 0) {
             readStream.Write(readBuffer, 0, read);
         }
         return ReadEntitiesSync(entities, readStream);
