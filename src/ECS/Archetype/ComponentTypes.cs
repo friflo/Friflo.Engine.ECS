@@ -126,7 +126,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     /// </summary>
     public void Add(in ComponentTypes componentTypes)
     {
-        bitSet.value = BitSet.Add(bitSet, componentTypes.bitSet);
+        bitSet = BitSet.Add(bitSet, componentTypes.bitSet);
     }
     
     /// <summary>
@@ -143,7 +143,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     /// </summary>
     public void Remove(in ComponentTypes componentTypes)
     {
-        bitSet.value = BitSet.Remove(bitSet, componentTypes.bitSet);
+        bitSet = BitSet.Remove(bitSet, componentTypes.bitSet);
     }
     
     // ----------------------------------------- static methods -----------------------------------------

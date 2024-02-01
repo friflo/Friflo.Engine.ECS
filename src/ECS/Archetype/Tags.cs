@@ -40,6 +40,11 @@ public struct Tags : IEnumerable<TagType>
         bitSet.value = value;
     }
     
+    public Tags(in BitSet value)
+    {
+        bitSet = value;
+    }
+    
     // ----------------------------------------- read Tags -----------------------------------------
     /// <summary>Return the number of contained <see cref="ITag"/>'s.</summary>
     public readonly int     Count => bitSet.GetBitCount();
@@ -106,7 +111,7 @@ public struct Tags : IEnumerable<TagType>
     /// <summary> Add the passed <paramref name="tags"/>.</summary>
     public void Add(in Tags tags)
     {
-        bitSet.value = BitSet.Add(bitSet, tags.bitSet);
+        bitSet = BitSet.Add(bitSet, tags.bitSet);
     }
     
     /// <summary> Removes the passed <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
@@ -119,7 +124,7 @@ public struct Tags : IEnumerable<TagType>
     /// <summary> Removes the passed <paramref name="tags"/>.</summary>
     public void Remove(in Tags tags)
     {
-        bitSet.value = BitSet.Remove(bitSet, tags.bitSet);
+        bitSet = BitSet.Remove(bitSet, tags.bitSet);
     }
         
     // ----------------------------------------- static methods -----------------------------------------

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -117,24 +116,34 @@ public struct BitSet
     }
     
 #if NET7_0_OR_GREATER
-    internal static Vector256<long> Add (in BitSet left, in BitSet right) {
-        return left.value | right.value;
+    internal static BitSet Add (in BitSet left, in BitSet right) {
+        return new BitSet {
+            value = left.value | right.value
+        };
     }
     
-    internal static Vector256<long> Remove (in BitSet left, in BitSet right) {
-        return left.value & ~right.value;
+    internal static BitSet Remove (in BitSet left, in BitSet right) {
+        return new BitSet {
+            value = left.value & ~right.value
+         };
     }
     
-    internal static Vector256<long> Added (in BitSet left, in BitSet right) {
-        return ~left.value & right.value;
+    internal static BitSet Added (in BitSet left, in BitSet right) {
+        return new BitSet {
+            value = ~left.value & right.value
+        };
     }
     
-    internal static Vector256<long> Removed (in BitSet left, in BitSet right) {
-        return left.value & ~right.value;
+    internal static BitSet Removed (in BitSet left, in BitSet right) {
+        return new BitSet {
+            value = left.value & ~right.value
+        };
     }
     
-    internal static Vector256<long> Changed (in BitSet left, in BitSet right) {
-        return left.value ^ right.value;
+    internal static BitSet Changed (in BitSet left, in BitSet right) {
+        return new BitSet {
+            value = left.value ^ right.value
+        };
     }
 #else
     internal static Vector256<long> Add (in BitSet left, in BitSet right) {
