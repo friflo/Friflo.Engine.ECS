@@ -48,16 +48,16 @@ public class ArchetypeQuery
 
 #region private / internal fields
     // --- non blittable types
-    [Browse(Never)] private  readonly   EntityStoreBase     store;                  //   8
-    [Browse(Never)] private             Archetype[]         archetypes;             //   8  current list of matching archetypes, can grow
-    [Browse(Never)] private             EventFilter         eventFilter;            //   8  used to filter component/tag add/remove events
+    [Browse(Never)] private  readonly   EntityStoreBase     store;              //   8
+    [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
+    [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
     
     // --- blittable types
-    [Browse(Never)] private             int                 archetypeCount;         //   4  current number archetypes 
-    [Browse(Never)] private             int                 lastArchetypeCount;     //   4  number of archetypes the EntityStore had on last check
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;       //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
-    [Browse(Never)] private  readonly   ComponentTypes      components;             //  32
-                    private             QueryFilter         filter;                 // 304
+    [Browse(Never)] private             int                 archetypeCount;     //   4  current number archetypes 
+    [Browse(Never)] private             int                 lastArchetypeCount; //   4  number of archetypes the EntityStore had on last check
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
+    [Browse(Never)] private  readonly   ComponentTypes      components;         //  32
+                    private             QueryFilter         filter;             // 304
     #endregion
 
 #region tags
