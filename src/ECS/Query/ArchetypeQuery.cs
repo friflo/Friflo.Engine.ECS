@@ -48,33 +48,37 @@ public class ArchetypeQuery
 
 #region private / internal fields
     // --- non blittable types
-    [Browse(Never)] private  readonly   EntityStoreBase     store;                  //  8
-    [Browse(Never)] private             Archetype[]         archetypes;             //  8   current list of matching archetypes, can grow
-    [Browse(Never)] private             EventFilter         eventFilter;            //  8   used to filter component/tag add/remove events
+    [Browse(Never)] private  readonly   EntityStoreBase     store;                  //   8
+    [Browse(Never)] private             Archetype[]         archetypes;             //   8  current list of matching archetypes, can grow
+    [Browse(Never)] private             EventFilter         eventFilter;            //   8  used to filter component/tag add/remove events
     
     // --- blittable types
-    [Browse(Never)] private             int                 archetypeCount;         //  4   current number archetypes 
-    [Browse(Never)] private             int                 lastArchetypeCount;     //  4   number of archetypes the EntityStore had on last check
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;       // 24   ordered struct indices of component types: T1,T2,T3,T4,T5
-    [Browse(Never)] private  readonly   ComponentTypes      requiredComponents;     // 32
+    [Browse(Never)] private             int                 archetypeCount;         //   4  current number archetypes 
+    [Browse(Never)] private             int                 lastArchetypeCount;     //   4  number of archetypes the EntityStore had on last check
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;       //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
+    [Browse(Never)] private  readonly   ComponentTypes      requiredComponents;     //  32
+                    private             Filter              filter;                 // 304
     
-                    private             Tags                allTags;                // 32   entity must have all tags
-                    private             Tags                anyTags;                // 32   entity must have any tag
-                    private             Tags                withoutAllTags;         // 32   entity must not have all tags
-                    private             Tags                withoutAnyTags;         // 32   entity must not have any tag
-                    
-                    private             ComponentTypes      allComponents;          // 32   entity must have all component types
-                    private             ComponentTypes      anyComponents;          // 32   entity must have any component types
-                    private             ComponentTypes      withoutAllComponents;   // 32   entity must not have all component types
-                    private             ComponentTypes      withoutAnyComponents;   // 32   entity must not have any component types
-    
-    [Browse(Never)] private             int                 withoutAllTagsCount;        //  8
-    [Browse(Never)] private             int                 anyTagsCount;               //  8
-    [Browse(Never)] private             int                 allTagsCount;               //  8
-    
-    [Browse(Never)] private             int                 withoutAllComponentsCount;  //  8
-    [Browse(Never)] private             int                 anyComponentsCount;         //  8
-    [Browse(Never)] private             int                 allComponentsCount;         //  8
+    private partial struct Filter
+    {
+                        internal        Tags                allTags;                //  32  entity must have all tags
+                        internal        Tags                anyTags;                //  32  entity must have any tag
+                        internal        Tags                withoutAllTags;         //  32  entity must not have all tags
+                        internal        Tags                withoutAnyTags;         //  32  entity must not have any tag
+                        
+                        internal        ComponentTypes      allComponents;          //  32  entity must have all component types
+                        internal        ComponentTypes      anyComponents;          //  32  entity must have any component types
+                        internal        ComponentTypes      withoutAllComponents;   //  32  entity must not have all component types
+                        internal        ComponentTypes      withoutAnyComponents;   //  32  entity must not have any component types
+   
+        [Browse(Never)] internal        int                 withoutAllTagsCount;        //   8
+        [Browse(Never)] internal        int                 anyTagsCount;               //   8
+        [Browse(Never)] internal        int                 allTagsCount;               //   8
+        
+        [Browse(Never)] internal        int                 withoutAllComponentsCount;  //   8
+        [Browse(Never)] internal        int                 anyComponentsCount;         //   8
+        [Browse(Never)] internal        int                 allComponentsCount;         //   8
+    }
     #endregion
 
 #region tags
@@ -95,25 +99,25 @@ public class ArchetypeQuery
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
     internal void SetHasAllTags(in Tags tags) {
-        allTags         = tags;
-        allTagsCount    = tags.Count;
+        filter.allTags          = tags;
+        filter.allTagsCount     = tags.Count;
         Reset();
     }
     
     internal void SetHasAnyTags(in Tags tags) {
-        anyTags         = tags;
-        anyTagsCount    = tags.Count;
+        filter.anyTags          = tags;
+        filter.anyTagsCount     = tags.Count;
         Reset();
     }
     
     internal void SetWithoutAllTags(in Tags tags) {
-        withoutAllTags      = tags;
-        withoutAllTagsCount = tags.Count;
+        filter.withoutAllTags       = tags;
+        filter.withoutAllTagsCount  = tags.Count;
         Reset();
     }
     
     internal void SetWithoutAnyTags(in Tags tags) {
-        withoutAnyTags      = tags;
+        filter.withoutAnyTags       = tags;
         Reset();
     }
     #endregion
@@ -136,25 +140,25 @@ public class ArchetypeQuery
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
     internal void SetHasAllComponents(in ComponentTypes types) {
-        allComponents         = types;
-        allComponentsCount    = types.Count;
+        filter.allComponents        = types;
+        filter.allComponentsCount   = types.Count;
         Reset();
     }
     
     internal void SetHasAnyComponents(in ComponentTypes types) {
-        anyComponents         = types;
-        anyComponentsCount    = types.Count;
+        filter.anyComponents        = types;
+        filter.anyComponentsCount   = types.Count;
         Reset();
     }
     
     internal void SetWithoutAllComponents(in ComponentTypes types) {
-        withoutAllComponents      = types;
-        withoutAllComponentsCount = types.Count;
+        filter.withoutAllComponents         = types;
+        filter.withoutAllComponentsCount    = types.Count;
         Reset();
     }
     
     internal void SetWithoutAnyComponents(in ComponentTypes types) {
-        withoutAnyComponents      = types;
+        filter.withoutAnyComponents         = types;
         Reset();
     }
     #endregion
@@ -209,58 +213,61 @@ public class ArchetypeQuery
         return new ReadOnlySpan<Archetype>(archs.array, 0, archs.length);
     }
     
-    private bool IsTagsMatch(in Tags tags)
+    private partial struct Filter
     {
-        if (anyTagsCount > 0)
+        internal bool IsTagsMatch(in Tags tags)
         {
-            if (!tags.HasAny(anyTags))
+            if (anyTagsCount > 0)
             {
-                if (allTagsCount == 0) {
-                    return false;
+                if (!tags.HasAny(anyTags))
+                {
+                    if (allTagsCount == 0) {
+                        return false;
+                    }
+                    if (!tags.HasAll(allTags)) {
+                        return false;
+                    }
                 }
+            } else {
                 if (!tags.HasAll(allTags)) {
                     return false;
                 }
             }
-        } else {
-            if (!tags.HasAll(allTags)) {
+            if (tags.HasAny(withoutAnyTags)) {
                 return false;
             }
+            if (withoutAllTagsCount > 0 && tags.HasAll(withoutAllTags)) {
+                return false;
+            }
+            return true;
         }
-        if (tags.HasAny(withoutAnyTags)) {
-            return false;
-        }
-        if (withoutAllTagsCount > 0 && tags.HasAll(withoutAllTags)) {
-            return false;
-        }
-        return true;
-    }
-    
-    private bool IsComponentsMatch(in ComponentTypes componentTypes)
-    {
-        if (anyComponentsCount > 0)
+        
+        internal bool IsComponentsMatch(in ComponentTypes componentTypes)
         {
-            if (!componentTypes.HasAny(anyComponents))
+            if (anyComponentsCount > 0)
             {
-                if (allComponentsCount == 0) {
-                    return false;
+                if (!componentTypes.HasAny(anyComponents))
+                {
+                    if (allComponentsCount == 0) {
+                        return false;
+                    }
+                    if (!componentTypes.HasAll(allComponents)) {
+                        return false;
+                    }
                 }
+            } else {
                 if (!componentTypes.HasAll(allComponents)) {
                     return false;
                 }
             }
-        } else {
-            if (!componentTypes.HasAll(allComponents)) {
+            if (componentTypes.HasAny(withoutAnyComponents)) {
                 return false;
             }
+            if (withoutAllComponentsCount > 0 && componentTypes.HasAll(withoutAllComponents)) {
+                return false;
+            }
+            return true;
         }
-        if (componentTypes.HasAny(withoutAnyComponents)) {
-            return false;
-        }
-        if (withoutAllComponentsCount > 0 && componentTypes.HasAll(withoutAllComponents)) {
-            return false;
-        }
-        return true;
     }
     
     internal Archetypes GetArchetypes()
@@ -281,10 +288,10 @@ public class ArchetypeQuery
             if (!archetype.componentTypes.HasAll(requiredComponents)) {
                 continue;
             }
-            if (!IsTagsMatch(archetype.tags)) {
+            if (!filter.IsTagsMatch(archetype.tags)) {
                 continue;
             }
-            if (!IsComponentsMatch(archetype.componentTypes)) {
+            if (!filter.IsComponentsMatch(archetype.componentTypes)) {
                 continue;
             }
             if (nextCount == nextArchetypes.Length) {
@@ -321,7 +328,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in allTags) {
+        foreach (var tag in filter.allTags) {
             sb.Append('#');
             sb.Append(tag.Name);
             sb.Append(", ");
