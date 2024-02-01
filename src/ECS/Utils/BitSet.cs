@@ -1,11 +1,15 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Numerics;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
 using System.Text;
+
+#if NETCOREAPP3_0_OR_GREATER
+    using System.Numerics;
+    using System.Runtime.Intrinsics;
+#endif
 
 [assembly: InternalsVisibleTo("Tests-internal")]
 [assembly: InternalsVisibleTo("Fliox.Tests-internal")]
@@ -20,7 +24,7 @@ namespace Friflo.Engine.ECS.Utils;
 [StructLayout(LayoutKind.Explicit)]
 public struct BitSet
 {
-#if NET5_0_OR_GREATER
+#if NETCOREAPP3_0_OR_GREATER
     [FieldOffset(00)] internal  Vector256<long> value;      // 32
 #endif
     [FieldOffset(00)] internal  long            l0;         // (8)
@@ -41,9 +45,17 @@ public struct BitSet
         }
     }
     
-#if NET5_0_OR_GREATER
+#if NETCOREAPP3_0_OR_GREATER
     internal bool IsDefault()                   => value.Equals(default);
     internal bool Equals   (in BitSet other)    => value.Equals(other.value);
+
+    public readonly int GetBitCount() {
+        return
+            BitOperations.PopCount((ulong)l0) +
+            BitOperations.PopCount((ulong)l1) +
+            BitOperations.PopCount((ulong)l2) + 
+            BitOperations.PopCount((ulong)l3);
+    }
 #else
     internal bool IsDefault() {
         return l0 == 0 &&
@@ -58,6 +70,14 @@ public struct BitSet
                l2 == other.l2 &&
                l3 == other.l3;
     }
+    
+    public readonly int GetBitCount() {
+        throw new NotImplementedException();
+    }
+    
+    internal static int TrailingZeroCount(long value) {
+        throw new NotImplementedException();
+    }
 #endif
     
     // hash distribution is probably not good. But executes fast. Leave it for now.
@@ -69,13 +89,7 @@ public struct BitSet
                unchecked((int)l3) ^ (int)(l3 >> 32);
     }
     
-    public readonly int GetBitCount() {
-        return
-            BitOperations.PopCount((ulong)l0) +
-            BitOperations.PopCount((ulong)l1) +
-            BitOperations.PopCount((ulong)l2) + 
-            BitOperations.PopCount((ulong)l3);
-    }
+
         
     public void SetBit(int index)
     {
@@ -256,7 +270,11 @@ public struct BitSetEnumerator
         while (true)
         {
             if (lng != 0) {
+#if NETCOREAPP3_0_OR_GREATER
                 var bitPos  = BitOperations.TrailingZeroCount(lng);
+#else
+                var bitPos = BitSet.TrailingZeroCount(lng);
+#endif
                 lng        ^= 1L << bitPos;
                 curPos      = (lngPos << 6) + bitPos;
                 return true;

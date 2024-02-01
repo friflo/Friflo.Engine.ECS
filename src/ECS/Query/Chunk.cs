@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
 using static System.Diagnostics.DebuggerBrowsableState;
 
 // ReSharper disable InconsistentNaming
@@ -38,11 +37,11 @@ public readonly struct Chunk<T>
     public   readonly   int         Length;     //  4
     
     /// <summary>
-    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to <see cref="Vector256{TTo}"/>'s.<br/>
-    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable safe conversion to a <see cref="Vector256{TTo}"/>.
+    /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
+    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable safe conversion to a Vector256{TTo}.
     /// </summary>
     /// <remarks>
-    /// By adding padding elements the returned <see cref="Span{TTo}"/> can be converted to <see cref="Vector256"/>'s <br/>
+    /// By adding padding elements the returned <see cref="Span{TTo}"/> can be converted to Vector256's <br/>
     /// without the need of an additional <b>for</b> loop to process the elements at the tail of the <see cref="Span{T}"/>.<br/>
     /// <br/>
     /// <i>Vectorization example:</i><br/>
@@ -67,7 +66,7 @@ public readonly struct Chunk<T>
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
-    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to <see cref="Vector128{TTo}"/>.
+    /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to Vector128{TTo}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
@@ -82,14 +81,14 @@ public readonly struct Chunk<T>
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount512) & 0x7fff_ffc0));
     
     /// <summary>
-    /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a <see cref="Vector128{T}"/>
+    /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a Vector128{T}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
     public              int         StepSpan128 => 16 / ComponentType<T>.ByteSize;
     
     /// <summary>
-    /// The step value in a for loop when converting a <see cref="AsSpan256{TTo}"/> value to a <see cref="Vector256{T}"/>
+    /// The step value in a for loop when converting a <see cref="AsSpan256{TTo}"/> value to a Vector256{T}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
     [DebuggerBrowsable(Never)]
