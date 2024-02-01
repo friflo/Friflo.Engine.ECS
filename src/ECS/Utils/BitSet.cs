@@ -1,13 +1,11 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
 #if NETCOREAPP3_0_OR_GREATER
-    using System.Numerics;
     using System.Runtime.Intrinsics;
 #endif
 
@@ -22,7 +20,7 @@ namespace Friflo.Engine.ECS.Utils;
 /// If need an additional Vector256Long[] could be added be added for arbitrary length.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-public struct BitSet
+public partial struct BitSet
 {
 #if NETCOREAPP3_0_OR_GREATER
     [FieldOffset(00)] internal  Vector256<long> value;      // 32
@@ -45,52 +43,6 @@ public struct BitSet
         }
     }
     
-#if NETCOREAPP3_0_OR_GREATER
-    internal bool IsDefault()                   => value.Equals(default);
-    internal bool Equals   (in BitSet other)    => value.Equals(other.value);
-
-    public readonly int GetBitCount() {
-        return
-            BitOperations.PopCount((ulong)l0) +
-            BitOperations.PopCount((ulong)l1) +
-            BitOperations.PopCount((ulong)l2) + 
-            BitOperations.PopCount((ulong)l3);
-    }
-#else
-    internal bool IsDefault() {
-        return l0 == 0 &&
-               l1 == 0 &&
-               l2 == 0 &&
-               l3 == 0;
-    }
-    
-    internal bool Equals (in BitSet other) {
-        return l0 == other.l0 &&
-               l1 == other.l1 &&
-               l2 == other.l2 &&
-               l3 == other.l3;
-    }
-    
-    public readonly int GetBitCount() {
-        return
-            NumberOfSetBits(l0) +
-            NumberOfSetBits(l1) +
-            NumberOfSetBits(l2) +
-            NumberOfSetBits(l3);
-    }
-    
-    private static int NumberOfSetBits(long i)
-    {
-        i -= ((i >> 1) & 0x5555555555555555);
-        i = (i & 0x3333333333333333) + ((i >> 2) & 0x3333333333333333);
-        return (int)((((i + (i >> 4)) & 0xF0F0F0F0F0F0F0F) * 0x101010101010101) >> 56);
-    }
-    
-    internal static int TrailingZeroCount(long value) {
-        throw new NotImplementedException();
-    }
-#endif
-    
     // hash distribution is probably not good. But executes fast. Leave it for now.
     public readonly int HashCode()
     {
@@ -99,8 +51,6 @@ public struct BitSet
                unchecked((int)l2) ^ (int)(l2 >> 32) ^
                unchecked((int)l3) ^ (int)(l3 >> 32);
     }
-    
-
         
     public void SetBit(int index)
     {
@@ -132,109 +82,6 @@ public struct BitSet
         }
     }
     
-#if NET7_0_OR_GREATER
-    public readonly bool HasAll(in BitSet bitSet)
-    {
-        return (value & bitSet.value) == bitSet.value;
-    }
-    
-    public readonly bool HasAny(in BitSet bitSet)
-    {
-        return !(value & bitSet.value).Equals(default);
-    }
-    
-    internal static BitSet Add (in BitSet left, in BitSet right) {
-        return new BitSet {
-            value = left.value | right.value
-        };
-    }
-    
-    internal static BitSet Remove (in BitSet left, in BitSet right) {
-        return new BitSet {
-            value = left.value & ~right.value
-         };
-    }
-    
-    internal static BitSet Added (in BitSet left, in BitSet right) {
-        return new BitSet {
-            value = ~left.value & right.value
-        };
-    }
-    
-    internal static BitSet Removed (in BitSet left, in BitSet right) {
-        return new BitSet {
-            value = left.value & ~right.value
-        };
-    }
-    
-    internal static BitSet Changed (in BitSet left, in BitSet right) {
-        return new BitSet {
-            value = left.value ^ right.value
-        };
-    }
-#else
-    public readonly bool HasAll(in BitSet bitSet)
-    {
-        return (l0 & bitSet.l0) == bitSet.l0 &&
-               (l1 & bitSet.l1) == bitSet.l1 &&
-               (l2 & bitSet.l2) == bitSet.l2 &&
-               (l3 & bitSet.l3) == bitSet.l3;
-    }
-    
-    public readonly bool HasAny(in BitSet bitSet)
-    {
-        return (l0 & bitSet.l0) != 0 ||
-               (l1 & bitSet.l1) != 0 ||
-               (l2 & bitSet.l2) != 0 ||
-               (l3 & bitSet.l3) != 0;
-    }
-
-    internal static BitSet Add (in BitSet left, in BitSet right) {
-        return new BitSet {
-            l0 = left.l0 | right.l0,
-            l1 = left.l1 | right.l1,
-            l2 = left.l2 | right.l2,
-            l3 = left.l3 | right.l3,
-        };
-    }
-    
-    internal static BitSet Remove (in BitSet left, in BitSet right) {
-        return new BitSet {
-            l0 = left.l0 & ~right.l0,
-            l1 = left.l1 & ~right.l1,
-            l2 = left.l2 & ~right.l2,
-            l3 = left.l3 & ~right.l3,
-        };
-    }
-    
-    internal static BitSet Added (in BitSet left, in BitSet right) {
-        return new BitSet {
-            l0 = ~left.l0 & right.l0,
-            l1 = ~left.l1 & right.l1,
-            l2 = ~left.l2 & right.l2,
-            l3 = ~left.l3 & right.l3,
-        };
-    }
-    
-    internal static BitSet Removed (in BitSet left, in BitSet right) {
-        return new BitSet {
-            l0 = left.l0 & ~right.l0,
-            l1 = left.l1 & ~right.l1,
-            l2 = left.l2 & ~right.l2,
-            l3 = left.l3 & ~right.l3,
-        };
-    }
-    
-    internal static BitSet Changed (in BitSet left, in BitSet right) {
-        return new BitSet {
-            l0 = left.l0 ^ right.l0,
-            l1 = left.l1 ^ right.l1,
-            l2 = left.l2 ^ right.l2,
-            l3 = left.l3 ^ right.l3,
-        };
-    }
-#endif
-    
     private readonly StringBuilder AppendString(StringBuilder sb) {
         if (l3 != 0) {
             sb.Append($"{l0:x16} {l1:x16} {l2:x16} {l3:x16}");
@@ -246,59 +93,5 @@ public struct BitSet
             sb.Append($"{l0:x16}");
         }
         return sb;
-    }
-}
-
-public struct BitSetEnumerator
-{
-    private readonly    long    l0;     //  8
-    private readonly    long    l1;     //  8
-    private readonly    long    l2;     //  8
-    private readonly    long    l3;     //  8
-    
-    private             long    lng;    //  8   - 64 bits
-    private             int     lngPos; //  4   - range: [0, 1, 2, 3, 4] - higher values are not assigned
-    private             int     curPos; //  4   - range: [0, ..., 255]
-    
-    internal BitSetEnumerator(in BitSet bitSet) {
-        l0  = bitSet.l0;
-        l1  = bitSet.l1;
-        l2  = bitSet.l2;
-        l3  = bitSet.l3;
-        lng = l0;
-    }
-    
-    /// <returns>the index of the current bit == 1. The index range is [0, ... , 255]</returns>
-    public readonly int Current => curPos;
-    
-    // --- IEnumerator
-    public void Reset() {
-        lng     = l0;
-        lngPos  = 0;
-        curPos  = 0;
-    }
-    
-    public bool MoveNext()
-    {
-        while (true)
-        {
-            if (lng != 0) {
-#if NETCOREAPP3_0_OR_GREATER
-                var bitPos  = BitOperations.TrailingZeroCount(lng);
-#else
-                var bitPos = BitSet.TrailingZeroCount(lng);
-#endif
-                lng        ^= 1L << bitPos;
-                curPos      = (lngPos << 6) + bitPos;
-                return true;
-            }
-            switch (++lngPos) {
-            //  case 0      not possible
-                case 1:     lng = l1;   break;  // use break instead of continue to reach scope end for test coverage
-                case 2:     lng = l2;   break;
-                case 3:     lng = l3;   break;
-                case 4:     return false;
-            }
-        }
     }
 }
