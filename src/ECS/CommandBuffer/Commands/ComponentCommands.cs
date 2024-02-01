@@ -69,7 +69,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
             } else {
                 change.componentTypes.bitSet.SetBit  (index);
             }
-            MapUtils.Add(entityChanges, entityId, change);
+            MapUtils.Set(entityChanges, entityId, change);
         }
     }
     

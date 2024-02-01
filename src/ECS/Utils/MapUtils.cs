@@ -16,10 +16,10 @@ internal static class MapUtils
     /// <summary>
     /// Is used if CollectionsMarshal.GetValueRefOrAddDefault() is not available - !NET6_0_OR_GREATER
     /// </summary>
-    internal static void Add<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, TValue value) where TKey : notnull
+    internal static void Set<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, TValue value) where TKey : notnull
     {
 #if !NET6_0_OR_GREATER
-        dictionary.Add(key, value);
+        dictionary[key] = value;
 #endif
     }
 }

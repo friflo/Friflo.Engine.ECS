@@ -198,7 +198,7 @@ public sealed class CommandBuffer
             } else {
                 change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
-            MapUtils.Add(entityChanges, entityId, change);
+            MapUtils.Set(entityChanges, entityId, change);
         }
     }
     
