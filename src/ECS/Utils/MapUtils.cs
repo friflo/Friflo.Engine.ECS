@@ -2,15 +2,24 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 internal static class MapUtils
 {
-    internal static ref TValue GetValueRefOrAddDefault<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, ref bool exists) where TKey : notnull
+    /* internal static ref TValue GetValueRefOrAddDefault<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, ref bool exists) where TKey : notnull
     {
         return ref CollectionsMarshal.GetValueRefOrAddDefault(dictionary, key, out exists);
+    } */
+    
+    /// <summary>
+    /// Is used if CollectionsMarshal.GetValueRefOrAddDefault() is not available - !NET6_0_OR_GREATER
+    /// </summary>
+    internal static void Add<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, TValue value) where TKey : notnull
+    {
+#if !NET6_0_OR_GREATER
+        dictionary.Add(key, value);
+#endif
     }
 }

@@ -2,7 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 
+// ReSharper disable TooWideLocalVariableScope
+// ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable UnusedMember.Global
@@ -172,12 +175,16 @@ public sealed class CommandBuffer
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan(); 
         var commands        = tagCommands.AsSpan(0, count);
-        bool exists         = false;
+        bool exists;
         
         foreach (var tagCommand in commands)
         {
             var entityId = tagCommand.entityId;
-            ref var change = ref MapUtils.GetValueRefOrAddDefault(entityChanges, entityId, ref exists);
+#if NET6_0_OR_GREATER
+            ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out exists);
+#else
+            exists         = entityChanges.TryGetValue(entityId, out var change);
+#endif
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 if (archetype == null) {
@@ -191,6 +198,7 @@ public sealed class CommandBuffer
             } else {
                 change.tags.bitSet.ClearBit(tagCommand.tagIndex);
             }
+            MapUtils.Add(entityChanges, entityId, change);
         }
     }
     
@@ -222,11 +230,10 @@ public sealed class CommandBuffer
         var nodes               = store.nodes.AsSpan();
         var defaultArchetype    = store.defaultArchetype;
         var entityChanges       = playback.entityChanges;
-        bool exists             = false;
         
         foreach (var entityId in entityChanges.Keys)
         {
-            ref var change      = ref MapUtils.GetValueRefOrAddDefault(entityChanges, entityId, ref exists);
+            var change          = entityChanges[entityId]; 
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
             if (curArchetype.componentTypes.bitSet.Equals(change.componentTypes.bitSet) &&
