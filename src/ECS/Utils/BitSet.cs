@@ -72,7 +72,18 @@ public struct BitSet
     }
     
     public readonly int GetBitCount() {
-        throw new NotImplementedException();
+        return
+            NumberOfSetBits(l0) +
+            NumberOfSetBits(l1) +
+            NumberOfSetBits(l2) +
+            NumberOfSetBits(l3);
+    }
+    
+    private static int NumberOfSetBits(long i)
+    {
+        i -= ((i >> 1) & 0x5555555555555555);
+        i = (i & 0x3333333333333333) + ((i >> 2) & 0x3333333333333333);
+        return (int)((((i + (i >> 4)) & 0xF0F0F0F0F0F0F0F) * 0x101010101010101) >> 56);
     }
     
     internal static int TrailingZeroCount(long value) {
@@ -121,31 +132,17 @@ public struct BitSet
         }
     }
     
+#if NET7_0_OR_GREATER
     public readonly bool HasAll(in BitSet bitSet)
     {
-#if NET7_0_OR_GREATER
         return (value & bitSet.value) == bitSet.value;
-#else
-        return (l0 & bitSet.l0) == bitSet.l0 &&
-               (l1 & bitSet.l1) == bitSet.l1 &&
-               (l2 & bitSet.l2) == bitSet.l2 &&
-               (l3 & bitSet.l3) == bitSet.l3;
-#endif
     }
     
     public readonly bool HasAny(in BitSet bitSet)
     {
-#if NET7_0_OR_GREATER
         return !(value & bitSet.value).Equals(default);
-#else
-        return (l0 & bitSet.l0) != 0 ||
-               (l1 & bitSet.l1) != 0 ||
-               (l2 & bitSet.l2) != 0 ||
-               (l3 & bitSet.l3) != 0;
-#endif
     }
     
-#if NET7_0_OR_GREATER
     internal static BitSet Add (in BitSet left, in BitSet right) {
         return new BitSet {
             value = left.value | right.value
@@ -176,6 +173,22 @@ public struct BitSet
         };
     }
 #else
+    public readonly bool HasAll(in BitSet bitSet)
+    {
+        return (l0 & bitSet.l0) == bitSet.l0 &&
+               (l1 & bitSet.l1) == bitSet.l1 &&
+               (l2 & bitSet.l2) == bitSet.l2 &&
+               (l3 & bitSet.l3) == bitSet.l3;
+    }
+    
+    public readonly bool HasAny(in BitSet bitSet)
+    {
+        return (l0 & bitSet.l0) != 0 ||
+               (l1 & bitSet.l1) != 0 ||
+               (l2 & bitSet.l2) != 0 ||
+               (l3 & bitSet.l3) != 0;
+    }
+
     internal static BitSet Add (in BitSet left, in BitSet right) {
         return new BitSet {
             l0 = left.l0 | right.l0,
