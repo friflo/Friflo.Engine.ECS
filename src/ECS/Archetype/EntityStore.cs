@@ -33,7 +33,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] public              int                     NodeMaxId           => nodesMaxId;
     
     /// <summary> Return the <see cref="ECS.Systems"/> instance attached to the entity store. </summary>
-                    public              Systems                 Systems             { get => systems; init => systems = value; }
+                    public              Systems                 Systems             { get; init; }
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
@@ -74,7 +74,6 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] protected           int                     nodesMaxId;         //  4   - highest entity id
     [Browse(Never)] protected           int                     nodesCount;         //  4   - number of all entities
     // --- misc
-    [Browse(Never)] internal  readonly  Systems                 systems;            //  8
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
     
                     private             InternBase              internBase;         // 40

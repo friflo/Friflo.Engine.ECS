@@ -13,7 +13,11 @@ public readonly struct  EntitiesChanged
     /// Use <see cref="EntityStore.GetEntityById"/> to get the <see cref="Entity"/>. E.g.<br/>
     /// <code>      var entity = store.GetEntityById(args.EntityIds[]);       </code>
     /// </remarks>
+#if NET5_0_OR_GREATER
     public              IReadOnlySet<int>   EntityIds   => entityIds;
+#else
+    public              ISet<int>           EntityIds   => entityIds;
+#endif
     
     private readonly    HashSet<int>        entityIds;  //  8
     
