@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Intrinsics;
 using System.Text;
 using Friflo.Engine.ECS.Utils;
 
@@ -33,11 +32,6 @@ public struct Tags : IEnumerable<TagType>
     public Tags(TagType type)
     {
         bitSet.SetBit(type.TagIndex);
-    }
-    
-    public Tags(in Vector256<long> value)
-    {
-        bitSet.value = value;
     }
     
     public Tags(in BitSet value)

@@ -96,8 +96,8 @@ internal sealed class ArchetypeKeyEqualityComparer : IEqualityComparer<Archetype
     internal static readonly ArchetypeKeyEqualityComparer Instance = new ();
 
     public bool Equals(ArchetypeKey left, ArchetypeKey right) {
-        return left!.componentTypes.bitSet.value.Equals(right!.componentTypes.bitSet.value) &&
-               left!.tags.          bitSet.value.Equals(right!.tags.          bitSet.value);
+        return left!.componentTypes.bitSet.Equals(right!.componentTypes.bitSet) &&
+               left!.tags.          bitSet.Equals(right!.tags.          bitSet);
     }
 
     public int GetHashCode(ArchetypeKey key) {

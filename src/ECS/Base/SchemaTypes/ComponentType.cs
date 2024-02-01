@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics;
 using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
@@ -86,7 +85,7 @@ internal sealed class ComponentType<T> : ComponentType
     internal static readonly    int ByteSize        = GetByteSize();
 
     /// <summary>
-    /// The returned padding enables using <see cref="Vector128"/>, <see cref="Vector256"/> and Vector512 (512 bits = 64 bytes) operations <br/>
+    /// The returned padding enables using Vector128, Vector256 and Vector512 (512 bits = 64 bytes) operations <br/>
     /// on <see cref="StructHeap{T}"/>.<see cref="StructHeap{T}.components"/>
     /// without the need of an additional for loop to process the elements at the end of a <see cref="Span{T}"/>.
     /// </summary>

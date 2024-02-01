@@ -228,8 +228,8 @@ public sealed class CommandBuffer
             ref var change      = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool _);
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
-            if (curArchetype.componentTypes.bitSet.value.Equals(change.componentTypes.bitSet.value) &&
-                curArchetype.tags.          bitSet.value.Equals(change.tags.          bitSet.value)) {
+            if (curArchetype.componentTypes.bitSet.Equals(change.componentTypes.bitSet) &&
+                curArchetype.tags.          bitSet.Equals(change.tags.          bitSet)) {
                 continue;
             }
             var newArchetype = store.GetArchetype(change.componentTypes, change.tags);

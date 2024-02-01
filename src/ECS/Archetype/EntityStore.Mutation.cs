@@ -127,7 +127,7 @@ public partial class EntityStoreBase
         var arch        = archetype;
         var curTags     = arch.tags;
         var newTags     = new Tags (BitSet.Add(curTags.bitSet, tags.bitSet));
-        if (newTags.bitSet.value.Equals(curTags.bitSet.value)) {
+        if (newTags.bitSet.Equals(curTags.bitSet)) {
             return false;
         }
         var searchKey = store.searchKey;
@@ -168,7 +168,7 @@ public partial class EntityStoreBase
         var arch        = archetype;
         var curTags     = arch.tags;
         var newTags     = new Tags (BitSet.Remove(curTags.bitSet, tags.bitSet));
-        if (newTags.bitSet.value.Equals(curTags.bitSet.value)) {
+        if (newTags.bitSet.Equals(curTags.bitSet)) {
             return false;
         }
         var searchKey = store.searchKey;

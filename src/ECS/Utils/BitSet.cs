@@ -20,8 +20,9 @@ namespace Friflo.Engine.ECS.Utils;
 [StructLayout(LayoutKind.Explicit)]
 public struct BitSet
 {
+#if NET5_0_OR_GREATER
     [FieldOffset(00)] internal  Vector256<long> value;      // 32
-    
+#endif
     [FieldOffset(00)] internal  long            l0;         // (8)
     [FieldOffset(08)] internal  long            l1;         // (8)
     [FieldOffset(16)] internal  long            l2;         // (8)
@@ -40,9 +41,24 @@ public struct BitSet
         }
     }
     
+#if NET5_0_OR_GREATER
+    internal bool IsDefault()                   => value.Equals(default);
+    internal bool Equals   (in BitSet other)    => value.Equals(other.value);
+#else
     internal bool IsDefault() {
-        return value.Equals(default);
+        return l0 == 0 &&
+               l1 == 0 &&
+               l2 == 0 &&
+               l3 == 0;
     }
+    
+    internal bool Equals (in BitSet other) {
+        return l0 == other.l0 &&
+               l1 == other.l1 &&
+               l2 == other.l2 &&
+               l3 == other.l3;
+    }
+#endif
     
     // hash distribution is probably not good. But executes fast. Leave it for now.
     public readonly int HashCode()
