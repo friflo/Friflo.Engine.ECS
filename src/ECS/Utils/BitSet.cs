@@ -146,24 +146,49 @@ public struct BitSet
         };
     }
 #else
-    internal static Vector256<long> Add (in BitSet left, in BitSet right) {
-        return left.value | right.value;
+    internal static BitSet Add (in BitSet left, in BitSet right) {
+        return new BitSet {
+            l0 = left.l0 | right.l0,
+            l1 = left.l1 | right.l1,
+            l2 = left.l2 | right.l2,
+            l3 = left.l3 | right.l3,
+        };
     }
     
-    internal static Vector256<long> Remove (in BitSet left, in BitSet right) {
-        return left.value & ~right.value;
+    internal static BitSet Remove (in BitSet left, in BitSet right) {
+        return new BitSet {
+            l0 = left.l0 & ~right.l0,
+            l1 = left.l1 & ~right.l1,
+            l2 = left.l2 & ~right.l2,
+            l3 = left.l3 & ~right.l3,
+        };
     }
     
-    internal static Vector256<long> Added (in BitSet left, in BitSet right) {
-        return ~left.value & right.value;
+    internal static BitSet Added (in BitSet left, in BitSet right) {
+        return new BitSet {
+            l0 = ~left.l0 & right.l0,
+            l1 = ~left.l1 & right.l1,
+            l2 = ~left.l2 & right.l2,
+            l3 = ~left.l3 & right.l3,
+        };
     }
     
-    internal static Vector256<long> Removed (in BitSet left, in BitSet right) {
-        return left.value & ~right.value;
+    internal static BitSet Removed (in BitSet left, in BitSet right) {
+        return new BitSet {
+            l0 = left.l0 & ~right.l0,
+            l1 = left.l1 & ~right.l1,
+            l2 = left.l2 & ~right.l2,
+            l3 = left.l3 & ~right.l3,
+        };
     }
     
-    internal static Vector256<long> Changed (in BitSet left, in BitSet right) {
-        return left.value ^ right.value;
+    internal static BitSet Changed (in BitSet left, in BitSet right) {
+        return new BitSet {
+            l0 = left.l0 ^ right.l0,
+            l1 = left.l1 ^ right.l1,
+            l2 = left.l2 ^ right.l2,
+            l3 = left.l3 ^ right.l3,
+        };
     }
 #endif
     
