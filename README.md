@@ -70,11 +70,14 @@ Features in this list are also explained in the Examples.
   [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
   Example: [Query](#query)
 
+- 1.13.0 Add support for target framework .NET Standard 2.1 or higher.
+
 
 
 ## Development
 
-The library can be integrated on all **.NET** supported platforms:  
+The library supports target framework **.NET Standard 2.1** or higher.  
+This includes .NET Core, .NET 5, .NET 6, .NET 7 and .NET 8.  
 Tested: Windows, macOS and Linux. Untested: Android, iOS, tvOS and WASM/WebAssembly.
 
 The library can be build on all platforms a .NET SDK is available.  
