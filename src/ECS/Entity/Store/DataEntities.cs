@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
@@ -108,13 +107,13 @@ public partial class EntityStore
             pidMap.Add(pid, id);
         }
         // --- map children pid's to id's
-        var children    = CollectionsMarshal.AsSpan(dataEntity.children);
-        var childCount  = children.Length;
+        var children    = dataEntity.children;
+        var childCount  = children?.Count ?? 0;
         EnsureIdBufferCapacity(childCount);
         Span<int> ids   = new (idBuffer, 0, childCount);
         for (int n = 0; n < childCount; n++)
         {
-            var childPid = children[n];
+            var childPid = children![n];
             if (!pidMap.TryGetValue(childPid, out int childId)) {
                 childId = NewId();
                 pidMap.Add(childPid, childId);
@@ -140,13 +139,13 @@ public partial class EntityStore
         var id          = (int)pid;
         // --- use pid's as id's
         var maxPid      = id;
-        var children    = CollectionsMarshal.AsSpan(dataEntity.children);
-        var childCount  = children.Length; 
+        var children    = dataEntity.children;
+        var childCount  = children?.Count ?? 0; 
         EnsureIdBufferCapacity(childCount);
         Span<int> ids   = new (idBuffer, 0, childCount);
         for (int n = 0; n < childCount; n++)
         {
-            var childId = children[n];
+            var childId = children![n];
             if (childId < Static.MinNodeId || childId > int.MaxValue) {
                 throw PidOutOfRangeException(childId, $"{nameof(DataEntity)}.{nameof(dataEntity.children)}");
             }
@@ -173,7 +172,7 @@ public partial class EntityStore
     }
     
     /// update EntityNode.pid of the child nodes
-    private void UpdateEntityNodes(ReadOnlySpan<int> childIds, ReadOnlySpan<long> children)
+    private void UpdateEntityNodes(ReadOnlySpan<int> childIds, List<long> children)
     {
         var localNodes  = nodes;
         var count       = childIds.Length;
