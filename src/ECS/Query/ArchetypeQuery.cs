@@ -56,7 +56,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 archetypeCount;         //   4  current number archetypes 
     [Browse(Never)] private             int                 lastArchetypeCount;     //   4  number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;       //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
-    [Browse(Never)] private  readonly   ComponentTypes      requiredComponents;     //  32
+    [Browse(Never)] private  readonly   ComponentTypes      components;             //  32
                     private             QueryFilter         filter;                 // 304
     #endregion
 
@@ -166,7 +166,7 @@ public class ArchetypeQuery
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
-        requiredComponents  = new ComponentTypes(indexes);
+        components          = new ComponentTypes(indexes);
         signatureIndexes    = indexes;
     }
     
@@ -175,7 +175,7 @@ public class ArchetypeQuery
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
         lastArchetypeCount  = 1;
-        requiredComponents  = componentTypes;
+        components          = componentTypes;
     }
     
     /// <remarks>
@@ -207,7 +207,7 @@ public class ArchetypeQuery
         for (int n = lastCount; n < newStoreLength; n++)
         {
             var archetype = storeArchetypes[n];
-            if (!archetype.componentTypes.HasAll(requiredComponents)) {
+            if (!archetype.componentTypes.HasAll(components)) {
                 continue;
             }
             if (!filter.IsTagsMatch(archetype.tags)) {
