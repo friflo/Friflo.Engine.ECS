@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 [CLSCompliant(true)]
 public struct Tags : IEnumerable<TagType>
 {
-    internal            BitSet  bitSet;  // 32
+    internal            BitSet   bitSet;  // 32
     
     public readonly     TagsEnumerator  GetEnumerator()                         => new TagsEnumerator (this);
 
@@ -106,7 +106,7 @@ public struct Tags : IEnumerable<TagType>
     /// <summary> Add the passed <paramref name="tags"/>.</summary>
     public void Add(in Tags tags)
     {
-        bitSet.value |= tags.bitSet.value;
+        bitSet.value = BitSet.Add(bitSet, tags.bitSet);
     }
     
     /// <summary> Removes the passed <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
@@ -119,7 +119,7 @@ public struct Tags : IEnumerable<TagType>
     /// <summary> Removes the passed <paramref name="tags"/>.</summary>
     public void Remove(in Tags tags)
     {
-        bitSet.value &= ~tags.bitSet.value;
+        bitSet.value = BitSet.Remove(bitSet, tags.bitSet);
     }
         
     // ----------------------------------------- static methods -----------------------------------------

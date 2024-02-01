@@ -3,6 +3,7 @@
 
 
 using System.Text;
+using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -35,11 +36,11 @@ public readonly struct  TagsChanged
     /// <summary>The <see cref="Entity"/> that emitted the event - aka the publisher.</summary>
     public              Entity      Entity      => new Entity(Store, EntityId);
     /// <summary>The <see cref="ECS.Tags"/> added to the <see cref="Entity"/>.</summary>
-    public              Tags        AddedTags   => new(~OldTags.bitSet.value &  Tags.bitSet.value);
+    public              Tags        AddedTags   => new(BitSet.Added  (OldTags.bitSet, Tags.bitSet));
     /// <summary>The <see cref="ECS.Tags"/> removed from the <see cref="Entity"/>.</summary>
-    public              Tags        RemovedTags => new( OldTags.bitSet.value & ~Tags.bitSet.value);
+    public              Tags        RemovedTags => new(BitSet.Removed(OldTags.bitSet, Tags.bitSet));
     /// <summary>The changed (removed / added) entity <see cref="ECS.Tags"/>.</summary>
-    public              Tags        ChangedTags => new( OldTags.bitSet.value ^  Tags.bitSet.value);
+    public              Tags        ChangedTags => new(BitSet.Changed(OldTags.bitSet, Tags.bitSet));
     
     public override     string      ToString()  => GetString();
 
@@ -57,12 +58,12 @@ public readonly struct  TagsChanged
         sb.Append(EntityId);
         sb.Append(" - event >");
         var added = AddedTags;
-        if (added.bitSet.value != default) {
+        if (!added.bitSet.IsDefault()) {
             sb.Append(" Add ");
             sb.Append(added.ToString());
         }
         var removed = RemovedTags;
-        if (removed.bitSet.value != default) {
+        if (!removed.bitSet.IsDefault()) {
             sb.Append(" Remove ");
             sb.Append(removed.ToString());
         }

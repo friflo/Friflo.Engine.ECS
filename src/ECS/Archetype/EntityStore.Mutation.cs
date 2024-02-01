@@ -4,10 +4,12 @@
 
 // Hard rule: this file MUST NOT use type: Entity
 
+using Friflo.Engine.ECS.Utils;
+
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertConstructorToMemberInitializers
-// ReSharper disable once CheckNamespace
 // ReSharper disable UseNullPropagation
+// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
@@ -124,8 +126,8 @@ public partial class EntityStoreBase
     {
         var arch        = archetype;
         var curTags     = arch.tags;
-        var newTags     = new Tags (curTags.bitSet.value | tags.bitSet.value);
-        if (newTags.bitSet.value == curTags.bitSet.value) {
+        var newTags     = new Tags (BitSet.Add(curTags.bitSet, tags.bitSet));
+        if (newTags.bitSet.value.Equals(curTags.bitSet.value)) {
             return false;
         }
         var searchKey = store.searchKey;
@@ -165,8 +167,8 @@ public partial class EntityStoreBase
     {
         var arch        = archetype;
         var curTags     = arch.tags;
-        var newTags     = new Tags (curTags.bitSet.value & ~tags.bitSet.value);
-        if (newTags.bitSet.value == curTags.bitSet.value) {
+        var newTags     = new Tags (BitSet.Remove(curTags.bitSet, tags.bitSet));
+        if (newTags.bitSet.value.Equals(curTags.bitSet.value)) {
             return false;
         }
         var searchKey = store.searchKey;

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -38,6 +39,10 @@ public struct BitSet
         foreach (var index in indices) {
             SetBit(index);
         }
+    }
+    
+    internal bool IsDefault() {
+        return value.Equals(default);
     }
     
     // hash distribution is probably not good. But executes fast. Leave it for now.
@@ -89,13 +94,69 @@ public struct BitSet
     
     public readonly bool HasAll(in BitSet bitSet)
     {
+#if NET7_0_OR_GREATER
         return (value & bitSet.value) == bitSet.value;
+#else
+        return (l0 & bitSet.l0) == bitSet.l0 &&
+               (l1 & bitSet.l1) == bitSet.l1 &&
+               (l2 & bitSet.l2) == bitSet.l2 &&
+               (l3 & bitSet.l3) == bitSet.l3;
+#endif
     }
     
     public readonly bool HasAny(in BitSet bitSet)
     {
-        return (value & bitSet.value) != default;
+#if NET7_0_OR_GREATER
+        return !(value & bitSet.value).Equals(default);
+#else
+        return (l0 & bitSet.l0) != 0 ||
+               (l1 & bitSet.l1) != 0 ||
+               (l2 & bitSet.l2) != 0 ||
+               (l3 & bitSet.l3) != 0;
+#endif
     }
+    
+#if NET7_0_OR_GREATER
+    internal static Vector256<long> Add (in BitSet left, in BitSet right) {
+        return left.value | right.value;
+    }
+    
+    internal static Vector256<long> Remove (in BitSet left, in BitSet right) {
+        return left.value & ~right.value;
+    }
+    
+    internal static Vector256<long> Added (in BitSet left, in BitSet right) {
+        return ~left.value & right.value;
+    }
+    
+    internal static Vector256<long> Removed (in BitSet left, in BitSet right) {
+        return left.value & ~right.value;
+    }
+    
+    internal static Vector256<long> Changed (in BitSet left, in BitSet right) {
+        return left.value ^ right.value;
+    }
+#else
+    internal static Vector256<long> Add (in BitSet left, in BitSet right) {
+        return left.value | right.value;
+    }
+    
+    internal static Vector256<long> Remove (in BitSet left, in BitSet right) {
+        return left.value & ~right.value;
+    }
+    
+    internal static Vector256<long> Added (in BitSet left, in BitSet right) {
+        return ~left.value & right.value;
+    }
+    
+    internal static Vector256<long> Removed (in BitSet left, in BitSet right) {
+        return left.value & ~right.value;
+    }
+    
+    internal static Vector256<long> Changed (in BitSet left, in BitSet right) {
+        return left.value ^ right.value;
+    }
+#endif
     
     private readonly StringBuilder AppendString(StringBuilder sb) {
         if (l3 != 0) {
