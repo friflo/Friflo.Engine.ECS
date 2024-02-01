@@ -57,28 +57,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 lastArchetypeCount;     //   4  number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;       //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      requiredComponents;     //  32
-                    private             Filter              filter;                 // 304
-    
-    private partial struct Filter
-    {
-                        internal    Tags                allTags;                    //  32  entity must have all tags
-                        internal    Tags                anyTags;                    //  32  entity must have any tag
-                        internal    Tags                withoutAllTags;             //  32  entity must not have all tags
-                        internal    Tags                withoutAnyTags;             //  32  entity must not have any tag
-                        
-                        internal    ComponentTypes      allComponents;              //  32  entity must have all component types
-                        internal    ComponentTypes      anyComponents;              //  32  entity must have any component types
-                        internal    ComponentTypes      withoutAllComponents;       //  32  entity must not have all component types
-                        internal    ComponentTypes      withoutAnyComponents;       //  32  entity must not have any component types
-   
-        [Browse(Never)] internal    int                 withoutAllTagsCount;        //   8
-        [Browse(Never)] internal    int                 anyTagsCount;               //   8
-        [Browse(Never)] internal    int                 allTagsCount;               //   8
-        
-        [Browse(Never)] internal    int                 withoutAllComponentsCount;  //   8
-        [Browse(Never)] internal    int                 anyComponentsCount;         //   8
-        [Browse(Never)] internal    int                 allComponentsCount;         //   8
-    }
+                    private             QueryFilter         filter;                 // 304
     #endregion
 
 #region tags
@@ -211,63 +190,6 @@ public class ArchetypeQuery
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {
         var archs = GetArchetypes();
         return new ReadOnlySpan<Archetype>(archs.array, 0, archs.length);
-    }
-    
-    private partial struct Filter
-    {
-        internal bool IsTagsMatch(in Tags tags)
-        {
-            if (anyTagsCount > 0)
-            {
-                if (!tags.HasAny(anyTags))
-                {
-                    if (allTagsCount == 0) {
-                        return false;
-                    }
-                    if (!tags.HasAll(allTags)) {
-                        return false;
-                    }
-                }
-            } else {
-                if (!tags.HasAll(allTags)) {
-                    return false;
-                }
-            }
-            if (tags.HasAny(withoutAnyTags)) {
-                return false;
-            }
-            if (withoutAllTagsCount > 0 && tags.HasAll(withoutAllTags)) {
-                return false;
-            }
-            return true;
-        }
-        
-        internal bool IsComponentsMatch(in ComponentTypes componentTypes)
-        {
-            if (anyComponentsCount > 0)
-            {
-                if (!componentTypes.HasAny(anyComponents))
-                {
-                    if (allComponentsCount == 0) {
-                        return false;
-                    }
-                    if (!componentTypes.HasAll(allComponents)) {
-                        return false;
-                    }
-                }
-            } else {
-                if (!componentTypes.HasAll(allComponents)) {
-                    return false;
-                }
-            }
-            if (componentTypes.HasAny(withoutAnyComponents)) {
-                return false;
-            }
-            if (withoutAllComponentsCount > 0 && componentTypes.HasAll(withoutAllComponents)) {
-                return false;
-            }
-            return true;
-        }
     }
     
     internal Archetypes GetArchetypes()
