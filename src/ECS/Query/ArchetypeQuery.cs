@@ -61,23 +61,23 @@ public class ArchetypeQuery
     
     private partial struct Filter
     {
-                        internal        Tags                allTags;                //  32  entity must have all tags
-                        internal        Tags                anyTags;                //  32  entity must have any tag
-                        internal        Tags                withoutAllTags;         //  32  entity must not have all tags
-                        internal        Tags                withoutAnyTags;         //  32  entity must not have any tag
+                        internal    Tags                allTags;                    //  32  entity must have all tags
+                        internal    Tags                anyTags;                    //  32  entity must have any tag
+                        internal    Tags                withoutAllTags;             //  32  entity must not have all tags
+                        internal    Tags                withoutAnyTags;             //  32  entity must not have any tag
                         
-                        internal        ComponentTypes      allComponents;          //  32  entity must have all component types
-                        internal        ComponentTypes      anyComponents;          //  32  entity must have any component types
-                        internal        ComponentTypes      withoutAllComponents;   //  32  entity must not have all component types
-                        internal        ComponentTypes      withoutAnyComponents;   //  32  entity must not have any component types
+                        internal    ComponentTypes      allComponents;              //  32  entity must have all component types
+                        internal    ComponentTypes      anyComponents;              //  32  entity must have any component types
+                        internal    ComponentTypes      withoutAllComponents;       //  32  entity must not have all component types
+                        internal    ComponentTypes      withoutAnyComponents;       //  32  entity must not have any component types
    
-        [Browse(Never)] internal        int                 withoutAllTagsCount;        //   8
-        [Browse(Never)] internal        int                 anyTagsCount;               //   8
-        [Browse(Never)] internal        int                 allTagsCount;               //   8
+        [Browse(Never)] internal    int                 withoutAllTagsCount;        //   8
+        [Browse(Never)] internal    int                 anyTagsCount;               //   8
+        [Browse(Never)] internal    int                 allTagsCount;               //   8
         
-        [Browse(Never)] internal        int                 withoutAllComponentsCount;  //   8
-        [Browse(Never)] internal        int                 anyComponentsCount;         //   8
-        [Browse(Never)] internal        int                 allComponentsCount;         //   8
+        [Browse(Never)] internal    int                 withoutAllComponentsCount;  //   8
+        [Browse(Never)] internal    int                 anyComponentsCount;         //   8
+        [Browse(Never)] internal    int                 allComponentsCount;         //   8
     }
     #endregion
 
