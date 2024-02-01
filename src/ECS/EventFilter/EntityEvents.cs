@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable InconsistentNaming
@@ -91,8 +90,9 @@ internal sealed class EntityEvents
     {
         var changes     = entityChanges;
         var eventSpan   = new ReadOnlySpan<EntityEvent>(events, entityChangesPos, eventCount - entityChangesPos);
+        bool exists     = false;
         foreach (var ev in eventSpan) {
-            ref var value = ref CollectionsMarshal.GetValueRefOrAddDefault(changes, ev.Id, out _);
+            ref var value = ref MapUtils.GetValueRefOrAddDefault(changes, ev.Id, ref exists);
             value.SetBit(ev.TypeIndex);
         }
         entityChangesPos = eventCount;

@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Runtime.InteropServices;
 using static Friflo.Engine.ECS.ComponentChangedAction;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -40,6 +39,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
         var commands        = componentCommands.AsSpan(0, commandCount);
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan();
+        bool exists         = false;
         
         // --- set new entity component types for Add/Remove commands
         foreach (ref var command in commands)
@@ -48,7 +48,7 @@ internal sealed class ComponentCommands<T> : ComponentCommands
                 continue;
             }
             var entityId = command.entityId;
-            ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool exists);
+            ref var change = ref MapUtils.GetValueRefOrAddDefault(entityChanges, entityId, ref exists);
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 if (archetype == null) {

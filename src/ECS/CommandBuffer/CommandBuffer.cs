@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Runtime.InteropServices;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
@@ -173,11 +172,12 @@ public sealed class CommandBuffer
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan(); 
         var commands        = tagCommands.AsSpan(0, count);
+        bool exists         = false;
         
         foreach (var tagCommand in commands)
         {
             var entityId = tagCommand.entityId;
-            ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool exists);
+            ref var change = ref MapUtils.GetValueRefOrAddDefault(entityChanges, entityId, ref exists);
             if (!exists) {
                 var archetype           = nodes[entityId].archetype;
                 if (archetype == null) {
@@ -222,10 +222,11 @@ public sealed class CommandBuffer
         var nodes               = store.nodes.AsSpan();
         var defaultArchetype    = store.defaultArchetype;
         var entityChanges       = playback.entityChanges;
+        bool exists             = false;
         
         foreach (var entityId in entityChanges.Keys)
         {
-            ref var change      = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out bool _);
+            ref var change      = ref MapUtils.GetValueRefOrAddDefault(entityChanges, entityId, ref exists);
             ref var node        = ref nodes[entityId];
             var curArchetype    = node.Archetype;
             if (curArchetype.componentTypes.bitSet.Equals(change.componentTypes.bitSet) &&
