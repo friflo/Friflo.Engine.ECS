@@ -12,3 +12,17 @@ namespace System.Runtime.CompilerServices
 }
 
 #endif
+
+/*
+ * C# preprocessor directives used by Friflo.Engine.ECS
+ *
+ * NETCOREAPP3_0_OR_GREATER - for init only setter properties
+ *                          - System.Runtime.Intrinsics.Vector256[T]
+ *                          - System.Numerics.BitOperations
+ *
+ * NET5_0_OR_GREATER        - System.Collections.Generic.IReadOnlySet[T]
+ *
+ * NET6_0_OR_GREATER        - System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault[TKey, TValue]
+ *
+ * NET7_0_OR_GREATER        - System.Runtime.Intrinsics.Vector256[T] operators
+ */

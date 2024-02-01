@@ -42,7 +42,7 @@ public struct BitSetEnumerator
 #if NETCOREAPP3_0_OR_GREATER
                 var bitPos  = BitOperations.TrailingZeroCount(lng);
 #else
-                var bitPos = BitSet.TrailingZeroCount(lng);
+                var bitPos  = BitSet.TrailingZeroCount(lng);
 #endif
                 lng        ^= 1L << bitPos;
                 curPos      = (lngPos << 6) + bitPos;
