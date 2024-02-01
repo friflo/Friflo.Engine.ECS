@@ -103,8 +103,7 @@ public partial struct BitSet
     }
 #endif
 
-    // ReSharper disable UnusedMember.Local
-    private static int NumberOfSetBits(long i)
+    internal static int NumberOfSetBits(long i)
     {
         i -= ((i >> 1) & 0x5555555555555555);
         i = (i & 0x3333333333333333) + ((i >> 2) & 0x3333333333333333);
