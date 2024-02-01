@@ -115,6 +115,7 @@ public partial struct BitSet
         long y;
         if (i == 0) return 64;
         int n = 63;
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse - no clue why
         y = i << 32; if (y != 0) { n = n -32; i = y; }
         y = i << 16; if (y != 0) { n = n -16; i = y; }
         y = i << 8;  if (y != 0) { n = n - 8; i = y; }

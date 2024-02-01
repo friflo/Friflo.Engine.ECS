@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static Tests.Utils.Mem;
@@ -217,12 +216,14 @@ public static class Test_Query
         entity3.AddComponent(new Rotation(8, 8, 8, 8));
         entity3.AddComponent(new Scale3  (7, 7, 7));
         
+        // var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 400 : 416;
         var sig     = Signature.Get<Position, Rotation>();
-        _           = store.Query(sig); // for one time allocation for Mem check
-        var expect  = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? 400 : 416;
-        var start   = GetAllocatedBytes();
         var query   = store.Query(sig);
-        AssertAlloc(start, expect);
+        _           = query.Archetypes; // create archetypes array to avoid creation in ChunkEnumerator to check allocation
+        
+        var start   = GetAllocatedBytes();
+        foreach (var _ in query.Chunks) { }
+        AssertNoAlloc(start);
         
         _ = query.Archetypes; // Note: force update of ArchetypeQuery.archetypes[] which resize the array if needed
 
