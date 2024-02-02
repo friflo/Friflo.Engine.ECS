@@ -8,13 +8,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable InlineOutVariableDeclaration
-// ReSharper disable ConvertToAutoPropertyWhenPossible
-// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
-// ReSharper disable UnusedMember.Global
-// ReSharper disable ConvertToPrimaryConstructor
-// ReSharper disable InconsistentNaming
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-// ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -29,16 +23,16 @@ public sealed class CommandBuffer
 {
 #region public properties
     /// <summary> Return the number of recorded components commands. </summary>
-    [Browse(Never)] public  int             ComponentCommandsCount  => GetComponentCommandsCount(intern._componentCommandTypes);
+    [Browse(Never)] public  int             ComponentCommandsCount  => GetComponentCommandsCount(intern.componentCommandTypes);
     
     /// <summary> Return the number of recorded tag commands. </summary>
-    [Browse(Never)] public  int             TagCommandsCount        => intern._tagCommandsCount;
+    [Browse(Never)] public  int             TagCommandsCount        => intern.tagCommandsCount;
     
     /// <summary> Return the number of recorded script commands. </summary>
-    [Browse(Never)] public  int             ScriptCommandsCount     => intern._scriptCommandsCount;
+    [Browse(Never)] public  int             ScriptCommandsCount     => intern.scriptCommandsCount;
     
     /// <summary> Return the number of recorded entity commands. </summary>
-    [Browse(Never)] public  int             EntityCommandsCount     => intern._entityCommandCount;
+    [Browse(Never)] public  int             EntityCommandsCount     => intern.entityCommandCount;
     
     /// <summary>
     /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.
@@ -49,9 +43,9 @@ public sealed class CommandBuffer
     #endregion
     
 #region internal debugging properties
-    internal ReadOnlySpan<TagCommand>       TagCommands             => new (intern._tagCommands,    0, intern._tagCommandsCount);
-    internal ReadOnlySpan<ScriptCommand>    ScriptCommands          => new (intern._scriptCommands, 0, intern._scriptCommandsCount);
-    internal ReadOnlySpan<EntityCommand>    EntityCommands          => new (intern._entityCommands, 0, intern._entityCommandCount);
+    internal ReadOnlySpan<TagCommand>       TagCommands             => new (intern.tagCommands,    0, intern.tagCommandsCount);
+    internal ReadOnlySpan<ScriptCommand>    ScriptCommands          => new (intern.scriptCommands, 0, intern.scriptCommandsCount);
+    internal ReadOnlySpan<EntityCommand>    EntityCommands          => new (intern.entityCommands, 0, intern.entityCommandCount);
     internal ComponentCommands[]            ComponentCommands       => GetComponentCommands();
     #endregion
     
@@ -60,25 +54,25 @@ public sealed class CommandBuffer
     
     // MUST be private by all means. Used to reduce noise of fields in debugger.
     private struct Intern {
-        internal            ComponentTypes      _changedComponentTypes;
-        internal readonly   ComponentCommands[] _componentCommandTypes;
+        internal            ComponentTypes      changedComponentTypes;
+        internal readonly   ComponentCommands[] componentCommandTypes;
         //
-        internal            TagCommand[]        _tagCommands;
-        internal            int                 _tagCommandsCount;
+        internal            TagCommand[]        tagCommands;
+        internal            int                 tagCommandsCount;
         //
-        internal            ScriptCommand[]     _scriptCommands;
-        internal            int                 _scriptCommandsCount;
+        internal            ScriptCommand[]     scriptCommands;
+        internal            int                 scriptCommandsCount;
         //
-        internal            EntityCommand[]     _entityCommands;
-        internal            int                 _entityCommandCount;
+        internal            EntityCommand[]     entityCommands;
+        internal            int                 entityCommandCount;
         //
         internal readonly   EntityStore         store;
         internal            bool                reuseBuffer;
         internal            bool                returnedBuffer;
         
         internal Intern(EntityStore store, ComponentCommands[] componentCommandTypes) {
-            this.store              = store;
-            _componentCommandTypes  = componentCommandTypes;
+            this.store                  = store;
+            this.componentCommandTypes  = componentCommandTypes;
         }
     }
     #endregion
@@ -95,9 +89,9 @@ public sealed class CommandBuffer
             commands[n] = componentTypes[n].CreateComponentCommands();
         }
         intern = new Intern(store, commands) {
-            _tagCommands    = Array.Empty<TagCommand>(),
-            _scriptCommands = Array.Empty<ScriptCommand>(),
-            _entityCommands = Array.Empty<EntityCommand>()
+            tagCommands     = Array.Empty<TagCommand>(),
+            scriptCommands  = Array.Empty<ScriptCommand>(),
+            entityCommands  = Array.Empty<EntityCommand>()
         };
     }
     
@@ -110,10 +104,10 @@ public sealed class CommandBuffer
     /// </exception>
     public void Playback()
     {
-        var componentCommands   = intern._componentCommandTypes;
+        var componentCommands   = intern.componentCommandTypes;
         var playback            = intern.store.GetPlayback();
         try {
-            var hasComponentChanges = intern._changedComponentTypes.Count > 0;
+            var hasComponentChanges = intern.changedComponentTypes.Count > 0;
             
             ExecuteEntityCommands();
             ExecuteTagCommands          (playback);
@@ -154,12 +148,12 @@ public sealed class CommandBuffer
     
     private void ExecuteEntityCommands()
     {
-        int count = intern._entityCommandCount;
+        int count = intern.entityCommandCount;
         if (count == 0) {
             return;
         }
-        var commands        = intern._entityCommands.AsSpan(0, count);
-        var store           = intern.store;
+        var commands    = intern.entityCommands.AsSpan(0, count);
+        var store       = intern.store;
         foreach (var command in commands)
         {
             var entityId = command.entityId;
@@ -179,13 +173,13 @@ public sealed class CommandBuffer
     
     private void ExecuteTagCommands(Playback playback)
     {
-        var count = intern._tagCommandsCount;
+        var count = intern.tagCommandsCount;
         if (count == 0) {
             return;
         }
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan(); 
-        var commands        = intern._tagCommands.AsSpan(0, count);
+        var commands        = intern.tagCommands.AsSpan(0, count);
         bool exists;
         
         foreach (var tagCommand in commands)
@@ -215,12 +209,12 @@ public sealed class CommandBuffer
     
     private void ExecuteScriptCommands()
     {
-        if (intern._scriptCommandsCount == 0) {
+        if (intern.scriptCommandsCount == 0) {
             return;
         }
         var store = intern.store;
 
-        foreach (var command in intern._scriptCommands)
+        foreach (var command in intern.scriptCommands)
         {
             var entity = new Entity(store, command.entityId);
             switch (command.action)
@@ -237,8 +231,8 @@ public sealed class CommandBuffer
     
     private void PrepareComponentCommands(Playback playback)
     {
-        var componentCommands = intern._componentCommandTypes;
-        foreach (var componentType in intern._changedComponentTypes)
+        var componentCommands = intern.componentCommandTypes;
+        foreach (var componentType in intern.changedComponentTypes)
         {
             var commands = componentCommands[componentType.StructIndex];
             commands.UpdateComponentTypes(playback);
@@ -247,8 +241,8 @@ public sealed class CommandBuffer
     
     private void ExecuteComponentCommands(Playback playback)
     {
-        var componentCommands   = intern._componentCommandTypes;
-        foreach (var componentType in intern._changedComponentTypes)
+        var componentCommands   = intern.componentCommandTypes;
+        foreach (var componentType in intern.changedComponentTypes)
         {
             var commands = componentCommands[componentType.StructIndex];
             commands.ExecuteCommands(playback);
@@ -292,19 +286,19 @@ public sealed class CommandBuffer
     
     private void Reset(ComponentCommands[] componentCommands)
     {
-        foreach (var componentType in intern._changedComponentTypes)
+        foreach (var componentType in intern.changedComponentTypes)
         {
             componentCommands[componentType.StructIndex].commandCount = 0;
         }
-        intern._changedComponentTypes   = default;
-        intern._tagCommandsCount        = 0;
-        intern._scriptCommandsCount     = 0;
-        intern._entityCommandCount      = 0;
+        intern.changedComponentTypes   = default;
+        intern.tagCommandsCount        = 0;
+        intern.scriptCommandsCount     = 0;
+        intern.entityCommandCount      = 0;
     }
     
     private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {
         int count = 0;
-        foreach (var componentType in intern._changedComponentTypes) {
+        foreach (var componentType in intern.changedComponentTypes) {
             count += componentCommands[componentType.StructIndex].commandCount;
         }
         return count;
@@ -320,10 +314,10 @@ public sealed class CommandBuffer
     
     private ComponentCommands[] GetComponentCommands()
     {
-        var commands    = new ComponentCommands[intern._changedComponentTypes.Count];
+        var commands    = new ComponentCommands[intern.changedComponentTypes.Count];
         int pos         = 0;
-        var commandTypes =  intern._componentCommandTypes;
-        foreach (var commandType in intern._changedComponentTypes)
+        var commandTypes =  intern.componentCommandTypes;
+        foreach (var commandType in intern.changedComponentTypes)
         {
             commands[pos++] = commandTypes[commandType.StructIndex];
         }
@@ -376,8 +370,8 @@ public sealed class CommandBuffer
             throw CannotReuseCommandBuffer();   
         }
         var structIndex = StructHeap<T>.StructIndex;
-        intern._changedComponentTypes.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)intern._componentCommandTypes[structIndex];
+        intern.changedComponentTypes.bitSet.SetBit(structIndex);
+        var commands    = (ComponentCommands<T>)intern.componentCommandTypes[structIndex];
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, Math.Max(4, 2 * count));
@@ -434,12 +428,12 @@ public sealed class CommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
-        var count = intern._tagCommandsCount;
-        if (count == intern._tagCommands.Length) {
-            ArrayUtils.Resize(ref intern._tagCommands, Math.Max(4, 2 * count));
+        var count = intern.tagCommandsCount;
+        if (count == intern.tagCommands.Length) {
+            ArrayUtils.Resize(ref intern.tagCommands, Math.Max(4, 2 * count));
         }
-        intern._tagCommandsCount = count + 1;
-        ref var command     = ref intern._tagCommands[count];
+        intern.tagCommandsCount = count + 1;
+        ref var command     = ref intern.tagCommands[count];
         command.tagIndex    = (byte)tagIndex;
         command.entityId    = entityId;
         command.change      = change;
@@ -470,12 +464,12 @@ public sealed class CommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
-        var count =  intern._scriptCommandsCount;
-        if (count == intern._scriptCommands.Length) {
-            ArrayUtils.Resize(ref intern._scriptCommands, Math.Max(4, 2 * count));
+        var count =  intern.scriptCommandsCount;
+        if (count == intern.scriptCommands.Length) {
+            ArrayUtils.Resize(ref intern.scriptCommands, Math.Max(4, 2 * count));
         }
-        intern._scriptCommandsCount = count + 1;
-        ref var command     = ref intern._scriptCommands[count];
+        intern.scriptCommandsCount = count + 1;
+        ref var command     = ref intern.scriptCommands[count];
         command.scriptIndex = (byte)scriptIndex;
         command.action      = action;
         command.entityId    = entityId;
@@ -493,13 +487,13 @@ public sealed class CommandBuffer
             throw CannotReuseCommandBuffer();
         }
         var id = intern.store.NewId();
-        var count = intern._entityCommandCount; 
+        var count = intern.entityCommandCount; 
 
-        if (count == intern._entityCommands.Length) {
-            ArrayUtils.Resize(ref intern._entityCommands, Math.Max(4, 2 * count));
+        if (count == intern.entityCommands.Length) {
+            ArrayUtils.Resize(ref intern.entityCommands, Math.Max(4, 2 * count));
         }
-        intern._entityCommandCount  = count + 1;
-        ref var command             = ref intern._entityCommands[count];
+        intern.entityCommandCount  = count + 1;
+        ref var command             = ref intern.entityCommands[count];
         command.entityId            = id;
         command.action              = EntityCommandAction.Create;
         return id;
@@ -513,12 +507,12 @@ public sealed class CommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
-        var count =  intern._entityCommandCount; 
-        if (count == intern._entityCommands.Length) {
-            ArrayUtils.Resize(ref intern._entityCommands, Math.Max(4, 2 * count));
+        var count =  intern.entityCommandCount; 
+        if (count == intern.entityCommands.Length) {
+            ArrayUtils.Resize(ref intern.entityCommands, Math.Max(4, 2 * count));
         }
-        intern._entityCommandCount  = count + 1;
-        ref var command             = ref intern._entityCommands[count];
+        intern.entityCommandCount  = count + 1;
+        ref var command             = ref intern.entityCommands[count];
         command.entityId            = entityId;
         command.action              = EntityCommandAction.Delete;
     }
