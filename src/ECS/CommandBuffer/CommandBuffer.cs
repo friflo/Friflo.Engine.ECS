@@ -81,6 +81,22 @@ public sealed class CommandBuffer
             this.store                  = store;
             this.componentCommandTypes  = componentCommandTypes;
         }
+        
+        internal void Reset(bool hasComponentChanges)
+        {
+            if (hasComponentChanges)
+            {
+                var componentCommands = componentCommandTypes;
+                foreach (var componentType in changedComponentTypes) {
+                    componentCommands[componentType.StructIndex].commandCount = 0;
+                }
+            }
+            changedComponentTypes    = default;
+            tagCommandsCount         = 0;
+            scriptCommandsCount      = 0;
+            childCommandsCount       = 0;
+            entityCommandCount       = 0;
+        }
     }
     #endregion
     
@@ -112,11 +128,9 @@ public sealed class CommandBuffer
     /// </exception>
     public void Playback()
     {
-        var componentCommands   = intern.componentCommandTypes;
         var playback            = intern.store.GetPlayback();
+        var hasComponentChanges = intern.changedComponentTypes.Count > 0;
         try {
-            var hasComponentChanges = intern.changedComponentTypes.Count > 0;
-            
             if (intern.entityCommandCount > 0) {
                 ExecuteEntityCommands();
             }
@@ -138,7 +152,7 @@ public sealed class CommandBuffer
             }
         }
         finally {
-            Reset(componentCommands);
+            intern.Reset(hasComponentChanges);
             playback.entityChanges.Clear();
             if (!intern.reuseBuffer) {
                 ReturnBuffer();
@@ -308,19 +322,6 @@ public sealed class CommandBuffer
             }
             node.archetype  = newArchetype;
         }
-    }
-    
-    private void Reset(ComponentCommands[] componentCommands)
-    {
-        foreach (var componentType in intern.changedComponentTypes)
-        {
-            componentCommands[componentType.StructIndex].commandCount = 0;
-        }
-        intern.changedComponentTypes    = default;
-        intern.tagCommandsCount         = 0;
-        intern.scriptCommandsCount      = 0;
-        intern.childCommandsCount       = 0;
-        intern.entityCommandCount       = 0;
     }
     
     private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {
