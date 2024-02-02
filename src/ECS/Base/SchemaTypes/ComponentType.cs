@@ -73,10 +73,9 @@ internal sealed class ComponentType<T> : ComponentType
     
     internal override ComponentCommands CreateComponentCommands()
     {
-        var commands = new ComponentCommands<T>(StructIndex) {
+        return new ComponentCommands<T>(StructIndex) {
             componentCommands = new ComponentCommand<T>[8]
         };
-        return commands;
     }
     
     private static              int GetByteSize()   => Unsafe.SizeOf<T>();
