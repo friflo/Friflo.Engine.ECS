@@ -32,6 +32,9 @@ public sealed class CommandBuffer
     /// <summary> Return the number of recorded tag commands. </summary>
     public              int                 TagCommandsCount        => intern._tagCommandsCount;
     
+    /// <summary> Return the number of recorded script commands. </summary>
+    public              int                 ScriptCommandsCount     => intern._scriptCommandsCount;
+    
     /// <summary> Return the number of recorded entity commands. </summary>
     public              int                 EntityCommandsCount     => intern._entityCommandCount;
     
@@ -45,6 +48,7 @@ public sealed class CommandBuffer
     
 #region internal debugging properties
     internal ReadOnlySpan<TagCommand>       TagCommands             => new (intern._tagCommands,    0, intern._tagCommandsCount);
+    internal ReadOnlySpan<ScriptCommand>    ScriptCommands          => new (intern._scriptCommands, 0, intern._scriptCommandsCount);
     internal ReadOnlySpan<EntityCommand>    EntityCommands          => new (intern._entityCommands, 0, intern._entityCommandCount);
     internal ComponentCommands[]            ComponentCommands       => GetComponentCommands();
     #endregion
@@ -90,6 +94,7 @@ public sealed class CommandBuffer
         }
         intern = new Intern(store, commands) {
             _tagCommands    = Array.Empty<TagCommand>(),
+            _scriptCommands = Array.Empty<ScriptCommand>(),
             _entityCommands = Array.Empty<EntityCommand>()
         };
     }
@@ -117,7 +122,7 @@ public sealed class CommandBuffer
             if (hasComponentChanges) {
                 ExecuteComponentCommands(playback);
             }
-            ExecuteScriptCommands       (playback);
+            ExecuteScriptCommands();
         }
         finally {
             Reset(componentCommands);
@@ -206,20 +211,23 @@ public sealed class CommandBuffer
         }
     }
     
-    private void ExecuteScriptCommands(Playback playback)
+    private void ExecuteScriptCommands()
     {
         if (intern._scriptCommandsCount == 0) {
             return;
         }
-        // var nodes = playback.store.nodes.AsSpan();
-        var store = playback.store;
+        var store = intern.store;
+
         foreach (var command in intern._scriptCommands)
         {
-            switch (command.action) {
+            var entity = new Entity(store, command.entityId);
+            switch (command.action)
+            {
                 case ScriptChangedAction.Add:
-                    // EntityUtils.AddScriptInternal()    (this, ScriptType<TScript>.Index, script);
+                    EntityUtils.AddScript(entity, command.script);
                     break;
                 case ScriptChangedAction.Remove:
+                    EntityUtils.RemoveScript(entity, command.scriptIndex);
                     break;
             }
         }
@@ -440,7 +448,7 @@ public sealed class CommandBuffer
     /// <summary>
     /// Add the given <paramref name="script"/> to the entity with the passed <paramref name="entityId"/>.
     /// </summary>
-    public void AddScript<T>(int entityId, Script script)
+    public void AddScript<T>(int entityId, T script)
         where T : Script, new()
     {
         ChangeScript(entityId, script, ScriptType<T>.Index, ScriptChangedAction.Add);
@@ -452,7 +460,7 @@ public sealed class CommandBuffer
     public void RemoveScript<T>(int entityId)
         where T : Script, new()
     {
-        ChangeScript(entityId, null, ScriptType<T>.Index, ScriptChangedAction.Replace);
+        ChangeScript(entityId, null, ScriptType<T>.Index, ScriptChangedAction.Remove);
     }
     
     private void ChangeScript(int entityId, Script script, int scriptIndex, ScriptChangedAction action)

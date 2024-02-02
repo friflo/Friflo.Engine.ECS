@@ -195,7 +195,7 @@ public static class EntityUtils
         return AddScriptInternal(entity, script, scriptType);
     }
     
-    private static Script AddScript (Entity entity, Script script) {
+    internal static Script AddScript (Entity entity, Script script) {
         var scriptType = ScriptTypeByType[script.GetType()];
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }

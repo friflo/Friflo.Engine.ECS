@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS.Buffer;
@@ -212,6 +213,11 @@ public static class Test_CommandBuffer
             ecb.AddTag<TestTag>(1);
         });
         AreEqual("CommandBuffer - buffers returned to store", e!.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
+            ecb.AddScript(1, new TestScript1());
+        });
+        AreEqual("CommandBuffer - buffers returned to store", e!.Message);
     }
     
     [Test]
@@ -335,5 +341,34 @@ public static class Test_CommandBuffer
         }
         ecb.Playback();
         Mem.AreEqual(0, store.EntityCount);
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_scripts()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity(1);
+        var ecb     = store.GetCommandBuffer();
+        ecb.ReuseBuffer = true;
+        AreEqual(0, ecb.ScriptCommandsCount);
+        
+        var script1 = new TestScript1();
+        ecb.AddScript(entity.Id, script1);
+        AreEqual(1, ecb.ScriptCommandsCount);
+        ecb.Playback();
+        AreEqual(0, ecb.ScriptCommandsCount);
+        AreSame (script1, entity.GetScript<TestScript1>());
+        NotNull (script1.Store);
+        
+        ecb.RemoveScript<TestScript1>(entity.Id);
+        ecb.Playback();
+        IsNull  (entity.GetScript<TestScript1>());
+        IsNull  (script1.Store);
+        
+        ecb.AddScript(entity.Id, new TestScript2());
+        ecb.RemoveScript<TestScript2>(entity.Id);
+        AreEqual(2, ecb.ScriptCommandsCount);
+        ecb.Playback();
+        IsNull  (entity.GetScript<TestScript2>());
     }
 }
