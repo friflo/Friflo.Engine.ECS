@@ -98,19 +98,18 @@ public sealed class CommandBuffer
             entityCommandCount       = 0;
         }
     }
+    
+    private static class Static
+    {
+        internal static readonly ComponentType[] ComponentTypes = EntityStoreBase.Static.EntitySchema.components;
+    }
     #endregion
     
 #region general methods
     internal CommandBuffer(EntityStore store)
     {
-        var schema          = EntityStoreBase.Static.EntitySchema;
-        var maxStructIndex  = schema.maxStructIndex;
-        var componentTypes  = schema.components;
-
-        var commands = new ComponentCommands[maxStructIndex];
-        for (int n = 1; n < maxStructIndex; n++) {
-            commands[n] = componentTypes[n].CreateComponentCommands();
-        }
+        var schema      = EntityStoreBase.Static.EntitySchema;
+        var commands    = new ComponentCommands[schema.maxStructIndex];
         intern = new Intern(store, commands) {
             tagCommands     = Array.Empty<TagCommand>(),
             scriptCommands  = Array.Empty<ScriptCommand>(),
@@ -399,10 +398,15 @@ public sealed class CommandBuffer
         }
         var structIndex = StructHeap<T>.StructIndex;
         intern.changedComponentTypes.bitSet.SetBit(structIndex);
-        var commands    = (ComponentCommands<T>)intern.componentCommandTypes[structIndex];
+        var componentCommands = intern.componentCommandTypes[structIndex];
+        if (componentCommands == null) {
+            var componentType = Static.ComponentTypes[structIndex];
+            intern.componentCommandTypes[structIndex] = componentCommands = componentType.CreateComponentCommands();
+        }
+        var commands    = (ComponentCommands<T>)componentCommands;
         var count       = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
-            ArrayUtils.Resize(ref commands.componentCommands, Math.Max(4, 2 * count));
+            ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
         }
         commands.commandCount   = count + 1;
         ref var command         = ref commands.componentCommands[count];
