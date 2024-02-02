@@ -1,14 +1,9 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("Tests-internal")]
-[assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
 // ReSharper disable ConvertToAutoProperty
 namespace Friflo.Engine.ECS.Utils;
-
 
 public partial struct BitSet
 {

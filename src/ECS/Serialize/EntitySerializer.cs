@@ -3,15 +3,11 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
-
-[assembly: InternalsVisibleTo("Tests-internal")]
-[assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable UseUtf8StringLiteral

@@ -1,14 +1,10 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Runtime.CompilerServices;
-
 #if NETCOREAPP3_0_OR_GREATER
     using System.Numerics;
 #endif
 
-[assembly: InternalsVisibleTo("Tests-internal")]
-[assembly: InternalsVisibleTo("Fliox.Tests-internal")]
 
 // ReSharper disable ConvertToAutoProperty
 namespace Friflo.Engine.ECS.Utils;

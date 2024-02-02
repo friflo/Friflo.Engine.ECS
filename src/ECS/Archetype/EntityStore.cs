@@ -7,8 +7,6 @@ using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-[assembly: CLSCompliant(true)]
-
 // Hard rule: this file MUST NOT use type: Entity
 
 // ReSharper disable once CheckNamespace
