@@ -14,7 +14,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// The modification type of a <see cref="ScriptChanged"/> event: <see cref="Remove"/>, <see cref="Add"/> or <see cref="Replace"/> script.
 /// </summary>
-public enum ScriptChangedAction
+public enum ScriptChangedAction : byte
 {
     /// <summary> A <see cref="Script"/> was removed from an <see cref="Entity"/>. </summary>
     Remove  = 0,
