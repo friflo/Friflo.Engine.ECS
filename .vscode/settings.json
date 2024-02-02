@@ -35,6 +35,7 @@
         "globaltool",
         "MemberwiseClone",
         "Netcode",
+        "NETCOREAPP",
         "nunit",
         "Pids",
         "renderable",

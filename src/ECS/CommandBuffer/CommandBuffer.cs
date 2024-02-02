@@ -43,7 +43,7 @@ public sealed class CommandBuffer
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}";
     #endregion
     
-#region interal debugging properties
+#region internal debugging properties
     internal ReadOnlySpan<TagCommand>       TagCommands             => new (intern._tagCommands,    0, intern._tagCommandsCount);
     internal ReadOnlySpan<EntityCommand>    EntityCommands          => new (intern._entityCommands, 0, intern._entityCommandCount);
     internal ComponentCommands[]            ComponentCommands       => GetComponentCommands();

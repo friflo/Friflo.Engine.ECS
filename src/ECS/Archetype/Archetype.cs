@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS;
 /// An <see cref="Archetype"/> store entities with a specific set of <see cref="IComponent"/> and <see cref="ITag"/> types.
 /// </summary>
 /// <remarks>
-/// E.g. all entities with a <see cref="Position"/> and <see cref="Rotation"/> componet are store in the same archetype.<br/>
+/// E.g. all entities with a <see cref="Position"/> and <see cref="Rotation"/> component are store in the same archetype.<br/>
 /// In case of removing one of these components or adding a new one from / to an <see cref="Entity"/> the entity is moved to a different archetype.<br/>
 /// <br/>
 /// This is the basic pattern for an archetype base ECS. This approach enables efficient entity / component queries.<br/>
