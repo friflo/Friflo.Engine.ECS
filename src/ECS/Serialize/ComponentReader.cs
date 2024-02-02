@@ -342,7 +342,7 @@ internal readonly struct RawKey
     internal  readonly  string      key;            // never null
     internal  readonly  SchemaType  schemaType;     // never null
 
-    public    override  string      ToString() => $"{key} - {schemaType.Type.Name}";
+    public    override  string      ToString() => $"{key} - {schemaType.Name}";
     
     internal RawKey(string key, SchemaType schemaType) {
         this.key        = key;

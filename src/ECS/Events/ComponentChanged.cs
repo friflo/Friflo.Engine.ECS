@@ -189,7 +189,7 @@ public readonly struct  ComponentChanged
     }
     
     private ArgumentException TypeException(string message, Type type) {
-        return new ArgumentException($"{message}{ComponentType.Type.Name}. T: {type.Name}");
+        return new ArgumentException($"{message}{ComponentType.Name}. T: {type.Name}");
     }
     #endregion
 }
