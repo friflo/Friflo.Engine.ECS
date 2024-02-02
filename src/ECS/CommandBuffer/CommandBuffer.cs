@@ -3,6 +3,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable InlineOutVariableDeclaration
@@ -27,21 +29,21 @@ public sealed class CommandBuffer
 {
 #region public properties
     /// <summary> Return the number of recorded components commands. </summary>
-    public              int                 ComponentCommandsCount  => GetComponentCommandsCount(intern._componentCommandTypes);
+    [Browse(Never)] public  int             ComponentCommandsCount  => GetComponentCommandsCount(intern._componentCommandTypes);
     
     /// <summary> Return the number of recorded tag commands. </summary>
-    public              int                 TagCommandsCount        => intern._tagCommandsCount;
+    [Browse(Never)] public  int             TagCommandsCount        => intern._tagCommandsCount;
     
     /// <summary> Return the number of recorded script commands. </summary>
-    public              int                 ScriptCommandsCount     => intern._scriptCommandsCount;
+    [Browse(Never)] public  int             ScriptCommandsCount     => intern._scriptCommandsCount;
     
     /// <summary> Return the number of recorded entity commands. </summary>
-    public              int                 EntityCommandsCount     => intern._entityCommandCount;
+    [Browse(Never)] public  int             EntityCommandsCount     => intern._entityCommandCount;
     
     /// <summary>
     /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.
     /// </summary>
-    public              bool                ReuseBuffer             { get => intern.reuseBuffer; set => intern.reuseBuffer = value; }
+    public                  bool            ReuseBuffer             { get => intern.reuseBuffer; set => intern.reuseBuffer = value; }
     
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}";
     #endregion
