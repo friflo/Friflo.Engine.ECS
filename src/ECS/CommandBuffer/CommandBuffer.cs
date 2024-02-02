@@ -398,13 +398,10 @@ public sealed class CommandBuffer
         }
         var structIndex = StructHeap<T>.StructIndex;
         intern.changedComponentTypes.bitSet.SetBit(structIndex);
-        var componentCommands = intern.componentCommandTypes[structIndex];
-        if (componentCommands == null) {
-            var componentType = Static.ComponentTypes[structIndex];
-            intern.componentCommandTypes[structIndex] = componentCommands = componentType.CreateComponentCommands();
-        }
-        var commands    = (ComponentCommands<T>)componentCommands;
-        var count       = commands.commandCount; 
+        var componentCommands   = intern.componentCommandTypes[structIndex];
+        componentCommands     ??= CreateComponentCommands(structIndex);
+        var commands            = (ComponentCommands<T>)componentCommands;
+        var count               = commands.commandCount; 
         if (count == commands.componentCommands.Length) {
             ArrayUtils.Resize(ref commands.componentCommands, 2 * count);
         }
@@ -413,6 +410,11 @@ public sealed class CommandBuffer
         command.change          = change;
         command.entityId        = entityId;
         command.component       = component;
+    }
+    
+    private  ComponentCommands CreateComponentCommands(int structIndex) {
+        var componentType = Static.ComponentTypes[structIndex];
+        return intern.componentCommandTypes[structIndex] = componentType.CreateComponentCommands();
     }
     #endregion
     
