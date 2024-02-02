@@ -33,13 +33,15 @@ public static class Test_CommandBuffer
         
         AreEqual(0, ecb.ComponentCommandsCount);
         
-        ecb.CreateEntity();
+        var entity1     = ecb.CreateEntity();
+        var entity2     = ecb.CreateEntity();
         
         ecb.AddTag          <TestTag>    (1);
         ecb.AddComponent    <Position>   (1);
         ecb.RemoveComponent <Position>   (1);
         ecb.AddScript                    (1, new TestScript1());
         ecb.RemoveScript    <TestScript1>(1);
+        ecb.AddChild(entity1, entity2);
         
         AreEqual(2,                                     ecb.ComponentCommandsCount);
         var componentCommands = (ComponentCommands<Position>)ecb.ComponentCommands[0];
@@ -53,13 +55,17 @@ public static class Test_CommandBuffer
         AreEqual(1,                                     ecb.TagCommands.Length);
         AreEqual("entity: 1 - Add [#TestTag]",          ecb.TagCommands[0].ToString());
         
-        AreEqual(1,                                     ecb.EntityCommandsCount);
-        AreEqual(1,                                     ecb.EntityCommands.Length);
+        AreEqual(2,                                     ecb.EntityCommandsCount);
+        AreEqual(2,                                     ecb.EntityCommands.Length);
         AreEqual("Create entity - id: 1",               ecb.EntityCommands[0].ToString());
+        AreEqual("Create entity - id: 2",               ecb.EntityCommands[1].ToString());
         
         AreEqual(2,                                     ecb.ScriptCommandsCount);
         AreEqual("entity: 1 - Add [#TestScript1]",      ecb.ScriptCommands[0].ToString());
         AreEqual("entity: 1 - Remove [#TestScript1]",   ecb.ScriptCommands[1].ToString());
+        
+        AreEqual(1,                                     ecb.ChildCommandsCount);
+        AreEqual("entity: 1 - Add child: 2",            ecb.ChildCommands[0].ToString());
     }
 }
 

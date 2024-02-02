@@ -218,6 +218,11 @@ public static class Test_CommandBuffer
             ecb.AddScript(1, new TestScript1());
         });
         AreEqual("CommandBuffer - buffers returned to store", e!.Message);
+        
+        e = Throws<InvalidOperationException>(() => {
+            ecb.AddChild(1, 2);
+        });
+        AreEqual("CommandBuffer - buffers returned to store", e!.Message);
     }
     
     [Test]
@@ -370,5 +375,33 @@ public static class Test_CommandBuffer
         AreEqual(2, ecb.ScriptCommandsCount);
         ecb.Playback();
         IsNull  (entity.GetScript<TestScript2>());
+    }
+    
+    [Test]
+    public static void Test_CommandBuffer_child_entities()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        var ecb     = store.GetCommandBuffer();
+        ecb.ReuseBuffer = true;
+        AreEqual(0, ecb.ChildCommandsCount);
+
+        ecb.AddChild(entity1.Id, entity2.Id);
+        AreEqual(1, ecb.ChildCommandsCount);
+        ecb.Playback();
+        AreEqual(0, ecb.ChildCommandsCount);
+        AreEqual(1, entity1.ChildIds.Length);
+        AreEqual(2, entity1.ChildIds[0]);
+        
+        ecb.RemoveChild(entity1.Id, entity2.Id);
+        ecb.Playback();
+        AreEqual(0, entity1.ChildIds.Length);
+        
+        ecb.AddChild   (entity1.Id, entity2.Id);
+        ecb.RemoveChild(entity1.Id, entity2.Id);
+        AreEqual(2, ecb.ChildCommandsCount);
+        ecb.Playback();
+        AreEqual(0, entity1.ChildIds.Length);
     }
 }

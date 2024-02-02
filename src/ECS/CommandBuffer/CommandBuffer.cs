@@ -31,9 +31,12 @@ public sealed class CommandBuffer
     /// <summary> Return the number of recorded script commands. </summary>
     [Browse(Never)] public  int             ScriptCommandsCount     => intern.scriptCommandsCount;
     
+    /// <summary> Return the number of recorded add / remove child commands. </summary>
+    [Browse(Never)] public  int             ChildCommandsCount      => intern.childCommandsCount;
+    
     /// <summary> Return the number of recorded entity commands. </summary>
     [Browse(Never)] public  int             EntityCommandsCount     => intern.entityCommandCount;
-    
+
     /// <summary>
     /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.
     /// </summary>
@@ -45,6 +48,7 @@ public sealed class CommandBuffer
 #region internal debugging properties
     internal ReadOnlySpan<TagCommand>       TagCommands             => new (intern.tagCommands,    0, intern.tagCommandsCount);
     internal ReadOnlySpan<ScriptCommand>    ScriptCommands          => new (intern.scriptCommands, 0, intern.scriptCommandsCount);
+    internal ReadOnlySpan<ChildCommand>     ChildCommands           => new (intern.childCommands,  0, intern.childCommandsCount);
     internal ReadOnlySpan<EntityCommand>    EntityCommands          => new (intern.entityCommands, 0, intern.entityCommandCount);
     internal ComponentCommands[]            ComponentCommands       => GetComponentCommands();
     #endregion
@@ -62,6 +66,9 @@ public sealed class CommandBuffer
         //
         internal            ScriptCommand[]     scriptCommands;
         internal            int                 scriptCommandsCount;
+        //
+        internal            ChildCommand[]      childCommands;
+        internal            int                 childCommandsCount;
         //
         internal            EntityCommand[]     entityCommands;
         internal            int                 entityCommandCount;
@@ -91,6 +98,7 @@ public sealed class CommandBuffer
         intern = new Intern(store, commands) {
             tagCommands     = Array.Empty<TagCommand>(),
             scriptCommands  = Array.Empty<ScriptCommand>(),
+            childCommands   = Array.Empty<ChildCommand>(),
             entityCommands  = Array.Empty<EntityCommand>()
         };
     }
@@ -109,8 +117,12 @@ public sealed class CommandBuffer
         try {
             var hasComponentChanges = intern.changedComponentTypes.Count > 0;
             
-            ExecuteEntityCommands();
-            ExecuteTagCommands          (playback);
+            if (intern.entityCommandCount > 0) {
+                ExecuteEntityCommands();
+            }
+            if (intern.tagCommandsCount > 0) {
+                ExecuteTagCommands      (playback);
+            }
             if (hasComponentChanges) {
                 PrepareComponentCommands(playback);
             }
@@ -118,7 +130,12 @@ public sealed class CommandBuffer
             if (hasComponentChanges) {
                 ExecuteComponentCommands(playback);
             }
-            ExecuteScriptCommands();
+            if (intern.scriptCommandsCount > 0) {
+                ExecuteScriptCommands();
+            }
+            if (intern.childCommandsCount > 0) {
+                ExecuteChildCommands();
+            }
         }
         finally {
             Reset(componentCommands);
@@ -148,11 +165,7 @@ public sealed class CommandBuffer
     
     private void ExecuteEntityCommands()
     {
-        int count = intern.entityCommandCount;
-        if (count == 0) {
-            return;
-        }
-        var commands    = intern.entityCommands.AsSpan(0, count);
+        var commands    = intern.entityCommands.AsSpan(0, intern.entityCommandCount);
         var store       = intern.store;
         foreach (var command in commands)
         {
@@ -173,13 +186,9 @@ public sealed class CommandBuffer
     
     private void ExecuteTagCommands(Playback playback)
     {
-        var count = intern.tagCommandsCount;
-        if (count == 0) {
-            return;
-        }
         var entityChanges   = playback.entityChanges;
         var nodes           = playback.store.nodes.AsSpan(); 
-        var commands        = intern.tagCommands.AsSpan(0, count);
+        var commands        = intern.tagCommands.AsSpan(0, intern.tagCommandsCount);
         bool exists;
         
         foreach (var tagCommand in commands)
@@ -209,12 +218,10 @@ public sealed class CommandBuffer
     
     private void ExecuteScriptCommands()
     {
-        if (intern.scriptCommandsCount == 0) {
-            return;
-        }
-        var store = intern.store;
+        var commands    = intern.scriptCommands.AsSpan(0, intern.scriptCommandsCount);
+        var store       = intern.store;
 
-        foreach (var command in intern.scriptCommands)
+        foreach (var command in commands)
         {
             var entity = new Entity(store, command.entityId);
             switch (command.action)
@@ -224,6 +231,25 @@ public sealed class CommandBuffer
                     break;
                 case ScriptChangedAction.Remove:
                     EntityUtils.RemoveScript(entity, command.scriptIndex);
+                    break;
+            }
+        }
+    }
+    
+    private void ExecuteChildCommands()
+    {
+        var commands    = intern.childCommands.AsSpan(0, intern.childCommandsCount);
+        var store       = intern.store;
+
+        foreach (var command in commands)
+        {
+            switch (command.action)
+            {
+                case ChildEntitiesChangedAction.Add:
+                    store.AddChild(command.parentId, command.childId);
+                    break;
+                case ChildEntitiesChangedAction.Remove:
+                    store.RemoveChild(command.parentId, command.childId);
                     break;
             }
         }
@@ -290,10 +316,11 @@ public sealed class CommandBuffer
         {
             componentCommands[componentType.StructIndex].commandCount = 0;
         }
-        intern.changedComponentTypes   = default;
-        intern.tagCommandsCount        = 0;
-        intern.scriptCommandsCount     = 0;
-        intern.entityCommandCount      = 0;
+        intern.changedComponentTypes    = default;
+        intern.tagCommandsCount         = 0;
+        intern.scriptCommandsCount      = 0;
+        intern.childCommandsCount       = 0;
+        intern.entityCommandCount       = 0;
     }
     
     private int GetComponentCommandsCount(ComponentCommands[] componentCommands) {
@@ -474,6 +501,40 @@ public sealed class CommandBuffer
         command.action      = action;
         command.entityId    = entityId;
         command.script      = script;
+    }
+    #endregion
+    
+#region child entity
+    /// <summary>
+    /// Add the entity with the given <paramref name="childId"/> as a child to the entity with the passed <paramref name="parentId"/>.
+    /// </summary>
+    public void AddChild(int parentId, int childId)
+    {
+        ChangeChild (parentId, childId, ChildEntitiesChangedAction.Add);
+    }
+        
+    /// <summary>
+    /// Remove the child entity with given <paramref name="childId"/> from the parent entity with the the passed <paramref name="parentId"/>.
+    /// </summary>
+    public void RemoveChild(int parentId, int childId)
+    {
+        ChangeChild (parentId, childId, ChildEntitiesChangedAction.Remove);
+    }
+    
+    private void ChangeChild(int parentId, int childId, ChildEntitiesChangedAction action)
+    {
+        if (intern.returnedBuffer) {
+            throw CannotReuseCommandBuffer();
+        }
+        var count =  intern.childCommandsCount;
+        if (count == intern.childCommands.Length) {
+            ArrayUtils.Resize(ref intern.childCommands, Math.Max(4, 2 * count));
+        }
+        intern.childCommandsCount = count + 1;
+        ref var command     = ref intern.childCommands[count];
+        command.parentId    = parentId;
+        command.childId     = childId;
+        command.action      = action;
     }
     #endregion
 
