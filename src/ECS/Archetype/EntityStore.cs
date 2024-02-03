@@ -92,7 +92,9 @@ public abstract partial class EntityStoreBase
     #endregion
     
 #region static fields
-    public static class Static {
+    // use nested class to minimize noise in debugger
+    public static class Static
+    {
         internal static readonly    int[]           EmptyChildIds   = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes(TypeStore);

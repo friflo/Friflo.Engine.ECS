@@ -99,6 +99,7 @@ public sealed class CommandBuffer
         }
     }
     
+    // use nested class to minimize noise in debugger
     private static class Static
     {
         internal static readonly ComponentType[] ComponentTypes = EntityStoreBase.Static.EntitySchema.components;
