@@ -1,5 +1,4 @@
 ﻿using System;
-
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
 using NUnit.Framework;

@@ -3,7 +3,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+using System.Threading;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using static Friflo.Engine.ECS.StructInfo;
@@ -66,25 +66,27 @@ internal readonly struct QueryJob<T1>
     
     internal void RunParallel()
     {
-        var chunkSections = new Chunks<T1>[Environment.ProcessorCount]; // todo pool chunks
-
         foreach (Chunks<T1> chunk in query.Chunks)
         {
             if (chunk.Length < 100) {
                 action(chunk.Chunk1, chunk.Entities);
                 continue;
             }
-            var step = chunk.Length / Environment.ProcessorCount;
+            var localAction = action;
+            var step        = chunk.Length / Environment.ProcessorCount;
+            var finished    = new WaitHandle[Environment.ProcessorCount];   // todo pool array
+            
             for (int n = 0; n < Environment.ProcessorCount; n++)
             {
                 var chunk1          = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
                 var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
-                chunkSections[n]    = new Chunks<T1>(chunk1, entities);
+
+                var thread = EngineThreadPool.Instance.Execute(() => {
+                    localAction(chunk1, entities);
+                });
+                finished[n] = thread.finished;
             }
-            var localAction = action;
-            Parallel.ForEach(chunkSections, chunks => {
-                localAction(chunks.Chunk1, chunks.Entities);
-            });
+            WaitHandle.WaitAll(finished);
         }
     }
 }
