@@ -34,8 +34,6 @@ public static class Test_QueryJob
         // --- execute ForEach() synchronously
         var job = query.ForEach((component1, entities) => { });
         job.Run();
-        
-        job = query.ForEach((component1, entities) => { });
         job.Run();
     }
     
