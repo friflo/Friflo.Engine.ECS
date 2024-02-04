@@ -44,6 +44,7 @@ public static class Test_QueryJob
     {
         long count       = 10; // 100_000;
         long entityCount = 100_000;
+        int  threadCount = 2;
         
         var store       = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
@@ -64,22 +65,22 @@ public static class Test_QueryJob
                 ++c.a;
             }
         });
-        job.ThreadCount             = 2;
+        job.ThreadCount             = threadCount;
         job.MinParallelChunkLength  = 1000;
         job.RunParallel();  // force one time allocation of IJobAction
 
-        var start = Mem.GetAllocatedBytes();
-        var sw = new Stopwatch();
+        var sw      = new Stopwatch();
+        var start   = Mem.GetAllocatedBytes();
         sw.Start();
         for (int n = 0; n < count - 1; n++) {
             job.RunParallel();
         }
         Mem.AssertNoAlloc(start);
         var duration = sw.ElapsedMilliseconds;
-        Console.Write($"JobQuery.RunParallel() - entities: {entityCount}, threads: {job.ThreadCount}, count: {count}, duration: {duration}" );
+        Console.Write($"JobQuery.RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration}" );
         
-        Assert.AreEqual(job.ThreadCount * count, forEachCount);
-        Assert.AreEqual(entityCount     * count, lengthSum);
+        Assert.AreEqual(threadCount * count, forEachCount);
+        Assert.AreEqual(entityCount * count, lengthSum);
     }
 
     /// all TPL <see cref="Parallel"/> methods allocate memory. SO they are out.
