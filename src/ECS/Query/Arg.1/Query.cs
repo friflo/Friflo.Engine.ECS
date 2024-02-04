@@ -44,12 +44,13 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     internal QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)  => new (this, action);
 }
 
+
 [ExcludeFromCodeCoverage]
 internal readonly struct QueryJob<T1>
     where T1 : struct, IComponent
 {
-    private readonly ArchetypeQuery<T1>                 query;
-    private readonly Action<Chunk<T1>, ChunkEntities>   action;
+    private readonly ArchetypeQuery<T1>                 query;  //  8
+    private readonly Action<Chunk<T1>, ChunkEntities>   action; //  8
     
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
         this.query  = query;
@@ -80,9 +81,9 @@ internal readonly struct QueryJob<T1>
                 var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
                 chunkSections[n]    = new Chunks<T1>(chunk1, entities);
             }
-            var action2 = action;
+            var localAction = action;
             Parallel.ForEach(chunkSections, chunks => {
-                action2(chunks.Chunk1, chunks.Entities);
+                localAction(chunks.Chunk1, chunks.Entities);
             });
         }
     }
