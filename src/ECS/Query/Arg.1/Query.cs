@@ -92,8 +92,9 @@ internal struct QueryJob<T1>
             for (int n = 0; n < threadCount; n++)
             {
                 var start       = n * step;
-                var chunk1      = new Chunk<T1>(chunk.Chunk1,       start, 42);
-                var entities    = new ChunkEntities(chunk.Entities, start, 42);
+                var length      = chunk.Length / threadCount;
+                var chunk1      = new Chunk<T1>(chunk.Chunk1,       start, length);
+                var entities    = new ChunkEntities(chunk.Entities, start, length);
                 var worker      = workers[n];
                 finished[n]     = worker.finished;
                 worker.Signal(() => {
