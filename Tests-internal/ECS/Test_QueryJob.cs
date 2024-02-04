@@ -42,8 +42,8 @@ public static class Test_QueryJob
     // [Test]
     public static void Test_QueryJob_RunParallel()
     {
-        var count       = 1_000;
-        var entityCount = 100_000;
+        long count       = 100_000;
+        long entityCount = 100_000;
         
         var store       = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
@@ -64,7 +64,7 @@ public static class Test_QueryJob
                 ++c.a;
             }
         });
-        job.ThreadCount             = 2;
+        job.ThreadCount             = 1;
         job.MinParallelChunkLength  = 1000;
         job.RunParallel();
 
