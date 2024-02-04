@@ -24,16 +24,18 @@ public static class Test_QueryJob
         
         ArchetypeQuery<MyComponent1> query = store.Query<MyComponent1>();
         
-        // use same interface by ForEach() as in foreach loop
-        foreach (var (component1, entities) in query.Chunks) { }
-        foreach ((Chunk<MyComponent1> component1, ChunkEntities entities) in query.Chunks) { }
+        // --- use same interface by ForEach() as in foreach loop
+        foreach (var  (component1, entities) in query.Chunks) { }
+        query.ForEach((component1, entities) => { });
         
+        foreach      ((Chunk<MyComponent1> component1, ChunkEntities entities) in query.Chunks) { }
+        query.ForEach((Chunk<MyComponent1> component1, ChunkEntities entities) => { });
+        
+        // --- execute ForEach() synchronously
         var job = query.ForEach((component1, entities) => { });
-        job.ThreadCount             = Environment.ProcessorCount;
-        job.MinParallelChunkLength  = 1000;
         job.Run();
         
-        job = query.ForEach((Chunk<MyComponent1> component1, ChunkEntities entities) => { });
+        job = query.ForEach((component1, entities) => { });
         job.Run();
     }
     
@@ -49,10 +51,12 @@ public static class Test_QueryJob
         var query = store.Query<MyComponent1>();
         
         var job = query.ForEach((component1, entities) => { });
-        job.ThreadCount = 2;
-        job.RunParallel();
+        job.ThreadCount             = 2;
+        job.MinParallelChunkLength  = 1000;
         
-        job = query.ForEach((Chunk<MyComponent1> component1, ChunkEntities entities) => { });
+        job.RunParallel();
+        job.RunParallel();
+        job.RunParallel();
         job.RunParallel();
     }
 
