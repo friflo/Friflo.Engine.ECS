@@ -29,6 +29,8 @@ public static class Test_QueryJob
         foreach ((Chunk<MyComponent1> component1, ChunkEntities entities) in query.Chunks) { }
         
         var job = query.ForEach((component1, entities) => { });
+        job.ThreadCount             = Environment.ProcessorCount;
+        job.MinParallelChunkLength  = 1000;
         job.Run();
         
         job = query.ForEach((Chunk<MyComponent1> component1, ChunkEntities entities) => { });

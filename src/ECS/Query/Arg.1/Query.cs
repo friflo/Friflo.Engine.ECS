@@ -8,6 +8,7 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using static Friflo.Engine.ECS.StructInfo;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -46,15 +47,20 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
 
 
 [ExcludeFromCodeCoverage]
-internal readonly struct QueryJob<T1>
+internal struct QueryJob<T1>
     where T1 : struct, IComponent
 {
-    private readonly ArchetypeQuery<T1>                 query;  //  8
-    private readonly Action<Chunk<T1>, ChunkEntities>   action; //  8
+    public              int                                 ThreadCount;            //  4
+    public              int                                 MinParallelChunkLength; //  4
+    
+    private readonly    ArchetypeQuery<T1>                  query;                  //  8
+    private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
     
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
-        this.query  = query;
-        this.action = action;
+        this.query              = query;
+        this.action             = action;
+        ThreadCount             = Environment.ProcessorCount;
+        MinParallelChunkLength  = 1000;
     }
     
     internal void Run()
@@ -68,11 +74,11 @@ internal readonly struct QueryJob<T1>
     {
         var             localAction = action;
         WaitHandle[]    finished    = null;
-        var             threadCount = Environment.ProcessorCount;
+        var             threadCount = ThreadCount;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
-            if (chunk.Length < 100) {
+            if (chunk.Length < MinParallelChunkLength) {
                 localAction(chunk.Chunk1, chunk.Entities);
                 continue;
             }
