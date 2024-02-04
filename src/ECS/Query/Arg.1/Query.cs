@@ -42,11 +42,36 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     
     
     [ExcludeFromCodeCoverage]
-    internal void ForEach(Action<Chunk<T1>, ChunkEntities> action)
+    internal QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)
     {
-        var chunks = new Chunks<T1>[Environment.ProcessorCount]; // todo pool chunks
+        return new QueryJob<T1>(this, action);
+    }
+}
 
-        foreach (Chunks<T1> chunk in Chunks)
+[ExcludeFromCodeCoverage]
+internal readonly struct QueryJob<T1>
+    where T1 : struct, IComponent
+{
+    private readonly ArchetypeQuery<T1>                 query;
+    private readonly Action<Chunk<T1>, ChunkEntities>   action;
+    
+    internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
+        this.query  = query;
+        this.action = action;
+    }
+    
+    internal void Run()
+    {
+        foreach (Chunks<T1> chunk in query.Chunks) {
+            action(chunk.Chunk1, chunk.Entities);
+        }
+    }
+    
+    internal void RunParallel()
+    {
+        var chunkSections = new Chunks<T1>[Environment.ProcessorCount]; // todo pool chunks
+
+        foreach (Chunks<T1> chunk in query.Chunks)
         {
             if (chunk.Length < 100) {
                 action(chunk.Chunk1, chunk.Entities);
@@ -55,11 +80,14 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
             var step = chunk.Length / Environment.ProcessorCount;
             for (int n = 0; n < Environment.ProcessorCount; n++)
             {
-                var chunk1      = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
-                var entities    = new ChunkEntities(chunk.Entities, n * step, 42); 
-                chunks[n]       = new Chunks<T1>(chunk1, entities);
+                var chunk1          = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
+                var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
+                chunkSections[n]   = new Chunks<T1>(chunk1, entities);
             }
-            Parallel.ForEach(chunks, ddd => { action(ddd.Chunk1, ddd.Entities); });        
+            var action2 = action;
+            Parallel.ForEach(chunkSections, chunks => {
+                action2(chunks.Chunk1, chunks.Entities);
+            });
         }
     }
 }
