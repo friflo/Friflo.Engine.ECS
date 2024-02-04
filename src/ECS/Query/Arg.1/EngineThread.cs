@@ -14,14 +14,18 @@ internal sealed class EngineThread
     private  readonly   EngineThreadPool    pool;
     internal readonly   AutoResetEvent      finished;
     
-    internal EngineThread(EngineThreadPool pool) {
+    internal EngineThread(EngineThreadPool pool, int id) {
         this.pool   = pool;
         thread      = new Thread(Run);
+        thread.Name = $"EngineThread {id}";
     }
     
     internal void Run()
     {
-
+        var poolStack = pool.stack;
+        lock (poolStack) {
+            poolStack.Push(this);
+        }
         pool.availableThreads.Release();
     }
 }
@@ -31,12 +35,13 @@ internal sealed class EngineThreadPool
 {
     internal static readonly EngineThreadPool   Instance = new();
     
-    private  readonly   Stack<EngineThread>     pool;
+    internal readonly   Stack<EngineThread>     stack;
     internal readonly   Semaphore               availableThreads;
+    private             int                     threadSeq;
     
     private EngineThreadPool()
     {
-        pool                = new Stack<EngineThread>();
+        stack               = new Stack<EngineThread>();
         availableThreads    = new Semaphore(0, Environment.ProcessorCount, "available engine threads");
     }
     
@@ -44,10 +49,10 @@ internal sealed class EngineThreadPool
     {
         EngineThread engineThread;
         availableThreads.WaitOne();
-        lock (pool)
+        lock (stack)
         {
-            if (!pool.TryPop(out engineThread)) {
-                engineThread = new EngineThread(this);
+            if (!stack.TryPop(out engineThread)) {
+                engineThread = new EngineThread(this, ++threadSeq);
             }
         }
         // engineThread.Run(action)
