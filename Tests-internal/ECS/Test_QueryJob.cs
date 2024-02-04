@@ -42,11 +42,11 @@ public static class Test_QueryJob
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        for (int n = 0; n < 32; n++) {
+        for (int n = 0; n < 100_000; n++) {
             archetype.CreateEntity();
         }
         
-        ArchetypeQuery<MyComponent1> query = store.Query<MyComponent1>();
+        var query = store.Query<MyComponent1>();
         
         var job = query.ForEach((component1, entities) => { });
         job.RunParallel();

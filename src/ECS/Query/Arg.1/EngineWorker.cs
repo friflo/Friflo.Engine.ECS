@@ -25,6 +25,7 @@ internal sealed class EngineWorker
         thread      = new Thread(Run) {
             Name = $"{nameof(EngineWorker)} {id}"
         };
+        thread.Start();
     }
     
     internal void Signal(Action action)
@@ -79,7 +80,8 @@ internal sealed class EngineWorkerPool
     private EngineWorkerPool()
     {
         stack               = new Stack<EngineWorker>();
-        availableThreads    = new Semaphore(0, Environment.ProcessorCount, "available engine threads");
+        var count           = Environment.ProcessorCount;
+        availableThreads    = new Semaphore(count, count, "available engine threads");
     }
     
     internal EngineWorker Execute(Action action)
