@@ -70,6 +70,10 @@ internal struct QueryJob<T1>
         }
     }
     
+    // ReSharper disable StaticMemberInGenericType
+    private static readonly WaitHandle[]    TestHandles = new WaitHandle  [1];
+    private static readonly EngineWorker[]  TestWorkers = new EngineWorker[1];
+    
     internal void RunParallel()
     {
         var             localAction = action;
@@ -84,10 +88,14 @@ internal struct QueryJob<T1>
                 continue;
             }
             var step    = chunk.Length / threadCount;
-            finished  ??= new WaitHandle  [threadCount];    // todo pool array
-            workers   ??= new EngineWorker[threadCount];    // todo pool array
+            // finished  ??= new WaitHandle  [threadCount];    // todo pool array
+            // workers   ??= new EngineWorker[threadCount];    // todo pool array
             
-            EngineWorkerPool.GetWorkers(workers, threadCount);
+            finished  = TestHandles;
+            workers   = TestWorkers;
+
+            
+            EngineWorkerPool.GetWorkers(workers, threadCount - 1);
             
             for (int n = 0; n < threadCount; n++)
             {
@@ -95,11 +103,16 @@ internal struct QueryJob<T1>
                 var length      = chunk.Length / threadCount;
                 var chunk1      = new Chunk<T1>(chunk.Chunk1,       start, length);
                 var entities    = new ChunkEntities(chunk.Entities, start, length);
-                var worker      = workers[n];
-                finished[n]     = worker.finished;
-                worker.Signal(() => {
-                    localAction(chunk1, entities);
-                });
+                if (n < threadCount - 1) {
+                    var worker      = workers[n];
+                    finished[n]     = worker.finished;
+                    worker.Signal(() => {
+                        localAction(chunk1, entities);
+                    });
+                    continue;
+                }
+                localAction(chunk1, entities);
+                break;
             }
             WaitHandle.WaitAll(finished);
         }

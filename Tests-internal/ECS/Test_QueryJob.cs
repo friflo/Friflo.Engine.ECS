@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -41,7 +42,7 @@ public static class Test_QueryJob
     // [Test]
     public static void Test_QueryJob_RunParallel()
     {
-        var count       = 100_000;
+        var count       = 1_000;
         var entityCount = 100_000;
         
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -51,9 +52,13 @@ public static class Test_QueryJob
         }
         
         var query = store.Query<MyComponent1>();
+        var forEachCount    = 0;
+        var lengthSum       = 0L;
         
         var job = query.ForEach((component1, entities) =>
         {
+            Interlocked.Increment(ref forEachCount);
+            Interlocked.Add(ref lengthSum, entities.Length);
             var componentSpan = component1.Span;
             foreach (ref var c in componentSpan) {
                 ++c.a;
@@ -65,11 +70,14 @@ public static class Test_QueryJob
 
         var sw = new Stopwatch();
         sw.Start();
-        for (int n = 0; n < count; n++) {
+        for (int n = 0; n < count - 1; n++) {
             job.RunParallel();
         }
         var duration = sw.ElapsedMilliseconds;
         Console.Write($"JobQuery.RunParallel() - entities: {entityCount}, threads: {job.ThreadCount}, count: {count}, duration: {duration}" );
+        
+        Assert.AreEqual(job.ThreadCount * count, forEachCount);
+        Assert.AreEqual(entityCount     * count, lengthSum);
     }
 
     /// all TPL <see cref="Parallel"/> methods allocate memory. SO they are out.
