@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -9,14 +8,18 @@ using System.Threading;
 // ReSharper disable CheckNamespace
 namespace Friflo.Engine.ECS;
 
+public interface IWorkerAction {
+    void Execute();
+}
+
 internal sealed class EngineWorker
 {
-    private  readonly   string                  name;
-    private  readonly   EngineWorkerPool        pool;
-    private  readonly   AutoResetEvent          start;
-    internal readonly   AutoResetEvent          finished;
-    private             Action                  action;
-    private             bool                    running;
+    private  readonly   string              name;
+    private  readonly   EngineWorkerPool    pool;
+    private  readonly   AutoResetEvent      start;
+    internal readonly   AutoResetEvent      finished;
+    private             IWorkerAction       action;
+    private             bool                running;
 
     public   override   string              ToString() => GetString();
 
@@ -32,7 +35,7 @@ internal sealed class EngineWorker
         thread.Start();
     }
     
-    internal void Signal(Action action)
+    internal void Signal(IWorkerAction action)
     {
         this.action = action;
         start.Set(); // Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
@@ -46,7 +49,7 @@ internal sealed class EngineWorker
                 start.WaitOne();
                 running = true;
                 // ReSharper disable once PossibleNullReferenceException - waiting on finished ensures action is not null
-                action();
+                action.Execute();
             }
             finally {
                 finished.Set();
@@ -91,8 +94,8 @@ internal sealed class EngineWorkerPool
     
     internal static void GetWorkers(EngineWorker[] workers, int count)
     {
-        var             pool        = Instance; 
-        var             poolStack   = pool.stack;
+        var pool        = Instance; 
+        var poolStack   = pool.stack;
         
         // for (int n = 0; n < count; n++) { pool.availableThreads.WaitOne(); }
         lock (poolStack)

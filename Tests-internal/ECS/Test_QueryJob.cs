@@ -64,15 +64,17 @@ public static class Test_QueryJob
                 ++c.a;
             }
         });
-        job.ThreadCount             = 1;
+        job.ThreadCount             = 2;
         job.MinParallelChunkLength  = 1000;
-        job.RunParallel();
+        job.RunParallel();  // force one time allocation of IJobAction
 
+        var start = Mem.GetAllocatedBytes();
         var sw = new Stopwatch();
         sw.Start();
         for (int n = 0; n < count - 1; n++) {
             job.RunParallel();
         }
+        Mem.AssertNoAlloc(start);
         var duration = sw.ElapsedMilliseconds;
         Console.Write($"JobQuery.RunParallel() - entities: {entityCount}, threads: {job.ThreadCount}, count: {count}, duration: {duration}" );
         

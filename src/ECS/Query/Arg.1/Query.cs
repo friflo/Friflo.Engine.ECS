@@ -58,6 +58,15 @@ internal struct QueryJob<T1>
     
     private readonly    ArchetypeQuery<T1>                  query;                  //  8
     private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
+    private             JobAction                           jobAction;              //  8
+    
+    private class JobAction : IWorkerAction {
+        internal    Action<Chunk<T1>, ChunkEntities>    action;
+        internal    Chunk<T1>                           chunk1;
+        internal    ChunkEntities                       entities;
+        
+        public void Execute() => action(chunk1, entities);
+    }
     
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
         this.query              = query;
@@ -65,7 +74,7 @@ internal struct QueryJob<T1>
         ThreadCount             = Environment.ProcessorCount;
         MinParallelChunkLength  = 1000;
     }
-    
+
     internal void Run()
     {
         foreach (Chunks<T1> chunk in query.Chunks) {
@@ -94,27 +103,25 @@ internal struct QueryJob<T1>
             // finished  ??= new WaitHandle  [threadCount];    // todo pool array
             // workers   ??= new EngineWorker[threadCount];    // todo pool array
             
-            finished  = TestHandles;
-            workers   = TestWorkers;
-
+            jobAction ??= new JobAction{ action = localAction };
+            finished    = TestHandles;
+            workers     = TestWorkers;
             
             EngineWorkerPool.GetWorkers(workers, threadCount - 1);
             
             for (int n = 0; n < threadCount; n++)
             {
-                var start       = n * step;
-                var length      = chunk.Length / threadCount;
-                var chunk1      = new Chunk<T1>(chunk.Chunk1,       start, length);
-                var entities    = new ChunkEntities(chunk.Entities, start, length);
+                var start           = n * step;
+                var length          = chunk.Length / threadCount;
+                jobAction.chunk1    = new Chunk<T1>(chunk.Chunk1,       start, length);
+                jobAction.entities  = new ChunkEntities(chunk.Entities, start, length);
                 if (n < threadCount - 1) {
                     var worker      = workers[n];
                     finished[n]     = worker.finished;
-                    worker.Signal(() => {
-                        localAction(chunk1, entities);
-                    });
+                    worker.Signal(jobAction);
                     continue;
                 }
-                localAction(chunk1, entities);
+                jobAction.Execute();
                 break;
             }
             WaitHandle.WaitAll(finished);
