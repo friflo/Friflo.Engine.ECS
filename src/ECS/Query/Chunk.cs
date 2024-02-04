@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -35,6 +36,9 @@ public readonly struct Chunk<T>
     
     /// <summary> Return the number of components in a <see cref="Chunk{T}"/>. </summary>
     public   readonly   int         Length;     //  4
+    
+    // ReSharper disable once NotAccessedField.Local
+    private  readonly   int         start;      //  4
     
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
@@ -106,13 +110,20 @@ public readonly struct Chunk<T>
 
 
     internal Chunk(T[] values, T[] copy, int length) {
-        Length = length;
+        Length      = length;
         if (copy == null) {
             this.values = values;
         } else {
             Array.Copy(values, copy, length);
             this.values = copy;
         }
+    }
+    
+    [ExcludeFromCodeCoverage] // todo remove
+    internal Chunk(Chunk<T> chunk, int start, int length) {
+        Length      = length;
+        this.start  = start;
+        values      = chunk.values;
     }
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>

@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 // ReSharper disable InconsistentNaming
@@ -32,6 +33,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     /// <summary> The <see cref="Archetype"/> containing the <see cref="Chunk{T}"/> components. </summary>
     public   readonly   Archetype           Archetype;  //  8
     
+    // ReSharper disable once NotAccessedField.Local
+    private  readonly   int                 start;
+    
     /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
     //
@@ -41,6 +45,14 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     internal ChunkEntities(Archetype archetype, int componentLen) {
         Archetype   = archetype;
         entityIds   = archetype.entityIds;
+        Length      = componentLen;
+    }
+    
+    [ExcludeFromCodeCoverage] // todo remove
+    internal ChunkEntities(ChunkEntities entities, int start, int componentLen) {
+        Archetype   = entities.Archetype;
+        entityIds   = entities.entityIds;
+        this.start  = start;
         Length      = componentLen;
     }
     
