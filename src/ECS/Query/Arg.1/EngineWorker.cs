@@ -12,38 +12,52 @@ namespace Friflo.Engine.ECS;
 internal sealed class EngineWorker
 {
     private  readonly   Thread              thread;
-    private  readonly   EngineThreadPool    pool;
+    private  readonly   EngineWorkerPool    pool;
     internal readonly   AutoResetEvent      finished;
+    private             Action              action;
 
     public   override   string              ToString() => thread.Name;
 
-    internal EngineWorker(EngineThreadPool pool, int id) {
+    internal EngineWorker(EngineWorkerPool pool, int id) {
         this.pool   = pool;
+        finished    = new AutoResetEvent(false); // false: Not signaled
         thread      = new Thread(Run) {
             Name = $"{nameof(EngineWorker)} {id}"
         };
     }
     
+    internal void Signal(Action action)
+    {
+        this.action = action;
+        finished.Set(); // Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
+    }
+    
     private void Run()
     {
-        var poolStack = pool.stack;
-        lock (poolStack) {
-            poolStack.Push(this);
+        try {
+            finished.WaitOne();
+            action();
         }
-        pool.availableThreads.Release();
+        finally {
+            var poolStack = pool.stack;
+            lock (poolStack) {
+                poolStack.Push(this);
+            }
+            pool.availableThreads.Release();
+        }
     }
 }
 
 
-internal sealed class EngineThreadPool
+internal sealed class EngineWorkerPool
 {
-    internal static readonly EngineThreadPool   Instance = new();
+    internal static readonly EngineWorkerPool   Instance = new();
     
     internal readonly   Stack<EngineWorker>     stack;
     internal readonly   Semaphore               availableThreads;
     private             int                     threadSeq;
     
-    private EngineThreadPool()
+    private EngineWorkerPool()
     {
         stack               = new Stack<EngineWorker>();
         availableThreads    = new Semaphore(0, Environment.ProcessorCount, "available engine threads");
@@ -51,16 +65,18 @@ internal sealed class EngineThreadPool
     
     internal EngineWorker Execute(Action action)
     {
-        EngineWorker engineWorker;
+        var             poolStack = stack;
+        EngineWorker    engineWorker;
         availableThreads.WaitOne();
-        var poolStack = stack;
+        
         lock (poolStack)
         {
             if (!poolStack.TryPop(out engineWorker)) {
                 engineWorker = new EngineWorker(this, ++threadSeq);
             }
         }
-        // engineThread.Run(action)
+        engineWorker.Signal(action);
+
         return engineWorker;
     }
 }

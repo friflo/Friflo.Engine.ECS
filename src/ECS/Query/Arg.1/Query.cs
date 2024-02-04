@@ -84,7 +84,7 @@ internal readonly struct QueryJob<T1>
                 var chunk1          = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
                 var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
 
-                var thread = EngineThreadPool.Instance.Execute(() => {
+                var thread = EngineWorkerPool.Instance.Execute(() => {
                     localAction(chunk1, entities);
                 });
                 finished[n] = thread.finished;
