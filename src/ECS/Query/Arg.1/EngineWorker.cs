@@ -5,22 +5,26 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal sealed class EngineThread
+internal sealed class EngineWorker
 {
     private  readonly   Thread              thread;
     private  readonly   EngineThreadPool    pool;
     internal readonly   AutoResetEvent      finished;
-    
-    internal EngineThread(EngineThreadPool pool, int id) {
+
+    public   override   string              ToString() => thread.Name;
+
+    internal EngineWorker(EngineThreadPool pool, int id) {
         this.pool   = pool;
-        thread      = new Thread(Run);
-        thread.Name = $"EngineThread {id}";
+        thread      = new Thread(Run) {
+            Name = $"{nameof(EngineWorker)} {id}"
+        };
     }
     
-    internal void Run()
+    private void Run()
     {
         var poolStack = pool.stack;
         lock (poolStack) {
@@ -35,28 +39,29 @@ internal sealed class EngineThreadPool
 {
     internal static readonly EngineThreadPool   Instance = new();
     
-    internal readonly   Stack<EngineThread>     stack;
+    internal readonly   Stack<EngineWorker>     stack;
     internal readonly   Semaphore               availableThreads;
     private             int                     threadSeq;
     
     private EngineThreadPool()
     {
-        stack               = new Stack<EngineThread>();
+        stack               = new Stack<EngineWorker>();
         availableThreads    = new Semaphore(0, Environment.ProcessorCount, "available engine threads");
     }
     
-    internal EngineThread Execute(Action action)
+    internal EngineWorker Execute(Action action)
     {
-        EngineThread engineThread;
+        EngineWorker engineWorker;
         availableThreads.WaitOne();
-        lock (stack)
+        var poolStack = stack;
+        lock (poolStack)
         {
-            if (!stack.TryPop(out engineThread)) {
-                engineThread = new EngineThread(this, ++threadSeq);
+            if (!poolStack.TryPop(out engineWorker)) {
+                engineWorker = new EngineWorker(this, ++threadSeq);
             }
         }
         // engineThread.Run(action)
-        return engineThread;
+        return engineWorker;
     }
 }
 
