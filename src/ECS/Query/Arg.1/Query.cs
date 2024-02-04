@@ -38,14 +38,10 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     }
     
     /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>. </summary> 
-    public      QueryChunks <T1>  Chunks                                      => new (this);
-    
+    public      QueryChunks <T1>  Chunks                                    => new (this);
     
     [ExcludeFromCodeCoverage]
-    internal QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)
-    {
-        return new QueryJob<T1>(this, action);
-    }
+    internal QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)  => new (this, action);
 }
 
 [ExcludeFromCodeCoverage]
@@ -82,7 +78,7 @@ internal readonly struct QueryJob<T1>
             {
                 var chunk1          = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
                 var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
-                chunkSections[n]   = new Chunks<T1>(chunk1, entities);
+                chunkSections[n]    = new Chunks<T1>(chunk1, entities);
             }
             var action2 = action;
             Parallel.ForEach(chunkSections, chunks => {
