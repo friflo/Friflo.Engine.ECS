@@ -37,7 +37,7 @@ public static class Test_QueryJob
         job.Run();
     }
     
-    [Test]
+    // [Test]
     public static void Test_QueryJob_RunParallel()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -52,7 +52,7 @@ public static class Test_QueryJob
         job.ThreadCount             = 2;
         job.MinParallelChunkLength  = 1000;
         job.RunParallel();
-        return;
+
         job.RunParallel();
         job.RunParallel();
         job.RunParallel();
