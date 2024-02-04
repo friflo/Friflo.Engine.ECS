@@ -74,7 +74,7 @@ internal sealed class EngineWorker
 
 internal sealed class EngineWorkerPool
 {
-    internal static readonly EngineWorkerPool   Instance = new();
+    private  static readonly EngineWorkerPool   Instance = new();
     
     internal readonly   Stack<EngineWorker>     stack;
     internal readonly   Semaphore               availableThreads;
@@ -87,16 +87,17 @@ internal sealed class EngineWorkerPool
         availableThreads    = new Semaphore(count, count, "available engine threads");
     }
     
-    internal EngineWorker Execute(Action action)
+    internal static EngineWorker Execute(Action action)
     {
-        var             poolStack = stack;
+        var             pool        = Instance; 
+        var             poolStack   = pool.stack;
         EngineWorker    engineWorker;
-        availableThreads.WaitOne();
+        pool.availableThreads.WaitOne();
         
         lock (poolStack)
         {
             if (!poolStack.TryPop(out engineWorker)) {
-                engineWorker = new EngineWorker(this, ++threadSeq);
+                engineWorker = new EngineWorker(pool, ++pool.threadSeq);
             }
         }
         engineWorker.Signal(action);
