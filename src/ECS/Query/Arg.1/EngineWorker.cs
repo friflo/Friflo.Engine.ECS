@@ -15,8 +15,9 @@ internal sealed class EngineWorker
     private  readonly   EngineWorkerPool    pool;
     internal readonly   AutoResetEvent      finished;
     private             Action              action;
+    private             bool                running;
 
-    public   override   string              ToString() => thread.Name;
+    public   override   string              ToString() => GetString();
 
     internal EngineWorker(EngineWorkerPool pool, int id) {
         this.pool   = pool;
@@ -36,15 +37,29 @@ internal sealed class EngineWorker
     {
         try {
             finished.WaitOne();
+            running = true;
             action();
         }
         finally {
+            running = false;
+            action  = null;
             var poolStack = pool.stack;
             lock (poolStack) {
                 poolStack.Push(this);
             }
             pool.availableThreads.Release();
         }
+    }
+    
+    private string GetString()
+    {
+        if (action == null) {
+            return thread.Name + " - idle";
+        }
+        if (running) {
+            return thread.Name + " - running";
+        }
+        return thread.Name + " - waiting";
     }
 }
 
