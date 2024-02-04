@@ -74,6 +74,7 @@ internal struct QueryJob<T1>
     {
         var             localAction = action;
         WaitHandle[]    finished    = null;
+        EngineWorker[]  workers     = null;
         var             threadCount = ThreadCount;
         
         foreach (Chunks<T1> chunk in query.Chunks)
@@ -83,18 +84,21 @@ internal struct QueryJob<T1>
                 continue;
             }
             var step    = chunk.Length / threadCount;
-            finished  ??= new WaitHandle[threadCount];   // todo pool array
+            finished  ??= new WaitHandle  [threadCount];    // todo pool array
+            workers   ??= new EngineWorker[threadCount];    // todo pool array
+            
+            EngineWorkerPool.GetWorkers(workers, threadCount);
             
             for (int n = 0; n < threadCount; n++)
             {
                 var start       = n * step;
                 var chunk1      = new Chunk<T1>(chunk.Chunk1,       start, 42);
                 var entities    = new ChunkEntities(chunk.Entities, start, 42);
-
-                var thread = EngineWorkerPool.Execute(() => {
+                var worker      = workers[n];
+                finished[n]     = worker.finished;
+                worker.Signal(() => {
                     localAction(chunk1, entities);
                 });
-                finished[n] = thread.finished;
             }
             WaitHandle.WaitAll(finished);
         }

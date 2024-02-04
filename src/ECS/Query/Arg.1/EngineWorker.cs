@@ -11,7 +11,7 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class EngineWorker
 {
-    private  readonly   Thread              thread;
+    private  readonly   string              name;
     private  readonly   EngineWorkerPool    pool;
     private  readonly   AutoResetEvent      start;
     internal readonly   AutoResetEvent      finished;
@@ -24,8 +24,10 @@ internal sealed class EngineWorker
         this.pool   = pool;
         start       = new AutoResetEvent(false); // false: Not signaled
         finished    = new AutoResetEvent(false); // false: Not signaled
-        thread      = new Thread(Run) {
-            Name = $"{nameof(EngineWorker)} {id}"
+        name        = $"{nameof(EngineWorker)} {id}";
+         var thread = new Thread(Run) {
+            IsBackground    = true,
+            Name            = name
         };
         thread.Start();
     }
@@ -54,7 +56,7 @@ internal sealed class EngineWorker
                 lock (poolStack) {
                     poolStack.Push(this);
                 }
-                pool.availableThreads.Release();
+                // pool.availableThreads.Release();
             }
         }
     }
@@ -62,12 +64,12 @@ internal sealed class EngineWorker
     private string GetString()
     {
         if (action == null) {
-            return thread.Name + " - idle";
+            return name + " - idle";
         }
         if (running) {
-            return thread.Name + " - running";
+            return name + " - running";
         }
-        return thread.Name + " - waiting";
+        return name + " - waiting";
     }
 }
 
@@ -77,32 +79,37 @@ internal sealed class EngineWorkerPool
     private  static readonly EngineWorkerPool   Instance = new();
     
     internal readonly   Stack<EngineWorker>     stack;
-    internal readonly   Semaphore               availableThreads;
+//  internal readonly   Semaphore               availableThreads;
     private             int                     threadSeq;
     
     private EngineWorkerPool()
     {
         stack               = new Stack<EngineWorker>();
-        var count           = Environment.ProcessorCount;
-        availableThreads    = new Semaphore(count, count, "available engine threads");
+    //  var count           = Environment.ProcessorCount;
+    //  availableThreads    = new Semaphore(count, count, "available engine threads");
     }
     
-    internal static EngineWorker Execute(Action action)
+    internal static void GetWorkers(EngineWorker[] workers, int count)
     {
         var             pool        = Instance; 
         var             poolStack   = pool.stack;
-        EngineWorker    engineWorker;
-        pool.availableThreads.WaitOne();
         
+        // for (int n = 0; n < count; n++) { pool.availableThreads.WaitOne(); }
         lock (poolStack)
         {
-            if (!poolStack.TryPop(out engineWorker)) {
-                engineWorker = new EngineWorker(pool, ++pool.threadSeq);
+            for (int n = 0; n < count; n++) {
+                if (!poolStack.TryPop(out var worker)) {
+                    worker = new EngineWorker(pool, ++pool.threadSeq);
+                }
+                workers[n] = worker; 
             }
         }
-        engineWorker.Signal(action);
-
-        return engineWorker;
     }
+    
+    /* internal static void ReturnWorkers(EngineWorker[] workers, int count)
+    {
+        var             pool        = Instance; 
+        for (int n = 0; n < count; n++) { pool.availableThreads.Release(); }
+    } */
 }
 
