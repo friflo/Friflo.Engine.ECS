@@ -11,12 +11,12 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class EngineWorker
 {
-    private  readonly   string              name;
-    private  readonly   EngineWorkerPool    pool;
-    private  readonly   AutoResetEvent      start;
-    internal readonly   AutoResetEvent      finished;
-    private             Action              action;
-    private             bool                running;
+    private  readonly   string                  name;
+    private  readonly   EngineWorkerPool        pool;
+    private  readonly   AutoResetEvent          start;
+    internal readonly   AutoResetEvent          finished;
+    private             Action                  action;
+    private             bool                    running;
 
     public   override   string              ToString() => GetString();
 
@@ -79,7 +79,7 @@ internal sealed class EngineWorkerPool
     private  static readonly EngineWorkerPool   Instance = new();
     
     internal readonly   Stack<EngineWorker>     stack;
-//  internal readonly   Semaphore               availableThreads;
+//  internal readonly   SemaphoreSlim           availableThreads;
     private             int                     threadSeq;
     
     private EngineWorkerPool()

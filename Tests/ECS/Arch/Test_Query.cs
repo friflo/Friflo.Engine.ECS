@@ -52,18 +52,44 @@ public static class Test_Query
     [Test]
     public static void Test_generic_Query_with_AllTags()
     {
-        var store  =    new EntityStore();
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
+        entity1.AddComponent<Position>();
+        entity1.AddComponent<Rotation>();
+        entity1.AddComponent<Scale3>();
+        entity1.AddComponent<MyComponent1>();
+        entity1.AddComponent<MyComponent2>();
+
+        var entity2 = store.CreateEntity();
+        entity2.AddComponent<Position>();
+        entity2.AddComponent<Rotation>();
+        entity2.AddComponent<Scale3>();
+        entity2.AddComponent<MyComponent1>();
+        entity2.AddComponent<MyComponent2>();
+        
         var query1 =    store.Query<Position>();
         var query2 =    store.Query<Position, Rotation>();
         var query3 =    store.Query<Position, Rotation, Scale3>();
         var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>();
         var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
         
-        AreEqual("Query: [Position]  EntityCount: 0",                                               query1.ToString());
-        AreEqual("Query: [Position, Rotation]  EntityCount: 0",                                     query2.ToString());
-        AreEqual("Query: [Position, Rotation, Scale3]  EntityCount: 0",                             query3.ToString());
-        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]  EntityCount: 0",               query4.ToString());
-        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]  EntityCount: 0", query5.ToString());
+        AreEqual("Query: [Position]  EntityCount: 2",                                               query1.ToString());
+        AreEqual("Query: [Position, Rotation]  EntityCount: 2",                                     query2.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3]  EntityCount: 2",                             query3.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1]  EntityCount: 2",               query4.ToString());
+        AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2]  EntityCount: 2", query5.ToString());
+        
+        AreEqual("QueryChunks[1]  Components: [Position]",                                                  query1.Chunks.ToString());
+        AreEqual("QueryChunks[1]  Components: [Position, Rotation]",                                        query2.Chunks.ToString());
+        AreEqual("QueryChunks[1]  Components: [Position, Rotation, Scale3]",                                query3.Chunks.ToString());
+        AreEqual("QueryChunks[1]  Components: [Position, Rotation, Scale3, MyComponent1]",                  query4.Chunks.ToString());
+        AreEqual("QueryChunks[1]  Components: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",    query5.Chunks.ToString());
+        
+        AreEqual(2, query1.Chunks.EntityCount);
+        AreEqual(2, query2.Chunks.EntityCount);
+        AreEqual(2, query3.Chunks.EntityCount);
+        AreEqual(2, query4.Chunks.EntityCount);
+        AreEqual(2, query5.Chunks.EntityCount);
         
         var tags = Tags.Get<TestTag>();
         AreEqual("Query: [Position, #TestTag]  EntityCount: 0",                                                 query1.AllTags(tags).ToString());

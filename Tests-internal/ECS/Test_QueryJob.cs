@@ -42,7 +42,7 @@ public static class Test_QueryJob
     // [Test]
     public static void Test_QueryJob_RunParallel()
     {
-        long count       = 100_000;
+        long count       = 10; // 100_000;
         long entityCount = 100_000;
         
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -104,5 +104,22 @@ public static class Test_QueryJob
         start = Mem.GetAllocatedBytes();
         Parallel.Invoke(actions);
         Assert.IsTrue(Mem.GetAllocatedBytes() - start > 0);
+    }
+    
+    [Test]
+    public static void Test_QueryJob_ToString()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        for (int n = 0; n < 32; n++) {
+            archetype.CreateEntity();
+        }
+        
+        ArchetypeQuery<MyComponent1> query = store.Query<MyComponent1>();
+        
+        var job = query.ForEach((component1, entities) => { });
+        
+        Assert.AreEqual(32, job.Chunks.EntityCount);
+        Assert.AreEqual("QueryChunks[1]  Components: [MyComponent1]", job.ToString());
     }
 }

@@ -50,6 +50,9 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
 internal struct QueryJob<T1>
     where T1 : struct, IComponent
 {
+    internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
+    public  override    string                              ToString()  => query.GetQueryChunksString();
+    
     public              int                                 ThreadCount;            //  4
     public              int                                 MinParallelChunkLength; //  4
     
