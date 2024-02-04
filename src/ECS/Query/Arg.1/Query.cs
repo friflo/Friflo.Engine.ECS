@@ -87,8 +87,9 @@ internal struct QueryJob<T1>
             
             for (int n = 0; n < threadCount; n++)
             {
-                var chunk1          = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
-                var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
+                var start       = n * step;
+                var chunk1      = new Chunk<T1>(chunk.Chunk1,       start, 42);
+                var entities    = new ChunkEntities(chunk.Entities, start, 42);
 
                 var thread = EngineWorkerPool.Instance.Execute(() => {
                     localAction(chunk1, entities);
