@@ -66,17 +66,20 @@ internal readonly struct QueryJob<T1>
     
     internal void RunParallel()
     {
+        var             localAction = action;
+        WaitHandle[]    finished    = null;
+        var             threadCount = Environment.ProcessorCount;
+        
         foreach (Chunks<T1> chunk in query.Chunks)
         {
             if (chunk.Length < 100) {
-                action(chunk.Chunk1, chunk.Entities);
+                localAction(chunk.Chunk1, chunk.Entities);
                 continue;
             }
-            var localAction = action;
-            var step        = chunk.Length / Environment.ProcessorCount;
-            var finished    = new WaitHandle[Environment.ProcessorCount];   // todo pool array
+            var step    = chunk.Length / threadCount;
+            finished  ??= new WaitHandle[threadCount];   // todo pool array
             
-            for (int n = 0; n < Environment.ProcessorCount; n++)
+            for (int n = 0; n < threadCount; n++)
             {
                 var chunk1          = new Chunk<T1>(chunk.Chunk1,       n * step, 42);
                 var entities        = new ChunkEntities(chunk.Entities, n * step, 42);
