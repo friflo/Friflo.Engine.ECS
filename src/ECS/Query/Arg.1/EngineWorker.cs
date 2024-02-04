@@ -35,19 +35,23 @@ internal sealed class EngineWorker
     
     private void Run()
     {
-        try {
-            finished.WaitOne();
-            running = true;
-            action();
-        }
-        finally {
-            running = false;
-            action  = null;
-            var poolStack = pool.stack;
-            lock (poolStack) {
-                poolStack.Push(this);
+        while (true)
+        {
+            try {
+                finished.WaitOne();
+                running = true;
+                // ReSharper disable once PossibleNullReferenceException - waiting on finished ensures action is not null
+                action();
             }
-            pool.availableThreads.Release();
+            finally {
+                running = false;
+                action  = null;
+                var poolStack = pool.stack;
+                lock (poolStack) {
+                    poolStack.Push(this);
+                }
+                pool.availableThreads.Release();
+            }
         }
     }
     
