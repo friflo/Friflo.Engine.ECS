@@ -49,6 +49,7 @@ public static class Test_QueryJob
         var query = store.Query<MyComponent1>();
         
         var job = query.ForEach((component1, entities) => { });
+        job.ThreadCount = 2;
         job.RunParallel();
         
         job = query.ForEach((Chunk<MyComponent1> component1, ChunkEntities entities) => { });

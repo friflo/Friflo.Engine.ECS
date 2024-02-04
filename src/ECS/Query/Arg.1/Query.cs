@@ -78,7 +78,7 @@ internal struct QueryJob<T1>
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
-            if (chunk.Length < MinParallelChunkLength) {
+            if (threadCount <= 1 || chunk.Length < MinParallelChunkLength) {
                 localAction(chunk.Chunk1, chunk.Entities);
                 continue;
             }

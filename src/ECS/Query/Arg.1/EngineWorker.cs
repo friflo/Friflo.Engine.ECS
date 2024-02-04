@@ -13,6 +13,7 @@ internal sealed class EngineWorker
 {
     private  readonly   Thread              thread;
     private  readonly   EngineWorkerPool    pool;
+    private  readonly   AutoResetEvent      start;
     internal readonly   AutoResetEvent      finished;
     private             Action              action;
     private             bool                running;
@@ -21,6 +22,7 @@ internal sealed class EngineWorker
 
     internal EngineWorker(EngineWorkerPool pool, int id) {
         this.pool   = pool;
+        start       = new AutoResetEvent(false); // false: Not signaled
         finished    = new AutoResetEvent(false); // false: Not signaled
         thread      = new Thread(Run) {
             Name = $"{nameof(EngineWorker)} {id}"
@@ -31,7 +33,7 @@ internal sealed class EngineWorker
     internal void Signal(Action action)
     {
         this.action = action;
-        finished.Set(); // Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
+        start.Set(); // Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
     }
     
     private void Run()
@@ -39,12 +41,13 @@ internal sealed class EngineWorker
         while (true)
         {
             try {
-                finished.WaitOne();
+                start.WaitOne();
                 running = true;
                 // ReSharper disable once PossibleNullReferenceException - waiting on finished ensures action is not null
                 action();
             }
             finally {
+                finished.Set();
                 running = false;
                 action  = null;
                 var poolStack = pool.stack;
