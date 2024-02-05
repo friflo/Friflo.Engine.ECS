@@ -23,12 +23,14 @@ internal struct QueryJob<T1>
     private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
     private             JobAction                           jobAction;              //  8
     
-    private class JobAction : IWorkerAction {
+    private class JobAction : WorkerAction {
         internal    Action<Chunk<T1>, ChunkEntities>    action;
         internal    Chunk<T1>                           chunk1;
         internal    ChunkEntities                       entities;
+        internal    WaitHandle[]                        finished;
+        internal    EngineWorker[]                      workers;
         
-        public void Execute() => action(chunk1, entities);
+        internal  override void Execute() => action(chunk1, entities);
     }
     
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
@@ -45,16 +47,10 @@ internal struct QueryJob<T1>
         }
     }
     
-    // ReSharper disable StaticMemberInGenericType
-    private static readonly WaitHandle[]    TestHandles = new WaitHandle  [1];
-    private static readonly EngineWorker[]  TestWorkers = new EngineWorker[1];
-    
     internal void RunParallel()
     {
-        var             localAction = action;
-        WaitHandle[]    finished    = null;
-        EngineWorker[]  workers     = null;
-        var             threadCount = ThreadCount;
+        var localAction = action;
+        var threadCount = ThreadCount;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
@@ -63,31 +59,29 @@ internal struct QueryJob<T1>
                 continue;
             }
             var step    = chunk.Length / threadCount;
-            // finished  ??= new WaitHandle  [threadCount];    // todo pool array
-            // workers   ??= new EngineWorker[threadCount];    // todo pool array
-            
-            jobAction ??= new JobAction{ action = localAction };
-            finished    = TestHandles;
-            workers     = TestWorkers;
-            
-            EngineWorkerPool.GetWorkers(workers, threadCount - 1);
+            var job     = jobAction ??= new JobAction {
+                action      = localAction,
+                finished    = new WaitHandle  [threadCount - 1],    // todo pool array
+                workers     = new EngineWorker[threadCount - 1]     // todo pool array
+            };
+            EngineWorkerPool.GetWorkers(job.workers, threadCount - 1);
             
             for (int n = 0; n < threadCount; n++)
             {
-                var start           = n * step;
-                var length          = chunk.Length / threadCount;
-                jobAction.chunk1    = new Chunk<T1>(chunk.Chunk1,       start, length);
-                jobAction.entities  = new ChunkEntities(chunk.Entities, start, length);
+                var start     = n * step;
+                var length    = chunk.Length / threadCount;
+                job.chunk1    = new Chunk<T1>(chunk.Chunk1,       start, length);
+                job.entities  = new ChunkEntities(chunk.Entities, start, length);
                 if (n < threadCount - 1) {
-                    var worker      = workers[n];
-                    finished[n]     = worker.finished;
-                    worker.Signal(jobAction);
+                    var worker      = job.workers[n];
+                    job.finished[n] = worker.finished;
+                    worker.Signal(job);
                     continue;
                 }
-                jobAction.Execute();
+                job.Execute();
                 break;
             }
-            WaitHandle.WaitAll(finished);
+            WaitHandle.WaitAll(job.finished);
         }
     }
 }

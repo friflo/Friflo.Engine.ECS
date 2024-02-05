@@ -8,8 +8,8 @@ using System.Threading;
 // ReSharper disable CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public interface IWorkerAction {
-    void Execute();
+internal abstract class WorkerAction {
+    internal abstract void Execute();
 }
 
 internal sealed class EngineWorker
@@ -18,7 +18,7 @@ internal sealed class EngineWorker
     private  readonly   EngineWorkerPool    pool;
     private  readonly   AutoResetEvent      start;
     internal readonly   AutoResetEvent      finished;
-    private             IWorkerAction       action;
+    private             WorkerAction        action;
     private             bool                running;
 
     public   override   string              ToString() => GetString();
@@ -35,7 +35,7 @@ internal sealed class EngineWorker
         thread.Start();
     }
     
-    internal void Signal(IWorkerAction action)
+    internal void Signal(WorkerAction action)
     {
         this.action = action;
         start.Set(); // Sets the state of the event to signaled, allowing one or more waiting threads to proceed.
