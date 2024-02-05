@@ -39,11 +39,11 @@ public static class Test_QueryJob
         job.Run();
     }
     
-    // [Test]
+    [Test]
     public static void Test_QueryJob_RunParallel()
     {
-        long count       = 10; // 100_000;
-        long entityCount = 100_000;
+        long count       = 10;      // 100_000;
+        long entityCount = 10_000;  // 100_000;
         int  threadCount = 2;
         
         var store       = new EntityStore(PidType.UsePidAsId);
@@ -72,7 +72,7 @@ public static class Test_QueryJob
         var sw      = new Stopwatch();
         var start   = Mem.GetAllocatedBytes();
         sw.Start();
-        for (int n = 0; n < count - 1; n++) {
+        for (int n = 1; n < count; n++) {
             job.RunParallel();
         }
         Mem.AssertNoAlloc(start);

@@ -10,7 +10,7 @@ using System.Threading;
 namespace Friflo.Engine.ECS;
 
 [ExcludeFromCodeCoverage]
-internal struct QueryJob<T1>
+internal class QueryJob<T1>
     where T1 : struct, IComponent
 {
     internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
@@ -21,14 +21,15 @@ internal struct QueryJob<T1>
     
     private readonly    ArchetypeQuery<T1>                  query;                  //  8
     private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
-    private             JobAction                           jobAction;              //  8
+    private             JobAction[]                         jobActions;             //  8
+    private             WaitHandle[]                        finished;
+    private             EngineWorker[]                      workers;
+
     
     private class JobAction : WorkerAction {
         internal    Action<Chunk<T1>, ChunkEntities>    action;
         internal    Chunk<T1>                           chunk1;
         internal    ChunkEntities                       entities;
-        internal    WaitHandle[]                        finished;
-        internal    EngineWorker[]                      workers;
         
         internal  override void Execute() => action(chunk1, entities);
     }
@@ -59,29 +60,34 @@ internal struct QueryJob<T1>
                 continue;
             }
             var step    = chunk.Length / threadCount;
-            var job     = jobAction ??= new JobAction {
-                action      = localAction,
-                finished    = new WaitHandle  [threadCount - 1],    // todo pool array
-                workers     = new EngineWorker[threadCount - 1]     // todo pool array
-            };
-            EngineWorkerPool.GetWorkers(job.workers, threadCount - 1);
+            finished  ??= new WaitHandle  [threadCount - 1];    // todo pool array
+            workers   ??= new EngineWorker[threadCount - 1];    // todo pool array
+            if (jobActions == null) {
+                jobActions  = new JobAction[threadCount];       // todo pool array
+                for (int n = 0; n < threadCount; n++) {
+                    jobActions[n] = new JobAction { action = localAction };
+                }
+            }
+            EngineWorkerPool.GetWorkers(workers, threadCount - 1);
             
             for (int n = 0; n < threadCount; n++)
             {
-                var start     = n * step;
-                var length    = chunk.Length / threadCount;
-                job.chunk1    = new Chunk<T1>(chunk.Chunk1,       start, length);
-                job.entities  = new ChunkEntities(chunk.Entities, start, length);
+                var start       = n * step;
+                var length      = chunk.Length / threadCount;
+                var job         = jobActions[n];
+                job.chunk1      = new Chunk<T1>(chunk.Chunk1,       start, length);
+                job.entities    = new ChunkEntities(chunk.Entities, start, length);
                 if (n < threadCount - 1) {
-                    var worker      = job.workers[n];
-                    job.finished[n] = worker.finished;
+                    var worker      = workers[n];
+                    finished[n] = worker.finished;
                     worker.Signal(job);
                     continue;
                 }
+                // --- last job task
                 job.Execute();
                 break;
             }
-            WaitHandle.WaitAll(job.finished);
+            WaitHandle.WaitAll(finished);
         }
     }
 }
