@@ -43,7 +43,7 @@ internal class ParallelJobRunner
     
     internal void ExecuteJob(JobTask[] tasks, JobTask task0)
     {
-        if (workersStarted) {
+        if (!workersStarted) {
             StartWorkers();
         }
         jobTasks = tasks;

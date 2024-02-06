@@ -47,31 +47,30 @@ internal class QueryJob<T1>
     
     internal void RunParallel()
     {
-        var localAction = action;
         var runner      = JobRunner;
-        var threadCount = runner.workerCount;
+        var taskCount   = runner.workerCount + 1;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
-            if (threadCount <= 1 || chunk.Length < MinParallelChunkLength) {
-                localAction(chunk.Chunk1, chunk.Entities);
+            if (taskCount <= 1 || chunk.Length < MinParallelChunkLength) {
+                action(chunk.Chunk1, chunk.Entities);
                 continue;
             }
-            var step    = chunk.Length / threadCount;
+            var step = chunk.Length / taskCount;
             if (jobTasks == null) {
-                jobTasks    = new QueryJobTask[threadCount];       // todo pool array
-                for (int n = 0; n < threadCount; n++) {
-                    jobTasks[n] = new QueryJobTask { action = localAction };
+                jobTasks    = new QueryJobTask[taskCount];       // todo pool array
+                for (int n = 0; n < taskCount; n++) {
+                    jobTasks[n] = new QueryJobTask { action = action };
                 }
             }
-            for (int n = 0; n < threadCount; n++)
+            for (int n = 0; n < taskCount; n++)
             {
                 var start       = n * step;
-                var length      = chunk.Length / threadCount;
+                var length      = chunk.Length / taskCount;
                 var task        = jobTasks[n];
                 task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, length);
                 task.entities   = new ChunkEntities(chunk.Entities, start, length);
-                if (n < threadCount - 1) {
+                if (n < taskCount - 1) {
                     continue;
                 }
                 // --- last job task

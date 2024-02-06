@@ -39,7 +39,7 @@ public static class Test_QueryJob
         job.Run();
     }
     
-    // [Test]
+    [Test]
     public static void Test_QueryJob_RunParallel()
     {
         long count       = 10;      // 100_000;
@@ -67,7 +67,7 @@ public static class Test_QueryJob
         });
         job.JobRunner               = new ParallelJobRunner(threadCount);
         job.MinParallelChunkLength  = 1000;
-        job.RunParallel();  // force one time allocation of IJobAction
+        job.RunParallel();  // force one time allocations
 
         var sw      = new Stopwatch();
         var start   = Mem.GetAllocatedBytes();
