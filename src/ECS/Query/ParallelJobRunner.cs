@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Reflection.Emit;
 using System.Threading;
 
 // ReSharper disable InlineTemporaryVariable
@@ -79,33 +80,34 @@ internal sealed class ParallelJobRunner
     // ----------------------------------------- worker thread -----------------------------------------
     private void RunWorker(ParallelJobWorker worker)
     {
+        
         var barrier = 0;
         var index   = worker.index;
+        goto Label;
         
-        while (true)
+    Next:
+        startWorkers.Wait();
+        
+        // --- execute task
+        var task = jobTasks[index];
+        task.Execute();
+            
+        // ---
+        var count = Interlocked.Increment(ref finishedWorkerCount);
+        if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
+        if (count == workerCount)
         {
-            // --- wait until a task is scheduled ...
-            // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
-            while (barrier == Volatile.Read(ref allFinishedBarrier)) {
-                // Thread.SpinWait(1);
-            }
-            barrier++;
-            
-            startWorkers.Wait();
-            
-            // --- execute task
-            var task = jobTasks[index];
-            task.Execute();
-                
-            // ---
-            var count = Interlocked.Increment(ref finishedWorkerCount);
-            if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
-            if (count == workerCount)
-            {
-                startWorkers.Reset();
-                allWorkersFinished.Set();
-            }
+            startWorkers.Reset();
+            allWorkersFinished.Set();
         }
+    Label:
+        // --- wait until a task is scheduled ...
+        // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
+        while (barrier == Volatile.Read(ref allFinishedBarrier)) {
+            // Thread.SpinWait(1);
+        }
+        barrier++;
+        goto Next;
     }
 }
 
