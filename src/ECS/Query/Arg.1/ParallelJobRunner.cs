@@ -12,6 +12,14 @@ internal abstract class JobTask {
     internal abstract void Execute();
 }
 
+/// <remarks>
+/// The main goals of the <see cref="ParallelJobRunner"/>:<br/>
+/// - Minimize calls to synchronization primitives.<br/>
+/// - Use cheap synchronization primitives such as:
+///   <see cref="ManualResetEventSlim"/>, <see cref="Interlocked"/> and <see cref="Volatile"/>.<br/>
+/// - Minimize thread context switches caused by <see cref="ManualResetEventSlim"/> in case calling
+///   <see cref="ManualResetEventSlim.Wait()"/> when the event is not signaled.<br/>
+/// </remarks>
 internal class ParallelJobRunner
 {
 #region fields
