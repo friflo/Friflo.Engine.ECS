@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Reflection.Emit;
 using System.Threading;
 
 // ReSharper disable InlineTemporaryVariable
@@ -42,7 +41,7 @@ internal sealed class ParallelJobRunner
         workersStarted = true;
         for (int index = 0; index < workerCount; index++)
         {
-            var worker = new ParallelJobWorker(index);
+            var worker = new ParallelJobWorker(index + 1);
             var thread = new Thread(() => RunWorker(worker)) {
                 Name            = $"ParallelJobWorker - {index}",
                 IsBackground    = true
@@ -52,7 +51,7 @@ internal sealed class ParallelJobRunner
     }
     
     // ------------------------------------------ job thread -------------------------------------------
-    internal void ExecuteJob(JobTask[] tasks, JobTask task0)
+    internal void ExecuteJob(JobTask[] tasks)
     {
         if (!workersStarted) {
             StartWorkers();
@@ -66,7 +65,7 @@ internal sealed class ParallelJobRunner
 
         Interlocked.Increment(ref allFinishedBarrier);
 
-        task0.Execute();
+        tasks[0].Execute();
             
         allWorkersFinished.Wait();
 

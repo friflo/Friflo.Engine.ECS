@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 
 // ReSharper disable UnusedMember.Local
-// ReSharper disable NotAccessedField.Local
 namespace GameTest;
 
 public static class Program

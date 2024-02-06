@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using Friflo.Engine.ECS;
 
+// ReSharper disable NotAccessedField.Local
 namespace GameTest;
 
 public static class ParallelQuery

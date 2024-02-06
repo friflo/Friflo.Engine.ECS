@@ -74,7 +74,7 @@ internal sealed class QueryJob<T1>
                 }
                 // --- last job task
                 // ReSharper disable once CoVariantArrayConversion
-                JobRunner.ExecuteJob(jobTasks, task);
+                JobRunner.ExecuteJob(jobTasks);
                 break;
             }
         }
