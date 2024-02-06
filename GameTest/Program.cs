@@ -65,13 +65,15 @@ public static class Program
         
         var sw      = new Stopwatch();
         sw.Start();
-        for (int n = 1; n < count; n++) {
+        for (int n = 0; n < count; n++) {
             if (n % log == 0) Console.WriteLine(n);
             job.RunParallel();
         }
         var duration = sw.ElapsedMilliseconds;
-        Console.Write($"JobQuery.RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration}" );
+        Console.WriteLine($"JobQuery.RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration}" );
         
+        Console.WriteLine($"forEachCount: {forEachCount}, lengthSum: {lengthSum}" );
+        Console.WriteLine($"expect:       {2 * threadCount * count}             {2 * entityCount * count}" );
         // Assert.AreEqual(threadCount * count, forEachCount);
         // Assert.AreEqual(entityCount * count, lengthSum);
     }
