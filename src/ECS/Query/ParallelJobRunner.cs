@@ -82,31 +82,30 @@ internal sealed class ParallelJobRunner
         
         var barrier = 0;
         var index   = worker.index;
-        goto Label;
-        
-    Next:
-        startWorkers.Wait();
-        
-        // --- execute task
-        var task = jobTasks[index];
-        task.Execute();
-            
-        // ---
-        var count = Interlocked.Increment(ref finishedWorkerCount);
-        if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
-        if (count == workerCount)
+        while (true)
         {
-            startWorkers.Reset();
-            allWorkersFinished.Set();
+            // --- wait until a task is scheduled ...
+            // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
+            while (barrier == Volatile.Read(ref allFinishedBarrier)) {
+                Thread.SpinWait(30);
+            }
+            barrier++;            
+
+            startWorkers.Wait();
+            
+            // --- execute task
+            var task = jobTasks[index];
+            task.Execute();
+                
+            // ---
+            var count = Interlocked.Increment(ref finishedWorkerCount);
+            if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
+            if (count == workerCount)
+            {
+                startWorkers.Reset();
+                allWorkersFinished.Set();
+            }
         }
-    Label:
-        // --- wait until a task is scheduled ...
-        // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
-        while (barrier == Volatile.Read(ref allFinishedBarrier)) {
-            // Thread.SpinWait(1);
-        }
-        barrier++;
-        goto Next;
     }
 }
 
