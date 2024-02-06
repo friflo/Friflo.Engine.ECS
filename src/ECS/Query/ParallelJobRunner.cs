@@ -20,7 +20,7 @@ internal abstract class JobTask {
 /// - Minimize thread context switches caused by <see cref="ManualResetEventSlim"/> in case calling
 ///   <see cref="ManualResetEventSlim.Wait()"/> when the event is not signaled.<br/>
 /// </remarks>
-internal class ParallelJobRunner
+internal sealed class ParallelJobRunner
 {
 #region fields
     private  readonly   ManualResetEventSlim    startWorkers        = new (false);
@@ -109,7 +109,7 @@ internal class ParallelJobRunner
     }
 }
 
-internal class ParallelJobWorker
+internal sealed class ParallelJobWorker
 {
     internal readonly    int                 index;
     

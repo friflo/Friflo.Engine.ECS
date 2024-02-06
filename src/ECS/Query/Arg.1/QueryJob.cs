@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS;
 
 
 [ExcludeFromCodeCoverage]
-internal class QueryJob<T1>
+internal sealed class QueryJob<T1>
     where T1 : struct, IComponent
 {
     internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
