@@ -14,14 +14,15 @@ internal abstract class JobTask {
 
 internal class ParallelJobRunner
 {
-    internal readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
-    internal readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
-    internal            int                     allFinishedBarrier;
-    internal            int                     finishedWorkerCount;
+#region fields
+    private  readonly   ManualResetEventSlim    startWorkers        = new (false);
+    private  readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
+    private             int                     allFinishedBarrier;
+    private             int                     finishedWorkerCount;
     private             bool                    workersStarted;
-    internal            JobTask[]               jobTasks;
+    private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
-    
+    #endregion
     
     internal ParallelJobRunner(int threadCount) {
         workerCount = threadCount - 1;
@@ -32,8 +33,8 @@ internal class ParallelJobRunner
         workersStarted = true;
         for (int index = 0; index < workerCount; index++)
         {
-            var worker = new ParallelJobWorker(this, index);
-            var thread = new Thread(() => worker.Run()) {
+            var worker = new ParallelJobWorker(index);
+            var thread = new Thread(() => RunWorker(worker)) {
                 Name            = $"ParallelJobWorker - {index}",
                 IsBackground    = true
             };
@@ -66,45 +67,45 @@ internal class ParallelJobRunner
         
         jobTasks = null;
     }
-}
-
-internal class ParallelJobWorker
-{
+    
     // ----------------------------------------- worker thread -----------------------------------------
-    internal void Run()
+    private void RunWorker(ParallelJobWorker worker)
     {
-        var runner          = jobRunner;
-        var barrier         = 0;
+        var barrier = 0;
+        var index   = worker.index;
         
         while (true)
         {
             // --- wait until a task is scheduled ...
             // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
-            while (barrier == Volatile.Read(ref runner.allFinishedBarrier)) { Thread.SpinWait(1);  }
+            while (barrier == Volatile.Read(ref allFinishedBarrier)) {
+                // Thread.SpinWait(1);
+            }
             barrier++;
-
-            runner.startWorkers.Wait();
+            
+            startWorkers.Wait();
             
             // --- execute task
-            var task = runner.jobTasks[index];
+            var task = jobTasks[index];
             task.Execute();
                 
             // ---
-            var count = Interlocked.Increment(ref runner.finishedWorkerCount);
-            if (count > runner.workerCount) throw new InvalidOperationException($"unexpected count: {count}");
-            if (count == runner.workerCount)
+            var count = Interlocked.Increment(ref finishedWorkerCount);
+            if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
+            if (count == workerCount)
             {
-                runner.startWorkers.Reset();
-                runner.allWorkersFinished.Set();
+                startWorkers.Reset();
+                allWorkersFinished.Set();
             }
         }
     }
+}
+
+internal class ParallelJobWorker
+{
+    internal readonly    int                 index;
     
-    private readonly    ParallelJobRunner   jobRunner;
-    private readonly    int                 index;
-    
-    internal ParallelJobWorker(ParallelJobRunner runner, int index) {
-        jobRunner   = runner;
+    internal ParallelJobWorker(int index) {
         this.index  = index;
     }
     

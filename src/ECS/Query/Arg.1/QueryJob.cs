@@ -47,8 +47,7 @@ internal class QueryJob<T1>
     
     internal void RunParallel()
     {
-        var runner      = JobRunner;
-        var taskCount   = runner.workerCount + 1;
+        var taskCount   = JobRunner.workerCount + 1;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
@@ -75,7 +74,7 @@ internal class QueryJob<T1>
                 }
                 // --- last job task
                 // ReSharper disable once CoVariantArrayConversion
-                runner.ExecuteJob(jobTasks, task);
+                JobRunner.ExecuteJob(jobTasks, task);
                 break;
             }
         }

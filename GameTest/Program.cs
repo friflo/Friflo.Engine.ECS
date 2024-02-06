@@ -62,6 +62,7 @@ public static class Program
             if (n % log == 0) Console.WriteLine(n);
             job.RunParallel();
         }
+        // Thread.Sleep(4000);
         
         var sw      = new Stopwatch();
         sw.Start();
@@ -70,7 +71,7 @@ public static class Program
             job.RunParallel();
         }
         var duration = sw.ElapsedMilliseconds;
-        Console.WriteLine($"JobQuery.RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration}" );
+        Console.WriteLine($"RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration} ms");
         
         Console.WriteLine($"forEachCount: {forEachCount}, lengthSum: {lengthSum}" );
         Console.WriteLine($"expect:       {2 * threadCount * count}             {2 * entityCount * count}" );
