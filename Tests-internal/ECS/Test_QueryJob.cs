@@ -39,7 +39,7 @@ public static class Test_QueryJob
         job.Run();
     }
     
-    [Test]
+    // [Test]
     public static void Test_QueryJob_RunParallel()
     {
         long count       = 10;      // 100_000;

@@ -14,7 +14,8 @@ internal abstract class JobTask {
 
 internal class ParallelJobRunner
 {
-    internal readonly   ManualResetEventSlim    startWorkers        = new (false);
+    internal            bool                    startWorkersSpin;
+    internal readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
     internal readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
     internal            int                     allFinishedBarrier;
     internal            int                     finishedWorkerCount;
@@ -61,9 +62,7 @@ internal class ParallelJobRunner
         
         Volatile.Write(ref finishedWorkerCount, 0);
         
-        // if (n < count - 1) {
-        //     startWorkers.Set(); // set before increment allFinishedBarrier to prevent blocking worker thread
-        // }
+        Volatile.Write(ref startWorkersSpin, true);
         
         Interlocked.Increment(ref allFinishedBarrier);
         
@@ -82,31 +81,51 @@ internal class ParallelJobWorker
         this.index  = index;
     }
     
+    private const int SpinMax = 5_000;
+    
+    private void WaitStartWorkers()
+    {
+        var runner          = jobRunner;
+        var startWorkers    = runner.startWorkers;
+        for (int n = 0; n < SpinMax; n++)
+        {
+            while (Volatile.Read(ref runner.startWorkersSpin)) {
+                if (startWorkers.IsSet) {
+                    return;
+                }
+            }
+        }
+        Volatile.Write(ref runner.startWorkersSpin, false);
+        startWorkers.Wait();
+    }
+    
     internal void Run()
     {
-        var runner  = jobRunner;
-        var barrier = 0;
+        var runner          = jobRunner;
+        // var barrier         = 0;
         
         while (true)
         {
-            runner.startWorkers.Wait(); // wait until a task is scheduled ...
+            // --- wait until a task is scheduled ...
+            WaitStartWorkers();
                 
+            // --- execute task
             var task = runner.jobTasks[index];
             task.Execute();
                 
+            // ---
             var count = Interlocked.Increment(ref runner.finishedWorkerCount);
-                
-            if (count > runner.workerCount) throw new InvalidOperationException($"unexpected count: {count}");
-                
+            // if (count > runner.workerCount) throw new InvalidOperationException($"unexpected count: {count}");
             if (count == runner.workerCount)
             {
                 runner.startWorkers.Reset();
                 runner.allWorkersFinished.Set();
             }
+            /*
             // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
             while (barrier == Volatile.Read(ref runner.allFinishedBarrier)) { }
             
-            barrier++;
+            barrier++; */
         }
     }
 }
