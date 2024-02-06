@@ -25,7 +25,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
     /// <summary> Return the entity <see cref="Entity.Id"/>'s for the components in a <see cref="Chunk{T}"/>. </summary>
-    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, 0, Length);
+    public              ReadOnlySpan<int>   Ids         => new(Archetype.entityIds, start, Length);
     public   override   string              ToString()  => GetString();
     #endregion
 

@@ -30,7 +30,7 @@ public readonly struct Chunk<T>
     where T : struct, IComponent
 {
     /// <summary> Return the components in a <see cref="Chunk{T}"/> as a <see cref="Span"/>. </summary>
-    public              Span<T>     Span            => new(values, 0, Length);
+    public              Span<T>     Span            => new(values, start, Length);
     
     private  readonly   T[]         values;     //  8
     
