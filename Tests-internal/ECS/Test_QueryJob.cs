@@ -74,14 +74,17 @@ public static class Test_QueryJob
         job.MinParallelChunkLength  = 1000;
         job.RunParallel();  // force one time allocations
 
-        var sw      = new Stopwatch();
         var start   = Mem.GetAllocatedBytes();
-        sw.Start();
-        for (int n = 1; n < count; n++) {
-            job.RunParallel();
-        }
         Mem.AssertNoAlloc(start);
+        job.RunParallel();
+        
+        var sw      = new Stopwatch();
+        sw.Start();
+        for (int n = 2; n < count; n++) {
+            job.RunParallel(); // allocate occasionally 24 byte for the entire loop in DEBUG
+        }
         var duration = sw.ElapsedMilliseconds;
+        
         Console.Write($"JobQuery.RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration}" );
         
         Assert.AreEqual(threadCount * count, forEachCount);
