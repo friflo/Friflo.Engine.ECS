@@ -62,6 +62,7 @@ public static class ParallelQuery
         Console.WriteLine($"expect:       {loop * threadCount * count}             {loop * entityCount * count}" );
         // Assert.AreEqual(threadCount * count, forEachCount);
         // Assert.AreEqual(entityCount * count, lengthSum);
+        job.JobRunner.Dispose();
     }
 
     private struct MyComponent1 : IComponent { public int a; }

@@ -43,7 +43,7 @@ internal sealed class ParallelJobRunner : IDisposable
     internal readonly   int                     workerCount;
     private             bool                    running;
     
-    internal static readonly ParallelJobRunner Default = new ParallelJobRunner(Environment.ProcessorCount);
+    internal static readonly ParallelJobRunner Default = new (Environment.ProcessorCount);
     #endregion
     
 #region general

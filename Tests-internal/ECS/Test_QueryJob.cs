@@ -42,6 +42,7 @@ public static class Test_QueryJob
         job.RunParallel();
         
         Assert.AreEqual(2, taskCount);
+        job.JobRunner.Dispose();
     }
     
     [Test]
@@ -89,6 +90,7 @@ public static class Test_QueryJob
         
         Assert.AreEqual(threadCount * count, forEachCount);
         Assert.AreEqual(entityCount * count, lengthSum);
+        job.JobRunner.Dispose();
     }
 
     /// all TPL <see cref="Parallel"/> methods allocate memory. SO they are out.
@@ -162,6 +164,7 @@ public static class Test_QueryJob
             job.Run();
         });
         Assert.AreEqual("test exception", e2!.Message);
+        runner.Dispose();
     }
     
     [Test]
