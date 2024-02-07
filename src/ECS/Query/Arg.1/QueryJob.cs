@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -53,7 +52,7 @@ internal sealed class QueryJob<T1> : QueryJob
             }
             var step = chunk.Length / taskCount;
             if (jobTasks == null) {
-                jobTasks    = new QueryJobTask[taskCount];       // todo pool array
+                jobTasks = new QueryJobTask[taskCount];
                 for (int n = 0; n < taskCount; n++) {
                     jobTasks[n] = new QueryJobTask { action = action };
                 }
@@ -61,10 +60,9 @@ internal sealed class QueryJob<T1> : QueryJob
             for (int n = 0; n < taskCount; n++)
             {
                 var start       = n * step;
-                var length      = chunk.Length / taskCount;
                 var task        = jobTasks[n];
-                task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, length);
-                task.entities   = new ChunkEntities(chunk.Entities, start, length);
+                task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, step);
+                task.entities   = new ChunkEntities(chunk.Entities, start, step);
                 if (n < taskCount - 1) {
                     continue;
                 }
