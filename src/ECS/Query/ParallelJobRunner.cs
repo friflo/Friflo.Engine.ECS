@@ -144,7 +144,6 @@ internal sealed class ParallelJobRunner : IDisposable
             throw JobException(job);
         }
         inUseByJob = null;
-
     }
     
     // ------------------------------------ worker thread loop ------------------------------------
