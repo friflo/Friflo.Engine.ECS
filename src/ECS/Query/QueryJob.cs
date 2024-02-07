@@ -34,7 +34,7 @@ internal abstract class QueryJob
     }
     
     private void  SetRunner(ParallelJobRunner value) {
-        jobRunner = value ?? throw new ArgumentNullException(nameof(value));
+        jobRunner = value ?? ParallelJobRunner.Default;
     }
     
     private void  SetMinParallel(int value) {
