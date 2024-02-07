@@ -12,7 +12,7 @@ using System.Threading;
 namespace Friflo.Engine.ECS;
 
 internal abstract class JobTask {
-    internal abstract void Execute();
+    internal abstract void ExecuteTask();
 }
 
 /// <remarks>
@@ -122,7 +122,7 @@ internal sealed class ParallelJobRunner : IDisposable
             startWorkers.Set(); // all worker threads start running ...
             
             try {
-                tasks[0].Execute();
+                tasks[0].ExecuteTask();
             } catch (Exception exception) {
                 AddTaskException(exception);
             }
@@ -153,7 +153,7 @@ internal sealed class ParallelJobRunner : IDisposable
             
             // --- execute task
             try {
-                jobTasks[index].Execute();
+                jobTasks[index].ExecuteTask();
             } catch (Exception exception) {
                 AddTaskException(exception);
             }

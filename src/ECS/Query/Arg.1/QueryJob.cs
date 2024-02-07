@@ -23,7 +23,7 @@ internal sealed class QueryJob<T1> : QueryJob
         internal    Chunk<T1>                           chunk1;
         internal    ChunkEntities                       entities;
         
-        internal  override void Execute()  => action(chunk1, entities);
+        internal  override void ExecuteTask()  => action(chunk1, entities);
     }
     
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
