@@ -36,7 +36,6 @@ internal sealed class ParallelJobRunner : IDisposable
 #region fields
     private  readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
     private  readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
-    private  readonly   object                  monitor             = new object();
     private  readonly   List<Exception>         taskExceptions      = new ();
     private             int                     allFinishedBarrier;
     private             int                     finishedWorkerCount;
@@ -116,38 +115,36 @@ internal sealed class ParallelJobRunner : IDisposable
     internal void ExecuteJob(object job, JobTask[] tasks)
     {
         if (inUseByJob != null) throw AlreadyInUseException(inUseByJob);
-        lock (monitor)
-        {
-            if (!running)   throw RunnerDisposedException();
-            inUseByJob = job;
-            taskExceptions.Clear();
-            if (!workersStarted) {
-                StartWorkers();
-            }
-            jobTasks = tasks;
-            
-            Volatile.Write(ref finishedWorkerCount, 0);
-            startWorkers.Set(); // all worker threads start running ...
-            
-            try {
-                tasks[0].ExecuteTask();
-            } catch (Exception exception) {
-                AddTaskException(exception);
-            }
-            allWorkersFinished.Wait();
-
-            allWorkersFinished.Reset();
-            
-            AssertStartWorkersNotSignaled();
-            
-            Interlocked.Increment(ref allFinishedBarrier);
-            
-            jobTasks = null;
-            if (taskExceptions.Count > 0) {
-                throw JobException(job);
-            }
-            inUseByJob = null;
+        if (!running)           throw RunnerDisposedException();
+        taskExceptions.Clear();
+        if (!workersStarted) {
+            StartWorkers();
         }
+        inUseByJob  = job;
+        jobTasks    = tasks;
+        
+        Volatile.Write(ref finishedWorkerCount, 0);
+        startWorkers.Set(); // all worker threads start running ...
+        
+        try {
+            tasks[0].ExecuteTask();
+        } catch (Exception exception) {
+            AddTaskException(exception);
+        }
+        allWorkersFinished.Wait();
+
+        allWorkersFinished.Reset();
+        
+        AssertStartWorkersNotSignaled();
+        
+        Interlocked.Increment(ref allFinishedBarrier);
+        
+        jobTasks = null;
+        if (taskExceptions.Count > 0) {
+            throw JobException(job);
+        }
+        inUseByJob = null;
+
     }
     
     // ------------------------------------ worker thread loop ------------------------------------
