@@ -197,9 +197,8 @@ public static class Test_QueryJob
     [Test]
     public static void Test_QueryJob_EntityStore_JobRunner()
     {
-        var jobRunner   = new ParallelJobRunner(2);
-        StringAssert.StartsWith("JobRunner ",   jobRunner.ToString());
-        StringAssert.EndsWith("threads: 2",     jobRunner.ToString());
+        var jobRunner   = new ParallelJobRunner(2, "MyRunner");
+        Assert.AreEqual("MyRunner - threads: 2", jobRunner.ToString());
         
         var store       = new EntityStore(PidType.UsePidAsId) {
             JobRunner = jobRunner   // attach JobRunner to EntityStore
@@ -207,11 +206,22 @@ public static class Test_QueryJob
         store.CreateEntity().AddComponent<MyComponent1>();
         var query       = store.Query<MyComponent1>();
         int count       = 0;
-        var job         = query.ForEach((_,_) => count++ );
+        Thread.CurrentThread.Name = "MainThread";
+        bool foundWorkerName = false;
+        bool foundCallerName = false;
+        var job         = query.ForEach((_, entities) => {
+            count++;
+            switch (Thread.CurrentThread.Name) {
+                case "MyRunner - worker 1": foundWorkerName = true; break;
+                case "MainThread":          foundCallerName = true; break;
+            }
+        });
         job.MinParallelChunkLength = 1;
         job.RunParallel();  // uses JobRunner from EntityStore
         
         Assert.AreEqual(2, count);
+        Assert.IsTrue(foundWorkerName, "worker thread name not found");
+        Assert.IsTrue(foundCallerName, "caller thread name not found");
         jobRunner.Dispose();
     }
     

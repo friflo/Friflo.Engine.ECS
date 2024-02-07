@@ -30,7 +30,7 @@ internal sealed class ParallelJobRunner : IDisposable
 #region
     public              bool                    IsDisposed  => !running;
     public              int                     ThreadCount => workerCount + 1;
-    public override     string                  ToString()  => $"JobRunner {runnerId} - threads: {ThreadCount}";
+    public override     string                  ToString()  => $"{name} - threads: {ThreadCount}";
     #endregion
     
 #region fields
@@ -44,16 +44,20 @@ internal sealed class ParallelJobRunner : IDisposable
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
     private             bool                    running;
-    private  readonly   int                     runnerId;
+    private  readonly   string                  name;
     
     private  static int         _jobRunnerIdSeq;
     #endregion
     
 #region general
-    internal ParallelJobRunner(int threadCount) {
+    internal ParallelJobRunner(int threadCount, string name = null) {
         workerCount = threadCount - 1;
         running     = true;
-        runnerId    = ++_jobRunnerIdSeq;
+        if (name != null) {
+            this.name = name;
+            return;
+        }
+        this.name = "JobRunner " + ++_jobRunnerIdSeq; 
     }
 
     public void Dispose() {
@@ -67,7 +71,7 @@ internal sealed class ParallelJobRunner : IDisposable
         for (int index = 1; index <= workerCount; index++)
         {
             var thread = new Thread(RunWorker) {
-                Name            = $"{this} - worker {index}",
+                Name            = $"{name} - worker {index}",
                 IsBackground    = true
             };
             thread.Start(index);

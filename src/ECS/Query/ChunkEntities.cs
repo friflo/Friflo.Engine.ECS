@@ -34,7 +34,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   Archetype           Archetype;  //  8
     
     // ReSharper disable once NotAccessedField.Local
-    private  readonly   int                 start;
+    private  readonly   int                 start;      //  4
     
     /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
