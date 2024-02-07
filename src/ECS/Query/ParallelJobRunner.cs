@@ -29,7 +29,8 @@ internal sealed class ParallelJobRunner : IDisposable
 {
 #region
     public              bool                    IsDisposed  => !running;
-    public override     string                  ToString()  => $"JobRunner {runnerId}";
+    public              int                     ThreadCount => workerCount + 1;
+    public override     string                  ToString()  => $"JobRunner {runnerId} - threads: {ThreadCount}";
     #endregion
     
 #region fields

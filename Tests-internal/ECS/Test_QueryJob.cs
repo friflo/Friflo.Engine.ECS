@@ -151,6 +151,7 @@ public static class Test_QueryJob
         job.MinParallelChunkLength = 10;
         
         var runner  = new ParallelJobRunner(2);
+        Assert.AreEqual(2, runner.ThreadCount);
         job.JobRunner = runner;
         Assert.AreSame(runner, job.JobRunner);
         
@@ -197,7 +198,8 @@ public static class Test_QueryJob
     public static void Test_QueryJob_EntityStore_JobRunner()
     {
         var jobRunner   = new ParallelJobRunner(2);
-        StringAssert.StartsWith("JobRunner ", jobRunner.ToString());
+        StringAssert.StartsWith("JobRunner ",   jobRunner.ToString());
+        StringAssert.EndsWith("threads: 2",     jobRunner.ToString());
         
         var store       = new EntityStore(PidType.UsePidAsId) {
             JobRunner = jobRunner   // attach JobRunner to EntityStore
