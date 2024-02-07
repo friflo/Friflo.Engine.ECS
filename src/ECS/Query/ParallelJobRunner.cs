@@ -64,13 +64,13 @@ internal sealed class ParallelJobRunner
         }
     }
     
-    private AggregateException JobException ()
+    private AggregateException JobException (object job)
     {
-        return new AggregateException($"{nameof(ParallelJobRunner)} - {taskExceptions.Count} exceptions.", taskExceptions);
+        return new AggregateException($"{job} - {taskExceptions.Count} task exceptions.", taskExceptions);
     }
     
     // ----------------------------------- job on caller thread -----------------------------------
-    internal void ExecuteJob(JobTask[] tasks)
+    internal void ExecuteJob(object job, JobTask[] tasks)
     {
         lock (monitor)
         {
@@ -98,7 +98,7 @@ internal sealed class ParallelJobRunner
             
             jobTasks = null;
             if (taskExceptions.Count > 0) {
-                throw JobException();
+                throw JobException(job);
             }
         }
     }

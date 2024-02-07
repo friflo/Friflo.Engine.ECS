@@ -13,7 +13,7 @@ internal sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
 {
     internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
-    public  override    string                              ToString()  => query.GetQueryChunksString();
+    public  override    string                              ToString()  => query.GetQueryJobString();
 
     private readonly    ArchetypeQuery<T1>                  query;                  //  8
     private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
@@ -68,7 +68,7 @@ internal sealed class QueryJob<T1> : QueryJob
                 }
                 // --- last job task
                 // ReSharper disable once CoVariantArrayConversion
-                jobRunner.ExecuteJob(jobTasks);
+                jobRunner.ExecuteJob(this, jobTasks);
                 break;
             }
         }

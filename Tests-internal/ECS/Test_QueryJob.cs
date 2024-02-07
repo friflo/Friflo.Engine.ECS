@@ -123,7 +123,7 @@ public static class Test_QueryJob
         var job = query.ForEach((component1, entities) => { });
         
         Assert.AreEqual(32, job.Chunks.EntityCount);
-        Assert.AreEqual("QueryChunks[1]  Components: [MyComponent1]", job.ToString());
+        Assert.AreEqual("QueryJob [MyComponent1]", job.ToString());
     }
     
     [Test]
@@ -143,6 +143,11 @@ public static class Test_QueryJob
             job.RunParallel();
         });
         Assert.AreEqual(2, e!.InnerExceptions.Count);
-        Assert.AreEqual("ParallelJobRunner - 2 exceptions. (test exception) (test exception)", e!.Message);
+        Assert.AreEqual("QueryJob [MyComponent1] - 2 task exceptions. (test exception) (test exception)", e!.Message);
+        
+        var e2  = Assert.Throws<InvalidOperationException>(() => {
+            job.Run();
+        });
+        Assert.AreEqual("test exception", e2!.Message);
     }
 }

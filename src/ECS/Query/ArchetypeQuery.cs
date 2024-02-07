@@ -237,6 +237,10 @@ public class ArchetypeQuery
         return signatureIndexes.GetString($"QueryChunks[{ChunkCount}]  Components: ");
     }
     
+    internal string GetQueryJobString() {
+        return signatureIndexes.GetString($"QueryJob ");
+    }
+    
     private string GetString() {
         var sb          = new StringBuilder();
         var hasTypes    = false;
