@@ -28,7 +28,8 @@ internal abstract class JobTask {
 internal sealed class ParallelJobRunner : IDisposable
 {
 #region
-    public   bool                               IsDisposed => !running;
+    public              bool                    IsDisposed  => !running;
+    public override     string                  ToString()  => $"JobRunner {runnerId}";
     #endregion
     
 #region fields
@@ -42,13 +43,21 @@ internal sealed class ParallelJobRunner : IDisposable
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
     private             bool                    running;
+    private  readonly   int                     runnerId;
     
-    internal static readonly ParallelJobRunner Default = new (Environment.ProcessorCount);
+    private  static int         _jobRunnerIdSeq;
+    internal static readonly    ParallelJobRunner Default = new ();
     #endregion
     
 #region general
     internal ParallelJobRunner(int threadCount) {
         workerCount = threadCount - 1;
+        running     = true;
+        runnerId    = ++_jobRunnerIdSeq;
+    }
+    
+    private ParallelJobRunner() {
+        workerCount = Environment.ProcessorCount - 1;
         running     = true;
     }
 
@@ -60,10 +69,10 @@ internal sealed class ParallelJobRunner : IDisposable
     private void StartWorkers()
     {
         workersStarted = true;
-        for (int index = 0; index < workerCount; index++)
+        for (int index = 1; index <= workerCount; index++)
         {
             var thread = new Thread(RunWorker) {
-                Name            = $"ParallelJobWorker - {index}",
+                Name            = $"{this} - worker {index}",
                 IsBackground    = true
             };
             thread.Start(index);

@@ -30,11 +30,14 @@ public static class ParallelQuery
         var query = store.Query<MyComponent1>();
         var forEachCount    = 0;
         var lengthSum       = 0L;
+        var runner          = new ParallelJobRunner(threadCount);
         
-        query.ForEach((_, _) => {}).RunParallel();
+        var job = query.ForEach((_, _) => {});
+        job.JobRunner = runner;
+        job.RunParallel();
         // Thread.Sleep(10_000); // ensure all threads are idle during Sleep()
         
-        var job = query.ForEach((component1, entities) =>
+        job = query.ForEach((component1, entities) =>
         {
             Interlocked.Increment(ref forEachCount);
             Interlocked.Add(ref lengthSum, entities.Length);
@@ -43,7 +46,7 @@ public static class ParallelQuery
                 ++c.a;
             }
         });
-        job.JobRunner               = new ParallelJobRunner(threadCount);
+        job.JobRunner               = runner;
         job.MinParallelChunkLength  = 1000;
 
         long log = count / 5;
@@ -62,7 +65,7 @@ public static class ParallelQuery
         Console.WriteLine($"expect:       {loop * threadCount * count}             {loop * entityCount * count}" );
         // Assert.AreEqual(threadCount * count, forEachCount);
         // Assert.AreEqual(entityCount * count, lengthSum);
-        job.JobRunner.Dispose();
+        runner.Dispose();
     }
 
     private struct MyComponent1 : IComponent { public int a; }

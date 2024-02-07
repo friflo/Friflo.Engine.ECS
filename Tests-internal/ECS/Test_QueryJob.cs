@@ -134,6 +134,8 @@ public static class Test_QueryJob
         
         Assert.AreEqual(32, job.Chunks.EntityCount);
         Assert.AreEqual("QueryJob [MyComponent1]", job.ToString());
+        
+        Assert.AreEqual("JobRunner 0", job.JobRunner.ToString()); // JobRunner 0 is the default job runer
     }
     
     [Test]
