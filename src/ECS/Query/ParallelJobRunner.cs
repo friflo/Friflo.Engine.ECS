@@ -19,6 +19,8 @@ internal abstract class JobTask {
 ///   <see cref="ManualResetEventSlim"/>, <see cref="Interlocked"/> and <see cref="Volatile"/>.<br/>
 /// - Minimize thread context switches caused by <see cref="ManualResetEventSlim"/> in case calling
 ///   <see cref="ManualResetEventSlim.Wait()"/> when the event is not signaled.<br/>
+/// <br/>
+/// Use analyze amount of thread context switches use: Process Explorer > Column > CSwitch Delta.<br/>
 /// </remarks>
 internal sealed class ParallelJobRunner
 {
@@ -118,28 +120,6 @@ internal sealed class ParallelJobWorker
     internal ParallelJobWorker(int index) {
         this.index  = index;
     }
-    
-    #region test
-    /* private const int SpinMax = 5000;
-
-    private void WaitStartWorkers()
-    {
-        var startWorkers = jobRunner.startWorkers;
-        for (int n = 0; n < SpinMax; n++)
-        {
-            if (startWorkers.IsSet) {
-                ++passCount;
-                return;
-            }
-        }
-        startWorkers.Wait();
-        if (++waitCount % 100 == 0) Console.WriteLine($"passCount: {passCount},  waitCount: {waitCount}");
-    }
-
-    int passCount;
-    int waitCount;
-    long spinWaitCount; */
-    #endregion
 }
 
 
