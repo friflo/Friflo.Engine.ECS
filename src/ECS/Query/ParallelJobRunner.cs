@@ -25,7 +25,7 @@ internal abstract class JobTask {
 internal sealed class ParallelJobRunner
 {
 #region fields
-    private  readonly   ManualResetEventSlim    startWorkers        = new (false);
+    private  readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
     private  readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
     private             int                     allFinishedBarrier;
     private             int                     finishedWorkerCount;
@@ -64,10 +64,7 @@ internal sealed class ParallelJobRunner
         
         Volatile.Write(ref finishedWorkerCount, 0);
         
-        // set before increment allFinishedBarrier to prevent blocking worker thread
         startWorkers.Set(); // all worker threads start running ...
-
-        Interlocked.Increment(ref allFinishedBarrier);
 
         tasks[0].Execute();
             
@@ -76,6 +73,8 @@ internal sealed class ParallelJobRunner
         allWorkersFinished.Reset();
         
         if (startWorkers.IsSet) throw new InvalidOperationException("startWorkers.IsSet");
+        
+        Interlocked.Increment(ref allFinishedBarrier);
         
         jobTasks = null;
     }
@@ -87,13 +86,6 @@ internal sealed class ParallelJobRunner
         var index   = worker.index;
         while (true)
         {
-            // --- wait until a task is scheduled ...
-            // spin wait for event to prevent preempting thread execution on: startWorkers.Wait()
-            while (barrier == Volatile.Read(ref allFinishedBarrier)) {
-                Thread.SpinWait(30);
-            }
-            barrier++;            
-
             startWorkers.Wait();
             
             // --- execute task
@@ -108,6 +100,12 @@ internal sealed class ParallelJobRunner
                 startWorkers.Reset();
                 allWorkersFinished.Set();
             }
+            // Spin wait for all workers are finished their task.
+            // Required to ensure startWorkers is not signal when they reach startWorkers.Wait() above.
+            while (barrier == Volatile.Read(ref allFinishedBarrier)) {
+                // Thread.SpinWait(30);
+            }
+            barrier++;
         }
     }
 }

@@ -13,9 +13,10 @@ public static class ParallelQuery
 {
     internal static void Query_ForEach(string[] args)
     {
-        int  threadCount = 8;
-        long count       = 100_000;      // 100_000;
-        long entityCount = 100_000;  // 100_000;
+        int  threadCount    = 8;
+        long count          = 100_000;      // 100_000;
+        long entityCount    = 100_000;  // 100_000;
+        int  loop           = 10;
         if (args.Length > 0) {
             threadCount = Int32.Parse(args[0]);
         }
@@ -30,6 +31,9 @@ public static class ParallelQuery
         var forEachCount    = 0;
         var lengthSum       = 0L;
         
+        query.ForEach((_, _) => {}).RunParallel();
+        // Thread.Sleep(10_000); // ensure all threads are idle during Sleep()
+        
         var job = query.ForEach((component1, entities) =>
         {
             Interlocked.Increment(ref forEachCount);
@@ -41,26 +45,21 @@ public static class ParallelQuery
         });
         job.JobRunner               = new ParallelJobRunner(threadCount);
         job.MinParallelChunkLength  = 1000;
-        job.RunParallel();  // force one time allocations
 
         long log = count / 5;
-        for (int n = 1; n < count; n++) {
-            if (n % log == 0) Console.WriteLine(n);
-            job.RunParallel();
+        for (int i = 0; i < loop; i++) {
+            var sw      = new Stopwatch();
+            sw.Start();
+            for (int n = 0; n < count; n++) {
+                if (n % log == 0) Console.WriteLine(n);
+                job.RunParallel();
+            }
+            var duration = sw.ElapsedMilliseconds;
+            Console.WriteLine($"RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration} ms");
         }
-        // Thread.Sleep(4000);
-        
-        var sw      = new Stopwatch();
-        sw.Start();
-        for (int n = 0; n < count; n++) {
-            if (n % log == 0) Console.WriteLine(n);
-            job.RunParallel();
-        }
-        var duration = sw.ElapsedMilliseconds;
-        Console.WriteLine($"RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration} ms");
         
         Console.WriteLine($"forEachCount: {forEachCount}, lengthSum: {lengthSum}" );
-        Console.WriteLine($"expect:       {2 * threadCount * count}             {2 * entityCount * count}" );
+        Console.WriteLine($"expect:       {loop * threadCount * count}             {loop * entityCount * count}" );
         // Assert.AreEqual(threadCount * count, forEachCount);
         // Assert.AreEqual(entityCount * count, lengthSum);
     }
