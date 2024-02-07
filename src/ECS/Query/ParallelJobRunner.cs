@@ -144,9 +144,8 @@ internal sealed class ParallelJobRunner : IDisposable
             if (!running) break;
             
             // --- execute task
-            var task = jobTasks[index];
             try {
-                task.Execute();
+                jobTasks[index].Execute();
             } catch (Exception exception) {
                 AddTaskException(exception);
             }
