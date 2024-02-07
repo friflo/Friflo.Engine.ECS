@@ -58,12 +58,12 @@ internal sealed class ParallelJobRunner : IDisposable
         workersStarted = true;
         for (int index = 0; index < workerCount; index++)
         {
-            var worker = new ParallelJobWorker(index + 1);
-            var thread = new Thread(() => RunWorker(worker)) {
+            var thread = new Thread(RunWorker) {
                 Name            = $"ParallelJobWorker - {index}",
                 IsBackground    = true
             };
-            thread.Start();
+            var worker = new ParallelJobWorker(index + 1);
+            thread.Start(worker);
         }
     }
     
@@ -131,10 +131,10 @@ internal sealed class ParallelJobRunner : IDisposable
     }
     
     // ------------------------------------ worker thread loop ------------------------------------
-    private void RunWorker(ParallelJobWorker worker)
+    private void RunWorker(object worker)
     {
         var barrier = 0;
-        var index   = worker.index;
+        var index   = ((ParallelJobWorker)worker).index;
         while (running)
         {
             startWorkers.Wait();
