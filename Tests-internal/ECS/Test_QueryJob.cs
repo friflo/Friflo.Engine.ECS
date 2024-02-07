@@ -134,8 +134,6 @@ public static class Test_QueryJob
         
         Assert.AreEqual(32, job.Chunks.EntityCount);
         Assert.AreEqual("QueryJob [MyComponent1]", job.ToString());
-        
-        Assert.AreEqual("JobRunner 0", job.JobRunner.ToString()); // JobRunner 0 is the default job runer
     }
     
     [Test]
@@ -176,13 +174,43 @@ public static class Test_QueryJob
         var query   = store.Query<MyComponent1>();
         var job     = query.ForEach((_,_) => {});
         
+        var e1 = Assert.Throws<InvalidOperationException>(() => {
+            job.RunParallel();
+        });
+        Assert.AreEqual("QueryJob requires a JobRunner", e1!.Message);
+        
         job.MinParallelChunkLength = 10000;
         Assert.AreEqual(10000, job.MinParallelChunkLength);
         
-        var e = Assert.Throws<ArgumentException>(() => {
+        var e2 = Assert.Throws<ArgumentException>(() => {
             job.MinParallelChunkLength = 0;
         });
-        Assert.AreEqual("MinParallelChunkLength must be > 0", e!.Message);
+        Assert.AreEqual("MinParallelChunkLength must be > 0", e2!.Message);
+        
+        var e3 = Assert.Throws<ArgumentNullException>(() => {
+            job.JobRunner = null;
+        });
+        Assert.AreEqual("Value cannot be null. (Parameter 'jobRunner')", e3!.Message);
+    }
+    
+    [Test]
+    public static void Test_QueryJob_EntityStore_JobRunner()
+    {
+        var jobRunner   = new ParallelJobRunner(2);
+        StringAssert.StartsWith("JobRunner ", jobRunner.ToString());
+        
+        var store       = new EntityStore(PidType.UsePidAsId) {
+            JobRunner = jobRunner   // attach JobRunner to EntityStore
+        };
+        store.CreateEntity().AddComponent<MyComponent1>();
+        var query       = store.Query<MyComponent1>();
+        int count       = 0;
+        var job         = query.ForEach((_,_) => count++ );
+        job.MinParallelChunkLength = 1;
+        job.RunParallel();  // uses JobRunner from EntityStore
+        
+        Assert.AreEqual(2, count);
+        jobRunner.Dispose();
     }
     
     [Test]

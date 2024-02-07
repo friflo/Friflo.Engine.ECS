@@ -27,8 +27,9 @@ internal sealed class QueryJob<T1> : QueryJob
     }
     
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
-        this.query              = query;
-        this.action             = action;
+        this.query  = query;
+        this.action = action;
+        jobRunner   = query.Store.JobRunner;
     }
     
     internal override void Run()
@@ -40,6 +41,7 @@ internal sealed class QueryJob<T1> : QueryJob
     
     internal override void RunParallel()
     {
+        if (jobRunner == null) throw JobRunnerIsNullException();
         var taskCount = jobRunner.workerCount + 1;
         
         foreach (Chunks<T1> chunk in query.Chunks)
