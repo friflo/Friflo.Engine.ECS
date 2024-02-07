@@ -136,13 +136,14 @@ public static class Test_QueryJob
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        for (int n = 0; n < 10_000; n++) {
+        for (int n = 0; n < 10; n++) {
             archetype.CreateEntity();
         }
         
         var query = store.Query<MyComponent1>();
         
         var job     = query.ForEach((component1, entities) => throw new InvalidOperationException("test exception"));
+        job.MinParallelChunkLength = 10;
         
         var runner  = new ParallelJobRunner(2);
         job.JobRunner = runner;
@@ -174,5 +175,28 @@ public static class Test_QueryJob
             job.MinParallelChunkLength = 0;
         });
         Assert.AreEqual("MinParallelChunkLength must be > 0", e!.Message);
+    }
+    
+    [Test]
+    public static void Test_QueryJob_QueryJobDispose()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        for (int n = 0; n < 10; n++) {
+            archetype.CreateEntity();
+        }
+        var runner  = new ParallelJobRunner(4);
+        var query   = store.Query<MyComponent1>();
+        var job     = query.ForEach((_,_) => {});
+        job.MinParallelChunkLength  = 10;
+        job.jobRunner               = runner;
+        
+        job.RunParallel();
+        
+        runner.Dispose();
+        var e = Assert.Throws<ObjectDisposedException>(() => {
+            job.RunParallel();    
+        });
+        Assert.AreEqual("Cannot access a disposed object.\r\nObject name: 'ParallelJobRunner'.", e!.Message);
     }
 }

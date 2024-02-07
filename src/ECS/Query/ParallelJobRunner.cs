@@ -25,7 +25,7 @@ internal abstract class JobTask {
 /// <br/>
 /// Use analyze amount of thread context switches use: Process Explorer > Column > CSwitch Delta.<br/>
 /// </remarks>
-internal sealed class ParallelJobRunner
+internal sealed class ParallelJobRunner : IDisposable
 {
 #region fields
     private  readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
@@ -37,6 +37,7 @@ internal sealed class ParallelJobRunner
     private             bool                    workersStarted;
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
+    private             bool                    running;
     
     internal static readonly ParallelJobRunner Default = new ParallelJobRunner(Environment.ProcessorCount);
     #endregion
@@ -44,8 +45,14 @@ internal sealed class ParallelJobRunner
 #region general
     internal ParallelJobRunner(int threadCount) {
         workerCount = threadCount - 1;
+        running     = true;
     }
-    
+
+    public void Dispose() {
+        running     = false;
+        startWorkers.Set();
+    }
+
     private void StartWorkers()
     {
         workersStarted = true;
@@ -65,6 +72,11 @@ internal sealed class ParallelJobRunner
         lock (taskExceptions) {
             taskExceptions.Add(exception);
         }
+    }
+    
+    private static ObjectDisposedException RunnerDisposedException ()
+    {
+        return new ObjectDisposedException(nameof(ParallelJobRunner));
     }
     
     private AggregateException JobException (object job)
@@ -88,6 +100,7 @@ internal sealed class ParallelJobRunner
     {
         lock (monitor)
         {
+            if (!running) throw RunnerDisposedException();
             taskExceptions.Clear();
             if (!workersStarted) {
                 StartWorkers();
@@ -122,9 +135,10 @@ internal sealed class ParallelJobRunner
     {
         var barrier = 0;
         var index   = worker.index;
-        while (true)
+        while (running)
         {
             startWorkers.Wait();
+            if (!running) break;
             
             // --- execute task
             var task = jobTasks[index];
