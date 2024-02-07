@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 // ReSharper disable InlineTemporaryVariable
@@ -69,6 +71,16 @@ internal sealed class ParallelJobRunner
     {
         return new AggregateException($"{job} - {taskExceptions.Count} task exceptions.", taskExceptions);
     }
+    
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    private void AssertStartWorkersNotSignaled() {
+        if (startWorkers.IsSet) throw new InvalidOperationException("startWorkers.IsSet");
+    }
+    
+    [Conditional("DEBUG")] [ExcludeFromCodeCoverage]
+    private void AssertWorkerCount(int count) {
+        if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
+    }
     #endregion
     
     // ----------------------------------- job on caller thread -----------------------------------
@@ -94,7 +106,7 @@ internal sealed class ParallelJobRunner
 
             allWorkersFinished.Reset();
             
-            if (startWorkers.IsSet) throw new InvalidOperationException("startWorkers.IsSet");
+            AssertStartWorkersNotSignaled();
             
             Interlocked.Increment(ref allFinishedBarrier);
             
@@ -123,7 +135,7 @@ internal sealed class ParallelJobRunner
             }
             // ---
             var count = Interlocked.Increment(ref finishedWorkerCount);
-            if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");
+            AssertWorkerCount(count);
             if (count == workerCount)
             {
                 startWorkers.Reset();

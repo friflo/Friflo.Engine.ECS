@@ -33,13 +33,18 @@ public static class Test_QueryJob
         foreach      ((Chunk<MyComponent1> component1, ChunkEntities entities) in query.Chunks) { }
         query.ForEach((Chunk<MyComponent1> component1, ChunkEntities entities) => { });
         
-        // --- execute ForEach() synchronously
-        var job = query.ForEach((component1, entities) => { });
+        // --- execute ForEach() single threaded
+        int taskCount = 0;
+        var job = query.ForEach((component1, entities) => taskCount++);
         job.Run();
-        job.Run();
+        
+        job.JobRunner = new ParallelJobRunner(1);
+        job.RunParallel();
+        
+        Assert.AreEqual(2, taskCount);
     }
     
-    // [Test]
+    [Test]
     public static void Test_QueryJob_RunParallel()
     {
         long count       = 10;      // 100_000;
@@ -137,8 +142,12 @@ public static class Test_QueryJob
         
         var query = store.Query<MyComponent1>();
         
-        var job = query.ForEach((component1, entities) => throw new InvalidOperationException("test exception"));
-        job.JobRunner = new ParallelJobRunner(2);
+        var job     = query.ForEach((component1, entities) => throw new InvalidOperationException("test exception"));
+        
+        var runner  = new ParallelJobRunner(2);
+        job.JobRunner = runner;
+        Assert.AreSame(runner, job.JobRunner);
+        
         var e   = Assert.Throws<AggregateException>(() => {
             job.RunParallel();
         });
@@ -149,5 +158,21 @@ public static class Test_QueryJob
             job.Run();
         });
         Assert.AreEqual("test exception", e2!.Message);
+    }
+    
+    [Test]
+    public static void Test_QueryJob_QueryJob_exceptions()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var query   = store.Query<MyComponent1>();
+        var job     = query.ForEach((_,_) => {});
+        
+        job.MinParallelChunkLength = 10000;
+        Assert.AreEqual(10000, job.MinParallelChunkLength);
+        
+        var e = Assert.Throws<ArgumentException>(() => {
+            job.MinParallelChunkLength = 0;
+        });
+        Assert.AreEqual("MinParallelChunkLength must be > 0", e!.Message);
     }
 }

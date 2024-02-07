@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Friflo.Engine.ECS;
 
 
-[ExcludeFromCodeCoverage]
 internal sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
 {
