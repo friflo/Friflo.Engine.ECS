@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 // ReSharper disable InlineTemporaryVariable
@@ -27,6 +28,8 @@ internal sealed class ParallelJobRunner
 #region fields
     private  readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
     private  readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
+    private  readonly   object                  monitor             = new object();
+    private  readonly   List<Exception>         taskExceptions      = new ();
     private             int                     allFinishedBarrier;
     private             int                     finishedWorkerCount;
     private             bool                    workersStarted;
@@ -54,29 +57,50 @@ internal sealed class ParallelJobRunner
         }
     }
     
+    private void AddTaskException (Exception exception)
+    {
+        lock (taskExceptions) {
+            taskExceptions.Add(exception);
+        }
+    }
+    
+    private AggregateException JobException ()
+    {
+        return new AggregateException($"{nameof(ParallelJobRunner)} - {taskExceptions.Count} exceptions.", taskExceptions);
+    }
+    
     // ----------------------------------- job on caller thread -----------------------------------
     internal void ExecuteJob(JobTask[] tasks)
     {
-        if (!workersStarted) {
-            StartWorkers();
-        }
-        jobTasks = tasks;
-        
-        Volatile.Write(ref finishedWorkerCount, 0);
-        
-        startWorkers.Set(); // all worker threads start running ...
-
-        tasks[0].Execute();
+        lock (monitor)
+        {
+            taskExceptions.Clear();
+            if (!workersStarted) {
+                StartWorkers();
+            }
+            jobTasks = tasks;
             
-        allWorkersFinished.Wait();
+            Volatile.Write(ref finishedWorkerCount, 0);
+            startWorkers.Set(); // all worker threads start running ...
+            
+            try {
+                tasks[0].Execute();
+            } catch (Exception exception) {
+                AddTaskException(exception);
+            }
+            allWorkersFinished.Wait();
 
-        allWorkersFinished.Reset();
-        
-        if (startWorkers.IsSet) throw new InvalidOperationException("startWorkers.IsSet");
-        
-        Interlocked.Increment(ref allFinishedBarrier);
-        
-        jobTasks = null;
+            allWorkersFinished.Reset();
+            
+            if (startWorkers.IsSet) throw new InvalidOperationException("startWorkers.IsSet");
+            
+            Interlocked.Increment(ref allFinishedBarrier);
+            
+            jobTasks = null;
+            if (taskExceptions.Count > 0) {
+                throw JobException();
+            }
+        }
     }
     
     // ------------------------------------ worker thread loop ------------------------------------
@@ -90,8 +114,11 @@ internal sealed class ParallelJobRunner
             
             // --- execute task
             var task = jobTasks[index];
-            task.Execute();
-                
+            try {
+                task.Execute();
+            } catch (Exception exception) {
+                AddTaskException(exception);
+            }
             // ---
             var count = Interlocked.Increment(ref finishedWorkerCount);
             if (count > workerCount) throw new InvalidOperationException($"unexpected count: {count}");

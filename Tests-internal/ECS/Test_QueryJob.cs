@@ -118,11 +118,31 @@ public static class Test_QueryJob
             archetype.CreateEntity();
         }
         
-        ArchetypeQuery<MyComponent1> query = store.Query<MyComponent1>();
+        var query = store.Query<MyComponent1>();
         
         var job = query.ForEach((component1, entities) => { });
         
         Assert.AreEqual(32, job.Chunks.EntityCount);
         Assert.AreEqual("QueryChunks[1]  Components: [MyComponent1]", job.ToString());
+    }
+    
+    [Test]
+    public static void Test_QueryJob_task_exceptions()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        for (int n = 0; n < 10_000; n++) {
+            archetype.CreateEntity();
+        }
+        
+        var query = store.Query<MyComponent1>();
+        
+        var job = query.ForEach((component1, entities) => throw new InvalidOperationException("test exception"));
+        job.JobRunner = new ParallelJobRunner(2);
+        var e   = Assert.Throws<AggregateException>(() => {
+            job.RunParallel();
+        });
+        Assert.AreEqual(2, e!.InnerExceptions.Count);
+        Assert.AreEqual("ParallelJobRunner - 2 exceptions. (test exception) (test exception)", e!.Message);
     }
 }
