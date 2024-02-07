@@ -54,7 +54,7 @@ internal sealed class ParallelJobRunner
         }
     }
     
-    // ------------------------------------------ job thread -------------------------------------------
+    // ----------------------------------- job on caller thread -----------------------------------
     internal void ExecuteJob(JobTask[] tasks)
     {
         if (!workersStarted) {
@@ -80,10 +80,9 @@ internal sealed class ParallelJobRunner
         jobTasks = null;
     }
     
-    // ----------------------------------------- worker thread -----------------------------------------
+    // ------------------------------------ worker thread loop ------------------------------------
     private void RunWorker(ParallelJobWorker worker)
     {
-        
         var barrier = 0;
         var index   = worker.index;
         while (true)
@@ -121,13 +120,3 @@ internal sealed class ParallelJobWorker
         this.index  = index;
     }
 }
-
-
-
-
-
-
-
-
-
-
