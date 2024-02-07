@@ -10,15 +10,12 @@ namespace Friflo.Engine.ECS;
 
 
 [ExcludeFromCodeCoverage]
-internal sealed class QueryJob<T1>
+internal sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
 {
     internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
     public  override    string                              ToString()  => query.GetQueryChunksString();
-    
-    public              int                                 MinParallelChunkLength; //  4
-    public              ParallelJobRunner                   JobRunner { get; set; } //  8
-    
+
     private readonly    ArchetypeQuery<T1>                  query;                  //  8
     private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
     private             QueryJobTask[]                      jobTasks;               //  8
@@ -35,23 +32,22 @@ internal sealed class QueryJob<T1>
     internal QueryJob(ArchetypeQuery<T1> query, Action<Chunk<T1>, ChunkEntities> action) {
         this.query              = query;
         this.action             = action;
-        MinParallelChunkLength  = 1000;
     }
 
-    internal void Run()
+    internal override void Run()
     {
         foreach (Chunks<T1> chunk in query.Chunks) {
             action(chunk.Chunk1, chunk.Entities);
         }
     }
     
-    internal void RunParallel()
+    internal override void RunParallel()
     {
-        var taskCount   = JobRunner.workerCount + 1;
+        var taskCount   = jobRunner.workerCount + 1;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
-            if (taskCount <= 1 || chunk.Length < MinParallelChunkLength) {
+            if (taskCount <= 1 || chunk.Length < minParallel) {
                 action(chunk.Chunk1, chunk.Entities);
                 continue;
             }
@@ -74,7 +70,7 @@ internal sealed class QueryJob<T1>
                 }
                 // --- last job task
                 // ReSharper disable once CoVariantArrayConversion
-                JobRunner.ExecuteJob(jobTasks);
+                jobRunner.ExecuteJob(jobTasks);
                 break;
             }
         }
