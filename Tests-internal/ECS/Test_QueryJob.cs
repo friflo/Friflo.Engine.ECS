@@ -195,6 +195,31 @@ public static class Test_QueryJob
     }
     
     [Test]
+    public static void Test_QueryJob_nested_ForEach()
+    {
+        Thread.CurrentThread.Name = "MainThread";
+        var store   = new EntityStore(PidType.UsePidAsId) {
+            JobRunner = new ParallelJobRunner(2, "TestRunner")
+        };
+        store.CreateEntity().AddComponent<MyComponent1>();
+        
+        var query   = store.Query<MyComponent1>();
+        var job1    = query.ForEach((_,_) =>
+        {
+            var job2 = query.ForEach((_, _) => {});
+            job2.MinParallelChunkLength = 1;
+            job2.RunParallel(); // throws runner is already in use exception
+        });
+        Assert.AreEqual(1000, job1.MinParallelChunkLength);
+        job1.MinParallelChunkLength = 1;
+        var e = Assert.Throws<AggregateException>(job1.RunParallel)!;
+        
+        Assert.AreEqual(2, e.InnerExceptions.Count);
+        Assert.AreEqual("ParallelJobRunner (TestRunner) is already in use by: QueryJob [MyComponent1]", e.InnerExceptions[0].Message);
+        Assert.AreEqual("ParallelJobRunner (TestRunner) is already in use by: QueryJob [MyComponent1]", e.InnerExceptions[1].Message);
+    }
+    
+    [Test]
     public static void Test_QueryJob_EntityStore_JobRunner()
     {
         var jobRunner   = new ParallelJobRunner(2, "MyRunner");
@@ -216,6 +241,7 @@ public static class Test_QueryJob
                 case "MainThread":          foundCallerName = true; break;
             }
         });
+        Assert.AreEqual(1000, job.MinParallelChunkLength);
         job.MinParallelChunkLength = 1;
         job.RunParallel();  // uses JobRunner from EntityStore
         

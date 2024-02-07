@@ -17,8 +17,8 @@ internal abstract class QueryJob
     #endregion
     
 #region internal fields
-    internal    ParallelJobRunner   jobRunner;      //  4
-    internal    int                 minParallel;    //  4
+    internal    ParallelJobRunner   jobRunner;          //  4
+    internal    int                 minParallel = 1000; //  4
     #endregion
     
     internal    abstract    void Run();

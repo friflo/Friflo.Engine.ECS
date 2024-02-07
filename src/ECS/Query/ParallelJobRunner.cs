@@ -44,9 +44,10 @@ internal sealed class ParallelJobRunner : IDisposable
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
     private             bool                    running;
+    private             object                  inUseByJob;
     private  readonly   string                  name;
     
-    private  static int         _jobRunnerIdSeq;
+    private  static     int     _jobRunnerIdSeq;
     #endregion
     
 #region general
@@ -57,7 +58,7 @@ internal sealed class ParallelJobRunner : IDisposable
             this.name = name;
             return;
         }
-        this.name = "JobRunner " + ++_jobRunnerIdSeq; 
+        this.name = "JobRunner " + ++_jobRunnerIdSeq;
     }
 
     public void Dispose() {
@@ -90,6 +91,11 @@ internal sealed class ParallelJobRunner : IDisposable
         return new ObjectDisposedException(nameof(ParallelJobRunner));
     }
     
+    private InvalidOperationException AlreadyInUseException (object job)
+    {
+        return new InvalidOperationException($"{nameof(ParallelJobRunner)} ({name}) is already in use by: {job}");
+    }
+    
     private AggregateException JobException (object job)
     {
         return new AggregateException($"{job} - {taskExceptions.Count} task exceptions.", taskExceptions);
@@ -109,9 +115,11 @@ internal sealed class ParallelJobRunner : IDisposable
     // ----------------------------------- job on caller thread -----------------------------------
     internal void ExecuteJob(object job, JobTask[] tasks)
     {
+        if (inUseByJob != null) throw AlreadyInUseException(inUseByJob);
         lock (monitor)
         {
-            if (!running) throw RunnerDisposedException();
+            if (!running)   throw RunnerDisposedException();
+            inUseByJob = job;
             taskExceptions.Clear();
             if (!workersStarted) {
                 StartWorkers();
@@ -138,6 +146,7 @@ internal sealed class ParallelJobRunner : IDisposable
             if (taskExceptions.Count > 0) {
                 throw JobException(job);
             }
+            inUseByJob = null;
         }
     }
     
