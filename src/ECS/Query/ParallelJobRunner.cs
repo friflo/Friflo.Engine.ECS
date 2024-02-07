@@ -46,6 +46,7 @@ internal sealed class ParallelJobRunner : IDisposable
     private  readonly   int                     runnerId;
     
     private  static int         _jobRunnerIdSeq;
+    /// <summary> The <see cref="Default"/> <see cref="ParallelJobRunner"/> uses the half of the available cores. </summary>
     internal static readonly    ParallelJobRunner Default = new ();
     #endregion
     
@@ -56,8 +57,9 @@ internal sealed class ParallelJobRunner : IDisposable
         runnerId    = ++_jobRunnerIdSeq;
     }
     
+    /// <summary> Default <see cref="ParallelJobRunner"/>. </summary>
     private ParallelJobRunner() {
-        workerCount = Environment.ProcessorCount - 1;
+        workerCount = Math.Min(1, Environment.ProcessorCount / 2 - 1);
         running     = true;
     }
 
