@@ -27,6 +27,10 @@ internal abstract class JobTask {
 /// </remarks>
 internal sealed class ParallelJobRunner : IDisposable
 {
+#region
+    public   bool                               IsDisposed => !running;
+    #endregion
+    
 #region fields
     private  readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
     private  readonly   ManualResetEventSlim    allWorkersFinished  = new (false);

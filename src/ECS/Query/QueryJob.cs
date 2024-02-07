@@ -34,6 +34,7 @@ internal abstract class QueryJob
     }
     
     private void  SetRunner(ParallelJobRunner value) {
+        if (value.IsDisposed) throw new ArgumentException($"{nameof(ParallelJobRunner)} is disposed");; 
         jobRunner = value ?? ParallelJobRunner.Default;
     }
     

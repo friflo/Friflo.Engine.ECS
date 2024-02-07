@@ -189,7 +189,7 @@ public static class Test_QueryJob
         var query   = store.Query<MyComponent1>();
         var job     = query.ForEach((_,_) => {});
         job.MinParallelChunkLength  = 10;
-        job.jobRunner               = runner;
+        job.JobRunner               = runner;
         
         job.RunParallel();
         
@@ -197,6 +197,11 @@ public static class Test_QueryJob
         var e = Assert.Throws<ObjectDisposedException>(() => {
             job.RunParallel();    
         });
-        // no check of e.Message. uses different line ending \r\n \n on different platforms 
+        // no check of e.Message. uses different line ending \r\n \n on different platforms
+        
+        var e2 = Assert.Throws<ArgumentException>(() => {
+            job.JobRunner = runner;
+        });
+        Assert.AreEqual("ParallelJobRunner is disposed", e2!.Message);
     }
 }
