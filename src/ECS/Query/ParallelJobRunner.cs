@@ -30,6 +30,8 @@ internal sealed class ParallelJobRunner
     private             bool                    workersStarted;
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
+    
+    internal static readonly ParallelJobRunner Default = new ParallelJobRunner(Environment.ProcessorCount);
     #endregion
     
     internal ParallelJobRunner(int threadCount) {

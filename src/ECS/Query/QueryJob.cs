@@ -20,12 +20,13 @@ internal abstract class QueryJob
     internal    int                 minParallel;    //  4
     #endregion
     
-    internal abstract void Run();
-    internal abstract void RunParallel();
-    
+    internal    abstract    void Run();
+    internal    abstract    void RunParallel();
+
 #region methods
     protected QueryJob() {
-        minParallel  = 1000;
+        jobRunner       = ParallelJobRunner.Default;
+        minParallel     = 1000;
     }
     
     private ParallelJobRunner GetRunner() {

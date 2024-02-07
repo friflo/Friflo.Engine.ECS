@@ -32,7 +32,7 @@ internal sealed class QueryJob<T1> : QueryJob
         this.query              = query;
         this.action             = action;
     }
-
+    
     internal override void Run()
     {
         foreach (Chunks<T1> chunk in query.Chunks) {
@@ -42,7 +42,7 @@ internal sealed class QueryJob<T1> : QueryJob
     
     internal override void RunParallel()
     {
-        var taskCount   = jobRunner.workerCount + 1;
+        var taskCount = jobRunner.workerCount + 1;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
@@ -51,7 +51,7 @@ internal sealed class QueryJob<T1> : QueryJob
                 continue;
             }
             var step = chunk.Length / taskCount;
-            if (jobTasks == null) {
+            if (jobTasks == null || jobTasks.Length < taskCount) {
                 jobTasks = new QueryJobTask[taskCount];
                 for (int n = 0; n < taskCount; n++) {
                     jobTasks[n] = new QueryJobTask { action = action };
