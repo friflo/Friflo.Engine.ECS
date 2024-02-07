@@ -39,6 +39,7 @@ internal sealed class ParallelJobRunner
     internal static readonly ParallelJobRunner Default = new ParallelJobRunner(Environment.ProcessorCount);
     #endregion
     
+#region general
     internal ParallelJobRunner(int threadCount) {
         workerCount = threadCount - 1;
     }
@@ -68,6 +69,7 @@ internal sealed class ParallelJobRunner
     {
         return new AggregateException($"{job} - {taskExceptions.Count} task exceptions.", taskExceptions);
     }
+    #endregion
     
     // ----------------------------------- job on caller thread -----------------------------------
     internal void ExecuteJob(object job, JobTask[] tasks)
