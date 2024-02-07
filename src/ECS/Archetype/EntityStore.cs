@@ -33,7 +33,7 @@ public abstract partial class EntityStoreBase
     /// <summary> Return the <see cref="ECS.Systems"/> instance attached to the entity store. </summary>
                     public              Systems                 Systems             { get; init; }
     
-    /// <summary> Return the <see cref="ECS.Systems"/> instance attached to the entity store. </summary>
+    /// <summary> Initialize a default <see cref="ParallelJobRunner"/> used for <see cref="QueryJob"/>'s. </summary>
     [Browse(Never)] internal            ParallelJobRunner       JobRunner           { get; init; }
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>

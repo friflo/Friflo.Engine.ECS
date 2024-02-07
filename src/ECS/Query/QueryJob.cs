@@ -22,6 +22,11 @@ internal abstract class QueryJob
     #endregion
     
     internal    abstract    void Run();
+    /// <summary>Executes the query job.</summary>
+    /// <remarks>
+    /// Requires an <see cref="ParallelJobRunner"/>.<br/>
+    /// A runner can be assigned to <see cref="JobRunner"/> or to the <see cref="EntityStore"/>.
+    /// </remarks>
     internal    abstract    void RunParallel();
 
 #region methods
