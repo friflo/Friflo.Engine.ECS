@@ -61,16 +61,14 @@ internal sealed class QueryJob<T1> : QueryJob
             {
                 var start       = n * step;
                 var task        = jobTasks[n];
+                if (n == taskCount - 1) {  // --- last task
+                    // todo adjust step
+                }
                 task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, step);
                 task.entities   = new ChunkEntities(chunk.Entities, start, step);
-                if (n < taskCount - 1) {
-                    continue;
-                }
-                // --- last job task
-                // ReSharper disable once CoVariantArrayConversion
-                jobRunner.ExecuteJob(this, jobTasks);
-                break;
             }
+            // ReSharper disable once CoVariantArrayConversion
+            jobRunner.ExecuteJob(this, jobTasks);
         }
     }
 }
