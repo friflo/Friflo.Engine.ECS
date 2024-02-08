@@ -129,6 +129,7 @@ internal sealed class ParallelJobRunner : IDisposable
     internal void ExecuteJob(object job, JobTask[] tasks)
     {
         var stack = _tlsUsedRunnerStack ??= new Stack<ParallelJobRunner>();
+        // In a common application without nested jobs: stack.Count == 0
         foreach (var runner in stack) {
             if (runner == this) throw AlreadyUsedByException(usedBy);    
         }
