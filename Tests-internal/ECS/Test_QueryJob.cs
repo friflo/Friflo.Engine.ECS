@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Tests.ECS;
 using Tests.Utils;
 
+// ReSharper disable AccessToModifiedClosure
 // ReSharper disable UnusedVariable
 // ReSharper disable RedundantLambdaParameterType
 // ReSharper disable UnusedParameter.Local
@@ -197,25 +198,36 @@ public static class Test_QueryJob
     public static void Test_QueryJob_nested_ForEach()
     {
         Thread.CurrentThread.Name = "MainThread";
-        using var runner = new ParallelJobRunner(2, "JobRunner"); 
-        var store   = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
+        using var runner    = new ParallelJobRunner(2, "JobRunner");
+        var store           = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
         store.CreateEntity().AddComponent<MyComponent1>();
         
-        var query   = store.Query<MyComponent1>();
-        var job1    = query.ForEach((_,_) =>
-        {
-            var job2 = query.ForEach((_, _) => {});
-            job2.MinParallelChunkLength = 1;
-            job2.RunParallel(); // throws runner is already in use exception
+        var count       = 0;
+        var query       = store.Query<MyComponent1>();
+        var nestedJob   = query.ForEach((_, _) => {
+            Interlocked.Increment(ref count);
         });
-        Assert.AreEqual(1000, job1.MinParallelChunkLength);
-        job1.MinParallelChunkLength = 1;
-        var e = Assert.Throws<AggregateException>(job1.RunParallel)!;
+        nestedJob.MinParallelChunkLength = 1;
+        var enclosingJob = query.ForEach((_,_) => {
+            nestedJob.RunParallel(); // throws '... is already used by ...' exception if using the same job runner
+        });
+        Assert.AreEqual(1000, enclosingJob.MinParallelChunkLength);
+        
+        // --- error case
+        enclosingJob.MinParallelChunkLength = 1;
+        var e = Assert.Throws<AggregateException>(enclosingJob.RunParallel)!;
         
         var exceptions =  e.InnerExceptions;
         Assert.AreEqual(2, exceptions.Count);
         Assert.AreEqual("'JobRunner' is already used by <- QueryJob [MyComponent1]", exceptions[0].Message);
         Assert.AreEqual("'JobRunner' is already used by <- QueryJob [MyComponent1]", exceptions[1].Message);
+        
+        // --- happy case
+        count = 0;
+        using var runner2 = new ParallelJobRunner(2, "JobRunner 2");
+        nestedJob.JobRunner = runner2;  // assign a separate job runner
+        enclosingJob.RunParallel();
+        Assert.AreEqual(4, count);
     }
     
     [Test]
