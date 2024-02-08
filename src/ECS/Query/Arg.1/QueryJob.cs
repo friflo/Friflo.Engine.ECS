@@ -63,12 +63,15 @@ internal sealed class QueryJob<T1> : QueryJob
             var taskIndex   = 0;
             for (int start = 0; start < length; start += sectionSize)
             {
-                var task = jobTasks[taskIndex++];
-                if (taskIndex == taskCount) {  // is last task?
-                    sectionSize = length - start;
+                var task        = jobTasks[taskIndex++];
+                var remaining   = length - start;
+                var isLastTask  = remaining < sectionSize;
+                if (isLastTask) {
+                    sectionSize = remaining;
                 }
                 task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, sectionSize);
                 task.entities   = new ChunkEntities(chunk.Entities, start, sectionSize);
+                if (isLastTask) break;
             }
             for (;taskIndex < taskCount; taskIndex++) {
                 jobTasks[taskIndex] = default;
