@@ -16,14 +16,17 @@ internal abstract class JobTask {
 }
 
 /// <remarks>
-/// The main goals of the <see cref="ParallelJobRunner"/>:<br/>
+/// <see cref="ParallelJobRunner"/> is thread safe.<br/>
+/// The intention is to use the same instance for all jobs. E.g. the JobRunner assigned to the <see cref="EntityStore"/>.<br/>
+/// When executing nested jobs - running a job within another job - the nested job requires its own runner.<br/> 
+/// <br/>
+/// Performance related implementation goals:<br/>
 /// - Minimize calls to synchronization primitives.<br/>
 /// - Use cheap synchronization primitives such as:
 ///   <see cref="ManualResetEventSlim"/>, <see cref="Interlocked"/> and <see cref="Volatile"/>.<br/>
 /// - Minimize thread context switches caused by <see cref="ManualResetEventSlim"/> in case calling
 ///   <see cref="ManualResetEventSlim.Wait()"/> when the event is not signaled.<br/>
-/// <br/>
-/// Use analyze amount of thread context switches use: Process Explorer > Column > CSwitch Delta.<br/>
+/// Note: To analyze the amount of thread context switches use: Process Explorer > Column > CSwitch Delta.
 /// </remarks>
 internal sealed class ParallelJobRunner : IDisposable
 {
@@ -43,10 +46,12 @@ internal sealed class ParallelJobRunner : IDisposable
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
     private             bool                    running;
-    private             object                  inUseByJob;
-    private  readonly   string                  name;
-    
-    private  static     int     _jobRunnerIdSeq;
+    private  readonly   string                  name;                   // never null. used also as monitor 
+    private             object                  usedBy;
+    // --- static
+    [ThreadStatic]
+    private  static     Stack<ParallelJobRunner>_tlsUsedRunnerStack; // single instance per thread
+    private  static     int                     _jobRunnerIdSeq;
     #endregion
     
 #region general
@@ -90,9 +95,9 @@ internal sealed class ParallelJobRunner : IDisposable
         return new ObjectDisposedException(nameof(ParallelJobRunner));
     }
     
-    private InvalidOperationException AlreadyInUseException (object job)
+    private InvalidOperationException AlreadyUsedByException (object job)
     {
-        return new InvalidOperationException($"{nameof(ParallelJobRunner)} ({name}) is already in use by: {job}");
+        return new InvalidOperationException($"'{name}' is already used by <- {job}");
     }
     
     private AggregateException JobException (object job)
@@ -114,36 +119,45 @@ internal sealed class ParallelJobRunner : IDisposable
     // ----------------------------------- job on caller thread -----------------------------------
     internal void ExecuteJob(object job, JobTask[] tasks)
     {
-        if (inUseByJob != null) throw AlreadyInUseException(inUseByJob);
-        if (!running)           throw RunnerDisposedException();
-        taskExceptions.Clear();
-        if (!workersStarted) {
-            StartWorkers();
+        var stack = _tlsUsedRunnerStack ??= new Stack<ParallelJobRunner>();
+        foreach (var runner in stack) {
+            if (runner == this) throw AlreadyUsedByException(usedBy);    
         }
-        inUseByJob  = job;
-        jobTasks    = tasks;
-        
-        Volatile.Write(ref finishedWorkerCount, 0);
-        startWorkers.Set(); // all worker threads start running ...
-        
-        try {
-            tasks[0].ExecuteTask();
-        } catch (Exception exception) {
-            AddTaskException(exception);
-        }
-        allWorkersFinished.Wait();
+        lock(name)
+        {
+            if (!running)       throw RunnerDisposedException();
+            taskExceptions.Clear();
+            if (!workersStarted) {
+                StartWorkers();
+            }
+            jobTasks = tasks;
+            usedBy   = job;
+            
+            Volatile.Write(ref finishedWorkerCount, 0);
+            startWorkers.Set(); // all worker threads start running ...
+            
+            stack.Push(this);
+            try {
+                tasks[0].ExecuteTask();
+            } catch (Exception exception) {
+                AddTaskException(exception);
+            }
+            stack.Pop();
 
-        allWorkersFinished.Reset();
-        
-        AssertStartWorkersNotSignaled();
-        
-        Interlocked.Increment(ref allFinishedBarrier);
-        
-        jobTasks = null;
-        if (taskExceptions.Count > 0) {
-            throw JobException(job);
+            allWorkersFinished.Wait();
+
+            allWorkersFinished.Reset();
+            
+            AssertStartWorkersNotSignaled();
+            
+            Interlocked.Increment(ref allFinishedBarrier);
+            
+            jobTasks = null;
+            usedBy   = null;
+            if (taskExceptions.Count > 0) {
+                throw JobException(job);
+            }
         }
-        inUseByJob = null;
     }
     
     // ------------------------------------ worker thread loop ------------------------------------
@@ -157,11 +171,14 @@ internal sealed class ParallelJobRunner : IDisposable
             if (!running) break;
             
             // --- execute task
+            var stack = _tlsUsedRunnerStack ??= new Stack<ParallelJobRunner>();
+            stack.Push(this);
             try {
                 jobTasks[index].ExecuteTask();
             } catch (Exception exception) {
                 AddTaskException(exception);
             }
+            stack.Pop();
             // ---
             var count = Interlocked.Increment(ref finishedWorkerCount);
             AssertWorkerCount(count);

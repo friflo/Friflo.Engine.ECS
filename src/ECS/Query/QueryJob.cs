@@ -27,6 +27,12 @@ internal abstract class QueryJob
     /// Requires an <see cref="ParallelJobRunner"/>.<br/>
     /// A runner can be assigned to <see cref="JobRunner"/> or to the <see cref="EntityStore"/>.
     /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///     If the <see cref="JobRunner"/> is not set.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     If a nested <see cref="RunParallel"/> is using the same <see cref="JobRunner"/> as the enclosing job. 
+    /// </exception>
     internal    abstract    void RunParallel();
 
 #region methods

@@ -199,7 +199,7 @@ public static class Test_QueryJob
     {
         Thread.CurrentThread.Name = "MainThread";
         var store   = new EntityStore(PidType.UsePidAsId) {
-            JobRunner = new ParallelJobRunner(2, "TestRunner")
+            JobRunner = new ParallelJobRunner(2, "JobRunner")
         };
         store.CreateEntity().AddComponent<MyComponent1>();
         
@@ -214,9 +214,43 @@ public static class Test_QueryJob
         job1.MinParallelChunkLength = 1;
         var e = Assert.Throws<AggregateException>(job1.RunParallel)!;
         
-        Assert.AreEqual(2, e.InnerExceptions.Count);
-        Assert.AreEqual("ParallelJobRunner (TestRunner) is already in use by: QueryJob [MyComponent1]", e.InnerExceptions[0].Message);
-        Assert.AreEqual("ParallelJobRunner (TestRunner) is already in use by: QueryJob [MyComponent1]", e.InnerExceptions[1].Message);
+        var exceptions =  e.InnerExceptions;
+        Assert.AreEqual(2, exceptions.Count);
+        Assert.AreEqual("'JobRunner' is already used by <- QueryJob [MyComponent1]", exceptions[0].Message);
+        Assert.AreEqual("'JobRunner' is already used by <- QueryJob [MyComponent1]", exceptions[1].Message);
+    }
+    
+    [Test]
+    public static void Test_QueryJob_multi_thread_JobRunner()
+    {
+        var threads = 4; 
+        var runner  = new ParallelJobRunner(threads, "TestRunner");
+        var store   = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
+        for (int n = 0; n < 10; n++) {
+            var entity  = store.CreateEntity();
+            entity.AddComponent<MyComponent1>();
+            entity.AddComponent<MyComponent2>();
+        }
+        var query1  = store.Query<MyComponent1>();
+        var query2  = store.Query<MyComponent2>();
+        var count1  = 0;
+        var count2  = 0;
+        var job1    = query1.ForEach((_,_) =>  Interlocked.Increment(ref count1)); 
+        var job2    = query2.ForEach((_,_) =>  Interlocked.Increment(ref count2));
+        job1.MinParallelChunkLength = 1;
+        job2.MinParallelChunkLength = 1;
+        
+        var jobs    = new QueryJob [] { job1, job2 };
+        Parallel.ForEach(jobs, job =>
+        {
+            for (int n = 0; n < 1000; n++) {
+                job.RunParallel();
+            }
+        });
+        Console.WriteLine($"{count1} {count2}");
+        Assert.AreEqual(threads * 1000, count1);
+        Assert.AreEqual(threads * 1000, count2);
+        runner.Dispose();
     }
     
     [Test]
