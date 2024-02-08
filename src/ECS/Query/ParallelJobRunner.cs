@@ -34,7 +34,7 @@ internal abstract class JobTask {
 /// </remarks>
 internal sealed class ParallelJobRunner : IDisposable
 {
-#region
+#region public properties
     public              bool                    IsDisposed  => !running;
     public              int                     ThreadCount => workerCount + 1;
     public override     string                  ToString()  => $"{name} - threads: {ThreadCount}";
@@ -50,9 +50,10 @@ internal sealed class ParallelJobRunner : IDisposable
     private             JobTask[]               jobTasks;
     internal readonly   int                     workerCount;
     private             bool                    running;
+    #endregion
+#region debug fields
     private  readonly   string                  name;                   // never null. used also as monitor 
     private             object                  usedBy;                 // only used for exceptions to provide context
-    // --- static
     [ThreadStatic]
     // Used only for throwing an exception if using same job runner twice.
     // Not checking for this case result in a deadlock which is much harder to find.
