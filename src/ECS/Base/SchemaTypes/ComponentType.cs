@@ -95,4 +95,20 @@ internal sealed class ComponentType<T> : ComponentType
     
     /// <summary> 128 bits = 16 bytes </summary>
     internal static readonly    int PadCount128     = 16 / ByteSize - 1;
+    
+    internal static readonly    int Align512        = GetAlign512();
+    
+    private static int GetAlign512()
+    {
+        switch (ByteSize)
+        {
+            case  1:     return 64;
+            case  2:     return 32;
+            case  4:     return 16;
+            case  8:     return  8;
+            case 16:     return  4;
+            case 32:     return  2;
+            default:     return  0;
+        }
+    }
 }

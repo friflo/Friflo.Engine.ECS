@@ -54,5 +54,15 @@ internal abstract class QueryJob
     internal static InvalidOperationException JobRunnerIsNullException() {
         return new InvalidOperationException($"{nameof(QueryJob)} requires a {nameof(JobRunner)}");
     }
+
+    internal static int GetSectionSize(int chunkLength, int taskCount, int align512)
+    {
+        var size = chunkLength / taskCount;
+        if (align512 == 0) {
+            return size;            
+        }
+        return ((size + align512 - 1) / align512) * align512;
+    }
+    
     #endregion
 }

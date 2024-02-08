@@ -142,7 +142,7 @@ public static class Test_QueryJob
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        for (int n = 0; n < 10; n++) {
+        for (int n = 0; n < 32; n++) {
             archetype.CreateEntity();
         }
         
@@ -200,7 +200,9 @@ public static class Test_QueryJob
         Thread.CurrentThread.Name = "MainThread";
         using var runner    = new ParallelJobRunner(2, "JobRunner");
         var store           = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
-        store.CreateEntity().AddComponent<MyComponent1>();
+        for (int n = 0; n < 32; n++) {
+            store.CreateEntity().AddComponent<MyComponent1>();
+        }
         
         var count       = 0;
         var query       = store.Query<MyComponent1>();
@@ -236,7 +238,7 @@ public static class Test_QueryJob
         var threads = 4; 
         using var runner    = new ParallelJobRunner(threads, "TestRunner");
         var store           = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
-        for (int n = 0; n < 10; n++) {
+        for (int n = 0; n < 64; n++) {
             var entity  = store.CreateEntity();
             entity.AddComponent<MyComponent1>();
             entity.AddComponent<MyComponent2>();
@@ -271,7 +273,9 @@ public static class Test_QueryJob
         var store       = new EntityStore(PidType.UsePidAsId) {
             JobRunner = jobRunner   // attach JobRunner to EntityStore
         };
-        store.CreateEntity().AddComponent<MyComponent1>();
+        for (int n = 0; n < 32; n++) {
+            store.CreateEntity().AddComponent<MyComponent1>();
+        }
         var query       = store.Query<MyComponent1>();
         int count       = 0;
         Thread.CurrentThread.Name = "MainThread";
@@ -298,7 +302,7 @@ public static class Test_QueryJob
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        for (int n = 0; n < 10; n++) {
+        for (int n = 0; n < 64; n++) {
             archetype.CreateEntity();
         }
         var runner  = new ParallelJobRunner(4);

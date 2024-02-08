@@ -43,30 +43,32 @@ internal sealed class QueryJob<T1> : QueryJob
     internal override void RunParallel()
     {
         if (jobRunner == null) throw JobRunnerIsNullException();
-        var taskCount = jobRunner.workerCount + 1;
+        var taskCount   = jobRunner.workerCount + 1;
+        var align512    = ComponentType<T1>.Align512;
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
-            if (taskCount <= 1 || chunk.Length < minParallel) {
+            var length = chunk.Length;
+            if (taskCount <= 1 || length < minParallel) {
                 action(chunk.Chunk1, chunk.Entities);
                 continue;
             }
-            var chunkLength = chunk.Length / taskCount;
             if (jobTasks == null || jobTasks.Length < taskCount) {
                 jobTasks = new QueryJobTask[taskCount];
                 for (int n = 0; n < taskCount; n++) {
                     jobTasks[n] = new QueryJobTask { action = action };
                 }
             }
-            for (int n = 0; n < taskCount; n++)
+            var sectionSize = GetSectionSize(length, taskCount, align512);
+            var taskIndex   = 0;
+            for (int start = 0; start < length; start += sectionSize)
             {
-                var start   = n * chunkLength;
-                var task    = jobTasks[n];
-                if (n == taskCount - 1) {  // is last task?
-                    // todo adjust step
+                var task = jobTasks[taskIndex++];
+                if (taskIndex == taskCount) {  // is last task?
+                    sectionSize = length - start;
                 }
-                task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, chunkLength);
-                task.entities   = new ChunkEntities(chunk.Entities, start, chunkLength);
+                task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, sectionSize);
+                task.entities   = new ChunkEntities(chunk.Entities, start, sectionSize);
             }
             jobRunner.ExecuteJob(this, jobTasks);
         }
