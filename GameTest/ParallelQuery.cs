@@ -30,7 +30,7 @@ public static class ParallelQuery
         var query = store.Query<MyComponent1>();
         var forEachCount    = 0;
         var lengthSum       = 0L;
-        var runner          = new ParallelJobRunner(threadCount);
+        using var runner    = new ParallelJobRunner(threadCount);
         
         var job = query.ForEach((_, _) => {});
         job.JobRunner = runner;
@@ -65,7 +65,6 @@ public static class ParallelQuery
         Console.WriteLine($"expect:       {loop * threadCount * count}             {loop * entityCount * count}" );
         // Assert.AreEqual(threadCount * count, forEachCount);
         // Assert.AreEqual(entityCount * count, lengthSum);
-        runner.Dispose();
     }
 
     private struct MyComponent1 : IComponent { public int a; }

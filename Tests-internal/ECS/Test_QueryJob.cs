@@ -38,11 +38,11 @@ public static class Test_QueryJob
         var job = query.ForEach((component1, entities) => taskCount++);
         job.Run();
         
-        job.JobRunner = new ParallelJobRunner(1);
+        using var runner = new ParallelJobRunner(1);  
+        job.JobRunner = runner;
         job.RunParallel();
         
         Assert.AreEqual(2, taskCount);
-        job.JobRunner.Dispose();
     }
     
     [Test]
@@ -71,7 +71,8 @@ public static class Test_QueryJob
                 ++c.a;
             }
         });
-        job.JobRunner               = new ParallelJobRunner(threadCount);
+        var runner = new ParallelJobRunner(threadCount);
+        job.JobRunner               = runner;
         job.MinParallelChunkLength  = 1000;
         job.RunParallel();  // force one time allocations
 
@@ -90,7 +91,6 @@ public static class Test_QueryJob
         
         Assert.AreEqual(threadCount * count, forEachCount);
         Assert.AreEqual(entityCount * count, lengthSum);
-        job.JobRunner.Dispose();
     }
 
     /// all TPL <see cref="Parallel"/> methods allocate memory. SO they are out.
@@ -150,7 +150,7 @@ public static class Test_QueryJob
         var job     = query.ForEach((component1, entities) => throw new InvalidOperationException("test exception"));
         job.MinParallelChunkLength = 10;
         
-        var runner  = new ParallelJobRunner(2);
+        using var runner  = new ParallelJobRunner(2);
         Assert.AreEqual(2, runner.ThreadCount);
         job.JobRunner = runner;
         Assert.AreSame(runner, job.JobRunner);
@@ -165,7 +165,6 @@ public static class Test_QueryJob
             job.Run();
         });
         Assert.AreEqual("test exception", e2!.Message);
-        runner.Dispose();
     }
     
     [Test]
@@ -198,9 +197,8 @@ public static class Test_QueryJob
     public static void Test_QueryJob_nested_ForEach()
     {
         Thread.CurrentThread.Name = "MainThread";
-        var store   = new EntityStore(PidType.UsePidAsId) {
-            JobRunner = new ParallelJobRunner(2, "JobRunner")
-        };
+        using var runner = new ParallelJobRunner(2, "JobRunner"); 
+        var store   = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
         store.CreateEntity().AddComponent<MyComponent1>();
         
         var query   = store.Query<MyComponent1>();
@@ -224,8 +222,8 @@ public static class Test_QueryJob
     public static void Test_QueryJob_multi_thread_JobRunner()
     {
         var threads = 4; 
-        var runner  = new ParallelJobRunner(threads, "TestRunner");
-        var store   = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
+        using var runner    = new ParallelJobRunner(threads, "TestRunner");
+        var store           = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
         for (int n = 0; n < 10; n++) {
             var entity  = store.CreateEntity();
             entity.AddComponent<MyComponent1>();
@@ -250,13 +248,12 @@ public static class Test_QueryJob
         Console.WriteLine($"{count1} {count2}");
         Assert.AreEqual(threads * 1000, count1);
         Assert.AreEqual(threads * 1000, count2);
-        runner.Dispose();
     }
     
     [Test]
     public static void Test_QueryJob_EntityStore_JobRunner()
     {
-        var jobRunner   = new ParallelJobRunner(2, "MyRunner");
+        using var jobRunner = new ParallelJobRunner(2, "MyRunner");
         Assert.AreEqual("MyRunner - threads: 2", jobRunner.ToString());
         
         var store       = new EntityStore(PidType.UsePidAsId) {
@@ -282,7 +279,6 @@ public static class Test_QueryJob
         Assert.AreEqual(2, count);
         Assert.IsTrue(foundWorkerName, "worker thread name not found");
         Assert.IsTrue(foundCallerName, "caller thread name not found");
-        jobRunner.Dispose();
     }
     
     [Test]
