@@ -53,17 +53,18 @@ internal sealed class QueryJob<T1> : QueryJob
                 action(chunk.Chunk1, chunk.Entities);
                 continue;
             }
-            if (jobTasks == null || jobTasks.Length < taskCount) {
-                jobTasks = new QueryJobTask[taskCount];
+            var tasks = jobTasks;
+            if (tasks == null || tasks.Length < taskCount) {
+                tasks = jobTasks = new QueryJobTask[taskCount];
                 for (int n = 0; n < taskCount; n++) {
-                    jobTasks[n] = new QueryJobTask { action = action };
+                    tasks[n] = new QueryJobTask { action = action };
                 }
             }
             var sectionSize = GetSectionSize(chunkLength, taskCount, align512);
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
-                var task        = jobTasks[taskIndex];
+                var task        = tasks[taskIndex];
                 var remaining   = chunkLength - start;
                 var reachedEnd  = remaining < sectionSize;
                 var length      = reachedEnd ? Math.Max(0, remaining) : sectionSize;
@@ -71,7 +72,7 @@ internal sealed class QueryJob<T1> : QueryJob
                 task.entities   = new ChunkEntities(chunk.Entities, start, length);
                 start          += sectionSize;
             }
-            jobRunner.ExecuteJob(this, jobTasks);
+            jobRunner.ExecuteJob(this, tasks);
         }
     }
 }
