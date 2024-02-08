@@ -47,10 +47,10 @@ internal sealed class ParallelJobRunner : IDisposable
     internal readonly   int                     workerCount;
     private             bool                    running;
     private  readonly   string                  name;                   // never null. used also as monitor 
-    private             object                  usedBy;
+    private             object                  usedBy;                 // only used for exceptions to provide context
     // --- static
     [ThreadStatic]
-    private  static     Stack<ParallelJobRunner>_tlsUsedRunnerStack; // single instance per thread
+    private  static     Stack<ParallelJobRunner>_tlsUsedRunnerStack;    // single instance per thread
     private  static     int                     _jobRunnerIdSeq;
     #endregion
     
