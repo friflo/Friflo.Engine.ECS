@@ -50,6 +50,8 @@ internal sealed class ParallelJobRunner : IDisposable
     private             object                  usedBy;                 // only used for exceptions to provide context
     // --- static
     [ThreadStatic]
+    // Used only for throwing an exception if using same job runner twice.
+    // Not checking for this case result in a deadlock which is much harder to find.
     private  static     Stack<ParallelJobRunner>_tlsUsedRunnerStack;    // single instance per thread
     private  static     int                     _jobRunnerIdSeq;
     #endregion
