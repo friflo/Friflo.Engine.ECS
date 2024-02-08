@@ -18,6 +18,10 @@ internal abstract class JobTask {
 /// <remarks>
 /// <see cref="ParallelJobRunner"/> is thread safe.<br/>
 /// The intention is to use the same instance for all jobs. E.g. the JobRunner assigned to the <see cref="EntityStore"/>.<br/>
+/// The job runner divide a job in multiple tasks each executed on its own core.<br/>
+/// This ensures high cache hit rate of code and data structures.<br/>
+/// <br/>
+/// <i>Constraint</i><br/>
 /// When executing nested jobs - running a job within another job - the nested job requires its own runner.<br/> 
 /// <br/>
 /// Performance related implementation goals:<br/>
