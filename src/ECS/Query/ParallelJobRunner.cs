@@ -165,13 +165,13 @@ internal sealed class ParallelJobRunner : IDisposable
     {
         var barrier = 0;
         var index   = (int)workerIndex;
+        var stack   = _tlsUsedRunnerStack = new Stack<ParallelJobRunner>();
         while (running)
         {
             startWorkers.Wait();
             if (!running) break;
             
             // --- execute task
-            var stack = _tlsUsedRunnerStack ??= new Stack<ParallelJobRunner>();
             stack.Push(this);
             try {
                 jobTasks[index].ExecuteTask();
