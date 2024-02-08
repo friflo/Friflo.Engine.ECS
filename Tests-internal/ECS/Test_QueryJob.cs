@@ -46,9 +46,10 @@ public static class Test_QueryJob
         Assert.AreEqual(2, taskCount);
     }
     
-    private static void SetComponent(Chunk<MyComponent1> myComponent1, ChunkEntities chunkEntities)
+    private static void SetComponent(Chunk<MyComponent1> myComponent1, ChunkEntities chunkEntities, ref int count)
     {
         var span = myComponent1.Span;
+        Interlocked.Add(ref count, span.Length);
         for (int n = 0; n < span.Length; n++) {
             ++span[n].a;
         }
@@ -63,27 +64,36 @@ public static class Test_QueryJob
         var archetype       = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         var entities        = new Entity[entityCount];
         var query           = store.Query<MyComponent1>();
-        var forEachRun      = query.ForEach(SetComponent);
-        var forEachParallel = query.ForEach(SetComponent);
+        var count           = 0;
+        var forEachRun      = query.ForEach((chunk, chunkEntities) => {
+            SetComponent(chunk, chunkEntities, ref count);
+        });
+        var forEachParallel = query.ForEach((chunk, chunkEntities) => {
+            SetComponent(chunk, chunkEntities, ref count);
+        });
         forEachRun.MinParallelChunkLength = 1;
         forEachParallel.MinParallelChunkLength = 1;
         
-        for (int n = 0; n < entityCount; n++) {
-            entities[n] = archetype.CreateEntity();
-            
+        for (int n = 0; n < entityCount; n++)
+        {
             for (int i = 0; i < n; i++) { entities[i].GetComponent<MyComponent1>().a = i; }
+            count = 0;
             forEachRun.Run();
+            Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
                 var comp = entities[i].GetComponent<MyComponent1>();
                 Mem.AreEqual(i + 1, comp.a);
             }
 
             for (int i = 0; i < n; i++) { entities[i].GetComponent<MyComponent1>().a = i; }
+            count = 0;
             forEachParallel.RunParallel();
+            Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
                 var comp = entities[i].GetComponent<MyComponent1>();
                 Mem.AreEqual(i + 1, comp.a);
             }
+            entities[n] = archetype.CreateEntity();
         }
     }
     
