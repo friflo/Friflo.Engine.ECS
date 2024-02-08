@@ -48,8 +48,8 @@ internal sealed class QueryJob<T1> : QueryJob
         
         foreach (Chunks<T1> chunk in query.Chunks)
         {
-            var length = chunk.Length;
-            if (taskCount <= 1 || length < minParallel) {
+            var chunkLength = chunk.Length;
+            if (taskCount <= 1 || chunkLength < minParallel) {
                 action(chunk.Chunk1, chunk.Entities);
                 continue;
             }
@@ -59,22 +59,17 @@ internal sealed class QueryJob<T1> : QueryJob
                     jobTasks[n] = new QueryJobTask { action = action };
                 }
             }
-            var sectionSize = GetSectionSize(length, taskCount, align512);
-            var taskIndex   = 0;
-            for (int start = 0; start < length; start += sectionSize)
+            var sectionSize = GetSectionSize(chunkLength, taskCount, align512);
+            var start       = 0;
+            for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
-                var task        = jobTasks[taskIndex++];
-                var remaining   = length - start;
-                var isLastTask  = remaining < sectionSize;
-                if (isLastTask) {
-                    sectionSize = remaining;
-                }
-                task.chunk1     = new Chunk<T1>    (chunk.Chunk1,   start, sectionSize);
-                task.entities   = new ChunkEntities(chunk.Entities, start, sectionSize);
-                if (isLastTask) break;
-            }
-            for (;taskIndex < taskCount; taskIndex++) {
-                jobTasks[taskIndex] = default;
+                var task        = jobTasks[taskIndex];
+                var remaining   = chunkLength - start;
+                var reachedEnd  = remaining < sectionSize;
+                var length      = reachedEnd ? Math.Max(0, remaining) : sectionSize;
+                task.chunk1     = new Chunk<T1>    (chunk.Chunk1,   start, length);
+                task.entities   = new ChunkEntities(chunk.Entities, start, length);
+                start          += sectionSize;
             }
             jobRunner.ExecuteJob(this, jobTasks);
         }
