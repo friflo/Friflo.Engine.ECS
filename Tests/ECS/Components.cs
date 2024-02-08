@@ -12,7 +12,10 @@ namespace Tests.ECS;
 // ------------------------------------------------ components
 [CodeCoverageTest]
 [ComponentKey("my1")]
-public struct MyComponent1 : IComponent { public int a; }
+public struct MyComponent1 : IComponent {
+    public          int     a;
+    public override string  ToString() => a.ToString();
+}
 
 [ComponentKey("my2")]
 public struct MyComponent2 : IComponent { public int b; }

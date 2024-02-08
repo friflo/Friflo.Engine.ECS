@@ -57,7 +57,7 @@ internal abstract class QueryJob
 
     internal static int GetSectionSize(int chunkLength, int taskCount, int align512)
     {
-        var size = chunkLength / taskCount;
+        var size = (chunkLength + taskCount - 1) / taskCount;
         if (align512 == 0) {
             return size;            
         }
