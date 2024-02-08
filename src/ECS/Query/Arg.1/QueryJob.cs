@@ -69,7 +69,7 @@ internal sealed class QueryJob<T1> : QueryJob
                 if (isLastTask) {
                     sectionSize = remaining;
                 }
-                task.chunk1     = new Chunk<T1>(chunk.Chunk1,       start, sectionSize);
+                task.chunk1     = new Chunk<T1>    (chunk.Chunk1,   start, sectionSize);
                 task.entities   = new ChunkEntities(chunk.Entities, start, sectionSize);
                 if (isLastTask) break;
             }
