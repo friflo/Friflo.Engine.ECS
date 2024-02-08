@@ -37,9 +37,9 @@ internal sealed class ParallelJobRunner : IDisposable
     #endregion
     
 #region fields
-    private  readonly   ManualResetEventSlim    startWorkers        = new (false, 2047);
-    private  readonly   ManualResetEventSlim    allWorkersFinished  = new (false);
-    private  readonly   List<Exception>         taskExceptions      = new ();
+    private  readonly   ManualResetEventSlim    startWorkers;
+    private  readonly   ManualResetEventSlim    allWorkersFinished;
+    private  readonly   List<Exception>         taskExceptions;
     private             int                     allFinishedBarrier;
     private             int                     finishedWorkerCount;
     private             bool                    workersStarted;
@@ -56,13 +56,16 @@ internal sealed class ParallelJobRunner : IDisposable
     
 #region general
     internal ParallelJobRunner(int threadCount, string name = null) {
-        workerCount = threadCount - 1;
-        running     = true;
+        workerCount         = threadCount - 1;
+        running             = true;
+        startWorkers        = new ManualResetEventSlim(false, 2047);
+        allWorkersFinished  = new ManualResetEventSlim(false);
+        taskExceptions      = new List<Exception>();
         if (name != null) {
             this.name = name;
-            return;
+        } else {
+            this.name = "JobRunner " + ++_jobRunnerIdSeq;
         }
-        this.name = "JobRunner " + ++_jobRunnerIdSeq;
     }
 
     public void Dispose() {
