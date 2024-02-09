@@ -50,7 +50,6 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
     {
         if (jobRunner == null) throw JobRunnerIsNullException();
         var taskCount   = jobRunner.workerCount + 1;
-        var align512    = ComponentType<T1>.Align512;
         
         foreach (Chunks<T1, T2, T3, T4, T5> chunk in query.Chunks)
         {
@@ -66,7 +65,7 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
                     tasks[n] = new QueryJobTask { action = action };
                 }
             }
-            var sectionSize = GetSectionSize(chunkLength, taskCount, align512);
+            var sectionSize = GetSectionSize(chunkLength, taskCount);
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {

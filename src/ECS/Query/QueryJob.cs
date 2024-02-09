@@ -70,6 +70,11 @@ public abstract class QueryJob
     internal static InvalidOperationException JobRunnerIsNullException() {
         return new InvalidOperationException($"{nameof(QueryJob)} requires a {nameof(JobRunner)}");
     }
+    
+    internal static int GetSectionSize(int chunkLength, int taskCount)
+    {
+        return (chunkLength + taskCount - 1) / taskCount;
+    }
 
     /// <remarks>
     /// The return size which is applied to every section <see cref="Chunk{T}"/>.<br/>
@@ -79,7 +84,7 @@ public abstract class QueryJob
     /// This enables vectorization using Vector128, Vector256 or Vector512 without a remainder loop.<br/>
     /// See <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> an <see cref="Chunk{T}.AsSpan512{TTo}"/>.  
     /// </remarks>
-    internal static int GetSectionSize(int chunkLength, int taskCount, int align512)
+    internal static int GetSectionSize512(int chunkLength, int taskCount, int align512)
     {
         var size = (chunkLength + taskCount - 1) / taskCount;
         if (align512 == 0) {

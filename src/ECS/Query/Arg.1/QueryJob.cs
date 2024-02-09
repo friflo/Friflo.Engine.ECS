@@ -62,7 +62,7 @@ public sealed class QueryJob<T1> : QueryJob
                     tasks[n] = new QueryJobTask { action = action };
                 }
             }
-            var sectionSize = GetSectionSize(chunkLength, taskCount, align512);
+            var sectionSize = GetSectionSize512(chunkLength, taskCount, align512);
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
