@@ -99,5 +99,32 @@ public abstract class QueryJob
         var reachedEnd  = remaining < sectionSize;
         return reachedEnd ? Math.Max(0, remaining) : sectionSize;
     }
+
+    private static int GreatestCommonDivider(int a, int b)
+    {
+        // used loop instead of recursive call below
+        while (true)
+        {
+            if (b == 0) {
+                return a;
+            }
+            var a1 = a;
+            a = b;
+            b = a1 % b;
+        }
+        /* same as
+        if(b == 0) {
+            return a;
+        }
+        return GreatestCommonDivider(b, a % b); */
+    }
+
+    internal static int LeastCommonMultiple(int a, int b)
+    {
+        if(a > b) {
+            return a / GreatestCommonDivider(a, b) * b;
+        }
+        return b / GreatestCommonDivider(a, b) * a;  
+    }
     #endregion
 }

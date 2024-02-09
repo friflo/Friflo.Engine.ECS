@@ -105,7 +105,9 @@ internal sealed class ComponentType<T> : ComponentType
     /// This enables providing <see cref="Chunk{T}"/> components as <see cref="Span{T}"/> of Vector128, Vector256 and Vector512
     /// of https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.<br/>
     /// See: <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> and <see cref="Chunk{T}.AsSpan512{TTo}"/>.<br/>
-    /// It also enables to apply vectorization without a remainder loop.
+    /// It also enables to apply vectorization without a remainder loop.<br/>
+    /// <br/>
+    /// See <see cref="QueryJob.LeastCommonMultiple(int, int)"/> and its tests to check values.
     /// </remarks>
     private static int GetAlign512()
     {
