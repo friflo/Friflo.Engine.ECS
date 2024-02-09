@@ -65,9 +65,7 @@ public sealed class QueryJob<T1> : QueryJob
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
                 var task        = tasks[taskIndex];
-                var remaining   = chunkLength - start;
-                var reachedEnd  = remaining < sectionSize;
-                var length      = reachedEnd ? Math.Max(0, remaining) : sectionSize;
+                var length      = GetSectionLength (chunkLength,    start, sectionSize);
                 task.chunk1     = new Chunk<T1>    (chunk.Chunk1,   start, length);
                 task.entities   = new ChunkEntities(chunk.Entities, start, length, taskIndex);
                 start          += sectionSize;

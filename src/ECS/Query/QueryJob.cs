@@ -80,5 +80,11 @@ public abstract class QueryJob
         return ((size + align512 - 1) / align512) * align512;
     }
     
+    internal static int GetSectionLength(int chunkLength, int start, int sectionSize)
+    {
+        var remaining   = chunkLength - start;
+        var reachedEnd  = remaining < sectionSize;
+        return reachedEnd ? Math.Max(0, remaining) : sectionSize;
+    }
     #endregion
 }
