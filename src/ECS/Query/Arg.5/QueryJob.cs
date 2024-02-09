@@ -70,7 +70,6 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
-                var task        = tasks[taskIndex];
                 var length      = GetSectionLength (chunkLength,    start, sectionSize);
                 var chunk1      = new Chunk<T1>    (chunk.Chunk1,   start, length);
                 var chunk2      = new Chunk<T2>    (chunk.Chunk2,   start, length);
@@ -78,7 +77,7 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
                 var chunk4      = new Chunk<T4>    (chunk.Chunk4,   start, length);
                 var chunk5      = new Chunk<T5>    (chunk.Chunk5,   start, length);
                 var entities    = new ChunkEntities(chunk.Entities, start, length, taskIndex);
-                task.chunks     = new Chunks<T1, T2, T3, T4, T5>(chunk1, chunk2, chunk3, chunk4, chunk5, entities);
+                tasks[taskIndex].chunks = new Chunks<T1, T2, T3, T4, T5>(chunk1, chunk2, chunk3, chunk4, chunk5, entities);
                 start          += sectionSize;
             }
             jobRunner.ExecuteJob(this, tasks);

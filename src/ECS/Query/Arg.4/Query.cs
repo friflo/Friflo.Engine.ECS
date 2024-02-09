@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 using static Friflo.Engine.ECS.StructInfo;
@@ -46,4 +47,6 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     
     /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4}"/>. </summary>
     public      QueryChunks    <T1, T2, T3, T4>  Chunks         => new (this);
+    
+    public QueryJob<T1, T2, T3, T4> ForEach(Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities> action)  => new (this, action);
 }

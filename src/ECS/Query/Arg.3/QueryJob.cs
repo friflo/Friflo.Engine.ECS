@@ -8,27 +8,29 @@ using System;
 namespace Friflo.Engine.ECS;
 
 
-public sealed class QueryJob<T1> : QueryJob
+public sealed class QueryJob<T1, T2, T3> : QueryJob
     where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
 {
-    internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
-    public  override    string                              ToString()  => query.GetQueryJobString();
+    internal            QueryChunks<T1, T2, T3> Chunks      => new (query); // only for debugger
+    public  override    string                  ToString()  => query.GetQueryJobString();
 
-    private readonly    ArchetypeQuery<T1>                  query;                  //  8
-    private readonly    Action<Chunk<T1>, ChunkEntities>    action;                 //  8
-    private             QueryJobTask[]                      jobTasks;               //  8
+    private readonly    ArchetypeQuery<T1, T2, T3>                              query;      //  8
+    private readonly    Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities>  action;     //  8
+    private             QueryJobTask[]                                          jobTasks;   //  8
 
 
     private class QueryJobTask : JobTask {
-        internal    Action<Chunk<T1>, ChunkEntities>    action;
-        internal    Chunks<T1>                          chunks;
+        internal    Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities>      action;
+        internal    Chunks<T1, T2, T3>                                          chunks;
         
-        internal  override void ExecuteTask()  => action(chunks.Chunk1, chunks.Entities);
+        internal  override void ExecuteTask()  => action(chunks.Chunk1, chunks.Chunk2, chunks.Chunk3, chunks.Entities);
     }
     
     internal QueryJob(
-        ArchetypeQuery<T1>                  query,
-        Action<Chunk<T1>, ChunkEntities>    action)
+        ArchetypeQuery<T1, T2, T3>                              query,
+        Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities>  action)
     {
         this.query  = query;
         this.action = action;
@@ -37,8 +39,8 @@ public sealed class QueryJob<T1> : QueryJob
     
     public override void Run()
     {
-        foreach (Chunks<T1> chunk in query.Chunks) {
-            action(chunk.Chunk1, chunk.Entities);
+        foreach (Chunks<T1, T2, T3> chunk in query.Chunks) {
+            action(chunk.Chunk1, chunk.Chunk2, chunk.Chunk3, chunk.Entities);
         }
     }
     
@@ -48,11 +50,11 @@ public sealed class QueryJob<T1> : QueryJob
         var taskCount   = jobRunner.workerCount + 1;
         var align512    = ComponentType<T1>.Align512;
         
-        foreach (Chunks<T1> chunk in query.Chunks)
+        foreach (Chunks<T1, T2, T3> chunk in query.Chunks)
         {
             var chunkLength = chunk.Length;
             if (taskCount <= 1 || chunkLength < minParallel) {
-                action(chunk.Chunk1, chunk.Entities);
+                action(chunk.Chunk1, chunk.Chunk2, chunk.Chunk3, chunk.Entities);
                 continue;
             }
             var tasks = jobTasks;
@@ -68,8 +70,10 @@ public sealed class QueryJob<T1> : QueryJob
             {
                 var length      = GetSectionLength (chunkLength,    start, sectionSize);
                 var chunk1      = new Chunk<T1>    (chunk.Chunk1,   start, length);
+                var chunk2      = new Chunk<T2>    (chunk.Chunk2,   start, length);
+                var chunk3      = new Chunk<T3>    (chunk.Chunk3,   start, length);
                 var entities    = new ChunkEntities(chunk.Entities, start, length, taskIndex);
-                tasks[taskIndex].chunks = new Chunks<T1>(chunk1, entities);
+                tasks[taskIndex].chunks = new Chunks<T1, T2, T3>(chunk1, chunk2, chunk3, entities);
                 start          += sectionSize;
             }
             jobRunner.ExecuteJob(this, tasks);
