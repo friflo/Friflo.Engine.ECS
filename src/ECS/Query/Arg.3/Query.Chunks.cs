@@ -19,7 +19,7 @@ public readonly struct Chunks<T1, T2, T3>
     public readonly     Chunk<T1>       Chunk1;     //  16
     public readonly     Chunk<T2>       Chunk2;     //  16
     public readonly     Chunk<T3>       Chunk3;     //  16
-    public readonly     ChunkEntities   Entities;   //  24
+    public readonly     ChunkEntities   Entities;   //  32
 
     public override     string          ToString() => Entities.GetChunksString();
 

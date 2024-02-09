@@ -15,7 +15,7 @@ public readonly struct Chunks<T1>
 {
     public              int             Length => Chunk1.Length;
     public readonly     Chunk<T1>       Chunk1;     //  16
-    public readonly     ChunkEntities   Entities;   //  24
+    public readonly     ChunkEntities   Entities;   //  32
 
     public override     string          ToString() => Entities.GetChunksString();
 
