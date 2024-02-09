@@ -103,7 +103,7 @@ internal sealed class ComponentType<T> : ComponentType
     /// </summary>
     /// <remarks>
     /// This enables providing <see cref="Chunk{T}"/> components as <see cref="Span{T}"/> of Vector128, Vector256 and Vector512
-    /// of <see cref="System.Runtime.Intrinsics"/>.<br/>
+    /// of https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.<br/>
     /// See: <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> and <see cref="Chunk{T}.AsSpan512{TTo}"/>.<br/>
     /// It also enables to apply vectorization without a remainder loop.
     /// </remarks>
