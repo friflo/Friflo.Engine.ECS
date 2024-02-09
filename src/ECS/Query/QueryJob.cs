@@ -12,7 +12,23 @@ namespace Friflo.Engine.ECS;
 public abstract class QueryJob
 {
 #region public properties
-    public      ParallelJobRunner   JobRunner               { get => GetRunner(); set => SetRunner(value); }
+    /// <summary> The job runner used to execute a query <see cref="ForEachExecution.Parallel"/>. </summary>
+    public      ParallelJobRunner   JobRunner               { get => GetRunner(); set => SetRunner(value);      }
+    
+    /// <summary>
+    /// The minimum number <see cref="Chunk{T}"/> components required to execute the query <see cref="ForEachExecution.Parallel"/>.
+    /// Default: 1000.
+    /// </summary>
+    /// <remarks>
+    /// Parallel query execution adds an overhead of 1 to 2 micro seconds per query for thread synchronization.<br/>
+    /// Execution of a simple computation on a single component takes 0.5 to 1 nano seconds.<br/>
+    /// <br/>
+    /// E.g. processing a chunk with 100 components will take 50 to 100 nano seconds.<br/>
+    /// So the chunk components are executed <see cref="ForEachExecution.Sequential"/> to avoid the parallelization overhead.<br/>
+    /// <br/>
+    /// For more complex computations <see cref="MinParallelChunkLength"/> can be reduces to execute a query
+    /// <see cref="ForEachExecution.Parallel"/> when dealing with a lower number of components.
+    /// </remarks>
     public      int                 MinParallelChunkLength  { get => minParallel; set => SetMinParallel(value); }
     #endregion
     
