@@ -50,7 +50,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
     
-    /// <summary> The execution type used to create the chunk entities. </summary>
+    /// <summary> The execution type used to provide the chunk entities. </summary>
     public   readonly   ForEachExecution    Execution;  //  1
     
     /// <summary>
