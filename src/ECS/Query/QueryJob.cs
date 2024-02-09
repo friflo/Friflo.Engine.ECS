@@ -71,11 +71,6 @@ public abstract class QueryJob
         return new InvalidOperationException($"{nameof(QueryJob)} requires a {nameof(JobRunner)}");
     }
     
-    internal static int GetSectionSize(int chunkLength, int taskCount)
-    {
-        return (chunkLength + taskCount - 1) / taskCount;
-    }
-
     /// <remarks>
     /// The return size which is applied to every section <see cref="Chunk{T}"/>.<br/>
     /// <br/>

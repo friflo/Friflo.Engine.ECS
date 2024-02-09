@@ -3,6 +3,7 @@
 
 using System;
 
+// ReSharper disable StaticMemberInGenericType
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -65,7 +66,7 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
                     tasks[n] = new QueryJobTask { action = action };
                 }
             }
-            var sectionSize = GetSectionSize(chunkLength, taskCount);
+            var sectionSize = GetSectionSize512(chunkLength, taskCount, Align512);
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
@@ -81,5 +82,20 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
             }
             jobRunner.ExecuteJob(this, tasks);
         }
+    }
+    
+    private static readonly int Align512 = GetAlign512();
+    
+    private static int GetAlign512()
+    {
+        int lcm1 = ComponentType<T1>.Align512;
+        int lcm2 = ComponentType<T2>.Align512;
+        int lcm3 = ComponentType<T3>.Align512;
+        int lcm4 = ComponentType<T4>.Align512;
+        int lcm5 = ComponentType<T5>.Align512;
+        int lcm12   =   LeastCommonMultiple(lcm1,    lcm2);
+        int lcm34   =   LeastCommonMultiple(lcm3,    lcm4);
+        int lcm1234 =   LeastCommonMultiple(lcm12,   lcm34);
+        return          LeastCommonMultiple(lcm1234, lcm5);
     }
 }
