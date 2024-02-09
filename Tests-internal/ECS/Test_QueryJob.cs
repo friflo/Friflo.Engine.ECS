@@ -25,12 +25,12 @@ public static class Test_QueryJob
         AreEqual("QueryJob [MyComponent1]", job.ToString());
     }
 
-    /// <summary>
-    /// Some combination are used at<see cref="ComponentType{T}.GetAlign512"/>
-    /// </summary>
     [Test]
     public static void Test_QueryJob_LeastCommonMultiple()
     {
+        AreEqual(  0, QueryJob.LeastCommonMultiple( 0,  1));
+        AreEqual(  0, QueryJob.LeastCommonMultiple( 1,  0));
+        
         AreEqual(  1, QueryJob.LeastCommonMultiple( 1,  1));
         AreEqual(  2, QueryJob.LeastCommonMultiple( 1,  2));
         AreEqual(  6, QueryJob.LeastCommonMultiple( 2,  3));

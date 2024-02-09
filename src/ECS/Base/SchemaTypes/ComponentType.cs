@@ -96,8 +96,6 @@ internal sealed class ComponentType<T> : ComponentType
     /// <summary> 128 bits = 16 bytes </summary>
     internal static readonly    int PadCount128     = 16 / ByteSize - 1;
     
-    internal static readonly    int Align512        = GetAlign512();
-    
     /// <summary>
     /// Return the number of components in a <see cref="Chunk{T}"/> as a multiple of 64 bytes.
     /// </summary>
@@ -105,32 +103,10 @@ internal sealed class ComponentType<T> : ComponentType
     /// This enables providing <see cref="Chunk{T}"/> components as <see cref="Span{T}"/> of Vector128, Vector256 and Vector512
     /// of https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics.<br/>
     /// See: <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> and <see cref="Chunk{T}.AsSpan512{TTo}"/>.<br/>
+    /// <br/>
     /// It also enables to apply vectorization without a remainder loop.<br/>
     /// <br/>
-    /// See <see cref="QueryJob.LeastCommonMultiple(int, int)"/> and its tests to check values.
+    /// Aligned naming to Vector512. 512 bits == 64 bytes.
     /// </remarks>
-    private static int GetAlign512()
-    {
-        // return the 'least common multiple' of ByteSize and 64.
-        switch (ByteSize)
-        {
-            case  1:    return  64;
-            case  2:    return  32;
-            case  4:    return  16;
-            case  8:    return   8;
-            case 16:    return   4;
-            case 32:    return   2;
-            case 64:    return   1;
-            //
-            case 12:    return 192;
-            case 20:    return 320;
-            case 24:    return 192;
-            case 28:    return 448;
-            case 40:    return 320;
-            case 48:    return 192;
-            case 56:    return 448;
-            //
-            default:    return   0;
-        }
-    }
+    internal static readonly    int Align512        =  QueryJob.LeastCommonMultiple(ByteSize, 64);
 }
