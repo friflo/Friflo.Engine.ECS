@@ -40,10 +40,12 @@ public static class Test_QueryJobArg
         var count       = 0;
         var forEach = query.ForEach((myComponent1, chunkEntities) => {
             Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
-            var span = myComponent1.Span;
-            Interlocked.Add(ref count, span.Length);
-            for (int n = 0; n < span.Length; n++) {
-                ++span[n].a;
+            var span1 = myComponent1.Span;
+            var ids = chunkEntities.Ids;
+            Interlocked.Add(ref count, span1.Length);
+            for (int n = 0; n < span1.Length; n++) {
+                Mem.AreEqual(span1[n].a + 1, ids[n]);
+                ++span1[n].a;
             }
         });
         forEach.MinParallelChunkLength = 1;
@@ -80,8 +82,10 @@ public static class Test_QueryJobArg
             Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
             var span1 = myComponent1.Span;
             var span2 = myComponent2.Span;
+            var ids = chunkEntities.Ids;
             Interlocked.Add(ref count, span1.Length);
             for (int n = 0; n < span1.Length; n++) {
+                Mem.AreEqual(span1[n].a + 1, ids[n]);
                 ++span1[n].a;
                 ++span2[n].b;
             }
@@ -126,8 +130,10 @@ public static class Test_QueryJobArg
             var span1 = myComponent1.Span;
             var span2 = myComponent2.Span;
             var span3 = position.Span;
+            var ids = chunkEntities.Ids;
             Interlocked.Add(ref count, span1.Length);
             for (int n = 0; n < span1.Length; n++) {
+                Mem.AreEqual(span1[n].a + 1, ids[n]);
                 ++span1[n].a;
                 ++span2[n].b;
                 ++span3[n].x;
@@ -177,8 +183,10 @@ public static class Test_QueryJobArg
             var span2 = myComponent2.Span;
             var span3 = position.Span;
             var span4 = rotation.Span;
+            var ids = chunkEntities.Ids;
             Interlocked.Add(ref count, span1.Length);
             for (int n = 0; n < span1.Length; n++) {
+                Mem.AreEqual(span1[n].a + 1, ids[n]);
                 ++span1[n].a;
                 ++span2[n].b;
                 ++span3[n].x;
@@ -233,8 +241,10 @@ public static class Test_QueryJobArg
             var span3 = position.Span;
             var span4 = rotation.Span;
             var span5 = scale3.Span;
+            var ids = chunkEntities.Ids;
             Interlocked.Add(ref count, span1.Length);
             for (int n = 0; n < span1.Length; n++) {
+                Mem.AreEqual(span1[n].a + 1, ids[n]);
                 ++span1[n].a;
                 ++span2[n].b;
                 ++span3[n].x;

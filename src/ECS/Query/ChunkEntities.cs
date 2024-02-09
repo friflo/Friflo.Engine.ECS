@@ -59,11 +59,13 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     
     internal ChunkEntities(in ChunkEntities entities, int start, int componentLen, int taskIndex) {
         Archetype   = entities.Archetype;
-        entityIds   = entities.entityIds;
-        this.start  = start;
-        Length      = componentLen;
         Execution   = JobExecution.Parallel;
         TaskIndex   = (byte)taskIndex;
+        if (componentLen > 0) {
+            entityIds   = entities.entityIds;
+            this.start  = start;
+            Length      = componentLen;
+        }
     }
     
 #region public methods
