@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-using Tests.ECS;
 using Tests.Utils;
 
 // ReSharper disable AccessToModifiedClosure
@@ -12,7 +11,7 @@ using Tests.Utils;
 // ReSharper disable RedundantLambdaParameterType
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable once InconsistentNaming
-namespace Internal.ECS;
+namespace Tests.ECS.Arch;
 
 public static class Test_QueryJob
 {
@@ -167,24 +166,6 @@ public static class Test_QueryJob
         Parallel.Invoke(actions);
         Assert.IsTrue(Mem.GetAllocatedBytes() - start > 0);
     }
-    
-    /* 
-    [Test]
-    public static void Test_QueryJob_ToString()
-    {
-        var store       = new EntityStore(PidType.UsePidAsId);
-        var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        for (int n = 0; n < 32; n++) {
-            archetype.CreateEntity();
-        }
-        
-        var query = store.Query<MyComponent1>();
-        
-        var job = query.ForEach((component1, entities) => { });
-        
-        Assert.AreEqual(32, job.Chunks.EntityCount);
-        Assert.AreEqual("QueryJob [MyComponent1]", job.ToString());
-    } */
     
     [Test]
     public static void Test_QueryJob_task_exceptions()
