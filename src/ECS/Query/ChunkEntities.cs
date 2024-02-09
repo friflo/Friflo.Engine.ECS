@@ -10,10 +10,15 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-
+/// <summary>
+/// Specify the way how <see cref="ChunkEntities"/> are provided by either a <c>foreach</c> loop,
+/// <see cref="QueryJob.Run"/> or <see cref="QueryJob.RunParallel"/>.
+/// </summary>
 public enum ForEachExecution : byte
 {
+    /// <summary><see cref="ChunkEntities"/> are provided by a <c>foreach</c> loop or <see cref="QueryJob.Run"/>.</summary>
     Sequential  = 0,
+    /// <summary><see cref="ChunkEntities"/> are provided by a <see cref="QueryJob.RunParallel"/>.</summary>
     Parallel    = 1
 }
 
@@ -49,8 +54,9 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   ForEachExecution    Execution;  //  1
     
     /// <summary>
-    /// if    0 - The chunk entities are created on the caller (main) thread.<br/>
-    /// if >= 1 - The chunk entities are created on a worker thread.
+    /// if    0 - The entities are provided from the main (caller) thread using <c>foreach(...)</c> loop,
+    /// <see cref="QueryJob.Run"/> or <see cref="QueryJob.RunParallel"/>.<br/>
+    /// if >= 1 - The entities are provided from a worker thread using <see cref="QueryJob.RunParallel"/>.
     /// </summary>
     public   readonly   byte                TaskIndex;  //  1
     //
