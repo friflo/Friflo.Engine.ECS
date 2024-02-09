@@ -36,7 +36,7 @@ public static class Test_QueryJob
         // --- execute ForEach() single threaded
         int taskCount = 0;
         var job = query.ForEach((component1, entities) => {
-            Mem.IsTrue(entities.Execution == ForEachExecution.Sequential);
+            Mem.IsTrue(entities.Execution == JobExecution.Sequential);
             Mem.AreEqual(0, entities.TaskIndex);
             taskCount++;
         });
@@ -70,7 +70,7 @@ public static class Test_QueryJob
         
         var count           = 0;
         var forEach = query.ForEach((chunk, chunkEntities) => {
-            Mem.IsTrue(chunkEntities.Execution == ForEachExecution.Parallel);
+            Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
             SetComponent(chunk, chunkEntities, ref count);
         });
         forEach.MinParallelChunkLength = 1;
@@ -111,7 +111,7 @@ public static class Test_QueryJob
         
         var job = query.ForEach((component1, entities) =>
         {
-            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Mem.IsTrue(entities.Execution == JobExecution.Parallel);
             Interlocked.Increment(ref forEachCount);
             Interlocked.Add(ref lengthSum, entities.Length);
             var componentSpan = component1.Span;
@@ -237,7 +237,7 @@ public static class Test_QueryJob
         var count       = 0;
         var query       = store.Query<MyComponent1>();
         var nestedJob   = query.ForEach((_, entities) => {
-            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Mem.IsTrue(entities.Execution == JobExecution.Parallel);
             Interlocked.Increment(ref count);
         });
         nestedJob.MinParallelChunkLength = 1;
@@ -279,11 +279,11 @@ public static class Test_QueryJob
         var count1  = 0;
         var count2  = 0;
         var job1    = query1.ForEach((_, entities) => {
-            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Mem.IsTrue(entities.Execution == JobExecution.Parallel);
             Interlocked.Increment(ref count1);
         }); 
         var job2    = query2.ForEach((_, entities) => {
-            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Mem.IsTrue(entities.Execution == JobExecution.Parallel);
             Interlocked.Increment(ref count2);
         });
         job1.MinParallelChunkLength = 1;
@@ -319,7 +319,7 @@ public static class Test_QueryJob
 
         var job         = query.ForEach((_, entities) => {
             count++;
-            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Mem.IsTrue(entities.Execution == JobExecution.Parallel);
             var threadName = Thread.CurrentThread.Name;
             switch (entities.TaskIndex) {
                 case 0:     Assert.AreEqual("MainThread",           threadName);  break;

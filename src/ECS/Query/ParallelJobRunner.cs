@@ -15,6 +15,18 @@ internal abstract class JobTask {
     internal abstract void ExecuteTask();
 }
 
+/// <summary>
+/// Specify the way how <see cref="ChunkEntities"/> are provided by either a <c>foreach</c> loop,
+/// <see cref="QueryJob.Run"/> or <see cref="QueryJob.RunParallel"/>.
+/// </summary>
+public enum JobExecution : byte
+{
+    /// <summary><see cref="ChunkEntities"/> are provided by a <c>foreach</c> loop or <see cref="QueryJob.Run"/>.</summary>
+    Sequential  = 0,
+    /// <summary><see cref="ChunkEntities"/> are provided by a <see cref="QueryJob.RunParallel"/>.</summary>
+    Parallel    = 1
+}
+
 /// <remarks>
 /// <see cref="ParallelJobRunner"/> is thread safe.<br/>
 /// The intention is to use the same instance for all jobs. E.g. the JobRunner assigned to the <see cref="EntityStore"/>.<br/>

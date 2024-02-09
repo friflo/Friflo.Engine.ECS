@@ -11,18 +11,6 @@ using System.Text;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Specify the way how <see cref="ChunkEntities"/> are provided by either a <c>foreach</c> loop,
-/// <see cref="QueryJob.Run"/> or <see cref="QueryJob.RunParallel"/>.
-/// </summary>
-public enum ForEachExecution : byte
-{
-    /// <summary><see cref="ChunkEntities"/> are provided by a <c>foreach</c> loop or <see cref="QueryJob.Run"/>.</summary>
-    Sequential  = 0,
-    /// <summary><see cref="ChunkEntities"/> are provided by a <see cref="QueryJob.RunParallel"/>.</summary>
-    Parallel    = 1
-}
-
-/// <summary>
 /// Provide the entity <see cref="Entity.Id"/>'s for <see cref="Chunk{T}"/> components using <see cref="Ids"/> or <see cref="this[int]"/>.<br/>
 /// </summary>
 /// <remarks>
@@ -51,7 +39,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   int                 Length;     //  4
     
     /// <summary> The execution type used to provide the chunk entities. </summary>
-    public   readonly   ForEachExecution    Execution;  //  1
+    public   readonly   JobExecution        Execution;  //  1
     
     /// <summary>
     /// if    0 - The entities are provided from the main (caller) thread using <c>foreach(...)</c> loop,
@@ -74,7 +62,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         entityIds   = entities.entityIds;
         this.start  = start;
         Length      = componentLen;
-        Execution   = ForEachExecution.Parallel;
+        Execution   = JobExecution.Parallel;
         TaskIndex   = (byte)taskIndex;
     }
     
