@@ -71,6 +71,14 @@ public abstract class QueryJob
         return new InvalidOperationException($"{nameof(QueryJob)} requires a {nameof(JobRunner)}");
     }
 
+    /// <remarks>
+    /// The return size which is applied to every section <see cref="Chunk{T}"/>.<br/>
+    /// <br/>
+    /// In case <paramref name="align512"/> != 0 the returned size ensures the number of bytes required for
+    /// section size components is a multiple of 64 bytes.<br/>
+    /// This enables vectorization using Vector128, Vector256 or Vector512 without a remainder loop.<br/>
+    /// See <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> an <see cref="Chunk{T}.AsSpan512{TTo}"/>.  
+    /// </remarks>
     internal static int GetSectionSize(int chunkLength, int taskCount, int align512)
     {
         var size = (chunkLength + taskCount - 1) / taskCount;
