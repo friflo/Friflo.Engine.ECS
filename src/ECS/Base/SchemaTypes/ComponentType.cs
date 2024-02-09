@@ -108,5 +108,29 @@ internal sealed class ComponentType<T> : ComponentType
     /// <br/>
     /// Aligned naming to Vector512. 512 bits == 64 bytes.
     /// </remarks>
-    internal static readonly    int Align512        =  QueryJob.LeastCommonMultiple(ByteSize, 64);
+    internal static readonly    int Align512        = GetAlign512();
+    
+    private static int GetAlign512()
+    {
+        //  1 -    64
+        //  2 -    32
+        //  4 -    16
+        //  8 -     8
+        // 16 -     4
+        // 32 -     2
+        // 64 -     1
+        
+        // 12 -   192
+        // 20 -   320
+        // 24 -   192
+        // 28 -   448
+        // 40 -   320
+        // 48 -   192
+        // 56 -   448
+        var result = QueryJob.LeastCommonMultiple(ByteSize, 64);
+        if (result > 200) {
+            return 0;
+        }
+        return result;
+    }
 }
