@@ -120,8 +120,10 @@ public readonly struct Chunk<T>
     
     internal Chunk(Chunk<T> chunk, int start, int length) {
         Length      = length;
-        this.start  = start;
-        values      = chunk.values;
+        if (length > 0) {
+            this.start  = start;
+            values      = chunk.values;
+        }
     }
     
     /// <summary> Return the component at the passed <paramref name="index"/> as a reference. </summary>
