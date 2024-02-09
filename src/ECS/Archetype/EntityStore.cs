@@ -34,7 +34,7 @@ public abstract partial class EntityStoreBase
                     public              Systems                 Systems             { get; init; }
     
     /// <summary> Initialize a default <see cref="ParallelJobRunner"/> used for <see cref="QueryJob"/>'s. </summary>
-    [Browse(Never)] internal            ParallelJobRunner       JobRunner           { get; init; }
+    [Browse(Never)] public              ParallelJobRunner       JobRunner           { get; init; }
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>

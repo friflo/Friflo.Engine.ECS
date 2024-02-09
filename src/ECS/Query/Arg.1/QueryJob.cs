@@ -8,7 +8,7 @@ using System;
 namespace Friflo.Engine.ECS;
 
 
-internal sealed class QueryJob<T1> : QueryJob
+public sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
 {
     internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
@@ -33,14 +33,14 @@ internal sealed class QueryJob<T1> : QueryJob
         jobRunner   = query.Store.JobRunner;
     }
     
-    internal override void Run()
+    public override void Run()
     {
         foreach (Chunks<T1> chunk in query.Chunks) {
             action(chunk.Chunk1, chunk.Entities);
         }
     }
     
-    internal override void RunParallel()
+    public override void RunParallel()
     {
         if (jobRunner == null) throw JobRunnerIsNullException();
         var taskCount   = jobRunner.workerCount + 1;

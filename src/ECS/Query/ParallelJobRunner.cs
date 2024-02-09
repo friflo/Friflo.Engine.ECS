@@ -32,7 +32,7 @@ internal abstract class JobTask {
 ///   <see cref="ManualResetEventSlim.Wait()"/> when the event is not signaled.<br/>
 /// Note: To analyze the amount of thread context switches use: Process Explorer > Column > CSwitch Delta.
 /// </remarks>
-internal sealed class ParallelJobRunner : IDisposable
+public sealed class ParallelJobRunner : IDisposable
 {
 #region public properties
     public              bool                    IsDisposed  => !running;
@@ -62,7 +62,7 @@ internal sealed class ParallelJobRunner : IDisposable
     #endregion
     
 #region general
-    internal ParallelJobRunner(int threadCount, string name = null) {
+    public ParallelJobRunner(int threadCount, string name = null) {
         workerCount         = threadCount - 1;
         running             = true;
         startWorkers        = new ManualResetEventSlim(false, 2047);

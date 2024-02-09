@@ -119,7 +119,6 @@ public readonly struct Chunk<T>
         }
     }
     
-    [ExcludeFromCodeCoverage] // todo remove
     internal Chunk(Chunk<T> chunk, int start, int length) {
         Length      = length;
         this.start  = start;

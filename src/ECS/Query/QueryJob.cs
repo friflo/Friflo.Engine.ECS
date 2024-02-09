@@ -9,11 +9,11 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal abstract class QueryJob
+public abstract class QueryJob
 {
 #region public properties
-    internal    ParallelJobRunner   JobRunner               { get => GetRunner(); set => SetRunner(value); }
-    internal    int                 MinParallelChunkLength  { get => minParallel; set => SetMinParallel(value); }
+    public      ParallelJobRunner   JobRunner               { get => GetRunner(); set => SetRunner(value); }
+    public      int                 MinParallelChunkLength  { get => minParallel; set => SetMinParallel(value); }
     #endregion
     
 #region internal fields
@@ -21,7 +21,7 @@ internal abstract class QueryJob
     internal    int                 minParallel = 1000; //  4
     #endregion
     
-    internal    abstract    void Run();
+    public      abstract    void Run();
     /// <summary>Executes the query job.</summary>
     /// <remarks>
     /// Requires an <see cref="ParallelJobRunner"/>.<br/>
@@ -33,7 +33,7 @@ internal abstract class QueryJob
     /// <exception cref="InvalidOperationException">
     ///     If a nested <see cref="RunParallel"/> is using the same <see cref="JobRunner"/> as the enclosing job. 
     /// </exception>
-    internal    abstract    void RunParallel();
+    public    abstract    void RunParallel();
 
 #region methods
     private ParallelJobRunner GetRunner() {

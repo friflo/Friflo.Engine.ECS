@@ -39,6 +39,5 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>. </summary> 
     public      QueryChunks <T1>  Chunks                                    => new (this);
     
-    [ExcludeFromCodeCoverage]
-    internal QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)  => new (this, action);
+    public QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)  => new (this, action);
 }

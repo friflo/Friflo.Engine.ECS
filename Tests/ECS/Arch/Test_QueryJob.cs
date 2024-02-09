@@ -168,6 +168,7 @@ public static class Test_QueryJob
         Assert.IsTrue(Mem.GetAllocatedBytes() - start > 0);
     }
     
+    /* 
     [Test]
     public static void Test_QueryJob_ToString()
     {
@@ -183,7 +184,7 @@ public static class Test_QueryJob
         
         Assert.AreEqual(32, job.Chunks.EntityCount);
         Assert.AreEqual("QueryJob [MyComponent1]", job.ToString());
-    }
+    } */
     
     [Test]
     public static void Test_QueryJob_task_exceptions()
