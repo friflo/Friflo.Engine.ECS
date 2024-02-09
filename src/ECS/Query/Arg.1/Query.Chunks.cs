@@ -19,7 +19,7 @@ public readonly struct Chunks<T1>
 
     public override     string          ToString() => Entities.GetChunksString();
 
-    internal Chunks(Chunk<T1> chunk1, ChunkEntities entities) {
+    internal Chunks(Chunk<T1> chunk1, in ChunkEntities entities) {
         Chunk1     = chunk1;
         Entities   = entities;
     }

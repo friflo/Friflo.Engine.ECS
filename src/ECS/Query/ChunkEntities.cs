@@ -57,7 +57,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         Length      = componentLen;
     }
     
-    internal ChunkEntities(ChunkEntities entities, int start, int componentLen, int taskIndex) {
+    internal ChunkEntities(in ChunkEntities entities, int start, int componentLen, int taskIndex) {
         Archetype   = entities.Archetype;
         entityIds   = entities.entityIds;
         this.start  = start;
