@@ -36,7 +36,11 @@ public static class Test_QueryJob
         
         // --- execute ForEach() single threaded
         int taskCount = 0;
-        var job = query.ForEach((component1, entities) => taskCount++);
+        var job = query.ForEach((component1, entities) => {
+            Mem.IsTrue(entities.Execution == ForEachExecution.Sequential);
+            Mem.AreEqual(0, entities.TaskIndex);
+            taskCount++;
+        });
         job.Run();
         
         using var runner = new ParallelJobRunner(1);  
@@ -67,6 +71,7 @@ public static class Test_QueryJob
         
         var count           = 0;
         var forEach = query.ForEach((chunk, chunkEntities) => {
+            Mem.IsTrue(chunkEntities.Execution == ForEachExecution.Parallel);
             SetComponent(chunk, chunkEntities, ref count);
         });
         forEach.MinParallelChunkLength = 1;
@@ -107,6 +112,7 @@ public static class Test_QueryJob
         
         var job = query.ForEach((component1, entities) =>
         {
+            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
             Interlocked.Increment(ref forEachCount);
             Interlocked.Add(ref lengthSum, entities.Length);
             var componentSpan = component1.Span;
@@ -248,7 +254,8 @@ public static class Test_QueryJob
         
         var count       = 0;
         var query       = store.Query<MyComponent1>();
-        var nestedJob   = query.ForEach((_, _) => {
+        var nestedJob   = query.ForEach((_, entities) => {
+            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
             Interlocked.Increment(ref count);
         });
         nestedJob.MinParallelChunkLength = 1;
@@ -289,8 +296,14 @@ public static class Test_QueryJob
         var query2  = store.Query<MyComponent2>();
         var count1  = 0;
         var count2  = 0;
-        var job1    = query1.ForEach((_,_) =>  Interlocked.Increment(ref count1)); 
-        var job2    = query2.ForEach((_,_) =>  Interlocked.Increment(ref count2));
+        var job1    = query1.ForEach((_, entities) => {
+            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Interlocked.Increment(ref count1);
+        }); 
+        var job2    = query2.ForEach((_, entities) => {
+            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            Interlocked.Increment(ref count2);
+        });
         job1.MinParallelChunkLength = 1;
         job2.MinParallelChunkLength = 1;
         
@@ -321,13 +334,15 @@ public static class Test_QueryJob
         var query       = store.Query<MyComponent1>();
         int count       = 0;
         Thread.CurrentThread.Name = "MainThread";
-        bool foundWorkerName = false;
-        bool foundCallerName = false;
+
         var job         = query.ForEach((_, entities) => {
             count++;
-            switch (Thread.CurrentThread.Name) {
-                case "MyRunner - worker 1": foundWorkerName = true; break;
-                case "MainThread":          foundCallerName = true; break;
+            Mem.IsTrue(entities.Execution == ForEachExecution.Parallel);
+            var threadName = Thread.CurrentThread.Name;
+            switch (entities.TaskIndex) {
+                case 0:     Assert.AreEqual("MainThread",           threadName);  break;
+                case 1:     Assert.AreEqual("MyRunner - worker 1",  threadName);  break;
+                default:    throw new InvalidOperationException("unexpected");
             }
         });
         Assert.AreEqual(1000, job.MinParallelChunkLength);
@@ -335,8 +350,6 @@ public static class Test_QueryJob
         job.RunParallel();  // uses JobRunner from EntityStore
         
         Assert.AreEqual(2, count);
-        Assert.IsTrue(foundWorkerName, "worker thread name not found");
-        Assert.IsTrue(foundCallerName, "caller thread name not found");
     }
     
     [Test]

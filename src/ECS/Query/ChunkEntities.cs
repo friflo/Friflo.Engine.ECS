@@ -10,6 +10,13 @@ using System.Text;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+
+public enum ForEachExecution : byte
+{
+    Sequential  = 0,
+    Parallel    = 1
+}
+
 /// <summary>
 /// Provide the entity <see cref="Entity.Id"/>'s for <see cref="Chunk{T}"/> components using <see cref="Ids"/> or <see cref="this[int]"/>.<br/>
 /// </summary>
@@ -37,6 +44,15 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     
     /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
+    
+    /// <summary> The execution type used to create the chunk entities. </summary>
+    public   readonly   ForEachExecution    Execution;  //  1
+    
+    /// <summary>
+    /// if    0 - The chunk entities are created on the caller (main) thread.<br/>
+    /// if >= 1 - The chunk entities are created on a worker thread.
+    /// </summary>
+    public   readonly   byte                TaskIndex;  //  1
     //
     internal readonly   int[]               entityIds;  //  8   - is redundant (archetype.entityIds) but avoid dereferencing for typical access pattern
     #endregion
@@ -47,11 +63,13 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         Length      = componentLen;
     }
     
-    internal ChunkEntities(ChunkEntities entities, int start, int componentLen) {
+    internal ChunkEntities(ChunkEntities entities, int start, int componentLen, int taskIndex) {
         Archetype   = entities.Archetype;
         entityIds   = entities.entityIds;
         this.start  = start;
         Length      = componentLen;
+        Execution   = ForEachExecution.Parallel;
+        TaskIndex   = (byte)taskIndex;
     }
     
 #region public methods

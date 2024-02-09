@@ -77,7 +77,7 @@ public static class Test_sizeof
     [Test]
     public static unsafe void Test_Query_sizeof() {
         var size = sizeof(ChunkEntities);
-        AreEqual(24, size);
+        AreEqual(32, size);
         
         size = sizeof(Chunk<Position>);
         AreEqual(16, size);
