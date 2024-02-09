@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 // ReSharper disable InconsistentNaming
@@ -48,7 +47,6 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
         Length      = componentLen;
     }
     
-    [ExcludeFromCodeCoverage] // todo remove
     internal ChunkEntities(ChunkEntities entities, int start, int componentLen) {
         Archetype   = entities.Archetype;
         entityIds   = entities.entityIds;

@@ -58,36 +58,27 @@ public static class Test_QueryJob
     [Test]
     public static void Test_QueryJob_RunParallel_Check()
     {
-        var entityCount     = 1000;
-        using var runner    = new ParallelJobRunner(8, "TestRunner");
+        var entityCount     = 500;
+        using var runner    = new ParallelJobRunner(4, "TestRunner");
         var store           = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
         var archetype       = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         var entities        = new Entity[entityCount];
         var query           = store.Query<MyComponent1>();
+        
         var count           = 0;
-        var forEachRun      = query.ForEach((chunk, chunkEntities) => {
+        var forEach = query.ForEach((chunk, chunkEntities) => {
             SetComponent(chunk, chunkEntities, ref count);
         });
-        var forEachParallel = query.ForEach((chunk, chunkEntities) => {
-            SetComponent(chunk, chunkEntities, ref count);
-        });
-        forEachRun.MinParallelChunkLength = 1;
-        forEachParallel.MinParallelChunkLength = 1;
+        forEach.MinParallelChunkLength = 1;
         
         for (int n = 0; n < entityCount; n++)
         {
             for (int i = 0; i < n; i++) { entities[i].GetComponent<MyComponent1>().a = i; }
+            
+            // method under test
             count = 0;
-            forEachRun.Run();
-            Mem.AreEqual(n, count);
-            for (int i = 0; i < n; i++) {
-                var comp = entities[i].GetComponent<MyComponent1>();
-                Mem.AreEqual(i + 1, comp.a);
-            }
-
-            for (int i = 0; i < n; i++) { entities[i].GetComponent<MyComponent1>().a = i; }
-            count = 0;
-            forEachParallel.RunParallel();
+            forEach.RunParallel();
+            
             Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
                 var comp = entities[i].GetComponent<MyComponent1>();

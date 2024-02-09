@@ -59,7 +59,7 @@ internal abstract class QueryJob
     {
         var size = (chunkLength + taskCount - 1) / taskCount;
         if (align512 == 0) {
-            return size;            
+            return size;
         }
         return ((size + align512 - 1) / align512) * align512;
     }
