@@ -11,21 +11,48 @@ namespace Internal.ECS;
 
 public static class Test_QueryJob
 {
+    private static void AssertMissingRunner(QueryJob job)
+    {
+        job.jobRunner = null;
+        var e = Throws<InvalidOperationException>(job.RunParallel)!;
+        AreEqual("QueryJob requires a JobRunner", e.Message);
+    }
+    
     [Test]
     public static void Test_QueryJob_ToString()
     {
-        var store       = new EntityStore(PidType.UsePidAsId);
-        var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var types   = ComponentTypes.Get<MyComponent1, MyComponent2, Position, Rotation, Scale3>();
+        var archetype   = store.GetArchetype(types);
         for (int n = 0; n < 32; n++) {
             archetype.CreateEntity();
         }
-        
-        var query = store.Query<MyComponent1>();
-        
-        var job = query.ForEach((_, _) => { });
-        
-        AreEqual(32, job.Chunks.EntityCount);
-        AreEqual("QueryJob [MyComponent1]", job.ToString());
+        {
+            var job = store.Query<MyComponent1>().ForEach((_, _) => { });
+            AreEqual(32, job.Chunks.EntityCount);
+            AreEqual("QueryJob [MyComponent1]", job.ToString());
+            AssertMissingRunner(job);
+        } {
+            var job = store.Query<MyComponent1, MyComponent2>().ForEach((_, _, _) => { });
+            AreEqual(32, job.Chunks.EntityCount);
+            AreEqual("QueryJob [MyComponent1, MyComponent2]", job.ToString());
+            AssertMissingRunner(job);
+        } {
+            var job = store.Query<MyComponent1, MyComponent2, Position>().ForEach((_, _, _, _) => { });
+            AreEqual(32, job.Chunks.EntityCount);
+            AreEqual("QueryJob [MyComponent1, MyComponent2, Position]", job.ToString());
+            AssertMissingRunner(job);
+        } {
+            var job = store.Query<MyComponent1, MyComponent2, Position, Rotation>().ForEach((_, _, _, _, _) => { });
+            AreEqual(32, job.Chunks.EntityCount);
+            AreEqual("QueryJob [MyComponent1, MyComponent2, Position, Rotation]", job.ToString());
+            AssertMissingRunner(job);
+        } {
+            var job = store.Query<MyComponent1, MyComponent2, Position, Rotation, Scale3>().ForEach((_, _, _, _, _, _) => { });
+            AreEqual(32, job.Chunks.EntityCount);
+            AreEqual("QueryJob [MyComponent1, MyComponent2, Position, Rotation, Scale3]", job.ToString());
+            AssertMissingRunner(job);
+        }
     }
 
     [Test]
