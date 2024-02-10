@@ -90,9 +90,8 @@ public abstract class QueryJob
     
     internal static int GetSectionLength(int chunkLength, int start, int sectionSize)
     {
-        var remaining   = chunkLength - start;
-        var reachedEnd  = remaining < sectionSize;
-        return reachedEnd ? Math.Max(0, remaining) : sectionSize;
+        var remaining = chunkLength - start;
+        return remaining < sectionSize ? remaining : sectionSize;
     }
 
     private static int GreatestCommonDivider(int a, int b)

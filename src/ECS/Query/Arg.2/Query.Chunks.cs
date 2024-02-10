@@ -27,6 +27,16 @@ public readonly struct Chunks<T1, T2>
         Entities   = entities;
     }
     
+    internal Chunks(in Chunks<T1, T2> chunks, int start, int length, int taskIndex) {
+        Chunk1      = new Chunk<T1>    (chunks.Chunk1,   start, length);
+        Chunk2      = new Chunk<T2>    (chunks.Chunk2,   start, length);
+        Entities    = new ChunkEntities(chunks.Entities, start, length, taskIndex);
+    }
+    
+    internal Chunks(in ChunkEntities entities, int taskIndex) {
+        Entities   = new ChunkEntities(entities, taskIndex);
+    }
+    
     public void Deconstruct(out Chunk<T1> chunk1, out Chunk<T2> chunk2, out ChunkEntities entities) {
         chunk1      = Chunk1;
         chunk2      = Chunk2;

@@ -50,11 +50,11 @@ public sealed class QueryJob<T1, T2, T3> : QueryJob
         if (jobRunner == null) throw JobRunnerIsNullException();
         var taskCount   = jobRunner.workerCount + 1;
         
-        foreach (Chunks<T1, T2, T3> chunk in query.Chunks)
+        foreach (Chunks<T1, T2, T3> chunks in query.Chunks)
         {
-            var chunkLength = chunk.Length;
+            var chunkLength = chunks.Length;
             if (taskCount <= 1 || chunkLength < minParallel) {
-                action(chunk.Chunk1, chunk.Chunk2, chunk.Chunk3, chunk.Entities);
+                action(chunks.Chunk1, chunks.Chunk2, chunks.Chunk3, chunks.Entities);
                 continue;
             }
             var tasks = jobTasks;
@@ -68,13 +68,16 @@ public sealed class QueryJob<T1, T2, T3> : QueryJob
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
-                var length      = GetSectionLength (chunkLength,    start, sectionSize);
-                var chunk1      = new Chunk<T1>    (chunk.Chunk1,   start, length);
-                var chunk2      = new Chunk<T2>    (chunk.Chunk2,   start, length);
-                var chunk3      = new Chunk<T3>    (chunk.Chunk3,   start, length);
-                var entities    = new ChunkEntities(chunk.Entities, start, length, taskIndex);
-                tasks[taskIndex].chunks = new Chunks<T1, T2, T3>(chunk1, chunk2, chunk3, entities);
-                start          += sectionSize;
+                var length = GetSectionLength (chunkLength, start, sectionSize);
+                if (length > 0) {
+                    tasks[taskIndex].chunks = new Chunks<T1, T2, T3>(chunks, start, length, taskIndex);
+                    start += sectionSize;
+                    continue;
+                }
+                for (; taskIndex < taskCount; taskIndex++) {
+                    tasks[taskIndex].chunks = new Chunks<T1, T2, T3>(chunks.Entities, taskIndex);
+                }
+                break;
             }
             jobRunner.ExecuteJob(this, tasks);
         }
