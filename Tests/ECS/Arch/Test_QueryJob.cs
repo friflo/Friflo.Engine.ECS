@@ -76,7 +76,7 @@ public static class Test_QueryJob
                 ++c.a;
             }
         });
-        var runner = new ParallelJobRunner(threadCount);
+        using var runner = new ParallelJobRunner(threadCount);
         job.JobRunner               = runner;
         job.MinParallelChunkLength  = 1000;
         job.RunParallel();  // force one time allocations
