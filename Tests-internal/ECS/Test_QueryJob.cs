@@ -1,4 +1,7 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
@@ -42,5 +45,59 @@ public static class Test_QueryJob
         AreEqual(320, QueryJob.LeastCommonMultiple(40, 64));
         AreEqual(192, QueryJob.LeastCommonMultiple(48, 64));
         AreEqual(448, QueryJob.LeastCommonMultiple(56, 64));
+    }
+    
+    class MyTask : JobTask
+    {
+        internal override void ExecuteTask() { }
+    }
+    
+    // [Test]
+    public static void Test_QueryJob_ExecuteJob_Perf()
+    {
+        int count = 100_000_000;
+        using var runner = new ParallelJobRunner(8);
+        var task = new MyTask();
+        var tasks = new [] {
+            task,
+            task,
+            task,
+            task,
+            task,
+            task,
+            task,
+            task,
+        };
+        runner.ExecuteJob(new object(), tasks);
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int n = 0; n < count; n++) {
+            runner.ExecuteJob(new object(), tasks);
+        }
+        Console.WriteLine($"ExecuteJob() perf - count: {count}, parallelism: {runner.ThreadCount}, duration: {sw.ElapsedMilliseconds}");
+    }
+    
+    // [Test]
+    public static void Test_QueryJob_TPL_Perf()
+    {
+        int count = 1_000_000;
+        var action = () => {};
+        var actions = new Action[] {
+            action,
+            action,
+            action,
+            action,
+            action,
+            action,
+            action,
+            action,
+        };
+        Parallel.Invoke(actions);
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int n = 0; n < count; n++) {
+            Parallel.Invoke(actions);
+        }
+        Console.WriteLine($"Parallel.Invoke() perf - count: {count}, parallelism: {actions.Length}, duration: {sw.ElapsedMilliseconds}");
     }
 }
