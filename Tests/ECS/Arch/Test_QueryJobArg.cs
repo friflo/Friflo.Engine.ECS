@@ -11,6 +11,7 @@ public static class Test_QueryJobArg
 {
 #region general
     private static ParallelJobRunner _jobRunner;
+    private const int EntityCount = 502;
 
     [OneTimeSetUp]
     public static void Setup() {
@@ -26,20 +27,42 @@ public static class Test_QueryJobArg
     private static EntityStore CreateTestStore() {
         return new EntityStore(PidType.UsePidAsId) { JobRunner = _jobRunner };
     }
+    
+    private static void AssertExecution(in ChunkEntities entities)
+    {
+        if (entities.Length >= EntityCount - 2) {
+            Mem.IsTrue(entities.Execution == JobExecution.Sequential);
+        } else {
+            Mem.IsTrue(entities.Execution == JobExecution.Parallel);
+        }
+    }
+    
+    private static void Run(QueryJob queryJob, int iteration)
+    {
+        if (iteration == EntityCount - 1) {
+            queryJob.Run();
+            return;
+        }
+        if (iteration == EntityCount - 2) {
+            queryJob.MinParallelChunkLength = 1000; // execute last iteration sequential
+        }
+        queryJob.RunParallel();
+    }
+    
     #endregion
     
     [Test]
     public static void Test_QueryJobArg_RunParallel_Arg_1()
     {
-        var entityCount = 500;
+
         var store       = CreateTestStore();
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        var entities    = new Entity[entityCount];
+        var entities    = new Entity[EntityCount];
 
         var query       = store.Query<MyComponent1>();
         var count       = 0;
         var forEach = query.ForEach((myComponent1, chunkEntities) => {
-            Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
+            AssertExecution(chunkEntities);
             var span1 = myComponent1.Span;
             var ids = chunkEntities.Ids;
             Interlocked.Add(ref count, span1.Length);
@@ -50,14 +73,14 @@ public static class Test_QueryJobArg
         });
         forEach.MinParallelChunkLength = 1;
         
-        for (int n = 0; n < entityCount; n++)
+        for (int n = 0; n < EntityCount; n++)
         {
             for (int i = 0; i < n; i++) {
                 entities[i].GetComponent<MyComponent1>().a = i;
             }
             // method under test
             count = 0;
-            forEach.RunParallel();
+            Run(forEach, n);
             
             Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
@@ -71,15 +94,14 @@ public static class Test_QueryJobArg
     [Test]
     public static void Test_QueryJobArg_RunParallel_Arg_2()
     {
-        var entityCount = 500;
         var store       = CreateTestStore();
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2>());
-        var entities    = new Entity[entityCount];
+        var entities    = new Entity[EntityCount];
 
         var query       = store.Query<MyComponent1, MyComponent2>();
         var count       = 0;
         var forEach = query.ForEach((myComponent1, myComponent2, chunkEntities) => {
-            Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
+            AssertExecution(chunkEntities);
             var span1 = myComponent1.Span;
             var span2 = myComponent2.Span;
             var ids = chunkEntities.Ids;
@@ -92,7 +114,7 @@ public static class Test_QueryJobArg
         });
         forEach.MinParallelChunkLength = 1;
         
-        for (int n = 0; n < entityCount; n++)
+        for (int n = 0; n < EntityCount; n++)
         {
             for (int i = 0; i < n; i++) {
                 var entity = entities[i];
@@ -101,7 +123,7 @@ public static class Test_QueryJobArg
             }
             // method under test
             count = 0;
-            forEach.RunParallel();
+            Run(forEach, n);
             
             Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
@@ -118,15 +140,14 @@ public static class Test_QueryJobArg
     [Test]
     public static void Test_QueryJobArg_RunParallel_Arg_3()
     {
-        var entityCount = 500;
         var store       = CreateTestStore();
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, Position>());
-        var entities    = new Entity[entityCount];
+        var entities    = new Entity[EntityCount];
 
         var query       = store.Query<MyComponent1, MyComponent2, Position>();
         var count       = 0;
         var forEach = query.ForEach((myComponent1, myComponent2, position, chunkEntities) => {
-            Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
+            AssertExecution(chunkEntities);
             var span1 = myComponent1.Span;
             var span2 = myComponent2.Span;
             var span3 = position.Span;
@@ -141,7 +162,7 @@ public static class Test_QueryJobArg
         });
         forEach.MinParallelChunkLength = 1;
         
-        for (int n = 0; n < entityCount; n++)
+        for (int n = 0; n < EntityCount; n++)
         {
             for (int i = 0; i < n; i++) {
                 var entity = entities[i];
@@ -151,7 +172,7 @@ public static class Test_QueryJobArg
             }
             // method under test
             count = 0;
-            forEach.RunParallel();
+            Run(forEach, n);
             
             Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
@@ -170,15 +191,14 @@ public static class Test_QueryJobArg
     [Test]
     public static void Test_QueryJobArg_RunParallel_Arg_4()
     {
-        var entityCount = 500;
         var store       = CreateTestStore();
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, Position, Rotation>());
-        var entities    = new Entity[entityCount];
+        var entities    = new Entity[EntityCount];
 
         var query       = store.Query<MyComponent1, MyComponent2, Position, Rotation>();
         var count       = 0;
         var forEach = query.ForEach((myComponent1, myComponent2, position, rotation, chunkEntities) => {
-            Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
+            AssertExecution(chunkEntities);
             var span1 = myComponent1.Span;
             var span2 = myComponent2.Span;
             var span3 = position.Span;
@@ -195,7 +215,7 @@ public static class Test_QueryJobArg
         });
         forEach.MinParallelChunkLength = 1;
         
-        for (int n = 0; n < entityCount; n++)
+        for (int n = 0; n < EntityCount; n++)
         {
             for (int i = 0; i < n; i++) {
                 var entity = entities[i];
@@ -206,7 +226,7 @@ public static class Test_QueryJobArg
             }
             // method under test
             count = 0;
-            forEach.RunParallel();
+            Run(forEach, n);
             
             Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
@@ -227,15 +247,14 @@ public static class Test_QueryJobArg
     [Test]
     public static void Test_QueryJobArg_RunParallel_Arg_5()
     {
-        var entityCount = 500;
         var store       = CreateTestStore();
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, Position, Rotation, Scale3>());
-        var entities    = new Entity[entityCount];
+        var entities    = new Entity[EntityCount];
 
         var query       = store.Query<MyComponent1, MyComponent2, Position, Rotation, Scale3>();
         var count       = 0;
         var forEach = query.ForEach((myComponent1, myComponent2, position, rotation, scale3, chunkEntities) => {
-            Mem.IsTrue(chunkEntities.Execution == JobExecution.Parallel);
+            AssertExecution(chunkEntities);
             var span1 = myComponent1.Span;
             var span2 = myComponent2.Span;
             var span3 = position.Span;
@@ -254,7 +273,7 @@ public static class Test_QueryJobArg
         });
         forEach.MinParallelChunkLength = 1;
         
-        for (int n = 0; n < entityCount; n++)
+        for (int n = 0; n < EntityCount; n++)
         {
             for (int i = 0; i < n; i++) {
                 var entity = entities[i];
@@ -266,7 +285,7 @@ public static class Test_QueryJobArg
             }
             // method under test
             count = 0;
-            forEach.RunParallel();
+            Run(forEach, n);
             
             Mem.AreEqual(n, count);
             for (int i = 0; i < n; i++) {
