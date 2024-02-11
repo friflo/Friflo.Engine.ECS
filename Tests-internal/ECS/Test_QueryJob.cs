@@ -89,12 +89,12 @@ public static class Test_QueryJob
         AreEqual(  2, ComponentType<Component32>    .Align512);
         AreEqual(  1, ComponentType<Component64>    .Align512);
         //
-        AreEqual(  0, ComponentType<Position>       .Align512); // 12 bytes
-        AreEqual(  0, ComponentType<Scale3>         .Align512); // 12 bytes
+        AreEqual( 16, ComponentType<Position>       .Align512); // 12 bytes
+        AreEqual( 16, ComponentType<Scale3>         .Align512); // 12 bytes
         AreEqual(  4, ComponentType<Rotation>       .Align512); // 16 bytes
         AreEqual(  1, ComponentType<Transform>      .Align512); // 64 bytes
         
-        AreEqual(  0, ComponentType<Component20>    .Align512);
+        AreEqual( 16, ComponentType<Component20>    .Align512);
         
         AreEqual( 20, Unsafe.SizeOf<Component20>());
     }
