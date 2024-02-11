@@ -111,7 +111,7 @@ internal sealed class ComponentType<T> : ComponentType
     private static int GetComponentMultiple()
     {
         var lcm = QueryJob.LeastCommonMultiple(ByteSize, 64) / ByteSize;
-        if (lcm <= ArchetypeUtils.MaxComponentPadding) {
+        if (lcm <= ArchetypeUtils.MaxComponentMultiple) {
             return lcm;
         }
         return 0;

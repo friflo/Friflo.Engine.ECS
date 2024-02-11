@@ -130,7 +130,7 @@ public abstract class QueryJob
     internal static int LeastComponentMultiple(int a, int b)
     {
         var lcm = LeastCommonMultiple(a, b);
-        if (lcm <= ArchetypeUtils.MaxComponentPadding) {
+        if (lcm <= ArchetypeUtils.MaxComponentMultiple) {
             return lcm;
         }
         return 0;

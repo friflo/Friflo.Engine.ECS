@@ -356,4 +356,36 @@ public static class Test_QueryJob
         });
         Assert.AreEqual("ParallelJobRunner is disposed", e2!.Message);
     }
+    
+    [Test]
+    public static void Test_QueryJob_ParallelComponentMultiple()
+    {
+        var store = new EntityStore();
+        var multiple = store.Query<ByteComponent>() .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(64, multiple);
+        
+        multiple = store.Query<ShortComponent>()    .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(32, multiple);
+        
+        multiple = store.Query<LongComponent>()     .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(8, multiple);
+        
+        multiple = store.Query<Position>()          .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(16, multiple);
+        
+        multiple = store.Query<Rotation>()          .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(4, multiple);
+        
+        multiple = store.Query<Transform>()         .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(1, multiple);
+        
+        multiple = store.Query<Component16>()       .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(4, multiple);
+        
+        multiple = store.Query<Component32>()       .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(2, multiple);
+        
+        multiple = store.Query<Component20>()       .ForEach((_, _) => {}).ParallelComponentMultiple;
+        Assert.AreEqual(16, multiple);
+    }
 }
