@@ -16,12 +16,12 @@ public abstract class QueryJob
     public      ParallelJobRunner   JobRunner               { get => GetRunner(); set => SetRunner(value);      }
     
     /// <summary>
-    /// The minimum number <see cref="Chunk{T}"/> components required to execute the query <see cref="JobExecution.Parallel"/>.
+    /// The minimum number of <see cref="Chunk{T}"/> components per thread required to execute the query <see cref="JobExecution.Parallel"/>.
     /// Default: 1000.
     /// </summary>
     /// <remarks>
     /// Parallel query execution adds an overhead of 1 to 2 micro seconds per query for thread synchronization.<br/>
-    /// Execution of a simple computation on a single component takes 0.5 to 1 nano seconds.<br/>
+    /// Execution of a simple computation like <c>health.value++</c> on a single component takes 0.5 to 1 nano seconds.<br/>
     /// <br/>
     /// E.g. processing a chunk with 100 components will take 50 to 100 nano seconds.<br/>
     /// So the chunk components are executed <see cref="JobExecution.Sequential"/> to avoid the parallelization overhead.<br/>
