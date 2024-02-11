@@ -49,7 +49,9 @@ public abstract class QueryJob
     /// <exception cref="InvalidOperationException">
     ///     If a nested <see cref="RunParallel"/> is using the same <see cref="JobRunner"/> as the enclosing job. 
     /// </exception>
-    public    abstract    void RunParallel();
+    public    abstract  void    RunParallel();
+    
+    public    abstract  int     ParallelComponentMultiple { get; }
 
 #region methods
     private ParallelJobRunner GetRunner() {
@@ -78,18 +80,18 @@ public abstract class QueryJob
     /// <remarks>
     /// The return size which is applied to every section <see cref="Chunk{T}"/>.<br/>
     /// <br/>
-    /// In case <paramref name="align512"/> != 0 the returned size ensures the number of bytes required for
+    /// In case <paramref name="multiple"/> != 0 the returned size ensures the number of bytes required for
     /// section size components is a multiple of 64 bytes.<br/>
     /// This enables vectorization using Vector128, Vector256 or Vector512 without a remainder loop.<br/>
     /// See <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> an <see cref="Chunk{T}.AsSpan512{TTo}"/>.  
     /// </remarks>
-    internal static int GetSectionSize512(int chunkLength, int taskCount, int align512)
+    internal static int GetSectionSize(int chunkLength, int taskCount, int multiple)
     {
         var size = (chunkLength + taskCount - 1) / taskCount;
-        if (align512 == 0) {
+        if (multiple == 0) {
             return size;
         }
-        return ((size + align512 - 1) / align512) * align512;
+        return ((size + multiple - 1) / multiple) * multiple;
     }
     
     internal static int GetSectionLength(int chunkLength, int start, int sectionSize)

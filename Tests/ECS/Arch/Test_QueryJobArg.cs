@@ -71,6 +71,7 @@ public static class Test_QueryJobArg
                 ++span1[n].a;
             }
         });
+        Assert.AreEqual(16, forEach.ParallelComponentMultiple);
         forEach.MinParallelChunkLength = 1;
         
         for (int n = 0; n < EntityCount; n++)
@@ -112,6 +113,7 @@ public static class Test_QueryJobArg
                 ++span2[n].b;
             }
         });
+        Assert.AreEqual(16, forEach.ParallelComponentMultiple);
         forEach.MinParallelChunkLength = 1;
         
         for (int n = 0; n < EntityCount; n++)
@@ -160,6 +162,7 @@ public static class Test_QueryJobArg
                 ++span3[n].x;
             }
         });
+        Assert.AreEqual(16, forEach.ParallelComponentMultiple);
         forEach.MinParallelChunkLength = 1;
         
         for (int n = 0; n < EntityCount; n++)
@@ -213,6 +216,7 @@ public static class Test_QueryJobArg
                 ++span4[n].x;
             }
         });
+        Assert.AreEqual(16, forEach.ParallelComponentMultiple);
         forEach.MinParallelChunkLength = 1;
         
         for (int n = 0; n < EntityCount; n++)
@@ -271,6 +275,7 @@ public static class Test_QueryJobArg
                 ++span5[n].x;
             }
         });
+        Assert.AreEqual(16, forEach.ParallelComponentMultiple);
         forEach.MinParallelChunkLength = 1;
         
         for (int n = 0; n < EntityCount; n++)

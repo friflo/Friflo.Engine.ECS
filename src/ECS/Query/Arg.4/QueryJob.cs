@@ -65,7 +65,7 @@ public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
                     tasks[n] = new QueryJobTask { action = action };
                 }
             }
-            var sectionSize = GetSectionSize512(chunkLength, taskCount, Align512);
+            var sectionSize = GetSectionSize(chunkLength, taskCount, Multiple);
             var start       = 0;
             for (int taskIndex = 0; taskIndex < taskCount; taskIndex++)
             {
@@ -84,9 +84,10 @@ public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
         }
     }
     
-    private static readonly int Align512 = GetAlign512();
+    public  override        int ParallelComponentMultiple   => Multiple;
+    private static readonly int Multiple                    = GetMultiple();
     
-    private static int GetAlign512()
+    private static int GetMultiple()
     {
         int lcm1 = ComponentType<T1>.ComponentMultiple;
         int lcm2 = ComponentType<T2>.ComponentMultiple;
