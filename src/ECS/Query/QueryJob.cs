@@ -119,10 +119,10 @@ public abstract class QueryJob
 
     internal static int LeastCommonMultiple(int a, int b)
     {
-        var divider = GreatestCommonDivider(a, b);
-        if (divider == 0) {
+        if (a == 0 || b == 0) {
             return 0;
         }
+        var divider = GreatestCommonDivider(a, b);
         if(a > b) {
             return a / divider * b;
         }

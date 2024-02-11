@@ -66,6 +66,7 @@ public static class Test_QueryJob
         AreEqual(  1, QueryJob.LeastCommonMultiple( 1,  1));
         AreEqual(  2, QueryJob.LeastCommonMultiple( 1,  2));
         AreEqual(  6, QueryJob.LeastCommonMultiple( 2,  3));
+        AreEqual(  6, QueryJob.LeastCommonMultiple( 3,  2));
         
         AreEqual(192, QueryJob.LeastCommonMultiple(12, 64));
         AreEqual(320, QueryJob.LeastCommonMultiple(20, 64));
