@@ -34,7 +34,7 @@ public abstract class QueryJob
     
 #region internal fields
     internal    ParallelJobRunner   jobRunner;          //  4
-    internal    int                 minParallel = 1000; //  4
+    private     int                 minParallel = 1000; //  4
     #endregion
     
     public      abstract    void Run();
@@ -69,6 +69,10 @@ public abstract class QueryJob
     
     internal static InvalidOperationException JobRunnerIsNullException() {
         return new InvalidOperationException($"{nameof(QueryJob)} requires a {nameof(JobRunner)}");
+    }
+    
+    internal bool ExecuteSequential(int taskCount, int chunkLength) {
+        return taskCount <= 1 || (chunkLength + taskCount - 1) / taskCount < minParallel;
     }
     
     /// <remarks>

@@ -14,12 +14,16 @@ public static class ParallelQuery
     internal static void Query_ForEach(string[] args)
     {
         int  threadCount    = 8;
-        long count          = 100_000;      // 100_000;
-        long entityCount    = 100_000;  // 100_000;
+        long entityCount    = 100_000;
         int  loop           = 10;
         if (args.Length > 0) {
             threadCount = Int32.Parse(args[0]);
         }
+        if (args.Length > 1) {
+            entityCount = Int32.Parse(args[1]);
+        }
+        long repeat         = 10_000_000_000 / entityCount;
+
         Console.WriteLine($"threadCount: {threadCount}");
         var store       = new EntityStore(PidType.UsePidAsId);
         var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
@@ -49,20 +53,20 @@ public static class ParallelQuery
         job.JobRunner               = runner;
         job.MinParallelChunkLength  = 1000;
 
-        long log = count / 5;
+        long log = repeat / 5;
         for (int i = 0; i < loop; i++) {
             var sw      = new Stopwatch();
             sw.Start();
-            for (int n = 0; n < count; n++) {
+            for (int n = 0; n < repeat; n++) {
                 if (n % log == 0) Console.WriteLine(n);
                 job.RunParallel();
             }
             var duration = sw.ElapsedMilliseconds;
-            Console.WriteLine($"RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {count}, duration: {duration} ms");
+            Console.WriteLine($"RunParallel() - entities: {entityCount}, threads: {threadCount}, count: {repeat}, duration: {duration} ms");
         }
         
         Console.WriteLine($"forEachCount: {forEachCount}, lengthSum: {lengthSum}" );
-        Console.WriteLine($"expect:       {loop * threadCount * count}             {loop * entityCount * count}" );
+        Console.WriteLine($"expect:       {loop * threadCount * repeat}             {loop * entityCount * repeat}" );
         // Assert.AreEqual(threadCount * count, forEachCount);
         // Assert.AreEqual(entityCount * count, lengthSum);
     }

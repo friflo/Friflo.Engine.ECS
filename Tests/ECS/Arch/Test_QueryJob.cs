@@ -97,6 +97,44 @@ public static class Test_QueryJob
         Assert.AreEqual(threadCount * count, forEachCount);
         Assert.AreEqual(entityCount * count, lengthSum);
     }
+    
+    static readonly bool LogMinParallel = false;
+    
+    [Test]
+    public static void Test_QueryJob_MinParallelChunkLength()
+    {
+        int threadCount = 4;
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var archetype   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        var query       = store.Query<MyComponent1>();
+        
+        int minParallel = 0;
+        int entityCount = 0;
+        var job         = query.ForEach((component1, entities) =>
+        {
+            if (LogMinParallel) {
+                Console.WriteLine($"minParallel: {minParallel}, length: {entities.Length}, entityCount: {entityCount} {entities.Execution}");
+            }
+            if ((entityCount + threadCount - 1) / threadCount >= minParallel) {
+                Mem.IsTrue(entities.Execution == JobExecution.Parallel);
+            } else {
+                Mem.IsTrue(entities.Execution == JobExecution.Sequential);
+            }
+        });
+        using var runner = new ParallelJobRunner(threadCount);
+        job.JobRunner               = runner;
+
+        for (entityCount = 0; entityCount < 4 * 4; entityCount++)
+        {
+            for (minParallel = 1; minParallel <= 4; minParallel++)
+            {
+                job.MinParallelChunkLength = minParallel;
+                job.RunParallel();
+            }
+            if (LogMinParallel) Console.WriteLine();
+            archetype.CreateEntity().AddComponent<MyComponent1>();
+        }
+    }
 
     /// all TPL <see cref="Parallel"/> methods allocate memory. SO they are out.
     [Test]

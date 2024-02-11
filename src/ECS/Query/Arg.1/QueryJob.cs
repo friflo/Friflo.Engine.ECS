@@ -50,7 +50,7 @@ public sealed class QueryJob<T1> : QueryJob
         foreach (Chunks<T1> chunks in query.Chunks)
         {
             var chunkLength = chunks.Length;
-            if (taskCount <= 1 || chunkLength < minParallel) {
+            if (ExecuteSequential(taskCount, chunkLength)) {
                 action(chunks.Chunk1, chunks.Entities);
                 continue;
             }
