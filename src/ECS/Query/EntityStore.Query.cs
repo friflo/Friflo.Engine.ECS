@@ -21,7 +21,7 @@ public partial class EntityStoreBase
     }
 
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
+    /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
     public ArchetypeQuery<T1> Query<T1> (in Signature<T1> signature)
         where T1 : struct, IComponent
@@ -29,6 +29,9 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1>(this, signature);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.
+    /// </summary>
     public ArchetypeQuery<T1> Query<T1> ()
         where T1 : struct, IComponent
     {
@@ -36,7 +39,7 @@ public partial class EntityStoreBase
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
+    /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
     public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature)
         where T1: struct, IComponent
@@ -45,6 +48,9 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2>(this, signature);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.
+    /// </summary>
     public ArchetypeQuery<T1, T2> Query<T1, T2> ()
         where T1: struct, IComponent
         where T2: struct, IComponent
@@ -53,7 +59,7 @@ public partial class EntityStoreBase
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
+    /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
     public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (in Signature<T1, T2, T3> signature)
         where T1: struct, IComponent
@@ -63,6 +69,9 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2, T3>(this, signature);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.
+    /// </summary>
     public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> ()
         where T1: struct, IComponent
         where T2: struct, IComponent
@@ -72,7 +81,7 @@ public partial class EntityStoreBase
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
+    /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (in Signature<T1, T2, T3, T4> signature)
         where T1: struct, IComponent
@@ -83,6 +92,9 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2, T3, T4>(this, signature);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.
+    /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> ()
         where T1: struct, IComponent
         where T2: struct, IComponent
@@ -93,7 +105,7 @@ public partial class EntityStoreBase
     }
     
     /// <summary>
-    /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store
+    /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (in Signature<T1, T2, T3, T4, T5> signature)
         where T1: struct, IComponent
@@ -105,6 +117,9 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> for the given component type.
+    /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> ()
         where T1: struct, IComponent
         where T2: struct, IComponent
