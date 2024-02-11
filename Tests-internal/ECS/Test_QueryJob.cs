@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable CoVariantArrayConversion
 // ReSharper disable once InconsistentNaming
 namespace Internal.ECS;
 
@@ -74,6 +76,28 @@ public static class Test_QueryJob
         AreEqual(448, QueryJob.LeastCommonMultiple(56, 64));
     }
     
+    [Test]
+    public static void Test_QueryJob_Align512()
+    {
+        AreEqual( 64, ComponentType<ByteComponent>  .Align512);
+        AreEqual( 32, ComponentType<ShortComponent> .Align512);
+        AreEqual( 16, ComponentType<IntComponent>   .Align512);
+        AreEqual(  8, ComponentType<LongComponent>  .Align512);
+        //
+        AreEqual(  4, ComponentType<Component16>    .Align512);
+        AreEqual(  2, ComponentType<Component32>    .Align512);
+        AreEqual(  1, ComponentType<Component64>    .Align512);
+        //
+        AreEqual(  0, ComponentType<Position>       .Align512); // 12 bytes
+        AreEqual(  0, ComponentType<Scale3>         .Align512); // 12 bytes
+        AreEqual(  4, ComponentType<Rotation>       .Align512); // 16 bytes
+        AreEqual(  1, ComponentType<Transform>      .Align512); // 64 bytes
+        
+        AreEqual(  0, ComponentType<Component20>    .Align512);
+        
+        AreEqual( 20, Unsafe.SizeOf<Component20>());
+    }
+    
     class MyTask : JobTask
     {
         internal override void ExecuteTask() { }
@@ -109,7 +133,7 @@ public static class Test_QueryJob
     {
         int count = 1_000_000;
         var action = () => {};
-        var actions = new Action[] {
+        var actions = new[] {
             action,
             action,
             action,

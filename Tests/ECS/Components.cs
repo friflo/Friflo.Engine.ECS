@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Friflo.Engine.ECS;
 using static NUnit.Framework.Assert;
 
@@ -33,9 +34,46 @@ public struct BlittableBigInteger       : IComponent { public BigInteger    bigI
 
 [CodeCoverageTest]
 [ComponentKey("byte")]
-public struct ByteComponent : IComponent { public byte b; }
+public struct ByteComponent     : IComponent { public byte  b; }
+public struct ShortComponent    : IComponent { public short b; }
+public struct IntComponent      : IComponent { public int   b; }
+public struct LongComponent     : IComponent { public long  b; }
 
-public struct LongComponent : IComponent { public long b; }
+
+public struct Component20       : IComponent
+{
+    public int  val1;
+    public int  val2;
+    public int  val3;
+    public int  val4;
+    public int  val5;
+}
+
+public struct Component16       : IComponent
+{
+    public long  val1;
+    public long  val2;
+}
+
+public struct Component32       : IComponent
+{
+    public long  val1;
+    public long  val2;
+    public long  val3;
+    public long  val4;
+}
+
+public struct Component64       : IComponent
+{
+    public long  val1;
+    public long  val2;
+    public long  val3;
+    public long  val4;
+    public long  val5;
+    public long  val6;
+    public long  val7;
+    public long  val8;
+}
 
 /// <summary>Example shows an extension class to enable component access using less code.</summary>
 public static class MyEntityExtensions

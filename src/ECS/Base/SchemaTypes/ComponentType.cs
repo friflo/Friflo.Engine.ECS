@@ -112,25 +112,15 @@ internal sealed class ComponentType<T> : ComponentType
     
     private static int GetAlign512()
     {
-        //  1 -    64
-        //  2 -    32
-        //  4 -    16
-        //  8 -     8
-        // 16 -     4
-        // 32 -     2
-        // 64 -     1
-        
-        // 12 -   192
-        // 20 -   320
-        // 24 -   192
-        // 28 -   448
-        // 40 -   320
-        // 48 -   192
-        // 56 -   448
-        var result = QueryJob.LeastCommonMultiple(ByteSize, 64);
-        if (result > 200) {
-            return 0;
+        switch (ByteSize) {
+            case  1:    return 64;
+            case  2:    return 32;
+            case  4:    return 16;
+            case  8:    return  8;
+            case 16:    return  4;
+            case 32:    return  2;
+            case 64:    return  1;
+            default:    return  0;
         }
-        return result;
     }
 }
