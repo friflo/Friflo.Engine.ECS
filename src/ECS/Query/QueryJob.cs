@@ -11,6 +11,15 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// A <see cref="QueryJob"/> enables <see cref="JobExecution.Parallel"/> query execution using multiple threads
+/// to reduce execution time of large queries.<br/>
+/// They are created by the <c>ArchetypeQuery.ForEach()</c> methods.
+/// </summary>
+/// <remarks>
+/// To execute a query job <see cref="JobExecution.Sequential"/> use the <see cref="Run"/> method.<br/>
+/// To execute a query job <see cref="JobExecution.Parallel"/> use the <see cref="RunParallel"/> method.
+/// </remarks>
 public abstract class QueryJob
 {
 #region public properties
