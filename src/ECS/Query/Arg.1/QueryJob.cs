@@ -80,5 +80,5 @@ public sealed class QueryJob<T1> : QueryJob
         }
     }
     
-    private static readonly int Align512 = ComponentType<T1>.Align512;
+    private static readonly int Align512 = ComponentType<T1>.ComponentMultiple;
 }

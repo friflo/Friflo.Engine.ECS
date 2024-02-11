@@ -105,15 +105,13 @@ internal sealed class ComponentType<T> : ComponentType
     /// See: <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> and <see cref="Chunk{T}.AsSpan512{TTo}"/>.<br/>
     /// <br/>
     /// It also enables to apply vectorization without a remainder loop.<br/>
-    /// <br/>
-    /// Aligned naming to Vector512. 512 bits == 64 bytes.
     /// </remarks>
-    internal static readonly    int Align512        = GetAlign512();
+    internal static readonly    int ComponentMultiple = GetComponentMultiple();
     
-    private static int GetAlign512()
+    private static int GetComponentMultiple()
     {
         var lcm = QueryJob.LeastCommonMultiple(ByteSize, 64) / ByteSize;
-        if (lcm <= 64) {
+        if (lcm <= ArchetypeUtils.MaxComponentPadding) {
             return lcm;
         }
         return 0;

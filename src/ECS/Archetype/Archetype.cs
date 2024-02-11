@@ -369,5 +369,8 @@ public static class ArchetypeUtils
 {
     /// <summary> Minimum: 64 to support padding for vectorization.</summary>
     /// <remarks> Could be less than 64 if using <see cref="ComponentType{T}.ByteSize"/> for <see cref="StructHeap{T}.components"/> </remarks>
-    public   const      int                 MinCapacity     = 512;
+    public   const  int     MinCapacity             = 512;
+    
+    /// <summary> Maximum number of components  </summary>
+    internal const  int     MaxComponentPadding     = 64;
 }

@@ -116,6 +116,15 @@ public abstract class QueryJob
         }
         return GreatestCommonDivider(b, a % b); */
     }
+    
+    internal static int LeastComponentMultiple(int a, int b)
+    {
+        var lcm = LeastCommonMultiple(a, b);
+        if (lcm <= ArchetypeUtils.MaxComponentPadding) {
+            return lcm;
+        }
+        return 0;
+    }
 
     internal static int LeastCommonMultiple(int a, int b)
     {

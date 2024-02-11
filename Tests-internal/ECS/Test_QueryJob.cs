@@ -78,23 +78,23 @@ public static class Test_QueryJob
     }
     
     [Test]
-    public static void Test_QueryJob_Align512()
+    public static void Test_QueryJob_ComponentMultiple()
     {
-        AreEqual( 64, ComponentType<ByteComponent>  .Align512);
-        AreEqual( 32, ComponentType<ShortComponent> .Align512);
-        AreEqual( 16, ComponentType<IntComponent>   .Align512);
-        AreEqual(  8, ComponentType<LongComponent>  .Align512);
+        AreEqual( 64, ComponentType<ByteComponent>  .ComponentMultiple);
+        AreEqual( 32, ComponentType<ShortComponent> .ComponentMultiple);
+        AreEqual( 16, ComponentType<IntComponent>   .ComponentMultiple);
+        AreEqual(  8, ComponentType<LongComponent>  .ComponentMultiple);
         //
-        AreEqual(  4, ComponentType<Component16>    .Align512);
-        AreEqual(  2, ComponentType<Component32>    .Align512);
-        AreEqual(  1, ComponentType<Component64>    .Align512);
+        AreEqual(  4, ComponentType<Component16>    .ComponentMultiple);
+        AreEqual(  2, ComponentType<Component32>    .ComponentMultiple);
+        AreEqual(  1, ComponentType<Component64>    .ComponentMultiple);
         //
-        AreEqual( 16, ComponentType<Position>       .Align512); // 12 bytes
-        AreEqual( 16, ComponentType<Scale3>         .Align512); // 12 bytes
-        AreEqual(  4, ComponentType<Rotation>       .Align512); // 16 bytes
-        AreEqual(  1, ComponentType<Transform>      .Align512); // 64 bytes
+        AreEqual( 16, ComponentType<Position>       .ComponentMultiple); // 12 bytes
+        AreEqual( 16, ComponentType<Scale3>         .ComponentMultiple); // 12 bytes
+        AreEqual(  4, ComponentType<Rotation>       .ComponentMultiple); // 16 bytes
+        AreEqual(  1, ComponentType<Transform>      .ComponentMultiple); // 64 bytes
         
-        AreEqual( 16, ComponentType<Component20>    .Align512);
+        AreEqual( 16, ComponentType<Component20>    .ComponentMultiple);
         
         AreEqual( 20, Unsafe.SizeOf<Component20>());
     }

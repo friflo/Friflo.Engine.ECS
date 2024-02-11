@@ -86,8 +86,8 @@ public sealed class QueryJob<T1, T2> : QueryJob
     
     private static int GetAlign512()
     {
-        int lcm1 = ComponentType<T1>.Align512;
-        int lcm2 = ComponentType<T2>.Align512;
-        return LeastCommonMultiple(lcm1, lcm2);
+        int lcm1 = ComponentType<T1>.ComponentMultiple;
+        int lcm2 = ComponentType<T2>.ComponentMultiple;
+        return LeastComponentMultiple(lcm1, lcm2);
     }
 }
