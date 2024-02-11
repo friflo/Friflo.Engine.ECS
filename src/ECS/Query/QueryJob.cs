@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable MergeIntoPattern
 // ReSharper disable ConvertConstructorToMemberInitializers
@@ -33,12 +35,18 @@ public abstract class QueryJob
     #endregion
     
 #region internal fields
-    internal    ParallelJobRunner   jobRunner;          //  4
-    private     int                 minParallel = 1000; //  4
+    [Browse(Never)] internal    ParallelJobRunner   jobRunner;          //  4
+    [Browse(Never)] private     int                 minParallel = 1000; //  4
     #endregion
     
+    /// <summary>
+    /// Execute a <see cref="JobExecution.Sequential"/> query.
+    /// </summary>
     public      abstract    void Run();
-    /// <summary>Executes the query job.</summary>
+    /// <summary>Execute the query.<br/> 
+    /// All <see cref="Chunk{T}"/>'s having at least <see cref="MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
+    /// components are executed <see cref="JobExecution.Parallel"/>. 
+    /// </summary>
     /// <remarks>
     /// Requires an <see cref="ParallelJobRunner"/>.<br/>
     /// A runner can be assigned to <see cref="JobRunner"/> or to the <see cref="EntityStore"/>.
@@ -53,7 +61,7 @@ public abstract class QueryJob
     
     /// <summary>
     /// The <see cref="ParallelComponentMultiple"/> is used to align the <see cref="Chunk{T}"/> components length 
-    /// of a <see cref="JobExecution.Parallel"/> executed query.
+    /// of a <see cref="JobExecution.Parallel"/> executed component chunks.
     /// </summary>
     /// <remarks>
     /// This enables vectorization of the components without a remainder loop using<br/>

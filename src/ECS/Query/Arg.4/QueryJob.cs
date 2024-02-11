@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable CoVariantArrayConversion
@@ -18,8 +20,10 @@ public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
     internal            QueryChunks<T1, T2, T3, T4>     Chunks      => new (query); // only for debugger
     public  override    string                              ToString()  => query.GetQueryJobString();
 
+    [Browse(Never)]
     private readonly    ArchetypeQuery<T1, T2, T3, T4>                                      query;      //  8
     private readonly    Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities>   action;     //  8
+    [Browse(Never)]
     private             QueryJobTask[]                                                      jobTasks;   //  8
 
 
