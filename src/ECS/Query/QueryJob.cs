@@ -51,6 +51,14 @@ public abstract class QueryJob
     /// </exception>
     public    abstract  void    RunParallel();
     
+    /// <summary>
+    /// The <see cref="ParallelComponentMultiple"/> is used to align the <see cref="Chunk{T}"/> components length 
+    /// of a <see cref="JobExecution.Parallel"/> executed query.
+    /// </summary>
+    /// <remarks>
+    /// This enables vectorization of the components without a remainder loop using<br/>
+    /// <see cref="Chunk{T}.AsSpan128{TTo}"/>, <see cref="Chunk{T}.AsSpan256{TTo}"/> or <see cref="Chunk{T}.AsSpan512{TTo}"/>.
+    /// </remarks>
     public    abstract  int     ParallelComponentMultiple { get; }
 
 #region methods
