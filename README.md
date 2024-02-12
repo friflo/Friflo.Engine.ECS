@@ -401,7 +401,7 @@ It provides the same functionality as the **foreach** loop in example above but 
 ```
 To enable running a query job a [ParallelJobRunner](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ParallelJobRunner.md) is required.  
 The runner can be assigned to the `EntityStore` or directly to the `QueryJob`.  
-A `ParallelJobRunner` instance is thread-safe an can and should be used for multiple / all query jobs.
+A `ParallelJobRunner` instance is thread-safe and can / should be used for multiple / all query jobs.
 
 ```csharp
 public static void ParallelQueryJob()
