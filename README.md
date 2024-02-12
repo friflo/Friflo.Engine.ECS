@@ -423,6 +423,13 @@ public static void ParallelQueryJob()
     runner.Dispose();
 }
 ```
+In case of structural changes inside the `ForEach((...) => {...})` delegate use a
+[CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)
+to record the changes.  
+Structural changes are adding / removing components, tags or child entities and the creation / deletion of entities.  
+After `RunParallel()` returns these changes can be applied to the `EntityStore` by calling `CommandBuffer.Playback()`.
+
+
 
 ## EventFilter
 
