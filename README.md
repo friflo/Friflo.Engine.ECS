@@ -29,14 +29,15 @@ The core feature of an Entity Component System are:
   all bytes stored in L1 cache lines - typically 64 or 128 - are utilized.  
 
 
-## Additional library features
+## Features
 
 - Performance
     - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
     - High memory locality by storing components in continuous memory.
-    - Optimize for high L1 cache line hit rate.
+    - Optimized for high L1 cache line hit rate.
     - Very good benchmark results at: [Ecs.CSharp.Benchmark - GitHub](https://github.com/Doraku/Ecs.CSharp.Benchmark).
-    - *TODO*: Add support for multithreading.
+    - Processing components of large queries has the memory bandwidth as bottleneck. Either using multi threading or SIMD.  
+      Alternative ECS implementations using C/C++, Rust, Zig or Mojo 🔥 cannot be faster due to the physical limits.
 - Developer friendly / OOP like API by exposing the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
   **struct** as the main interface.  
   Or compare the `Entity` API with other API's at [Engine-comparison.md](Engine-comparison.md).  
@@ -44,7 +45,9 @@ The core feature of an Entity Component System are:
 - JSON Serialization
 - Record entity changes on arbitrary threads using [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.
 - Build a hierarchy of entities typically used in Games and Game Editors.
-- Support for Vectorization (SIMD) of components returned by queries.
+- Support multi threaded component queries (systems).
+- Support for Vectorization (SIMD) of components returned by queries.  
+  It is preferred over multi threading as it uses only one core providing the same performance as multi threading running on all cores.
 - Minimize times required for GC collection by using struct types for entities and components.  
   GC.Collect(1) < 0.8 ms when using 10.000.000 entities.
 - Support tagging of entities and use them as a filter in queries.
