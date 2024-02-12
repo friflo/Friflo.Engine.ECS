@@ -367,8 +367,8 @@ Some optional filter snippets used to shrink the result set returned by a query.
 ## Enumerate Query Chunks
 
 Also as described in the intro enumeration of a query result is fundamental for an ECS.  
-Components are returned as `Chunks` and are suitable for
-[Vectorization - SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data)
+Components are returned as [Chunk](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Chunk_T_.md)'s and are suitable for
+[Vectorization - SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data).
 
 ```csharp
 public static void EnumerateQueryChunks()
@@ -394,7 +394,7 @@ public static void EnumerateQueryChunks()
 
 ## Parallel Query Job
 
-To minimized execution time for large queries a [QueryJob](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QueryJob.md) can be used.  
+To minimize execution time for large queries a [QueryJob](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QueryJob.md) can be used.  
 It provides the same functionality as the **foreach** loop in example above but runs on multiple cores in parallel. E.g.
 ```csharp
     foreach (var (components, entities) in query.Chunks) { ... }
