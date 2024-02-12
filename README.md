@@ -47,6 +47,8 @@ The core feature of an Entity Component System are:
 - Build a hierarchy of entities typically used in Games and Game Editors.
 - Support multi threaded component queries (systems).
 - Support for Vectorization (SIMD) of components returned by queries.  
+  Returned component arrays have padding elements at the end to enable SIMD processing without a
+  [scalar remainder (epilogue) loop](https://llvm.org/docs/Vectorizers.html#epilogue-vectorization).  
   It is preferred over multi threading as it uses only one core providing the same performance as multi threading running on all cores.
 - Minimize times required for GC collection by using struct types for entities and components.  
   GC.Collect(1) < 0.8 ms when using 10.000.000 entities.
