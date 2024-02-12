@@ -12,13 +12,11 @@ public static class Test_Entity
     {
         var store = new EntityStore();
         var entity = store.CreateEntity();
-        AreEqual("IComponent[0]", entity.Components.ToString());
         
         entity.AddComponent(new Position(1, 2, 3));
         entity.AddComponent(new EntityName("test"));
        
-        AreEqual("IComponent[2]", entity.Components.ToString());
-        var components = entity.Components.Array;
+        var components = entity.Components;
         AreEqual(2, components.Length);
         AreEqual("test",                ((EntityName)components[0]).value);
         AreEqual(new Position(1,2,3),   (Position)components[1]);

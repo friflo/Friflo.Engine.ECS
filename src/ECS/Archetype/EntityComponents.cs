@@ -21,6 +21,16 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     /// <summary>Return the number of <see cref="IComponent"/>'s of an entity.</summary>
     public              int     Count       => entity.archetype.componentCount;
     public   override   string  ToString()  => entity.archetype.componentTypes.GetString();
+    
+    internal IComponent[] GetComponentArray()
+    {
+        var components = new IComponent[Count];
+        int n = 0;
+        foreach (var component in this) {
+            components[n++] = component.GetValue();
+        }
+        return components;
+    }
 
     // --- IEnumerable<>
     IEnumerator<EntityComponent>   IEnumerable<EntityComponent>.GetEnumerator() => new ComponentEnumerator(entity);
@@ -84,7 +94,7 @@ public readonly struct EntityComponent
     /// To access a component use <see cref="Entity.GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
-    public              IComponent      Value       => entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
+    public              IComponent      Value       => GetValue();
     
     /// <summary>Return the <see cref="System.Type"/> of an entity component.</summary>
     public              ComponentType   Type        => type;
@@ -95,35 +105,8 @@ public readonly struct EntityComponent
         this.entity = entity;
         type        = componentType;
     }
-}
-
-/// <summary>
-/// Used only for convenience to display entity components in the debugger. 
-/// </summary>
-internal readonly struct Components
-{
-    [Browse(RootHidden)]
-    internal            IComponent[]    Array => GetComponentArray();
     
-    [Browse(Never)]
-    private readonly    Entity          entity;
-
-    public override     string          ToString() => $"IComponent[{entity.EntityComponents.Count}]";
-
-    internal Components(in Entity entity) {
-        this.entity = entity;
-    }
-    
-    private IComponent[] GetComponentArray()
-    {
-        var componentEntities = entity.EntityComponents;
-        var components = new IComponent[componentEntities.Count];
-        int n = 0;
-        foreach (var component in componentEntities) {
-#pragma warning disable CS0618 // Type or member is obsolete
-            components[n++] = component.Value;
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
-        return components;
+    internal IComponent GetValue() {
+        return entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
     }
 }
