@@ -77,6 +77,8 @@ Features in this list are also explained in the Examples.
 
 - 1.13.0 Add support for target framework .NET Standard 2.1 or higher.
 
+- 1.14.0 Add support for parallel (multi threaded) query job execution.
+
 
 
 ## Development
@@ -126,6 +128,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Signal](#signal)
 - [Query](#query)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
+- [Parallel Query Job](#parallel-query-job)
 - [EventFilter](#eventfilter)
 - [CommandBuffer](#commandbuffer)
 
@@ -375,8 +378,8 @@ public static void EnumerateQueryChunks()
         var entity = store.CreateEntity();
         entity.AddComponent(new MyComponent{ value = n + 42 });
     }
-    var queryMyComponents = store.Query<MyComponent>();
-    foreach (var (components, entities) in queryMyComponents.Chunks)
+    var query = store.Query<MyComponent>();
+    foreach (var (components, entities) in query.Chunks)
     {
         foreach (var component in components.Span) {
             Console.WriteLine($"MyComponent.value: {component.value}");
@@ -385,6 +388,39 @@ public static void EnumerateQueryChunks()
             // > MyComponent.value: 44
         }
     }
+}
+```
+
+
+## Parallel Query Job
+
+To minimized execution time for large queries a [QueryJob](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QueryJob.md) can be used.  
+It provides the same functionality as the **foreach** loop in example above but runs on multiple cores in parallel. E.g.
+```csharp
+    foreach (var (components, entities) in query.Chunks) { ... }
+```
+To enable running a query job a [ParallelJobRunner](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ParallelJobRunner.md) is required.  
+The runner can be assigned to the `EntityStore` or directly to the `QueryJob`.  
+A `ParallelJobRunner` instance is thread-safe an can and should be used for multiple / all query jobs.
+
+```csharp
+public static void ParallelQueryJob()
+{
+    var runner  = new ParallelJobRunner(Environment.ProcessorCount);
+    var store   = new EntityStore { JobRunner = runner };
+    for (int n = 0; n < 10_000; n++) {
+        var entity = store.CreateEntity().AddComponent<MyComponent>();
+    }
+    var query = store.Query<MyComponent>();
+    var queryJob = query.ForEach((myComponents, entities) =>
+    {
+        // multi threaded query execution running on all available cores 
+        foreach (ref var myComponent in myComponents.Span) {
+            myComponent.value += 10;                
+        }
+    });
+    queryJob.RunParallel();
+    runner.Dispose();
 }
 ```
 

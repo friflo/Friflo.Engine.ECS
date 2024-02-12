@@ -170,8 +170,8 @@ public static class Examples
             var entity = store.CreateEntity();
             entity.AddComponent(new MyComponent{ value = n + 42 });
         }
-        var queryMyComponents = store.Query<MyComponent>();
-        foreach (var (components, entities) in queryMyComponents.Chunks)
+        var query = store.Query<MyComponent>();
+        foreach (var (components, entities) in query.Chunks)
         {
             foreach (var component in components.Span) {
                 Console.WriteLine($"MyComponent.value: {component.value}");
@@ -180,6 +180,26 @@ public static class Examples
                 // > MyComponent.value: 44
             }
         }
+    }
+    
+    [Test]
+    public static void ParallelQueryJob()
+    {
+        var runner  = new ParallelJobRunner(Environment.ProcessorCount);
+        var store   = new EntityStore { JobRunner = runner };
+        for (int n = 0; n < 10_000; n++) {
+            var entity = store.CreateEntity().AddComponent<MyComponent>();
+        }
+        var query = store.Query<MyComponent>();
+        var queryJob = query.ForEach((myComponents, entities) =>
+        {
+            // multi threaded query execution running on all available cores 
+            foreach (ref var myComponent in myComponents.Span) {
+                myComponent.value += 10;                
+            }
+        });
+        queryJob.RunParallel();
+        runner.Dispose();
     }
     
     [Test]
