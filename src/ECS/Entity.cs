@@ -273,11 +273,11 @@ public readonly struct Entity : IEquatable<Entity>
     
     /// <summary>Return all child entities of an entity.</summary>
     /// <remarks>
-    /// Return all child entities of an entity. Enumerate with: 
+    /// Executes in O(1).<br/> Enumerate with:
     /// <code>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
-    /// Executes in O(1)</remarks>
+    /// </remarks>
     [Browse(Never)] public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
     
     /// <summary>Used only to display child entities in the debugger. Use <see cref="ChildEntities"/> instead.</summary>
