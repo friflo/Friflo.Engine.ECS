@@ -50,6 +50,15 @@ public readonly struct ChildEntities : IEnumerable<Entity>
             array[n] = new Entity(store, ids[n]);
         }
     }
+    
+    internal Entity[] ToArray() {
+        var ids = Ids;
+        var array = new Entity[childCount];
+        for (int n = 0; n < childCount; n++) {
+            array[n] = new Entity(store, ids[n]);
+        }
+        return array;
+    }
 }
 
 /// <summary>

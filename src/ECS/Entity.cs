@@ -278,7 +278,10 @@ public readonly struct Entity : IEquatable<Entity>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
     /// Executes in O(1)</remarks>
-                    public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
+    [Browse(Never)] public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
+    
+    /// <summary>Used only to display child entities in the debugger. Use <see cref="ChildEntities"/> instead.</summary>
+                    internal Entity[]           Children        => ChildEntities.ToArray();
     
     /// <summary>Return the ids of the child entities.</summary>
     [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);
