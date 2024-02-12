@@ -120,8 +120,7 @@ public static class Bench_Query
         var step    = component.StepSpan256;            // step = 32
         for (int n = 0; n < bytes.Length; n += step) {
             var slice   = bytes.Slice(n, step);
-            var value   = Vector256.Create<int>(slice);
-            var result  = Vector256.Add(value, add);    // execute 32 add instructions at once
+            var result = Vector256.Create<int>(slice) + add; // execute 32 add instructions at once
             result.CopyTo(slice);
         }
     }
