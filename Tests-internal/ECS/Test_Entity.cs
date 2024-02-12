@@ -13,6 +13,8 @@ public static class Test_Entity
         var store = new EntityStore();
         var entity = store.CreateEntity();
         
+        AreEqual(0, entity.Components.Length);
+        
         entity.AddComponent(new Position(1, 2, 3));
         entity.AddComponent(new EntityName("test"));
        
