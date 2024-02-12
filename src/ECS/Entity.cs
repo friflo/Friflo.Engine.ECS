@@ -123,7 +123,6 @@ namespace Friflo.Engine.ECS;
 ///     <see cref="RemoveComponent{T}"/>            <br/>
 /// </item>
 /// <item>  <b>components</b> · common              <br/>
-///     <see cref="Components"/>                    <br/>
 ///     <see cref="Name"/>                          <br/>
 ///     <see cref="Position"/>                      <br/>
 ///     <see cref="Rotation"/>                      <br/>
@@ -179,10 +178,14 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ general properties ------------------------------------
 #region general properties
     /// <summary>Returns the permanent entity id used for serialization.</summary>
+    [Browse(Never)]
     public              long                    Pid             => store.nodes[Id].pid;
 
     /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
-    public              EntityComponents        Components      => new EntityComponents(this);
+    [Browse(Never)]
+    public              EntityComponents        EntityComponents=> new EntityComponents(this);
+    
+    internal            Components              Components      => new Components(this);
 
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
     public              ReadOnlySpan<Script>    Scripts         => new (EntityUtils.GetScripts(this));
@@ -559,6 +562,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// Should be used only for debugging as it allocates arrays and do multiple Dictionary lookups.<br/>
     /// No allocations or lookups are made in case <see cref="ECS.DebugEventHandlers.TypeCount"/> is 0.
     /// </remarks>
+    [Browse(Never)]
     public       DebugEventHandlers             DebugEventHandlers => EntityStore.GetEventHandlers(store, Id);
     #endregion
 

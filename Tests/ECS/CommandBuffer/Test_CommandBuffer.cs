@@ -74,7 +74,7 @@ public static class Test_CommandBuffer
             ecb.AddComponent(1, pos1);
             ecb.Playback();
             
-            AreEqual(2, entity.Components.Count);
+            AreEqual(2, entity.EntityComponents.Count);
             AreEqual(1, entity.Position.x);
         }
     }

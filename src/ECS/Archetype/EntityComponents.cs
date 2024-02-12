@@ -84,7 +84,7 @@ public readonly struct EntityComponent
     /// To access a component use <see cref="Entity.GetComponent{T}"/>
     /// </remarks>
     [Obsolete($"use {nameof(Entity)}.{nameof(Entity.GetComponent)}<T>() to access a component")]
-    public              object          Value       => entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
+    public              IComponent      Value       => entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
     
     /// <summary>Return the <see cref="System.Type"/> of an entity component.</summary>
     public              ComponentType   Type        => type;
@@ -94,5 +94,36 @@ public readonly struct EntityComponent
     internal EntityComponent (Entity entity, ComponentType componentType) {
         this.entity = entity;
         type        = componentType;
+    }
+}
+
+/// <summary>
+/// Use only for convenience to display entity components in the debugger. 
+/// </summary>
+internal readonly struct Components
+{
+    [Browse(RootHidden)]
+    internal            IComponent[]    Array => GetComponentArray();
+    
+    [Browse(Never)]
+    private readonly    Entity          entity;
+
+    public override     string          ToString() => $"IComponent[{entity.EntityComponents.Count}]";
+
+    internal Components(in Entity entity) {
+        this.entity = entity;
+    }
+    
+    private IComponent[] GetComponentArray()
+    {
+        var componentEntities = entity.EntityComponents;
+        var components = new IComponent[componentEntities.Count];
+        int n = 0;
+        foreach (var component in componentEntities) {
+#pragma warning disable CS0618 // Type or member is obsolete
+            components[n++] = component.Value;
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
+        return components;
     }
 }
