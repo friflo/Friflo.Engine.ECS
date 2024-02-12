@@ -185,6 +185,7 @@ public readonly struct Entity : IEquatable<Entity>
     [Browse(Never)]
     public              EntityComponents        EntityComponents=> new EntityComponents(this);
     
+    /// <summary>Used only to display entity components in the debugger. Use <see cref="EntityComponents"/> instead.</summary>
     internal            Components              Components      => new Components(this);
 
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>

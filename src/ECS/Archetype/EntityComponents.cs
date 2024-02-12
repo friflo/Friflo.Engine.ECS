@@ -98,7 +98,7 @@ public readonly struct EntityComponent
 }
 
 /// <summary>
-/// Use only for convenience to display entity components in the debugger. 
+/// Used only for convenience to display entity components in the debugger. 
 /// </summary>
 internal readonly struct Components
 {
