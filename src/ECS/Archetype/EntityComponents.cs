@@ -24,7 +24,11 @@ public readonly struct EntityComponents : IEnumerable<EntityComponent>
     
     internal IComponent[] GetComponentArray()
     {
-        var components = new IComponent[Count];
+        int count = Count;
+        if (count == 0) {
+            return Array.Empty<IComponent>();
+        }
+        var components = new IComponent[count];
         int n = 0;
         foreach (var component in this) {
             components[n++] = component.GetValue();
