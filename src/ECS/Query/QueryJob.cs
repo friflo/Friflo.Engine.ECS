@@ -27,7 +27,7 @@ public abstract class QueryJob
     public      ParallelJobRunner   JobRunner               { get => GetRunner(); set => SetRunner(value);      }
     
     /// <summary>
-    /// The minimum number of <see cref="Chunk{T}"/> components per thread required to execute the query <see cref="JobExecution.Parallel"/>.
+    /// The minimum number of <see cref="Chunk{T}"/> components per thread required to execute a query <see cref="JobExecution.Parallel"/>.<br/>
     /// Default: 1000.
     /// </summary>
     /// <remarks>
@@ -37,7 +37,7 @@ public abstract class QueryJob
     /// E.g. processing a chunk with 100 components will take 50 to 100 nano seconds.<br/>
     /// So the chunk components are executed <see cref="JobExecution.Sequential"/> to avoid the parallelization overhead.<br/>
     /// <br/>
-    /// For more complex computations <see cref="MinParallelChunkLength"/> can be reduces to execute a query
+    /// For more complex computations <see cref="MinParallelChunkLength"/> can be reduced to execute a query
     /// <see cref="JobExecution.Parallel"/> when dealing with a lower number of components.
     /// </remarks>
     public      int                 MinParallelChunkLength  { get => minParallel; set => SetMinParallel(value); }
