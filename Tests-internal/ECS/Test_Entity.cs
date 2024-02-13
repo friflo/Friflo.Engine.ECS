@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
 
@@ -84,5 +85,29 @@ public static class Test_Entity
         AreEqual(json,                          entity.Info.JSON);
         AreEqual("event types: 0, handlers: 0", entity.Info.EventHandlers.ToString());
     }
+    
+    [Test]
+    public static void Test_Entity_debugger_screenshot()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+
+        entity.AddComponent(new EntityName("hello entity"));
+        entity.AddComponent(new Position());
+        entity.AddTag<MyTag>();
+        entity.AddChild(store.CreateEntity());
+        entity.AddChild(store.CreateEntity());
+        entity.AddChild(store.CreateEntity());
+        entity.AddChild(store.CreateEntity());
+        entity.AddChild(store.CreateEntity());
+        
+        DebuggerEntityScreenshot(entity);
+    }
+    
+    private static void DebuggerEntityScreenshot(Entity entity) {
+        _ = entity;
+    }
 }
+
+internal struct MyTag : ITag { }
 

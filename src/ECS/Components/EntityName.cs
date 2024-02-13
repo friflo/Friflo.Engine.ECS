@@ -19,7 +19,7 @@ public struct EntityName : IComponent
     
     [Browse(Never)] public  byte[]  Utf8 => value == null ? null : Encoding.UTF8.GetBytes(value);
     
-    public override         string  ToString() => $"EntityName: '{value}'";
+    public override         string  ToString() => $"'{value}'";
 
     public EntityName (string value) {
         this.value = value;
