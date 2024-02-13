@@ -460,11 +460,11 @@ public static void QueryVectorization()
     {
         // increment all MyComponent.value's. add = <1, 1, 1, 1, 1, 1, 1, 1>
         var add     = Vector256.Create<int>(1);         // create int[8] vector - all values = 1
-        var values  = component.AsSpan256<int>();       // bytes.Length - multiple of 8
+        var values  = component.AsSpan256<int>();       // values.Length - multiple of 8
         var step    = component.StepSpan256;            // step = 8
         for (int n = 0; n < values.Length; n += step) {
             var slice   = values.Slice(n, step);
-            var result = Vector256.Create<int>(slice) + add; // execute 8 add instructions in on cycle
+            var result  = Vector256.Create<int>(slice) + add; // execute 8 add instructions in one CPU cycle
             result.CopyTo(slice);
         }
     }
