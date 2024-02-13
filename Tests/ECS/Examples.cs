@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Intrinsics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 
@@ -189,7 +190,7 @@ public static class Examples
         var runner  = new ParallelJobRunner(Environment.ProcessorCount);
         var store   = new EntityStore { JobRunner = runner };
         for (int n = 0; n < 10_000; n++) {
-            var entity = store.CreateEntity().AddComponent<MyComponent>();
+            store.CreateEntity().AddComponent<MyComponent>();
         }
         var query = store.Query<MyComponent>();
         var queryJob = query.ForEach((myComponents, entities) =>
@@ -201,6 +202,28 @@ public static class Examples
         });
         queryJob.RunParallel();
         runner.Dispose();
+    }
+    
+    [Test]
+    public static void QueryVectorization()
+    {
+        var store   = new EntityStore();
+        for (int n = 0; n < 10_000; n++) {
+            store.CreateEntity().AddComponent<MyComponent>();
+        }
+        var query = store.Query<MyComponent>();
+        foreach (var (component, entities) in query.Chunks)
+        {
+            // increment all MyComponent.value's. add = <1, 1, 1, 1, 1, 1, 1, 1>
+            var add     = Vector256.Create<int>(1);         // create int[8] vector - all values = 1
+            var values  = component.AsSpan256<int>();       // values.Length - multiple of 8
+            var step    = component.StepSpan256;            // step = 8
+            for (int n = 0; n < values.Length; n += step) {
+                var slice   = values.Slice(n, step);
+                var result = Vector256.Create<int>(slice) + add; // execute 8 add instructions in on cycle
+                result.CopyTo(slice);
+            }
+        }
     }
     
     [Test]

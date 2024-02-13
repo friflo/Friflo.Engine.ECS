@@ -129,6 +129,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Query](#query)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
 - [Parallel Query Job](#parallel-query-job)
+- [Query Vectorization - SIMD](#query-vectorization---simd)
 - [EventFilter](#eventfilter)
 - [CommandBuffer](#commandbuffer)
 
@@ -409,7 +410,7 @@ public static void ParallelQueryJob()
     var runner  = new ParallelJobRunner(Environment.ProcessorCount);
     var store   = new EntityStore { JobRunner = runner };
     for (int n = 0; n < 10_000; n++) {
-        var entity = store.CreateEntity().AddComponent<MyComponent>();
+        store.CreateEntity().AddComponent<MyComponent>();
     }
     var query = store.Query<MyComponent>();
     var queryJob = query.ForEach((myComponents, entities) =>
@@ -429,6 +430,46 @@ to record the changes.
 Structural changes are adding / removing components, tags or child entities and the creation / deletion of entities.  
 After `RunParallel()` returns these changes can be applied to the `EntityStore` by calling `CommandBuffer.Playback()`.
 
+
+## Query Vectorization - SIMD
+
+The most efficient way to speedup query execution is vectorization.  
+Vectorization is similar to loop unrolling - aka loop unwinding - but with hardware support.  
+Its efficiency is superior to multi threading as it requires only a single thread to achieve the same performance gain.  
+So other threads can still keep running without competing for CPU resources.  
+
+*Note:* Vectorization can be combined with multi threading to speedup execution even more.  
+In case of a system with high memory bandwidth the speedup is *speedup(SIMD) * speedup(multi threading)*.  
+If SIMD or multi threading alone already reaches this bandwidth bottleneck their combination provide no performance gain.
+
+The API provide a few methods to convert chunk components into [System.Runtime.Intrinsics - Vectors](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.intrinsics).  
+E.g. `AsSpan256<>` and `StepSpan256`. See all methods at the [Chunk - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Chunk_T_.md).  
+The `Span` retrieved from a  chunk component has padding components at the end to enable vectorization without a scalar remainder loop.
+
+The following examples shows how to increment all `MyComponent.value`'s by 1.  
+
+```csharp
+public static void QueryVectorization()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 10_000; n++) {
+        store.CreateEntity().AddComponent<MyComponent>();
+    }
+    var query = store.Query<MyComponent>();
+    foreach (var (component, entities) in query.Chunks)
+    {
+        // increment all MyComponent.value's. add = <1, 1, 1, 1, 1, 1, 1, 1>
+        var add     = Vector256.Create<int>(1);         // create int[8] vector - all values = 1
+        var values  = component.AsSpan256<int>();       // bytes.Length - multiple of 8
+        var step    = component.StepSpan256;            // step = 8
+        for (int n = 0; n < values.Length; n += step) {
+            var slice   = values.Slice(n, step);
+            var result = Vector256.Create<int>(slice) + add; // execute 8 add instructions in on cycle
+            result.CopyTo(slice);
+        }
+    }
+}
+```
 
 
 ## EventFilter
