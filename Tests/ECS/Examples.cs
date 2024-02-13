@@ -220,7 +220,7 @@ public static class Examples
             var step    = component.StepSpan256;            // step = 8
             for (int n = 0; n < values.Length; n += step) {
                 var slice   = values.Slice(n, step);
-                var result = Vector256.Create<int>(slice) + add; // execute 8 add instructions in on cycle
+                var result = Vector256.Create<int>(slice) + add; // execute 8 add instructions in one CPU cycle
                 result.CopyTo(slice);
             }
         }
