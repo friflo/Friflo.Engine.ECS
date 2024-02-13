@@ -98,10 +98,10 @@ Library:
 - Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
 - Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
 - Unit test execution: ~ 1 second.
-- Size of `Friflo.Engine.ECS.dll`: ~ 140 kb. The implementation: ~ 10.000 LOC.
+- Size of `Friflo.Engine.ECS.dll`: ~ 180 kb. The implementation: ~ 14.000 LOC.
 - Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
 - The library is not using [unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
-- The library C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
+- The C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
 - No 3rd party dependencies.
 - It requires **Friflo.Json.Fliox** which is part of this repository.
 
@@ -114,7 +114,7 @@ Examples using **Friflo.Engine.ECS** are part of the unit tests see: [Tests/ECS/
 
 When testing the examples use a debugger to check entity state changes while stepping throw the code.
 
-<img src="docs/images/entity-debugger.png" width="593" height="270"></img>  
+<img src="docs/images/entity-debugger.png" width="742" height="305"></img>  
 *Screenshot:* All relevant entity data is directly available in the debugger.
 
 Examples showing typical use cases of the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
