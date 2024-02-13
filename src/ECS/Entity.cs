@@ -221,7 +221,10 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary> Return the <b>JSON</b> representation of an entity. </summary>
     /// <remarks> Counterpart of <see cref="Serialize.DataEntity.DebugJSON"/> </remarks>
     // Assigning JSON in a Debugger does not change the entity state as a developer would expect. So setter is only internal.   
-                    public  string              DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
+    [Browse(Never)] public  string              DebugJSON { get => EntityUtils.EntityToJSON(this); internal set => EntityUtils.JsonToEntity(this, value);  }
+    
+    /// <summary> Use to display </summary>
+                    internal EntityInfo         Info => new EntityInfo(this);
     #endregion
 
 

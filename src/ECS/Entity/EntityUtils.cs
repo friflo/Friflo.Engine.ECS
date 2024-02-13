@@ -6,12 +6,35 @@ using System.Collections.Generic;
 using System.Text;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Global
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
+
+/// <summary>
+/// Used to provide additional debug informations for an <see cref="Entity"/>:<br/>
+/// <see cref="Entity.Pid"/>                <br/>
+/// <see cref="Entity.DebugJSON"/>          <br/>
+/// <see cref="Entity.DebugEventHandlers"/> <br/>
+/// </summary>
+internal readonly struct EntityInfo
+{
+    internal            long                Pid             => entity.Pid;
+    internal            string              JSON            => EntityUtils.EntityToJSON(entity);
+    internal            DebugEventHandlers  EventHandlers   => EntityStore.GetEventHandlers(entity.store, entity.Id);
+    
+    public   override   string              ToString()      => "";
+
+    [Browse(Never)] private readonly Entity entity;
+    
+    internal EntityInfo(Entity entity) {
+        this.entity = entity;
+    }
+}
 
 public sealed class EntityEqualityComparer : IEqualityComparer<Entity>
 {

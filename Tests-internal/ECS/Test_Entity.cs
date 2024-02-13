@@ -1,5 +1,6 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -51,6 +52,37 @@ public static class Test_Entity
         
         AreEqual(2, child1.Children.Length);
         AreEqual(1, child2.Children.Length);
+    }
+    
+    [Test]
+    public static void Test_Entity_Info()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity();
+        
+        entity.AddComponent<Position>();
+        entity.AddScript(new TestScript1());
+        entity.AddChild(store.CreateEntity());
+        entity.AddChild(store.CreateEntity());
+        
+        var json =
+"""
+{
+    "id": 1,
+    "children": [
+        2,
+        3
+    ],
+    "components": {
+        "pos": {"x":0,"y":0,"z":0},
+        "script1": {"val1":0}
+    }
+}
+""";
+        AreEqual("",                            entity.Info.ToString());
+        AreEqual(entity.Pid,                    entity.Info.Pid);
+        AreEqual(json,                          entity.Info.JSON);
+        AreEqual("event types: 0, handlers: 0", entity.Info.EventHandlers.ToString());
     }
 }
 

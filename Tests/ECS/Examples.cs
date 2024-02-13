@@ -2,6 +2,7 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 
+// ReSharper disable UnusedParameter.Local
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable UnusedVariable
 // ReSharper disable FieldCanBeMadeReadOnly.Global
