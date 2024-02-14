@@ -35,7 +35,7 @@ internal sealed class  EntityBatch
         store.Apply(this);
     }
     
-    internal EntityBatch Add<T>(T component) where T : struct, IComponent
+    internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
         addedComponents.    bitSet.SetBit   (structIndex);
@@ -44,7 +44,7 @@ internal sealed class  EntityBatch
         return this;   
     }
     
-    internal EntityBatch Remove<T>() where T : struct, IComponent
+    internal EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
         removedComponents.  bitSet.SetBit   (structIndex);
