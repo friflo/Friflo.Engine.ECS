@@ -151,7 +151,8 @@ The entity store enables to
 - query for entities with a specific set of components or tags
 - subscribe events like adding / removing components, tags, scripts and child entities
 
-Multiple stores can be used in parallel and act completely independent from each other.
+Multiple stores can be used in parallel and act completely independent from each other.  
+The example shows how to create a store. Mainly every example will start with this line.
 
 ```csharp
 public static void CreateStore()
@@ -374,6 +375,8 @@ for available query filters to reduce the number of entities / components return
 ```csharp
 public static void EntityQueries()
 {
+    var store   = new EntityStore();
+    
     var entity1 = store.CreateEntity();
     entity1.AddComponent(new EntityName("test"));
     entity1.AddTag<MyTag1>();
