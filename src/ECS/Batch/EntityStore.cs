@@ -11,8 +11,12 @@ public partial class EntityStoreBase
 {
     internal EntityBatch GetBatch(int entityId)
     {
-        var batch       = internBase.batch ??= new EntityBatch(this);
-        batch.entityId  = entityId;
+        var batch               = internBase.batch ??= new EntityBatch(this);
+        batch.entityId          = entityId;
+        batch.addedTags         = default;
+        batch.removedTags       = default;
+        batch.addedComponents   = default;
+        batch.removedComponents = default;
         return batch;
     }
     

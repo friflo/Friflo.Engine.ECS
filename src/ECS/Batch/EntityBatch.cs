@@ -40,16 +40,7 @@ internal sealed class  EntityBatch
     }
     
     internal void Apply() {
-        try {
-            store.ApplyEntityBatch(this);
-        }
-        finally
-        {
-            addedTags           = default;
-            removedTags         = default;
-            addedComponents     = default;
-            removedComponents   = default;
-        }
+        store.ApplyEntityBatch(this);
     }
     
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
