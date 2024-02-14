@@ -214,7 +214,7 @@ public static class Test_ExplorerItem
                     AreEqual("Component<T>() - component was removed. T: EntityName", e!.Message);
                     
                     // ensure entity is in new Archetype
-                    AreEqual("[]",                          args.Entity.Archetype.ToString());
+                    AreEqual("[]  entities: 1",             args.Entity.Archetype.ToString());
                     AreEqual("entity: 1 - event > Remove Component: [EntityName]", argsStr);
                     return;
                 default:

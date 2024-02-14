@@ -240,13 +240,13 @@ public static class Test_Tags
         AreEqual(4,                                     store.Archetypes.Length);
         
         entity.RemoveTags(testTag2);
-        AreEqual("[]",                                  entity.Archetype.ToString());
+        AreEqual("[]  entities: 1",                     entity.Archetype.ToString());
         AreEqual(1,                                     store.EntityCount);
         AreEqual(4,                                     store.Archetypes.Length);
         
         // remove same tag again
         entity.RemoveTags(testTag2); // no event sent
-        AreEqual("[]",                                  entity.Archetype.ToString());
+        AreEqual("[]  entities: 1",                     entity.Archetype.ToString());
         AreEqual(1,                                     store.EntityCount);
         AreEqual(4,                                     store.Archetypes.Length);
         

@@ -172,7 +172,7 @@ public static class Test_StructComponent
         AreEqual(2,         posRotType.ComponentTypes.Count);
         
         var player1  = store.CreateEntity();
-        AreEqual("[]",      player1.Archetype.ToString());
+        AreEqual("[]  entities: 1", player1.Archetype.ToString());
         
         var position = new Position { x = 1 };
         player1.AddComponent(position);
