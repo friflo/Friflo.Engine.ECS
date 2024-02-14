@@ -86,6 +86,13 @@ public partial class EntityStoreBase
     
     private static Archetype GetArchetypeWithTags(EntityStoreBase store, Archetype archetype, in Tags tags)
     {
+        var searchKey               = store.searchKey;
+        searchKey.componentTypes    = archetype.componentTypes;
+        searchKey.tags              = tags;
+        searchKey.CalculateHashCode();
+        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
+            return archetypeKey.archetype;
+        }
         var config  = GetArchetypeConfig(store);
         var result  = Archetype.CreateWithComponentTypes(config, archetype.componentTypes, tags);
         AddArchetype(store, result);

@@ -108,19 +108,10 @@ public partial class EntityStoreBase
         if (newTags.bitSet.Equals(curTags.bitSet)) {
             return false;
         }
-        var searchKey = store.searchKey;
-        searchKey.componentTypes    = arch.componentTypes;
-        searchKey.tags              = newTags;
-        searchKey.CalculateHashCode();
-        Archetype newArchetype;
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
-            newArchetype = archetypeKey.archetype;
-        } else {
-            newArchetype = GetArchetypeWithTags(store, arch, searchKey.tags);
-        }
-        archetype   = newArchetype;
-        archIndex   = newArchetype.archIndex;
-        compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
+        var newArchetype    = GetArchetypeWithTags(store, arch, newTags);
+        archetype           = newArchetype;
+        archIndex           = newArchetype.archIndex;
+        compIndex           = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         // Send event. See: SEND_EVENT notes
         var tagsChanged = store.internBase.tagsChanged;
         if (tagsChanged == null) {
@@ -144,19 +135,10 @@ public partial class EntityStoreBase
         if (newTags.bitSet.Equals(curTags.bitSet)) {
             return false;
         }
-        var searchKey = store.searchKey;
-        searchKey.componentTypes    = arch.componentTypes;
-        searchKey.tags              = newTags;
-        searchKey.CalculateHashCode();
-        Archetype newArchetype;
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
-            newArchetype = archetypeKey.archetype;
-        } else {
-            newArchetype = GetArchetypeWithTags(store, arch, searchKey.tags);
-        }
-        archetype   = newArchetype;
-        archIndex   = archetype.archIndex;
-        compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
+        var newArchetype    = GetArchetypeWithTags(store, arch, newTags);
+        archetype           = newArchetype;
+        archIndex           = newArchetype.archIndex;
+        compIndex           = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         // Send event. See: SEND_EVENT notes
         var tagsChanged = store.internBase.tagsChanged;
         if (tagsChanged == null) {
