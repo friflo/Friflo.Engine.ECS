@@ -4,11 +4,11 @@
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable UseNullPropagation
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
-        
     internal EntityBatch GetBatch(int entityId)
     {
         var batch       = internBase.batch ??= new EntityBatch(this);
@@ -16,7 +16,7 @@ public partial class EntityStoreBase
         return batch;
     }
     
-    internal void Apply(EntityBatch batch)
+    internal void ApplyEntityBatch(EntityBatch batch)
     {
         var entityId    = batch.entityId;
         ref var node    = ref batch.entityStore.nodes[entityId];
@@ -31,30 +31,38 @@ public partial class EntityStoreBase
         newComponentTypes.Add   (batch.addedComponents);
         newComponentTypes.Remove(batch.removedComponents);
         
-        
         var newArchetype    = GetArchetype(newComponentTypes, newTags);
         node.compIndex      = compIndex = Archetype.MoveEntityTo(archetype, entityId, compIndex, newArchetype);
         node.archetype      = newArchetype;
         
-        var tagsChanged = internBase.tagsChanged;
-        if (tagsChanged != null)
+        var newHeapMap = newArchetype.heapMap;
+        foreach (var componentType in batch.addedComponents)
         {
-            if (!newTags.bitSet.Equals(archetype.tags.bitSet)) {
-                // Send event. See: SEND_EVENT notes
-                tagsChanged.Invoke(new TagsChanged(this, entityId, newTags, archetype.tags));
-            }   
+            var structIndex = componentType.StructIndex;
+            newHeapMap[structIndex].SetBatchComponent(batch.components, compIndex);
         }
-        AddComponents(batch, archetype, compIndex, newArchetype);
         
+        // ----------- Send events for all batch commands. See: SEND_EVENT notes
+        // --- send tags changed event
+        var tagsChanged = internBase.tagsChanged;
+        if (tagsChanged != null) {
+            if (!newTags.bitSet.Equals(archetype.tags.bitSet)) {
+                tagsChanged.Invoke(new TagsChanged(this, entityId, newTags, archetype.tags));
+            }
+        }
+        // --- send component removed event
         if (internBase.componentRemoved != null) {
-            RemoveComponents(batch, archetype, entityId);
+            SendComponentRemoved(batch, archetype, entityId);
+        }
+        // --- send component added event
+        if (internBase.componentAdded != null) {
+            SendComponentAdded(batch, archetype, compIndex);
         }
     }
     
-    private void AddComponents(EntityBatch batch, Archetype archetype, int compIndex, Archetype newArchetype)
+    private void SendComponentAdded(EntityBatch batch, Archetype archetype, int compIndex)
     {
         var oldHeapMap      = archetype.heapMap;
-        var newHeapMap      = newArchetype.heapMap;
         var componentAdded  = internBase.componentAdded;
         foreach (var componentType in batch.addedComponents)
         {
@@ -69,24 +77,19 @@ public partial class EntityStoreBase
                 oldHeap.StashComponent(compIndex);
                 action = ComponentChangedAction.Update;
             }
-            newHeapMap[structIndex].SetBatchComponent(batch.components, compIndex);
-            if (componentAdded == null) {
-                continue;
-            }
             componentAdded.Invoke(new ComponentChanged (this, batch.entityId, action, structIndex, oldHeap));
         }
     }
     
-    private void RemoveComponents(EntityBatch batch, Archetype archetype, int compIndex)
+    private void SendComponentRemoved(EntityBatch batch, Archetype archetype, int compIndex)
     {
         var oldHeapMap          = archetype.heapMap;
         var componentRemoved    = internBase.componentRemoved;
         foreach (var componentType in batch.removedComponents)
         {
             var structIndex = componentType.StructIndex;
-            var structHeap  = oldHeapMap[structIndex];
-            var oldHeap     = structHeap;
-            if (structHeap == null) {
+            var oldHeap     = oldHeapMap[structIndex];
+            if (oldHeap == null) {
                 continue;
             }
             oldHeap.StashComponent(compIndex);

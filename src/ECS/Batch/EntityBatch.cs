@@ -30,9 +30,8 @@ internal sealed class  EntityBatch
         }
     }
     
-    internal void Apply()
-    {
-        store.Apply(this);
+    internal void Apply() {
+        store.ApplyEntityBatch(this);
     }
     
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
