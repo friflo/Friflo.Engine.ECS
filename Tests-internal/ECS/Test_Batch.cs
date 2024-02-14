@@ -12,18 +12,21 @@ public static class Test_Batch
     public static void Test_Batch_Entity()
     {
         var store = new EntityStore();
+        store.OnComponentAdded      += _ => { };
+        store.OnComponentRemoved    += _ => { };
+        store.OnTagsChanged         += _ => { }; 
         var entity = store.CreateEntity();
         
         entity.Batch
             .AddComponent   (new Position())
             .RemoveComponent<Rotation>()
             .AddTag         <TestTag>()
-            .RemoveTag      <TestTag>()
+            .RemoveTag      <TestTag2>()
             .Apply();
         
         
-        var addTags     = Tags.Get<TestTag>();
-        var removeTags  = Tags.Get<TestTag2>();
+        var addTags     = Tags.Get<TestTag2>();
+        var removeTags  = Tags.Get<TestTag>();
         
         entity.Batch
             .AddComponent   (new Position())

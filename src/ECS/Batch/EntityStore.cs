@@ -20,6 +20,7 @@ public partial class EntityStoreBase
         var entityId    = batch.entityId;
         ref var node    = ref batch.entityStore.nodes[entityId];
         var archetype   = node.archetype;
+        var compIndex   = node.compIndex;
         
         var newTags     = archetype.tags;
         newTags.Add    (batch.addedTags);
@@ -31,22 +32,51 @@ public partial class EntityStoreBase
         
         
         var newArchetype    = GetArchetype(newComponentTypes, newTags);
-        node.compIndex      = Archetype.MoveEntityTo(archetype, entityId, node.compIndex, newArchetype);
+        node.compIndex      = Archetype.MoveEntityTo(archetype, entityId, compIndex, newArchetype);
         node.archetype      = newArchetype;
         
-        if (!newTags.bitSet.Equals(archetype.tags.bitSet)) {
-            // Send event. See: SEND_EVENT notes
-            var tagsChanged = internBase.tagsChanged;
-            if (tagsChanged != null) {
+        var tagsChanged = internBase.tagsChanged;
+        if (tagsChanged != null) {
+            if (!newTags.bitSet.Equals(archetype.tags.bitSet)) {
+                // Send event. See: SEND_EVENT notes
                 tagsChanged.Invoke(new TagsChanged(this, entityId, newTags, archetype.tags));
+            }   
+        }
+
+        var oldHeapMap      = archetype.heapMap;
+        var componentAdded  = internBase.componentAdded;
+        if (componentAdded != null)
+        {
+            foreach (var componentType in batch.addedComponents)
+            {
+                var structIndex = componentType.StructIndex;
+                var structHeap  = oldHeapMap[structIndex];
+                var oldHeap     = structHeap;
+                ComponentChangedAction action;
+                if (structHeap == null) {
+                    action = ComponentChangedAction.Add;
+                } else {
+                    // --- case: archetype contains the component type  => archetype remains unchanged
+                    oldHeap.StashComponent(compIndex);
+                    action = ComponentChangedAction.Update;
+                }
+                componentAdded.Invoke(new ComponentChanged (this, entityId, action, structIndex, oldHeap));
             }
         }
-        foreach (var componentType in batch.addedComponents) {
-            
-        }
-        
-        foreach (var componentType in batch.removedComponents) {
-            
+        var componentRemoved  = internBase.componentRemoved;
+        if (componentRemoved != null)
+        {
+            foreach (var componentType in batch.removedComponents)
+            {
+                var structIndex = componentType.StructIndex;
+                var structHeap  = oldHeapMap[structIndex];
+                var oldHeap     = structHeap;
+                if (structHeap == null) {
+                    continue;
+                }
+                oldHeap.StashComponent(compIndex);
+                componentRemoved.Invoke(new ComponentChanged (this, entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
+            }
         }
     }
 }

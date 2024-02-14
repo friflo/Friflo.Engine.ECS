@@ -35,7 +35,7 @@ internal sealed class StructHeap<T> : StructHeap
         components      = new T[ArchetypeUtils.MinCapacity];
     }
     
-    internal void StashComponent(int compIndex) {
+    internal override void StashComponent(int compIndex) {
         componentStash = components[compIndex];
     }
     
