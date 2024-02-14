@@ -11,8 +11,6 @@ internal class BatchComponent { }
 internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
 {
     internal        T       value;
-
-    public override string  ToString() => typeof(T).Name;
 }
 
 

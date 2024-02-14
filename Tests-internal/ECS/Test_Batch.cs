@@ -14,9 +14,9 @@ public static class Test_Batch
     public static void Test_Batch_Entity()
     {
         var store = new EntityStore();
-        // store.OnComponentAdded      += _ => { };
-        // store.OnComponentRemoved    += _ => { };
-        // store.OnTagsChanged         += _ => { }; 
+        store.OnComponentAdded      += _ => { };
+        store.OnComponentRemoved    += _ => { };
+        store.OnTagsChanged         += _ => { }; 
         var entity = store.CreateEntity();
         
         entity.Batch
