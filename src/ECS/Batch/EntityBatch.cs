@@ -2,8 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 
-// ReSharper disable once CheckNamespace
 // ReSharper disable RedundantTypeDeclarationBody
+// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 internal class BatchComponent { }
@@ -40,7 +40,16 @@ internal sealed class  EntityBatch
     }
     
     internal void Apply() {
-        store.ApplyEntityBatch(this);
+        try {
+            store.ApplyEntityBatch(this);
+        }
+        finally
+        {
+            addedTags           = default;
+            removedTags         = default;
+            addedComponents     = default;
+            removedComponents   = default;
+        }
     }
     
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent

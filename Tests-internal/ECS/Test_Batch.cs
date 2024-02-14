@@ -47,7 +47,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_Entity_Perf()
     {
-        long count = 10; // 10_000_000 ~ #PC: 1620 ms
+        long count      = 10; // 10_000_000 ~ #PC: 1691 ms
         var store       = new EntityStore();
         var entity      = store.CreateEntity();
         var addTags     = Tags.Get<TestTag2>();
