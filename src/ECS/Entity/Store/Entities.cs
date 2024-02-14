@@ -37,7 +37,16 @@ public partial class EntityStore
         var id  = NewId();
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return CreateEntityNode(id, pid);
+        CreateEntityNode(defaultArchetype, id, pid);
+        return new Entity(this, id);
+    }
+    
+    internal ref EntityNode CreateEntityInternal(Archetype archetype)
+    {
+        var id  = NewId();
+        EnsureNodesLength(id + 1);
+        var pid = GeneratePid(id);
+        return ref CreateEntityNode(archetype, id, pid);
     }
     
     /// <summary>
@@ -54,7 +63,8 @@ public partial class EntityStore
         }
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return CreateEntityNode(id, pid);
+        CreateEntityNode(defaultArchetype, id, pid);
+        return new Entity(this, id);
     }
     
     /// <summary>
@@ -63,12 +73,10 @@ public partial class EntityStore
     /// <returns></returns>
     public Entity CloneEntity(Entity entity)
     {
-        var clone      = CreateEntity();
         var archetype   = entity.archetype;
-        if (archetype != defaultArchetype) {
-            clone.refCompIndex    = Archetype.AddEntity(archetype, clone.Id);
-            clone.refArchetype    = archetype;
-        }
+        ref var node    = ref CreateEntityInternal(archetype);
+        var clone       = new Entity(this, node.id);
+        
         var isBlittable = IsBlittable(entity);
 
         // todo optimize - serialize / deserialize only non blittable components and scripts
@@ -150,26 +158,27 @@ public partial class EntityStore
     }
 
     /// <summary>expect <see cref="EntityStore.nodes"/> Length > id</summary> 
-    private Entity CreateEntityNode(int id, long pid)
+    private ref EntityNode CreateEntityNode(Archetype archetype, int id, long pid)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
         if ((node.flags & Created) != 0) {
             AssertPid(node.pid, pid);
-            return new Entity(this, id);
+            return ref node;
         }
         nodesCount++;
         if (nodesMaxId < id) {
             nodesMaxId = id;
         }
         AssertPid0(node.pid, pid);
+        node.compIndex      = Archetype.AddEntity(archetype, id);
+        node.archetype      = archetype;
         node.pid            = pid;
-        node.archetype      = defaultArchetype;
         node.scriptIndex    = EntityUtils.NoScripts;
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
-        return new Entity(this, id);
+        return ref node;
     }
     
     /// <summary>

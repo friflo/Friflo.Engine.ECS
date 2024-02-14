@@ -33,6 +33,7 @@ internal abstract class StructHeap
     internal  abstract  void        MoveComponent           (int from, int to);
     internal  abstract  void        CopyComponentTo         (int sourcePos, StructHeap target, int targetPos);
     internal  abstract  void        CopyComponent           (int sourcePos, int targetPos);
+    internal  abstract  void        SetComponentDefault     (int compIndex);
     internal  abstract  IComponent  GetComponentStashDebug  ();
     internal  abstract  IComponent  GetComponentDebug       (int compIndex);
     internal  abstract  Bytes       Write                   (ObjectWriter writer, int compIndex);

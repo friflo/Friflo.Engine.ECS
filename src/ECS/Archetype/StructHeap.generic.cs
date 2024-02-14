@@ -74,6 +74,10 @@ internal sealed class StructHeap<T> : StructHeap
         components[targetPos] = components[sourcePos];
     }
     
+    internal  override  void SetComponentDefault (int compIndex) {
+        components[compIndex] = default;
+    }
+    
     /// <summary>
     /// Method only available for debugging. Reasons:<br/>
     /// - it boxes struct values to return them as objects<br/>

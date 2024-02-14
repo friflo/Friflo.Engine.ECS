@@ -193,12 +193,9 @@ internal sealed class ComponentReader
         var curArchetype = entity.archetype;
         if (curArchetype != newArchetype)
         {
-            entity.refArchetype = newArchetype;
-            if (curArchetype == store.defaultArchetype) {
-                entity.refCompIndex = Archetype.AddEntity   (newArchetype, entity.Id);
-            } else {
-                entity.refCompIndex = Archetype.MoveEntityTo(curArchetype, entity.Id, entity.compIndex, newArchetype);
-            }
+            ref var node    = ref entity.store.nodes[entity.Id];
+            node.archetype  = newArchetype;
+            node.compIndex  = Archetype.MoveEntityTo(curArchetype, entity.Id, node.compIndex, newArchetype);
         }
         if (unresolvedTagList.Count > 0) {
             AddUnresolvedTags(entity);

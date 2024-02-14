@@ -69,28 +69,35 @@ public sealed class RawEntityStore : EntityStoreBase
         if (this != archetype.store) {
             throw InvalidStoreException(nameof(archetype));
         }
-        var id              = CreateEntity();
-        ref var entity      = ref entities[id]; 
-        entity.archIndex    = archetype.archIndex;
-        entity.compIndex    = Archetype.AddEntity(archetype, id);
+        var id = NewId();
+        CreateEntity(archetype, id);
+        return id;
+    }
+    
+    public int CreateEntity(int id)
+    {
+        CreateEntity(defaultArchetype, id);
         return id;
     }
     
     public int CreateEntity()
     {
         var id = NewId();
-        CreateEntity(id);
+        CreateEntity(defaultArchetype, id);
         return id;
     }
     
-    public int CreateEntity(int id)
+    private void CreateEntity(Archetype archetype, int id)
     {
         EnsureEntitiesLength(id + 1);
-        nodesCount++;
+        var index = nodesCount;
+        nodesCount = index + 1;
         if (nodesMaxId < id) {
             nodesMaxId = id;
         }
-        return id;
+        ref var node = ref entities[id];
+        node.compIndex = Archetype.AddEntity(archetype, id);
+        node.archIndex = archetype.archIndex; // default archetype index
     }
     
     protected internal override void    UpdateEntityCompIndex(int id, int compIndex) {
@@ -101,17 +108,19 @@ public sealed class RawEntityStore : EntityStoreBase
         return sequenceId++;
     }
     
-    public void DeleteEntity(int id)
+    public bool DeleteEntity(int id)
     {
-        ref var entity  = ref entities[id]; 
-        var archetype   = archs[entity.archIndex];
-        if (archetype == defaultArchetype) {
-            return;
+        ref var entity  = ref entities[id];
+        var archIndex   = entity.archIndex;
+        if (archIndex == 0) {
+            return false;
         }
+        var archetype   = archs[archIndex];
         Archetype.MoveLastComponentsTo(archetype, entity.compIndex);
         entity.archIndex = 0;
         entity.compIndex = 0;
         nodesCount--;
+        return true;
     }
 
     #endregion

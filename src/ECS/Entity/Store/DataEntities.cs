@@ -121,13 +121,13 @@ public partial class EntityStore
             ids[n] = childId;
         }
         EnsureNodesLength(intern.sequenceId + 1);
-        var entity  = CreateEntityNode(id, pid);
+        CreateEntityNode(defaultArchetype, id, pid);
 
         if (ids.Length > 0) {
             UpdateEntityNodes(ids, children);
         }
         SetChildNodes(id, ids);
-        return entity;
+        return new Entity(this, id);
     }
     
     private Entity CreateFromDataEntityUsePidAsId(DataEntity dataEntity)
@@ -155,13 +155,13 @@ public partial class EntityStore
             maxPid = Math.Max(maxPid, childId);
         }
         EnsureNodesLength(maxPid + 1);
-        var entity  = CreateEntityNode(id, id);
+        CreateEntityNode(defaultArchetype, id, id);
         
         if (ids.Length > 0) {
             UpdateEntityNodes(ids, children);
         }
         SetChildNodes(id, ids);
-        return entity;
+        return new Entity(this, id);
     }
     
     private void EnsureIdBufferCapacity(int count) {

@@ -26,46 +26,31 @@ public partial class EntityStoreBase
         in  T           component)      where T : struct, IComponent
     {
         var                     arch    = archetype;
-        var                     store   = arch.store;   
-        StructHeap              structHeap;
-        StructHeap              oldHeap;
+        var                     store   = arch.store;
         ComponentChangedAction  action;
         bool                    added;
-        if (arch != store.defaultArchetype)
-        {
-            structHeap  = arch.heapMap[structIndex];
-            oldHeap     = structHeap;
-            if (structHeap != null) {
-                // --- case: archetype contains the component type  => archetype remains unchanged
-                ((StructHeap<T>)oldHeap).StashComponent(compIndex);
-                added   = false;
-                action  = ComponentChangedAction.Update;
-                goto AssignComponent;
-            }
-            // --- case: archetype doesn't contain component type   => change entity archetype
-            // removed passing typeof(T) in commit:
-            //   Engine - extract EntityStoreBase.AddComponentInternal() to prepare sending events for EntityStoreBase.AddComponent<>()
-            //   https://github.com/friflo/Friflo.Json.Fliox/commit/f1cf0db5a59a961fc39c30918157678d82d3573e
-            var newArchetype    = GetArchetypeWith(store, arch, structIndex);
-            compIndex           = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
-            archetype           = arch = newArchetype;
-            added               = true;
-            action              = ComponentChangedAction.Add;
-        } else {
-            // --- case: entity is assigned to default archetype    => get archetype with component and add entity
-            oldHeap             = null;
-            arch                = GetArchetype(store, arch.tags, structIndex);
-            compIndex           = Archetype.AddEntity(arch, id);
-            archetype           = arch;
-            added               = true;
-            action              = ComponentChangedAction.Add;
+
+        var structHeap  = arch.heapMap[structIndex];
+        var oldHeap     = structHeap;
+        if (structHeap != null) {
+            // --- case: archetype contains the component type  => archetype remains unchanged
+            ((StructHeap<T>)oldHeap).StashComponent(compIndex);
+            added   = false;
+            action  = ComponentChangedAction.Update;
+            goto AssignComponent;
         }
-        archIndex   = arch.archIndex;
-        structHeap  = arch.heapMap[structIndex];
+        // --- case: archetype doesn't contain component type   => change entity archetype
+        var newArchetype    = GetArchetypeWith(store, arch, structIndex);
+        compIndex           = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
+        archetype           = arch = newArchetype;
+        added               = true;
+        action              = ComponentChangedAction.Add;
+        archIndex           = arch.archIndex;
+        structHeap          = arch.heapMap[structIndex];
         
     AssignComponent:  // --- assign passed component value
-        var heap    = (StructHeap<T>)structHeap;
-        heap.components[compIndex] = component;
+        var heap                    = (StructHeap<T>)structHeap;
+        heap.components[compIndex]  = component;
         // Send event. See: SEND_EVENT notes
         var componentAdded = store.internBase.componentAdded;
         if (componentAdded == null) {
@@ -91,18 +76,11 @@ public partial class EntityStoreBase
         }
         ((StructHeap<T>)heap).StashComponent(compIndex);
         var newArchetype = GetArchetypeWithout(store, arch, structIndex);
-        if (newArchetype == store.defaultArchetype) {
-            int removePos = compIndex; 
-            // --- update entity
-            archetype   = store.defaultArchetype;
-            compIndex   = 0;
-            Archetype.MoveLastComponentsTo(arch, removePos);
-        } else {
-            // --- change entity archetype
-            archetype   = newArchetype;
-            compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
-        }
-        archIndex   = archetype.archIndex;
+
+        // --- change entity archetype
+        archetype   = newArchetype;
+        archIndex   = newArchetype.archIndex;
+        compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         // Send event. See: SEND_EVENT notes
         var componentRemoved = store.internBase.componentRemoved;
         if (componentRemoved == null) {
@@ -140,14 +118,9 @@ public partial class EntityStoreBase
         } else {
             newArchetype = GetArchetypeWithTags(store, arch, searchKey.tags);
         }
-        if (arch != store.defaultArchetype) {
-            archetype   = newArchetype;
-            compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
-        } else {
-            compIndex   = Archetype.AddEntity(newArchetype, id);
-            archetype   = newArchetype;
-        }
-        archIndex = archetype.archIndex;
+        archetype   = newArchetype;
+        archIndex   = newArchetype.archIndex;
+        compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         // Send event. See: SEND_EVENT notes
         var tagsChanged = store.internBase.tagsChanged;
         if (tagsChanged == null) {
@@ -181,17 +154,9 @@ public partial class EntityStoreBase
         } else {
             newArchetype = GetArchetypeWithTags(store, arch, searchKey.tags);
         }
-        if (newArchetype == store.defaultArchetype) {
-            int removePos = compIndex; 
-            // --- update entity
-            compIndex   = 0;
-            archetype   = store.defaultArchetype;
-            Archetype.MoveLastComponentsTo(arch, removePos);
-        } else {
-            compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
-            archetype   = newArchetype;
-        }
-        archIndex = archetype.archIndex;
+        archetype   = newArchetype;
+        archIndex   = archetype.archIndex;
+        compIndex   = Archetype.MoveEntityTo(arch, id, compIndex, newArchetype);
         // Send event. See: SEND_EVENT notes
         var tagsChanged = store.internBase.tagsChanged;
         if (tagsChanged == null) {

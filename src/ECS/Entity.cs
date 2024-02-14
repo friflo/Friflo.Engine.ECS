@@ -485,9 +485,7 @@ public readonly struct Entity : IEquatable<Entity>
         var componentIndex  = compIndex; 
         var entityStore = arch.entityStore;
         entityStore.DeleteNode(Id); 
-        if (arch != entityStore.defaultArchetype) {
-            Archetype.MoveLastComponentsTo(arch, componentIndex);
-        }
+        Archetype.MoveLastComponentsTo(arch, componentIndex);
     }
     /// <summary>Return the position of the given <paramref name="child"/> in the entity.</summary>
     /// <param name="child"></param>

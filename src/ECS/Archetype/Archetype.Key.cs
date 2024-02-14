@@ -46,13 +46,6 @@ internal static class ArchetypeKeyExtensions {
         key.hash            = key.componentTypes.bitSet.HashCode() ^ key.tags.bitSet.HashCode();
     }
     
-    internal static void SetTagsWith(this ArchetypeKey key, in Tags tags, int structIndex) {
-        key.componentTypes  = default;
-        key.componentTypes.bitSet.SetBit(structIndex);
-        key.tags            = tags;
-        key.hash            = key.componentTypes.bitSet.HashCode() ^ tags.bitSet.HashCode();
-    }
-    
     internal static void SetWith(this ArchetypeKey key, Archetype archetype, int structIndex) {
         key.componentTypes  = archetype.componentTypes;
         key.componentTypes.bitSet.SetBit(structIndex);

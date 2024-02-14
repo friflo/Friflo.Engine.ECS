@@ -60,23 +60,23 @@ public sealed class Archetype
 #endregion
 
 #region     private / internal members
-    [Browse(Never)] internal readonly   StructHeap[]        structHeaps;    //  8 + all archetype components (struct heaps * componentCount)
+    [Browse(Never)] internal readonly   StructHeap[]        structHeaps;    //  8   - never null. archetype components
     /// Store the entity id for each component.
-    [Browse(Never)] internal            int[]               entityIds;      //  8 + ids - could use a StructHeap<int> if needed
-    [Browse(Never)] internal            int                 entityCount;    //  4       - number of entities in archetype
-    [Browse(Never)] private             ArchetypeMemory     memory;         // 16       - count & length used to store components in chunks  
+    [Browse(Never)] internal            int[]               entityIds;      //  8   - could use a StructHeap<int> if needed
+    [Browse(Never)] internal            int                 entityCount;    //  4   - number of entities in archetype
+    [Browse(Never)] private             ArchetypeMemory     memory;         // 16   - count & length used to store components in chunks  
     // --- internal
-    [Browse(Never)] internal readonly   int                 componentCount; //  4       - number of component types
-    [Browse(Never)] internal readonly   ComponentTypes      componentTypes; // 32       - component types of archetype
-    [Browse(Never)] internal readonly   Tags                tags;           // 32       - tags assigned to archetype
-    [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8 (+76)
+    [Browse(Never)] internal readonly   int                 componentCount; //  4   - number of component types
+    [Browse(Never)] internal readonly   ComponentTypes      componentTypes; // 32   - component types of archetype
+    [Browse(Never)] internal readonly   Tags                tags;           // 32   - tags assigned to archetype
+    [Browse(Never)] internal readonly   ArchetypeKey        key;            //  8
     /// <remarks>Lookups on <see cref="heapMap"/>[] does not require a range check. See <see cref="EntitySchema.CheckStructIndex"/></remarks>
-    [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8       - Length always = maxStructIndex. Used for heap lookup
-    [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8       - containing EntityStoreBase
-    [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8       - containing EntityStore
-    [Browse(Never)] internal readonly   int                 archIndex;      //  4       - archetype index in EntityStore.archs[]
-    [Browse(Never)] internal readonly   StandardComponents  std;            // 32       - heap references to std types: Position, Rotation, ...
-    [Browse(Never)] private             ArchetypeQuery      query;          //  8
+    [Browse(Never)] internal readonly   StructHeap[]        heapMap;        //  8   - never null. Length always = maxStructIndex. Used for heap lookup
+    [Browse(Never)] internal readonly   EntityStoreBase     store;          //  8   - containing EntityStoreBase
+    [Browse(Never)] internal readonly   EntityStore         entityStore;    //  8   - containing EntityStore
+    [Browse(Never)] internal readonly   int                 archIndex;      //  4   - archetype index in EntityStore.archs[]
+    [Browse(Never)] internal readonly   StandardComponents  std;            // 32   - heap references to std types: Position, Rotation, ...
+    [Browse(Never)] private             ArchetypeQuery      query;          //  8   - return the entities of this archetype
     #endregion
     
 #region public methods
@@ -85,10 +85,12 @@ public sealed class Archetype
     /// </summary>
     public Entity CreateEntity()
     {
-        var entity          = entityStore.CreateEntity();
-        entity.refArchetype = this;
-        entity.refCompIndex = AddEntity(this, entity.Id);
-        return entity;
+        ref var node    = ref entityStore.CreateEntityInternal(this);
+        var compIndex   = node.compIndex;
+        foreach (var heap in structHeaps) {
+            heap.SetComponentDefault(compIndex);
+        }
+        return new Entity(entityStore, node.id);
     }
     
     /// <summary>
@@ -110,15 +112,15 @@ public sealed class Archetype
     /// <summary>Create an instance of an <see cref="EntityStoreBase.defaultArchetype"/></summary>
     internal Archetype(in ArchetypeConfig config)
     {
+        memory.capacity         = ArchetypeUtils.MinCapacity;
+        memory.shrinkThreshold  = -1;
         store           = config.store;
         entityStore     = store as EntityStore;
         archIndex       = EntityStoreBase.Static.DefaultArchIndex;
         structHeaps     = Array.Empty<StructHeap>();
+        entityIds       = new int [memory.capacity];
         heapMap         = EntityStoreBase.Static.DefaultHeapMap; // all items are always null
         key             = new ArchetypeKey(this);
-        // entityIds        = null      // stores no entities
-        // entityCapacity   = 0         // stores no entities
-        // shrinkThreshold  = 0         // stores no entities - will not shrink
         // componentCount   = 0         // has no components
         // componentTypes   = default   // has no components
         // tags             = default   // has no tags
@@ -164,20 +166,6 @@ public sealed class Archetype
         }
     }
 
-    /// <remarks>Is called by methods using generic component type: T1, T2, T3, ...</remarks>
-    internal static Archetype CreateWithSignatureTypes(in ArchetypeConfig config, in SignatureIndexes indexes, in Tags tags)
-    {
-        var length          = indexes.length;
-        var componentHeaps  = new StructHeap[length];
-        var components      = EntityStoreBase.Static.EntitySchema.components;
-        for (int n = 0; n < length; n++) {
-            var structIndex   = indexes.GetStructIndex(n);
-            var componentType = components[structIndex];
-            componentHeaps[n] = componentType.CreateHeap();
-        }
-        return new Archetype(config, componentHeaps, tags);
-    }
-    
     /// <remarks>
     /// Is called by methods using a set of arbitrary struct <see cref="ComponentType"/>'s.<br/>
     /// Using a <see cref="List{T}"/> of types is okay. Method is only called for missing <see cref="Archetype"/>'s
@@ -207,20 +195,25 @@ public sealed class Archetype
     
 #region component handling
 
-    /// <remarks> the component index in the <paramref name="newArchetype"/> </remarks>
-    internal static int MoveEntityTo(Archetype arch, int id, int sourceIndex, Archetype newArchetype)
+    /// <returns> the component index in the <paramref name="targetArch"/> </returns>
+    internal static int MoveEntityTo(Archetype sourceArch, int id, int sourceIndex, Archetype targetArch)
     {
-        // --- copy entity components to components of new newArchetype
-        var targetIndex = AddEntity(newArchetype, id);
-        foreach (var sourceHeap in arch.structHeaps)
+        // --- copy entity components to components of targetArch
+        var targetIndex     = AddEntity(targetArch, id);
+        var sourceHeapMap   = sourceArch.heapMap;
+        foreach (var targetHeap in targetArch.structHeaps)
         {
-            var targetHeap = newArchetype.heapMap[sourceHeap.structIndex];
-            if (targetHeap == null) {
+            var sourceHeap = sourceHeapMap[targetHeap.structIndex];
+            if (sourceHeap != null) {
+                // case: sourceArch and targetArch contain component type   => copy component to targetHeap.
+                sourceHeap.CopyComponentTo(sourceIndex, targetHeap, targetIndex);
                 continue;
             }
-            sourceHeap.CopyComponentTo(sourceIndex, targetHeap, targetIndex);
+            // case: component type is no present in sourceArch     => set new component to default in targetHeap.
+            // This is redundant for Entity.AddComponent() but other callers may not assign a component value.
+            targetHeap.SetComponentDefault(targetIndex);
         }
-        MoveLastComponentsTo(arch, sourceIndex);
+        MoveLastComponentsTo(sourceArch, sourceIndex);
         return targetIndex;
     }
     
@@ -232,10 +225,11 @@ public sealed class Archetype
             foreach (var heap in arch.structHeaps) {
                 heap.MoveComponent(lastIndex, newIndex);
             }
-            var lastEntityId = arch.entityIds[lastIndex];
+            var entityIds       = arch.entityIds;
+            var lastEntityId    = entityIds[lastIndex];
             arch.store.UpdateEntityCompIndex(lastEntityId, newIndex); // set entity component index for new archetype
         
-            arch.entityIds[newIndex] = lastEntityId;
+            entityIds[newIndex] = lastEntityId;
         }   // ReSharper disable once RedundantIfElseBlock
         else {
             // --- case: newIndex is already the last entity => only decrement entityCount
@@ -255,7 +249,7 @@ public sealed class Archetype
         }
     }
     
-    /// <returns> the component index in this <see cref="Archetype"/> </returns>
+    /// <returns> the component index in <paramref name="arch"/> </returns>
     internal static int AddEntity(Archetype arch, int id)
     {
         var index =  arch.entityCount;
@@ -299,7 +293,7 @@ public sealed class Archetype
     
 #region internal methods
     private QueryEntities GetEntities() {
-        query ??= new ArchetypeQuery(store, componentTypes);
+        query ??= new ArchetypeQuery(this);
         return query.Entities;
     }
     

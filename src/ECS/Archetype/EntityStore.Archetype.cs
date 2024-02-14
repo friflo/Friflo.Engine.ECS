@@ -14,23 +14,6 @@ public partial class EntityStoreBase
 {
     // -------------------------------------- get archetype --------------------------------------
 #region get archetype
-    private static Archetype GetArchetype(EntityStoreBase store, in Tags tags, int structIndex)
-    {
-        var searchKey = store.searchKey;
-        searchKey.SetTagsWith(tags, structIndex);
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
-            return archetypeKey.archetype;
-        }
-        var config  = GetArchetypeConfig(store);
-        var schema  = Static.EntitySchema;
-        var types   = new SignatureIndexes(1,
-            T1: schema.CheckStructIndex(null, structIndex)
-        );
-        var archetype = Archetype.CreateWithSignatureTypes(config, types, tags);
-        AddArchetype(store, archetype);
-        return archetype;
-    }
-    
     internal static ArchetypeConfig GetArchetypeConfig(EntityStoreBase store) {
         return new ArchetypeConfig (store, store.archsCount);
     }

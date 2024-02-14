@@ -61,7 +61,7 @@ public static class Test_StructHeapRaw
         const int remaining = 500;
         for (int n = remaining; n < count; n++)
         {
-            store.DeleteEntity(ids[n]);
+            Mem.IsTrue(store.DeleteEntity(ids[n]));
             var expectCount = count + remaining - n - 1;
             if (expectCount != arch.EntityCount)    Mem.FailAreEqual(expectCount, arch.EntityCount);
         }
@@ -108,7 +108,7 @@ public static class Test_StructHeapRaw
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int n = 1; n <= count; n++) {
-            store.DeleteEntity(n);
+            Mem.IsTrue(store.DeleteEntity(n));
         }
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(0, arch1.EntityCount);
@@ -232,10 +232,10 @@ public static class Test_StructHeapRaw
         var entity  = store.CreateEntity(arch);
         Mem.AreEqual(1,     store.EntityCount);
         Mem.AreEqual(1,     arch.EntityCount);
-        store.DeleteEntity(entity);
+        Mem.IsTrue(store.DeleteEntity(entity));
         Mem.AreEqual(0,     store.EntityCount);
         Mem.AreEqual(0,     arch.EntityCount);
-        store.DeleteEntity(entity);
+        Mem.IsTrue(!store.DeleteEntity(entity));
         Mem.AreEqual(0,     store.EntityCount);
         Mem.AreEqual(0,     arch.EntityCount);
     }

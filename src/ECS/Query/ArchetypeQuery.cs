@@ -6,7 +6,7 @@ using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
-
+// ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -58,6 +58,7 @@ public class ArchetypeQuery
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      components;         //  32
                     private             QueryFilter         filter;             // 304
+    [Browse(Never)] private  readonly   bool                singleArchetype;    //   1  if true it returns only the entities a specific archetype
     #endregion
 
 #region tags
@@ -165,7 +166,6 @@ public class ArchetypeQuery
     {
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
-        lastArchetypeCount  = 1;
         components          = new ComponentTypes(indexes);
         signatureIndexes    = indexes;
     }
@@ -174,8 +174,15 @@ public class ArchetypeQuery
     {
         this.store          = store;
         archetypes          = Array.Empty<Archetype>();
-        lastArchetypeCount  = 1;
         components          = componentTypes;
+    }
+    
+    internal ArchetypeQuery(Archetype archetype)
+    {
+        singleArchetype     = true;
+        store               = archetype.store;
+        archetypes          = new [] { archetype };
+        components          = archetype.componentTypes;
     }
     
     /// <remarks>
@@ -183,7 +190,7 @@ public class ArchetypeQuery
     /// </remarks>
     private void Reset () {
         archetypes          = Array.Empty<Archetype>();
-        lastArchetypeCount  = 1;
+        lastArchetypeCount  = 0;
         archetypeCount      = 0;
     }
     
@@ -196,6 +203,9 @@ public class ArchetypeQuery
     {
         if (store.ArchetypeCount == lastArchetypeCount) {
             return new Archetypes(archetypes, archetypeCount);
+        }
+        if (singleArchetype) {
+            return new Archetypes(archetypes, 1);
         }
         // --- update archetypes / archetypesCount: Add matching archetypes newly added to the store
         var storeArchetypes     = store.Archetypes;

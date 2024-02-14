@@ -19,6 +19,19 @@ public static class Examples
     }
     
     [Test]
+    public static void CreateEntity() {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        store.CreateEntity();
+        store.CreateEntity();
+
+        foreach (var entity in store.Entities) {
+            Console.WriteLine($"entity {entity}");
+            // > entity id: 1  []
+            // > entity id: 2  []
+        }
+    }
+    
+    [Test]
     public static void AddComponents()
     {
         var store   = new EntityStore(PidType.UsePidAsId);

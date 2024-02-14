@@ -476,9 +476,54 @@ public static class Test_StructComponent
         Console.WriteLine($"EntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
+    [Test]
+    public static void Test_StructComponent_create_delete_entity() {
+        var store   = new EntityStore();
+        var arch0   = store.GetArchetype(default);
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        
+        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Entities.Count);
+        AreEqual(2, arch0.EntityCount);
+        AreEqual(2, arch0.Entities.Count);
+        
+        entity1.DeleteEntity();
+        entity2.DeleteEntity();
+        
+        AreEqual(0, store.EntityCount);
+        AreEqual(0, store.Entities.Count);
+        AreEqual(0, arch0.EntityCount);
+        AreEqual(0, arch0.Entities.Count);
+    }
+    
+    [Test]
+    public static void Test_StructComponent_add_remove_component() {
+        var store   = new EntityStore();
+        var arch0   = store.GetArchetype(default);
+        var arch1   = store.GetArchetype(ComponentTypes.Get<Position>());
+        var entity1 = store.CreateEntity();
+        entity1.AddComponent<Position>();
+        
+        AreEqual(1, store.EntityCount);
+        AreEqual(1, store.Entities.Count);
+        AreEqual(0, arch0.EntityCount);
+        AreEqual(0, arch0.Entities.Count);
+        AreEqual(1, arch1.EntityCount);
+        AreEqual(1, arch1.Entities.Count);
+        
+        entity1.RemoveComponent<Position>();
+        AreEqual(1, store.EntityCount);
+        AreEqual(1, store.Entities.Count);
+        AreEqual(1, arch0.EntityCount);
+        AreEqual(1, arch0.Entities.Count);
+        AreEqual(0, arch1.EntityCount);
+        AreEqual(0, arch1.Entities.Count);
+    }
         
     [Test]
-    public static void Test_StructComponent_Store_Entities() {
+    public static void Test_StructComponent_Archetype_CreateEntity_default_components()
+    {
         var store = new EntityStore();
                     store.GetArchetype(ComponentTypes.Get<Position>());
         var arch2 = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
@@ -486,14 +531,24 @@ public static class Test_StructComponent
         
         arch2.CreateEntity();
         arch3.CreateEntity();
-        arch3.CreateEntity();
-        
+        var entity = arch3.CreateEntity();
         int count = 0;
         foreach (var _ in store.Entities) {
             count++;
         }
         AreEqual(3, count);
         AreEqual(3, store.Entities.Count);
+        
+        entity.Position.x = 123;
+        entity.Rotation.x = 123;
+        entity.MyComponent1().a = 123;
+        entity.DeleteEntity();
+        
+        // ensure components of new entity have default values
+        entity = arch3.CreateEntity();
+        AreEqual(0, entity.Position.x);
+        AreEqual(0, entity.Rotation.x);
+        AreEqual(0, entity.MyComponent1().a);
     }
 }
 

@@ -297,7 +297,6 @@ public sealed class CommandBuffer
     {
         var store               = playback.store;
         var nodes               = store.nodes.AsSpan();
-        var defaultArchetype    = store.defaultArchetype;
         var entityChanges       = playback.entityChanges;
         
         foreach (var entityId in entityChanges.Keys)
@@ -309,18 +308,10 @@ public sealed class CommandBuffer
                 curArchetype.tags.          bitSet.Equals(change.tags.          bitSet)) {
                 continue;
             }
-            var newArchetype = store.GetArchetype(change.componentTypes, change.tags);
-            if (curArchetype == defaultArchetype) {
-                node.compIndex  = Archetype.AddEntity(newArchetype, entityId);
-            } else {
-                if (newArchetype == defaultArchetype) {
-                    Archetype.MoveLastComponentsTo(curArchetype, node.compIndex);
-                    node.compIndex = 0;
-                } else {
-                    node.compIndex  = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
-                }
-            }
-            node.archetype  = newArchetype;
+            // case: archetype changed 
+            var newArchetype    = store.GetArchetype(change.componentTypes, change.tags);
+            node.archetype      = newArchetype;
+            node.compIndex      = Archetype.MoveEntityTo(curArchetype, entityId, node.compIndex, newArchetype);
         }
     }
     
