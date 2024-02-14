@@ -64,20 +64,23 @@ The core feature of an Entity Component System are:
 
 Features in this list are also explained in the Examples.
 
-- 1.10.0 Add support for [CommandBuffer - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)s.  
-  Example: [CommandBuffer](#commandbuffer)
+- 1.10.0    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
 
-- 1.11.0 Support to filter entity changes - like adding/removing components/tags - in queries using an
-  [EventFilter - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
-  Example: [EventFilter](#eventfilter)
+- 1.11.0    Support to filter entity changes - like adding/removing components/tags - in queries using an
+            [EventFilter](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
 
-- 1.12.0 Add additional query filters like `WithoutAnyTags()` using an
-  [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
-  Example: [Query](#query)
+- 1.12.0    Add additional query filters like `WithoutAnyTags()` using an
+            [ArchetypeQuery](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
 
-- 1.13.0 Add support for target framework .NET Standard 2.1 or higher.
+- 1.13.0    Add support for target framework .NET Standard 2.1 or higher.
 
-- 1.14.0 Add support for parallel (multi threaded) query job execution.
+- 1.14.0    Add support for parallel (multi threaded) query job execution.
+
+- 1.15.0    Reduced the number of properties shown for an entity in the debugger. See screenshot in Examples. 
+
+- 1.16.0 (planned) **Changed behavior** of the Archetype assigned to entities without components & tags.  
+            *Now:*    Entities are stored in this archetype.  
+            *Before:* Entities were not stored. `Archetype.Entities` returned always an empty result.
 
 
 
