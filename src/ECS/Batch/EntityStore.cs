@@ -73,16 +73,15 @@ public partial class EntityStoreBase
         {
             var structIndex = componentType.StructIndex;
             var structHeap  = oldHeapMap[structIndex];
-            var oldHeap     = structHeap;
             ComponentChangedAction action;
             if (structHeap == null) {
                 action = ComponentChangedAction.Add;
             } else {
                 // --- case: archetype contains the component type  => archetype remains unchanged
-                oldHeap.StashComponent(compIndex);
+                structHeap.StashComponent(compIndex);
                 action = ComponentChangedAction.Update;
             }
-            componentAdded.Invoke(new ComponentChanged (this, batch.entityId, action, structIndex, oldHeap));
+            componentAdded.Invoke(new ComponentChanged (this, batch.entityId, action, structIndex, structHeap));
         }
     }
     
