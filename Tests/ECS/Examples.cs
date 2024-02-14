@@ -13,23 +13,29 @@ namespace Tests.ECS;
 
 public static class Examples
 {
-    [ComponentKey("my-component")]
-    public struct MyComponent : IComponent {
-        public int value;
+    [Test]
+    public static void CreateStore()
+    {
+        var store = new EntityStore();
     }
     
     [Test]
     public static void CreateEntity()
     {
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store = new EntityStore();
         store.CreateEntity();
         store.CreateEntity();
-
+        
         foreach (var entity in store.Entities) {
             Console.WriteLine($"entity {entity}");
-            // > entity id: 1  []
-            // > entity id: 2  []
         }
+        // > entity id: 1  []
+        // > entity id: 2  []
+    }
+    
+    [ComponentKey("my-component")]
+    public struct MyComponent : IComponent {
+        public int value;
     }
     
     [Test]
@@ -267,7 +273,7 @@ public static class Examples
     [Test]
     public static void CommandBuffer()
     {
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore();
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         entity1.AddComponent<Position>();

@@ -119,6 +119,8 @@ When testing the examples use a debugger to check entity state changes while ste
 
 Examples showing typical use cases of the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
 
+- [EntityStore](#entitystore)
+- [Entity](#entity)
 - [Component](#component)
 - [Unique entity](#unique-entity)
 - [Tag](#tag)
@@ -133,6 +135,48 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [EventFilter](#eventfilter)
 - [CommandBuffer](#commandbuffer)
 
+
+
+## EntityStore
+
+An `EntityStore` is a container for entities running as an in-memory database.  
+It is highly optimized for efficient storage fast queries and event handling.
+
+The entity store enables to
+- create entities
+- modify entities - add / remove components, tags, scripts and child entities
+- query for entities with a specific set of components or tags
+- subscribe events like adding / removing components, tags, scripts and child entities
+
+Multiple stores can be used in parallel and act completely independent from each other.
+
+```csharp
+public static void CreateStore()
+{
+    var store = new EntityStore();
+}
+```
+
+
+## Entity
+
+An `Entity` has an identity - `Id` - and acts as a container for components, tags, script and child entities.  
+Entities are related to a single `EntityStore` and created with `CreateEntity()`.
+
+```csharp
+public static void CreateEntity()
+{
+    var store = new EntityStore();
+    store.CreateEntity();
+    store.CreateEntity();
+    
+    foreach (var entity in store.Entities) {
+        Console.WriteLine($"entity {entity}");
+    }
+    // > entity id: 1  []
+    // > entity id: 2  []
+}
+```
 
 
 ## Component
@@ -520,7 +564,7 @@ After a query thread has finished these changes are executed with `Playback()` o
 ```csharp
 public static void CommandBuffer()
 {
-    var store   = new EntityStore(PidType.UsePidAsId);
+    var store   = new EntityStore();
     var entity1 = store.CreateEntity();
     var entity2 = store.CreateEntity();
     entity1.AddComponent<Position>();
