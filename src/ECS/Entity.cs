@@ -515,10 +515,12 @@ public readonly struct Entity : IEquatable<Entity>
     
     public override string  ToString()          => EntityUtils.EntityToString(this);
     
-    internal Entity(EntityStore store, int id) {
-        this.store  = store;
-        this.Id     = id;
+    internal Entity(EntityStore entityStore, int id) {
+        store   = entityStore;
+        Id      = id;
     }
+    
+    internal EntityBatch Batch => store.GetBatch(Id);
     #endregion
 
 

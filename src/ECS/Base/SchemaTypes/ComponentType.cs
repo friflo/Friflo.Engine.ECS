@@ -23,12 +23,13 @@ public abstract class ComponentType : SchemaType
     /// <summary> The size in bytes of the <see cref="IComponent"/> struct. </summary>
     public   readonly   int         StructSize;     //  4
     
-    internal abstract   StructHeap  CreateHeap();
-    internal abstract   bool        RemoveEntityComponent  (Entity entity);
-    internal abstract   bool        AddEntityComponent     (Entity entity);
-    internal abstract   bool        AddEntityComponentValue(Entity entity, object value);
+    internal abstract   StructHeap          CreateHeap();
+    internal abstract   bool                RemoveEntityComponent  (Entity entity);
+    internal abstract   bool                AddEntityComponent     (Entity entity);
+    internal abstract   bool                AddEntityComponentValue(Entity entity, object value);
     
-    internal abstract   ComponentCommands  CreateComponentCommands();
+    internal abstract   BatchComponent      CreateBatchComponent();
+    internal abstract   ComponentCommands   CreateComponentCommands();
     
     protected ComponentType(string componentKey, int structIndex, Type type, int byteSize)
         : base (componentKey, type, Component)
@@ -77,6 +78,9 @@ internal sealed class ComponentType<T> : ComponentType
             componentCommands = new ComponentCommand<T>[8]
         };
     }
+    
+    internal override BatchComponent CreateBatchComponent() => new BatchComponent<T>();
+    
     
     private static              int GetByteSize()   => Unsafe.SizeOf<T>();
 

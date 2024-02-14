@@ -124,6 +124,7 @@ public sealed partial class EntityStore : EntityStoreBase
         internal    Stack<CommandBuffer>                            commandBufferPool;      //  8
         internal    Playback                                        playback;               // 16
         internal    EventRecorder                                   eventRecorder;          //  8
+        internal    EntityBatch                                     batch;                  //  8
 
                     
         internal Intern(PidType pidType)
@@ -153,6 +154,14 @@ public sealed partial class EntityStore : EntityStoreBase
         idBufferSet         = new HashSet<int>();
         dataBuffer          = new DataEntity();
     }
+    
+    internal EntityBatch GetBatch(int entityId)
+    {
+        var batch       = intern.batch ??= new EntityBatch(this);
+        batch.entityId  = entityId;
+        return batch;
+    }
+
     #endregion
     
 
