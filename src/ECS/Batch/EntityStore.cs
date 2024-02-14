@@ -20,30 +20,33 @@ public partial class EntityStoreBase
         var entityId    = batch.entityId;
         ref var node    = ref batch.entityStore.nodes[entityId];
         var archetype   = node.archetype;
+        
         var newTags     = archetype.tags;
         newTags.Add    (batch.addedTags);
         newTags.Remove (batch.removedTags);
-        var componentTypes = archetype.componentTypes;
         
-        var newArchetype = GetArchetype(componentTypes, newTags);
-        Archetype.MoveEntityTo(archetype, entityId, node.compIndex, newArchetype);
+        var newComponentTypes = archetype.componentTypes;
+        newComponentTypes.Add   (batch.addedComponents);
+        newComponentTypes.Remove(batch.removedComponents);
+        
+        
+        var newArchetype    = GetArchetype(newComponentTypes, newTags);
+        node.compIndex      = Archetype.MoveEntityTo(archetype, entityId, node.compIndex, newArchetype);
+        node.archetype      = newArchetype;
         
         if (!newTags.bitSet.Equals(archetype.tags.bitSet)) {
+            // Send event. See: SEND_EVENT notes
             var tagsChanged = internBase.tagsChanged;
             if (tagsChanged != null) {
                 tagsChanged.Invoke(new TagsChanged(this, entityId, newTags, archetype.tags));
             }
         }
+        foreach (var componentType in batch.addedComponents) {
+            
+        }
         
-        for (int n = 0; n < batch.commandCount; n++)
-        {
-            var command = batch.commands[n]; 
-            switch (command.type) {
-                case BatchCommandType.AddComponent:
-                    break;
-                case BatchCommandType.RemoveComponent:
-                    break;
-            }
+        foreach (var componentType in batch.removedComponents) {
+            
         }
     }
 }

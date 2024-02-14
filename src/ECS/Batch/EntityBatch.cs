@@ -7,14 +7,14 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class  EntityBatch
 {
-    private  readonly   BatchComponent[]    components;
-    internal readonly   BatchCommand[]      commands;
-    internal int                            commandCount;
-    private  readonly   EntityStoreBase     store;
-    internal readonly   EntityStore         entityStore;
-    internal            int                 entityId;
-    internal            Tags                addedTags;
-    internal            Tags                removedTags;
+    private  readonly   BatchComponent[]    components;         //  8
+    private  readonly   EntityStoreBase     store;              //  8
+    internal readonly   EntityStore         entityStore;        //  8
+    internal            int                 entityId;           //  4
+    internal            Tags                addedTags;          // 32
+    internal            Tags                removedTags;        // 32
+    internal            ComponentTypes      addedComponents;    // 32
+    internal            ComponentTypes      removedComponents;  // 32
     
     internal EntityBatch(EntityStoreBase store)
     {
@@ -23,7 +23,6 @@ internal sealed class  EntityBatch
         var schema          = EntityStoreBase.Static.EntitySchema;
         int maxStructIndex  = schema.maxStructIndex;
         components          = new BatchComponent[maxStructIndex];
-        commands            = new BatchCommand[16];
         
         var componentTypes = schema.components;
         for (int n = 1; n < maxStructIndex; n++) {
@@ -38,19 +37,18 @@ internal sealed class  EntityBatch
     
     internal EntityBatch Add<T>(T component) where T : struct, IComponent
     {
-        ref var command     = ref commands[commandCount++];
-        var structIndex     = StructHeap<T>.StructIndex;
-        command.typeIndex   = structIndex;
-        command.type        = BatchCommandType.AddComponent;
+        var structIndex = StructHeap<T>.StructIndex;
+        addedComponents.    bitSet.SetBit   (structIndex);
+        removedComponents.  bitSet.ClearBit (structIndex);
         ((BatchComponent<T>)components[structIndex]).value = component;
         return this;   
     }
     
     internal EntityBatch Remove<T>() where T : struct, IComponent
     {
-        ref var command     = ref commands[commandCount++];
-        command.typeIndex   = StructHeap<T>.StructIndex;
-        command.type        = BatchCommandType.RemoveComponent;
+        var structIndex = StructHeap<T>.StructIndex;
+        removedComponents.  bitSet.SetBit   (structIndex);
+        addedComponents.    bitSet.ClearBit (structIndex);
         return this;   
     }
     
