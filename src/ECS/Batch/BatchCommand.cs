@@ -5,18 +5,6 @@
 // ReSharper disable RedundantTypeDeclarationBody
 namespace Friflo.Engine.ECS;
 
-internal enum BatchCommandType : byte
-{
-    AddComponent,
-    RemoveComponent,
-}
-
-internal struct BatchCommand
-{
-    internal BatchCommandType    type;
-    internal int                 typeIndex;
-}
-
 internal class BatchComponent { }
 
 internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
