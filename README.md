@@ -485,26 +485,22 @@ public static void FilterEntityEvents()
     var store   = new EntityStore();
     store.EventRecorder.Enabled = true; // required for EventFilter
     
-    var entity1 = store.CreateEntity();
-    entity1.AddComponent<MyComponent>();
-    entity1.AddComponent<Position>();
+    store.CreateEntity();
+    store.CreateEntity().AddComponent<Position>();
+    store.CreateEntity().AddTag      <MyTag1>();
     
-    var entity2 = store.CreateEntity();
-    entity2.AddComponent<MyComponent>();
-    entity2.AddTag   <MyTag1>();
-    
-    var query = store.Query<MyComponent>();
+    var query = store.Query();
     query.EventFilter.ComponentAdded<Position>();
     query.EventFilter.TagAdded<MyTag1>();
     
-    foreach (var (myComponent, entities) in query.Chunks) {
-        foreach (var entity in entities) {
-            bool hasEvent = query.HasEvent(entity.Id);
-            Console.WriteLine($"{entity} - hasEvent: {hasEvent}");                   
-        }
+    foreach (var entity in store.Entities)
+    {
+        bool hasEvent = query.HasEvent(entity.Id);
+        Console.WriteLine($"{entity} - hasEvent: {hasEvent}");
     }
-    // > id: 1  [Position, MyComponent] - hasEvent: True
-    // > id: 2  [MyComponent, #MyTag1] - hasEvent: True
+    // > id: 1  [] - hasEvent: False
+    // > id: 2  [Position] - hasEvent: True
+    // > id: 3  [#MyTag1] - hasEvent: True
 }
 ```
 
