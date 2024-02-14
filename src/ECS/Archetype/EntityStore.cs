@@ -91,6 +91,7 @@ public abstract partial class EntityStoreBase
         internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
         ///  reused query for <see cref="EntityStoreBase.GetUniqueEntity"/>
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8
+        internal        EntityBatch                                 batch;                  //  8
     }
     #endregion
     

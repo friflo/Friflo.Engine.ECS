@@ -7,17 +7,19 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class  EntityBatch
 {
-    private readonly    BatchComponent[]    components;
-    private readonly    BatchCommand[]      commands;
-    private int                             commandCount;
-    private readonly    EntityStore         store;
+    private  readonly   BatchComponent[]    components;
+    internal readonly   BatchCommand[]      commands;
+    internal int                            commandCount;
+    private  readonly   EntityStoreBase     store;
+    internal readonly   EntityStore         entityStore;
     internal            int                 entityId;
-    private             Tags                addedTags;
-    private             Tags                removedTags;
+    internal            Tags                addedTags;
+    internal            Tags                removedTags;
     
-    internal EntityBatch(EntityStore store)
+    internal EntityBatch(EntityStoreBase store)
     {
         this.store          = store;
+        entityStore         = (EntityStore)store;
         var schema          = EntityStoreBase.Static.EntitySchema;
         int maxStructIndex  = schema.maxStructIndex;
         components          = new BatchComponent[maxStructIndex];
@@ -31,21 +33,7 @@ internal sealed class  EntityBatch
     
     internal void Apply()
     {
-        var archetype   = store.nodes[entityId].archetype;
-        var tags        = archetype.tags;
-        tags.Add    (addedTags);
-        tags.Remove (removedTags);
-        // var componentTypes = archetype.componentTypes;
-        for (int n = 0; n < commandCount; n++)
-        {
-            var command = commands[n]; 
-            switch (command.type) {
-                case BatchCommandType.AddComponent:
-                    break;
-                case BatchCommandType.RemoveComponent:
-                    break;
-            }
-        }
+        store.Apply(this);
     }
     
     internal EntityBatch Add<T>(T component) where T : struct, IComponent

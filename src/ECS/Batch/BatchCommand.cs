@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable RedundantTypeDeclarationBody
 namespace Friflo.Engine.ECS;
 
 internal enum BatchCommandType : byte
