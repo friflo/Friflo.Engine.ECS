@@ -29,7 +29,7 @@ public static class Examples
         foreach (var entity in store.Entities) {
             Console.WriteLine($"entity {entity}");
         }
-        // > entity id: 1  []
+        // > entity id: 1  []       Info:  []  shows entity has no components, tags or scripts
         // > entity id: 2  []
     }
     
