@@ -34,16 +34,17 @@ public partial class EntityStoreBase
         newComponentTypes.Remove(batch.removedComponents);
         
         // --- change archetype
-        var newArchetype    = GetArchetype(newComponentTypes, newTags);
+        var newArchetype = GetArchetype(newComponentTypes, newTags);
         if (newArchetype != archetype) {
-            node.compIndex      = compIndex = Archetype.MoveEntityTo(archetype, entityId, compIndex, newArchetype);
-            node.archetype      = newArchetype;
+            node.compIndex  = compIndex = Archetype.MoveEntityTo(archetype, entityId, compIndex, newArchetype);
+            node.archetype  = newArchetype;
         }
         
         // --- assign AddComponent() values
-        var newHeapMap = newArchetype.heapMap;
+        var newHeapMap  = newArchetype.heapMap;
+        var components  = batch.components;
         foreach (var componentType in batch.addedComponents) {
-            newHeapMap[componentType.StructIndex].SetBatchComponent(batch.components, compIndex);
+            newHeapMap[componentType.StructIndex].SetBatchComponent(components, compIndex);
         }
         
         // ----------- Send events for all batch commands. See: SEND_EVENT notes
