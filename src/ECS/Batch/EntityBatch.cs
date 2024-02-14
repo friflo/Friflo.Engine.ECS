@@ -7,7 +7,7 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class  EntityBatch
 {
-    private  readonly   BatchComponent[]    components;         //  8
+    internal readonly   BatchComponent[]    components;         //  8
     private  readonly   EntityStoreBase     store;              //  8
     internal readonly   EntityStore         entityStore;        //  8
     internal            int                 entityId;           //  4

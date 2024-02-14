@@ -3,6 +3,7 @@
 
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable UseNullPropagation
 namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
@@ -36,47 +37,58 @@ public partial class EntityStoreBase
         node.archetype      = newArchetype;
         
         var tagsChanged = internBase.tagsChanged;
-        if (tagsChanged != null) {
+        if (tagsChanged != null)
+        {
             if (!newTags.bitSet.Equals(archetype.tags.bitSet)) {
                 // Send event. See: SEND_EVENT notes
                 tagsChanged.Invoke(new TagsChanged(this, entityId, newTags, archetype.tags));
             }   
         }
-
-        var oldHeapMap      = archetype.heapMap;
-        var componentAdded  = internBase.componentAdded;
-        if (componentAdded != null)
-        {
-            foreach (var componentType in batch.addedComponents)
-            {
-                var structIndex = componentType.StructIndex;
-                var structHeap  = oldHeapMap[structIndex];
-                var oldHeap     = structHeap;
-                ComponentChangedAction action;
-                if (structHeap == null) {
-                    action = ComponentChangedAction.Add;
-                } else {
-                    // --- case: archetype contains the component type  => archetype remains unchanged
-                    oldHeap.StashComponent(compIndex);
-                    action = ComponentChangedAction.Update;
-                }
-                componentAdded.Invoke(new ComponentChanged (this, entityId, action, structIndex, oldHeap));
-            }
+        AddComponents(batch, archetype, entityId, newArchetype);
+        
+        if (internBase.componentRemoved != null) {
+            RemoveComponents(batch, archetype, entityId);
         }
-        var componentRemoved  = internBase.componentRemoved;
-        if (componentRemoved != null)
+    }
+    
+    private void AddComponents(EntityBatch batch, Archetype archetype, int compIndex, Archetype newArchetype)
+    {
+        var oldHeapMap      = archetype.heapMap;
+        var newHeapMap      = newArchetype.heapMap;
+        var componentAdded  = internBase.componentAdded;
+        foreach (var componentType in batch.addedComponents)
         {
-            foreach (var componentType in batch.removedComponents)
-            {
-                var structIndex = componentType.StructIndex;
-                var structHeap  = oldHeapMap[structIndex];
-                var oldHeap     = structHeap;
-                if (structHeap == null) {
-                    continue;
-                }
+            var structIndex = componentType.StructIndex;
+            var structHeap  = oldHeapMap[structIndex];
+            var oldHeap     = structHeap;
+            ComponentChangedAction action;
+            if (structHeap == null) {
+                action = ComponentChangedAction.Add;
+            } else {
+                // --- case: archetype contains the component type  => archetype remains unchanged
                 oldHeap.StashComponent(compIndex);
-                componentRemoved.Invoke(new ComponentChanged (this, entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
+                action = ComponentChangedAction.Update;
             }
+            newHeapMap[structIndex].SetBatchComponent(batch.components, compIndex);
+            if (componentAdded != null) {
+                componentAdded.Invoke(new ComponentChanged (this, batch.entityId, action, structIndex, oldHeap));
+            }
+        }  
+    }
+    
+    private void RemoveComponents(EntityBatch batch, Archetype archetype, int compIndex)
+    {
+        var oldHeapMap      = archetype.heapMap;
+        foreach (var componentType in batch.removedComponents)
+        {
+            var structIndex = componentType.StructIndex;
+            var structHeap  = oldHeapMap[structIndex];
+            var oldHeap     = structHeap;
+            if (structHeap == null) {
+                continue;
+            }
+            oldHeap.StashComponent(compIndex);
+            internBase.componentRemoved.Invoke(new ComponentChanged (this, batch.entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
         }
     }
 }

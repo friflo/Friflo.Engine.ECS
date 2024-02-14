@@ -39,6 +39,11 @@ internal sealed class StructHeap<T> : StructHeap
         componentStash = components[compIndex];
     }
     
+    internal override  void SetBatchComponent(BatchComponent[] components, int compIndex)
+    {
+        this.components[compIndex] = ((BatchComponent<T>)components[structIndex]).value;
+    }
+    
     // --- StructHeap
     protected override  int     ComponentsLength    => components.Length;
 

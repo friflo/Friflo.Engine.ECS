@@ -18,7 +18,7 @@ public static class Test_Batch
         var entity = store.CreateEntity();
         
         entity.Batch
-            .AddComponent   (new Position())
+            .AddComponent   (new Position(1,1,1))
             .RemoveComponent<Rotation>()
             .AddTag         <TestTag>()
             .RemoveTag      <TestTag2>()
@@ -29,7 +29,7 @@ public static class Test_Batch
         var removeTags  = Tags.Get<TestTag>();
         
         entity.Batch
-            .AddComponent   (new Position())
+            .AddComponent   (new Position(2,2,2))
             .AddTags        (addTags)
             .RemoveTags     (removeTags)
             .Apply();
