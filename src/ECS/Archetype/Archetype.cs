@@ -11,6 +11,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file MUST NOT use type: Entity
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -85,12 +86,13 @@ public sealed class Archetype
     /// </summary>
     public Entity CreateEntity()
     {
-        ref var node    = ref entityStore.CreateEntityInternal(this);
+        var localStore  = entityStore;
+        ref var node    = ref localStore.CreateEntityInternal(this);
         var compIndex   = node.compIndex;
         foreach (var heap in structHeaps) {
             heap.SetComponentDefault(compIndex);
         }
-        return new Entity(entityStore, node.id);
+        return new Entity(localStore, node.id);
     }
     
     /// <summary>

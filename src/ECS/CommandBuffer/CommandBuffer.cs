@@ -546,13 +546,13 @@ public sealed class CommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();
         }
-        var id = intern.store.NewId();
-        var count = intern.entityCommandCount; 
+        var id      = intern.store.NewId();
+        var count   = intern.entityCommandCount; 
 
         if (count == intern.entityCommands.Length) {
             ArrayUtils.Resize(ref intern.entityCommands, Math.Max(4, 2 * count));
         }
-        intern.entityCommandCount  = count + 1;
+        intern.entityCommandCount   = count + 1;
         ref var command             = ref intern.entityCommands[count];
         command.entityId            = id;
         command.action              = EntityCommandAction.Create;

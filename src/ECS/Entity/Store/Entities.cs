@@ -34,11 +34,8 @@ public partial class EntityStore
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()
     {
-        var id  = NewId();
-        EnsureNodesLength(id + 1);
-        var pid = GeneratePid(id);
-        CreateEntityNode(defaultArchetype, id, pid);
-        return new Entity(this, id);
+        ref var node = ref CreateEntityInternal(defaultArchetype);
+        return new Entity(this, node.id);
     }
     
     internal ref EntityNode CreateEntityInternal(Archetype archetype)
