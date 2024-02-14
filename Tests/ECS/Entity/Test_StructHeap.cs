@@ -93,13 +93,16 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        int count   = 10; // 10_000_000 (UsePidAsId) ~ #PC: 488 ms
+        int count   = 10; // 10_000_000 (UsePidAsId) ~ #PC: 201 ms
         // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
-        store.EnsureCapacity(count);
+        store.EnsureCapacity(count + 1);
         var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        arch1.EnsureCapacity(count);
+        arch1.EnsureCapacity(count + 1);
         _ = arch1.CreateEntity(); // warmup
+        
+        var storeCapacity = store.Capacity;
+        var arch1Capacity = arch1.Capacity;
         
         // --- perf
         var stopwatch = new Stopwatch();
@@ -109,12 +112,15 @@ public static class Test_StructHeap
         }
         Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(count + 1, arch1.EntityCount);
+        // assert initial capacity was sufficient
+        Assert.AreEqual(storeCapacity, store.Capacity);
+        Assert.AreEqual(arch1Capacity, arch1.Capacity);
     }
     
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()
     {
-        int count = 10; // 100_000 (UsePidAsId) ~ #PC: 3041 ms
+        int count = 10; // 100_000 (UsePidAsId) ~ #PC: 3688 ms
         // --- warmup
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);

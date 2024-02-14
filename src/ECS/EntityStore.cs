@@ -60,6 +60,8 @@ public sealed partial class EntityStore : EntityStoreBase
     /// It is required to filter these events using an <see cref="EventFilter"/>.
     /// </summary>
     [Browse(Never)] public              EventRecorder   EventRecorder   => GetEventRecorder();
+    
+    [Browse(Never)] public              int             Capacity        => nodes.Length;
     #endregion
     
 #region events
