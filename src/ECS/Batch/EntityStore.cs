@@ -18,7 +18,7 @@ public partial class EntityStoreBase
         return batch;
     }
     
-    internal void ApplyEntityBatch(EntityBatch batch, int entityId)
+    internal void ApplyBatchTo(EntityBatch batch, int entityId)
     {
         ref var node    = ref batch.entityStore.nodes[entityId];
         var archetype   = node.archetype;

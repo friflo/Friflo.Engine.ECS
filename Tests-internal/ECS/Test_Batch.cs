@@ -49,15 +49,20 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_Batch_EntityStore_Batch()
+    public static void Test_Batch_BulkBatch()
     {
-        var store = new EntityStore();
-        var batch = store.BulkBatch;
-        batch.AddComponent(new Position());
-        batch.AddTag<TestTag>();
+        var store       = new EntityStore();
+        var bulkBatch   = store.BulkBatch;
+        bulkBatch.AddComponent(new Position());
+        bulkBatch.AddTag<TestTag>();
         
         var entity = store.CreateEntity();
-        batch.ApplyTo(entity);
+        bulkBatch.ApplyTo(entity);
+        
+        var e = Assert.Throws<InvalidOperationException>(() => {
+            bulkBatch.Apply();
+        });
+        Assert.AreEqual("Apply() can only be used on Entity.Batch", e!.Message);
     }
     
     [Test]

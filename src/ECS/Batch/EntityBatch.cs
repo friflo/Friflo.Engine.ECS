@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Text;
 
 // ReSharper disable RedundantTypeDeclarationBody
@@ -98,8 +99,9 @@ internal sealed class  EntityBatch
 #region commands
     internal void Apply()
     {
+        if (entityId == 0) throw new InvalidOperationException("Apply() can only be used on Entity.Batch");
         try {
-            store.ApplyEntityBatch(this, entityId);
+            store.ApplyBatchTo(this, entityId);
         }
         finally {
             Clear();
@@ -108,7 +110,7 @@ internal sealed class  EntityBatch
     
     internal void ApplyTo(Entity entity)
     {
-        store.ApplyEntityBatch(this, entity.Id);
+        store.ApplyBatchTo(this, entity.Id);
     }
     
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
