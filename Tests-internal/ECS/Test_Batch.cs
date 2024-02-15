@@ -4,6 +4,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 
+// ReSharper disable ConvertToConstant.Local
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS;
@@ -91,7 +92,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_Entity_Perf()
     {
-        long count      = 10; // 10_000_000 ~ #PC: 1691 ms
+        int count       = 10; // 10_000_000 ~ #PC: 1691 ms
         var store       = new EntityStore();
         var entity      = store.CreateEntity();
         var addTags     = Tags.Get<TestTag2>();
@@ -119,6 +120,47 @@ public static class Test_Batch
         }
         
         Console.WriteLine($"Entity.Batch - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_QueryEntities_ApplyBatch_Perf()
+    {
+        int count       = 10; // 100_000 ~ #PC: 1943 ms
+        int entityCount = 100;
+        var store   = new EntityStore();
+        for (int n = 0; n < entityCount; n++) {
+            store.CreateEntity();
+        }
+        var addTags     = Tags.Get<TestTag2>();
+        var removeTags  = Tags.Get<TestTag>();
+        
+        var batch1 = new EntityBatch(store);
+        var batch2 = new EntityBatch(store);
+        
+        batch1
+            .AddComponent   (new Position(1, 1, 1))
+            .AddComponent   (new EntityName("test"))
+            .RemoveComponent<Rotation>()
+            .AddTag         <TestTag>()
+            .RemoveTag      <TestTag2>();
+        batch2
+            .AddComponent   (new Position(2, 2, 2))
+            .RemoveComponent<EntityName>()
+            .AddTags        (addTags)
+            .RemoveTags     (removeTags);
+        
+        var sw = new Stopwatch();
+        sw.Start();
+
+        for (int n = 0; n < count; n++)
+        {
+            store.Entities.ApplyBatch(batch1);
+            store.Entities.ApplyBatch(batch2);
+        }
+        Console.WriteLine($"ApplyBatch() - duration: {sw.ElapsedMilliseconds} ms");
+        
+        var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
+        Assert.AreEqual(entityCount, arch.EntityCount);
     }
 }
 
