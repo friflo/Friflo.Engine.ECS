@@ -136,6 +136,8 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Parallel Query Job](#parallel-query-job)
 - [Query Vectorization - SIMD](#query-vectorization---simd)
 - [EventFilter](#eventfilter)
+- [Entity Batch](#entity-batch)
+- [Bulk Batch](#bulk-batch)
 - [CommandBuffer](#commandbuffer)
 
 
@@ -553,6 +555,61 @@ public static void FilterEntityEvents()
     // > id: 3  [#MyTag1] - hasEvent: True
 }
 ```
+
+
+## Entity Batch
+
+When adding/removing components or tags to/from a single entity it will be moved to a new archetype.  
+This is also called a *structural change* and in comparison to other methods a more costly operation.  
+Every component / tag change will cause a *structural change*.
+
+In case of multiple changes on a single entity use an [EntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityBatch.md)
+to apply all changes at one.  
+Using this approach only a single or no *structural change* will be executed.
+
+```csharp
+public static void EntityBatch()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    
+    entity.Batch
+        .AddComponent(new Position(1, 2, 3))
+        .AddTag<MyTag1>()
+        .Apply();
+    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [Position, #MyTag1]
+}
+```
+
+
+## Bulk Batch
+
+In cases you need to add/remove components or tags to a set of entities you can use a **bulk operation**.  
+Executing these type of changes are most efficient using a bulk operation.  
+This can be done by either using `ApplyBatch()` or a common `foreach ()` loop as shown below.
+
+
+```csharp
+public static void BulkBatch()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 1000; n++) {
+        store.CreateEntity();
+    }
+    var batch = new EntityBatch();
+    batch.AddComponent(new Position(1, 2, 3)).AddTag<MyTag1>();
+    store.Entities.ApplyBatch(batch);
+    
+    var query = store.Query<Position>().AllTags(Tags.Get<MyTag1>());
+    Console.WriteLine(query);                           // > Query: [Position, #MyTag1]  EntityCount: 1000
+
+    // Same as: store.Entities.ApplyBatch(batch) above
+    foreach (var entity in store.Entities) {
+        batch.ApplyTo(entity);
+    }
+}
+```
+
 
 ## CommandBuffer
 

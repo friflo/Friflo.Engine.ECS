@@ -64,6 +64,10 @@ public sealed class  EntityBatch
     #endregion
     
 #region general methods
+    /// <summary>
+    /// Creates a batch that can be applied to a <b>single</b> entity or a set of entities using a <b>bulk operation</b>.<br/>
+    /// See <see cref="EntityBatch"/>.
+    /// </summary>
     public EntityBatch()
     {
         componentTypes  = EntityStoreBase.Static.EntitySchema.components;

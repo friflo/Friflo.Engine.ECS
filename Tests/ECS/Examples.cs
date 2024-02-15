@@ -296,6 +296,11 @@ public static class Examples
         
         var query = store.Query<Position>().AllTags(Tags.Get<MyTag1>());
         Console.WriteLine(query);                           // > Query: [Position, #MyTag1]  EntityCount: 1000
+        
+        // Same as: store.Entities.ApplyBatch(batch) above
+        foreach (var entity in store.Entities) {
+            batch.ApplyTo(entity);
+        }
     }
     
     [Test]
