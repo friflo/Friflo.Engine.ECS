@@ -99,7 +99,7 @@ internal sealed class  EntityBatch
 #region commands
     public void Apply()
     {
-        if (entityId == 0) throw new InvalidOperationException("Apply() can only be used on Entity.Batch");
+        if (entityId == 0) throw new InvalidOperationException("Cannot use Apply() on EntityStore.BulkBatch. Use ApplyTo().");
         try {
             store.ApplyBatchTo(this, entityId);
         }

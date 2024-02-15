@@ -62,7 +62,7 @@ public static class Test_Batch
         var e = Assert.Throws<InvalidOperationException>(() => {
             bulkBatch.Apply();
         });
-        Assert.AreEqual("Apply() can only be used on Entity.Batch", e!.Message);
+        Assert.AreEqual("Cannot use Apply() on EntityStore.BulkBatch. Use ApplyTo().", e!.Message);
     }
     
     [Test]
