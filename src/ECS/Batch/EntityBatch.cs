@@ -17,6 +17,11 @@ internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
     internal    T   value;
 }
 
+internal enum BatchOwner
+{
+    Application = 0,
+    EntityStore = 1,
+}
 
 internal sealed class  EntityBatch
 {
@@ -28,8 +33,9 @@ internal sealed class  EntityBatch
 #region internal fields
     [Browse(Never)] internal            BatchComponent[]    batchComponents;    //  8
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
-    [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only for Entity.Batch
-    [Browse(Never)] internal            int                 entityId;           //  4   - used only for Entity.Batch
+    [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only if owner == EntityStore
+    [Browse(Never)] internal            int                 entityId;           //  4   - used only if owner == EntityStore
+    [Browse(Never)] private  readonly   BatchOwner          owner;              //  4
     [Browse(Never)] internal            Tags                tagsAdd;            // 32
     [Browse(Never)] internal            Tags                tagsRemove;         // 32
     [Browse(Never)] internal            ComponentTypes      componentsAdd;      // 32
@@ -39,13 +45,15 @@ internal sealed class  EntityBatch
 #region internal methods
     public EntityBatch()
     {
-        var schema          = EntityStoreBase.Static.EntitySchema;
-        componentTypes      = schema.components;
+        componentTypes  = EntityStoreBase.Static.EntitySchema.components;
+        owner           = BatchOwner.Application;
     }
     
-    internal EntityBatch(EntityStoreBase store) : this()
+    internal EntityBatch(EntityStoreBase store)
     {
-        this.store = store;
+        componentTypes  = EntityStoreBase.Static.EntitySchema.components;
+        owner           = BatchOwner.EntityStore;
+        this.store      = store;
     }
     
     public void Clear()
@@ -107,7 +115,7 @@ internal sealed class  EntityBatch
 #region commands
     public void Apply()
     {
-        if (entityId == 0) throw new InvalidOperationException("Apply() can only be used on Entity.Batch. Use ApplyTo()");
+        if (owner == BatchOwner.Application) throw new InvalidOperationException("Apply() can only be used on Entity.Batch. Use ApplyTo()");
         store.ApplyBatchTo(this, entityId);
     }
     
