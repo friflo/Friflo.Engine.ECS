@@ -78,9 +78,10 @@ Features in this list are also explained in the Examples.
 
 - 1.15.0    Reduced the number of properties shown for an entity in the debugger. See screenshot in Examples. 
 
-- 1.16.0 (planned) **Changed behavior** of the Archetype assigned to entities without components & tags.  
-            *Now:*    Entities are stored in this archetype.  
-            *Before:* Entities were not stored. `Archetype.Entities` returned always an empty result.
+- 1.16.0    Add support for entity batches and bulk batch operations to apply multiple entity changes at once.  
+            **Changed behavior** of the Archetype assigned to entities without components & tags.  
+            *Before:* Entities were not stored in this specific Archetype. `Archetype.Entities` returned always an empty result.  
+            *Now:*    Entities are stored in this Archetype.  
 
 
 
