@@ -114,10 +114,18 @@ internal sealed class  EntityBatch
         var structIndex = StructHeap<T>.StructIndex;
         addComponents.      bitSet.SetBit   (structIndex);
         removeComponents.   bitSet.ClearBit (structIndex);
-        var components      = batchComponents           ??= new BatchComponent[MaxStructIndex];
-        var batchComponent  = components[structIndex]   ??= componentTypes[structIndex].CreateBatchComponent();
+        var components      = batchComponents           ??= CreateBatchComponents();
+        var batchComponent  = components[structIndex]   ??= CreateBatchComponent(structIndex);
         ((BatchComponent<T>)batchComponent).value = component;
         return this;   
+    }
+    
+    private static BatchComponent[] CreateBatchComponents() {
+        return new BatchComponent[MaxStructIndex];
+    }
+    
+    private BatchComponent CreateBatchComponent(int structIndex) {
+        return componentTypes[structIndex].CreateBatchComponent();
     }
     
     public EntityBatch RemoveComponent<T>() where T : struct, IComponent
