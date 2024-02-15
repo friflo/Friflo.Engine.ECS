@@ -92,7 +92,6 @@ public abstract partial class EntityStoreBase
         ///  reused query for <see cref="EntityStoreBase.GetUniqueEntity"/>
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8
         internal        EntityBatch                                 entityBatch;            //  8
-        internal        EntityBatch                                 bulkBatch;              //  8
     }
     #endregion
     

@@ -52,7 +52,7 @@ public static class Test_Batch
     public static void Test_Batch_BulkBatch()
     {
         var store       = new EntityStore();
-        var bulkBatch   = store.BulkBatch;
+        var bulkBatch   = new EntityBatch(store);
         bulkBatch.AddComponent(new Position());
         bulkBatch.AddTag<TestTag>();
         
@@ -62,7 +62,7 @@ public static class Test_Batch
         var e = Assert.Throws<InvalidOperationException>(() => {
             bulkBatch.Apply();
         });
-        Assert.AreEqual("Cannot use Apply() on EntityStore.BulkBatch. Use ApplyTo().", e!.Message);
+        Assert.AreEqual("Apply() can only be used on Entity.Batch. Use ApplyTo()", e!.Message);
     }
     
     [Test]
@@ -72,7 +72,8 @@ public static class Test_Batch
         for (int n = 0; n < 10; n++) {
             store.CreateEntity();
         }
-        var bulkBatch = store.BulkBatch.AddComponent(new Position());
+        var bulkBatch = new EntityBatch(store);
+        bulkBatch.AddComponent(new Position(2, 3, 4));
         store.Entities.ExecuteBulkBatch(bulkBatch);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());

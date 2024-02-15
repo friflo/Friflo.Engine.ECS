@@ -21,7 +21,7 @@ internal sealed class  EntityBatch
     public   override   string              ToString() => GetString();
 
     #region internal fields
-    internal readonly   BatchComponent[]    components;         //  8
+    internal            BatchComponent[]    batchComponents;    //  8
     private  readonly   ComponentType[]     componentTypes;     //  8
     private  readonly   EntityStoreBase     store;              //  8
     internal readonly   EntityStore         entityStore;        //  8
@@ -30,16 +30,26 @@ internal sealed class  EntityBatch
     internal            Tags                removeTags;         // 32
     internal            ComponentTypes      addComponents;      // 32
     internal            ComponentTypes      removeComponents;   // 32
+    
+    private static readonly int MaxStructIndex = EntityStoreBase.Static.EntitySchema.maxStructIndex;
     #endregion
     
 #region internal methods
-    internal EntityBatch(EntityStoreBase store)
+    public EntityBatch(EntityStoreBase store)
     {
         this.store          = store;
         entityStore         = (EntityStore)store;
         var schema          = EntityStoreBase.Static.EntitySchema;
-        components          = new BatchComponent[schema.maxStructIndex];
         componentTypes      = schema.components;
+    }
+    
+    public void Clear()
+    {
+        entityId            = 0;
+        addTags             = default;
+        removeTags          = default;
+        addComponents       = default;
+        removeComponents    = default;
     }
     
     private string GetString()
@@ -80,22 +90,12 @@ internal sealed class  EntityBatch
         }
         return sb.ToString();
     }
-    
-    internal void Clear()
-    {
-        entityId            = 0;
-        addTags             = default;
-        removeTags          = default;
-        addComponents       = default;
-        removeComponents    = default;
-    }
-    
     #endregion
     
 #region commands
     public void Apply()
     {
-        if (entityId == 0) throw new InvalidOperationException("Cannot use Apply() on EntityStore.BulkBatch. Use ApplyTo().");
+        if (entityId == 0) throw new InvalidOperationException("Apply() can only be used on Entity.Batch. Use ApplyTo()");
         try {
             store.ApplyBatchTo(this, entityId);
         }
@@ -114,7 +114,8 @@ internal sealed class  EntityBatch
         var structIndex = StructHeap<T>.StructIndex;
         addComponents.      bitSet.SetBit   (structIndex);
         removeComponents.   bitSet.ClearBit (structIndex);
-        var batchComponent = components[structIndex] ??= componentTypes[structIndex].CreateBatchComponent();
+        var components      = batchComponents           ??= new BatchComponent[MaxStructIndex];
+        var batchComponent  = components[structIndex]   ??= componentTypes[structIndex].CreateBatchComponent();
         ((BatchComponent<T>)batchComponent).value = component;
         return this;   
     }

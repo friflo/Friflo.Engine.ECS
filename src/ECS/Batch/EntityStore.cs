@@ -9,8 +9,6 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
-    internal EntityBatch BulkBatch => internBase.bulkBatch ??= new EntityBatch(this);
-
     internal EntityBatch GetBatch(int entityId)
     {
         var batch       = internBase.entityBatch ??= new EntityBatch(this);
@@ -43,7 +41,7 @@ public partial class EntityStoreBase
         
         // --- assign AddComponent() values
         var newHeapMap  = newArchetype.heapMap;
-        var components  = batch.components;
+        var components  = batch.batchComponents;
         foreach (var componentType in batch.addComponents) {
             newHeapMap[componentType.StructIndex].SetBatchComponent(components, compIndex);
         }
