@@ -53,7 +53,7 @@ public static class Test_Batch
     public static void Test_Batch_ApplyTo()
     {
         var store   = new EntityStore();
-        var batch   = new EntityBatch(store);
+        var batch   = new EntityBatch();
         batch.AddComponent(new Position());
         batch.AddTag<TestTag>();
         
@@ -73,7 +73,7 @@ public static class Test_Batch
         for (int n = 0; n < 10; n++) {
             store.CreateEntity();
         }
-        var batch = new EntityBatch(store);
+        var batch = new EntityBatch();
         batch.AddComponent(new Position(2, 3, 4));
         store.Entities.ApplyBatch(batch);
         
@@ -135,8 +135,8 @@ public static class Test_Batch
         var addTags     = Tags.Get<TestTag2>();
         var removeTags  = Tags.Get<TestTag>();
         
-        var batch1 = new EntityBatch(store);
-        var batch2 = new EntityBatch(store);
+        var batch1 = new EntityBatch();
+        var batch2 = new EntityBatch();
         
         batch1
             .AddComponent   (new Position(1, 1, 1))

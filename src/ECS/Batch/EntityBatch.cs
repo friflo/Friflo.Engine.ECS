@@ -12,19 +12,20 @@ internal class BatchComponent { }
 
 internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
 {
-    internal        T       value;
+    internal    T   value;
 }
 
 
 internal sealed class  EntityBatch
 {
+#region public properties
     public   override   string              ToString() => GetString();
+    #endregion
 
-    #region internal fields
+#region internal fields
     internal            BatchComponent[]    batchComponents;    //  8
     private  readonly   ComponentType[]     componentTypes;     //  8
     private  readonly   EntityStoreBase     store;              //  8
-    internal readonly   EntityStore         entityStore;        //  8
     internal            int                 entityId;           //  4
     internal            Tags                addTags;            // 32
     internal            Tags                removeTags;         // 32
@@ -35,12 +36,15 @@ internal sealed class  EntityBatch
     #endregion
     
 #region internal methods
-    public EntityBatch(EntityStoreBase store)
+    public EntityBatch()
     {
-        this.store          = store;
-        entityStore         = (EntityStore)store;
         var schema          = EntityStoreBase.Static.EntitySchema;
         componentTypes      = schema.components;
+    }
+    
+    internal EntityBatch(EntityStoreBase store) : this()
+    {
+        this.store = store;
     }
     
     public void Clear()
@@ -106,7 +110,7 @@ internal sealed class  EntityBatch
     
     public void ApplyTo(Entity entity)
     {
-        store.ApplyBatchTo(this, entity.Id);
+        entity.store.ApplyBatchTo(this, entity.Id);
     }
     
     public EntityBatch AddComponent<T>(T component) where T : struct, IComponent

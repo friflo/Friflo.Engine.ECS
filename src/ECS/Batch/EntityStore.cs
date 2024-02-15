@@ -18,7 +18,7 @@ public partial class EntityStoreBase
     
     internal void ApplyBatchTo(EntityBatch batch, int entityId)
     {
-        ref var node    = ref batch.entityStore.nodes[entityId];
+        ref var node    = ref ((EntityStore)this).nodes[entityId];
         var archetype   = node.archetype;
         var compIndex   = node.compIndex;
         
