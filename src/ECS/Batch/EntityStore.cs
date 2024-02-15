@@ -24,13 +24,13 @@ public partial class EntityStoreBase
         
         // --- apply AddTag() / RemoveTag() commands
         var newTags     = archetype.tags;
-        newTags.Add    (batch.addTags);
-        newTags.Remove (batch.removeTags);
+        newTags.Add    (batch.tagsAdd);
+        newTags.Remove (batch.tagsRemove);
         
         // --- apply AddComponent() / RemoveComponent() commands
         var newComponentTypes = archetype.componentTypes;
-        newComponentTypes.Add   (batch.addComponents);
-        newComponentTypes.Remove(batch.removeComponents);
+        newComponentTypes.Add   (batch.componentsAdd);
+        newComponentTypes.Remove(batch.componentsRemove);
         
         // --- change archetype
         var newArchetype = GetArchetype(newComponentTypes, newTags);
@@ -42,7 +42,7 @@ public partial class EntityStoreBase
         // --- assign AddComponent() values
         var newHeapMap  = newArchetype.heapMap;
         var components  = batch.batchComponents;
-        foreach (var componentType in batch.addComponents) {
+        foreach (var componentType in batch.componentsAdd) {
             newHeapMap[componentType.StructIndex].SetBatchComponent(components, compIndex);
         }
         
@@ -68,7 +68,7 @@ public partial class EntityStoreBase
     {
         var oldHeapMap      = archetype.heapMap;
         var componentAdded  = internBase.componentAdded;
-        foreach (var componentType in batch.addComponents)
+        foreach (var componentType in batch.componentsAdd)
         {
             var structIndex = componentType.StructIndex;
             var structHeap  = oldHeapMap[structIndex];
@@ -88,7 +88,7 @@ public partial class EntityStoreBase
     {
         var oldHeapMap          = archetype.heapMap;
         var componentRemoved    = internBase.componentRemoved;
-        foreach (var componentType in batch.removeComponents)
+        foreach (var componentType in batch.componentsRemove)
         {
             var structIndex = componentType.StructIndex;
             var oldHeap     = oldHeapMap[structIndex];

@@ -30,10 +30,10 @@ internal sealed class  EntityBatch
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only for Entity.Batch
     [Browse(Never)] internal            int                 entityId;           //  4   - used only for Entity.Batch
-    [Browse(Never)] internal            Tags                addTags;            // 32
-    [Browse(Never)] internal            Tags                removeTags;         // 32
-    [Browse(Never)] internal            ComponentTypes      addComponents;      // 32
-    [Browse(Never)] internal            ComponentTypes      removeComponents;   // 32
+    [Browse(Never)] internal            Tags                tagsAdd;            // 32
+    [Browse(Never)] internal            Tags                tagsRemove;         // 32
+    [Browse(Never)] internal            ComponentTypes      componentsAdd;      // 32
+    [Browse(Never)] internal            ComponentTypes      componentsRemove;   // 32
     #endregion
     
 #region internal methods
@@ -51,35 +51,35 @@ internal sealed class  EntityBatch
     public void Clear()
     {
         entityId            = 0;
-        addTags             = default;
-        removeTags          = default;
-        addComponents       = default;
-        removeComponents    = default;
+        tagsAdd             = default;
+        tagsRemove          = default;
+        componentsAdd       = default;
+        componentsRemove    = default;
     }
     
     private int GetCommandCount()
     {
-        return addComponents    .Count +
-               removeComponents .Count +
-               addTags          .Count +
-               removeTags       .Count;
+        return  tagsAdd          .Count +
+                tagsRemove       .Count +
+                componentsAdd    .Count +
+                componentsRemove .Count;
     }
     
     private string GetString()
     {
-        var hasAdds     = addComponents.Count    > 0 || addTags.Count    > 0;
-        var hasRemoves  = removeComponents.Count > 0 || removeTags.Count > 0;
+        var hasAdds     = componentsAdd.Count    > 0 || tagsAdd.Count    > 0;
+        var hasRemoves  = componentsRemove.Count > 0 || tagsRemove.Count > 0;
         if (!hasAdds && !hasRemoves) {
             return "empty";
         }
         var sb = new StringBuilder();
         if (hasAdds) {
             sb.Append("add: [");
-            foreach (var component in addComponents) {
+            foreach (var component in componentsAdd) {
                 sb.Append(component.Name);
                 sb.Append(", ");
             }
-            foreach (var tag in addTags) {
+            foreach (var tag in tagsAdd) {
                 sb.Append('#');
                 sb.Append(tag.Name);
                 sb.Append(", ");
@@ -89,11 +89,11 @@ internal sealed class  EntityBatch
         }
         if (hasRemoves) {
             sb.Append("remove: [");
-            foreach (var component in removeComponents) {
+            foreach (var component in componentsRemove) {
                 sb.Append(component.Name);
                 sb.Append(", ");
             }
-            foreach (var tag in removeTags) {
+            foreach (var tag in tagsRemove) {
                 sb.Append('#');
                 sb.Append(tag.Name);
                 sb.Append(", ");
@@ -125,8 +125,8 @@ internal sealed class  EntityBatch
     public EntityBatch AddComponent<T>(T component) where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        addComponents.      bitSet.SetBit   (structIndex);
-        removeComponents.   bitSet.ClearBit (structIndex);
+        componentsAdd.      bitSet.SetBit   (structIndex);
+        componentsRemove.   bitSet.ClearBit (structIndex);
         var components      = batchComponents           ??= CreateBatchComponents();
         var batchComponent  = components[structIndex]   ??= CreateBatchComponent(structIndex);
         ((BatchComponent<T>)batchComponent).value = component;
@@ -145,38 +145,38 @@ internal sealed class  EntityBatch
     public EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        removeComponents.   bitSet.SetBit   (structIndex);
-        addComponents.      bitSet.ClearBit (structIndex);
+        componentsRemove.   bitSet.SetBit   (structIndex);
+        componentsAdd.      bitSet.ClearBit (structIndex);
         return this;   
     }
     
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
-        addTags.    bitSet.SetBit   (tagIndex);
-        removeTags. bitSet.ClearBit (tagIndex);
+        tagsAdd.    bitSet.SetBit   (tagIndex);
+        tagsRemove. bitSet.ClearBit (tagIndex);
         return this;
     }
     
     public EntityBatch AddTags(in Tags tags)
     {
-        addTags.    Add     (tags);
-        removeTags. Remove  (tags);
+        tagsAdd.    Add     (tags);
+        tagsRemove. Remove  (tags);
         return this;
     }
     
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
-        removeTags. bitSet.SetBit   (tagIndex);
-        addTags.    bitSet.ClearBit (tagIndex);
+        tagsRemove. bitSet.SetBit   (tagIndex);
+        tagsAdd.    bitSet.ClearBit (tagIndex);
         return this;
     }
     
     public EntityBatch RemoveTags(in Tags tags)
     {
-        addTags.    Remove  (tags);
-        removeTags. Add     (tags);
+        tagsAdd.    Remove  (tags);
+        tagsRemove. Add     (tags);
         return this;
     }
     #endregion
