@@ -24,11 +24,11 @@ internal enum BatchOwner
 }
 
 /// <summary>
-/// An entity batch is a container of component and tag commands that can be <see cref="Apply"/>'ed an entity.<br/>
+/// An entity batch is a container of component and tag commands that can be <see cref="Apply"/>'ed to an entity.<br/>
 /// It can be used on a single entity via <see cref="Entity.Batch"/> or as a <b>bulk operation</b> an a set of entities.
 /// </summary>
 /// <remarks>
-/// Its purpose is to optimize components and tag changes on entities.<br/>
+/// Its purpose is to optimize add / remove component and tag changes on entities.<br/>
 /// The same entity changes can be performed with the <see cref="Entity"/> methods using:<br/>
 /// <see cref="Entity.AddComponent{T}()"/>, <see cref="Entity.RemoveComponent{T}()"/>,
 /// <see cref="Entity.AddTag{TTag}()"/> or <see cref="Entity.RemoveTag{TTag}()"/>.<br/>
@@ -138,7 +138,7 @@ public sealed class  EntityBatch
     
 #region commands
     /// <summary>
-    /// Apply the add / remove commands of components and tags to the entity the <see cref="Entity.Batch"/> operates.
+    /// Apply the add / remove commands to the entity the <see cref="Entity.Batch"/> operates.
     /// </summary>
     public void Apply()
     {
@@ -150,6 +150,9 @@ public sealed class  EntityBatch
         return new InvalidOperationException("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()");
     }
     
+    /// <summary>
+    /// Apply the batch commands to the given <paramref name="entity"/>. 
+    /// </summary>
     public EntityBatch ApplyTo(Entity entity)
     {
         entity.store.ApplyBatchTo(this, entity.Id);
@@ -179,7 +182,9 @@ public sealed class  EntityBatch
         return componentTypes[structIndex].CreateBatchComponent();
     }
     
+    /// <summary> 
     /// Adds a remove component command to the <see cref="EntityBatch"/>.
+    /// </summary>
     public EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
@@ -188,7 +193,9 @@ public sealed class  EntityBatch
         return this;   
     }
     
+    /// <summary>
     /// Adds an add tag command to the <see cref="EntityBatch"/>.
+    /// </summary>
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
@@ -197,7 +204,9 @@ public sealed class  EntityBatch
         return this;
     }
     
+    /// <summary>
     /// Adds an add tags command to the <see cref="EntityBatch"/> adding the given <paramref name="tags"/>.
+    /// </summary>
     public EntityBatch AddTags(in Tags tags)
     {
         tagsAdd.    Add     (tags);
@@ -205,7 +214,9 @@ public sealed class  EntityBatch
         return this;
     }
     
+    /// <summary>
     /// Adds a remove tag command to the <see cref="EntityBatch"/>.
+    /// </summary>
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
@@ -214,7 +225,9 @@ public sealed class  EntityBatch
         return this;
     }
     
+    /// <summary>
     /// Adds a remove tags command to the <see cref="EntityBatch"/> removing the given <paramref name="tags"/>.
+    /// </summary>
     public EntityBatch RemoveTags(in Tags tags)
     {
         tagsAdd.    Remove  (tags);

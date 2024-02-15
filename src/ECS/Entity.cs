@@ -521,7 +521,7 @@ public readonly struct Entity : IEquatable<Entity>
     }
     
     /// <summary>
-    /// Returns an <see cref="EntityBatch"/> to add / remove components and tags as a batch operation.
+    /// Returns an <see cref="EntityBatch"/> to add / remove components and tags of this entity as a batch operation.
     /// </summary>
     [Browse(Never)] public EntityBatch Batch => store.GetBatch(Id);
     #endregion
