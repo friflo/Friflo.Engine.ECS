@@ -22,6 +22,7 @@ internal sealed class  EntityBatch
 
     #region internal fields
     internal readonly   BatchComponent[]    components;         //  8
+    private  readonly   ComponentType[]     componentTypes;     //  8
     private  readonly   EntityStoreBase     store;              //  8
     internal readonly   EntityStore         entityStore;        //  8
     internal            int                 entityId;           //  4
@@ -37,13 +38,8 @@ internal sealed class  EntityBatch
         this.store          = store;
         entityStore         = (EntityStore)store;
         var schema          = EntityStoreBase.Static.EntitySchema;
-        int maxStructIndex  = schema.maxStructIndex;
-        components          = new BatchComponent[maxStructIndex];
-        
-        var componentTypes = schema.components;
-        for (int n = 1; n < maxStructIndex; n++) {
-            components[n] = componentTypes[n].CreateBatchComponent();
-        }
+        components          = new BatchComponent[schema.maxStructIndex];
+        componentTypes      = schema.components;
     }
     
     private string GetString()
@@ -118,7 +114,8 @@ internal sealed class  EntityBatch
         var structIndex = StructHeap<T>.StructIndex;
         addComponents.      bitSet.SetBit   (structIndex);
         removeComponents.   bitSet.ClearBit (structIndex);
-        ((BatchComponent<T>)components[structIndex]).value = component;
+        var batchComponent = components[structIndex] ??= componentTypes[structIndex].CreateBatchComponent();
+        ((BatchComponent<T>)batchComponent).value = component;
         return this;   
     }
     
