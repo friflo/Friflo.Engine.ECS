@@ -2,12 +2,12 @@ using System;
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
-using Tests.ECS;
+using static NUnit.Framework.Assert;
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Tests.ECS.Arch;
 
 public static class Test_Batch
 {
@@ -15,25 +15,49 @@ public static class Test_Batch
     public static void Test_Batch_Entity()
     {
         var store = new EntityStore();
-        store.OnComponentAdded      += _ => { };
-        store.OnComponentRemoved    += _ => { };
-        store.OnTagsChanged         += _ => { }; 
+        var countAdd    = 0;
+        var countRemove = 0;
+        var countChange = 0;
+        store.OnComponentAdded += change => {
+            var str = change.ToString();
+            switch (countAdd++) {
+                case 0:     AreEqual("entity: 1 - event > Add Component: [EntityName]",     str);   break;
+                case 1:     AreEqual("entity: 1 - event > Add Component: [Position]",       str);   break;
+                case 2:     AreEqual("entity: 1 - event > Update Component: [Position]",    str);   break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        };
+        store.OnComponentRemoved += change => {
+            var str = change.ToString();
+            switch (countRemove++) {
+                case 0:     AreEqual("entity: 1 - event > Remove Component: [EntityName]",  str);   break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        };
+        store.OnTagsChanged += change => {
+            var str = change.ToString();
+            switch (countChange++) {
+                case 0:     AreEqual("entity: 1 - event > Add Tags: [#TestTag]",                            str);   break;
+                case 1:     AreEqual("entity: 1 - event > Add Tags: [#TestTag2] Remove Tags: [#TestTag]",   str);   break;
+                default:    throw new InvalidOperationException("unexpected");
+            }
+        }; 
         var entity = store.CreateEntity();
         
         var batch = entity.Batch;
-        Assert.AreEqual("empty", batch.ToString());
+        AreEqual("empty", batch.ToString());
         
         batch.AddComponent  (new Position(1, 1, 1))
             .AddComponent   (new EntityName("test"))
             .RemoveComponent<Rotation>()
             .AddTag         <TestTag>()
             .RemoveTag      <TestTag2>();
-        Assert.AreEqual("add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
-        Assert.AreEqual(5, batch.CommandCount);
+        AreEqual("add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
+        AreEqual(5, batch.CommandCount);
         batch.Apply();
         
-        Assert.AreEqual("id: 1  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
-        Assert.AreEqual(new Position(1, 1, 1), entity.Position);
+        AreEqual("id: 1  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
+        AreEqual(new Position(1, 1, 1), entity.Position);
         
         var addTags     = Tags.Get<TestTag2>();
         var removeTags  = Tags.Get<TestTag>();
@@ -43,12 +67,16 @@ public static class Test_Batch
             .RemoveComponent<EntityName>()
             .AddTags        (addTags)
             .RemoveTags     (removeTags);
-        Assert.AreEqual("add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
-        Assert.AreEqual(4, batch.CommandCount);
+        AreEqual("add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
+        AreEqual(4, batch.CommandCount);
         batch.Apply();
         
-        Assert.AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
-        Assert.AreEqual(new Position(2, 2, 2), entity.Position);
+        AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
+        AreEqual(new Position(2, 2, 2), entity.Position);
+        
+        AreEqual(3, countAdd);
+        AreEqual(1, countRemove);
+        AreEqual(2, countChange);
     }
     
     [Test]
@@ -64,13 +92,13 @@ public static class Test_Batch
         batch.ApplyTo(entity1)
              .ApplyTo(entity2);
         
-        Assert.AreEqual("id: 1  [Position, #TestTag]", entity1.ToString());
-        Assert.AreEqual("id: 2  [Position, #TestTag]", entity2.ToString());
+        AreEqual("id: 1  [Position, #TestTag]", entity1.ToString());
+        AreEqual("id: 2  [Position, #TestTag]", entity2.ToString());
         
-        var e = Assert.Throws<InvalidOperationException>(() => {
+        var e = Throws<InvalidOperationException>(() => {
             batch.Apply();
         });
-        Assert.AreEqual("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()", e!.Message);
+        AreEqual("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()", e!.Message);
     }
     
     [Test]
@@ -85,7 +113,7 @@ public static class Test_Batch
         store.Entities.ApplyBatch(batch);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());
-        Assert.AreEqual(10, arch.EntityCount);
+        AreEqual(10, arch.EntityCount);
         
         batch.Clear();
         batch.AddTag<TestTag>();
@@ -93,7 +121,7 @@ public static class Test_Batch
         store.Query<Position>().Entities.ApplyBatch(batch);
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
-        Assert.AreEqual(10, arch.EntityCount);
+        AreEqual(10, arch.EntityCount);
     }
     
     [Test]
@@ -127,7 +155,7 @@ public static class Test_Batch
         }
         
         Console.WriteLine($"Entity.Batch - duration: {sw.ElapsedMilliseconds} ms");
-        Assert.AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
+        AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
     }
     
     [Test]
@@ -168,7 +196,7 @@ public static class Test_Batch
         Console.WriteLine($"ApplyBatch() - duration: {sw.ElapsedMilliseconds} ms");
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
-        Assert.AreEqual(entityCount, arch.EntityCount);
+        AreEqual(entityCount, arch.EntityCount);
     }
 }
 
