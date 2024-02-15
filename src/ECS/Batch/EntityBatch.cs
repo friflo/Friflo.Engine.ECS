@@ -3,6 +3,8 @@
 
 using System;
 using System.Text;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable once CheckNamespace
@@ -19,20 +21,19 @@ internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
 internal sealed class  EntityBatch
 {
 #region public properties
-    public   override   string              ToString() => GetString();
+    public              int     CommandCount    => GetCommandCount();
+    public   override   string  ToString()      => GetString();
     #endregion
 
 #region internal fields
-    internal            BatchComponent[]    batchComponents;    //  8
-    private  readonly   ComponentType[]     componentTypes;     //  8
-    private  readonly   EntityStoreBase     store;              //  8   - used only for Entity.Batch
-    internal            int                 entityId;           //  4   - used only for Entity.Batch
-    internal            Tags                addTags;            // 32
-    internal            Tags                removeTags;         // 32
-    internal            ComponentTypes      addComponents;      // 32
-    internal            ComponentTypes      removeComponents;   // 32
-    
-    private static readonly int MaxStructIndex = EntityStoreBase.Static.EntitySchema.maxStructIndex;
+    [Browse(Never)] internal            BatchComponent[]    batchComponents;    //  8
+    [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
+    [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only for Entity.Batch
+    [Browse(Never)] internal            int                 entityId;           //  4   - used only for Entity.Batch
+    [Browse(Never)] internal            Tags                addTags;            // 32
+    [Browse(Never)] internal            Tags                removeTags;         // 32
+    [Browse(Never)] internal            ComponentTypes      addComponents;      // 32
+    [Browse(Never)] internal            ComponentTypes      removeComponents;   // 32
     #endregion
     
 #region internal methods
@@ -54,6 +55,14 @@ internal sealed class  EntityBatch
         removeTags          = default;
         addComponents       = default;
         removeComponents    = default;
+    }
+    
+    private int GetCommandCount()
+    {
+        return addComponents    .Count +
+               removeComponents .Count +
+               addTags          .Count +
+               removeTags       .Count;
     }
     
     private string GetString()
@@ -125,7 +134,8 @@ internal sealed class  EntityBatch
     }
     
     private static BatchComponent[] CreateBatchComponents() {
-        return new BatchComponent[MaxStructIndex];
+        var maxStructIndex = EntityStoreBase.Static.EntitySchema.maxStructIndex;
+        return new BatchComponent[maxStructIndex];
     }
     
     private BatchComponent CreateBatchComponent(int structIndex) {

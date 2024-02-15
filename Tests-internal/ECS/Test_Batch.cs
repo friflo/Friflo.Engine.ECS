@@ -29,6 +29,7 @@ public static class Test_Batch
             .AddTag         <TestTag>()
             .RemoveTag      <TestTag2>();
         Assert.AreEqual("add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
+        Assert.AreEqual(5, batch.CommandCount);
         batch.Apply();
         
         Assert.AreEqual("id: 1  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
@@ -43,6 +44,7 @@ public static class Test_Batch
             .AddTags        (addTags)
             .RemoveTags     (removeTags);
         Assert.AreEqual("add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
+        Assert.AreEqual(4, batch.CommandCount);
         batch.Apply();
         
         Assert.AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
