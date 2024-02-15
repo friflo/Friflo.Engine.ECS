@@ -13,10 +13,10 @@ public partial class EntityStoreBase
     {
         var batch               = internBase.batch ??= new EntityBatch(this);
         batch.entityId          = entityId;
-        batch.addedTags         = default;
-        batch.removedTags       = default;
-        batch.addedComponents   = default;
-        batch.removedComponents = default;
+        batch.addTags           = default;
+        batch.removeTags        = default;
+        batch.addComponents     = default;
+        batch.removeComponents  = default;
         return batch;
     }
     
@@ -29,13 +29,13 @@ public partial class EntityStoreBase
         
         // --- apply AddTag() / RemoveTag() commands
         var newTags     = archetype.tags;
-        newTags.Add    (batch.addedTags);
-        newTags.Remove (batch.removedTags);
+        newTags.Add    (batch.addTags);
+        newTags.Remove (batch.removeTags);
         
         // --- apply AddComponent() / RemoveComponent() commands
         var newComponentTypes = archetype.componentTypes;
-        newComponentTypes.Add   (batch.addedComponents);
-        newComponentTypes.Remove(batch.removedComponents);
+        newComponentTypes.Add   (batch.addComponents);
+        newComponentTypes.Remove(batch.removeComponents);
         
         // --- change archetype
         var newArchetype = GetArchetype(newComponentTypes, newTags);
@@ -47,7 +47,7 @@ public partial class EntityStoreBase
         // --- assign AddComponent() values
         var newHeapMap  = newArchetype.heapMap;
         var components  = batch.components;
-        foreach (var componentType in batch.addedComponents) {
+        foreach (var componentType in batch.addComponents) {
             newHeapMap[componentType.StructIndex].SetBatchComponent(components, compIndex);
         }
         
@@ -73,7 +73,7 @@ public partial class EntityStoreBase
     {
         var oldHeapMap      = archetype.heapMap;
         var componentAdded  = internBase.componentAdded;
-        foreach (var componentType in batch.addedComponents)
+        foreach (var componentType in batch.addComponents)
         {
             var structIndex = componentType.StructIndex;
             var structHeap  = oldHeapMap[structIndex];
@@ -93,7 +93,7 @@ public partial class EntityStoreBase
     {
         var oldHeapMap          = archetype.heapMap;
         var componentRemoved    = internBase.componentRemoved;
-        foreach (var componentType in batch.removedComponents)
+        foreach (var componentType in batch.removeComponents)
         {
             var structIndex = componentType.StructIndex;
             var oldHeap     = oldHeapMap[structIndex];

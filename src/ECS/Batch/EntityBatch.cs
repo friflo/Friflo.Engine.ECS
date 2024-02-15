@@ -4,6 +4,9 @@
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable once CheckNamespace
+
+using System.Text;
+
 namespace Friflo.Engine.ECS;
 
 internal class BatchComponent { }
@@ -16,15 +19,20 @@ internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
 
 internal sealed class  EntityBatch
 {
+    public   override   string              ToString() => GetString();
+
+    #region internal fields
     internal readonly   BatchComponent[]    components;         //  8
     private  readonly   EntityStoreBase     store;              //  8
     internal readonly   EntityStore         entityStore;        //  8
     internal            int                 entityId;           //  4
-    internal            Tags                addedTags;          // 32
-    internal            Tags                removedTags;        // 32
-    internal            ComponentTypes      addedComponents;    // 32
-    internal            ComponentTypes      removedComponents;  // 32
+    internal            Tags                addTags;            // 32
+    internal            Tags                removeTags;         // 32
+    internal            ComponentTypes      addComponents;      // 32
+    internal            ComponentTypes      removeComponents;   // 32
+    #endregion
     
+#region internal methods
     internal EntityBatch(EntityStoreBase store)
     {
         this.store          = store;
@@ -39,6 +47,46 @@ internal sealed class  EntityBatch
         }
     }
     
+    private string GetString()
+    {
+        var hasAdds     = addComponents.Count    > 0 || addTags.Count    > 0;
+        var hasRemoves  = removeComponents.Count > 0 || removeTags.Count > 0;
+        if (!hasAdds && !hasRemoves) {
+            return "empty";
+        }
+        var sb = new StringBuilder();
+        if (hasAdds) {
+            sb.Append("add: [");
+            foreach (var component in addComponents) {
+                sb.Append(component.Name);
+                sb.Append(", ");
+            }
+            foreach (var tag in addTags) {
+                sb.Append(tag.Name);
+                sb.Append(", ");
+            }
+            sb.Length -= 2;
+            sb.Append("]  ");
+        }
+        if (hasRemoves) {
+            sb.Append("remove: [");
+            foreach (var component in removeComponents) {
+                sb.Append(component.Name);
+                sb.Append(", ");
+            }
+            foreach (var tag in removeTags) {
+                sb.Append(tag.Name);
+                sb.Append(", ");
+            }
+            sb.Length -= 2;
+            sb.Append(']');
+        }
+        return sb.ToString();
+    }
+    
+    #endregion
+    
+#region commands
     internal void Apply() {
         store.ApplyEntityBatch(this);
     }
@@ -46,8 +94,8 @@ internal sealed class  EntityBatch
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        addedComponents.    bitSet.SetBit   (structIndex);
-        removedComponents.  bitSet.ClearBit (structIndex);
+        addComponents.      bitSet.SetBit   (structIndex);
+        removeComponents.   bitSet.ClearBit (structIndex);
         ((BatchComponent<T>)components[structIndex]).value = component;
         return this;   
     }
@@ -55,38 +103,39 @@ internal sealed class  EntityBatch
     internal EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
-        removedComponents.  bitSet.SetBit   (structIndex);
-        addedComponents.    bitSet.ClearBit (structIndex);
+        removeComponents.   bitSet.SetBit   (structIndex);
+        addComponents.      bitSet.ClearBit (structIndex);
         return this;   
     }
     
     internal EntityBatch AddTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
-        addedTags.  bitSet.SetBit   (tagIndex);
-        removedTags.bitSet.ClearBit (tagIndex);
+        addTags.    bitSet.SetBit   (tagIndex);
+        removeTags. bitSet.ClearBit (tagIndex);
         return this;
     }
     
     internal EntityBatch AddTags(in Tags tags)
     {
-        addedTags.  Add     (tags);
-        removedTags.Remove  (tags);
+        addTags.    Add     (tags);
+        removeTags. Remove  (tags);
         return this;
     }
     
     internal EntityBatch RemoveTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
-        removedTags.bitSet.SetBit   (tagIndex);
-        addedTags.  bitSet.ClearBit (tagIndex);
+        removeTags. bitSet.SetBit   (tagIndex);
+        addTags.    bitSet.ClearBit (tagIndex);
         return this;
     }
     
     internal EntityBatch RemoveTags(in Tags tags)
     {
-        addedTags.  Remove  (tags);
-        removedTags.Add     (tags);
+        addTags.    Remove  (tags);
+        removeTags. Add     (tags);
         return this;
     }
+    #endregion
 }
