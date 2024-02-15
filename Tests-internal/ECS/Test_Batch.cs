@@ -22,12 +22,12 @@ public static class Test_Batch
         var batch = entity.Batch;
         Assert.AreEqual("empty", batch.ToString());
         
-        batch.AddComponent   (new Position(1, 1, 1))
+        batch.AddComponent  (new Position(1, 1, 1))
             .AddComponent   (new EntityName("test"))
             .RemoveComponent<Rotation>()
             .AddTag         <TestTag>()
             .RemoveTag      <TestTag2>();
-        Assert.AreEqual("add: [EntityName, Position, TestTag]  remove: [Rotation, TestTag2]", batch.ToString());
+        Assert.AreEqual("add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
         batch.Apply();
         
         Assert.AreEqual("id: 1  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
@@ -37,11 +37,11 @@ public static class Test_Batch
         var removeTags  = Tags.Get<TestTag>();
         
         batch = entity.Batch;
-        batch.AddComponent   (new Position(2, 2, 2))
+        batch.AddComponent  (new Position(2, 2, 2))
             .RemoveComponent<EntityName>()
             .AddTags        (addTags)
             .RemoveTags     (removeTags);
-        Assert.AreEqual("add: [Position, TestTag2]  remove: [EntityName, TestTag]", batch.ToString());
+        Assert.AreEqual("add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
         batch.Apply();
         
         Assert.AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());

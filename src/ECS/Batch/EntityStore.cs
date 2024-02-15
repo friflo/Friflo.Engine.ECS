@@ -13,10 +13,6 @@ public partial class EntityStoreBase
     {
         var batch               = internBase.batch ??= new EntityBatch(this);
         batch.entityId          = entityId;
-        batch.addTags           = default;
-        batch.removeTags        = default;
-        batch.addComponents     = default;
-        batch.removeComponents  = default;
         return batch;
     }
     

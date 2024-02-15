@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Text;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable once CheckNamespace
-
-using System.Text;
-
 namespace Friflo.Engine.ECS;
 
 internal class BatchComponent { }
@@ -62,6 +60,7 @@ internal sealed class  EntityBatch
                 sb.Append(", ");
             }
             foreach (var tag in addTags) {
+                sb.Append('#');
                 sb.Append(tag.Name);
                 sb.Append(", ");
             }
@@ -75,6 +74,7 @@ internal sealed class  EntityBatch
                 sb.Append(", ");
             }
             foreach (var tag in removeTags) {
+                sb.Append('#');
                 sb.Append(tag.Name);
                 sb.Append(", ");
             }
@@ -84,11 +84,24 @@ internal sealed class  EntityBatch
         return sb.ToString();
     }
     
+    private void Clear()
+    {
+        addTags             = default;
+        removeTags          = default;
+        addComponents       = default;
+        removeComponents    = default;
+    }
+    
     #endregion
     
 #region commands
     internal void Apply() {
-        store.ApplyEntityBatch(this);
+        try {
+            store.ApplyEntityBatch(this);
+        }
+        finally {
+            Clear();
+        }
     }
     
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
