@@ -26,7 +26,7 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
     internal void ApplyBatch(EntityBatch entityBatch)
     {
         foreach (var entity in this) {
-            entityBatch.ApplyTo(entity);
+            entity.store.ApplyBatchTo(entityBatch, entity.Id);
         }
     }
     
