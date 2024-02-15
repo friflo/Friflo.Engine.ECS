@@ -23,10 +23,10 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
         this.query = query;
     }
     
-    internal void ExecuteBulkBatch(EntityBatch bulkBatch)
+    internal void ExecuteBulkBatch(EntityBatch entityBatch)
     {
         foreach (var entity in this) {
-            bulkBatch.ApplyTo(entity);
+            entityBatch.ApplyTo(entity);
         }
     }
     

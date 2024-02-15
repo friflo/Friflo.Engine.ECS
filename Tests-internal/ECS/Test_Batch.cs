@@ -49,40 +49,40 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_Batch_BulkBatch()
+    public static void Test_Batch_ApplyTo()
     {
-        var store       = new EntityStore();
-        var bulkBatch   = new EntityBatch(store);
-        bulkBatch.AddComponent(new Position());
-        bulkBatch.AddTag<TestTag>();
+        var store   = new EntityStore();
+        var batch   = new EntityBatch(store);
+        batch.AddComponent(new Position());
+        batch.AddTag<TestTag>();
         
         var entity = store.CreateEntity();
-        bulkBatch.ApplyTo(entity);
+        batch.ApplyTo(entity);
         
         var e = Assert.Throws<InvalidOperationException>(() => {
-            bulkBatch.Apply();
+            batch.Apply();
         });
         Assert.AreEqual("Apply() can only be used on Entity.Batch. Use ApplyTo()", e!.Message);
     }
     
     [Test]
-    public static void Test_Batch_Entities_BulkBatch()
+    public static void Test_Batch_QueryEntities_ExecuteBulkBatch()
     {
         var store       = new EntityStore();
         for (int n = 0; n < 10; n++) {
             store.CreateEntity();
         }
-        var bulkBatch = new EntityBatch(store);
-        bulkBatch.AddComponent(new Position(2, 3, 4));
-        store.Entities.ExecuteBulkBatch(bulkBatch);
+        var batch = new EntityBatch(store);
+        batch.AddComponent(new Position(2, 3, 4));
+        store.Entities.ExecuteBulkBatch(batch);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());
         Assert.AreEqual(10, arch.EntityCount);
         
-        bulkBatch.Clear();
-        bulkBatch.AddTag<TestTag>();
+        batch.Clear();
+        batch.AddTag<TestTag>();
         
-        store.Query<Position>().Entities.ExecuteBulkBatch(bulkBatch);
+        store.Query<Position>().Entities.ExecuteBulkBatch(batch);
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
         Assert.AreEqual(10, arch.EntityCount);
