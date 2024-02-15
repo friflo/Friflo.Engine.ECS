@@ -565,7 +565,7 @@ This is also called a *structural change* and in comparison to other methods a m
 Every component / tag change will cause a *structural change*.
 
 In case of multiple changes on a single entity use an [EntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityBatch.md)
-to apply all changes at one.  
+to apply all changes at once.  
 Using this approach only a single or no *structural change* will be executed.
 
 ```csharp
