@@ -85,7 +85,7 @@ internal sealed class  EntityBatch
         return sb.ToString();
     }
     
-    private void Clear()
+    internal void Clear()
     {
         entityId            = 0;
         addTags             = default;

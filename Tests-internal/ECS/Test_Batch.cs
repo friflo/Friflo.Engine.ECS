@@ -66,6 +66,28 @@ public static class Test_Batch
     }
     
     [Test]
+    public static void Test_Batch_Entities_BulkBatch()
+    {
+        var store       = new EntityStore();
+        for (int n = 0; n < 10; n++) {
+            store.CreateEntity();
+        }
+        var bulkBatch = store.BulkBatch.AddComponent(new Position());
+        store.Entities.ExecuteBulkBatch(bulkBatch);
+        
+        var arch = store.GetArchetype(ComponentTypes.Get<Position>());
+        Assert.AreEqual(10, arch.EntityCount);
+        
+        bulkBatch.Clear();
+        bulkBatch.AddTag<TestTag>();
+        
+        store.Query<Position>().Entities.ExecuteBulkBatch(bulkBatch);
+        
+        arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
+        Assert.AreEqual(10, arch.EntityCount);
+    }
+    
+    [Test]
     public static void Test_Batch_Entity_Perf()
     {
         long count      = 10; // 10_000_000 ~ #PC: 1691 ms

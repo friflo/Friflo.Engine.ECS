@@ -23,6 +23,13 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
         this.query = query;
     }
     
+    internal void ExecuteBulkBatch(EntityBatch bulkBatch)
+    {
+        foreach (var entity in this) {
+            bulkBatch.ApplyTo(entity);
+        }
+    }
+    
     // --- IEnumerable<>
     [ExcludeFromCodeCoverage]
     IEnumerator<Entity> IEnumerable<Entity>.GetEnumerator()  => new EntitiesEnumerator (query);
