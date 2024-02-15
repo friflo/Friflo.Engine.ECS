@@ -24,7 +24,7 @@ internal enum BatchOwner
 }
 
 /// <summary>
-/// An <see cref="EntityBatch"/> is a container of component and tag commands that can be <see cref="ApplyTo"/> an <see cref="Entity"/>.<br/>
+/// An entity batch is a container of component and tag commands that can be <see cref="Apply"/>'ed an entity.<br/>
 /// It can be used on a single entity via <see cref="Entity.Batch"/> or as a <b>bulk operation</b> an a set of entities.
 /// </summary>
 /// <remarks>
