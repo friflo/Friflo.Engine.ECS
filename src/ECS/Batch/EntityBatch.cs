@@ -25,8 +25,8 @@ internal sealed class  EntityBatch
 #region internal fields
     internal            BatchComponent[]    batchComponents;    //  8
     private  readonly   ComponentType[]     componentTypes;     //  8
-    private  readonly   EntityStoreBase     store;              //  8
-    internal            int                 entityId;           //  4
+    private  readonly   EntityStoreBase     store;              //  8   - used only for Entity.Batch
+    internal            int                 entityId;           //  4   - used only for Entity.Batch
     internal            Tags                addTags;            // 32
     internal            Tags                removeTags;         // 32
     internal            ComponentTypes      addComponents;      // 32
