@@ -520,7 +520,7 @@ public readonly struct Entity : IEquatable<Entity>
         Id      = id;
     }
     
-    [Browse(Never)] internal EntityBatch Batch => store.GetBatch(Id);
+    [Browse(Never)] public EntityBatch Batch => store.GetBatch(Id);
     #endregion
 
 

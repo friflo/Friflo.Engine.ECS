@@ -41,7 +41,7 @@ internal enum BatchOwner
 /// - the entities of an <see cref="ArchetypeQuery"/> using <see cref="ArchetypeQuery.Entities"/>.<br/>
 /// - or the entities of an <see cref="Archetype"/> using <see cref="Archetype.Entities"/>.
 /// </remarks>
-internal sealed class  EntityBatch
+public sealed class  EntityBatch
 {
 #region public properties
     public              int     CommandCount    => GetCommandCount();
