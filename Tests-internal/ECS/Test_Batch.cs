@@ -66,7 +66,7 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_Batch_QueryEntities_ExecuteBulkBatch()
+    public static void Test_Batch_QueryEntities_ApplyBatch()
     {
         var store       = new EntityStore();
         for (int n = 0; n < 10; n++) {
@@ -74,7 +74,7 @@ public static class Test_Batch
         }
         var batch = new EntityBatch(store);
         batch.AddComponent(new Position(2, 3, 4));
-        store.Entities.ExecuteBulkBatch(batch);
+        store.Entities.ApplyBatch(batch);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());
         Assert.AreEqual(10, arch.EntityCount);
@@ -82,7 +82,7 @@ public static class Test_Batch
         batch.Clear();
         batch.AddTag<TestTag>();
         
-        store.Query<Position>().Entities.ExecuteBulkBatch(batch);
+        store.Query<Position>().Entities.ApplyBatch(batch);
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
         Assert.AreEqual(10, arch.EntityCount);
