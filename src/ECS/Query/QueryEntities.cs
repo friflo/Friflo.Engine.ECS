@@ -23,10 +23,13 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
         this.query = query;
     }
     
-    public void ApplyBatch(EntityBatch entityBatch)
+    /// <summary>
+    /// Apply the given entity <paramref name="batch"/> to all entities in this set. 
+    /// </summary>
+    public void ApplyBatch(EntityBatch batch)
     {
         foreach (var entity in this) {
-            entity.store.ApplyBatchTo(entityBatch, entity.Id);
+            entity.store.ApplyBatchTo(batch, entity.Id);
         }
     }
     

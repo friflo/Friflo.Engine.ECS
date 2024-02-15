@@ -70,7 +70,7 @@ public static class Test_Batch
         var e = Assert.Throws<InvalidOperationException>(() => {
             batch.Apply();
         });
-        Assert.AreEqual("Apply() can only be used on Entity.Batch. Use ApplyTo()", e!.Message);
+        Assert.AreEqual("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()", e!.Message);
     }
     
     [Test]
