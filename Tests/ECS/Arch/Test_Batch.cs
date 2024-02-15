@@ -44,6 +44,7 @@ public static class Test_Batch
             var str = change.ToString();
             switch (countRemove++) {
                 case 0:
+                    IsNull  (                          change.DebugComponent);
                     AreEqual(new EntityName("test"),   change.DebugOldComponent);
                     AreEqual("entity: 1 - event > Remove Component: [EntityName]",  str);
                     break;
