@@ -86,6 +86,7 @@ internal sealed class  EntityBatch
     
     private void Clear()
     {
+        entityId            = 0;
         addTags             = default;
         removeTags          = default;
         addComponents       = default;
@@ -95,13 +96,19 @@ internal sealed class  EntityBatch
     #endregion
     
 #region commands
-    internal void Apply() {
+    internal void Apply()
+    {
         try {
-            store.ApplyEntityBatch(this);
+            store.ApplyEntityBatch(this, entityId);
         }
         finally {
             Clear();
         }
+    }
+    
+    internal void ApplyTo(Entity entity)
+    {
+        store.ApplyEntityBatch(this, entity.Id);
     }
     
     internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent

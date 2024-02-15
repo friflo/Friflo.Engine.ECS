@@ -2,23 +2,24 @@
 // See LICENSE file in the project root for full license information.
 
 
-// ReSharper disable once CheckNamespace
 // ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    internal EntityBatch BulkBatch => internBase.bulkBatch ??= new EntityBatch(this);
+
     internal EntityBatch GetBatch(int entityId)
     {
-        var batch               = internBase.batch ??= new EntityBatch(this);
-        batch.entityId          = entityId;
+        var batch       = internBase.entityBatch ??= new EntityBatch(this);
+        batch.entityId  = entityId;
         return batch;
     }
     
-    internal void ApplyEntityBatch(EntityBatch batch)
+    internal void ApplyEntityBatch(EntityBatch batch, int entityId)
     {
-        var entityId    = batch.entityId;
         ref var node    = ref batch.entityStore.nodes[entityId];
         var archetype   = node.archetype;
         var compIndex   = node.compIndex;
@@ -57,15 +58,15 @@ public partial class EntityStoreBase
         }
         // --- send component removed event
         if (internBase.componentRemoved != null) {
-            SendComponentRemoved(batch, archetype, entityId);
+            SendComponentRemoved(batch, entityId, archetype, compIndex);
         }
         // --- send component added event
         if (internBase.componentAdded != null) {
-            SendComponentAdded(batch, archetype, compIndex);
+            SendComponentAdded  (batch, entityId, archetype, compIndex);
         }
     }
     
-    private void SendComponentAdded(EntityBatch batch, Archetype archetype, int compIndex)
+    private void SendComponentAdded(EntityBatch batch, int entityId, Archetype archetype, int compIndex)
     {
         var oldHeapMap      = archetype.heapMap;
         var componentAdded  = internBase.componentAdded;
@@ -81,11 +82,11 @@ public partial class EntityStoreBase
                 structHeap.StashComponent(compIndex);
                 action = ComponentChangedAction.Update;
             }
-            componentAdded.Invoke(new ComponentChanged (this, batch.entityId, action, structIndex, structHeap));
+            componentAdded.Invoke(new ComponentChanged (this, entityId, action, structIndex, structHeap));
         }
     }
     
-    private void SendComponentRemoved(EntityBatch batch, Archetype archetype, int compIndex)
+    private void SendComponentRemoved(EntityBatch batch, int entityId, Archetype archetype, int compIndex)
     {
         var oldHeapMap          = archetype.heapMap;
         var componentRemoved    = internBase.componentRemoved;
@@ -97,7 +98,7 @@ public partial class EntityStoreBase
                 continue;
             }
             oldHeap.StashComponent(compIndex);
-            componentRemoved.Invoke(new ComponentChanged (this, batch.entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
+            componentRemoved.Invoke(new ComponentChanged (this, entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
         }
     }
 }

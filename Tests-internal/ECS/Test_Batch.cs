@@ -49,6 +49,18 @@ public static class Test_Batch
     }
     
     [Test]
+    public static void Test_Batch_EntityStore_Batch()
+    {
+        var store = new EntityStore();
+        var batch = store.BulkBatch;
+        batch.AddComponent(new Position());
+        batch.AddTag<TestTag>();
+        
+        var entity = store.CreateEntity();
+        batch.ApplyTo(entity);
+    }
+    
+    [Test]
     public static void Test_Batch_Entity_Perf()
     {
         long count      = 10; // 10_000_000 ~ #PC: 1691 ms
