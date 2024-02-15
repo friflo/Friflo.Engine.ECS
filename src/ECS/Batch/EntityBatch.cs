@@ -23,6 +23,24 @@ internal enum BatchOwner
     EntityStore = 1,
 }
 
+/// <summary>
+/// An <see cref="EntityBatch"/> is a container of component and tag commands that can be <see cref="ApplyTo"/> an <see cref="Entity"/>.<br/>
+/// It can be used on a single entity via <see cref="Entity.Batch"/> or as a <b>bulk operation</b> an a set of entities.
+/// </summary>
+/// <remarks>
+/// Its purpose is to optimize components and tag changes on entities.<br/>
+/// The same entity changes can be performed with the <see cref="Entity"/> methods using:<br/>
+/// <see cref="Entity.AddComponent{T}()"/>, <see cref="Entity.RemoveComponent{T}()"/>,
+/// <see cref="Entity.AddTag{TTag}()"/> or <see cref="Entity.RemoveTag{TTag}()"/>.<br/>
+/// Each of this methods may cause a structural change which is a relative costly operation in comparison to others.<br/>
+/// Using <see cref="EntityBatch"/> minimize theses structural changes to one or none.<br/>
+/// <br/>
+/// <b>Bulk operation</b><br/>
+/// To perform the same batch on multiple entities you can use <see cref="QueryEntities.ApplyBatch"/> for <br/>
+/// - all entities of an <see cref="EntityStore"/> using <see cref="EntityStore.Entities"/>.<br/>
+/// - the entities of an <see cref="ArchetypeQuery"/> using <see cref="ArchetypeQuery.Entities"/>.<br/>
+/// - or the entities of an <see cref="Archetype"/> using <see cref="Archetype.Entities"/>.
+/// </remarks>
 internal sealed class  EntityBatch
 {
 #region public properties
