@@ -59,8 +59,13 @@ public static class Test_Batch
         batch.AddComponent(new Position());
         batch.AddTag<TestTag>();
         
-        var entity = store.CreateEntity();
-        batch.ApplyTo(entity);
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        batch.ApplyTo(entity1)
+             .ApplyTo(entity2);
+        
+        Assert.AreEqual("id: 1  [Position, #TestTag]", entity1.ToString());
+        Assert.AreEqual("id: 2  [Position, #TestTag]", entity2.ToString());
         
         var e = Assert.Throws<InvalidOperationException>(() => {
             batch.Apply();

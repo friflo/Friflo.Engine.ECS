@@ -111,9 +111,10 @@ internal sealed class  EntityBatch
         store.ApplyBatchTo(this, entityId);
     }
     
-    public void ApplyTo(Entity entity)
+    public EntityBatch ApplyTo(Entity entity)
     {
         entity.store.ApplyBatchTo(this, entity.Id);
+        return this;
     }
     
     public EntityBatch AddComponent<T>(T component) where T : struct, IComponent
