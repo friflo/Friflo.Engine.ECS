@@ -18,30 +18,54 @@ public static class Test_Batch
         var countAdd    = 0;
         var countRemove = 0;
         var countChange = 0;
+#pragma warning disable CS0618 // Type or member is obsolete
         store.OnComponentAdded += change => {
             var str = change.ToString();
             switch (countAdd++) {
-                case 0:     AreEqual("entity: 1 - event > Add Component: [EntityName]",     str);   break;
-                case 1:     AreEqual("entity: 1 - event > Add Component: [Position]",       str);   break;
-                case 2:     AreEqual("entity: 1 - event > Update Component: [Position]",    str);   break;
-                default:    throw new InvalidOperationException("unexpected");
+                case 0:
+                    AreEqual(new EntityName("test"), change.DebugComponent);
+                    AreEqual("entity: 1 - event > Add Component: [EntityName]", str);
+                    break;
+                case 1:
+                    AreEqual(new Position(1,1,1),   change.DebugComponent);
+                    IsNull  (                       change.DebugOldComponent);
+                    AreEqual("entity: 1 - event > Add Component: [Position]", str);
+                    break;
+                case 2:
+                    AreEqual(new Position(2,2,2),   change.DebugComponent);
+                    AreEqual(new Position(1,1,1),   change.DebugOldComponent);
+                    AreEqual("entity: 1 - event > Update Component: [Position]", str);
+                    break;
+                default:
+                    throw new InvalidOperationException("unexpected");
             }
         };
         store.OnComponentRemoved += change => {
             var str = change.ToString();
             switch (countRemove++) {
-                case 0:     AreEqual("entity: 1 - event > Remove Component: [EntityName]",  str);   break;
-                default:    throw new InvalidOperationException("unexpected");
+                case 0:
+                    AreEqual(new EntityName("test"),   change.DebugOldComponent);
+                    AreEqual("entity: 1 - event > Remove Component: [EntityName]",  str);
+                    break;
+                default:
+                    throw new InvalidOperationException("unexpected");
             }
         };
         store.OnTagsChanged += change => {
             var str = change.ToString();
             switch (countChange++) {
-                case 0:     AreEqual("entity: 1 - event > Add Tags: [#TestTag]",                            str);   break;
-                case 1:     AreEqual("entity: 1 - event > Add Tags: [#TestTag2] Remove Tags: [#TestTag]",   str);   break;
-                default:    throw new InvalidOperationException("unexpected");
+                case 0:
+                    AreEqual("entity: 1 - event > Add Tags: [#TestTag]", str);
+                    break;
+                case 1:
+                    AreEqual("entity: 1 - event > Add Tags: [#TestTag2] Remove Tags: [#TestTag]", str);
+                    break;
+                default:
+                    throw new InvalidOperationException("unexpected");
             }
-        }; 
+        };
+#pragma warning restore CS0618 // Type or member is obsolete
+
         var entity = store.CreateEntity();
         
         var batch = entity.Batch;
