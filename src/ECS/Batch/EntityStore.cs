@@ -11,8 +11,9 @@ public partial class EntityStoreBase
 {
     internal EntityBatch GetBatch(int entityId)
     {
-        var batch       = internBase.entityBatch ??= new EntityBatch(this);
-        batch.entityId  = entityId;
+        var batch = internBase.entityBatch ??= new EntityBatch(this);
+        batch.Clear();
+        batch.entityId = entityId;
         return batch;
     }
     

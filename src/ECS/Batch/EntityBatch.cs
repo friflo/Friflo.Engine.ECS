@@ -50,7 +50,6 @@ internal sealed class  EntityBatch
     
     public void Clear()
     {
-        entityId            = 0;
         tagsAdd             = default;
         tagsRemove          = default;
         componentsAdd       = default;
@@ -109,12 +108,7 @@ internal sealed class  EntityBatch
     public void Apply()
     {
         if (entityId == 0) throw new InvalidOperationException("Apply() can only be used on Entity.Batch. Use ApplyTo()");
-        try {
-            store.ApplyBatchTo(this, entityId);
-        }
-        finally {
-            Clear();
-        }
+        store.ApplyBatchTo(this, entityId);
     }
     
     public void ApplyTo(Entity entity)
