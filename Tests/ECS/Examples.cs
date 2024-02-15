@@ -271,6 +271,34 @@ public static class Examples
     }
     
     [Test]
+    public static void EntityBatch()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        
+        entity.Batch
+            .AddComponent(new Position(1, 2, 3))
+            .AddTag<MyTag1>()
+            .Apply();
+        Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [Position, #MyTag1]
+    }
+    
+    [Test]
+    public static void BulkBatch()
+    {
+        var store   = new EntityStore();
+        for (int n = 0; n < 1000; n++) {
+            store.CreateEntity();
+        }
+        var batch = new EntityBatch();
+        batch.AddComponent(new Position(1, 2, 3)).AddTag<MyTag1>();
+        store.Entities.ApplyBatch(batch);
+        
+        var query = store.Query<Position>().AllTags(Tags.Get<MyTag1>());
+        Console.WriteLine(query);                           // > Query: [Position, #MyTag1]  EntityCount: 1000
+    }
+    
+    [Test]
     public static void CommandBuffer()
     {
         var store   = new EntityStore();
