@@ -97,7 +97,7 @@ internal sealed class  EntityBatch
     #endregion
     
 #region commands
-    internal void Apply()
+    public void Apply()
     {
         if (entityId == 0) throw new InvalidOperationException("Apply() can only be used on Entity.Batch");
         try {
@@ -108,12 +108,12 @@ internal sealed class  EntityBatch
         }
     }
     
-    internal void ApplyTo(Entity entity)
+    public void ApplyTo(Entity entity)
     {
         store.ApplyBatchTo(this, entity.Id);
     }
     
-    internal EntityBatch AddComponent<T>(T component) where T : struct, IComponent
+    public EntityBatch AddComponent<T>(T component) where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
         addComponents.      bitSet.SetBit   (structIndex);
@@ -122,7 +122,7 @@ internal sealed class  EntityBatch
         return this;   
     }
     
-    internal EntityBatch RemoveComponent<T>() where T : struct, IComponent
+    public EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
         removeComponents.   bitSet.SetBit   (structIndex);
@@ -130,7 +130,7 @@ internal sealed class  EntityBatch
         return this;   
     }
     
-    internal EntityBatch AddTag<T>() where T : struct, ITag
+    public EntityBatch AddTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
         addTags.    bitSet.SetBit   (tagIndex);
@@ -138,14 +138,14 @@ internal sealed class  EntityBatch
         return this;
     }
     
-    internal EntityBatch AddTags(in Tags tags)
+    public EntityBatch AddTags(in Tags tags)
     {
         addTags.    Add     (tags);
         removeTags. Remove  (tags);
         return this;
     }
     
-    internal EntityBatch RemoveTag<T>() where T : struct, ITag
+    public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
         var tagIndex = TagType<T>.TagIndex;
         removeTags. bitSet.SetBit   (tagIndex);
@@ -153,7 +153,7 @@ internal sealed class  EntityBatch
         return this;
     }
     
-    internal EntityBatch RemoveTags(in Tags tags)
+    public EntityBatch RemoveTags(in Tags tags)
     {
         addTags.    Remove  (tags);
         removeTags. Add     (tags);
