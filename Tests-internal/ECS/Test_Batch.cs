@@ -120,6 +120,7 @@ public static class Test_Batch
         }
         
         Console.WriteLine($"Entity.Batch - duration: {sw.ElapsedMilliseconds} ms");
+        Assert.AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
     }
     
     [Test]
