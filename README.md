@@ -17,7 +17,7 @@
 
 # Entity Component System
 
-Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as reference.  
+Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as re ference.  
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
@@ -28,6 +28,7 @@ The package is part of an in-development Game Editor. See [Architecture.md](Arch
 The library implements all features a common ECS provides.  
 *Unique library features*
 - Hybrid ECS - supporting both: Scripts similar to `MonoBehaviour`'s as well as struct components.  
+  This enables easy refactoring between both models. Scripts if OOP is suitable. Struct components for performance.
 - Build up a hierarchy of entities with parent / child relationship - optional.
 - Focus on optimal debugging experience. See screenshot at examples.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
@@ -811,7 +812,7 @@ public static void CommandBuffer()
 Two benchmarks - subset of [Ecs.CSharp.Benchmark - 2024-02-16](https://github.com/Doraku/Ecs.CSharp.Benchmark/tree/da28d170988949ee36eab62258c6130d473e70ac)
 running on a Mac Mini M2.
 
-Made a subset as the other benchmarks a similar only with different parameters.
+Made a subset as the other benchmarks are similar only with different parameters.
 
 1. Create 100.000 entities with three components
 2. Update query on 100.000 entities with two components
