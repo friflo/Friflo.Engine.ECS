@@ -283,7 +283,7 @@ public static void AddTags()
 <th>OOP - Polymorphism</th>
 </tr>
 <tr>
-<td>
+<td style="padding:0px;">
 
 ```csharp
 // No base class Animal - ECS: Composition over Inheritance
@@ -310,7 +310,7 @@ public static void ECS()
 ```
 
 </td>
-<td>
+<td style="padding:0px;">
 
 ```csharp
 class Animal { }
