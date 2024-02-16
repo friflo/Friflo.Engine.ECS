@@ -135,6 +135,9 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Signal](#signal)
 - [Query](#query)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
+
+[Optimization Examples](#optimization-examples)
+
 - [Parallel Query Job](#parallel-query-job)
 - [Query Vectorization - SIMD](#query-vectorization---simd)
 - [EventFilter](#eventfilter)
@@ -564,6 +567,10 @@ public static void EnumerateQueryChunks()
     }
 }
 ```
+
+<br/><br/>
+
+# Optimization Examples
 
 
 ## Parallel Query Job
