@@ -25,8 +25,8 @@ public static void ECS()
     Archetype catType = store.GetArchetype(Tags.Get<Cat>());
     Console.WriteLine(dogType.Name);            // [#Dog]
     
-    var dog = dogType.CreateEntity();
-    var cat = catType.CreateEntity();
+    dogType.CreateEntity();
+    catType.CreateEntity();
     
     var dogs = store.Query().AnyTags(Tags.Get<Dog>());
     var all  = store.Query().AnyTags(Tags.Get<Dog, Cat>());
