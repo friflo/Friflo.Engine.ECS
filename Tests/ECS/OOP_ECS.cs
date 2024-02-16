@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using static System.Console;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable ArrangeTypeMemberModifiers
@@ -21,9 +22,9 @@ public static void ECS()
 {
     var store = new EntityStore();
     
-    Archetype dogType = store.GetArchetype(Tags.Get<Dog>());
-    Archetype catType = store.GetArchetype(Tags.Get<Cat>());
-    Console.WriteLine(dogType.Name);            // [#Dog]
+    var dogType = store.GetArchetype(Tags.Get<Dog>());
+    var catType = store.GetArchetype(Tags.Get<Cat>());
+    WriteLine(dogType.Name);            // [#Dog]
     
     dogType.CreateEntity();
     catType.CreateEntity();
@@ -31,8 +32,8 @@ public static void ECS()
     var dogs = store.Query().AnyTags(Tags.Get<Dog>());
     var all  = store.Query().AnyTags(Tags.Get<Dog, Cat>());
     
-    Console.WriteLine($"dogs: {dogs.Count}");   // > dogs: 1
-    Console.WriteLine($"all: {all.Count}");     // > all: 2
+    WriteLine($"dogs: {dogs.Count}");   // dogs: 1
+    WriteLine($"all: {all.Count}");     // all: 2
 }
 
 
@@ -54,16 +55,16 @@ public static void OOP()
     
     var dogType = typeof(Dog);
     var catType = typeof(Cat);
-    Console.WriteLine(dogType.Name);            // > Dog
+    WriteLine(dogType.Name);            // Dog
     
     animals.Add(new Dog());
     animals.Add(new Cat());
     
-    var dogs = animals.Where(animal => animal is Dog);
-    var all  = animals.Where(animal => animal is Dog or Cat);
+    var dogs = animals.Where(a => a is Dog);
+    var all  = animals.Where(a => a is Dog or Cat);
     
-    Console.WriteLine($"dogs: {dogs.Count()}"); // > dogs: 1
-    Console.WriteLine($"all: {all.Count()}");   // > all: 2
+    WriteLine($"dogs: {dogs.Count()}"); // dogs: 1
+    WriteLine($"all: {all.Count()}");   // all: 2
 }
 
 

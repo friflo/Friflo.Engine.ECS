@@ -304,7 +304,7 @@ The following comparison show the difference in modeling types in **ECS** vs **O
       An Archetype is also a container of entities.
   </td>
   <td><br/>
-      Organizing specific types in containers is part of application code.
+      Organizing containers is part of application code.
   </td>
 </tr>
 <tr>
@@ -355,7 +355,7 @@ var store = new EntityStore();
 
 var dogType = store.GetArchetype(Tags.Get<Dog>());
 var catType = store.GetArchetype(Tags.Get<Cat>());
-Console.WriteLine(dogType.Name);            // [#Dog]
+WriteLine(dogType.Name);            // [#Dog]
 
 dogType.CreateEntity();
 catType.CreateEntity();
@@ -363,8 +363,8 @@ catType.CreateEntity();
 var dogs = store.Query().AnyTags(Tags.Get<Dog>());
 var all  = store.Query().AnyTags(Tags.Get<Dog, Cat>());
 
-Console.WriteLine($"dogs: {dogs.Count}");   // > dogs: 1
-Console.WriteLine($"all: {all.Count}");     // > all: 2
+WriteLine($"dogs: {dogs.Count}");   // dogs: 1
+WriteLine($"all: {all.Count}");     // all: 2
 ```
 
 </td>
@@ -380,16 +380,16 @@ var animals = new List<Animal>();
 
 var dogType = typeof(Dog);
 var catType = typeof(Cat);
-Console.WriteLine(dogType.Name);            // > Dog
+WriteLine(dogType.Name);            // Dog
 
 animals.Add(new Dog());
 animals.Add(new Cat());
 
-var dogs = animals.Where(animal => animal is Dog);
-var all  = animals.Where(animal => animal is Dog or Cat);
+var dogs = animals.Where(a => a is Dog);
+var all  = animals.Where(a => a is Dog or Cat);
 
-Console.WriteLine($"dogs: {dogs.Count()}"); // > dogs: 1
-Console.WriteLine($"all: {all.Count()}");   // > all: 2
+WriteLine($"dogs: {dogs.Count()}"); // dogs: 1
+WriteLine($"all: {all.Count()}");   // all: 2
 ```
 
 </td>
