@@ -161,27 +161,22 @@ public static class Examples
         entity1.AddTag<MyTag1>();
         
         var entity2 = store.CreateEntity();
-        entity2.AddComponent(new MyComponent { value = 42 });
         entity2.AddTag<MyTag1>();
         
         var entity3 = store.CreateEntity();
-        entity3.AddComponent(new MyComponent { value = 1337 });
         entity3.AddTag<MyTag1>();
         entity3.AddTag<MyTag2>();
         
         // --- query components
-        var queryEntityNames = store.Query<EntityName>();
-        Console.WriteLine(queryEntityNames);                // > Query: [EntityName]  EntityCount: 1
-
-        var queryMyComponents = store.Query<MyComponent>();
-        Console.WriteLine(queryMyComponents);               // > Query: [MyComponent]  EntityCount: 2
+        var queryNames = store.Query<EntityName>();
+        Console.WriteLine($"EntityName:     {queryNames.Entities}");    // > EntityName:     Entity[1]
         
         // --- query tags
         var queryTag  = store.Query().AllTags(Tags.Get<MyTag1>());
-        Console.WriteLine(queryTag);                        // > Query: [#MyTag1]  EntityCount: 3
+        Console.WriteLine($"MyTag1:         {queryTag.Entities}");      // > MyTag1:         Entity[3]
         
         var queryTags = store.Query().AllTags(Tags.Get<MyTag1, MyTag2>());
-        Console.WriteLine(queryTags);                       // > Query: [#MyTag1, #MyTag2]  EntityCount: 1
+        Console.WriteLine($"MyTag1, MyTag2: {queryTags.Entities}");     // > MyTag1, MyTag2: Entity[1]
     }
     
     [Test]
