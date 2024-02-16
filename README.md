@@ -295,8 +295,9 @@ The following comparison show the difference in modeling types in **ECS** vs **O
       ECS does not utilize inheritance.<br/>
       It prefers composition over inheritance.
   </td>
-  <td><br/><br/>
-      Common OPP is based on inheritance.
+  <td><br/>
+      Common OPP is based on inheritance.<br/>
+      Likely result: A god base class responsible for everything. 😊
   </td>  
 </tr>
 <tr>
@@ -305,22 +306,6 @@ The following comparison show the difference in modeling types in **ECS** vs **O
   </td>
   <td><br/>
       Organizing containers is part of application code.
-  </td>
-</tr>
-<tr>
-  <td><i>Runtime complexity O() of queries for specific types</i><br/>
-      O(size of result set)
-  </td>
-  <td><br/>
-      O(size of all objects)
-  </td>
-</tr>
-<tr>
-  <td><i>Memory layout</i><br/>
-      Continuous memory in heap.
-  </td>
-  <td><br/>
-      Randomly placed in heap.
   </td>
 </tr>
 <tr>
@@ -394,7 +379,30 @@ WriteLine($"all: {all.Count()}");   // all: 2
 
 </td>
 </tr>
+
+<tr>
+  <td colspan="2" align="center"><b>Performance</b>
+  </td>
+</tr>
+<tr>
+  <td><i>Runtime complexity O() of queries for specific types</i><br/>
+      O(size of result set)
+  </td>
+  <td><br/>
+      O(size of all objects)
+  </td>
+</tr>
+<tr>
+  <td><i>Memory layout</i><br/>
+      Continuous memory in heap - high hit rate of L1 cache.
+  </td>
+  <td><br/>
+      Randomly placed in heap - high rate of L1 cache misses.
+  </td>
+</tr>
+
 </table>
+<br/>
 
 
 ## Script
