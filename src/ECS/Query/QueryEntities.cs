@@ -19,9 +19,9 @@ namespace Friflo.Engine.ECS;
 public readonly struct QueryEntities  : IEnumerable <Entity>
 {
     public              int             Count       => query.EntityCount;
-    public  override    string          ToString()  => $"Entity[{query.EntityCount}]";
+    public   override   string          ToString()  => $"Entity[{query.EntityCount}]";
 
-    private readonly    ArchetypeQuery  query;
+    internal readonly   ArchetypeQuery  query;
 
     internal QueryEntities(ArchetypeQuery query) {
         this.query = query;

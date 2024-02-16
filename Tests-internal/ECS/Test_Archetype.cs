@@ -67,6 +67,25 @@ public static class Test_Archetype
         AreEqual("Key: [#TestTag, #TestTag2]",  archTestTagAll.key.ToString());
     }
     
+    [Test]
+    public static void Test_Archetype_Entities_query_ToString()
+    {
+        var store   = new EntityStore();
+        
+        var arch    = store.GetArchetype(ComponentTypes.Get<Position>());
+        AreEqual("Archetype: [Position]  EntityCount: 0", arch.Entities.query.ToString());
+        
+        arch    = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
+        AreEqual("Archetype: [Position, #TestTag]  EntityCount: 0", arch.Entities.query.ToString());
+    }
+    
+    [Test]
+    public static void Test_Archetype_EntityStore_Entities_query_ToString()
+    {
+        var store   = new EntityStore();
+        AreEqual("Query: []  EntityCount: 0", store.Entities.query.ToString());
+    }
+    
     
     [Test]
     public static void Test_Archetype_SignatureIndexes()

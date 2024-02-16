@@ -183,6 +183,7 @@ public class ArchetypeQuery
         store               = archetype.store;
         archetypes          = new [] { archetype };
         components          = archetype.componentTypes;
+        filter.allTags      = archetype.tags;
     }
     
     /// <remarks>
@@ -254,13 +255,13 @@ public class ArchetypeQuery
     private string GetString() {
         var sb          = new StringBuilder();
         var hasTypes    = false;
-        sb.Append("Query: [");
-        var componentTypes  = EntityStoreBase.Static.EntitySchema.components;
-        for (int n = 0; n < signatureIndexes.length; n++)
-        {
-            var structIndex = signatureIndexes.GetStructIndex(n);
-            var structType  = componentTypes[structIndex];
-            sb.Append(structType.Name);
+        if (singleArchetype) {
+            sb.Append("Archetype: [");
+        } else {
+            sb.Append("Query: [");
+        }
+        foreach (var component in components) {
+            sb.Append(component.Name);
             sb.Append(", ");
             hasTypes = true;
         }
@@ -272,8 +273,8 @@ public class ArchetypeQuery
         }
         if (hasTypes) {
             sb.Length -= 2;
-            sb.Append(']');
         }
+        sb.Append(']');
         sb.Append("  EntityCount: ");
         sb.Append(EntityCount);
         return sb.ToString();
