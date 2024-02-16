@@ -34,6 +34,8 @@ public sealed class Archetype
     /// <summary>Number of entities / components stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 EntityCount     => entityCount;
     
+    [Browse(Never)] public              string              Name            => GetName();
+    
     /// <summary>Number of <see cref="ComponentTypes"/> managed by the archetype.</summary>
     [Browse(Never)] public              int                 ComponentCount  => componentCount;
     
@@ -331,9 +333,21 @@ public sealed class Archetype
         return count;
     }
     
-    private string GetString() => AppendString(new StringBuilder()).ToString();
+    private string GetName() {
+        var sb = new StringBuilder();
+        AppendString(sb);
+        return sb.ToString();
+    }
     
-    internal StringBuilder AppendString(StringBuilder sb)
+    private string GetString() {
+        var sb = new StringBuilder();
+        AppendString(sb);
+        sb.Append("  entities: ");
+        sb.Append(entityCount);
+        return sb.ToString();
+    }
+
+    internal void AppendString(StringBuilder sb)
     {
         var hasTypes    = false;
         sb.Append('[');
@@ -351,9 +365,7 @@ public sealed class Archetype
         if (hasTypes) {
             sb.Length -= 2;
         }
-        sb.Append("]  entities: ");
-        sb.Append(entityCount);
-        return sb;
+        sb.Append(']');
     }
     #endregion
 }

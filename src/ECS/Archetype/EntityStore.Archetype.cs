@@ -37,6 +37,12 @@ public partial class EntityStoreBase
     }
     
     /// <summary>
+    /// Return the <see cref="Archetype"/> storing the specified <paramref name="tags"/>.<br/>
+    /// The <see cref="Archetype"/> is created if not already present.
+    /// </summary>
+    public Archetype GetArchetype(in Tags tags) => GetArchetype(default, tags);
+    
+    /// <summary>
     /// Return the <see cref="Archetype"/> storing the specified <paramref name="componentTypes"/> and <paramref name="tags"/>.<br/>
     /// </summary>
     /// <returns> null if the <see cref="Archetype"/> is not present. </returns>

@@ -128,6 +128,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Component](#component)
 - [Unique entity](#unique-entity)
 - [Tag](#tag)
+- [Archetype](#archetype)
 - [Script](#script)
 - [Child entities](#child-entities)
 - [Event](#event)
@@ -272,6 +273,79 @@ public static void AddTags()
     Console.WriteLine($"tag1: {tag1}");                 // > tag1: True
 }
 ```
+
+
+## Archetype
+
+<table>
+<tr>
+<th>ECS - Composition</th>
+<th>OOP - Polymorphism</th>
+</tr>
+<tr>
+<td>
+
+```csharp
+// No base class Animal - ECS uses: Composition over Inheritance
+struct Dog : ITag { }
+struct Cat : ITag { }
+
+public static void ECS()
+{
+    var store = new EntityStore();
+    
+    var dogType = store.GetArchetype(Tags.Get<Dog>());
+    var catType = store.GetArchetype(Tags.Get<Cat>());
+    Console.WriteLine($"type: {dogType.Name}");     // > type: [#Dog]
+    
+    var dog = dogType.CreateEntity();
+    var cat = catType.CreateEntity();
+    
+    var dogs = store.Query().AnyTags(Tags.Get<Dog>());
+    var all  = store.Query().AnyTags(Tags.Get<Dog, Cat>());
+    
+    Console.WriteLine($"dogs: {dogs.EntityCount}"); // > dogs: 1
+    Console.WriteLine($"all: {all.EntityCount}");   // > all: 2
+}
+```
+
+</td>
+<td>
+
+```csharp
+class Animal { }
+class Dog : Animal { }
+class Cat : Animal { }
+
+public static void OOP()
+{
+    var animals = new List<object>();
+    
+    Type dogType = typeof(Dog);
+    Type catType = typeof(Cat);
+    Console.WriteLine($"type: {dogType.Name}");     // > type: Dog
+    
+    animals.Add(new Dog());
+    animals.Add(new Cat());
+    
+    var dogs = animals.Where(animal => animal is Dog);
+    var all  = animals.Where(animal => animal is Dog or Cat);
+    
+    Console.WriteLine($"dogs: {dogs.Count()}");     // > dogs: 1
+    Console.WriteLine($"all: {all.Count()}");       // > all: 2
+}
+```
+
+</td>
+</tr>
+</table>
+
+
+
+
+
+
+
 
 
 ## Script
