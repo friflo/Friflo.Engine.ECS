@@ -302,6 +302,16 @@ The following comparison show the difference in modeling types in **ECS** vs **O
   </td>  
 </tr>
 <tr>
+  <td><i>Code coupling</i><br/>
+      Data lives in components - behavior in systems.<br/>
+      New behaviors does not affect existing code.
+  </td>
+  <td><br/>
+      Data and behavior are both in classes.<br/>
+      New behaviors may add dependencies or side effects.
+  </td>  
+</tr>
+<tr>
   <td><i>Storage</i><br/>
       An Archetype is also a container of entities.
   </td>
@@ -325,6 +335,11 @@ The following comparison show the difference in modeling types in **ECS** vs **O
   <td><br/>
     Is controlled by access modifiers:<br/>
     public, protected, internal and private.
+  </td>
+</tr>
+
+<tr>
+  <td colspan="2" align="center"><b>Example</b>
   </td>
 </tr>
 
