@@ -280,6 +280,7 @@ public static class Examples
             .AddComponent(new Position(1, 2, 3))
             .AddTag<MyTag1>()
             .Apply();
+        
         Console.WriteLine($"entity: {entity}");             // > entity: id: 1  [Position, #MyTag1]
     }
     
