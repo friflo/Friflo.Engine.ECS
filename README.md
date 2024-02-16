@@ -277,12 +277,58 @@ public static void AddTags()
 
 ## Archetype
 
+An `Archetype` defines a specific set of components and tags for its entities.  
+At the same time it is also a container of entities with exactly this combination of components and types.  
+
+The following comparison show the difference in modeling types in **ECS** vs **OOP**.  
+
 <table>
 <tr>
 <th>ECS - Composition</th>
 <th>OOP - Polymorphism</th>
 </tr>
 <tr>
+  <td><i>Inheritance</i><br/>
+      ECS does not use inheritance. It prefers composition over inheritance.
+  </td>
+  <td><br/>
+      Common OPP is based on inheritance.
+  </td>  
+</tr>
+<tr>
+  <td><i>Storage</i><br/>
+      An Archetype is also a container of entities.
+  </td>
+  <td><br/>
+      Organizing specific types in containers is part of application code.
+  </td>
+</tr>
+<tr>
+  <td><i>Runtime complexity O() of queries for specific types</i><br/>
+      O(size of result set)
+  </td>
+  <td><br/>
+      O(size of all objects)
+  </td>
+</tr>
+<tr>
+  <td><i>Memory layout</i><br/>
+      Continuous memory in heap.
+  </td>
+  <td><br/>
+      Randomly placed in heap.
+  </td>
+</tr>
+<tr>
+  <td><i>Changing a type</i><br/>
+      Supported by adding/removing tags or components.
+  </td>
+  <td><br/>
+      Type is fixed an cannot be changed.
+  </td>
+</tr>
+<tr>
+
 <td style="padding:0px;">
 
 ```csharp
@@ -335,13 +381,6 @@ Console.WriteLine($"all: {all.Count()}");   // > all: 2
 </td>
 </tr>
 </table>
-
-
-
-
-
-
-
 
 
 ## Script
