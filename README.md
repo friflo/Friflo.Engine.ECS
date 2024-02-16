@@ -289,9 +289,10 @@ The following comparison show the difference in modeling types in **ECS** vs **O
 </tr>
 <tr>
   <td><i>Inheritance</i><br/>
-      ECS does not use inheritance. It prefers composition over inheritance.
+      ECS does not utilize inheritance.<br/>
+      It prefers composition over inheritance.
   </td>
-  <td><br/>
+  <td><br/><br/>
       Common OPP is based on inheritance.
   </td>  
 </tr>
@@ -328,7 +329,17 @@ The following comparison show the difference in modeling types in **ECS** vs **O
   </td>
 </tr>
 <tr>
+  <td><i>Component access / visibility</i><br/>
+    Having a reference to an EntityStore enables<br/>
+    unrestricted reading and changing of components.
+  </td>
+  <td><br/>
+    Is controlled by access modifiers:<br/>
+    public, protected, internal and private.
+  </td>
+</tr>
 
+<tr>
 <td style="padding:0px;">
 
 ```csharp
