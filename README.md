@@ -285,7 +285,7 @@ public static void AddTags()
 <tr>
 <td style="padding:0px;">
 
-```csharp
+```csharp { .no-copy }
 // No base class Animal - Composition over Inheritance
 struct Dog : ITag { }
 struct Cat : ITag { }
@@ -311,7 +311,7 @@ Console.WriteLine($"all: {all.Count}");     // > all: 2
 </td>
 <td style="padding:0px;">
 
-```csharp
+```csharp { .no-copy }
 class Animal { }
 class Dog : Animal { }
 class Cat : Animal { }
