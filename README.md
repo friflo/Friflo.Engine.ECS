@@ -285,11 +285,10 @@ public static void AddTags()
 <tr>
 <td style="padding:0px;">
 
-```csharp { .no-copy }
-// No base class Animal - Composition over Inheritance
+```csharp
+// No base class Animal in ECS
 struct Dog : ITag { }
 struct Cat : ITag { }
-
 
 
 var store = new EntityStore();
@@ -311,17 +310,16 @@ Console.WriteLine($"all: {all.Count}");     // > all: 2
 </td>
 <td style="padding:0px;">
 
-```csharp { .no-copy }
+```csharp
 class Animal { }
 class Dog : Animal { }
 class Cat : Animal { }
 
 
+var animals = new List<Animal>();
 
-var animals = new List<object>();
-
-Type dogType = typeof(Dog);
-Type catType = typeof(Cat);
+var dogType = typeof(Dog);
+var catType = typeof(Cat);
 Console.WriteLine(dogType.Name);            // > Dog
 
 animals.Add(new Dog());

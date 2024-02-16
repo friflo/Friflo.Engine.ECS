@@ -12,7 +12,7 @@ namespace Tests.ECS;
 public static class ExampleECS
 {
 
-// No base class Animal - ECS: Composition over Inheritance
+// No base class Animal in ECS
 struct Dog : ITag { }
 struct Cat : ITag { }
 
@@ -21,8 +21,8 @@ public static void ECS()
 {
     var store = new EntityStore();
     
-    var dogType = store.GetArchetype(Tags.Get<Dog>());
-    var catType = store.GetArchetype(Tags.Get<Cat>());
+    Archetype dogType = store.GetArchetype(Tags.Get<Dog>());
+    Archetype catType = store.GetArchetype(Tags.Get<Cat>());
     Console.WriteLine(dogType.Name);            // [#Dog]
     
     var dog = dogType.CreateEntity();
@@ -50,10 +50,10 @@ class Cat : Animal { }
 [Test]
 public static void OOP()
 {
-    var animals = new List<object>();
+    var animals = new List<Animal>();
     
-    Type dogType = typeof(Dog);
-    Type catType = typeof(Cat);
+    var dogType = typeof(Dog);
+    var catType = typeof(Cat);
     Console.WriteLine(dogType.Name);            // > Dog
     
     animals.Add(new Dog());
