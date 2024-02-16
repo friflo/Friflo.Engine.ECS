@@ -85,11 +85,11 @@ public static class Test_Query
         AreEqual("QueryChunks[1]  Components: [Position, Rotation, Scale3, MyComponent1]",                  query4.Chunks.ToString());
         AreEqual("QueryChunks[1]  Components: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",    query5.Chunks.ToString());
         
-        AreEqual(2, query1.Chunks.EntityCount);
-        AreEqual(2, query2.Chunks.EntityCount);
-        AreEqual(2, query3.Chunks.EntityCount);
-        AreEqual(2, query4.Chunks.EntityCount);
-        AreEqual(2, query5.Chunks.EntityCount);
+        AreEqual(2, query1.Chunks.Count);
+        AreEqual(2, query2.Chunks.Count);
+        AreEqual(2, query3.Chunks.Count);
+        AreEqual(2, query4.Chunks.Count);
+        AreEqual(2, query5.Chunks.Count);
         
         var tags = Tags.Get<TestTag>();
         AreEqual("Query: [Position, #TestTag]  Count: 0",                                                 query1.AllTags(tags).ToString());

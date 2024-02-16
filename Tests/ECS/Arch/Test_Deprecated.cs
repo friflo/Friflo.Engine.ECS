@@ -19,4 +19,16 @@ public static class Test_Deprecated
         var archetype = store.GetArchetype(default);
         AreEqual(0, archetype.EntityCount); // replaced by Count
     }
+    
+    
+    [Test]
+    public static void Test_Deprecated_QueryChunk_EntityCount()
+    {
+        var store = new EntityStore();
+        _ = store.Query<Position>()                                                 .Chunks.EntityCount;
+        _ = store.Query<Position, Rotation>()                                       .Chunks.EntityCount;
+        _ = store.Query<Position, Rotation, Scale3>()                               .Chunks.EntityCount;
+        _ = store.Query<Position, Rotation, Scale3, MyComponent1>()                 .Chunks.EntityCount;
+        _ = store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>()   .Chunks.EntityCount;
+    }
 }

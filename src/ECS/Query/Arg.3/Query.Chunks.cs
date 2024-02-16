@@ -2,8 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable InconsistentNaming
@@ -59,8 +61,12 @@ public readonly struct QueryChunks<T1, T2, T3>  : IEnumerable <Chunks<T1, T2, T3
 {
     private readonly    ArchetypeQuery<T1, T2, T3>  query;
 
-    public              int                         EntityCount => query.Count;
-    public  override    string                      ToString()  => query.GetQueryChunksString();
+    public              int     Count => query.Count;
+    
+    [Obsolete($"Renamed to {nameof(Count)}")] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public              int     EntityCount => query.Count;
+    
+    public  override    string  ToString()  => query.GetQueryChunksString();
 
     internal QueryChunks(ArchetypeQuery<T1, T2, T3> query) {
         this.query = query;
