@@ -173,8 +173,8 @@ public static class Test_Tags
         var query1 = store.Query(sig).AllTags(Tags.Get<TestTag>());
         var query2 = store.Query(sig).AllTags(Tags.Get<TestTag, TestTag2>());
         
-        AreEqual("Query: [Position, #TestTag]  EntityCount: 0",             query1.ToString());
-        AreEqual("Query: [Position, #TestTag, #TestTag2]  EntityCount: 0",  query2.ToString());
+        AreEqual("Query: [Position, #TestTag]  Count: 0",             query1.ToString());
+        AreEqual("Query: [Position, #TestTag, #TestTag2]  Count: 0",  query2.ToString());
     }
     
     [Test]
@@ -301,8 +301,8 @@ public static class Test_Tags
         AreEqual(1,                                     archTestTagAll.EntityCount);
         {
             var query  = store.Query().AllTags(Tags.Get<TestTag>());
-            AreEqual("Query: [#TestTag]  EntityCount: 2",   query.ToString());
-            AreEqual("Entity[2]",                           query.Entities.ToString());
+            AreEqual("Query: [#TestTag]  Count: 2",     query.ToString());
+            AreEqual("Entity[2]",                       query.Entities.ToString());
             int count   = 0;
             foreach (var entity in query.Entities) {
                 switch (count) {
@@ -314,7 +314,7 @@ public static class Test_Tags
             AreEqual(2, count);
         } {
             var query  = store.Query().AllTags(Tags.Get<TestTag2>());
-            AreEqual("Query: [#TestTag2]  EntityCount: 1", query.ToString());
+            AreEqual("Query: [#TestTag2]  Count: 1", query.ToString());
             int count   = 0;
             foreach (var entity in query.Entities) {
                 count++;
@@ -323,7 +323,7 @@ public static class Test_Tags
             AreEqual(1, count);
         } { 
             var query = store.Query().AllTags(Tags.Get<TestTag, TestTag2>());
-            AreEqual("Query: [#TestTag, #TestTag2]  EntityCount: 1", query.ToString());
+            AreEqual("Query: [#TestTag, #TestTag2]  Count: 1", query.ToString());
             int count   = 0;
             foreach (var entities in query.Entities) {
                 count++;

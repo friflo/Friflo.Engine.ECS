@@ -279,7 +279,7 @@ public class ArchetypeQuery
             sb.Length -= 2;
         }
         sb.Append(']');
-        sb.Append("  EntityCount: ");
+        sb.Append("  Count: ");
         sb.Append(Count);
         return sb.ToString();
     }
