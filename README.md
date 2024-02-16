@@ -123,6 +123,7 @@ When testing the examples use a debugger to check entity state changes while ste
 
 Examples showing typical use cases of the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
 
+**General**
 - [EntityStore](#entitystore)
 - [Entity](#entity)
 - [Component](#component)
@@ -133,10 +134,10 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Child entities](#child-entities)
 - [Event](#event)
 - [Signal](#signal)
-- [Query](#query)
+- [Query entities](#query-entities)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
 
-[Optimization Examples](#optimization-examples)
+**Optimization**
 
 - [Parallel Query Job](#parallel-query-job)
 - [Query Vectorization - SIMD](#query-vectorization---simd)
@@ -497,7 +498,7 @@ public static void AddSignalHandler()
 ```
 
 
-## Query
+## Query entities
 
 As described in the intro queries are a fundamental feature of an ECS.  
 **Friflo.Engine.ECS** support queries by any combination of component types and tags.
@@ -570,8 +571,9 @@ public static void EnumerateQueryChunks()
     }
 }
 ```
-
 <br/><br/>
+
+
 
 # Optimization Examples
 
