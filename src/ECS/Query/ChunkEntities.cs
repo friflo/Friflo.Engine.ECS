@@ -4,7 +4,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -20,6 +24,7 @@ namespace Friflo.Engine.ECS;
 /// Its unlikely to enumerate <see cref="ChunkEntities"/> in an application.<br/>
 /// The recommended methods used by an application are <see cref="Ids"/>, <see cref="this[int]"/> or <see cref="EntityAt"/>.  
 /// </remarks>
+[DebuggerTypeProxy(typeof(ChunkEntitiesDebugView))]
 public readonly struct ChunkEntities : IEnumerable<Entity>
 {
 #region public properties
@@ -167,4 +172,29 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
 
     // --- IDisposable
     public void Dispose() { }
+}
+
+[ExcludeFromCodeCoverage]
+internal class ChunkEntitiesDebugView
+{
+    [Browse(RootHidden)]
+    public              Entity[]        Entities => GetEntities();
+
+    [Browse(Never)]
+    private readonly    ChunkEntities   chunkEntities;
+        
+    internal ChunkEntitiesDebugView(ChunkEntities chunkEntities)
+    {
+        this.chunkEntities = chunkEntities;
+    }
+    
+    private Entity[] GetEntities()
+    {
+        var entities = new Entity[chunkEntities.Length];
+        int n = 0; 
+        foreach (var entity in chunkEntities) {
+            entities[n++] = entity;
+        }
+        return entities;
+    }
 }
