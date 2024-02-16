@@ -193,7 +193,7 @@ public static class Test_StructComponent
         player2.AddComponent<Rotation>();   // changes Archetype of player2
         AreEqual(0,         posType.Count);
         AreEqual(2,         posRotType.Count);
-        AreEqual(2,         store.EntityCount);
+        AreEqual(2,         store.Count);
         var node = store.GetEntityNode(1);          // check node fields are reset to default values
         IsTrue  (player1 == store.GetEntityById(node.Id));
         AreEqual(0,         node.ChildCount);
@@ -483,7 +483,7 @@ public static class Test_StructComponent
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
         AreEqual(2, store.Entities.Count);
         AreEqual(2, arch0.Count);
         AreEqual(2, arch0.Entities.Count);
@@ -491,7 +491,7 @@ public static class Test_StructComponent
         entity1.DeleteEntity();
         entity2.DeleteEntity();
         
-        AreEqual(0, store.EntityCount);
+        AreEqual(0, store.Count);
         AreEqual(0, store.Entities.Count);
         AreEqual(0, arch0.Count);
         AreEqual(0, arch0.Entities.Count);
@@ -505,7 +505,7 @@ public static class Test_StructComponent
         var entity1 = store.CreateEntity();
         entity1.AddComponent<Position>();
         
-        AreEqual(1, store.EntityCount);
+        AreEqual(1, store.Count);
         AreEqual(1, store.Entities.Count);
         AreEqual(0, arch0.Count);
         AreEqual(0, arch0.Entities.Count);
@@ -513,7 +513,7 @@ public static class Test_StructComponent
         AreEqual(1, arch1.Entities.Count);
         
         entity1.RemoveComponent<Position>();
-        AreEqual(1, store.EntityCount);
+        AreEqual(1, store.Count);
         AreEqual(1, store.Entities.Count);
         AreEqual(1, arch0.Count);
         AreEqual(1, arch0.Entities.Count);

@@ -230,13 +230,13 @@ public static class Test_StructHeapRaw
         var store   = new RawEntityStore();
         var arch    = store.GetArchetype(ComponentTypes.Get<Position>());
         var entity  = store.CreateEntity(arch);
-        Mem.AreEqual(1,     store.EntityCount);
+        Mem.AreEqual(1,     store.Count);
         Mem.AreEqual(1,     arch.Count);
         Mem.IsTrue(store.DeleteEntity(entity));
-        Mem.AreEqual(0,     store.EntityCount);
+        Mem.AreEqual(0,     store.Count);
         Mem.AreEqual(0,     arch.Count);
         Mem.IsTrue(!store.DeleteEntity(entity));
-        Mem.AreEqual(0,     store.EntityCount);
+        Mem.AreEqual(0,     store.Count);
         Mem.AreEqual(0,     arch.Count);
     }
     

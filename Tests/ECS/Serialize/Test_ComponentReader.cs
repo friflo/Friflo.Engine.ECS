@@ -36,7 +36,7 @@ public static class Test_ComponentReader
         AssertChildEntity(child);
         var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
         AreEqual(2,     type.Count);
-        AreEqual(2,     store.EntityCount);
+        AreEqual(2,     store.Count);
         
         // --- read root DataEntity again
         root.Position   = default;
@@ -44,7 +44,7 @@ public static class Test_ComponentReader
         root            = converter.DataEntityToEntity(rootNode, store, out _);
         AssertRootEntity(root, 2);
         AreEqual(2,     type.Count);
-        AreEqual(2,     store.EntityCount);
+        AreEqual(2,     store.Count);
         
         // --- read child DataEntity again
         child.Position  = default;
@@ -52,7 +52,7 @@ public static class Test_ComponentReader
         child           = converter.DataEntityToEntity(childNode, store, out _);
         AssertChildEntity(child);
         AreEqual(2,     type.Count);
-        AreEqual(2,     store.EntityCount);
+        AreEqual(2,     store.Count);
     }
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
@@ -131,13 +131,13 @@ public static class Test_ComponentReader
         for (int n = 2; n <= 6; n++) {
             converter.DataEntityToEntity(new DataEntity { pid = n }, store, out _);
         }
-        AreEqual(6,     store.EntityCount);
+        AreEqual(6,     store.Count);
         
         dataRoot    = new DataEntity { pid = 1, children = new List<long> { 6, 4, 2, 5 } };
         root        = converter.DataEntityToEntity(dataRoot, store, out _);
         
         AreEqual(new [] { 6, 4, 2, 5 }, root.ChildIds.ToArray());
-        AreEqual(6,     store.EntityCount);
+        AreEqual(6,     store.Count);
     }
     
     /// <summary>test structure change in <see cref="ComponentReader.SetEntityArchetype"/></summary>
@@ -290,7 +290,7 @@ public static class Test_ComponentReader
         AssertChildEntity(child);
         // var type = store.GetArchetype(Signature.Get<Position, Scale3>());
         // AreEqual(2,     type.EntityCount);
-        AreEqual(2,     store.EntityCount);
+        AreEqual(2,     store.Count);
         
         // --- read same DataEntity again
         // root.Position   = default;
@@ -301,7 +301,7 @@ public static class Test_ComponentReader
         AssertRootEntity(root, 0);// 0 -> Fliox deserializer allocates memory for component structs
         AssertChildEntity(child);
         // AreEqual(2,     type.EntityCount);
-        AreEqual(2,     store.EntityCount);
+        AreEqual(2,     store.Count);
     }
     
     [Test]
@@ -427,7 +427,7 @@ public static class Test_ComponentReader
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 20, childIds[n]);
         }
-        AreEqual(1,     store.EntityCount);
+        AreEqual(1,     store.Count);
     }
     
     [Test]
@@ -456,7 +456,7 @@ public static class Test_ComponentReader
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 2, childIds[n]);
         }
-        AreEqual(1,     store.EntityCount);
+        AreEqual(1,     store.Count);
     }
     
     [Test]

@@ -323,7 +323,7 @@ public static class Test_Entity_Tree
         
         AreEqual(0,         root.ChildCount);
         IsTrue  (child.Parent.IsNull);
-        AreEqual(2,         store.EntityCount);
+        AreEqual(2,         store.Count);
     }
     
     [Test]
@@ -377,7 +377,7 @@ public static class Test_Entity_Tree
         AreEqual(0,             root.AddChild(child));
         IsTrue(root ==          child.Parent);
         AreEqual(treeNode,      child.TreeMembership);
-        AreEqual(2,             store.EntityCount);
+        AreEqual(2,             store.Count);
         var node0 = store.GetEntityNode(0);
         var node2 = store.GetEntityNode(2);
         AreEqual("id: 0",                                   node0.ToString());
@@ -463,7 +463,7 @@ public static class Test_Entity_Tree
         AreEqual(0, child.AddChild(subChild));
         AreEqual(1, events.Seq);
         
-        AreEqual(3,         store.EntityCount);
+        AreEqual(3,         store.Count);
         IsTrue(root ==      child.Parent);
         IsTrue(root ==      subChild.Store.StoreRoot);
         var childArchetype = child.Archetype;
@@ -478,7 +478,7 @@ public static class Test_Entity_Tree
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
         AreEqual(2,         childArchetype.Count);
-        AreEqual(2,         store.EntityCount);
+        AreEqual(2,         store.Count);
         AreEqual(0,         root.ChildCount);
         AreEqual(floating,  subChild.TreeMembership);
         IsNull  (child.Archetype);

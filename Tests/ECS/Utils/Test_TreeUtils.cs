@@ -313,11 +313,11 @@ public static class Test_TreeUtils
         
         var tree        = new ExplorerItemTree(root, "test-tree");
         var items = new [] { tree.RootItem };
-        AreEqual(1,         store.EntityCount);
+        AreEqual(1,         store.Count);
      
         // try remove root item
         TreeUtils.RemoveExplorerItems(items);
-        AreEqual(1,         store.EntityCount);
+        AreEqual(1,         store.Count);
     }
     #endregion
     

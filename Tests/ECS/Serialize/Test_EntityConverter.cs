@@ -30,7 +30,7 @@ public static class Test_EntityConverter
         
         AreEqual(2,             entity2.Id);
         AreEqual(0,             entity2.ChildEntities.Count);
-        AreEqual(1,             store.EntityCount);
+        AreEqual(1,             store.Count);
         AreEqual("Entity[0]",   entity2.ChildEntities.ToString());
         AreEqual("entities: 1", store.ToString());
     }
@@ -51,7 +51,7 @@ public static class Test_EntityConverter
         AreEqual(NullNode,              node8.Flags);      // diff_flags
         AreEqual(8,                     node8.Id);
         AreEqual(5,                     node8.ParentId);   // diff_parent
-        AreEqual(1,                     store.EntityCount);
+        AreEqual(1,                     store.Count);
         
         // --- create child 8
         var entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
@@ -59,7 +59,7 @@ public static class Test_EntityConverter
         AreEqual(Created,               node8.Flags);
         AreEqual(8,                     node8.Id);
         AreEqual(5,                     node8.ParentId);
-        AreEqual(2,                     store.EntityCount);
+        AreEqual(2,                     store.Count);
         //
         IsTrue  (                       store.StoreRoot.IsNull);
         store.SetStoreRoot(entity5);
@@ -78,7 +78,7 @@ public static class Test_EntityConverter
         AreEqual(Created,               node8.Flags);      // diff_flags
         AreEqual(8,                     node8.Id);
         AreEqual(0,                     node8.ParentId);   // diff_parent
-        AreEqual(1,                     store.EntityCount);
+        AreEqual(1,                     store.Count);
 
         // --- create parent 5
         var entity5 = converter.DataEntityToEntity(CreateDataEntity(5, new [] { 8 }), store, out _);
@@ -89,7 +89,7 @@ public static class Test_EntityConverter
         AreEqual(Created,               node8.Flags);
         AreEqual(8,                     node8.Id);
         AreEqual(5,                     node8.ParentId);
-        AreEqual(2,                     store.EntityCount);
+        AreEqual(2,                     store.Count);
         
         //
         IsTrue(                         store.StoreRoot.IsNull);
@@ -191,7 +191,7 @@ public static class Test_EntityConverter
             entity.pid = n;
             _ = converter.DataEntityToEntity(entity, store, out _);
         }
-        AreEqual(count, store.EntityCount);
+        AreEqual(count, store.Count);
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();

@@ -163,7 +163,7 @@ public partial class EntityStore
             AssertPid(node.pid, pid);
             return ref node;
         }
-        nodesCount++;
+        entityCount++;
         if (nodesMaxId < id) {
             nodesMaxId = id;
         }

@@ -25,28 +25,31 @@ public abstract partial class EntityStoreBase
 {
 #region public properties
     /// <summary>Number of all entities stored in the entity store</summary>
-    [Browse(Never)] public              int                     EntityCount         => nodesCount;
+    [Browse(Never)] public              int                     Count           => entityCount;
+    
+    [Obsolete($"Renamed to {nameof(Count)}")]
+    [Browse(Never)] public              int                     EntityCount     => entityCount;
     
     /// <summary> Return the largest entity <see cref="Entity.Id"/> store in the entity store. </summary>
-    [Browse(Never)] public              int                     NodeMaxId           => nodesMaxId;
+    [Browse(Never)] public              int                     NodeMaxId       => nodesMaxId;
     
     /// <summary> Return the <see cref="ECS.Systems"/> instance attached to the entity store. </summary>
-                    public              Systems                 Systems             { get; init; }
+                    public              Systems                 Systems         { get; init; }
     
     /// <summary> Initialize a default <see cref="ParallelJobRunner"/> used for <see cref="QueryJob"/>'s. </summary>
-    [Browse(Never)] public              ParallelJobRunner       JobRunner           { get; init; }
+    [Browse(Never)] public              ParallelJobRunner       JobRunner       { get; init; }
 
     /// <summary>Array of <see cref="Archetype"/>'s utilized by the entity store</summary>
     /// <remarks>Each <see cref="Archetype"/> contains all entities of a specific combination of <b>struct</b> components.</remarks>
-                    public ReadOnlySpan<Archetype>              Archetypes          => new (archs, 0, archsCount);
+                    public ReadOnlySpan<Archetype>              Archetypes      => new (archs, 0, archsCount);
     
     /// <summary> Returns the current number of <see cref="Archetypes"/> managed by the entity store. </summary>
-    [Browse(Never)] public              int                     ArchetypeCount      => archsCount;
+    [Browse(Never)] public              int                     ArchetypeCount  => archsCount;
     
     /// <summary>Return all <see cref="UniqueEntity"/>'s in the entity store </summary>
-                    public              QueryEntities           UniqueEntities      => GetUniqueEntities();
+                    public              QueryEntities           UniqueEntities  => GetUniqueEntities();
 
-                    public   override   string                  ToString()          => $"entities: {nodesCount}";
+                    public   override   string                  ToString()      => $"entities: {entityCount}";
     #endregion
 
 #region events
@@ -73,7 +76,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8   - default archetype. has no components & tags
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4   - highest entity id
-    [Browse(Never)] protected           int                     nodesCount;         //  4   - number of all entities
+    [Browse(Never)] protected           int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
     

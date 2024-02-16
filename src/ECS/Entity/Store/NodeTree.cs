@@ -494,7 +494,7 @@ public partial class EntityStore
     /// <remarks> Set <see cref="EntityNode.archetype"/> = null. </remarks>
     internal void DeleteNode(int id)
     {
-        nodesCount--;
+        entityCount--;
         var localNodes  = nodes;
         ref var node    = ref localNodes[id];
         

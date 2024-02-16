@@ -23,7 +23,7 @@ public static class Test_CommandBuffer
             var ecb = store.GetCommandBuffer();
             AreEqual(0, ecb.ComponentCommandsCount);
             ecb.Playback();
-            AreEqual(1, store.EntityCount);
+            AreEqual(1, store.Count);
         }
         
         var pos1 = new Position(1, 1, 1);
@@ -304,14 +304,14 @@ public static class Test_CommandBuffer
             var entity = store.GetEntityById(id);
             IsTrue(     entity.HasComponent<Position>());
             AreEqual(0, ecb.EntityCommandsCount);
-            AreEqual(1, store.EntityCount);
+            AreEqual(1, store.Count);
         } {
             var ecb     = store.GetCommandBuffer();
             ecb.DeleteEntity(id);
             ecb.Playback();
             
             AreEqual(0, ecb.EntityCommandsCount);
-            AreEqual(0, store.EntityCount);
+            AreEqual(0, store.Count);
         }
     }
     
@@ -345,7 +345,7 @@ public static class Test_CommandBuffer
             ecb.DeleteEntity(n + 1);    
         }
         ecb.Playback();
-        Mem.AreEqual(0, store.EntityCount);
+        Mem.AreEqual(0, store.Count);
     }
     
     [Test]

@@ -35,7 +35,7 @@ public static class Test_Serializer
             AreEqual("entity: 10 - event > Add Child[0] = 11", args.ToString());
         };
         entity.AddChild(child);
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
         
         // --- write store entities sync
         {
@@ -70,7 +70,7 @@ public static class Test_Serializer
             AreEqual("entity: 10 - event > Add Child[0] = 11", args.ToString());
         };
         entity.AddChild(child);
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
         
         var entities = new List<Entity> { entity, child, default };
         
@@ -95,7 +95,7 @@ public static class Test_Serializer
         stream.Close();
         AreEqual("[]", str);
         
-        AreEqual(0, store.EntityCount);
+        AreEqual(0, store.Count);
     }
     
     [Test]
@@ -137,7 +137,7 @@ public static class Test_Serializer
         AreEqual("entityCount: 2", result.ToString());
         IsNull(result.error);
         AreEqual(2, result.entityCount);
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
             
         var root        = store.GetEntityById(10);
         AreEqual(11,    root.ChildIds[0]);
@@ -215,7 +215,7 @@ public static class Test_Serializer
             entity.AddTag<TestTag>();
         }
         
-        AreEqual(count, store.EntityCount);
+        AreEqual(count, store.Count);
         
         var stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -241,7 +241,7 @@ public static class Test_Serializer
                 entity.AddComponent(new Position { x = 1, y = 2, z = 3 });
                 entity.AddTag<TestTag>();
             }
-            AreEqual(entityCount, store.EntityCount);
+            AreEqual(entityCount, store.Count);
             serializer.WriteStore(store, stream);
             MemoryStreamAsString(stream);
         }
@@ -255,7 +255,7 @@ public static class Test_Serializer
             var result = serializer.ReadIntoStore(store, stream);
             IsNull  (result.error);
             AreEqual(entityCount, result.entityCount);
-            AreEqual(entityCount, store.EntityCount);
+            AreEqual(entityCount, store.Count);
         }
         Console.WriteLine($"Read(). JSON size: {stream.Length}, entities: {entityCount}, duration: {stopwatch.ElapsedMilliseconds} ms");
         stream.Close();

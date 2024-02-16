@@ -13,8 +13,11 @@ public static class Test_Deprecated
     public static void Test_Deprecated_properties()
     {
         var store = new EntityStore();
+        
+        AreEqual(0, store.EntityCount);     // replaced by Count
+        
         var query = store.Query();
-        AreEqual(0, query.EntityCount); // replaced by Count
+        AreEqual(0, query.EntityCount);     // replaced by Count
         
         var archetype = store.GetArchetype(default);
         AreEqual(0, archetype.EntityCount); // replaced by Count

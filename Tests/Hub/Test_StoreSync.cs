@@ -55,13 +55,13 @@ public static class Test_StoreSync
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
             AreEqual(2,     type.Count);
-            AreEqual(2,     store.EntityCount);
+            AreEqual(2,     store.Count);
         }
         
         // clear entities in store
         store.GetEntityById(10).DeleteEntity();
         store.GetEntityById(11).DeleteEntity();
-        AreEqual(0,     store.EntityCount);
+        AreEqual(0,     store.Count);
         
         // load entities via client async
         for (int n = 0; n < 2; n++) {
@@ -74,7 +74,7 @@ public static class Test_StoreSync
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
             AreEqual(2,     type.Count);
-            AreEqual(2,     store.EntityCount);
+            AreEqual(2,     store.Count);
         }
     }
     
@@ -102,7 +102,7 @@ public static class Test_StoreSync
             IsTrue(         root.HasPosition);
             var type = store.GetArchetype(ComponentTypes.Get<Position>());
             AreEqual(1,     type.Count);
-            AreEqual(1,     store.EntityCount);
+            AreEqual(1,     store.Count);
         }
     }
     
@@ -123,7 +123,7 @@ public static class Test_StoreSync
             AreEqual("entity: 10 - event > Add Child[0] = 11", args.ToString());
         };
         entity.AddChild(child);
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
         
         // --- store entities via client sync
         for (int n = 0; n < 2; n++)
@@ -210,7 +210,7 @@ public static class Test_StoreSync
         client.SyncTasksSynchronous();
         processor.ProcessEvents();
         
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
         var root        = store.GetEntityById(10);
         var child       = store.GetEntityById(11);
         Test_ComponentReader.AssertRootEntity(root, 2);
@@ -220,7 +220,7 @@ public static class Test_StoreSync
         client.entities.Delete(11L);
         client.SyncTasksSynchronous();
         processor.ProcessEvents();
-        AreEqual(0, store.EntityCount);
+        AreEqual(0, store.Count);
     }
     
     /// <summary>Cover <see cref="StoreSync.SubscribeDatabaseChangesAsync"/></summary>
@@ -240,7 +240,7 @@ public static class Test_StoreSync
         await client.SyncTasks();
         processor.ProcessEvents();
         
-        AreEqual(2, store.EntityCount);
+        AreEqual(2, store.Count);
         var root        = store.GetEntityById(10);
         var child       = store.GetEntityById(11);
         Test_ComponentReader.AssertRootEntity(root, 2);
@@ -250,6 +250,6 @@ public static class Test_StoreSync
         client.entities.Delete(11L);
         await client.SyncTasks();
         processor.ProcessEvents();
-        AreEqual(0, store.EntityCount);
+        AreEqual(0, store.Count);
     }
 }

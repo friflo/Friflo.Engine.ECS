@@ -90,8 +90,8 @@ public sealed class RawEntityStore : EntityStoreBase
     private void CreateEntity(Archetype archetype, int id)
     {
         EnsureEntitiesLength(id + 1);
-        var index = nodesCount;
-        nodesCount = index + 1;
+        var index   = entityCount;
+        entityCount = index + 1;
         if (nodesMaxId < id) {
             nodesMaxId = id;
         }
@@ -119,7 +119,7 @@ public sealed class RawEntityStore : EntityStoreBase
         Archetype.MoveLastComponentsTo(archetype, entity.compIndex);
         entity.archIndex = 0;
         entity.compIndex = 0;
-        nodesCount--;
+        entityCount--;
         return true;
     }
 
