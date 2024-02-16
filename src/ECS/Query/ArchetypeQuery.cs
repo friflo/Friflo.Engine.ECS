@@ -26,6 +26,7 @@ public class ArchetypeQuery
     public              int                 Count => Archetype.GetEntityCount(GetArchetypesSpan());
     
     [Obsolete($"Renamed to {nameof(Count)}")]
+    [Browse(Never)]
     public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
     
     /// <summary> Return the number of <c>Chunks</c> returned by the query. </summary>
