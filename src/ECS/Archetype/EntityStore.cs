@@ -76,7 +76,7 @@ public abstract partial class EntityStoreBase
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8   - default archetype. has no components & tags
     // --- nodes
     [Browse(Never)] protected           int                     nodesMaxId;         //  4   - highest entity id
-    [Browse(Never)] protected           int                     entityCount;        //  4   - number of all entities
+    [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key
     
