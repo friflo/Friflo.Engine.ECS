@@ -15,5 +15,8 @@ public static class Test_Deprecated
         var store = new EntityStore();
         var query = store.Query();
         AreEqual(0, query.EntityCount); // replaced by Count
+        
+        var archetype = store.GetArchetype(default);
+        AreEqual(0, archetype.EntityCount); // replaced by Count
     }
 }

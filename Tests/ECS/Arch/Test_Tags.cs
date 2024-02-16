@@ -278,7 +278,7 @@ public static class Test_Tags
         entity.AddTag<TestTag>();
         
         var archetype = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
-        AreEqual(1, archetype.EntityCount);
+        AreEqual(1, archetype.Count);
     }
     
     [Test]
@@ -297,8 +297,8 @@ public static class Test_Tags
         AreEqual("[#TestTag, #TestTag2]  entities: 1",  entity2.Archetype.ToString());
         AreEqual(2,                                     store.EntityCount);
         AreEqual(3,                                     store.Archetypes.Length);
-        AreEqual(1,                                     archTestTag.EntityCount);
-        AreEqual(1,                                     archTestTagAll.EntityCount);
+        AreEqual(1,                                     archTestTag.Count);
+        AreEqual(1,                                     archTestTagAll.Count);
         {
             var query  = store.Query().AllTags(Tags.Get<TestTag>());
             AreEqual("Query: [#TestTag]  Count: 2",     query.ToString());

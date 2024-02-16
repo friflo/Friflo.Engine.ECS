@@ -138,7 +138,7 @@ public static class Test_Batch
         store.Entities.ApplyBatch(batch);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());
-        AreEqual(10, arch.EntityCount);
+        AreEqual(10, arch.Count);
         
         batch.Clear();
         batch.AddTag<TestTag>();
@@ -146,7 +146,7 @@ public static class Test_Batch
         store.Query<Position>().Entities.ApplyBatch(batch);
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
-        AreEqual(10, arch.EntityCount);
+        AreEqual(10, arch.Count);
     }
     
     [Test]
@@ -221,7 +221,7 @@ public static class Test_Batch
         Console.WriteLine($"ApplyBatch() - duration: {sw.ElapsedMilliseconds} ms");
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
-        AreEqual(entityCount, arch.EntityCount);
+        AreEqual(entityCount, arch.Count);
     }
 }
 

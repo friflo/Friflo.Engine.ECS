@@ -29,7 +29,7 @@ public static class Test_StructHeapRaw
             ids[n]  = id;
             var entityArch = store.GetEntityArchetype(id);
             if (arch != entityArch)             Mem.AreSame(arch, entityArch);
-            if (n + 1 != arch.EntityCount)      Mem.FailAreEqual(n + 1, arch.EntityCount);
+            if (n + 1 != arch.Count)      Mem.FailAreEqual(n + 1, arch.Count);
             ref var pos = ref store.GetEntityComponent<Position>(id);
             if (default != pos)                 Mem.FailAreEqual(default, pos);
             pos.x = n;
@@ -63,7 +63,7 @@ public static class Test_StructHeapRaw
         {
             Mem.IsTrue(store.DeleteEntity(ids[n]));
             var expectCount = count + remaining - n - 1;
-            if (expectCount != arch.EntityCount)    Mem.FailAreEqual(expectCount, arch.EntityCount);
+            if (expectCount != arch.Count)    Mem.FailAreEqual(expectCount, arch.Count);
         }
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
         Mem.AreEqual(1024, arch.Capacity);
@@ -91,7 +91,7 @@ public static class Test_StructHeapRaw
                 _ = store.CreateEntity(arch1);
             }
             Console.WriteLine($"CreateEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-            Mem.AreEqual(count + 1, arch1.EntityCount);
+            Mem.AreEqual(count + 1, arch1.Count);
         }
     }
     
@@ -104,14 +104,14 @@ public static class Test_StructHeapRaw
         for (int n = 0; n < count; n++) {
             _ = store.CreateEntity(arch1);
         }
-        Mem.AreEqual(count, arch1.EntityCount);
+        Mem.AreEqual(count, arch1.Count);
         var stopwatch = new Stopwatch();
         stopwatch.Start();
         for (int n = 1; n <= count; n++) {
             Mem.IsTrue(store.DeleteEntity(n));
         }
         Console.WriteLine($"DeleteEntity() - raw. count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        Mem.AreEqual(0, arch1.EntityCount);
+        Mem.AreEqual(0, arch1.Count);
     }
     
     [Test]
@@ -169,7 +169,7 @@ public static class Test_StructHeapRaw
             var id = store.CreateEntity(arch1);
             store.GetEntityComponent<Position>(id).x = count;
         }
-        Mem.AreEqual(QueryCount, arch1.EntityCount);
+        Mem.AreEqual(QueryCount, arch1.Count);
     }
     
     /// use greater than <see cref="ArchetypeUtils.MinCapacity"/> for coverage
@@ -196,7 +196,7 @@ public static class Test_StructHeapRaw
                 store.GetEntityComponent<MyComponent1>(id).a = n;
             }
             Console.WriteLine($"CreateEntity() - raw. count: {Count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-            Mem.AreEqual(Count, arch1.EntityCount);
+            Mem.AreEqual(Count, arch1.Count);
         } {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -231,13 +231,13 @@ public static class Test_StructHeapRaw
         var arch    = store.GetArchetype(ComponentTypes.Get<Position>());
         var entity  = store.CreateEntity(arch);
         Mem.AreEqual(1,     store.EntityCount);
-        Mem.AreEqual(1,     arch.EntityCount);
+        Mem.AreEqual(1,     arch.Count);
         Mem.IsTrue(store.DeleteEntity(entity));
         Mem.AreEqual(0,     store.EntityCount);
-        Mem.AreEqual(0,     arch.EntityCount);
+        Mem.AreEqual(0,     arch.Count);
         Mem.IsTrue(!store.DeleteEntity(entity));
         Mem.AreEqual(0,     store.EntityCount);
-        Mem.AreEqual(0,     arch.EntityCount);
+        Mem.AreEqual(0,     arch.Count);
     }
     
     [Test]

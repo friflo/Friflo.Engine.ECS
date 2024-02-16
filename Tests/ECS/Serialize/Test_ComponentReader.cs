@@ -35,7 +35,7 @@ public static class Test_ComponentReader
         AssertRootEntity(root, 2);
         AssertChildEntity(child);
         var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
-        AreEqual(2,     type.EntityCount);
+        AreEqual(2,     type.Count);
         AreEqual(2,     store.EntityCount);
         
         // --- read root DataEntity again
@@ -43,7 +43,7 @@ public static class Test_ComponentReader
         root.Scale3     = default;
         root            = converter.DataEntityToEntity(rootNode, store, out _);
         AssertRootEntity(root, 2);
-        AreEqual(2,     type.EntityCount);
+        AreEqual(2,     type.Count);
         AreEqual(2,     store.EntityCount);
         
         // --- read child DataEntity again
@@ -51,7 +51,7 @@ public static class Test_ComponentReader
         child.Scale3    = default;
         child           = converter.DataEntityToEntity(childNode, store, out _);
         AssertChildEntity(child);
-        AreEqual(2,     type.EntityCount);
+        AreEqual(2,     type.Count);
         AreEqual(2,     store.EntityCount);
     }
     

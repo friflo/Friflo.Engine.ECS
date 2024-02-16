@@ -152,7 +152,7 @@ public static class Test_Serializer
         AreEqual(0,     child.Tags.Count);
             
         var type = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag, TestTag3>());
-        AreEqual(1,     type.EntityCount);
+        AreEqual(1,     type.Count);
     }
     
     [Test]

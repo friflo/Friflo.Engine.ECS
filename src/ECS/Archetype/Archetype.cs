@@ -32,7 +32,11 @@ public sealed class Archetype
 {
 #region     public properties
     /// <summary>Number of entities / components stored in the <see cref="Archetype"/></summary>
-    [Browse(Never)] public              int                 EntityCount     => entityCount;
+    [Browse(Never)] public              int                 Count           => entityCount;
+    
+    [Obsolete($"Renamed to {nameof(Count)}")]
+    [Browse(Never)]
+    public                              int                 EntityCount     => entityCount;
     
     [Browse(Never)] public              string              Name            => GetName();
     

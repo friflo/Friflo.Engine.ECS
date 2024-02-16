@@ -22,7 +22,7 @@ public static class Test_StructHeap
             var entity = arch1.CreateEntity();
             entities[n] = entity;
             Mem.AreSame(arch1,              entity.Archetype);
-            Mem.AreEqual(n + 1,             arch1.EntityCount);
+            Mem.AreEqual(n + 1,             arch1.Count);
             Mem.IsTrue(new Position() == entity.Position); // Position is present & default
             entity.Position.x = n;
         }
@@ -49,7 +49,7 @@ public static class Test_StructHeap
         const int remaining = 500;
         for (int n = remaining; n < count; n++) {
             entities[n].DeleteEntity();
-            Mem.AreEqual(count + remaining - n - 1, arch1.EntityCount);
+            Mem.AreEqual(count + remaining - n - 1, arch1.Count);
         }
         Mem.AreEqual(1024, arch1.Capacity);
         for (int n = 0; n < remaining; n++) {
@@ -111,7 +111,7 @@ public static class Test_StructHeap
             _ = arch1.CreateEntity();
         }
         Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        Mem.AreEqual(count + 1, arch1.EntityCount);
+        Mem.AreEqual(count + 1, arch1.Count);
         // assert initial capacity was sufficient
         Assert.AreEqual(storeCapacity, store.Capacity);
         Assert.AreEqual(arch1Capacity, arch1.Capacity);
@@ -139,7 +139,7 @@ public static class Test_StructHeap
             for (int n = 0; n < count; n++) {
                 _ = arch1.CreateEntity();
             }
-            Mem.AreEqual(count, arch1.EntityCount);
+            Mem.AreEqual(count, arch1.Count);
         }
         Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }

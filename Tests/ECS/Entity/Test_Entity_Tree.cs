@@ -467,7 +467,7 @@ public static class Test_Entity_Tree
         IsTrue(root ==      child.Parent);
         IsTrue(root ==      subChild.Store.StoreRoot);
         var childArchetype = child.Archetype;
-        AreEqual(3,         childArchetype.EntityCount);
+        AreEqual(3,         childArchetype.Count);
         AreEqual(treeNode,  subChild.TreeMembership);
         NotNull (child.Archetype);
         NotNull (child.Store);
@@ -477,7 +477,7 @@ public static class Test_Entity_Tree
         events.RemoveHandler();
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
-        AreEqual(2,         childArchetype.EntityCount);
+        AreEqual(2,         childArchetype.Count);
         AreEqual(2,         store.EntityCount);
         AreEqual(0,         root.ChildCount);
         AreEqual(floating,  subChild.TreeMembership);

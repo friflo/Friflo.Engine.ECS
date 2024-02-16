@@ -54,7 +54,7 @@ public static class Test_StoreSync
             Test_ComponentReader.AssertRootEntity(root, 2);
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
-            AreEqual(2,     type.EntityCount);
+            AreEqual(2,     type.Count);
             AreEqual(2,     store.EntityCount);
         }
         
@@ -73,7 +73,7 @@ public static class Test_StoreSync
             Test_ComponentReader.AssertRootEntity(root, 2);
             Test_ComponentReader.AssertChildEntity(child);
             var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
-            AreEqual(2,     type.EntityCount);
+            AreEqual(2,     type.Count);
             AreEqual(2,     store.EntityCount);
         }
     }
@@ -101,7 +101,7 @@ public static class Test_StoreSync
             var root = store.GetEntityById(10);
             IsTrue(         root.HasPosition);
             var type = store.GetArchetype(ComponentTypes.Get<Position>());
-            AreEqual(1,     type.EntityCount);
+            AreEqual(1,     type.Count);
             AreEqual(1,     store.EntityCount);
         }
     }

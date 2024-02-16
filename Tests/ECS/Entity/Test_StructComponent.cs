@@ -158,8 +158,8 @@ public static class Test_StructComponent
         AreSame(type1, type2);
         
         AreEqual(5, store.Archetypes.Length);
-        AreEqual(0, type1.EntityCount);
-        AreEqual(0, type2.EntityCount);
+        AreEqual(0, type1.Count);
+        AreEqual(0, type2.Count);
     }
     
     [Test]
@@ -177,22 +177,22 @@ public static class Test_StructComponent
         var position = new Position { x = 1 };
         player1.AddComponent(position);
         AreEqual(1f,        player1.Position.x);
-        AreEqual(1,         posType.EntityCount);
+        AreEqual(1,         posType.Count);
         AreEqual(1,         posType.EntityIds.Length);
         AreEqual("[Position]  entities: 1", posType.ToString());
         
         
         player1.AddComponent<Rotation>(); // changes Archetype of player1
-        AreEqual(0,         posType.EntityCount);
+        AreEqual(0,         posType.Count);
         AreEqual(1f,        player1.Position.x);
         
         var player2 = store.CreateEntity();
         player2.AddComponent<Position>();
-        AreEqual(1,         posType.EntityCount);
+        AreEqual(1,         posType.Count);
         
         player2.AddComponent<Rotation>();   // changes Archetype of player2
-        AreEqual(0,         posType.EntityCount);
-        AreEqual(2,         posRotType.EntityCount);
+        AreEqual(0,         posType.Count);
+        AreEqual(2,         posRotType.Count);
         AreEqual(2,         store.EntityCount);
         var node = store.GetEntityNode(1);          // check node fields are reset to default values
         IsTrue  (player1 == store.GetEntityById(node.Id));
@@ -255,7 +255,7 @@ public static class Test_StructComponent
         player.AddComponent(rotation);
         var scale    = new Scale3   { x = 3, y = 4 };
         player.AddComponent(scale);
-        AreEqual(1,     type.EntityCount);
+        AreEqual(1,     type.Count);
         AreEqual(1f,    player.Rotation.x);
         AreEqual(2f,    player.Rotation.y);
         AreEqual(3f,    player.Scale3.x);
@@ -382,32 +382,32 @@ public static class Test_StructComponent
         
         var entity1  = store.CreateEntity();
         entity1.AddComponent(new Position { x = 1 });
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(1,     entity1.Archetype.ComponentCount);
         
         entity1.RemoveComponent<Position>();
-        AreEqual(0,     type1.EntityCount);
+        AreEqual(0,     type1.Count);
         AreEqual(0,     entity1.Archetype.ComponentCount);
         
         entity1.AddComponent(new Position { x = 1 });
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(1,     entity1.Archetype.ComponentCount);
         
         entity1.AddComponent(new Rotation { x = 2 });
-        AreEqual(0,     type1.EntityCount);
-        AreEqual(1,     type2.EntityCount);
+        AreEqual(0,     type1.Count);
+        AreEqual(1,     type2.Count);
         AreEqual(2,     entity1.Archetype.ComponentCount);
         
         entity1.RemoveComponent<Rotation>();
-        AreEqual(1,     type1.EntityCount);
-        AreEqual(0,     type2.EntityCount);
+        AreEqual(1,     type1.Count);
+        AreEqual(0,     type2.Count);
         AreEqual(1f,    entity1.Position.x);
         AreEqual(1,     entity1.Archetype.ComponentCount);
         //
         var entity2  = store.CreateEntity();
         entity2.AddComponent(new Position { x = 1 });   // possible alloc: resize type1.entityIds
         entity2.RemoveComponent<Position>();            // note: remove the last id in type1.entityIds => only type1.entityCount--  
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(0,     entity2.Archetype.ComponentCount);
         
         var start = Mem.GetAllocatedBytes();
@@ -415,7 +415,7 @@ public static class Test_StructComponent
         entity2.RemoveComponent<Position>();
         Mem.AssertNoAlloc(start);
         
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(0,     entity2.Archetype.ComponentCount);
     }
     
@@ -437,7 +437,7 @@ public static class Test_StructComponent
             entity.RemoveComponent<Position>();
         }
         Mem.AssertNoAlloc(start);
-        AreEqual(3, posType.EntityCount);
+        AreEqual(3, posType.Count);
     }
     
     [Test]
@@ -485,7 +485,7 @@ public static class Test_StructComponent
         
         AreEqual(2, store.EntityCount);
         AreEqual(2, store.Entities.Count);
-        AreEqual(2, arch0.EntityCount);
+        AreEqual(2, arch0.Count);
         AreEqual(2, arch0.Entities.Count);
         
         entity1.DeleteEntity();
@@ -493,7 +493,7 @@ public static class Test_StructComponent
         
         AreEqual(0, store.EntityCount);
         AreEqual(0, store.Entities.Count);
-        AreEqual(0, arch0.EntityCount);
+        AreEqual(0, arch0.Count);
         AreEqual(0, arch0.Entities.Count);
     }
     
@@ -507,17 +507,17 @@ public static class Test_StructComponent
         
         AreEqual(1, store.EntityCount);
         AreEqual(1, store.Entities.Count);
-        AreEqual(0, arch0.EntityCount);
+        AreEqual(0, arch0.Count);
         AreEqual(0, arch0.Entities.Count);
-        AreEqual(1, arch1.EntityCount);
+        AreEqual(1, arch1.Count);
         AreEqual(1, arch1.Entities.Count);
         
         entity1.RemoveComponent<Position>();
         AreEqual(1, store.EntityCount);
         AreEqual(1, store.Entities.Count);
-        AreEqual(1, arch0.EntityCount);
+        AreEqual(1, arch0.Count);
         AreEqual(1, arch0.Entities.Count);
-        AreEqual(0, arch1.EntityCount);
+        AreEqual(0, arch1.Count);
         AreEqual(0, arch1.Entities.Count);
     }
         

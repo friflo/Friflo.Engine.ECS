@@ -21,32 +21,32 @@ public static class Test_RawEntities
         
         var entity1  = store.CreateEntity(1);
         store.AddEntityComponent(entity1, new Position { x = 1 });
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
         
         store.RemoveEntityComponent<Position>(entity1);
-        AreEqual(0,     type1.EntityCount);
+        AreEqual(0,     type1.Count);
         AreEqual(0,     store.GetEntityComponentCount(entity1));
         
         store.AddEntityComponent(entity1, new Position { x = 1 });
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
         
         store.AddEntityComponent(entity1, new Rotation { x = 2 });
-        AreEqual(0,     type1.EntityCount);
-        AreEqual(1,     type2.EntityCount);
+        AreEqual(0,     type1.Count);
+        AreEqual(1,     type2.Count);
         AreEqual(2,     store.GetEntityComponentCount(entity1));
         
         store.RemoveEntityComponent<Rotation>(entity1);
-        AreEqual(1,     type1.EntityCount);
-        AreEqual(0,     type2.EntityCount);
+        AreEqual(1,     type1.Count);
+        AreEqual(0,     type2.Count);
         AreEqual(1f,    store.GetEntityComponent<Position>(entity1).x);
         AreEqual(1,     store.GetEntityComponentCount(entity1));
         //
         var entity2  = store.CreateEntity(2);
         store.AddEntityComponent(entity2, new Position { x = 1 });    // possible alloc: resize type1.entityIds
         store.RemoveEntityComponent<Position>(entity2);               // note: remove the last id in type1.entityIds => only type1.entityCount--  
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(0,     store.GetEntityComponentCount(entity2));
         
         var start = Mem.GetAllocatedBytes();
@@ -54,7 +54,7 @@ public static class Test_RawEntities
         store.RemoveEntityComponent<Position>(entity2);
         Mem.AssertNoAlloc(start);
         
-        AreEqual(1,     type1.EntityCount);
+        AreEqual(1,     type1.Count);
         AreEqual(0,     store.GetEntityComponentCount(entity2));
     }
     
@@ -72,17 +72,17 @@ public static class Test_RawEntities
         var entity     = store.CreateEntity(1);
         
         store.AddEntityTags(entity, testTag);
-        AreEqual(1,         tags1.EntityCount);
+        AreEqual(1,         tags1.Count);
         AreEqual(testTag,   store.GetEntityTags(entity));
         
         store.AddEntityTags(entity, testTag2);
-        AreEqual(0,         tags1.EntityCount);
-        AreEqual(1,         tags12.EntityCount);
+        AreEqual(0,         tags1.Count);
+        AreEqual(1,         tags12.Count);
         AreEqual(testTag12, store.GetEntityTags(entity));
         
         store.RemoveEntityTags(entity, testTag);
-        AreEqual(0,         tags12.EntityCount);
-        AreEqual(1,         tags2.EntityCount);
+        AreEqual(0,         tags12.Count);
+        AreEqual(1,         tags2.Count);
         
         AreEqual(4,         store.Archetypes.Length);
     }
