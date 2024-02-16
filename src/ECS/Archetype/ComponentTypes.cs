@@ -4,8 +4,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Friflo.Engine.ECS.Utils;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // Hard rule: this file MUST NOT use type: Entity
 
@@ -18,6 +22,7 @@ namespace Friflo.Engine.ECS;
 /// component <see cref="System.Type"/>'s of an <see cref="Archetype"/>.
 /// </summary>
 [CLSCompliant(true)]
+[DebuggerTypeProxy(typeof(ComponentTypesDebugView))]
 public struct ComponentTypes : IEnumerable<ComponentType>
 {
     internal        BitSet  bitSet;     // 32
@@ -269,4 +274,28 @@ public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
     // --- IEnumerator
     public          bool MoveNext() => bitSetEnumerator.MoveNext();
     public readonly void Dispose() { }
+}
+
+[ExcludeFromCodeCoverage]
+internal class ComponentTypesDebugView
+{
+    [Browse(RootHidden)]
+    public              ComponentType[] Types => GetComponentTypes();
+
+    [Browse(Never)]
+    private readonly    ComponentTypes  componentTypes;
+        
+    internal ComponentTypesDebugView(ComponentTypes componentTypes) {
+        this.componentTypes = componentTypes;
+    }
+    
+    private ComponentType[] GetComponentTypes()
+    {        
+        var items = new ComponentType[componentTypes.Count];
+        int n = 0;
+        foreach (var type in componentTypes) {
+            items[n++] = type;
+        }
+        return items;
+    }
 }

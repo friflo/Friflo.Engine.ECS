@@ -4,6 +4,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -13,9 +15,11 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Return the <see cref="IComponent"/>'s added to an <see cref="Entity"/>.
 /// </summary>
+[DebuggerTypeProxy(typeof(EntityComponentsDebugView))]
 public readonly struct EntityComponents : IEnumerable<EntityComponent>
 {
     // --- internal fields
+    [Browse(Never)]
     private  readonly   Entity  entity;     // 16
 
     /// <summary>Return the number of <see cref="IComponent"/>'s of an entity.</summary>
@@ -112,5 +116,20 @@ public readonly struct EntityComponent
     
     internal IComponent GetValue() {
         return entity.archetype.heapMap[type.StructIndex].GetComponentDebug(entity.compIndex);
+    }
+}
+
+[ExcludeFromCodeCoverage]
+internal class EntityComponentsDebugView
+{
+    [Browse(RootHidden)]
+    public              IComponent[]        Components => entityComponents.GetComponentArray();
+
+    [Browse(Never)]
+    private readonly    EntityComponents    entityComponents;
+        
+    internal EntityComponentsDebugView(EntityComponents entityComponents)
+    {
+        this.entityComponents = entityComponents;
     }
 }

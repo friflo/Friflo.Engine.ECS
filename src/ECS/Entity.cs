@@ -182,12 +182,8 @@ public readonly struct Entity : IEquatable<Entity>
     public              long                    Pid             => store.nodes[Id].pid;
 
     /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
-    [Browse(Never)]
-    public              EntityComponents        EntityComponents=> new EntityComponents(this);
+    public              EntityComponents        Components      => new EntityComponents(this);
     
-    /// <summary>Used only to display entity components in the debugger. Use <see cref="EntityComponents"/> instead.</summary>
-    internal            IComponent[]            Components      => EntityComponents.GetComponentArray();
-
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
     public              ReadOnlySpan<Script>    Scripts         => new (EntityUtils.GetScripts(this));
 
@@ -281,10 +277,7 @@ public readonly struct Entity : IEquatable<Entity>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
     /// </remarks>
-    [Browse(Never)] public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
-    
-    /// <summary>Used only to display child entities in the debugger. Use <see cref="ChildEntities"/> instead.</summary>
-                    internal Entity[]           Children        => ChildEntities.ToArray();
+     public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
     
     /// <summary>Return the ids of the child entities.</summary>
     [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);

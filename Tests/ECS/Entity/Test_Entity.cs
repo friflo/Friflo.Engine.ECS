@@ -119,7 +119,7 @@ public static class Test_Entity
         var clone = store.CloneEntity(entity);
         
         AreEqual("Tags: [#TestTag]",            clone.Tags.ToString());
-        AreEqual("Components: [EntityName]",    clone.EntityComponents.ToString());
+        AreEqual("Components: [EntityName]",    clone.Components.ToString());
         AreEqual(1,                             clone.Scripts.Length);
         NotNull(clone.GetScript<TestScript1>());
         AreNotSame(script1,                     clone.Scripts[0]);
@@ -127,7 +127,7 @@ public static class Test_Entity
         // --- clone entity with non blittable component
         entity.AddComponent<NonBlittableArray>();
         clone = store.CloneEntity(entity);
-        AreEqual("Components: [EntityName, NonBlittableArray]",    clone.EntityComponents.ToString());
+        AreEqual("Components: [EntityName, NonBlittableArray]",    clone.Components.ToString());
         
         // --- clone entity with non blittable script
         entity.RemoveComponent<NonBlittableArray>();

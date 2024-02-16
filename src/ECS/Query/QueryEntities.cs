@@ -3,7 +3,10 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable once CheckNamespace
@@ -12,6 +15,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Provide the result set of an <see cref="ArchetypeQuery"/> as a set of <see cref="Entity"/>'s.
 /// </summary>
+[DebuggerTypeProxy(typeof(QueryEntitiesDebugView))]
 public readonly struct QueryEntities  : IEnumerable <Entity>
 {
     public              int             Count       => query.EntityCount;
@@ -110,4 +114,29 @@ public struct EntitiesEnumerator : IEnumerator<Entity>
     
     // --- IDisposable
     public void Dispose() { }
+}
+
+[ExcludeFromCodeCoverage]
+internal class QueryEntitiesDebugView
+{
+    [Browse(RootHidden)]
+    public              Entity[]        Entities => GetEntities();
+
+    [Browse(Never)]
+    private readonly    QueryEntities   queryEntities;
+        
+    internal QueryEntitiesDebugView(QueryEntities queryEntities)
+    {
+        this.queryEntities = queryEntities;
+    }
+    
+    private Entity[] GetEntities()
+    {
+        var entities = new Entity[queryEntities.Count];
+        int n = 0; 
+        foreach (var entity in queryEntities) {
+            entities[n++] = entity;
+        }
+        return entities;
+    }
 }

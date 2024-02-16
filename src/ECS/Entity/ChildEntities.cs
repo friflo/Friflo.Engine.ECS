@@ -4,6 +4,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -15,11 +17,12 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Return the child entities of an <see cref="Entity"/>.
 /// </summary>
+[DebuggerTypeProxy(typeof(ChildEntitiesDebugView))]
 public readonly struct ChildEntities : IEnumerable<Entity>
 {
     // --- public properties
-    [Browse(Never)]     public              int                 Count           => childCount;
-    [Browse(Never)]     public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
+                        public              int                 Count           => childCount;
+                        public              ReadOnlySpan<int>   Ids             => new (childIds, 0, childCount);
     
                         public              Entity              this[int index] => new Entity(store, Ids[index]);
                         public override     string              ToString()      => $"Entity[{childCount}]";
@@ -95,4 +98,17 @@ public struct ChildEnumerator : IEnumerator<Entity>
     public void Dispose() { }
 }
 
+[ExcludeFromCodeCoverage]
+internal class ChildEntitiesDebugView
+{
+    [Browse(RootHidden)]
+    public  Entity[]        Entities => childEntities.ToArray();
 
+    [Browse(Never)]
+    private ChildEntities   childEntities;
+        
+    internal ChildEntitiesDebugView(ChildEntities childEntities)
+    {
+        this.childEntities = childEntities;
+    }
+}

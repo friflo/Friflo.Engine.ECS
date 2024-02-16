@@ -148,7 +148,7 @@ public static class Test_Serializer
             
         var child       = store.GetEntityById(11);
         AreEqual(0,     child.ChildCount);
-        AreEqual(0,     child.EntityComponents.Count);
+        AreEqual(0,     child.Components.Count);
         AreEqual(0,     child.Tags.Count);
             
         var type = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag, TestTag3>());

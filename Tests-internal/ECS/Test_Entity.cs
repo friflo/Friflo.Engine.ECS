@@ -14,13 +14,13 @@ public static class Test_Entity
     {
         var store = new EntityStore();
         var entity = store.CreateEntity();
-        
-        AreEqual(0, entity.Components.Length);
+        var components = entity.Components.GetComponentArray(); 
+        AreEqual(0, components.Length);
         
         entity.AddComponent(new Position(1, 2, 3));
         entity.AddComponent(new EntityName("test"));
        
-        var components = entity.Components;
+        components = entity.Components.GetComponentArray();
         AreEqual(2, components.Length);
         AreEqual("test",                ((EntityName)components[0]).value);
         AreEqual(new Position(1,2,3),   (Position)components[1]);
@@ -38,7 +38,7 @@ public static class Test_Entity
         var sub12   = store.CreateEntity();
         var sub21   = store.CreateEntity();
         
-        AreEqual(0, entity.Children.Length);
+        AreEqual(0, entity.ChildEntities.ToArray().Length);
         
         entity.AddChild(child1);
         entity.AddChild(child2);
@@ -46,13 +46,13 @@ public static class Test_Entity
         child1.AddChild(sub12);
         child2.AddChild(sub21);
         
-        var children = entity.Children;
+        var children = entity.ChildEntities.ToArray();
         AreEqual(2, children.Length);
         AreEqual(child1, children[0]);
         AreEqual(child2, children[1]);
         
-        AreEqual(2, child1.Children.Length);
-        AreEqual(1, child2.Children.Length);
+        AreEqual(2, child1.ChildEntities.Count);
+        AreEqual(1, child2.ChildEntities.Count);
     }
     
     [Test]

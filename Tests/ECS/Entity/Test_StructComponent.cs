@@ -249,7 +249,7 @@ public static class Test_StructComponent
         var type    = store.GetArchetype(ComponentTypes.Get<Rotation, Scale3>());
         
         var player = store.CreateEntity();
-        AreEqual(0,     player.EntityComponents.Count);
+        AreEqual(0,     player.Components.Count);
         
         var rotation = new Rotation { x = 1, y = 2 };
         player.AddComponent(rotation);
@@ -261,7 +261,7 @@ public static class Test_StructComponent
         AreEqual(3f,    player.Scale3.x);
         AreEqual(4f,    player.Scale3.y);
         
-        var components  =       player.EntityComponents;
+        var components  =       player.Components;
         AreEqual(2,             components.Count);
 
         int count = 0;
@@ -287,29 +287,29 @@ public static class Test_StructComponent
     {
         var store   = new EntityStore();
         var player  = store.CreateEntity();
-        AreEqual(0,     player.EntityComponents.Count);
+        AreEqual(0,     player.Components.Count);
         
         var rotation = new Rotation { x = 1, y = 2 };
         player.AddComponent(rotation);
         var scale    = new Scale3   { x = 3, y = 4 };
         player.AddComponent(scale);
-        AreEqual("Components: [Rotation, Scale3]",     player.EntityComponents.ToString());
+        AreEqual("Components: [Rotation, Scale3]",     player.Components.ToString());
         {
-            IEnumerable<EntityComponent> components = player.EntityComponents;
+            IEnumerable<EntityComponent> components = player.Components;
             int count = 0;
             foreach (var _ in components) {
                 count++;
             }
             AreEqual(2, count);
         } {
-            IEnumerable components = player.EntityComponents;
+            IEnumerable components = player.Components;
             int count = 0;
             foreach (var _ in components) {
                 count++;
             }
             AreEqual(2, count);
         } {
-            ComponentEnumerator enumerator = player.EntityComponents.GetEnumerator();
+            ComponentEnumerator enumerator = player.Components.GetEnumerator();
             while (enumerator.MoveNext()) { }
             enumerator.Reset();
             

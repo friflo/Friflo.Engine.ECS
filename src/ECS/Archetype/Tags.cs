@@ -4,8 +4,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Friflo.Engine.ECS.Utils;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -14,6 +18,7 @@ namespace Friflo.Engine.ECS;
 /// <see cref="Tags"/> define a set of <see cref="ITag"/>'s used to query entities in an <see cref="EntityStoreBase"/>.
 /// </summary>
 [CLSCompliant(true)]
+[DebuggerTypeProxy(typeof(TagsDebugView))]
 public struct Tags : IEnumerable<TagType>
 {
     internal            BitSet   bitSet;  // 32
@@ -245,4 +250,28 @@ public struct TagsEnumerator : IEnumerator<TagType>
     // --- IEnumerator
     public          bool MoveNext() => bitSetEnumerator.MoveNext();
     public readonly void Dispose() { }
+}
+
+[ExcludeFromCodeCoverage]
+internal class TagsDebugView
+{
+    [Browse(RootHidden)]
+    public              TagType[]   TagTypes => GetItems();
+
+    [Browse(Never)]
+    private readonly    Tags        tags;
+        
+    internal TagsDebugView(Tags tags) {
+        this.tags = tags;
+    }
+    
+    private TagType[] GetItems() {
+        
+        var items = new TagType[tags.Count];
+        int n = 0;
+        foreach (var tag in tags) {
+            items[n++] = tag;
+        }
+        return items;
+    }
 }
