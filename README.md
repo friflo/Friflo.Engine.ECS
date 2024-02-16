@@ -281,7 +281,7 @@ public static void AddTags()
 ## Archetype
 
 An `Archetype` defines a specific set of components and tags for its entities.  
-At the same time it is also a container of entities with exactly this combination of components and types.  
+At the same time it is also a container of entities with exactly this combination of components and tags.  
 
 The following comparison show the difference in modeling types in **ECS** vs **OOP**.  
 
