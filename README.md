@@ -5,11 +5,20 @@
 [![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml) 
 
 
-The package **Friflo.Engine.ECS** is part of an in-development Game Editor which is documented at [Architecture.md](Architecture.md).
+# Content
+- [Entity Component System](#entity-component-system)
+- [Features](#features)
+- [Latest features](#latest-features)
+- [Development](#development)
+- [Examples](#examples)
+- [Optimization Examples](#optimization-examples)
 
+
+
+# Entity Component System
+
+The package **Friflo.Engine.ECS** is part of an in-development Game Editor which is documented at [Architecture.md](Architecture.md).  
 **Friflo.Engine.ECS** implements an [Entity Component System - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).
-
-# Entity Component System - ECS
 
 The core feature of an Entity Component System are:
 
@@ -29,7 +38,7 @@ The core feature of an Entity Component System are:
   all bytes stored in L1 cache lines - typically 64 or 128 - are utilized.  
 
 
-## Features
+# Features
 
 - Performance
     - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
@@ -60,7 +69,7 @@ The core feature of an Entity Component System are:
 <img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
 
 
-## Latest features
+# Latest features
 
 Features in this list are also explained in the Examples.
 
@@ -85,7 +94,7 @@ Features in this list are also explained in the Examples.
 
 
 
-## Development
+# Development
 
 The library supports target framework **.NET Standard 2.1** or higher.  
 This includes .NET Core, .NET 5, .NET 6, .NET 7 and .NET 8.  
