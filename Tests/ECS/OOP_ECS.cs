@@ -12,7 +12,7 @@ namespace Tests.ECS;
 public static class ExampleECS
 {
 
-// No base class Animal - ECS uses: Composition over Inheritance
+// No base class Animal - ECS: Composition over Inheritance
 struct Dog : ITag { }
 struct Cat : ITag { }
 
@@ -23,7 +23,7 @@ public static void ECS()
     
     var dogType = store.GetArchetype(Tags.Get<Dog>());
     var catType = store.GetArchetype(Tags.Get<Cat>());
-    Console.WriteLine($"type: {dogType.Name}");     // > type: [#Dog]
+    Console.WriteLine(dogType.Name);            // [#Dog]
     
     var dog = dogType.CreateEntity();
     var cat = catType.CreateEntity();
@@ -31,8 +31,8 @@ public static void ECS()
     var dogs = store.Query().AnyTags(Tags.Get<Dog>());
     var all  = store.Query().AnyTags(Tags.Get<Dog, Cat>());
     
-    Console.WriteLine($"dogs: {dogs.EntityCount}"); // > dogs: 1
-    Console.WriteLine($"all: {all.EntityCount}");   // > all: 2
+    Console.WriteLine($"dogs: {dogs.Count}");   // > dogs: 1
+    Console.WriteLine($"all: {all.Count}");     // > all: 2
 }
 
 
@@ -54,7 +54,7 @@ public static void OOP()
     
     Type dogType = typeof(Dog);
     Type catType = typeof(Cat);
-    Console.WriteLine($"type: {dogType.Name}");     // > type: Dog
+    Console.WriteLine(dogType.Name);            // > Dog
     
     animals.Add(new Dog());
     animals.Add(new Cat());
@@ -62,8 +62,8 @@ public static void OOP()
     var dogs = animals.Where(animal => animal is Dog);
     var all  = animals.Where(animal => animal is Dog or Cat);
     
-    Console.WriteLine($"dogs: {dogs.Count()}");     // > dogs: 1
-    Console.WriteLine($"all: {all.Count()}");       // > all: 2
+    Console.WriteLine($"dogs: {dogs.Count()}"); // > dogs: 1
+    Console.WriteLine($"all: {all.Count()}");   // > all: 2
 }
 
 

@@ -23,6 +23,9 @@ public class ArchetypeQuery
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
     /// Typically there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
+    public              int                 Count => Archetype.GetEntityCount(GetArchetypesSpan());
+    
+    [Obsolete($"Renamed to {nameof(Count)}")]
     public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
     
     /// <summary> Return the number of <c>Chunks</c> returned by the query. </summary>
@@ -276,7 +279,7 @@ public class ArchetypeQuery
         }
         sb.Append(']');
         sb.Append("  EntityCount: ");
-        sb.Append(EntityCount);
+        sb.Append(Count);
         return sb.ToString();
     }
     

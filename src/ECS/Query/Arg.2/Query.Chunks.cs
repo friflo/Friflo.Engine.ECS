@@ -53,7 +53,7 @@ public readonly struct QueryChunks<T1, T2> : IEnumerable <Chunks<T1,T2>>
 {
     private readonly ArchetypeQuery<T1, T2> query;
 
-    public              int         EntityCount => query.EntityCount;
+    public              int         EntityCount => query.Count;
     public  override    string      ToString()  => query.GetQueryChunksString();
 
     internal QueryChunks(ArchetypeQuery<T1, T2> query) {

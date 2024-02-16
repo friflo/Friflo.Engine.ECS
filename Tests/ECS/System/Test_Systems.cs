@@ -38,7 +38,7 @@ public class MySystem_Arg1 : ComponentSystem
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
     public override void OnUpdate()
     {
-        Mem.AreEqual(1000, query.EntityCount);
+        Mem.AreEqual(1000, query.Count);
         var store       = query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position>());
         int chunkCount  = 0;
