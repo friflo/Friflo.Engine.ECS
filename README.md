@@ -108,8 +108,10 @@ Library:
 - Unit test execution: ~ 1 second.
 - Size of `Friflo.Engine.ECS.dll`: ~ 180 kb. The implementation: ~ 14.000 LOC.
 - Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
-- The library is not using [unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
 - The C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
+- The library is not using [unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
+- No use of C# preprocessor directives.
+- Deterministic dll build.
 - No 3rd party dependencies.
 - It requires **Friflo.Json.Fliox** which is part of this repository.
 
