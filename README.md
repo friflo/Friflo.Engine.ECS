@@ -741,10 +741,10 @@ version: 1.17.0
 
 Creating entities can be optimized if knowing the components and tags required by an entity in advance.  
 This prevent structural changes every time a component or tag is added to an exiting entity.  
-Entities can be created by using `EntityStore.CreateBatch` or an [CreateEntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CreateEntityBatch.md)
+Entities can be created by using `store.CreateBatch` property or an [CreateEntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CreateEntityBatch.md)
 instance.
 
-It can also be used to multiple entities all with the same set of components and tags.
+It can also be used to create multiple entities all with the same set of components and tags.
 
 ```csharp
 public static void CreateEntityBatch()
