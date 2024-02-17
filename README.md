@@ -455,7 +455,7 @@ In case dealing only with a few thousands of entities `Script`s are fine.
 If dealing with a multiple of 10.000 components should be used for efficiency / performance.
 
 ```csharp
-public class MyScript : Script { }
+public class MyScript : Script { public int data; }
 
 public static void AddScript()
 {
