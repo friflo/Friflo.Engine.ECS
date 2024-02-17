@@ -149,6 +149,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Parallel Query Job](#parallel-query-job)
 - [Query Vectorization - SIMD](#query-vectorization---simd)
 - [EventFilter](#eventfilter)
+- [Create Entity Batch](#create-entity-batch)
 - [Entity Batch](#entity-batch)
 - [Bulk Batch](#bulk-batch)
 - [CommandBuffer](#commandbuffer)
@@ -730,6 +731,38 @@ public static void FilterEntityEvents()
     // > id: 1  [] - hasEvent: False
     // > id: 2  [Position] - hasEvent: True
     // > id: 3  [#MyTag1] - hasEvent: True
+}
+```
+
+
+## Create Entity Batch
+
+version: 1.17.0
+
+Creating entities can be optimized if knowing the components and tags required by an entity in advance.  
+This prevent structural changes every time a component or tag is added to an exiting entity.  
+Entities can be created by using `EntityStore.CreateBatch` or an [CreateEntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CreateEntityBatch.md)
+instance.
+
+It can also be used to multiple entities all with the same set of components and tags.
+
+```csharp
+public static void CreateEntityBatch()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateBatch
+        .Add(new EntityName("test"))
+        .Add(new Position(1,1,1))
+        .CreateEntity();
+    Console.WriteLine($"entity: {entity}");             // > entity: id: 1  "test"  [EntityName, Position]
+
+    // Create a batch - can be cached if needed.
+    var batch = new CreateEntityBatch(store).AddTag<MyTag1>();
+    for (int n = 0; n < 10; n++) {
+        batch.CreateEntity();
+    }
+    var taggedEntities = store.Query().AllTags(Tags.Get<MyTag1>());
+    Console.WriteLine(taggedEntities);                  // > Query: [#MyTag1]  Count: 10
 }
 ```
 
