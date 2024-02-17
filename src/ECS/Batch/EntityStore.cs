@@ -100,4 +100,12 @@ public partial class EntityStoreBase
             componentRemoved.Invoke(new ComponentChanged (this, entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
         }
     }
+    
+    internal CreateBatch GetCreateBatch()
+    {
+        var batch = internBase.createBatch ??= new CreateBatch(this);
+        batch.componentsCreate  = default;
+        batch.tagsCreate        = default;
+        return batch;
+    }
 }

@@ -166,7 +166,7 @@ public sealed class  EntityBatch
     /// <summary>
     /// Adds an add component command to the <see cref="EntityBatch"/> with the given <paramref name="component"/>.
     /// </summary>
-    public EntityBatch AddComponent<T>(T component) where T : struct, IComponent
+    public EntityBatch AddComponent<T>(in T component) where T : struct, IComponent
     {
         var structIndex = StructHeap<T>.StructIndex;
         componentsAdd.      bitSet.SetBit   (structIndex);
