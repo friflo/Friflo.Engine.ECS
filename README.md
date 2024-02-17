@@ -1,8 +1,27 @@
-[![JSON Fliox](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/Json-Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md)    **Friflo.Engine.ECS** ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
+[![JSON Fliox](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/Json-Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md)   ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
 
 [![nuget](https://img.shields.io/nuget/v/Friflo.Engine.ECS.svg?color=blue)](https://www.nuget.org/packages/Friflo.Engine.ECS) 
 [![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml) 
 [![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml) 
+
+
+# Friflo.Engine.ECS
+
+Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as reference.  
+See benchmark results - Mac Mini M2 - at the bottom of this page.  
+This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
+
+Maybe this project is a little late at the party. Published on nuget in January 2024. Started development in September 2023.  
+The package is part of an in-development Game Editor. See [Architecture.md](Architecture.md).  
+
+The library implements all features a common ECS provides.  
+*Unique library features*
+- Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
+  This enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
+- Build up a hierarchy of entities with parent / child relationship - optional.
+- Focus on optimal debugging experience. See screenshot at examples.
+- SIMD Support - optional. Multi thread capable and remainder loop free.
+
 
 
 # Content
@@ -14,23 +33,6 @@
 - [Optimization Examples](#optimization-examples)
 - [ECS Benchmarks](#ecs-benchmarks)
 
-
-# Entity Component System
-
-Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as reference.  
-See benchmark results - Mac Mini M2 - at the bottom of this page.  
-This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
-
-Maybe this project is a little late at the party. Published on nuget in January 2024. Started development in September 2023.  
-The package is part of an in-development Game Editor. See [Architecture.md](Architecture.md).  
-
-The library implements all features a common ECS provides.  
-*Unique library features*
-- Hybrid ECS - supporting both: Scripts similar to `MonoBehaviour`'s as well as struct components and tags.  
-  This enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
-- Build up a hierarchy of entities with parent / child relationship - optional.
-- Focus on optimal debugging experience. See screenshot at examples.
-- SIMD Support - optional. Multi thread capable and remainder loop free.
 
 
 # Features
@@ -423,6 +425,15 @@ WriteLine($"all: {all.Count()}");   // all: 2
   </td>
   <td><br/>
       Randomly placed in heap - high rate of L1 cache misses.
+  </td>
+</tr>
+<tr>
+  <td><i>Instruction pipelining</i><br/>
+      Minimize conditional branches in update loops.<br/>
+      Process multiple components at once using SIMD.
+  </td>
+  <td><br/><br/>
+      Virtual method calls prevent branch prediction.
   </td>
 </tr>
 
