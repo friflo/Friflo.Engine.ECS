@@ -39,13 +39,13 @@ public sealed class CreateEntityBatch
     [Browse(Never)] private  readonly   BatchComponent[]    batchComponents;    //  8
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8
-    [Browse(Never)] internal            Archetype           archetype;          //  8
-    [Browse(Never)] internal            Tags                tagsCreate;         // 32
-    [Browse(Never)] internal            ComponentTypes      componentsCreate;   // 32
+    [Browse(Never)] private             Archetype           archetype;          //  8
+    [Browse(Never)] private             Tags                tagsCreate;         // 32
+    [Browse(Never)] private             ComponentTypes      componentsCreate;   // 32
     #endregion
     
 #region general methods
-    internal CreateEntityBatch(EntityStoreBase store)
+    public CreateEntityBatch(EntityStoreBase store)
     {
         var schema          = EntityStoreBase.Static.EntitySchema;
         componentTypes      = schema.components;
@@ -53,14 +53,21 @@ public sealed class CreateEntityBatch
         this.store          = store;
     }
     
+    /// <summary> Clear all components and tags previously added to the batch. </summary>
+    public void Clear() {
+        componentsCreate  = default;
+        tagsCreate        = default;
+        archetype         = null;
+    }
+    
     private string GetString()
     {
-        var hasAdds     = componentsCreate.Count    > 0 || tagsCreate.Count    > 0;
+        var hasAdds = componentsCreate.Count > 0 || tagsCreate.Count > 0;
         if (!hasAdds) {
             return "empty";
         }
         var sb = new StringBuilder();
-        sb.Append("entity: [");
+        sb.Append("add: [");
         foreach (var component in componentsCreate) {
             sb.Append(component.Name);
             sb.Append(", ");

@@ -231,14 +231,14 @@ public static class Test_Batch
         
         var addTags     = Tags.Get<TestTag2>();
         
-        var batch = store.Batch;
+        var batch = store.CreateBatch;
         AreEqual("empty", batch.ToString());
         batch.Add   <Position>()
             .Add    (new Rotation(1, 2, 3, 4))
             .AddTag <TestTag>()
             .AddTags(addTags);
         
-        AreEqual("entity: [Position, Rotation, #TestTag, #TestTag2]", batch.ToString());
+        AreEqual("add: [Position, Rotation, #TestTag, #TestTag2]", batch.ToString());
         AreEqual(2, batch.ComponentCount);
         AreEqual(2, batch.TagCount);
         
@@ -247,14 +247,17 @@ public static class Test_Batch
         
         AreEqual(new Position(),            entity.Position);
         AreEqual(new Rotation (1,2,3,4),    entity.Rotation);
+        
+        batch.Clear();
+        AreEqual(0, batch.ComponentCount);
+        AreEqual(0, batch.TagCount);
     }
     
     [Test]
     public static void Test_Batch_Create_multiple_entities()
     {
         var store = new EntityStore(PidType.UsePidAsId);
-        
-        var batch = store.Batch;
+        var batch = new CreateEntityBatch(store);
         batch.Add<Position>()
              .Add<Rotation>();
         
@@ -285,7 +288,7 @@ public static class Test_Batch
         
         for (int n = 0; n < count; n++)
         {
-            store.Batch
+            store.CreateBatch
                 .Add    <Position>()
                 .Add    <Rotation>()
                 .AddTag <TestTag>()

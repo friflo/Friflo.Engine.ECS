@@ -104,9 +104,7 @@ public partial class EntityStoreBase
     internal CreateEntityBatch GetCreateBatch()
     {
         var batch = internBase.createEntityBatch ??= new CreateEntityBatch(this);
-        batch.componentsCreate  = default;
-        batch.tagsCreate        = default;
-        batch.archetype         = null;
+        batch.Clear();
         return batch;
     }
 }

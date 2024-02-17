@@ -61,7 +61,8 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     [Browse(Never)] public              EventRecorder       EventRecorder   => GetEventRecorder();
     
-    [Browse(Never)] public              CreateEntityBatch   Batch           => GetCreateBatch();
+    /// <summary> Returns an empty <see cref="CreateEntityBatch"/> used to create entities. </summary>
+    [Browse(Never)] public              CreateEntityBatch   CreateBatch     => GetCreateBatch();
     
     [Browse(Never)] public              int                 Capacity        => nodes.Length;
     #endregion
