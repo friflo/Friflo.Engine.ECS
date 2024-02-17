@@ -861,7 +861,9 @@ Made a subset as the other benchmarks are similar only with different parameters
 
 ## 2. Update query on 100.000 entities with two components - Padding 0.
 
-Interesting fact: SIMD MonoThread beats MultiThread running on 8 cores. 
+*Notable fact*  
+SIMD MonoThread running on a **single core** beats MultiThread running on 8 cores.  
+So other threads can still keep running without competing for CPU resources.  
 
 | Method                          | Mean        | Error     | StdDev    | Median      | Gen0   | Allocated |
 |-------------------------------- |------------:|----------:|----------:|------------:|-------:|----------:|
