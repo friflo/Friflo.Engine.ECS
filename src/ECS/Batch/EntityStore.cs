@@ -101,11 +101,12 @@ public partial class EntityStoreBase
         }
     }
     
-    internal CreateBatch GetCreateBatch()
+    internal CreateEntityBatch GetCreateBatch()
     {
-        var batch = internBase.createBatch ??= new CreateBatch(this);
+        var batch = internBase.createEntityBatch ??= new CreateEntityBatch(this);
         batch.componentsCreate  = default;
         batch.tagsCreate        = default;
+        batch.archetype         = null;
         return batch;
     }
 }

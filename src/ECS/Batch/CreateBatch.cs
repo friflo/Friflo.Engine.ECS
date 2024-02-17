@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -10,7 +11,19 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 
-public sealed class CreateBatch
+/// <summary>
+/// A create batch is used to optimize entity creation.<br/>
+/// Components and tags are buffered before creating an entity with <see cref="CreateEntity"/>. 
+/// </summary>
+/// <remarks>
+/// Multiple entities can be created using the same batch.<br/>
+/// <br/>
+/// Creating an entity via a batch stores the entity directly in the target <see cref="Archetype"/><br/>
+/// This prevents any structural changes caused when creating an entity in steps using<br/>  
+/// <see cref="EntityStore.CreateEntity()"/> an subsequent calls to <see cref="Entity.AddComponent{T}()"/>
+/// and <see cref="Entity.AddTag{TTag}()"/>.
+/// </remarks>
+public sealed class CreateEntityBatch
 {
 #region public properties
     public              int     ComponentCount  => componentsCreate.Count;
@@ -22,12 +35,13 @@ public sealed class CreateBatch
     [Browse(Never)] private  readonly   BatchComponent[]    batchComponents;    //  8
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8
+    [Browse(Never)] internal            Archetype           archetype;          //  8
     [Browse(Never)] internal            Tags                tagsCreate;         // 32
     [Browse(Never)] internal            ComponentTypes      componentsCreate;   // 32
     #endregion
     
 #region general methods
-    internal CreateBatch(EntityStoreBase store)
+    internal CreateEntityBatch(EntityStoreBase store)
     {
         var schema          = EntityStoreBase.Static.EntitySchema;
         componentTypes      = schema.components;
@@ -59,9 +73,13 @@ public sealed class CreateBatch
     #endregion
     
 #region commands
+    /// <summary>
+    /// Creates an entity with the components and tags added previously using<br/>
+    /// <see cref="Add{T}()"/>, <see cref="AddTag{T}"/> or <see cref="AddTags"/>.
+    /// </summary>
     public Entity CreateEntity()
     {
-        var archetype   = store.GetArchetype(componentsCreate, tagsCreate);
+        archetype       ??= store.GetArchetype(componentsCreate, tagsCreate);
         var localStore  = (EntityStore)store;
         ref var node    = ref localStore.CreateEntityInternal(archetype);
         var compIndex   = node.compIndex;
@@ -75,10 +93,11 @@ public sealed class CreateBatch
     }
 
     /// <summary>
-    /// Adds an add component command to the <see cref="EntityBatch"/> with the given <paramref name="component"/>.
+    /// Add the given <paramref name="component"/> that will be added to the entity when calling <see cref="CreateEntity"/>. 
     /// </summary>
-    public CreateBatch Add<T>(in T component) where T : struct, IComponent
+    public CreateEntityBatch Add<T>(in T component) where T : struct, IComponent
     {
+        archetype       = null;
         var structIndex = StructHeap<T>.StructIndex;
         componentsCreate.bitSet.SetBit(structIndex);
         var batchComponent = batchComponents[structIndex] ??= CreateBatchComponent(structIndex);
@@ -86,8 +105,12 @@ public sealed class CreateBatch
         return this;   
     }
     
-    public CreateBatch Add<T>() where T : struct, IComponent
+    /// <summary>
+    /// Add a component that will be added to the entity when calling <see cref="CreateEntity"/>. 
+    /// </summary>
+    public CreateEntityBatch Add<T>() where T : struct, IComponent
     {
+        archetype       = null;
         var structIndex = StructHeap<T>.StructIndex;
         componentsCreate.bitSet.SetBit(structIndex);
         var batchComponent = batchComponents[structIndex] ??= CreateBatchComponent(structIndex);
@@ -95,24 +118,43 @@ public sealed class CreateBatch
         return this;   
     }
     
+    /// <summary>
+    /// Get a component by reference previously added to the batch.<br/>
+    /// This enables creation of multiple entities using the same batch. 
+    /// </summary>
+    public ref T Get<T>() where T : struct, IComponent
+    {
+        var structIndex = StructHeap<T>.StructIndex;
+        if (!componentsCreate.bitSet.Has(structIndex)) throw GetException(structIndex);
+        return ref ((BatchComponent<T>)batchComponents[structIndex]).value;
+    }
+    
+    private static InvalidOperationException GetException(int structIndex)
+    {
+        var componentName = EntityStoreBase.Static.EntitySchema.components[structIndex].Name;
+        return new InvalidOperationException($"Get<>() requires a preceding Add<>(). Component: [{componentName}]");
+    }
+    
     private BatchComponent CreateBatchComponent(int structIndex) {
         return componentTypes[structIndex].CreateBatchComponent();
     }
     
     /// <summary>
-    /// Adds an add tag command to the <see cref="EntityBatch"/>.
+    /// Add a tag that will be added to the entity when calling <see cref="CreateEntity"/>. 
     /// </summary>
-    public CreateBatch AddTag<T>() where T : struct, ITag
+    public CreateEntityBatch AddTag<T>() where T : struct, ITag
     {
+        archetype = null;
         tagsCreate.bitSet.SetBit(TagType<T>.TagIndex);
         return this;
     }
     
     /// <summary>
-    /// Adds an add tags command to the <see cref="EntityBatch"/> adding the given <paramref name="tags"/>.
+    /// Adds the given <paramref name="tags"/> that will be added to the entity when calling <see cref="CreateEntity"/>. 
     /// </summary>
-    public CreateBatch AddTags(in Tags tags)
+    public CreateEntityBatch AddTags(in Tags tags)
     {
+        archetype = null;
         tagsCreate.Add(tags);
         return this;
     }

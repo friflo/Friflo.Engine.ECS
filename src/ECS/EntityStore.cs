@@ -45,25 +45,25 @@ public sealed partial class EntityStore : EntityStoreBase
 {
 #region public properties
     /// <summary> Return the root <see cref="Entity"/> of the store.</summary>
-                    public              Entity          StoreRoot       => storeRoot; // null if no graph origin set
+                    public              Entity              StoreRoot       => storeRoot; // null if no graph origin set
     
     /// <summary> Return all <see cref="Script"/>'s added to <see cref="Entity"/>'s in the <see cref="EntityStore"/>. </summary>
-                    public ReadOnlySpan<EntityScripts>  EntityScripts   => new (entityScripts, 1, entityScriptCount - 1);
+                    public ReadOnlySpan<EntityScripts>      EntityScripts   => new (entityScripts, 1, entityScriptCount - 1);
     
     /// <summary> Return all <see cref="Entity"/>'s stored in the <see cref="EntityStore"/>.</summary>
     /// <remarks>Property is mainly used for debugging.<br/>
     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <b><c>EntityStore.Query()</c></b> methods. </remarks>
-                    public              QueryEntities   Entities        => GetEntities();
+                    public              QueryEntities       Entities        => GetEntities();
     
     /// <summary>
     /// Record adding/removing of components/tags to/from entities if <see cref="ECS.EventRecorder.Enabled"/> is true.<br/>
     /// It is required to filter these events using an <see cref="EventFilter"/>.
     /// </summary>
-    [Browse(Never)] public              EventRecorder   EventRecorder   => GetEventRecorder();
+    [Browse(Never)] public              EventRecorder       EventRecorder   => GetEventRecorder();
     
-    [Browse(Never)] public              CreateBatch     Batch           => GetCreateBatch();
+    [Browse(Never)] public              CreateEntityBatch   Batch           => GetCreateBatch();
     
-    [Browse(Never)] public              int             Capacity        => nodes.Length;
+    [Browse(Never)] public              int                 Capacity        => nodes.Length;
     #endregion
     
 #region events

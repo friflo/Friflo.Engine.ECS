@@ -249,6 +249,29 @@ public static class Test_Batch
         AreEqual(new Rotation (1,2,3,4),    entity.Rotation);
     }
     
+    [Test]
+    public static void Test_Batch_Create_multiple_entities()
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+        
+        var batch = store.Batch;
+        batch.Add<Position>()
+             .Add<Rotation>();
+        
+        batch.Get<Position>().x = 1;
+        var entity1 = batch.CreateEntity();
+        AreEqual(new Position(1, 0, 0), entity1.Position);
+
+        batch.Get<Position>().x = 2;
+        var entity2 = batch.CreateEntity();
+        AreEqual(new Position(2, 0, 0), entity2.Position);
+        
+        var e = Throws<InvalidOperationException>(() => {
+            batch.Get<MyComponent1>();
+        });
+        AreEqual("Get<>() requires a preceding Add<>(). Component: [MyComponent1]", e!.Message);
+    }
+    
     
     [Test]
     public static void Test_Batch_Create_Entity_Perf()
