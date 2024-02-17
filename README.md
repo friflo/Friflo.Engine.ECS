@@ -842,7 +842,7 @@ Made a subset as the other benchmarks are similar only with different parameters
 2. Update query on 100.000 entities with two components
 
 
-### 1. Create 100.000 entities with three components
+## 1. Create 100.000 entities with three components
 
 | Method           | Mean      | Error     | StdDev    | Gen0      | Gen1      | Gen2      | Allocated   |
 |----------------- |----------:|----------:|----------:|----------:|----------:|----------:|------------:|
@@ -860,7 +860,7 @@ Made a subset as the other benchmarks are similar only with different parameters
 | RelEcs           | 56.156 ms | 0.4419 ms | 0.4134 ms | 9000.0000 | 4000.0000 | 3000.0000 | 75714.03 KB |
 
 
-### 2. Update query on 100.000 entities with two components - Padding 0.
+## 2. Update query on 100.000 entities with two components - Padding 0.
 
 Interesting fact: SIMD MonoThread beats MultiThread running on 8 cores. 
 
