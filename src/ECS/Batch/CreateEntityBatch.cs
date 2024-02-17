@@ -26,8 +26,12 @@ namespace Friflo.Engine.ECS;
 public sealed class CreateEntityBatch
 {
 #region public properties
+    /// <summary> Return the of components added to the batch.</summary>
     public              int     ComponentCount  => componentsCreate.Count;
+    
+    /// <summary> Return the of tags added to the batch.</summary>
     public              int     TagCount        => tagsCreate.Count;
+    
     public   override   string  ToString()      => GetString();
     #endregion
 
