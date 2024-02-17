@@ -549,8 +549,10 @@ As described in the intro queries are a fundamental feature of an ECS.
 **Friflo.Engine.ECS** support queries by any combination of component types and tags.
 
 See [ArchetypeQuery - API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md)
-for available query filters to reduce the number of entities / components returned by a query.
+for available query filters to reduce the number of entities / components returned by a query.  
 
+`ArchetypeQuery` and all its generic variants returned by `store.Query()` are designed for reuse.  
+So their references can be stored and used when needed to avoid unnecessary allocations.
 
 ```csharp
 public static void EntityQueries()
