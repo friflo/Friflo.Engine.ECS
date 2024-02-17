@@ -17,18 +17,17 @@
 
 # Entity Component System
 
-Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as re ference.  
+Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as reference.  
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
-Maybe this project is a little late at the party.  
-Published on nuget in January 2024. Started development in September 2023.  
+Maybe this project is a little late at the party. Published on nuget in January 2024. Started development in September 2023.  
 The package is part of an in-development Game Editor. See [Architecture.md](Architecture.md).  
 
 The library implements all features a common ECS provides.  
 *Unique library features*
-- Hybrid ECS - supporting both: Scripts similar to `MonoBehaviour`'s as well as struct components.  
-  This enables easy refactoring between both models. Scripts if OOP is suitable. Struct components for performance.
+- Hybrid ECS - supporting both: Scripts similar to `MonoBehaviour`'s as well as struct components and tags.  
+  This enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
 - Build up a hierarchy of entities with parent / child relationship - optional.
 - Focus on optimal debugging experience. See screenshot at examples.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
@@ -158,12 +157,13 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 ## EntityStore
 
 An `EntityStore` is a container for entities running as an in-memory database.  
-It is highly optimized for efficient storage fast queries and event handling.
+It is highly optimized for efficient storage fast queries and event handling.  
+In other ECS implementations this type is typically called *World*.
 
-The entity store enables to
+The store enables to
 - create entities
 - modify entities - add / remove components, tags, scripts and child entities
-- query for entities with a specific set of components or tags
+- query entities with a specific set of components or tags
 - subscribe events like adding / removing components, tags, scripts and child entities
 
 Multiple stores can be used in parallel and act completely independent from each other.  
@@ -200,8 +200,9 @@ public static void CreateEntity()
 
 ## Component
 
-`Components` are `struct`s used to store data for entity / fields.  
-Multiple components can be added / removed to / from an entity.  
+`Components` are `struct`s used to store data on entities.  
+Multiple components with different types can be added / removed to / from an entity.  
+If adding a component using a type already stored in the entity its value gets updated. 
 
 ```csharp
 [ComponentKey("my-component")]
@@ -263,7 +264,8 @@ public static void GetUniqueEntity()
 ## Tag
 
 `Tags` are `struct`s similar to components - except they store no data.  
-They can be utilized in queries similar as components to restrict the amount of entities returned by a query. 
+They can be utilized in queries similar as components to restrict the amount of entities returned by a query.  
+If adding a tag using a type already attached to the entity the entity remains unchanged.
 
 ```csharp
 public struct MyTag1 : ITag { }
@@ -291,7 +293,7 @@ public static void AddTags()
 An `Archetype` defines a specific set of components and tags for its entities.  
 At the same time it is also a container of entities with exactly this combination of components and tags.  
 
-The following comparison show the difference in modeling types in **ECS** vs **OOP**.  
+The following comparison shows the difference in modeling types in **ECS** vs **OOP**.  
 
 <table>
 <tr>
@@ -431,7 +433,7 @@ WriteLine($"all: {all.Count()}");   // all: 2
 ## Script
 
 `Script`s are similar to components and can be added / removed to / from entities.  
-`Script`s are classes and can be used to store data.  
+`Script`s are classes and can also be used to store data.  
 Additional to components they enable adding behavior in the common OOP style.
 
 In case dealing only with a few thousands of entities `Script`s are fine.  
@@ -459,6 +461,10 @@ public static void AddScript()
 ## Child entities
 
 A typical use case in Games or Editor is to build up a hierarchy of entities.  
+To add an entity as a child to another entity use `Entity.AddChild()`.  
+In case the added child already has a parent it gest removed from the old parent.  
+The children of the added (moved) entity remain being its children.  
+If removing a child from its parent all its children are removed from the hierarchy.
 
 ```csharp
 public static void AddChildEntities()
@@ -506,6 +512,8 @@ public static void AddEventHandlers()
 
 `Signal`s are similar to events. They are used to send and receive custom events on entity level in an application.  
 They have the same characteristics as events described in the section above.  
+The use of `Signal`'s is intended for scenarios when something happens occasionally.  
+This avoids the need to check a state every frame.
 
 ```csharp
 public readonly struct MySignal { } 
@@ -599,6 +607,10 @@ public static void EnumerateQueryChunks()
 
 # Optimization Examples
 
+Examples in this section are targeting for performance optimization.  
+The same functionality can be realized by using the features described in the examples above.  
+Performance optimizations are achieved by SIMD, multi threading / parallelization, batching or bulk operations.
+
 
 ## Parallel Query Job
 
@@ -684,7 +696,7 @@ public static void QueryVectorization()
 An alternative to process entity changes - see section [Event](#event) - are `EventFilter`'s.  
 `EventFilter`'s can be used on its own or within a query like in the example below.  
 All events that need to be filtered - like added/removed components/tags - can be added to the `EventFilter`.  
-E.g. `ComponentAdded<Position>()` or `TagAdded<MyTag1>`.
+E.g. `ComponentAdded<Position>()` or `TagAdded<MyTag1>`.  
 
 ```csharp
 public static void FilterEntityEvents()
@@ -805,6 +817,7 @@ public static void CommandBuffer()
 }
 ```
 <br/><br/>
+
 
 
 # ECS Benchmarks
