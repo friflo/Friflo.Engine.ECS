@@ -25,7 +25,6 @@ The library implements all features a common ECS provides.
 
 
 # Content
-- [Entity Component System](#entity-component-system)
 - [Features](#features)
 - [Latest features](#latest-features)
 - [Development](#development)
