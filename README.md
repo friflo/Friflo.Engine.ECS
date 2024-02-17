@@ -110,7 +110,7 @@ Library:
 - Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
 - The C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
 - The library is not using [unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
-- No usage of custom C# preprocessor directives.
+- No custom C# preprocessor directives to enable / disable features within custom builds.
 - Deterministic dll build.
 - No 3rd party dependencies.
 - It requires **Friflo.Json.Fliox** which is part of this repository.
