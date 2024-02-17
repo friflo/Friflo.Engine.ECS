@@ -90,16 +90,26 @@ public static class Test_Entity
     public static void Test_Entity_debugger_screenshot()
     {
         var store   = new EntityStore();
+        var root    = store.CreateEntity();
+        root.AddComponent(new EntityName("root"));
+        
         var entity  = store.CreateEntity();
+        root.AddChild(entity);
 
         entity.AddComponent(new EntityName("hello entity"));
-        entity.AddComponent(new Position());
+        entity.AddComponent(new Position(10, 10, 0));
         entity.AddTag<MyTag>();
-        entity.AddChild(store.CreateEntity());
-        entity.AddChild(store.CreateEntity());
-        entity.AddChild(store.CreateEntity());
-        entity.AddChild(store.CreateEntity());
-        entity.AddChild(store.CreateEntity());
+        var child1 = store.CreateEntity();
+        var child2 = store.CreateEntity();
+        var child3 = store.CreateEntity();
+        child1.AddComponent(new Position(1, 1, 0));
+        child2.AddComponent(new Position(1, 1, 1));
+        child3.AddComponent(new Position(1, 1, 2));
+        child3.AddTag<MyTag>();
+            
+        entity.AddChild(child1);
+        entity.AddChild(child2);
+        entity.AddChild(child3);
         
         DebuggerEntityScreenshot(entity);
     }
