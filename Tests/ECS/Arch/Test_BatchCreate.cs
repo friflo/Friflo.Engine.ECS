@@ -144,7 +144,7 @@ public static class Test_BatchCreate
     
     
     [Test]
-    public static void Test_BatchCreate_CreateEntity_Perf()
+    public static void Test_BatchCreate_autoReturn_false_Perf()
     {
         int count = 10;  // 10_000_000 ~ #PC: 1019 ms
         var store = new EntityStore(PidType.UsePidAsId);
@@ -163,6 +163,33 @@ public static class Test_BatchCreate
                 .AddTag <TestTag>()
                 .AddTag <TestTag2>()
                 .CreateEntity();
+        }
+        AreEqual(0, store.PooledCreateEntityBatchCount);
+        batch.Return();
+        Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
+        AreEqual(count, store.Count);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
+    }
+    
+    [Test]
+    public static void Test_BatchCreate_autoReturn_false_Perf2()
+    {
+        int count = 10;  // 10_000_000 ~ #PC: 730 ms
+        var store = new EntityStore(PidType.UsePidAsId);
+        store.EnsureCapacity(count);
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        
+        var batch = store.Batch(false)
+            .Add    <Position>()
+            .Add    <Rotation>()
+            .AddTag <TestTag>()
+            .AddTag <TestTag2>();
+        
+        for (int n = 0; n < count; n++)
+        {
+            batch.CreateEntity();
         }
         AreEqual(0, store.PooledCreateEntityBatchCount);
         batch.Return();
