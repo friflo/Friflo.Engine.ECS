@@ -77,7 +77,7 @@ public static class Test_Batch
             .RemoveComponent<Rotation>()
             .AddTag         <TestTag>()
             .RemoveTag      <TestTag2>();
-        AreEqual("add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
+        AreEqual("entity: 1 > add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
         AreEqual(5, batch.CommandCount);
         batch.Apply();
         
@@ -92,7 +92,7 @@ public static class Test_Batch
             .RemoveComponent<EntityName>()
             .AddTags        (addTags)
             .RemoveTags     (removeTags);
-        AreEqual("add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
+        AreEqual("entity: 1 > add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
         AreEqual(4, batch.CommandCount);
         batch.Apply();
         
@@ -147,6 +147,24 @@ public static class Test_Batch
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
         AreEqual(10, arch.Count);
+    }
+    
+    [Test]
+    public static void Test_Batch_BatchInUseException() 
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity(1);
+        var entity2 = store.CreateEntity(2);
+        
+        var e = Throws<BatchInUseException>(() =>
+        {
+            // Evaluating of property batch in debugger - e.g. by hovering or as watch variable 
+            // does not change the entity which called Entity.Batch.
+            var batch1 = entity1.Batch.AddComponent(new Position());
+            AreEqual("entity: 1 > add: [Position]", batch1.ToString());
+            _ = entity2.Batch;
+        });
+        AreEqual("Entity.Batch in use - entity: 1 > add: [Position]", e!.Message);
     }
     
     [Test]

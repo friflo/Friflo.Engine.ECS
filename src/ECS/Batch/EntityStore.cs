@@ -1,19 +1,28 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 
 // ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+
+public class BatchInUseException : InvalidOperationException {
+    internal BatchInUseException(string message) : base (message) {}
+}
+
 public partial class EntityStoreBase
 {
     internal EntityBatch GetBatch(int entityId)
     {
         var batch = internBase.entityBatch ??= new EntityBatch(this);
-        batch.Clear();
-        batch.entityId = entityId;
+        if (!batch.inUse) {
+            batch.entityId = entityId;
+            return batch;
+        }
+        if (entityId != batch.entityId) throw batch.BatchInUseException();
         return batch;
     }
     

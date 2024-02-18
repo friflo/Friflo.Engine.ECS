@@ -57,6 +57,7 @@ public sealed class  EntityBatch
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only if owner == EntityStore
     [Browse(Never)] internal            int                 entityId;           //  4   - used only if owner == EntityStore
     [Browse(Never)] private  readonly   BatchOwner          owner;              //  4
+    [Browse(Never)] internal            bool                inUse;
     [Browse(Never)] internal            Tags                tagsAdd;            // 32
     [Browse(Never)] internal            Tags                tagsRemove;         // 32
     [Browse(Never)] internal            ComponentTypes      componentsAdd;      // 32
@@ -79,6 +80,11 @@ public sealed class  EntityBatch
         componentTypes  = EntityStoreBase.Static.EntitySchema.components;
         owner           = BatchOwner.EntityStore;
         this.store      = store;
+    }
+    
+    internal BatchInUseException BatchInUseException() {
+        var entity = new Entity((EntityStore)store, entityId);
+        return new BatchInUseException($"Entity.Batch in use - {this}");
     }
     
     /// <summary>
@@ -108,6 +114,11 @@ public sealed class  EntityBatch
             return "empty";
         }
         var sb = new StringBuilder();
+        if (entityId != 0) {
+            sb.Append("entity: ");
+            sb.Append(entityId);
+            sb.Append(" > ");
+        }
         if (hasAdds) {
             sb.Append("add: [");
             foreach (var component in componentsAdd) {
@@ -120,9 +131,12 @@ public sealed class  EntityBatch
                 sb.Append(", ");
             }
             sb.Length -= 2;
-            sb.Append("]  ");
+            sb.Append("]");
         }
         if (hasRemoves) {
+            if (hasAdds) {
+                sb.Append("  ");
+            }
             sb.Append("remove: [");
             foreach (var component in componentsRemove) {
                 sb.Append(component.Name);
@@ -143,12 +157,14 @@ public sealed class  EntityBatch
 #region commands
     /// <summary>
     /// Apply the batch commands to the entity the <see cref="Entity.Batch"/> operates.<br/>
-    /// The stored batch commands are not cleared.
     /// </summary>
     public void Apply()
     {
         if (owner == BatchOwner.Application) throw ApplyException();
         store.ApplyBatchTo(this, entityId);
+        Clear();
+        entityId = 0;
+        inUse = false;
     }
     
     private static InvalidOperationException ApplyException() {
@@ -170,6 +186,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddComponent<T>(in T component) where T : struct, IComponent
     {
+        inUse = true;
         var structIndex = StructHeap<T>.StructIndex;
         componentsAdd.      bitSet.SetBit   (structIndex);
         componentsRemove.   bitSet.ClearBit (structIndex);
@@ -193,6 +210,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
+        inUse = true;
         var structIndex = StructHeap<T>.StructIndex;
         componentsRemove.   bitSet.SetBit   (structIndex);
         componentsAdd.      bitSet.ClearBit (structIndex);
@@ -204,6 +222,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
+        inUse = true;
         var tagIndex = TagType<T>.TagIndex;
         tagsAdd.    bitSet.SetBit   (tagIndex);
         tagsRemove. bitSet.ClearBit (tagIndex);
@@ -215,6 +234,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddTags(in Tags tags)
     {
+        inUse = true;
         tagsAdd.    Add     (tags);
         tagsRemove. Remove  (tags);
         return this;
@@ -225,6 +245,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
+        inUse = true;
         var tagIndex = TagType<T>.TagIndex;
         tagsRemove. bitSet.SetBit   (tagIndex);
         tagsAdd.    bitSet.ClearBit (tagIndex);
@@ -236,6 +257,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveTags(in Tags tags)
     {
+        inUse = true;
         tagsAdd.    Remove  (tags);
         tagsRemove. Add     (tags);
         return this;
