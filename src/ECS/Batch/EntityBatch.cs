@@ -142,7 +142,8 @@ public sealed class  EntityBatch
     
 #region commands
     /// <summary>
-    /// Apply the add / remove commands to the entity the <see cref="Entity.Batch"/> operates.
+    /// Apply the batch commands to the entity the <see cref="Entity.Batch"/> operates.<br/>
+    /// The stored batch commands are not cleared.
     /// </summary>
     public void Apply()
     {
@@ -155,7 +156,8 @@ public sealed class  EntityBatch
     }
     
     /// <summary>
-    /// Apply the batch commands to the given <paramref name="entity"/>. 
+    /// Apply the batch commands to the given <paramref name="entity"/>.<br/>
+    /// The stored batch commands are not cleared.
     /// </summary>
     public EntityBatch ApplyTo(Entity entity)
     {

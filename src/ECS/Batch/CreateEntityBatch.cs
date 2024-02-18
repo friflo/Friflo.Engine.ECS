@@ -85,8 +85,8 @@ public sealed class CreateEntityBatch
     
 #region commands
     /// <summary>
-    /// Creates an entity with the components and tags added previously using<br/>
-    /// <see cref="Add{T}()"/>, <see cref="AddTag{T}"/> or <see cref="AddTags"/>.
+    /// Creates an entity with the components and tags previously added.<br/>
+    /// The added batch commands are not cleared.
     /// </summary>
     public Entity CreateEntity()
     {
