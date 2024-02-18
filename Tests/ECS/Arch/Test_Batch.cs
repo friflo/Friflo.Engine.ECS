@@ -127,7 +127,7 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_Batch_QueryEntities_ApplyBatch()
+    public static void Test_Batch_ApplyBatch()
     {
         var store       = new EntityStore();
         for (int n = 0; n < 10; n++) {
@@ -150,7 +150,7 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_Batch_Entity_Perf()
+    public static void Test_Batch_Apply_Perf()
     {
         int count       = 10; // 10_000_000 ~ #PC: 1691 ms
         var store       = new EntityStore();
@@ -184,7 +184,7 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_QueryEntities_ApplyBatch_Perf()
+    public static void Test_Batch_EntityBatch_Perf()
     {
         int count       = 10; // 100_000 ~ #PC: 1943 ms
         int entityCount = 100;
@@ -222,81 +222,6 @@ public static class Test_Batch
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
         AreEqual(entityCount, arch.Count);
-    }
-    
-    [Test]
-    public static void Test_Batch_Create_Entity()
-    {
-        var store = new EntityStore(PidType.UsePidAsId);
-        
-        var addTags     = Tags.Get<TestTag2>();
-        
-        var batch = store.CreateBatch;
-        AreEqual("empty", batch.ToString());
-        batch.Add   <Position>()
-            .Add    (new Rotation(1, 2, 3, 4))
-            .AddTag <TestTag>()
-            .AddTags(addTags);
-        
-        AreEqual("add: [Position, Rotation, #TestTag, #TestTag2]", batch.ToString());
-        AreEqual(2, batch.ComponentCount);
-        AreEqual(2, batch.TagCount);
-        
-        var entity = batch.CreateEntity();
-        AreEqual("id: 1  [Position, Rotation, #TestTag, #TestTag2]", entity.ToString());
-        
-        AreEqual(new Position(),            entity.Position);
-        AreEqual(new Rotation (1,2,3,4),    entity.Rotation);
-        
-        batch.Clear();
-        AreEqual(0, batch.ComponentCount);
-        AreEqual(0, batch.TagCount);
-    }
-    
-    [Test]
-    public static void Test_Batch_Create_multiple_entities()
-    {
-        var store = new EntityStore(PidType.UsePidAsId);
-        var batch = new CreateEntityBatch(store);
-        batch.Add<Position>()
-             .Add<Rotation>();
-        
-        batch.Get<Position>().x = 1;
-        var entity1 = batch.CreateEntity();
-        AreEqual(new Position(1, 0, 0), entity1.Position);
-
-        batch.Get<Position>().x = 2;
-        var entity2 = batch.CreateEntity();
-        AreEqual(new Position(2, 0, 0), entity2.Position);
-        
-        var e = Throws<InvalidOperationException>(() => {
-            batch.Get<MyComponent1>();
-        });
-        AreEqual("Get<>() requires a preceding Add<>(). Component: [MyComponent1]", e!.Message);
-    }
-    
-    
-    [Test]
-    public static void Test_Batch_Create_Entity_Perf()
-    {
-        int count = 10;  // 10_000_000 ~ #PC: 983 ms
-        var store = new EntityStore(PidType.UsePidAsId);
-        store.EnsureCapacity(count);
-        
-        var sw = new Stopwatch();
-        sw.Start();
-        
-        for (int n = 0; n < count; n++)
-        {
-            store.CreateBatch
-                .Add    <Position>()
-                .Add    <Rotation>()
-                .AddTag <TestTag>()
-                .AddTag <TestTag2>()
-                .CreateEntity();
-        }
-        Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
-        AreEqual(count, store.Count);
     }
 }
 
