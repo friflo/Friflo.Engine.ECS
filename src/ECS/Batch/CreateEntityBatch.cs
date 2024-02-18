@@ -60,10 +60,11 @@ public sealed class CreateEntityBatch
     }
     
     /// <summary> Clear all components and tags previously added to the batch. </summary>
-    public void Clear() {
+    public CreateEntityBatch Clear() {
         componentsCreate  = default;
         tagsCreate        = default;
         archetype         = null;
+        return this;
     }
     
     private string GetString()

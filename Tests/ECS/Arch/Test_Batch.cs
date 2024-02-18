@@ -185,7 +185,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_Apply_Perf()
     {
-        int count       = 10; // 10_000_000 ~ #PC: 1691 ms
+        int count       = 10; // 10_000_000 ~ #PC: 1617 ms
         var store       = new EntityStore();
         var entity      = store.CreateEntity();
         var addTags     = Tags.Get<TestTag2>();
@@ -220,7 +220,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_EntityBatch_Perf()
     {
-        int count       = 10; // 100_000 ~ #PC: 1943 ms
+        int count       = 10; // 100_000 ~ #PC: 1796 ms
         int entityCount = 100;
         var store   = new EntityStore();
         for (int n = 0; n < entityCount; n++) {

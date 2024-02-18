@@ -146,25 +146,29 @@ public static class Test_BatchCreate
     [Test]
     public static void Test_BatchCreate_CreateEntity_Perf()
     {
-        int count = 10;  // 10_000_000 ~ #PC: 983 ms
+        int count = 10;  // 10_000_000 ~ #PC: 1019 ms
         var store = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
         
         var sw = new Stopwatch();
         sw.Start();
         
+        var batch = store.Batch(false);
         for (int n = 0; n < count; n++)
         {
-            store.Batch(false)
+            batch
+                .Clear()
                 .Add    <Position>()
                 .Add    <Rotation>()
                 .AddTag <TestTag>()
                 .AddTag <TestTag2>()
                 .CreateEntity();
         }
+        AreEqual(0, store.PooledCreateEntityBatchCount);
+        batch.Return();
         Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
         AreEqual(count, store.Count);
-        AreEqual(0, store.PooledCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
     }
 }
 
