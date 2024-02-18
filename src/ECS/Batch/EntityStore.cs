@@ -130,6 +130,7 @@ public partial class EntityStoreBase
             batch = new CreateEntityBatch(this);
         }
         batch.autoReturn = autoReturn;
+        batch.isReturned = false;
         return batch;
     }
     

@@ -14,10 +14,10 @@ public static class Test_BatchCreate
     [Test]
     public static void Test_BatchCreate_CreateEntity()
     {
-        var store = new EntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var addTags = Tags.Get<TestTag2>();
         
-        var addTags     = Tags.Get<TestTag2>();
-        
+        // --- batch 1
         var batch = store.Batch();
         AreEqual("empty", batch.ToString());
         batch.Add   <Position>()
@@ -29,16 +29,27 @@ public static class Test_BatchCreate
         AreEqual(2, batch.ComponentCount);
         AreEqual(2, batch.TagCount);
         
-        var entity = batch.CreateEntity();
-        AreEqual("id: 1  [Position, Rotation, #TestTag, #TestTag2]", entity.ToString());
+        var entity1 = batch.CreateEntity();
+        AreEqual("id: 1  [Position, Rotation, #TestTag, #TestTag2]", entity1.ToString());
         AreEqual(1, store.PooledCreateEntityBatchCount);
         
-        AreEqual(new Position(),            entity.Position);
-        AreEqual(new Rotation (1,2,3,4),    entity.Rotation);
+        AreEqual(new Position(),            entity1.Position);
+        AreEqual(new Rotation (1, 2, 3, 4), entity1.Rotation);
         
-        batch.Clear();
-        AreEqual(0, batch.ComponentCount);
-        AreEqual(0, batch.TagCount);
+        // --- batch 2
+        batch = store.Batch();
+        AreEqual("empty", batch.ToString());
+        batch.Add   (new Position(1, 2, 3))
+            .Add    <Rotation>()
+            .AddTag <TestTag>()
+            .AddTags(addTags);
+        
+        var entity2 = batch.CreateEntity();
+        AreEqual("id: 2  [Position, Rotation, #TestTag, #TestTag2]", entity2.ToString());
+        AreEqual(1, store.PooledCreateEntityBatchCount);
+        
+        AreEqual(new Position(1, 2, 3),     entity2.Position);
+        AreEqual(new Rotation(),            entity2.Rotation);
     }
     
     [Test]
@@ -142,11 +153,34 @@ public static class Test_BatchCreate
         AreEqual(1, store.PooledCreateEntityBatchCount);
     }
     
+    [Test]
+    public static void Test_BatchCreate_autoReturn_true_Perf()
+    {
+        int count = 10;  // 10_000_000 ~ #PC: 1141 ms
+        var store = new EntityStore(PidType.UsePidAsId);
+        store.EnsureCapacity(count);
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        
+        for (int n = 0; n < count; n++)
+        {
+            store.Batch()
+                .Add    <Position>()
+                .Add    <Rotation>()
+                .AddTag <TestTag>()
+                .AddTag <TestTag2>()
+                .CreateEntity();
+        }
+        AreEqual(1, store.PooledCreateEntityBatchCount);
+        Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
+        AreEqual(count, store.Count);
+    }
     
     [Test]
     public static void Test_BatchCreate_autoReturn_false_Perf()
     {
-        int count = 10;  // 10_000_000 ~ #PC: 1019 ms
+        int count = 10;  // 10 ~ #PC: 1216 ms
         var store = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
         

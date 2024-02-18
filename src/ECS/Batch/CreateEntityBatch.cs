@@ -44,7 +44,7 @@ public sealed class CreateEntityBatch
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8
     [Browse(Never)] internal            bool                autoReturn;         //  4
-    [Browse(Never)] private             bool                isReturned;         //  4
+    [Browse(Never)] internal            bool                isReturned;         //  4
     [Browse(Never)] private             Archetype           archetype;          //  8
     [Browse(Never)] private             Tags                tagsCreate;         // 32
     [Browse(Never)] private             ComponentTypes      componentsCreate;   // 32
