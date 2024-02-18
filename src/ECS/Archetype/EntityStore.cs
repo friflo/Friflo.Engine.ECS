@@ -94,8 +94,8 @@ public abstract partial class EntityStoreBase
         internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
         ///  reused query for <see cref="EntityStoreBase.GetUniqueEntity"/>
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8
-        internal        Stack<EntityBatch>                          entityBatches;          //  8
-        internal        Stack<CreateEntityBatch>                    createEntityBatch;      //  8
+        internal        StackArray<EntityBatch>                     entityBatches;          //  8
+        internal        StackArray<CreateEntityBatch>               createEntityBatch;      //  8
     }
     #endregion
     
@@ -132,8 +132,8 @@ public abstract partial class EntityStoreBase
         defaultArchetype    = new Archetype(config);
         searchKey           = new ArchetypeKey();
         AddArchetype(this, defaultArchetype);
-        internBase.entityBatches        = new Stack<EntityBatch>();
-        internBase.createEntityBatch    = new Stack<CreateEntityBatch>();
+        internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
+        internBase.createEntityBatch    = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
     }
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);

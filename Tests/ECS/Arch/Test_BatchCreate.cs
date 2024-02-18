@@ -63,6 +63,7 @@ public static class Test_BatchCreate
             batch.Get<MyComponent1>();
         });
         AreEqual("Get<>() requires a preceding Add<>(). Component: [MyComponent1]", e!.Message);
+        AreEqual(0, store.PendingCreateEntityBatchCount);
     }
     
     [Test]
@@ -104,6 +105,7 @@ public static class Test_BatchCreate
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.AddTags(default));
         AreEqual(expect, e!.Message);
+        AreEqual(1, store.PendingCreateEntityBatchCount);
     }
     
     [Test]

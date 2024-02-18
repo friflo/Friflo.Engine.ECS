@@ -17,7 +17,7 @@ internal static class TypeExtensions
 
 internal static class ArrayUtils
 {
-    internal static void Resize<T>(ref T[] array, int len)
+    internal static T[] Resize<T>(ref T[] array, int len)
     {
         var newArray = new T[len];
         if (array != null) {
@@ -26,7 +26,7 @@ internal static class ArrayUtils
             var target      = new Span<T>(newArray,      0, curLength);
             source.CopyTo(target);
         }
-        array = newArray;
+        return array = newArray;
     }
     
     internal static void Resize<T>(ref T[] array, int capacity, int count)
