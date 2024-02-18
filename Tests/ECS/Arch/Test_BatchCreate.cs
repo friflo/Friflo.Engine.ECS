@@ -31,7 +31,7 @@ public static class Test_BatchCreate
         
         var entity = batch.CreateEntity();
         AreEqual("id: 1  [Position, Rotation, #TestTag, #TestTag2]", entity.ToString());
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
         
         AreEqual(new Position(),            entity.Position);
         AreEqual(new Rotation (1,2,3,4),    entity.Rotation);
@@ -52,18 +52,18 @@ public static class Test_BatchCreate
         batch.Get<Position>().x = 1;
         var entity1 = batch.CreateEntity();
         AreEqual(new Position(1, 0, 0), entity1.Position);
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
 
         batch.Get<Position>().x = 2;
         var entity2 = batch.CreateEntity();
         AreEqual(new Position(2, 0, 0), entity2.Position);
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
         
         var e = Throws<InvalidOperationException>(() => {
             batch.Get<MyComponent1>();
         });
         AreEqual("Get<>() requires a preceding Add<>(). Component: [MyComponent1]", e!.Message);
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
     }
     
     [Test]
@@ -72,27 +72,27 @@ public static class Test_BatchCreate
         var store = new EntityStore(PidType.UsePidAsId);
         var batch = store.Batch(false).Add<Position>().Add<Rotation>();
         var entity1 = batch.CreateEntity();
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
         
         var entity2 = batch.CreateEntity();
         AreEqual("id: 1  [Position, Rotation]", entity1.ToString());
         AreEqual("id: 2  [Position, Rotation]", entity2.ToString());
         AreEqual("add: [Position, Rotation]",   batch.ToString());
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
 
         batch.Return();
         AreEqual("batch returned", batch.ToString());
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
         
         batch.Return();
         AreEqual("batch returned", batch.ToString());
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
         
         var expect = "batch already returned";
         
         var e = Throws<BatchAlreadyReturnedException> (() => batch.CreateEntity());
         AreEqual(expect, e!.Message);
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.Add(new Position()));
         AreEqual(expect, e!.Message);
@@ -105,7 +105,7 @@ public static class Test_BatchCreate
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.AddTags(default));
         AreEqual(expect, e!.Message);
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
     }
     
     [Test]
@@ -113,20 +113,20 @@ public static class Test_BatchCreate
     {
         var store = new EntityStore(PidType.UsePidAsId);
         var batch = store.Batch();
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
         var entity = batch
             .Add<Position>()
             .Add<Rotation>()
             .CreateEntity();
         AreEqual("id: 1  [Position, Rotation]", entity.ToString());
         AreEqual("batch returned",              batch.ToString());
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
         
         var expect = "batch already returned";
         
         var e = Throws<BatchAlreadyReturnedException> (() => batch.CreateEntity());
         AreEqual(expect, e!.Message);
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.Add(new Position()));
         AreEqual(expect, e!.Message);
@@ -139,7 +139,7 @@ public static class Test_BatchCreate
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.AddTags(default));
         AreEqual(expect, e!.Message);
-        AreEqual(1, store.PendingCreateEntityBatchCount);
+        AreEqual(1, store.PooledCreateEntityBatchCount);
     }
     
     
@@ -164,7 +164,7 @@ public static class Test_BatchCreate
         }
         Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
         AreEqual(count, store.Count);
-        AreEqual(0, store.PendingCreateEntityBatchCount);
+        AreEqual(0, store.PooledCreateEntityBatchCount);
     }
 }
 

@@ -18,7 +18,7 @@ public partial class EntityStoreBase
 {
 #region EntityBatch
     [Browse(Never)]
-    public int PendingEntityBatchCount => internBase.entityBatches.Count;
+    public int PooledEntityBatchCount => internBase.entityBatches.Count;
 
     internal EntityBatch GetBatch(int entityId)
     {
@@ -134,7 +134,7 @@ public partial class EntityStoreBase
     }
     
     [Browse(Never)]
-    public int PendingCreateEntityBatchCount => internBase.createEntityBatch.Count;
+    public int PooledCreateEntityBatchCount => internBase.createEntityBatch.Count;
     
     internal void ReturnCreateBatch(CreateEntityBatch batch) => internBase.createEntityBatch.Push(batch);
     #endregion
