@@ -38,6 +38,8 @@ public static class Test_BatchCreate
         
         // --- batch 2
         batch = store.Batch();
+        AreEqual(0, store.PooledCreateEntityBatchCount);
+        
         AreEqual("empty", batch.ToString());
         batch.Add   (new Position(1, 2, 3))
             .Add    <Rotation>()
