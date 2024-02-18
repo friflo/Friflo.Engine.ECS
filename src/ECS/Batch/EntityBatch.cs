@@ -56,8 +56,7 @@ public sealed class  EntityBatch
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only if owner == EntityStore
     [Browse(Never)] internal            int                 entityId;           //  4   - used only if owner == EntityStore
-    [Browse(Never)] private  readonly   BatchOwner          owner;              //  4
-    [Browse(Never)] internal            bool                inUse;
+    [Browse(Never)] private             BatchOwner          owner;              //  4
     [Browse(Never)] internal            Tags                tagsAdd;            // 32
     [Browse(Never)] internal            Tags                tagsRemove;         // 32
     [Browse(Never)] internal            ComponentTypes      componentsAdd;      // 32
@@ -82,10 +81,11 @@ public sealed class  EntityBatch
         this.store      = store;
     }
     
+    /*
     internal BatchInUseException BatchInUseException() {
         var entity = new Entity((EntityStore)store, entityId);
         return new BatchInUseException($"Entity.Batch in use - {this}");
-    }
+    } */
     
     /// <summary>
     /// Clear all commands currently stored in the <see cref="EntityBatch"/>.
@@ -162,9 +162,9 @@ public sealed class  EntityBatch
     {
         if (owner == BatchOwner.Application) throw ApplyException();
         store.ApplyBatchTo(this, entityId);
+        store.ReturnBatch(this);
+        owner = BatchOwner.EntityStore;
         Clear();
-        entityId = 0;
-        inUse = false;
     }
     
     private static InvalidOperationException ApplyException() {
@@ -186,7 +186,6 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddComponent<T>(in T component) where T : struct, IComponent
     {
-        inUse = true;
         var structIndex = StructHeap<T>.StructIndex;
         componentsAdd.      bitSet.SetBit   (structIndex);
         componentsRemove.   bitSet.ClearBit (structIndex);
@@ -210,7 +209,6 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveComponent<T>() where T : struct, IComponent
     {
-        inUse = true;
         var structIndex = StructHeap<T>.StructIndex;
         componentsRemove.   bitSet.SetBit   (structIndex);
         componentsAdd.      bitSet.ClearBit (structIndex);
@@ -222,7 +220,6 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
-        inUse = true;
         var tagIndex = TagType<T>.TagIndex;
         tagsAdd.    bitSet.SetBit   (tagIndex);
         tagsRemove. bitSet.ClearBit (tagIndex);
@@ -234,7 +231,6 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddTags(in Tags tags)
     {
-        inUse = true;
         tagsAdd.    Add     (tags);
         tagsRemove. Remove  (tags);
         return this;
@@ -245,7 +241,6 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
-        inUse = true;
         var tagIndex = TagType<T>.TagIndex;
         tagsRemove. bitSet.SetBit   (tagIndex);
         tagsAdd.    bitSet.ClearBit (tagIndex);
@@ -257,7 +252,6 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveTags(in Tags tags)
     {
-        inUse = true;
         tagsAdd.    Remove  (tags);
         tagsRemove. Add     (tags);
         return this;

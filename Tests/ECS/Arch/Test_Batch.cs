@@ -69,8 +69,9 @@ public static class Test_Batch
 
         var entity = store.CreateEntity();
         
-        var batch = entity.Batch;
+        var batch = entity.Batch();
         AreEqual("empty", batch.ToString());
+        AreEqual(0, store.PendingEntityBatchCount);
         
         batch.AddComponent  (new Position(1, 1, 1))
             .AddComponent   (new EntityName("test"))
@@ -83,11 +84,13 @@ public static class Test_Batch
         
         AreEqual("id: 1  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
         AreEqual(new Position(1, 1, 1), entity.Position);
+        AreEqual(1, store.PendingEntityBatchCount);
         
         var addTags     = Tags.Get<TestTag2>();
         var removeTags  = Tags.Get<TestTag>();
         
-        batch = entity.Batch;
+        batch = entity.Batch();
+        AreEqual(0, store.PendingEntityBatchCount);
         batch.AddComponent  (new Position(2, 2, 2))
             .RemoveComponent<EntityName>()
             .AddTags        (addTags)
@@ -98,6 +101,7 @@ public static class Test_Batch
         
         AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
         AreEqual(new Position(2, 2, 2), entity.Position);
+        AreEqual(1, store.PendingEntityBatchCount);
         
         AreEqual(3, countAdd);
         AreEqual(1, countRemove);
@@ -116,6 +120,7 @@ public static class Test_Batch
         var entity2 = store.CreateEntity();
         batch.ApplyTo(entity1)
              .ApplyTo(entity2);
+        AreEqual(0, store.PendingEntityBatchCount);
         
         AreEqual("id: 1  [Position, #TestTag]", entity1.ToString());
         AreEqual("id: 2  [Position, #TestTag]", entity2.ToString());
@@ -124,6 +129,7 @@ public static class Test_Batch
             batch.Apply();
         });
         AreEqual("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()", e!.Message);
+        AreEqual(0, store.PendingEntityBatchCount);
     }
     
     [Test]
@@ -136,6 +142,7 @@ public static class Test_Batch
         var batch = new EntityBatch();
         batch.AddComponent(new Position(2, 3, 4));
         store.Entities.ApplyBatch(batch);
+        AreEqual(0, store.PendingEntityBatchCount);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());
         AreEqual(10, arch.Count);
@@ -147,24 +154,32 @@ public static class Test_Batch
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
         AreEqual(10, arch.Count);
+        AreEqual(0, store.PendingEntityBatchCount);
     }
     
     [Test]
-    public static void Test_Batch_BatchInUseException() 
+    public static void Test_Batch_multiple_batches() 
     {
         var store   = new EntityStore();
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
-        var e = Throws<BatchInUseException>(() =>
-        {
-            // Evaluating of property batch in debugger - e.g. by hovering or as watch variable 
-            // does not change the entity which called Entity.Batch.
-            var batch1 = entity1.Batch.AddComponent(new Position());
-            AreEqual("entity: 1 > add: [Position]", batch1.ToString());
-            _ = entity2.Batch;
-        });
-        AreEqual("Entity.Batch in use - entity: 1 > add: [Position]", e!.Message);
+        // Evaluating of property batch in debugger - e.g. by hovering or as watch variable 
+        // does not change the entity which called Entity.Batch.
+        var batch1 = entity1.Batch().AddComponent(new Position());
+        AreEqual(0, store.PendingEntityBatchCount);
+        
+        var batch2 = entity2.Batch().AddComponent(new Rotation());
+        AreEqual(0, store.PendingEntityBatchCount);
+        
+        AreEqual("entity: 1 > add: [Position]", batch1.ToString());
+        AreEqual("entity: 2 > add: [Rotation]", batch2.ToString());
+        
+        batch1.Apply();
+        AreEqual(1, store.PendingEntityBatchCount);
+        
+        batch2.Apply();
+        AreEqual(2, store.PendingEntityBatchCount);
     }
     
     [Test]
@@ -181,7 +196,7 @@ public static class Test_Batch
 
         for (int n = 0; n < count; n++)
         {
-            entity.Batch
+            entity.Batch()
                 .AddComponent   (new Position(1, 1, 1))
                 .AddComponent   (new EntityName("test"))
                 .RemoveComponent<Rotation>()
@@ -189,7 +204,7 @@ public static class Test_Batch
                 .RemoveTag      <TestTag2>()
                 .Apply();
         
-            entity.Batch
+            entity.Batch()
                 .AddComponent   (new Position(2, 2, 2))
                 .RemoveComponent<EntityName>()
                 .AddTags        (addTags)
@@ -199,6 +214,7 @@ public static class Test_Batch
         
         Console.WriteLine($"Entity.Batch - duration: {sw.ElapsedMilliseconds} ms");
         AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
+        AreEqual(1, store.PendingEntityBatchCount);
     }
     
     [Test]
@@ -240,6 +256,7 @@ public static class Test_Batch
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
         AreEqual(entityCount, arch.Count);
+        AreEqual(0, store.PendingEntityBatchCount);
     }
 }
 

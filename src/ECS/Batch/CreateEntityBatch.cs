@@ -10,6 +10,10 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+public class BatchAlreadyReturnedException : InvalidOperationException
+{
+    internal BatchAlreadyReturnedException(string message) : base (message) { }
+}
 
 /// <summary>
 /// A create batch is used to optimize entity creation.<br/>
@@ -39,6 +43,8 @@ public sealed class CreateEntityBatch
     [Browse(Never)] private  readonly   BatchComponent[]    batchComponents;    //  8
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8
+    [Browse(Never)] internal            bool                autoReturn;         //  4
+    [Browse(Never)] private             bool                isReturned;         //  4
     [Browse(Never)] private             Archetype           archetype;          //  8
     [Browse(Never)] private             Tags                tagsCreate;         // 32
     [Browse(Never)] private             ComponentTypes      componentsCreate;   // 32
@@ -62,6 +68,9 @@ public sealed class CreateEntityBatch
     
     private string GetString()
     {
+        if (isReturned) {
+            return "batch returned";
+        }
         var hasAdds = componentsCreate.Count > 0 || tagsCreate.Count > 0;
         if (!hasAdds) {
             return "empty";
@@ -90,6 +99,7 @@ public sealed class CreateEntityBatch
     /// </summary>
     public Entity CreateEntity()
     {
+        if (isReturned) throw BatchAlreadyReturnedException();
         archetype       ??= store.GetArchetype(componentsCreate, tagsCreate);
         var localStore  = (EntityStore)store;
         ref var node    = ref localStore.CreateEntityInternal(archetype);
@@ -100,7 +110,25 @@ public sealed class CreateEntityBatch
         foreach (var heap in archetype.structHeaps) {
             heap.SetBatchComponent(components, compIndex);
         }
+        if (autoReturn) {
+            isReturned = true;
+            Clear();
+            store.ReturnCreateBatch(this);
+        }
         return new Entity(localStore, node.id);
+    }
+    
+    public void Return() {
+        if (isReturned) {
+            return;
+        }
+        isReturned = true;
+        Clear();
+        store.ReturnCreateBatch(this);
+    }
+    
+    private static BatchAlreadyReturnedException BatchAlreadyReturnedException() {
+        return new BatchAlreadyReturnedException("batch already returned");
     }
 
     /// <summary>
@@ -108,6 +136,7 @@ public sealed class CreateEntityBatch
     /// </summary>
     public CreateEntityBatch Add<T>(in T component) where T : struct, IComponent
     {
+        if (isReturned) throw BatchAlreadyReturnedException();
         archetype       = null;
         var structIndex = StructHeap<T>.StructIndex;
         componentsCreate.bitSet.SetBit(structIndex);
@@ -121,6 +150,7 @@ public sealed class CreateEntityBatch
     /// </summary>
     public CreateEntityBatch Add<T>() where T : struct, IComponent
     {
+        if (isReturned) throw BatchAlreadyReturnedException();
         archetype       = null;
         var structIndex = StructHeap<T>.StructIndex;
         componentsCreate.bitSet.SetBit(structIndex);
@@ -135,6 +165,7 @@ public sealed class CreateEntityBatch
     /// </summary>
     public ref T Get<T>() where T : struct, IComponent
     {
+        if (isReturned) throw BatchAlreadyReturnedException();
         var structIndex = StructHeap<T>.StructIndex;
         if (!componentsCreate.bitSet.Has(structIndex)) throw GetException(structIndex);
         return ref ((BatchComponent<T>)batchComponents[structIndex]).value;
@@ -155,6 +186,7 @@ public sealed class CreateEntityBatch
     /// </summary>
     public CreateEntityBatch AddTag<T>() where T : struct, ITag
     {
+        if (isReturned) throw BatchAlreadyReturnedException();
         archetype = null;
         tagsCreate.bitSet.SetBit(TagType<T>.TagIndex);
         return this;
@@ -165,6 +197,7 @@ public sealed class CreateEntityBatch
     /// </summary>
     public CreateEntityBatch AddTags(in Tags tags)
     {
+        if (isReturned) throw BatchAlreadyReturnedException();
         archetype = null;
         tagsCreate.Add(tags);
         return this;

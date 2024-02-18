@@ -269,7 +269,7 @@ public static void FilterEntityEvents()
 public static void CreateEntityBatch()
 {
     var store   = new EntityStore();
-    var entity  = store.CreateBatch
+    var entity  = store.Batch()
         .Add(new EntityName("test"))
         .Add(new Position(1,1,1))
         .CreateEntity();
@@ -290,7 +290,7 @@ public static void EntityBatch()
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
     
-    entity.Batch
+    entity.Batch()
         .AddComponent(new Position(1, 2, 3))
         .AddTag<MyTag1>()
         .Apply();

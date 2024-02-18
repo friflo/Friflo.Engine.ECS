@@ -1,28 +1,31 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-
+/*
 public class BatchInUseException : InvalidOperationException {
     internal BatchInUseException(string message) : base (message) {}
-}
+} */
 
 public partial class EntityStoreBase
 {
+#region EntityBatch
+    [Browse(Never)]
+    public int PendingEntityBatchCount => internBase.entityBatches.Count;
+
     internal EntityBatch GetBatch(int entityId)
     {
-        var batch = internBase.entityBatch ??= new EntityBatch(this);
-        if (!batch.inUse) {
-            batch.entityId = entityId;
-            return batch;
+        if (!internBase.entityBatches.TryPop(out var batch)) {
+            batch = new EntityBatch(this);
         }
-        if (entityId != batch.entityId) throw batch.BatchInUseException();
+        batch.entityId = entityId;
         return batch;
     }
     
@@ -109,11 +112,30 @@ public partial class EntityStoreBase
             componentRemoved.Invoke(new ComponentChanged (this, entityId, ComponentChangedAction.Remove, structIndex, oldHeap));
         }
     }
+    #endregion
     
-    internal CreateEntityBatch GetCreateBatch()
+#region CreateEntityBatch
+    internal void ReturnBatch(EntityBatch batch) {
+        internBase.entityBatches.Push(batch);
+    }
+    
+    /// <summary>
+    /// Return an empty <see cref="CreateEntityBatch"/>.<br/>
+    /// If <paramref name="autoReturn"/> == true the batch is returned to the EntityStore when calling <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
+    /// Otherwise the caller should call <see cref="CreateEntityBatch.Return"/> after usage to prevent unnecessary allocations.
+    /// </summary>
+    public CreateEntityBatch Batch(bool autoReturn = true)
     {
-        var batch = internBase.createEntityBatch ??= new CreateEntityBatch(this);
-        batch.Clear();
+        if (!internBase.createEntityBatch.TryPop(out var batch)) {
+            batch = new CreateEntityBatch(this);
+        }
+        batch.autoReturn = autoReturn;
         return batch;
     }
+    
+    [Browse(Never)]
+    public int PendingCreateEntityBatchCount => internBase.createEntityBatch.Count;
+    
+    internal void ReturnCreateBatch(CreateEntityBatch batch) => internBase.createEntityBatch.Push(batch);
+    #endregion
 }
