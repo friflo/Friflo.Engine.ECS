@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable ConvertToConstant.Local
@@ -128,7 +129,7 @@ public static class Test_Batch
         var e = Throws<InvalidOperationException>(() => {
             batch.Apply();
         });
-        AreEqual("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()", e!.Message);
+        AreEqual("Apply() can only be used on a batch using Entity.Batch() - use ApplyTo()", e!.Message);
         AreEqual(0, store.PooledEntityBatchCount);
     }
     
@@ -246,12 +247,14 @@ public static class Test_Batch
         
         var sw = new Stopwatch();
         sw.Start();
-
+        long start = 0;
         for (int n = 0; n < count; n++)
         {
             store.Entities.ApplyBatch(batch1);
             store.Entities.ApplyBatch(batch2);
+            if (n == 0)  start = Mem.GetAllocatedBytes();
         }
+        Mem.AssertNoAlloc(start);
         Console.WriteLine($"ApplyBatch() - duration: {sw.ElapsedMilliseconds} ms");
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable ConvertToConstant.Local
@@ -164,7 +165,7 @@ public static class Test_BatchCreate
         
         var sw = new Stopwatch();
         sw.Start();
-        
+        long start = 0;
         for (int n = 0; n < count; n++)
         {
             store.Batch()
@@ -173,7 +174,9 @@ public static class Test_BatchCreate
                 .AddTag <TestTag>()
                 .AddTag <TestTag2>()
                 .CreateEntity();
+            if (n == 0)  start = Mem.GetAllocatedBytes();
         }
+        Mem.AssertNoAlloc(start);
         AreEqual(1, store.PooledCreateEntityBatchCount);
         Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
         AreEqual(count, store.Count);
@@ -188,7 +191,7 @@ public static class Test_BatchCreate
         
         var sw = new Stopwatch();
         sw.Start();
-        
+        long start = 0;
         var batch = store.Batch(false);
         for (int n = 0; n < count; n++)
         {
@@ -199,7 +202,9 @@ public static class Test_BatchCreate
                 .AddTag <TestTag>()
                 .AddTag <TestTag2>()
                 .CreateEntity();
+            if (n == 0)  start = Mem.GetAllocatedBytes();
         }
+        Mem.AssertNoAlloc(start);
         AreEqual(0, store.PooledCreateEntityBatchCount);
         batch.Return();
         Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");
@@ -216,17 +221,19 @@ public static class Test_BatchCreate
         
         var sw = new Stopwatch();
         sw.Start();
-        
         var batch = store.Batch(false)
             .Add    <Position>()
             .Add    <Rotation>()
             .AddTag <TestTag>()
             .AddTag <TestTag2>();
+        long start = 0;
         
         for (int n = 0; n < count; n++)
         {
             batch.CreateEntity();
+            if (n == 0)  start = Mem.GetAllocatedBytes();
         }
+        Mem.AssertNoAlloc(start);
         AreEqual(0, store.PooledCreateEntityBatchCount);
         batch.Return();
         Console.WriteLine($"CreateBatch - duration: {sw.ElapsedMilliseconds} ms");

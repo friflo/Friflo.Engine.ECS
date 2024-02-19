@@ -168,7 +168,7 @@ public sealed class  EntityBatch
     }
     
     private static InvalidOperationException ApplyException() {
-        return new InvalidOperationException("Apply() can only be used on a batch using Entity.Batch - use ApplyTo()");
+        return new InvalidOperationException("Apply() can only be used on a batch using Entity.Batch() - use ApplyTo()");
     }
     
     /// <summary>
