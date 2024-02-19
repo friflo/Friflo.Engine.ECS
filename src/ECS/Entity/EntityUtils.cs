@@ -36,6 +36,9 @@ internal readonly struct EntityInfo
     }
 }
 
+/// <summary>
+/// Used to check if two <see cref="Entity"/> instances are the same entity by comparing their <see cref="Entity.Id"/>'s. 
+/// </summary>
 public sealed class EntityEqualityComparer : IEqualityComparer<Entity>
 {
     public  bool    Equals(Entity left, Entity right)   => left.Id == right.Id;
