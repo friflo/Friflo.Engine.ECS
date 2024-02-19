@@ -291,7 +291,7 @@ public static void EntityBatch()
     var entity  = store.CreateEntity();
     
     entity.Batch()
-        .AddComponent(new Position(1, 2, 3))
+        .Add(new Position(1, 2, 3))
         .AddTag<MyTag1>()
         .Apply();
     
@@ -306,7 +306,7 @@ public static void BulkBatch()
         store.CreateEntity();
     }
     var batch = new EntityBatch();
-    batch.AddComponent(new Position(1, 2, 3)).AddTag<MyTag1>();
+    batch.Add(new Position(1, 2, 3)).AddTag<MyTag1>();
     store.Entities.ApplyBatch(batch);
     
     var query = store.Query<Position>().AllTags(Tags.Get<MyTag1>());

@@ -74,11 +74,11 @@ public static class Test_Batch
         AreEqual("empty", batch.ToString());
         AreEqual(0, store.PooledEntityBatchCount);
         
-        batch.AddComponent  (new Position(1, 1, 1))
-            .AddComponent   (new EntityName("test"))
-            .RemoveComponent<Rotation>()
-            .AddTag         <TestTag>()
-            .RemoveTag      <TestTag2>();
+        batch.Add       (new Position(1, 1, 1))
+            .Add        (new EntityName("test"))
+            .Remove     <Rotation>()
+            .AddTag     <TestTag>()
+            .RemoveTag  <TestTag2>();
         AreEqual("entity: 1 > add: [EntityName, Position, #TestTag]  remove: [Rotation, #TestTag2]", batch.ToString());
         AreEqual(5, batch.CommandCount);
         batch.Apply();
@@ -92,10 +92,10 @@ public static class Test_Batch
         
         batch = entity.Batch();
         AreEqual(0, store.PooledEntityBatchCount);
-        batch.AddComponent  (new Position(2, 2, 2))
-            .RemoveComponent<EntityName>()
-            .AddTags        (addTags)
-            .RemoveTags     (removeTags);
+        batch.Add       (new Position(2, 2, 2))
+            .Remove     <EntityName>()
+            .AddTags    (addTags)
+            .RemoveTags (removeTags);
         AreEqual("entity: 1 > add: [Position, #TestTag2]  remove: [EntityName, #TestTag]", batch.ToString());
         AreEqual(4, batch.CommandCount);
         batch.Apply();
@@ -114,7 +114,7 @@ public static class Test_Batch
     {
         var store   = new EntityStore();
         var batch   = new EntityBatch();
-        batch.AddComponent(new Position());
+        batch.Add   (new Position());
         batch.AddTag<TestTag>();
         
         var entity1 = store.CreateEntity();
@@ -141,7 +141,7 @@ public static class Test_Batch
             store.CreateEntity();
         }
         var batch = new EntityBatch();
-        batch.AddComponent(new Position(2, 3, 4));
+        batch.Add(new Position(2, 3, 4));
         store.Entities.ApplyBatch(batch);
         AreEqual(0, store.PooledEntityBatchCount);
         
@@ -165,10 +165,10 @@ public static class Test_Batch
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
-        var batch1 = entity1.Batch().AddComponent(new Position());
+        var batch1 = entity1.Batch().Add(new Position());
         AreEqual(0, store.PooledEntityBatchCount);
         
-        var batch2 = entity2.Batch().AddComponent(new Rotation());
+        var batch2 = entity2.Batch().Add(new Rotation());
         AreEqual(0, store.PooledEntityBatchCount);
         
         AreEqual("entity: 1 > add: [Position]", batch1.ToString());
@@ -187,7 +187,7 @@ public static class Test_Batch
         var store   = new EntityStore();
         var entity  = store.CreateEntity(1);
         
-        var batch = entity.Batch().AddComponent(new Position());
+        var batch = entity.Batch().Add(new Position());
         batch.Apply();
         
         var e = Throws<BatchAlreadyAppliedException>(() => {
@@ -211,18 +211,18 @@ public static class Test_Batch
         for (int n = 0; n < count; n++)
         {
             entity.Batch()
-                .AddComponent   (new Position(1, 1, 1))
-                .AddComponent   (new EntityName("test"))
-                .RemoveComponent<Rotation>()
-                .AddTag         <TestTag>()
-                .RemoveTag      <TestTag2>()
+                .Add        (new Position(1, 1, 1))
+                .Add        (new EntityName("test"))
+                .Remove     <Rotation>()
+                .AddTag     <TestTag>()
+                .RemoveTag  <TestTag2>()
                 .Apply();
         
             entity.Batch()
-                .AddComponent   (new Position(2, 2, 2))
-                .RemoveComponent<EntityName>()
-                .AddTags        (addTags)
-                .RemoveTags     (removeTags)
+                .Add        (new Position(2, 2, 2))
+                .Remove     <EntityName>()
+                .AddTags    (addTags)
+                .RemoveTags (removeTags)
                 .Apply();
         }
         
@@ -247,16 +247,16 @@ public static class Test_Batch
         var batch2 = new EntityBatch();
         
         batch1
-            .AddComponent   (new Position(1, 1, 1))
-            .AddComponent   (new EntityName("test"))
-            .RemoveComponent<Rotation>()
-            .AddTag         <TestTag>()
-            .RemoveTag      <TestTag2>();
+            .Add        (new Position(1, 1, 1))
+            .Add        (new EntityName("test"))
+            .Remove     <Rotation>()
+            .AddTag     <TestTag>()
+            .RemoveTag  <TestTag2>();
         batch2
-            .AddComponent   (new Position(2, 2, 2))
-            .RemoveComponent<EntityName>()
-            .AddTags        (addTags)
-            .RemoveTags     (removeTags);
+            .Add        (new Position(2, 2, 2))
+            .Remove     <EntityName>()
+            .AddTags    (addTags)
+            .RemoveTags (removeTags);
         
         var sw = new Stopwatch();
         sw.Start();
