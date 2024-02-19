@@ -90,7 +90,8 @@ Features in this list are also explained in the Examples.
 
 - 1.17.0    (planned) Introduced `CreateEntityBatch` to optimize creation of entities.  
             Added DebugView's for all IEnumerable<> types to enable one click navigation to their elements in the debugger.  
-            E.g. the expanded properties ChildEntities and Components in the examples screenshot.
+            E.g. the expanded properties ChildEntities and Components in the examples screenshot.  
+            **Breaking change**: Changed property `Entity.Batch` to method `Entity.Batch()`.  
 
 
 
