@@ -521,7 +521,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// These changes are applied to the entity when calling <see cref="EntityBatch.Apply"/>.<br/>
     /// <br/>
     /// If missing the <see cref="EntityBatch.Apply"/> call:<br/>
-    /// - Entity changed are not applied.<br/>
+    /// - Entity changes are not applied.<br/>
     /// - Some unnecessary memory allocations.
     /// </remarks>
     public EntityBatch Batch() => store.GetBatch(Id);
