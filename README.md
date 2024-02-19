@@ -7,7 +7,7 @@
 
 # Friflo.Engine.ECS
 
-Currently fastest 🔥 ECS implementation in .NET - using Ecs.CSharp.Benchmark as reference.  
+Currently fastest 🔥 ECS implementation in .NET - using **Ecs.CSharp.Benchmark** as reference.  
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
