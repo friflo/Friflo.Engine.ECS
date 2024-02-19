@@ -16,7 +16,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Used to provide additional debug informations for an <see cref="Entity"/>:<br/>
+/// Used to provide additional debug information for an <see cref="Entity"/>:<br/>
 /// <see cref="Entity.Pid"/>                <br/>
 /// <see cref="Entity.DebugJSON"/>          <br/>
 /// <see cref="Entity.DebugEventHandlers"/> <br/>
