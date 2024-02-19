@@ -182,7 +182,7 @@ public static class Test_Batch
     }
     
     [Test]
-    public static void Test_Batch_Apply_already_returned() 
+    public static void Test_Batch_already_applied_exception() 
     {
         var store   = new EntityStore();
         var entity  = store.CreateEntity(1);
@@ -190,10 +190,28 @@ public static class Test_Batch
         var batch = entity.Batch().Add(new Position());
         batch.Apply();
         
-        var e = Throws<BatchAlreadyAppliedException>(() => {
-            batch.Apply();    
-        });
-        AreEqual("batch already applied", e!.Message);
+        var expect = "batch already applied";
+        
+        var e = Throws<BatchAlreadyAppliedException>(() => batch.Apply());
+        AreEqual(expect, e!.Message);
+        
+        e = Throws<BatchAlreadyAppliedException>(() => batch.Add(new Position()));
+        AreEqual(expect, e!.Message);
+        
+        e = Throws<BatchAlreadyAppliedException>(() => batch.Remove<Position>());
+        AreEqual(expect, e!.Message);
+        
+        e = Throws<BatchAlreadyAppliedException>(() => batch.AddTag<TestTag>());
+        AreEqual(expect, e!.Message);
+
+        e = Throws<BatchAlreadyAppliedException>(() => batch.RemoveTag<TestTag>());
+        AreEqual(expect, e!.Message);
+        
+        e = Throws<BatchAlreadyAppliedException>(() => batch.AddTags(default));
+        AreEqual(expect, e!.Message);
+
+        e = Throws<BatchAlreadyAppliedException>(() => batch.RemoveTags(default));
+        AreEqual(expect, e!.Message);
     }
     
     [Test]

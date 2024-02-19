@@ -199,6 +199,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch Add<T>(in T component) where T : struct, IComponent
     {
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         var structIndex = StructHeap<T>.StructIndex;
         componentsAdd.      bitSet.SetBit   (structIndex);
         componentsRemove.   bitSet.ClearBit (structIndex);
@@ -222,6 +223,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch Remove<T>() where T : struct, IComponent
     {
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         var structIndex = StructHeap<T>.StructIndex;
         componentsRemove.   bitSet.SetBit   (structIndex);
         componentsAdd.      bitSet.ClearBit (structIndex);
@@ -233,6 +235,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         var tagIndex = TagType<T>.TagIndex;
         tagsAdd.    bitSet.SetBit   (tagIndex);
         tagsRemove. bitSet.ClearBit (tagIndex);
@@ -244,6 +247,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch AddTags(in Tags tags)
     {
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         tagsAdd.    Add     (tags);
         tagsRemove. Remove  (tags);
         return this;
@@ -254,6 +258,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         var tagIndex = TagType<T>.TagIndex;
         tagsRemove. bitSet.SetBit   (tagIndex);
         tagsAdd.    bitSet.ClearBit (tagIndex);
@@ -265,6 +270,7 @@ public sealed class  EntityBatch
     /// </summary>
     public EntityBatch RemoveTags(in Tags tags)
     {
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         tagsAdd.    Remove  (tags);
         tagsRemove. Add     (tags);
         return this;

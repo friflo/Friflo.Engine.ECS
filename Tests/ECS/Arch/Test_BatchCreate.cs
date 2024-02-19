@@ -153,6 +153,10 @@ public static class Test_BatchCreate
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.AddTags(default));
         AreEqual(expect, e!.Message);
+        
+        e = Throws<BatchAlreadyReturnedException> (() => batch.Get<Position>());
+        AreEqual(expect, e!.Message);
+        
         AreEqual(1, store.PooledCreateEntityBatchCount);
     }
     
