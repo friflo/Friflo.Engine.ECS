@@ -121,10 +121,17 @@ public partial class EntityStoreBase
     }
     
     /// <summary>
-    /// Return an empty <see cref="CreateEntityBatch"/>.<br/>
-    /// If <paramref name="autoReturn"/> == true the batch is returned to the EntityStore when calling <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
-    /// Otherwise the caller should call <see cref="CreateEntityBatch.Return"/> after usage to prevent unnecessary allocations.
+    /// Returns a <see cref="CreateEntityBatch"/> used to create entities with components and tags added to the batch.
     /// </summary>
+    /// <remarks>
+    /// The returned batch creates entities with previously added components and tags when calling
+    /// <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
+    /// <br/>
+    /// If <paramref name="autoReturn"/> == true the batch is returned to the EntityStore when
+    /// calling <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
+    /// If <paramref name="autoReturn"/> == false the caller should call <see cref="CreateEntityBatch.Return"/>
+    /// after usage to prevent unnecessary memory allocations.<br/>
+    /// </remarks>
     public CreateEntityBatch Batch(bool autoReturn = true)
     {
         if (!internBase.createEntityBatch.TryPop(out var batch)) {
