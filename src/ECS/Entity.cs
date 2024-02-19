@@ -522,7 +522,9 @@ public readonly struct Entity : IEquatable<Entity>
     /// <br/>
     /// If missing the <see cref="EntityBatch.Apply"/> call:<br/>
     /// - Entity changes are not applied.<br/>
-    /// - Some unnecessary memory allocations.
+    /// - Some unnecessary memory allocations.<br/>
+    /// <br/>
+    /// When calling <see cref="EntityBatch.Apply"/> the batch executes without memory allocations.
     /// </remarks>
     public EntityBatch Batch() => store.GetBatch(Id);
     #endregion

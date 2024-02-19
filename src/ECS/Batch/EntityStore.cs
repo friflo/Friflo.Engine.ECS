@@ -133,6 +133,9 @@ public partial class EntityStoreBase
     /// If <paramref name="autoReturn"/> == false <see cref="CreateEntityBatch.CreateEntity"/> can be called
     /// multiple times to create multiple entities.<br/>
     /// The caller should call <see cref="CreateEntityBatch.Return"/> after usage to prevent unnecessary memory allocations.<br/>
+    /// <br/>
+    /// When calling <see cref="CreateEntityBatch.CreateEntity"/> or <see cref="CreateEntityBatch.Return"/>
+    /// the batch executes without memory allocations.
     /// </remarks>
     public CreateEntityBatch Batch(bool autoReturn = true)
     {
