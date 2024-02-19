@@ -7,7 +7,6 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-using static Friflo.Engine.ECS.EntityStoreBase.Static;
 
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
@@ -198,7 +197,7 @@ public static class Test_StructComponent
         IsTrue  (player1 == store.GetEntityById(node.Id));
         AreEqual(0,         node.ChildCount);
         AreEqual(0,         node.ChildIds.Length);
-        AreEqual(NoParentId,node.ParentId);
+        AreEqual(0,         node.ParentId);
         AreEqual("entities: 2", store.ToString());
         
         long count = 10; // 1_000_000_000L ~ #PC: 969 ms

@@ -101,7 +101,7 @@ public abstract partial class EntityStoreBase
     
 #region static fields
     // use nested class to minimize noise in debugger
-    public static class Static
+    internal static class Static
     {
         internal static readonly    int[]           EmptyChildIds   = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
@@ -118,7 +118,7 @@ public abstract partial class EntityStoreBase
         /// An <see cref="EntityNode"/> with <see cref="EntityNode.parentId"/> == <see cref="NoParentId"/>
         /// is declared as <see cref="TreeMembership.floating"/>.
         /// </summary>
-        public   const              int             NoParentId              =  0;
+        internal const              int             NoParentId              =  0;
         internal const              int             StoreRootParentId       = -1;
     }
     #endregion
