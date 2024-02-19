@@ -281,10 +281,12 @@ public sealed class  EntityBatch
         tagsRemove. Add     (tags);
         return this;
     }
-    
+
+    /// <summary> Obsolete - use renamed method: <see cref="Remove{T}"/> </summary>
     [Obsolete($"Renamed to {nameof(Remove)}()")]
     public EntityBatch RemoveComponent<T>() where T : struct, IComponent => Remove<T>();
     
+    /// <summary> Obsolete - use renamed method: <see cref="Add{T}"/> </summary>
     [Obsolete($"Renamed to {nameof(Add)}()")]
     public EntityBatch AddComponent<T>(T component) where T : struct, IComponent => Add(component);
     
