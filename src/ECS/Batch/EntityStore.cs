@@ -124,13 +124,15 @@ public partial class EntityStoreBase
     /// Returns a <see cref="CreateEntityBatch"/> used to create entities with components and tags added to the batch.
     /// </summary>
     /// <remarks>
-    /// The returned batch creates entities with previously added components and tags when calling
+    /// The returned batch creates an entity with previously added components and tags when calling
     /// <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
     /// <br/>
     /// If <paramref name="autoReturn"/> == true the batch is returned to the EntityStore when
     /// calling <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
-    /// If <paramref name="autoReturn"/> == false the caller should call <see cref="CreateEntityBatch.Return"/>
-    /// after usage to prevent unnecessary memory allocations.<br/>
+    /// <br/>
+    /// If <paramref name="autoReturn"/> == false <see cref="CreateEntityBatch.CreateEntity"/> can be called
+    /// multiple times to create multiple entities.<br/>
+    /// The caller should call <see cref="CreateEntityBatch.Return"/> after usage to prevent unnecessary memory allocations.<br/>
     /// </remarks>
     public CreateEntityBatch Batch(bool autoReturn = true)
     {

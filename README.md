@@ -747,7 +747,7 @@ version: 1.17.0
 
 Creating entities can be optimized if knowing the components and tags required by an entity in advance.  
 This prevent structural changes every time a component or tag is added to an exiting entity.  
-Entities can be created by using `store.CreateBatch` property or an [CreateEntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CreateEntityBatch.md)
+Entities can be created by using `store.Batch()` or an [CreateEntityBatch](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CreateEntityBatch.md)
 instance.
 
 It can also be used to create multiple entities all with the same set of components and tags.
@@ -756,7 +756,7 @@ It can also be used to create multiple entities all with the same set of compone
 public static void CreateEntityBatch()
 {
     var store   = new EntityStore();
-    var entity  = store.CreateBatch
+    var entity  = store.Batch()
         .Add(new EntityName("test"))
         .Add(new Position(1,1,1))
         .CreateEntity();
@@ -789,8 +789,8 @@ public static void EntityBatch()
     var store   = new EntityStore();
     var entity  = store.CreateEntity();
     
-    entity.Batch
-        .AddComponent(new Position(1, 2, 3))
+    entity.Batch()
+        .Add(new Position(1, 2, 3))
         .AddTag<MyTag1>()
         .Apply();
     
@@ -814,12 +814,12 @@ public static void BulkBatch()
         store.CreateEntity();
     }
     var batch = new EntityBatch();
-    batch.AddComponent(new Position(1, 2, 3)).AddTag<MyTag1>();
+    batch.Add(new Position(1, 2, 3)).AddTag<MyTag1>();
     store.Entities.ApplyBatch(batch);
     
     var query = store.Query<Position>().AllTags(Tags.Get<MyTag1>());
     Console.WriteLine(query);                           // > Query: [Position, #MyTag1]  Count: 1000
-
+    
     // Same as: store.Entities.ApplyBatch(batch) above
     foreach (var entity in store.Entities) {
         batch.ApplyTo(entity);
