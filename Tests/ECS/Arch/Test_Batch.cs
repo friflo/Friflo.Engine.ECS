@@ -165,8 +165,6 @@ public static class Test_Batch
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
-        // Evaluating of property batch in debugger - e.g. by hovering or as watch variable 
-        // does not change the entity which called Entity.Batch.
         var batch1 = entity1.Batch().AddComponent(new Position());
         AreEqual(0, store.PooledEntityBatchCount);
         
@@ -181,6 +179,21 @@ public static class Test_Batch
         
         batch2.Apply();
         AreEqual(2, store.PooledEntityBatchCount);
+    }
+    
+    [Test]
+    public static void Test_Batch_Apply_already_returned() 
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(1);
+        
+        var batch = entity.Batch().AddComponent(new Position());
+        batch.Apply();
+        
+        var e = Throws<BatchAlreadyAppliedException>(() => {
+            batch.Apply();    
+        });
+        AreEqual("batch already applied", e!.Message);
     }
     
     [Test]

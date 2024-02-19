@@ -25,7 +25,8 @@ public partial class EntityStoreBase
         if (!internBase.entityBatches.TryPop(out var batch)) {
             batch = new EntityBatch(this);
         }
-        batch.entityId = entityId;
+        batch.entityId  = entityId;
+        batch.owner     = BatchOwner.EntityBatch;
         return batch;
     }
     

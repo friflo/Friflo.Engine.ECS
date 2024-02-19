@@ -10,6 +10,11 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+public class BatchAlreadyAppliedException : InvalidOperationException
+{
+    internal BatchAlreadyAppliedException(string message) : base (message) { }
+}
+
 internal class BatchComponent { }
 
 internal class BatchComponent<T> : BatchComponent where T : struct, IComponent
@@ -21,6 +26,7 @@ internal enum BatchOwner
 {
     Application = 0,
     EntityStore = 1,
+    EntityBatch = 2,
 }
 
 /// <summary>
@@ -56,7 +62,7 @@ public sealed class  EntityBatch
     [Browse(Never)] private  readonly   ComponentType[]     componentTypes;     //  8
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //  8   - used only if owner == EntityStore
     [Browse(Never)] internal            int                 entityId;           //  4   - used only if owner == EntityStore
-    [Browse(Never)] private             BatchOwner          owner;              //  4
+    [Browse(Never)] internal            BatchOwner          owner;              //  4
     [Browse(Never)] internal            Tags                tagsAdd;            // 32
     [Browse(Never)] internal            Tags                tagsRemove;         // 32
     [Browse(Never)] internal            ComponentTypes      componentsAdd;      // 32
@@ -156,11 +162,14 @@ public sealed class  EntityBatch
     
 #region commands
     /// <summary>
-    /// Apply the batch commands to the entity the <see cref="Entity.Batch"/> operates.<br/>
+    /// Apply added batch commands to the entity the preceding <see cref="Entity.Batch"/> operates.<br/>
+    /// <br/>
+    /// Subsequent use of the batch throws <see cref="ECS.BatchAlreadyAppliedException"/>.
     /// </summary>
     public void Apply()
     {
         if (owner == BatchOwner.Application) throw ApplyException();
+        if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
         store.ApplyBatchTo(this, entityId);
         store.ReturnBatch(this);
         owner = BatchOwner.EntityStore;
@@ -169,6 +178,10 @@ public sealed class  EntityBatch
     
     private static InvalidOperationException ApplyException() {
         return new InvalidOperationException("Apply() can only be used on a batch using Entity.Batch() - use ApplyTo()");
+    }
+    
+    private static BatchAlreadyAppliedException BatchAlreadyAppliedException() {
+        return new BatchAlreadyAppliedException("batch already applied");
     }
     
     /// <summary>
