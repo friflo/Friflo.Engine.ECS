@@ -119,7 +119,7 @@ public abstract partial class EntityStoreBase
         /// is declared as <see cref="TreeMembership.floating"/>.
         /// </summary>
         public   const              int             NoParentId              =  0;
-        public   const              int             StoreRootParentId       = -1;
+        internal const              int             StoreRootParentId       = -1;
     }
     #endregion
     

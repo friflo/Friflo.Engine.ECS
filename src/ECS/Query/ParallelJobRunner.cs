@@ -27,6 +27,9 @@ public enum JobExecution : byte
     Parallel    = 1
 }
 
+/// <summary>
+/// Required for parallel - multi threaded - query job execution using <see cref="QueryJob.RunParallel"/>.
+/// </summary>
 /// <remarks>
 /// <see cref="ParallelJobRunner"/> is thread safe.<br/>
 /// The intention is to use the same instance for all jobs. E.g. the JobRunner assigned to the <see cref="EntityStore"/>.<br/>
