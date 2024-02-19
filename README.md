@@ -89,7 +89,7 @@ Features in this list are also explained in the Examples.
             *Before:* Entities were not stored in this specific Archetype. `Archetype.Entities` returned always an empty result.  
             *Now:*    Entities are stored in this Archetype.  
 
-- 1.17.0    (planned) Introduced `CreateEntityBatch` to optimize creation of entities.  
+- 1.17.0    Introduced `CreateEntityBatch` to optimize creation of entities.  
             Added DebugView's for all IEnumerable<> types to enable one click navigation to their elements in the debugger.  
             E.g. the expanded properties ChildEntities and Components in the examples screenshot.  
             **Breaking change**: Changed property `Entity.Batch` to method `Entity.Batch()`.  
@@ -744,8 +744,6 @@ public static void FilterEntityEvents()
 
 
 ## Create Entity Batch
-
-version: 1.17.0
 
 Creating entities can be optimized if knowing the components and tags required by an entity in advance.  
 This prevent structural changes every time a component or tag is added to an exiting entity.  
