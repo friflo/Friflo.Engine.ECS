@@ -47,14 +47,25 @@ namespace Friflo.Engine.ECS;
 public struct EntityNode
 {
 #region public properties
-    /// <summary>Unique id within an <see cref="EntityNode"/> instance</summary>
+    /// <summary>The unique entity id.</summary>
                     public              int                 Id          =>  id;
+    
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
                     public              long                Pid         =>  pid;
+    
+    /// <summary>The <see cref="ECS.Archetype"/> the entity node is stored.</summary>
                     public              Archetype           Archetype   =>  archetype;
+    
+    /// <summary>The child entities of an entity as an array of ids.</summary>
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
+                    
+    /// <summary>Number of child entities.</summary>
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
+    
+    /// <summary>The parent id of the entity. 0 - if the entity has no parent.</summary>
                     public              int                 ParentId    =>  parentId;
+                    
+    /// <summary>Internally used flags assigned to the entity.</summary>
                     public              NodeFlags           Flags       =>  flags;
                     
                     public   override   string              ToString()  => GetString();
