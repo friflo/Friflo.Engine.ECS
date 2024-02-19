@@ -42,7 +42,7 @@ internal enum BatchOwner
 /// <see cref="Entity.AddComponent{T}()"/>, <see cref="Entity.RemoveComponent{T}()"/>,
 /// <see cref="Entity.AddTag{TTag}()"/> or <see cref="Entity.RemoveTag{TTag}()"/>.<br/>
 /// Each of these methods may cause a structural change which is a relative costly operation in comparison to others.<br/>
-/// Using <see cref="EntityBatch"/> minimize theses structural changes to one or none.<br/>
+/// Using a batch minimize theses structural changes to one or none.<br/>
 /// <br/>
 /// <b>Bulk operation</b><br/>
 /// To perform the same batch on multiple entities you can use <see cref="QueryEntities.ApplyBatch"/> for <br/>
@@ -75,7 +75,7 @@ public sealed class  EntityBatch
 #region general methods
     /// <summary>
     /// Creates a batch that can be applied to a <b>single</b> entity or a set of entities using a <b>bulk operation</b>.<br/>
-    /// See <see cref="EntityBatch"/>.
+    /// The created batch instance can be cached.
     /// </summary>
     public EntityBatch()
     {

@@ -55,6 +55,10 @@ public sealed class CreateEntityBatch
     #endregion
     
 #region general methods
+    /// <summary>
+    /// Creates a batch used to create entities with components and tags added to the batch.<br/>
+    /// The created batch instance can be cached.
+    /// </summary>
     public CreateEntityBatch(EntityStoreBase store)
     {
         var schema          = EntityStoreBase.Static.EntitySchema;
@@ -125,6 +129,10 @@ public sealed class CreateEntityBatch
         return new Entity(localStore, node.id);
     }
     
+    /// <summary>
+    /// Return the batch instance to its <see cref="EntityStore"/> to prevent memory allocations for future
+    /// <see cref="EntityStoreBase.Batch"/> calls.
+    /// </summary>
     public void Return() {
         if (isReturned) {
             return;
