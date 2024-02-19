@@ -22,6 +22,7 @@ The library implements all features a common ECS provides.
 - Focus on optimal debugging experience. See screenshot at examples.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 
+For feedback or questions check [Discord](https://discord.gg/nFfrhgQkb8).
 
 
 # Content
