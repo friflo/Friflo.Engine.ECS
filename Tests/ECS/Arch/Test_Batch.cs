@@ -274,5 +274,19 @@ public static class Test_Batch
         AreEqual(entityCount, arch.Count);
         AreEqual(0, store.PooledEntityBatchCount);
     }
+    
+    [Test]
+    public static void Test_Batch_obsolete() {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent(new EntityName("test"));
+        
+#pragma warning disable CS0618 // Type or member is obsolete
+        entity.Batch()
+            .AddComponent(new Position(1,2,3))
+            .RemoveComponent<EntityName>()
+            .Apply();
+        AreEqual("id: 1  [Position]", entity.ToString());
+    }
 }
 

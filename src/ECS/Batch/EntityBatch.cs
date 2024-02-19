@@ -269,5 +269,12 @@ public sealed class  EntityBatch
         tagsRemove. Add     (tags);
         return this;
     }
+    
+    [Obsolete($"Renamed to {nameof(Remove)}()")]
+    public EntityBatch RemoveComponent<T>() where T : struct, IComponent => Remove<T>();
+    
+    [Obsolete($"Renamed to {nameof(Add)}()")]
+    public EntityBatch AddComponent<T>(T component) where T : struct, IComponent => Add(component);
+    
     #endregion
 }
