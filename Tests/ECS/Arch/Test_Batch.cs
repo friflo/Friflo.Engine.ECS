@@ -129,7 +129,7 @@ public static class Test_Batch
         var e = Throws<InvalidOperationException>(() => {
             batch.Apply();
         });
-        AreEqual("Apply() can only be used on a batch using Entity.Batch() - use ApplyTo()", e!.Message);
+        AreEqual("Apply() can only be used on a batch returned by Entity.Batch() - use ApplyTo()", e!.Message);
         AreEqual(0, store.PooledEntityBatchCount);
     }
     
