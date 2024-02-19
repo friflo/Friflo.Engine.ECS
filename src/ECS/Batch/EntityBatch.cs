@@ -10,6 +10,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Is thrown if using a batch returned by <see cref="Entity.Batch"/> after calling <see cref="EntityBatch.Apply"/>.
+/// </summary>
 public class BatchAlreadyAppliedException : InvalidOperationException
 {
     internal BatchAlreadyAppliedException(string message) : base (message) { }
