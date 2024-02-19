@@ -104,10 +104,11 @@ public sealed class CreateEntityBatch
 #region commands
     /// <summary>
     /// Creates an entity with the components and tags previously added.<br/>
-    /// The added batch commands are not cleared.<br/>
-    /// <br/>
-    /// Subsequent use of a batch returned by <c>Batch(autoReturn: true)</c> throws <see cref="ECS.BatchAlreadyReturnedException"/>.
+    /// Added batch components and tags are not cleared.
     /// </summary>
+    /// <remarks>
+    /// Subsequent use of a batch returned by <c>Batch(autoReturn: true)</c> throws <see cref="ECS.BatchAlreadyReturnedException"/>.
+    /// </remarks>
     public Entity CreateEntity()
     {
         if (isReturned) throw BatchAlreadyReturnedException();

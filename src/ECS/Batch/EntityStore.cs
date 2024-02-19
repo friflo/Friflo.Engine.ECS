@@ -129,6 +129,7 @@ public partial class EntityStoreBase
     /// <br/>
     /// If <paramref name="autoReturn"/> == true the batch is returned to the EntityStore when
     /// calling <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
+    /// Subsequent use of the batch throws <see cref="BatchAlreadyReturnedException"/>.<br/>
     /// <br/>
     /// If <paramref name="autoReturn"/> == false <see cref="CreateEntityBatch.CreateEntity"/> can be called
     /// multiple times to create multiple entities.<br/>

@@ -520,6 +520,8 @@ public readonly struct Entity : IEquatable<Entity>
     /// The returned batch is used to add/removed components and tags.<br/>
     /// These changes are applied to the entity when calling <see cref="EntityBatch.Apply"/>.<br/>
     /// <br/>
+    /// Subsequent use of the batch throws <see cref="BatchAlreadyAppliedException"/>.<br/>
+    /// <br/>
     /// If missing the <see cref="EntityBatch.Apply"/> call:<br/>
     /// - Entity changes are not applied.<br/>
     /// - Some unnecessary memory allocations.<br/>
