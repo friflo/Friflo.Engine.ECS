@@ -62,6 +62,9 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] public              EventRecorder       EventRecorder   => GetEventRecorder();
     
     [Browse(Never)] public              int                 Capacity        => nodes.Length;
+    
+    // ReSharper disable once InconsistentNaming
+    [Browse(Never)] public readonly     EntityStoreInfo           Info;
     #endregion
     
 #region events
@@ -152,6 +155,7 @@ public sealed partial class EntityStore : EntityStoreBase
         idBuffer            = new int[1];
         idBufferSet         = new HashSet<int>();
         dataBuffer          = new DataEntity();
+        Info                = new EntityStoreInfo(this);
     }
     #endregion
     

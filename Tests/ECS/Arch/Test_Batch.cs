@@ -72,7 +72,7 @@ public static class Test_Batch
         
         var batch = entity.Batch();
         AreEqual("empty", batch.ToString());
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
         
         batch.Add       (new Position(1, 1, 1))
             .Add        (new EntityName("test"))
@@ -85,13 +85,13 @@ public static class Test_Batch
         
         AreEqual("id: 1  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
         AreEqual(new Position(1, 1, 1), entity.Position);
-        AreEqual(1, store.PooledEntityBatchCount);
+        AreEqual(1, store.Info.PooledEntityBatchCount);
         
         var addTags     = Tags.Get<TestTag2>();
         var removeTags  = Tags.Get<TestTag>();
         
         batch = entity.Batch();
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
         batch.Add       (new Position(2, 2, 2))
             .Remove     <EntityName>()
             .AddTags    (addTags)
@@ -102,7 +102,7 @@ public static class Test_Batch
         
         AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
         AreEqual(new Position(2, 2, 2), entity.Position);
-        AreEqual(1, store.PooledEntityBatchCount);
+        AreEqual(1, store.Info.PooledEntityBatchCount);
         
         AreEqual(3, countAdd);
         AreEqual(1, countRemove);
@@ -121,7 +121,7 @@ public static class Test_Batch
         var entity2 = store.CreateEntity();
         batch.ApplyTo(entity1)
              .ApplyTo(entity2);
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
         
         AreEqual("id: 1  [Position, #TestTag]", entity1.ToString());
         AreEqual("id: 2  [Position, #TestTag]", entity2.ToString());
@@ -130,7 +130,7 @@ public static class Test_Batch
             batch.Apply();
         });
         AreEqual("Apply() can only be used on a batch returned by Entity.Batch() - use ApplyTo()", e!.Message);
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
     }
     
     [Test]
@@ -143,7 +143,7 @@ public static class Test_Batch
         var batch = new EntityBatch();
         batch.Add(new Position(2, 3, 4));
         store.Entities.ApplyBatch(batch);
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>());
         AreEqual(10, arch.Count);
@@ -155,7 +155,7 @@ public static class Test_Batch
         
         arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag>());
         AreEqual(10, arch.Count);
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
     }
     
     [Test]
@@ -166,21 +166,21 @@ public static class Test_Batch
         var entity2 = store.CreateEntity(2);
         
         var batch1 = entity1.Batch().Add(new Position());
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
         
         var batch2 = entity2.Batch().Add(new Rotation());
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
         
         AreEqual("entity: 1 > add: [Position]", batch1.ToString());
         AreEqual("entity: 2 > add: [Rotation]", batch2.ToString());
         
         batch1.Apply();
         AreEqual("batch applied", batch1.ToString());
-        AreEqual(1, store.PooledEntityBatchCount);
+        AreEqual(1, store.Info.PooledEntityBatchCount);
         
         batch2.Apply();
         AreEqual("batch applied", batch2.ToString());
-        AreEqual(2, store.PooledEntityBatchCount);
+        AreEqual(2, store.Info.PooledEntityBatchCount);
     }
     
     [Test]
@@ -248,7 +248,7 @@ public static class Test_Batch
         
         Console.WriteLine($"Entity.Batch - duration: {sw.ElapsedMilliseconds} ms");
         AreEqual("id: 1  [Position, #TestTag2]", entity.ToString());
-        AreEqual(1, store.PooledEntityBatchCount);
+        AreEqual(1, store.Info.PooledEntityBatchCount);
     }
     
     [Test]
@@ -292,7 +292,7 @@ public static class Test_Batch
         
         var arch = store.GetArchetype(ComponentTypes.Get<Position>(), Tags.Get<TestTag2>());
         AreEqual(entityCount, arch.Count);
-        AreEqual(0, store.PooledEntityBatchCount);
+        AreEqual(0, store.Info.PooledEntityBatchCount);
     }
     
     [Test]
