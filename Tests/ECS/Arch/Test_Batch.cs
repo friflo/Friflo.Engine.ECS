@@ -179,7 +179,7 @@ public static class Test_Batch
         AreEqual(1, store.PooledEntityBatchCount);
         
         batch2.Apply();
-        AreEqual("batch applied", batch1.ToString());
+        AreEqual("batch applied", batch2.ToString());
         AreEqual(2, store.PooledEntityBatchCount);
     }
     
