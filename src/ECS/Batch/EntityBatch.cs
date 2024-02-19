@@ -41,7 +41,7 @@ internal enum BatchOwner
 /// The same entity changes can be performed with the <see cref="Entity"/> methods using:<br/>
 /// <see cref="Entity.AddComponent{T}()"/>, <see cref="Entity.RemoveComponent{T}()"/>,
 /// <see cref="Entity.AddTag{TTag}()"/> or <see cref="Entity.RemoveTag{TTag}()"/>.<br/>
-/// Each of this methods may cause a structural change which is a relative costly operation in comparison to others.<br/>
+/// Each of these methods may cause a structural change which is a relative costly operation in comparison to others.<br/>
 /// Using <see cref="EntityBatch"/> minimize theses structural changes to one or none.<br/>
 /// <br/>
 /// <b>Bulk operation</b><br/>
