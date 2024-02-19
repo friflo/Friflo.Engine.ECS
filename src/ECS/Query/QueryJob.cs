@@ -49,7 +49,7 @@ public abstract class QueryJob
     #endregion
     
     /// <summary>
-    /// Execute a <see cref="JobExecution.Sequential"/> query.
+    /// Execute the query <see cref="JobExecution.Sequential"/>.
     /// </summary>
     public      abstract    void Run();
     /// <summary>Execute the query.<br/> 
