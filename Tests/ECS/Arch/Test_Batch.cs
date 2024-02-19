@@ -175,9 +175,11 @@ public static class Test_Batch
         AreEqual("entity: 2 > add: [Rotation]", batch2.ToString());
         
         batch1.Apply();
+        AreEqual("batch applied", batch1.ToString());
         AreEqual(1, store.PooledEntityBatchCount);
         
         batch2.Apply();
+        AreEqual("batch applied", batch1.ToString());
         AreEqual(2, store.PooledEntityBatchCount);
     }
     

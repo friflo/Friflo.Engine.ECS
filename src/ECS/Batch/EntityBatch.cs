@@ -117,6 +117,9 @@ public sealed class  EntityBatch
     
     private string GetString()
     {
+        if (owner == BatchOwner.EntityStore) {
+            return "batch applied";
+        }
         var hasAdds     = componentsAdd.Count    > 0 || tagsAdd.Count    > 0;
         var hasRemoves  = componentsRemove.Count > 0 || tagsRemove.Count > 0;
         if (!hasAdds && !hasRemoves) {
