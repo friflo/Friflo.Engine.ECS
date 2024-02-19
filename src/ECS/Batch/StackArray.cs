@@ -9,8 +9,9 @@ namespace Friflo.Engine.ECS;
 
 internal struct StackArray<T>
 {
-    internal    int     Count => count;
-    
+    internal        int     Count       => count;
+    public override string  ToString()  => $"Count: {count}";
+
     private     T[]     items;
     private     int     count;
     
