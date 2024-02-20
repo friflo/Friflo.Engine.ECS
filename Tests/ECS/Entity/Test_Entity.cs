@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
@@ -11,6 +12,18 @@ namespace Tests.ECS;
 
 public static class Test_Entity
 {
+    [Test]
+    public static void Test_Entity_new_EntityStore_Perf()
+    {
+        long count = 10; // 10_000_000 ~ #PC: 4867 ms
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int n = 0; n < count; n++) {
+            _ = new EntityStore(PidType.UsePidAsId);
+        }
+        Console.WriteLine($"new EntityStore() - duration: {sw.ElapsedMilliseconds}");
+    }
+    
     [Test]
     public static void Test_Entity_non_generic_Script_methods()
     {
