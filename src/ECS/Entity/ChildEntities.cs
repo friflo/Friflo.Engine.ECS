@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -98,7 +97,6 @@ public struct ChildEnumerator : IEnumerator<Entity>
     public void Dispose() { }
 }
 
-[ExcludeFromCodeCoverage]
 internal class ChildEntitiesDebugView
 {
     [Browse(RootHidden)]

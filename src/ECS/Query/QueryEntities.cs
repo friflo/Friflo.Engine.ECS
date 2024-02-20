@@ -116,7 +116,6 @@ public struct EntitiesEnumerator : IEnumerator<Entity>
     public void Dispose() { }
 }
 
-[ExcludeFromCodeCoverage]
 internal class QueryEntitiesDebugView
 {
     [Browse(RootHidden)]

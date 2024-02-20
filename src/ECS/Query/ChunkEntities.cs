@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -174,7 +173,6 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     public void Dispose() { }
 }
 
-[ExcludeFromCodeCoverage]
 internal class ChunkEntitiesDebugView
 {
     [Browse(RootHidden)]

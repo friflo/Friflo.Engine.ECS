@@ -117,6 +117,38 @@ public static class Test_Entity
     private static void DebuggerEntityScreenshot(Entity entity) {
         _ = entity;
     }
+    
+    [Test]
+    public static void Test_Entity_EntityComponents()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        entity.AddComponent<Position>();
+        entity.AddComponent<Rotation>();
+        
+        var debugView   = new EntityComponentsDebugView(entity.Components);
+        var components  = debugView.Components;
+        
+        AreEqual(2, components.Length);
+        AreEqual(new Position(), components[0]);
+        AreEqual(new Rotation(), components[1]);
+    }
+    
+    [Test]
+    public static void Test_Entity_ChildEntities_DebugView()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity(1);
+        entity.AddChild(store.CreateEntity(2));
+        entity.AddChild(store.CreateEntity(3));
+        
+        var debugView   = new ChildEntitiesDebugView(entity.ChildEntities);
+        var entities    = debugView.Entities;
+        
+        AreEqual(2, entities.Length);
+        AreEqual(2, entities[0].Id);
+        AreEqual(3, entities[1].Id);
+    }
 }
 
 internal struct MyTag : ITag { }
