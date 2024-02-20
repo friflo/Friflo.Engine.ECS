@@ -140,7 +140,7 @@ public partial class EntityStoreBase
     /// </remarks>
     public CreateEntityBatch Batch(bool autoReturn = true)
     {
-        if (!internBase.createEntityBatch.TryPop(out var batch)) {
+        if (!internBase.createEntityBatches.TryPop(out var batch)) {
             batch = new CreateEntityBatch(this);
         }
         batch.autoReturn = autoReturn;
@@ -149,8 +149,8 @@ public partial class EntityStoreBase
     }
     
     [Browse(Never)]
-    internal int PooledCreateEntityBatchCount => internBase.createEntityBatch.Count;
+    internal int PooledCreateEntityBatchCount => internBase.createEntityBatches.Count;
     
-    internal void ReturnCreateBatch(CreateEntityBatch batch) => internBase.createEntityBatch.Push(batch);
+    internal void ReturnCreateBatch(CreateEntityBatch batch) => internBase.createEntityBatches.Push(batch);
     #endregion
 }

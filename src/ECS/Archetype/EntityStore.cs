@@ -95,7 +95,7 @@ public abstract partial class EntityStoreBase
         ///  reused query for <see cref="EntityStoreBase.GetUniqueEntity"/>
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8
         internal        StackArray<EntityBatch>                     entityBatches;          //  8
-        internal        StackArray<CreateEntityBatch>               createEntityBatch;      //  8
+        internal        StackArray<CreateEntityBatch>               createEntityBatches;    //  8
     }
     #endregion
     
@@ -133,7 +133,7 @@ public abstract partial class EntityStoreBase
         searchKey           = new ArchetypeKey();
         AddArchetype(this, defaultArchetype);
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
-        internBase.createEntityBatch    = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
+        internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
     }
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);
