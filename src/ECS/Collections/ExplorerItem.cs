@@ -8,6 +8,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 // ReSharper disable PossibleNullReferenceException
@@ -56,7 +57,7 @@ public sealed class ExplorerItem :
     
     public              bool    flag;           // todo remove
     
-    public   override   string  ToString()  => entity.ToString();
+    public   override   string  ToString()      => GetString();
     #endregion
     
 #region internal fields
@@ -133,6 +134,18 @@ public sealed class ExplorerItem :
     
     private int GetChildIndex(ExplorerItem item) {
         return entity.GetChildIndex(item.entity);
+    }
+    
+    private string GetString()
+    {
+        var sb = new StringBuilder();
+        EntityUtils.EntityToString(entity.Id, entity.archetype, sb);
+        var childCount = entity.ChildCount; 
+        if (childCount > 0) {
+            sb.Append("   children: ");
+            sb.Append(childCount);
+        }
+        return sb.ToString();
     }
     #endregion
     

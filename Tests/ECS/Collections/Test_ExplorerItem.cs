@@ -435,5 +435,24 @@ public static class Test_ExplorerItem
                 throw new InvalidOperationException("unexpected");
         }
     }
+    
+    [Test]
+    public static void Test_ExplorerItem_ToString()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var root    = store.CreateEntity(1);
+        var child1  = store.CreateEntity(2);
+        var child2  = store.CreateEntity(3);
+        root.AddChild(child1);
+        root.AddChild(child2);
+        root.AddComponent(new EntityName("root"));
+        child1.AddComponent<Position>();
+        child2.AddTag<TestTag>();
+        
+        var tree = new ExplorerItemTree(root, "test-tree");
+        
+        AreEqual("id: 1  \"root\"  [EntityName]   children: 2", tree.GetItemById(1).ToString());
+        AreEqual("id: 2  [Position]",                           tree.GetItemById(2).ToString());
+        AreEqual("id: 3  [#TestTag]",                           tree.GetItemById(3).ToString());
+    }
 }
-
