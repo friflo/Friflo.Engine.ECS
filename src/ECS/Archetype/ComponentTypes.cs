@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Friflo.Engine.ECS.Utils;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -276,7 +275,6 @@ public struct ComponentTypesEnumerator : IEnumerator<ComponentType>
     public readonly void Dispose() { }
 }
 
-[ExcludeFromCodeCoverage]
 internal class ComponentTypesDebugView
 {
     [Browse(RootHidden)]

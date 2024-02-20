@@ -1,13 +1,11 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 namespace Friflo.Engine.ECS.Collections;
 
-[ExcludeFromCodeCoverage]
 internal sealed class ExplorerItemDebugView 
 {
     [Browse(RootHidden)]

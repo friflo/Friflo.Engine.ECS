@@ -43,5 +43,16 @@ public static class Test_ComponentType
         });
         AreEqual("Cannot create SchemaType for Type: System.Guid", e!.Message);
     }
-
+    
+    [Test]
+    public static void Test_ComponentType_DebugView()
+    {
+        var componentTypes = ComponentTypes.Get<Position, Rotation>();
+        
+        var debugView   = new ComponentTypesDebugView(componentTypes);
+        var types       = debugView.Types;
+        AreEqual(2,                 types.Length);
+        AreEqual(typeof(Position),  types[0].Type);
+        AreEqual(typeof(Rotation),  types[1].Type);
+    }
 }
