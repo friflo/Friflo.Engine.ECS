@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -36,6 +37,7 @@ namespace Friflo.Engine.ECS.Collections;
 ///   </item>
 /// </list>
 /// </remarks>
+[DebuggerTypeProxy(typeof(ExplorerItemDebugView))]
 public sealed class ExplorerItem :
     IList<ExplorerItem>,
     IList,

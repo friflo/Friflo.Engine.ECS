@@ -41,4 +41,22 @@ public static class Test_ExplorerItem
         });
         AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
     }
+    
+    [Test]
+    public static void Test_ExplorerItem_DebugView()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity(1);
+        root.AddChild(store.CreateEntity(2));
+        root.AddChild(store.CreateEntity(3));
+        var tree        = new ExplorerItemTree(root, "test");
+        
+        var rootItem    = tree.GetItemById(1);
+        var rootDebug   = new ExplorerItemDebugView(rootItem);
+        
+        var rootItems   = rootDebug.Items;
+        AreEqual(2, rootItems.Length);
+        AreEqual(2, rootItems[0].Id);
+        AreEqual(3, rootItems[1].Id);
+    }
 }
