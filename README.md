@@ -109,7 +109,10 @@ Build options:
 - Visual Studio 2022 - Windows
 - Visual Studio Code - Windows, macOS, Linux (untested)
 
-Library:
+## Library
+- The nuget package contains four dll's specific for: .NET Standard 2.1, .NET 6, .NET 7 and .NET 8.  
+  This enables using the most performant features available for each target.  
+  E.g. Some SIMD intrinsics methods available on .NET 7 and .NET 8 but not on earlier versions.
 - Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
 - Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
 - Unit test execution: ~ 1 second.
