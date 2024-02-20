@@ -156,8 +156,8 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Query Vectorization - SIMD](#query-vectorization---simd)
 - [EventFilter](#eventfilter)
 - [Batch - Create Entity](#batch---create-entity)
-- [Batch - Change Entity](#batch---change-entity)
-- [Bulk Batch](#bulk-batch)
+- [Batch - Entity](#batch---entity)
+- [Bulk Batch - Entity](#bulk-batch---entity)
 - [CommandBuffer](#commandbuffer)
 
 
@@ -773,7 +773,7 @@ public static void CreateEntityBatch()
 ```
 
 
-## Batch - Change Entity
+## Batch - Entity
 
 When adding/removing components or tags to/from a single entity it will be moved to a new archetype.  
 This is also called a *structural change* and in comparison to other methods a more costly operation.  
@@ -799,7 +799,7 @@ public static void EntityBatch()
 ```
 
 
-## Bulk Batch
+## Bulk Batch - Entity
 
 In cases you need to add/remove components or tags to a set of entities you can use a **bulk operation**.  
 Executing these type of changes are most efficient using a bulk operation.  
