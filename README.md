@@ -877,7 +877,7 @@ running on a Mac Mini M2.
 Made a subset as the other benchmarks are similar only with different parameters.
 
 1. Create 100.000 entities with three components
-2. Update query on 100.000 entities with two components
+2. Update 100.000 entities with two components
 
 
 ## 1. Create 100.000 entities with three components
@@ -898,7 +898,9 @@ Made a subset as the other benchmarks are similar only with different parameters
 | RelEcs           | 56.156 ms | 0.4419 ms | 0.4134 ms | 9000.0000 | 4000.0000 | 3000.0000 | 75714.03 KB |
 
 
-## 2. Update query on 100.000 entities with two components - Padding 0.
+## 2. Update 100.000 entities with two components
+
+Benchmark parameter: Padding = 0
 
 *Notable fact*  
 SIMD MonoThread running on a **single core** beats MultiThread running on 8 cores.  
