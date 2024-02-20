@@ -155,8 +155,8 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Parallel Query Job](#parallel-query-job)
 - [Query Vectorization - SIMD](#query-vectorization---simd)
 - [EventFilter](#eventfilter)
-- [Create Entity Batch](#create-entity-batch)
-- [Entity Batch](#entity-batch)
+- [Batch - Create Entity](#batch---create-entity)
+- [Batch - Change Entity](#batch---change-entity)
 - [Bulk Batch](#bulk-batch)
 - [CommandBuffer](#commandbuffer)
 
@@ -743,7 +743,7 @@ public static void FilterEntityEvents()
 ```
 
 
-## Create Entity Batch
+## Batch - Create Entity
 
 Creating entities can be optimized if knowing the components and tags required by an entity in advance.  
 This prevent structural changes every time a component or tag is added to an exiting entity.  
@@ -773,7 +773,7 @@ public static void CreateEntityBatch()
 ```
 
 
-## Entity Batch
+## Batch - Change Entity
 
 When adding/removing components or tags to/from a single entity it will be moved to a new archetype.  
 This is also called a *structural change* and in comparison to other methods a more costly operation.  
