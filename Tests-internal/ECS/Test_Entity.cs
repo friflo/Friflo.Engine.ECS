@@ -149,6 +149,21 @@ public static class Test_Entity
         AreEqual(2, entities[0].Id);
         AreEqual(3, entities[1].Id);
     }
+    
+    [Test]
+    public static void Test_Entity_Scripts_DebugView()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity();
+        var script = new TestScript1();
+        entity.AddScript(script);
+        
+        var debugView   = new ScriptsDebugView(entity.Scripts);
+        var scripts     = debugView.Items;
+        
+        AreEqual(1,     scripts .Length);
+        AreSame(script, scripts[0]);
+    }
 }
 
 internal struct MyTag : ITag { }

@@ -185,7 +185,7 @@ public readonly struct Entity : IEquatable<Entity>
     public              EntityComponents        Components      => new EntityComponents(this);
     
     /// <summary>Return the <see cref="Script"/>'s added to the entity.</summary>
-    public              ReadOnlySpan<Script>    Scripts         => new (EntityUtils.GetScripts(this));
+    public              Scripts                 Scripts         => new Scripts(EntityUtils.GetScripts(this));
 
     /// <summary>Return the <see cref="ECS.Tags"/> added to the entity.</summary>
     /// <returns>

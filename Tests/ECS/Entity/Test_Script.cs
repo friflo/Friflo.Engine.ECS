@@ -248,6 +248,42 @@ public static class Test_Script
         IsNull  (entity2.GetScript<TestScript2>());
     }
     
+    [Test]
+    public static void Test_Script_Enumerator()
+    {
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity();
+        var script  = new TestScript1 { val1 = 1 };
+        AreEqual(0,             entity.Scripts.Length);
+        AreEqual("Script[0]",   entity.Scripts.ToString());
+        
+        IsNull  (entity.AddScript(script));
+        
+        AreEqual(1,             entity.Scripts.Length);
+        AreEqual(1,             entity.Scripts.Span.Length);
+        AreEqual("Script[1]",   entity.Scripts.ToString());
+        {
+            IEnumerable<Script> enumerable = entity.Scripts;
+            int count = 0;
+            foreach (var item in enumerable) {
+                count++;
+                AreSame(script, item);
+            }
+            AreEqual(1, count);
+        } {
+            IEnumerable enumerable = entity.Scripts;
+            var enumerator = enumerable.GetEnumerator();
+            using var disposable = enumerator as IDisposable;
+            int count = 0;
+            enumerator.Reset();
+            while (enumerator.MoveNext()) {
+                count++;
+                AreSame(script, enumerator.Current);
+            }
+            AreEqual(1, count);
+        }
+    }
+    
     /// <summary>Cover <see cref="EntityUtils.RemoveScript"/></summary>
     [Test]
     public static void Test_3_cover_remove_non_added_script() {
