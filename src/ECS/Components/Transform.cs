@@ -39,3 +39,5 @@ public struct  Transform : IComponent
     [FieldOffset(56)] public    float       m43;
     [FieldOffset(60)] public    float       m44;
 }
+
+internal struct Disabled : ITag;

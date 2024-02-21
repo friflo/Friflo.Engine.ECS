@@ -190,7 +190,8 @@ public static class EntityUtils
     
     // ---------------------------------- Script utils ----------------------------------
     private  static readonly Script[]                       EmptyScripts        = Array.Empty<Script>();
-    internal const  int                                     NoScripts           = 0;  
+    internal const  int                                     NoScripts           = 0;
+    internal static readonly Tags                           Disabled            = Tags.Get<Disabled>();
     private  static readonly ScriptType[]                   ScriptTypes         = EntityStoreBase.Static.EntitySchema.scripts;
     private  static readonly Dictionary<Type, ScriptType>   ScriptTypeByType    = EntityStoreBase.Static.EntitySchema.scriptTypeByType;
     
@@ -249,5 +250,25 @@ public static class EntityUtils
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
+        
+    internal static void SetTags(Entity entity, in Tags tags)
+    {
+        int index = 0;
+        ref var node = ref entity.store.nodes[entity.Id];
+        EntityStoreBase.AddTags(entity.store, tags, entity.Id, ref node.archetype, ref node.compIndex, ref index);
+        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount)) {
+            SetTags(child, tags);
+        }
+    }
+    
+    internal static void ClearTags(Entity entity, in Tags tags)
+    {
+        int index = 0;
+        ref var node = ref entity.store.nodes[entity.Id];
+        EntityStoreBase.RemoveTags(entity.store, tags, entity.Id, ref node.archetype, ref node.compIndex, ref index);
+        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount)) {
+            ClearTags(child, tags);
+        }
+    }
     #endregion
 }

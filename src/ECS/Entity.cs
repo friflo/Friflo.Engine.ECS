@@ -419,6 +419,13 @@ public readonly struct Entity : IEquatable<Entity>
         int index = 0;
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
+    
+    internal bool Enabled {
+        get => !Tags.HasAll(EntityUtils.Disabled);
+        set { if (value) EntityUtils.ClearTags(this, EntityUtils.Disabled);
+              else       EntityUtils.SetTags  (this, EntityUtils.Disabled);
+        }
+    }
     #endregion
 
 

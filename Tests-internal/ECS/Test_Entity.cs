@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -163,6 +165,33 @@ public static class Test_Entity
         
         AreEqual(1,     scripts .Length);
         AreSame(script, scripts[0]);
+    }
+    
+    [Test]
+    public static void Test_Tags_Disable_Enable()
+    {
+        var count       = 10;    // 1_000_000 ~ #PC: 8279 ms
+        var entityCount = 100;
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var root        = store.CreateEntity();
+        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
+        
+        for (int n = 1; n < entityCount; n++) {
+            root.AddChild(archetype.CreateEntity());
+        }
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int i = 0; i < count; i++)
+        {
+            root.Enabled = true;
+            root.Enabled = false;
+        }
+        Console.WriteLine($"Disable / Enable - duration: {sw.ElapsedMilliseconds} ms");
+        
+        var query = store.Query().AllTags(Tags.Get<Disabled>());
+        AreEqual(100, query.Count);
+        IsFalse (root.Enabled);
     }
 }
 
