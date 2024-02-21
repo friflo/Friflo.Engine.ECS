@@ -421,10 +421,14 @@ public readonly struct Entity : IEquatable<Entity>
     }
     
     internal bool Enabled {
-        get => !Tags.HasAll(EntityUtils.Disabled);
-        set { if (value) EntityUtils.ClearTags(this, EntityUtils.Disabled);
-              else       EntityUtils.SetTags  (this, EntityUtils.Disabled);
+        get =>             !Tags.HasAll(EntityUtils.Disabled);
+        set { if (value)    RemoveTags (EntityUtils.Disabled);
+              else          AddTags    (EntityUtils.Disabled);
         }
+    }
+    internal void EnableTree(bool enabled) {
+        if (enabled) EntityUtils.ClearTags(this, EntityUtils.Disabled);
+        else         EntityUtils.SetTags  (this, EntityUtils.Disabled);
     }
     #endregion
 

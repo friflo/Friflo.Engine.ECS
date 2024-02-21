@@ -179,13 +179,14 @@ public static class Test_Entity
         for (int n = 1; n < entityCount; n++) {
             root.AddChild(archetype.CreateEntity());
         }
+        IsTrue (root.Enabled);
         
         var sw = new Stopwatch();
         sw.Start();
         for (int i = 0; i < count; i++)
         {
-            root.Enabled = true;
-            root.Enabled = false;
+            root.EnableTree(true);
+            root.EnableTree(false);
         }
         Console.WriteLine($"Disable / Enable - duration: {sw.ElapsedMilliseconds} ms");
         
