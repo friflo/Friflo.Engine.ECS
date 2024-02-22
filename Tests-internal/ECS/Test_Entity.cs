@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
@@ -170,7 +171,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Tags_Disable_Enable()
     {
-        var count       = 10;    // 1_000_000 ~ #PC: 8279 ms
+        var count       = 10;    // 1_000_000 ~ #PC: 8475 ms
         var entityCount = 100;
         var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity();
@@ -183,11 +184,14 @@ public static class Test_Entity
         
         var sw = new Stopwatch();
         sw.Start();
+        long start = 0;
         for (int i = 0; i < count; i++)
         {
             root.EnableTree(true);
             root.EnableTree(false);
+            if (i == 0) start = Mem.GetAllocatedBytes();
         }
+        Mem.AssertNoAlloc(start);
         Console.WriteLine($"Disable / Enable - duration: {sw.ElapsedMilliseconds} ms");
         
         var query = store.Query().AllTags(Tags.Get<Disabled>());

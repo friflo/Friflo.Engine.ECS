@@ -250,27 +250,6 @@ public static class EntityUtils
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
-        
-    internal static void AddTags(Entity entity, in Tags tags)
-    {
-        int index = 0;
-        ref var node = ref entity.store.nodes[entity.Id];
-        EntityStoreBase.AddTags(entity.store, tags, entity.Id, ref node.archetype, ref node.compIndex, ref index);
-        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount)) {
-            AddTags(child, tags);
-        }
-    }
-    
-    internal static void RemoveTags(Entity entity, in Tags tags)
-    {
-        int index = 0;
-        ref var node = ref entity.store.nodes[entity.Id];
-        EntityStoreBase.RemoveTags(entity.store, tags, entity.Id, ref node.archetype, ref node.compIndex, ref index);
-        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount)) {
-            RemoveTags(child, tags);
-        }
-    }
-    
     internal static void AddTreeEntities(Entity entity, EntityList list)
     {
         list.AddEntityId(entity.Id);

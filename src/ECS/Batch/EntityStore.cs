@@ -153,4 +153,19 @@ public partial class EntityStoreBase
     
     internal void ReturnCreateBatch(CreateEntityBatch batch) => internBase.createEntityBatches.Push(batch);
     #endregion
+    
+#region EntityList
+    internal EntityList GetEntityList()
+    {
+        if (!internBase.entityLists.TryPop(out var list)) {
+            list = new EntityList((EntityStore)this);
+        }
+        return list;
+    }
+    
+    internal void ReturnEntityList(EntityList list)
+    {
+        internBase.entityLists.Push(list);
+    }
+    #endregion
 }

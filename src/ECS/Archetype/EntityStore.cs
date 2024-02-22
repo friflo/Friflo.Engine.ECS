@@ -96,6 +96,7 @@ public abstract partial class EntityStoreBase
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8
         internal        StackArray<EntityBatch>                     entityBatches;          //  8
         internal        StackArray<CreateEntityBatch>               createEntityBatches;    //  8
+        internal        StackArray<EntityList>                      entityLists;            //  8
     }
     #endregion
     
@@ -134,6 +135,7 @@ public abstract partial class EntityStoreBase
         AddArchetype(this, defaultArchetype);
         internBase.entityBatches        = new StackArray<EntityBatch>       (Array.Empty<EntityBatch>());
         internBase.createEntityBatches  = new StackArray<CreateEntityBatch> (Array.Empty<CreateEntityBatch>());
+        internBase.entityLists          = new StackArray<EntityList>        (Array.Empty<EntityList>());
     }
     
     protected internal abstract void    UpdateEntityCompIndex(int id, int compIndex);

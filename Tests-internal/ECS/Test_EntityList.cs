@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -26,13 +27,16 @@ public static class Test_EntityList
         
         var sw = new Stopwatch();
         sw.Start();
+        long start = 0; 
         var tags = Tags.Get<Disabled>();
         for (int n = 0; n < count; n++) {
             list.Clear();
             EntityUtils.AddTreeEntities(root, list);
             list.RemoveTags(tags);
             list.AddTags(tags);
+            if (n == 0) start = Mem.GetAllocatedBytes();
         }
+        Mem.AssertNoAlloc(start);
         Console.WriteLine($"AddTreeEntities - duration: {sw.ElapsedMilliseconds} ms");
         AreEqual(entityCount, list.Count);
         AreEqual(entityCount, list.Ids.Length);
