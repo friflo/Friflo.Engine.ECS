@@ -250,6 +250,19 @@ public static class EntityUtils
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
+    internal static void EnableTree(Entity entity, bool enable)
+    {
+        var list = entity.store.GetEntityList();
+        list.Clear();
+        AddTreeEntities(entity, list);
+        try {
+            if (enable) list.RemoveTags(EntityUtils.Disabled);
+            else        list.AddTags   (EntityUtils.Disabled);
+        } finally {
+            entity.store.ReturnEntityList(list);
+        }
+    }
+    
     internal static void AddTreeEntities(Entity entity, EntityList list)
     {
         list.AddEntityId(entity.Id);

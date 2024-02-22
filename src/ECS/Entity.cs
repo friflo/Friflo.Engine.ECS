@@ -427,18 +427,7 @@ public readonly struct Entity : IEquatable<Entity>
         }
     }
     
-    internal void EnableTree(bool enable)
-    {
-        var list = store.GetEntityList();
-        list.Clear();
-        EntityUtils.AddTreeEntities(this, list);
-        try {
-            if (enable) list.RemoveTags(EntityUtils.Disabled);
-            else        list.AddTags   (EntityUtils.Disabled);
-        } finally {
-            store.ReturnEntityList(list);
-        }
-    }
+    internal void EnableTree(bool enable) => EntityUtils.EnableTree(this ,enable);
     #endregion
 
 
