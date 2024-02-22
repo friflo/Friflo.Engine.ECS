@@ -218,5 +218,7 @@ public sealed class CreateEntityBatch
         tagsCreate.Add(tags);
         return this;
     }
+    
+    public CreateEntityBatch Disable() => AddTags(EntityUtils.Disabled);
     #endregion
 }

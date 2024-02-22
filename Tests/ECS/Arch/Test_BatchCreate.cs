@@ -46,11 +46,12 @@ public static class Test_BatchCreate
         batch.Add   (new Position(1, 2, 3))
             .Add    <Rotation>()
             .AddTag <TestTag>()
-            .AddTags(addTags);
+            .AddTags(addTags)
+            .Disable();
         
         var entity2 = batch.CreateEntity();
         AreEqual("batch returned", batch.ToString());
-        AreEqual("id: 2  [Position, Rotation, #TestTag, #TestTag2]", entity2.ToString());
+        AreEqual("id: 2  [Position, Rotation, #Disabled, #TestTag, #TestTag2]", entity2.ToString());
         AreEqual(1, store.Info.PooledCreateEntityBatchCount);
         
         AreEqual(new Position(1, 2, 3),     entity2.Position);
