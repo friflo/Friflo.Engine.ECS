@@ -266,9 +266,9 @@ public static class EntityUtils
         list.AddEntityTree(entity);
         try {
             if (action == TagsAction.Add) {
-                list.AddTags(tags);
+                list.ApplyAddTags(tags);
             } else {
-                list.RemoveTags(tags);
+                list.ApplyRemoveTags(tags);
             }
         } finally {
             entity.store.ReturnEntityList(list);

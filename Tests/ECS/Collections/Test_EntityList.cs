@@ -34,8 +34,8 @@ public static class Test_EntityList
         for (int n = 0; n < count; n++) {
             list.Clear();
             list.AddEntityTree(root);
-            list.RemoveTags(tags);
-            list.AddTags(tags);
+            list.ApplyRemoveTags(tags);
+            list.ApplyAddTags(tags);
             if (n == 0) start = Mem.GetAllocatedBytes();
         }
         Mem.AssertNoAlloc(start);

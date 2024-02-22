@@ -59,8 +59,8 @@ public sealed class EntityList : IEnumerable<Entity>
     }
     #endregion
     
-#region modify entities
-    public void AddTags(in Tags tags)
+#region apply entity changes
+    public void ApplyAddTags(in Tags tags)
     {
         int index = 0;
         var store = entityStore;
@@ -72,7 +72,7 @@ public sealed class EntityList : IEnumerable<Entity>
         }
     }
     
-    public void RemoveTags(in Tags tags)
+    public void ApplyRemoveTags(in Tags tags)
     {
         int index = 0;
         var store = entityStore;
