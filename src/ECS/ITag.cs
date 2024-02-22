@@ -17,3 +17,5 @@ namespace Friflo.Engine.ECS;
 /// to assign a custom tag name used for JSON serialization.
 /// </remarks>
 public interface ITag { }
+
+public struct Disabled : ITag { };

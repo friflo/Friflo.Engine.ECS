@@ -8,13 +8,14 @@ using System.Diagnostics;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
-internal sealed class EntityList : IEnumerable<Entity>
+public sealed class EntityList : IEnumerable<Entity>
 {
 #region properties
     public              int         Count       => count;
@@ -33,6 +34,7 @@ internal sealed class EntityList : IEnumerable<Entity>
         entityStore = store;
         ids         = new int[8];
     }
+#region add entities
     
     public void Clear() {
         count = 0;
@@ -44,6 +46,17 @@ internal sealed class EntityList : IEnumerable<Entity>
         }
         ids[count++] = entityId;
     }
+    
+    public void AddEntityTree(Entity entity)
+    {
+        AddEntity(entity.Id);
+        ref var node = ref entity.store.nodes[entity.Id];
+        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount))
+        {
+            AddEntityTree(child);
+        }
+    }
+    #endregion
     
     public void AddTags(in Tags tags)
     {
@@ -91,7 +104,7 @@ internal sealed class EntityList : IEnumerable<Entity>
 }
 
 
-internal struct EntityListEnumerator : IEnumerator<Entity>
+public struct EntityListEnumerator : IEnumerator<Entity>
 {
     private readonly    int[]       ids;        //  8
     private readonly    EntityStore store;      //  8

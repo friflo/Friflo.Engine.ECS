@@ -226,7 +226,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// Shortcut property to return or set <see cref="Enabled"/> state of an entity.<br/>
     /// A disabled entity has the <see cref="Disabled"/> tag. An enabled entity not.
     /// </summary>
-    [Browse(Never)] internal bool               Enabled
+    [Browse(Never)] public   bool               Enabled
                     { get => !Tags.HasAll(EntityUtils.Disabled); set { if (value) RemoveTags(EntityUtils.Disabled); else AddTags(EntityUtils.Disabled); } }
     #endregion
 

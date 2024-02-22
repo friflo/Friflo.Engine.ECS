@@ -263,7 +263,7 @@ public static class EntityUtils
     {
         var list = entity.store.GetEntityList();
         list.Clear();
-        AddTreeEntities(entity, list);
+        list.AddEntityTree(entity);
         try {
             if (action == TagsAction.Add) {
                 list.AddTags(tags);
@@ -272,16 +272,6 @@ public static class EntityUtils
             }
         } finally {
             entity.store.ReturnEntityList(list);
-        }
-    }
-    
-    internal static void AddTreeEntities(Entity entity, EntityList list)
-    {
-        list.AddEntity(entity.Id);
-        ref var node = ref entity.store.nodes[entity.Id];
-        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount))
-        {
-            AddTreeEntities(child, list);
         }
     }
     #endregion
