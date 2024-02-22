@@ -59,7 +59,8 @@ internal sealed class EntityList : IEnumerable<Entity>
         var store = entityStore;
         foreach (var id in Ids)
         {
-            ref var node = ref store.nodes[id];
+            // don't capture store.nodes. Application event handler may resize
+            ref var node = ref store.nodes[id]; 
             EntityStoreBase.AddTags(store, tags, id, ref node.archetype, ref node.compIndex, ref index);
         }
     }
@@ -70,6 +71,7 @@ internal sealed class EntityList : IEnumerable<Entity>
         var store = entityStore;
         foreach (var id in Ids)
         {
+            // don't capture store.nodes. Application event handler may resize
             ref var node = ref store.nodes[id];
             EntityStoreBase.RemoveTags(store, tags, id, ref node.archetype, ref node.compIndex, ref index);
         }
