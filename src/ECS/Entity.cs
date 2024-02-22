@@ -427,7 +427,7 @@ public readonly struct Entity : IEquatable<Entity>
         }
     }
     
-    internal void EnableTree(bool enable) => EntityUtils.EnableTree(this ,enable);
+    internal void EnableTree(bool enable) => EntityUtils.EnableTree(this, EntityUtils.Disabled, enable ? TagsAction.Remove : TagsAction.Add);
     #endregion
 
 
