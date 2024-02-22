@@ -34,8 +34,9 @@ public sealed class EntityList : IEnumerable<Entity>
         entityStore = store;
         ids         = new int[8];
     }
+    public Entity this[int index] => new Entity(entityStore, ids[index]);
+
 #region add entities
-    
     public void Clear() {
         count = 0;
     }
@@ -58,6 +59,7 @@ public sealed class EntityList : IEnumerable<Entity>
     }
     #endregion
     
+#region modify entities
     public void AddTags(in Tags tags)
     {
         int index = 0;
@@ -87,12 +89,12 @@ public sealed class EntityList : IEnumerable<Entity>
     /// </summary>
     public void ApplyBatch(EntityBatch batch)
     {
-        foreach (var entity in this) {
-            entity.store.ApplyBatchTo(batch, entity.Id);
+        var store = entityStore;
+        foreach (var id in Ids) {
+            store.ApplyBatchTo(batch, id);
         }
     }
-    
-    public Entity this[int index] => new Entity(entityStore, ids[index]);
+    #endregion
     
     public EntityListEnumerator             GetEnumerator() => new EntityListEnumerator (this);
 
