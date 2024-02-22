@@ -29,12 +29,14 @@ public sealed class EntityList : IEnumerable<Entity>
     internal            int         count;          //  4
     #endregion
     
+#region general
     public EntityList(EntityStore store)
     {
         entityStore = store;
         ids         = new int[8];
     }
     public Entity this[int index] => new Entity(entityStore, ids[index]);
+    #endregion
 
 #region add entities
     public void Clear() {
@@ -96,6 +98,7 @@ public sealed class EntityList : IEnumerable<Entity>
     }
     #endregion
     
+#region enumerator
     public EntityListEnumerator             GetEnumerator() => new EntityListEnumerator (this);
 
     // --- IEnumerable
@@ -103,6 +106,7 @@ public sealed class EntityList : IEnumerable<Entity>
 
     // --- IEnumerable<>
     IEnumerator<Entity> IEnumerable<Entity>.GetEnumerator() => new EntityListEnumerator (this);
+    #endregion
 }
 
 
