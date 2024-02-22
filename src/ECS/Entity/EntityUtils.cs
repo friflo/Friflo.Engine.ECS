@@ -256,7 +256,7 @@ public static class EntityUtils
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
-    internal static void EnableTree(Entity entity, in Tags tags, TagsAction action)
+    internal static void ChangeTreeTags(Entity entity, in Tags tags, TagsAction action)
     {
         var list = entity.store.GetEntityList();
         list.Clear();
