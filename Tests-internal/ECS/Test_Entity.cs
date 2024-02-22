@@ -169,6 +169,20 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Test_Entity_Enabled()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity();
+        IsTrue (entity.Enabled);
+        
+        entity.Enabled = false;
+        IsFalse(entity.Enabled);
+        
+        entity.Enabled = true;
+        IsTrue (entity.Enabled);
+    }
+    
+    [Test]
     public static void Test_Tags_Disable_Enable()
     {
         var count       = 10;    // 1_000_000 ~ #PC: 8475 ms
