@@ -426,7 +426,11 @@ public readonly struct Entity : IEquatable<Entity>
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
     }
     
-    internal void EnableTree(bool enable) => EntityUtils.ChangeTreeTags(this, EntityUtils.Disabled, enable ? TagsAction.Remove : TagsAction.Add);
+    /// <summary> Enable recursively all child entities of the <see cref="Entity"/>. </summary>
+    public void EnableTree()  => EntityUtils.ChangeTreeTags(this, EntityUtils.Disabled, TagsAction.Remove);
+    
+    /// <summary> Disable recursively all child entities of the <see cref="Entity"/>. </summary>
+    public void DisableTree() => EntityUtils.ChangeTreeTags(this, EntityUtils.Disabled, TagsAction.Add);
     #endregion
 
 
