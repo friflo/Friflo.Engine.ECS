@@ -119,7 +119,7 @@ internal struct EntityListEnumerator : IEnumerator<Entity>
 internal sealed class EntityListDebugView
 {
     [Browse(RootHidden)]
-    public              Entity[]    Entities => GetEntities();
+    internal            Entity[]    Entities => GetEntities();
     
     private readonly    EntityList  list;
     
