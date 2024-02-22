@@ -1,12 +1,14 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -16,26 +18,27 @@ internal sealed class EntityList : IEnumerable<Entity>
 {
 #region properties
     public              int         Count       => count;
+    public ReadOnlySpan<int>        Ids         => new (ids, 0, count);
     public override     string      ToString()  => $"Count: {count}";
     #endregion
     
 #region fields
-    internal            int[]       ids;    //  8
-    internal readonly   EntityStore store;  //  8
-    internal            int         count;  //  4
+    internal            int[]       ids;            //  8
+    internal readonly   EntityStore entityStore;    //  8
+    internal            int         count;          //  4
     #endregion
     
     public EntityList(EntityStore store)
     {
-        this.store = store;
-        ids = new int[8];
+        entityStore = store;
+        ids         = new int[8];
     }
     
     public void Clear() {
         count = 0;
     }
     
-    public void Add(Entity entity)
+    public void AddEntity(Entity entity)
     {
         if (ids.Length == count) {
             ArrayUtils.Resize(ref ids, 2 * count);
@@ -43,14 +46,36 @@ internal sealed class EntityList : IEnumerable<Entity>
         ids[count++] = entity.Id;
     }
     
-    public void Add(int entityId) {
+    public void AddEntityId(int entityId) {
         if (ids.Length == count) {
             ArrayUtils.Resize(ref ids, 2 * count);
         }
         ids[count++] = entityId;
     }
     
-    public Entity this[int index] => new Entity(store, ids[index]);
+    public void AddTags(in Tags tags)
+    {
+        int index = 0;
+        var store = entityStore;
+        foreach (var id in Ids)
+        {
+            ref var node = ref store.nodes[id];
+            EntityStoreBase.AddTags(store, tags, id, ref node.archetype, ref node.compIndex, ref index);
+        }
+    }
+    
+    public void RemoveTags(in Tags tags)
+    {
+        int index = 0;
+        var store = entityStore;
+        foreach (var id in Ids)
+        {
+            ref var node = ref store.nodes[id];
+            EntityStoreBase.RemoveTags(store, tags, id, ref node.archetype, ref node.compIndex, ref index);
+        }
+    }
+    
+    public Entity this[int index] => new Entity(entityStore, ids[index]);
     
     public EntityListEnumerator             GetEnumerator() => new EntityListEnumerator (this);
 
@@ -73,7 +98,7 @@ internal struct EntityListEnumerator : IEnumerator<Entity>
     internal EntityListEnumerator(EntityList list) {
         ids     = list.ids;
         count   = list.count;
-        store   = list.store;
+        store   = list.entityStore;
     }
     
     // --- IEnumerator
@@ -111,7 +136,7 @@ internal sealed class EntityListDebugView
     private Entity[] GetEntities()
     {
         var ids     = list.ids;
-        var store   = list.store;
+        var store   = list.entityStore;
         var count   = list.count;
         var result  = new Entity[count];
         for (int n = 0; n < count; n++) {

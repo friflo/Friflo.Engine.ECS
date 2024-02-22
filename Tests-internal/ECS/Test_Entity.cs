@@ -191,7 +191,7 @@ public static class Test_Entity
         Console.WriteLine($"Disable / Enable - duration: {sw.ElapsedMilliseconds} ms");
         
         var query = store.Query().AllTags(Tags.Get<Disabled>());
-        AreEqual(100, query.Count);
+        AreEqual(entityCount, query.Count);
         IsFalse (root.Enabled);
     }
 }

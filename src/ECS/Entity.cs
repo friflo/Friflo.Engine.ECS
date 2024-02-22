@@ -427,8 +427,8 @@ public readonly struct Entity : IEquatable<Entity>
         }
     }
     internal void EnableTree(bool enabled) {
-        if (enabled) EntityUtils.ClearTags(this, EntityUtils.Disabled);
-        else         EntityUtils.SetTags  (this, EntityUtils.Disabled);
+        if (enabled) EntityUtils.RemoveTags(this, EntityUtils.Disabled);
+        else         EntityUtils.AddTags  (this, EntityUtils.Disabled);
     }
     #endregion
 
