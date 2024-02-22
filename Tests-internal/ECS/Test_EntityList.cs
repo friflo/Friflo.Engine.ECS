@@ -49,6 +49,27 @@ public static class Test_EntityList
     }
     
     [Test]
+    public static void Test_EntityList_ApplyBatch()
+    {
+        var store   = new EntityStore();
+        var entity = store.CreateEntity(1);
+        
+        var list = new EntityList(store);
+        list.AddEntity(entity.Id);
+        
+        var batch = new EntityBatch();
+        batch.Disable();
+        batch.Add(new Position());
+        list.ApplyBatch(batch);
+        AreEqual("id: 1  [Position, #Disabled]", entity.ToString());
+        
+        batch.Enable();
+        batch.Remove<Position>();
+        list.ApplyBatch(batch);
+        AreEqual("id: 1  []", entity.ToString());
+    }
+    
+    [Test]
     public static void Test_EntityList_Enumerator()
     {
         var store   = new EntityStore(PidType.UsePidAsId);

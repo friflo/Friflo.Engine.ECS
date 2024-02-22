@@ -281,6 +281,11 @@ public sealed class  EntityBatch
         tagsRemove. Add     (tags);
         return this;
     }
+    
+    public EntityBatch Enable()     => RemoveTags(EntityUtils.Disabled);
+    
+    public EntityBatch Disable()    => AddTags(EntityUtils.Disabled);
+    
 
     /// <summary> Obsolete - use renamed method: <see cref="Remove{T}"/> </summary>
     [Obsolete($"Renamed to {nameof(Remove)}()")]

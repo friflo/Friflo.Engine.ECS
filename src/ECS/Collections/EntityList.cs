@@ -69,6 +69,16 @@ internal sealed class EntityList : IEnumerable<Entity>
         }
     }
     
+    /// <summary>
+    /// Apply the given entity <paramref name="batch"/> to all entities in the list. 
+    /// </summary>
+    public void ApplyBatch(EntityBatch batch)
+    {
+        foreach (var entity in this) {
+            entity.store.ApplyBatchTo(batch, entity.Id);
+        }
+    }
+    
     public Entity this[int index] => new Entity(entityStore, ids[index]);
     
     public EntityListEnumerator             GetEnumerator() => new EntityListEnumerator (this);
