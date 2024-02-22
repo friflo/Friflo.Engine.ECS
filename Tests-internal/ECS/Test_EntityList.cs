@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Friflo.Engine.ECS;
@@ -70,6 +71,18 @@ public static class Test_EntityList
             int count = 0;
             IEnumerable<Entity> enumerable = list;
             foreach (var entity in enumerable) {
+                AreEqual(++count, entity.Id);
+            }
+            AreEqual(2, count);
+        }
+        {
+            int count = 0;
+            IEnumerable enumerable = list;
+            var enumerator = enumerable.GetEnumerator();
+            using var unknown = enumerator as IDisposable;
+            enumerator.Reset();
+            while (enumerator.MoveNext()) {
+                var entity = (Entity)enumerator.Current!;
                 AreEqual(++count, entity.Id);
             }
             AreEqual(2, count);
