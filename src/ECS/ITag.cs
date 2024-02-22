@@ -18,4 +18,9 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 public interface ITag { }
 
+
+/// <summary>
+/// Used to tag an entity as <see cref="Disabled"/>.<br/>
+/// To check if an entity is enabled/disabled use <see cref="Entity.Enabled"/>. 
+/// </summary>
 public struct Disabled : ITag { };

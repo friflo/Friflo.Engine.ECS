@@ -17,8 +17,8 @@ namespace Friflo.Engine.ECS;
 
 internal enum TagsAction
 {
-    Add     = 0,
-    Remove  = 1
+    Remove  = 0,
+    Add     = 1,
 }
 
 /// <summary>

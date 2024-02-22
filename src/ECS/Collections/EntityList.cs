@@ -14,12 +14,20 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// An entity list used to apply changes to all entities stored in the container.<br/>
+/// Its recommended to reuse instances of this class to avoid unnecessary allocations.
+/// </summary>
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
 public sealed class EntityList : IEnumerable<Entity>
 {
 #region properties
+    /// <summary> Returns the number of entities stored in the container. </summary>
     public              int         Count       => count;
+    
+    /// <summary> Return the ids of entities stored in the container. </summary>
     public ReadOnlySpan<int>        Ids         => new (ids, 0, count);
+    
     public override     string      ToString()  => $"Count: {count}";
     #endregion
     
@@ -30,26 +38,39 @@ public sealed class EntityList : IEnumerable<Entity>
     #endregion
     
 #region general
+    /// <summary>
+    /// Creates a container to store entities of the given <paramref name="store"/>.
+    /// </summary>
     public EntityList(EntityStore store)
     {
         entityStore = store;
         ids         = new int[8];
     }
+    
+    /// <summary> Return the entity at the given <paramref name="index"/>.</summary>
     public Entity this[int index] => new Entity(entityStore, ids[index]);
     #endregion
 
 #region add entities
+    /// <summary> Removes all entities from the <see cref="EntityList"/>. </summary>
     public void Clear() {
         count = 0;
     }
     
-    public void AddEntity(int entityId) {
+    /// <summary>
+    /// Adds the entity with the given <paramref name="id"/> to the end of the <see cref="EntityList"/>.
+    /// </summary>
+    public void AddEntity(int id) {
         if (ids.Length == count) {
             ArrayUtils.Resize(ref ids, 2 * count);
         }
-        ids[count++] = entityId;
+        ids[count++] = id;
     }
     
+    /// <summary>
+    /// Adds the <paramref name="entity"/> and recursively all child entities of the given <paramref name="entity"/>
+    /// to the end of the <see cref="EntityList"/>.
+    /// </summary>
     public void AddEntityTree(Entity entity)
     {
         AddEntity(entity.Id);
@@ -62,6 +83,9 @@ public sealed class EntityList : IEnumerable<Entity>
     #endregion
     
 #region apply entity changes
+    /// <summary>
+    /// Adds the given <paramref name="tags"/> to all entities in the <see cref="EntityList"/>.
+    /// </summary>
     public void ApplyAddTags(in Tags tags)
     {
         int index = 0;
@@ -74,6 +98,9 @@ public sealed class EntityList : IEnumerable<Entity>
         }
     }
     
+    /// <summary>
+    /// Removes the given <paramref name="tags"/> from all entities in the <see cref="EntityList"/>.
+    /// </summary>
     public void ApplyRemoveTags(in Tags tags)
     {
         int index = 0;
@@ -87,7 +114,7 @@ public sealed class EntityList : IEnumerable<Entity>
     }
     
     /// <summary>
-    /// Apply the given entity <paramref name="batch"/> to all entities in the list. 
+    /// Apply the the given <paramref name="batch"/> to all entities in the <see cref="EntityList"/>. 
     /// </summary>
     public void ApplyBatch(EntityBatch batch)
     {
@@ -99,6 +126,10 @@ public sealed class EntityList : IEnumerable<Entity>
     #endregion
     
 #region enumerator
+
+    /// <summary>
+    /// Returns an enumerator that iterates through the <see cref="EntityList"/>. 
+    /// </summary>
     public EntityListEnumerator             GetEnumerator() => new EntityListEnumerator (this);
 
     // --- IEnumerable
@@ -109,7 +140,9 @@ public sealed class EntityList : IEnumerable<Entity>
     #endregion
 }
 
-
+/// <summary>
+/// Enumerates the entities of an <see cref="EntityList"/>.
+/// </summary>
 public struct EntityListEnumerator : IEnumerator<Entity>
 {
     private readonly    int[]       ids;        //  8
