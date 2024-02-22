@@ -24,16 +24,19 @@ internal enum TagsAction
 /// <summary>
 /// Used to provide additional debug information for an <see cref="Entity"/>:<br/>
 /// <see cref="Entity.Pid"/>                <br/>
+/// <see cref="Entity.Enabled"/>            <br/>
 /// <see cref="Entity.DebugJSON"/>          <br/>
 /// <see cref="Entity.DebugEventHandlers"/> <br/>
 /// </summary>
 internal readonly struct EntityInfo
 {
+#region properties
     internal            long                Pid             => entity.Pid;
+    internal            bool                Enabled         => entity.Enabled;
     internal            string              JSON            => EntityUtils.EntityToJSON(entity);
     internal            DebugEventHandlers  EventHandlers   => EntityStore.GetEventHandlers(entity.store, entity.Id);
-    
     public   override   string              ToString()      => "";
+    #endregion
 
     [Browse(Never)] private readonly Entity entity;
     

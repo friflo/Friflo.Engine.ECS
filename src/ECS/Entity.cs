@@ -221,6 +221,13 @@ public readonly struct Entity : IEquatable<Entity>
     
     /// <summary> Use to display </summary>
                     internal EntityInfo         Info => new EntityInfo(this);
+    
+    /// <summary>
+    /// Shortcut property to return or set <see cref="Enabled"/> state of an entity.<br/>
+    /// A disabled entity has the <see cref="Disabled"/> tag. An enabled entity not.
+    /// </summary>
+    [Browse(Never)] internal bool               Enabled
+                    { get => !Tags.HasAll(EntityUtils.Disabled); set { if (value) RemoveTags(EntityUtils.Disabled); else AddTags(EntityUtils.Disabled); } }
     #endregion
 
 
@@ -418,13 +425,6 @@ public readonly struct Entity : IEquatable<Entity>
     public bool RemoveTags(in Tags tags) {
         int index = 0;
         return EntityStoreBase.RemoveTags(archetype.store, tags,          Id, ref refArchetype, ref refCompIndex, ref index);
-    }
-    
-    internal bool Enabled {
-        get =>             !Tags.HasAll(EntityUtils.Disabled);
-        set { if (value)    RemoveTags (EntityUtils.Disabled);
-              else          AddTags    (EntityUtils.Disabled);
-        }
     }
     
     internal void EnableTree(bool enable) => EntityUtils.ChangeTreeTags(this, EntityUtils.Disabled, enable ? TagsAction.Remove : TagsAction.Add);

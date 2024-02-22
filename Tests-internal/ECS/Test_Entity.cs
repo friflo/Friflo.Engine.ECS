@@ -85,6 +85,7 @@ public static class Test_Entity
 """;
         AreEqual("",                            entity.Info.ToString());
         AreEqual(entity.Pid,                    entity.Info.Pid);
+        AreEqual(entity.Enabled,                entity.Info.Enabled);
         AreEqual(json,                          entity.Info.JSON);
         AreEqual("event types: 0, handlers: 0", entity.Info.EventHandlers.ToString());
     }
@@ -172,7 +173,8 @@ public static class Test_Entity
     public static void Test_Entity_Enabled()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        var entity  = store.CreateEntity();
+        var entity  = store.CreateEntity(1);
+        
         IsTrue (entity.Enabled);
         
         entity.Enabled = false;
