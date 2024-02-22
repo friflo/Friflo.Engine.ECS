@@ -38,15 +38,7 @@ internal sealed class EntityList : IEnumerable<Entity>
         count = 0;
     }
     
-    public void AddEntity(Entity entity)
-    {
-        if (ids.Length == count) {
-            ArrayUtils.Resize(ref ids, 2 * count);
-        }
-        ids[count++] = entity.Id;
-    }
-    
-    public void AddEntityId(int entityId) {
+    public void AddEntity(int entityId) {
         if (ids.Length == count) {
             ArrayUtils.Resize(ref ids, 2 * count);
         }

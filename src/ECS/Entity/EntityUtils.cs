@@ -265,7 +265,7 @@ public static class EntityUtils
     
     internal static void AddTreeEntities(Entity entity, EntityList list)
     {
-        list.AddEntityId(entity.Id);
+        list.AddEntity(entity.Id);
         ref var node = ref entity.store.nodes[entity.Id];
         foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount))
         {
