@@ -270,5 +270,15 @@ public static class EntityUtils
             ClearTags(child, tags);
         }
     }
+    
+    internal static void AddTreeEntities(Entity entity, EntityList list)
+    {
+        list.Add(entity.Id);
+        ref var node = ref entity.store.nodes[entity.Id];
+        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount))
+        {
+            AddTreeEntities(child, list);
+        }
+    }
     #endregion
 }
