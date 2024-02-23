@@ -145,6 +145,7 @@ public sealed class EntityList : IList<Entity>
     #endregion
     
 #region IList<>
+    /// <summary> Gets a value indicating whether the <see cref="ICollection"/> is read-only. </summary>
     public bool IsReadOnly => false;
 
     /// <summary> Return the entity at the given <paramref name="index"/>.</summary>
@@ -164,10 +165,13 @@ public sealed class EntityList : IList<Entity>
     /// <summary> not implemented </summary>
     [ExcludeFromCodeCoverage] public bool Contains(Entity item)             => throw new NotImplementedException();
     
-    public void CopyTo(Entity[] array, int arrayIndex)
+    /// <summary>
+    /// Copies the entities of the <see cref="EntityList"/> to an <see cref="Entity"/>[], starting at the given <paramref name="index"/>
+    /// </summary>
+    public void CopyTo(Entity[] array, int index)
     {
         for (int n = 0; n < count; n++) {
-            array[arrayIndex++] = new Entity(entityStore, ids[n]);
+            array[index++] = new Entity(entityStore, ids[n]);
         }
     }
     #endregion
