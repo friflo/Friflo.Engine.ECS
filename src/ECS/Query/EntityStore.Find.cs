@@ -19,7 +19,7 @@ public partial class EntityStoreBase
     /// </remarks>
     public Entity GetUniqueEntity(string uid)
     {
-        var query = internBase.uniqueEntityQuery ??= Query<UniqueEntity>();
+        var query = internBase.uniqueEntityQuery ??= CreateUniqueEntityQuery();
 
         // --- enumerate entities with unique names
         var foundId = 0;
@@ -44,9 +44,11 @@ public partial class EntityStoreBase
     
     private QueryEntities GetUniqueEntities()
     {
-        var query = internBase.uniqueEntityQuery ??= Query<UniqueEntity>();
+        var query = internBase.uniqueEntityQuery ??= CreateUniqueEntityQuery();
         return query.Entities;
     }
+    
+    private ArchetypeQuery<UniqueEntity> CreateUniqueEntityQuery() => Query<UniqueEntity>().WithDisabled();
     
     private static InvalidOperationException MultipleEntitiesWithSameName(string name) {
         return new InvalidOperationException($"found multiple {nameof(UniqueEntity)}'s with uid: \"{name}\"");

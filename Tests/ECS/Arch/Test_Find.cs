@@ -65,11 +65,12 @@ public static class Test_Find
     [Test]
     public static void Test_Find_UniqueEntity_perf()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.UsePidAsId);
         var archetype1  = store.GetArchetype(ComponentTypes.Get<Position>());
         
         for (int n = 0; n < 100; n++) {
             var entity = archetype1.CreateEntity();
+            if (n % 2 == 0) entity.Enabled = false; //  
             entity.AddComponent(new UniqueEntity(n.ToString())); // create names with < 3 characters
         }
         var player = archetype1.CreateEntity();
@@ -77,10 +78,17 @@ public static class Test_Find
         
         Assert.AreEqual(101, store.UniqueEntities.Count);
         
+        Assert.AreEqual(101, store.GetUniqueEntity("xxx").Id);
+        
         int count = 10;     // 10_000_000 ~ #PC: 2132 ms
         for (int n = 0; n < count; n++) {
             store.GetUniqueEntity("xxx"); // find name with 3 characters
         }
+        
+        var disabled = archetype1.CreateEntity();
+        disabled.Enabled = false;
+        disabled.AddComponent(new UniqueEntity("yyy"));
+        Assert.AreEqual(102, store.GetUniqueEntity("yyy").Id);
     }
 }
 
