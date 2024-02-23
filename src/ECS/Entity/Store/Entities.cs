@@ -192,7 +192,7 @@ public partial class EntityStore
     }
     
     private QueryEntities GetEntities() {
-        var query = intern.entityQuery ??= new ArchetypeQuery(this, new ComponentTypes());
+        var query = intern.entityQuery ??= new ArchetypeQuery(this);
         return query.Entities;
     }
 }

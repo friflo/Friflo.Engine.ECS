@@ -109,7 +109,7 @@ public static class Test_QueryTags
         var sig     = Signature.Get<Position>();
         var query   = store.Query(sig);
         
-        query = query.WithoutAnyTags(Tags.Get<TestTag>());
+        query = query.WithoutAnyTags(Tags.Get<TestTag>()).WithDisabled();
         AreEqual("1, 3, 4, 5, 6",           query.Ids());
         
         query = query.WithoutAnyTags(Tags.Get<TestTag2>());
@@ -135,7 +135,7 @@ public static class Test_QueryTags
         var allTags = Tags.Get<TestTag2, TestTag3>(); // entities: 8, 9, 10
         
         // without: 1, 3, 4, 5, 6
-        query = query.WithoutAnyTags(Tags.Get<TestTag>()).WithoutAllTags(allTags);
+        query = query.WithoutAnyTags(Tags.Get<TestTag>()).WithoutAllTags(allTags).WithDisabled();
         AreEqual("1, 3, 4, 5, 6",           query.Ids());
         
         // without: 1, 2, 4, 5, 6

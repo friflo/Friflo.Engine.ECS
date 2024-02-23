@@ -16,6 +16,7 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     
     public new ArchetypeQuery<T1> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
     public new ArchetypeQuery<T1> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    public new ArchetypeQuery<T1> WithDisabled  ()             { SetWithDisabled();         return this; }
     public new ArchetypeQuery<T1> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
     public new ArchetypeQuery<T1> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     

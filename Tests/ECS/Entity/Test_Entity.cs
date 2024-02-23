@@ -219,10 +219,11 @@ public static class Test_Entity
         var entityCount = 100;
         var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity();
-        var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
+        var arch2       = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
+        var arch3       = store.GetArchetype(ComponentTypes.Get<Position, Rotation>(), Tags.Get<Disabled>());
         
         for (int n = 1; n < entityCount; n++) {
-            root.AddChild(archetype.CreateEntity());
+            root.AddChild(arch2.CreateEntity());
         }
         IsTrue (root.Enabled);
         
@@ -238,8 +239,15 @@ public static class Test_Entity
         Mem.AssertNoAlloc(start);
         Console.WriteLine($"Disable / Enable - duration: {sw.ElapsedMilliseconds} ms");
         
-        var query = store.Query().AllTags(Tags.Get<Disabled>());
-        AreEqual(entityCount, query.Count);
+        var query       = store.Query();
+        AreEqual(0,                 query.Count);
+        
+        var disabled    = store.Query().WithDisabled();
+        AreEqual(entityCount,       disabled.Count);
+        
+        AreEqual(entityCount,       store.Count);
+        AreEqual(0,                 arch2.Count);
+        AreEqual(entityCount - 1,   arch3.Count);
         IsFalse (root.Enabled);
     }
 }

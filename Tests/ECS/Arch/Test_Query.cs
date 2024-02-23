@@ -67,11 +67,11 @@ public static class Test_Query
         entity2.AddComponent<MyComponent1>();
         entity2.AddComponent<MyComponent2>();
         
-        var query1 =    store.Query<Position>();
-        var query2 =    store.Query<Position, Rotation>();
-        var query3 =    store.Query<Position, Rotation, Scale3>();
-        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>();
-        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        var query1 =    store.Query<Position>()                                                 .WithDisabled();
+        var query2 =    store.Query<Position, Rotation>()                                       .WithDisabled();
+        var query3 =    store.Query<Position, Rotation, Scale3>()                               .WithDisabled();
+        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>()                 .WithDisabled();
+        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>()   .WithDisabled();
         
         AreEqual("Query: [Position]  Count: 2",                                               query1.ToString());
         AreEqual("Query: [Position, Rotation]  Count: 2",                                     query2.ToString());

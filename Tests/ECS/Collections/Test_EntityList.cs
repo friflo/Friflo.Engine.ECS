@@ -20,10 +20,11 @@ public static class Test_EntityList
         
         var store   = new EntityStore();
         var root    = store.CreateEntity();
-        var arch    = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
+        var arch2   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
+        var arch3   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>(), Tags.Get<Disabled>());
         
         for (int n = 1; n < entityCount; n++) {
-            root.AddChild(arch.CreateEntity());
+            root.AddChild(arch2.CreateEntity());
         }
         var list = new EntityList(store);
         
@@ -43,8 +44,15 @@ public static class Test_EntityList
         AreEqual(entityCount, list.Count);
         AreEqual(entityCount, list.Ids.Length);
         
-        var query = store.Query().AllTags(Tags.Get<Disabled>());
-        AreEqual(entityCount, query.Count);
+        var query = store.Query();
+        AreEqual(0,                 query.Count);
+        
+        var disabled = store.Query().WithDisabled();
+        AreEqual(entityCount,       disabled.Count);
+        
+        AreEqual(entityCount,       store.Count);
+        AreEqual(0,                 arch2.Count);
+        AreEqual(entityCount - 1,   arch3.Count);
         IsFalse (root.Enabled);
     }
     

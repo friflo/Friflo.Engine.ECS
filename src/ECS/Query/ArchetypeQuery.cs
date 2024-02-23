@@ -74,6 +74,10 @@ public class ArchetypeQuery
     /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   AnyTags         (in Tags tags) { SetHasAnyTags(tags); return this; }
     
+    /// <summary> A query result will contain <see cref="Disabled"/> entities. </summary>
+    public ArchetypeQuery   WithDisabled    ()             { SetWithDisabled(); return this; }
+
+    
     /// <summary> Entities having all passed <paramref name="tags"/> are excluded from query result. </summary>
     /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAllTags  (in Tags tags) { SetWithoutAllTags(tags); return this; }
@@ -102,6 +106,15 @@ public class ArchetypeQuery
     
     internal void SetWithoutAnyTags(in Tags tags) {
         filter.withoutAnyTags       = tags;
+        if (filter.withoutDisabled) {
+            filter.withoutAnyTags.Add(EntityUtils.Disabled);
+        }
+        Reset();
+    }
+    
+    internal void SetWithDisabled() {
+        filter.withoutDisabled = false;
+        filter.withoutAnyTags.Remove(EntityUtils.Disabled);
         Reset();
     }
     #endregion
@@ -166,21 +179,41 @@ public class ArchetypeQuery
         return false;
     }
     
+    /// <summary>
+    /// Called by generic ArchetypeQuery's. <br/>
+    /// <see cref="Disabled"/> entities excluded by default.
+    /// </summary>
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
     {
-        this.store          = store;
-        archetypes          = Array.Empty<Archetype>();
-        components          = new ComponentTypes(indexes);
-        signatureIndexes    = indexes;
+        this.store              = store;
+        archetypes              = Array.Empty<Archetype>();
+        components              = new ComponentTypes(indexes);
+        signatureIndexes        = indexes;
+        filter.withoutDisabled  = true;
+        filter.withoutAnyTags   = EntityUtils.Disabled;
     }
     
+    /// <summary>
+    /// Called by <see cref="EntityStoreBase.Query()"/>. <br/>
+    /// <see cref="Disabled"/> entities excluded by default.
+    /// </summary>
     internal ArchetypeQuery(EntityStoreBase store, in ComponentTypes componentTypes)
     {
-        this.store          = store;
-        archetypes          = Array.Empty<Archetype>();
-        components          = componentTypes;
+        this.store              = store;
+        archetypes              = Array.Empty<Archetype>();
+        components              = componentTypes;
+        filter.withoutDisabled  = true;
+        filter.withoutAnyTags   = EntityUtils.Disabled;
     }
     
+    /// <summary> Called by <see cref="EntityStore.GetEntities"/> </summary>
+    internal ArchetypeQuery(EntityStoreBase store)
+    {
+        this.store              = store;
+        archetypes              = Array.Empty<Archetype>();
+    }
+    
+    /// <summary> Called by <see cref="Archetype.GetEntities"/> </summary>
     internal ArchetypeQuery(Archetype archetype)
     {
         singleArchetype     = true;

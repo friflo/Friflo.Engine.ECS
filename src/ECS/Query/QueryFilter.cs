@@ -18,7 +18,7 @@ internal struct QueryFilter
                     internal    ComponentTypes  anyComponents;              //  32  entity must have any component types
                     internal    ComponentTypes  withoutAllComponents;       //  32  entity must not have all component types
                     internal    ComponentTypes  withoutAnyComponents;       //  32  entity must not have any component types
-   
+                    
     [Browse(Never)] internal    int             withoutAllTagsCount;        //   8
     [Browse(Never)] internal    int             anyTagsCount;               //   8
     [Browse(Never)] internal    int             allTagsCount;               //   8
@@ -26,6 +26,8 @@ internal struct QueryFilter
     [Browse(Never)] internal    int             withoutAllComponentsCount;  //   8
     [Browse(Never)] internal    int             anyComponentsCount;         //   8
     [Browse(Never)] internal    int             allComponentsCount;         //   8
+    
+                    internal    bool            withoutDisabled;            //   1
     
     
     internal bool IsTagsMatch(in Tags tags)

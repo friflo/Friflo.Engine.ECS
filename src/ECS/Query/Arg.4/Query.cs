@@ -23,6 +23,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     
     public new ArchetypeQuery<T1, T2, T3, T4> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
     public new ArchetypeQuery<T1, T2, T3, T4> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    public new ArchetypeQuery<T1, T2, T3, T4> WithDisabled  ()             { SetWithDisabled();         return this; }
     public new ArchetypeQuery<T1, T2, T3, T4> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
     public new ArchetypeQuery<T1, T2, T3, T4> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     
