@@ -61,9 +61,9 @@ For feedback or questions check [Discord](https://discord.gg/nFfrhgQkb8).
 - Support tagging of entities and use them as a filter in queries.
 - Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
 - Support observing entity changes by event handlers triggered by adding / removing: components, tags, scripts and child entities.
-- Reliability - no undefined behavior with one exception:  
+- Reliability - no undefined behavior with only one exception:  
   Performing structural changes - adding/removing components/tags - while iterating a query result.  
-  The solution for this is using a CommandBuffer.
+  The solution is buffering structural changes with a CommandBuffer.
 - Enable binding an entity hierarchy to a [TreeDataGrid - GitHub](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
   in [AvaloniaUI - Website](https://avaloniaui.net/). Screenshot below:    
 <img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
@@ -143,7 +143,7 @@ Examples using **Friflo.Engine.ECS** are part of the unit tests see: [Tests/ECS/
 
 When testing the examples use a debugger to check entity state changes while stepping throw the code.
 
-<img src="docs/images/entity-debugger.png" width="660" height="450"></img>  
+<img src="docs/images/entity-debugger.png" width="530" height="320"></img>  
 *Screenshot:* Entity state - enables browsing the entire store hierarchy.
 
 Examples showing typical use cases of the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
