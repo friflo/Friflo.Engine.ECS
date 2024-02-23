@@ -589,8 +589,7 @@ public partial class EntityStore
     
     internal static ChildEntities GetChildEntities(EntityStore store, int id)
     {
-        ref var node    = ref store.nodes[id];
-        return new ChildEntities(store, node.childIds, node.childCount);
+        return new ChildEntities(store, store.nodes[id]);
     }
     
     internal static ReadOnlySpan<int> GetChildIds(EntityStore store, int id)

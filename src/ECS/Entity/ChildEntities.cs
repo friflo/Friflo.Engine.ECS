@@ -40,10 +40,10 @@ public readonly struct ChildEntities : IEnumerable<Entity>
     // --- new
     public ChildEnumerator                  GetEnumerator() => new ChildEnumerator(this);
 
-    internal ChildEntities(EntityStore store, int[] childIds, int childCount) {
+    internal ChildEntities(EntityStore store, in EntityNode node) {
         this.store          = store;
-        this.childIds       = childIds;
-        this.childCount     = childCount;
+        this.childIds       = node.childIds;
+        this.childCount     = node.childCount;
     }
     
     public void ToArray(Entity[] array) {
