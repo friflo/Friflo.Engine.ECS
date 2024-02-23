@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -19,7 +20,7 @@ namespace Friflo.Engine.ECS;
 /// Its recommended to reuse instances of this class to avoid unnecessary allocations.
 /// </summary>
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
-public sealed class EntityList : IEnumerable<Entity>
+public sealed class EntityList : IList<Entity>
 {
 #region properties
     /// <summary> Returns the number of entities stored in the container. </summary>
@@ -46,21 +47,32 @@ public sealed class EntityList : IEnumerable<Entity>
         entityStore = store;
         ids         = new int[8];
     }
-    
-    /// <summary> Return the entity at the given <paramref name="index"/>.</summary>
-    public Entity this[int index] => new Entity(entityStore, ids[index]);
     #endregion
 
 #region add entities
     /// <summary> Removes all entities from the <see cref="EntityList"/>. </summary>
-    public void Clear() {
+    public void Clear()
+    {
         count = 0;
+    }
+    
+    /// <summary>
+    /// Adds the given <paramref name="entity"/> to the end of the <see cref="EntityList"/>.
+    /// </summary>
+    public void Add(Entity entity)
+    {
+        if (entity.store != entityStore) throw EntityStoreBase.InvalidStoreException(nameof(entity));
+        if (ids.Length == count) {
+            ArrayUtils.Resize(ref ids, 2 * count);
+        }
+        ids[count++] = entity.Id;
     }
     
     /// <summary>
     /// Adds the entity with the given <paramref name="id"/> to the end of the <see cref="EntityList"/>.
     /// </summary>
-    public void AddEntity(int id) {
+    public void Add(int id)
+    {
         if (ids.Length == count) {
             ArrayUtils.Resize(ref ids, 2 * count);
         }
@@ -71,15 +83,15 @@ public sealed class EntityList : IEnumerable<Entity>
     /// Adds the <paramref name="entity"/> and recursively all child entities of the given <paramref name="entity"/>
     /// to the end of the <see cref="EntityList"/>.
     /// </summary>
-    public void AddEntityTree(Entity entity)
+    public void AddTree(Entity entity)
     {
-        if (entity.store != entityStore) throw EntityStoreBase.InvalidStoreException(nameof(entity)); 
+        if (entity.store != entityStore) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         AddEntityTree(new Span<EntityNode>(entity.store.nodes), entity.Id);
     }
     
     private void AddEntityTree(Span<EntityNode> nodes, int entityId)
     {
-        AddEntity(entityId);
+        Add(entityId);
         ref var node    = ref nodes[entityId];
         var childCount  = node.childCount;
         var childIds    = node.childIds;
@@ -132,7 +144,35 @@ public sealed class EntityList : IEnumerable<Entity>
     }
     #endregion
     
-#region enumerator
+#region IList<>
+    public bool IsReadOnly => false;
+
+    /// <summary> Return the entity at the given <paramref name="index"/>.</summary>
+    public Entity this[int index]
+    {
+        get => new Entity(entityStore, ids[index]);
+        set => ids[index] = value.Id;
+    }
+    /// <summary> not implemented </summary>
+    [ExcludeFromCodeCoverage] public bool Remove  (Entity item)             => throw new NotImplementedException();
+    /// <summary> not implemented </summary>
+    [ExcludeFromCodeCoverage] public int  IndexOf (Entity item)             => throw new NotImplementedException();
+    /// <summary> not implemented </summary>
+    [ExcludeFromCodeCoverage] public void Insert  (int index, Entity item)  => throw new NotImplementedException();
+    /// <summary> not implemented </summary>
+    [ExcludeFromCodeCoverage] public void RemoveAt(int index)               => throw new NotImplementedException();
+    /// <summary> not implemented </summary>
+    [ExcludeFromCodeCoverage] public bool Contains(Entity item)             => throw new NotImplementedException();
+    
+    public void CopyTo(Entity[] array, int arrayIndex)
+    {
+        for (int n = 0; n < count; n++) {
+            array[arrayIndex++] = new Entity(entityStore, ids[n]);
+        }
+    }
+    #endregion
+    
+#region IEnumerator
 
     /// <summary>
     /// Returns an enumerator that iterates through the <see cref="EntityList"/>. 

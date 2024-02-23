@@ -12,8 +12,8 @@ public static class Test_EntityList
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         var list    = new EntityList(store);
-        list.AddEntity(store.CreateEntity(1).Id);
-        list.AddEntity(store.CreateEntity(2).Id);
+        list.Add(store.CreateEntity(1).Id);
+        list.Add(store.CreateEntity(2).Id);
         
         var debugView   = new EntityListDebugView(list);
         var entities    = debugView.Entities;

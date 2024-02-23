@@ -257,7 +257,7 @@ public static class EntityUtils
     {
         var list = entity.store.GetEntityList();
         list.Clear();
-        list.AddEntityTree(entity);
+        list.AddTree(entity);
         try {
             list.ApplyAddTags(tags);
         } finally {
@@ -269,7 +269,7 @@ public static class EntityUtils
     {
         var list = entity.store.GetEntityList();
         list.Clear();
-        list.AddEntityTree(entity);
+        list.AddTree(entity);
         try {
             list.ApplyRemoveTags(tags);
         } finally {
