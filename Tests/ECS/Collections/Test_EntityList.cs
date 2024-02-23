@@ -109,4 +109,17 @@ public static class Test_EntityList
             AreEqual(2, count);
         }
     }
+    
+    [Test]
+    public static void Test_EntityList_exception()
+    {
+        var store1 = new EntityStore();
+        var store2 = new EntityStore();
+        var entity = store1.CreateEntity();
+        var list = new EntityList(store2);
+        var e = Throws<ArgumentException>(() => {
+            list.AddEntityTree(entity);
+        });
+        AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+    }
 }

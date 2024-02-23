@@ -73,7 +73,7 @@ public sealed class EntityList : IEnumerable<Entity>
     /// </summary>
     public void AddEntityTree(Entity entity)
     {
-        if (entity.store != entityStore) EntityStoreBase.InvalidStoreException(nameof(entity)); 
+        if (entity.store != entityStore) throw EntityStoreBase.InvalidStoreException(nameof(entity)); 
         AddEntityTree(new Span<EntityNode>(entity.store.nodes), entity.Id);
     }
     
