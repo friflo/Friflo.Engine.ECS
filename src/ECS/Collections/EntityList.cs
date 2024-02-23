@@ -16,7 +16,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// An entity list used to apply changes to all entities stored in the container.<br/>
+/// A list of entities of a specific <see cref="EntityStore"/> used to apply changes to all entities in the container.<br/>
 /// Its recommended to reuse instances of this class to avoid unnecessary allocations.
 /// </summary>
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
