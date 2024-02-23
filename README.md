@@ -61,6 +61,9 @@ For feedback or questions check [Discord](https://discord.gg/nFfrhgQkb8).
 - Support tagging of entities and use them as a filter in queries.
 - Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
 - Support observing entity changes by event handlers triggered by adding / removing: components, tags, scripts and child entities.
+- Reliability - no undefined behavior with one exception:  
+  Performing structural changes - adding/removing components/tags - while iterating a query result.  
+  The solution for this is using a CommandBuffer.
 - Enable binding an entity hierarchy to a [TreeDataGrid - GitHub](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid)
   in [AvaloniaUI - Website](https://avaloniaui.net/). Screenshot below:    
 <img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
