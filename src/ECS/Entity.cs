@@ -427,10 +427,10 @@ public readonly struct Entity : IEquatable<Entity>
     }
     
     /// <summary> Enable recursively all child entities of the <see cref="Entity"/>. </summary>
-    public void EnableTree()  => EntityUtils.ChangeTreeTags(this, EntityUtils.Disabled, TagsAction.Remove);
+    public void EnableTree()  => EntityUtils.AddTreeTags(this, EntityUtils.Disabled);
     
     /// <summary> Disable recursively all child entities of the <see cref="Entity"/>. </summary>
-    public void DisableTree() => EntityUtils.ChangeTreeTags(this, EntityUtils.Disabled, TagsAction.Add);
+    public void DisableTree() => EntityUtils.RemoveTreeTags(this, EntityUtils.Disabled);
     #endregion
 
 

@@ -15,12 +15,6 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal enum TagsAction
-{
-    Remove  = 0,
-    Add     = 1,
-}
-
 /// <summary>
 /// Used to provide additional debug information for an <see cref="Entity"/>:<br/>
 /// <see cref="Entity.Pid"/>                <br/>
@@ -259,17 +253,25 @@ public static class EntityUtils
         return entity.archetype.entityStore.RemoveScript(entity, scriptType);
     }
     
-    internal static void ChangeTreeTags(Entity entity, in Tags tags, TagsAction action)
+    internal static void AddTreeTags(Entity entity, in Tags tags)
     {
         var list = entity.store.GetEntityList();
         list.Clear();
         list.AddEntityTree(entity);
         try {
-            if (action == TagsAction.Add) {
-                list.ApplyAddTags(tags);
-            } else {
-                list.ApplyRemoveTags(tags);
-            }
+            list.ApplyAddTags(tags);
+        } finally {
+            entity.store.ReturnEntityList(list);
+        }
+    }
+    
+    internal static void RemoveTreeTags(Entity entity, in Tags tags)
+    {
+        var list = entity.store.GetEntityList();
+        list.Clear();
+        list.AddEntityTree(entity);
+        try {
+            list.ApplyRemoveTags(tags);
         } finally {
             entity.store.ReturnEntityList(list);
         }
