@@ -80,11 +80,12 @@ public sealed class EntityList : IEnumerable<Entity>
     private void AddEntityTree(Span<EntityNode> nodes, int entityId)
     {
         AddEntity(entityId);
-        var enumerator  = new ChildEntities (null, nodes[entityId]).GetEnumerator();
-        while (enumerator.MoveNext()) {
-            AddEntityTree(nodes, enumerator.Current.Id);
+        ref var node    = ref nodes[entityId];
+        var childCount  = node.childCount;
+        var childIds    = node.childIds;
+        for (int index = 0; index < childCount; index++) {
+            AddEntityTree(nodes, childIds[index]);
         }
-        enumerator.Dispose();
     }
     #endregion
     
