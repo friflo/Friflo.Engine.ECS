@@ -109,6 +109,7 @@ public static class Test_Entity
         DebuggerEntityScreenshot(entity);
     }
     
+    // make screenshot with SCale 350% Scale - on 4K monitor. Size[px]: 1890 x 1110
     private static void DebuggerEntityScreenshot(Entity entity) {
         _ = entity;
     }
