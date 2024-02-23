@@ -11,7 +11,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// <see cref="ArchetypeQuery"/> and all its generic implementations are designed to be reused.
+/// <see cref="ArchetypeQuery"/> and all its generic implementations are designed to be reused.<br/>
+/// By default an query does not contain <see cref="Disabled"/> entities. Use <see cref="WithDisabled"/> if needed.  
 /// </summary>
 public class ArchetypeQuery
 {
