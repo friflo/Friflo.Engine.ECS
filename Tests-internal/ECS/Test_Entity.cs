@@ -100,17 +100,11 @@ public static class Test_Entity
         entity.AddComponent(new EntityName("hello entity"));
         entity.AddComponent(new Position(10, 10, 0));
         entity.AddTag<MyTag>();
+        
         var child1 = store.CreateEntity();
-        var child2 = store.CreateEntity();
-        var child3 = store.CreateEntity();
         child1.AddComponent(new Position(1, 1, 0));
-        child2.AddComponent(new Position(1, 1, 1));
-        child3.AddComponent(new Position(1, 1, 2));
-        child3.AddTag<MyTag>();
-            
+        child1.Enabled = false;
         entity.AddChild(child1);
-        entity.AddChild(child2);
-        entity.AddChild(child3);
         
         DebuggerEntityScreenshot(entity);
     }
