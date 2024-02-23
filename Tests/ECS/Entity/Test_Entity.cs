@@ -215,7 +215,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_EnableTree()
     {
-        var count       = 10;    // 1_000_000 ~ #PC: 8475 ms
+        var count       = 10;    // 1_000_000 ~ #PC: 8296 ms
         var entityCount = 100;
         var store       = new EntityStore(PidType.UsePidAsId);
         var root        = store.CreateEntity();

@@ -15,7 +15,7 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_AddTreeEntities()
     {
-        var count       = 10;   // 1_000_000 ~ #PC: 7860 ms
+        var count       = 10;   // 1_000_000 ~ #PC: 7715 ms
         var entityCount = 100;
         
         var store   = new EntityStore();

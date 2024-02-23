@@ -73,12 +73,19 @@ public sealed class EntityList : IEnumerable<Entity>
     /// </summary>
     public void AddEntityTree(Entity entity)
     {
-        AddEntity(entity.Id);
-        ref var node = ref entity.store.nodes[entity.Id];
-        foreach (var child in new ChildEntities (entity.store, node.childIds, node.childCount))
-        {
-            AddEntityTree(child);
+        if (entity.store != entityStore) EntityStoreBase.InvalidStoreException(nameof(entity)); 
+        AddEntityTree(new Span<EntityNode>(entity.store.nodes), entity.Id);
+    }
+    
+    private void AddEntityTree(Span<EntityNode> nodes, int entityId)
+    {
+        AddEntity(entityId);
+        ref var node    = ref nodes[entityId];
+        var enumerator  = new ChildEntities (null, node.childIds, node.childCount).GetEnumerator();
+        while (enumerator.MoveNext()) {
+            AddEntityTree(nodes, enumerator.Current.Id);
         }
+        enumerator.Dispose();
     }
     #endregion
     
