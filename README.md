@@ -169,7 +169,8 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [EventFilter](#eventfilter)
 - [Batch - Create Entity](#batch---create-entity)
 - [Batch - Entity](#batch---entity)
-- [Bulk Batch - Entity](#bulk-batch---entity)
+- [Bulk Batch - Query](#bulk-batch---query)
+- [Bulk Batch - EntityList](#bulk-batch---entitylist)
 - [CommandBuffer](#commandbuffer)
 
 
@@ -811,12 +812,12 @@ public static void EntityBatch()
 ```
 
 
-## Bulk Batch - Entity
+## Bulk Batch - Query
 
-In cases you need to add/remove components or tags to a set of entities you can use a **bulk operation**.  
+In cases you need to add/remove components or tags to entities returned by a query use a bulk operation.  
 Executing these type of changes are most efficient using a bulk operation.  
-This can be done by either using `ApplyBatch()` or a common `foreach ()` loop as shown below.
-
+This can be done by either using `ApplyBatch()` or a common `foreach ()` loop as shown below.  
+To prevent unnecessary allocations the application should cache and reuse the list instance for future batches.
 
 ```csharp
 public static void BulkBatch()
@@ -836,6 +837,40 @@ public static void BulkBatch()
     foreach (var entity in store.Entities) {
         batch.ApplyTo(entity);
     }
+}
+```
+
+## Bulk Batch - EntityList
+
+An [EntityList](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityList.md) is a container
+of entities added to the list.  
+Single entities are added using `Add()`. `AddTree()` adds an entity and all its children including their children etc.  
+A bulk operation can be applied to all entities in the lists as shown in the example below.  
+
+
+```csharp
+public static void EntityList()
+{
+    var store   = new EntityStore();
+    var root    = store.CreateEntity();
+    for (int n = 0; n < 10; n++) {
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        // Add two children to each child
+        child.AddChild(store.CreateEntity());
+        child.AddChild(store.CreateEntity());
+    }
+    var list = new EntityList(store);
+    // Add root and all its children to the list
+    list.AddTree(root);
+    Console.WriteLine($"list - {list}");                // > list - Count: 31
+    
+    var batch = new EntityBatch();
+    batch.Add(new Position());
+    list.ApplyBatch(batch);
+    
+    var query = store.Query<Position>();
+    Console.WriteLine(query);                           // > Query: [Position]  Count: 31
 }
 ```
 

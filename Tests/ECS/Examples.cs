@@ -319,6 +319,31 @@ public static void BulkBatch()
 }
 
 [Test]
+public static void EntityList()
+{
+    var store   = new EntityStore();
+    var root    = store.CreateEntity();
+    for (int n = 0; n < 10; n++) {
+        var child = store.CreateEntity();
+        root.AddChild(child);
+        // Add two children to each child
+        child.AddChild(store.CreateEntity());
+        child.AddChild(store.CreateEntity());
+    }
+    var list = new EntityList(store);
+    // Add root and all its children to the list
+    list.AddTree(root);
+    Console.WriteLine($"list - {list}");                // > list - Count: 31
+    
+    var batch = new EntityBatch();
+    batch.Add(new Position());
+    list.ApplyBatch(batch);
+    
+    var query = store.Query<Position>();
+    Console.WriteLine(query);                           // > Query: [Position]  Count: 31
+}
+
+[Test]
 public static void CommandBuffer()
 {
     var store   = new EntityStore();
@@ -341,5 +366,6 @@ public static void CommandBuffer()
     Console.WriteLine(entity2);                         // > id: 2  (detached)
     Console.WriteLine(entity3);                         // > id: 3  "new entity"  [EntityName]
 }
+
 
 }
