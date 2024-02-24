@@ -181,7 +181,7 @@ public class ArchetypeQuery
     }
     
     /// <summary>
-    /// Called by generic ArchetypeQuery's. <br/>
+    /// Called by generic ArchetypeQuery constructors. <br/>
     /// <see cref="Disabled"/> entities excluded by default.
     /// </summary>
     internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
