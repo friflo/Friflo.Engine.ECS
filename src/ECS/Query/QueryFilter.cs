@@ -27,7 +27,7 @@ internal struct QueryFilter
     [Browse(Never)] internal    int             anyComponentsCount;         //   8
     [Browse(Never)] internal    int             allComponentsCount;         //   8
     
-                    internal    bool            withoutDisabled;            //   1
+                    internal    bool            withoutDisabled;            //   1  if true (default) entity must be enabled
     
     
     internal bool IsTagsMatch(in Tags tags)
