@@ -20,7 +20,7 @@ public interface ITag { }
 
 
 /// <summary>
-/// Used to tag an entity as <see cref="Disabled"/>.<br/>
-/// To check if an entity is enabled/disabled use <see cref="Entity.Enabled"/>. 
+/// If entity <see cref="Entity.Enabled"/> == false it is tagged with <see cref="Disabled"/>.<br/>
+/// Disabled entities are excluded from query results by default. To include use <see cref="ArchetypeQuery.WithDisabled"/>.
 /// </summary>
 public struct Disabled : ITag { };
