@@ -33,6 +33,21 @@ public static void CreateEntity()
     // > entity id: 2  []
 }
 
+[Test]
+public static void DisableEntity()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    entity.Enabled = false;
+    Console.WriteLine(entity);                          // > id: 1  [#Disabled]
+    
+    var query    = store.Query();
+    Console.WriteLine($"default - {query}");            // > default - Query: []  Count: 0
+    
+    var disabled = store.Query().WithDisabled();
+    Console.WriteLine($"disabled - {disabled}");        // > disabled - Query: []  Count: 1
+}
+
 [ComponentKey("my-component")]
 public struct MyComponent : IComponent {
     public int value;

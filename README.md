@@ -218,6 +218,26 @@ public static void CreateEntity()
 }
 ```
 
+Entities can be disabled.  
+Disabled entities are excluded from query results by default.  
+To include disabled entities in a query result use `query.WithDisabled()`.
+
+```csharp
+public static void DisableEntity()
+{
+    var store   = new EntityStore();
+    var entity  = store.CreateEntity();
+    entity.Enabled = false;
+    Console.WriteLine(entity);                          // > id: 1  [#Disabled]
+    
+    var query    = store.Query();
+    Console.WriteLine($"default - {query}");            // > default - Query: []  Count: 0
+    
+    var disabled = store.Query().WithDisabled();
+    Console.WriteLine($"disabled - {disabled}");        // > disabled - Query: []  Count: 1
+}
+```
+
 
 ## Component
 
@@ -601,9 +621,10 @@ public static void EntityQueries()
 Some optional filter snippets used to shrink the result set returned by a query.
 
 ```csharp
-    .AllTags(Tags.Get<MyTag1>());                   // query will contain only entities having all given tags
-    .WithoutAnyTags(Tags.Get<MyTag1, MyTag2>());    // entities having any of the given tags are excluded from query
-    .AllComponents(ComponentTypes.Get<Position>);   // query will contain only entities having all given components
+    .WithDisabled();                                // query result contains also disabled entities
+    .AllTags(Tags.Get<MyTag1>());                   // query result contains only entities having all given tags
+    .WithoutAnyTags(Tags.Get<MyTag1, MyTag2>());    // entities having any of the given tags are excluded from query result
+    .AllComponents(ComponentTypes.Get<Position>);   // query result contains only entities having all given components
 ```
 
 
