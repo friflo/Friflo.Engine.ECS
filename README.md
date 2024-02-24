@@ -97,8 +97,7 @@ Features in this list are also explained in the Examples.
             E.g. the expanded properties ChildEntities and Components in the examples screenshot.  
             **Breaking change**: Changed property `Entity.Batch` to method `Entity.Batch()`.
 
-- 1.18.0    (planned)  
-            Introduced `EntityList` to apply an entity batch to all entities in the list.
+- 1.18.0    Introduced `EntityList` to apply an entity batch to all entities in the list.
             It supports also to add/remove tags to/from all entities in the list.  
             Add `Entity.Enabled` to enable/disable an entity.  
             Add `Entity.EnableTree()` / `Entity.DisableTree()` to enable/disable recursively the child entities of an entity.
