@@ -1,6 +1,6 @@
 {
   "AssemblyFilePath": "../Tests/bin/Release/net8.0/Friflo.Engine.ECS.dll",
-  "OutputDirectoryPath": "defaultDoc",
+  "OutputDirectoryPath": "../../../Friflo.Engine-docs/api",
   "GeneratedAccessModifiers": "Public",
   "IncludeUndocumentedItems": true,
   "FileNameFactory": "Name",
