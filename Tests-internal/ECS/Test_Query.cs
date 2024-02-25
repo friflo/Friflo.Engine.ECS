@@ -40,4 +40,23 @@ public static class Test_Query
         Assert.AreEqual(1, debugEntities[0].Id);
         Assert.AreEqual(2, debugEntities[1].Id);
     }
+    
+    [Test]
+    public static void Test_Query_ChunkDebugView()
+    {
+        var store = new EntityStore();
+        store.CreateEntity(1).AddComponent<Position>();
+        store.CreateEntity(2).AddComponent<Position>();
+        
+        var query = store.Query<Position>();
+        var count = 0;
+        foreach (var chunk in query.Chunks) {
+            count++;
+            Assert.AreEqual("Position[2]", chunk.Chunk1.ToString());
+            var debugView   = new ChunkDebugView<Position>(chunk.Chunk1);
+            var positions   = debugView.Components;
+            Assert.AreEqual(2, positions.Length);
+        }
+        Assert.AreEqual(1, count);
+    }
 }

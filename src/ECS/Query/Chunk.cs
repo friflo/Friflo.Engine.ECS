@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -25,6 +26,7 @@ namespace Friflo.Engine.ECS;
 /// <br/> <i>See vectorization example</i> at <see cref="AsSpan256{TTo}"/>.
 /// </remarks>
 /// <typeparam name="T"><see cref="IComponent"/> type of a struct component.</typeparam>
+[DebuggerTypeProxy(typeof(ChunkDebugView<>))]
 public readonly struct Chunk<T>
     where T : struct, IComponent
 {
@@ -88,14 +90,14 @@ public readonly struct Chunk<T>
     /// The step value in a for loop when converting a <see cref="AsSpan128{TTo}"/> value to a Vector128{T}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
-    [DebuggerBrowsable(Never)]
+    [Browse(Never)]
     public              int         StepSpan128 => 16 / ComponentType<T>.ByteSize;
     
     /// <summary>
     /// The step value in a for loop when converting a <see cref="AsSpan256{TTo}"/> value to a Vector256{T}.
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
-    [DebuggerBrowsable(Never)]
+    [Browse(Never)]
     public              int         StepSpan256 => 32 / ComponentType<T>.ByteSize;
     
     // ReSharper disable once InvalidXmlDocComment
@@ -103,7 +105,7 @@ public readonly struct Chunk<T>
     /// The step value in a for loop when converting a <see cref="AsSpan512{TTo}"/> value to a <c>Vector512{T}</c>
     /// <br/><br/> See example at <see cref="AsSpan256{TTo}"/>.
     /// </summary>
-    [DebuggerBrowsable(Never)]
+    [Browse(Never)]
     public              int         StepSpan512 => 64 / ComponentType<T>.ByteSize;
 
     public override     string      ToString()  => $"{typeof(T).Name}[{Length}]";
@@ -133,6 +135,21 @@ public readonly struct Chunk<T>
             }
             throw new IndexOutOfRangeException();
         }
+    }
+}
+
+internal class ChunkDebugView<T>
+    where T : struct, IComponent
+{
+    [Browse(RootHidden)]
+    public              T[]         Components => chunk.Span.ToArray();
+
+    [Browse(Never)]
+    private readonly    Chunk<T>    chunk;
+        
+    internal ChunkDebugView(Chunk<T> chunk)
+    {
+        this.chunk = chunk;
     }
 }
 
