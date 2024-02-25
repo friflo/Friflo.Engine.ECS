@@ -9,6 +9,10 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// A query instance returned by <see cref="EntityStoreBase.Query{T1}()"/> to retrieve the given component types.<br/>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#query-entities">Example.</a>
+/// </summary>
 public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     where T1 : struct, IComponent
 {
@@ -36,7 +40,10 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
         throw ReadOnlyException(typeof(T));
     }
     
-    /// <summary> Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>. </summary> 
+    /// <summary>
+    /// Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1}"/>.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#enumerate-query-chunks">Example.</a>
+    /// </summary> 
     public      QueryChunks <T1>  Chunks                                    => new (this);
     
     /// <summary>

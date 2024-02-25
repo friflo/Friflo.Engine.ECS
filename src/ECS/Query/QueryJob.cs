@@ -52,8 +52,9 @@ public abstract class QueryJob
     /// Execute the query <see cref="JobExecution.Sequential"/>.
     /// </summary>
     public      abstract    void Run();
-    /// <summary>Execute the query.<br/> 
-    /// All <see cref="Chunk{T}"/>'s having at least <see cref="MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
+    /// <summary>Execute the query.
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#parallel-query-job">Example.</a>.<br/>
+    /// All chunks having at least <see cref="QueryJob.MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
     /// components are executed <see cref="JobExecution.Parallel"/>. 
     /// </summary>
     /// <remarks>

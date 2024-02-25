@@ -45,7 +45,12 @@ public sealed class QueryJob<T1> : QueryJob
             action(chunk.Chunk1, chunk.Entities);
         }
     }
-    
+
+    /// <summary>Execute the query.
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#parallel-query-job">Example.</a>.<br/>
+    /// All chunks having at least <see cref="QueryJob.MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
+    /// components are executed <see cref="JobExecution.Parallel"/>. 
+    /// </summary>
     public override void RunParallel()
     {
         if (jobRunner == null) throw JobRunnerIsNullException();

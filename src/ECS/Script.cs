@@ -7,7 +7,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// To enable adding a script class to an <see cref="ECS.Entity"/> it need to extend <see cref="Script"/>.
+/// To enable adding a script class to an <see cref="ECS.Entity"/> it need to extend <see cref="Script"/>.<br/>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#script">Example.</a>
 /// </summary>
 /// <remarks>
 /// A <see cref="Script"/> is a reference type - a class-  which contains data <b>and</b> behavior - aka scripts / methods.<br/> 

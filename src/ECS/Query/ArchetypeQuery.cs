@@ -12,7 +12,8 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// <see cref="ArchetypeQuery"/> and all its generic implementations are designed to be reused.<br/>
-/// By default an query does not contain <see cref="Disabled"/> entities. Use <see cref="WithDisabled"/> if needed.  
+/// By default an query does not contain <see cref="Disabled"/> entities. Use <see cref="WithDisabled"/> if needed.<br/>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#query-entities">Example.</a>
 /// </summary>
 public class ArchetypeQuery
 {
@@ -45,7 +46,10 @@ public class ArchetypeQuery
     /// </summary>
     public              QueryEntities       Entities    => new (this);
     
-    /// <summary> An <see cref="ECS.EventFilter"/> used to filter the query result for added/removed components/tags. </summary>
+    /// <summary>
+    /// An <see cref="ECS.EventFilter"/> used to filter the query result for added/removed components/tags.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#eventfilter">Example.</a>
+    /// </summary>
     public              EventFilter         EventFilter => GetEventFilter();
 
     public override     string              ToString()  => GetString();

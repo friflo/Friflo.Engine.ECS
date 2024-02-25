@@ -29,9 +29,10 @@ public partial class EntityStore
     public static     EntitySchema         GetEntitySchema()=> Static.EntitySchema;
     
     /// <summary>
-    /// Create and return new <see cref="Entity"/> in the entity store.
+    /// Create and return a new <see cref="Entity"/> in the entity store.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entity">Example.</a>
     /// </summary>
-    /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
+    /// <returns>An <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()
     {
         ref var node = ref CreateEntityInternal(defaultArchetype);
