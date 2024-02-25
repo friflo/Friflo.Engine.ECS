@@ -10,7 +10,7 @@ using static Friflo.Engine.ECS.StructInfo;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A query instance returned by <see cref="EntityStoreBase.Query{T1,T2,T3,T4,T5}()"/> to retrieve the given component types.<br/>
+/// A query instance use to retrieve the given component types.
 /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#query-entities">Example.</a>
 /// </summary>
 public sealed class ArchetypeQuery<T1, T2, T3, T4, T5> : ArchetypeQuery

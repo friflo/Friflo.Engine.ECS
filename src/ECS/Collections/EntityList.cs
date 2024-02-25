@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A list of entities of a specific <see cref="EntityStore"/> used to apply changes to all entities in the container.<br/>
-/// Its recommended to reuse instances of this class to avoid unnecessary allocations.
+/// Its recommended to reuse instances of this class to avoid unnecessary allocations.<br/>
 /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entitybatch---entitylist">Example.</a>
 /// </summary>
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
