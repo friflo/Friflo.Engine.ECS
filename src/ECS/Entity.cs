@@ -341,8 +341,11 @@ public readonly struct Entity : IEquatable<Entity>
         int archIndex = 0;
         return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
-    /// <summary>Add the given <paramref name="component"/> to the entity.<br/>
-    /// If the entity contains a component of the same type it is updated.</summary>
+    /// <summary>
+    /// Add the given <paramref name="component"/> to the entity.<br/>
+    /// If the entity contains a component of the same type it is updated.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#component">Example.</a>
+    /// </summary>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
@@ -590,7 +593,10 @@ public readonly struct Entity : IEquatable<Entity>
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
-    /// <summary>Add the given <see cref="Signal{TEvent}"/> handler to the entity.</summary>
+    /// <summary>
+    /// Add the given <see cref="Signal{TEvent}"/> handler to the entity.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#signal">Example.</a>
+    /// </summary>
     /// <returns>The the signal handler added to the entity.<br/>
     /// Practical when passing a lambda that can be removed later with <see cref="RemoveSignalHandler{TEvent}"/>.</returns>
     public Action<Signal<TEvent>>  AddSignalHandler   <TEvent> (Action<Signal<TEvent>> handler) where TEvent : struct {

@@ -121,7 +121,8 @@ public sealed class CommandBuffer
     }
     
     /// <summary>
-    /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread. 
+    /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#commandbuffer">Example.</a>
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// When recording commands after calling <see cref="Playback"/>.<br/>

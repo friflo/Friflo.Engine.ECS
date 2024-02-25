@@ -28,7 +28,8 @@ public enum JobExecution : byte
 }
 
 /// <summary>
-/// Required for parallel - multi threaded - query job execution using <see cref="QueryJob.RunParallel"/>.
+/// Required for parallel - multi threaded - query job execution using <see cref="QueryJob.RunParallel"/>.<br/>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#parallel-query-job">Example.</a>
 /// </summary>
 /// <remarks>
 /// <see cref="ParallelJobRunner"/> is thread safe.<br/>

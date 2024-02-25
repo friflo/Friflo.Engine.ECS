@@ -21,7 +21,8 @@ public class BatchAlreadyReturnedException : InvalidOperationException
 
 /// <summary>
 /// A create batch is used to optimize entity creation.<br/>
-/// Components and tags are buffered before creating an entity with <see cref="CreateEntity"/>. 
+/// Components and tags are buffered before creating an entity with <see cref="CreateEntity"/>.<br/>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#batch---create-entity">Example.</a>
 /// </summary>
 /// <remarks>
 /// Multiple entities can be created using the same batch.<br/>
