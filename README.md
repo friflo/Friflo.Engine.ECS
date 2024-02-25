@@ -167,8 +167,8 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [EventFilter](#eventfilter)
 - [Batch - Create Entity](#batch---create-entity)
 - [Batch - Entity](#batch---entity)
-- [Bulk Batch - Query](#bulk-batch---query)
-- [Bulk Batch - EntityList](#bulk-batch---entitylist)
+- [EntityBatch - Query](#entitybatch---query)
+- [EntityBatch - EntityList](#entitybatch---entitylist)
 - [CommandBuffer](#commandbuffer)
 
 
@@ -831,9 +831,9 @@ public static void EntityBatch()
 ```
 
 
-## Bulk Batch - Query
+## EntityBatch - Query
 
-In cases you need to add/remove components or tags to entities returned by a query use a bulk operation.  
+In cases you need to add/remove components or tags to entities returned by a query use a **bulk operation**.  
 Executing these type of changes are most efficient using a bulk operation.  
 This can be done by either using `ApplyBatch()` or a common `foreach ()` loop as shown below.  
 To prevent unnecessary allocations the application should cache and reuse the list instance for future batches.
@@ -859,12 +859,12 @@ public static void BulkBatch()
 }
 ```
 
-## Bulk Batch - EntityList
+## EntityBatch - EntityList
 
 An [EntityList](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityList.md) is a container
 of entities added to the list.  
 Single entities are added using `Add()`. `AddTree()` adds an entity and all its children including their children etc.  
-A bulk operation can be applied to all entities in the lists as shown in the example below.  
+A **bulk operation** can be applied to all entities in the lists as shown in the example below.  
 
 
 ```csharp

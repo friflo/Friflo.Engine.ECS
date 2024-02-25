@@ -45,10 +45,11 @@ internal enum BatchOwner
 /// Using a batch minimize theses structural changes to one or none.<br/>
 /// <br/>
 /// <b>Bulk operation</b><br/>
-/// To perform the same batch on multiple entities you can use <see cref="QueryEntities.ApplyBatch"/> for <br/>
+/// To perform a batch on multiple entities you can use <see cref="QueryEntities.ApplyBatch"/> for <br/>
 /// - all entities of an <see cref="EntityStore"/> using <see cref="EntityStore.Entities"/>.<br/>
 /// - the entities of an <see cref="ArchetypeQuery"/> using <see cref="ArchetypeQuery.Entities"/>.<br/>
-/// - or the entities of an <see cref="Archetype"/> using <see cref="Archetype.Entities"/>.
+/// - or the entities of an <see cref="Archetype"/> using <see cref="Archetype.Entities"/>.<br/>
+/// To perform a batch on entities in an <see cref="EntityList"/> you can use <see cref="EntityList.ApplyBatch"/>.
 /// </remarks>
 public sealed class  EntityBatch
 {
