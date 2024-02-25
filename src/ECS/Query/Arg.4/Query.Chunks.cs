@@ -12,6 +12,10 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Contains the components returned by a component query.
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#enumerate-query-chunks">Example.</a>
+/// </summary>
 public readonly struct Chunks<T1, T2, T3, T4>
     where T1 : struct, IComponent
     where T2 : struct, IComponent
@@ -57,7 +61,8 @@ public readonly struct Chunks<T1, T2, T3, T4>
 }
 
 /// <summary>
-/// Contains the <see cref="Chunk{T}"/>'s storing components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4}"/>.
+/// Contains the component chunks returned by a component query.
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct QueryChunks<T1, T2, T3, T4>  : IEnumerable <Chunks<T1, T2, T3, T4>>
     where T1 : struct, IComponent

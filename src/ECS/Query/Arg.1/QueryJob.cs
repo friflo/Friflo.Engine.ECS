@@ -9,7 +9,10 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-
+/// <summary>
+/// Enables <see cref="JobExecution.Parallel"/> query execution returning the specified components.
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#parallel-query-job">Example.</a>
+/// </summary>
 public sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
 {
