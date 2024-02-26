@@ -9,6 +9,9 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{T1}.ForEachEntity"/>.
+/// </summary>
 public delegate void ForEachEntity<T1>(ref T1 component1, Entity entity)
     where T1 : struct, IComponent;
 
@@ -55,7 +58,10 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     /// </summary>
     public QueryJob<T1> ForEach(Action<Chunk<T1>, ChunkEntities> action)  => new (this, action);
     
-    public void ForEachEntity(ForEachEntity<T1> forEach)
+    /// <summary>
+    /// Executes the given <paramref name="lambda"/> for each entity in the query result.
+    /// </summary>
+    public void ForEachEntity(ForEachEntity<T1> lambda)
     {
         var store = Store;
         foreach (var (chunk1, entities) in Chunks)
@@ -63,7 +69,7 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
             var span1   = chunk1.Span;
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
-                forEach(ref span1[n], new Entity(store, ids[n]));
+                lambda(ref span1[n], new Entity(store, ids[n]));
             }
         }
     }

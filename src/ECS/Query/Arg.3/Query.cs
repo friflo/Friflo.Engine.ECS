@@ -9,6 +9,9 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide the state of an <paramref name="entity"/> within <see cref="ArchetypeQuery{T1,T2,T3}.ForEachEntity"/>.
+/// </summary>
 public delegate void ForEachEntity<T1, T2, T3>(ref T1 component1, ref T2 component2, ref T3 component3, Entity entity)
     where T1 : struct, IComponent
     where T2 : struct, IComponent
@@ -63,7 +66,10 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
     /// </summary>
     public QueryJob<T1, T2, T3> ForEach(Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, ChunkEntities> action)  => new (this, action);
     
-    public void ForEachEntity(ForEachEntity<T1, T2, T3> forEach)
+    /// <summary>
+    /// Executes the given <paramref name="lambda"/> for each entity in the query result.
+    /// </summary>
+    public void ForEachEntity(ForEachEntity<T1, T2, T3> lambda)
     {
         var store = Store;
         foreach (var (chunk1, chunk2, chunk3, entities) in Chunks)
@@ -73,7 +79,7 @@ public sealed class ArchetypeQuery<T1, T2, T3> : ArchetypeQuery
             var span3   = chunk3.Span;
             var ids     = entities.Ids;
             for (int n = 0; n < chunk1.Length; n++) {
-                forEach(ref span1[n], ref span2[n], ref span3[n], new Entity(store, ids[n]));    
+                lambda(ref span1[n], ref span2[n], ref span3[n], new Entity(store, ids[n]));    
             }
         }
     }
