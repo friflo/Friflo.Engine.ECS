@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.Intrinsics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -13,6 +14,28 @@ namespace Tests.ECS;
 
 public static class Examples
 {
+
+
+
+public struct Velocity : IComponent { public Vector3 value; } // requires >= v1.18.0
+
+[Test]
+public static void HelloWorld()
+{
+    var store = new EntityStore();
+    for (int n = 0; n < 10; n++) {
+        store.Batch()
+            .Add(new Position(n, 0, 0))
+            .Add(new Velocity{ value = new Vector3(0, n, 0) })
+            .Add(new EntityName("hello entity"))
+            .CreateEntity();
+    }
+    var query = store.Query<Position, Velocity>();
+    query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
+        position.value += velocity.value;
+    });
+}
+
 [Test]
 public static void CreateStore()
 {
