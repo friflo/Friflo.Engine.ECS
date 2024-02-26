@@ -19,10 +19,10 @@ The library implements all features a common ECS provides.
 - Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
   This enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
 - Build up a hierarchy of entities with parent / child relationship - optional.
-- Focus on optimal debugging experience. See screenshot at examples.
+- Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
+  See screenshot at examples.
+- Subscribe to events and signals only for specific entities.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
-
-For feedback or questions check [Discord](https://discord.gg/nFfrhgQkb8).
 
 
 # Content
@@ -71,7 +71,8 @@ For feedback or questions check [Discord](https://discord.gg/nFfrhgQkb8).
 
 # Latest features
 
-Features in this list are also explained in the Examples.
+Features in this list are also explained in the Examples. Every new version is backward compatible earlier versions.  
+Exceptions are labeled as  **Breaking change** / **Changed behavior**. These changes are made only on rarely used features.
 
 - 1.10.0    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
 
