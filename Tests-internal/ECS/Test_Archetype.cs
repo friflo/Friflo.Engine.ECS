@@ -6,7 +6,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_Archetype
 {
@@ -113,5 +113,7 @@ public static class Test_Archetype
         var indexes = (SignatureIndexes)obj;
         AreEqual(-1, indexes.GetStructIndex(5));
     }
+}
+
 }
 

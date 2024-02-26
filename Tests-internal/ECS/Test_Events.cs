@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable once InconsistentNaming
 public static class Test_Events
@@ -45,5 +45,7 @@ public static class Test_Events
         EntityStore.    AssertEventDelegatesNull(store);
     }
     
-    private struct MyEvent;
+    private struct MyEvent {}
+}
+
 }

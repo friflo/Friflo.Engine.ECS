@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Serialize;
+namespace Tests.ECS.Serialize {
 
 public static class Test_DataEntitySerializer
 {
@@ -31,22 +31,20 @@ public static class Test_DataEntitySerializer
         dataEntity.components  = new JsonValue(components);
         
         var expect =
-"""
-{
-    "id": 10,
-    "children": [
+@"{
+    ""id"": 10,
+    ""children"": [
         11
     ],
-    "components": {
-        "pos": {"x":1,"y":2,"z":3},
-        "script1": {"val1":10}
+    ""components"": {
+        ""pos"": {""x"":1,""y"":2,""z"":3},
+        ""script1"": {""val1"":10}
     },
-    "tags": [
-        "test-tag",
-        "TestTag3"
+    ""tags"": [
+        ""test-tag"",
+        ""TestTag3""
     ]
-}
-""";
+}";
         json = serializer.WriteDataEntity(dataEntity, out _);
         AreEqual(expect, json);
     }
@@ -73,4 +71,6 @@ public static class Test_DataEntitySerializer
         serializer.WriteDataEntity(dataEntity, out error);
         AreEqual("'components' element must be an object. was ValueNumber, component: 'foo'", error);
     }
+}
+
 }

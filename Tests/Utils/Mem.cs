@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
-namespace Tests.Utils;
+namespace Tests.Utils {
 
 [ExcludeFromCodeCoverage]
 public static class Mem
@@ -80,5 +80,7 @@ public static class Mem
         return false;
 #endif        
     }
+
+}
 
 }

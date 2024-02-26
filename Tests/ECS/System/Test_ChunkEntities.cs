@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Tests.Utils;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.System;
+namespace Tests.ECS.System {
 
 public static class Test_ChunkEntities
 {
@@ -82,5 +82,7 @@ public static class Test_ChunkEntities
         }
         Mem.AreEqual(2, chunkCount);
     }
+}
+
 }
 

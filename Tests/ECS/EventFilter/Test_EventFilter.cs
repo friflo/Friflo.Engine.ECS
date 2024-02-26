@@ -6,7 +6,7 @@ using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS.Filter;
+namespace Tests.ECS.Filter {
 
 // ReSharper disable once InconsistentNaming
 public static class Test_EventFilter
@@ -269,3 +269,4 @@ public static class Test_EventFilter
     }
 }
 
+}

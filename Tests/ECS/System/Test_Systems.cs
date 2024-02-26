@@ -5,7 +5,7 @@ using Tests.Utils;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.System;
+namespace Tests.ECS.System {
 
 
 public class CreateSystems : Script
@@ -360,3 +360,4 @@ public static class Test_Systems
     }
 }
 
+}

@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Internal.SIMD;
+namespace Internal.SIMD {
 
 [ExcludeFromCodeCoverage]
 public class VectorOps
@@ -44,4 +44,6 @@ public class VectorOps
         arr[6] = arr[10] = arr[14] = arr[18] = arr[2];
         arr[7] = arr[11] = arr[15] = arr[19] = arr[3];
     }
+}
+
 }

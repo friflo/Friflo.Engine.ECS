@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_ComponentTypes
 {
@@ -180,3 +180,4 @@ public static class Test_ComponentTypes
     }
 }
 
+}

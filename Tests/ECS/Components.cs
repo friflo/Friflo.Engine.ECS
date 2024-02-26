@@ -7,7 +7,7 @@ using static NUnit.Framework.Assert;
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
 
 // ReSharper disable RedundantTypeDeclarationBody
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 // ------------------------------------------------ components
 [CodeCoverageTest]
@@ -131,3 +131,5 @@ class TestComponent : Script
 /// <see cref="StructUtils.NewStructIndex"/> and <see cref="ScriptType.NewScriptIndex"/></summary>
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }
+
+}

@@ -5,7 +5,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_Entity
 {
@@ -67,19 +67,17 @@ public static class Test_Entity
         entity.AddChild(store.CreateEntity());
         
         var json =
-"""
-{
-    "id": 1,
-    "children": [
+@"{
+    ""id"": 1,
+    ""children"": [
         2,
         3
     ],
-    "components": {
-        "pos": {"x":0,"y":0,"z":0},
-        "script1": {"val1":0}
+    ""components"": {
+        ""pos"": {""x"":0,""y"":0,""z"":0},
+        ""script1"": {""val1"":0}
     }
-}
-""";
+}";
         AreEqual("",                            entity.Info.ToString());
         AreEqual(entity.Pid,                    entity.Info.Pid);
         AreEqual(entity.Enabled,                entity.Info.Enabled);
@@ -163,4 +161,6 @@ public static class Test_Entity
 }
 
 internal struct MyTag : ITag { }
+
+}
 

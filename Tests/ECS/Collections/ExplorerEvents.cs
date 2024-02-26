@@ -5,7 +5,7 @@ using Friflo.Engine.ECS.Collections;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
-namespace Tests.ECS.Collections;
+namespace Tests.ECS.Collections {
 
 internal class ExplorerEvents
 {
@@ -53,4 +53,6 @@ internal class ExplorerEvents
         col.Add(1);
         col.RemoveAt(0);
     }
+}
+
 }

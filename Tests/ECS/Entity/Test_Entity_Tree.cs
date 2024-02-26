@@ -15,7 +15,7 @@ using static Tests.Utils.Events;
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 public static class Test_Entity_Tree
 {
@@ -751,5 +751,6 @@ public static class Test_Entity_Tree
     }
 }
 
+}
 
 

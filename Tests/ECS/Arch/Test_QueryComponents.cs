@@ -5,7 +5,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_QueryComponents
 {
@@ -252,3 +252,4 @@ public static class Test_QueryComponents
     }
 }
 
+}

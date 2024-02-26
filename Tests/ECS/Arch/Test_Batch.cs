@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_Batch
 {
@@ -310,3 +310,4 @@ public static class Test_Batch
     }
 }
 
+}

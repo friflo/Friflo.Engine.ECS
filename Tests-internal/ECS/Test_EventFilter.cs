@@ -5,7 +5,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_EventFilter
 {
@@ -48,4 +48,6 @@ public static class Test_EventFilter
         
         AreEqual("added: [Position, #TestTag]  removed: [Position, #TestTag]", filter.ToString());
     }
+}
+
 }

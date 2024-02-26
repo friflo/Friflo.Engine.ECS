@@ -2,7 +2,7 @@
 using System.Reflection;
 using NUnit.Framework;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable once InconsistentNaming
 public static class Test_LoadAssemblies
@@ -21,4 +21,6 @@ public static class Test_LoadAssemblies
             Assert.AreSame(first, result);
         }
     }
+}
+
 }

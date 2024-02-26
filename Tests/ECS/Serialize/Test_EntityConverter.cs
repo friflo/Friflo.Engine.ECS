@@ -9,7 +9,7 @@ using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Serialize;
+namespace Tests.ECS.Serialize {
 
 public static class Test_EntityConverter
 {
@@ -206,4 +206,6 @@ public static class Test_EntityConverter
         AreEqual(count, entityCount);
         Console.WriteLine($"{count} iterations: {stopwatch.ElapsedMilliseconds} ms");
     }
+}
+
 }

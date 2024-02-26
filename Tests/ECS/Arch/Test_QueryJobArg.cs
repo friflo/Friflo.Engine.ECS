@@ -5,7 +5,7 @@ using Tests.Utils;
 
 // ReSharper disable AccessToModifiedClosure
 // ReSharper disable once InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_QueryJobArg
 {
@@ -309,5 +309,7 @@ public static class Test_QueryJobArg
             entities[n] = archetype.CreateEntity();
         }
     }
+
+}
 
 }

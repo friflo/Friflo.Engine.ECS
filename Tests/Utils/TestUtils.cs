@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Tests.Utils;
+namespace Tests.Utils {
 
 public static class TestUtils
 {
@@ -28,4 +28,6 @@ public static class TestUtils
     public static double StopwatchMillis(Stopwatch stopwatch) {
         return stopwatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency;
     }
+}
+
 }

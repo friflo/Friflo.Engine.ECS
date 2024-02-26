@@ -7,7 +7,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public struct InternalTestTag  : ITag { }
 
@@ -68,4 +68,6 @@ public static class Test_ComponentType
         AreEqual(typeof(TestTag),   types[0].Type);
         AreEqual(typeof(TestTag2),  types[1].Type);
     }
+}
+
 }

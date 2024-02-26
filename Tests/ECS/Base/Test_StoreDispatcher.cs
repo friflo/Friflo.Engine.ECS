@@ -5,7 +5,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Base {
 
 
 public static class Test_StoreDispatcher
@@ -76,3 +76,4 @@ internal class TestDispatcher : IStoreDispatcher
     public Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)   => action();
 }
 
+}

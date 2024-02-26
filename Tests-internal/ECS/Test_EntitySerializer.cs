@@ -8,28 +8,26 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_EntitySerializer
 {
     private const string SampleJson =
-"""
-{
-    "id": 10,
-    "children": [
+@"{
+    ""id"": 10,
+    ""children"": [
         11
     ],
-    "components": {
-        "pos": {"x":1,"y":2,"z":3},
-        "script1": {"val1":10}
+    ""components"": {
+        ""pos"": {""x"":1,""y"":2,""z"":3},
+        ""script1"": {""val1"":10}
     },
-    "tags": [
-        "test-tag",
-        "TestTag3",
-        "xyz"
+    ""tags"": [
+        ""test-tag"",
+        ""TestTag3"",
+        ""xyz""
     ]
-}
-""";
+}";
     
     [Test]
     public static void Test_Entity_DebugJSON_set()
@@ -111,5 +109,7 @@ public static class Test_EntitySerializer
             AreEqual("'components[pos]' - Cannot assign bool to float. got: true path: 'x' at position: 9 path: '(root)' at position: 33", error);
         }
     }
+}
+
 }
 

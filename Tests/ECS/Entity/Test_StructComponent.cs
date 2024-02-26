@@ -12,7 +12,7 @@ using static NUnit.Framework.Assert;
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
 
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 class PlayerRef {
     public Position position;
@@ -551,3 +551,4 @@ public static class Test_StructComponent
     }
 }
 
+}

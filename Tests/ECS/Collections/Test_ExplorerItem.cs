@@ -10,7 +10,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Collections;
+namespace Tests.ECS.Collections {
 
 public static class Test_ExplorerItem
 {
@@ -455,4 +455,6 @@ public static class Test_ExplorerItem
         AreEqual("id: 2  [Position]",                           tree.GetItemById(2).ToString());
         AreEqual("id: 3  [#TestTag]",                           tree.GetItemById(3).ToString());
     }
+}
+
 }

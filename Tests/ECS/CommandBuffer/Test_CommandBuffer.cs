@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS.Buffer;
+namespace Tests.ECS.Buffer {
 
 public static class Test_CommandBuffer
 {
@@ -404,4 +404,6 @@ public static class Test_CommandBuffer
         ecb.Playback();
         AreEqual(0, entity1.ChildIds.Length);
     }
+}
+
 }

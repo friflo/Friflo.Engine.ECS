@@ -3,7 +3,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_EntityList
 {
@@ -22,4 +22,6 @@ public static class Test_EntityList
         AreEqual(1, entities[0].Id);
         AreEqual(2, entities[1].Id);
     }
+}
+
 }

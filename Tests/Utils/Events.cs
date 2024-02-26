@@ -5,7 +5,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
-namespace Tests.Utils;
+namespace Tests.Utils {
 
 internal class ChildEntitiesChangedEvents {
     internal    int                             Seq => seq;
@@ -70,4 +70,6 @@ internal static class Events
         col.Add(1);
         col.RemoveAt(0);
     }
+}
+
 }

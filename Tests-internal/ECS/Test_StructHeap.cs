@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable InconsistentNaming
 public static class Test_StructHeap
@@ -16,4 +16,6 @@ public static class Test_StructHeap
         var heap    = (StructHeap<MyComponent1>)type.CreateHeap();
         AreEqual(512, heap.components.Length);
     }
+}
+
 }

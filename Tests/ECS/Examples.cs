@@ -10,7 +10,7 @@ using NUnit.Framework;
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable MemberCanBePrivate.Global
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 public static class Examples
 {
@@ -405,5 +405,7 @@ public static void CommandBuffer()
     Console.WriteLine(entity3);                         // > id: 3  "new entity"  [EntityName]
 }
 
+
+}
 
 }

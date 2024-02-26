@@ -5,7 +5,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Serialize;
+namespace Tests.ECS.Serialize {
 
 public static class Test_ComponentWriter
 {
@@ -36,22 +36,20 @@ public static class Test_ComponentWriter
         AreEqual("{\"pos\":{\"x\":1,\"y\":2,\"z\":3},\"script1\":{\"val1\":10}}", dataEntity.components.AsString());
         
 var expect =
-"""
-{
-    "id": 10,
-    "children": [
+@"{
+    ""id"": 10,
+    ""children"": [
         11
     ],
-    "components": {
-        "pos": {"x":1,"y":2,"z":3},
-        "script1": {"val1":10}
+    ""components"": {
+        ""pos"": {""x"":1,""y"":2,""z"":3},
+        ""script1"": {""val1"":10}
     },
-    "tags": [
-        "test-tag",
-        "TestTag3"
+    ""tags"": [
+        ""test-tag"",
+        ""TestTag3""
     ]
-}
-""";
+}";
         var json = dataEntity.DebugJSON;
         AreEqual(expect, json);
         
@@ -146,23 +144,22 @@ var expect =
     }
     
     private const string SampleJson =
-    """
-    {
-        "id": 10,
-        "children": [
-            11
-        ],
-        "components": {
-            "pos": {"x":1,"y":2,"z":3},
-            "script1": {"val1":10}
-        },
-        "tags": [
-            "test-tag",
-            "TestTag3",
-            "xyz"
-        ]
-    }
-    """;
+@"{
+    ""id"": 10,
+    ""children"": [
+        11
+    ],
+    ""components"": {
+        ""pos"": {""x"":1,""y"":2,""z"":3},
+        ""script1"": {""val1"":10}
+    },
+    ""tags"": [
+        ""test-tag"",
+        ""TestTag3"",
+        ""xyz""
+    ]
+}";
 
 }
 
+}

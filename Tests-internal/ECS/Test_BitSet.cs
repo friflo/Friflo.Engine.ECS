@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 // ReSharper disable IntVariableOverflowInUncheckedContext
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_BitSet
 {
@@ -31,4 +31,6 @@ public static class Test_BitSet
             Assert.AreEqual(n,  BitSet.TrailingZeroCount(value));
         }
     }
+}
+
 }

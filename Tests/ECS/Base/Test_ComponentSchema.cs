@@ -3,7 +3,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Base {
 
 public static class Test_ComponentSchema
 {
@@ -133,5 +133,7 @@ public static class Test_ComponentSchema
         
         AssertBlittableScript<TestComponent>(schema, true);
     }
+
+}
 
 }

@@ -5,7 +5,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_CommandBuffer
 {
@@ -67,5 +67,7 @@ public static class Test_CommandBuffer
         AreEqual(1,                                     ecb.ChildCommandsCount);
         AreEqual("entity: 1 - Add child: 2",            ecb.ChildCommands[0].ToString());
     }
+}
+
 }
 

@@ -5,7 +5,7 @@ using Tests.Utils;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.System;
+namespace Tests.ECS.System {
 
 public static class Test_Query
 {
@@ -287,5 +287,7 @@ public static class Test_Query
             archetype.CreateEntity();
         }
     }
+}
+
 }
 

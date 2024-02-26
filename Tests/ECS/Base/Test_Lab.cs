@@ -2,7 +2,7 @@
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Base {
 
 public static class Test_Lab
 {
@@ -10,5 +10,7 @@ public static class Test_Lab
     public static void Test_Anything() {
         IsTrue(true);
     }
+}
+
 }
 

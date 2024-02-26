@@ -19,7 +19,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.Hub;
+namespace Tests.Hub {
 
 public static class Test_StoreSync
 {
@@ -252,4 +252,6 @@ public static class Test_StoreSync
         processor.ProcessEvents();
         AreEqual(0, store.Count);
     }
+}
+
 }

@@ -12,7 +12,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable ConvertToConstant.Local
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Utils;
+namespace Tests.ECS.Utils {
 
 
 public static class Test_TreeUtils
@@ -23,16 +23,16 @@ public static class Test_TreeUtils
     public static void Test_TreeUtils_JsonArrayToDataEntities()
     {
         var json = new JsonValue(
-        """
-        [{
-            "id": 2,
-            "tags": ["Tag1"],
-            "components": {
-                "name": { "value": "test" }
-            },
-            "children": [3]
-        }]
-        """);
+@"
+[{
+    ""id"": 2,
+    ""tags"": [""Tag1""],
+    ""components"": {
+        ""name"": { ""value"": ""test"" }
+    },
+    ""children"": [3]
+}]
+");
         var dataEntities = new List<DataEntity>();
         IsNull(TreeUtils.JsonArrayToDataEntities(json, dataEntities));
         
@@ -125,28 +125,26 @@ public static class Test_TreeUtils
         
         AreEqual(3, jsonEntities.count);
         var json =
-"""
-[{
-    "id": 1,
-    "children": [
+@"[{
+    ""id"": 1,
+    ""children"": [
         2,
         3
     ],
-    "components": {
-        "name": {"value":"root"}
+    ""components"": {
+        ""name"": {""value"":""root""}
     }
 },{
-    "id": 2,
-    "components": {
-        "name": {"value":"child-2"}
+    ""id"": 2,
+    ""components"": {
+        ""name"": {""value"":""child-2""}
     }
 },{
-    "id": 3,
-    "components": {
-        "name": {"value":"child-3"}
+    ""id"": 3,
+    ""components"": {
+        ""name"": {""value"":""child-3""}
     }
-}]
-""";
+}]";
         AreEqual(json, jsonEntities.entities.ToString());
     }
     
@@ -168,22 +166,20 @@ public static class Test_TreeUtils
         
         AreEqual(2, jsonEntities.count);
         var json =
-"""
-[{
-    "id": 2,
-    "components": {
-        "name": {"value":"child-2"}
+@"[{
+    ""id"": 2,
+    ""components"": {
+        ""name"": {""value"":""child-2""}
     }
 },{
-    "id": 1,
-    "children": [
+    ""id"": 1,
+    ""children"": [
         2
     ],
-    "components": {
-        "name": {"value":"root"}
+    ""components"": {
+        ""name"": {""value"":""root""}
     }
-}]
-""";
+}]";
         AreEqual(json, jsonEntities.entities.ToString());
     }
     
@@ -390,4 +386,6 @@ public static class Test_TreeUtils
         IsNull(TreeUtils.MoveExplorerItemsDown(items, 1));
     }
     #endregion
+}
+
 }

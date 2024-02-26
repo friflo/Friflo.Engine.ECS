@@ -9,7 +9,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable once InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_QueryJob
 {
@@ -133,7 +133,7 @@ public static class Test_QueryJob
     public static void Test_QueryJob_TPL_Perf()
     {
         int count = 1_000_000;
-        var action = () => {};
+        Action action = () => {};
         var actions = new[] {
             action,
             action,
@@ -152,4 +152,6 @@ public static class Test_QueryJob
         }
         Console.WriteLine($"Parallel.Invoke() perf - count: {count}, parallelism: {actions.Length}, duration: {sw.ElapsedMilliseconds}");
     }
+}
+
 }

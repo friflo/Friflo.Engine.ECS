@@ -11,7 +11,7 @@ using Tests.Utils;
 // ReSharper disable RedundantLambdaParameterType
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable once InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_QueryJob
 {
@@ -388,4 +388,6 @@ public static class Test_QueryJob
         multiple = store.Query<Component20>()       .ForEach((_, _) => {}).ParallelComponentMultiple;
         Assert.AreEqual(16, multiple);
     }
+}
+
 }

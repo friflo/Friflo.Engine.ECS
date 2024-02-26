@@ -7,7 +7,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_sizeof
 {
@@ -137,4 +137,6 @@ public static class Test_sizeof
             AreEqual(1L, offset);
         }
     }
+}
+
 }

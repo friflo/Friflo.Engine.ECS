@@ -7,7 +7,7 @@ using static Tests.Utils.Mem;
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_Query
 {
@@ -414,5 +414,7 @@ public static class Test_Query
             }
         }
     }
+}
+
 }
 

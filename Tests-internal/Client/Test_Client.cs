@@ -4,7 +4,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.Client;
+namespace Internal.Client {
 
 public static class Test_Client
 {
@@ -16,4 +16,6 @@ public static class Test_Client
         var result = new ReadResult(2, "test error");
         AreEqual("entityCount: 2 error: test error", result.ToString());
     }
+}
+
 }

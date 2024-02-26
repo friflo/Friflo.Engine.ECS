@@ -4,7 +4,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 #pragma warning disable CS0618 // Type or member is obsolete
 public static class Test_Deprecated
@@ -34,4 +34,6 @@ public static class Test_Deprecated
         _ = store.Query<Position, Rotation, Scale3, MyComponent1>()                 .Chunks.EntityCount;
         _ = store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>()   .Chunks.EntityCount;
     }
+}
+
 }

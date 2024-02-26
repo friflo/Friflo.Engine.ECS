@@ -5,7 +5,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable InconsistentNaming
 public static class Test_SpanConvert
@@ -36,4 +36,6 @@ public static class Test_SpanConvert
             MemoryMarshal.Cast<Position, Vector3>(positionSpan);
         }
     }
+}
+
 }

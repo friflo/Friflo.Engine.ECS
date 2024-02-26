@@ -7,7 +7,7 @@ using static System.Console;
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable UnusedVariable
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 public static class ExampleECS
 {
@@ -68,4 +68,6 @@ public static void OOP()
 
 
 }    
+
+}
 

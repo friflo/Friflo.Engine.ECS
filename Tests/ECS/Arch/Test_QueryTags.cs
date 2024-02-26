@@ -4,7 +4,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_QueryTags
 {
@@ -242,3 +242,4 @@ public static class Test_QueryTags
     }
 }
 
+}

@@ -8,7 +8,7 @@ using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Collections;
+namespace Tests.ECS.Collections {
 
 public static class Test_EntityList
 {
@@ -156,4 +156,6 @@ public static class Test_EntityList
         });
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
     }
+}
+
 }

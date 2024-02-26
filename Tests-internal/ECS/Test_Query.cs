@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 
 // ReSharper disable once InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_Query
 {
@@ -59,4 +59,6 @@ public static class Test_Query
         }
         Assert.AreEqual(1, count);
     }
+}
+
 }

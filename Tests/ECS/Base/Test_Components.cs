@@ -3,7 +3,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Base {
 
 public static class Test_Components
 {
@@ -25,4 +25,6 @@ public static class Test_Components
         IsTrue  (new Scale3().Equals(default));
         AreEqual("1, 2, 3", new Scale3(1, 2, 3).ToString());
     }
+}
+
 }

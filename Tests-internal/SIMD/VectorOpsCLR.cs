@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Intrinsics.X86;
 
 // ReSharper disable InconsistentNaming
-namespace Internal.SIMD;
+namespace Internal.SIMD {
 
 [ExcludeFromCodeCoverage]
 public sealed class VectorOpsCLR : VectorOps
@@ -37,4 +37,6 @@ public sealed class VectorOpsCLR : VectorOps
     public override void Populate(byte[] arr) {
         PopulateVector(arr);
     }
+}
+
 }

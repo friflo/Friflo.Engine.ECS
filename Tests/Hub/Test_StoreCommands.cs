@@ -11,7 +11,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.Hub;
+namespace Tests.Hub {
 
 public static class Test_StoreCommands
 {
@@ -125,4 +125,6 @@ public static class Test_StoreCommands
             AreEqual(expect, add.Error.Message);
         }
     }
+}
+
 }

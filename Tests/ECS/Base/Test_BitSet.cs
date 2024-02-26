@@ -6,7 +6,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable StringLiteralTypo
 // ReSharper disable InconsistentNaming
 
-namespace Tests.ECS.Base;
+namespace Tests.ECS.Base {
 
 public static class Test_BitSet
 {
@@ -172,4 +172,6 @@ public static class Test_BitSet
         }
 
     }
+}
+
 }

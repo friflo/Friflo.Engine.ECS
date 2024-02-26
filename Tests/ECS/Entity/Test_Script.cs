@@ -10,7 +10,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 
 public static class Test_Script
@@ -371,6 +371,7 @@ public static class Test_Script
     }
 }
 
+}
 
 
 

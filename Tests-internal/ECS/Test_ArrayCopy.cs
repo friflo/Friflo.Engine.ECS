@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using NUnit.Framework;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable InconsistentNaming
 public static class Test_ArrayCopy
@@ -38,4 +38,6 @@ public static class Test_ArrayCopy
         }
         Console.WriteLine($"Span.CopyTo() Type: {typeof(T).Name} {stopwatch.ElapsedMilliseconds} ms");
     }
+}
+
 }

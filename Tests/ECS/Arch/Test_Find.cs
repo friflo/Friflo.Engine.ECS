@@ -5,7 +5,7 @@ using Tests.Utils;
 
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_Find
 {
@@ -92,3 +92,4 @@ public static class Test_Find
     }
 }
 
+}

@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 
 public static class Test_Entity_Events
@@ -21,13 +21,13 @@ public static class Test_Entity_Events
         var entity2     = store.CreateEntity(2);
         
         var entity1EventCount = 0;
-        var tagsChanged1 = (TagsChanged args)    => {
+        Action<TagsChanged> tagsChanged1 = (args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Tags: [#TestTag]", args.ToString()); break;
                 default:    Fail("unexpected"); break;
             }
         };
-        var tagsChanged2 = (TagsChanged args)    => { };
+        Action<TagsChanged> tagsChanged2 = (_)    => { };
         
         entity1.OnTagsChanged -= tagsChanged1;  // remove event handler not added before. 
         entity1.OnTagsChanged += tagsChanged1;
@@ -72,7 +72,7 @@ public static class Test_Entity_Events
         var entity2     = store.CreateEntity(2);
 
         var entity1EventCount = 0;
-        var onComponentChanged = (ComponentChanged args)    => {
+        Action<ComponentChanged> onComponentChanged = (args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Component: [Position]", args.ToString()); break;
             }
@@ -101,7 +101,7 @@ public static class Test_Entity_Events
         var entity2     = store.CreateEntity(2);
 
         var entity1EventCount = 0;
-        var onScriptChanged = (ScriptChanged args)    => {
+        Action<ScriptChanged> onScriptChanged = (args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Script: [*TestScript1]", args.ToString()); break;
                 default:    Fail("unexpected"); break;
@@ -130,7 +130,7 @@ public static class Test_Entity_Events
         var child12     = store.CreateEntity(12);
 
         var entity1EventCount = 0;
-        var onChildEntitiesChanged = (ChildEntitiesChanged args)    => {
+        Action<ChildEntitiesChanged> onChildEntitiesChanged = (args)    => {
             switch (entity1EventCount++) {
                 case 0:     AreEqual("entity: 1 - event > Add Child[0] = 10", args.ToString()); break;
                 default:    Fail("unexpected"); break;
@@ -175,7 +175,7 @@ public static class Test_Entity_Events
         var entity  = store.CreateEntity(1);
 
         var entity1SignalCount = 0;
-        var onMyEvent = (Signal<MyEvent2> signal)    => {
+        Action<Signal<MyEvent2>> onMyEvent = (signal)    => {
             switch (entity1SignalCount++) {
                 case 0:
                     Mem.AreEqual(1,                                 signal.Entity.Id);
@@ -192,7 +192,7 @@ public static class Test_Entity_Events
                     break;
             }
         };
-        var onMyEvent2 = (Signal<MyEvent2> signal) => { };
+        Action<Signal<MyEvent2>> onMyEvent2 = (_) => { };
         AreSame(onMyEvent,  entity.AddSignalHandler(onMyEvent));
         AreSame(onMyEvent2, entity.AddSignalHandler(onMyEvent2));
         
@@ -267,3 +267,4 @@ internal struct MyEvent1 { }
 internal struct MyEvent2 { internal int value; }
 internal struct MyEvent3 { }
 
+}

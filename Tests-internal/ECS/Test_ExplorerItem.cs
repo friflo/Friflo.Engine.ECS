@@ -5,7 +5,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_ExplorerItem
 {
@@ -59,4 +59,6 @@ public static class Test_ExplorerItem
         AreEqual(2, rootItems[0].Id);
         AreEqual(3, rootItems[1].Id);
     }
+}
+
 }

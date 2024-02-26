@@ -13,7 +13,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Serialize;
+namespace Tests.ECS.Serialize {
 
 public static class Test_Serializer
 {
@@ -405,4 +405,6 @@ public static class Test_Serializer
         AreEqual("'components[pos]' - Cannot assign bool to float. got: false path: 'x' at position: 10 path: '[0]' at position: 46", result.error);
     }
     #endregion
+}
+
 }

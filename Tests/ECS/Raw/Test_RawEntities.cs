@@ -7,7 +7,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable HeuristicUnreachableCode
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Raw;
+namespace Tests.ECS.Raw {
 
 public static class Test_RawEntities
 {
@@ -114,4 +114,6 @@ public static class Test_RawEntities
         }
         Console.WriteLine($"RawEntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
+}
+
 }

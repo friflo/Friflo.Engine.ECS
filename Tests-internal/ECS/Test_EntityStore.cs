@@ -6,7 +6,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 public static class Test_EntityStore
 {
@@ -65,5 +65,7 @@ public static class Test_EntityStore
             store.CreateEntity();
         }
     }
+}
+
 }
 

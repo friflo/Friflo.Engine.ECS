@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Tests.Utils;
 
 // ReSharper disable ConvertToConstant.Local
-namespace Tests.ECS.System;
+namespace Tests.ECS.System {
 
 // ReSharper disable InconsistentNaming
 public static class Bench_Query
@@ -132,4 +132,6 @@ public static class Bench_Query
         Span<byte> oneBytes = stackalloc byte[32] {1,1,1,1,1,1,1,1,  2,2,2,2,2,2,2,2,  3,3,3,3,3,3,3,3,  4,4,4,4,4,4,4,4};
         return Vector256.Create<byte>(oneBytes);
     }
+}
+
 }

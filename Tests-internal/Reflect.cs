@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Engine.ECS;
 
-namespace Internal;
+namespace Internal {
 
 public static class Reflect
 {
@@ -111,4 +111,6 @@ public static class Reflect
         }
         return null;
     }
+}
+
 }

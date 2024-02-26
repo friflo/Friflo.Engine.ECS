@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using NUnit.Framework;
 
-namespace Tests.SIMD;
+namespace Tests.SIMD {
 
 public static class VectorTest
 {
@@ -18,7 +13,7 @@ public static class VectorTest
         Assert.AreEqual(new Vector2(1.2f, 2.4f), vResult);
     }
 }
-
+/*
 [ExcludeFromCodeCoverage]
 public static class MyExtensions
 {
@@ -69,4 +64,6 @@ public static class MyExtensions
         }
         return sum;
     }
+}
+*/
 }

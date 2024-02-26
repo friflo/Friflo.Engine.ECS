@@ -8,7 +8,7 @@ using static NUnit.Framework.Assert;
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 public static class Test_Entity
 {
@@ -250,4 +250,6 @@ public static class Test_Entity
         AreEqual(entityCount - 1,   arch3.Count);
         IsFalse (root.Enabled);
     }
+}
+
 }

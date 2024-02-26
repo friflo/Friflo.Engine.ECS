@@ -3,7 +3,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 public static class Test_Signature
 {
@@ -64,4 +64,6 @@ public static class Test_Signature
         AreEqual(s4.ComponentTypes.ToString(), ct4);
         AreEqual(s5.ComponentTypes.ToString(), ct5);
     }
+}
+
 }

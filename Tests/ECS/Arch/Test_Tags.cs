@@ -7,7 +7,7 @@ using static NUnit.Framework.Assert;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.Arch;
+namespace Tests.ECS.Arch {
 
 
 
@@ -332,5 +332,7 @@ public static class Test_Tags
             AreEqual(1, count);
         }
     }
+}
+
 }
 

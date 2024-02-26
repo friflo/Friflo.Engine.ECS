@@ -10,7 +10,7 @@ using Tests.Utils;
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace Tests.ECS;
+namespace Tests.ECS {
 
 public static class Test_StructHeapRaw
 {
@@ -253,3 +253,4 @@ public static class Test_StructHeapRaw
     }
 }
 
+}

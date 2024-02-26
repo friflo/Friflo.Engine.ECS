@@ -2,7 +2,7 @@
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable once InconsistentNaming
 public static class Test_ComponentReader
@@ -15,4 +15,6 @@ public static class Test_ComponentReader
         var rawComponent    = new RawComponent(rawKey, 0, 0);
         Assert.AreEqual("test - Unresolved", rawComponent.ToString());
     }
+}
+
 }

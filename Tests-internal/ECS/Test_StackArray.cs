@@ -2,7 +2,7 @@
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 
-namespace Internal.ECS;
+namespace Internal.ECS {
 
 // ReSharper disable InconsistentNaming
 public static class Test_StackArray
@@ -28,4 +28,6 @@ public static class Test_StackArray
         Assert.IsFalse(stack.TryPop(out value));
         Assert.AreEqual(0, stack.Count);
     }
+}
+
 }
