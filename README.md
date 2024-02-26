@@ -101,6 +101,10 @@ Features in this list are also explained in the Examples.
             Add `Entity.Enabled` to enable/disable an entity.  
             Add `Entity.EnableTree()` / `Entity.DisableTree()` to enable/disable recursively the child entities of an entity.
 
+- 1.19.0    Support using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
+            Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
+            
+
 
 
 # Development
@@ -147,6 +151,7 @@ When testing the examples use a debugger to check entity state changes while ste
 Examples showing typical use cases of the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
 
 **General**
+- [Hello World](#hello-world)
 - [EntityStore](#entitystore)
 - [Entity](#entity)
 - [Component](#component)
@@ -171,6 +176,33 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [EntityBatch - EntityList](#entitybatch---entitylist)
 - [CommandBuffer](#commandbuffer)
 
+
+## Hello World
+
+The hello world examples demonstrates the creation of some entities  
+and their movement using a simple `ForEachEntity()` call.  
+
+```csharp
+public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.19.0
+
+public static void HelloWorld()
+{
+    var store = new EntityStore();
+    for (int n = 0; n < 10; n++) {
+        store.Batch()
+            .Add(new Position(n, 0, 0))
+            .Add(new Velocity{ value = new Vector3(0, n, 0) })
+            .Add(new EntityName("hello entity"))
+            .CreateEntity();
+    }
+    var query = store.Query<Position, Velocity>();
+    query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
+        position.value += velocity.value;
+    });
+}
+```
+In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
+See [Enumerate Query Chunks](#enumerate-query-chunks) and [Parallel Query Job](#parallel-query-job).
 
 
 ## EntityStore

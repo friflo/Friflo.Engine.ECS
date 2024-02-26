@@ -17,7 +17,7 @@ public static class Examples
 
 
 
-public struct Velocity : IComponent { public Vector3 value; } // requires >= v1.18.0
+public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.19.0
 
 [Test]
 public static void HelloWorld()
