@@ -9,6 +9,12 @@ using static Friflo.Engine.ECS.StructInfo;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+public delegate void ForEachEntity<T1, T2, T3, T4>(ref T1 component1, ref T2 component2, ref T3 component3, ref T4 component4, Entity entity)
+    where T1 : struct, IComponent
+    where T2 : struct, IComponent
+    where T3 : struct, IComponent
+    where T4 : struct, IComponent;
+
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
@@ -60,4 +66,20 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     /// Returns a <see cref="QueryJob"/> that enables <see cref="JobExecution.Parallel"/> query execution.  
     /// </summary>
     public QueryJob<T1, T2, T3, T4> ForEach(Action<Chunk<T1>, Chunk<T2>, Chunk<T3>, Chunk<T4>, ChunkEntities> action)  => new (this, action);
+    
+    public void ForEachEntity(ForEachEntity<T1, T2, T3, T4> forEach)
+    {
+        var store = Store;
+        foreach (var (chunk1, chunk2, chunk3, chunk4, entities) in Chunks)
+        {
+            var span1   = chunk1.Span;
+            var span2   = chunk2.Span;
+            var span3   = chunk3.Span;
+            var span4   = chunk4.Span;
+            var ids     = entities.Ids;
+            for (int n = 0; n < chunk1.Length; n++) {
+                forEach(ref span1[n], ref span2[n], ref span3[n], ref span4[n], new Entity(store, ids[n]));
+            }
+        }
+    }
 }

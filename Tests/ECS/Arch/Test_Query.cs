@@ -100,6 +100,81 @@ public static class Test_Query
     }
     
     [Test]
+    public static void Test_Query_ForEachEntity()
+    {
+        var store   = new EntityStore();
+        for (int n = 1; n <= 5; n++) {
+            store.Batch()
+                .Add(new Position   (n, 0, 0))
+                .Add(new Rotation   (n, 0, 0, 0))
+                .Add(new Scale3     (n, 0, 0))
+                .Add(new MyComponent1 { a = n })
+                .Add(new MyComponent2 { b = n })
+                .CreateEntity();
+        }
+        var query1 = store.Query<Position>();
+        var query2 = store.Query<Position, Rotation>();
+        var query3 = store.Query<Position, Rotation, Scale3>();
+        var query4 = store.Query<Position, Rotation, Scale3, MyComponent1>();
+        var query5 = store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>();
+        {
+            int count = 0;
+            query1.ForEachEntity((ref Position position, Entity entity) => {
+                count++;
+                AreEqual(count, position.x);
+                AreEqual(count, entity.Id);
+            });
+            AreEqual(5, count);
+        }
+        {
+            int count = 0;
+            query2.ForEachEntity((ref Position pos, ref Rotation rot, Entity entity) => {
+                count++;
+                AreEqual(count, pos.x);
+                AreEqual(count, rot.x);
+                AreEqual(count, entity.Id);
+            });
+            AreEqual(5, count);
+        }
+        {
+            int count = 0;
+            query3.ForEachEntity((ref Position pos, ref Rotation rot, ref Scale3 scale, Entity entity) => {
+                count++;
+                AreEqual(count, pos.x);
+                AreEqual(count, rot.x);
+                AreEqual(count, scale.x);
+                AreEqual(count, entity.Id);
+            });
+            AreEqual(5, count);
+        }
+        {
+            int count = 0;
+            query4.ForEachEntity((ref Position pos, ref Rotation rot, ref Scale3 scale, ref MyComponent1 my1, Entity entity) => {
+                count++;
+                AreEqual(count, pos.x);
+                AreEqual(count, rot.x);
+                AreEqual(count, scale.x);
+                AreEqual(count, my1.a);
+                AreEqual(count, entity.Id);
+            });
+            AreEqual(5, count);
+        }
+        {
+            int count = 0;
+            query5.ForEachEntity((ref Position pos, ref Rotation rot, ref Scale3 scale, ref MyComponent1 my1, ref MyComponent2 my2, Entity entity) => {
+                count++;
+                AreEqual(count, pos.x);
+                AreEqual(count, rot.x);
+                AreEqual(count, scale.x);
+                AreEqual(count, my1.a);
+                AreEqual(count, my2.b);
+                AreEqual(count, entity.Id);
+            });
+            AreEqual(5, count);
+        }
+    }
+    
+    [Test]
     public static void Test_Signature_Query()
     {
         var store   = new EntityStore();
