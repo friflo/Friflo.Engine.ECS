@@ -37,6 +37,8 @@ The library implements all features a common ECS provides.
 
 # Features
 
+- Support integration as nuget package in Unity 2021 or higher. Tested with 2021.3.9f1.  
+  Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package. Requires Friflo.Engine.ECS 1.21.0 or higher.
 - Performance
     - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
     - High memory locality by storing components in continuous memory.
@@ -104,7 +106,8 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 
 - 1.19.0    Support using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
             Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
-            
+
+- 1.21.0    Support integration in Unity as nuget package.
 
 
 
