@@ -142,13 +142,12 @@ public abstract partial class EntityStoreBase
     
     #endregion
     
+    
+    
 #region exceptions
     private static ArgumentException ArgumentException(string message, string parameterName) {
-#if UNITY_5_3_OR_NEWER
+        // required as Unity format exception message different than CLR
         return new ArgumentException($"{message} (Parameter '{parameterName}')");
-#else
-        return new ArgumentException(message, parameterName);
-#endif
     }
 
     internal static Exception   InvalidStoreException(string parameterName) {
