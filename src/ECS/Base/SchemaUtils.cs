@@ -90,6 +90,10 @@ internal static class SchemaUtils
         return new ComponentType<T>(componentKey, structIndex, typeMapper);
     }
     
+    /// <remarks>
+    /// <see cref="ScriptType{T}.Index"/> must be assigned here.<br/>
+    /// Unity initializes static fields of generic types already when creating a instance of that type.
+    /// </remarks>
     internal static ScriptType CreateScriptType<T>(TypeStore typeStore, int scriptIndex)
         where T : Script, new()
     {
@@ -111,6 +115,10 @@ internal static class SchemaUtils
         return type.Name;
     }
     
+    /// <remarks>
+    /// <see cref="TagType{T}.TagIndex"/> must be assigned here.<br/>
+    /// Unity initializes static fields of generic types already when creating a instance of that type.  
+    /// </remarks>
     internal static TagType CreateTagType<T>(int tagIndex)
         where T : struct, ITag
     {
