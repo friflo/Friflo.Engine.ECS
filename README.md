@@ -39,7 +39,8 @@ The library implements all features a common ECS provides.
 
 - ![new](docs/images/new.svg) Support integration as nuget package in **Unity** 2021 or higher. Tested with 2021.3.9f1.  
   Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package. Requires **Friflo.Engine.ECS** 1.21.0 or higher.
-- The library supports target framework **.NET Standard 2.1** or higher.  This includes .NET Core, .NET 5, .NET 6, .NET 7 and .NET 8.  
+- The library supports target framework .NET Standard 2.1 or higher - includes .NET 5, .NET 6, .NET 7 and .NET 8.  
+  See [nuget - Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/) to integrate in a **.NET** project.
 - Performance
     - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
     - High memory locality by storing components in continuous memory.
