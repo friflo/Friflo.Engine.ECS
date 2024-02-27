@@ -49,11 +49,11 @@ public abstract class ScriptType : SchemaType
         return (Script)clone;
     }
     
-    internal static int NewScriptIndex(Type type)
+    /* internal static int NewScriptIndex(Type type)
     {
         var schema = EntityStoreBase.Static.EntitySchema;
         return schema.scriptTypeByType[type].ScriptIndex;
-    }
+    } */
 }
 
 internal sealed class ScriptType<T> : ScriptType 
@@ -62,7 +62,8 @@ internal sealed class ScriptType<T> : ScriptType
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"Script: [*{typeof(T).Name}]";
     
-    internal static readonly    int     Index  = NewScriptIndex(typeof(T));
+    // ReSharper disable once StaticMemberInGenericType
+    internal static     int             Index;
     
     internal ScriptType(string scriptComponentKey, int scriptIndex, TypeMapper<T> typeMapper)
         : base(scriptComponentKey, scriptIndex, typeof(T))

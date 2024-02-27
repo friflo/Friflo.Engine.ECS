@@ -95,6 +95,7 @@ internal static class SchemaUtils
     {
         var scriptKey   = GetComponentKey(typeof(T));
         var typeMapper  = typeStore.GetTypeMapper<T>();
+        ScriptType<T>.Index = scriptIndex;
         return new ScriptType<T>(scriptKey, scriptIndex, typeMapper);
     }
     
@@ -114,6 +115,7 @@ internal static class SchemaUtils
         where T : struct, ITag
     {
         var tagName = GetTagName(typeof(T));
+        TagType<T>.TagIndex = tagIndex;
         return new TagType(tagName, typeof(T), tagIndex);
     }
     

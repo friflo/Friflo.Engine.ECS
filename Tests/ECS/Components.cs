@@ -127,8 +127,11 @@ class TestComponent : Script
     }
 }
 
-/// <summary> Used only to cover <see cref="TagType.NewTagIndex"/>,
-/// <see cref="StructUtils.NewStructIndex"/> and <see cref="ScriptType.NewScriptIndex"/></summary>
+/// <summary> Used only to cover <see cref="StructUtils.NewStructIndex"/>
+/// Deprecated methods
+/// TagType.NewTagIndex()
+/// ScriptType.NewScriptIndex()
+/// </summary> 
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }
 
