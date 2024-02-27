@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <OutputType>library</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net8.0;netstandard2.1</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <RootNamespace>Friflo.Engine.Hub</RootNamespace>
     <AssemblyName>Friflo.Engine.Hub</AssemblyName>
+    <LangVersion>12.0</LangVersion>
 
     <!-- packaging -->
     <PublishRepositoryUrl>false</PublishRepositoryUrl>
