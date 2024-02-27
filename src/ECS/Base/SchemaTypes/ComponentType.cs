@@ -82,7 +82,20 @@ internal sealed class ComponentType<T> : ComponentType
     internal override BatchComponent CreateBatchComponent() => new BatchComponent<T>();
     
     
-    private static              int GetByteSize()   => Unsafe.SizeOf<T>();
+    private static int GetByteSize() {
+        // Unity: when testing as dll in Assets/Plugins folder add required dll's
+        //  Friflo.Json.Fliox.Hub.dll
+        //  Friflo.Json.Fliox.dll
+        //  Friflo.Json.Fliox.Annotation.dll
+        //  Friflo.Json.Burst.dll
+        //  Friflo.Engine.Hub.dll
+        //  Friflo.Engine.ECS.dll
+        //  System.Runtime.CompilerServices.Unsafe.dll
+        // 
+        //  System.Runtime.CompilerServices.Unsafe.dll can be downloaded from
+        //      https://www.nuget.org/packages/System.Runtime.CompilerServices.Unsafe/6.0.0
+        return Unsafe.SizeOf<T>();
+    }
 
     // ReSharper disable StaticMemberInGenericType
     internal static readonly    int ByteSize        = GetByteSize();
