@@ -220,9 +220,10 @@ public static class Test_QueryJob
     }
     
     private static void SetThreadName(string name) {
-#if !UNITY_5_3_OR_NEWER
-        Thread.CurrentThread.Name = name;
+#if UNITY_5_3_OR_NEWER
+        if (Thread.CurrentThread.Name == name) return; // can set thread name only once in Unity
 #endif
+        Thread.CurrentThread.Name = name;
     }
     
     [Test]
