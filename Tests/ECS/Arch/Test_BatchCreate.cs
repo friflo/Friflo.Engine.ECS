@@ -117,7 +117,7 @@ public static class Test_BatchCreate
         e = Throws<BatchAlreadyReturnedException> (() => batch.Add<Position>());
         AreEqual(expect, e!.Message);
         
-        e = Throws<BatchAlreadyReturnedException> (() => batch.AddTag<Examples.MyTag1>());
+        e = Throws<BatchAlreadyReturnedException> (() => batch.AddTag<TestTag>());
         AreEqual(expect, e!.Message);
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.AddTags(default));
@@ -151,7 +151,7 @@ public static class Test_BatchCreate
         e = Throws<BatchAlreadyReturnedException> (() => batch.Add<Position>());
         AreEqual(expect, e!.Message);
         
-        e = Throws<BatchAlreadyReturnedException> (() => batch.AddTag<Examples.MyTag1>());
+        e = Throws<BatchAlreadyReturnedException> (() => batch.AddTag<TestTag>());
         AreEqual(expect, e!.Message);
         
         e = Throws<BatchAlreadyReturnedException> (() => batch.AddTags(default));
