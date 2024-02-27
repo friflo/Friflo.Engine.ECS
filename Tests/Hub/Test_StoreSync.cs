@@ -169,13 +169,13 @@ public static class Test_StoreSync
         var e = Throws<ArgumentNullException>(() => {
             _ = new StoreSync(null, null);
         });
-        AreEqual("Value cannot be null. (Parameter 'store')", e!.Message);
+        AreEqual("store", e!.ParamName);
         
         var store = new EntityStore();
         e = Throws<ArgumentNullException>(() => {
             _ = new StoreSync(store, null);
         });
-        AreEqual("Value cannot be null. (Parameter 'client')", e!.Message);
+        AreEqual("client", e!.ParamName);
     }
     
     private static FlioxHub Prepare_SubscribeDatabaseChanges(out StoreSync sync, out EventProcessorQueue processor)

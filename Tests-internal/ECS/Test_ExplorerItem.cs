@@ -39,7 +39,7 @@ public static class Test_ExplorerItem
         var e = Throws<ArgumentNullException>(() => {
             _ = new ExplorerItem(tree, entity);
         });
-        AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
+        AreEqual("entity", e!.ParamName);
     }
     
     [Test]

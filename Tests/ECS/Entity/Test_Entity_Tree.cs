@@ -640,7 +640,7 @@ public static class Test_Entity_Tree
             var e       = Throws<ArgumentNullException>(() => {
                 store.SetStoreRoot(default);
             });
-            AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
+            AreEqual("entity", e!.ParamName);
         } {
             var store1  = new EntityStore();
             var store2  = new EntityStore();

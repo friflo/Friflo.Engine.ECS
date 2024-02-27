@@ -53,7 +53,7 @@ public static class Test_StoreDispatcher
         var e = Throws<ArgumentNullException>(() => {
             StoreDispatcher.SetDispatcher(null);
         });
-        AreEqual("Value cannot be null. (Parameter 'dispatcher')", e!.Message);
+        AreEqual("dispatcher", e!.ParamName);
         
         var dispatcher = new TestDispatcher();
         IStoreDispatcher old = null;

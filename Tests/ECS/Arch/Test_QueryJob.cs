@@ -216,7 +216,7 @@ public static class Test_QueryJob
         var e3 = Assert.Throws<ArgumentNullException>(() => {
             job.JobRunner = null;
         });
-        Assert.AreEqual("Value cannot be null. (Parameter 'jobRunner')", e3!.Message);
+        Assert.AreEqual("jobRunner", e3!.ParamName);
     }
     
     private static void SetThreadName(string name) {

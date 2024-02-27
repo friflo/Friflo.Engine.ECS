@@ -231,7 +231,7 @@ public static class Test_ComponentReader
             var e = Throws<ArgumentNullException>(() => {
                 converter.DataEntityToEntity(null, store, out _);
             });
-            AreEqual("Value cannot be null. (Parameter 'dataEntity')", e!.Message);
+            AreEqual("dataEntity", e!.ParamName);
         } {
             var store       = new EntityStore(PidType.UsePidAsId);
             var converter   = EntityConverter.Default;
@@ -467,12 +467,12 @@ public static class Test_ComponentReader
             var e = Throws<ArgumentNullException>(() => {
                 converter.DataEntityToEntity(null, store, out _);    
             });
-            AreEqual("Value cannot be null. (Parameter 'dataEntity')", e!.Message);
+            AreEqual("dataEntity", e!.ParamName);
         } {
             var e = Throws<ArgumentNullException>(() => {
                 converter.EntityToDataEntity(default, null, false);    
             });
-            AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
+            AreEqual("entity", e!.ParamName);
         }
     }
 }
