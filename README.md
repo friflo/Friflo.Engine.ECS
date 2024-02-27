@@ -21,7 +21,7 @@ The library implements all features a common ECS provides.
 - Build up a hierarchy of entities with parent / child relationship - optional.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
   See screenshot at examples.
-- Subscribe to events and signals only for specific entities.
+- Subscribe to events and signals for specific or all entities.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 
 
