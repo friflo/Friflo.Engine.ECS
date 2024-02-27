@@ -37,13 +37,14 @@ The library implements all features a common ECS provides.
 
 # Features
 
-- Support integration as nuget package in Unity 2021 or higher. Tested with 2021.3.9f1.  
-  Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package. Requires Friflo.Engine.ECS 1.21.0 or higher.
+- ![new](docs/images/new.svg) Support integration as nuget package in **Unity** 2021 or higher. Tested with 2021.3.9f1.  
+  Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package. Requires **Friflo.Engine.ECS** 1.21.0 or higher.
+- The library supports target framework **.NET Standard 2.1** or higher.  This includes .NET Core, .NET 5, .NET 6, .NET 7 and .NET 8.  
 - Performance
     - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
     - High memory locality by storing components in continuous memory.
     - Optimized for high L1 cache line hit rate.
-    - Very good benchmark results at: [Ecs.CSharp.Benchmark - GitHub](https://github.com/Doraku/Ecs.CSharp.Benchmark).
+    - Very good benchmark results at: [**Ecs.CSharp.Benchmark - GitHub**](https://github.com/Doraku/Ecs.CSharp.Benchmark).
     - Processing components of large queries has the memory bandwidth as bottleneck. Either using multi threading or SIMD.  
       Alternative ECS implementations using C/C++, Rust, Zig or Mojo 🔥 cannot be faster due to the physical limits.
 - Developer friendly / OOP like API by exposing the [Entity API](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/Entity.md)
@@ -52,17 +53,17 @@ The library implements all features a common ECS provides.
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
 - JSON Serialization
 - Record entity changes on arbitrary threads using [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.
-- Build a hierarchy of entities typically used in Games and Game Editors.
-- Support multi threaded component queries (systems).
-- Support for Vectorization (SIMD) of components returned by queries.  
+- Build a **hierarchy of entities** typically used in Games and Game Editors.
+- Support **multi threaded** component queries (systems).
+- Support for **Vectorization (SIMD)** of components returned by queries.  
   Returned component arrays have padding elements at the end to enable SIMD processing without a
   [scalar remainder (epilogue) loop](https://llvm.org/docs/Vectorizers.html#epilogue-vectorization).  
   It is preferred over multi threading as it uses only one core providing the same performance as multi threading running on all cores.
 - Minimize times required for GC collection by using struct types for entities and components.  
   GC.Collect(1) < 0.8 ms when using 10.000.000 entities.
-- Support tagging of entities and use them as a filter in queries.
+- Support **tagging** of entities and use them as a filter in queries.
 - Add scripts - similar to `MonoBehavior`'s - to entities in cases OOP is preferred.
-- Support observing entity changes by event handlers triggered by adding / removing: components, tags, scripts and child entities.
+- Support **observing entity changes** by event handlers triggered by adding / removing: components, tags, scripts and child entities.
 - Reliability - no undefined behavior with only one exception:  
   Performing structural changes - adding/removing components/tags - while iterating a query result.  
   The solution is buffering structural changes with a CommandBuffer.
@@ -76,46 +77,43 @@ The library implements all features a common ECS provides.
 Features in this list are also explained in the Examples. Every new version is backward compatible earlier versions.  
 Exceptions are labeled as  **Breaking change** / **Changed behavior**. These changes are made only on rarely used features.
 
-- 1.10.0    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
+- **1.10.0**    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
 
-- 1.11.0    Support to filter entity changes - like adding/removing components/tags - in queries using an
-            [EventFilter](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
+- **1.11.0**    Support to filter entity changes - like adding/removing components/tags - in queries using an
+                [EventFilter](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
 
-- 1.12.0    Add additional query filters like `WithoutAnyTags()` using an
-            [ArchetypeQuery](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
+- **1.12.0**    Add additional query filters like `WithoutAnyTags()` using an
+                [ArchetypeQuery](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
 
-- 1.13.0    Add support for target framework .NET Standard 2.1 or higher.
+- **1.13.0**    Add support for target framework .NET Standard 2.1 or higher.
 
-- 1.14.0    Add support for parallel (multi threaded) query job execution.
+- **1.14.0**    Add support for parallel (multi threaded) query job execution.
 
-- 1.15.0    Reduced the number of properties shown for an entity in the debugger. See screenshot in Examples. 
+- **1.15.0**    Reduced the number of properties shown for an entity in the debugger. See screenshot in Examples. 
 
-- 1.16.0    Add support for entity batches and bulk batch operations to apply multiple entity changes at once.  
-            **Changed behavior** of the Archetype assigned to entities without components & tags.  
-            *Before:* Entities were not stored in this specific Archetype. `Archetype.Entities` returned always an empty result.  
-            *Now:*    Entities are stored in this Archetype.  
+- **1.16.0**    Add support for entity batches and bulk batch operations to apply multiple entity changes at once.  
+                **Changed behavior** of the Archetype assigned to entities without components & tags.  
+                *Before:* Entities were not stored in this specific Archetype. `Archetype.Entities` returned always an empty result.  
+                *Now:*    Entities are stored in this Archetype.  
 
-- 1.17.0    Introduced `CreateEntityBatch` to optimize creation of entities.  
-            Added DebugView's for all IEnumerable<> types to enable one click navigation to their elements in the debugger.  
-            E.g. the expanded properties ChildEntities and Components in the examples screenshot.  
-            **Breaking change**: Changed property `Entity.Batch` to method `Entity.Batch()`.
+- **1.17.0**    Introduced `CreateEntityBatch` to optimize creation of entities.  
+                Added DebugView's for all IEnumerable<> types to enable one click navigation to their elements in the debugger.  
+                E.g. the expanded properties ChildEntities and Components in the examples screenshot.  
+                **Breaking change**: Changed property `Entity.Batch` to method `Entity.Batch()`.
 
-- 1.18.0    Introduced `EntityList` to apply an entity batch to all entities in the list.  
-            Add `Entity.Enabled` to enable/disable an entity.  
-            Add `Entity.EnableTree()` / `Entity.DisableTree()` to enable/disable recursively the child entities of an entity.
+- **1.18.0**    ![new](docs/images/new.svg) Introduced `EntityList` to apply an entity batch to all entities in the list.  
+                Add `Entity.Enabled` to enable/disable an entity.  
+                Add `Entity.EnableTree()` / `Entity.DisableTree()` to enable/disable recursively the child entities of an entity.
 
-- 1.19.0    Support using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
-            Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
+- **1.19.0**    ![new](docs/images/new.svg) Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
+                Support / fix using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
+                
 
-- 1.21.0    Support integration in Unity as nuget package.
+- **1.21.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.
 
 
 
 # Development
-
-The library supports target framework **.NET Standard 2.1** or higher.  
-This includes .NET Core, .NET 5, .NET 6, .NET 7 and .NET 8.  
-Tested: Windows, macOS and Linux. Untested: Android, iOS, tvOS and WASM/WebAssembly.
 
 The library can be build on all platforms a .NET SDK is available.  
 Build options:
@@ -124,10 +122,12 @@ Build options:
 - Visual Studio 2022 - Windows
 - Visual Studio Code - Windows, macOS, Linux (untested)
 
+
 ## Library
 - The nuget package contains four dll's specific for: .NET Standard 2.1, .NET 6, .NET 7 and .NET 8.  
   This enables using the most performant features available for each target.  
-  E.g. Some SIMD intrinsics methods available on .NET 7 and .NET 8 but not on earlier versions.
+  E.g. Some SIMD intrinsics methods available on .NET 7 and .NET 8 but not on earlier versions.  
+  Builds tested on: Windows, macOS and Linux. Untested: Android, iOS, tvOS and WASM/WebAssembly.
 - Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
 - Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
 - Unit test execution: ~ 1 second.
