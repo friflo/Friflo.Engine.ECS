@@ -11,9 +11,13 @@ public static class TestUtils
     
     public static string GetBasePath(string folder = "")
     {
+#if UNITY_5_3_OR_NEWER
+        var baseDir = UnityUtils.GetProjectFolder();
+#else
         // remove folder like ".bin/Debug/net6.0" which is added when running unit tests
         var projectFolder   = IsInUnitTest ?  "/../../../" : "/";
         string baseDir      = Directory.GetCurrentDirectory() + projectFolder;
+#endif
         baseDir = Path.GetFullPath(baseDir + folder);
         return baseDir;
     }

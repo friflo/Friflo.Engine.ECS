@@ -22,6 +22,19 @@ public static class Mem
         throw new AssertionException(msg);
     }
     
+    public static void AssertAllocations(long start) {
+#if UNITY_5_3_OR_NEWER
+        return;
+#endif
+        long current    = GC.GetAllocatedBytesForCurrentThread();
+        var diff        = current - start;
+        if (diff > 0) {
+            return;
+        }
+        var msg = $"expected allocations.\n but was: {diff}";
+        throw new AssertionException(msg);
+    }
+    
     /// <summary>Assert allocation of expected bytes</summary>
     public static long AssertAlloc(long start, long expected) {
         long current    = GC.GetAllocatedBytesForCurrentThread();

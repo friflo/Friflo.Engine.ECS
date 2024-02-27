@@ -144,12 +144,12 @@ public static class Test_QueryJob
         var array = new int[100];
         var start = Mem.GetAllocatedBytes();
         Parallel.ForEach(array, value => { _ = value; });
-        Assert.IsTrue(Mem.GetAllocatedBytes() - start > 0);
+        Mem.AssertAllocations(start);
         
         // --- Parallel.For()
         start = Mem.GetAllocatedBytes();
         Parallel.For(0, 10, i => {});
-        Assert.IsTrue(Mem.GetAllocatedBytes() - start > 0);
+        Mem.AssertAllocations(start);
         
         // --- Parallel.Invoke()
         var actions = new Action[4];
@@ -159,7 +159,7 @@ public static class Test_QueryJob
         actions[3] = () => {};
         start = Mem.GetAllocatedBytes();
         Parallel.Invoke(actions);
-        Assert.IsTrue(Mem.GetAllocatedBytes() - start > 0);
+        Mem.AssertAllocations(start);
     }
     
     [Test]
