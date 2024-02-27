@@ -143,21 +143,29 @@ public abstract partial class EntityStoreBase
     #endregion
     
 #region exceptions
+    private static ArgumentException ArgumentException(string message, string parameterName) {
+#if UNITY_5_3_OR_NEWER
+        return new ArgumentException($"{message} (Parameter '{parameterName}')");
+#else
+        return new ArgumentException(message, parameterName);
+#endif
+    }
+
     internal static Exception   InvalidStoreException(string parameterName) {
-        return new ArgumentException("entity is owned by a different store", parameterName);
+        return ArgumentException("entity is owned by a different store", parameterName);
     }
         
     internal static Exception   InvalidEntityIdException(int id, string parameterName) {
-        return new ArgumentException($"invalid entity id <= 0. was: {id}", parameterName);
+        return ArgumentException($"invalid entity id <= 0. was: {id}", parameterName);
     }
         
     internal static Exception   IdAlreadyInUseException(int id, string parameterName) {
-        return new ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
+        return ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
     }
     
     internal static Exception   PidOutOfRangeException(long pid, string parameterName) {
         var msg = $"pid must be in range [1, 2147483647] when using {nameof(PidType)}.{nameof(PidType.UsePidAsId)}. was: {pid}";
-        return new ArgumentException(msg, parameterName);
+        return ArgumentException(msg, parameterName);
     }
     
     internal static Exception   AddEntityAsChildToItselfException(int id) {
