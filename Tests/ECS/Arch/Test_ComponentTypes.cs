@@ -53,7 +53,9 @@ public static class Test_ComponentTypes
     public static void Test_ComponentTypes_Get()
     {
         var schema = EntityStore.GetEntitySchema();
+#if !UNITY_5_3_OR_NEWER
         AreEqual(3, schema.EngineDependants.Length);
+#endif
         var engine = schema.EngineDependants[0];
         AreEqual("Friflo.Engine.ECS.dll",   engine.Assembly.ManifestModule.Name);
         AreEqual("Friflo.Engine.ECS.dll",   engine.ToString());

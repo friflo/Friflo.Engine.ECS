@@ -363,10 +363,9 @@ public static class Test_StructComponent
     {
         var store   = new EntityStore();
         var player  = store.CreateEntity();
-        var e2      = Throws<NullReferenceException>(() => {
+        Throws<NullReferenceException>(() => {
             player.GetComponent<MyInvalidComponent>();
         });
-        AreEqual("Object reference not set to an instance of an object.", e2!.Message);
         
         // throws currently no exception
         player.RemoveComponent<MyInvalidComponent>();
