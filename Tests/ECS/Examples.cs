@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Numerics;
-using System.Runtime.Intrinsics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+
+#if !UNITY_5_3_OR_NEWER
+using System.Runtime.Intrinsics;
+#endif
+
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UseObjectOrCollectionInitializer
@@ -257,6 +261,7 @@ public static void ParallelQueryJob()
     runner.Dispose();
 }
 
+#if !UNITY_5_3_OR_NEWER
 [Test]
 public static void QueryVectorization()
 {
@@ -278,6 +283,7 @@ public static void QueryVectorization()
         }
     }
 }
+#endif
 
 [Test]
 public static void FilterEntityEvents()

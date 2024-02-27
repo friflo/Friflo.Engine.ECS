@@ -219,10 +219,16 @@ public static class Test_QueryJob
         Assert.AreEqual("Value cannot be null. (Parameter 'jobRunner')", e3!.Message);
     }
     
+    private static void SetThreadName(string name) {
+#if !UNITY_5_3_OR_NEWER
+        Thread.CurrentThread.Name = name;
+#endif
+    }
+    
     [Test]
     public static void Test_QueryJob_nested_ForEach()
     {
-        Thread.CurrentThread.Name = "MainThread";
+        SetThreadName("MainThread");
         using var runner    = new ParallelJobRunner(2, "JobRunner");
         var store           = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
         for (int n = 0; n < 32; n++) {
@@ -310,7 +316,7 @@ public static class Test_QueryJob
         }
         var query       = store.Query<MyComponent1>();
         int count       = 0;
-        Thread.CurrentThread.Name = "MainThread";
+        SetThreadName("MainThread");
 
         var job         = query.ForEach((_, entities) => {
             count++;

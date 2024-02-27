@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.Intrinsics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
+
+#if !UNITY_5_3_OR_NEWER
+using System.Runtime.Intrinsics;
+#endif
 
 // ReSharper disable ConvertToConstant.Local
 namespace Tests.ECS.System {
@@ -110,9 +113,11 @@ public static class Bench_Query
             SIMD_Add(component);
         }
     }
-    
-    private static void SIMD_Add(Chunk<MyComponent1> component)
-    {
+
+    private static void SIMD_Add(Chunk<MyComponent1> component) {
+#if UNITY_5_3_OR_NEWER
+    }
+#else
         // Requires .NET 8 to enable SIMD on ARM (Apple Silicon).
         // See: [What's new in .NET 8] https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8#systemnumerics-and-systemruntimeintrinsics
         var add     = Vector256.Create<int>(1);         // create byte[32] vector - all values = 1
@@ -132,6 +137,7 @@ public static class Bench_Query
         Span<byte> oneBytes = stackalloc byte[32] {1,1,1,1,1,1,1,1,  2,2,2,2,2,2,2,2,  3,3,3,3,3,3,3,3,  4,4,4,4,4,4,4,4};
         return Vector256.Create<byte>(oneBytes);
     }
+#endif
 }
 
 }
