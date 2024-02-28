@@ -1,13 +1,10 @@
 
+# Install
 
-# Unity Editor Tests
+Friflo.Engine.ECS is added as a nuget package using [NuGetForUnity - GitHub](https://github.com/GlitchEnzo/NuGetForUnity).  
+NuGetForUnity **must be installed** in Unity to add Friflo.Engine.ECS as nuget package.
 
-Unit tests are used as symlink from `Tests folder`.  
-These tests are executed as **EditMode** tests in Unity.
-
-Friflo.Engine.ECS is added as a nuget package using [NuGetForUnity - GitHub](https://github.com/GlitchEnzo/NuGetForUnity).
-
-## Install NuGetForUnity
+### Install NuGetForUnity
 
 1. Open Package Manager at  
   Menu > Window > Package Manager
@@ -18,9 +15,27 @@ Friflo.Engine.ECS is added as a nuget package using [NuGetForUnity - GitHub](htt
     ```
     https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity
     ```
+### Add nuget package **Friflo.Engine.ECS**
+
+1. Open Nuget Manager at  
+   Menu > NuGet > Manage Nuget Packages
+
+2. Search the package below and click Install.
+    ```
+    Friflo.Engine.ECS
+    ```
 
 
-## Create Symlink
+
+# Unity Editor Tests
+
+Running unit tests is only relevant for development of the library.
+
+Unit tests are used as symlink from `Tests folder`.  
+These tests are executed as **EditMode** tests in Unity.
+
+
+### Create Symlink
 
 The symlink is already committed to git repository.  
 To create a symlink manually execute the steps below.
@@ -33,8 +48,7 @@ cd Unity/Assets/Scripts
 mklink /D Tests ..\..\..\Tests
 ```
 
-
-## Run Tests
+### Run Tests
 
 Menu > Window > General > Test Runner  
 Select: **EditMode**
