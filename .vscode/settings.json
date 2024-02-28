@@ -16,7 +16,7 @@
 		"**/.bin": true,
 		"**/*.meta": true,
         "**/*.csproj.xml": true,
-        "Tests-Unity/*.csproj": true,
+        "Unity/*.csproj": true,
         
         // root files / folders
         "package-lock.json": true,
