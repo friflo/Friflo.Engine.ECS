@@ -9,6 +9,7 @@ public class FrifloEcsSystem : MonoBehaviour
     {
         int entityCount = 1_000;
         var store = new EntityStore();
+        // create entities with a Position component
         for (int n = 0; n < entityCount; n++) {
             store.Batch()
                 .Add(new Position(n, 0, 0))
@@ -21,6 +22,7 @@ public class FrifloEcsSystem : MonoBehaviour
     {
         foreach (var (positions, entities) in query.Chunks)
         {
+            // Update entity positions on each frame
             foreach (ref var position in positions.Span) {
                 position.y++;
             }
