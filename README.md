@@ -40,7 +40,7 @@ The library implements all features a common ECS provides.
 - Integration
     - **Unity** - ![new](docs/images/new.svg) - Integration as nuget package. Tested with Unity 2021.3.9f1.  
       Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package **Friflo.Engine.ECS**. 1.21.0 or higher.
-      [Example script](Tests-Unity/Assets/Scripts/FrifloEcsSystem.cs).
+      [Example script](Unity/Assets/Scripts/FrifloEcsSystem.cs).
     - **.NET** - Library supports target frameworks .NET Standard 2.1 or higher - includes .NET 5, .NET 6, .NET 7 and .NET 8.  
       See [nuget - Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/) for integration into a .NET project.  
     - **Godot** - Integration as nuget package. Tested with Godot 4.1.1.
