@@ -11,7 +11,11 @@ public static class Test_QueryJobArg
 {
 #region general
     private static ParallelJobRunner _jobRunner;
+#if UNITY_5_3_OR_NEWER
+    private const int EntityCount = 102;
+#else
     private const int EntityCount = 502;
+#endif
 
     [OneTimeSetUp]
     public static void Setup() {

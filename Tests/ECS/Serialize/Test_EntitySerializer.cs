@@ -9,6 +9,7 @@ using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
+using static Tests.Utils.SingleThreadSynchronizationContext;
 
 // ReSharper disable MethodHasAsyncOverload
 // ReSharper disable HeuristicUnreachableCode
@@ -19,7 +20,8 @@ public static class Test_Serializer
 {
 #region Happy path
     [Test]
-    public static async Task Test_Serializer_write_store()
+    public  static void  Test_Serializer_write_store() => Run(async () => await Serializer_write_store());
+    private static async Task Serializer_write_store()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
@@ -116,7 +118,8 @@ public static class Test_Serializer
     }
     
     [Test]
-    public static async Task Test_Serializer_read_into_store_async()
+    public  static void  Test_Serializer_read_into_store_async() => Run(async () => await Serializer_read_into_store_async());
+    private static async Task Serializer_read_into_store_async()
     {
         var store       = new EntityStore(PidType.UsePidAsId);
         var serializer  = new EntitySerializer();
@@ -291,7 +294,8 @@ public static class Test_Serializer
     
     /// <summary>Cover <see cref="EntitySerializer.ReadIntoStoreAsync"/></summary>
     [Test]
-    public static async Task Test_Serializer_ReadAsync_MemoryStream()
+    public  static void  Test_Serializer_ReadAsync_MemoryStream() => Run(async () => await Serializer_ReadAsync_MemoryStream());
+    private static async Task Serializer_ReadAsync_MemoryStream()
     {
         var stream      = new MemoryStream();
         var store       = new EntityStore(PidType.UsePidAsId);

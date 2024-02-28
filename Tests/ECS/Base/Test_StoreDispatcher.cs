@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable InconsistentNaming
@@ -26,7 +27,8 @@ public static class Test_StoreDispatcher
     }
     
     [Test]
-    public static async Task Test_StoreDispatcher_async()
+    public  static void  Test_StoreDispatcher_async() => SingleThreadSynchronizationContext.Run(async () => await StoreDispatcher_async());
+    private static async Task StoreDispatcher_async()
     {
         // --- Task<int> InvokeAsync()
         var result = await StoreDispatcher.InvokeAsync(() => Task.FromResult(42));
