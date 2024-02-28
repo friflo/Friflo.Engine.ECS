@@ -25,11 +25,11 @@ Friflo.Engine.ECS is added as a nuget package using [NuGetForUnity - GitHub](htt
 The symlink is already committed to git repository.  
 To create a symlink manually execute the steps below.
 
-`Tests-Unity/Assets/Scripts/Tests` -> `Tests`
+`Unity/Assets/Scripts/Tests` -> `Tests`
 
 Create symlink on windows
 ```
-cd Tests-Unity/Assets/Scripts
+cd Unity/Assets/Scripts
 mklink /D Tests ..\..\..\Tests
 ```
 
