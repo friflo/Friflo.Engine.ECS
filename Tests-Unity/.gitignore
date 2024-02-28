@@ -6,5 +6,6 @@ Logs/
 ProjectSettings/
 UserSettings/
 
+Tests-Unity.sln
 *.csproj
 Packages/packages-lock.json

@@ -29,6 +29,9 @@
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="**/*.meta" />
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\src\Hub\Engine.Hub.csproj" />
