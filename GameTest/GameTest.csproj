@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="0.54.0" />
+      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="0.55.0" />
     </ItemGroup>
 
     <ItemGroup>
