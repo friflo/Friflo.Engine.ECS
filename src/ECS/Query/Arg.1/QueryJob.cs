@@ -16,7 +16,8 @@ namespace Friflo.Engine.ECS;
 public sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
 {
-    internal            QueryChunks<T1>                     Chunks      => new (query); // only for debugger
+    internal            QueryChunks<T1>                     Chunks      => new (query);     // only for debugger
+    internal            QueryEntities                       Entities    => query.Entities;  // only for debugger
     public  override    string                              ToString()  => query.GetQueryJobString();
 
     [Browse(Never)]

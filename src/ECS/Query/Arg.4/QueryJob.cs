@@ -20,8 +20,9 @@ public sealed class QueryJob<T1, T2, T3, T4> : QueryJob
     where T3 : struct, IComponent
     where T4 : struct, IComponent
 {
-    internal            QueryChunks<T1, T2, T3, T4>     Chunks      => new (query); // only for debugger
-    public  override    string                              ToString()  => query.GetQueryJobString();
+    internal            QueryChunks<T1, T2, T3, T4>     Chunks      => new (query);     // only for debugger
+    internal            QueryEntities                   Entities    => query.Entities;  // only for debugger
+    public  override    string                          ToString()  => query.GetQueryJobString();
 
     [Browse(Never)]
     private readonly    ArchetypeQuery<T1, T2, T3, T4>                                      query;      //  8

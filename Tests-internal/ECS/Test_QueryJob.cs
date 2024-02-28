@@ -32,26 +32,31 @@ public static class Test_QueryJob
         {
             var job = store.Query<MyComponent1>().ForEach((_, _) => { });
             AreEqual(32, job.Chunks.Count);
+            AreEqual(32, job.Entities.Count);
             AreEqual("QueryJob [MyComponent1]", job.ToString());
             AssertMissingRunner(job);
         } {
             var job = store.Query<MyComponent1, MyComponent2>().ForEach((_, _, _) => { });
             AreEqual(32, job.Chunks.Count);
+            AreEqual(32, job.Entities.Count);
             AreEqual("QueryJob [MyComponent1, MyComponent2]", job.ToString());
             AssertMissingRunner(job);
         } {
             var job = store.Query<MyComponent1, MyComponent2, Position>().ForEach((_, _, _, _) => { });
             AreEqual(32, job.Chunks.Count);
+            AreEqual(32, job.Entities.Count);
             AreEqual("QueryJob [MyComponent1, MyComponent2, Position]", job.ToString());
             AssertMissingRunner(job);
         } {
             var job = store.Query<MyComponent1, MyComponent2, Position, Rotation>().ForEach((_, _, _, _, _) => { });
             AreEqual(32, job.Chunks.Count);
+            AreEqual(32, job.Entities.Count);
             AreEqual("QueryJob [MyComponent1, MyComponent2, Position, Rotation]", job.ToString());
             AssertMissingRunner(job);
         } {
             var job = store.Query<MyComponent1, MyComponent2, Position, Rotation, Scale3>().ForEach((_, _, _, _, _, _) => { });
             AreEqual(32, job.Chunks.Count);
+            AreEqual(32, job.Entities.Count);
             AreEqual("QueryJob [MyComponent1, MyComponent2, Position, Rotation, Scale3]", job.ToString());
             AssertMissingRunner(job);
         }

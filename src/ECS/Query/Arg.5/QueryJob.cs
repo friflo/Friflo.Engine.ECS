@@ -21,7 +21,8 @@ public sealed class QueryJob<T1, T2, T3, T4, T5> : QueryJob
     where T4 : struct, IComponent
     where T5 : struct, IComponent
 {
-    internal            QueryChunks<T1, T2, T3, T4, T5>     Chunks      => new (query); // only for debugger
+    internal            QueryChunks<T1, T2, T3, T4, T5>     Chunks      => new (query);     // only for debugger
+    internal            QueryEntities                       Entities    => query.Entities;  // only for debugger
     public  override    string                              ToString()  => query.GetQueryJobString();
 
     [Browse(Never)]
