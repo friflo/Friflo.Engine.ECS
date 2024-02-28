@@ -16,7 +16,13 @@
 		"**/.bin": true,
 		"**/*.meta": true,
         "**/*.csproj.xml": true,
+
+        // Unity files / folders
+        "Unity/Unity.sln": true,
         "Unity/*.csproj": true,
+        "Unity/Library": true,
+        "Unity/Logs": true,
+        "Unity/UserSettings": true,
         
         // root files / folders
         "package-lock.json": true,
