@@ -1,0 +1,10 @@
+
+
+Assets/Packages/
+Library/
+Logs/
+ProjectSettings/
+UserSettings/
+
+*.csproj
+Packages/packages-lock.json
