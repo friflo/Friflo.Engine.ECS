@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Ullrich Praetz. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+#if !UNITY_5_3_OR_NEWER
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -255,3 +257,5 @@ public static class Test_StoreSync
 }
 
 }
+
+#endif
