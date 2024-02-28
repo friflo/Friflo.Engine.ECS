@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 1728978446}
   - component: {fileID: 1728978447}
   m_Layer: 0
-  m_Name: friflo.engine.example
+  m_Name: friflo ECS Example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,6 +342,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1728978445}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a49d578d0fe7494bb37d556699d8676, type: 3}
+  m_Script: {fileID: 11500000, guid: 92e53ab94a4a1d04b847f33b3f98b419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

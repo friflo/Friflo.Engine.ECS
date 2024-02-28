@@ -1,10 +1,10 @@
 using Friflo.Engine.ECS;
 using UnityEngine;
 
-public class FrifloEngineSystem : MonoBehaviour
+public class FrifloEcsSystem : MonoBehaviour
 {
     private ArchetypeQuery<Position> query;
-    // Start is called before the first frame update
+
     void Start()
     {
         int entityCount = 1_000;
@@ -17,7 +17,6 @@ public class FrifloEngineSystem : MonoBehaviour
         query = store.Query<Position>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         foreach (var (positions, entities) in query.Chunks)
