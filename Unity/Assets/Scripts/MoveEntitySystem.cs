@@ -1,7 +1,7 @@
 using Friflo.Engine.ECS;
 using UnityEngine;
 
-public class FrifloEcsSystem : MonoBehaviour
+public class MoveEntitySystem : MonoBehaviour
 {
     private ArchetypeQuery<Position> query;
 
