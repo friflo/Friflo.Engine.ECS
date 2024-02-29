@@ -171,13 +171,14 @@ public sealed class EntitySchema
     
 public readonly struct EngineDependant
 {
-                    public  ReadOnlySpan<SchemaType>    Types       => new (types);
-                    public              Assembly        Assembly    => assembly;
+                    public  ReadOnlySpan<SchemaType>    Types           => new (types);
+                    public              Assembly        Assembly        => assembly;
+                    public              string          AssemblyName    => assembly.GetName().Name;
     
     [Browse(Never)] private readonly    Assembly        assembly;
     [Browse(Never)] private readonly    SchemaType[]    types;
 
-    public override                     string          ToString()  => assembly.ManifestModule.Name;
+    public override                     string          ToString()  => AssemblyName;
 
     internal EngineDependant(Assembly assembly, List<SchemaType> types) {
         this.assembly   = assembly;

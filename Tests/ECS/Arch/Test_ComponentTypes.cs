@@ -57,9 +57,9 @@ public static class Test_ComponentTypes
         AreEqual(3, schema.EngineDependants.Length);
 #endif
         var engine = schema.EngineDependants[0];
-        AreEqual("Friflo.Engine.ECS.dll",   engine.Assembly.ManifestModule.Name);
-        AreEqual("Friflo.Engine.ECS.dll",   engine.ToString());
-        AreEqual(8,                         engine.Types.Length);
+        AreEqual("Friflo.Engine.ECS",   engine.AssemblyName);
+        AreEqual("Friflo.Engine.ECS",   engine.ToString());
+        AreEqual(8,                     engine.Types.Length);
         foreach (var type in engine.Types) {
             AreSame(engine.Assembly, type.Type.Assembly);
         }

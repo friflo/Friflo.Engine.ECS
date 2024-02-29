@@ -39,7 +39,7 @@ internal sealed class AssemblyLoader
         sb.Append(" ms");
         sb.Append(", engine-dependants: [");
         foreach (var dependant in dependants) {
-            sb.Append(dependant.Assembly.ManifestModule.Name);
+            sb.Append(dependant.AssemblyName);
             sb.Append(" (");
             sb.Append(dependant.Types.Length);
             sb.Append("),  ");
