@@ -60,3 +60,11 @@ Select: **EditMode**
   URP is required to enable using an Matrix4x4[] array with a length  
   of multiple of 100.000 by `Graphics.RenderMeshInstanced()`  
   
+
+### Build
+- Windows:  
+  logs of a standalone build are written to:
+  ```
+  %appdata%\..\LocalLow\DefaultCompany\Unity
+  ```
+  
