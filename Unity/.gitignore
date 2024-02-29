@@ -9,5 +9,6 @@ Temp/
 UserSettings/
 
 Unity.sln
+Tests-Unity.sln
 *.csproj
 Packages/packages-lock.json
