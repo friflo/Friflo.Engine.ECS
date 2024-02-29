@@ -7,6 +7,10 @@ obj/
 .vs/
 
 
+!**/*.meta
+Tests/**/*.meta
+
+
 *.DotSettings.user
 
 ## Editor
