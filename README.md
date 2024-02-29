@@ -11,10 +11,8 @@ Currently fastest 🔥 ECS implementation in .NET - using **Ecs.CSharp.Benchmark
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
-Maybe this project is a little late at the party. Published on nuget in January 2024. Started development in September 2023.  
-The package is part of an in-development Game Editor. See [Architecture.md](Architecture.md).  
+The library implements the common features a common ECS provides. It was first published on nuget in January 2024.
 
-The library implements all features a common ECS provides.  
 *Unique library features*
 - Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
   This enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
@@ -23,6 +21,11 @@ The library implements all features a common ECS provides.
   See screenshot at examples.
 - Subscribe to events and signals for specific or all entities.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
+
+Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
+```
+dotnet add package Friflo.Engine.ECS --version 1.22.0
+```
 
 
 # Content
