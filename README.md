@@ -30,7 +30,7 @@ dotnet add package Friflo.Engine.ECS --version 1.22.0
 
 # Content
 - [Features](#features)
-- [Latest features](#latest-features)
+- [Releases](#releases)
 - [Development](#development)
 - [Examples](#examples)
 - [Optimization Examples](#optimization-examples)
@@ -79,7 +79,7 @@ dotnet add package Friflo.Engine.ECS --version 1.22.0
 <img src="docs/images/Friflo-Engine-Editor.png" width="677" height="371"></img>
 
 
-# Latest features
+# Releases
 
 Features in this list are also explained in the Examples. Every new version is backward compatible earlier versions.  
 Exceptions are labeled as  **Breaking change** / **Changed behavior**. These changes are made only on rarely used features.
