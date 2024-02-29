@@ -43,7 +43,7 @@ dotnet add package Friflo.Engine.ECS --version 1.22.0
 - Integration
     - **Unity** - ![new](docs/images/new.svg) - Integration as nuget package. Tested with Unity 2021.3.9f1.  
       Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package **Friflo.Engine.ECS**. 1.21.0 or higher.
-      [Example script](Unity/Assets/Scripts/FrifloEcsSystem.cs).
+      Usage in [Unity script example](#unity-update-script).
     - **.NET** - Library supports target frameworks .NET Standard 2.1 or higher - includes .NET 5, .NET 6, .NET 7 and .NET 8.  
       See [nuget - Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/) for integration into a .NET project.  
     - **Godot** - Integration as nuget package. Tested with Godot 4.1.1.
@@ -175,6 +175,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Signal](#signal)
 - [Query entities](#query-entities)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
+- [Unity update script](#unity-update-script)
 
 **Optimization**
 
@@ -696,7 +697,9 @@ public static void EnumerateQueryChunks()
 }
 ```
 
-The query can be used within a script to update the position of dynamic objects.  
+## Unity update script
+
+A query can be used within a MonoBehaviour script to update the position of moving objects.  
 Example for a move system in Unity.
 
 ```csharp
