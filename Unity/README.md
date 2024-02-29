@@ -52,3 +52,11 @@ mklink /D Tests ..\..\..\Tests
 
 Menu > Window > General > Test Runner  
 Select: **EditMode**
+
+
+### Unity Project Setup
+- Selected Unity Install: 2022.3.20f1
+- Selected template: 3D (URP) Core  
+  URP is required to enable using an Matrix4x4[] array with a length  
+  of multiple of 100.000 by `Graphics.RenderMeshInstanced()`  
+  

@@ -24,7 +24,7 @@ The library implements the common features a common ECS provides. It was first p
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
 ```
-dotnet add package Friflo.Engine.ECS --version 1.22.0
+dotnet add package Friflo.Engine.ECS --version 1.23.0
 ```
 
 
@@ -41,8 +41,8 @@ dotnet add package Friflo.Engine.ECS --version 1.22.0
 # Features
 
 - Integration
-    - **Unity** - ![new](docs/images/new.svg) - Integration as nuget package. Tested with Unity 2021.3.9f1.  
-      Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package **Friflo.Engine.ECS**. 1.21.0 or higher.
+    - **Unity** - ![new](docs/images/new.svg) - Integration as nuget package. Tested 2022.3.20f1 (Mono & AOT/IL2CPP).  
+      Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package **Friflo.Engine.ECS**. 1.23.0 or higher.
       Usage in [Unity script example](#unity-update-script).
     - **.NET** - Library supports target frameworks .NET Standard 2.1 or higher - includes .NET 5, .NET 6, .NET 7 and .NET 8.  
       See [nuget - Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/) for integration into a .NET project.  
@@ -116,7 +116,8 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
                 Support / fix using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
                 
 
-- **1.21.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.
+- **1.23.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.  
+                Supports Mono & AOT/IL2CPP builds. Tested on Windows & macOS.
 
 
 
