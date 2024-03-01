@@ -2,12 +2,14 @@
 using Friflo.Engine.ECS;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class AnimateMeshInstanced : MonoBehaviour
 {
+    [SerializeField] private TMP_Text count;
     [SerializeField] private TMP_Text fpsText;
-    [SerializeField] private Toggle   toggle;
+    [SerializeField] private Toggle   parallel;
 
     
     private ArchetypeQuery<Position> query;
@@ -23,6 +25,7 @@ public class AnimateMeshInstanced : MonoBehaviour
     
     void Start()
     {
+        count.text = $"Count: {NumInstances}";
         rp = new RenderParams(material);
         instData = new Matrix4x4[NumInstances];
         runner = new ParallelJobRunner(8);
@@ -81,7 +84,7 @@ public class AnimateMeshInstanced : MonoBehaviour
         }
         Graphics.RenderMeshInstanced(rp, mesh, 0, instData);
         
-        toggle.onValueChanged .AddListener((dd) => {
+        parallel.onValueChanged .AddListener((dd) => {
             
             runParallel = dd;
             // runParallel = _toggle.isOn;
