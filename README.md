@@ -18,7 +18,7 @@ The library implements all features a typical ECS provides.
 *Unique library features*
 - Build up a hierarchy of entities with parent / child relationship - optional.
 - Subscribe to events/signals for specific entities - *Unique feature*.  
-  Subscribe to events in a world - *Supported by others also*.
+  Subscribe to events in a world - *Supported by most ECS projects*.
 - Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
   It enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
