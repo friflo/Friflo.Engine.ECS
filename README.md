@@ -2,8 +2,8 @@
 
 [![nuget](https://buildstats.info/nuget/Friflo.Engine.ECS)](https://www.nuget.org/packages/Friflo.Engine.ECS) 
 [![nuget](https://img.shields.io/badge/published-2024-blue.svg)](https://www.nuget.org/packages/Friflo.Engine.ECS/1.0.0) 
-[![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml) 
-[![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD-Engine/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml) 
+[![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml) 
+[![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml) 
 [![nuget](https://img.shields.io/badge/docs-C%23%20API-blue.svg)](https://github.com/friflo/Friflo.Engine-docs/blob/main/README.md) 
 
 # Friflo.Engine.ECS
