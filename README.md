@@ -47,8 +47,8 @@ dotnet add package Friflo.Engine.ECS --version 1.23.0
     - **Unity** - ![new](docs/images/new.svg) - Integration as nuget package. Tested 2022.3.20f1 (Mono & AOT/IL2CPP).  
       Use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to install nuget package **Friflo.Engine.ECS**. 1.23.0 or higher.
       Usage in [Unity script example](#unity-update-script).
-    - **.NET** - Library supports target frameworks .NET Standard 2.1 or higher - includes .NET 5, .NET 6, .NET 7 and .NET 8.  
-      See [nuget - Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/) for integration into a .NET project.  
+    - **.NET** - Supported target frameworks: **.NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8**. Supports **WASM / WebAssembly**.  
+      Integration into a .NET project as nuget package see [nuget ⋅ Friflo.Engine.ECS](https://www.nuget.org/packages/Friflo.Engine.ECS/).  
     - **Godot** - Integration as nuget package. Tested with Godot 4.1.1.
 - Performance
     - Use array buffers and cache query instances -> no memory allocations after buffers are large enough.
@@ -135,23 +135,25 @@ Build options:
 
 
 ## Library
-- The nuget package contains four dll's specific for: .NET Standard 2.1, .NET 6, .NET 7 and .NET 8.  
-  This enables using the most performant features available for each target.  
-  E.g. Some SIMD intrinsics methods available on .NET 7 and .NET 8 but not on earlier versions.  
-  Builds tested on: Windows, macOS and Linux. Untested: Android, iOS, tvOS and WASM/WebAssembly.
-- Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
-- Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
-- Unit test execution: ~ 1 second.
-- Size of `Friflo.Engine.ECS.dll`: ~ 180 kb. The implementation: ~ 14.000 LOC.
-- Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
-- The C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
+- Builds tested on: **Windows, macOS, Linux, WASM / WebAssembly**. Untested: Android, iOS, tvOS.
 - The library is using only *verifiably safe code*. `<AllowUnsafeBlocks>false</AllowUnsafeBlocks>`.  
   See [Unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
   Unsafe code may cause memory corruption and introduces security and stability risks.
-- No custom C# preprocessor directives to enable / disable features within custom builds.
+- Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
+- The C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
+- No custom C# preprocessor directives which requires custom builds to enable / disable features.
 - Deterministic dll build.
 - No 3rd party dependencies.
 - It requires **Friflo.Json.Fliox** which is part of this repository.
+
+## Build
+- Size of `Friflo.Engine.ECS.dll`: ~ 200 kb. The implementation: ~ 15.000 LOC.
+- Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
+- Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
+- Unit test execution: ~ 1 second.
+- The nuget package contains four dll's specific for: **.NET Standard 2.1 .NET 6 .NET 7 .NET 8**.  
+  This enables using the most performant features available for each target.  
+  E.g. Some SIMD intrinsics methods available on .NET 7 and .NET 8 but not on earlier versions.
 
 <br/><br/>
 
