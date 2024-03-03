@@ -46,10 +46,17 @@ reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:Report"
 
 ## GitHub Actions integration
 ```yaml
-    - name: Install  dotnet-coverage (.NET CLI Tool)
+    - name: Install dotnet-coverage
       run: dotnet tool install --global dotnet-coverage
 
-    - name: Run Test to create coverage file
+    - name: Test with coverage
       working-directory: ./Engine
-      run: dotnet-coverage collect -f cobertura -o "coverage.cobertura.xml" "dotnet test"
+      run: dotnet-coverage collect -f cobertura -s coverage.settings.xml -o "coverage.cobertura.xml" "dotnet test"
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: Engine/coverage.cobertura.xml
+        name: Friflo.Engine.ECS
 ```
