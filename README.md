@@ -145,7 +145,9 @@ Build options:
 - Size of `Friflo.Engine.ECS.dll`: ~ 180 kb. The implementation: ~ 14.000 LOC.
 - Pure C# implementation - no C/C++ bindings slowing down runtime / development performance.
 - The C# API is [CLS-compliant](https://learn.microsoft.com/en-us/dotnet/api/system.clscompliantattribute?view=net-8.0#remarks).
-- The library is not using [unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
+- The library is using only *verifiably safe code*. `<AllowUnsafeBlocks>false</AllowUnsafeBlocks>`.  
+  See [Unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
+  Unsafe code may cause memory corruption and introduces security and stability risks.
 - No custom C# preprocessor directives to enable / disable features within custom builds.
 - Deterministic dll build.
 - No 3rd party dependencies.
