@@ -89,6 +89,8 @@ dotnet add package Friflo.Engine.ECS --version 1.23.0
 Features in this list are also explained in the Examples. Every new version is backward compatible earlier versions.  
 Exceptions are labeled as  **Breaking change** / **Changed behavior**. These changes are made only on rarely used features.
 
+[Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
+
 - **1.10.0**    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
 
 - **1.11.0**    Support to filter entity changes - like adding/removing components/tags - in queries using an
