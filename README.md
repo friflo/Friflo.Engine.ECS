@@ -1,11 +1,13 @@
 [![JSON Fliox](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/Json-Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md)   ![splash](https://raw.githubusercontent.com/friflo/Friflo.Json.Fliox/main/docs/images/paint-splatter.svg)
 
-[![nuget](https://buildstats.info/nuget/Friflo.Engine.ECS)](https://www.nuget.org/packages/Friflo.Engine.ECS) 
-[![nuget](https://img.shields.io/badge/published-2024-blue.svg)](https://www.nuget.org/packages/Friflo.Engine.ECS/1.0.0) 
-[![Coverage](https://codecov.io/gh/friflo/Friflo.Json.Fliox/branch/main/graph/badge.svg)](https://codecov.io/gh/friflo/Friflo.Json.Fliox) 
-[![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml) 
-[![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml) 
-[![nuget](https://img.shields.io/badge/docs-C%23%20API-blue.svg)](https://github.com/friflo/Friflo.Engine-docs/blob/main/README.md) 
+[![nuget](https://buildstats.info/nuget/Friflo.Engine.ECS)](https://www.nuget.org/packages/Friflo.Engine.ECS)
+[![nuget](https://img.shields.io/badge/published-2024-blue.svg)](https://www.nuget.org/packages/Friflo.Engine.ECS/1.0.0)
+[![stars](https://img.shields.io/github/stars/friflo/Friflo.Json.Fliox.svg?style=flat)](https://github.com/friflo/Friflo.Json.Fliox)
+[![Coverage](https://codecov.io/gh/friflo/Friflo.Json.Fliox/branch/main/graph/badge.svg)](https://codecov.io/gh/friflo/Friflo.Json.Fliox)
+[![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml)
+[![CD-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CD/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/nuget-engine.yml)
+[![nuget](https://img.shields.io/badge/docs-C%23%20API-blue.svg)](https://github.com/friflo/Friflo.Engine-docs/blob/main/README.md)
+
 
 # Friflo.Engine.ECS
 
