@@ -139,7 +139,8 @@ Build options:
 
 
 ## Library
-- Builds tested on: **Windows, macOS, Linux, WASM / WebAssembly**. Untested: Android, iOS, tvOS.
+- Builds tested on: **Windows, macOS, Linux, WASM / WebAssembly, Unity, Godot, MonoGame**.  
+  Untested: Android, iOS, tvOS.
 - The library is using only *verifiably safe code*. `<AllowUnsafeBlocks>false</AllowUnsafeBlocks>`.  
   See [Unsafe code](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/unsafe-code).
   Unsafe code may cause memory corruption and introduces security and stability risks.
