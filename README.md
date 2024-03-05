@@ -21,10 +21,11 @@ The library implements all features a typical ECS provides.
 - Subscribe to events/signals for specific entities - *Unique feature*.  
   Subscribe to events in a world - *Supported by most ECS projects*.
 - Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
-  It enables simple refactoring between both models. Scripts if OOP is suitable. Struct components / tags for performance.
+  It enables simple refactoring between both models.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
-  See screenshot at examples.
+  See screenshot at [Examples](#examples).
 - SIMD Support - optional. Multi thread capable and remainder loop free.
+- Does not use unsafe code. See [Library](#library).
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
 ```
