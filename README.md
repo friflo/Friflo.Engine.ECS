@@ -32,6 +32,16 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 dotnet add package Friflo.Engine.ECS --version 1.23.0
 ```
 
+<a href="https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/">
+<img src="docs/images/MonoGame-integration.png" width="427" height="240"/>
+</a>
+
+Interactive WebAssembly Demo. [Try out Demo!](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/)  
+Integration into MonoGame WASM build.  
+*Note:* WebGL rendering performance cannot compete with Desktop build.
+
+<br/>
+
 
 # Content
 - [Features](#features)
