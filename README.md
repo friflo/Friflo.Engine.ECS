@@ -39,7 +39,7 @@ dotnet add package Friflo.Engine.ECS --version 1.23.0
 Interactive Browser Demo showing MonoGame WebAssembly integration. [Try online Demo](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
 *Note:* WebGL rendering performance cannot compete with Desktop build.
 
-Similar Demos are also available as projects for **Godot**, **MonoGame** and **Unity**.
+Example Demos for **Windows**, **macOS** & **Linux** available as projects for **Godot**, **MonoGame** and **Unity**.  
 See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
 <br/>
