@@ -2,10 +2,10 @@
 
 [![nuget](https://buildstats.info/nuget/Friflo.Engine.ECS)](https://www.nuget.org/packages/Friflo.Engine.ECS)
 [![nuget](https://img.shields.io/badge/published-2024-blue.svg)](https://www.nuget.org/packages/Friflo.Engine.ECS/1.0.0)
-[![stars](https://img.shields.io/github/stars/friflo/Friflo.Json.Fliox.svg?style=flat)](https://github.com/friflo/Friflo.Json.Fliox)
 [![Coverage](https://codecov.io/gh/friflo/Friflo.Json.Fliox/branch/main/graph/badge.svg)](https://app.codecov.io/gh/friflo/Friflo.Json.Fliox/tree/main/Engine%2Fsrc%2FECS)
 [![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml)
 [![nuget](https://img.shields.io/badge/docs-C%23%20API-blue.svg)](https://github.com/friflo/Friflo.Engine-docs/blob/main/README.md)
+[![stars](https://img.shields.io/github/stars/friflo/Friflo.Json.Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox)
 
 
 # Friflo.Engine.ECS
