@@ -29,7 +29,7 @@ The library implements all features a typical ECS provides.
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
 ```
-dotnet add package Friflo.Engine.ECS --version 1.23.0
+dotnet add package Friflo.Engine.ECS
 ```
 
 <a href="https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/">
