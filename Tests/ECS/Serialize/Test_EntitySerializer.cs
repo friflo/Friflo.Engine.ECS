@@ -409,6 +409,50 @@ public static class Test_Serializer
         AreEqual("'components[pos]' - Cannot assign bool to float. got: false path: 'x' at position: 10 path: '[0]' at position: 46", result.error);
     }
     #endregion
+    
+    [Test]
+    public static void Test_Serializer_Non_CLS()
+    {
+        var storeWrite  = new EntityStore(PidType.UsePidAsId);
+        var serializer  = new EntitySerializer();
+        
+        var nonClsWrite = new NonClsTypes {
+            int8        = 1,
+            uint16      = 2,
+            uint32      = 3,
+            uint64      = 4,
+            int8Null    = 5,
+            uint16Null  = 6,
+            uint32Null  = 7,
+            uint64Null  = 8
+        };
+        
+        var entityWrite = storeWrite.CreateEntity();
+        entityWrite.AddComponent(nonClsWrite);
+        
+        // --- write
+        var stream = new MemoryStream();
+        serializer.WriteEntities(new [] {entityWrite }, stream);
+        var json = MemoryStreamAsString(stream);
+        var expect =
+@"[{
+    ""id"": 1,
+    ""components"": {
+        ""NonClsTypes"": {""int8"":1,""uint16"":2,""uint32"":3,""uint64"":4,""int8Null"":5,""uint16Null"":6,""uint32Null"":7,""uint64Null"":8}
+    }
+}]";
+        AreEqual(expect, json);
+        
+        // --- read
+        var storeRead   = new EntityStore(PidType.UsePidAsId);
+        stream.Position = 0;
+        var result = serializer.ReadIntoStore(storeRead, stream);
+        AreEqual(1, result.entityCount);
+        
+        var entityRead = storeRead.GetEntityById(1);
+        var nonClsRead = entityRead.GetComponent<NonClsTypes>();
+        AreEqual(nonClsWrite, nonClsRead);
+    }
 }
 
 }

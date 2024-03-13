@@ -38,6 +38,19 @@ public struct ShortComponent    : IComponent { public short b; }
 public struct IntComponent      : IComponent { public int   b; }
 public struct LongComponent     : IComponent { public long  b; }
 
+// see [Integral numeric types - C# reference - C# | Microsoft Learn] https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types
+public struct NonClsTypes : IComponent
+{
+    public  sbyte   int8;
+    public  ushort  uint16;
+    public  uint    uint32;
+    public  ulong   uint64;
+    
+    public  sbyte?  int8Null;
+    public  ushort? uint16Null;
+    public  uint?   uint32Null;
+    public  ulong?  uint64Null;
+}
 
 public struct Component20       : IComponent
 {
