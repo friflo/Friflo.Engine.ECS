@@ -103,40 +103,44 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 
 [Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
 
-- **1.10.0**    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
+- **1.24.0**    ![new](docs/images/new.svg) Add support for component fields of type: `sbyte, ushort, uint, ulong`.
+                See [Issue #38](https://github.com/friflo/Friflo.Json.Fliox/issues/38).
 
-- **1.11.0**    Support to filter entity changes - like adding/removing components/tags - in queries using an
-                [EventFilter](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
+- **1.23.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.  
+                Supports Mono & AOT/IL2CPP builds. Tested on Windows & macOS.
 
-- **1.12.0**    Add additional query filters like `WithoutAnyTags()` using an
-                [ArchetypeQuery](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
+- **1.19.0**    ![new](docs/images/new.svg) Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
+                Support / fix using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
 
-- **1.13.0**    Add support for target framework .NET Standard 2.1 or higher.
-
-- **1.14.0**    Add support for parallel (multi threaded) query job execution.
-
-- **1.15.0**    Reduced the number of properties shown for an entity in the debugger. See screenshot in Examples. 
-
-- **1.16.0**    Add support for entity batches and bulk batch operations to apply multiple entity changes at once.  
-                **Changed behavior** of the Archetype assigned to entities without components & tags.  
-                *Before:* Entities were not stored in this specific Archetype. `Archetype.Entities` returned always an empty result.  
-                *Now:*    Entities are stored in this Archetype.  
+- **1.18.0**    Introduced `EntityList` to apply an entity batch to all entities in the list.  
+                Add `Entity.Enabled` to enable/disable an entity.  
+                Add `Entity.EnableTree()` / `Entity.DisableTree()` to enable/disable recursively the child entities of an entity.
 
 - **1.17.0**    Introduced `CreateEntityBatch` to optimize creation of entities.  
                 Added DebugView's for all IEnumerable<> types to enable one click navigation to their elements in the debugger.  
                 E.g. the expanded properties ChildEntities and Components in the examples screenshot.  
                 **Breaking change**: Changed property `Entity.Batch` to method `Entity.Batch()`.
 
-- **1.18.0**    ![new](docs/images/new.svg) Introduced `EntityList` to apply an entity batch to all entities in the list.  
-                Add `Entity.Enabled` to enable/disable an entity.  
-                Add `Entity.EnableTree()` / `Entity.DisableTree()` to enable/disable recursively the child entities of an entity.
+- **1.16.0**    Add support for entity batches and bulk batch operations to apply multiple entity changes at once.  
+                **Changed behavior** of the Archetype assigned to entities without components & tags.  
+                *Before:* Entities were not stored in this specific Archetype. `Archetype.Entities` returned always an empty result.  
+                *Now:*    Entities are stored in this Archetype.  
 
-- **1.19.0**    ![new](docs/images/new.svg) Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
-                Support / fix using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
-                
+- **1.15.0**    Reduced the number of properties shown for an entity in the debugger. See screenshot in Examples. 
 
-- **1.23.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.  
-                Supports Mono & AOT/IL2CPP builds. Tested on Windows & macOS.
+- **1.14.0**    Add support for parallel (multi threaded) query job execution.
+
+- **1.13.0**    Add support for target framework .NET Standard 2.1 or higher.
+
+- **1.12.0**    Add additional query filters like `WithoutAnyTags()` using an
+                [ArchetypeQuery](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.md).  
+
+- **1.11.0**    Support to filter entity changes - like adding/removing components/tags - in queries using an
+                [EventFilter](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EventFilter.md).  
+
+- **1.10.0**    Add support for [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.  
+
+<br/><br/>
 
 
 
