@@ -15,6 +15,10 @@ using Friflo.Json.Fliox;
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 namespace Friflo.Engine.ECS.Serialize;
 
+/// <summary>
+/// Enables serialization of entities to / from JSON.
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#json-serialization">Example.</a>
+/// </summary>
 public sealed class EntitySerializer
 {
 #region private fields
@@ -50,6 +54,9 @@ public sealed class EntitySerializer
     private static readonly byte[] ArrayStart  = Encoding.UTF8.GetBytes("[");
     private static readonly byte[] ArrayEnd    = Encoding.UTF8.GetBytes("]");
 
+    /// <summary>
+    /// Asynchronously writes all entities in the given <paramref name="store"/> as a JSON array to the passed <paramref name="stream"/>. 
+    /// </summary>
     public async Task WriteStoreAsync(EntityStore store, Stream stream)
     {
         await stream.WriteAsync(ArrayStart, 0 , ArrayStart.Length);
@@ -69,6 +76,9 @@ public sealed class EntitySerializer
         await stream.WriteAsync(ArrayEnd, 0, ArrayEnd.Length);
     }
     
+    /// <summary>
+    /// Writes all entities in the given <paramref name="store"/> as a JSON array to the passed <paramref name="stream"/>. 
+    /// </summary>
     public void WriteStore(EntityStore store, Stream stream)
     {
         stream.Write(ArrayStart, 0, ArrayStart.Length);
@@ -88,6 +98,9 @@ public sealed class EntitySerializer
         stream.Write(ArrayEnd, 0, ArrayEnd.Length);
     }
     
+    /// <summary>
+    /// Writes the given <paramref name="entities"/> as a JSON array to the passed <paramref name="stream"/>. 
+    /// </summary>
     public void WriteEntities(IEnumerable<Entity> entities, Stream stream)
     {
         stream.Write(ArrayStart, 0, ArrayStart.Length);
@@ -105,6 +118,9 @@ public sealed class EntitySerializer
         stream.Write(ArrayEnd, 0, ArrayEnd.Length);
     }
     
+    /// <summary>
+    /// Returns a JSON object of the passed <paramref name="entity"/> as a string. 
+    /// </summary>
     public string WriteEntity(Entity entity)
     {
         writer.SetPretty(true);
@@ -225,6 +241,9 @@ public sealed class EntitySerializer
         return new MemoryStream(capacity);
     }
 
+    /// <summary>
+    /// Asynchronously reads the JSON array of the given <paramref name="stream"/> into the passed <paramref name="store"/>.   
+    /// </summary>
     public async Task<ReadResult> ReadIntoStoreAsync(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
@@ -238,6 +257,9 @@ public sealed class EntitySerializer
         return ReadIntoStoreSync(store, readStream);
     }
     
+    /// <summary>
+    /// Reads the JSON array of the given <paramref name="stream"/> into the passed <paramref name="store"/>.   
+    /// </summary>
     public ReadResult ReadIntoStore(EntityStore store, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
@@ -310,6 +332,9 @@ public sealed class EntitySerializer
     #endregion
     
 #region read entities
+    /// <summary>
+    /// Reads the JSON array of the given <paramref name="stream"/> into the passed <paramref name="entities"/> list.   
+    /// </summary>
     public ReadResult ReadEntities(List<DataEntity> entities, Stream stream)
     {
         if (stream is MemoryStream memoryStream) {
