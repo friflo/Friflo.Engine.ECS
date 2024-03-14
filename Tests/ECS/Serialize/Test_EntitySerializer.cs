@@ -432,7 +432,7 @@ public static class Test_Serializer
         
         // --- write
         var stream = new MemoryStream();
-        serializer.WriteEntities(new [] {entityWrite }, stream);
+        serializer.WriteStore(storeWrite, stream);
         var json = MemoryStreamAsString(stream);
         var expect =
 @"[{

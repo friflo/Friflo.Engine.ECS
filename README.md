@@ -20,6 +20,7 @@ The library implements all features a typical ECS provides.
 - Build up a hierarchy of entities with parent / child relationship - optional.
 - Subscribe to events/signals for specific entities - *Unique feature*.  
   Subscribe to events in a world - *Supported by most ECS projects*.
+- JSON Serialization without any boilerplate.
 - Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
   It enables simple refactoring between both models.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
@@ -76,7 +77,6 @@ See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
   **struct** as the main interface.  
   Or compare the `Entity` API with other API's at [Engine-comparison.md](Engine-comparison.md).  
   The typical alternative of an ECS implementations is providing a `World` class and using `int` parameters as entity `id`s.
-- JSON Serialization
 - Record entity changes on arbitrary threads using [CommandBuffer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/CommandBuffer.md)'s.
 - Build a **hierarchy of entities** typically used in Games and Game Editors.
 - Support **multi threaded** component queries (systems).
@@ -203,6 +203,7 @@ Examples showing typical use cases of the [Entity API](https://github.com/friflo
 - [Child entities](#child-entities)
 - [Event](#event)
 - [Signal](#signal)
+- [JSON Serialization](#json-serialization)
 - [Query entities](#query-entities)
 - [Enumerate Query Chunks](#enumerate-query-chunks)
 - [Unity update script](#unity-update-script)
@@ -648,6 +649,54 @@ public static void AddSignalHandler()
     entity.EmitSignal(new MySignal());
 }
 ```
+
+
+## JSON Serialization
+
+The entities stored in an EntityStore can be serialized as JSON using an
+[EntitySerializer](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntitySerializer.md).
+
+Writing the entities of a store to a JSON file is done with `WriteStore()`.  
+Reading the entities of a JSON file into a store with `ReadIntoStore()`.
+
+```csharp
+public static void JsonSerialization()
+{
+    var store = new EntityStore(PidType.UsePidAsId);
+    var entity1 = store.CreateEntity();
+    entity1.AddComponent(new EntityName("hello JSON"));
+    var entity2 = store.CreateEntity();
+    entity2.AddComponent(new Position(1, 2, 3));
+
+    // Write store entities as JSON array
+    var serializer = new EntitySerializer();
+    var writeStream = new FileStream("entity-store.json", FileMode.Create);
+    serializer.WriteStore(store, writeStream);
+    writeStream.Close();
+    
+    // Read JSON array into new store
+    var targetStore = new EntityStore(PidType.UsePidAsId);
+    serializer.ReadIntoStore(targetStore, new FileStream("entity-store.json", FileMode.Open));
+    
+    Console.WriteLine($"entities: {targetStore.Count}"); // > entities: 2
+}
+```
+
+The JSON content of the file `"entity-store.json"` created with `serializer.WriteStore()`
+```json
+[{
+    "id": 1,
+    "components": {
+        "name": {"value":"hello JSON"}
+    }
+},{
+    "id": 2,
+    "components": {
+        "pos": {"x":1,"y":2,"z":3}
+    }
+}]
+```
+
 
 
 ## Query entities
