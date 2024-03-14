@@ -204,13 +204,13 @@ public static void JsonSerialization()
     var entity2 = store.CreateEntity();
     entity2.AddComponent(new Position(1, 2, 3));
 
-    // Write store entities as JSON array
+    // --- Write store entities as JSON array
     var serializer = new EntitySerializer();
     var writeStream = new FileStream("entity-store.json", FileMode.Create);
     serializer.WriteStore(store, writeStream);
     writeStream.Close();
     
-    // Read JSON array into new store
+    // --- Read JSON array into new store
     var targetStore = new EntityStore(PidType.UsePidAsId);
     serializer.ReadIntoStore(targetStore, new FileStream("entity-store.json", FileMode.Open));
     
