@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS {
 
 namespace Friflo.Engine.ECS.Serialize {
     /// <summary>
-    /// Contains type and methods to serialize / deserialize <see cref="Entity"/>'s as JSON.
+    /// Contains types and methods to serialize / deserialize <see cref="Entity"/>'s as JSON.
     /// </summary>
     internal static class NamespaceDoc { }
 }
