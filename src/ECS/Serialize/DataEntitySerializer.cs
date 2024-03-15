@@ -9,6 +9,9 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Serialize;
 
+/// <summary>
+/// Used to serialize a single <see cref="DataEntity"/> to JSON.
+/// </summary>
 public sealed class DataEntitySerializer
 {
     private readonly    DataEntity      dataEntity;      
@@ -25,6 +28,9 @@ public sealed class DataEntitySerializer
         };
     }
     
+    /// <summary>
+    /// Return the given <see cref="DataEntity"/> as JSON.
+    /// </summary>
     public string WriteDataEntity(DataEntity data, out string error)
     {
         parser.InitParser(data.components);

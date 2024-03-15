@@ -6,11 +6,17 @@ using System;
 
 namespace Friflo.Engine.ECS.Serialize;
 
+/// <summary>
+/// Converts an <see cref="Entity"/> to a <see cref="DataEntity"/> and vice versa.
+/// </summary>
 public sealed class EntityConverter
 {
     private  readonly   ComponentReader reader;
     private  readonly   ComponentWriter writer;
     
+    /// <summary>
+    /// An <see cref="EntityConverter"/> singleton. Must be used only from the main thread.
+    /// </summary>
     public static readonly EntityConverter Default = new EntityConverter();
     
     public EntityConverter() {
@@ -18,6 +24,9 @@ public sealed class EntityConverter
         writer = new ComponentWriter();
     }
     
+    /// <summary>
+    /// Returns the passed <see cref="Entity"/> as a <see cref="DataEntity"/> 
+    /// </summary>
     public DataEntity EntityToDataEntity(Entity entity, DataEntity dataEntity, bool pretty)
     {
         if (entity.IsNull) {
@@ -31,6 +40,10 @@ public sealed class EntityConverter
         return dataEntity;
     }
     
+    /// <summary>
+    /// Add / update the passed <see cref="DataEntity"/> in the given <paramref name="store"/> and returns
+    /// the added / updated <see cref="Entity"/>. 
+    /// </summary>
     public Entity DataEntityToEntity(DataEntity dataEntity, EntityStore store, out string error)
     {
         if (dataEntity == null) {

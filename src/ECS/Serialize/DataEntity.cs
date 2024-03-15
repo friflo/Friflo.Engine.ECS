@@ -10,7 +10,7 @@ using Friflo.Json.Fliox;
 namespace Friflo.Engine.ECS.Serialize;
 
 /// <summary>
-/// A <see cref="DataEntity"/> is used to serialize entities.
+/// A <see cref="DataEntity"/> represents an <see cref="Entity"/> as a POCO class used for serialization.
 /// </summary>
 /// <remarks>
 /// When reading / writing <see cref="DataEntity"/>'s in the editor a special MemoryDatabase" implementation is required.<br/>
@@ -24,13 +24,16 @@ namespace Friflo.Engine.ECS.Serialize;
 [CLSCompliant(true)]
 public sealed class DataEntity
 {
-    /// <summary>permanent id used to identify entities in a database</summary>
+    /// <summary>Permanent id used to identify entities in a database</summary>
     [Key]
     [Serialize            ("id")] 
     public  long            pid;        //  8
     
+    /// <summary>
+    /// The list of child entity ids. 
+    /// </summary>
     /// <remarks>
-    /// Use a list of child ids instead of a single field <c>parentId</c> to enable child order.<br/>
+    /// Used a list of child ids instead of a single field <c>parentId</c> to enable child order.<br/>
     /// <br/>
     /// An alternative order implementation - using firstChild, nextSibling - is error prone if referenced nodes are missing.<br/>
     /// For now the child order is required to enable a memorable order in the editor and to avoid merge conflicts. 
@@ -38,7 +41,8 @@ public sealed class DataEntity
     public  List<long>      children;   //  8   - can be null
     
     /// <summary>
-    /// Each key in <see cref="components"/> defines the type of a component or script. Its value is the component / script value.
+    /// Each key in <see cref="components"/> defines the type of a component or script.<br/>
+    /// Its value is the component / script value.
     /// </summary>
     public  JsonValue       components; // 16   - can be null
     
