@@ -22,8 +22,6 @@ public partial class Editor : AppEvents
 {
 #region private fields
     private             StoreSync               sync;
-
-    private  readonly   ManualResetEvent        signalEvent = new ManualResetEvent(false);
     private             EventProcessorQueue     processor;
     private             HttpServer              server;
     
@@ -127,16 +125,6 @@ public partial class Editor : AppEvents
         StoreDispatcher.AssertMainThread();
         if (sync != null) {
             await sync.SyncChangesAsync();
-        }
-    }
-
-    internal void Run()
-    {
-        // simple event/game loop 
-        while (signalEvent.WaitOne())
-        {
-            signalEvent.Reset();
-            processor.ProcessEvents();
         }
     }
     
