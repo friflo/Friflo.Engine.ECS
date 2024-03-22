@@ -190,10 +190,30 @@ public sealed partial class EntityStore : EntityStoreBase
 #region get Entity by id / pid
 
     /// <summary>
-    /// Return the <see cref="Entity"/> with the passed entity <paramref name="id"/>.
+    /// Returns the <see cref="Entity"/> with the passed <paramref name="id"/>.<br/>
+    /// The returned entity can be null (<see cref="Entity.IsNull"/> == true).
     /// </summary>
+    /// <exception cref="IndexOutOfRangeException"> In case passed <paramref name="id"/> invalid (id >= <see cref="Capacity"/>). </exception>
     public  Entity  GetEntityById(int id) {
-        return new Entity(this, id);
+        if (0 <= id && id < nodes.Length) {
+            return new Entity(this, id);
+        }
+        throw new IndexOutOfRangeException();
+    }
+    
+    /// <summary>
+    /// Get the <see cref="Entity"/> associated with the passed <paramref name="id"/>.<br/>
+    /// Returns true if passed <paramref name="id"/> is valid (id &lt; <see cref="Capacity"/>).<br/>
+    /// The returned entity can be null (<see cref="Entity.IsNull"/> == true).
+    /// </summary>
+    public  bool TryGetEntityById(int id, out Entity entity)
+    {
+        if (0 <= id && id < nodes.Length) {
+            entity = new Entity(this, id);
+            return true;
+        }
+        entity = default;
+        return false;
     }
     
     /// <summary>
