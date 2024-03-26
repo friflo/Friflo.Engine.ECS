@@ -48,7 +48,7 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
-    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
   </PropertyGroup>
   <!-- packaging: end -->
 
