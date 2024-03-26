@@ -88,7 +88,7 @@ public readonly struct UnresolvedComponent
 
     public override string ToString() => $"\"{key}\": {value.ToString()}";
     
-    internal UnresolvedComponent(string key, in JsonValue value) {
+    public UnresolvedComponent(string key, in JsonValue value) {
         this.key    = key;
         this.value  = new JsonValue(value); // create a copy
     }

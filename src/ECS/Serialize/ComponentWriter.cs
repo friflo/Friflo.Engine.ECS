@@ -32,7 +32,7 @@ internal sealed class ComponentWriter
         unresolvedIndex     = schema.unresolvedType.StructIndex;
     }
     
-    internal JsonValue Write(Entity entity, bool pretty)
+    internal JsonValue Write(Entity entity, List<JsonValue> members, bool pretty)
     {
         var archetype = entity.archetype;
         if (entity.ComponentCount() == 0) {
@@ -47,12 +47,14 @@ internal sealed class ComponentWriter
         for (int n = 0; n < heaps.Length; n++) {
             var heap = heaps[n];
             if (heap.structIndex == unresolvedIndex) {
-                componentCount += WriteUnresolvedComponents(entity);
+                componentCount += WriteUnresolvedComponents(entity, members);
                 continue;
             }
             var value       = heap.Write(componentWriter, entity.compIndex);
-            var keyBytes    = structTypes[heap.structIndex].componentKeyBytes; 
+            var keyBytes    = structTypes[heap.structIndex].componentKeyBytes;
+            var start       = writer.json.end;
             writer.MemberBytes(keyBytes.AsSpan(), value);
+            members?.AddMember(writer, start);
             componentCount++;
         }
         // --- write scripts
@@ -60,7 +62,9 @@ internal sealed class ComponentWriter
             componentWriter.WriteObject(script, ref buffer);
             var classType   = scriptTypeByType[script.GetType()];
             var keyBytes    = classType.componentKeyBytes;
+            var start       = writer.json.end;
             writer.MemberBytes(keyBytes.AsSpan(), buffer);
+            members?.AddMember(writer, start);
             componentCount++;
         }
         if (componentCount == 0) {
@@ -70,7 +74,8 @@ internal sealed class ComponentWriter
         return new JsonValue(writer.json);
     }
     
-    private int WriteUnresolvedComponents(Entity entity)
+
+    private int WriteUnresolvedComponents(Entity entity, List<JsonValue> members)
     {
         var unresolved = entity.GetComponent<Unresolved>();
         var components = unresolved.components;
@@ -82,9 +87,23 @@ internal sealed class ComponentWriter
         {
             var key     = Encoding.UTF8.GetBytes(component.key); // todo remove byte[] allocation
             var data    = JsonUtils.JsonValueToBytes(component.value);
+            var start   = writer.json.end;
             writer.MemberBytes(key, data);
+            members?.AddMember(writer, start);
             count++;
         }
         return count;
+    }
+}
+
+internal static class ComponentWriterExtensions
+{
+    internal static void AddMember(this List<JsonValue> members, Utf8JsonWriter writer, int start)
+    {
+        var buffer = writer.json.buffer;
+        if (buffer[start] == ',') {
+            start++;
+        }
+        members.Add(new JsonValue(buffer, start, writer.json.end - start));
     }
 }

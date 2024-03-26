@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using Friflo.Json.Fliox;
@@ -160,6 +161,32 @@ var expect =
     ]
 }";
 
+    [Test]
+    public static void Test_ComponentWriter_JsonMembers()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var entity = store.CreateEntity();
+        entity.AddComponent(new EntityName("test"));
+        entity.AddComponent<Position>();
+        entity.AddComponent<Rotation>();
+        var unresolved = new Unresolved {
+            components = new[] {
+                new UnresolvedComponent ("unknown", new JsonValue("{\"value\": 1}"))
+            }
+        };
+        entity.AddComponent(unresolved);
+        
+        var members = new List<JsonValue>();
+        
+        converter.EntityComponentsToJsonMembers(entity, members);
+        AreEqual(4, members.Count);
+        AreEqual("\"name\":{\"value\":\"test\"}",               members[0].ToString());
+        AreEqual("\"pos\":{\"x\":0,\"y\":0,\"z\":0}",           members[1].ToString());
+        AreEqual("\"rot\":{\"x\":0,\"y\":0,\"z\":0,\"w\":0}",   members[2].ToString());
+        AreEqual("\"unknown\":{\"value\": 1}",                  members[3].ToString());
+    }
 }
 
 }

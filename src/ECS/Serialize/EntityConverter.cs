@@ -3,6 +3,8 @@
 
 // ReSharper disable ConvertConstructorToMemberInitializers
 using System;
+using System.Collections.Generic;
+using Friflo.Json.Fliox;
 
 namespace Friflo.Engine.ECS.Serialize;
 
@@ -38,6 +40,15 @@ public sealed class EntityConverter
         dataEntity.pid  = pid;
         store.EntityToDataEntity(entity, dataEntity, writer, pretty);
         return dataEntity;
+    }
+    
+    public void EntityComponentsToJsonMembers(Entity entity, List<JsonValue> members)
+    {
+        if (entity.IsNull) {
+            throw new ArgumentNullException(nameof(entity));
+        }
+        members.Clear();
+        writer.Write(entity, members, false);
     }
     
     /// <summary>

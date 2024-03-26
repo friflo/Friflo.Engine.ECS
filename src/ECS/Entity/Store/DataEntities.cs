@@ -25,7 +25,7 @@ public partial class EntityStore
         ProcessChildren(dataEntity, nodes[entity.Id]);
         
         // --- write components & scripts
-        var jsonComponents = writer.Write(entity, pretty);
+        var jsonComponents = writer.Write(entity, null, pretty);
         if (!jsonComponents.IsNull()) {
             JsonUtils.FormatComponents(jsonComponents, ref writer.buffer);
             jsonComponents = new JsonValue(writer.buffer);
