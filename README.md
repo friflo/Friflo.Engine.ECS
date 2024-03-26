@@ -2,6 +2,7 @@
 
 [![nuget](https://buildstats.info/nuget/Friflo.Engine.ECS)](https://www.nuget.org/packages/Friflo.Engine.ECS)
 [![nuget](https://img.shields.io/badge/published-2024-blue.svg)](https://www.nuget.org/packages/Friflo.Engine.ECS/1.0.0)
+[![nuget](https://img.shields.io/badge/license-LGPL-blue.svg)](https://github.com/friflo/Friflo.Json.Fliox/blob/main/LICENSE)
 [![Coverage](https://codecov.io/gh/friflo/Friflo.Json.Fliox/branch/main/graph/badge.svg)](https://app.codecov.io/gh/friflo/Friflo.Json.Fliox/tree/main/Engine%2Fsrc%2FECS)
 [![CI-Engine](https://github.com/friflo/Friflo.Json.Fliox/workflows/CI/badge.svg)](https://github.com/friflo/Friflo.Json.Fliox/actions/workflows/engine.yml)
 [![nuget](https://img.shields.io/badge/docs-C%23%20API-blue.svg)](https://github.com/friflo/Friflo.Engine-docs/blob/main/README.md)
@@ -104,13 +105,16 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 
 [Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
 
+- **1.25.0**    ![new](docs/images/new.svg) Switched project to more permissive license LGPL v3.0. Before AGPL v3.0.
+                See [#41](https://github.com/friflo/Friflo.Json.Fliox/discussions/41).
+
 - **1.24.0**    ![new](docs/images/new.svg) Add support for component fields of type: `sbyte, ushort, uint, ulong`.
                 See [Issue #38](https://github.com/friflo/Friflo.Json.Fliox/issues/38).
 
 - **1.23.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.  
                 Supports Mono & AOT/IL2CPP builds. Tested on Windows & macOS.
 
-- **1.19.0**    ![new](docs/images/new.svg) Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
+- **1.19.0**    Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
                 Support / fix using vector types - e.g. `Vector3` - as component fields for .NET 7 or higher.  
 
 - **1.18.0**    Introduced `EntityList` to apply an entity batch to all entities in the list.  
