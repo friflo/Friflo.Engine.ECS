@@ -86,6 +86,30 @@ var expect =
     }
     
     [Test]
+    public static void Test_ComponentWriter_write_non_serialized_component()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        
+        var entity      = store.CreateEntity(10);
+        entity.AddComponent(new NonSerializedComponent());
+        entity.AddComponent(new EntityName("test"));
+        var dataEntity = converter.EntityToDataEntity(entity, null, false);
+        AreEqual("{\"name\":{\"value\":\"test\"}}", dataEntity.components.ToString());
+        
+        var serializer = new EntitySerializer();
+        var json = serializer.WriteEntity(entity);
+        const string expect =
+@"{
+    ""id"": 10,
+    ""components"": {
+        ""name"": {""value"":""test""}
+    }
+}";
+        AreEqual(expect, json);
+    }
+    
+    [Test]
     public static void Test_ComponentWriter_write_tags()
     {
         var store       = new EntityStore(PidType.UsePidAsId);

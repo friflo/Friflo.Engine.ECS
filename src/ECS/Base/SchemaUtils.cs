@@ -109,7 +109,7 @@ internal static class SchemaUtils
             if (attr.AttributeType != typeof(ComponentKeyAttribute)) {
                 continue;
             }
-            var arg     = attr.ConstructorArguments;
+            var arg = attr.ConstructorArguments;
             return (string) arg[0].Value;
         }
         return type.Name;

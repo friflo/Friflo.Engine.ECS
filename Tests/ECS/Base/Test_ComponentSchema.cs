@@ -48,12 +48,12 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 34  scripts: 8  entity tags: 10", schema.ToString());
-        AreEqual(35,    components.Length);
+        AreEqual("components: 35  scripts: 8  entity tags: 10", schema.ToString());
+        AreEqual(36,    components.Length);
         AreEqual( 9,    scripts.Length);
         
         AreEqual(42,    schema.SchemaTypeByKey.Count);
-        AreEqual(34,    schema.ComponentTypeByType.Count);
+        AreEqual(35,    schema.ComponentTypeByType.Count);
         AreEqual( 8,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);
@@ -61,7 +61,11 @@ public static class Test_ComponentSchema
             var type = components[n];
             AreEqual(n, type.StructIndex);
             AreEqual(SchemaTypeKind.Component, type.Kind);
-            NotNull (type.ComponentKey);
+            if (type.Type == typeof(NonSerializedComponent)) {
+                IsNull (type.ComponentKey);
+            } else {
+                NotNull(type.ComponentKey);    
+            }
         }
         {
             var schemaType = schema.SchemaTypeByKey["pos"];

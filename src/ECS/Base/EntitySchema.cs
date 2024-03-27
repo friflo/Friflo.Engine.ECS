@@ -102,7 +102,10 @@ public sealed class EntitySchema
         //     System.ArgumentException: An item with the same key has already been added.
         // => so for now use Dictionary<,> index operator
         foreach (var componentType in componentList) {
-            schemaTypeByKey.    Add (componentType.ComponentKey,    componentType); // SHOULD_USE_ADD
+            var key = componentType.ComponentKey;
+            if (key != null) {
+                schemaTypeByKey.Add (key,                           componentType); // SHOULD_USE_ADD
+            }
             componentTypeByType.Add (componentType.Type,            componentType);
             components              [componentType.StructIndex] =   componentType;
         }

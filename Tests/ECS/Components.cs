@@ -38,7 +38,8 @@ public struct BlittableGuid             : IComponent { public Guid          guid
 public struct BlittableBigInteger       : IComponent { public BigInteger    bigInteger;  }
 // public struct BlittableUri           : IComponent { public Uri           uri;         } todo requires fix in Fliox.Mapper
 
-
+[ComponentKey(null)]
+public struct NonSerializedComponent    : IComponent { public int           value;  }
 
 [CodeCoverageTest]
 [ComponentKey("byte")]

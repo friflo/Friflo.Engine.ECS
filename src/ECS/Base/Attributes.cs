@@ -20,6 +20,7 @@ public sealed class TagNameAttribute : Attribute {
 
 /// <summary>
 /// Assign a custom key used for JSON serialization for annotated <see cref="IComponent"/> and <see cref="Script"/> types.<br/>
+/// If specified key is null The component type is not serialized.
 /// </summary>
 /// <remarks>
 /// The attribute is used for:

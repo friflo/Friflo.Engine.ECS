@@ -50,9 +50,13 @@ internal sealed class ComponentWriter
                 componentCount += WriteUnresolvedComponents(entity, members);
                 continue;
             }
-            var value       = heap.Write(componentWriter, entity.compIndex);
-            var keyBytes    = structTypes[heap.structIndex].componentKeyBytes;
-            var start       = writer.json.end;
+            var componentType = structTypes[heap.structIndex];
+            if (componentType.ComponentKey == null) {
+                continue;
+            }
+            var value           = heap.Write(componentWriter, entity.compIndex);
+            var keyBytes        = componentType.componentKeyBytes;
+            var start           = writer.json.end;
             writer.MemberBytes(keyBytes.AsSpan(), value);
             members?.AddMember(writer, start);
             componentCount++;

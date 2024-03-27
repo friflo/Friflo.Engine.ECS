@@ -26,8 +26,9 @@ internal enum BlittableType
 public abstract class SchemaType
 {
     /// <summary>
-    /// If <see cref="Kind"/> is a <see cref="Component"/> or a <see cref="Script"/>
-    /// the key assigned with <see cref="ComponentKeyAttribute"/>.
+    /// If <see cref="Kind"/> is a <see cref="Component"/> or a <see cref="Script"/> the key assigned
+    /// with <see cref="ComponentKeyAttribute"/>.<br/>
+    /// If null the component is not serialized.
     /// </summary>
     public   readonly   string          ComponentKey;       //  8
     
