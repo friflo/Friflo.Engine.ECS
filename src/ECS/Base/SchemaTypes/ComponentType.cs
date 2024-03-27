@@ -35,7 +35,7 @@ public abstract class ComponentType : SchemaType
         : base (componentKey, type, Component)
     {
         StructIndex = structIndex;
-        IsBlittable = IsBlittableType(type);
+        IsBlittable = GetBlittableType(type) == BlittableType.Blittable;
         StructSize  = byteSize;
     }
 }

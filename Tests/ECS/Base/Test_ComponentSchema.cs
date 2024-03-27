@@ -48,12 +48,12 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 32  scripts: 8  entity tags: 10", schema.ToString());
-        AreEqual(33,    components.Length);
+        AreEqual("components: 33  scripts: 8  entity tags: 10", schema.ToString());
+        AreEqual(34,    components.Length);
         AreEqual( 9,    scripts.Length);
         
-        AreEqual(40,    schema.SchemaTypeByKey.Count);
-        AreEqual(32,    schema.ComponentTypeByType.Count);
+        AreEqual(41,    schema.SchemaTypeByKey.Count);
+        AreEqual(33,    schema.ComponentTypeByType.Count);
         AreEqual( 8,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);

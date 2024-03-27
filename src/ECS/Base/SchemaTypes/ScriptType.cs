@@ -31,7 +31,7 @@ public abstract class ScriptType : SchemaType
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
         ScriptIndex = scriptIndex;
-        IsBlittable   = IsBlittableType(type);
+        IsBlittable   = GetBlittableType(type) == BlittableType.Blittable;
         if (IsBlittable) {
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod;
             var methodInfo      = type.GetMethod("MemberwiseClone", flags);

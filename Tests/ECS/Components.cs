@@ -17,12 +17,18 @@ public struct MyComponent1 : IComponent {
     public override string  ToString() => a.ToString();
 }
 
+internal class CycleClass
+{
+    internal CycleClass cycle; 
+}
+
 [ComponentKey("my2")]
 public struct MyComponent2 : IComponent { public int b; }
 
 public struct NonBlittableArray         : IComponent { internal int[]                   array;  }
 public struct NonBlittableList          : IComponent { internal List<int>               list;   }
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }
+public struct NonBlittableCycle         : IComponent { internal CycleClass              cycle;  }
 
 public struct BlittableDatetime         : IComponent { public DateTime      dateTime;    }
 public struct BlittableGuid             : IComponent { public Guid          guid;        }
