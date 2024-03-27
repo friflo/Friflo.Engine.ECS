@@ -6,6 +6,7 @@ using static NUnit.Framework.Assert;
 
 #pragma warning disable CS0649 // Field '...' is never assigned to, and will always have its default value
 
+// ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable RedundantTypeDeclarationBody
 namespace Tests.ECS {
 
@@ -17,10 +18,11 @@ public struct MyComponent1 : IComponent {
     public override string  ToString() => a.ToString();
 }
 
-internal class CycleClass
-{
-    internal CycleClass cycle; 
-}
+internal class CycleClass  { internal CycleClass    cycle;  }
+
+// two classes with indirect type cycle
+internal class CycleClass1 { internal CycleClass2   cycle2; }
+internal class CycleClass2 { internal CycleClass1   cycle1; }
 
 [ComponentKey("my2")]
 public struct MyComponent2 : IComponent { public int b; }
@@ -29,6 +31,7 @@ public struct NonBlittableArray         : IComponent { internal int[]           
 public struct NonBlittableList          : IComponent { internal List<int>               list;   }
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }
 public struct NonBlittableCycle         : IComponent { internal CycleClass              cycle;  }
+public struct NonBlittableCycle2        : IComponent { internal CycleClass1             cycle1; }
 
 public struct BlittableDatetime         : IComponent { public DateTime      dateTime;    }
 public struct BlittableGuid             : IComponent { public Guid          guid;        }
