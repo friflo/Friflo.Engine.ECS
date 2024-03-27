@@ -9,6 +9,7 @@ using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
 using static Friflo.Engine.ECS.NodeFlags;
 
+// ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable SuggestBaseTypeForParameter
@@ -36,7 +37,11 @@ public partial class EntityStore
     public Entity CreateEntity()
     {
         ref var node = ref CreateEntityInternal(defaultArchetype);
-        return new Entity(this, node.id);
+        var entity = new Entity(this, node.id);
+        
+        // Send event. See: SEND_EVENT notes
+        CreateEntityEvent(entity);
+        return entity;
     }
     
     internal ref EntityNode CreateEntityInternal(Archetype archetype)
@@ -89,17 +94,19 @@ public partial class EntityStore
                 scriptClone.entity  = clone;
                 AddScript(clone, scriptClone, scriptType);
             }
-            return clone;
+        } else {
+            // --- serialize entity
+            var converter       = EntityConverter.Default;
+            converter.EntityToDataEntity(entity, dataBuffer, false);
+            
+            // --- deserialize DataEntity
+            dataBuffer.pid      = IdToPid(clone.Id);
+            // convert will use entity created above
+            converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
+            AssertNoError(error);
         }
-        // --- serialize entity
-        var converter       = EntityConverter.Default;
-        converter.EntityToDataEntity(entity, dataBuffer, false);
-        
-        // --- deserialize DataEntity
-        dataBuffer.pid      = IdToPid(clone.Id);
-        // convert will use entity created above
-        converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
-        AssertNoError(error);
+        // Send event. See: SEND_EVENT notes
+        CreateEntityEvent(clone);
         return clone;
     }
     
@@ -195,6 +202,22 @@ public partial class EntityStore
     private QueryEntities GetEntities() {
         var query = intern.entityQuery ??= new ArchetypeQuery(this);
         return query.Entities;
+    }
+    
+    internal void CreateEntityEvent(Entity entity)
+    {
+        if (intern.entityCreated == null) {
+            return;
+        }
+        intern.entityCreated(new EntityCreated(entity));
+    }
+    
+    internal void DeleteEntityEvent(Entity entity)
+    {
+        if (intern.entityDeleted == null) {
+            return;
+        }
+        intern.entityDeleted(new EntityDeleted(entity));
     }
 }
 

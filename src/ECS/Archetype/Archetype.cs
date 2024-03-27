@@ -99,7 +99,11 @@ public sealed class Archetype
         foreach (var heap in structHeaps) {
             heap.SetComponentDefault(compIndex);
         }
-        return new Entity(localStore, node.id);
+        var entity = new Entity(localStore, node.id);
+        
+        // Send event. See: SEND_EVENT notes
+        localStore.CreateEntityEvent(entity);
+        return entity;
     }
     
     /// <summary>

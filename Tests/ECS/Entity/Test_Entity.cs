@@ -292,6 +292,73 @@ public static class Test_Entity
         AreEqual(entityCount - 1,   arch3.Count);
         IsFalse (root.Enabled);
     }
+    
+    [Test]
+    public static void Test_Entity_CreateEntity_events()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var createCount = 0;
+        Action<EntityCreated> createdHandler = created => {
+            var str = created.ToString();
+            switch (createCount++) {
+                case 0:     AreSame (store,         created.Store);
+                            AreEqual("id: 1  []",   created.Entity.ToString());
+                            AreEqual("entity: 1 - event > EntityCreated", str);     break;
+                case 1:     AreEqual("entity: 2 - event > EntityCreated", str);     break;
+                case 2:     AreEqual("entity: 3 - event > EntityCreated", str);     break;
+                default: throw new InvalidOperationException("unexpected");
+            }
+        };
+        var deleteCount = 0;
+        Action<EntityDeleted> deletedHandler = deleted  => {
+            var str = deleted.ToString();
+            switch (deleteCount++) {
+                case 0:
+                    AreSame (store, deleted.Store);
+                    AreEqual("id: 1  (detached)", deleted.Entity.ToString());
+                    AreEqual("entity: 1 - event > EntityDeleted", str);
+                    break;
+                default: throw new InvalidOperationException("unexpected");
+            } 
+        };
+        store.OnEntityCreated += createdHandler;
+        store.OnEntityDeleted += deletedHandler;
+            
+        var entity1 = store.CreateEntity();
+        
+        var arch = store.GetArchetype(ComponentTypes.Get<EntityName>());
+        arch.CreateEntity();
+        
+        var entity2 = store.CloneEntity(entity1);
+        
+        entity1.DeleteEntity();
+        
+        store.OnEntityCreated -= createdHandler;
+        store.OnEntityDeleted -= deletedHandler;
+        
+        store.CreateEntity();   // does not fire event - handler removed
+        entity2.DeleteEntity(); // does not fire event - handler removed
+        
+        AreEqual(3, createCount);
+        AreEqual(1, deleteCount);
+    }
+    
+    [Test]
+    public static void Test_Entity_CreateEntity_Perf()
+    {
+        int count   = 10; // 10_000_000 ~ #PC: 316 ms
+        var store   = new EntityStore(PidType.UsePidAsId);
+        store.EnsureCapacity(count);
+        var capacity = store.Capacity;
+        var sw = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            store.CreateEntity();
+        }
+        Console.WriteLine($"CreateEntity(PidType.UsePidAsId) - count: {count}, duration: {sw.ElapsedMilliseconds}");
+        AreEqual(count,     store.Count);
+        AreEqual(capacity,  store.Capacity);
+    }
 }
 
 }

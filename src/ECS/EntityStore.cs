@@ -84,6 +84,13 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Fire events in case an <see cref="Entity"/> changed. </summary>
     public  event   EventHandler<EntitiesChanged>   OnEntitiesChanged       { add => intern.entitiesChanged     += value;   remove => intern.entitiesChanged-= value; }
     
+    
+    /// <summary>Add / remove an event handler for <see cref="EntityCreated"/> events triggered by <see cref="EntityStore.CreateEntity()"/>.</summary>
+    public event    Action<EntityCreated>            OnEntityCreated        { add => intern.entityCreated       += value; remove => intern.entityCreated    -= value; }
+    
+    /// <summary>Add / remove an event handler for <see cref="EntityDeleted"/> events triggered by <see cref="Entity.DeleteEntity()"/>.</summary>
+    public event    Action<EntityDeleted>            OnEntityDeleted        { add => intern.entityDeleted       += value; remove => intern.entityDeleted    -= value; }
+    
     public  void    CastEntitiesChanged(object sender, EntitiesChanged args) => intern.entitiesChanged?.Invoke(sender, args);
     #endregion
     
@@ -120,6 +127,9 @@ public sealed partial class EntityStore : EntityStoreBase
         //
         internal    SignalHandler[]                                 signalHandlerMap;       //  8
         internal    List<SignalHandler>                             signalHandlers;         //  8 
+        //
+        internal    Action                <EntityCreated>           entityCreated;          //  8   - fires event on create entity
+        internal    Action                <EntityDeleted>           entityDeleted;          //  8   - fires event on delete entity
         //
         internal    EventHandler          <EntitiesChanged>         entitiesChanged;        //  8   - fires event to notify changes of multiple entities
         //

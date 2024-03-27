@@ -55,15 +55,15 @@ public abstract partial class EntityStoreBase
 #region events
     /// <summary>Add / remove an event handler for <see cref="ECS.TagsChanged"/> events triggered by:<br/>
     /// <see cref="Entity.AddTag{T}"/> <br/> <see cref="Entity.AddTags"/> <br/> <see cref="Entity.RemoveTag{T}"/> <br/> <see cref="Entity.RemoveTags"/>.</summary>
-    public event    Action<TagsChanged>       OnTagsChanged       { add => internBase.tagsChanged        += value;   remove => internBase.tagsChanged      -= value; }
+    public event    Action<TagsChanged>       OnTagsChanged      { add => internBase.tagsChanged      += value; remove => internBase.tagsChanged      -= value; }
     
     /// <summary>Add / remove an event handler for <see cref="ECS.ComponentChanged"/> events triggered by: <br/>
     /// <see cref="Entity.AddComponent{T}()"/>.</summary>
-    public event    Action<ComponentChanged>  OnComponentAdded    { add => internBase.componentAdded     += value;   remove => internBase.componentAdded   -= value; }
+    public event    Action<ComponentChanged>  OnComponentAdded   { add => internBase.componentAdded   += value; remove => internBase.componentAdded   -= value; }
     
     /// <summary>Add / remove an event handler for <see cref="ECS.ComponentChanged"/> events triggered by: <br/>
     /// <see cref="Entity.RemoveComponent{T}()"/>.</summary>
-    public event    Action<ComponentChanged>  OnComponentRemoved  { add => internBase.componentRemoved   += value;   remove => internBase.componentRemoved -= value; }
+    public event    Action<ComponentChanged>  OnComponentRemoved { add => internBase.componentRemoved += value; remove => internBase.componentRemoved -= value; }
     #endregion
     
 #region private / internal fields
@@ -92,6 +92,7 @@ public abstract partial class EntityStoreBase
         internal        Action                <ComponentChanged>    componentAdded;         //  8   - fires event on add component
         internal        Action                <ComponentChanged>    componentRemoved;       //  8   - fires event on remove component
         internal        Dictionary<int, Action<ComponentChanged>>   entityComponentChanged; //  8   - entity event handlers for add/remove component
+        //
         ///  reused query for <see cref="EntityStoreBase.GetUniqueEntity"/>
         internal        ArchetypeQuery<UniqueEntity>                uniqueEntityQuery;      //  8
         internal        StackArray<EntityBatch>                     entityBatches;          //  8

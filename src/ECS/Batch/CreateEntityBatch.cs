@@ -128,7 +128,11 @@ public sealed class CreateEntityBatch
             Clear();
             store.ReturnCreateBatch(this);
         }
-        return new Entity(localStore, node.id);
+        var entity = new Entity(localStore, node.id);
+        
+        // Send event. See: SEND_EVENT notes
+        localStore.CreateEntityEvent(entity);
+        return entity;
     }
     
     /// <summary>
