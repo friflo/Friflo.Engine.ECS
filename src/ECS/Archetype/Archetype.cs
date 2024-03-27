@@ -94,12 +94,26 @@ public sealed class Archetype
     public Entity CreateEntity()
     {
         var localStore  = entityStore;
-        ref var node    = ref localStore.CreateEntityInternal(this);
-        var compIndex   = node.compIndex;
+        var id          = localStore.NewId();
+        var compIndex   = localStore.CreateEntityInternal(this, id);
         foreach (var heap in structHeaps) {
             heap.SetComponentDefault(compIndex);
         }
-        var entity = new Entity(localStore, node.id);
+        var entity = new Entity(localStore, id);
+        
+        // Send event. See: SEND_EVENT notes
+        localStore.CreateEntityEvent(entity);
+        return entity;
+    }
+    
+    public Entity CreateEntity(int id)
+    {
+        var localStore  = entityStore;
+        var compIndex   = localStore.CreateEntityInternal(this, id);
+        foreach (var heap in structHeaps) {
+            heap.SetComponentDefault(compIndex);
+        }
+        var entity = new Entity(localStore, id);
         
         // Send event. See: SEND_EVENT notes
         localStore.CreateEntityEvent(entity);

@@ -115,8 +115,8 @@ public sealed class CreateEntityBatch
         if (isReturned) throw BatchAlreadyReturnedException();
         archetype       ??= store.GetArchetype(componentsCreate, tagsCreate);
         var localStore  = (EntityStore)store;
-        ref var node    = ref localStore.CreateEntityInternal(archetype);
-        var compIndex   = node.compIndex;
+        var id          = localStore.NewId();
+        var compIndex   = localStore.CreateEntityInternal(archetype, id);
         var components  = batchComponents;
         
         // --- assign component values
@@ -128,7 +128,7 @@ public sealed class CreateEntityBatch
             Clear();
             store.ReturnCreateBatch(this);
         }
-        var entity = new Entity(localStore, node.id);
+        var entity = new Entity(localStore, id);
         
         // Send event. See: SEND_EVENT notes
         localStore.CreateEntityEvent(entity);

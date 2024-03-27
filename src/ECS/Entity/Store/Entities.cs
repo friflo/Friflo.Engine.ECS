@@ -36,20 +36,21 @@ public partial class EntityStore
     /// <returns>An <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity()
     {
-        ref var node = ref CreateEntityInternal(defaultArchetype);
-        var entity = new Entity(this, node.id);
+        var id = NewId();
+        CreateEntityInternal(defaultArchetype, id);
+        var entity = new Entity(this, id);
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
         return entity;
     }
     
-    internal ref EntityNode CreateEntityInternal(Archetype archetype)
+    /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
+    internal int CreateEntityInternal(Archetype archetype, int id)
     {
-        var id  = NewId();
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        return ref CreateEntityNode(archetype, id, pid);
+        return CreateEntityNode(archetype, id, pid);
     }
     
     /// <summary>
@@ -76,9 +77,10 @@ public partial class EntityStore
     /// <returns></returns>
     public Entity CloneEntity(Entity entity)
     {
+        var id          = NewId();
         var archetype   = entity.archetype;
-        ref var node    = ref CreateEntityInternal(archetype);
-        var clone       = new Entity(this, node.id);
+        CreateEntityInternal(archetype, id);
+        var clone       = new Entity(this, id);
         
         var isBlittable = IsBlittable(entity);
 
@@ -162,14 +164,15 @@ public partial class EntityStore
         throw new InvalidOperationException($"invalid pid. expected: 0 or {expected}, was: {pid}");
     }
 
-    /// <summary>expect <see cref="EntityStore.nodes"/> Length > id</summary> 
-    private ref EntityNode CreateEntityNode(Archetype archetype, int id, long pid)
+    /// <summary> expect <see cref="EntityStore.nodes"/> Length > id </summary>
+    /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
+    private int CreateEntityNode(Archetype archetype, int id, long pid)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
         if ((node.flags & Created) != 0) {
             AssertPid(node.pid, pid);
-            return ref node;
+            return node.compIndex;
         }
         entityCount++;
         if (nodesMaxId < id) {
@@ -183,7 +186,7 @@ public partial class EntityStore
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
         node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
-        return ref node;
+        return node.compIndex;
     }
     
     /// <summary>
