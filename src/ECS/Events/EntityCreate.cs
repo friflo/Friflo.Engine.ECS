@@ -6,12 +6,12 @@
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Is the event for event handlers added to <see cref="EntityStore.OnEntityCreated"/>.
+/// Is the event for event handlers added to <see cref="EntityStore.OnEntityCreate"/>.
 /// </summary>
 /// <remarks>
 /// These events are fired on <see cref="EntityStore.CreateEntity()"/>.
 /// </remarks>
-public readonly struct  EntityCreated
+public readonly struct  EntityCreate
 {
 #region fields
     /// <summary>The created <see cref="ECS.Entity"/>.</summary>
@@ -23,11 +23,11 @@ public readonly struct  EntityCreated
     /// <summary>The <see cref="EntityStore"/> containing the created entity.</summary>
     public              EntityStore Store       => Entity.store;
     
-    public override     string      ToString()  => $"entity: {Entity.Id} - event > EntityCreated";
+    public override     string      ToString()  => $"entity: {Entity.Id} - event > EntityCreate";
     #endregion
 
 #region methods
-    internal EntityCreated(Entity entity)
+    internal EntityCreate(Entity entity)
     {
         Entity = entity;
     }

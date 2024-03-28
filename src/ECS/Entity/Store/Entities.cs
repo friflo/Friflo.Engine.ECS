@@ -209,18 +209,18 @@ public partial class EntityStore
     
     internal void CreateEntityEvent(Entity entity)
     {
-        if (intern.entityCreated == null) {
+        if (intern.entityCreate == null) {
             return;
         }
-        intern.entityCreated(new EntityCreated(entity));
+        intern.entityCreate(new EntityCreate(entity));
     }
     
     internal void DeleteEntityEvent(Entity entity)
     {
-        if (intern.entityDeleted == null) {
+        if (intern.entityDelete == null) {
             return;
         }
-        intern.entityDeleted(new EntityDeleted(entity));
+        intern.entityDelete(new EntityDelete(entity));
     }
 }
 

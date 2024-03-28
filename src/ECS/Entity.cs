@@ -501,14 +501,17 @@ public readonly struct Entity : IEquatable<Entity>
     /// </remarks>
     public void DeleteEntity()
     {
-        var arch            = archetype;
-        var componentIndex  = compIndex; 
-        var entityStore = arch.entityStore;
-        entityStore.DeleteNode(Id); 
-        Archetype.MoveLastComponentsTo(arch, componentIndex);
-        
-        // Send event. See: SEND_EVENT notes
-        store.DeleteEntityEvent(this);
+        try {
+            // Send event. See: SEND_EVENT notes. Note - Specific characteristic: event is send before deleting the entity.
+            store.DeleteEntityEvent(this);
+        }
+        finally {
+            var arch            = archetype;
+            var componentIndex  = compIndex;
+            var entityStore     = arch.entityStore;
+            entityStore.DeleteNode(Id); 
+            Archetype.MoveLastComponentsTo(arch, componentIndex);
+        }
     }
     /// <summary>Return the position of the given <paramref name="child"/> in the entity.</summary>
     /// <param name="child"></param>
