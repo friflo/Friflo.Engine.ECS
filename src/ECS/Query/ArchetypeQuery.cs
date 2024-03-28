@@ -60,6 +60,7 @@ public class ArchetypeQuery
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //   8
     [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
     [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
+    [Browse(Never)] private             EntityList          entityList;         //   8  provide entities as list to perform structural changes
     
     // --- blittable types
     [Browse(Never)] private             int                 archetypeCount;     //   4  current number archetypes 
@@ -182,6 +183,20 @@ public class ArchetypeQuery
             return eventFilter.HasEvent(entityId);
         }
         return false;
+    }
+    
+    /// <summary>
+    /// Returns the query result as an <see cref="EntityList"/> to perform structural changes.
+    /// </summary>
+    public EntityList ToEntityList()
+    {
+        var list = entityList ??= new EntityList(Store);
+        list.Clear();
+        list.entityStore = Store;
+        foreach (var entity in Entities) {
+            list.Add(entity.Id);   
+        }
+        return list;
     }
     
     /// <summary>

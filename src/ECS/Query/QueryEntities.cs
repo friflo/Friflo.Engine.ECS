@@ -28,6 +28,19 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
     }
     
     /// <summary>
+    /// Returns the query result as an <see cref="EntityList"/> to perform structural changes.
+    /// </summary>
+    public EntityList ToEntityList(EntityList list)
+    {
+        list.Clear();
+        list.entityStore = query.Store;
+        foreach (var entity in query.Entities) {
+            list.Add(entity.Id);   
+        }
+        return list;
+    }
+    
+    /// <summary>
     /// Apply the given entity <paramref name="batch"/> to all entities in this set.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entitybatch---query">Example.</a>
     /// </summary>

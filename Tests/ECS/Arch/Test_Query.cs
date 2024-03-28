@@ -305,6 +305,30 @@ public static class Test_Query
     }
     
     [Test]
+    public static void Test_Query_AsEntityList()
+    {
+        var store   = new EntityStore();
+        for (int n = 0; n < 10; n++) {
+            store.CreateEntity().AddComponent<Position>();
+        }
+        
+        var query = store.Query<Position>();
+        var count = 0;
+        foreach (var entity in query.ToEntityList()) {
+            entity.AddComponent<Rotation>(); // structural changes are allowed
+            count++;
+        }
+        AreEqual(10, count);
+        
+        count = 0;
+        foreach (var entity in query.Entities.ToEntityList(new EntityList())) {
+            entity.AddComponent<Rotation>(); // structural changes are allowed
+            count++;
+        }
+        AreEqual(10, count);
+    }
+    
+    [Test]
     public static void Test_Query_loop()
     {
         var store   = new EntityStore();

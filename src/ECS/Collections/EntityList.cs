@@ -34,12 +34,21 @@ public sealed class EntityList : IList<Entity>
     #endregion
     
 #region fields
-    internal            int[]       ids;            //  8
-    internal readonly   EntityStore entityStore;    //  8
-    internal            int         count;          //  4
+    internal    int[]       ids;            //  8
+    internal    EntityStore entityStore;    //  8
+    internal    int         count;          //  4
     #endregion
     
 #region general
+    /// <summary>
+    /// Creates a container for entities returned by a query to perform structural changes.<br/>
+    /// This constructor is intended for use in <see cref="QueryEntities.ToEntityList"/>.
+    /// </summary>
+    public EntityList()
+    {
+        ids         = new int[8];
+    }
+
     /// <summary>
     /// Creates a container to store entities of the given <paramref name="store"/>.
     /// </summary>
