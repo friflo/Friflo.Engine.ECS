@@ -30,6 +30,11 @@ public readonly struct QueryEntities  : IEnumerable <Entity>
     /// <summary>
     /// Returns the query result as an <see cref="EntityList"/> to perform structural changes.
     /// </summary>
+    public EntityList ToEntityList() => ToEntityList(new EntityList());
+    
+    /// <summary>
+    /// Returns the query result as an <see cref="EntityList"/> to perform structural changes.
+    /// </summary>
     public EntityList ToEntityList(EntityList list)
     {
         list.Clear();

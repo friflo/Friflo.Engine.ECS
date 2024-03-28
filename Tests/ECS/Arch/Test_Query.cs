@@ -321,6 +321,13 @@ public static class Test_Query
         AreEqual(10, count);
         
         count = 0;
+        foreach (var entity in query.Entities.ToEntityList()) {
+            entity.AddComponent<Rotation>(); // structural changes are allowed
+            count++;
+        }
+        AreEqual(10, count);
+        
+        count = 0;
         foreach (var entity in query.Entities.ToEntityList(new EntityList())) {
             entity.AddComponent<Rotation>(); // structural changes are allowed
             count++;
