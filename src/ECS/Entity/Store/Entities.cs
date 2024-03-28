@@ -68,7 +68,11 @@ public partial class EntityStore
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
         CreateEntityNode(defaultArchetype, id, pid);
-        return new Entity(this, id);
+        var entity = new Entity(this, id); 
+        
+        // Send event. See: SEND_EVENT notes
+        CreateEntityEvent(entity);
+        return entity;
     }
     
     /// <summary>

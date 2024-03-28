@@ -304,9 +304,10 @@ public static class Test_Entity
                 case 0:     AreSame (store,         create.Store);
                             AreEqual("id: 1  []",   create.Entity.ToString());
                             AreEqual("entity: 1 - event > EntityCreate", str);      break;
-                case 1:     AreEqual("entity: 2 - event > EntityCreate", str);      break;
-                case 2:     AreEqual("entity: 5 - event > EntityCreate", str);      break;
-                case 3:     AreEqual("entity: 3 - event > EntityCreate", str);      break;
+                case 1:     AreEqual("entity: 10 - event > EntityCreate", str);      break;
+                case 2:     AreEqual("entity: 2 - event > EntityCreate", str);      break;
+                case 3:     AreEqual("entity: 11 - event > EntityCreate", str);      break;
+                case 4:     AreEqual("entity: 3 - event > EntityCreate", str);      break;
                 default: throw new InvalidOperationException("unexpected");
             }
         };
@@ -330,10 +331,11 @@ public static class Test_Entity
         store.OnEntityDelete += deleteHandler;
             
         var entity1 = store.CreateEntity();
+        store.CreateEntity(10);
         
         var arch    = store.GetArchetype(ComponentTypes.Get<EntityName>());
         var entity2 = arch.CreateEntity();
-        arch.CreateEntity(5);
+        arch.CreateEntity(11);
         
         var clone = store.CloneEntity(entity1);
         
@@ -346,7 +348,7 @@ public static class Test_Entity
         store.CreateEntity();   // does not fire event - handler removed
         clone.DeleteEntity(); // does not fire event - handler removed
         
-        AreEqual(4, createCount);
+        AreEqual(5, createCount);
         AreEqual(2, deleteCount);
     }
     
