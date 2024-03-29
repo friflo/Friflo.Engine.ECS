@@ -77,8 +77,7 @@ public partial class EntityStore
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component;
         
         // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        SendCreateEvents(entity.Id, archetype, tags);
+        SendCreateEvents(entity, archetype);
         return entity;
     }
     
@@ -103,8 +102,7 @@ public partial class EntityStore
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
         
         // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        SendCreateEvents(entity.Id, archetype, tags);
+        SendCreateEvents(entity, archetype);
         return entity;
     }
     
@@ -133,8 +131,7 @@ public partial class EntityStore
         ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
         
         // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        SendCreateEvents(entity.Id, archetype, tags);
+        SendCreateEvents(entity, archetype);
         return entity;
     }
     
@@ -167,8 +164,7 @@ public partial class EntityStore
         ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
         
         // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        SendCreateEvents(entity.Id, archetype, tags);
+        SendCreateEvents(entity, archetype);
         return entity;
     }
     
@@ -205,8 +201,7 @@ public partial class EntityStore
         ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
         
         // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        SendCreateEvents(entity.Id, archetype, tags);
+        SendCreateEvents(entity, archetype);
         return entity;
     }
     
@@ -218,12 +213,15 @@ public partial class EntityStore
         return new Entity(this, id);
     }
     
-    private void SendCreateEvents(int id, Archetype archetype, in Tags tags)
+    private void SendCreateEvents(Entity entity, Archetype archetype)
     {
-        // --- tag events
+        // --- create entity event
+        CreateEntityEvent(entity);
+        
+        // --- tag event
         var tagsChanged = TagsChanged;
         if (tagsChanged != null) {
-            tagsChanged(new TagsChanged(this, id, tags, default));
+            tagsChanged(new TagsChanged(this, entity.Id, archetype.tags, default));
         }
         // --- component events 
         var componentAdded = ComponentAdded;
@@ -231,7 +229,7 @@ public partial class EntityStore
             return;
         }
         foreach (var heap in archetype.structHeaps) {
-            componentAdded(new ComponentChanged (this, id, ComponentChangedAction.Add, heap.structIndex, null));    
+            componentAdded(new ComponentChanged (this, entity.Id, ComponentChangedAction.Add, heap.structIndex, null));    
         }
     }
 }
