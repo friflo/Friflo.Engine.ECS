@@ -48,6 +48,9 @@ public abstract partial class EntityStoreBase
     
     /// <summary>Return all <see cref="UniqueEntity"/>'s in the entity store </summary>
                     public              QueryEntities           UniqueEntities  => GetUniqueEntities();
+    
+    [Browse(Never)] internal            Action<ComponentChanged>ComponentAdded  => internBase.componentAdded;
+    [Browse(Never)] internal            Action<TagsChanged>     TagsChanged     => internBase.tagsChanged;
 
                     public   override   string                  ToString()      => $"entities: {entityCount}";
     #endregion

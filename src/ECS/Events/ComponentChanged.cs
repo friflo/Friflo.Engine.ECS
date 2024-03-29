@@ -112,6 +112,14 @@ public readonly struct  ComponentChanged
         this.oldHeap    = oldHeap;
     }
     
+    internal ComponentChanged(EntityStoreBase store, int entityId, int structIndex)
+    {
+        Store           = store as EntityStore; 
+        EntityId        = entityId;
+        Action          = ComponentChangedAction.Add;
+        StructIndex     = structIndex;     
+    }
+    
     /// <summary>
     /// Returns the current component value after executing the <see cref="ComponentChangedAction.Add"/>
     /// or <see cref="ComponentChangedAction.Update"/> component.<br/>
