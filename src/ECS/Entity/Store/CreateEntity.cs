@@ -62,11 +62,11 @@ public partial class EntityStore
         var bitSet          = new BitSet();
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         
-        var archetype       = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
-        var id              = NewId();
-        var compIndex       = CreateEntityInternal(archetype, id);
-        var entity          = new Entity(this, id);
-        var heapMap         = archetype.heapMap;
+        var archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        var id          = NewId();
+        var compIndex   = CreateEntityInternal(archetype, id);
+        var entity      = new Entity(this, id);
+        var heapMap     = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         
@@ -86,11 +86,11 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         bitSet.SetBit(StructHeap<T2>.StructIndex);
         
-        var archetype       = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
-        var id              = NewId();
-        var compIndex       = CreateEntityInternal(archetype, id);
-        var entity          = new Entity(this, id);
-        var heapMap         = archetype.heapMap;
+        var archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        var id          = NewId();
+        var compIndex   = CreateEntityInternal(archetype, id);
+        var entity      = new Entity(this, id);
+        var heapMap     = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
@@ -114,11 +114,11 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T2>.StructIndex);
         bitSet.SetBit(StructHeap<T3>.StructIndex);
         
-        var archetype       = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
-        var id              = NewId();
-        var compIndex       = CreateEntityInternal(archetype, id);
-        var entity          = new Entity(this, id);
-        var heapMap         = archetype.heapMap;
+        var archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        var id          = NewId();
+        var compIndex   = CreateEntityInternal(archetype, id);
+        var entity      = new Entity(this, id);
+        var heapMap     = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
@@ -146,11 +146,11 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T3>.StructIndex);
         bitSet.SetBit(StructHeap<T4>.StructIndex);
         
-        var archetype       = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
-        var id              = NewId();
-        var compIndex       = CreateEntityInternal(archetype, id);
-        var entity          = new Entity(this, id);
-        var heapMap         = archetype.heapMap;
+        var archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        var id          = NewId();
+        var compIndex   = CreateEntityInternal(archetype, id);
+        var entity      = new Entity(this, id);
+        var heapMap     = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
@@ -183,11 +183,11 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T4>.StructIndex);
         bitSet.SetBit(StructHeap<T5>.StructIndex);
         
-        var archetype       = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
-        var id              = NewId();
-        var compIndex       = CreateEntityInternal(archetype, id);
-        var entity          = new Entity(this, id);
-        var heapMap         = archetype.heapMap;
+        var archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        var id          = NewId();
+        var compIndex   = CreateEntityInternal(archetype, id);
+        var entity      = new Entity(this, id);
+        var heapMap     = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
