@@ -71,18 +71,14 @@ public partial class EntityStore
         var bitSet          = new BitSet();
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         
-        var entity = CreateEntityGeneric(bitSet, tags, out var heapMap, out int compIndex, out int id);
+        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var heapMap = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component;
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
-        var tagsChanged = TagsChanged;
-        if (tagsChanged != null) tagsChanged(new TagsChanged(this, id, tags, default));
-        var componentAdded = ComponentAdded;
-        if (componentAdded != null) {
-            componentAdded(new ComponentChanged (this, id, StructHeap<T1>.StructIndex));
-        }
+        SendCreateEvents(entity.Id, archetype, tags);
         return entity;
     }
     
@@ -100,20 +96,15 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         bitSet.SetBit(StructHeap<T2>.StructIndex);
         
-        var entity = CreateEntityGeneric(bitSet, tags, out var heapMap, out int compIndex, out int id);
+        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var heapMap = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
-        var tagsChanged = TagsChanged;
-        if (tagsChanged != null) tagsChanged(new TagsChanged(this, id, tags, default));
-        var componentAdded = ComponentAdded;
-        if (componentAdded != null) {
-            componentAdded(new ComponentChanged (this, id, StructHeap<T1>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T2>.StructIndex));
-        }
+        SendCreateEvents(entity.Id, archetype, tags);
         return entity;
     }
     
@@ -134,7 +125,8 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T2>.StructIndex);
         bitSet.SetBit(StructHeap<T3>.StructIndex);
         
-        var entity = CreateEntityGeneric(bitSet, tags, out var heapMap, out int compIndex, out int id);
+        var entity = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var heapMap = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
@@ -142,14 +134,7 @@ public partial class EntityStore
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
-        var tagsChanged = TagsChanged;
-        if (tagsChanged != null) tagsChanged(new TagsChanged(this, id, tags, default));
-        var componentAdded = ComponentAdded;
-        if (componentAdded != null) {
-            componentAdded(new ComponentChanged (this, id, StructHeap<T1>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T2>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T3>.StructIndex));
-        }
+        SendCreateEvents(entity.Id, archetype, tags);
         return entity;
     }
     
@@ -173,7 +158,8 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T3>.StructIndex);
         bitSet.SetBit(StructHeap<T4>.StructIndex);
         
-        var entity = CreateEntityGeneric(bitSet, tags, out var heapMap, out int compIndex, out int id);
+        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var heapMap = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
@@ -182,15 +168,7 @@ public partial class EntityStore
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
-        var tagsChanged = TagsChanged;
-        if (tagsChanged != null) tagsChanged(new TagsChanged(this, id, tags, default));
-        var componentAdded = ComponentAdded;
-        if (componentAdded != null) {
-            componentAdded(new ComponentChanged (this, id, StructHeap<T1>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T2>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T3>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T4>.StructIndex));
-        }
+        SendCreateEvents(entity.Id, archetype, tags);
         return entity;
     }
     
@@ -217,7 +195,8 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T4>.StructIndex);
         bitSet.SetBit(StructHeap<T5>.StructIndex);
         
-        var entity = CreateEntityGeneric(bitSet, tags, out var heapMap, out int compIndex, out int id);
+        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var heapMap = archetype.heapMap;
         
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
@@ -227,25 +206,32 @@ public partial class EntityStore
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
-        var tagsChanged = TagsChanged;
-        if (tagsChanged != null) tagsChanged.Invoke(new TagsChanged(this, id, tags, default));
-        var componentAdded = ComponentAdded;
-        if (componentAdded != null) {
-            componentAdded(new ComponentChanged (this, id, StructHeap<T1>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T2>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T3>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T4>.StructIndex));
-            componentAdded(new ComponentChanged (this, id, StructHeap<T5>.StructIndex));
-        }
+        SendCreateEvents(entity.Id, archetype, tags);
         return entity;
     }
     
-    private Entity CreateEntityGeneric(in BitSet bitSet, in Tags tags, out StructHeap[] heapMap, out int compIndex, out int id)
+    private Entity CreateEntityGeneric(in BitSet bitSet, in Tags tags, out Archetype archetype, out int compIndex)
     {
-        var archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
-        id              = NewId();
-        compIndex       = CreateEntityInternal(archetype, id);
-        heapMap         = archetype.heapMap;
+        archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        var id      = NewId();
+        compIndex   = CreateEntityInternal(archetype, id);
         return new Entity(this, id);
+    }
+    
+    private void SendCreateEvents(int id, Archetype archetype, in Tags tags)
+    {
+        // --- tag events
+        var tagsChanged = TagsChanged;
+        if (tagsChanged != null) {
+            tagsChanged.Invoke(new TagsChanged(this, id, tags, default));
+        }
+        // --- component events 
+        var componentAdded = ComponentAdded;
+        if (componentAdded == null) {
+            return;
+        }
+        foreach (var heap in archetype.structHeaps) {
+            componentAdded(new ComponentChanged (this, id, ComponentChangedAction.Add, heap.structIndex, null));    
+        }
     }
 }
