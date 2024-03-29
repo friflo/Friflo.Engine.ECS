@@ -28,7 +28,7 @@ public partial class EntityStore
     }
     
     /// <summary>
-    /// Create and return new <see cref="Entity"/> with the passed <paramref name="id"/> in the entity store.
+    /// Create and return a new <see cref="Entity"/> with the passed <paramref name="id"/> in the entity store.
     /// </summary>
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity(int id)
@@ -42,6 +42,9 @@ public partial class EntityStore
         return entity;
     }
     
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed <paramref name="tags"/>.
+    /// </summary>
     public Entity CreateEntity(in Tags tags)
     {
         var archetype   = GetArchetype(default, tags);
@@ -54,8 +57,11 @@ public partial class EntityStore
         return entity;
     }
    
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed component and <paramref name="tags"/>.
+    /// </summary>
     public Entity CreateEntity<T1>(
-        T1 component1,
+        T1 component,
         in Tags tags = default)
             where T1 : struct, IComponent
     {
@@ -64,13 +70,16 @@ public partial class EntityStore
         
         var entity = CreateEntityGeneric(bitSet, tags, out var heapMap, out int compIndex);
         
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
+        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component;
         
         // Send event. See: SEND_EVENT notes
         CreateEntityEvent(entity);
         return entity;
     }
     
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public Entity CreateEntity<T1, T2>(
         T1 component1,
         T2 component2,
@@ -92,6 +101,9 @@ public partial class EntityStore
         return entity;
     }
     
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public Entity CreateEntity<T1, T2, T3>(
         T1 component1,
         T2 component2,
@@ -117,6 +129,9 @@ public partial class EntityStore
         return entity;
     }
     
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public Entity CreateEntity<T1, T2, T3, T4>(
         T1 component1,
         T2 component2,
@@ -146,7 +161,9 @@ public partial class EntityStore
         return entity;
     }
     
-    
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public Entity CreateEntity<T1, T2, T3, T4, T5>(
         T1 component1,
         T2 component2,
@@ -188,5 +205,4 @@ public partial class EntityStore
         heapMap         = archetype.heapMap;
         return new Entity(this, id);
     }
-    
 }
