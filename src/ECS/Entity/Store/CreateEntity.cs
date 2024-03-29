@@ -223,7 +223,7 @@ public partial class EntityStore
         // --- tag events
         var tagsChanged = TagsChanged;
         if (tagsChanged != null) {
-            tagsChanged.Invoke(new TagsChanged(this, id, tags, default));
+            tagsChanged(new TagsChanged(this, id, tags, default));
         }
         // --- component events 
         var componentAdded = ComponentAdded;
