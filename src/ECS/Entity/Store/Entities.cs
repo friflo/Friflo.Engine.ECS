@@ -5,16 +5,10 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Friflo.Engine.ECS.Serialize;
-using static Friflo.Engine.ECS.StoreOwnership;
-using static Friflo.Engine.ECS.TreeMembership;
 using static Friflo.Engine.ECS.NodeFlags;
 
 // ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
-// ReSharper disable InlineTemporaryVariable
-// ReSharper disable SuggestBaseTypeForParameter
-// ReSharper disable UseObjectOrCollectionInitializer
-// ReSharper disable ConvertConstructorToMemberInitializers
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -28,37 +22,6 @@ public partial class EntityStore
     /// <see cref="IComponent"/>, <see cref="ITag"/> and <see cref="Script"/> types.
     /// </summary>
     public static     EntitySchema         GetEntitySchema()=> Static.EntitySchema;
-    
-    /// <summary>
-    /// Create and return a new <see cref="Entity"/> in the entity store.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entity">Example.</a>
-    /// </summary>
-    /// <returns>An <see cref="attached"/> and <see cref="floating"/> entity</returns>
-    public Entity CreateEntity()
-    {
-        var id = NewId();
-        CreateEntityInternal(defaultArchetype, id);
-        var entity = new Entity(this, id);
-        
-        // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        return entity;
-    }
-    
-    /// <summary>
-    /// Create and return new <see cref="Entity"/> with the passed <paramref name="id"/> in the entity store.
-    /// </summary>
-    /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
-    public Entity CreateEntity(int id)
-    {
-        CheckEntityId(id);
-        CreateEntityInternal(defaultArchetype, id);
-        var entity = new Entity(this, id); 
-        
-        // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        return entity;
-    }
     
     internal void CheckEntityId(int id)
     {
