@@ -154,6 +154,7 @@ public partial struct  Entity
         SendAddEvents(store, Id, newType, oldType);
     }
     
+    // ------------------------------------------------- utils -------------------------------------------------
     private static void StashComponents(EntityStoreBase store, Archetype newType, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentAdded == null) {
@@ -181,20 +182,14 @@ public partial struct  Entity
         if (componentAdded == null) {
             return;
         }
-        var heaps = newType.structHeaps;
-        for (int n = 0; n < heaps.Length; n++)
+        var newHeaps    = newType.structHeaps;
+        var oldHeapMap  = oldType.heapMap;
+        for (int n = 0; n < newHeaps.Length; n++)
         {
-            var structIndex = heaps[n].structIndex;
-            ComponentChangedAction action;
-            StructHeap oldHeap;
-            if (oldType.componentTypes.bitSet.Has(structIndex)) {
-                action = ComponentChangedAction.Update;
-                oldHeap = oldType.heapMap[structIndex];
-            } else {
-                action  = ComponentChangedAction.Add;
-                oldHeap = null;
-            }
-            componentAdded(new ComponentChanged (store, id, action, structIndex, oldHeap));    
+            var structIndex = newHeaps[n].structIndex;
+            var oldHeap     = oldHeapMap[structIndex];
+            var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
+            componentAdded(new ComponentChanged (store, id, action, structIndex, oldHeap));
         }
     }
 } 
