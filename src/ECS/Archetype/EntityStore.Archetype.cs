@@ -4,6 +4,7 @@
 // Hard rule: this file MUST NOT use type: Entity
 
 using System;
+using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation
@@ -103,6 +104,20 @@ public partial class EntityStoreBase
         var result  = Archetype.CreateWithComponentTypes(config, archetype.componentTypes, tags);
         AddArchetype(store, result);
         return result;
+    }
+    
+    internal Archetype GetArchetypeWithTagsAdd(in BitSet componentTypes, Archetype type, in Tags tags)
+    {
+        searchKey.componentTypes.bitSet = componentTypes;
+        searchKey.tags.bitSet           = BitSet.Add(type.tags.bitSet, tags.bitSet);
+        searchKey.CalculateHashCode();
+        if (archSet.TryGetValue(searchKey, out var key)) {
+            return key.archetype;
+        }
+        var config      = GetArchetypeConfig(this);
+        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, tags);
+        AddArchetype(this, archetype);
+        return archetype;
     }
     
     internal static void AddArchetype (EntityStoreBase store, Archetype archetype)
