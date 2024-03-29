@@ -109,6 +109,7 @@ public sealed class Archetype
     public Entity CreateEntity(int id)
     {
         var localStore  = entityStore;
+        localStore.CheckEntityId(id);
         var compIndex   = localStore.CreateEntityInternal(this, id);
         foreach (var heap in structHeaps) {
             heap.SetComponentDefault(compIndex);

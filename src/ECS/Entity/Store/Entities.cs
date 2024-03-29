@@ -45,19 +45,22 @@ public partial class EntityStore
         return entity;
     }
     
-    /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
-    internal int CreateEntityInternal(Archetype archetype, int id)
-    {
-        EnsureNodesLength(id + 1);
-        var pid = GeneratePid(id);
-        return CreateEntityNode(archetype, id, pid);
-    }
-    
     /// <summary>
     /// Create and return new <see cref="Entity"/> with the passed <paramref name="id"/> in the entity store.
     /// </summary>
     /// <returns>an <see cref="attached"/> and <see cref="floating"/> entity</returns>
     public Entity CreateEntity(int id)
+    {
+        CheckEntityId(id);
+        CreateEntityInternal(defaultArchetype, id);
+        var entity = new Entity(this, id); 
+        
+        // Send event. See: SEND_EVENT notes
+        CreateEntityEvent(entity);
+        return entity;
+    }
+    
+    internal void CheckEntityId(int id)
     {
         if (id < Static.MinNodeId) {
             throw InvalidEntityIdException(id, nameof(id));
@@ -65,14 +68,14 @@ public partial class EntityStore
         if (id < nodes.Length && nodes[id].Is(Created)) {
             throw IdAlreadyInUseException(id, nameof(id));
         }
+    }
+    
+    /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
+    internal int CreateEntityInternal(Archetype archetype, int id)
+    {
         EnsureNodesLength(id + 1);
         var pid = GeneratePid(id);
-        CreateEntityNode(defaultArchetype, id, pid);
-        var entity = new Entity(this, id); 
-        
-        // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        return entity;
+        return CreateEntityNode(archetype, id, pid);
     }
     
     /// <summary>
