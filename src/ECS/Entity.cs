@@ -174,7 +174,7 @@ namespace Friflo.Engine.ECS;
 /// </para>
 /// </remarks>
 [CLSCompliant(true)]
-public readonly struct Entity : IEquatable<Entity>
+public readonly partial struct Entity : IEquatable<Entity>
 {
     // ------------------------------------ general properties ------------------------------------
 #region general properties
