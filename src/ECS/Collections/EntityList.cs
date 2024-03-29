@@ -42,7 +42,7 @@ public sealed class EntityList : IList<Entity>
 #region general
     /// <summary>
     /// Creates a container for entities returned by a query to perform structural changes.<br/>
-    /// This constructor is intended for use in <see cref="QueryEntities.ToEntityList"/>.
+    /// This constructor is intended for use in <see cref="QueryEntities.ToEntityList()"/>.
     /// </summary>
     public EntityList()
     {

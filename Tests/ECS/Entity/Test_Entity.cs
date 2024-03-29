@@ -410,6 +410,66 @@ public static class Test_Entity
         Console.WriteLine($"DeleteEntity() - count: {count}, duration: {sw.ElapsedMilliseconds}");
         AreEqual(0,     store.Count);
     }
+   
+    [Test]
+    public static void Test_Entity_CreateEntity_generic()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var tags    = Tags.Get<TestTag>();
+        {
+            var entity = store.CreateEntity(new Position(1,1,1), tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+            AreEqual(1,         entity.Position.x);
+        } {
+            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+            AreEqual(1,         entity.Position.x);
+            AreEqual("test",    entity.Name.value);
+        } {
+            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), new Rotation(1,1,1,1), tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+            AreEqual(1,         entity.Position.x);
+            AreEqual("test",    entity.Name.value);
+            AreEqual(1,         entity.Rotation.x);
+        } {
+            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), new Rotation(1,1,1,1), new Scale3(1,1,1), tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+            AreEqual(1,         entity.Position.x);
+            AreEqual("test",    entity.Name.value);
+            AreEqual(1,         entity.Rotation.x);
+            AreEqual(1,         entity.Scale3.x);
+        } {
+            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), new Rotation(1,1,1,1), new Scale3(1,1,1), new MyComponent1 { a = 1}, tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+            AreEqual(1,         entity.Position.x);
+            AreEqual("test",    entity.Name.value);
+            AreEqual(1,         entity.Rotation.x);
+            AreEqual(1,         entity.Scale3.x);
+            AreEqual(1,         entity.GetComponent<MyComponent1>().a);
+        }
+    }
+    
+    
+    [Test]
+    public static void Test_Entity_CreateEntity_generic_Perf()
+    {
+        int count   = 10; // 10_000_000 ~ #PC: 715 ms
+        var store   = new EntityStore(PidType.UsePidAsId);
+        store.EnsureCapacity(count);
+        var type = store.CreateEntity(new Position(), new EntityName(), new Rotation(), new Scale3(), new MyComponent1()).Archetype;
+        type.EnsureCapacity(count);
+        
+        var capacity = store.Capacity;
+        var sw = new Stopwatch();
+        sw.Start();
+        for (int n = 1; n < count; n++) {
+            store.CreateEntity(new Position(), new EntityName(), new Rotation(), new Scale3(), new MyComponent1());
+        }
+        Console.WriteLine($"CreateEntity(PidType.UsePidAsId) - count: {count}, duration: {sw.ElapsedMilliseconds}");
+        AreEqual(count,     store.Count);
+        AreEqual(count,     type.Count);
+        AreEqual(capacity,  store.Capacity);
+    }
 }
 
 }
