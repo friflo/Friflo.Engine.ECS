@@ -41,6 +41,18 @@ public partial class EntityStore
         CreateEntityEvent(entity);
         return entity;
     }
+    
+    public Entity CreateEntity(in Tags tags)
+    {
+        var archetype   = GetArchetype(default, tags);
+        var id          = NewId();
+        CreateEntityInternal(archetype, id);
+        var entity      = new Entity(this, id);
+        
+        // Send event. See: SEND_EVENT notes
+        CreateEntityEvent(entity);
+        return entity;
+    }
    
     public Entity CreateEntity<T1>(
         T1 component1,

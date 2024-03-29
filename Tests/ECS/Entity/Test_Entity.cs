@@ -417,6 +417,9 @@ public static class Test_Entity
         var store   = new EntityStore(PidType.UsePidAsId);
         var tags    = Tags.Get<TestTag>();
         {
+            var entity = store.CreateEntity(tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+        } {
             var entity = store.CreateEntity(new Position(1,1,1), tags);
             IsTrue(entity.Tags.Has<TestTag>());
             AreEqual(1,         entity.Position.x);
