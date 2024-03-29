@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
@@ -210,6 +211,10 @@ var expect =
         AreEqual("\"pos\":{\"x\":0,\"y\":0,\"z\":0}",           members[1].ToString());
         AreEqual("\"rot\":{\"x\":0,\"y\":0,\"z\":0,\"w\":0}",   members[2].ToString());
         AreEqual("\"unknown\":{\"value\": 1}",                  members[3].ToString());
+        
+        Throws<ArgumentNullException>(() => {
+            converter.EntityComponentsToJsonMembers(default, members);
+        });
     }
 }
 
