@@ -415,6 +415,18 @@ public static class Test_Entity
     public static void Test_Entity_CreateEntity_generic()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
+        int count   = 0;
+        store.OnEntityCreate += create => {
+            var str = create.Entity.ToString();
+            switch (count++) {
+                case 0: AreEqual("id: 1  [#TestTag]",                                                           str); break;
+                case 1: AreEqual("id: 2  [Position, #TestTag]",                                                 str); break;
+                case 2: AreEqual("id: 3  [Position, Rotation, #TestTag]",                                       str); break;
+                case 3: AreEqual("id: 4  [Position, Rotation, Scale3, #TestTag]",                               str); break;
+                case 4: AreEqual("id: 5  [Position, Rotation, Scale3, MyComponent1, #TestTag]",                 str); break;
+                case 5: AreEqual("id: 6  [Position, Rotation, Scale3, MyComponent1, MyComponent2, #TestTag]",   str); break;
+            }
+        };
         var tags    = Tags.Get<TestTag>();
         {
             var entity = store.CreateEntity(tags);
@@ -424,32 +436,33 @@ public static class Test_Entity
             IsTrue(entity.Tags.Has<TestTag>());
             AreEqual(1,         entity.Position.x);
         } {
-            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), tags);
+            var entity = store.CreateEntity(new Position(1,1,1), new Rotation(1,1,1,1), tags);
             IsTrue(entity.Tags.Has<TestTag>());
             AreEqual(1,         entity.Position.x);
-            AreEqual("test",    entity.Name.value);
-        } {
-            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), new Rotation(1,1,1,1), tags);
-            IsTrue(entity.Tags.Has<TestTag>());
-            AreEqual(1,         entity.Position.x);
-            AreEqual("test",    entity.Name.value);
             AreEqual(1,         entity.Rotation.x);
         } {
-            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), new Rotation(1,1,1,1), new Scale3(1,1,1), tags);
+            var entity = store.CreateEntity(new Position(1,1,1), new Rotation(1,1,1,1), new Scale3(1,1,1), tags);
             IsTrue(entity.Tags.Has<TestTag>());
             AreEqual(1,         entity.Position.x);
-            AreEqual("test",    entity.Name.value);
             AreEqual(1,         entity.Rotation.x);
             AreEqual(1,         entity.Scale3.x);
         } {
-            var entity = store.CreateEntity(new Position(1,1,1), new EntityName("test"), new Rotation(1,1,1,1), new Scale3(1,1,1), new MyComponent1 { a = 1}, tags);
+            var entity = store.CreateEntity(new Position(1,1,1), new Rotation(1,1,1,1), new Scale3(1,1,1), new MyComponent1 { a = 1} , tags);
             IsTrue(entity.Tags.Has<TestTag>());
             AreEqual(1,         entity.Position.x);
-            AreEqual("test",    entity.Name.value);
             AreEqual(1,         entity.Rotation.x);
             AreEqual(1,         entity.Scale3.x);
             AreEqual(1,         entity.GetComponent<MyComponent1>().a);
+        } {
+            var entity = store.CreateEntity(new Position(1,1,1), new Rotation(1,1,1,1), new Scale3(1,1,1), new MyComponent1 { a = 1}, new MyComponent2 { b = 1}, tags);
+            IsTrue(entity.Tags.Has<TestTag>());
+            AreEqual(1,         entity.Position.x);
+            AreEqual(1,         entity.Rotation.x);
+            AreEqual(1,         entity.Scale3.x);
+            AreEqual(1,         entity.GetComponent<MyComponent1>().a);
+            AreEqual(1,         entity.GetComponent<MyComponent2>().b);
         }
+        AreEqual(6, count);
     }
     
     
