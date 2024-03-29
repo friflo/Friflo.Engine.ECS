@@ -415,16 +415,29 @@ public static class Test_Entity
     public static void Test_Entity_CreateEntity_generic()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        int count   = 0;
+        int entityCount = 0;
         store.OnEntityCreate += create => {
             var str = create.Entity.ToString();
-            switch (count++) {
+            switch (entityCount++) {
                 case 0: AreEqual("id: 1  [#TestTag]",                                                           str); break;
                 case 1: AreEqual("id: 2  [Position, #TestTag]",                                                 str); break;
                 case 2: AreEqual("id: 3  [Position, Rotation, #TestTag]",                                       str); break;
                 case 3: AreEqual("id: 4  [Position, Rotation, Scale3, #TestTag]",                               str); break;
                 case 4: AreEqual("id: 5  [Position, Rotation, Scale3, MyComponent1, #TestTag]",                 str); break;
                 case 5: AreEqual("id: 6  [Position, Rotation, Scale3, MyComponent1, MyComponent2, #TestTag]",   str); break;
+            }
+        };
+        int tagCount = 0;
+        store.OnTagsChanged += changed => {
+            tagCount++;
+            AreEqual("Tags: [#TestTag]", changed.AddedTags.ToString());
+        };
+        int componentCount = 0;
+        store.OnComponentAdded += changed => {
+            switch (componentCount++) {
+                case 0: AreEqual("entity: 2 - event > Add Component: [Position]", changed.ToString());    break;
+                case 1: AreEqual("entity: 3 - event > Add Component: [Position]", changed.ToString());    break;
+                case 2: AreEqual("entity: 3 - event > Add Component: [Rotation]", changed.ToString());    break;
             }
         };
         var tags    = Tags.Get<TestTag>();
@@ -462,7 +475,9 @@ public static class Test_Entity
             AreEqual(1,         entity.GetComponent<MyComponent1>().a);
             AreEqual(1,         entity.GetComponent<MyComponent2>().b);
         }
-        AreEqual(6, count);
+        AreEqual(6,  entityCount);
+        AreEqual(6,  tagCount);
+        AreEqual(15, componentCount);
     }
     
     
