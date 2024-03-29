@@ -18,7 +18,9 @@ namespace Friflo.Engine.ECS;
 [DebuggerTypeProxy(typeof(QueryEntitiesDebugView))]
 public readonly struct QueryEntities  : IEnumerable <Entity>
 {
+    /// <summary> Return the number of entities matching the query. </summary>
     public              int             Count       => query.Count;
+    
     public   override   string          ToString()  => $"Entity[{query.Count}]";
 
     internal readonly   ArchetypeQuery  query;

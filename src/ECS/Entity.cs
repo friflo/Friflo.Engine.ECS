@@ -213,6 +213,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// Otherwise <see cref="floating"/></returns>
     [Browse(Never)] public  TreeMembership      TreeMembership  => archetype.entityStore.GetTreeMembership(Id);
     
+    /// <summary> Returns true if the entity was deleted. </summary>
     [Browse(Never)] public  bool                IsNull          => store?.nodes[Id].archetype == null;
     
     /// <summary> Return the <b>JSON</b> representation of an entity. </summary>
@@ -524,7 +525,10 @@ public readonly struct Entity : IEquatable<Entity>
 
     // ------------------------------------ general methods ---------------------------------------
 #region general - methods
+    /// <summary> Return true if the passed entities have the same <see cref="Entity.Id"/>'s. </summary>
     public static   bool    operator == (Entity a, Entity b)    => a.Id == b.Id && a.store == b.store;
+    
+    /// <summary> Return true if the passed entities have the different <see cref="Entity.Id"/>'s. </summary>
     public static   bool    operator != (Entity a, Entity b)    => a.Id != b.Id || a.store != b.store;
 
     // --- IEquatable<T>

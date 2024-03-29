@@ -6,7 +6,10 @@ namespace Friflo.Engine.ECS;
 
 public readonly struct EntityStoreInfo
 {
+    /// <summary> Return the number of cached <see cref="EntityBatch"/>'s. </summary>
     public int PooledEntityBatchCount       => store.PooledEntityBatchCount;
+    
+    /// <summary> Return the number of cached <see cref="CreateEntityBatch"/>'s. </summary>
     public int PooledCreateEntityBatchCount => store.PooledCreateEntityBatchCount;
         
     private readonly EntityStore store;

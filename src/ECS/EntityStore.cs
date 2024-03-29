@@ -62,10 +62,12 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     [Browse(Never)] public              EventRecorder       EventRecorder   => GetEventRecorder();
     
+    /// <summary> Get the number of internally reserved entities. </summary>
     [Browse(Never)] public              int                 Capacity        => nodes.Length;
     
+    /// <summary> Return store information used for debugging and optimization. </summary>
     // ReSharper disable once InconsistentNaming
-    [Browse(Never)] public readonly     EntityStoreInfo           Info;
+    [Browse(Never)] public readonly     EntityStoreInfo     Info;
     #endregion
     
 #region events
