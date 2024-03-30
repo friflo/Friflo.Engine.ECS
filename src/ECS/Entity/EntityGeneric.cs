@@ -10,40 +10,39 @@ namespace Friflo.Engine.ECS;
 internal static class EntityGeneric
 {
   
-#region set components
-
-    internal static void SetComponents<T1>(
+#region assign components
+    internal static void AssignComponents<T1>(
         Archetype   archetype,
-        int     compIndex,
-        in T1   component1)
-        where T1 : struct, IComponent
+        int         compIndex,
+        in T1       component1)
+            where T1 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
     }
 
-    internal static void SetComponents<T1, T2>(
+    internal static void AssignComponents<T1, T2>(
         Archetype   archetype,
-        int     compIndex,
-        in T1   component1,
-        in T2   component2)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
+        int         compIndex,
+        in T1       component1,
+        in T2       component2)
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
         ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
     }
 
-    internal static void SetComponents<T1, T2, T3>(
+    internal static void AssignComponents<T1, T2, T3>(
         Archetype   archetype,
-        int     compIndex,
-        in T1   component1,
-        in T2   component2,
-        in T3   component3)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
+        int         compIndex,
+        in T1       component1,
+        in T2       component2,
+        in T3       component3)
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
@@ -51,17 +50,17 @@ internal static class EntityGeneric
         ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
     }
 
-    internal static void SetComponents<T1, T2, T3, T4>(
+    internal static void AssignComponents<T1, T2, T3, T4>(
         Archetype   archetype,
-        int     compIndex,
-        in T1   component1,
-        in T2   component2,
-        in T3   component3,
-        in T4   component4)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
+        int         compIndex,
+        in T1       component1,
+        in T2       component2,
+        in T3       component3,
+        in T4       component4)
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent
+            where T4 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
         ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
@@ -70,14 +69,14 @@ internal static class EntityGeneric
         ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
     }
 
-    internal static void SetComponents<T1, T2, T3, T4, T5>(
+    internal static void AssignComponents<T1, T2, T3, T4, T5>(
         Archetype   archetype,
-        int     compIndex,
-        in T1   component1,
-        in T2   component2,
-        in T3   component3,
-        in T4   component4,
-        in T5   component5)
+        int         compIndex,
+        in T1       component1,
+        in T2       component2,
+        in T3       component3,
+        in T4       component4,
+        in T5       component5)
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent
@@ -92,7 +91,8 @@ internal static class EntityGeneric
         ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
     }
     #endregion
-    
+
+
 #region add components
     internal static void StashAddComponents(EntityStoreBase store, in ComponentTypes addComponents, Archetype oldType, int oldCompIndex)
     {
@@ -131,7 +131,8 @@ internal static class EntityGeneric
         }
     }
     #endregion
-    
+
+
 #region remove components
     internal static void StashRemoveComponents(EntityStoreBase store, in ComponentTypes removeComponents, Archetype oldType, int oldCompIndex)
     {
@@ -169,6 +170,33 @@ internal static class EntityGeneric
                 continue;
             }
             componentRemoved(new ComponentChanged (store, id, ComponentChangedAction.Remove, removeTypeIndex, oldHeap));
+        }
+    }
+    #endregion
+
+
+#region set components
+
+    internal static void StashSetComponents(EntityStoreBase store, in ComponentTypes components, Archetype type, int compIndex)
+    {
+        if (store.ComponentAdded == null) {
+            return;
+        }
+        var heapMap = type.heapMap;
+        foreach (var structIndex in components.bitSet) {
+            heapMap[structIndex].StashComponent(compIndex);
+        }
+    }
+    
+    internal static void SendSetEvents(EntityStoreBase store, int id, in ComponentTypes components, Archetype type)
+    {
+        var componentAdded = store.ComponentAdded;
+        if (componentAdded == null) {
+            return;
+        }
+        var heapMap = type.heapMap;
+        foreach (var structIndex in components.bitSet) {
+            componentAdded(new ComponentChanged (store, id, ComponentChangedAction.Update, structIndex, heapMap[structIndex]));
         }
     }
     #endregion

@@ -21,7 +21,7 @@ public partial struct  Entity
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
-        EntityGeneric.SetComponents(newType, newCompIndex, component1);
+        EntityGeneric.AssignComponents(newType, newCompIndex, component1);
         
         // Send event. See: SEND_EVENT notes
         EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
@@ -43,7 +43,7 @@ public partial struct  Entity
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
-        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2);
+        EntityGeneric.AssignComponents(newType, newCompIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
         EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
@@ -67,7 +67,7 @@ public partial struct  Entity
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
-        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3);
+        EntityGeneric.AssignComponents(newType, newCompIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
         EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
@@ -93,7 +93,7 @@ public partial struct  Entity
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
-        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4);
+        EntityGeneric.AssignComponents(newType, newCompIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
         EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
@@ -121,7 +121,7 @@ public partial struct  Entity
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
-        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4, component5);
+        EntityGeneric.AssignComponents(newType, newCompIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
         EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
