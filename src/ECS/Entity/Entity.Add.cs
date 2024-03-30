@@ -19,8 +19,8 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         bitSet.SetBit(StructHeap<T1>.StructIndex);
-        var newType     = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
-        StashComponents(store, newType, oldType, oldCompIndex);
+        var newType     = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
@@ -42,8 +42,8 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         EntityGeneric.SetBits<T1,T2>(ref bitSet);
-        var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
-        StashComponents(store, newType, oldType, oldCompIndex);
+        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
@@ -67,8 +67,8 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         EntityGeneric.SetBits<T1,T2,T3>(ref bitSet);
-        var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
-        StashComponents(store, newType, oldType, oldCompIndex);
+        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
@@ -94,8 +94,8 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         EntityGeneric.SetBits<T1,T2,T3,T4>(ref bitSet);
-        var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
-        StashComponents(store, newType, oldType, oldCompIndex);
+        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
@@ -123,8 +123,8 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref bitSet);
-        var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
-        StashComponents(store, newType, oldType, oldCompIndex);
+        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
@@ -135,7 +135,7 @@ public partial struct  Entity
     }
     
     // ------------------------------------------------- utils -------------------------------------------------
-    private static void StashComponents(EntityStoreBase store, Archetype newType, Archetype oldType, int oldCompIndex)
+    private static void StashAddComponents(EntityStoreBase store, Archetype newType, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentAdded == null) {
             return;

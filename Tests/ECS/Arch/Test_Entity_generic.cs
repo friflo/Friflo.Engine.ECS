@@ -25,7 +25,7 @@ public static class Test_Entity_generic
             }
         };
         int componentAddedCount = 0;
-        Action<ComponentChanged> componentChanged = changed => {
+        Action<ComponentChanged> componentAdded = changed => {
             var str = changed.ToString();
             switch (componentAddedCount++)
             {                   
@@ -78,7 +78,7 @@ public static class Test_Entity_generic
             }
         };
         store.OnTagsChanged     += tagsChanged;
-        store.OnComponentAdded  += componentChanged;
+        store.OnComponentAdded  += componentAdded;
         
         for (int n = 0; n < 2; n++)
         {
@@ -106,11 +106,63 @@ public static class Test_Entity_generic
             entity5.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, new MyComponent2 { b = 2 }, tags);
             
             store.OnTagsChanged     -= tagsChanged;
-            store.OnComponentAdded  -= componentChanged;
+            store.OnComponentAdded  -= componentAdded;
         }
         
+        AreEqual(10, store.Count);
         AreEqual(5,  tagsCount);
         AreEqual(30, componentAddedCount);
+    }
+    
+    
+    // [Test]
+    public static void Test_Entity_generic_Remove()
+    {
+        var store   = new EntityStore();
+        
+        var tags    = Tags.Get<TestTag>();
+        var entity1  = store.CreateEntity();
+        var entity2  = store.CreateEntity();
+        var entity3  = store.CreateEntity();
+        var entity4  = store.CreateEntity();
+        var entity5  = store.CreateEntity();
+            
+        entity1.Add(new Position(1,1,1), tags);
+        entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
+        entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tags);
+        entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tags);
+        entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tags);
+        
+        int tagsCount = 0;
+        Action<TagsChanged> tagsChanged = changed => {
+            var str = changed.ToString();
+            switch (tagsCount++)
+            {
+                case 0: AreEqual("entity: 1 - event > Add Tags: [#TestTag]", str); break;
+            }
+        };
+        int componentRemovedCount = 0;
+        Action<ComponentChanged> componentRemoved = changed => {
+            var str = changed.ToString();
+            switch (componentRemovedCount++)
+            {                   
+                // --- entity 1
+                case 0: AreEqual("entity: 1 - event > Add Tags: [#TestTag]", str); break;
+            }
+        };
+        store.OnTagsChanged         += tagsChanged;
+        store.OnComponentRemoved    += componentRemoved;
+        
+
+        for (int n = 0; n < 2; n++) {
+            entity1.Remove<Position>(tags);
+            
+            store.OnTagsChanged     -= tagsChanged;
+            store.OnComponentAdded  -= componentRemoved;
+        }
+        AreEqual(0,  store.Count);
+        AreEqual(5,  tagsCount);
+        AreEqual(30, componentRemovedCount);
     }
 }
 
