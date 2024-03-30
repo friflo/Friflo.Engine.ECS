@@ -164,13 +164,16 @@ public static class Test_Entity_generic
         for (int n = 0; n < 2; n++) {
             entity1.Remove<Position>(tags);
             entity2.Remove<Position, Scale3>(tags);
+            entity3.Remove<Position, Scale3, EntityName>(tags);
+            entity4.Remove<Position, Scale3, EntityName, MyComponent1>(tags);
+            entity5.Remove<Position, Scale3, EntityName, MyComponent1, MyComponent2>(tags);
             
             store.OnTagsChanged     -= tagsChanged;
             store.OnComponentAdded  -= componentRemoved;
         }
 
-        AreEqual(2,  tagsCount);
-        AreEqual(3,  componentRemovedCount);
+        AreEqual(5,  tagsCount);
+        AreEqual(15, componentRemovedCount);
     }
 }
 
