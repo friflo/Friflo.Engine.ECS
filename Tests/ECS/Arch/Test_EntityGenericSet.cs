@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
@@ -14,7 +16,7 @@ public static class Test_EntityGenericSet
     [Test]
     public static void Test_Entity_generic_Set()
     {
-        var store   = new EntityStore();
+        var store = new EntityStore(PidType.UsePidAsId);
 
         int componentAddedCount = 0;
         Action<ComponentChanged> componentAdded = changed => {
@@ -89,6 +91,27 @@ public static class Test_EntityGenericSet
             store.OnComponentAdded  -= componentAdded;
         }
         AreEqual(15, componentAddedCount);
+    }
+    
+    [Test]
+    public static void Test_Entity_generic_Set_Perf()
+    {
+        int count = 10; // 100_000_000 ~ #PC: 1232 ms
+        var store = new EntityStore(PidType.UsePidAsId);
+        var entity = store.CreateEntity();
+        
+        entity.Add(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+        entity.Set(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        var start = Mem.GetAllocatedBytes();
+        
+        for (int n = 0; n < count; n++) {
+            entity.Set(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+        }
+        Mem.AssertNoAlloc(start);
+        Console.WriteLine($"Entity.Set<>() - duration: {sw.ElapsedMilliseconds} ms");
     }
 }
 

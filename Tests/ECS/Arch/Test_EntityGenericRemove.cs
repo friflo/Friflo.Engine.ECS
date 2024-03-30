@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable RedundantTypeDeclarationBody
@@ -14,7 +16,7 @@ public static class Test_EntityGenericRemove
     [Test]
     public static void Test_Entity_generic_Remove()
     {
-        var store   = new EntityStore();
+        var store = new EntityStore(PidType.UsePidAsId);
         
         int tagsCount = 0;
         Action<TagsChanged> tagsChanged = changed => {
@@ -126,6 +128,26 @@ public static class Test_EntityGenericRemove
 
         AreEqual(6,  tagsCount);
         AreEqual(16, componentRemovedCount);
+    }
+    
+    [Test]
+    public static void Test_Entity_generic_Remove_Perf()
+    {
+        int count = 10; // 10_000_000 ~ #PC: 546 ms
+        var store = new EntityStore(PidType.UsePidAsId);
+        var entity = store.CreateEntity();
+        
+        entity.Remove<Position, Rotation, EntityName, MyComponent1, MyComponent2>();
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        var start = Mem.GetAllocatedBytes();
+        
+        for (int n = 0; n < count; n++) {
+            entity.Remove<Position, Rotation, EntityName, MyComponent1, MyComponent2>();
+        }
+        Mem.AssertNoAlloc(start);
+        Console.WriteLine($"Entity.Remove<>() - duration: {sw.ElapsedMilliseconds} ms");
     }
 }
 
