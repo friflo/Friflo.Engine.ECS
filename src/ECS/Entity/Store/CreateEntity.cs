@@ -72,9 +72,7 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        var heapMap = archetype.heapMap;
-        
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component;
+        EntityGeneric.SetComponents1(archetype.heapMap, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -96,10 +94,7 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T2>.StructIndex);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        var heapMap = archetype.heapMap;
-        
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
+        EntityGeneric.SetComponents2(archetype.heapMap, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -124,11 +119,7 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T3>.StructIndex);
         
         var entity = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        var heapMap = archetype.heapMap;
-        
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
+        EntityGeneric.SetComponents3(archetype.heapMap, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -156,12 +147,7 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T4>.StructIndex);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        var heapMap = archetype.heapMap;
-        
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
+        EntityGeneric.SetComponents4(archetype.heapMap, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -192,13 +178,7 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T5>.StructIndex);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        var heapMap = archetype.heapMap;
-        
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
+        EntityGeneric.SetComponents5(archetype.heapMap, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
