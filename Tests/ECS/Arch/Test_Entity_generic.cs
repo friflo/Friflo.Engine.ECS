@@ -203,7 +203,7 @@ public static class Test_Entity_generic
             entity5.Remove<Position, Scale3, EntityName, MyComponent1, MyComponent2>(tags);
             
             store.OnTagsChanged     -= tagsChanged;
-            store.OnComponentAdded  -= componentRemoved;
+            store.OnComponentRemoved-= componentRemoved;
         }
 
         AreEqual(5,  tagsCount);
