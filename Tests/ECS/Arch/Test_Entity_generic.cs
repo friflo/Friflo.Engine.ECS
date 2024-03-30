@@ -126,6 +126,9 @@ public static class Test_Entity_generic
             {
                 case 0: AreEqual("entity: 1 - event > Remove Tags: [#TestTag]", str); break;
                 case 1: AreEqual("entity: 2 - event > Remove Tags: [#TestTag]", str); break;
+                case 2: AreEqual("entity: 3 - event > Remove Tags: [#TestTag]", str); break;
+                case 3: AreEqual("entity: 4 - event > Remove Tags: [#TestTag]", str); break;
+                case 4: AreEqual("entity: 5 - event > Remove Tags: [#TestTag]", str); break;
             }
         };
         int componentRemovedCount = 0;
@@ -142,6 +145,37 @@ public static class Test_Entity_generic
                         AreEqual("entity: 2 - event > Remove Component: [Position]",    str); break;
                 case 2: AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
                         AreEqual("entity: 2 - event > Remove Component: [Scale3]",      str); break;
+                
+                // --- entity 3
+                case 3: AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
+                    AreEqual("entity: 3 - event > Remove Component: [EntityName]",  str); break;
+                case 4: AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                        AreEqual("entity: 3 - event > Remove Component: [Position]",    str); break;
+                case 5: AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
+                        AreEqual("entity: 3 - event > Remove Component: [Scale3]",      str); break;
+                
+                // --- entity 4
+                case 6: AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
+                        AreEqual("entity: 4 - event > Remove Component: [EntityName]",  str); break;
+                case 7: AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                        AreEqual("entity: 4 - event > Remove Component: [Position]",    str); break;
+                case 8: AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
+                        AreEqual("entity: 4 - event > Remove Component: [Scale3]",      str); break;
+                case 9: AreEqual(new MyComponent1{ a = 1 }, changed.OldComponent<MyComponent1>());
+                        AreEqual("entity: 4 - event > Remove Component: [MyComponent1]",str); break;
+
+                // --- entity 4
+                case 10:AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
+                        AreEqual("entity: 5 - event > Remove Component: [EntityName]",  str); break;
+                case 11:AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                        AreEqual("entity: 5 - event > Remove Component: [Position]",    str); break;
+                case 12:AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
+                        AreEqual("entity: 5 - event > Remove Component: [Scale3]",      str); break;
+                case 13:AreEqual(new MyComponent1{ a = 1 }, changed.OldComponent<MyComponent1>());
+                        AreEqual("entity: 5 - event > Remove Component: [MyComponent1]",str); break;
+                case 14:AreEqual(new MyComponent2{ b = 1 }, changed.OldComponent<MyComponent2>());
+                        AreEqual("entity: 5 - event > Remove Component: [MyComponent2]",str); break;
+
             }
         };
         

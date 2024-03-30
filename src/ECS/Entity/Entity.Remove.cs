@@ -38,8 +38,7 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
-        removeTypes.SetBit(StructHeap<T1>.StructIndex);
-        removeTypes.SetBit(StructHeap<T2>.StructIndex);
+        EntityGeneric.SetBits<T1,T2>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
         StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
@@ -60,9 +59,7 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
-        removeTypes.SetBit(StructHeap<T1>.StructIndex);
-        removeTypes.SetBit(StructHeap<T2>.StructIndex);
-        removeTypes.SetBit(StructHeap<T3>.StructIndex);
+        EntityGeneric.SetBits<T1,T2,T3>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
         StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
@@ -84,10 +81,7 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
-        removeTypes.SetBit(StructHeap<T1>.StructIndex);
-        removeTypes.SetBit(StructHeap<T2>.StructIndex);
-        removeTypes.SetBit(StructHeap<T3>.StructIndex);
-        removeTypes.SetBit(StructHeap<T4>.StructIndex);
+        EntityGeneric.SetBits<T1,T2,T3,T4>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
         StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
@@ -110,11 +104,7 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
-        removeTypes.SetBit(StructHeap<T1>.StructIndex);
-        removeTypes.SetBit(StructHeap<T2>.StructIndex);
-        removeTypes.SetBit(StructHeap<T3>.StructIndex);
-        removeTypes.SetBit(StructHeap<T4>.StructIndex);
-        removeTypes.SetBit(StructHeap<T5>.StructIndex);
+        EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
         StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
