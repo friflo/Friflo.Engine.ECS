@@ -9,9 +9,8 @@ namespace Friflo.Engine.ECS;
 
 public partial struct  Entity
 {
-    public void Remove<T1>(
-        in Tags tags = default)
-            where T1 : struct, IComponent
+    public void Remove<T1>(in Tags tags = default)
+        where T1 : struct, IComponent
     {
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
@@ -28,8 +27,7 @@ public partial struct  Entity
         EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
-    public void Remove<T1, T2>(
-        in Tags tags = default)
+    public void Remove<T1, T2>(in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
@@ -48,8 +46,7 @@ public partial struct  Entity
         EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
-    public void Remove<T1, T2, T3>(
-        in Tags tags = default)
+    public void Remove<T1, T2, T3>(in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
@@ -69,8 +66,7 @@ public partial struct  Entity
         EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
-    public void Remove<T1, T2, T3, T4>(
-        in Tags tags = default)
+    public void Remove<T1, T2, T3, T4>(in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
@@ -91,8 +87,7 @@ public partial struct  Entity
         EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
-    public void Remove<T1, T2, T3, T4, T5>(
-        in Tags tags = default)
+    public void Remove<T1, T2, T3, T4, T5>(in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
