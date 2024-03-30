@@ -95,39 +95,39 @@ public static class Test_Entity_generic
         
         for (int n = 0; n < 2; n++)
         {
-            var tags    = Tags.Get<TestTag>();
-            var tags2   = Tags.Get<TestTag, TestTag2>();
-            var entity1  = store.CreateEntity(1);
-            var entity2  = store.CreateEntity(2);
-            var entity3  = store.CreateEntity(3);
-            var entity4  = store.CreateEntity(4);
-            var entity5  = store.CreateEntity(5);
-            var entity101= store.CreateEntity(101);
+            var tag         = Tags.Get<TestTag>();
+            var tag2        = Tags.Get<TestTag2>();
+            var entity1     = store.CreateEntity(1);
+            var entity2     = store.CreateEntity(2);
+            var entity3     = store.CreateEntity(3);
+            var entity4     = store.CreateEntity(4);
+            var entity5     = store.CreateEntity(5);
+            var entity101   = store.CreateEntity(101);
             
             
-            entity1.Add(new Position(1,1,1), tags);
-            entity1.Add(new Position(2,2,2), tags);
+            entity1.Add(new Position(1,1,1), tag);
+            entity1.Add(new Position(2,2,2), tag);
             AreEqual("id: 1  [Position, #TestTag]", entity1.ToString());
             
-            entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
-            entity2.Add(new Position(2,2,2), new Scale3(2,2,2), tags);
+            entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tag);
+            entity2.Add(new Position(2,2,2), new Scale3(2,2,2), tag);
             AreEqual("id: 2  [Position, Scale3, #TestTag]", entity2.ToString());
             
-            entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tags);
-            entity3.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), tags);
+            entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tag);
+            entity3.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), tag);
             AreEqual("id: 3  \"new\"  [EntityName, Position, Scale3, #TestTag]", entity3.ToString());
             
-            entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tags);
-            entity4.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, tags);
+            entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tag);
+            entity4.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, tag);
             AreEqual("id: 4  \"new\"  [EntityName, Position, Scale3, MyComponent1, #TestTag]", entity4.ToString());
             
-            entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tags);
-            entity5.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, new MyComponent2 { b = 2 }, tags);
+            entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tag);
+            entity5.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, new MyComponent2 { b = 2 }, tag);
             AreEqual("id: 5  \"new\"  [EntityName, Position, Scale3, MyComponent1, MyComponent2, #TestTag]", entity5.ToString());
             
-            entity101.Add(new Position(1,1,1), tags);
+            entity101.Add(new Position(1,1,1), tag);
             AreEqual("id: 101  [Position, #TestTag]", entity101.ToString());
-            entity101.Add(new Position(2,2,2), new Scale3(2,2,2), tags2);
+            entity101.Add(new Position(2,2,2), new Scale3(2,2,2), tag2);
             AreEqual("id: 101  [Position, Scale3, #TestTag, #TestTag2]", entity101.ToString());
             
             store.OnTagsChanged     -= tagsChanged;
@@ -217,42 +217,42 @@ public static class Test_Entity_generic
             }
         };
         
-        var tags     = Tags.Get<TestTag>();
-        var tags2    = Tags.Get<TestTag, TestTag2>();
-        var entity1  = store.CreateEntity();
-        var entity2  = store.CreateEntity();
-        var entity3  = store.CreateEntity();
-        var entity4  = store.CreateEntity();
-        var entity5  = store.CreateEntity();
-        var entity102= store.CreateEntity(102);
+        var tag         = Tags.Get<TestTag>();
+        var tags2       = Tags.Get<TestTag, TestTag2>();
+        var entity1     = store.CreateEntity();
+        var entity2     = store.CreateEntity();
+        var entity3     = store.CreateEntity();
+        var entity4     = store.CreateEntity();
+        var entity5     = store.CreateEntity();
+        var entity102   = store.CreateEntity(102);
             
-        entity1.Add(new Position(1,1,1), tags);
-        entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
-        entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tags);
-        entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tags);
-        entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tags);
+        entity1.Add(new Position(1,1,1), tag);
+        entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tag);
+        entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tag);
+        entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tag);
+        entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tag);
         entity102.Add(new Position(1,1,1), new Scale3(1,1,1), tags2);
         
         store.OnTagsChanged         += tagsChanged;
         store.OnComponentRemoved    += componentRemoved;
         
         for (int n = 0; n < 2; n++) {
-            entity1.Remove<Position>(tags);
+            entity1.Remove<Position>(tag);
             AreEqual("id: 1  []", entity1.ToString());
             
-            entity2.Remove<Position, Scale3>(tags);
+            entity2.Remove<Position, Scale3>(tag);
             AreEqual("id: 2  []", entity2.ToString());
             
-            entity3.Remove<Position, Scale3, EntityName>(tags);
+            entity3.Remove<Position, Scale3, EntityName>(tag);
             AreEqual("id: 3  []", entity3.ToString());
             
-            entity4.Remove<Position, Scale3, EntityName, MyComponent1>(tags);
+            entity4.Remove<Position, Scale3, EntityName, MyComponent1>(tag);
             AreEqual("id: 4  []", entity4.ToString());
             
-            entity5.Remove<Position, Scale3, EntityName, MyComponent1, MyComponent2>(tags);
+            entity5.Remove<Position, Scale3, EntityName, MyComponent1, MyComponent2>(tag);
             AreEqual("id: 5  []", entity5.ToString());
             
-            entity102.Remove<Scale3>(tags); // cover EntityStoreBase.GetArchetypeRemove()
+            entity102.Remove<Scale3>(tag); // cover EntityStoreBase.GetArchetypeRemove()
             AreEqual("id: 102  [Position, #TestTag2]", entity102.ToString());
             
             store.OnTagsChanged     -= tagsChanged;
