@@ -84,7 +84,9 @@ public static class Test_Entity_generic
                 
                 // --- entity 101
                 case 30:    AreEqual("entity: 101 - event > Add Component: [Position]",     str);   break;
-                case 31:    AreEqual("entity: 101 - event > Update Component: [Position]",  str);   break;
+                case 31:    AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                            AreEqual(new Position(2,2,2),       changed.Component<Position>());
+                            AreEqual("entity: 101 - event > Update Component: [Position]",  str);   break;
                 case 32:    AreEqual("entity: 101 - event > Add Component: [Scale3]",       str);   break;
             }
         };
