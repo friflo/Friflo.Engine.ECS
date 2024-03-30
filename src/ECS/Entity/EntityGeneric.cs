@@ -138,4 +138,80 @@ internal static class EntityGeneric
         ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
     }
     #endregion
+    
+#region add components
+    internal static void StashAddComponents(EntityStoreBase store, in BitSet addTypes, Archetype oldType, int oldCompIndex)
+    {
+        if (store.ComponentAdded == null) {
+            return;
+        }
+        var oldHeapMap  = oldType.heapMap;
+        foreach (var addTypeIndex in addTypes) {
+            var oldHeap = oldHeapMap[addTypeIndex];
+            if (oldHeap == null) {
+                continue;
+            }
+            oldHeap.StashComponent(oldCompIndex);
+        }
+    }
+    
+    internal static void SendAddEvents(EntityStoreBase store, int id, in BitSet addTypes, Archetype newType, Archetype oldType)
+    {
+        // --- tag event
+        var tagsChanged = store.TagsChanged;
+        if (tagsChanged != null && !newType.tags.bitSet.Equals(oldType.Tags.bitSet)) {
+            tagsChanged(new TagsChanged(store, id, newType.tags, oldType.Tags));
+        }
+        // --- component events 
+        var componentAdded = store.ComponentAdded;
+        if (componentAdded == null) {
+            return;
+        }
+        var oldHeapMap  = oldType.heapMap;
+        foreach (var addTypeIndex in addTypes) {
+            var oldHeap     = oldHeapMap[addTypeIndex];
+            var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
+            componentAdded(new ComponentChanged (store, id, action, addTypeIndex, oldHeap));
+        }
+    }
+    #endregion
+    
+#region remove components
+    internal static void StashRemoveComponents(EntityStoreBase store, in BitSet removeTypes, Archetype oldType, int oldCompIndex)
+    {
+        if (store.ComponentRemoved == null) {
+            return;
+        }
+        var oldHeapMap = oldType.heapMap;
+        foreach (var removeTypeIndex in removeTypes) {
+            var oldHeap = oldHeapMap[removeTypeIndex];
+            if (oldHeap == null) {
+                continue;
+            }
+            oldHeap.StashComponent(oldCompIndex);
+        }
+    }
+    
+    internal static void SendRemoveEvents(EntityStoreBase store, int id, in BitSet removeTypes, Archetype newType, Archetype oldType)
+    {
+        // --- tag event
+        var tagsChanged = store.TagsChanged;
+        if (tagsChanged != null && !newType.tags.bitSet.Equals(oldType.Tags.bitSet)) {
+            tagsChanged(new TagsChanged(store, id, newType.tags, oldType.Tags));
+        }
+        // --- component events 
+        var componentRemoved = store.ComponentRemoved;
+        if (componentRemoved == null) {
+            return;
+        }
+        var oldHeapMap = oldType.heapMap;
+        foreach (var removeTypeIndex in removeTypes) {
+            var oldHeap = oldHeapMap[removeTypeIndex];
+            if (oldHeap == null) {
+                continue;
+            }
+            componentRemoved(new ComponentChanged (store, id, ComponentChangedAction.Remove, removeTypeIndex, oldHeap));
+        }
+    }
+    #endregion
 }

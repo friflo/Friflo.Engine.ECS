@@ -20,13 +20,13 @@ public partial struct  Entity
         var removeTypes     = new BitSet();
         removeTypes.SetBit(StructHeap<T1>.StructIndex);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
-        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
+        EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
+        EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
     public void Remove<T1, T2>(
@@ -40,13 +40,13 @@ public partial struct  Entity
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
-        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
+        EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
+        EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
     public void Remove<T1, T2, T3>(
@@ -61,13 +61,13 @@ public partial struct  Entity
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
-        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
+        EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
+        EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
     public void Remove<T1, T2, T3, T4>(
@@ -83,13 +83,13 @@ public partial struct  Entity
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
-        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
+        EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
+        EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
     public void Remove<T1, T2, T3, T4, T5>(
@@ -106,51 +106,12 @@ public partial struct  Entity
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
-        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
+        EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
-    }
-    
-    
-    // ------------------------------------------------- utils -------------------------------------------------
-    private static void StashRemoveComponents(EntityStoreBase store, in BitSet removeTypes, Archetype oldType, int oldCompIndex)
-    {
-        if (store.ComponentRemoved == null) {
-            return;
-        }
-        var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeTypes) {
-            var oldHeap = oldHeapMap[removeTypeIndex];
-            if (oldHeap == null) {
-                continue;
-            }
-            oldHeap.StashComponent(oldCompIndex);
-        }
-    }
-    
-    private static void SendRemoveEvents(EntityStoreBase store, int id, in BitSet removeTypes, Archetype newType, Archetype oldType)
-    {
-        // --- tag event
-        var tagsChanged = store.TagsChanged;
-        if (tagsChanged != null && !newType.tags.bitSet.Equals(oldType.Tags.bitSet)) {
-            tagsChanged(new TagsChanged(store, id, newType.tags, oldType.Tags));
-        }
-        // --- component events 
-        var componentRemoved = store.ComponentRemoved;
-        if (componentRemoved == null) {
-            return;
-        }
-        var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeTypes) {
-            var oldHeap = oldHeapMap[removeTypeIndex];
-            if (oldHeap == null) {
-                continue;
-            }
-            componentRemoved(new ComponentChanged (store, id, ComponentChangedAction.Remove, removeTypeIndex, oldHeap));
-        }
+        EntityGeneric.SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
 } 
