@@ -3,8 +3,6 @@
 
 using Friflo.Engine.ECS.Utils;
 
-// ReSharper disable UseNullPropagation
-// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 

@@ -4,6 +4,7 @@
 
 using Friflo.Engine.ECS.Utils;
 
+// ReSharper disable UseNullPropagation
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -146,7 +147,8 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap  = oldType.heapMap;
-        foreach (var addTypeIndex in addTypes) {
+        foreach (var addTypeIndex in addTypes)
+        {
             var oldHeap = oldHeapMap[addTypeIndex];
             if (oldHeap == null) {
                 continue;
@@ -168,7 +170,8 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap  = oldType.heapMap;
-        foreach (var addTypeIndex in addTypes) {
+        foreach (var addTypeIndex in addTypes)
+        {
             var oldHeap     = oldHeapMap[addTypeIndex];
             var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
             componentAdded(new ComponentChanged (store, id, action, addTypeIndex, oldHeap));
@@ -183,7 +186,8 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeTypes) {
+        foreach (var removeTypeIndex in removeTypes)
+        {
             var oldHeap = oldHeapMap[removeTypeIndex];
             if (oldHeap == null) {
                 continue;
@@ -205,7 +209,8 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeTypes) {
+        foreach (var removeTypeIndex in removeTypes)
+        {
             var oldHeap = oldHeapMap[removeTypeIndex];
             if (oldHeap == null) {
                 continue;
