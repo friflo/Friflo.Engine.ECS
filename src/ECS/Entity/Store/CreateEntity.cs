@@ -1,12 +1,11 @@
 ﻿// ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using Friflo.Engine.ECS.Utils;
+
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
+
 // ReSharper disable UseNullPropagation
-
-
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -68,10 +67,8 @@ public partial class EntityStore
         in Tags tags = default)
             where T1 : struct, IComponent
     {
-        var bitSet          = new BitSet();
-        EntityGeneric.SetBits<T1>(ref bitSet);
-        
-        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var componentTypes  = ComponentTypes.Get<T1>();
+        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
         EntityGeneric.SetComponents(archetype, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
@@ -89,10 +86,8 @@ public partial class EntityStore
             where T1 : struct, IComponent
             where T2 : struct, IComponent
     {
-        var bitSet = new BitSet();
-        EntityGeneric.SetBits<T1,T2>(ref bitSet);
-        
-        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var componentTypes  = ComponentTypes.Get<T1,T2>();
+        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
         EntityGeneric.SetComponents(archetype, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
@@ -112,10 +107,8 @@ public partial class EntityStore
             where T2 : struct, IComponent
             where T3 : struct, IComponent
     {
-        var bitSet = new BitSet();
-        EntityGeneric.SetBits<T1,T2,T3>(ref bitSet);
-        
-        var entity = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var componentTypes  = ComponentTypes.Get<T1,T2,T3>();
+        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
         EntityGeneric.SetComponents(archetype, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
@@ -137,10 +130,8 @@ public partial class EntityStore
             where T3 : struct, IComponent
             where T4 : struct, IComponent
     {
-        var bitSet = new BitSet();
-        EntityGeneric.SetBits<T1,T2,T3,T4>(ref bitSet);
-        
-        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4>();
+        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
         EntityGeneric.SetComponents(archetype, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
@@ -164,10 +155,8 @@ public partial class EntityStore
             where T4 : struct, IComponent
             where T5 : struct, IComponent
     {
-        var bitSet = new BitSet();
-        EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref bitSet);
-        
-        var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
+        var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4,T5>();
+        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
         EntityGeneric.SetComponents(archetype, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
@@ -175,9 +164,9 @@ public partial class EntityStore
         return entity;
     }
     
-    private Entity CreateEntityGeneric(in BitSet bitSet, in Tags tags, out Archetype archetype, out int compIndex)
+    private Entity CreateEntityGeneric(in ComponentTypes componentTypes, in Tags tags, out Archetype archetype, out int compIndex)
     {
-        archetype   = GetArchetype(new ComponentTypes { bitSet = bitSet }, tags);
+        archetype   = GetArchetype(componentTypes, tags);
         var id      = NewId();
         compIndex   = CreateEntityInternal(archetype, id);
         return new Entity(this, id);

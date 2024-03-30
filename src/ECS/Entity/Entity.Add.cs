@@ -1,7 +1,6 @@
 ﻿// ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -16,17 +15,16 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = new BitSet();
-        EntityGeneric.SetBits<T1>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
-        EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
+        var addComponents   = ComponentTypes.Get<T1>();
+        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        EntityGeneric.StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendAddEvents(store, Id, addTypes, newType, oldType);
+        EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
     }
     
     public void Add<T1, T2>(
@@ -39,17 +37,16 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = new BitSet();
-        EntityGeneric.SetBits<T1,T2>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
-        EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
+        var addComponents   = ComponentTypes.Get<T1,T2>();
+        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        EntityGeneric.StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendAddEvents(store, Id, addTypes, newType, oldType);
+        EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
     }
     
     public void Add<T1, T2, T3>(
@@ -64,17 +61,16 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = new BitSet();
-        EntityGeneric.SetBits<T1,T2,T3>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
-        EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
+        var addComponents   = ComponentTypes.Get<T1,T2,T3>();
+        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        EntityGeneric.StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendAddEvents(store, Id, addTypes, newType, oldType);
+        EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
     }
     
     public void Add<T1, T2, T3, T4>(
@@ -91,17 +87,16 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = new BitSet();
-        EntityGeneric.SetBits<T1,T2,T3,T4>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
-        EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
+        var addComponents   = ComponentTypes.Get<T1,T2,T3,T4>();
+        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        EntityGeneric.StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendAddEvents(store, Id, addTypes, newType, oldType);
+        EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
     }
     
     public void Add<T1, T2, T3, T4, T5>(
@@ -120,17 +115,16 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = new BitSet();
-        EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
-        EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
+        var addComponents   = ComponentTypes.Get<T1,T2,T3,T4,T5>();
+        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        EntityGeneric.StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendAddEvents(store, Id, addTypes, newType, oldType);
+        EntityGeneric.SendAddEvents(store, Id, addComponents, newType, oldType);
     }
     
 

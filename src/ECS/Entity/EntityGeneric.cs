@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 
-using Friflo.Engine.ECS.Utils;
-
 // ReSharper disable UseNullPropagation
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -11,58 +9,7 @@ namespace Friflo.Engine.ECS;
 
 internal static class EntityGeneric
 {
-#region set bits
-    internal static void SetBits<T1>(ref BitSet bitSet)
-        where T1 : struct, IComponent
-    {
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-    }
-
-    internal static void SetBits<T1, T2>(ref BitSet bitSet)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-    {
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-    }
-    
-    internal static void SetBits<T1, T2, T3>(ref BitSet bitSet)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-    {
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
-    }
-    
-    internal static void SetBits<T1, T2, T3, T4>(ref BitSet bitSet)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-    {
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
-        bitSet.SetBit(StructHeap<T4>.StructIndex);
-    }
-    
-    internal static void SetBits<T1, T2, T3, T4, T5>(ref BitSet bitSet)
-            where T1 : struct, IComponent
-            where T2 : struct, IComponent
-            where T3 : struct, IComponent
-            where T4 : struct, IComponent
-            where T5 : struct, IComponent
-    {
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
-        bitSet.SetBit(StructHeap<T4>.StructIndex);
-        bitSet.SetBit(StructHeap<T5>.StructIndex);
-    }
-    #endregion
-    
+  
 #region set components
 
     internal static void SetComponents<T1>(
@@ -147,13 +94,13 @@ internal static class EntityGeneric
     #endregion
     
 #region add components
-    internal static void StashAddComponents(EntityStoreBase store, in BitSet addTypes, Archetype oldType, int oldCompIndex)
+    internal static void StashAddComponents(EntityStoreBase store, in ComponentTypes addComponents, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentAdded == null) {
             return;
         }
         var oldHeapMap  = oldType.heapMap;
-        foreach (var addTypeIndex in addTypes)
+        foreach (var addTypeIndex in addComponents.bitSet)
         {
             var oldHeap = oldHeapMap[addTypeIndex];
             if (oldHeap == null) {
@@ -163,7 +110,7 @@ internal static class EntityGeneric
         }
     }
     
-    internal static void SendAddEvents(EntityStoreBase store, int id, in BitSet addTypes, Archetype newType, Archetype oldType)
+    internal static void SendAddEvents(EntityStoreBase store, int id, in ComponentTypes addComponents, Archetype newType, Archetype oldType)
     {
         // --- tag event
         var tagsChanged = store.TagsChanged;
@@ -176,7 +123,7 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap  = oldType.heapMap;
-        foreach (var addTypeIndex in addTypes)
+        foreach (var addTypeIndex in addComponents.bitSet)
         {
             var oldHeap     = oldHeapMap[addTypeIndex];
             var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
@@ -186,13 +133,13 @@ internal static class EntityGeneric
     #endregion
     
 #region remove components
-    internal static void StashRemoveComponents(EntityStoreBase store, in BitSet removeTypes, Archetype oldType, int oldCompIndex)
+    internal static void StashRemoveComponents(EntityStoreBase store, in ComponentTypes removeComponents, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentRemoved == null) {
             return;
         }
         var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeTypes)
+        foreach (var removeTypeIndex in removeComponents.bitSet)
         {
             var oldHeap = oldHeapMap[removeTypeIndex];
             if (oldHeap == null) {
@@ -202,7 +149,7 @@ internal static class EntityGeneric
         }
     }
     
-    internal static void SendRemoveEvents(EntityStoreBase store, int id, in BitSet removeTypes, Archetype newType, Archetype oldType)
+    internal static void SendRemoveEvents(EntityStoreBase store, int id, in ComponentTypes removeComponents, Archetype newType, Archetype oldType)
     {
         // --- tag event
         var tagsChanged = store.TagsChanged;
@@ -215,7 +162,7 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeTypes)
+        foreach (var removeTypeIndex in removeComponents.bitSet)
         {
             var oldHeap = oldHeapMap[removeTypeIndex];
             if (oldHeap == null) {

@@ -106,9 +106,9 @@ public partial class EntityStoreBase
         return result;
     }
     
-    internal Archetype GetArchetypeAdd(Archetype type, in BitSet addTypes, in Tags addTags)
+    internal Archetype GetArchetypeAdd(Archetype type, in ComponentTypes addComponents, in Tags addTags)
     {
-        searchKey.componentTypes.bitSet = BitSet.Add(type.componentTypes.bitSet,    addTypes);
+        searchKey.componentTypes.bitSet = BitSet.Add(type.componentTypes.bitSet,    addComponents.bitSet);
         searchKey.tags.bitSet           = BitSet.Add(type.tags.bitSet,              addTags.bitSet);
         searchKey.CalculateHashCode();
         if (archSet.TryGetValue(searchKey, out var key)) {
@@ -120,9 +120,9 @@ public partial class EntityStoreBase
         return archetype;
     }
     
-    internal Archetype GetArchetypeRemove(Archetype type, in BitSet removeTypes, in Tags removeTags)
+    internal Archetype GetArchetypeRemove(Archetype type, in ComponentTypes removeComponents, in Tags removeTags)
     {
-        searchKey.componentTypes.bitSet = BitSet.Remove(type.componentTypes.bitSet, removeTypes);
+        searchKey.componentTypes.bitSet = BitSet.Remove(type.componentTypes.bitSet, removeComponents.bitSet);
         searchKey.tags.bitSet           = BitSet.Remove(type.tags.bitSet,           removeTags.bitSet);
         searchKey.CalculateHashCode();
         if (archSet.TryGetValue(searchKey, out var key)) {
