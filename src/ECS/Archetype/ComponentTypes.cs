@@ -230,9 +230,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         return componentTypes;
     }
     
-    internal string GetString()
+    internal string GetString() => AppendTo(new StringBuilder()).ToString();
+    
+    internal StringBuilder AppendTo(StringBuilder sb)
     {
-        var sb = new StringBuilder();
         sb.Append("Components: [");
         var hasTypes    = false;
         var components  = EntityStoreBase.Static.EntitySchema.components;
@@ -246,7 +247,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
             sb.Length -= 2;
         }
         sb.Append(']');
-        return sb.ToString();
+        return sb;
     }
 }
 

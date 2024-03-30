@@ -15,7 +15,7 @@ public partial struct  Entity
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1>();
-        EntityGeneric.StashSetComponents(store, components, type, componentIndex);
+        EntityGeneric.CheckComponents(this, components, type, componentIndex);
         
         EntityGeneric.AssignComponents(type, componentIndex, component1);
         
@@ -33,7 +33,7 @@ public partial struct  Entity
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2>();
-        EntityGeneric.StashSetComponents(store, components, type, componentIndex);
+        EntityGeneric.CheckComponents(this, components, type, componentIndex);
         
         EntityGeneric.AssignComponents(type, componentIndex, component1, component2);
         
@@ -53,7 +53,7 @@ public partial struct  Entity
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2, T3>();
-        EntityGeneric.StashSetComponents(store, components, type, componentIndex);
+        EntityGeneric.CheckComponents(this, components, type, componentIndex);
         
         EntityGeneric.AssignComponents(type, componentIndex, component1, component2, component3);
         
@@ -75,7 +75,7 @@ public partial struct  Entity
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2, T3, T4>();
-        EntityGeneric.StashSetComponents(store, components, type, componentIndex);
+        EntityGeneric.CheckComponents(this, components, type, componentIndex);
         
         EntityGeneric.AssignComponents(type, componentIndex, component1, component2, component3, component4);
         
@@ -99,7 +99,7 @@ public partial struct  Entity
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2, T3, T4, T5>();
-        EntityGeneric.StashSetComponents(store, components, type, componentIndex);
+        EntityGeneric.CheckComponents(this, components, type, componentIndex);
         
         EntityGeneric.AssignComponents(type, componentIndex, component1, component2, component3, component4, component5);
         

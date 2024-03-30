@@ -1,11 +1,13 @@
 ﻿// ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System.Text;
+using Friflo.Engine.ECS.Utils;
 
-// ReSharper disable UseNullPropagation
+using System;
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
-
 
 internal static class EntityGeneric
 {
@@ -177,15 +179,29 @@ internal static class EntityGeneric
 
 #region set components
 
-    internal static void StashSetComponents(EntityStoreBase store, in ComponentTypes components, Archetype type, int compIndex)
+    internal static void CheckComponents(in Entity entity, in ComponentTypes components, Archetype type, int compIndex)
     {
-        if (store.ComponentAdded == null) {
+        if (!type.componentTypes.bitSet.HasAll(components.bitSet)) {
+            throw MissingComponentException(entity, components, type);
+        }
+        if (entity.store.ComponentAdded == null) {
             return;
         }
         var heapMap = type.heapMap;
         foreach (var structIndex in components.bitSet) {
             heapMap[structIndex].StashComponent(compIndex);
         }
+    }
+    
+    private static MissingComponentException MissingComponentException(in Entity entity, in ComponentTypes components, Archetype type)
+    {
+        var missingTypes = new ComponentTypes{ bitSet = BitSet.Remove(components.bitSet, type.componentTypes.bitSet) };
+        var sb = new StringBuilder();
+        sb.Append("entity ");
+        EntityUtils.EntityToString(entity.Id, type, sb);
+        sb.Append(" - missing ");
+        missingTypes.AppendTo(sb);
+        return new MissingComponentException(sb.ToString());
     }
     
     internal static void SendSetEvents(EntityStoreBase store, int id, in ComponentTypes components, Archetype type)
@@ -200,4 +216,12 @@ internal static class EntityGeneric
         }
     }
     #endregion
+}
+
+/// <summary>
+/// Is thrown when calling <c>Entity.Set()</c> on an entity missing the specified components.
+/// </summary>
+public class MissingComponentException : Exception
+{
+    internal MissingComponentException(string message) : base (message) { }
 }

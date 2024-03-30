@@ -94,6 +94,19 @@ public static class Test_EntityGenericSet
     }
     
     [Test]
+    public static void Test_Entity_generic_Set_exception()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        store.OnComponentAdded += changed => { }; 
+        var entity  = store.CreateEntity(new EntityName(), new Scale3());
+        
+        var e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3());    
+        });
+        AreEqual("entity id: 1  [EntityName, Scale3] - missing Components: [Position]", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Entity_generic_Set_Perf()
     {
         int count = 10; // 100_000_000 ~ #PC: 1232 ms
