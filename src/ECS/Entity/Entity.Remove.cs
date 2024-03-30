@@ -1,9 +1,11 @@
 ﻿// ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using Friflo.Engine.ECS.Utils;
 
-// ReSharper disable once CheckNamespace
+
 // ReSharper disable UseNullPropagation
+// ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 public partial struct  Entity
@@ -15,9 +17,9 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var bitSet          = oldType.componentTypes.bitSet;
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        var newType         = store.GetArchetypeWithoutBitSet(bitSet, oldType, tags);
+        var removeTypes     = new BitSet();
+        removeTypes.ClearBit(StructHeap<T1>.StructIndex);
+        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
         StashRemoveComponents(store, newType, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);

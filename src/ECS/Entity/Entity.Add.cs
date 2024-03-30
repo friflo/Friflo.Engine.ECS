@@ -1,6 +1,7 @@
 ﻿// ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using Friflo.Engine.ECS.Utils;
 
 // ReSharper disable UseNullPropagation
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -17,9 +18,9 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var bitSet          = oldType.componentTypes.bitSet;
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        var newType     = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        var addTypes        = new BitSet();
+        addTypes.SetBit(StructHeap<T1>.StructIndex);
+        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
         StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -40,9 +41,9 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var bitSet          = oldType.componentTypes.bitSet;
-        EntityGeneric.SetBits<T1,T2>(ref bitSet);
-        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        var addTypes        = new BitSet();
+        EntityGeneric.SetBits<T1,T2>(ref addTypes);
+        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
         StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -65,9 +66,9 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var bitSet          = oldType.componentTypes.bitSet;
-        EntityGeneric.SetBits<T1,T2,T3>(ref bitSet);
-        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        var addTypes        = new BitSet();
+        EntityGeneric.SetBits<T1,T2,T3>(ref addTypes);
+        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
         StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -92,9 +93,9 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var bitSet          = oldType.componentTypes.bitSet;
-        EntityGeneric.SetBits<T1,T2,T3,T4>(ref bitSet);
-        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        var addTypes        = new BitSet();
+        EntityGeneric.SetBits<T1,T2,T3,T4>(ref addTypes);
+        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
         StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -121,9 +122,9 @@ public partial struct  Entity
         ref var node        = ref store.nodes[Id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var bitSet          = oldType.componentTypes.bitSet;
-        EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref bitSet);
-        var newType         = store.GetArchetypeWithBitSet(bitSet, oldType, tags);
+        var addTypes        = new BitSet();
+        EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref addTypes);
+        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
         StashAddComponents(store, newType, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
