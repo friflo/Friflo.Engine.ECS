@@ -129,6 +129,7 @@ public static class Test_Entity_generic
                 case 2: AreEqual("entity: 3 - event > Remove Tags: [#TestTag]", str); break;
                 case 3: AreEqual("entity: 4 - event > Remove Tags: [#TestTag]", str); break;
                 case 4: AreEqual("entity: 5 - event > Remove Tags: [#TestTag]", str); break;
+                case 5: AreEqual("entity: 102 - event > Remove Tags: [#TestTag]", str); break;
             }
         };
         int componentRemovedCount = 0;
@@ -175,6 +176,10 @@ public static class Test_Entity_generic
                         AreEqual("entity: 5 - event > Remove Component: [MyComponent1]",str); break;
                 case 14:AreEqual(new MyComponent2{ b = 1 }, changed.OldComponent<MyComponent2>());
                         AreEqual("entity: 5 - event > Remove Component: [MyComponent2]",str); break;
+                
+                // --- entity 102
+                case 15: AreEqual(new Scale3(1,1,1),        changed.OldComponent<Scale3>());
+                    AreEqual("entity: 102 - event > Remove Component: [Scale3]",    str); break;
 
             }
         };
@@ -185,12 +190,14 @@ public static class Test_Entity_generic
         var entity3  = store.CreateEntity();
         var entity4  = store.CreateEntity();
         var entity5  = store.CreateEntity();
+        var entity102= store.CreateEntity(102);
             
         entity1.Add(new Position(1,1,1), tags);
         entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
         entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tags);
         entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tags);
         entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tags);
+        entity102.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
         
         store.OnTagsChanged         += tagsChanged;
         store.OnComponentRemoved    += componentRemoved;
@@ -201,13 +208,14 @@ public static class Test_Entity_generic
             entity3.Remove<Position, Scale3, EntityName>(tags);
             entity4.Remove<Position, Scale3, EntityName, MyComponent1>(tags);
             entity5.Remove<Position, Scale3, EntityName, MyComponent1, MyComponent2>(tags);
+            entity102.Remove<Scale3>(tags); // cover EntityStoreBase.GetArchetypeRemove()
             
             store.OnTagsChanged     -= tagsChanged;
             store.OnComponentRemoved-= componentRemoved;
         }
 
-        AreEqual(5,  tagsCount);
-        AreEqual(15, componentRemovedCount);
+        AreEqual(6,  tagsCount);
+        AreEqual(16, componentRemovedCount);
     }
 }
 

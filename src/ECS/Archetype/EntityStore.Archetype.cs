@@ -115,7 +115,7 @@ public partial class EntityStoreBase
             return key.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, addTags);
+        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags);
         AddArchetype(this, archetype);
         return archetype;
     }
@@ -129,7 +129,7 @@ public partial class EntityStoreBase
             return key.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, removeTags);
+        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags);
         AddArchetype(this, archetype);
         return archetype;
     }
