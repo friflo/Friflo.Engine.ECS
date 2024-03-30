@@ -22,7 +22,45 @@ public static class Test_EntityGenericSet
             switch (componentAddedCount++)
             {                   
                 // --- entity 1
-                case 0:     AreEqual("entity: 1 - event > Update Component: [Position]",       str);   break;
+                case 0:     AreEqual(new Position(2,2,2),       changed.Component<Position>());     
+                            AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                            AreEqual("entity: 1 - event > Update Component: [Position]",        str);   break;
+                
+                // --- entity 2
+                case 1:     AreEqual(new Position(2,2,2),       changed.Component<Position>());     
+                            AreEqual("entity: 2 - event > Update Component: [Position]",        str);   break;
+                case 2:     AreEqual(new Scale3(2,2,2),         changed.Component<Scale3>());     
+                            AreEqual("entity: 2 - event > Update Component: [Scale3]",          str);   break;
+                
+                // --- entity 3
+                case 3:     AreEqual(new EntityName("new"),     changed.Component<EntityName>());     
+                            AreEqual("entity: 3 - event > Update Component: [EntityName]",      str);   break;
+                case 4:     AreEqual(new Position(2,2,2),       changed.Component<Position>());     
+                            AreEqual("entity: 3 - event > Update Component: [Position]",        str);   break;
+                case 5:     AreEqual(new Scale3(2,2,2),         changed.Component<Scale3>());     
+                            AreEqual("entity: 3 - event > Update Component: [Scale3]",          str);   break;
+                
+                // --- entity 4
+                case 6:     AreEqual(new EntityName("new"),     changed.Component<EntityName>());     
+                            AreEqual("entity: 4 - event > Update Component: [EntityName]",      str);   break;
+                case 7:     AreEqual(new Position(2,2,2),       changed.Component<Position>());     
+                            AreEqual("entity: 4 - event > Update Component: [Position]",        str);   break;
+                case 8:     AreEqual(new Scale3(2,2,2),         changed.Component<Scale3>());     
+                            AreEqual("entity: 4 - event > Update Component: [Scale3]",          str);   break;
+                case 9:     AreEqual(new MyComponent1{ a = 2 }, changed.Component<MyComponent1>());     
+                            AreEqual("entity: 4 - event > Update Component: [MyComponent1]",    str);   break;
+                
+                // --- entity 5
+                case 10:    AreEqual(new EntityName("new"),     changed.Component<EntityName>());     
+                            AreEqual("entity: 5 - event > Update Component: [EntityName]",      str);   break;
+                case 11:    AreEqual(new Position(2,2,2),       changed.Component<Position>());     
+                            AreEqual("entity: 5 - event > Update Component: [Position]",        str);   break;
+                case 12:    AreEqual(new Scale3(2,2,2),         changed.Component<Scale3>());     
+                            AreEqual("entity: 5 - event > Update Component: [Scale3]",          str);   break;
+                case 13:    AreEqual(new MyComponent1{ a = 2 }, changed.Component<MyComponent1>());     
+                            AreEqual("entity: 5 - event > Update Component: [MyComponent1]",    str);   break;
+                case 14:    AreEqual(new MyComponent2 { b = 2}, changed.Component<MyComponent2>());     
+                            AreEqual("entity: 5 - event > Update Component: [MyComponent2]",    str);   break;
             }
         };
         var tag         = Tags.Get<TestTag>();

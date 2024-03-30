@@ -45,9 +45,9 @@ public partial struct  Entity
         in T1   component1,
         in T2   component2,
         in T3   component3)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent
     {
         ref var node        = ref store.nodes[Id];
         var type            = node.archetype;
