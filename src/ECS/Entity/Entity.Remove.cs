@@ -18,35 +18,35 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
-        removeTypes.ClearBit(StructHeap<T1>.StructIndex);
+        removeTypes.SetBit(StructHeap<T1>.StructIndex);
         var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
-        StashRemoveComponents(store, newType, oldType, oldCompIndex);
+        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        SendRemoveEvents(store, Id, newType, oldType);
+        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
     
     // ------------------------------------------------- utils -------------------------------------------------
-    private static void StashRemoveComponents(EntityStoreBase store, Archetype newType, Archetype oldType, int oldCompIndex)
+    private static void StashRemoveComponents(EntityStoreBase store, in BitSet removeTypes, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentRemoved == null) {
             return;
         }
-        var newHeapMap = newType.heapMap;
-        foreach (var oldHeap in oldType.structHeaps) {
-            var newHeap = newHeapMap[oldHeap.structIndex];
-            if (newHeap == null) {
+        var oldHeapMap = oldType.heapMap;
+        foreach (var removeTypeIndex in removeTypes) {
+            var oldHeap = oldHeapMap[removeTypeIndex];
+            if (oldHeap == null) {
                 continue;
             }
             oldHeap.StashComponent(oldCompIndex);
         }
     }
     
-    private static void SendRemoveEvents(EntityStoreBase store, int id, Archetype newType, Archetype oldType)
+    private static void SendRemoveEvents(EntityStoreBase store, int id, in BitSet removeTypes, Archetype newType, Archetype oldType)
     {
         // --- tag event
         var tagsChanged = store.TagsChanged;
@@ -58,14 +58,13 @@ public partial struct  Entity
         if (componentRemoved == null) {
             return;
         }
-        var newHeaps    = newType.structHeaps;
-        var oldHeapMap  = oldType.heapMap;
-        for (int n = 0; n < newHeaps.Length; n++)
-        {
-            var structIndex = newHeaps[n].structIndex;
-            var oldHeap     = oldHeapMap[structIndex];
-            var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
-            componentRemoved(new ComponentChanged (store, id, action, structIndex, oldHeap));
+        var oldHeapMap = oldType.heapMap;
+        foreach (var removeTypeIndex in removeTypes) {
+            var oldHeap = oldHeapMap[removeTypeIndex];
+            if (oldHeap == null) {
+                continue;
+            }
+            componentRemoved(new ComponentChanged (store, id, ComponentChangedAction.Remove, removeTypeIndex, oldHeap));
         }
     }
 } 

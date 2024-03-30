@@ -21,14 +21,14 @@ public partial struct  Entity
         var addTypes        = new BitSet();
         addTypes.SetBit(StructHeap<T1>.StructIndex);
         var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
-        StashAddComponents(store, newType, oldType, oldCompIndex);
+        StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(store, Id, newType, oldType);
+        SendAddEvents(store, Id, addTypes, newType, oldType);
     }
     
     public void Add<T1, T2>(
@@ -44,14 +44,14 @@ public partial struct  Entity
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2>(ref addTypes);
         var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
-        StashAddComponents(store, newType, oldType, oldCompIndex);
+        StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(store, Id, newType, oldType);
+        SendAddEvents(store, Id, addTypes, newType, oldType);
     }
     
     public void Add<T1, T2, T3>(
@@ -69,14 +69,14 @@ public partial struct  Entity
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3>(ref addTypes);
         var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
-        StashAddComponents(store, newType, oldType, oldCompIndex);
+        StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(store, Id, newType, oldType);
+        SendAddEvents(store, Id, addTypes, newType, oldType);
     }
     
     public void Add<T1, T2, T3, T4>(
@@ -96,14 +96,14 @@ public partial struct  Entity
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4>(ref addTypes);
         var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
-        StashAddComponents(store, newType, oldType, oldCompIndex);
+        StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(store, Id, newType, oldType);
+        SendAddEvents(store, Id, addTypes, newType, oldType);
     }
     
     public void Add<T1, T2, T3, T4, T5>(
@@ -125,25 +125,25 @@ public partial struct  Entity
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref addTypes);
         var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
-        StashAddComponents(store, newType, oldType, oldCompIndex);
+        StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
         node.archetype      = newType;
         EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
-        SendAddEvents(store, Id, newType, oldType);
+        SendAddEvents(store, Id, addTypes, newType, oldType);
     }
     
     // ------------------------------------------------- utils -------------------------------------------------
-    private static void StashAddComponents(EntityStoreBase store, Archetype newType, Archetype oldType, int oldCompIndex)
+    private static void StashAddComponents(EntityStoreBase store, in BitSet addTypes, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentAdded == null) {
             return;
         }
-        var oldHeapMap = oldType.heapMap;
-        foreach (var newHeap in newType.structHeaps) {
-            var oldHeap = oldHeapMap[newHeap.structIndex];
+        var oldHeapMap  = oldType.heapMap;
+        foreach (var addTypeIndex in addTypes) {
+            var oldHeap = oldHeapMap[addTypeIndex];
             if (oldHeap == null) {
                 continue;
             }
@@ -151,7 +151,7 @@ public partial struct  Entity
         }
     }
     
-    private static void SendAddEvents(EntityStoreBase store, int id, Archetype newType, Archetype oldType)
+    private static void SendAddEvents(EntityStoreBase store, int id, in BitSet addTypes, Archetype newType, Archetype oldType)
     {
         // --- tag event
         var tagsChanged = store.TagsChanged;
@@ -163,14 +163,11 @@ public partial struct  Entity
         if (componentAdded == null) {
             return;
         }
-        var newHeaps    = newType.structHeaps;
         var oldHeapMap  = oldType.heapMap;
-        for (int n = 0; n < newHeaps.Length; n++)
-        {
-            var structIndex = newHeaps[n].structIndex;
-            var oldHeap     = oldHeapMap[structIndex];
+        foreach (var addTypeIndex in addTypes) {
+            var oldHeap     = oldHeapMap[addTypeIndex];
             var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
-            componentAdded(new ComponentChanged (store, id, action, structIndex, oldHeap));
+            componentAdded(new ComponentChanged (store, id, action, addTypeIndex, oldHeap));
         }
     }
 } 
