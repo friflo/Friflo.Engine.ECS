@@ -1,3 +1,4 @@
+using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -11,12 +12,12 @@ namespace Tests.ECS.Arch {
 public static class Test_Entity_generic
 {
     [Test]
-    public static void Test_Entity_Events_OnTagsChanged()
+    public static void Test_Entity_generic_Add()
     {
         var store   = new EntityStore();
         
         int tagsCount = 0;
-        store.OnTagsChanged += changed => {
+        Action<TagsChanged> tagsChanged = changed => {
             var str = changed.ToString();
             switch (tagsCount++)
             {
@@ -24,7 +25,7 @@ public static class Test_Entity_generic
             }
         };
         int componentAddedCount = 0;
-        store.OnComponentAdded += changed => {
+        Action<ComponentChanged> componentChanged = changed => {
             var str = changed.ToString();
             switch (componentAddedCount++)
             {                   
@@ -76,27 +77,37 @@ public static class Test_Entity_generic
                             AreEqual("entity: 4 - event > Update Component: [MyComponent1]",str);   break;
             }
         };
-        var tags    = Tags.Get<TestTag>();
-        var entity1  = store.CreateEntity();
-        var entity2  = store.CreateEntity();
-        var entity3  = store.CreateEntity();
-        var entity4  = store.CreateEntity();
-        var entity5  = store.CreateEntity();
+        store.OnTagsChanged     += tagsChanged;
+        store.OnComponentAdded  += componentChanged;
         
-        entity1.Add(new Position(1,1,1), tags);
-        entity1.Add(new Position(2,2,2), tags);
-        
-        entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
-        entity2.Add(new Position(2,2,2), new Scale3(2,2,2), tags);
-        
-        entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tags);
-        entity3.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), tags);
-        
-        entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tags);
-        entity4.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, tags);
-        
-        entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tags);
-        entity5.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, new MyComponent2 { b = 2 }, tags);
+        for (int n = 0; n < 2; n++)
+        {
+            var tags    = Tags.Get<TestTag>();
+            var entity1  = store.CreateEntity();
+            var entity2  = store.CreateEntity();
+            var entity3  = store.CreateEntity();
+            var entity4  = store.CreateEntity();
+            var entity5  = store.CreateEntity();
+            
+            
+            entity1.Add(new Position(1,1,1), tags);
+            entity1.Add(new Position(2,2,2), tags);
+            
+            entity2.Add(new Position(1,1,1), new Scale3(1,1,1), tags);
+            entity2.Add(new Position(2,2,2), new Scale3(2,2,2), tags);
+            
+            entity3.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), tags);
+            entity3.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), tags);
+            
+            entity4.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, tags);
+            entity4.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, tags);
+            
+            entity5.Add(new Position(1,1,1), new Scale3(1,1,1), new EntityName("old"), new MyComponent1 { a = 1 }, new MyComponent2 { b = 1 }, tags);
+            entity5.Add(new Position(2,2,2), new Scale3(2,2,2), new EntityName("new"), new MyComponent1 { a = 2 }, new MyComponent2 { b = 2 }, tags);
+            
+            store.OnTagsChanged     -= tagsChanged;
+            store.OnComponentAdded  -= componentChanged;
+        }
         
         AreEqual(5,  tagsCount);
         AreEqual(30, componentAddedCount);
