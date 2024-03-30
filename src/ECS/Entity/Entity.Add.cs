@@ -20,7 +20,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var addTypes        = new BitSet();
         addTypes.SetBit(StructHeap<T1>.StructIndex);
-        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -43,7 +43,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -68,7 +68,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -95,7 +95,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -124,7 +124,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var addTypes        = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref addTypes);
-        var newType         = store.GetArchetypeAdd(addTypes, oldType, tags);
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);

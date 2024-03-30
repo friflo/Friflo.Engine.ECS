@@ -19,7 +19,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
         removeTypes.SetBit(StructHeap<T1>.StructIndex);
-        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
+        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -39,7 +39,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2>(ref removeTypes);
-        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
+        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -60,7 +60,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3>(ref removeTypes);
-        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
+        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -82,7 +82,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4>(ref removeTypes);
-        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
+        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
@@ -105,7 +105,7 @@ public partial struct  Entity
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
         EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref removeTypes);
-        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
+        var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);

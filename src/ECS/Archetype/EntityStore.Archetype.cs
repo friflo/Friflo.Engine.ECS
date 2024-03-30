@@ -106,30 +106,30 @@ public partial class EntityStoreBase
         return result;
     }
     
-    internal Archetype GetArchetypeAdd(in BitSet addTypes, Archetype type, in Tags tags)
+    internal Archetype GetArchetypeAdd(Archetype type, in BitSet addTypes, in Tags addTags)
     {
         searchKey.componentTypes.bitSet = BitSet.Add(type.componentTypes.bitSet,    addTypes);
-        searchKey.tags.bitSet           = BitSet.Add(type.tags.bitSet,              tags.bitSet);
+        searchKey.tags.bitSet           = BitSet.Add(type.tags.bitSet,              addTags.bitSet);
         searchKey.CalculateHashCode();
         if (archSet.TryGetValue(searchKey, out var key)) {
             return key.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, tags);
+        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, addTags);
         AddArchetype(this, archetype);
         return archetype;
     }
     
-    internal Archetype GetArchetypeRemove(in BitSet removeTypes, Archetype type, in Tags tags)
+    internal Archetype GetArchetypeRemove(Archetype type, in BitSet removeTypes, in Tags removeTags)
     {
         searchKey.componentTypes.bitSet = BitSet.Remove(type.componentTypes.bitSet, removeTypes);
-        searchKey.tags.bitSet           = BitSet.Remove(type.tags.bitSet,           tags.bitSet);
+        searchKey.tags.bitSet           = BitSet.Remove(type.tags.bitSet,           removeTags.bitSet);
         searchKey.CalculateHashCode();
         if (archSet.TryGetValue(searchKey, out var key)) {
             return key.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, tags);
+        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, removeTags);
         AddArchetype(this, archetype);
         return archetype;
     }
