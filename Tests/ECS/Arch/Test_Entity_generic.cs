@@ -109,7 +109,6 @@ public static class Test_Entity_generic
             store.OnComponentAdded  -= componentAdded;
         }
         
-        AreEqual(10, store.Count);
         AreEqual(5,  tagsCount);
         AreEqual(30, componentAddedCount);
     }
@@ -126,6 +125,7 @@ public static class Test_Entity_generic
             switch (tagsCount++)
             {
                 case 0: AreEqual("entity: 1 - event > Remove Tags: [#TestTag]", str); break;
+                case 1: AreEqual("entity: 2 - event > Remove Tags: [#TestTag]", str); break;
             }
         };
         int componentRemovedCount = 0;
@@ -134,7 +134,14 @@ public static class Test_Entity_generic
             switch (componentRemovedCount++)
             {                   
                 // --- entity 1
-                case 0: AreEqual("entity: 1 - event > Remove Component: [Position]", str); break;
+                case 0: AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                        AreEqual("entity: 1 - event > Remove Component: [Position]",    str); break;
+                
+                // --- entity 2
+                case 1: AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                        AreEqual("entity: 2 - event > Remove Component: [Position]",    str); break;
+                case 2: AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
+                        AreEqual("entity: 2 - event > Remove Component: [Scale3]",      str); break;
             }
         };
         
@@ -156,13 +163,14 @@ public static class Test_Entity_generic
         
         for (int n = 0; n < 2; n++) {
             entity1.Remove<Position>(tags);
+            entity2.Remove<Position, Scale3>(tags);
             
             store.OnTagsChanged     -= tagsChanged;
             store.OnComponentAdded  -= componentRemoved;
         }
-        AreEqual(5,  store.Count);
-        AreEqual(1,  tagsCount);
-        AreEqual(1,  componentRemovedCount);
+
+        AreEqual(2,  tagsCount);
+        AreEqual(3,  componentRemovedCount);
     }
 }
 

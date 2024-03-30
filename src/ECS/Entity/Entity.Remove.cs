@@ -29,6 +29,27 @@ public partial struct  Entity
         SendRemoveEvents(store, Id, removeTypes, newType, oldType);
     }
     
+    public void Remove<T1, T2>(
+        in Tags tags = default)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+    {
+        ref var node        = ref store.nodes[Id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
+        var removeTypes     = new BitSet();
+        removeTypes.SetBit(StructHeap<T1>.StructIndex);
+        removeTypes.SetBit(StructHeap<T2>.StructIndex);
+        var newType         = store.GetArchetypeRemove(removeTypes, oldType, tags);
+        StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
+
+        node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.archetype      = newType;
+        
+        // Send event. See: SEND_EVENT notes
+        SendRemoveEvents(store, Id, removeTypes, newType, oldType);
+    }
+    
     
     // ------------------------------------------------- utils -------------------------------------------------
     private static void StashRemoveComponents(EntityStoreBase store, in BitSet removeTypes, Archetype oldType, int oldCompIndex)
