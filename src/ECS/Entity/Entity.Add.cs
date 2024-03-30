@@ -14,16 +14,17 @@ public partial struct  Entity
         in Tags tags = default)
             where T1 : struct, IComponent
     {
-        var oldType         = archetype;
-        var oldCompIndex    = compIndex;
+        ref var node        = ref store.nodes[Id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         bitSet.SetBit(StructHeap<T1>.StructIndex);
-        var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
+        var newType     = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
         StashComponents(store, newType, oldType, oldCompIndex);
 
-        var newCompIndex    = refCompIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
-        refArchetype        = newType;
-        EntityGeneric.SetComponents1(newType.heapMap, newCompIndex, component1);
+        var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.archetype      = newType;
+        EntityGeneric.SetComponents(newType, newCompIndex, component1);
         
         // Send event. See: SEND_EVENT notes
         SendAddEvents(store, Id, newType, oldType);
@@ -36,17 +37,17 @@ public partial struct  Entity
             where T1 : struct, IComponent
             where T2 : struct, IComponent
     {
-        var oldType         = archetype;
-        var oldCompIndex    = compIndex;
+        ref var node        = ref store.nodes[Id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        EntityGeneric.SetBits<T1,T2>(ref bitSet);
         var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
         StashComponents(store, newType, oldType, oldCompIndex);
 
-        var newCompIndex    = refCompIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
-        refArchetype        = newType;
-        EntityGeneric.SetComponents2(newType.heapMap, newCompIndex, component1, component2);
+        var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.archetype      = newType;
+        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
         SendAddEvents(store, Id, newType, oldType);
@@ -61,18 +62,17 @@ public partial struct  Entity
             where T2 : struct, IComponent
             where T3 : struct, IComponent
     {
-        var oldType         = archetype;
-        var oldCompIndex    = compIndex;
+        ref var node        = ref store.nodes[Id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        EntityGeneric.SetBits<T1,T2,T3>(ref bitSet);
         var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
         StashComponents(store, newType, oldType, oldCompIndex);
 
-        var newCompIndex    = refCompIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
-        refArchetype        = newType;
-        EntityGeneric.SetComponents3(newType.heapMap, newCompIndex, component1, component2, component3);
+        var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.archetype      = newType;
+        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
         SendAddEvents(store, Id, newType, oldType);
@@ -89,19 +89,17 @@ public partial struct  Entity
             where T3 : struct, IComponent
             where T4 : struct, IComponent
     {
-        var oldType         = archetype;
-        var oldCompIndex    = compIndex;
+        ref var node        = ref store.nodes[Id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
-        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        EntityGeneric.SetBits<T1,T2,T3,T4>(ref bitSet);
         var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
         StashComponents(store, newType, oldType, oldCompIndex);
 
-        var newCompIndex    = refCompIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
-        refArchetype        = newType;
-        EntityGeneric.SetComponents4(newType.heapMap, newCompIndex, component1, component2, component3, component4);
+        var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.archetype      = newType;
+        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
         SendAddEvents(store, Id, newType, oldType);
@@ -120,16 +118,17 @@ public partial struct  Entity
             where T4 : struct, IComponent
             where T5 : struct, IComponent
     {
-        var oldType         = archetype;
-        var oldCompIndex    = compIndex;
+        ref var node        = ref store.nodes[Id];
+        var oldType         = node.archetype;
+        var oldCompIndex    = node.compIndex;
         var bitSet          = oldType.componentTypes.bitSet;
         EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref bitSet);
         var newType         = store.GetArchetypeWithTagsAdd(bitSet, oldType, tags);
         StashComponents(store, newType, oldType, oldCompIndex);
 
-        var newCompIndex    = refCompIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
-        refArchetype        = newType;
-        EntityGeneric.SetComponents5(newType.heapMap, newCompIndex, component1, component2, component3, component4, component5);
+        var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.archetype      = newType;
+        EntityGeneric.SetComponents(newType, newCompIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
         SendAddEvents(store, Id, newType, oldType);

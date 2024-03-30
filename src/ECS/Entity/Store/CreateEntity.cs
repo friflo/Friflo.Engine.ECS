@@ -72,7 +72,7 @@ public partial class EntityStore
         bitSet.SetBit(StructHeap<T1>.StructIndex);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        EntityGeneric.SetComponents1(archetype.heapMap, compIndex, component);
+        EntityGeneric.SetComponents(archetype, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -89,12 +89,11 @@ public partial class EntityStore
             where T1 : struct, IComponent
             where T2 : struct, IComponent
     {
-        var bitSet          = new BitSet();
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        var bitSet = new BitSet();
+        EntityGeneric.SetBits<T1,T2>(ref bitSet);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        EntityGeneric.SetComponents2(archetype.heapMap, compIndex, component1, component2);
+        EntityGeneric.SetComponents(archetype, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -113,13 +112,11 @@ public partial class EntityStore
             where T2 : struct, IComponent
             where T3 : struct, IComponent
     {
-        var bitSet          = new BitSet();
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        var bitSet = new BitSet();
+        EntityGeneric.SetBits<T1,T2,T3>(ref bitSet);
         
         var entity = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        EntityGeneric.SetComponents3(archetype.heapMap, compIndex, component1, component2, component3);
+        EntityGeneric.SetComponents(archetype, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -140,14 +137,11 @@ public partial class EntityStore
             where T3 : struct, IComponent
             where T4 : struct, IComponent
     {
-        var bitSet          = new BitSet();
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
-        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        var bitSet = new BitSet();
+        EntityGeneric.SetBits<T1,T2,T3,T4>(ref bitSet);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        EntityGeneric.SetComponents4(archetype.heapMap, compIndex, component1, component2, component3, component4);
+        EntityGeneric.SetComponents(archetype, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -170,15 +164,11 @@ public partial class EntityStore
             where T4 : struct, IComponent
             where T5 : struct, IComponent
     {
-        var bitSet          = new BitSet();
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
-        bitSet.SetBit(StructHeap<T2>.StructIndex);
-        bitSet.SetBit(StructHeap<T3>.StructIndex);
-        bitSet.SetBit(StructHeap<T4>.StructIndex);
-        bitSet.SetBit(StructHeap<T5>.StructIndex);
+        var bitSet = new BitSet();
+        EntityGeneric.SetBits<T1,T2,T3,T4,T5>(ref bitSet);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
-        EntityGeneric.SetComponents5(archetype.heapMap, compIndex, component1, component2, component3, component4, component5);
+        EntityGeneric.SetComponents(archetype, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
