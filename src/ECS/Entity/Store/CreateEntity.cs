@@ -69,7 +69,7 @@ public partial class EntityStore
             where T1 : struct, IComponent
     {
         var bitSet          = new BitSet();
-        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        EntityGeneric.SetBits<T1>(ref bitSet);
         
         var entity  = CreateEntityGeneric(bitSet, tags, out var archetype, out int compIndex);
         EntityGeneric.SetComponents(archetype, compIndex, component);

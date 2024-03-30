@@ -17,7 +17,7 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = new BitSet();
-        removeTypes.SetBit(StructHeap<T1>.StructIndex);
+        EntityGeneric.SetBits<T1>(ref removeTypes);
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         EntityGeneric.StashRemoveComponents(store, removeTypes, oldType, oldCompIndex);
 

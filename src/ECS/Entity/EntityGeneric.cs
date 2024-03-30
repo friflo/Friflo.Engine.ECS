@@ -12,6 +12,12 @@ namespace Friflo.Engine.ECS;
 internal static class EntityGeneric
 {
 #region set bits
+    internal static void SetBits<T1>(ref BitSet bitSet)
+        where T1 : struct, IComponent
+    {
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+    }
+
     internal static void SetBits<T1, T2>(ref BitSet bitSet)
         where T1 : struct, IComponent
         where T2 : struct, IComponent

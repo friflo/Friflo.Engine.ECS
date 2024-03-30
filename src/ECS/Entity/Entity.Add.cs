@@ -17,7 +17,7 @@ public partial struct  Entity
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var addTypes        = new BitSet();
-        addTypes.SetBit(StructHeap<T1>.StructIndex);
+        EntityGeneric.SetBits<T1>(ref addTypes);
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         EntityGeneric.StashAddComponents(store, addTypes, oldType, oldCompIndex);
 
