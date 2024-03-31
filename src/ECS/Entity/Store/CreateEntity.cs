@@ -177,6 +177,9 @@ public static class EntityStoreExtensions {
         return entity;
     }
     
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public static Entity CreateEntity<T1, T2, T3, T4, T5, T6>(
         this EntityStore store,
         T1      component1,
@@ -202,7 +205,9 @@ public static class EntityStoreExtensions {
         return entity;
     }
 
-    
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public static Entity CreateEntity<T1, T2, T3, T4, T5, T6, T7>(
         this EntityStore store,
         T1      component1,
@@ -230,7 +235,9 @@ public static class EntityStoreExtensions {
         return entity;
     }
 
-    
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public static Entity CreateEntity<T1, T2, T3, T4, T5, T6, T7, T8>(
         this EntityStore store,
         T1      component1,
@@ -260,7 +267,9 @@ public static class EntityStoreExtensions {
         return entity;
     }
 
-    
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public static Entity CreateEntity<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         this EntityStore store,
         T1      component1,
@@ -292,7 +301,9 @@ public static class EntityStoreExtensions {
         return entity;
     }
 
-
+    /// <summary>
+    /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
+    /// </summary>
     public static Entity CreateEntity<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
         this EntityStore store,
         T1      component1,
