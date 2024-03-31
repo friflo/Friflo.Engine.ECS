@@ -105,13 +105,18 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 
 [Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
 
+- **1.26.0**    ![new](docs/images/new.svg) New Features  
+                Added [EntityStoreExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStoreExtensions.md) with 10 generic `CreateEntity()` overloads to create entities with components without any structural change.  
+                Added [EntityExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityExtensions.md) with 10 generic overloads to `Add<>()`, `Set<>()` and `Remove<>()` entity components with none or one structural change.  
+                Added [ArchetypeQuery.ToEntityList()](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.ToEntityList().md) returning the entities as a list which can be used for structural changes.  
+
 - **1.25.0**    ![new](docs/images/new.svg) Switched project to more permissive license LGPL v3.0. Before AGPL v3.0.
                 See [#41](https://github.com/friflo/Friflo.Json.Fliox/discussions/41).
 
 - **1.24.0**    ![new](docs/images/new.svg) Add support for component fields of type: `sbyte, ushort, uint, ulong`.
                 See [Issue #38](https://github.com/friflo/Friflo.Json.Fliox/issues/38).
 
-- **1.23.0**    ![new](docs/images/new.svg) Support integration in Unity as nuget package.  
+- **1.23.0**    Support integration in Unity as nuget package.  
                 Supports Mono & AOT/IL2CPP builds. Tested on Windows & macOS.
 
 - **1.19.0**    Add `ArchetypeQuery.ForEachEntity()` for convenient query iteration.  
