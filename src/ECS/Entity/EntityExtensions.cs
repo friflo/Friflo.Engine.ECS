@@ -9,7 +9,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Provide extension methods to optimize <see cref="Entity"/> modifications.<br/>
-/// <c>Add() and Remove()</c> cause only none or one structural change.   
+/// <c>Add()</c> and <c>Remove()</c> cause only none or one structural change.   
 /// </summary>
 public static partial class EntityExtensions
 {
