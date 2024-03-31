@@ -44,6 +44,9 @@ public partial class EntityStore
     }
 }
 
+/// <summary>
+/// Provide generic <c>CreateEntity()</c> overloads to create entities with passed components without any structural change.
+/// </summary>
 public static class EntityStoreExtensions {
     
     /// <summary>
