@@ -25,6 +25,7 @@ The library implements all features a typical ECS provides.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
   See screenshot at [Examples](#examples).
 - SIMD Support - optional. Multi thread capable and remainder loop free.
+- High-performance and compact ECS implementation - Friflo.Engine.ECS.dll size 220 kb
 - Does not use unsafe code. See [Library](#library).
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
@@ -178,7 +179,7 @@ Build options:
 - It requires **Friflo.Json.Fliox** which is part of this repository.
 
 ## Build
-- Size of `Friflo.Engine.ECS.dll`: ~ 200 kb. The implementation: ~ 15.000 LOC.
+- Size: Friflo.Engine.ECS.dll: ~ 210 kb. Implementation: ~ 17.500 LOC.
 - Build time Windows: ~ 5 seconds, macOS (M2): 2,5 seconds.
 - Code coverage of the unit tests: 99,9%. See: [docs/code-coverage.md](docs/code-coverage.md).
 - Unit test execution: ~ 1 second.
