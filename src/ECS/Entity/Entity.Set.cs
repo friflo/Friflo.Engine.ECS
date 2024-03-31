@@ -8,6 +8,7 @@ namespace Friflo.Engine.ECS;
 public static partial class EntityExtensions
 {
     /// <summary> Set the passed component on the entity. </summary>
+    /// <exception cref="ECS.MissingComponentException"> if the entity does not contain a passed component. </exception>
     public static void Set<T1>(
         this Entity entity,
         in T1   component1)
@@ -26,6 +27,7 @@ public static partial class EntityExtensions
     }
     
     /// <summary> Set the passed components on the entity. </summary>
+    /// <exception cref="ECS.MissingComponentException"> if the entity does not contain a passed component. </exception>
     public static void Set<T1, T2>(
         this Entity entity,
         in T1   component1,
@@ -46,6 +48,7 @@ public static partial class EntityExtensions
     }
     
     /// <summary> Set the passed components on the entity. </summary>
+    /// <exception cref="ECS.MissingComponentException"> if the entity does not contain a passed component. </exception>
     public static void Set<T1, T2, T3>(
         this Entity entity,
         in T1   component1,
@@ -68,6 +71,7 @@ public static partial class EntityExtensions
     }
     
     /// <summary> Set the passed components on the entity. </summary>
+    /// <exception cref="ECS.MissingComponentException"> if the entity does not contain a passed component. </exception>
     public static void Set<T1, T2, T3, T4>(
         this Entity entity,
         in T1   component1,
@@ -92,6 +96,7 @@ public static partial class EntityExtensions
     }
     
     /// <summary> Set the passed components on the entity. </summary>
+    /// <exception cref="ECS.MissingComponentException"> if the entity does not contain a passed component. </exception>
     public static void Set<T1, T2, T3, T4, T5>(
         this Entity entity,
         in T1   component1,

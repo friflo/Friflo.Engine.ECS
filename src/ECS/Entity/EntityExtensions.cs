@@ -7,6 +7,10 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Provide extension methods to optimize <see cref="Entity"/> modifications.<br/>
+/// <c>Add() and Remove()</c> cause only none or one structural change.   
+/// </summary>
 public static partial class EntityExtensions
 {
 #region get component type indexes
