@@ -14,14 +14,14 @@ namespace Friflo.Engine.ECS;
 public static partial class EntityExtensions
 {
 #region get component type indexes
-    private static Span<int> GetTypes<T1>(Span<int> components)
+    internal static Span<int> GetTypes<T1>(Span<int> components)
         where T1 : struct, IComponent
     {
         components[0] = StructHeap<T1>.StructIndex;
         return components;
     }
     
-    private static Span<int> GetTypes<T1, T2>(Span<int> components)
+    internal static Span<int> GetTypes<T1, T2>(Span<int> components)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
@@ -30,7 +30,7 @@ public static partial class EntityExtensions
         return components;
     }
     
-    private static Span<int> GetTypes<T1, T2, T3>(Span<int> components)
+    internal static Span<int> GetTypes<T1, T2, T3>(Span<int> components)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
@@ -41,7 +41,7 @@ public static partial class EntityExtensions
         return components;
     }
     
-    private static Span<int> GetTypes<T1, T2, T3, T4>(Span<int> components)
+    internal static Span<int> GetTypes<T1, T2, T3, T4>(Span<int> components)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
@@ -54,7 +54,7 @@ public static partial class EntityExtensions
         return components;
     }
     
-    private static Span<int> GetTypes<T1, T2, T3, T4, T5>(Span<int> components)
+    internal static Span<int> GetTypes<T1, T2, T3, T4, T5>(Span<int> components)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent

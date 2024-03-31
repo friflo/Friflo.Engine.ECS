@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
 
@@ -71,12 +72,12 @@ public static class EntityStoreExtensions {
         in Tags tags = default)
             where T1 : struct, IComponent
     {
-        var componentTypes  = ComponentTypes.Get<T1>();
+        var componentTypes  = EntityExtensions.GetTypes<T1>(stackalloc int[1]);
         var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
-        SendCreateEvents(entity, archetype);
+        SendCreateEvents(entity, archetype, componentTypes);
         return entity;
     }
     
@@ -91,12 +92,12 @@ public static class EntityStoreExtensions {
             where T1 : struct, IComponent
             where T2 : struct, IComponent
     {
-        var componentTypes  = ComponentTypes.Get<T1,T2>();
+        var componentTypes  = EntityExtensions.GetTypes<T1,T2>(stackalloc int[2]);
         var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
-        SendCreateEvents(entity, archetype);
+        SendCreateEvents(entity, archetype, componentTypes);
         return entity;
     }
     
@@ -113,12 +114,12 @@ public static class EntityStoreExtensions {
             where T2 : struct, IComponent
             where T3 : struct, IComponent
     {
-        var componentTypes  = ComponentTypes.Get<T1,T2,T3>();
+        var componentTypes  = EntityExtensions.GetTypes<T1,T2,T3>(stackalloc int[3]);
         var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
-        SendCreateEvents(entity, archetype);
+        SendCreateEvents(entity, archetype, componentTypes);
         return entity;
     }
     
@@ -137,12 +138,12 @@ public static class EntityStoreExtensions {
             where T3 : struct, IComponent
             where T4 : struct, IComponent
     {
-        var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4>();
+        var componentTypes  = EntityExtensions.GetTypes<T1,T2,T3,T4>(stackalloc int[4]);
         var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
-        SendCreateEvents(entity, archetype);
+        SendCreateEvents(entity, archetype, componentTypes);
         return entity;
     }
     
@@ -163,24 +164,28 @@ public static class EntityStoreExtensions {
             where T4 : struct, IComponent
             where T5 : struct, IComponent
     {
-        var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4,T5>();
+        var componentTypes  = EntityExtensions.GetTypes<T1,T2,T3,T4,T5>(stackalloc int[5]);
         var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
-        SendCreateEvents(entity, archetype);
+        SendCreateEvents(entity, archetype, componentTypes);
         return entity;
     }
     
-    private static Entity CreateEntityGeneric(EntityStore store, in ComponentTypes componentTypes, in Tags tags, out Archetype archetype, out int compIndex)
+    private static Entity CreateEntityGeneric(EntityStore store, Span<int> componentTypes, in Tags tags, out Archetype archetype, out int compIndex)
     {
-        archetype   = store.GetArchetype(componentTypes, tags);
+        var types = new ComponentTypes();
+        foreach (var structIndex in componentTypes) {
+            types.bitSet.SetBit(structIndex);
+        }
+        archetype   = store.GetArchetype(types, tags);
         var id      = store.NewId();
         compIndex   = store.CreateEntityInternal(archetype, id);
         return new Entity(store, id);
     }
     
-    private static void SendCreateEvents(Entity entity, Archetype archetype)
+    private static void SendCreateEvents(Entity entity, Archetype archetype, Span<int> componentTypes)
     {
         var store = entity.store;
         // --- create entity event
@@ -196,8 +201,8 @@ public static class EntityStoreExtensions {
         if (componentAdded == null) {
             return;
         }
-        foreach (var heap in archetype.structHeaps) {
-            componentAdded(new ComponentChanged (store, entity.Id, ComponentChangedAction.Add, heap.structIndex, null));    
+        foreach (var structIndex in componentTypes) {
+            componentAdded(new ComponentChanged (store, entity.Id, ComponentChangedAction.Add, structIndex, null));    
         }
     }
 }

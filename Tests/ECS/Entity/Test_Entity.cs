@@ -434,10 +434,32 @@ public static class Test_Entity
         };
         int componentCount = 0;
         store.OnComponentAdded += changed => {
+            var str = changed.ToString();
             switch (componentCount++) {
-                case 0: AreEqual("entity: 2 - event > Add Component: [Position]", changed.ToString());    break;
-                case 1: AreEqual("entity: 3 - event > Add Component: [Position]", changed.ToString());    break;
-                case 2: AreEqual("entity: 3 - event > Add Component: [Rotation]", changed.ToString());    break;
+                // --- entity 2
+                case 0:     AreEqual("entity: 2 - event > Add Component: [Position]",       str); break;
+                
+                // --- entity 3
+                case 1:     AreEqual("entity: 3 - event > Add Component: [Position]",       str); break;
+                case 2:     AreEqual("entity: 3 - event > Add Component: [Rotation]",       str); break;
+                
+                // --- entity 4
+                case 3:     AreEqual("entity: 4 - event > Add Component: [Position]",       str); break;
+                case 4:     AreEqual("entity: 4 - event > Add Component: [Rotation]",       str); break;
+                case 5:     AreEqual("entity: 4 - event > Add Component: [Scale3]",         str); break;
+                
+                // --- entity 5
+                case 6:     AreEqual("entity: 5 - event > Add Component: [Position]",       str); break;
+                case 7:     AreEqual("entity: 5 - event > Add Component: [Rotation]",       str); break;
+                case 8:     AreEqual("entity: 5 - event > Add Component: [Scale3]",         str); break;
+                case 9:     AreEqual("entity: 5 - event > Add Component: [MyComponent1]",   str); break;
+                
+                // --- entity 6
+                case 10:    AreEqual("entity: 6 - event > Add Component: [Rotation]",       str); break;
+                case 11:    AreEqual("entity: 6 - event > Add Component: [Position]",       str); break;
+                case 12:    AreEqual("entity: 6 - event > Add Component: [Scale3]",         str); break;
+                case 13:    AreEqual("entity: 6 - event > Add Component: [MyComponent1]",   str); break;
+                case 14:    AreEqual("entity: 6 - event > Add Component: [MyComponent2]",   str); break;
             }
         };
         var tags    = Tags.Get<TestTag>();
@@ -467,7 +489,7 @@ public static class Test_Entity
             AreEqual(1,         entity.Scale3.x);
             AreEqual(1,         entity.GetComponent<MyComponent1>().a);
         } {
-            var entity = store.CreateEntity(new Position(1,1,1), new Rotation(1,1,1,1), new Scale3(1,1,1), new MyComponent1 { a = 1}, new MyComponent2 { b = 1}, tags);
+            var entity = store.CreateEntity(new Rotation(1,1,1,1), new Position(1,1,1), new Scale3(1,1,1), new MyComponent1 { a = 1}, new MyComponent2 { b = 1}, tags);
             IsTrue(entity.Tags.Has<TestTag>());
             AreEqual(1,         entity.Position.x);
             AreEqual(1,         entity.Rotation.x);
