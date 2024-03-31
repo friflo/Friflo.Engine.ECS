@@ -235,17 +235,13 @@ The hello world examples demonstrates the creation of some entities
 and their movement using a simple `ForEachEntity()` call.  
 
 ```csharp
-public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.19.0
+public struct Velocity : IComponent { public Vector3 value; }
 
 public static void HelloWorld()
 {
     var store = new EntityStore();
     for (int n = 0; n < 10; n++) {
-        store.Batch()
-            .Add(new Position(n, 0, 0))
-            .Add(new Velocity{ value = new Vector3(0, n, 0) })
-            .Add(new EntityName("hello entity"))
-            .CreateEntity();
+        store.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
     }
     var query = store.Query<Position, Velocity>();
     query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
@@ -375,8 +371,7 @@ It enables access to a unique entity without the need to pass an entity by exter
 public static void GetUniqueEntity()
 {
     var store   = new EntityStore();
-    var entity  = store.CreateEntity();
-    entity.AddComponent(new UniqueEntity("Player"));    // UniqueEntity is a build-in component
+    var entity  = store.CreateEntity(new UniqueEntity("Player")); // UniqueEntity is a build-in component
     
     var player  = store.GetUniqueEntity("Player");
     Console.WriteLine($"entity: {player}");             // > entity: id: 1  [UniqueEntity]
@@ -672,10 +667,8 @@ Reading the entities of a JSON file into a store with `ReadIntoStore()`.
 public static void JsonSerialization()
 {
     var store = new EntityStore(PidType.UsePidAsId);
-    var entity1 = store.CreateEntity();
-    entity1.AddComponent(new EntityName("hello JSON"));
-    var entity2 = store.CreateEntity();
-    entity2.AddComponent(new Position(1, 2, 3));
+    var entity1 = store.CreateEntity(new EntityName("hello JSON"));
+    var entity2 = store.CreateEntity(new Position(1, 2, 3));
 
     // --- Write store entities as JSON array
     var serializer = new EntitySerializer();
@@ -724,16 +717,9 @@ public static void EntityQueries()
 {
     var store   = new EntityStore();
     
-    var entity1 = store.CreateEntity();
-    entity1.AddComponent(new EntityName("test"));
-    entity1.AddTag<MyTag1>();
-    
-    var entity2 = store.CreateEntity();
-    entity2.AddTag<MyTag1>();
-    
-    var entity3 = store.CreateEntity();
-    entity3.AddTag<MyTag1>();
-    entity3.AddTag<MyTag2>();
+    var entity1 = store.CreateEntity(new EntityName("test"), Tags.Get<MyTag1>());
+    var entity2 = store.CreateEntity(Tags.Get<MyTag1>());
+    var entity3 = store.CreateEntity(Tags.Get<MyTag1, MyTag2>());
     
     // --- query components
     var queryNames = store.Query<EntityName>();
@@ -769,8 +755,7 @@ public static void EnumerateQueryChunks()
 {
     var store   = new EntityStore();
     for (int n = 0; n < 3; n++) {
-        var entity = store.CreateEntity();
-        entity.AddComponent(new MyComponent{ value = n + 42 });
+        store.CreateEntity(new MyComponent{ value = n + 42 });
     }
     var query = store.Query<MyComponent>();
     foreach (var (components, entities) in query.Chunks)
@@ -849,7 +834,7 @@ public static void ParallelQueryJob()
     var runner  = new ParallelJobRunner(Environment.ProcessorCount);
     var store   = new EntityStore { JobRunner = runner };
     for (int n = 0; n < 10_000; n++) {
-        store.CreateEntity().AddComponent<MyComponent>();
+        store.CreateEntity(new MyComponent());
     }
     var query = store.Query<MyComponent>();
     var queryJob = query.ForEach((myComponents, entities) =>
@@ -892,7 +877,7 @@ public static void QueryVectorization()
 {
     var store   = new EntityStore();
     for (int n = 0; n < 10_000; n++) {
-        store.CreateEntity().AddComponent<MyComponent>();
+        store.CreateEntity(new MyComponent());
     }
     var query = store.Query<MyComponent>();
     foreach (var (component, entities) in query.Chunks)
@@ -924,9 +909,7 @@ public static void FilterEntityEvents()
     var store   = new EntityStore();
     store.EventRecorder.Enabled = true; // required for EventFilter
     
-    store.CreateEntity();
-    store.CreateEntity().AddComponent<Position>();
-    store.CreateEntity().AddTag      <MyTag1>();
+    store.CreateEntity(new Position(), Tags.Get<MyTag1>());
     
     var query = store.Query();
     query.EventFilter.ComponentAdded<Position>();
@@ -1080,9 +1063,8 @@ After a query thread has finished these changes are executed with `Playback()` o
 public static void CommandBuffer()
 {
     var store   = new EntityStore();
-    var entity1 = store.CreateEntity();
+    var entity1 = store.CreateEntity(new Position());
     var entity2 = store.CreateEntity();
-    entity1.AddComponent<Position>();
     
     CommandBuffer cb = store.GetCommandBuffer();
     var newEntity = cb.CreateEntity();
