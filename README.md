@@ -22,8 +22,6 @@ The library implements all features a typical ECS provides.
 - Subscribe to events/signals for specific entities - *Unique feature*.  
   Subscribe to events in a world - *Supported by most ECS projects*.
 - JSON Serialization without any boilerplate.
-- Hybrid ECS - supporting both: Scripts similar to MonoBehaviour's as well as struct components and tags.  
-  It enables simple refactoring between both models.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
   See screenshot at [Examples](#examples).
 - SIMD Support - optional. Multi thread capable and remainder loop free.
@@ -106,9 +104,11 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 [Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
 
 - **1.26.0**    ![new](docs/images/new.svg) New Features  
-                Added [EntityStoreExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStoreExtensions.md) with 10 generic `CreateEntity()` overloads to create entities with components without any structural change.  
-                Added [EntityExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityExtensions.md) with 10 generic overloads to `Add<>()`, `Set<>()` and `Remove<>()` entity components with none or one structural change.  
-                Added [ArchetypeQuery.ToEntityList()](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.ToEntityList().md) returning the entities as a list which can be used for structural changes.  
+                Add [EntityStoreExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStoreExtensions.md) with 10 `CreateEntity()` overloads to create entities with components without any structural change.  
+                Add [EntityExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityExtensions.md) with 10 overloads to `Add<>()`, `Set<>()` and `Remove<>()` entity components with one/none structural change.  
+                Add [ArchetypeQuery.ToEntityList()](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.ToEntityList().md) returning the entities as a list which can be used for structural changes.  
+                Emit events on create / delete entity via [EntityStore.OnEntityCreate](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStore.OnEntityCreate.md) and
+                [EntityStore.OnEntityDelete](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStore.OnEntityDelete.md).
 
 - **1.25.0**    ![new](docs/images/new.svg) Switched project to more permissive license LGPL v3.0. Before AGPL v3.0.
                 See [#41](https://github.com/friflo/Friflo.Json.Fliox/discussions/41).
