@@ -41,34 +41,38 @@ public partial class EntityStore
         CreateEntityEvent(entity);
         return entity;
     }
+}
+
+public static class EntityStoreExtensions {
     
     /// <summary>
     /// Create and return a new <see cref="Entity"/> with the passed <paramref name="tags"/>.
     /// </summary>
-    public Entity CreateEntity(in Tags tags)
+    public static Entity CreateEntity(this EntityStore store, in Tags tags)
     {
-        var archetype   = GetArchetype(default, tags);
-        var id          = NewId();
-        CreateEntityInternal(archetype, id);
-        var entity      = new Entity(this, id);
+        var archetype   = store.GetArchetype(default, tags);
+        var id          = store.NewId();
+        store.CreateEntityInternal(archetype, id);
+        var entity      = new Entity(store, id);
         
         // Send event. See: SEND_EVENT notes
-        CreateEntityEvent(entity);
-        var tagsChanged = TagsChanged;
-        if (tagsChanged != null) tagsChanged(new TagsChanged(this, id, tags, default));
+        store.CreateEntityEvent(entity);
+        var tagsChanged = store.TagsChanged;
+        if (tagsChanged != null) tagsChanged(new TagsChanged(store, id, tags, default));
         return entity;
     }
    
     /// <summary>
     /// Create and return a new <see cref="Entity"/> with the passed component and <paramref name="tags"/>.
     /// </summary>
-    public Entity CreateEntity<T1>(
-        T1 component,
+    public static Entity CreateEntity<T1>(
+        this EntityStore store,
+        T1      component,
         in Tags tags = default)
             where T1 : struct, IComponent
     {
         var componentTypes  = ComponentTypes.Get<T1>();
-        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
+        var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
@@ -79,15 +83,16 @@ public partial class EntityStore
     /// <summary>
     /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
     /// </summary>
-    public Entity CreateEntity<T1, T2>(
-        T1 component1,
-        T2 component2,
+    public static Entity CreateEntity<T1, T2>(
+        this EntityStore store,
+        T1      component1,
+        T2      component2,
         in Tags tags = default)
             where T1 : struct, IComponent
             where T2 : struct, IComponent
     {
         var componentTypes  = ComponentTypes.Get<T1,T2>();
-        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
+        var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
@@ -98,17 +103,18 @@ public partial class EntityStore
     /// <summary>
     /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
     /// </summary>
-    public Entity CreateEntity<T1, T2, T3>(
-        T1 component1,
-        T2 component2,
-        T3 component3,
+    public static Entity CreateEntity<T1, T2, T3>(
+        this EntityStore store,
+        T1      component1,
+        T2      component2,
+        T3      component3,
         in Tags tags = default)
             where T1 : struct, IComponent
             where T2 : struct, IComponent
             where T3 : struct, IComponent
     {
         var componentTypes  = ComponentTypes.Get<T1,T2,T3>();
-        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
+        var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
@@ -119,11 +125,12 @@ public partial class EntityStore
     /// <summary>
     /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
     /// </summary>
-    public Entity CreateEntity<T1, T2, T3, T4>(
-        T1 component1,
-        T2 component2,
-        T3 component3,
-        T4 component4,
+    public static Entity CreateEntity<T1, T2, T3, T4>(
+        this EntityStore store,
+        T1      component1,
+        T2      component2,
+        T3      component3,
+        T4      component4,
         in Tags tags = default)
             where T1 : struct, IComponent
             where T2 : struct, IComponent
@@ -131,7 +138,7 @@ public partial class EntityStore
             where T4 : struct, IComponent
     {
         var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4>();
-        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
+        var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
@@ -142,12 +149,13 @@ public partial class EntityStore
     /// <summary>
     /// Create and return a new <see cref="Entity"/> with the passed components and <paramref name="tags"/>.
     /// </summary>
-    public Entity CreateEntity<T1, T2, T3, T4, T5>(
-        T1 component1,
-        T2 component2,
-        T3 component3,
-        T4 component4,
-        T5 component5,
+    public static Entity CreateEntity<T1, T2, T3, T4, T5>(
+        this EntityStore store,
+        T1      component1,
+        T2      component2,
+        T3      component3,
+        T4      component4,
+        T5      component5,
         in Tags tags = default)
             where T1 : struct, IComponent
             where T2 : struct, IComponent
@@ -156,7 +164,7 @@ public partial class EntityStore
             where T5 : struct, IComponent
     {
         var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4,T5>();
-        var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
+        var entity          = CreateEntityGeneric(store, componentTypes, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
@@ -164,31 +172,32 @@ public partial class EntityStore
         return entity;
     }
     
-    private Entity CreateEntityGeneric(in ComponentTypes componentTypes, in Tags tags, out Archetype archetype, out int compIndex)
+    private static Entity CreateEntityGeneric(EntityStore store, in ComponentTypes componentTypes, in Tags tags, out Archetype archetype, out int compIndex)
     {
-        archetype   = GetArchetype(componentTypes, tags);
-        var id      = NewId();
-        compIndex   = CreateEntityInternal(archetype, id);
-        return new Entity(this, id);
+        archetype   = store.GetArchetype(componentTypes, tags);
+        var id      = store.NewId();
+        compIndex   = store.CreateEntityInternal(archetype, id);
+        return new Entity(store, id);
     }
     
-    private void SendCreateEvents(Entity entity, Archetype archetype)
+    private static void SendCreateEvents(Entity entity, Archetype archetype)
     {
+        var store = entity.store;
         // --- create entity event
-        CreateEntityEvent(entity);
+        store.CreateEntityEvent(entity);
         
         // --- tag event
-        var tagsChanged = TagsChanged;
+        var tagsChanged = store.TagsChanged;
         if (tagsChanged != null) {
-            tagsChanged(new TagsChanged(this, entity.Id, archetype.tags, default));
+            tagsChanged(new TagsChanged(store, entity.Id, archetype.tags, default));
         }
         // --- component events 
-        var componentAdded = ComponentAdded;
+        var componentAdded = store.ComponentAdded;
         if (componentAdded == null) {
             return;
         }
         foreach (var heap in archetype.structHeaps) {
-            componentAdded(new ComponentChanged (this, entity.Id, ComponentChangedAction.Add, heap.structIndex, null));    
+            componentAdded(new ComponentChanged (store, entity.Id, ComponentChangedAction.Add, heap.structIndex, null));    
         }
     }
 }
