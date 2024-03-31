@@ -9,7 +9,7 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal static class EntityGeneric
+public static partial class EntityExtensions
 {
   
 #region assign components
@@ -96,7 +96,7 @@ internal static class EntityGeneric
 
 
 #region add components
-    internal static void StashAddComponents(EntityStoreBase store, in ComponentTypes addComponents, Archetype oldType, int oldCompIndex)
+    private static void StashAddComponents(EntityStoreBase store, in ComponentTypes addComponents, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentAdded == null) {
             return;
@@ -112,12 +112,13 @@ internal static class EntityGeneric
         }
     }
     
-    internal static void SendAddEvents(EntityStoreBase store, int id, in ComponentTypes addComponents, Archetype newType, Archetype oldType)
+    private static void SendAddEvents(Entity entity, in ComponentTypes addComponents, Archetype newType, Archetype oldType)
     {
+        var store = entity.store;
         // --- tag event
         var tagsChanged = store.TagsChanged;
         if (tagsChanged != null && !newType.tags.bitSet.Equals(oldType.Tags.bitSet)) {
-            tagsChanged(new TagsChanged(store, id, newType.tags, oldType.Tags));
+            tagsChanged(new TagsChanged(store, entity.Id, newType.tags, oldType.Tags));
         }
         // --- component events 
         var componentAdded = store.ComponentAdded;
@@ -125,6 +126,7 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap  = oldType.heapMap;
+        var id          = entity.Id;
         foreach (var addTypeIndex in addComponents.bitSet)
         {
             var oldHeap     = oldHeapMap[addTypeIndex];
@@ -136,7 +138,7 @@ internal static class EntityGeneric
 
 
 #region remove components
-    internal static void StashRemoveComponents(EntityStoreBase store, in ComponentTypes removeComponents, Archetype oldType, int oldCompIndex)
+    private static void StashRemoveComponents(EntityStoreBase store, in ComponentTypes removeComponents, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentRemoved == null) {
             return;
@@ -152,12 +154,13 @@ internal static class EntityGeneric
         }
     }
     
-    internal static void SendRemoveEvents(EntityStoreBase store, int id, in ComponentTypes removeComponents, Archetype newType, Archetype oldType)
+    private static void SendRemoveEvents(Entity entity, in ComponentTypes removeComponents, Archetype newType, Archetype oldType)
     {
+        var store = entity.store;
         // --- tag event
         var tagsChanged = store.TagsChanged;
         if (tagsChanged != null && !newType.tags.bitSet.Equals(oldType.Tags.bitSet)) {
-            tagsChanged(new TagsChanged(store, id, newType.tags, oldType.Tags));
+            tagsChanged(new TagsChanged(store, entity.Id, newType.tags, oldType.Tags));
         }
         // --- component events 
         var componentRemoved = store.ComponentRemoved;
@@ -165,6 +168,7 @@ internal static class EntityGeneric
             return;
         }
         var oldHeapMap = oldType.heapMap;
+        var id          = entity.Id;
         foreach (var removeTypeIndex in removeComponents.bitSet)
         {
             var oldHeap = oldHeapMap[removeTypeIndex];
@@ -179,7 +183,7 @@ internal static class EntityGeneric
 
 #region set components
 
-    internal static void CheckComponents(in Entity entity, in ComponentTypes components, Archetype type, int compIndex)
+    private static void CheckComponents(in Entity entity, in ComponentTypes components, Archetype type, int compIndex)
     {
         if (!type.componentTypes.bitSet.HasAll(components.bitSet)) {
             throw MissingComponentException(entity, components, type);
@@ -204,13 +208,15 @@ internal static class EntityGeneric
         return new MissingComponentException(sb.ToString());
     }
     
-    internal static void SendSetEvents(EntityStoreBase store, int id, in ComponentTypes components, Archetype type)
+    private static void SendSetEvents(Entity entity, in ComponentTypes components, Archetype type)
     {
+        var store = entity.store;
         var componentAdded = store.ComponentAdded;
         if (componentAdded == null) {
             return;
         }
         var heapMap = type.heapMap;
+        var id      = entity.Id;
         foreach (var structIndex in components.bitSet) {
             componentAdded(new ComponentChanged (store, id, ComponentChangedAction.Update, structIndex, heapMap[structIndex]));
         }

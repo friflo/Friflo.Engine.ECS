@@ -69,7 +69,7 @@ public partial class EntityStore
     {
         var componentTypes  = ComponentTypes.Get<T1>();
         var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
-        EntityGeneric.AssignComponents(archetype, compIndex, component);
+        EntityExtensions.AssignComponents(archetype, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -88,7 +88,7 @@ public partial class EntityStore
     {
         var componentTypes  = ComponentTypes.Get<T1,T2>();
         var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
-        EntityGeneric.AssignComponents(archetype, compIndex, component1, component2);
+        EntityExtensions.AssignComponents(archetype, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -109,7 +109,7 @@ public partial class EntityStore
     {
         var componentTypes  = ComponentTypes.Get<T1,T2,T3>();
         var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
-        EntityGeneric.AssignComponents(archetype, compIndex, component1, component2, component3);
+        EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -132,7 +132,7 @@ public partial class EntityStore
     {
         var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4>();
         var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
-        EntityGeneric.AssignComponents(archetype, compIndex, component1, component2, component3, component4);
+        EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);
@@ -157,7 +157,7 @@ public partial class EntityStore
     {
         var componentTypes  = ComponentTypes.Get<T1,T2,T3,T4,T5>();
         var entity          = CreateEntityGeneric(componentTypes, tags, out var archetype, out int compIndex);
-        EntityGeneric.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5);
+        EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
         SendCreateEvents(entity, archetype);

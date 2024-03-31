@@ -48,8 +48,6 @@ public sealed class EntityEqualityComparer : IEqualityComparer<Entity>
     public  int     GetHashCode(Entity entity)          => entity.Id;
 }
 
-// ReSharper disable once UnusedType.Global
-internal static class EntityExtensions { } // Engine.ECS must not have an Entity extension class to avoid confusion
 
 public static class EntityUtils
 {

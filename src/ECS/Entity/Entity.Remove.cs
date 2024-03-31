@@ -4,100 +4,115 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public partial struct  Entity
+public static partial class EntityExtensions
 {
-    public void Remove<T1>(in Tags tags = default)
+    /// <summary> Remove the specified component and tags from the entity. </summary>
+    public static void Remove<T1>(this Entity entity, in Tags tags = default)
         where T1 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        var store           = entity.store;
+        var id              = entity.Id;
+        ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeComponents= ComponentTypes.Get<T1>();
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
-        EntityGeneric.StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
-        node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendRemoveEvents(store, Id, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, removeComponents, newType, oldType);
     }
     
-    public void Remove<T1, T2>(in Tags tags = default)
+    /// <summary> Remove the specified components and tags from the entity. </summary>
+    public static void Remove<T1, T2>(this Entity entity, in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        var store           = entity.store;
+        var id              = entity.Id;
+        ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeComponents= ComponentTypes.Get<T1,T2>();
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
-        EntityGeneric.StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
-        node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendRemoveEvents(store, Id, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, removeComponents, newType, oldType);
     }
     
-    public void Remove<T1, T2, T3>(in Tags tags = default)
+    /// <summary> Remove the specified components and tags from the entity. </summary>
+    public static void Remove<T1, T2, T3>(this Entity entity, in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        var store           = entity.store;
+        var id              = entity.Id;
+        ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeComponents= ComponentTypes.Get<T1,T2,T3>();
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
-        EntityGeneric.StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
-        node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendRemoveEvents(store, Id, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, removeComponents, newType, oldType);
     }
     
-    public void Remove<T1, T2, T3, T4>(in Tags tags = default)
+    /// <summary> Remove the specified components and tags from the entity. </summary>
+    public static void Remove<T1, T2, T3, T4>(this Entity entity, in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        var store           = entity.store;
+        var id              = entity.Id;
+        ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeComponents= ComponentTypes.Get<T1,T2,T3,T4>();
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
-        EntityGeneric.StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
-        node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendRemoveEvents(store, Id, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, removeComponents, newType, oldType);
     }
     
-    public void Remove<T1, T2, T3, T4, T5>(in Tags tags = default)
+    /// <summary> Remove the specified components and tags from the entity. </summary>
+    public static void Remove<T1, T2, T3, T4, T5>(this Entity entity, in Tags tags = default)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
         where T3 : struct, IComponent
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        var store           = entity.store;
+        var id              = entity.Id;
+        ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeComponents= ComponentTypes.Get<T1,T2,T3,T4,T5>();
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
-        EntityGeneric.StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
+        StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
-        node.compIndex      = Archetype.MoveEntityTo(oldType, Id, oldCompIndex, newType);
+        node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
         node.archetype      = newType;
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendRemoveEvents(store, Id, removeComponents, newType, oldType);
+        SendRemoveEvents(entity, removeComponents, newType, oldType);
     }
 } 

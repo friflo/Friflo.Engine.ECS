@@ -5,43 +5,49 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-public partial struct  Entity
+public static partial class EntityExtensions
 {
-    public void Set<T1>(
+    /// <summary> Set the passed component on the entity. </summary>
+    public static void Set<T1>(
+        this Entity entity,
         in T1   component1)
             where T1 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1>();
-        EntityGeneric.CheckComponents(this, components, type, componentIndex);
+        CheckComponents(entity, components, type, componentIndex);
         
-        EntityGeneric.AssignComponents(type, componentIndex, component1);
+        AssignComponents(type, componentIndex, component1);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendSetEvents(store, Id, components, type);
+        SendSetEvents(entity, components, type);
     }
     
-    public void Set<T1, T2>(
+    /// <summary> Set the passed components on the entity. </summary>
+    public static void Set<T1, T2>(
+        this Entity entity,
         in T1   component1,
         in T2   component2)
             where T1 : struct, IComponent
             where T2 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2>();
-        EntityGeneric.CheckComponents(this, components, type, componentIndex);
+        CheckComponents(entity, components, type, componentIndex);
         
-        EntityGeneric.AssignComponents(type, componentIndex, component1, component2);
+        AssignComponents(type, componentIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendSetEvents(store, Id, components, type);
+        SendSetEvents(entity, components, type);
     }
     
-    public void Set<T1, T2, T3>(
+    /// <summary> Set the passed components on the entity. </summary>
+    public static void Set<T1, T2, T3>(
+        this Entity entity,
         in T1   component1,
         in T2   component2,
         in T3   component3)
@@ -49,19 +55,21 @@ public partial struct  Entity
             where T2 : struct, IComponent
             where T3 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2, T3>();
-        EntityGeneric.CheckComponents(this, components, type, componentIndex);
+        CheckComponents(entity, components, type, componentIndex);
         
-        EntityGeneric.AssignComponents(type, componentIndex, component1, component2, component3);
+        AssignComponents(type, componentIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendSetEvents(store, Id, components, type);
+        SendSetEvents(entity, components, type);
     }
     
-    public void Set<T1, T2, T3, T4>(
+    /// <summary> Set the passed components on the entity. </summary>
+    public static void Set<T1, T2, T3, T4>(
+        this Entity entity,
         in T1   component1,
         in T2   component2,
         in T3   component3,
@@ -71,19 +79,21 @@ public partial struct  Entity
             where T3 : struct, IComponent
             where T4 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2, T3, T4>();
-        EntityGeneric.CheckComponents(this, components, type, componentIndex);
+        CheckComponents(entity, components, type, componentIndex);
         
-        EntityGeneric.AssignComponents(type, componentIndex, component1, component2, component3, component4);
+        AssignComponents(type, componentIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendSetEvents(store, Id, components, type);
+        SendSetEvents(entity, components, type);
     }
     
-    public void Set<T1, T2, T3, T4, T5>(
+    /// <summary> Set the passed components on the entity. </summary>
+    public static void Set<T1, T2, T3, T4, T5>(
+        this Entity entity,
         in T1   component1,
         in T2   component2,
         in T3   component3,
@@ -95,15 +105,15 @@ public partial struct  Entity
             where T4 : struct, IComponent
             where T5 : struct, IComponent
     {
-        ref var node        = ref store.nodes[Id];
+        ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
         var components      = ComponentTypes.Get<T1, T2, T3, T4, T5>();
-        EntityGeneric.CheckComponents(this, components, type, componentIndex);
+        CheckComponents(entity, components, type, componentIndex);
         
-        EntityGeneric.AssignComponents(type, componentIndex, component1, component2, component3, component4, component5);
+        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
-        EntityGeneric.SendSetEvents(store, Id, components, type);
+        SendSetEvents(entity, components, type);
     }
 } 
