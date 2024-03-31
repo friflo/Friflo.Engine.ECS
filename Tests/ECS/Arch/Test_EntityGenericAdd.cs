@@ -53,33 +53,35 @@ public static class Test_EntityGenericAdd
                             AreEqual("entity: 2 - event > Update Component: [Scale3]",      str);   break;
                     
                 // --- entity 3
-                case 6:     AreEqual("entity: 3 - event > Add Component: [EntityName]",     str);   break;
-                case 7:     AreEqual("entity: 3 - event > Add Component: [Position]",       str);   break;
-                case 8:     AreEqual("entity: 3 - event > Add Component: [Scale3]",         str);   break;
-                case 9:     AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
-                            AreEqual(new EntityName("new"),     changed.Component<EntityName>());
-                            AreEqual("entity: 3 - event > Update Component: [EntityName]",  str);   break;
-                case 10:    AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                case 6:     AreEqual("entity: 3 - event > Add Component: [Position]",       str);   break;
+                case 7:     AreEqual("entity: 3 - event > Add Component: [Scale3]",         str);   break;
+                case 8:     AreEqual("entity: 3 - event > Add Component: [EntityName]",     str);   break;
+                
+                case 9:     AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
                             AreEqual(new Position(2,2,2),       changed.Component<Position>());
                             AreEqual("entity: 3 - event > Update Component: [Position]",    str);   break;
-                case 11:    AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
+                case 10:    AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
                             AreEqual(new Scale3(2,2,2),         changed.Component<Scale3>());
                             AreEqual("entity: 3 - event > Update Component: [Scale3]",      str);   break;
+                case 11:    AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
+                            AreEqual(new EntityName("new"),     changed.Component<EntityName>());
+                            AreEqual("entity: 3 - event > Update Component: [EntityName]",  str);   break;
                 
                 // --- entity 4
-                case 12:    AreEqual("entity: 4 - event > Add Component: [EntityName]",     str);   break;
-                case 13:    AreEqual("entity: 4 - event > Add Component: [Position]",       str);   break;
-                case 14:    AreEqual("entity: 4 - event > Add Component: [Scale3]",         str);   break;
+                case 12:    AreEqual("entity: 4 - event > Add Component: [Position]",       str);   break;
+                case 13:    AreEqual("entity: 4 - event > Add Component: [Scale3]",         str);   break;
+                case 14:    AreEqual("entity: 4 - event > Add Component: [EntityName]",     str);   break;
                 case 15:    AreEqual("entity: 4 - event > Add Component: [MyComponent1]",   str);   break;
-                case 16:    AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
-                            AreEqual(new EntityName("new"),     changed.Component<EntityName>());
-                            AreEqual("entity: 4 - event > Update Component: [EntityName]",  str);   break;
-                case 17:    AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
+                
+                case 16:    AreEqual(new Position(1,1,1),       changed.OldComponent<Position>());
                             AreEqual(new Position(2,2,2),       changed.Component<Position>());
                             AreEqual("entity: 4 - event > Update Component: [Position]",    str);   break;
-                case 18:    AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
+                case 17:    AreEqual(new Scale3(1,1,1),         changed.OldComponent<Scale3>());
                             AreEqual(new Scale3(2,2,2),         changed.Component<Scale3>());
                             AreEqual("entity: 4 - event > Update Component: [Scale3]",      str);   break;
+                case 18:    AreEqual(new EntityName("old"),     changed.OldComponent<EntityName>());
+                            AreEqual(new EntityName("new"),     changed.Component<EntityName>());
+                            AreEqual("entity: 4 - event > Update Component: [EntityName]",  str);   break;
                 case 19:    AreEqual(new MyComponent1{ a = 1 }, changed.OldComponent<MyComponent1>());
                             AreEqual(new MyComponent1{ a = 2 }, changed.Component<MyComponent1>());
                             AreEqual("entity: 4 - event > Update Component: [MyComponent1]",str);   break;

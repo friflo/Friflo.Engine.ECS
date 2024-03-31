@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Text;
-using Friflo.Engine.ECS.Utils;
-
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -11,7 +9,64 @@ namespace Friflo.Engine.ECS;
 
 public static partial class EntityExtensions
 {
-  
+#region get component type indexes
+    private static Span<int> GetTypes<T1>(Span<int> components)
+        where T1 : struct, IComponent
+    {
+        components[0] = StructHeap<T1>.StructIndex;
+        return components;
+    }
+    
+    private static Span<int> GetTypes<T1, T2>(Span<int> components)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+    {
+        components[0] = StructHeap<T1>.StructIndex;
+        components[1] = StructHeap<T2>.StructIndex;
+        return components;
+    }
+    
+    private static Span<int> GetTypes<T1, T2, T3>(Span<int> components)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+    {
+        components[0] = StructHeap<T1>.StructIndex;
+        components[1] = StructHeap<T2>.StructIndex;
+        components[2] = StructHeap<T3>.StructIndex;
+        return components;
+    }
+    
+    private static Span<int> GetTypes<T1, T2, T3, T4>(Span<int> components)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+    {
+        components[0] = StructHeap<T1>.StructIndex;
+        components[1] = StructHeap<T2>.StructIndex;
+        components[2] = StructHeap<T3>.StructIndex;
+        components[3] = StructHeap<T4>.StructIndex;
+        return components;
+    }
+    
+    private static Span<int> GetTypes<T1, T2, T3, T4, T5>(Span<int> components)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+    {
+        components[0] = StructHeap<T1>.StructIndex;
+        components[1] = StructHeap<T2>.StructIndex;
+        components[2] = StructHeap<T3>.StructIndex;
+        components[3] = StructHeap<T4>.StructIndex;
+        components[4] = StructHeap<T5>.StructIndex;
+        return components;
+    }
+    #endregion
+
+
 #region assign components
     internal static void AssignComponents<T1>(
         Archetype   archetype,
@@ -96,13 +151,13 @@ public static partial class EntityExtensions
 
 
 #region add components
-    private static void StashAddComponents(EntityStoreBase store, in ComponentTypes addComponents, Archetype oldType, int oldCompIndex)
+    private static void StashAddComponents(EntityStoreBase store, Span<int> addComponents, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentAdded == null) {
             return;
         }
         var oldHeapMap  = oldType.heapMap;
-        foreach (var addTypeIndex in addComponents.bitSet)
+        foreach (var addTypeIndex in addComponents)
         {
             var oldHeap = oldHeapMap[addTypeIndex];
             if (oldHeap == null) {
@@ -112,7 +167,7 @@ public static partial class EntityExtensions
         }
     }
     
-    private static void SendAddEvents(Entity entity, in ComponentTypes addComponents, Archetype newType, Archetype oldType)
+    private static void SendAddEvents(Entity entity, Span<int> addComponents, Archetype newType, Archetype oldType)
     {
         var store = entity.store;
         // --- tag event
@@ -127,7 +182,7 @@ public static partial class EntityExtensions
         }
         var oldHeapMap  = oldType.heapMap;
         var id          = entity.Id;
-        foreach (var addTypeIndex in addComponents.bitSet)
+        foreach (var addTypeIndex in addComponents)
         {
             var oldHeap     = oldHeapMap[addTypeIndex];
             var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
@@ -138,23 +193,20 @@ public static partial class EntityExtensions
 
 
 #region remove components
-    private static void StashRemoveComponents(EntityStoreBase store, in ComponentTypes removeComponents, Archetype oldType, int oldCompIndex)
+    private static void StashRemoveComponents(EntityStoreBase store, Span<int> removeComponents, Archetype oldType, int oldCompIndex)
     {
         if (store.ComponentRemoved == null) {
             return;
         }
         var oldHeapMap = oldType.heapMap;
-        foreach (var removeTypeIndex in removeComponents.bitSet)
+        foreach (var removeTypeIndex in removeComponents)
         {
             var oldHeap = oldHeapMap[removeTypeIndex];
-            if (oldHeap == null) {
-                continue;
-            }
-            oldHeap.StashComponent(oldCompIndex);
+            oldHeap?.StashComponent(oldCompIndex);
         }
     }
     
-    private static void SendRemoveEvents(Entity entity, in ComponentTypes removeComponents, Archetype newType, Archetype oldType)
+    private static void SendRemoveEvents(Entity entity, Span<int> removeComponents, Archetype newType, Archetype oldType)
     {
         var store = entity.store;
         // --- tag event
@@ -169,7 +221,7 @@ public static partial class EntityExtensions
         }
         var oldHeapMap = oldType.heapMap;
         var id          = entity.Id;
-        foreach (var removeTypeIndex in removeComponents.bitSet)
+        foreach (var removeTypeIndex in removeComponents)
         {
             var oldHeap = oldHeapMap[removeTypeIndex];
             if (oldHeap == null) {
@@ -183,32 +235,48 @@ public static partial class EntityExtensions
 
 #region set components
 
-    private static void CheckComponents(in Entity entity, in ComponentTypes components, Archetype type, int compIndex)
+    private static void CheckComponents(in Entity entity, Span<int> components, Archetype type, int compIndex)
     {
-        if (!type.componentTypes.bitSet.HasAll(components.bitSet)) {
+        foreach (var index in components) {
+            if (type.componentTypes.bitSet.Has(index)) {
+                continue;
+            }
             throw MissingComponentException(entity, components, type);
         }
         if (entity.store.ComponentAdded == null) {
             return;
         }
         var heapMap = type.heapMap;
-        foreach (var structIndex in components.bitSet) {
+        foreach (var structIndex in components) {
             heapMap[structIndex].StashComponent(compIndex);
         }
     }
     
-    private static MissingComponentException MissingComponentException(in Entity entity, in ComponentTypes components, Archetype type)
+    private static MissingComponentException MissingComponentException(in Entity entity, Span<int> components, Archetype type)
     {
-        var missingTypes = new ComponentTypes{ bitSet = BitSet.Remove(components.bitSet, type.componentTypes.bitSet) };
+        bool isFirst = true;
         var sb = new StringBuilder();
         sb.Append("entity ");
         EntityUtils.EntityToString(entity.Id, type, sb);
-        sb.Append(" - missing ");
-        missingTypes.AppendTo(sb);
+        
+        var schemaComponents = EntityStore.GetEntitySchema().components;
+        sb.Append(" - missing: [");
+        foreach (var index in components) {
+            if (type.componentTypes.bitSet.Has(index)) {
+                continue;
+            }
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                sb.Append(", ");
+            }
+            sb.Append(schemaComponents[index].Name);
+        }
+        sb.Append(']');
         return new MissingComponentException(sb.ToString());
     }
     
-    private static void SendSetEvents(Entity entity, in ComponentTypes components, Archetype type)
+    private static void SendSetEvents(Entity entity, Span<int> components, Archetype type)
     {
         var store = entity.store;
         var componentAdded = store.ComponentAdded;
@@ -217,7 +285,7 @@ public static partial class EntityExtensions
         }
         var heapMap = type.heapMap;
         var id      = entity.Id;
-        foreach (var structIndex in components.bitSet) {
+        foreach (var structIndex in components) {
             componentAdded(new ComponentChanged (store, id, ComponentChangedAction.Update, structIndex, heapMap[structIndex]));
         }
     }

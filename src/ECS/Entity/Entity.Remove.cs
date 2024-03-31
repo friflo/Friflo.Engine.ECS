@@ -15,7 +15,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeComponents= ComponentTypes.Get<T1>();
+        var removeComponents= GetTypes<T1>(stackalloc int[1]);
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
@@ -36,7 +36,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeComponents= ComponentTypes.Get<T1,T2>();
+        var removeComponents= GetTypes<T1,T2>(stackalloc int[2]);
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
@@ -58,7 +58,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeComponents= ComponentTypes.Get<T1,T2,T3>();
+        var removeComponents= GetTypes<T1,T2,T3>(stackalloc int[3]);
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
@@ -81,7 +81,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeComponents= ComponentTypes.Get<T1,T2,T3,T4>();
+        var removeComponents= GetTypes<T1,T2,T3,T4>(stackalloc int[4]);
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
@@ -105,7 +105,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var removeComponents= ComponentTypes.Get<T1,T2,T3,T4,T5>();
+        var removeComponents= GetTypes<T1,T2,T3,T4,T5>(stackalloc int[5]);
         var newType         = store.GetArchetypeRemove(oldType, removeComponents, tags);
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 

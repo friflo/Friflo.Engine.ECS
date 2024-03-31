@@ -16,7 +16,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = ComponentTypes.Get<T1>();
+        var components      = GetTypes<T1>(stackalloc int[1]);
         CheckComponents(entity, components, type, componentIndex);
         
         AssignComponents(type, componentIndex, component1);
@@ -36,7 +36,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = ComponentTypes.Get<T1, T2>();
+        var components      = GetTypes<T1, T2>(stackalloc int[2]);
         CheckComponents(entity, components, type, componentIndex);
         
         AssignComponents(type, componentIndex, component1, component2);
@@ -58,7 +58,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = ComponentTypes.Get<T1, T2, T3>();
+        var components      = GetTypes<T1, T2, T3>(stackalloc int[3]);
         CheckComponents(entity, components, type, componentIndex);
         
         AssignComponents(type, componentIndex, component1, component2, component3);
@@ -82,7 +82,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = ComponentTypes.Get<T1, T2, T3, T4>();
+        var components      = GetTypes<T1, T2, T3, T4>(stackalloc int[4]);
         CheckComponents(entity, components, type, componentIndex);
         
         AssignComponents(type, componentIndex, component1, component2, component3, component4);
@@ -108,7 +108,7 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = ComponentTypes.Get<T1, T2, T3, T4, T5>();
+        var components      = GetTypes<T1, T2, T3, T4, T5>(stackalloc int[5]);
         CheckComponents(entity, components, type, componentIndex);
         
         AssignComponents(type, componentIndex, component1, component2, component3, component4, component5);

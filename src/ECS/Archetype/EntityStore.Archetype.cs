@@ -6,6 +6,7 @@
 using System;
 using Friflo.Engine.ECS.Utils;
 
+// ReSharper disable InlineTemporaryVariable
 // ReSharper disable ArrangeTrailingCommaInMultilineLists
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable once CheckNamespace
@@ -106,30 +107,38 @@ public partial class EntityStoreBase
         return result;
     }
     
-    internal Archetype GetArchetypeAdd(Archetype type, in ComponentTypes addComponents, in Tags addTags)
+    internal Archetype GetArchetypeAdd(Archetype type, Span<int> addComponents, in Tags addTags)
     {
-        searchKey.componentTypes.bitSet = BitSet.Add(type.componentTypes.bitSet,    addComponents.bitSet);
-        searchKey.tags.bitSet           = BitSet.Add(type.tags.bitSet,              addTags.bitSet);
-        searchKey.CalculateHashCode();
-        if (archSet.TryGetValue(searchKey, out var key)) {
-            return key.archetype;
+        var key = searchKey;
+        key.tags.bitSet             = BitSet.Add(type.tags.bitSet, addTags.bitSet);
+        key.componentTypes.bitSet   = type.componentTypes.bitSet;
+        foreach (var structIndex in addComponents) {
+            key.componentTypes.bitSet.SetBit(structIndex);
+        }
+        key.CalculateHashCode();
+        if (archSet.TryGetValue(key, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags);
+        var archetype   = Archetype.CreateWithComponentTypes(config, key.componentTypes, key.tags);
         AddArchetype(this, archetype);
         return archetype;
     }
     
-    internal Archetype GetArchetypeRemove(Archetype type, in ComponentTypes removeComponents, in Tags removeTags)
+    internal Archetype GetArchetypeRemove(Archetype type, Span<int> removeComponents, in Tags removeTags)
     {
-        searchKey.componentTypes.bitSet = BitSet.Remove(type.componentTypes.bitSet, removeComponents.bitSet);
-        searchKey.tags.bitSet           = BitSet.Remove(type.tags.bitSet,           removeTags.bitSet);
-        searchKey.CalculateHashCode();
-        if (archSet.TryGetValue(searchKey, out var key)) {
-            return key.archetype;
+        var key = searchKey;
+        key.tags.bitSet             = BitSet.Remove(type.tags.bitSet, removeTags.bitSet);
+        key.componentTypes.bitSet   = type.componentTypes.bitSet;
+        foreach (var structIndex in removeComponents) {
+            key.componentTypes.bitSet.ClearBit(structIndex);
+        }
+        key.CalculateHashCode();
+        if (archSet.TryGetValue(key, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig(this);
-        var archetype   = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags);
+        var archetype   = Archetype.CreateWithComponentTypes(config, key.componentTypes, key.tags);
         AddArchetype(this, archetype);
         return archetype;
     }
