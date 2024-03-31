@@ -36,7 +36,7 @@ namespace Tests.Utils
                 SetSynchronizationContext(syncCtx);
  
                 Task funcTask = func();
-                funcTask.ContinueWith(t => syncCtx.Complete(), TaskScheduler.Default);
+                funcTask.ContinueWith(_ => syncCtx.Complete(), TaskScheduler.Default);
  
                 syncCtx.RunOnCurrentThread();
  

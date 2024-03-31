@@ -97,7 +97,7 @@ public static class Test_EntityGenericSet
     public static void Test_Entity_generic_Set_exception()
     {
         var store   = new EntityStore(PidType.UsePidAsId);
-        store.OnComponentAdded += changed => { }; 
+        store.OnComponentAdded += _ => { }; 
         var entity  = store.CreateEntity(new EntityName(), new Scale3());
         
         var e = Throws<MissingComponentException>(() => {
