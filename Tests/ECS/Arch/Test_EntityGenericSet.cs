@@ -94,6 +94,27 @@ public static class Test_EntityGenericSet
     }
     
     [Test]
+    public static void Test_Entity_generic_Set_6_and_more()
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+        
+        var entities = new Entity[5];
+        for (int n = 0; n < 5; n++) {
+            entities[n] = store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7());    
+        }
+        var componentEventCount = 0;
+        store.OnComponentAdded  += _ => { componentEventCount++; };
+        
+        entities[0].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3());
+        entities[1].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4());
+        entities[2].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5());
+        entities[3].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6());
+        entities[4].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7());
+        
+        AreEqual(40, componentEventCount);
+    }
+    
+    [Test]
     public static void Test_Entity_generic_Set_exception()
     {
         var store   = new EntityStore(PidType.UsePidAsId);

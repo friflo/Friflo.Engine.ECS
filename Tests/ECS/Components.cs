@@ -27,6 +27,21 @@ internal class CycleClass2 { internal CycleClass1   cycle1; }
 [ComponentKey("my2")]
 public struct MyComponent2 : IComponent { public int b; }
 
+[ComponentKey("my3")]
+public struct MyComponent3 : IComponent { public int b; }
+
+[ComponentKey("my4")]
+public struct MyComponent4 : IComponent { public int b; }
+
+[ComponentKey("my5")]
+public struct MyComponent5 : IComponent { public int b; }
+
+[ComponentKey("my6")]
+public struct MyComponent6 : IComponent { public int b; }
+
+[ComponentKey("my7")]
+public struct MyComponent7 : IComponent { public int b; }
+
 public struct NonBlittableArray         : IComponent { internal int[]                   array;  }
 public struct NonBlittableList          : IComponent { internal List<int>               list;   }
 public struct NonBlittableDictionary    : IComponent { internal Dictionary<int, int>    map;    }

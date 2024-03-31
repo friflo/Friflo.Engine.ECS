@@ -150,6 +150,32 @@ public static class Test_EntityGenericAdd
     }
     
     [Test]
+    public static void Test_Entity_generic_Add_6_and_more()
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+        
+        var tagEventCount = 0;
+        var componentEventCount = 0;
+        store.OnTagsChanged     += _ => { tagEventCount++; };
+        store.OnComponentAdded  += _ => { componentEventCount++; };
+        
+        var entities = new Entity[5];
+        for (int n = 0; n < 5; n++) {
+            entities[n] = store.CreateEntity();    
+        }
+        var tag         = Tags.Get<TestTag>();
+
+        entities[0].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), tag);
+        entities[1].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), tag);
+        entities[2].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), tag);
+        entities[3].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), tag);
+        entities[4].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7(), tag);
+        
+        AreEqual(5,  tagEventCount);
+        AreEqual(40, componentEventCount);
+    }
+    
+    [Test]
     public static void Test_Entity_generic_Add_Perf()
     {
         int count = 10; // 10_000_000 ~ #PC: 834 ms

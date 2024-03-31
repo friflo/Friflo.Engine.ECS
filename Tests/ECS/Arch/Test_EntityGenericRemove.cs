@@ -131,6 +131,32 @@ public static class Test_EntityGenericRemove
     }
     
     [Test]
+    public static void Test_Entity_generic_Remove_6_and_more()
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+        var tag     = Tags.Get<TestTag>();
+        
+        var entities = new Entity[5];
+        for (int n = 0; n < 5; n++) {
+            entities[n] = store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7(), tag);    
+        }
+        var tagEventCount = 0;
+        store.OnTagsChanged  += _ => { tagEventCount++; };
+
+        var componentEventCount = 0;
+        store.OnComponentRemoved  += _ => { componentEventCount++; };
+        
+        entities[0].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3>(tag);
+        entities[1].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4>(tag);
+        entities[2].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5>(tag);
+        entities[3].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6>(tag);
+        entities[4].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>(tag);
+        
+        AreEqual(5,  tagEventCount);
+        AreEqual(40, componentEventCount);
+    }
+    
+    [Test]
     public static void Test_Entity_generic_Remove_Perf()
     {
         int count = 10; // 10_000_000 ~ #PC: 546 ms

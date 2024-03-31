@@ -502,6 +502,32 @@ public static class Test_Entity
         AreEqual(15, componentCount);
     }
     
+    [Test]
+    public static void Test_Entity_CreateEntity_generic_6_and_more() 
+    {
+        var store = new EntityStore(PidType.UsePidAsId);
+    
+        var tagEventCount = 0;
+        var componentEventCount = 0;
+        var createEventCount = 0;
+        
+        store.OnEntityCreate    += _ => { createEventCount++; };
+        store.OnTagsChanged     += _ => { tagEventCount++; };
+        store.OnComponentAdded  += _ => { componentEventCount++; };
+    
+        var tag         = Tags.Get<TestTag>();
+
+        store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), tag);
+        store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), tag);
+        store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), tag);
+        store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), tag);
+        store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7(), tag);
+    
+        AreEqual(5,  createEventCount);
+        AreEqual(5,  tagEventCount);
+        AreEqual(40, componentEventCount);
+    }
+    
     
     [Test]
     public static void Test_Entity_CreateEntity_generic_Perf()
