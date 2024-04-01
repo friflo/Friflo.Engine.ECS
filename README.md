@@ -105,8 +105,8 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 [Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
 
 - **1.26.0**    ![new](docs/images/new.svg) New Features  
-                Add [EntityStoreExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStoreExtensions.md) with 10 `CreateEntity()` overloads to create entities with components without any structural change.  
-                Add [EntityExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityExtensions.md) with 10 overloads to `Add<>()`, `Set<>()` and `Remove<>()` entity components with one/none structural change.  
+                Add 10 `CreateEntity()` overloads to create entities with components without any structural change in [EntityStoreExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStoreExtensions.md).  
+                Add 10 overloads to `Add<>()`, `Set<>()` and `Remove<>()` entity components with one/none structural change in [EntityExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityExtensions.md).  
                 Add [ArchetypeQuery.ToEntityList()](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/ArchetypeQuery.ToEntityList().md) returning the entities as a list which can be used for structural changes.  
                 Emit events on create / delete entity via [EntityStore.OnEntityCreate](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStore.OnEntityCreate.md) and
                 [EntityStore.OnEntityDelete](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStore.OnEntityDelete.md).
