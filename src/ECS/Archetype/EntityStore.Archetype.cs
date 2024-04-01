@@ -26,11 +26,12 @@ public partial class EntityStoreBase
     /// </summary>
     public Archetype GetArchetype(in ComponentTypes componentTypes, in Tags tags = default)
     {
-        searchKey.componentTypes    = componentTypes;
-        searchKey.tags              = tags;
-        searchKey.CalculateHashCode();
-        if (archSet.TryGetValue(searchKey, out var key)) {
-            return key.archetype;
+        var key             = searchKey;
+        key.componentTypes  = componentTypes;
+        key.tags            = tags;
+        key.CalculateHashCode();
+        if (archSet.TryGetValue(key, out var archetypeKey)) {
+            return archetypeKey.archetype;
         }
         var config      = GetArchetypeConfig(this);
         var archetype   = Archetype.CreateWithComponentTypes(config, componentTypes, tags);
@@ -48,11 +49,13 @@ public partial class EntityStoreBase
     /// Return the <see cref="Archetype"/> storing the specified <paramref name="componentTypes"/> and <paramref name="tags"/>.<br/>
     /// </summary>
     /// <returns> null if the <see cref="Archetype"/> is not present. </returns>
-    public Archetype FindArchetype(in ComponentTypes componentTypes, in Tags tags) {
-        searchKey.componentTypes    = componentTypes;
-        searchKey.tags              = tags;
-        searchKey.CalculateHashCode();
-        archSet.TryGetValue(searchKey, out var actualValue);
+    public Archetype FindArchetype(in ComponentTypes componentTypes, in Tags tags)
+    {
+        var key             = searchKey;
+        key.componentTypes  = componentTypes;
+        key.tags            = tags;
+        key.CalculateHashCode();
+        archSet.TryGetValue(key, out var actualValue);
         return actualValue?.archetype;
     }
     #endregion
@@ -64,9 +67,9 @@ public partial class EntityStoreBase
         
     private static Archetype GetArchetypeWith(EntityStoreBase store, Archetype current, int structIndex)
     {
-        var searchKey = store.searchKey;
-        searchKey.SetWith(current, structIndex);
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        var key = store.searchKey;
+        key.SetWith(current, structIndex);
+        if (store.archSet.TryGetValue(key, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config          = GetArchetypeConfig(store);
@@ -79,9 +82,9 @@ public partial class EntityStoreBase
     
     private static Archetype GetArchetypeWithout(EntityStoreBase store, Archetype archetype, int structIndex)
     {
-        var searchKey = store.searchKey;
-        searchKey.SetWithout(archetype, structIndex);
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        var key = store.searchKey;
+        key.SetWithout(archetype, structIndex);
+        if (store.archSet.TryGetValue(key, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config          = GetArchetypeConfig(store);
@@ -94,11 +97,11 @@ public partial class EntityStoreBase
     
     private static Archetype GetArchetypeWithTags(EntityStoreBase store, Archetype archetype, in Tags tags)
     {
-        var searchKey               = store.searchKey;
-        searchKey.componentTypes    = archetype.componentTypes;
-        searchKey.tags              = tags;
-        searchKey.CalculateHashCode();
-        if (store.archSet.TryGetValue(searchKey, out var archetypeKey)) {
+        var key             = store.searchKey;
+        key.componentTypes  = archetype.componentTypes;
+        key.tags            = tags;
+        key.CalculateHashCode();
+        if (store.archSet.TryGetValue(key, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
         var config  = GetArchetypeConfig(store);
@@ -109,7 +112,7 @@ public partial class EntityStoreBase
     
     internal Archetype GetArchetypeAdd(Archetype type, Span<int> addComponents, in Tags addTags)
     {
-        var key = searchKey;
+        var key                     = searchKey;
         key.tags.bitSet             = BitSet.Add(type.tags.bitSet, addTags.bitSet);
         key.componentTypes.bitSet   = type.componentTypes.bitSet;
         foreach (var structIndex in addComponents) {
@@ -127,7 +130,7 @@ public partial class EntityStoreBase
     
     internal Archetype GetArchetypeRemove(Archetype type, Span<int> removeComponents, in Tags removeTags)
     {
-        var key = searchKey;
+        var key                     = searchKey;
         key.tags.bitSet             = BitSet.Remove(type.tags.bitSet, removeTags.bitSet);
         key.componentTypes.bitSet   = type.componentTypes.bitSet;
         foreach (var structIndex in removeComponents) {
