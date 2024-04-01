@@ -4,6 +4,7 @@
 using System.Text;
 using System;
 
+// ReSharper disable UseNullPropagation
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -449,8 +450,8 @@ public static partial class EntityExtensions
         var id          = entity.Id;
         foreach (var addTypeIndex in addComponents)
         {
-            var oldHeap     = oldHeapMap[addTypeIndex];
-            var action      = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
+            var oldHeap = oldHeapMap[addTypeIndex];
+            var action  = oldHeap == null ? ComponentChangedAction.Add : ComponentChangedAction.Update;
             componentAdded(new ComponentChanged (store, id, action, addTypeIndex, oldHeap));
         }
     }
