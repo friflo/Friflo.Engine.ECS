@@ -76,12 +76,12 @@ public static class EntityStoreExtensions {
             where T1 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1>();
+        var indexes = EntityExtensions.GetIndexes<T1>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
     
@@ -97,12 +97,12 @@ public static class EntityStoreExtensions {
             where T2 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
     
@@ -120,12 +120,12 @@ public static class EntityStoreExtensions {
             where T3 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
     
@@ -145,12 +145,12 @@ public static class EntityStoreExtensions {
             where T4 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
     
@@ -172,12 +172,12 @@ public static class EntityStoreExtensions {
             where T5 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
     
@@ -200,13 +200,13 @@ public static class EntityStoreExtensions {
             where T5 : struct, IComponent
             where T6 : struct, IComponent
     {
-        var types       = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5,T6>();
-        var entity      = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
+        var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5,T6>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6>();
+        var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5, component6);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
 
@@ -232,12 +232,12 @@ public static class EntityStoreExtensions {
             where T7 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5,T6,T7>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5, component6, component7);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
 
@@ -265,12 +265,12 @@ public static class EntityStoreExtensions {
             where T8 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5, component6, component7, component8);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
 
@@ -300,12 +300,12 @@ public static class EntityStoreExtensions {
             where T9 : struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
 
@@ -337,12 +337,12 @@ public static class EntityStoreExtensions {
             where T10: struct, IComponent
     {
         var types   = EntityExtensions.GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
+        var indexes = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
         var entity  = CreateEntityGeneric(store, types, tags, out var archetype, out int compIndex);
         EntityExtensions.AssignComponents(archetype, compIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10);
         
         // Send event. See: SEND_EVENT notes
-        var componentTypes  = EntityExtensions.GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
-        SendCreateEvents(entity, archetype, componentTypes);
+        SendCreateEvents(entity, archetype, indexes);
         return entity;
     }
     

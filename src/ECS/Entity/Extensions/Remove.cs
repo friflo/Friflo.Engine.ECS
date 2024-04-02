@@ -16,9 +16,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1>();
+        var removeComponents= GetIndexes<T1>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -39,9 +39,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2>();
+        var removeComponents= GetIndexes<T1,T2>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -63,9 +63,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3>();
+        var removeComponents= GetIndexes<T1,T2,T3>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -88,9 +88,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -114,9 +114,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4,T5>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4,T5>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -141,9 +141,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4,T5,T6>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -169,9 +169,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -198,9 +198,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -228,9 +228,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -259,9 +259,9 @@ public static partial class EntityExtensions
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
         var removeTypes     = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
+        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
         var newType         = store.GetArchetypeRemove(oldType, removeTypes, tags);
         
-        var removeComponents= GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
         StashRemoveComponents(store, removeComponents, oldType, oldCompIndex);
 
         node.compIndex      = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);

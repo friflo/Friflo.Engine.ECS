@@ -11,7 +11,8 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T1 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
         return result;
     }
     
@@ -20,8 +21,9 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T2 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
         return result;
     }
     
@@ -31,9 +33,10 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T3 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
         return result;
     }
     
@@ -44,10 +47,11 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T4 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
         return result;
     }
     
@@ -59,11 +63,12 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T5 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T5>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        bitSet.SetBit(StructHeap<T5>.StructIndex);
         return result;
     }
     
@@ -76,12 +81,13 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T6 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T5>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T6>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        bitSet.SetBit(StructHeap<T5>.StructIndex);
+        bitSet.SetBit(StructHeap<T6>.StructIndex);
         return result;
     }
     
@@ -95,13 +101,14 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T7 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T5>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T6>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T7>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        bitSet.SetBit(StructHeap<T5>.StructIndex);
+        bitSet.SetBit(StructHeap<T6>.StructIndex);
+        bitSet.SetBit(StructHeap<T7>.StructIndex);
         return result;
     }
     
@@ -116,14 +123,15 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T8 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T5>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T6>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T7>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T8>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        bitSet.SetBit(StructHeap<T5>.StructIndex);
+        bitSet.SetBit(StructHeap<T6>.StructIndex);
+        bitSet.SetBit(StructHeap<T7>.StructIndex);
+        bitSet.SetBit(StructHeap<T8>.StructIndex);
         return result;
     }
     
@@ -139,15 +147,16 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T9 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T5>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T6>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T7>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T8>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T9>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        bitSet.SetBit(StructHeap<T5>.StructIndex);
+        bitSet.SetBit(StructHeap<T6>.StructIndex);
+        bitSet.SetBit(StructHeap<T7>.StructIndex);
+        bitSet.SetBit(StructHeap<T8>.StructIndex);
+        bitSet.SetBit(StructHeap<T9>.StructIndex);
         return result;
     }
     
@@ -164,16 +173,17 @@ internal static ComponentTypes GetComponentTypes<T1>()
         where T10 : struct, IComponent
     {
         var result  = new ComponentTypes();
-        result.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T5>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T6>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T7>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T8>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T9>.StructIndex);
-        result.bitSet.SetBit(StructHeap<T10>.StructIndex);
+        ref var bitSet = ref result.bitSet;
+        bitSet.SetBit(StructHeap<T1>.StructIndex);
+        bitSet.SetBit(StructHeap<T2>.StructIndex);
+        bitSet.SetBit(StructHeap<T3>.StructIndex);
+        bitSet.SetBit(StructHeap<T4>.StructIndex);
+        bitSet.SetBit(StructHeap<T5>.StructIndex);
+        bitSet.SetBit(StructHeap<T6>.StructIndex);
+        bitSet.SetBit(StructHeap<T7>.StructIndex);
+        bitSet.SetBit(StructHeap<T8>.StructIndex);
+        bitSet.SetBit(StructHeap<T9>.StructIndex);
+        bitSet.SetBit(StructHeap<T10>.StructIndex);
         return result;
     }
 }
