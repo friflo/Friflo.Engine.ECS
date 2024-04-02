@@ -51,6 +51,21 @@ public partial struct BitSet
                (l2 & bitSet.l2) != 0 ||
                (l3 & bitSet.l3) != 0;
     }
+    
+    
+    internal void Add (in BitSet right) {
+        l0 |= right.l0;
+        l1 |= right.l1;
+        l2 |= right.l2;
+        l3 |= right.l3;
+    }
+    
+    internal void Remove (in BitSet right) {
+        l0 &= ~right.l0;
+        l1 &= ~right.l1;
+        l2 &= ~right.l2;
+        l3 &= ~right.l3;
+    }
 
     internal static BitSet Add (in BitSet left, in BitSet right) {
         return new BitSet {

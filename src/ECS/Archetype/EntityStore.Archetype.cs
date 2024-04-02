@@ -112,9 +112,11 @@ public partial class EntityStoreBase
     
     internal Archetype GetArchetypeAdd(Archetype type, in ComponentTypes addComponents, in Tags addTags)
     {
-        var key                     = searchKey;
-        key.tags.bitSet             = BitSet.Add(type.tags.bitSet,              addTags.bitSet);
-        key.componentTypes.bitSet   = BitSet.Add(type.componentTypes.bitSet,    addComponents.bitSet);
+        var key             = searchKey;
+        key.tags            = type.tags;
+        key.componentTypes  = type.componentTypes;    
+        key.tags.bitSet.          Add(addTags.bitSet);
+        key.componentTypes.bitSet.Add(addComponents.bitSet);
         if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet)) {
             return type;
         }
@@ -130,9 +132,11 @@ public partial class EntityStoreBase
     
     internal Archetype GetArchetypeRemove(Archetype type, in ComponentTypes removeComponents, in Tags removeTags)
     {
-        var key                     = searchKey;
-        key.tags.bitSet             = BitSet.Remove(type.tags.bitSet, removeTags.bitSet);
-        key.componentTypes.bitSet   = BitSet.Remove(type.componentTypes.bitSet, removeComponents.bitSet);
+        var key             = searchKey;
+        key.tags            = type.tags;
+        key.componentTypes  = type.componentTypes;
+        key.tags.bitSet          .Remove(removeTags.bitSet);
+        key.componentTypes.bitSet.Remove(removeComponents.bitSet);
         if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet)) {
             return type;
         }

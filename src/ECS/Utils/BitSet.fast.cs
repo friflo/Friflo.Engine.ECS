@@ -44,6 +44,14 @@ public partial struct BitSet
     {
         return !(value & bitSet.value).Equals(default);
     }
+
+    internal void Add (in BitSet right) {
+        value |= right.value;
+    }
+    
+    internal void Remove (in BitSet right) {
+        value &= ~right.value;
+    }
     
     internal static BitSet Add (in BitSet left, in BitSet right) {
         return new BitSet {
