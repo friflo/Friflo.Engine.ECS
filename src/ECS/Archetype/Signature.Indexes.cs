@@ -18,16 +18,16 @@ internal readonly struct SignatureIndexes
 {
     internal readonly   int     length; // 4    - values: [1, 5] ensured by assertion
     
-    internal readonly   int     T1;     // 4
-    internal readonly   int     T2;     // 4
-    internal readonly   int     T3;     // 4
-    internal readonly   int     T4;     // 4
-    internal readonly   int     T5;     // 4
-    internal  readonly   int     T6;     // 4
-    internal  readonly   int     T7;     // 4
-    internal  readonly   int     T8;     // 4
-    internal  readonly   int     T9;     // 4
-    internal  readonly   int     T10;    // 4
+    internal readonly   byte    T1;     // 1
+    internal readonly   byte    T2;     // 1
+    internal readonly   byte    T3;     // 1
+    internal readonly   byte    T4;     // 1
+    internal readonly   byte    T5;     // 1
+    private  readonly   byte    T6;     // 1
+    private  readonly   byte    T7;     // 1
+    private  readonly   byte    T8;     // 1
+    private  readonly   byte    T9;     // 1
+    private  readonly   byte    T10;    // 1
     
     public   SignatureIndexesEnumerator GetEnumerator() => new (this);
     
@@ -48,16 +48,16 @@ internal readonly struct SignatureIndexes
     ) {
         AssertLength(length);
         this.length = length;
-        this.T1     = T1;
-        this.T2     = T2;
-        this.T3     = T3;
-        this.T4     = T4;
-        this.T5     = T5;
-        this.T6     = T6;
-        this.T7     = T7;
-        this.T8     = T8;
-        this.T9     = T9;
-        this.T10    = T10;
+        this.T1     = (byte)T1;
+        this.T2     = (byte)T2;
+        this.T3     = (byte)T3;
+        this.T4     = (byte)T4;
+        this.T5     = (byte)T5;
+        this.T6     = (byte)T6;
+        this.T7     = (byte)T7;
+        this.T8     = (byte)T8;
+        this.T9     = (byte)T9;
+        this.T10    = (byte)T10;
     }
     
     [ExcludeFromCodeCoverage]
