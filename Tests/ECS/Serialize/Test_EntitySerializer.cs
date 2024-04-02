@@ -356,8 +356,11 @@ public static class Test_Serializer
         var stream      = StringAsStream("[1]");
         var result      = serializer.ReadIntoStore(store, stream);
         AreEqual("expect object entity. was: ValueNumber path: '[0]' at position: 2", result.error);
+        AreEqual("entityCount: 0 error: expect object entity. was: ValueNumber path: '[0]' at position: 2", result.ToString());
+        
         result          = serializer.ReadEntities(entities, stream);
         AreEqual("expect object entity. was: ValueNumber path: '[0]' at position: 2", result.error);
+        AreEqual("entityCount: 0 error: expect object entity. was: ValueNumber path: '[0]' at position: 2", result.ToString());
     }
     
     /// <summary>Cover <see cref="EntitySerializer.ReadChildren"/></summary>
