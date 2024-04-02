@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 
-using System;
-using Friflo.Engine.ECS.Utils;
 using static Friflo.Engine.ECS.StoreOwnership;
 using static Friflo.Engine.ECS.TreeMembership;
 

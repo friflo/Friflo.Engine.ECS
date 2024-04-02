@@ -1,4 +1,3 @@
-using System;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
