@@ -105,11 +105,26 @@ public static class Test_EntityGenericSet
         var componentEventCount = 0;
         store.OnComponentAdded  += _ => { componentEventCount++; };
         
-        entities[0].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3());
-        entities[1].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4());
-        entities[2].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5());
-        entities[3].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6());
-        entities[4].Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7());
+        entities[0].Set(new Position(1,1,1), new Scale3(1,1,1), new Rotation(1,1,1,1), new MyComponent1{a=1}, new MyComponent2{b=1}, new MyComponent3{b=1});
+        entities[1].Set(new Position(1,1,1), new Scale3(1,1,1), new Rotation(1,1,1,1), new MyComponent1{a=1}, new MyComponent2{b=1}, new MyComponent3{b=1}, new MyComponent4{b=1});
+        entities[2].Set(new Position(1,1,1), new Scale3(1,1,1), new Rotation(1,1,1,1), new MyComponent1{a=1}, new MyComponent2{b=1}, new MyComponent3{b=1}, new MyComponent4{b=1}, new MyComponent5{b=1});
+        entities[3].Set(new Position(1,1,1), new Scale3(1,1,1), new Rotation(1,1,1,1), new MyComponent1{a=1}, new MyComponent2{b=1}, new MyComponent3{b=1}, new MyComponent4{b=1}, new MyComponent5{b=1}, new MyComponent6{b=1});
+        entities[4].Set(new Position(1,1,1), new Scale3(1,1,1), new Rotation(1,1,1,1), new MyComponent1{a=1}, new MyComponent2{b=1}, new MyComponent3{b=1}, new MyComponent4{b=1}, new MyComponent5{b=1}, new MyComponent6{b=1}, new MyComponent7{b=1});
+        
+        for (int n = 0; n < 5; n++) {
+            var entity = entities[n];
+            AreEqual(new Position(1,1,1),   entity.GetComponent<Position>());
+            AreEqual(new Scale3  (1,1,1),   entity.GetComponent<Scale3>());
+            AreEqual(new Rotation(1,1,1,1), entity.GetComponent<Rotation>());
+            AreEqual(new MyComponent1{a=1}, entity.GetComponent<MyComponent1>());
+            AreEqual(new MyComponent2{b=1}, entity.GetComponent<MyComponent2>());
+            AreEqual(new MyComponent3{b=1}, entity.GetComponent<MyComponent3>());
+            
+            if (n > 0) AreEqual(new MyComponent4{b=1}, entity.GetComponent<MyComponent4>());
+            if (n > 1) AreEqual(new MyComponent5{b=1}, entity.GetComponent<MyComponent5>());
+            if (n > 2) AreEqual(new MyComponent6{b=1}, entity.GetComponent<MyComponent6>());
+            if (n > 3) AreEqual(new MyComponent7{b=1}, entity.GetComponent<MyComponent7>());
+        }
         
         AreEqual(40, componentEventCount);
     }

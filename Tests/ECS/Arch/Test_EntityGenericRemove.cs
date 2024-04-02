@@ -138,7 +138,7 @@ public static class Test_EntityGenericRemove
         
         var entities = new Entity[5];
         for (int n = 0; n < 5; n++) {
-            entities[n] = store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7(), tag);    
+            entities[n] = store.CreateEntity(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7(), tag);
         }
         var tagEventCount = 0;
         store.OnTagsChanged  += _ => { tagEventCount++; };
@@ -151,6 +151,12 @@ public static class Test_EntityGenericRemove
         entities[2].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5>(tag);
         entities[3].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6>(tag);
         entities[4].Remove<Position, Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7>(tag);
+        
+        AreEqual("id: 1  [MyComponent4, MyComponent5, MyComponent6, MyComponent7]", entities[0].ToString());
+        AreEqual("id: 2  [MyComponent5, MyComponent6, MyComponent7]",               entities[1].ToString());
+        AreEqual("id: 3  [MyComponent6, MyComponent7]",                             entities[2].ToString());
+        AreEqual("id: 4  [MyComponent7]",                                           entities[3].ToString());
+        AreEqual("id: 5  []",                                                       entities[4].ToString());
         
         AreEqual(5,  tagEventCount);
         AreEqual(40, componentEventCount);

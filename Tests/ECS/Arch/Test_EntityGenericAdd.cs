@@ -171,6 +171,12 @@ public static class Test_EntityGenericAdd
         entities[3].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), tag);
         entities[4].Add(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7(), tag);
         
+        AreEqual("id: 1  [Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3, #TestTag]", entities[0].ToString());
+        AreEqual("id: 2  [Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3, MyComponent4, #TestTag]", entities[1].ToString());
+        AreEqual("id: 3  [Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, #TestTag]", entities[2].ToString());
+        AreEqual("id: 4  [Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, #TestTag]", entities[3].ToString());
+        AreEqual("id: 5  [Position, Rotation, Scale3, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7, #TestTag]", entities[4].ToString());
+        
         AreEqual(5,  tagEventCount);
         AreEqual(40, componentEventCount);
     }
