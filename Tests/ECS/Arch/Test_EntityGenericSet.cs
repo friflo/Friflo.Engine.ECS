@@ -134,17 +134,58 @@ public static class Test_EntityGenericSet
     {
         var store   = new EntityStore(PidType.UsePidAsId);
         store.OnComponentAdded += _ => { }; 
-        var entity  = store.CreateEntity(new EntityName(), new Scale3());
+        var entity  = store.CreateEntity(new EntityName(), new Position());
         
         var e = Throws<MissingComponentException>(() => {
-            entity.Set(new Position(), new Scale3());    
+            entity.Set(new Scale3());    
         });
-        AreEqual("entity id: 1  [EntityName, Scale3] - missing: [Position]", e!.Message);
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3]", e!.Message);
         
         e = Throws<MissingComponentException>(() => {
-            entity.Set(new MyComponent1(), new MyComponent2());    
+            entity.Set(new Position(), new Scale3());    
         });
-        AreEqual("entity id: 1  [EntityName, Scale3] - missing: [MyComponent1, MyComponent2]", e!.Message);
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1, MyComponent2]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6]", e!.Message);
+        
+        e = Throws<MissingComponentException>(() => {
+            entity.Set(new Position(), new Scale3(), new Rotation(), new MyComponent1(), new MyComponent2(), new MyComponent3(), new MyComponent4(), new MyComponent5(), new MyComponent6(), new MyComponent7());    
+        });
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation, MyComponent1, MyComponent2, MyComponent3, MyComponent4, MyComponent5, MyComponent6, MyComponent7]", e!.Message);
+        
     }
     
     [Test]

@@ -108,7 +108,7 @@ public static partial class EntityExtensions
         }
     }
     
-    private static void MissingComponentException(Entity entity, SignatureIndexes indexes, Archetype type)
+    private static MissingComponentException MissingComponentException(Entity entity, SignatureIndexes indexes, Archetype type)
     {
         bool isFirst = true;
         var sb = new StringBuilder();
@@ -129,7 +129,7 @@ public static partial class EntityExtensions
             sb.Append(schemaComponents[index].Name);
         }
         sb.Append(']');
-        throw new MissingComponentException(sb.ToString());
+        return new MissingComponentException(sb.ToString());
     }
     
     private static void SendSetEvents(Entity entity, in SignatureIndexes indexes, Archetype type)

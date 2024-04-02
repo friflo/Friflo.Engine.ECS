@@ -20,7 +20,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -42,7 +42,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -66,7 +66,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -92,7 +92,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -120,7 +120,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -150,7 +150,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -182,7 +182,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -216,7 +216,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -252,7 +252,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
         
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
@@ -290,7 +290,7 @@ public static partial class EntityExtensions
         StashSetComponents(entity, components, type, componentIndex);
 
         if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10)) {
-            MissingComponentException(entity, components, type);
+            throw MissingComponentException(entity, components, type);
         }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
