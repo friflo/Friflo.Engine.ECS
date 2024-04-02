@@ -178,7 +178,7 @@ public static class Test_EntityGenericAdd
     [Test]
     public static void Test_Entity_generic_Add_Perf()
     {
-        int count = 10; // 100_000_000 ~ #PC: 2941 ms
+        int count = 10; // 100_000_000 ~ #PC: 2342 ms
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity();
         
