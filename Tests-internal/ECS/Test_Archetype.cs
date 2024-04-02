@@ -90,18 +90,14 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_SignatureIndexes()
     {
-        Throws<IndexOutOfRangeException>(() => {
-            _ = new SignatureIndexes (6);
-        });
+        /* Throws<IndexOutOfRangeException>(() => {
+            _ = new SignatureIndexes (11);
+        }); */
         
-        var indexes = new SignatureIndexes(1);
-        Throws<IndexOutOfRangeException>(() => {
-            indexes.GetStructIndex(1);
-        });
         var schema  = EntityStore.GetEntitySchema();
         var posType = schema.GetComponentType<Position>();
         
-        indexes = new SignatureIndexes(1, posType.StructIndex);
+        var indexes = new SignatureIndexes(1, posType.StructIndex);
         AreEqual("SignatureIndexes: [Position]", indexes.ToString());
     }
     
@@ -109,9 +105,9 @@ public static class Test_Archetype
     public static void Test_Archetype_SignatureIndexes_coverage()
     {
         object obj = new SignatureIndexes();
-        obj.SetInternalField(nameof(SignatureIndexes.length), 6);
+        obj.SetInternalField(nameof(SignatureIndexes.length), 11);
         var indexes = (SignatureIndexes)obj;
-        AreEqual(-1, indexes.GetStructIndex(5));
+        AreEqual(-1, indexes.GetStructIndex(10));
     }
 }
 

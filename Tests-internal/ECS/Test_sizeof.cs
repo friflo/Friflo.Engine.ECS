@@ -56,7 +56,7 @@ public static class Test_sizeof
     public static void Test_sizeof_StructIndexes() {
         var type = typeof(SignatureIndexes);
         var size = Marshal.SizeOf(type!);
-        AreEqual(24, size);
+        AreEqual(44, size);
     }
     
     [Test]

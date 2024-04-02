@@ -532,7 +532,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_CreateEntity_generic_Perf()
     {
-        int count   = 10; // 10_000_000 ~ #PC: 725 ms
+        int count   = 10; // 10_000_000 ~ #PC: 792 ms
         var store   = new EntityStore(PidType.UsePidAsId);
         store.EnsureCapacity(count);
         var type = store.CreateEntity(new Position(), new EntityName(), new Rotation(), new Scale3(), new MyComponent1()).Archetype;

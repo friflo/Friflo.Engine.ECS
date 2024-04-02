@@ -229,6 +229,58 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         componentTypes.bitSet.SetBit(StructHeap<T5>.StructIndex);
         return componentTypes;
     }
+    /*
+    internal static void Remove(ref BitSet bitSet, in SignatureIndexes indexes)
+    {
+        switch (indexes.length) {
+            case 1:     goto Length_1;
+            case 2:     goto Length_2;
+            case 3:     goto Length_3;
+            case 4:     goto Length_4;
+            case 5:     goto Length_5;
+            case 6:     goto Length_6;
+            case 7:     goto Length_7;
+            case 8:     goto Length_8;
+            case 9:     goto Length_9;
+            case 10:    goto Length_10;
+        }
+        Length_10:  bitSet.ClearBit(indexes.T10);
+        Length_9:   bitSet.ClearBit(indexes.T9);
+        Length_8:   bitSet.ClearBit(indexes.T8);
+        Length_7:   bitSet.ClearBit(indexes.T7);
+        Length_6:   bitSet.ClearBit(indexes.T6);
+        Length_5:   bitSet.ClearBit(indexes.T5);
+        Length_4:   bitSet.ClearBit(indexes.T4);
+        Length_3:   bitSet.ClearBit(indexes.T3);
+        Length_2:   bitSet.ClearBit(indexes.T2);
+        Length_1:   bitSet.ClearBit(indexes.T1);
+    }
+    
+    internal static void Add(ref BitSet bitSet, in SignatureIndexes indexes)
+    {
+        switch (indexes.length) {
+            case 1:     goto Length_1;
+            case 2:     goto Length_2;
+            case 3:     goto Length_3;
+            case 4:     goto Length_4;
+            case 5:     goto Length_5;
+            case 6:     goto Length_6;
+            case 7:     goto Length_7;
+            case 8:     goto Length_8;
+            case 9:     goto Length_9;
+            case 10:    goto Length_10;
+        }
+        Length_10:  bitSet.SetBit(indexes.T10);
+        Length_9:   bitSet.SetBit(indexes.T9);
+        Length_8:   bitSet.SetBit(indexes.T8);
+        Length_7:   bitSet.SetBit(indexes.T7);
+        Length_6:   bitSet.SetBit(indexes.T6);
+        Length_5:   bitSet.SetBit(indexes.T5);
+        Length_4:   bitSet.SetBit(indexes.T4);
+        Length_3:   bitSet.SetBit(indexes.T3);
+        Length_2:   bitSet.SetBit(indexes.T2);
+        Length_1:   bitSet.SetBit(indexes.T1);
+    } */
     
     internal string GetString() => AppendTo(new StringBuilder()).ToString();
     

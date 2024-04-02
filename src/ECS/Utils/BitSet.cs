@@ -48,13 +48,13 @@ public partial struct BitSet
                unchecked((int)l3) ^ (int)(l3 >> 32);
     }
         
-    public void SetBit(int index)
+    public int SetBit(int index)
     {
         switch (index) {
-            case < 64:      l0 |= 1L <<  index;          return;
-            case < 128:     l1 |= 1L << (index - 64);    return;
-            case < 192:     l2 |= 1L << (index - 128);   return;
-            default:        l3 |= 1L << (index - 192);   return;
+            case < 64:      l0 |= 1L <<  index;          return index;
+            case < 128:     l1 |= 1L << (index - 64);    return index;
+            case < 192:     l2 |= 1L << (index - 128);   return index;
+            default:        l3 |= 1L << (index - 192);   return index;
         }
     }
     

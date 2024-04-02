@@ -110,13 +110,13 @@ public partial class EntityStoreBase
         return result;
     }
     
-    internal Archetype GetArchetypeAdd(Archetype type, Span<int> addComponents, in Tags addTags)
+    internal Archetype GetArchetypeAdd(Archetype type, in ComponentTypes addComponents, in Tags addTags)
     {
         var key                     = searchKey;
-        key.tags.bitSet             = BitSet.Add(type.tags.bitSet, addTags.bitSet);
-        key.componentTypes.bitSet   = type.componentTypes.bitSet;
-        foreach (var structIndex in addComponents) {
-            key.componentTypes.bitSet.SetBit(structIndex);
+        key.tags.bitSet             = BitSet.Add(type.tags.bitSet,              addTags.bitSet);
+        key.componentTypes.bitSet   = BitSet.Add(type.componentTypes.bitSet,    addComponents.bitSet);
+        if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet)) {
+            return type;
         }
         key.CalculateHashCode();
         if (archSet.TryGetValue(key, out var archetypeKey)) {
@@ -128,13 +128,13 @@ public partial class EntityStoreBase
         return archetype;
     }
     
-    internal Archetype GetArchetypeRemove(Archetype type, Span<int> removeComponents, in Tags removeTags)
+    internal Archetype GetArchetypeRemove(Archetype type, in ComponentTypes removeComponents, in Tags removeTags)
     {
         var key                     = searchKey;
         key.tags.bitSet             = BitSet.Remove(type.tags.bitSet, removeTags.bitSet);
-        key.componentTypes.bitSet   = type.componentTypes.bitSet;
-        foreach (var structIndex in removeComponents) {
-            key.componentTypes.bitSet.ClearBit(structIndex);
+        key.componentTypes.bitSet   = BitSet.Remove(type.componentTypes.bitSet, removeComponents.bitSet);
+        if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet)) {
+            return type;
         }
         key.CalculateHashCode();
         if (archSet.TryGetValue(key, out var archetypeKey)) {

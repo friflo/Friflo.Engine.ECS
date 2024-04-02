@@ -19,8 +19,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1>(stackalloc int[1]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -45,8 +47,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2>(stackalloc int[2]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -73,8 +77,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3>(stackalloc int[3]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -103,8 +109,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4>(stackalloc int[4]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -135,8 +143,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4,T5>(stackalloc int[5]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4,T5>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -169,8 +179,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4,T5,T6>(stackalloc int[6]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -205,8 +217,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4,T5,T6,T7>(stackalloc int[7]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -243,8 +257,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4,T5,T6,T7,T8>(stackalloc int[8]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -283,8 +299,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9>(stackalloc int[9]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -326,8 +344,10 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addComponents   = GetTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>(stackalloc int[10]);
-        var newType         = store.GetArchetypeAdd(oldType, addComponents, tags);
+        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
+        var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
+        
+        var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
         StashAddComponents(store, addComponents, oldType, oldCompIndex);
 
         var newCompIndex    = node.compIndex = Archetype.MoveEntityTo(oldType, id, oldCompIndex, newType);
@@ -337,4 +357,15 @@ public static partial class EntityExtensions
         // Send event. See: SEND_EVENT notes
         SendAddEvents(entity, addComponents, newType, oldType);
     }
-} 
+}
+
+
+
+
+
+
+
+
+
+
+

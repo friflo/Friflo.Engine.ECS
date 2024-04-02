@@ -178,7 +178,7 @@ public static class Test_EntityGenericAdd
     [Test]
     public static void Test_Entity_generic_Add_Perf()
     {
-        int count = 10; // 10_000_000 ~ #PC: 834 ms
+        int count = 10; // 100_000_000 ~ #PC: 2941 ms
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity();
         
@@ -189,7 +189,28 @@ public static class Test_EntityGenericAdd
         
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
-            entity.Add(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+            entity.Add(new Position(), new Rotation(), new EntityName(), new MyComponent1(), new MyComponent2());
+        }
+        Mem.AssertNoAlloc(start);
+        Console.WriteLine($"Entity.Add<>() - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_Entity_generic_Add_Remove_Perf()
+    {
+        int count = 10; // 100_000_000 ~ #PC: 9827 ms
+        var store = new EntityStore(PidType.UsePidAsId);
+        var entity = store.CreateEntity();
+        
+        entity.Add(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+        
+        var sw = new Stopwatch();
+        sw.Start();
+        
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 0; n < count; n++) {
+            entity.Add(new Position(), new Rotation(), new EntityName(), new MyComponent1(), new MyComponent2());
+            entity.Remove<Position, Rotation, EntityName, MyComponent1, MyComponent2>();
         }
         Mem.AssertNoAlloc(start);
         Console.WriteLine($"Entity.Add<>() - duration: {sw.ElapsedMilliseconds} ms");

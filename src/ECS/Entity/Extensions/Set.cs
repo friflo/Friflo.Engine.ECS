@@ -1,7 +1,6 @@
 ﻿// ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -17,11 +16,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1>(stackalloc int[1]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1);
-        
+        if (!SetAssignComponents(type, componentIndex, component1)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -38,11 +38,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2>(stackalloc int[2]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -61,11 +62,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3>(stackalloc int[3]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -86,11 +88,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4>(stackalloc int[4]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3, T4>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3, component4);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -113,11 +116,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4, T5>(stackalloc int[5]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3, T4, T5>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -132,21 +136,22 @@ public static partial class EntityExtensions
         in T4   component4,
         in T5   component5,
         in T6   component6)
-        where T1 : struct, IComponent
-        where T2 : struct, IComponent
-        where T3 : struct, IComponent
-        where T4 : struct, IComponent
-        where T5 : struct, IComponent
-        where T6 : struct, IComponent
+            where T1 : struct, IComponent
+            where T2 : struct, IComponent
+            where T3 : struct, IComponent
+            where T4 : struct, IComponent
+            where T5 : struct, IComponent
+            where T6 : struct, IComponent
     {
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4, T5, T6>(stackalloc int[6]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3, T4, T5, T6>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -173,11 +178,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4, T5, T6, T7>(stackalloc int[7]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -206,11 +212,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4, T5, T6, T7, T8>(stackalloc int[8]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -241,11 +248,12 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9>(stackalloc int[9]);
-        CheckComponents(entity, components, type, componentIndex);
+        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8, T9>();
+        StashSetComponents(entity, components, type, componentIndex);
         
-        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9);
-        
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
@@ -278,12 +286,23 @@ public static partial class EntityExtensions
         ref var node        = ref entity.store.nodes[entity.Id];
         var type            = node.archetype;
         var componentIndex  = node.compIndex;
-        var components      = GetTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(stackalloc int[10]);
-        CheckComponents(entity, components, type, componentIndex);
-        
-        AssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10);
-        
+        var components      = GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
+        StashSetComponents(entity, components, type, componentIndex);
+
+        if (!SetAssignComponents(type, componentIndex, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10)) {
+            MissingComponentException(entity, components, type);
+        }
         // Send event. See: SEND_EVENT notes
         SendSetEvents(entity, components, type);
     }
-} 
+}
+
+
+
+
+
+
+
+
+
+

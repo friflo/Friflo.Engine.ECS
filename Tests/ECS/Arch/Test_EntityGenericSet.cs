@@ -127,27 +127,27 @@ public static class Test_EntityGenericSet
         AreEqual("entity id: 1  [EntityName, Scale3] - missing: [Position]", e!.Message);
         
         e = Throws<MissingComponentException>(() => {
-            entity.Set(new MyComponent1(), new MyComponent1());    
+            entity.Set(new MyComponent1(), new MyComponent2());    
         });
-        AreEqual("entity id: 1  [EntityName, Scale3] - missing: [MyComponent1, MyComponent1]", e!.Message);
+        AreEqual("entity id: 1  [EntityName, Scale3] - missing: [MyComponent1, MyComponent2]", e!.Message);
     }
     
     [Test]
     public static void Test_Entity_generic_Set_Perf()
     {
-        int count = 10; // 100_000_000 ~ #PC: 1232 ms
+        int count = 10; // 100_000_000 ~ #PC: 1231 ms
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity();
         
-        entity.Add(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
-        entity.Set(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+        entity.Add(new Position(), new Rotation(), new EntityName(), new MyComponent1(), new MyComponent2());
+        entity.Set(new Position(), new Rotation(), new EntityName(), new MyComponent1(), new MyComponent2());
         
         var sw = new Stopwatch();
         sw.Start();
         var start = Mem.GetAllocatedBytes();
         
         for (int n = 0; n < count; n++) {
-            entity.Set(new Position(), new Rotation(), new EntityName("test"), new MyComponent1(), new MyComponent2());
+            entity.Set(new Position(), new Rotation(), new EntityName(), new MyComponent1(), new MyComponent2());
         }
         Mem.AssertNoAlloc(start);
         Console.WriteLine($"Entity.Set<>() - duration: {sw.ElapsedMilliseconds} ms");

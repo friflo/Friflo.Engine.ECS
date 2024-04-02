@@ -226,6 +226,9 @@ public sealed class Archetype
     /// <returns> the component index in the <paramref name="targetArch"/> </returns>
     internal static int MoveEntityTo(Archetype sourceArch, int id, int sourceIndex, Archetype targetArch)
     {
+        if (sourceArch == targetArch) {
+            return sourceIndex;
+        }
         // --- copy entity components to components of targetArch
         var targetIndex     = AddEntity(targetArch, id);
         var sourceHeapMap   = sourceArch.heapMap;
