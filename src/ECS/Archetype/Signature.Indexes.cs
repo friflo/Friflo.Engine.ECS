@@ -108,8 +108,8 @@ internal readonly struct SignatureIndexes
 
 internal struct SignatureIndexesEnumerator
 {
-    private readonly    SignatureIndexes   indexes;
-    private             int             index;
+    private readonly    SignatureIndexes    indexes;    // 16
+    private             int                 index;      //  4
     
     internal SignatureIndexesEnumerator(in SignatureIndexes indexes)
     {

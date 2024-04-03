@@ -139,7 +139,7 @@ public readonly struct Signature<T1>
 {
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
 
     public override string ToString() => Signature.GetSignatureString(signatureIndexes);
 
@@ -154,7 +154,7 @@ public readonly struct Signature<T1, T2>
 {
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
     
     public override string ToString() => Signature.GetSignatureString(signatureIndexes);
     
@@ -170,7 +170,7 @@ public readonly struct Signature<T1, T2, T3>
 {
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
     
     
     public override string ToString() => Signature.GetSignatureString(signatureIndexes);
@@ -188,7 +188,7 @@ public readonly struct Signature<T1, T2, T3, T4>
 {
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
     
     public override string ToString() => Signature.GetSignatureString(signatureIndexes);
     
@@ -206,7 +206,7 @@ public readonly struct Signature<T1, T2, T3, T4, T5>
 {
     public                              ComponentTypes      ComponentTypes  => new ComponentTypes(signatureIndexes);
     [Browse(Never)] public              int                 ComponentCount  => signatureIndexes.length;
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 32
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   // 16
 
     public override string ToString() => Signature.GetSignatureString(signatureIndexes);
 
