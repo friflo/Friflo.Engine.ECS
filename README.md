@@ -104,7 +104,7 @@ Exceptions are labeled as  **Breaking change** / **Changed behavior**. These cha
 
 [Release Tags](https://github.com/friflo/Friflo.Json.Fliox/releases)
 
-- **1.27.0**    Optimize performance of `Add<>()`, `Set<>()` and `Remove<>()` introduced in **1.26.0**.
+- **1.28.0**    Optimize performance of `Add<>()`, `Set<>()` and `Remove<>()` introduced in **1.26.0**.
 
 - **1.26.0**    ![new](docs/images/new.svg) Features:  
                 Add 10 `CreateEntity()` overloads to create entities with components without any structural change in [EntityStoreExtensions](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/EntityStoreExtensions.md).  
