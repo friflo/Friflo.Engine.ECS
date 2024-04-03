@@ -24,11 +24,17 @@ namespace Friflo.Engine.ECS;
 [DebuggerTypeProxy(typeof(ComponentTypesDebugView))]
 public struct ComponentTypes : IEnumerable<ComponentType>
 {
-    internal        BitSet  bitSet;     // 32
-    
+#region public properties    
     /// <summary>Return the number of contained <see cref="IComponent"/>'s.</summary>
-    public readonly int                         Count                                       => bitSet.GetBitCount();
-   
+    public readonly int     Count       => bitSet.GetBitCount();
+    public override string  ToString()  => GetString();
+    #endregion
+    
+#region interal field
+    internal        BitSet  bitSet;     // 32
+    #endregion
+
+#region enumerator    
     public readonly ComponentTypesEnumerator    GetEnumerator()                             => new ComponentTypesEnumerator (this);
 
     // --- IEnumerable
@@ -36,9 +42,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
 
     // --- IEnumerable<>
            readonly IEnumerator<ComponentType>  IEnumerable<ComponentType>.GetEnumerator()  => new ComponentTypesEnumerator (this);
+#endregion
 
-    public override string                      ToString() => GetString();
-    
+#region internal constructors
     internal ComponentTypes(StructHeap[] heaps) {
         foreach (var heap in heaps) {
             bitSet.SetBit(heap.structIndex);
@@ -62,8 +68,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         Type2:   bitSet.SetBit(indexes.T2);
         Type1:   bitSet.SetBit(indexes.T1);
     }
-    
+    #endregion
+
     // ----------------------------------------- component getter -----------------------------------------
+#region component types query
     /// <summary>
     /// Return true if it contains the passed <see cref="IComponent"/> type <typeparamref name="T1"/>.
     /// </summary>
@@ -114,7 +122,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     {
         return bitSet.HasAny(componentTypes.bitSet);
     }
+    #endregion
     
+#region component types mutation
     // ----------------------------------------- mutate Mask -----------------------------------------
     /// <summary>
     /// Add the passed <see cref="IComponent"/> type <typeparamref name="T"/>.
@@ -149,8 +159,11 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     {
         bitSet.Remove(componentTypes.bitSet);
     }
+    #endregion
     
     // ----------------------------------------- static methods -----------------------------------------
+#region generic component types creation
+
     /// <summary>
     /// Create an instance containing the passed <see cref="IComponent"/> type <typeparamref name="T1"/>.
     /// </summary>
@@ -229,62 +242,12 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         componentTypes.bitSet.SetBit(StructHeap<T5>.StructIndex);
         return componentTypes;
     }
-    /*
-    internal static void Remove(ref BitSet bitSet, in SignatureIndexes indexes)
-    {
-        switch (indexes.length) {
-            case 1:     goto Length_1;
-            case 2:     goto Length_2;
-            case 3:     goto Length_3;
-            case 4:     goto Length_4;
-            case 5:     goto Length_5;
-            case 6:     goto Length_6;
-            case 7:     goto Length_7;
-            case 8:     goto Length_8;
-            case 9:     goto Length_9;
-            case 10:    goto Length_10;
-        }
-        Length_10:  bitSet.ClearBit(indexes.T10);
-        Length_9:   bitSet.ClearBit(indexes.T9);
-        Length_8:   bitSet.ClearBit(indexes.T8);
-        Length_7:   bitSet.ClearBit(indexes.T7);
-        Length_6:   bitSet.ClearBit(indexes.T6);
-        Length_5:   bitSet.ClearBit(indexes.T5);
-        Length_4:   bitSet.ClearBit(indexes.T4);
-        Length_3:   bitSet.ClearBit(indexes.T3);
-        Length_2:   bitSet.ClearBit(indexes.T2);
-        Length_1:   bitSet.ClearBit(indexes.T1);
-    }
+    #endregion
     
-    internal static void Add(ref BitSet bitSet, in SignatureIndexes indexes)
-    {
-        switch (indexes.length) {
-            case 1:     goto Length_1;
-            case 2:     goto Length_2;
-            case 3:     goto Length_3;
-            case 4:     goto Length_4;
-            case 5:     goto Length_5;
-            case 6:     goto Length_6;
-            case 7:     goto Length_7;
-            case 8:     goto Length_8;
-            case 9:     goto Length_9;
-            case 10:    goto Length_10;
-        }
-        Length_10:  bitSet.SetBit(indexes.T10);
-        Length_9:   bitSet.SetBit(indexes.T9);
-        Length_8:   bitSet.SetBit(indexes.T8);
-        Length_7:   bitSet.SetBit(indexes.T7);
-        Length_6:   bitSet.SetBit(indexes.T6);
-        Length_5:   bitSet.SetBit(indexes.T5);
-        Length_4:   bitSet.SetBit(indexes.T4);
-        Length_3:   bitSet.SetBit(indexes.T3);
-        Length_2:   bitSet.SetBit(indexes.T2);
-        Length_1:   bitSet.SetBit(indexes.T1);
-    } */
-    
+#region internal methods
     internal string GetString() => AppendTo(new StringBuilder()).ToString();
     
-    internal StringBuilder AppendTo(StringBuilder sb)
+    private StringBuilder AppendTo(StringBuilder sb)
     {
         sb.Append("Components: [");
         var hasTypes    = false;
@@ -301,6 +264,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         sb.Append(']');
         return sb;
     }
+    #endregion
 }
 
 /// <summary>
