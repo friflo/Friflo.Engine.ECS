@@ -172,7 +172,7 @@ public static class Test_EntityGenericRemove
     [Test]
     public static void Test_Entity_generic_Remove_Perf()
     {
-        int count = 10; // 100_000_000 ~ #PC: 2111 ms
+        int count = 10; // 100_000_000 ~ #PC: 2017 ms
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity();
         

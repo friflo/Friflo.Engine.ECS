@@ -68,6 +68,102 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         Type2:   bitSet.SetBit(indexes.T2);
         Type1:   bitSet.SetBit(indexes.T1);
     }
+    
+    private ComponentTypes(int t1)
+    {
+        bitSet.SetBit(t1);
+    }
+    
+    private ComponentTypes(int t1, int t2)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+    }
+    
+    
+    private ComponentTypes(int t1, int t2, int t3)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4, int t5)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+        bitSet.SetBit(t5);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+        bitSet.SetBit(t5);
+        bitSet.SetBit(t6);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+        bitSet.SetBit(t5);
+        bitSet.SetBit(t6);
+        bitSet.SetBit(t7);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+        bitSet.SetBit(t5);
+        bitSet.SetBit(t6);
+        bitSet.SetBit(t7);
+        bitSet.SetBit(t8);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+        bitSet.SetBit(t5);
+        bitSet.SetBit(t6);
+        bitSet.SetBit(t7);
+        bitSet.SetBit(t8);
+        bitSet.SetBit(t9);
+    }
+    
+    private ComponentTypes(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8, int t9, int t10)
+    {
+        bitSet.SetBit(t1);
+        bitSet.SetBit(t2);
+        bitSet.SetBit(t3);
+        bitSet.SetBit(t4);
+        bitSet.SetBit(t5);
+        bitSet.SetBit(t6);
+        bitSet.SetBit(t7);
+        bitSet.SetBit(t8);
+        bitSet.SetBit(t9);
+        bitSet.SetBit(t10);
+    }
     #endregion
 
     // ----------------------------------------- component getter -----------------------------------------
@@ -170,9 +266,8 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     public static ComponentTypes Get<T1>()
         where T1 : struct, IComponent
     {
-        var componentTypes = new ComponentTypes();
-        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        return componentTypes;
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex);
     }
     
     /// <summary>
@@ -183,10 +278,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        var componentTypes = new ComponentTypes();
-        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        return componentTypes;
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex);
     }
     
     /// <summary>
@@ -198,11 +292,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        var componentTypes = new ComponentTypes();
-        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        return componentTypes;
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex);
     }
     
     /// <summary>
@@ -215,12 +308,11 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T3 : struct, IComponent
         where T4 : struct, IComponent
     {
-        var componentTypes = new ComponentTypes();
-        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        return componentTypes;
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex);
     }
     
     /// <summary>
@@ -234,13 +326,117 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T4 : struct, IComponent
         where T5 : struct, IComponent
     {
-        var componentTypes = new ComponentTypes();
-        componentTypes.bitSet.SetBit(StructHeap<T1>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T2>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T3>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T4>.StructIndex);
-        componentTypes.bitSet.SetBit(StructHeap<T5>.StructIndex);
-        return componentTypes;
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex,
+            StructHeap<T5>.StructIndex);
+    }
+    
+    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+    {
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex,
+            StructHeap<T5>.StructIndex,
+            StructHeap<T6>.StructIndex);
+    }
+    
+    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+        where T7 : struct, IComponent
+    {
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex,
+            StructHeap<T5>.StructIndex,
+            StructHeap<T6>.StructIndex,
+            StructHeap<T7>.StructIndex);
+    }
+    
+    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+        where T7 : struct, IComponent
+        where T8 : struct, IComponent
+    {
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex,
+            StructHeap<T5>.StructIndex,
+            StructHeap<T6>.StructIndex,
+            StructHeap<T7>.StructIndex,
+            StructHeap<T8>.StructIndex);
+    }
+    
+    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+        where T7 : struct, IComponent
+        where T8 : struct, IComponent
+        where T9 : struct, IComponent
+    {
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex,
+            StructHeap<T5>.StructIndex,
+            StructHeap<T6>.StructIndex,
+            StructHeap<T7>.StructIndex,
+            StructHeap<T8>.StructIndex,
+            StructHeap<T9>.StructIndex);
+    }
+    
+    internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+        where T6 : struct, IComponent
+        where T7 : struct, IComponent
+        where T8 : struct, IComponent
+        where T9 : struct, IComponent
+        where T10: struct, IComponent
+    {
+        return new ComponentTypes(
+            StructHeap<T1>.StructIndex,
+            StructHeap<T2>.StructIndex,
+            StructHeap<T3>.StructIndex,
+            StructHeap<T4>.StructIndex,
+            StructHeap<T5>.StructIndex,
+            StructHeap<T6>.StructIndex,
+            StructHeap<T7>.StructIndex,
+            StructHeap<T8>.StructIndex,
+            StructHeap<T9>.StructIndex,
+            StructHeap<T10>.StructIndex);
     }
     #endregion
     

@@ -19,7 +19,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1>();
+        var addTypes        = ComponentTypes.Get<T1>();
         var addComponents   = GetIndexes<T1>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -47,7 +47,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2>();
+        var addTypes        = ComponentTypes.Get<T1,T2>();
         var addComponents   = GetIndexes<T1,T2>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -77,7 +77,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3>();
         var addComponents   = GetIndexes<T1,T2,T3>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -109,7 +109,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4>();
         var addComponents   = GetIndexes<T1,T2,T3,T4>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -143,7 +143,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5>();
         var addComponents   = GetIndexes<T1,T2,T3,T4,T5>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -179,7 +179,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6>();
         var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -217,7 +217,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7>();
         var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -257,7 +257,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8>();
         var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -299,7 +299,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
         var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
@@ -344,7 +344,7 @@ public static partial class EntityExtensions
         ref var node        = ref store.nodes[id];
         var oldType         = node.archetype;
         var oldCompIndex    = node.compIndex;
-        var addTypes        = GetComponentTypes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
+        var addTypes        = ComponentTypes.Get<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
         var addComponents   = GetIndexes<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10>();
         var newType         = store.GetArchetypeAdd(oldType, addTypes, tags);
         
