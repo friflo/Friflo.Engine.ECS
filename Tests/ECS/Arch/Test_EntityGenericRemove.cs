@@ -23,12 +23,14 @@ public static class Test_EntityGenericRemove
             var str = changed.ToString();
             switch (tagsCount++)
             {
-                case 0: AreEqual("entity: 1 - event > Remove Tags: [#TestTag]", str); break;
-                case 1: AreEqual("entity: 2 - event > Remove Tags: [#TestTag]", str); break;
-                case 2: AreEqual("entity: 3 - event > Remove Tags: [#TestTag]", str); break;
-                case 3: AreEqual("entity: 4 - event > Remove Tags: [#TestTag]", str); break;
-                case 4: AreEqual("entity: 5 - event > Remove Tags: [#TestTag]", str); break;
-                case 5: AreEqual("entity: 102 - event > Remove Tags: [#TestTag]", str); break;
+                case 0: AreEqual("entity: 1 - event > Remove Tags: [#TestTag]",     str); break;
+                case 1: AreEqual("entity: 2 - event > Remove Tags: [#TestTag]",     str); break;
+                case 2: AreEqual("entity: 3 - event > Remove Tags: [#TestTag]",     str); break;
+                case 3: AreEqual("entity: 4 - event > Remove Tags: [#TestTag]",     str); break;
+                case 4: AreEqual("entity: 5 - event > Remove Tags: [#TestTag]",     str); break;
+                case 5: AreEqual("entity: 102 - event > Remove Tags: [#TestTag]",   str); break;
+                case 6: AreEqual("entity: 102 - event > Remove Tags: [#TestTag2]",  str); break;
+                case 7: AreEqual("entity: 102 - event > Add Tags: [#TestTag2]",     str); break;
             }
         };
         int componentRemovedCount = 0;
@@ -122,11 +124,16 @@ public static class Test_EntityGenericRemove
             entity102.Remove<Scale3>(tag); // cover EntityStoreBase.GetArchetypeRemove()
             AreEqual("id: 102  [Position, #TestTag2]", entity102.ToString());
             
+            entity102.Remove<Scale3>(tags2);
+            AreEqual("id: 102  [Position]", entity102.ToString());
+            entity102.AddTag<TestTag2>();
+            
+            
             store.OnTagsChanged     -= tagsChanged;
             store.OnComponentRemoved-= componentRemoved;
         }
 
-        AreEqual(6,  tagsCount);
+        AreEqual(8,  tagsCount);
         AreEqual(16, componentRemovedCount);
     }
     
@@ -165,7 +172,7 @@ public static class Test_EntityGenericRemove
     [Test]
     public static void Test_Entity_generic_Remove_Perf()
     {
-        int count = 10; // 100_000_000 ~ #PC: 2018 ms
+        int count = 10; // 100_000_000 ~ #PC: 2111 ms
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity();
         

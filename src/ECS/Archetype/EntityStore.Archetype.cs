@@ -116,7 +116,8 @@ public partial class EntityStoreBase
         key.componentTypes  = type.componentTypes;    
         key.tags.bitSet.          Add(addTags.bitSet);
         key.componentTypes.bitSet.Add(addComponents.bitSet);
-        if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet)) {
+        if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet) &&
+            key.tags.          bitSet.Equals(type.tags.          bitSet)) {
             return type;
         }
         key.CalculateHashCode();
@@ -136,7 +137,8 @@ public partial class EntityStoreBase
         key.componentTypes  = type.componentTypes;
         key.tags.bitSet          .Remove(removeTags.bitSet);
         key.componentTypes.bitSet.Remove(removeComponents.bitSet);
-        if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet)) {
+        if (key.componentTypes.bitSet.Equals(type.componentTypes.bitSet) &&
+            key.tags.          bitSet.Equals(type.tags.          bitSet)) {
             return type;
         }
         key.CalculateHashCode();

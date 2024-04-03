@@ -23,13 +23,14 @@ public static class Test_EntityGenericAdd
             var str = changed.ToString();
             switch (tagsCount++)
             {
-                case 0: AreEqual("entity: 1 - event > Add Tags: [#TestTag]", str); break;
-                case 1: AreEqual("entity: 2 - event > Add Tags: [#TestTag]", str); break;
-                case 2: AreEqual("entity: 3 - event > Add Tags: [#TestTag]", str); break;
-                case 3: AreEqual("entity: 4 - event > Add Tags: [#TestTag]", str); break;
-                case 4: AreEqual("entity: 5 - event > Add Tags: [#TestTag]", str); break;
-                case 5: AreEqual("entity: 101 - event > Add Tags: [#TestTag]", str); break;
+                case 0: AreEqual("entity: 1 - event > Add Tags: [#TestTag]",    str); break;
+                case 1: AreEqual("entity: 2 - event > Add Tags: [#TestTag]",    str); break;
+                case 2: AreEqual("entity: 3 - event > Add Tags: [#TestTag]",    str); break;
+                case 3: AreEqual("entity: 4 - event > Add Tags: [#TestTag]",    str); break;
+                case 4: AreEqual("entity: 5 - event > Add Tags: [#TestTag]",    str); break;
+                case 5: AreEqual("entity: 101 - event > Add Tags: [#TestTag]",  str); break;
                 case 6: AreEqual("entity: 101 - event > Add Tags: [#TestTag2]", str); break;
+                case 7: AreEqual("entity: 101 - event > Add Tags: [#TestTag3]", str); break;
             }
         };
         int componentAddedCount = 0;
@@ -92,6 +93,7 @@ public static class Test_EntityGenericAdd
                             AreEqual(new Position(2,2,2),       changed.Component<Position>());
                             AreEqual("entity: 101 - event > Update Component: [Position]",  str);   break;
                 case 32:    AreEqual("entity: 101 - event > Add Component: [Scale3]",       str);   break;
+                case 33:    AreEqual("entity: 101 - event > Update Component: [Position]",  str);   break;
             }
         };
         store.OnTagsChanged     += tagsChanged;
@@ -101,6 +103,7 @@ public static class Test_EntityGenericAdd
         {
             var tag         = Tags.Get<TestTag>();
             var tag2        = Tags.Get<TestTag2>();
+            var tag3        = Tags.Get<TestTag3>();
             var entity1     = store.CreateEntity(1);
             var entity2     = store.CreateEntity(2);
             var entity3     = store.CreateEntity(3);
@@ -133,6 +136,8 @@ public static class Test_EntityGenericAdd
             AreEqual("id: 101  [Position, #TestTag]", entity101.ToString());
             entity101.Add(new Position(2,2,2), new Scale3(2,2,2), tag2);
             AreEqual("id: 101  [Position, Scale3, #TestTag, #TestTag2]", entity101.ToString());
+            entity101.Add(new Position(3,3,3), tag3);
+            AreEqual("id: 101  [Position, Scale3, #TestTag, #TestTag2, #TestTag3]", entity101.ToString());
             
             store.OnTagsChanged     -= tagsChanged;
             store.OnComponentAdded  -= componentAdded;
@@ -145,8 +150,8 @@ public static class Test_EntityGenericAdd
             entity101.DeleteEntity();
         }
         
-        AreEqual(7,  tagsCount);
-        AreEqual(33, componentAddedCount);
+        AreEqual(8,  tagsCount);
+        AreEqual(34, componentAddedCount);
     }
     
     [Test]
@@ -184,7 +189,7 @@ public static class Test_EntityGenericAdd
     [Test]
     public static void Test_Entity_generic_Add_Perf()
     {
-        int count = 10; // 100_000_000 ~ #PC: 2774 ms
+        int count = 10; // 100_000_000 ~ #PC: 2829 ms
         var store = new EntityStore(PidType.UsePidAsId);
         var entity = store.CreateEntity();
         
