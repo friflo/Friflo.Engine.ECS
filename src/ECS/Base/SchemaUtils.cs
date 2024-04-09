@@ -140,8 +140,7 @@ internal static class SchemaUtils
             return type.Name.Substring(0, 1);
         }
         name = name.Substring(0, Math.Min(3, name.Length));
-        name = name.Trim();
-        if (name.Length == 0) {
+        if (name.Trim().Length == 0) {
             return type.Name.Substring(0, 1);
         }
         return name;
