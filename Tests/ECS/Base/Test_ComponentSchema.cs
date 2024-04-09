@@ -105,6 +105,46 @@ public static class Test_ComponentSchema
         AssertBlittableComponent<NonBlittableDictionary>(schema, false);
     }
     
+    [Test]
+    public static void Test_Component_symbols()
+    {
+        var schema      = EntityStore.GetEntitySchema();
+        
+        var entityName = schema.GetComponentType<EntityName>();
+        AreEqual("N",                     entityName.SymbolName);
+        AreEqual(new SymbolColor(0,0,0),  entityName.SymbolColor);
+        
+        var disabled = schema.GetTagType<Disabled>();
+        AreEqual("D",                           disabled.SymbolName);
+        AreEqual(new SymbolColor(150,150,150),  disabled.SymbolColor);
+        
+        var unresolved = schema.GetComponentType<Unresolved>();
+        AreEqual("U",                       unresolved.SymbolName);
+        AreEqual(new SymbolColor(255,0,0),  unresolved.SymbolColor);
+        
+        var myComponent1 = schema.GetComponentType<MyComponent1>();
+        AreEqual("M1",  myComponent1.SymbolName);
+        AreEqual(null,  myComponent1.SymbolColor);
+        
+        var myComponent2 = schema.GetComponentType<MyComponent2>();
+        AreEqual("M2",  myComponent2.SymbolName);
+        AreEqual(null,  myComponent2.SymbolColor);
+        
+        var myComponent3 = schema.GetComponentType<MyComponent3>();
+        AreEqual("M3",  myComponent3.SymbolName);
+        AreEqual(null,  myComponent3.SymbolColor);
+        
+        var myComponent4 = schema.GetComponentType<MyComponent4>();
+        AreEqual("M4",  myComponent4.SymbolName);
+        AreEqual(null,  myComponent4.SymbolColor);
+        
+        var myComponent5 = schema.GetComponentType<MyComponent5>();
+        AreEqual("M",   myComponent5.SymbolName);
+        AreEqual(null,  myComponent5.SymbolColor);
+        
+        _ = new ComponentSymbolAttribute("abc"); // cover constructor
+    }
+    
     private static void AssertBlittableComponent<T>(EntitySchema schema, bool expect) where T : struct, IComponent {
         var componentType = schema.ComponentTypeByType[typeof(T)];
         AreEqual(expect, componentType.IsBlittable);

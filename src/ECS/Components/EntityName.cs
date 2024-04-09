@@ -12,6 +12,7 @@ namespace Friflo.Engine.ECS;
 /// Can be added to an <see cref="Entity"/> to provide a descriptive name for debugging or in an editor.
 /// </summary>
 [ComponentKey("name")]
+[ComponentSymbol("N", "0,0,0")]
 public struct EntityName : IComponent
 {
     /// <summary>Descriptive entity name for debugging or in an editor.</summary>

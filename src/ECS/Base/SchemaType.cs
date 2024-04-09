@@ -9,6 +9,7 @@ using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -50,6 +51,12 @@ public abstract class SchemaType
     /// <summary>Returns the <see cref="System.Type"/> name of the struct / class. </summary>
     public   readonly   string          Name;               //  8
     
+    /// <summary>A character used to to symbolize a component, tag or script in a UI. See <see cref="ComponentSymbolAttribute"/></summary>
+    public   readonly   string          SymbolName;         //  8
+    
+    /// <summary>A color used to to symbolize a component, tag or script in a UI. See <see cref="ComponentSymbolAttribute"/></summary>
+    public   readonly   SymbolColor?    SymbolColor;        // 12  
+    
     internal readonly   Bytes           componentKeyBytes;  // 16
         
     internal SchemaType(string componentKey, Type type, SchemaTypeKind kind)
@@ -61,6 +68,7 @@ public abstract class SchemaType
         if (componentKey != null) {
             componentKeyBytes = new Bytes(componentKey);   
         }
+        SchemaUtils.GetComponentSymbol(type, out SymbolName, out SymbolColor);
     }
     
     private static readonly Dictionary<Type, BlittableType> BlittableTypes = new Dictionary<Type, BlittableType>();
@@ -142,5 +150,18 @@ public abstract class SchemaType
             }
         }
         return BlittableType.Blittable;
+    }
+}
+
+public readonly struct SymbolColor
+{
+    public readonly int r;
+    public readonly int g;
+    public readonly int b;
+    
+    public SymbolColor (int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
 }

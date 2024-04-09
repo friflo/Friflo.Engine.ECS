@@ -115,6 +115,48 @@ internal static class SchemaUtils
         return type.Name;
     }
     
+    internal static void GetComponentSymbol(Type type, out string name, out SymbolColor? color)
+    {
+        name    = null;
+        color   = default;
+        foreach (var attr in type.CustomAttributes) {
+            if (attr.AttributeType != typeof(ComponentSymbolAttribute)) {
+                continue;
+            }
+            var arg = attr.ConstructorArguments;
+            if (arg.Count > 0) {
+                name    = (string)arg[0].Value;
+            }
+            if (arg.Count > 1) {
+                color = ParseColor((string)arg[1].Value);
+            }
+        }
+        if (name == null) {
+            name = type.Name.Substring(0, 1);
+        } else {
+            name = name.Substring(0, Math.Min(2, name.Length));
+        }
+    }
+    
+    private static SymbolColor? ParseColor(string color)
+    {
+        if (color == null) {
+            return null;
+        }
+        var colors = color.Split(',');
+        if (colors.Length != 3) {
+            return default;
+        }
+        if (int.TryParse(colors[0], out int r) &&
+            int.TryParse(colors[1], out int g) &&
+            int.TryParse(colors[2], out int b))
+        {
+            return new SymbolColor(r, g, b);
+        }
+        return null;
+    } 
+        
+    
     /// <remarks>
     /// <see cref="TagType{T}.TagIndex"/> must be assigned here.<br/>
     /// Unity initializes static fields of generic types already when creating a instance of that type.  

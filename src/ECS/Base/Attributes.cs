@@ -33,3 +33,11 @@ public sealed class TagNameAttribute : Attribute {
 public sealed class ComponentKeyAttribute : Attribute {
     public ComponentKeyAttribute (string key) { }
 }
+
+/// <summary>
+/// Compact symbolization of a component, tag or script in a UI by a character and a color. 
+/// </summary>
+[AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
+public sealed class ComponentSymbolAttribute : Attribute {
+    public ComponentSymbolAttribute (string name, string color = null) { }
+}
