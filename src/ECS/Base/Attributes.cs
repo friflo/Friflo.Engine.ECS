@@ -35,8 +35,12 @@ public sealed class ComponentKeyAttribute : Attribute {
 }
 
 /// <summary>
-/// Compact symbolization of a component, tag or script in UI or console by a name (max 3 characters) and a color. 
+/// Short symbol for a component, tag or script in UI or console as a name (max 3 chars) and a color.<br/>
+/// Prefer using single character names for common used symbols. Consider <a href="https://en.wikipedia.org/wiki/List_of_Unicode_characters">Unicode characters</a>.
 /// </summary>
+/// <remarks>
+/// Use 2 or 3 letter strings only for rarely used or important components, tags or scripts.
+/// </remarks>
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class ComponentSymbolAttribute : Attribute {
     public ComponentSymbolAttribute (string name, string color = null) { }
