@@ -35,7 +35,7 @@ public sealed class ComponentKeyAttribute : Attribute {
 }
 
 /// <summary>
-/// Compact symbolization of a component, tag or script in a UI by a character and a color. 
+/// Compact symbolization of a component, tag or script in UI or console by a name (max 3 characters) and a color. 
 /// </summary>
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class ComponentSymbolAttribute : Attribute {

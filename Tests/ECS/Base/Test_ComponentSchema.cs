@@ -140,7 +140,7 @@ public static class Test_ComponentSchema
         AreEqual(null,  myComponent3.SymbolColor);
         
         var myComponent4 = schema.GetComponentType<MyComponent4>();
-        AreEqual("M4",  myComponent4.SymbolName);
+        AreEqual("M",   myComponent4.SymbolName);
         AreEqual(null,  myComponent4.SymbolColor);
         
         var myComponent5 = schema.GetComponentType<MyComponent5>();

@@ -26,15 +26,15 @@ internal class CycleClass1 { internal CycleClass2   cycle2; }
 internal class CycleClass2 { internal CycleClass1   cycle1; }
 
 [ComponentKey("my2")]
-[ComponentSymbol("M2-trimmed")]
+[ComponentSymbol("M2 too long")]
 public struct MyComponent2 : IComponent { public int b; }
 
 [ComponentKey("my3")]
-[ComponentSymbol("M3", "invalid")]
+[ComponentSymbol(" M3", "invalid")]
 public struct MyComponent3 : IComponent { public int b; }
 
 [ComponentKey("my4")]
-[ComponentSymbol("M4", "invalid1,invalid2,invalid3")]
+[ComponentSymbol("", "invalid1,invalid2,invalid3")]
 public struct MyComponent4 : IComponent { public int b; }
 
 [ComponentKey("my5")]

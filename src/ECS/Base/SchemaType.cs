@@ -51,10 +51,16 @@ public abstract class SchemaType
     /// <summary>Returns the <see cref="System.Type"/> name of the struct / class. </summary>
     public   readonly   string          Name;               //  8
     
-    /// <summary>A character used to to symbolize a component, tag or script in a UI. See <see cref="ComponentSymbolAttribute"/></summary>
+    /// <summary>
+    /// A string with 1, 2 or 3 characters used to to symbolize a component, tag or script in a UI.<br/>
+    /// See <see cref="ComponentSymbolAttribute"/>
+    /// </summary>
     public   readonly   string          SymbolName;         //  8
     
-    /// <summary>A color used to to symbolize a component, tag or script in a UI. See <see cref="ComponentSymbolAttribute"/></summary>
+    /// <summary>
+    /// A color used to to symbolize a component, tag or script in a UI. <br/>
+    /// See <see cref="ComponentSymbolAttribute"/>
+    /// </summary>
     public   readonly   SymbolColor?    SymbolColor;        // 12  
     
     internal readonly   Bytes           componentKeyBytes;  // 16

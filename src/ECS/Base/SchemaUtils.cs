@@ -131,12 +131,21 @@ internal static class SchemaUtils
                 color = ParseColor((string)arg[1].Value);
             }
         }
-        if (name == null) {
-            name = type.Name.Substring(0, 1);
-        } else {
-            name = name.Substring(0, Math.Min(2, name.Length));
-        }
+        name = GetSymbolName(name, type);
     }
+    
+    private static string GetSymbolName(string name, Type type)
+    {
+        if (name == null) {
+            return type.Name.Substring(0, 1);
+        }
+        name = name.Substring(0, Math.Min(3, name.Length));
+        name = name.Trim();
+        if (name.Length == 0) {
+            return type.Name.Substring(0, 1);
+        }
+        return name;
+    } 
     
     private static SymbolColor? ParseColor(string color)
     {
