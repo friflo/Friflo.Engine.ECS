@@ -45,7 +45,7 @@ namespace Friflo.Engine.ECS;
 /// </list>
 /// </remarks>
 [ComponentKey("unresolved")]
-[ComponentSymbol("U", "255,0,0")]
+[ComponentSymbol("Un", "255,0,0")]
 public struct Unresolved : IComponent
 {
     public          UnresolvedComponent[]   components;

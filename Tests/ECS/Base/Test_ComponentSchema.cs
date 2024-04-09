@@ -111,8 +111,8 @@ public static class Test_ComponentSchema
         var schema      = EntityStore.GetEntitySchema();
         
         var entityName = schema.GetComponentType<EntityName>();
-        AreEqual("N",                     entityName.SymbolName);
-        AreEqual(new SymbolColor(0,0,0),  entityName.SymbolColor);
+        AreEqual("N",                           entityName.SymbolName);
+        AreEqual(new SymbolColor(0,0,0),        entityName.SymbolColor);
         
         
         var disabled = schema.GetTagType<Disabled>();
@@ -120,8 +120,8 @@ public static class Test_ComponentSchema
         AreEqual(new SymbolColor(150,150,150),  disabled.SymbolColor);
         
         var unresolved = schema.GetComponentType<Unresolved>();
-        AreEqual("U",                       unresolved.SymbolName);
-        AreEqual(new SymbolColor(255,0,0),  unresolved.SymbolColor);
+        AreEqual("Un",                          unresolved.SymbolName);
+        AreEqual(new SymbolColor(255,0,0),      unresolved.SymbolColor);
         var col = unresolved.SymbolColor.Value;
         AreEqual(255,   col.r);
         AreEqual(0,     col.g);
