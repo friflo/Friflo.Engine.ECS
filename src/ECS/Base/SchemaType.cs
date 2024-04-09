@@ -52,7 +52,7 @@ public abstract class SchemaType
     public   readonly   string          Name;               //  8
     
     /// <summary>
-    /// A string with 1, 2 or 3 characters used to to symbolize a component, tag or script in a UI.<br/>
+    /// A string with 1, 2 or 3 characters used to to symbolize a component, tag or script in a UI or console.<br/>
     /// See <see cref="ComponentSymbolAttribute"/>
     /// </summary>
     public   readonly   string          SymbolName;         //  8
