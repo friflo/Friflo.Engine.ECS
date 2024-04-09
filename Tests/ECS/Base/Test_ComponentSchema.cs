@@ -114,10 +114,13 @@ public static class Test_ComponentSchema
         AreEqual("N",                           entityName.SymbolName);
         AreEqual(new SymbolColor(0,0,0),        entityName.SymbolColor);
         
-        
         var disabled = schema.GetTagType<Disabled>();
         AreEqual("D",                           disabled.SymbolName);
         AreEqual(new SymbolColor(150,150,150),  disabled.SymbolColor);
+        
+        var unique = schema.GetComponentType<UniqueEntity>();
+        AreEqual("UQ",                          unique.SymbolName);
+        AreEqual(new SymbolColor(255,145,0),    unique.SymbolColor);
         
         var unresolved = schema.GetComponentType<Unresolved>();
         AreEqual("Un",                          unresolved.SymbolName);

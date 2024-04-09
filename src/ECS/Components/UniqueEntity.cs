@@ -15,6 +15,7 @@ namespace Friflo.Engine.ECS;
 /// It basically acts as a singleton within an <see cref="EntityStore"/>. 
 /// </remarks>
 [ComponentKey("unique")]
+[ComponentSymbol("UQ",  "255,145,0")]
 public struct UniqueEntity : IComponent
 {
     /// <summary>Unique string identifier assigned to specific <see cref="Entity"/></summary>
