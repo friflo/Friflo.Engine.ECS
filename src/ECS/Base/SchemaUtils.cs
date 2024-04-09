@@ -147,9 +147,9 @@ internal static class SchemaUtils
         if (colors.Length != 3) {
             return default;
         }
-        if (int.TryParse(colors[0], out int r) &&
-            int.TryParse(colors[1], out int g) &&
-            int.TryParse(colors[2], out int b))
+        if (byte.TryParse(colors[0], out byte r) &&
+            byte.TryParse(colors[1], out byte g) &&
+            byte.TryParse(colors[2], out byte b))
         {
             return new SymbolColor(r, g, b);
         }

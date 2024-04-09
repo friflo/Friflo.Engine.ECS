@@ -155,11 +155,11 @@ public abstract class SchemaType
 
 public readonly struct SymbolColor
 {
-    public readonly int r;
-    public readonly int g;
-    public readonly int b;
+    public readonly byte r;
+    public readonly byte g;
+    public readonly byte b;
     
-    public SymbolColor (int r, int g, int b) {
+    public SymbolColor (byte r, byte g, byte b) {
         this.r = r;
         this.g = g;
         this.b = b;
