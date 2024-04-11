@@ -220,9 +220,10 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     public  bool TryGetEntityById(int id, out Entity entity)
     {
-        if (0 <= id && id < nodes.Length) {
+        var localNodes = nodes;
+        if (0 <= id && id < localNodes.Length) {
             entity = new Entity(this, id);
-            return true;
+            return localNodes[id].archetype != null;
         }
         entity = default;
         return false;
@@ -231,9 +232,11 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary>
     /// Return the <see cref="Entity"/> with the passed entity <paramref name="pid"/>.
     /// </summary>
-    public  Entity  GetEntityByPid(long pid) {
-        if (intern.pid2Id != null) {
-            return new Entity(this, intern.pid2Id[pid]);
+    public  Entity  GetEntityByPid(long pid)
+    {
+        var pid2Id = intern.pid2Id;
+        if (pid2Id != null) {
+            return new Entity(this, pid2Id[pid]);
         }
         return new Entity(this, (int)pid);
     }
@@ -241,9 +244,11 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary>
     /// Try to return the <see cref="Entity"/> with the passed entity <paramref name="pid"/>.<br/>
     /// </summary>
-    public  bool  TryGetEntityByPid(long pid, out Entity value) {
-        if (intern.pid2Id != null) {
-            if (intern.pid2Id.TryGetValue(pid,out int id)) {
+    public  bool  TryGetEntityByPid(long pid, out Entity value)
+    {
+        var pid2Id = intern.pid2Id;
+        if (pid2Id != null) {
+            if (pid2Id.TryGetValue(pid,out int id)) {
                 value = new Entity(this, id);
                 return true;
             }

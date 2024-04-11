@@ -144,20 +144,20 @@ public static class Test_Entity
 
         AreEqual(4, store.Capacity);
         
-        IsTrue(store.TryGetEntityById(0, out Entity entity));
-        IsTrue(entity.IsNull);
+        IsFalse(store.TryGetEntityById(0, out Entity entity));
+        IsTrue (entity.IsNull);
         
-        IsTrue(store.TryGetEntityById(1, out entity));
-        IsTrue(entity.IsNull);
+        IsFalse(store.TryGetEntityById(1, out entity));
+        IsTrue (entity.IsNull);
         
-        IsTrue(store.TryGetEntityById(2, out entity));
+        IsTrue (store.TryGetEntityById(2, out entity));
         IsFalse(entity.IsNull);
 
-        IsTrue(store.TryGetEntityById(3, out entity));
-        IsTrue(entity.IsNull);
+        IsFalse(store.TryGetEntityById(3, out entity));
+        IsTrue (entity.IsNull);
         
         IsFalse(store.TryGetEntityById(4, out entity));
-        IsTrue(entity.IsNull);
+        IsTrue (entity.IsNull);
     }
         
     [Test]
