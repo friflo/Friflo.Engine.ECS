@@ -14,7 +14,7 @@ namespace Friflo.Engine.ECS;
 
 [ComponentKey("pos")]
 [StructLayout(LayoutKind.Explicit)]
-[ComponentSymbol("P",  "255,255,0")]
+[ComponentSymbol("P",  "0, 170, 0")]
 public struct  Position : IComponent, IEquatable<Position>
 {
     [Browse(Never)]
