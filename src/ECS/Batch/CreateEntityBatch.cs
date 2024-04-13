@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Is thrown if using a batch returned by <see cref="EntityStoreBase.Batch"/> with autoReturn: true<br/>
-/// after calling <see cref="CreateEntityBatch.CreateEntity"/>.
+/// after calling <see cref="CreateEntityBatch.CreateEntity()"/>.
 /// </summary>
 public class BatchAlreadyReturnedException : InvalidOperationException
 {
@@ -21,7 +21,7 @@ public class BatchAlreadyReturnedException : InvalidOperationException
 
 /// <summary>
 /// A create batch is used to optimize entity creation.<br/>
-/// Components and tags are buffered before creating an entity with <see cref="CreateEntity"/>.<br/>
+/// Components and tags are buffered before creating an entity with <see cref="CreateEntity()"/>.<br/>
 /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#batch---create-entity">Example.</a>
 /// </summary>
 /// <remarks>
@@ -29,7 +29,7 @@ public class BatchAlreadyReturnedException : InvalidOperationException
 /// <br/>
 /// Creating an entity via a batch stores the entity directly in the target <see cref="Archetype"/><br/>
 /// This prevents any structural changes caused when creating an entity in steps using<br/>  
-/// <see cref="EntityStore.CreateEntity()"/> an subsequent calls to <see cref="Entity.AddComponent{T}()"/>
+/// <see cref="EntityStore.CreateEntity()"/> a subsequent calls to <see cref="Entity.AddComponent{T}()"/>
 /// and <see cref="Entity.AddTag{TTag}()"/>.
 /// </remarks>
 public sealed class CreateEntityBatch
@@ -110,13 +110,32 @@ public sealed class CreateEntityBatch
     /// <remarks>
     /// Subsequent use of a batch returned by <c>Batch(autoReturn: true)</c> throws <see cref="ECS.BatchAlreadyReturnedException"/>.
     /// </remarks>
-    public Entity CreateEntity()
+    public Entity CreateEntity() {
+        if (isReturned) throw BatchAlreadyReturnedException();
+        var entityStore     = (EntityStore)store;
+        var id              = entityStore.NewId(); 
+        return CreateEntityInternal(entityStore, id);
+    }
+    
+    /// <summary>
+    /// Creates an entity with the specified <paramref name="id"/> and the components and tags previously added.<br/>
+    /// Added batch components and tags are not cleared.
+    /// </summary>
+    /// <remarks>
+    /// Subsequent use of a batch returned by <c>Batch(autoReturn: true)</c> throws <see cref="ECS.BatchAlreadyReturnedException"/>.
+    /// </remarks>
+    public Entity CreateEntity(int id)
     {
         if (isReturned) throw BatchAlreadyReturnedException();
-        archetype       ??= store.GetArchetype(componentsCreate, tagsCreate);
-        var localStore  = (EntityStore)store;
-        var id          = localStore.NewId();
-        var compIndex   = localStore.CreateEntityInternal(archetype, id);
+        var entityStore  = (EntityStore)store;
+        entityStore.CheckEntityId(id);
+        return CreateEntityInternal(entityStore, id);
+    }
+    
+    private Entity CreateEntityInternal(EntityStore entityStore, int id)
+    {
+        archetype     ??= entityStore.GetArchetype(componentsCreate, tagsCreate);
+        var compIndex   = entityStore.CreateEntityInternal(archetype, id);
         var components  = batchComponents;
         
         // --- assign component values
@@ -126,12 +145,12 @@ public sealed class CreateEntityBatch
         if (autoReturn) {
             isReturned = true;
             Clear();
-            store.ReturnCreateBatch(this);
+            entityStore.ReturnCreateBatch(this);
         }
-        var entity = new Entity(localStore, id);
+        var entity = new Entity(entityStore, id);
         
         // Send event. See: SEND_EVENT notes
-        localStore.CreateEntityEvent(entity);
+        entityStore.CreateEntityEvent(entity);
         return entity;
     }
     
@@ -153,7 +172,7 @@ public sealed class CreateEntityBatch
     }
 
     /// <summary>
-    /// Add the given <paramref name="component"/> that will be added to the entity when calling <see cref="CreateEntity"/>. 
+    /// Add the given <paramref name="component"/> that will be added to the entity when calling <see cref="CreateEntity()"/>. 
     /// </summary>
     public CreateEntityBatch Add<T>(in T component) where T : struct, IComponent
     {
@@ -167,7 +186,7 @@ public sealed class CreateEntityBatch
     }
     
     /// <summary>
-    /// Add a component that will be added to the entity when calling <see cref="CreateEntity"/>. 
+    /// Add a component that will be added to the entity when calling <see cref="CreateEntity()"/>. 
     /// </summary>
     public CreateEntityBatch Add<T>() where T : struct, IComponent
     {
@@ -203,7 +222,7 @@ public sealed class CreateEntityBatch
     }
     
     /// <summary>
-    /// Add a tag that will be added to the entity when calling <see cref="CreateEntity"/>. 
+    /// Add a tag that will be added to the entity when calling <see cref="CreateEntity()"/>. 
     /// </summary>
     public CreateEntityBatch AddTag<T>() where T : struct, ITag
     {
@@ -214,7 +233,7 @@ public sealed class CreateEntityBatch
     }
     
     /// <summary>
-    /// Adds the given <paramref name="tags"/> that will be added to the entity when calling <see cref="CreateEntity"/>. 
+    /// Adds the given <paramref name="tags"/> that will be added to the entity when calling <see cref="CreateEntity()"/>. 
     /// </summary>
     public CreateEntityBatch AddTags(in Tags tags)
     {

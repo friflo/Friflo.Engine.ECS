@@ -68,11 +68,13 @@ public static class Test_BatchCreate
         
         batch.Get<Position>().x = 1;
         var entity1 = batch.CreateEntity();
+        AreEqual("id: 1  [Position, Rotation]", entity1.ToString());
         AreEqual(new Position(1, 0, 0), entity1.Position);
         AreEqual(0, store.Info.PooledCreateEntityBatchCount);
 
         batch.Get<Position>().x = 2;
-        var entity2 = batch.CreateEntity();
+        var entity2 = batch.CreateEntity(2);
+        AreEqual("id: 2  [Position, Rotation]", entity2.ToString());
         AreEqual(new Position(2, 0, 0), entity2.Position);
         AreEqual(0, store.Info.PooledCreateEntityBatchCount);
         
@@ -142,6 +144,10 @@ public static class Test_BatchCreate
         var expect = "batch already returned";
         
         var e = Throws<BatchAlreadyReturnedException> (() => batch.CreateEntity());
+        AreEqual(expect, e!.Message);
+        AreEqual(1, store.Info.PooledCreateEntityBatchCount);
+        
+        e = Throws<BatchAlreadyReturnedException> (() => batch.CreateEntity(42));
         AreEqual(expect, e!.Message);
         AreEqual(1, store.Info.PooledCreateEntityBatchCount);
         

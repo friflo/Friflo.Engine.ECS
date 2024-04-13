@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Numerics;
 
 namespace Friflo.Engine.ECS.Utils;
 
@@ -40,7 +39,7 @@ public struct BitSetEnumerator
         {
             if (lng != 0) {
 #if NETCOREAPP3_0_OR_GREATER
-                var bitPos  = BitOperations.TrailingZeroCount(lng);
+                var bitPos  = System.Numerics.BitOperations.TrailingZeroCount(lng);
 #else
                 var bitPos  = BitSet.TrailingZeroCount(lng);
 #endif

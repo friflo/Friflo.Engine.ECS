@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Runtime.InteropServices;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -211,7 +210,7 @@ public sealed class CommandBuffer
         {
             var entityId = tagCommand.entityId;
 #if NET6_0_OR_GREATER
-            ref var change = ref CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out exists);
+            ref var change = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(entityChanges, entityId, out exists);
 #else
             exists         = entityChanges.TryGetValue(entityId, out var change);
 #endif

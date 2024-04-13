@@ -126,17 +126,17 @@ public partial class EntityStoreBase
     /// </summary>
     /// <remarks>
     /// The returned batch creates an entity with previously added components and tags when calling
-    /// <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
+    /// <see cref="CreateEntityBatch.CreateEntity()"/>.<br/>
     /// <br/>
     /// If <paramref name="autoReturn"/> == true the batch is returned to the EntityStore when
-    /// calling <see cref="CreateEntityBatch.CreateEntity"/>.<br/>
+    /// calling <see cref="CreateEntityBatch.CreateEntity()"/>.<br/>
     /// Subsequent use of the batch throws <see cref="BatchAlreadyReturnedException"/>.<br/>
     /// <br/>
-    /// If <paramref name="autoReturn"/> == false <see cref="CreateEntityBatch.CreateEntity"/> can be called
+    /// If <paramref name="autoReturn"/> == false <see cref="CreateEntityBatch.CreateEntity()"/> can be called
     /// multiple times to create multiple entities.<br/>
     /// The caller should call <see cref="CreateEntityBatch.Return"/> after usage to prevent unnecessary memory allocations.<br/>
     /// <br/>
-    /// When calling <see cref="CreateEntityBatch.CreateEntity"/> or <see cref="CreateEntityBatch.Return"/>
+    /// When calling <see cref="CreateEntityBatch.CreateEntity()"/> or <see cref="CreateEntityBatch.Return"/>
     /// the batch executes without memory allocations.
     /// </remarks>
     public CreateEntityBatch Batch(bool autoReturn = true)
