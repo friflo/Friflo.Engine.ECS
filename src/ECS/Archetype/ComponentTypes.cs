@@ -44,6 +44,14 @@ public struct ComponentTypes : IEnumerable<ComponentType>
            readonly IEnumerator<ComponentType>  IEnumerable<ComponentType>.GetEnumerator()  => new ComponentTypesEnumerator (this);
 #endregion
 
+#region specialized constructor
+    public ComponentTypes(ComponentType type)
+    {
+        bitSet.SetBit(type.StructIndex);
+    }
+    #endregion
+
+
 #region internal constructors
     internal ComponentTypes(StructHeap[] heaps) {
         foreach (var heap in heaps) {

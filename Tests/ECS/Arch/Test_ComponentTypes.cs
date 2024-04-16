@@ -50,6 +50,17 @@ public static class Test_ComponentTypes
     }
     
     [Test]
+    public static void Test_ComponentTypes_constructor()
+    {
+        var schema          = EntityStore.GetEntitySchema();
+        var positionType    = schema.GetComponentType<Position>();
+        
+        var types = new ComponentTypes(positionType);
+        AreEqual(1, types.Count);
+        IsTrue  (types.Has<Position>());
+    }
+    
+    [Test]
     public static void Test_ComponentTypes_Get()
     {
         var schema = EntityStore.GetEntitySchema();
