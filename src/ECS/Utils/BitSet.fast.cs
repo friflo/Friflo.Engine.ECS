@@ -82,6 +82,12 @@ public partial struct BitSet
             value = left.value ^ right.value
         };
     }
+    
+    internal static BitSet Intersect (in BitSet left, in BitSet right) {
+        return new BitSet {
+            value = left.value & right.value
+        };
+    }
 #endif
 
 }

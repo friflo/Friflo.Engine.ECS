@@ -179,6 +179,32 @@ public static class Test_ComponentReader
     }
     
     [Test]
+    public static void Test_ComponentReader_preserve_components()
+    {
+        var store       = new EntityStore(PidType.UsePidAsId);
+        var converter   = EntityConverter.Default;
+        var entity      = store.CreateEntity(10);
+        entity.AddComponent(new Position(1,2,3));   // preserved
+        entity.AddComponent(new Scale3(4,5,6));
+        entity.AddTag<TestTag>();                   // preserved
+        entity.AddTag<TestTag2>();
+        
+        // Note: MyComponent1 & TestTag3 are not present in entity => so they are not preserved.
+        //       EntityName will be used from DataEntity.components
+        var preserveComponents  = ComponentTypes.Get<Position, EntityName, MyComponent1>();
+        var preserveTags        = Tags.Get<TestTag, TestTag3>();
+        var node    = new DataEntity { pid = 10, components = new JsonValue("{\"name\":{\"value\":\"test\"}}") };
+        entity      = converter.DataEntityToEntityPreserve(node, store, out var error, preserveComponents, preserveTags);
+        
+        AreEqual("test",                entity.GetComponent<EntityName>().value);
+        AreEqual(new Position(1,2,3),   entity.GetComponent<Position>());
+        IsTrue  (entity.Tags.Has<TestTag>());
+        AreEqual("id: 10  \"test\"  [EntityName, Position, #TestTag]", entity.ToString());
+        
+        IsNull  (error);
+    }
+    
+    [Test]
     public static void Test_ComponentReader_read_invalid_component()
     {
         var store       = new EntityStore(PidType.UsePidAsId);

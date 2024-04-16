@@ -57,9 +57,29 @@ public sealed class EntityConverter
     /// </summary>
     public Entity DataEntityToEntity(DataEntity dataEntity, EntityStore store, out string error)
     {
-        if (dataEntity == null) {
-            throw new ArgumentNullException(nameof(dataEntity));
-        }
-        return store.DataEntityToEntity(dataEntity, out error, reader);
+        return store.DataEntityToEntity(dataEntity, out error, reader, default);
     }
+    
+    /// <summary>
+    /// Add / update the passed <see cref="DataEntity"/> in the given <paramref name="store"/> and returns
+    /// the added / updated <see cref="Entity"/>.<br/>
+    /// The specified <paramref name="componentTypes"/> and <paramref name="tags"/> are preserved if present on entity. 
+    /// </summary>
+    public Entity DataEntityToEntityPreserve(
+        DataEntity          dataEntity,
+        EntityStore         store,
+        out string          error,
+        in  ComponentTypes  componentTypes,
+        in  Tags            tags)
+    {
+        var options = new ConvertOptions { preserveComponents = componentTypes, preserveTags = tags, preserve = true };
+        return store.DataEntityToEntity(dataEntity, out error, reader, options);
+    }
+}
+
+internal struct ConvertOptions
+{
+    internal ComponentTypes  preserveComponents;
+    internal Tags            preserveTags;
+    internal bool            preserve;
 }

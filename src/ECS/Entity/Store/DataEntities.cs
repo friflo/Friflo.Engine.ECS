@@ -85,15 +85,18 @@ public partial class EntityStore
 // --------------------------------------- DataEntity -> Entity ---------------------------------------
 #region DataEntity -> Entity
 
-    internal Entity DataEntityToEntity(DataEntity dataEntity, out string error, ComponentReader reader)
+    internal Entity DataEntityToEntity(DataEntity dataEntity, out string error, ComponentReader reader, in ConvertOptions options)
     {
+        if (dataEntity == null) {
+            throw new ArgumentNullException(nameof(dataEntity));
+        }
         Entity entity;
         if (intern.pidType == PidType.UsePidAsId) {
             entity = CreateFromDataEntityUsePidAsId(dataEntity);
         } else {
             entity = CreateFromDataEntityRandomPid (dataEntity);
         }
-        error = reader.Read(dataEntity, entity, this);
+        error = reader.Read(dataEntity, entity, this, options);
         return entity;
     }
     

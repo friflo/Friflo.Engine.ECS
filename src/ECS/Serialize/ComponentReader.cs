@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -22,7 +23,6 @@ internal sealed class ComponentReader
     private readonly    Dictionary<Type,   ScriptType>          scriptTypeByType;
     private readonly    Dictionary<string, TagType>             tagTypeByName;
     private readonly    ComponentType                           unresolvedType;
-    private readonly    List<ComponentType>                     componentTypes;
     private readonly    HashSet<ScriptType>                     scriptTypes;
     private readonly    ArchetypeKey                            searchKey;
     private readonly    List<string>                            unresolvedTagList;
@@ -45,7 +45,6 @@ internal sealed class ComponentReader
         schemaTypeByKey         = schema.schemaTypeByKey;
         scriptTypeByType        = schema.scriptTypeByType;
         tagTypeByName           = schema.tagTypeByName;
-        componentTypes          = new List<ComponentType>();
         scriptTypes             = new HashSet<ScriptType>(); // Cannot use Script. User code may override Equals() or GetHashCode()
         searchKey               = new ArchetypeKey();
         unresolvedTagList       = new List<string>();
@@ -55,7 +54,7 @@ internal sealed class ComponentReader
         rawKeyCache             = new Dictionary<BytesHash, RawKey>(BytesHash.Equality);
     }
     
-    internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store)
+    internal string Read(DataEntity dataEntity, Entity entity, EntityStoreBase store, in ConvertOptions options)
     {
         componentCount      = 0;
         var hasTags         = dataEntity.tags?.Count > 0;
@@ -67,7 +66,7 @@ internal sealed class ComponentReader
         if (error != null) {
             return error;
         }
-        SetEntityArchetype(dataEntity, entity, store);
+        SetEntityArchetype(dataEntity, entity, store, options);
         return ReadComponents(entity);
     }
     
@@ -173,10 +172,11 @@ internal sealed class ComponentReader
     /// Ensures the given entity present / moved to an <see cref="Archetype"/> that contains all components 
     /// within the current JSON payload.
     /// </summary>
-    private void SetEntityArchetype(DataEntity dataEntity, Entity entity, EntityStoreBase store)
+    private void SetEntityArchetype(DataEntity dataEntity, Entity entity, EntityStoreBase store, in ConvertOptions options)
     {
-        searchKey.Clear();
-        var hasComponentTypes   = GetComponentTypes(ref searchKey.componentTypes);
+        var key = searchKey;
+        key.Clear();
+        var hasComponentTypes   = GetComponentTypes(ref key.componentTypes);
         var tags                = dataEntity.tags;
         var hasTags             = tags?.Count > 0;
         if (!hasComponentTypes && !hasTags) {
@@ -184,18 +184,21 @@ internal sealed class ComponentReader
         }
         unresolvedTagList.Clear();
         if (hasTags) {
-            AddTags(tags, searchKey);
+            AddTags(tags, key);
         }
-        searchKey.CalculateHashCode();
-        // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
-        var newArchetype = FindArchetype(searchKey, store);
+        var curType = entity.archetype;
+        if (options.preserve) {
+            Preserve(key, curType, options);
+        }
+        key.CalculateHashCode();
         
-        var curArchetype = entity.archetype;
-        if (curArchetype != newArchetype)
+        // --- use / create Archetype with present components to eliminate structural changes for every individual component Read()
+        var newType = FindArchetype(key, store);
+        if (curType != newType)
         {
             ref var node    = ref entity.store.nodes[entity.Id];
-            node.archetype  = newArchetype;
-            node.compIndex  = Archetype.MoveEntityTo(curArchetype, entity.Id, node.compIndex, newArchetype);
+            node.archetype  = newType;
+            node.compIndex  = Archetype.MoveEntityTo(curType, entity.Id, node.compIndex, newType);
         }
         if (unresolvedTagList.Count > 0) {
             AddUnresolvedTags(entity);
@@ -256,24 +259,20 @@ internal sealed class ComponentReader
         return hasComponentTypes;
     }
     
-    private Archetype FindArchetype(ArchetypeKey searchKey, EntityStoreBase store)
+    /// <summary> Preserve components & tags present on passed <paramref name="type"/>. </summary>
+    private static void Preserve(ArchetypeKey key, Archetype type, in ConvertOptions options)
+    {
+        key.componentTypes.bitSet.Add(BitSet.Intersect(type.componentTypes.bitSet, options.preserveComponents.bitSet));
+        key.tags.          bitSet.Add(BitSet.Intersect(type.tags.          bitSet, options.preserveTags.      bitSet));
+    }
+    
+    private static Archetype FindArchetype(ArchetypeKey searchKey, EntityStoreBase store)
     {
         if (store.TryGetValue(searchKey, out var archetypeKey)) {
             return archetypeKey.archetype;
         }
-        var config = EntityStoreBase.GetArchetypeConfig(store);
-        componentTypes.Clear();
-        for (int n = 0; n < componentCount; n++) {
-            ref var component = ref components[n];
-            var schemaType = component.rawKey.schemaType;
-            if (schemaType.Kind == SchemaTypeKind.Component) {
-                componentTypes.Add((ComponentType)schemaType);
-            }
-        }
-        if (unresolvedTagList.Count > 0) {
-            componentTypes.Add(unresolvedType);
-        }
-        var newArchetype = Archetype.CreateWithComponentTypeList(config, componentTypes, searchKey.tags);
+        var config          = EntityStoreBase.GetArchetypeConfig(store);
+        var newArchetype    = Archetype.CreateWithComponentTypes(config, searchKey.componentTypes, searchKey.tags);
         EntityStoreBase.AddArchetype(store, newArchetype);
         return newArchetype;
     }

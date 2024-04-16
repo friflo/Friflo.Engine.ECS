@@ -111,6 +111,15 @@ public partial struct BitSet
             l3 = left.l3 ^ right.l3,
         };
     }
+    
+    internal static BitSet Intersect (in BitSet left, in BitSet right) {
+        return new BitSet {
+            l0 = left.l0 & right.l0,
+            l1 = left.l1 & right.l1,
+            l2 = left.l2 & right.l2,
+            l3 = left.l3 & right.l3,
+        };
+    }
 #endif
 
     internal static int NumberOfSetBits(long i)
