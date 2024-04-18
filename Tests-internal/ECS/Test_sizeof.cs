@@ -84,6 +84,9 @@ public static class Test_sizeof
 
         size = sizeof(Archetypes);
         AreEqual(16, size);
+        
+        size = sizeof(QueryFilter);
+        AreEqual(288, size);
     }
     
     [Test]
