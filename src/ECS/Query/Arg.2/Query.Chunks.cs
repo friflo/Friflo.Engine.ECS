@@ -62,6 +62,7 @@ public readonly struct QueryChunks<T1, T2> : IEnumerable <Chunks<T1,T2>>
 
     public              int     Count       => query.Count;
     
+    /// <summary> Obsolete. Renamed to <see cref="Count"/>. </summary>
     [Obsolete($"Renamed to {nameof(Count)}")] [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public              int     EntityCount => query.Count;
     

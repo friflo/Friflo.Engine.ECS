@@ -15,6 +15,8 @@ public static class Test_Query
         store.CreateEntity(2).AddComponent<Position>();
         
         var query = store.Query<Position>();
+        Assert.AreEqual("Components: [Position]", query.ComponentTypes.ToString());
+        
 
         foreach (var (_, entities) in query.Chunks) {
             var debugView       = new ChunkEntitiesDebugView(entities);

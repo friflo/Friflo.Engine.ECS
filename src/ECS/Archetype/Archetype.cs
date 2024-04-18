@@ -34,6 +34,7 @@ public sealed class Archetype
     /// <summary>Number of entities / components stored in the <see cref="Archetype"/></summary>
     [Browse(Never)] public              int                 Count           => entityCount;
     
+    /// <summary> Obsolete. Renamed to <see cref="Count"/>. </summary>
     [Obsolete($"Renamed to {nameof(Count)}")]
     [Browse(Never)]
     public                              int                 EntityCount     => entityCount;

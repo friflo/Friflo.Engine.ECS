@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// <see cref="ArchetypeQuery"/> and all its generic implementations are designed to be reused.<br/>
-/// By default an query does not contain <see cref="Disabled"/> entities. Use <see cref="WithDisabled"/> if needed.<br/>
+/// By default, a query does not contain <see cref="Disabled"/> entities. Use <see cref="WithDisabled"/> if needed.<br/>
 /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#query-entities">Example.</a>
 /// </summary>
 public class ArchetypeQuery
@@ -23,36 +23,41 @@ public class ArchetypeQuery
     /// </summary>
     /// <remarks>
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
-    /// Typically there are only a few matching <see cref="Archetypes"/>.
+    /// Typically, there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
-    public              int                 Count => Archetype.GetEntityCount(GetArchetypesSpan());
+    public              int             Count           => Archetype.GetEntityCount(GetArchetypesSpan());
     
+    /// <summary> Obsolete. Renamed to <see cref="Count"/>. </summary>
     [Obsolete($"Renamed to {nameof(Count)}")]
     [Browse(Never)]
-    public              int                 EntityCount => Archetype.GetEntityCount(GetArchetypesSpan());
+    public              int             EntityCount     => Archetype.GetEntityCount(GetArchetypesSpan());
     
     /// <summary> Return the number of <c>Chunks</c> returned by the query. </summary>
-    public              int                 ChunkCount  => Archetype.GetChunkCount (GetArchetypesSpan());
+    public              int             ChunkCount      => Archetype.GetChunkCount (GetArchetypesSpan());
     
     /// <summary> Returns the set of <see cref="Archetype"/>'s matching the query.</summary>
-    public ReadOnlySpan<Archetype>          Archetypes  => GetArchetypesSpan();
+    public ReadOnlySpan<Archetype>      Archetypes      => GetArchetypesSpan();
 
     /// <summary> The <see cref="EntityStore"/> on which the query operates. </summary>
-    public              EntityStore         Store       => store as EntityStore;
+    public              EntityStore     Store           => store as EntityStore;
     
     /// <summary>
     /// Return the <see cref="ArchetypeQuery"/> entities mainly for debugging.<br/>
     /// For efficient access to entity <see cref="IComponent"/>'s use one of the generic <c>EntityStore.Query()</c> methods. 
     /// </summary>
-    public              QueryEntities       Entities    => new (this);
+    public              QueryEntities   Entities        => new (this);
     
     /// <summary>
-    /// An <see cref="ECS.EventFilter"/> used to filter the query result for added/removed components/tags.<br/>
+    /// A <see cref="ECS.EventFilter"/> used to filter the query result for added/removed components/tags.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#eventfilter">Example.</a>
     /// </summary>
-    public              EventFilter         EventFilter => GetEventFilter();
+    public              EventFilter     EventFilter     => GetEventFilter();
+    
+    /// <summary> Return the <see cref="ComponentTypes"/> of components returned by a query result. </summary>
+    [Browse(Never)]
+    public ref readonly ComponentTypes  ComponentTypes  => ref components; 
 
-    public override     string              ToString()  => GetString();
+    public override     string          ToString()      => GetString();
     #endregion
 
 #region private / internal fields
@@ -186,7 +191,7 @@ public class ArchetypeQuery
     }
     
     /// <summary>
-    /// Returns the query result as an <see cref="EntityList"/> to perform structural changes.
+    /// Returns the query result as a <see cref="EntityList"/> used to perform structural changes.
     /// </summary>
     public EntityList ToEntityList()
     {

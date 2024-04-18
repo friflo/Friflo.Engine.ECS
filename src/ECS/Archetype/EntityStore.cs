@@ -27,6 +27,7 @@ public abstract partial class EntityStoreBase
     /// <summary>Number of all entities stored in the entity store</summary>
     [Browse(Never)] public              int                     Count           => entityCount;
     
+    /// <summary> Obsolete. Renamed to <see cref="Count"/>. </summary>
     [Obsolete($"Renamed to {nameof(Count)}")]
     [Browse(Never)] public              int                     EntityCount     => entityCount;
     
