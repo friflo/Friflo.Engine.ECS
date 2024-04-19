@@ -55,7 +55,10 @@ public class ArchetypeQuery
     
     /// <summary> Return the <see cref="ComponentTypes"/> of components returned by a query result. </summary>
     [Browse(Never)]
-    public ref readonly ComponentTypes  ComponentTypes  => ref components; 
+    public ref readonly ComponentTypes  ComponentTypes  => ref components;
+    
+    /// <summary> Return component and tag filters added to the query </summary>
+    public ref readonly QueryFilter     QueryFilter     => ref filter;
 
     public override     string          ToString()      => GetString();
     #endregion
@@ -72,7 +75,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 lastArchetypeCount; //   4  number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      components;         //  32
-                    private             QueryFilter         filter;             // 288
+    [Browse(Never)] private             QueryFilter         filter;             // 288
     [Browse(Never)] private  readonly   bool                singleArchetype;    //   1  if true it returns only the entities a specific archetype
     #endregion
 

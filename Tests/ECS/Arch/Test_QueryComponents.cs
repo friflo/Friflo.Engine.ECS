@@ -292,6 +292,41 @@ public static class Test_QueryComponents
         IsTrue (query.IsMatch(default, Tags.Get<TestTag, TestTag2>()));
         IsTrue (query.IsMatch(default, Tags.Get<TestTag, TestTag2, TestTag3>()));
     }
+    
+    [Test]
+    public static void Test_QueryComponents_QueryFilter_components()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var query = store.Query()
+            .AllComponents       (ComponentTypes.Get<Comp1>())
+            .AnyComponents       (ComponentTypes.Get<Comp2>())
+            .WithoutAllComponents(ComponentTypes.Get<Comp3>())
+            .WithoutAnyComponents(ComponentTypes.Get<Comp4>());
+        
+        var filter = query.QueryFilter;
+        AreEqual(ComponentTypes.Get<Comp1>(), filter.AllComponents);
+        AreEqual(ComponentTypes.Get<Comp2>(), filter.AnyComponents);
+        AreEqual(ComponentTypes.Get<Comp3>(), filter.WithoutAllComponents);
+        AreEqual(ComponentTypes.Get<Comp4>(), filter.WithoutAnyComponents);
+    }
+    
+    [Test]
+    public static void Test_QueryComponents_QueryFilter_tags()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        
+        var query   = store.Query().AllTags       (Tags.Get<TestTag>());
+        AreEqual(Tags.Get<TestTag>(),           query.QueryFilter.AllTags);
+            
+        query       = store.Query().AnyTags       (Tags.Get<TestTag2>());
+        AreEqual(Tags.Get<TestTag2>(),          query.QueryFilter.AnyTags);
+        
+        query       = store.Query().WithoutAllTags(Tags.Get<TestTag3>());
+        AreEqual(Tags.Get<TestTag3>(),          query.QueryFilter.WithoutAllTags);
+        
+        query       = store.Query().WithoutAnyTags(Tags.Get<TestTag4>());
+        AreEqual(Tags.Get<TestTag4,Disabled>(), query.QueryFilter.WithoutAnyTags);
+    }
 }
 
 }

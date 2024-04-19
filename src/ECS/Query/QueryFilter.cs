@@ -7,8 +7,24 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal struct QueryFilter
+/// <summary>
+/// Contains component and tags filters added to an <see cref="ArchetypeQuery"/>. 
+/// </summary>
+public struct QueryFilter
 {
+#region properties
+    /** Entity must have all tags. */               public    Tags            AllTags               => allTags;
+    /** Entity must have any tag. */                public    Tags            AnyTags               => anyTags;
+    /** Entity must not have all tags. */           public    Tags            WithoutAllTags        => withoutAllTags;
+    /** Entity must not have any tag. */            public    Tags            WithoutAnyTags        => withoutAnyTags;
+                        
+    /** Entity must have all component types. */    public    ComponentTypes  AllComponents         => allComponents;
+    /** Entity must have any component types. */    public    ComponentTypes  AnyComponents         => anyComponents;
+    /** Entity must not have all component types. */public    ComponentTypes  WithoutAllComponents  => withoutAllComponents;
+    /** Entity must not have any component types. */public    ComponentTypes  WithoutAnyComponents  => withoutAnyComponents;
+    #endregion
+
+#region fields
                     internal    Tags            allTags;                    //  32  entity must have all tags
                     internal    Tags            anyTags;                    //  32  entity must have any tag
                     internal    Tags            withoutAllTags;             //  32  entity must not have all tags
@@ -28,6 +44,7 @@ internal struct QueryFilter
     [Browse(Never)] internal    int             allComponentsCount;         //   8
     
                     internal    bool            withoutDisabled;            //   1  if true (default) entity must be enabled
+    #endregion
     
     
     internal bool IsTagsMatch(in Tags tags)
