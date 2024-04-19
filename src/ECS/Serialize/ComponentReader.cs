@@ -259,7 +259,7 @@ internal sealed class ComponentReader
         return hasComponentTypes;
     }
     
-    /// <summary> Preserve components & tags present on passed <paramref name="type"/>. </summary>
+    /// <summary> Preserve components and tags present on passed <paramref name="type"/>. </summary>
     private static void Preserve(ArchetypeKey key, Archetype type, in ConvertOptions options)
     {
         key.componentTypes.bitSet.Add(BitSet.Intersect(type.componentTypes.bitSet, options.preserveComponents.bitSet));
