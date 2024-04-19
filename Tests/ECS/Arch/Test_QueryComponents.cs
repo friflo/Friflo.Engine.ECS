@@ -23,19 +23,19 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1>());
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        AssertResult("2, 7, 8, 9, 10",  query);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2>());
-        AreEqual("7, 8, 9, 10",     query.Ids());
+        AssertResult("7, 8, 9, 10",     query);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3>());
-        AreEqual("8, 9, 10",        query.Ids());
+        AssertResult("8, 9, 10",        query);
         
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4>());
-        AreEqual("9, 10",           query.Ids());
+        AssertResult("9, 10",           query);
 
         query = query.AllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5>());
-        AreEqual("10",              query.Ids());
+        AssertResult("10",              query);
     }
     
     [Test]
@@ -46,19 +46,19 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp1>());
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        AssertResult("2, 7, 8, 9, 10",  query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp2>());
-        AreEqual("3, 7, 8, 9, 10",  query.Ids());
+        AssertResult("3, 7, 8, 9, 10",  query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp3>());
-        AreEqual("4, 8, 9, 10",     query.Ids());
+        AssertResult("4, 8, 9, 10",     query);
         
         query = query.AnyComponents(ComponentTypes.Get<Comp4>());
-        AreEqual("5, 9, 10",        query.Ids());
+        AssertResult("5, 9, 10",        query);
 
         query = query.AnyComponents(ComponentTypes.Get<Comp5>());
-        AreEqual("6, 10",           query.Ids());
+        AssertResult("6, 10",           query);
     }
 
     [Test]
@@ -68,22 +68,22 @@ public static class Test_QueryComponents
         var sig     = Signature.Get<Position>();
         var query   = store.Query(sig);
 
-        var allTags = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
+        var all = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
         
-        query = query.AnyComponents(ComponentTypes.Get<Comp1>()).AllComponents(allTags);
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        query = query.AnyComponents(ComponentTypes.Get<Comp1>()).AllComponents(all);
+        AssertResult("2, 7, 8, 9, 10",  query);
         
-        query = query.AnyComponents(ComponentTypes.Get<Comp2>()).AllComponents(allTags);
-        AreEqual("3, 7, 8, 9, 10",  query.Ids());
+        query = query.AnyComponents(ComponentTypes.Get<Comp2>()).AllComponents(all);
+        AssertResult("3, 7, 8, 9, 10",  query);
         
-        query = query.AnyComponents(ComponentTypes.Get<Comp3>()).AllComponents(allTags);
-        AreEqual("4, 8, 9, 10",     query.Ids());
+        query = query.AnyComponents(ComponentTypes.Get<Comp3>()).AllComponents(all);
+        AssertResult("4, 8, 9, 10",     query);
         
-        query = query.AnyComponents(ComponentTypes.Get<Comp4>()).AllComponents(allTags);
-        AreEqual("5, 8, 9, 10",     query.Ids());
+        query = query.AnyComponents(ComponentTypes.Get<Comp4>()).AllComponents(all);
+        AssertResult("5, 8, 9, 10",     query);
 
-        query = query.AnyComponents(ComponentTypes.Get<Comp5>()).AllComponents(allTags);
-        AreEqual("6, 8, 9, 10",     query.Ids());
+        query = query.AnyComponents(ComponentTypes.Get<Comp5>()).AllComponents(all);
+        AssertResult("6, 8, 9, 10",     query);
     }
     
     [Test]
@@ -94,19 +94,19 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1>());
-        AreEqual("1, 3, 4, 5, 6",               query.Ids());
+        AssertResult("1, 3, 4, 5, 6",               query);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2>());
-        AreEqual("1, 2, 3, 4, 5, 6",            query.Ids());
+        AssertResult("1, 2, 3, 4, 5, 6",            query);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7",         query.Ids());
+        AssertResult("1, 2, 3, 4, 5, 6, 7",         query);
         
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8",      query.Ids());
+        AssertResult("1, 2, 3, 4, 5, 6, 7, 8",      query);
 
         query = query.WithoutAllComponents(ComponentTypes.Get<Comp1, Comp2, Comp3, Comp4, Comp5>());
-        AreEqual("1, 2, 3, 4, 5, 6, 7, 8, 9",   query.Ids());
+        AssertResult("1, 2, 3, 4, 5, 6, 7, 8, 9",   query);
     }
     
     [Test]
@@ -117,19 +117,19 @@ public static class Test_QueryComponents
         var query   = store.Query(sig);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp1>());
-        AreEqual("1, 3, 4, 5, 6",           query.Ids());
+        AssertResult("1, 3, 4, 5, 6",           query);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp2>());
-        AreEqual("1, 2, 4, 5, 6",           query.Ids());
+        AssertResult("1, 2, 4, 5, 6",           query);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp3>());
-        AreEqual("1, 2, 3, 5, 6, 7",        query.Ids());
+        AssertResult("1, 2, 3, 5, 6, 7",        query);
         
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp4>());
-        AreEqual("1, 2, 3, 4, 6, 7, 8",     query.Ids());
+        AssertResult("1, 2, 3, 4, 6, 7, 8",     query);
 
         query = query.WithoutAnyComponents(ComponentTypes.Get<Comp5>());
-        AreEqual("1, 2, 3, 4, 5, 7, 8, 9",  query.Ids());
+        AssertResult("1, 2, 3, 4, 5, 7, 8, 9",  query);
     }
     
     [Test]
@@ -139,27 +139,27 @@ public static class Test_QueryComponents
         var sig     = Signature.Get<Position>();
         var query   = store.Query(sig);
         
-        var allTags = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
+        var all = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
         
         // without: 1, 3, 4, 5, 6
-        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp1>()).WithoutAllComponents(allTags);
-        AreEqual("1, 3, 4, 5, 6",           query.Ids());
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp1>()).WithoutAllComponents(all);
+        AssertResult("1, 3, 4, 5, 6",           query);
         
         // without: 1, 2, 4, 5, 6
-        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp2>()).WithoutAllComponents(allTags);
-        AreEqual("1, 2, 4, 5, 6",           query.Ids());
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp2>()).WithoutAllComponents(all);
+        AssertResult("1, 2, 4, 5, 6",           query);
         
         // without: 1, 2, 3, 5, 6, 7
-        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp3>()).WithoutAllComponents(allTags);
-        AreEqual("1, 2, 3, 5, 6, 7",        query.Ids());
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp3>()).WithoutAllComponents(all);
+        AssertResult("1, 2, 3, 5, 6, 7",        query);
         
         // without: 1, 2, 3, 4, 6, 7, 8
-        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp4>()).WithoutAllComponents(allTags);
-        AreEqual("1, 2, 3, 4, 6, 7",        query.Ids());
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp4>()).WithoutAllComponents(all);
+        AssertResult("1, 2, 3, 4, 6, 7",        query);
 
         // without: 1, 2, 3, 4, 5, 7, 8, 9
-        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp5>()).WithoutAllComponents(allTags);
-        AreEqual("1, 2, 3, 4, 5, 7",        query.Ids());
+        query = query.WithoutAnyComponents(ComponentTypes.Get<Comp5>()).WithoutAllComponents(all);
+        AssertResult("1, 2, 3, 4, 5, 7",        query);
     }
     
     private static EntityStore CreateTestStore()
@@ -193,38 +193,47 @@ public static class Test_QueryComponents
         }
     }
     
-    private static string Ids(this ArchetypeQuery entities)
+    private static void AssertResult(string expect, ArchetypeQuery query)
     {
         var list = new List<int>();
-        foreach (var entity in entities.Entities) {
+        foreach (var entity in query.Entities) {
             list.Add(entity.Id);
         }
-        return string.Join(", ", list);
+        var ids = string.Join(", ", list);
+        
+        AreEqual(expect, ids);
+        
+        foreach (var entity in query.Store.Entities)
+        {
+            var archetype       = entity.Archetype;
+            var queryContains   = query.IsMatch(archetype.ComponentTypes, archetype.Tags);
+            var listContains    = list.Contains(entity.Id);
+            AreEqual(listContains, queryContains);
+        }
     }
-    
 
     [Test]
     public static void Test_QueryComponents_overloads_AllComponents_AnyComponents()
     {
         var store = CreateTestStore();
         
-        var allTags = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
-        var anyTags = ComponentTypes.Get<Comp1>();
+        var all = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
+        var any = ComponentTypes.Get<Comp1>();
         
-        var query = store.Query().AllComponents(allTags).AnyComponents(anyTags);
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        var query = store.Query().AllComponents(all).AnyComponents(any);
+        AssertResult("2, 7, 8, 9, 10",  query);
         
-        query = store.Query<Position, Rotation>().AllComponents(allTags).AnyComponents(anyTags);
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        query = store.Query<Position, Rotation>().AllComponents(all).AnyComponents(any);
+        AssertResult("2, 7, 8, 9, 10",  query);
     
-        query = store.Query<Position, Rotation, EntityName>().AllComponents(allTags).AnyComponents(anyTags);
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        query = store.Query<Position, Rotation, EntityName>().AllComponents(all).AnyComponents(any);
+        AssertResult("2, 7, 8, 9, 10",  query);
 
-        query = store.Query<Position, Rotation, EntityName, Scale3>().AllComponents(allTags).AnyComponents(anyTags);
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        query = store.Query<Position, Rotation, EntityName, Scale3>().AllComponents(all).AnyComponents(any);
+        AssertResult("2, 7, 8, 9, 10",  query);
         
-        query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().AllComponents(allTags).AnyComponents(anyTags);
-        AreEqual("2, 7, 8, 9, 10",  query.Ids());
+        query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().AllComponents(all).AnyComponents(any);
+        AssertResult("2, 7, 8, 9, 10",  query);
     }
     
     [Test]
@@ -232,23 +241,56 @@ public static class Test_QueryComponents
     {
         var store = CreateTestStore();
         
-        var allTags = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
-        var anyTags = ComponentTypes.Get<Comp1>();
+        var all = ComponentTypes.Get<Comp2, Comp3>(); // entities: 8, 9, 10
+        var any = ComponentTypes.Get<Comp1>();
         
-        var query = store.Query().WithoutAllComponents(allTags).WithoutAnyComponents(anyTags);
-        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        var query = store.Query().WithoutAllComponents(all).WithoutAnyComponents(any);
+        AssertResult("1, 3, 4, 5, 6",  query);
         
-        query = store.Query<Position, Rotation>().WithoutAllComponents(allTags).WithoutAnyComponents(anyTags);
-        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        query = store.Query<Position, Rotation>().WithoutAllComponents(all).WithoutAnyComponents(any);
+        AssertResult("1, 3, 4, 5, 6",  query);
     
-        query = store.Query<Position, Rotation, EntityName>().WithoutAllComponents(allTags).WithoutAnyComponents(anyTags);
-        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        query = store.Query<Position, Rotation, EntityName>().WithoutAllComponents(all).WithoutAnyComponents(any);
+        AssertResult("1, 3, 4, 5, 6",  query);
 
-        query = store.Query<Position, Rotation, EntityName, Scale3>().WithoutAllComponents(allTags).WithoutAnyComponents(anyTags);
-        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        query = store.Query<Position, Rotation, EntityName, Scale3>().WithoutAllComponents(all).WithoutAnyComponents(any);
+        AssertResult("1, 3, 4, 5, 6",  query);
         
-        query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().WithoutAllComponents(allTags).WithoutAnyComponents(anyTags);
-        AreEqual("1, 3, 4, 5, 6",  query.Ids());
+        query = store.Query<Position, Rotation, EntityName, Scale3, MyComponent1>().WithoutAllComponents(all).WithoutAnyComponents(any);
+        AssertResult("1, 3, 4, 5, 6",  query);
+    }
+    
+    [Test]
+    public static void Test_QueryComponents_Query_IsMatch_components()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        
+        var query = store.Query();
+        IsTrue(query.IsMatch(default, default));
+        
+        query = store.Query().AllComponents(ComponentTypes.Get<Comp1, Comp2>());
+        IsFalse(query.IsMatch(ComponentTypes.Get<Comp1>(),                  default));
+        IsTrue (query.IsMatch(ComponentTypes.Get<Comp1, Comp2>(),           default));
+        IsTrue (query.IsMatch(ComponentTypes.Get<Comp1, Comp2, Comp3>(),    default));
+        
+        query = store.Query<Position>().AllComponents(ComponentTypes.Get<Comp1, Comp2>());
+        IsFalse(query.IsMatch(ComponentTypes.Get<Comp1>(),                  default));
+        IsFalse(query.IsMatch(ComponentTypes.Get<Comp1, Comp2>(),           default));
+        IsFalse(query.IsMatch(ComponentTypes.Get<Comp1, Comp2, Comp3>(),    default));
+    }
+    
+    [Test]
+    public static void Test_QueryComponents_Query_IsMatch_tags()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        
+        var query = store.Query();
+        IsTrue(query.IsMatch(default, default));
+        
+        query = store.Query().AllTags(Tags.Get<TestTag, TestTag2>());
+        IsFalse(query.IsMatch(default, Tags.Get<TestTag>()));
+        IsTrue (query.IsMatch(default, Tags.Get<TestTag, TestTag2>()));
+        IsTrue (query.IsMatch(default, Tags.Get<TestTag, TestTag2, TestTag3>()));
     }
 }
 

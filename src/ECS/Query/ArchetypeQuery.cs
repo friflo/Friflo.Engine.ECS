@@ -280,6 +280,7 @@ public class ArchetypeQuery
         for (int n = lastCount; n < newStoreLength; n++)
         {
             var archetype = storeArchetypes[n];
+            // Filter conditions same as in IsMatch()
             if (!archetype.componentTypes.HasAll(components)) {
                 continue;
             }
@@ -300,6 +301,23 @@ public class ArchetypeQuery
         archetypeCount      = nextCount;        // archetypes already changed                                       => OK
         lastArchetypeCount  = newStoreLength;   // using old lastArchetypeCount result only in a redundant update   => OK
         return new Archetypes(nextArchetypes, nextCount);
+    }
+    
+    /// <summary>
+    /// Returns true if the passed <paramref name="componentTypes"/> and <paramref name="tags"/> matches the query filter.
+    /// </summary>
+    public bool IsMatch(in ComponentTypes componentTypes, in Tags tags)
+    {
+        if (!componentTypes.HasAll(components)) {
+            return false;
+        }
+        if (!filter.IsTagsMatch(tags)) {
+            return false;
+        }
+        if (!filter.IsComponentsMatch(componentTypes)) {
+            return false;
+        }
+        return true;
     }
     
     internal static ArgumentException ReadOnlyException(Type type) {
