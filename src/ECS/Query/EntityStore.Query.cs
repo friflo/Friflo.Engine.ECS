@@ -10,6 +10,7 @@ namespace Friflo.Engine.ECS;
 
 public partial class EntityStoreBase
 {
+    #region args - 0
     // -------------------------------------- archetype query --------------------------------------
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store.<br/>
@@ -17,8 +18,14 @@ public partial class EntityStoreBase
     /// </summary>
     public ArchetypeQuery Query ()
     {
-        return new ArchetypeQuery(this, new ComponentTypes());
+        return new ArchetypeQuery(this, new ComponentTypes(), null);
     }
+    
+    public ArchetypeQuery Query (QueryFilter filter)
+    {
+        return new ArchetypeQuery(this, new ComponentTypes(), filter);
+    }
+    #endregion
 
 #region args - 1
     /// <summary>

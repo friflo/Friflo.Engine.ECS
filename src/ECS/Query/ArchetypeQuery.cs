@@ -181,12 +181,12 @@ public class ArchetypeQuery
     /// Called by <see cref="EntityStoreBase.Query()"/>. <br/>
     /// <see cref="Disabled"/> entities excluded by default.
     /// </summary>
-    internal ArchetypeQuery(EntityStoreBase store, in ComponentTypes componentTypes)
+    internal ArchetypeQuery(EntityStoreBase store, in ComponentTypes componentTypes, QueryFilter filter)
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
         components      = componentTypes;
-        filter          = new QueryFilter();
+        this.filter     = filter ?? new QueryFilter();
     }
     
     /// <summary> Called by <see cref="EntityStore.GetEntities"/> </summary>
