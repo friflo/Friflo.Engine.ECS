@@ -64,7 +64,7 @@ public class ArchetypeQuery
     
 #region public fields
     /// <summary> Return component and tag filters added to the query </summary>
-    [Browse(Never)] public   readonly   QueryFilter         Filter;             //   8
+                    public   readonly   QueryFilter         Filter;             //   8
     #endregion
 
 #region private / internal fields

@@ -28,14 +28,18 @@ public class QueryFilter
         /** Entity must not have all component types. */public    ComponentTypes  WithoutAllComponents  => filter.withoutAllComponents;
         /** Entity must not have any component types. */public    ComponentTypes  WithoutAnyComponents  => filter.withoutAnyComponents;
     
-        private readonly QueryFilter filter;
+        [Browse(Never)] private readonly QueryFilter filter;
     
         internal FilterCondition(QueryFilter filter) {
             this.filter = filter;
         }
     }
     
-#region fields
+#region public fields
+                public readonly FilterCondition Condition;                  //   8
+    #endregion
+    
+#region private fields
     [Browse(Never)] private     Tags            allTags;                    //  32  entity must have all tags
     [Browse(Never)] private     Tags            anyTags;                    //  32  entity must have any tag
     [Browse(Never)] private     Tags            withoutAllTags;             //  32  entity must not have all tags
@@ -56,8 +60,6 @@ public class QueryFilter
     
                     private     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
                     internal    int             version;                    //   4  incremented if filter changes
-                    
-                    public      FilterCondition Condition;                  //   8
     #endregion
     
     
