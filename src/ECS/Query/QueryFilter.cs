@@ -4,6 +4,7 @@
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -15,7 +16,7 @@ public class QueryFilter
     /// <summary>
     /// Contains component and tag filter conditions added to an <see cref="ArchetypeQuery"/>. 
     /// </summary>
-    public readonly struct Condition
+    public readonly struct FilterCondition
     {
         /** Entity must have all tags. */               public    Tags            AllTags               => filter.allTags;
         /** Entity must have any tag. */                public    Tags            AnyTags               => filter.anyTags;
@@ -29,7 +30,7 @@ public class QueryFilter
     
         private readonly QueryFilter filter;
     
-        internal Condition(QueryFilter filter) {
+        internal FilterCondition(QueryFilter filter) {
             this.filter = filter;
         }
     }
@@ -56,7 +57,7 @@ public class QueryFilter
                     private     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
                     internal    int             version;                    //   4  incremented if filter changes
                     
-                    public      Condition       condition;                  //   8
+                    public      FilterCondition Condition;                  //   8
     #endregion
     
     
@@ -64,12 +65,12 @@ public class QueryFilter
     public QueryFilter() {
         withoutDisabled = true;
         withoutAnyTags  = EntityUtils.Disabled;
-        condition       = new Condition(this); 
+        Condition       = new FilterCondition(this); 
     }
     
     internal QueryFilter(in Tags allTags) {
         this.allTags    = allTags;
-        condition       = new Condition(this);
+        Condition       = new FilterCondition(this);
     }
     #endregion
 

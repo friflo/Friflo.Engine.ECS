@@ -306,7 +306,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in Filter.condition.AllTags) {
+        foreach (var tag in Filter.Condition.AllTags) {
             sb.Append('#');
             sb.Append(tag.Name);
             sb.Append(", ");

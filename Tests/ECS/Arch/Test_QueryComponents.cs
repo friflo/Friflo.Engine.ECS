@@ -304,10 +304,10 @@ public static class Test_QueryComponents
             .WithoutAnyComponents(ComponentTypes.Get<Comp4>());
         
         var filter = query.Filter;
-        AreEqual(ComponentTypes.Get<Comp1>(), filter.condition.AllComponents);
-        AreEqual(ComponentTypes.Get<Comp2>(), filter.condition.AnyComponents);
-        AreEqual(ComponentTypes.Get<Comp3>(), filter.condition.WithoutAllComponents);
-        AreEqual(ComponentTypes.Get<Comp4>(), filter.condition.WithoutAnyComponents);
+        AreEqual(ComponentTypes.Get<Comp1>(), filter.Condition.AllComponents);
+        AreEqual(ComponentTypes.Get<Comp2>(), filter.Condition.AnyComponents);
+        AreEqual(ComponentTypes.Get<Comp3>(), filter.Condition.WithoutAllComponents);
+        AreEqual(ComponentTypes.Get<Comp4>(), filter.Condition.WithoutAnyComponents);
     }
     
     [Test]
@@ -316,16 +316,16 @@ public static class Test_QueryComponents
         var store   = new EntityStore(PidType.UsePidAsId);
         
         var query   = store.Query().AllTags       (Tags.Get<TestTag>());
-        AreEqual(Tags.Get<TestTag>(),           query.Filter.condition.AllTags);
+        AreEqual(Tags.Get<TestTag>(),           query.Filter.Condition.AllTags);
             
         query       = store.Query().AnyTags       (Tags.Get<TestTag2>());
-        AreEqual(Tags.Get<TestTag2>(),          query.Filter.condition.AnyTags);
+        AreEqual(Tags.Get<TestTag2>(),          query.Filter.Condition.AnyTags);
         
         query       = store.Query().WithoutAllTags(Tags.Get<TestTag3>());
-        AreEqual(Tags.Get<TestTag3>(),          query.Filter.condition.WithoutAllTags);
+        AreEqual(Tags.Get<TestTag3>(),          query.Filter.Condition.WithoutAllTags);
         
         query       = store.Query().WithoutAnyTags(Tags.Get<TestTag4>());
-        AreEqual(Tags.Get<TestTag4,Disabled>(), query.Filter.condition.WithoutAnyTags);
+        AreEqual(Tags.Get<TestTag4,Disabled>(), query.Filter.Condition.WithoutAnyTags);
     }
 }
 
