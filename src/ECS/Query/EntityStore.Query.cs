@@ -11,7 +11,6 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStoreBase
 {
     // -------------------------------------- archetype query --------------------------------------
-#region archetype query
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for the entity store.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#query-entities">Example.</a>
@@ -21,13 +20,14 @@ public partial class EntityStoreBase
         return new ArchetypeQuery(this, new ComponentTypes());
     }
 
+#region args - 1
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
     public ArchetypeQuery<T1> Query<T1> (in Signature<T1> signature)
         where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T1>(this, signature);
+        return new ArchetypeQuery<T1>(this, signature, null);
     }
     
     /// <summary>
@@ -37,8 +37,17 @@ public partial class EntityStoreBase
     public ArchetypeQuery<T1> Query<T1> ()
         where T1 : struct, IComponent
     {
-        return new ArchetypeQuery<T1>(this, Signature.Get<T1>());
+        return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), null);
     }
+    
+    public ArchetypeQuery<T1> Query<T1> (QueryFilter filter)
+        where T1 : struct, IComponent
+    {
+        return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), filter);
+    }
+    #endregion
+    
+#region args - 2
     
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
@@ -47,7 +56,7 @@ public partial class EntityStoreBase
         where T1: struct, IComponent
         where T2: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2>(this, signature);
+        return new ArchetypeQuery<T1, T2>(this, signature, null);
     }
     
     /// <summary>
@@ -58,9 +67,19 @@ public partial class EntityStoreBase
         where T1: struct, IComponent
         where T2: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>());
+        return new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>(), null);
     }
     
+    public ArchetypeQuery<T1, T2> Query<T1, T2> (QueryFilter filter)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+    {
+        return new ArchetypeQuery<T1,T2>(this, Signature.Get<T1,T2>(), filter);
+    }
+    #endregion
+    
+#region args - 3
+
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
@@ -69,7 +88,7 @@ public partial class EntityStoreBase
         where T2: struct, IComponent
         where T3: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3>(this, signature);
+        return new ArchetypeQuery<T1, T2, T3>(this, signature, null);
     }
     
     /// <summary>
@@ -81,9 +100,20 @@ public partial class EntityStoreBase
         where T2: struct, IComponent
         where T3: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>());
+        return new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>(), null);
     }
     
+    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (QueryFilter filter)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+    {
+        return new ArchetypeQuery<T1,T2,T3>(this, Signature.Get<T1,T2,T3>(), filter);
+    }
+    #endregion
+    
+#region args - 4
+
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
@@ -93,7 +123,7 @@ public partial class EntityStoreBase
         where T3: struct, IComponent
         where T4: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4>(this, signature);
+        return new ArchetypeQuery<T1, T2, T3, T4>(this, signature, null);
     }
     
     /// <summary>
@@ -106,9 +136,20 @@ public partial class EntityStoreBase
         where T3: struct, IComponent
         where T4: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>());
+        return new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>(), null);
     }
     
+    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (QueryFilter filter)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+    {
+        return new ArchetypeQuery<T1,T2,T3,T4>(this, Signature.Get<T1,T2,T3,T4>(), filter);
+    }
+    #endregion
+    
+#region args - 5
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
@@ -119,7 +160,7 @@ public partial class EntityStoreBase
         where T4: struct, IComponent
         where T5: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature);
+        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, signature, null);
     }
     
     /// <summary>
@@ -133,8 +174,17 @@ public partial class EntityStoreBase
         where T4: struct, IComponent
         where T5: struct, IComponent
     {
-        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>());
+        return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>(), null);
     }
     
+    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (QueryFilter filter)
+        where T1 : struct, IComponent
+        where T2 : struct, IComponent
+        where T3 : struct, IComponent
+        where T4 : struct, IComponent
+        where T5 : struct, IComponent
+    {
+        return new ArchetypeQuery<T1,T2,T3,T4,T5>(this, Signature.Get<T1,T2,T3,T4,T5>(), filter);
+    }
     #endregion
 }

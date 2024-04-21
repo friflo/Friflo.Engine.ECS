@@ -45,8 +45,8 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     public new ArchetypeQuery<T1, T2, T3, T4> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
     public new ArchetypeQuery<T1, T2, T3, T4> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
-    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4> signature)
-        : base(store, signature.signatureIndexes) {
+    internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2, T3, T4> signature, QueryFilter filter)
+        : base(store, signature.signatureIndexes, filter) {
     }
     
     public ArchetypeQuery<T1, T2, T3, T4> ReadOnly<T>()

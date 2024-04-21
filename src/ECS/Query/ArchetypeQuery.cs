@@ -58,7 +58,7 @@ public class ArchetypeQuery
     public ref readonly ComponentTypes  ComponentTypes  => ref components;
     
     /// <summary> Return component and tag filters added to the query </summary>
-    public ref readonly QueryFilter     QueryFilter     => ref filter;
+    public              QueryFilter     QueryFilter     => filter;
 
     public override     string          ToString()      => GetString();
     #endregion
@@ -69,13 +69,14 @@ public class ArchetypeQuery
     [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
     [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
     [Browse(Never)] private             EntityList          entityList;         //   8  provide entities as list to perform structural changes
+    [Browse(Never)] private  readonly   QueryFilter         filter;             //   8
     
     // --- blittable types
+    [Browse(Never)] private             int                 filterVersion;      //   4
     [Browse(Never)] private             int                 archetypeCount;     //   4  current number archetypes 
     [Browse(Never)] private             int                 lastArchetypeCount; //   4  number of archetypes the EntityStore had on last check
     [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      components;         //  32
-    [Browse(Never)] private             QueryFilter         filter;             // 288
     [Browse(Never)] private  readonly   bool                singleArchetype;    //   1  if true it returns only the entities a specific archetype
     #endregion
 
@@ -100,37 +101,11 @@ public class ArchetypeQuery
     /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
-    internal void SetHasAllTags(in Tags tags) {
-        filter.allTags          = tags;
-        filter.allTagsCount     = tags.Count;
-        Reset();
-    }
-    
-    internal void SetHasAnyTags(in Tags tags) {
-        filter.anyTags          = tags;
-        filter.anyTagsCount     = tags.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAllTags(in Tags tags) {
-        filter.withoutAllTags       = tags;
-        filter.withoutAllTagsCount  = tags.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAnyTags(in Tags tags) {
-        filter.withoutAnyTags       = tags;
-        if (filter.withoutDisabled) {
-            filter.withoutAnyTags.Add(EntityUtils.Disabled);
-        }
-        Reset();
-    }
-    
-    internal void SetWithDisabled() {
-        filter.withoutDisabled = false;
-        filter.withoutAnyTags.Remove(EntityUtils.Disabled);
-        Reset();
-    }
+    internal void SetHasAllTags     (in Tags tags) => filter.SetHasAllTags(tags);
+    internal void SetHasAnyTags     (in Tags tags) => filter.SetHasAnyTags(tags);
+    internal void SetWithoutAllTags (in Tags tags) => filter.SetWithoutAllTags(tags);
+    internal void SetWithoutAnyTags (in Tags tags) => filter.SetWithoutAnyTags(tags);
+    internal void SetWithDisabled()                => filter.SetWithDisabled();
     #endregion
     
 #region components
@@ -150,28 +125,10 @@ public class ArchetypeQuery
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
-    internal void SetHasAllComponents(in ComponentTypes types) {
-        filter.allComponents        = types;
-        filter.allComponentsCount   = types.Count;
-        Reset();
-    }
-    
-    internal void SetHasAnyComponents(in ComponentTypes types) {
-        filter.anyComponents        = types;
-        filter.anyComponentsCount   = types.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAllComponents(in ComponentTypes types) {
-        filter.withoutAllComponents         = types;
-        filter.withoutAllComponentsCount    = types.Count;
-        Reset();
-    }
-    
-    internal void SetWithoutAnyComponents(in ComponentTypes types) {
-        filter.withoutAnyComponents         = types;
-        Reset();
-    }
+    internal void SetHasAllComponents       (in ComponentTypes types) => filter.SetHasAllComponents(types);
+    internal void SetHasAnyComponents       (in ComponentTypes types) => filter.SetHasAnyComponents(types);
+    internal void SetWithoutAllComponents   (in ComponentTypes types) => filter.SetWithoutAllComponents(types);
+    internal void SetWithoutAnyComponents   (in ComponentTypes types) => filter.SetWithoutAnyComponents(types);
     #endregion
     
 #region general
@@ -211,14 +168,13 @@ public class ArchetypeQuery
     /// Called by generic ArchetypeQuery constructors. <br/>
     /// <see cref="Disabled"/> entities excluded by default.
     /// </summary>
-    internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes)
+    internal ArchetypeQuery(EntityStoreBase store, in SignatureIndexes indexes, QueryFilter filter)
     {
-        this.store              = store;
-        archetypes              = Array.Empty<Archetype>();
-        components              = new ComponentTypes(indexes);
-        signatureIndexes        = indexes;
-        filter.withoutDisabled  = true;
-        filter.withoutAnyTags   = EntityUtils.Disabled;
+        this.store      = store;
+        archetypes      = Array.Empty<Archetype>();
+        components      = new ComponentTypes(indexes);
+        signatureIndexes= indexes;
+        this.filter     = filter ?? new QueryFilter();
     }
     
     /// <summary>
@@ -227,37 +183,28 @@ public class ArchetypeQuery
     /// </summary>
     internal ArchetypeQuery(EntityStoreBase store, in ComponentTypes componentTypes)
     {
-        this.store              = store;
-        archetypes              = Array.Empty<Archetype>();
-        components              = componentTypes;
-        filter.withoutDisabled  = true;
-        filter.withoutAnyTags   = EntityUtils.Disabled;
+        this.store      = store;
+        archetypes      = Array.Empty<Archetype>();
+        components      = componentTypes;
+        filter          = new QueryFilter();
     }
     
     /// <summary> Called by <see cref="EntityStore.GetEntities"/> </summary>
     internal ArchetypeQuery(EntityStoreBase store)
     {
-        this.store              = store;
-        archetypes              = Array.Empty<Archetype>();
+        this.store      = store;
+        archetypes      = Array.Empty<Archetype>();
+        filter          = new QueryFilter(default);
     }
     
     /// <summary> Called by <see cref="Archetype.GetEntities"/> </summary>
     internal ArchetypeQuery(Archetype archetype)
     {
-        singleArchetype     = true;
-        store               = archetype.store;
-        archetypes          = new [] { archetype };
-        components          = archetype.componentTypes;
-        filter.allTags      = archetype.tags;
-    }
-    
-    /// <remarks>
-    /// Reset <see cref="lastArchetypeCount"/> to force update of <see cref="archetypes"/> on subsequent call to <see cref="Archetypes"/>
-    /// </remarks>
-    private void Reset () {
-        archetypes          = Array.Empty<Archetype>();
-        lastArchetypeCount  = 0;
-        archetypeCount      = 0;
+        singleArchetype = true;
+        store           = archetype.store;
+        archetypes      = new [] { archetype };
+        components      = archetype.componentTypes;
+        filter          = new QueryFilter(archetype.tags);
     }
     
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {
@@ -267,6 +214,13 @@ public class ArchetypeQuery
     
     internal Archetypes GetArchetypes()
     {
+        var localFilter = filter;
+        if (filterVersion      != localFilter.version) {
+            filterVersion       = localFilter.version;
+            archetypes          = Array.Empty<Archetype>();
+            archetypeCount      = 0;
+            lastArchetypeCount  = 0;
+        }
         if (store.ArchetypeCount == lastArchetypeCount) {
             return new Archetypes(archetypes, archetypeCount);
         }
@@ -279,7 +233,7 @@ public class ArchetypeQuery
         var nextArchetypes      = archetypes;
         var lastCount           = lastArchetypeCount;
         var nextCount           = archetypeCount;
-        
+
         for (int n = lastCount; n < newStoreLength; n++)
         {
             var archetype = storeArchetypes[n];
@@ -287,10 +241,10 @@ public class ArchetypeQuery
             if (!archetype.componentTypes.HasAll(components)) {
                 continue;
             }
-            if (!filter.IsTagsMatch(archetype.tags)) {
+            if (!localFilter.IsTagsMatch(archetype.tags)) {
                 continue;
             }
-            if (!filter.IsComponentsMatch(archetype.componentTypes)) {
+            if (!localFilter.IsComponentsMatch(archetype.componentTypes)) {
                 continue;
             }
             if (nextCount == nextArchetypes.Length) {
@@ -348,7 +302,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in filter.allTags) {
+        foreach (var tag in filter.AllTags) {
             sb.Append('#');
             sb.Append(tag.Name);
             sb.Append(", ");
