@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// A list of entities of a specific <see cref="EntityStore"/> used to apply changes to all entities in the container.<br/>
-/// Its recommended to reuse instances of this class to avoid unnecessary allocations.<br/>
+/// It's recommended to reuse instances of this class to avoid unnecessary allocations.<br/>
 /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entitybatch---entitylist">Example.</a>
 /// </summary>
 [DebuggerTypeProxy(typeof(EntityListDebugView))]
@@ -27,6 +27,9 @@ public sealed class EntityList : IList<Entity>
     /// <summary> Returns the number of entities stored in the container. </summary>
     public              int         Count       => count;
     
+    /// <summary> Returns the store list entities belong to. </summary>
+    public              EntityStore EntityStore => entityStore;
+    
     /// <summary> Return the ids of entities stored in the container. </summary>
     public ReadOnlySpan<int>        Ids         => new (ids, 0, count);
     
@@ -34,9 +37,9 @@ public sealed class EntityList : IList<Entity>
     #endregion
     
 #region fields
-    internal    int[]       ids;            //  8
-    internal    EntityStore entityStore;    //  8
-    internal    int         count;          //  4
+    [Browse(Never)] internal    int[]       ids;            //  8
+    [Browse(Never)] internal    EntityStore entityStore;    //  8
+    [Browse(Never)] internal    int         count;          //  4
     #endregion
     
 #region general
@@ -56,6 +59,16 @@ public sealed class EntityList : IList<Entity>
     {
         entityStore = store;
         ids         = new int[8];
+    }
+    
+    /// <summary>
+    /// Set the <paramref name="store"/> list entities belong to.<br/>
+    /// EntityList must be empty when setting <see cref="EntityStore"/>.
+    /// </summary>
+    public void SetStore(EntityStore store)
+    {
+        if (count > 0) throw new ArgumentException("EntityList must be empty when calling SetStore()");
+        entityStore = store;
     }
     #endregion
 
