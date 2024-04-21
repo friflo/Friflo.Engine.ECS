@@ -6,6 +6,7 @@ using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
@@ -57,10 +58,13 @@ public class ArchetypeQuery
     [Browse(Never)]
     public ref readonly ComponentTypes  ComponentTypes  => ref components;
     
-    /// <summary> Return component and tag filters added to the query </summary>
-    public              QueryFilter     QueryFilter     => filter;
-
+    
     public override     string          ToString()      => GetString();
+    #endregion
+    
+#region public fields
+    /// <summary> Return component and tag filters added to the query </summary>
+    [Browse(Never)] public   readonly   QueryFilter         Filter;             //   8
     #endregion
 
 #region private / internal fields
@@ -69,7 +73,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
     [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
     [Browse(Never)] private             EntityList          entityList;         //   8  provide entities as list to perform structural changes
-    [Browse(Never)] private  readonly   QueryFilter         filter;             //   8
+
     
     // --- blittable types
     [Browse(Never)] private             int                 filterVersion;      //   4
@@ -101,11 +105,11 @@ public class ArchetypeQuery
     /// <param name="tags"> Use <c>Tags.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyTags  (in Tags tags) { SetWithoutAnyTags(tags); return this; }
     
-    internal void SetHasAllTags     (in Tags tags) => filter.SetHasAllTags(tags);
-    internal void SetHasAnyTags     (in Tags tags) => filter.SetHasAnyTags(tags);
-    internal void SetWithoutAllTags (in Tags tags) => filter.SetWithoutAllTags(tags);
-    internal void SetWithoutAnyTags (in Tags tags) => filter.SetWithoutAnyTags(tags);
-    internal void SetWithDisabled()                => filter.SetWithDisabled();
+    internal void SetHasAllTags     (in Tags tags) => Filter.AllTags(tags);
+    internal void SetHasAnyTags     (in Tags tags) => Filter.AnyTags(tags);
+    internal void SetWithoutAllTags (in Tags tags) => Filter.WithoutAllTags(tags);
+    internal void SetWithoutAnyTags (in Tags tags) => Filter.WithoutAnyTags(tags);
+    internal void SetWithDisabled()                => Filter.WithDisabled();
     #endregion
     
 #region components
@@ -125,10 +129,10 @@ public class ArchetypeQuery
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
-    internal void SetHasAllComponents       (in ComponentTypes types) => filter.SetHasAllComponents(types);
-    internal void SetHasAnyComponents       (in ComponentTypes types) => filter.SetHasAnyComponents(types);
-    internal void SetWithoutAllComponents   (in ComponentTypes types) => filter.SetWithoutAllComponents(types);
-    internal void SetWithoutAnyComponents   (in ComponentTypes types) => filter.SetWithoutAnyComponents(types);
+    internal void SetHasAllComponents       (in ComponentTypes types) => Filter.AllComponents(types);
+    internal void SetHasAnyComponents       (in ComponentTypes types) => Filter.AnyComponents(types);
+    internal void SetWithoutAllComponents   (in ComponentTypes types) => Filter.WithoutAllComponents(types);
+    internal void SetWithoutAnyComponents   (in ComponentTypes types) => Filter.WithoutAnyComponents(types);
     #endregion
     
 #region general
@@ -174,7 +178,7 @@ public class ArchetypeQuery
         archetypes      = Array.Empty<Archetype>();
         components      = new ComponentTypes(indexes);
         signatureIndexes= indexes;
-        this.filter     = filter ?? new QueryFilter();
+        Filter          = filter ?? new QueryFilter();
     }
     
     /// <summary>
@@ -186,7 +190,7 @@ public class ArchetypeQuery
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
         components      = componentTypes;
-        this.filter     = filter ?? new QueryFilter();
+        Filter          = filter ?? new QueryFilter();
     }
     
     /// <summary> Called by <see cref="EntityStore.GetEntities"/> </summary>
@@ -194,7 +198,7 @@ public class ArchetypeQuery
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
-        filter          = new QueryFilter(default);
+        Filter          = new QueryFilter(default);
     }
     
     /// <summary> Called by <see cref="Archetype.GetEntities"/> </summary>
@@ -204,7 +208,7 @@ public class ArchetypeQuery
         store           = archetype.store;
         archetypes      = new [] { archetype };
         components      = archetype.componentTypes;
-        filter          = new QueryFilter(archetype.tags);
+        Filter          = new QueryFilter(archetype.tags);
     }
     
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {
@@ -214,7 +218,7 @@ public class ArchetypeQuery
     
     internal Archetypes GetArchetypes()
     {
-        var localFilter = filter;
+        var localFilter = Filter;
         if (filterVersion      != localFilter.version) {
             filterVersion       = localFilter.version;
             archetypes          = Array.Empty<Archetype>();
@@ -268,10 +272,10 @@ public class ArchetypeQuery
         if (!componentTypes.HasAll(components)) {
             return false;
         }
-        if (!filter.IsTagsMatch(tags)) {
+        if (!Filter.IsTagsMatch(tags)) {
             return false;
         }
-        if (!filter.IsComponentsMatch(componentTypes)) {
+        if (!Filter.IsComponentsMatch(componentTypes)) {
             return false;
         }
         return true;
@@ -302,7 +306,7 @@ public class ArchetypeQuery
             sb.Append(", ");
             hasTypes = true;
         }
-        foreach (var tag in filter.AllTags) {
+        foreach (var tag in Filter.condition.AllTags) {
             sb.Append('#');
             sb.Append(tag.Name);
             sb.Append(", ");

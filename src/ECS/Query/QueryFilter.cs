@@ -12,18 +12,28 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 public class QueryFilter
 {
-#region properties
-    /** Entity must have all tags. */               public    Tags            AllTags               => allTags;
-    /** Entity must have any tag. */                public    Tags            AnyTags               => anyTags;
-    /** Entity must not have all tags. */           public    Tags            WithoutAllTags        => withoutAllTags;
-    /** Entity must not have any tag. */            public    Tags            WithoutAnyTags        => withoutAnyTags;
+    /// <summary>
+    /// Contains component and tag filter conditions added to an <see cref="ArchetypeQuery"/>. 
+    /// </summary>
+    public readonly struct Condition
+    {
+        /** Entity must have all tags. */               public    Tags            AllTags               => filter.allTags;
+        /** Entity must have any tag. */                public    Tags            AnyTags               => filter.anyTags;
+        /** Entity must not have all tags. */           public    Tags            WithoutAllTags        => filter.withoutAllTags;
+        /** Entity must not have any tag. */            public    Tags            WithoutAnyTags        => filter.withoutAnyTags;
                         
-    /** Entity must have all component types. */    public    ComponentTypes  AllComponents         => allComponents;
-    /** Entity must have any component types. */    public    ComponentTypes  AnyComponents         => anyComponents;
-    /** Entity must not have all component types. */public    ComponentTypes  WithoutAllComponents  => withoutAllComponents;
-    /** Entity must not have any component types. */public    ComponentTypes  WithoutAnyComponents  => withoutAnyComponents;
-    #endregion
-
+        /** Entity must have all component types. */    public    ComponentTypes  AllComponents         => filter.allComponents;
+        /** Entity must have any component types. */    public    ComponentTypes  AnyComponents         => filter.anyComponents;
+        /** Entity must not have all component types. */public    ComponentTypes  WithoutAllComponents  => filter.withoutAllComponents;
+        /** Entity must not have any component types. */public    ComponentTypes  WithoutAnyComponents  => filter.withoutAnyComponents;
+    
+        private readonly QueryFilter filter;
+    
+        internal Condition(QueryFilter filter) {
+            this.filter = filter;
+        }
+    }
+    
 #region fields
     [Browse(Never)] private     Tags            allTags;                    //  32  entity must have all tags
     [Browse(Never)] private     Tags            anyTags;                    //  32  entity must have any tag
@@ -45,78 +55,91 @@ public class QueryFilter
     
                     private     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
                     internal    int             version;                    //   4  incremented if filter changes
+                    
+                    public      Condition       condition;                  //   8
     #endregion
     
     
 #region constructors
     public QueryFilter() {
-        withoutDisabled  = true;
-        withoutAnyTags   = EntityUtils.Disabled;
+        withoutDisabled = true;
+        withoutAnyTags  = EntityUtils.Disabled;
+        condition       = new Condition(this); 
     }
     
     internal QueryFilter(in Tags allTags) {
-        this.allTags = allTags;
+        this.allTags    = allTags;
+        condition       = new Condition(this);
     }
     #endregion
 
 
 #region change tags filter
-    public void SetHasAllTags(in Tags tags) {
+    public QueryFilter AllTags(in Tags tags) {
         allTags          = tags;
         allTagsCount     = tags.Count;
         Changed();
+        return this;
     }
     
-    public void SetHasAnyTags(in Tags tags) {
+    public QueryFilter AnyTags(in Tags tags) {
         anyTags          = tags;
         anyTagsCount     = tags.Count;
         Changed();
+        return this;
     }
     
-    public void SetWithoutAllTags(in Tags tags) {
+    public QueryFilter WithoutAllTags(in Tags tags) {
         withoutAllTags       = tags;
         withoutAllTagsCount  = tags.Count;
         Changed();
+        return this;
     }
     
-    public void SetWithoutAnyTags(in Tags tags) {
+    public QueryFilter WithoutAnyTags(in Tags tags) {
         withoutAnyTags       = tags;
         if (withoutDisabled) {
             withoutAnyTags.Add(EntityUtils.Disabled);
         }
         Changed();
+        return this;
     }
     
-    public void SetWithDisabled() {
+    public QueryFilter WithDisabled() {
         withoutDisabled = false;
         withoutAnyTags.Remove(EntityUtils.Disabled);
         Changed();
+        return this;
     }
     #endregion
 
     
 #region change components filter
-    public void SetHasAllComponents(in ComponentTypes types) {
+    public QueryFilter AllComponents(in ComponentTypes types) {
         allComponents        = types;
         allComponentsCount   = types.Count;
         Changed();
+        return this;
     }
         
-    public void SetHasAnyComponents(in ComponentTypes types) {
+    public QueryFilter AnyComponents(in ComponentTypes types) {
         anyComponents        = types;
         anyComponentsCount   = types.Count;
         Changed();
+        return this;
     }
         
-    public void SetWithoutAllComponents(in ComponentTypes types) {
+    public QueryFilter WithoutAllComponents(in ComponentTypes types) {
         withoutAllComponents         = types;
         withoutAllComponentsCount    = types.Count;
         Changed();
+        return this;
     }
         
-    public void SetWithoutAnyComponents(in ComponentTypes types) {
+    public QueryFilter WithoutAnyComponents(in ComponentTypes types) {
         withoutAnyComponents         = types;
         Changed();
+        return this;
     }
     #endregion
     
