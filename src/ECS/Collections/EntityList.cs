@@ -27,7 +27,7 @@ public sealed class EntityList : IList<Entity>
     /// <summary> Returns the number of entities stored in the container. </summary>
     public              int         Count       => count;
     
-    /// <summary> Returns the store list entities belong to. </summary>
+    /// <summary> Returns the store to which the list entities belong to. </summary>
     public              EntityStore EntityStore => entityStore;
     
     /// <summary> Return the ids of entities stored in the container. </summary>
@@ -62,7 +62,7 @@ public sealed class EntityList : IList<Entity>
     }
     
     /// <summary>
-    /// Set the <paramref name="store"/> list entities belong to.<br/>
+    /// Set the <paramref name="store"/> to which the list entities belong to.<br/>
     /// EntityList must be empty when setting <see cref="EntityStore"/>.
     /// </summary>
     public void SetStore(EntityStore store)

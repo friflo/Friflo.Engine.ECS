@@ -36,6 +36,7 @@ public class QueryFilter
     }
     
 #region public fields
+    /// <summary> Return all filter conditions of <see cref="QueryFilter"/>. </summary>
                 public readonly FilterCondition Condition;                  //   8
     #endregion
     
@@ -64,6 +65,7 @@ public class QueryFilter
     
     
 #region constructors
+    /// <summary> Create a filter returning all <see cref="Entity.Enabled"/> entities. </summary>
     public QueryFilter() {
         withoutDisabled = true;
         withoutAnyTags  = EntityUtils.Disabled;
@@ -78,6 +80,7 @@ public class QueryFilter
 
 
 #region change tags filter
+    /// <summary> Include entities containing all specified <paramref name="tags"/>. </summary>
     public QueryFilter AllTags(in Tags tags) {
         allTags          = tags;
         allTagsCount     = tags.Count;
@@ -85,6 +88,7 @@ public class QueryFilter
         return this;
     }
     
+    /// <summary> Include entities containing any of the specified <paramref name="tags"/>. </summary>
     public QueryFilter AnyTags(in Tags tags) {
         anyTags          = tags;
         anyTagsCount     = tags.Count;
@@ -92,6 +96,7 @@ public class QueryFilter
         return this;
     }
     
+    /// <summary> Exclude entities containing all specified <paramref name="tags"/>. </summary>
     public QueryFilter WithoutAllTags(in Tags tags) {
         withoutAllTags       = tags;
         withoutAllTagsCount  = tags.Count;
@@ -99,6 +104,7 @@ public class QueryFilter
         return this;
     }
     
+    /// <summary> Exclude entities containing any of the specified <paramref name="tags"/>. </summary>
     public QueryFilter WithoutAnyTags(in Tags tags) {
         withoutAnyTags       = tags;
         if (withoutDisabled) {
@@ -108,6 +114,7 @@ public class QueryFilter
         return this;
     }
     
+    /// <summary> A query will return <see cref="Entity.Enabled"/> as well as disabled entities. </summary>
     public QueryFilter WithDisabled() {
         withoutDisabled = false;
         withoutAnyTags.Remove(EntityUtils.Disabled);
@@ -118,6 +125,7 @@ public class QueryFilter
 
     
 #region change components filter
+    /// <summary> Include entities containing all specified component <see cref="types"/>. </summary>
     public QueryFilter AllComponents(in ComponentTypes types) {
         allComponents        = types;
         allComponentsCount   = types.Count;
@@ -125,6 +133,7 @@ public class QueryFilter
         return this;
     }
         
+    /// <summary> Include entities containing any of the specified component <see cref="types"/>. </summary>
     public QueryFilter AnyComponents(in ComponentTypes types) {
         anyComponents        = types;
         anyComponentsCount   = types.Count;
@@ -132,13 +141,15 @@ public class QueryFilter
         return this;
     }
         
+    /// <summary> Exclude entities containing all specified component <see cref="types"/>. </summary>
     public QueryFilter WithoutAllComponents(in ComponentTypes types) {
         withoutAllComponents         = types;
         withoutAllComponentsCount    = types.Count;
         Changed();
         return this;
     }
-        
+     
+    /// <summary> Exclude entities containing any of the specified  component <see cref="types"/>. </summary>
     public QueryFilter WithoutAnyComponents(in ComponentTypes types) {
         withoutAnyComponents         = types;
         Changed();

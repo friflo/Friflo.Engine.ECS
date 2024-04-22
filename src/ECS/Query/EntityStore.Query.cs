@@ -21,6 +21,10 @@ public partial class EntityStoreBase
         return new ArchetypeQuery(this, new ComponentTypes(), null);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
     public ArchetypeQuery Query (QueryFilter filter)
     {
         return new ArchetypeQuery(this, new ComponentTypes(), filter);
@@ -47,6 +51,10 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1>(this, Signature.Get<T1>(), null);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
     public ArchetypeQuery<T1> Query<T1> (QueryFilter filter)
         where T1 : struct, IComponent
     {
@@ -77,6 +85,10 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2>(this, Signature.Get<T1, T2>(), null);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
     public ArchetypeQuery<T1, T2> Query<T1, T2> (QueryFilter filter)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -110,6 +122,10 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2, T3>(this, Signature.Get<T1, T2, T3>(), null);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
     public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (QueryFilter filter)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -146,6 +162,10 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2, T3, T4>(this, Signature.Get<T1, T2, T3, T4>(), null);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (QueryFilter filter)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
@@ -184,6 +204,10 @@ public partial class EntityStoreBase
         return new ArchetypeQuery<T1, T2, T3, T4, T5>(this, Signature.Get<T1, T2, T3, T4, T5>(), null);
     }
     
+    /// <summary>
+    /// Create a reusable <see cref="ArchetypeQuery"/> with given query <paramref name="filter"/>.<br/>
+    /// The filter attached to the query can be modified subsequently.
+    /// </summary>
     public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (QueryFilter filter)
         where T1 : struct, IComponent
         where T2 : struct, IComponent
