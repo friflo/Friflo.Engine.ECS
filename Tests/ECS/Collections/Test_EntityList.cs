@@ -13,6 +13,19 @@ namespace Tests.ECS.Collections {
 public static class Test_EntityList
 {
     [Test]
+    public static void Test_EntityList_SetStore()
+    {
+        var store   = new EntityStore();
+        var list    = new EntityList();
+        IsNull(list.EntityStore);
+        var entity  = store.CreateEntity();
+        list.SetStore(store);
+        AreSame(store, list.EntityStore);
+        list.Add(entity);
+        AreEqual(1, list.Count);
+    }
+    
+    [Test]
     public static void Test_EntityList_AddTreeEntities()
     {
         var count       = 10;   // 1_000_000 ~ #PC: 7715 ms
@@ -141,20 +154,27 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_exception()
     {
-        var store1 = new EntityStore();
-        var store2 = new EntityStore();
-        var entity = store1.CreateEntity();
-        var list = new EntityList(store2);
+        var store1  = new EntityStore();
+        var store2  = new EntityStore();
+        var entity1 = store1.CreateEntity();
+        var entity2 = store2.CreateEntity();
+        var list    = new EntityList(store2);
         
         var e = Throws<ArgumentException>(() => {
-            list.AddTree(entity);
+            list.AddTree(entity1);
         });
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         
         e = Throws<ArgumentException>(() => {
-            list.Add(entity);
+            list.Add(entity1);
         });
         AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
+        
+        list.Add(entity2);
+        e = Throws<ArgumentException>(() => {
+            list.SetStore(store1);
+        });
+        AreEqual("EntityList must be empty when calling SetStore()", e!.Message);
     }
 }
 

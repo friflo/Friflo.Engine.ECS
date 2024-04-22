@@ -49,6 +49,7 @@ public static class Test_Query
         AreEqual("Components: [Position, Rotation, Scale3, MyComponent1]",                sig4.ComponentTypes.ToString());
         AreEqual("Components: [Position, Rotation, Scale3, MyComponent1, MyComponent2]",  sig5.ComponentTypes.ToString());
     }
+    
     [Test]
     public static void Test_generic_Query_with_AllTags()
     {
@@ -97,6 +98,44 @@ public static class Test_Query
         AreEqual("Query: [Position, Rotation, Scale3, #TestTag]  Count: 0",                               query3.AllTags(tags).ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, #TestTag]  Count: 0",                 query4.AllTags(tags).ToString());
         AreEqual("Query: [Position, Rotation, Scale3, MyComponent1, MyComponent2, #TestTag]  Count: 0",   query5.AllTags(tags).ToString());
+    }
+    
+    [Test]
+    public static void Test_generic_Query_QueryFilter()
+    {
+        var store   = new EntityStore();
+        var entity1 = store.CreateEntity();
+        entity1.AddComponent<Position>();
+        entity1.AddComponent<Rotation>();
+        entity1.AddComponent<Scale3>();
+        entity1.AddComponent<MyComponent1>();
+        entity1.AddComponent<MyComponent2>();
+        entity1.AddTag<TestTag>();
+        entity1.AddTag<TestTag2>();
+        
+        var filter = new QueryFilter()
+            .AllTags        (Tags.Get<TestTag>())
+            .AnyTags        (Tags.Get<TestTag2>())
+            .WithoutAllTags (Tags.Get<TestTag3>())
+            .WithoutAnyTags (Tags.Get<TestTag4>())
+            .AllComponents          (ComponentTypes.Get<Position, Rotation>())
+            .AnyComponents          (ComponentTypes.Get<Scale3>())
+            .WithoutAllComponents   (ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>())
+            .WithoutAnyComponents   (ComponentTypes.Get<MyComponent4>());
+        
+        var query0 =    store.Query(filter);
+        var query1 =    store.Query<Position>(filter);
+        var query2 =    store.Query<Position, Rotation>(filter);
+        var query3 =    store.Query<Position, Rotation, Scale3>(filter);
+        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>(filter);
+        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>(filter);
+        
+        AreEqual(1, query0.Entities.Count);
+        AreEqual(1, query1.Entities.Count);
+        AreEqual(1, query2.Entities.Count);
+        AreEqual(1, query3.Entities.Count);
+        AreEqual(1, query4.Entities.Count);
+        AreEqual(1, query5.Entities.Count);
     }
     
     [Test]
