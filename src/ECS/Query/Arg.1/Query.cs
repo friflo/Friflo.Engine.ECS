@@ -36,6 +36,8 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
     public new ArchetypeQuery<T1> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
     public new ArchetypeQuery<T1> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
+    public new ArchetypeQuery<T1> FreezeFilter() { SetFreezeFilter();   return this; }
+    
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter)
         : base(store, signature.signatureIndexes, filter) {
     }

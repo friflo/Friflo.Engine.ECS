@@ -169,6 +169,18 @@ public class ArchetypeQuery
     }
     
     /// <summary>
+    /// The query <see cref="Filter"/> cannot be changed anymore.
+    /// </summary>
+    public ArchetypeQuery FreezeFilter() {
+        Filter.FreezeFilter();
+        return this;
+    }
+    
+    internal void SetFreezeFilter() {
+        Filter.FreezeFilter();
+    }
+    
+    /// <summary>
     /// Called by generic ArchetypeQuery constructors. <br/>
     /// <see cref="Disabled"/> entities excluded by default.
     /// </summary>
@@ -198,7 +210,7 @@ public class ArchetypeQuery
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
-        Filter          = new QueryFilter(default);
+        Filter          = new QueryFilter(default).FreezeFilter();
     }
     
     /// <summary> Called by <see cref="Archetype.GetEntities"/> </summary>
@@ -208,7 +220,7 @@ public class ArchetypeQuery
         store           = archetype.store;
         archetypes      = new [] { archetype };
         components      = archetype.componentTypes;
-        Filter          = new QueryFilter(archetype.tags);
+        Filter          = new QueryFilter(archetype.tags).FreezeFilter();
     }
     
     private ReadOnlySpan<Archetype> GetArchetypesSpan() {

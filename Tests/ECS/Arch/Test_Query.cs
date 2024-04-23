@@ -123,12 +123,12 @@ public static class Test_Query
             .WithoutAllComponents   (ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>())
             .WithoutAnyComponents   (ComponentTypes.Get<MyComponent4>());
         
-        var query0 =    store.Query(filter);
-        var query1 =    store.Query<Position>(filter);
-        var query2 =    store.Query<Position, Rotation>(filter);
-        var query3 =    store.Query<Position, Rotation, Scale3>(filter);
-        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>(filter);
-        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>(filter);
+        var query0 =    store.Query(filter).FreezeFilter();
+        var query1 =    store.Query<Position>(filter).FreezeFilter();
+        var query2 =    store.Query<Position, Rotation>(filter).FreezeFilter();
+        var query3 =    store.Query<Position, Rotation, Scale3>(filter).FreezeFilter();
+        var query4 =    store.Query<Position, Rotation, Scale3, MyComponent1>(filter).FreezeFilter();
+        var query5 =    store.Query<Position, Rotation, Scale3, MyComponent1, MyComponent2>(filter).FreezeFilter();
         
         AreEqual(1, query0.Entities.Count);
         AreEqual(1, query1.Entities.Count);
@@ -136,6 +136,18 @@ public static class Test_Query
         AreEqual(1, query3.Entities.Count);
         AreEqual(1, query4.Entities.Count);
         AreEqual(1, query5.Entities.Count);
+    }
+    
+    [Test]
+    public static void Test_generic_Query_QueryFilter_exceptions()
+    {
+        var store   = new EntityStore();
+        var filter = new QueryFilter().FreezeFilter();
+
+        var e = Assert.Throws<InvalidOperationException>(() => {
+            store.Query(filter).AllTags(Tags.Get<TestTag>()); 
+        });
+        Assert.AreEqual("QueryFilter was frozen and cannot be changed anymore.", e!.Message);
     }
     
     [Test]

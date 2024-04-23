@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -61,6 +62,7 @@ public class QueryFilter
     
                     private     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
                     internal    int             version;                    //   4  incremented if filter changes
+                    private     bool            frozen;                     //   1  if true the filter cannot be changed anymore
     #endregion
     
     
@@ -78,81 +80,88 @@ public class QueryFilter
     }
     #endregion
 
+    /// <summary>
+    /// <see cref="QueryFilter"/> cannot be changed anymore.
+    /// </summary>
+    public QueryFilter FreezeFilter() {
+        frozen = true;
+        return this;
+    }
 
 #region change tags filter
     /// <summary> Include entities containing all specified <paramref name="tags"/>. </summary>
     public QueryFilter AllTags(in Tags tags) {
+        Change();
         allTags          = tags;
         allTagsCount     = tags.Count;
-        Changed();
         return this;
     }
     
     /// <summary> Include entities containing any of the specified <paramref name="tags"/>. </summary>
     public QueryFilter AnyTags(in Tags tags) {
+        Change();
         anyTags          = tags;
         anyTagsCount     = tags.Count;
-        Changed();
         return this;
     }
     
     /// <summary> Exclude entities containing all specified <paramref name="tags"/>. </summary>
     public QueryFilter WithoutAllTags(in Tags tags) {
+        Change();
         withoutAllTags       = tags;
         withoutAllTagsCount  = tags.Count;
-        Changed();
         return this;
     }
     
     /// <summary> Exclude entities containing any of the specified <paramref name="tags"/>. </summary>
     public QueryFilter WithoutAnyTags(in Tags tags) {
+        Change();
         withoutAnyTags       = tags;
         if (withoutDisabled) {
             withoutAnyTags.Add(EntityUtils.Disabled);
         }
-        Changed();
         return this;
     }
     
     /// <summary> A query will return <see cref="Entity.Enabled"/> as well as disabled entities. </summary>
     public QueryFilter WithDisabled() {
+        Change();
         withoutDisabled = false;
         withoutAnyTags.Remove(EntityUtils.Disabled);
-        Changed();
         return this;
     }
     #endregion
 
     
 #region change components filter
-    /// <summary> Include entities containing all specified component <see cref="types"/>. </summary>
+    /// <summary> Include entities containing all specified component <paramref name="types"/>. </summary>
     public QueryFilter AllComponents(in ComponentTypes types) {
+        Change();
         allComponents        = types;
         allComponentsCount   = types.Count;
-        Changed();
         return this;
     }
         
-    /// <summary> Include entities containing any of the specified component <see cref="types"/>. </summary>
+    /// <summary> Include entities containing any of the specified component <paramref name="types"/>. </summary>
     public QueryFilter AnyComponents(in ComponentTypes types) {
+        Change();
         anyComponents        = types;
         anyComponentsCount   = types.Count;
-        Changed();
         return this;
     }
         
-    /// <summary> Exclude entities containing all specified component <see cref="types"/>. </summary>
+    /// <summary> Exclude entities containing all specified component <paramref name="types"/>. </summary>
     public QueryFilter WithoutAllComponents(in ComponentTypes types) {
+        Change();
         withoutAllComponents         = types;
         withoutAllComponentsCount    = types.Count;
-        Changed();
         return this;
     }
      
-    /// <summary> Exclude entities containing any of the specified  component <see cref="types"/>. </summary>
+    /// <summary> Exclude entities containing any of the specified  component <paramref name="types"/>. </summary>
     public QueryFilter WithoutAnyComponents(in ComponentTypes types) {
+        Change();
         withoutAnyComponents         = types;
-        Changed();
         return this;
     }
     #endregion
@@ -162,7 +171,8 @@ public class QueryFilter
     /// Reset <see cref="ArchetypeQuery.lastArchetypeCount"/> to force update of <see cref="ArchetypeQuery.archetypes"/>
     /// on subsequent call to <see cref="ArchetypeQuery.Archetypes"/>
     /// </remarks>
-    private void Changed() {
+    private void Change() {
+        if (frozen) throw new InvalidOperationException("QueryFilter was frozen and cannot be changed anymore.");
         version++;    
     }
     
