@@ -10,7 +10,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// Contains component and tags filters added to an <see cref="ArchetypeQuery"/>. 
+/// Contains component and tags filters added to an <see cref="ArchetypeQuery"/>.<br/>
+/// Multiple <see cref="ArchetypeQuery"/>'s can share a single <see cref="QueryFilter"/> instance.
 /// </summary>
 public class QueryFilter
 {
