@@ -37,6 +37,8 @@ public sealed class CommandBuffer
     
     /// <summary> Return the number of recorded entity commands. </summary>
     [Browse(Never)] public  int             EntityCommandsCount     => intern.entityCommandCount;
+    
+    [Browse(Never)] public  EntityStore     EntityStore             => intern.store;
 
     /// <summary>
     /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.

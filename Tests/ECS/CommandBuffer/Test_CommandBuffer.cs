@@ -412,6 +412,7 @@ public static class Test_CommandBuffer
         var entity  = store.CreateEntity();
         var child   = store.CreateEntity();
         var ecb     = store.GetCommandBuffer();
+        AreSame(store, ecb.EntityStore);
 
         ecb.ReuseBuffer = false;
         ecb.Playback();
