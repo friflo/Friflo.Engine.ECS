@@ -5,6 +5,7 @@ using System;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable TooWideLocalVariableScope
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -58,6 +59,8 @@ public sealed class CommandBuffer
     
     // MUST be private by all means. Used to reduce noise of fields in debugger.
     private struct Intern {
+        internal            bool                hasCommands;
+        //
         internal            ComponentTypes      changedComponentTypes;
         internal readonly   ComponentCommands[] componentCommandTypes;
         //
@@ -91,11 +94,12 @@ public sealed class CommandBuffer
                     componentCommands[componentType.StructIndex].commandCount = 0;
                 }
             }
-            changedComponentTypes    = default;
-            tagCommandsCount         = 0;
-            scriptCommandsCount      = 0;
-            childCommandsCount       = 0;
-            entityCommandCount       = 0;
+            hasCommands             = false;
+            changedComponentTypes   = default;
+            tagCommandsCount        = 0;
+            scriptCommandsCount     = 0;
+            childCommandsCount      = 0;
+            entityCommandCount      = 0;
         }
     }
     
@@ -129,6 +133,13 @@ public sealed class CommandBuffer
     /// </exception>
     public void Playback()
     {
+        if (!intern.hasCommands) {
+            // early out if command buffer is still empty 
+            if (!intern.reuseBuffer) {
+                ReturnBuffer();
+            }
+            return;
+        }
         var playback            = intern.store.GetPlayback();
         var hasComponentChanges = intern.changedComponentTypes.Count > 0;
         try {
@@ -390,6 +401,7 @@ public sealed class CommandBuffer
             throw CannotReuseCommandBuffer();   
         }
         var structIndex = StructHeap<T>.StructIndex;
+        intern.hasCommands      = true;
         intern.changedComponentTypes.bitSet.SetBit(structIndex);
         var componentCommands   = intern.componentCommandTypes[structIndex];
         componentCommands     ??= CreateComponentCommands(structIndex);
@@ -459,7 +471,8 @@ public sealed class CommandBuffer
         if (count == intern.tagCommands.Length) {
             ArrayUtils.Resize(ref intern.tagCommands, Math.Max(4, 2 * count));
         }
-        intern.tagCommandsCount = count + 1;
+        intern.hasCommands          = true;
+        intern.tagCommandsCount     = count + 1;
         ref var command     = ref intern.tagCommands[count];
         command.tagIndex    = (byte)tagIndex;
         command.entityId    = entityId;
@@ -495,7 +508,8 @@ public sealed class CommandBuffer
         if (count == intern.scriptCommands.Length) {
             ArrayUtils.Resize(ref intern.scriptCommands, Math.Max(4, 2 * count));
         }
-        intern.scriptCommandsCount = count + 1;
+        intern.hasCommands          = true;
+        intern.scriptCommandsCount  = count + 1;
         ref var command     = ref intern.scriptCommands[count];
         command.scriptIndex = (byte)scriptIndex;
         command.action      = action;
@@ -530,7 +544,8 @@ public sealed class CommandBuffer
         if (count == intern.childCommands.Length) {
             ArrayUtils.Resize(ref intern.childCommands, Math.Max(4, 2 * count));
         }
-        intern.childCommandsCount = count + 1;
+        intern.hasCommands          = true;
+        intern.childCommandsCount   = count + 1;
         ref var command     = ref intern.childCommands[count];
         command.parentId    = parentId;
         command.childId     = childId;
@@ -553,6 +568,7 @@ public sealed class CommandBuffer
         if (count == intern.entityCommands.Length) {
             ArrayUtils.Resize(ref intern.entityCommands, Math.Max(4, 2 * count));
         }
+        intern.hasCommands          = true;
         intern.entityCommandCount   = count + 1;
         ref var command             = ref intern.entityCommands[count];
         command.entityId            = id;
@@ -572,7 +588,8 @@ public sealed class CommandBuffer
         if (count == intern.entityCommands.Length) {
             ArrayUtils.Resize(ref intern.entityCommands, Math.Max(4, 2 * count));
         }
-        intern.entityCommandCount  = count + 1;
+        intern.hasCommands          = true;
+        intern.entityCommandCount   = count + 1;
         ref var command             = ref intern.entityCommands[count];
         command.entityId            = entityId;
         command.action              = EntityCommandAction.Delete;

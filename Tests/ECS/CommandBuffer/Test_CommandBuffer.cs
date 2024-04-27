@@ -404,6 +404,53 @@ public static class Test_CommandBuffer
         ecb.Playback();
         AreEqual(0, entity1.ChildIds.Length);
     }
+    
+    [Test]
+    public static void Test_CommandBuffer_Playback_early_out()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity  = store.CreateEntity();
+        var child   = store.CreateEntity();
+        var ecb     = store.GetCommandBuffer();
+
+        ecb.ReuseBuffer = false;
+        ecb.Playback();
+        
+        var start = Mem.GetAllocatedBytes();
+        ecb = store.GetCommandBuffer();
+        ecb.ReuseBuffer = true;
+        ecb.Playback();
+        Mem.AssertNoAlloc(start);
+        
+        // --- Ensure single modifications are applied by Playback()  
+        ecb.AddComponent(entity.Id, new Position(1,2,3));
+        ecb.Playback();
+        AreEqual(new Position(1,2,3), entity.Position);
+        
+        ecb.RemoveComponent<Position>(entity.Id);
+        ecb.Playback();
+        IsFalse(entity.HasPosition);
+        
+        ecb.AddTag<TestTag>(entity.Id);
+        ecb.Playback();
+        IsTrue(entity.Tags.Has<TestTag>());
+        
+        ecb.AddScript(entity.Id, new TestScript1());
+        ecb.Playback();
+        NotNull(entity.GetScript<TestScript1>());
+        
+        ecb.AddChild(entity.Id, child.Id);
+        ecb.Playback();
+        AreEqual(1, entity.ChildCount);
+        
+        int  newEntity = ecb.CreateEntity();
+        ecb.Playback();
+        AreEqual(3, store.Count);
+        
+        ecb.DeleteEntity(newEntity);
+        ecb.Playback();
+        AreEqual(2, store.Count);
+    }
 }
 
 }
