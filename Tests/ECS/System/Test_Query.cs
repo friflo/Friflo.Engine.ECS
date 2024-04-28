@@ -208,9 +208,7 @@ public static class Test_Query
     }
     
     private static EntityStore SetupTestStore() {
-        var systems = new Systems();
-        var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
-        Assert.AreSame(systems, store.Systems);
+        var store   = new EntityStore(PidType.UsePidAsId);
         
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("root"));

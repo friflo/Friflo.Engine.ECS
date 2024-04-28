@@ -27,7 +27,6 @@ public abstract class Script
     /// <summary>The entity the component is added to. Otherwise null.</summary>
     public          Entity      Entity  => entity;
     public          EntityStore Store   => entity.store;
-    public          Systems     Systems => entity.store.Systems;
                     
     // --- internal
     [Browse(Never)] internal    Entity  entity;     // 16

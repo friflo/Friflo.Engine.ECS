@@ -1,5 +1,6 @@
 using System;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.Utils;
 
@@ -10,39 +11,38 @@ namespace Tests.ECS.System {
 
 public class CreateSystems : Script
 {
-    public int argCount;
+    public              int         argCount;
+    private readonly    SystemRoot  Systems = new ("Systems");
     
     public override void Start() {
-        var store = Store;
-        ComponentSystem system = argCount switch {
-            1 => new MySystem_Arg1(store),
-            2 => new MySystem_Arg2(store),
-            3 => new MySystem_Arg3(store),
-            4 => new MySystem_Arg4(store),
-            5 => new MySystem_Arg5(store),
+        QuerySystem system = argCount switch {
+            1 => new MySystem_Arg1(),
+            2 => new MySystem_Arg2(),
+            3 => new MySystem_Arg3(),
+            4 => new MySystem_Arg4(),
+            5 => new MySystem_Arg5(),
             _ => throw new ArgumentException($"value: {argCount}", nameof(argCount))
         };
         Systems.AddSystem(system);
+        Systems.AddStore(Store);
+    }
+
+    public override void Update() {
+        Systems.Update(default);
     }
 }
 
-public class MySystem_Arg1 : ComponentSystem
+public class MySystem_Arg1 : QuerySystem<Position>
 {
-    private readonly    ArchetypeQuery<Position>    query;
-        
-    public MySystem_Arg1(EntityStore store) {
-        query       = store.Query<Position>();
-        Assert.AreEqual("QueryChunks[2]  Components: [Position]", query.Chunks.ToString());
-    }
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    public override void OnUpdate()
+    protected override void OnUpdate(Tick tick)
     {
-        Mem.AreEqual(1000, query.Count);
-        var store       = query.Store;
+        Mem.AreEqual(1000, Query.Count);
+        var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position>());
         int chunkCount  = 0;
-        foreach (var (position, entities) in query.Chunks) {
+        foreach (var (position, entities) in Query.Chunks) {
             var vectors     = position.AsSpanVector3();
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
@@ -61,22 +61,15 @@ public class MySystem_Arg1 : ComponentSystem
     }
 }
 
-public class MySystem_Arg2 : ComponentSystem
+public class MySystem_Arg2 : QuerySystem<Position, Rotation>
 {
-    private readonly    ArchetypeQuery<Position, Rotation>  query;
-        
-    public MySystem_Arg2(EntityStore store) {
-        query       = store.Query<Position, Rotation>();
-        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation]", query.Chunks.ToString());
-    }
-    
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    public override void OnUpdate()
+    protected override void OnUpdate(Tick tick)
     {
-        var store       = query.Store;
+        var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         int chunkCount  = 0;
-        foreach (var (positions, rotations, entities) in query.Chunks) {
+        foreach (var (positions, rotations, entities) in Query.Chunks) {
             var vectors     = rotations.AsSpanQuaternion();
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
@@ -94,22 +87,15 @@ public class MySystem_Arg2 : ComponentSystem
     }
 }
 
-public class MySystem_Arg3 : ComponentSystem
+public class MySystem_Arg3 : QuerySystem<Position, Rotation, EntityName>
 {
-    private readonly    ArchetypeQuery<Position, Rotation, EntityName>  query;
-        
-    public MySystem_Arg3(EntityStore store) {
-        query       = store.Query<Position, Rotation, EntityName>();
-        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation, EntityName]", query.Chunks.ToString());
-    }
-    
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    public override void OnUpdate()
+    protected override void OnUpdate(Tick tick)
     {
-        var store       = query.Store;
+        var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName>());
         int chunkCount  = 0;
-        foreach (var (positions, rotation, name, entities) in query.Chunks) {
+        foreach (var (positions, rotation, name, entities) in Query.Chunks) {
             var length      = entities.Length;
             Mem.AreEqual(length,                    positions.Length);
             Mem.AreEqual(length,                    rotation.Length);
@@ -126,22 +112,15 @@ public class MySystem_Arg3 : ComponentSystem
     }
 }
 
-public class MySystem_Arg4 : ComponentSystem
+public class MySystem_Arg4 : QuerySystem<Position, Rotation, EntityName, Scale3>
 {
-    private readonly    ArchetypeQuery<Position, Rotation, EntityName, Scale3>  query;
-        
-    public MySystem_Arg4(EntityStore store) {
-        query       = store.Query<Position, Rotation, EntityName, Scale3>();
-        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation, EntityName, Scale3]", query.Chunks.ToString());
-    }
-    
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    public override void OnUpdate()
+    protected override void OnUpdate(Tick tick)
     {
-        var store       = query.Store;
+        var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3>());
         int chunkCount  = 0;
-        foreach (var (positions, rotation, name, scale, entities) in query.Chunks) {
+        foreach (var (positions, rotation, name, scale, entities) in Query.Chunks) {
             var vectors     = scale.AsSpanVector3();
             var length      = entities.Length;
             Mem.AreEqual(length,                    vectors.Length);
@@ -161,22 +140,15 @@ public class MySystem_Arg4 : ComponentSystem
     }
 }
 
-public class MySystem_Arg5 : ComponentSystem
+public class MySystem_Arg5 : QuerySystem<Position, Rotation, EntityName, Scale3, Transform>
 {
-    private readonly    ArchetypeQuery<Position, Rotation, EntityName, Scale3, Transform>   query;
-        
-    public MySystem_Arg5(EntityStore store) {
-        query       = store.Query<Position, Rotation, EntityName, Scale3, Transform>();
-        Assert.AreEqual("QueryChunks[2]  Components: [Position, Rotation, EntityName, Scale3, Transform]", query.Chunks.ToString());
-    }
-    
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    public override void OnUpdate()
+    protected override void OnUpdate(Tick tick)
     {
-        var store       = query.Store;
+        var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3, Transform>());
         int chunkCount  = 0;
-        foreach (var (positions, rotation, name, scale, transform, entities) in query.Chunks) {
+        foreach (var (positions, rotation, name, scale, transform, entities) in Query.Chunks) {
             var matrix4X4   = transform.AsSpanMatrix4x4();
             var length      = entities.Length;
             Mem.AreEqual(length,                    matrix4X4.Length);
@@ -216,7 +188,7 @@ public static class Test_Systems
         }
         CreateSystems(store);
         int count = 10; // 10_000_000 ~ #PC: 1575 ms
-        ExecuteSystems(store.Systems, count);
+        ExecuteSystems(store, count);
     }
     
     [Test]
@@ -238,7 +210,7 @@ public static class Test_Systems
         }
         CreateSystems(store);
         int count = 10; // 10_000_000 ~ #PC: 1387 ms
-        ExecuteSystems(store.Systems, count);
+        ExecuteSystems(store, count);
     }
     
     [Test]
@@ -262,7 +234,7 @@ public static class Test_Systems
         }
         CreateSystems(store);
         int count = 10; // 10_000_000 ~ #PC: 1500 ms
-        ExecuteSystems(store.Systems, count);
+        ExecuteSystems(store, count);
     }
     
     [Test]
@@ -288,7 +260,7 @@ public static class Test_Systems
         }
         CreateSystems(store);
         int count = 10; // 10_000_000 ~ #PC: 1757 ms
-        ExecuteSystems(store.Systems, count);
+        ExecuteSystems(store, count);
     }
     
     [Test]
@@ -315,13 +287,11 @@ public static class Test_Systems
         }
         CreateSystems(store);
         int count = 10; // 10_000_000 ~ #PC: 1847 ms
-        ExecuteSystems(store.Systems, count);
+        ExecuteSystems(store, count);
     }
     
     internal static EntityStore SetupTestStore() {
-        var systems = new Systems();
-        var store   = new EntityStore(PidType.UsePidAsId) { Systems = systems };
-        Assert.AreSame(systems, store.Systems);
+        var store   = new EntityStore(PidType.UsePidAsId);
         
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("root"));
@@ -345,16 +315,25 @@ public static class Test_Systems
         }
     }
     
-    private static void ExecuteSystems(Systems systems, int count)
+    private static void ExecuteSystems(EntityStore store, int count)
     {
-        Assert.AreEqual("Count: 1", systems.ToString());
+        // Assert.AreEqual("Count: 1", systems.ToString());
 
         // --- execute systems
-        systems.UpdateSystems(); // force one time allocations
+        
+        foreach (var scripts in store.EntityScripts) {
+            foreach (var script in scripts) {
+                script.Update();
+            }
+        }
 
         var start = Mem.GetAllocatedBytes();
         for (int n = 0; n < count; n++) {
-            systems.UpdateSystems();
+            foreach (var scripts in store.EntityScripts) {
+                foreach (var script in scripts) {
+                    script.Update();
+                }
+            }
         }
         Mem.AssertNoAlloc(start);
     }

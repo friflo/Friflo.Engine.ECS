@@ -34,8 +34,7 @@ public abstract partial class EntityStoreBase
     /// <summary> Return the largest entity <see cref="Entity.Id"/> store in the entity store. </summary>
     [Browse(Never)] public              int                     NodeMaxId       => nodesMaxId;
     
-    /// <summary> Return the <see cref="ECS.Systems"/> instance attached to the entity store. </summary>
-                    public              Systems                 Systems         { get; init; }
+
     
     /// <summary> Initialize a default <see cref="ParallelJobRunner"/> used for <see cref="QueryJob"/>'s. </summary>
     [Browse(Never)] public              ParallelJobRunner       JobRunner       { get; init; }
