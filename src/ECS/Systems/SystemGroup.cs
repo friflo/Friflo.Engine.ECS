@@ -50,7 +50,7 @@ namespace Friflo.Engine.ECS.Systems
             childSystems.Add(system);
             system.SetParentAndRoot(this);
             // Send event. See: SEND_EVENT notes
-            system.CastSystemChanged(SystemChangedAction.Add, null, null);
+            system.CastSystemChanged(SystemChangedAction.Add);
         }
         
         public void RemoveSystem(BaseSystem system)
@@ -145,7 +145,7 @@ namespace Friflo.Engine.ECS.Systems
             if (name is null or "") throw new ArgumentException("group name must not be null or empty");
             this.name   = name;
             // Send event. See: SEND_EVENT notes
-            CastSystemChanged(SystemChangedAction.Update, nameof(Name), name);
+            CastSystemUpdate(nameof(Name), name);
         }
         #endregion
         

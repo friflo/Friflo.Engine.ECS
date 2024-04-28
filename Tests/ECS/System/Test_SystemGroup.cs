@@ -95,5 +95,25 @@ namespace Tests.Systems
             });
             AreEqual("Group: group2 has no parent", e!.Message);
         }
+        
+        [Test]
+        public static void Test_SystemGroup_CastSystemChanged()
+        {
+            var group       = new SystemGroup("base");
+            var testSystem1 = new TestSystem1();
+            group.AddSystem(testSystem1);
+            
+            var count = 0;
+            group.OnSystemChanged += changed => {
+                var str = changed.ToString();
+                switch (count++) {
+                    case 0: AreEqual("Update - System: TestSystem1, field: enabled, value: True", str);   return;
+                }
+            };
+            testSystem1.Enabled = true;
+            testSystem1.CastSystemUpdate("enabled", true);
+            
+            AreEqual(1, count);
+        }
     }
 }

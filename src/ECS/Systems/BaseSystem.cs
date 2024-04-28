@@ -36,12 +36,22 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
         
-    #region events
+    #region system events
         public event Action<SystemChanged>  OnSystemChanged;
 
-        internal void CastSystemChanged(SystemChangedAction action, string field, object value)
+        public void CastSystemUpdate(string field, object value)
         {
-            var change  = new SystemChanged(action, this, field, value);
+            var change  = new SystemChanged(SystemChangedAction.Update, this, field, value);
+            var root    = systemRoot;
+            if (root != parentGroup) {
+                parentGroup.OnSystemChanged?.Invoke(change);
+            }
+            root?.OnSystemChanged?.Invoke(change);
+        }
+        
+        internal void CastSystemChanged(SystemChangedAction action)
+        {
+            var change  = new SystemChanged(action, this, null, null);
             var root    = systemRoot;
             if (root != parentGroup) {
                 parentGroup.OnSystemChanged?.Invoke(change);
@@ -94,7 +104,7 @@ namespace Friflo.Engine.ECS.Systems
                     systemGroup.childSystems.InsertAt(index, this);
                 }
                 // Send event. See: SEND_EVENT notes
-                CastSystemChanged(SystemChangedAction.Move, null, null); 
+                CastSystemChanged(SystemChangedAction.Move); 
                 return index;
             }
             if (systemRoot == systemGroup.systemRoot) {
@@ -107,7 +117,7 @@ namespace Friflo.Engine.ECS.Systems
                 }
                 parentGroup = systemGroup;
                 // Send event. See: SEND_EVENT notes
-                CastSystemChanged(SystemChangedAction.Move, null, null);
+                CastSystemChanged(SystemChangedAction.Move);
                 return index;
             }
             throw new NotImplementedException();
