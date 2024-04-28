@@ -2,6 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
@@ -121,14 +123,43 @@ namespace Tests.Systems
             var mySystem2 = new MySystem2();
             AreEqual("MySystem2 - custom name", mySystem2.Name);
         }
+        
+        [Test]
+        public static void Test_SystemRoot_Update_Perf()
+        {
+            int count   = 10;   // 100_000_000 ~ #PC: 3337 ms
+            var store   = new EntityStore(PidType.UsePidAsId);
+            var root    = new SystemRoot("root");
+            root.AddSystem(new TestSystem2());
+            root.AddStore(store);
+
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int n = 0; n < count; n++) {
+                root.Update(default);
+            }
+            Console.WriteLine($"Test_SystemRoot_Update_Perf - count: {count}, duration: {sw.ElapsedMilliseconds} ms");
+        }
     }
     
-    public class TestSystem1 : QuerySystem<Position> {
+    public class TestSystem1 : QuerySystem<Position>
+    {
         protected override void OnUpdate(Tick tick) {
             Query.ForEachEntity((ref Position position, Entity entity) => {
                 position.x++;
                 CommandBuffer.AddComponent(entity.Id, new Scale3(4,5,6));
             });
+        }
+    }
+    
+    public class TestSystem2 : QuerySystem<Position>
+    {
+        protected override void OnUpdate(Tick tick) {
+            foreach (var (positions, _)  in Query.Chunks) {
+                foreach (ref var position in positions.Span) {
+                    position.x++;
+                }
+            }
         }
     }
     

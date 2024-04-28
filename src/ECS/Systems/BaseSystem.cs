@@ -69,23 +69,23 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
 
-    #region abstract - store: add / remove
-        internal virtual void RemoveStoreInternal(EntityStore store) { }
-        internal virtual void AddStoreInternal   (EntityStore store) { }
+    #region virtual - store: add / remove
+        internal           virtual  void RemoveStoreInternal(EntityStore store) { }
+        internal           virtual  void AddStoreInternal   (EntityStore store) { }
         #endregion
         
-    #region abstract - update
-        public              virtual void Update             (Tick tick) { }
+    #region virtual - system: update
+        public             virtual  void Update             (Tick tick) { }
         
         /// <summary>
         /// Called once per <see cref="BaseSystem"/> before <see cref="Update"/> within a <see cref="SystemGroup"/>.
         /// </summary>
-        protected internal  virtual void OnUpdateGroupBegin (Tick tick) { }
+        protected internal virtual  void OnUpdateGroupBegin (Tick tick) { }
         
         /// <summary>
         /// Called once per <see cref="BaseSystem"/> after <see cref="Update"/> within a <see cref="SystemGroup"/>.
         /// </summary>
-        protected internal  virtual void OnUpdateGroupEnd   (Tick tick) { }
+        protected internal virtual  void OnUpdateGroupEnd   (Tick tick) { }
         #endregion
         
     #region system: move
