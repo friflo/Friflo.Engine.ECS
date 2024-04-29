@@ -22,8 +22,7 @@ namespace Tests.Systems
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
             root.AddSystem(new TestSystem1());
-            root.Tick.deltaTime = 42;
-            root.Update();
+            root.Update(new Tick(42));
             AreEqual(new Position(1,0,0), entity.Position);
         }
         
@@ -53,8 +52,7 @@ namespace Tests.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            root.Tick.deltaTime = 42;
-            root.Update();
+            root.Update(new Tick(42));
             
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);
@@ -77,12 +75,12 @@ namespace Tests.Systems
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
             
-            root.Tick.deltaTime = 42;
-            root.Update();
+            root.Update(new Tick(42));
             
             AreEqual(new Scale3(4,5,6), entity.Scale3);
             AreEqual(0, testSystem1.Tick.deltaTime);
             AreEqual(0, testGroup.Tick.deltaTime);
+            AreEqual(0, root.Tick.deltaTime);
         }
         
         [Test]
@@ -103,8 +101,7 @@ namespace Tests.Systems
             AreEqual(1, root.Stores.Count);
             AreEqual(1, testSystem1.Queries.Count);
             AreEqual(1, testSystem1.EntityCount);
-            root.Tick.deltaTime = 42;
-            root.Update();
+            root.Update(new Tick(42));
             
             root.AddStore(store2);                      // add store after system setup
             AreEqual(2, root.Stores.Count);
@@ -151,7 +148,7 @@ namespace Tests.Systems
             var sw = new Stopwatch();
             sw.Start();
             for (int n = 0; n < count; n++) {
-                root.Update();
+                root.Update(default);
             }
             Console.WriteLine($"Test_SystemRoot_Update_Perf - count: {count}, duration: {sw.ElapsedMilliseconds} ms");
         }
@@ -208,6 +205,6 @@ namespace Tests.Systems
         
         protected   override void   OnUpdateGroupBegin() { }
         protected   override void   OnUpdateGroupEnd()   { }
-        public      override void   Update()             { }
+        public      override void   Update(Tick tick)    { }
     }
 }

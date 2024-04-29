@@ -4,9 +4,6 @@
 // Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
 
 // ReSharper disable once CheckNamespace
-
-using System.Globalization;
-
 namespace Friflo.Engine.ECS.Systems
 {
    
@@ -16,5 +13,9 @@ namespace Friflo.Engine.ECS.Systems
         public float deltaTime;
 
         public override string ToString() => $"deltaTime: {deltaTime}";
+        
+        public Tick(float deltaTime) {
+            this.deltaTime = deltaTime;
+        }
     }
 }

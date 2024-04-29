@@ -67,7 +67,7 @@ namespace Friflo.Engine.ECS.Systems
         /// <summary> Called for every query in <see cref="Queries"/>. </summary>
         protected abstract void OnUpdate();
         
-        public    override void Update()
+        public    override void Update(Tick tick)
         {
             if (!Enabled) return;
             var commandBuffers = parentGroup.commandBuffers;

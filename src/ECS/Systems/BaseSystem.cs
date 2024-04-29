@@ -77,7 +77,7 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region virtual - system: update
-        public             virtual  void Update             () { }
+        public             virtual void Update(Tick tick) { }
         
         /// <summary>
         /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before <see cref="SystemGroup.Update"/>.

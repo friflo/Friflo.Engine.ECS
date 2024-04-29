@@ -28,7 +28,7 @@ public class CreateSystems : Script
     }
 
     public override void Update() {
-        Systems.Update();
+        Systems.Update(default);
     }
 }
 

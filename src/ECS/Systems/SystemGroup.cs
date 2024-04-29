@@ -175,20 +175,21 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region update
-        public override void Update()
+        public override void Update(Tick tick)
         {
             if (!Enabled) {
                 return;
             }
+            Tick = tick;
             var children = childSystems;
             // --- calls OnUpdateGroupBegin() once per child system.
             foreach (var child in children) {
-                child.Tick = Tick;
+                child.Tick = tick;
                 child.OnUpdateGroupBegin();
             }
             // --- calls OnUpdate() for every QuerySystem child and every store of SystemRoot.Stores - commonly a single store.
             foreach (var child in children) {
-                child.Update();
+                child.Update(tick);
             }
             // --- apply command buffer changes
             foreach (var commandBuffer in commandBuffers) {
@@ -199,6 +200,7 @@ namespace Friflo.Engine.ECS.Systems
                 child.OnUpdateGroupEnd();
                 child.Tick = default;
             }
+            Tick = default;
         }
         #endregion
         
