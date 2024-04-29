@@ -18,7 +18,8 @@ namespace Friflo.Engine.ECS.Systems
     #region properties
         [Browse(Never)] public override string              Name            => name;
                         public          Array<BaseSystem>   ChildSystems    => childSystems;
-                        internal        View                System          => view ??= new View(this); 
+                        internal        View                System          => view ??= new View(this);
+                        internal        Array<CommandBuffer>CommandBuffers  => commandBuffers; // only for debug view
                         public override string              ToString()      => $"'{name}' Group - systems: {childSystems.Count}";
         #endregion
         

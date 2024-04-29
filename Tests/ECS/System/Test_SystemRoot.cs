@@ -166,6 +166,8 @@ namespace Tests.Systems
             });
             AreEqual(42, Tick.deltaTime);
         }
+
+        protected override void OnUpdateGroupEnd() { }
     }
     
     public class TestSystem2 : QuerySystem<Position>

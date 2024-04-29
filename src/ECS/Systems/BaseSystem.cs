@@ -200,7 +200,7 @@ namespace Friflo.Engine.ECS.Systems
         public  bool                Enabled         => system.Enabled;
         public  string              Name            => system.Name;
         public  SystemRoot          SystemRoot      => system.SystemRoot;
-        public  SystemGroup         SystemGroup     => system.ParentGroup;
+        public  SystemGroup         ParentGroup     => system.ParentGroup;
 
         [Browse(Never)] private readonly BaseSystem   system;
         

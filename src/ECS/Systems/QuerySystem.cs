@@ -20,7 +20,7 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)] public          int                     EntityCount     => GetEntityCount();
         [Browse(Never)] public          ComponentTypes          ComponentTypes  => componentTypes;
                         public          Array<ArchetypeQuery>   Queries         => queries;
-                        public          CommandBuffer           CommandBuffer   => commandBuffer;
+        [Browse(Never)] public          CommandBuffer           CommandBuffer   => commandBuffer;
                         internal        View                    System          => view ??= new View(this);              
         #endregion
         
