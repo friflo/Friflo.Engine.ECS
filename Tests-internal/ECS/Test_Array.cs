@@ -3,6 +3,8 @@
 
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -14,7 +16,7 @@ namespace Tests.Systems
     public static class Test_Array
     {
         [Test]
-        public static void Test_Array_basics()
+        public static void Test_Array_mutate()
         {
             var array = new Array<object>(Array.Empty<object>());
             var object1 = new object();
@@ -43,6 +45,41 @@ namespace Tests.Systems
             var array2= new Array<object>(Array.Empty<object>());
             array2.InsertAt(0, object1); // cover resize
         }
+        
+        [Test]
+        public static void Test_Array_enumerator()
+        {
+            var array = new Array<object>(Array.Empty<object>());
+            var object1 = new object();
+            array.Add(object1);
+            {
+                IEnumerable enumerable = array;
+                IEnumerator enumerator = enumerable.GetEnumerator();
+                int count = 0;
+                while (enumerator.MoveNext()) {
+                    count++;
+                }
+                AreEqual(1, count);
+                
+                count = 0;
+                enumerator.Reset();
+                while (enumerator.MoveNext()) {
+                    count++;
+                    AreSame(object1, enumerator.Current);
+                }
+                AreEqual(1, count);
+            }
+            {
+                IEnumerable<object> enumerable = array;
+                using var enumerator = enumerable.GetEnumerator();
+                int count = 0;
+                while (enumerator.MoveNext()) {
+                    count++;
+                }
+                AreEqual(1, count);
+            }
+        }
+        
         
         [Test]
         public static void Test_Array_DebugView()

@@ -83,13 +83,13 @@ namespace Friflo.Engine.ECS
         
     #region IEnumerator
 
-        public StructArrayEnumerator<T> GetEnumerator() => new StructArrayEnumerator<T>(array, count);
+        public      ArrayEnumerator<T> GetEnumerator() => new ArrayEnumerator<T>(array, count);
 
         // --- IEnumerable
-        IEnumerator         IEnumerable.GetEnumerator() => new StructArrayEnumerator<T>(array, count);
+        IEnumerator        IEnumerable.GetEnumerator() => new ArrayEnumerator<T>(array, count);
 
         // --- IEnumerable<>
-        IEnumerator<T>   IEnumerable<T>.GetEnumerator() => new StructArrayEnumerator<T>(array, count);
+        IEnumerator<T>  IEnumerable<T>.GetEnumerator() => new ArrayEnumerator<T>(array, count);
         #endregion
         
         private static void Resize(ref T[] array, int len)
@@ -104,7 +104,7 @@ namespace Friflo.Engine.ECS
     }
     
     
-    public struct StructArrayEnumerator<T> : IEnumerator<T>
+    public struct ArrayEnumerator<T> : IEnumerator<T>
     {
     #region private fields
         private readonly    T[]     array;  //  8
@@ -112,7 +112,7 @@ namespace Friflo.Engine.ECS
         private             int     index;  //  4
         #endregion
     
-        internal StructArrayEnumerator(T[] array, int count) {
+        internal ArrayEnumerator(T[] array, int count) {
             this.array  = array;
             this.count  = count - 1;
             index       = -1;
@@ -136,7 +136,7 @@ namespace Friflo.Engine.ECS
             return false;
         }
     
-        public readonly void Dispose() { }
+        public void Dispose() { }
         #endregion
     }
     
