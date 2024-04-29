@@ -80,12 +80,12 @@ namespace Friflo.Engine.ECS.Systems
         public             virtual void Update(Tick tick) { }
         
         /// <summary>
-        /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before <see cref="SystemGroup.Update"/>.
+        /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before group <see cref="SystemGroup.Update"/>.
         /// </summary>
         protected internal virtual  void OnUpdateGroupBegin () { }
         
         /// <summary>
-        /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after <see cref="SystemGroup.Update"/>.
+        /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after group <see cref="SystemGroup.Update"/>.
         /// </summary>
         protected internal virtual  void OnUpdateGroupEnd   () { }
         #endregion
