@@ -78,6 +78,11 @@ namespace Tests.ECS.Systems
             var baseGroup   = new SystemGroup("Base");
             var group1      = new SystemGroup("Group1");
             baseGroup.AddSystem(group1);
+            
+            Throws<ArgumentNullException>(() => {
+                group1.MoveSystemTo(null, 0);
+            });
+            
             Exception e = Throws<ArgumentException>(() => {
                 group1.MoveSystemTo(baseGroup, -2);
             });

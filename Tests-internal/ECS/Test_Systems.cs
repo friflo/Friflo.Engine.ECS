@@ -29,9 +29,9 @@ namespace Tests.Systems
             AreSame (root,              view.ParentGroup);
             
             NotNull(root.System);
+            
+            NotNull(root.CommandBuffers);
         }
-        
-        
     }
     
     class TestQuerySystem : QuerySystem<Position> {

@@ -143,6 +143,18 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
+        public static void Test_Systems_BaseSystem_coverage()
+        {
+            var root            = new SystemRoot("Systems");
+            var customSystem    = new MySystem1();
+            root.AddSystem(customSystem);
+            var store = new EntityStore(PidType.UsePidAsId);
+            root.AddStore(store);
+            root.RemoveStore(store);
+            root.Update(0);
+        }
+        
+        [Test]
         public static void Test_SystemRoot_exceptions()
         {
             var group = new SystemRoot("Systems");
