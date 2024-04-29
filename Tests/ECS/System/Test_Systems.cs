@@ -28,7 +28,7 @@ public class CreateSystems : Script
     }
 
     public override void Update() {
-        Systems.Update(default);
+        Systems.Update();
     }
 }
 
@@ -36,7 +36,7 @@ public class MySystem_Arg1 : QuerySystem<Position>
 {
     
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    protected override void OnUpdate(Tick tick)
+    protected override void OnUpdate()
     {
         Mem.AreEqual(1000, Query.Count);
         var store       = Query.Store;
@@ -64,7 +64,7 @@ public class MySystem_Arg1 : QuerySystem<Position>
 public class MySystem_Arg2 : QuerySystem<Position, Rotation>
 {
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    protected override void OnUpdate(Tick tick)
+    protected override void OnUpdate()
     {
         var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
@@ -90,7 +90,7 @@ public class MySystem_Arg2 : QuerySystem<Position, Rotation>
 public class MySystem_Arg3 : QuerySystem<Position, Rotation, EntityName>
 {
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    protected override void OnUpdate(Tick tick)
+    protected override void OnUpdate()
     {
         var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName>());
@@ -115,7 +115,7 @@ public class MySystem_Arg3 : QuerySystem<Position, Rotation, EntityName>
 public class MySystem_Arg4 : QuerySystem<Position, Rotation, EntityName, Scale3>
 {
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    protected override void OnUpdate(Tick tick)
+    protected override void OnUpdate()
     {
         var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3>());
@@ -143,7 +143,7 @@ public class MySystem_Arg4 : QuerySystem<Position, Rotation, EntityName, Scale3>
 public class MySystem_Arg5 : QuerySystem<Position, Rotation, EntityName, Scale3, Transform>
 {
     /// <summary> Cover <see cref="ChunkEnumerator{T1}.MoveNext"/> </summary>
-    protected override void OnUpdate(Tick tick)
+    protected override void OnUpdate()
     {
         var store       = Query.Store;
         var childArch   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName, Scale3, Transform>());

@@ -64,9 +64,9 @@ namespace Friflo.Engine.ECS.Systems
         
     #region update
         /// <summary> Called for every query in <see cref="Queries"/>. </summary>
-        protected abstract  void OnUpdate           (Tick tick);
+        protected abstract void OnUpdate();
         
-        public override void Update(Tick tick)
+        public    override void Update()
         {
             if (!Enabled) return;
             var commandBuffers = parentGroup.commandBuffers;
@@ -75,7 +75,7 @@ namespace Friflo.Engine.ECS.Systems
                 var query       = queries[n];
                 commandBuffer   = commandBuffers[n];
                 SetQuery(query);
-                OnUpdate(tick);
+                OnUpdate();
                 SetQuery(null);
                 commandBuffer = null;
             }

@@ -7,6 +7,7 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace
@@ -21,8 +22,9 @@ namespace Friflo.Engine.ECS.Systems
         [Ignore]public          bool            Enabled     { get => enabled;       set => enabled = value; }
                 public          int             Id          => id;
         #endregion
-    
-    #region internal fields
+            
+    #region fields
+        [Ignore]                    public              Tick        Tick;
         [Serialize] [Browse(Never)] internal            int         id;
         [Serialize] [Browse(Never)] private             bool        enabled = true;
                     [Browse(Never)] private readonly    string      systemName;
@@ -75,17 +77,17 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region virtual - system: update
-        public             virtual  void Update             (Tick tick) { }
+        public             virtual  void Update             () { }
         
         /// <summary>
         /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before <see cref="SystemGroup.Update"/>.
         /// </summary>
-        protected internal virtual  void OnUpdateGroupBegin (Tick tick) { }
+        protected internal virtual  void OnUpdateGroupBegin () { }
         
         /// <summary>
         /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after <see cref="SystemGroup.Update"/>.
         /// </summary>
-        protected internal virtual  void OnUpdateGroupEnd   (Tick tick) { }
+        protected internal virtual  void OnUpdateGroupEnd   () { }
         #endregion
         
     #region system: move

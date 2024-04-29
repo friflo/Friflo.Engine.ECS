@@ -22,7 +22,8 @@ namespace Tests.Systems
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
             root.AddSystem(new TestSystem1());
-            root.Update(default);
+            root.Tick.deltaTime = 42;
+            root.Update();
             AreEqual(new Position(1,0,0), entity.Position);
         }
         
@@ -52,7 +53,9 @@ namespace Tests.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            root.Update(default);
+            root.Tick.deltaTime = 42;
+            root.Update();
+            
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);
         }
@@ -63,19 +66,23 @@ namespace Tests.Systems
             var store       = new EntityStore(PidType.UsePidAsId);
             var entity      = store.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot(store);    // create SystemRoot with store
-            var group       = new SystemGroup("Group");
-            root.AddSystem(group);
+            var testGroup       = new TestGroup();
+            root.AddSystem(testGroup);
             var testSystem1 = new TestSystem1();
             AreEqual("TestSystem1 - Components: [Position]", testSystem1.ToString());
             AreEqual("Components: [Position]", testSystem1.ComponentTypes.ToString());
             AreEqual(0,     testSystem1.Queries.Count);
-            group.AddSystem(testSystem1);
+            testGroup.AddSystem(testSystem1);
             AreEqual(1,     testSystem1.Queries.Count);
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
             
-            root.Update(default);
+            root.Tick.deltaTime = 42;
+            root.Update();
+            
             AreEqual(new Scale3(4,5,6), entity.Scale3);
+            AreEqual(0, testSystem1.Tick.deltaTime);
+            AreEqual(0, testGroup.Tick.deltaTime);
         }
         
         [Test]
@@ -96,7 +103,8 @@ namespace Tests.Systems
             AreEqual(1, root.Stores.Count);
             AreEqual(1, testSystem1.Queries.Count);
             AreEqual(1, testSystem1.EntityCount);
-            root.Update(default);
+            root.Tick.deltaTime = 42;
+            root.Update();
             
             root.AddStore(store2);                      // add store after system setup
             AreEqual(2, root.Stores.Count);
@@ -143,7 +151,7 @@ namespace Tests.Systems
             var sw = new Stopwatch();
             sw.Start();
             for (int n = 0; n < count; n++) {
-                root.Update(default);
+                root.Update();
             }
             Console.WriteLine($"Test_SystemRoot_Update_Perf - count: {count}, duration: {sw.ElapsedMilliseconds} ms");
         }
@@ -151,17 +159,18 @@ namespace Tests.Systems
     
     public class TestSystem1 : QuerySystem<Position>
     {
-        protected override void OnUpdate(Tick tick) {
+        protected override void OnUpdate() {
             Query.ForEachEntity((ref Position position, Entity entity) => {
                 position.x++;
                 CommandBuffer.AddComponent(entity.Id, new Scale3(4,5,6));
             });
+            AreEqual(42, Tick.deltaTime);
         }
     }
     
     public class TestSystem2 : QuerySystem<Position>
     {
-        protected override void OnUpdate(Tick tick) {
+        protected override void OnUpdate() {
             foreach (var (positions, _)  in Query.Chunks) {
                 foreach (ref var position in positions.Span) {
                     position.x++;
@@ -176,12 +185,13 @@ namespace Tests.Systems
         
         public TestGroup() : base("TestGroup") { }
 
-        protected override void OnUpdateGroupBegin(Tick tick) {
+        protected override void OnUpdateGroupBegin() {
             AreEqual(1, SystemRoot.Stores.Count);
+            AreEqual(42, Tick.deltaTime);
             beginCalled++;
         }
 
-        protected override void OnUpdateGroupEnd(Tick tick) {
+        protected override void OnUpdateGroupEnd() {
             AreEqual(1, SystemRoot.Stores.Count);
             endCalled++;
         }
@@ -194,8 +204,8 @@ namespace Tests.Systems
     public class MySystem2 : BaseSystem {
         public      override string Name => "MySystem2 - custom name";
         
-        protected   override void   OnUpdateGroupBegin(Tick tick) { }
-        protected   override void   OnUpdateGroupEnd(Tick tick)   { }
-        public      override void   Update(Tick tick)             { }
+        protected   override void   OnUpdateGroupBegin() { }
+        protected   override void   OnUpdateGroupEnd()   { }
+        public      override void   Update()             { }
     }
 }
