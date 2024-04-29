@@ -5,7 +5,7 @@ using Tests.Utils;
 
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.System {
+namespace Tests.ECS.Systems {
 
 public static class Test_Query
 {

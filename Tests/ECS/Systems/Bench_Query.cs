@@ -9,7 +9,7 @@ using System.Runtime.Intrinsics;
 #endif
 
 // ReSharper disable ConvertToConstant.Local
-namespace Tests.ECS.System {
+namespace Tests.ECS.Systems {
 
 // ReSharper disable InconsistentNaming
 public static class Bench_Query

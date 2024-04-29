@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Tests.Utils;
 
 // ReSharper disable InconsistentNaming
-namespace Tests.ECS.System {
+namespace Tests.ECS.Systems {
 
 public static class Test_ChunkEntities
 {

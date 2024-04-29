@@ -7,8 +7,7 @@ using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
-// ReSharper disable once CheckNamespace
-namespace Tests.Systems
+namespace Tests.ECS.Systems
 {
     // ReSharper disable once InconsistentNaming
     public static class Test_SystemGroup

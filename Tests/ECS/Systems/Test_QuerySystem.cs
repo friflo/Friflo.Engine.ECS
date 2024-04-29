@@ -5,11 +5,9 @@
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
-using Tests.ECS;
 using static NUnit.Framework.Assert;
 
-// ReSharper disable once CheckNamespace
-namespace Tests.Systems
+namespace Tests.ECS.Systems
 {
     // ReSharper disable once InconsistentNaming
     public static class Test_QuerySystem
@@ -28,6 +26,23 @@ namespace Tests.Systems
             AreEqual("TestQuerySystem3 - [Position, Scale3, Rotation]",                             query3.ToString());
             AreEqual("TestQuerySystem4 - [Position, Scale3, Rotation, MyComponent5]",               query4.ToString());
             AreEqual("TestQuerySystem5 - [Position, Scale3, Rotation, MyComponent5, MyComponent6]", query5.ToString());
+        }
+        
+        [Test]
+        public static void Test_QuerySystem_Disabled()
+        {
+            var store   = new EntityStore(PidType.UsePidAsId);
+            var entity  = store.CreateEntity(new Position(1,2,3));
+            var query1  = new TestSystem1();
+            var root    = new SystemRoot(store);
+            root.AddSystem(query1);
+            
+            root.Update(42);
+            AreEqual(new Position(2,2,3), entity.Position);
+            
+            query1.Enabled = false;
+            root.Update(42);
+            AreEqual(new Position(2,2,3), entity.Position);
         }
     }
     
