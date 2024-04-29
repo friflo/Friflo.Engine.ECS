@@ -22,7 +22,7 @@ namespace Tests.Systems
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
             root.AddSystem(new TestSystem1());
-            root.Update(42);
+            root.Update(1 / 60); 
             AreEqual(new Position(1,0,0), entity.Position);
         }
         
@@ -52,7 +52,7 @@ namespace Tests.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            root.Update(42);
+            root.Update(new Tick(42)); // use Tick constructor to ensure its available
             
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);
