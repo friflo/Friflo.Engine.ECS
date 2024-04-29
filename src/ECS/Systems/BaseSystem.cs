@@ -202,6 +202,8 @@ namespace Friflo.Engine.ECS.Systems
         public  SystemRoot          SystemRoot      => system.SystemRoot;
         public  SystemGroup         ParentGroup     => system.ParentGroup;
 
+        public override string      ToString()      => $"Enabled: {Enabled}  Id: {Id}";
+
         [Browse(Never)] private readonly BaseSystem   system;
         
         internal View(BaseSystem system) {
