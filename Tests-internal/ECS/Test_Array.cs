@@ -55,6 +55,7 @@ namespace Tests.Systems
             {
                 IEnumerable enumerable = array;
                 IEnumerator enumerator = enumerable.GetEnumerator();
+                using var enumerator1 = enumerator as IDisposable;
                 int count = 0;
                 while (enumerator.MoveNext()) {
                     count++;
