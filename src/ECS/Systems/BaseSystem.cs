@@ -16,15 +16,15 @@ namespace Friflo.Engine.ECS.Systems
     public abstract class BaseSystem
     {
     #region properties
-                public virtual  string          Name        => systemName;
-                public          SystemRoot      SystemRoot  => systemRoot;
-                public          SystemGroup     ParentGroup => parentGroup;
-        [Ignore]public          bool            Enabled     { get => enabled;       set => enabled = value; }
-                public          int             Id          => id;
+        [Browse(Never)]         public virtual  string          Name        => systemName;
+        [Browse(Never)]         public          SystemRoot      SystemRoot  => systemRoot;
+        [Browse(Never)]         public          SystemGroup     ParentGroup => parentGroup;
+        [Browse(Never)][Ignore] public          bool            Enabled     { get => enabled;       set => enabled = value; }
+        [Browse(Never)]         public          int             Id          => id;
         #endregion
             
     #region fields
-        [Ignore]                    public              Tick        Tick;
+        [Ignore]    [Browse(Never)] public              Tick        Tick;
         [Serialize] [Browse(Never)] internal            int         id;
         [Serialize] [Browse(Never)] private             bool        enabled = true;
                     [Browse(Never)] private readonly    string      systemName;
@@ -191,5 +191,21 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
         #endregion
+    }
+    
+    internal class View
+    {
+        public  Tick                Tick            => system.Tick;
+        public  int                 Id              => system.Id;
+        public  bool                Enabled         => system.Enabled;
+        public  string              Name            => system.Name;
+        public  SystemRoot          SystemRoot      => system.SystemRoot;
+        public  SystemGroup         SystemGroup     => system.ParentGroup;
+
+        [Browse(Never)] private readonly BaseSystem   system;
+        
+        internal View(BaseSystem system) {
+            this.system = system;
+        }
     }
 }

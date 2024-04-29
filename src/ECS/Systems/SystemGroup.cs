@@ -16,9 +16,10 @@ namespace Friflo.Engine.ECS.Systems
     public class SystemGroup : BaseSystem
     {
     #region properties
-        public override string              Name            => name;
-        public          Array<BaseSystem>   ChildSystems    => childSystems;
-        public override string              ToString()      => $"Group '{name}' systems: {childSystems.Count}";
+        [Browse(Never)] public override string              Name            => name;
+                        public          Array<BaseSystem>   ChildSystems    => childSystems;
+                        internal        View                System          => view ??= new View(this); 
+                        public override string              ToString()      => $"Group '{name}' systems: {childSystems.Count}";
         #endregion
         
     #region fields
@@ -26,6 +27,7 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)] private     string                  name;
         [Browse(Never)] internal    Array<BaseSystem>       childSystems;
         [Browse(Never)] internal    Array<CommandBuffer>    commandBuffers;
+        [Browse(Never)] private     View                    view;
         #endregion
         
     #region constructor

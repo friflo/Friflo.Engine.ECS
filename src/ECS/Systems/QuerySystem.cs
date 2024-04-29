@@ -16,19 +16,20 @@ namespace Friflo.Engine.ECS.Systems
     public abstract class QuerySystem : BaseSystem
     {
     #region properties
-                        protected       QueryFilter             Filter          => filter;
+        [Browse(Never)] protected       QueryFilter             Filter          => filter;
         [Browse(Never)] public          int                     EntityCount     => GetEntityCount();
         [Browse(Never)] public          ComponentTypes          ComponentTypes  => componentTypes;
                         public          Array<ArchetypeQuery>   Queries         => queries;
                         public          CommandBuffer           CommandBuffer   => commandBuffer;
+                        internal        View                    System          => view ??= new View(this);              
         #endregion
         
     #region fields
-
         [Browse(Never)] private  readonly   QueryFilter             filter  = new ();
         [Browse(Never)] private  readonly   ComponentTypes          componentTypes;
         [Browse(Never)] private             Array<ArchetypeQuery>   queries;
         [Browse(Never)] private             CommandBuffer           commandBuffer;
+        [Browse(Never)] private             View                    view;
         #endregion
         
     #region constructor

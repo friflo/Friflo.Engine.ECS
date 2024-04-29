@@ -66,7 +66,7 @@ namespace Tests.Systems
             var store       = new EntityStore(PidType.UsePidAsId);
             var entity      = store.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot(store);    // create SystemRoot with store
-            var testGroup       = new TestGroup();
+            var testGroup   = new TestGroup();
             root.AddSystem(testGroup);
             var testSystem1 = new TestSystem1();
             AreEqual("TestSystem1 - Components: [Position]", testSystem1.ToString());
