@@ -16,6 +16,12 @@ namespace Tests.Systems
     public static class Test_SystemRoot
     {
         [Test]
+        public static void Test_Systems_Tick() {
+            Tick tick = 42;
+            AreEqual("deltaTime: 42", tick.ToString());
+        }
+            
+        [Test]
         public static void Test_SystemRoot_Add_System_minimal()
         {
             var store   = new EntityStore(PidType.UsePidAsId);
