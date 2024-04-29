@@ -91,12 +91,7 @@ namespace Friflo.Engine.ECS.Systems
             return count;
         }
         
-        internal string GetString(ArchetypeQuery query) {
-            if (query == null) {
-                return $"{Name} - {ComponentTypes}";
-            }
-            return $"{Name} - {ComponentTypes}  entities: {query.Count}";
-        }
+        internal string GetString() => $"{Name} - {ComponentTypes}";
         #endregion
     }
 }

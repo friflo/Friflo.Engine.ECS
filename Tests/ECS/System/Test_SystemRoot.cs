@@ -30,16 +30,21 @@ namespace Tests.Systems
         public static void Test_SystemRoot_Add_Group()
         {
             var store       = new EntityStore(PidType.UsePidAsId);
-            var root        = new SystemRoot("root");
-            var group1      = new SystemGroup("group1");
+            var root        = new SystemRoot("Systems");
+            var group1      = new SystemGroup("Group1");
             var testGroup   = new TestGroup();
+            
             IsNull(root.FindGroup("group1"));
             IsNull(root.FindGroup("TestGroup"));
             root.AddSystem(group1);
             root.AddSystem(testGroup);
             
+            AreEqual("Root 'Systems' systems: 2", root.ToString());
+            AreEqual("Group 'Group1' systems: 0", group1.ToString());
+            AreEqual("Group 'TestGroup' systems: 0", testGroup.ToString());
+            
             AreEqual(2,     root.RootSystems.Count);
-            AreSame(group1, root.FindGroup("group1"));
+            AreSame(group1, root.FindGroup("Group1"));
             AreSame(testGroup, root.FindGroup("TestGroup"));
             
             AreEqual(2, root.ChildSystems.Count);
@@ -58,9 +63,10 @@ namespace Tests.Systems
             var store       = new EntityStore(PidType.UsePidAsId);
             var entity      = store.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot(store);    // create SystemRoot with store
-            var group       = new SystemGroup("group");
+            var group       = new SystemGroup("Group");
             root.AddSystem(group);
             var testSystem1 = new TestSystem1();
+            AreEqual("TestSystem1 - Components: [Position]", testSystem1.ToString());
             AreEqual("Components: [Position]", testSystem1.ComponentTypes.ToString());
             AreEqual(0,     testSystem1.Queries.Count);
             group.AddSystem(testSystem1);
@@ -78,8 +84,8 @@ namespace Tests.Systems
             var store1      = new EntityStore(PidType.UsePidAsId);
             var store2      = new EntityStore(PidType.UsePidAsId);
             store1.CreateEntity(new Position(1,2,3));
-            var root        = new SystemRoot("root");   // create SystemRoot without store
-            var group       = new SystemGroup("group");
+            var root        = new SystemRoot("Systems");   // create SystemRoot without store
+            var group       = new SystemGroup("Group");
             var testSystem1 = new TestSystem1();
             group.AddSystem(testSystem1);
             root.AddSystem(group);
@@ -130,7 +136,7 @@ namespace Tests.Systems
         {
             int count   = 10;   // 100_000_000 ~ #PC: 3337 ms
             var store   = new EntityStore(PidType.UsePidAsId);
-            var root    = new SystemRoot("root");
+            var root    = new SystemRoot("Systems");
             root.AddSystem(new TestSystem2());
             root.AddStore(store);
 

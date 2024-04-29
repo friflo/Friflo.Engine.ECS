@@ -16,11 +16,11 @@ namespace Tests.Systems
         [Test]
         public static void Test_SystemGroup_MoveTo()
         {
-            var baseGroup   = new SystemRoot("base");
+            var baseGroup   = new SystemRoot("Systems");
             int count = 0;
-            var group1      = new SystemGroup("group1");
-            var group2      = new SystemGroup("group2");
-            var group3      = new SystemGroup("group3");
+            var group1      = new SystemGroup("Group1");
+            var group2      = new SystemGroup("Group2");
+            var group3      = new SystemGroup("Group3");
             baseGroup.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
@@ -76,8 +76,8 @@ namespace Tests.Systems
         [Test]
         public static void Test_SystemGroup_MoveTo_exception()
         {
-            var baseGroup   = new SystemGroup("base");
-            var group1      = new SystemGroup("group1");
+            var baseGroup   = new SystemGroup("Base");
+            var group1      = new SystemGroup("Group1");
             baseGroup.AddSystem(group1);
             Exception e = Throws<ArgumentException>(() => {
                 group1.MoveSystemTo(baseGroup, -2);
@@ -89,7 +89,7 @@ namespace Tests.Systems
             });
             AreEqual("invalid index: 2", e!.Message);
             
-            var group2      = new SystemGroup("group2");
+            var group2      = new SystemGroup("Group2");
             e = Throws<InvalidOperationException>(() => {
                 group2.MoveSystemTo(baseGroup, 1);
             });
@@ -99,7 +99,7 @@ namespace Tests.Systems
         [Test]
         public static void Test_SystemGroup_CastSystemChanged()
         {
-            var group       = new SystemGroup("base");
+            var group       = new SystemGroup("Base");
             var testSystem1 = new TestSystem1();
             group.AddSystem(testSystem1);
             

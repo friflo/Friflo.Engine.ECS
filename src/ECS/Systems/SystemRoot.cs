@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS.Systems
     #region properties
         public  Array<EntityStore>              Stores      => stores;
         public  IReadOnlyCollection<BaseSystem> RootSystems => systemMap.Values;
-        public override string                  ToString()  => $"Root: {Name}  - systems: {systemMap.Count}";
+        public override string                  ToString()  => $"Root '{Name}' systems: {systemMap.Count}";
         #endregion
 
     #region internal fields

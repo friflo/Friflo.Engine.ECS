@@ -13,7 +13,7 @@ namespace Friflo.Engine.ECS.Systems
         where T1 : struct, IComponent
     {
         protected       ArchetypeQuery<T1>  Query       => query;
-        public override string              ToString()  => GetString(query);
+        public override string              ToString()  => GetString();
 
         #region fields
         [Browse(Never)] private     ArchetypeQuery<T1>    query;
