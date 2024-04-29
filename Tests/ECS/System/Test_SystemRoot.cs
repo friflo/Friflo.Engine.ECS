@@ -22,7 +22,7 @@ namespace Tests.Systems
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
             root.AddSystem(new TestSystem1());
-            root.Update(new Tick(42));
+            root.Update(42);
             AreEqual(new Position(1,0,0), entity.Position);
         }
         
@@ -52,7 +52,7 @@ namespace Tests.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            root.Update(new Tick(42));
+            root.Update(42);
             
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);
@@ -75,7 +75,7 @@ namespace Tests.Systems
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
             
-            root.Update(new Tick(42));
+            root.Update(42);
             
             AreEqual(new Scale3(4,5,6), entity.Scale3);
             AreEqual(0, testSystem1.Tick.deltaTime);
@@ -101,7 +101,7 @@ namespace Tests.Systems
             AreEqual(1, root.Stores.Count);
             AreEqual(1, testSystem1.Queries.Count);
             AreEqual(1, testSystem1.EntityCount);
-            root.Update(new Tick(42));
+            root.Update(42);
             
             root.AddStore(store2);                      // add store after system setup
             AreEqual(2, root.Stores.Count);

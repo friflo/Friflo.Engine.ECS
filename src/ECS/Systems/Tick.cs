@@ -4,15 +4,18 @@
 // Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable ConvertToPrimaryConstructor
 namespace Friflo.Engine.ECS.Systems
 {
    
     // TODO add array to add and get custom types by generic type T
-    public struct Tick
+    public readonly struct Tick
     {
-        public float deltaTime;
+        public readonly float deltaTime;
 
         public override string ToString() => $"deltaTime: {deltaTime}";
+        
+        public static implicit operator Tick(float deltaTime) => new Tick(deltaTime);
         
         public Tick(float deltaTime) {
             this.deltaTime = deltaTime;
