@@ -40,9 +40,9 @@ namespace Tests.Systems
             root.AddSystem(group1);
             root.AddSystem(testGroup);
             
-            AreEqual("Root 'Systems' systems: 2", root.ToString());
-            AreEqual("Group 'Group1' systems: 0", group1.ToString());
-            AreEqual("Group 'TestGroup' systems: 0", testGroup.ToString());
+            AreEqual("'Systems' Root - systems: 2", root.ToString());
+            AreEqual("'Group1' Group - systems: 0", group1.ToString());
+            AreEqual("'TestGroup' Group - systems: 0", testGroup.ToString());
             
             AreEqual(2,     root.RootSystems.Count);
             AreSame(group1, root.FindGroup("Group1"));
