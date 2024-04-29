@@ -22,7 +22,7 @@ namespace Tests.Systems
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
             root.AddSystem(new TestSystem1());
-            root.Update(1 / 60); 
+            root.Update(42); 
             AreEqual(new Position(1,0,0), entity.Position);
         }
         
