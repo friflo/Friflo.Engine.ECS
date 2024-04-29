@@ -86,7 +86,7 @@ internal readonly struct SignatureIndexes
         return -1;  // unreachable - all valid cases are covered
     }
     
-    internal readonly string GetString (string prefix) {
+    internal string GetString (string prefix) {
         var sb = new StringBuilder();
         if (prefix != null) {
             sb.Append(prefix);

@@ -15,7 +15,7 @@ namespace Friflo.Engine.ECS.Systems
         where T2 : struct, IComponent
     {
         protected       ArchetypeQuery<T1, T2>  Query       => query;
-        public override string                  ToString()  => GetString();
+        public override string                  ToString()  => GetString(Signature.Get<T1,T2>().signatureIndexes);
                         
     #region fields
         [Browse(Never)] private     ArchetypeQuery<T1, T2>    query;

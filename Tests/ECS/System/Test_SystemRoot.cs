@@ -73,7 +73,7 @@ namespace Tests.Systems
             var testGroup   = new TestGroup();
             root.AddSystem(testGroup);
             var testSystem1 = new TestSystem1();
-            AreEqual("TestSystem1 - Components: [Position]", testSystem1.ToString());
+            AreEqual("TestSystem1 - [Position]", testSystem1.ToString());
             AreEqual("Components: [Position]", testSystem1.ComponentTypes.ToString());
             AreEqual(0,     testSystem1.Queries.Count);
             testGroup.AddSystem(testSystem1);

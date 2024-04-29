@@ -14,8 +14,8 @@ namespace Tests.Systems
     // ReSharper disable once InconsistentNaming
     public static class Test_QuerySystem
     {
-        // [Test]
-        public static void Test_Systems_Tick()
+        [Test]
+        public static void Test_QuerySystem_ToString()
         {
             var query1 = new TestQuerySystem1();
             var query2 = new TestQuerySystem2();
@@ -23,11 +23,11 @@ namespace Tests.Systems
             var query4 = new TestQuerySystem4();
             var query5 = new TestQuerySystem5();
             
-            AreEqual("TestQuerySystem1 - Components: [Position]", query1.ToString());
-            AreEqual("TestQuerySystem2 - Components: [Position, Scale3]", query2.ToString());
-            AreEqual("TestQuerySystem3 - Components: [Position, Scale3, Rotation]", query3.ToString());
-            AreEqual("TestQuerySystem4 - Components: [Position, Scale3, Rotation, MyComponent5]", query4.ToString());
-            AreEqual("TestQuerySystem5 - Components: [Position, Scale3, Rotation, MyComponent5, MyComponent6]", query5.ToString());
+            AreEqual("TestQuerySystem1 - [Position]",                                               query1.ToString());
+            AreEqual("TestQuerySystem2 - [Position, Scale3]",                                       query2.ToString());
+            AreEqual("TestQuerySystem3 - [Position, Scale3, Rotation]",                             query3.ToString());
+            AreEqual("TestQuerySystem4 - [Position, Scale3, Rotation, MyComponent5]",               query4.ToString());
+            AreEqual("TestQuerySystem5 - [Position, Scale3, Rotation, MyComponent5, MyComponent6]", query5.ToString());
         }
     }
     

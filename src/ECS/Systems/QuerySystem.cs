@@ -92,7 +92,7 @@ namespace Friflo.Engine.ECS.Systems
             return count;
         }
         
-        internal string GetString() => $"{Name} - {ComponentTypes}";
+        internal string GetString(in SignatureIndexes signature) => $"{Name} - {signature.GetString(null)}";
         #endregion
     }
 }
