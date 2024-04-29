@@ -61,6 +61,7 @@ namespace Tests.Systems
             var group       = new SystemGroup("group");
             root.AddSystem(group);
             var testSystem1 = new TestSystem1();
+            AreEqual("Components: [Position]", testSystem1.ComponentTypes.ToString());
             AreEqual(0,     testSystem1.Queries.Count);
             group.AddSystem(testSystem1);
             AreEqual(1,     testSystem1.Queries.Count);

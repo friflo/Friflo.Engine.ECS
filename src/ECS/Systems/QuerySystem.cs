@@ -6,6 +6,8 @@ using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
 
+// ReSharper disable ConvertToAutoPropertyWithPrivateSetter
+// ReSharper disable UseCollectionExpression
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable once CheckNamespace
