@@ -27,6 +27,8 @@ namespace Tests.Systems
             AreEqual(new Tick(),        view.Tick);
             AreSame (root,              view.SystemRoot);
             AreSame (root,              view.ParentGroup);
+            
+            NotNull(root.System);
         }
         
         
