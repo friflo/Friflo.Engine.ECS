@@ -114,5 +114,61 @@ namespace Tests.ECS.Systems
             
             AreEqual(1, count);
         }
+        
+        [Test]
+        public static void Test_SystemRoot_exceptions_add_remove()
+        {
+            var group = new SystemGroup("Group1");
+            Throws<ArgumentNullException>(() => {
+                group.AddSystem(null);
+            });
+            
+            Exception e = Throws<ArgumentException>(() => {
+                group.AddSystem(new SystemRoot("Root"));
+            });
+            AreEqual("SystemRoot must not be a child system (Parameter 'system')", e!.Message);
+            
+            var testSystem = new TestSystem1();
+            group.AddSystem(testSystem);
+            e = Throws<ArgumentException>(() => {
+                group.AddSystem(testSystem);
+            });
+            AreEqual("system already added to Group 'Group1' (Parameter 'system')", e!.Message);
+            
+            Throws<ArgumentNullException>(() => {
+                group.RemoveSystem(null);
+            });
+            
+            var group2 = new SystemGroup("Group2");
+            e = Throws<ArgumentException>(() => {
+                group2.RemoveSystem(testSystem);
+            });
+            AreEqual("system not child of Group 'Group2' (Parameter 'system')", e!.Message);
+        }
+        
+        [Test]
+        public static void Test_SystemRoot_exceptions_name()
+        {
+            Exception e = Throws<ArgumentException>(() => {
+                _ = new SystemRoot(null);
+            });
+            AreEqual("group name must not be null or empty", e!.Message);
+            
+            e = Throws<ArgumentException>(() => {
+                _ = new SystemRoot("");
+            });
+            AreEqual("group name must not be null or empty", e!.Message);
+            
+            var group = new SystemGroup("Test");
+            e = Throws<ArgumentException>(() => {
+                group.SetName(null);
+            });
+            AreEqual("group name must not be null or empty", e!.Message);
+            
+            e = Throws<ArgumentException>(() => {
+                group.SetName("");
+            });
+            AreEqual("group name must not be null or empty", e!.Message);   
+        }
     }
 }

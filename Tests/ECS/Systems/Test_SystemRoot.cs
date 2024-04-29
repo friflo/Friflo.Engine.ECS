@@ -16,7 +16,7 @@ namespace Tests.ECS.Systems
     public static class Test_SystemRoot
     {
         [Test]
-        public static void Test_Systems_Tick() {
+        public static void Test_SystemRoot_Tick() {
             Tick tick = 42;
             AreEqual("deltaTime: 42", tick.ToString());
         }
@@ -124,7 +124,7 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_System_Name()
+        public static void Test_SystemRoot_Name()
         {
             var group = new SystemGroup("TestGroup");
             AreEqual("TestGroup", group.Name);
@@ -140,6 +140,18 @@ namespace Tests.ECS.Systems
             
             var mySystem2 = new MySystem2();
             AreEqual("MySystem2 - custom name", mySystem2.Name);
+        }
+        
+        [Test]
+        public static void Test_SystemRoot_exceptions()
+        {
+            var group = new SystemRoot("Systems");
+            Throws<ArgumentNullException>(() => {
+                group.AddStore(null);
+            });
+            Throws<ArgumentNullException>(() => {
+                group.RemoveStore(null);
+            });
         }
         
         [Test]
