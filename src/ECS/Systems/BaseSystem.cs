@@ -92,7 +92,7 @@ namespace Friflo.Engine.ECS.Systems
         public int MoveSystemTo(SystemGroup systemGroup, int index)
         {
             if (systemGroup == null)                                    throw new ArgumentNullException(nameof(systemGroup));
-            if (parentGroup == null)                                    throw new InvalidOperationException($"Group: {Name} has no parent");
+            if (parentGroup == null)                                    throw new InvalidOperationException($"Group '{Name}' has no parent");
             if (index < -1 || index > systemGroup.childSystems.Count)   throw new ArgumentException($"invalid index: {index}");
             if (parentGroup == systemGroup) {
                 var oldIndex = systemGroup.childSystems.Remove(this);

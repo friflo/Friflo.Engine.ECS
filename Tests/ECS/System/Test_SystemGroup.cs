@@ -24,12 +24,12 @@ namespace Tests.Systems
             baseGroup.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
-                    case 0: AreEqual("Add - Group: group1", str);   return;
-                    case 1: AreEqual("Add - Group: group2", str);   return;
-                    case 2: AreEqual("Add - Group: group3", str);   return;
-                    case 3: AreEqual("Move - Group: group1", str);  return;
-                    case 4: AreEqual("Move - Group: group2", str);  return;
-                    case 5: AreEqual("Move - Group: group1", str);  return;
+                    case 0: AreEqual("Add - Group 'Group1'", str);   return;
+                    case 1: AreEqual("Add - Group 'Group2'", str);   return;
+                    case 2: AreEqual("Add - Group 'Group3'", str);   return;
+                    case 3: AreEqual("Move - Group 'Group1'", str);  return;
+                    case 4: AreEqual("Move - Group 'Group2'", str);  return;
+                    case 5: AreEqual("Move - Group 'Group1'", str);  return;
                 }
             };
             baseGroup.AddSystem(group1);
@@ -56,8 +56,8 @@ namespace Tests.Systems
             root.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
-                    case 0: AreEqual("Add - System: TestSystem1",       str);   return;
-                    case 1: AreEqual("Remove - System: TestSystem1",    str);   return;
+                    case 0: AreEqual("Add - System 'TestSystem1'",       str);   return;
+                    case 1: AreEqual("Remove - System 'TestSystem1'",    str);   return;
                 }
             };
             root.AddSystem(testSystem1);
@@ -93,7 +93,7 @@ namespace Tests.Systems
             e = Throws<InvalidOperationException>(() => {
                 group2.MoveSystemTo(baseGroup, 1);
             });
-            AreEqual("Group: group2 has no parent", e!.Message);
+            AreEqual("Group 'Group2' has no parent", e!.Message);
         }
         
         [Test]
@@ -107,7 +107,7 @@ namespace Tests.Systems
             group.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
-                    case 0: AreEqual("Update - System: TestSystem1, field: enabled, value: True", str);   return;
+                    case 0: AreEqual("Update - System 'TestSystem1' field: enabled, value: True", str);   return;
                 }
             };
             testSystem1.Enabled = true;

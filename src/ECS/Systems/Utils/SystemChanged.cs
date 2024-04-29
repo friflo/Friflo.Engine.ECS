@@ -38,10 +38,11 @@ namespace Friflo.Engine.ECS.Systems
             sb.Append(action);
             sb.Append(" - ");
             sb.Append(system is SystemGroup ? "Group" : "System");
-            sb.Append(": ");
+            sb.Append(" '");
             sb.Append(system.Name);
+            sb.Append('\'');
             if (field != null) {
-                sb.Append(", field: ");
+                sb.Append(" field: ");
                 sb.Append(field);
                 sb.Append(", value: ");
                 sb.Append(value);

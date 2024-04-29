@@ -47,7 +47,7 @@ namespace Friflo.Engine.ECS.Systems
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));
             if (system is SystemRoot)       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
-            if (system.ParentGroup != null) throw new ArgumentException($"system already added to Group: {system.ParentGroup.Name}", nameof(system));
+            if (system.ParentGroup != null) throw new ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
             childSystems.Add(system);
             system.SetParentAndRoot(this);
             // Send event. See: SEND_EVENT notes
@@ -57,7 +57,7 @@ namespace Friflo.Engine.ECS.Systems
         public void RemoveSystem(BaseSystem system)
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));
-            if (system.ParentGroup != this) throw new ArgumentException($"system not child of Group: {Name}", nameof(system));
+            if (system.ParentGroup != this) throw new ArgumentException($"system not child of Group '{Name}'", nameof(system));
             
             foreach (var child in childSystems) {
                 if (child == system) {
