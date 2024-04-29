@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS.Systems
     #region properties
         public override string              Name            => name;
         public          Array<BaseSystem>   ChildSystems    => childSystems;
-        public override string              ToString()      => $"{name} Group - systems: {childSystems.Count}";
+        public override string              ToString()      => $"Group: {name}  - systems: {childSystems.Count}";
         #endregion
         
     #region fields
