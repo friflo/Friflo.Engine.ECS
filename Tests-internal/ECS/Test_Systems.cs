@@ -65,6 +65,22 @@ namespace Tests.Systems
             AreEqual(2, group2.Id);
             AreEqual(3, querySystem.Id);
         }
+        
+        [Test]
+        public static void Test_Systems_constructor()
+        {
+            var store = new EntityStore(PidType.UsePidAsId);
+            var root  = new SystemRoot(store, "Systems");
+            var child = new SystemGroup();
+            child.SetName("Child");
+            
+            root.AddSystem(child);
+            AreSame(store, child.CommandBuffers[0].EntityStore);
+            
+            var testQuerySystem = new TestQuerySystem();
+            child.AddSystem(testQuerySystem);
+            AreSame(testQuerySystem, child.ChildSystems[0]);
+        }
     }
     
     class TestQuerySystem : QuerySystem<Position> {

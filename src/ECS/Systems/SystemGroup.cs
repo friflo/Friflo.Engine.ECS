@@ -32,6 +32,12 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region constructor
+        /// <summary> Default constructor required to create SystemGroup for deserialization </summary>
+        internal SystemGroup() {
+            childSystems    = new Array<BaseSystem>(Array.Empty<BaseSystem>());
+            commandBuffers  = new Array<CommandBuffer>(Array.Empty<CommandBuffer>());
+        } 
+        
         public SystemGroup(string name) {
             if (name is null or "") throw new ArgumentException("group name must not be null or empty");
             this.name       = name;
