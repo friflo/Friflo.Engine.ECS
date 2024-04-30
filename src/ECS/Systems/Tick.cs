@@ -5,9 +5,8 @@
 
 // ReSharper disable once CheckNamespace
 // ReSharper disable ConvertToPrimaryConstructor
-namespace Friflo.Engine.ECS.Systems
+namespace Friflo.Engine.ECS
 {
-   
     // May add an array or field to add and get custom types by generic type T
     public readonly struct Tick
     {
