@@ -39,35 +39,9 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region system events
-        public event Action<SystemChanged>  OnSystemChanged;
-
         public void CastSystemUpdate(string field, object value)
         {
-            var change  = new SystemChanged(SystemChangedAction.Update, this, field, value);
-            var root    = systemRoot;
-            if (root != parentGroup) {
-                parentGroup.OnSystemChanged?.Invoke(change);
-            }
-            root?.OnSystemChanged?.Invoke(change);
-        }
-        
-        internal void CastSystemChanged(SystemChangedAction action)
-        {
-            var change  = new SystemChanged(action, this, null, null);
-            var root    = systemRoot;
-            if (root != parentGroup) {
-                parentGroup.OnSystemChanged?.Invoke(change);
-            }
-            root?.OnSystemChanged?.Invoke(change);
-        }
-        
-        internal void CastSystemRemoved(SystemRoot oldRoot, SystemGroup oldParent)
-        {
-            var change  = new SystemChanged(SystemChangedAction.Remove, this, null, null);
-            if (oldRoot != oldParent) {
-                oldParent.OnSystemChanged?.Invoke(change);
-            }
-            oldRoot?.OnSystemChanged?.Invoke(change);
+            SystemGroup.CastSystemUpdate(this, field, value);
         }
         #endregion
 
@@ -106,7 +80,7 @@ namespace Friflo.Engine.ECS.Systems
                     systemGroup.childSystems.InsertAt(index, this);
                 }
                 // Send event. See: SEND_EVENT notes
-                CastSystemChanged(SystemChangedAction.Move); 
+                SystemGroup.CastSystemChanged(this, SystemChangedAction.Move); 
                 return index;
             }
             if (systemRoot == systemGroup.systemRoot) {
@@ -119,7 +93,7 @@ namespace Friflo.Engine.ECS.Systems
                 }
                 parentGroup = systemGroup;
                 // Send event. See: SEND_EVENT notes
-                CastSystemChanged(SystemChangedAction.Move);
+                SystemGroup.CastSystemChanged(this, SystemChangedAction.Move);
                 return index;
             }
             throw new NotImplementedException();
