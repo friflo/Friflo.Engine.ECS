@@ -33,7 +33,8 @@ namespace Friflo.Engine.ECS.Systems
             this.value  = value;
         }
         
-        private string GetString() {
+        private string GetString()
+        {
             var sb = new StringBuilder();
             sb.Append(action);
             sb.Append(" - ");
@@ -41,11 +42,34 @@ namespace Friflo.Engine.ECS.Systems
             sb.Append(" '");
             sb.Append(system.Name);
             sb.Append('\'');
-            if (field != null) {
-                sb.Append(" field: ");
-                sb.Append(field);
-                sb.Append(", value: ");
-                sb.Append(value);
+            switch (action) {
+                case SystemChangedAction.Add:
+                    sb.Append(" to: '");
+                    sb.Append(system.ParentGroup.Name);
+                    sb.Append('\'');
+                    break;
+                case SystemChangedAction.Remove:
+                    sb.Append(" from: '");
+                    var oldParent = (SystemGroup)value;
+                    sb.Append(oldParent.Name);
+                    sb.Append('\'');
+                    break;
+                case  SystemChangedAction.Move:
+                    sb.Append(" from: '");
+                    oldParent = (SystemGroup)value;
+                    sb.Append(oldParent.Name);
+                    sb.Append("' to: '");
+                    sb.Append(system.ParentGroup.Name);
+                    sb.Append('\'');
+                    break;
+                case SystemChangedAction.Update:
+                    if (field != null) {
+                        sb.Append(" field: ");
+                        sb.Append(field);
+                        sb.Append(", value: ");
+                        sb.Append(value);
+                    }
+                    break;
             }
             return sb.ToString();
         }

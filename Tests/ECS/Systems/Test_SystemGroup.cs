@@ -16,48 +16,68 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemGroup_MoveTo()
         {
-            var baseGroup   = new SystemRoot("Systems");
-            int count = 0;
-            var group1      = new SystemGroup("Group1");
-            var group2      = new SystemGroup("Group2");
-            var group3      = new SystemGroup("Group3");
-            baseGroup.OnSystemChanged += changed => {
+            int changesRoot     = 0;
+            int changesGroup1   = 0;
+            int changesGroup2   = 0;
+            int changesGroup3   = 0;
+            var root    = new SystemRoot("Systems");
+            var group1  = new SystemGroup("Group1");
+            var group2  = new SystemGroup("Group2");
+            var group3  = new SystemGroup("Group3");
+            root.OnSystemChanged += changed => {
                 var str = changed.ToString();
-                switch (count++) {
-                    case 0: AreEqual("Add - Group 'Group1'", str);   return;
-                    case 1: AreEqual("Add - Group 'Group2'", str);   return;
-                    case 2: AreEqual("Add - Group 'Group3'", str);   return;
-                    case 3: AreEqual("Move - Group 'Group1'", str);  return;
-                    case 4: AreEqual("Move - Group 'Group2'", str);  return;
-                    case 5: AreEqual("Move - Group 'Group1'", str);  return;
+                switch (changesRoot++) {
+                    case 0: AreEqual("Add - Group 'Group1' to: 'Systems'",                  str);   return;
+                    case 1: AreEqual("Add - Group 'Group2' to: 'Systems'",                  str);   return;
+                    case 2: AreEqual("Add - Group 'Group3' to: 'Systems'",                  str);   return;
+                    case 3: AreEqual("Move - Group 'Group1' from: 'Systems' to: 'Group3'",  str);   return;
+                    case 4: AreEqual("Move - Group 'Group2' from: 'Systems' to: 'Group3'",  str);   return;
+                    case 5: AreEqual("Move - Group 'Group1' from: 'Group3' to: 'Group3'",   str);   return;
                 }
             };
-            baseGroup.AddSystem(group1);
-            baseGroup.AddSystem(group2);
-            baseGroup.AddSystem(group3);
+            group1.OnSystemChanged += _ => {
+                changesGroup1++;
+            };
+            group2.OnSystemChanged += _ => {
+                changesGroup2++;
+            };
+            group3.OnSystemChanged += changed => {
+                var str = changed.ToString();
+                switch (changesGroup3++) {
+                    case 0: AreEqual("Move - Group 'Group1' from: 'Systems' to: 'Group3'",  str);   return;
+                    case 1: AreEqual("Move - Group 'Group2' from: 'Systems' to: 'Group3'",  str);   return;
+                    case 2: AreEqual("Move - Group 'Group1' from: 'Group3' to: 'Group3'",   str);   return;
+                }
+            };
+            root.AddSystem(group1);
+            root.AddSystem(group2);
+            root.AddSystem(group3);
             
             AreEqual(0, group1.MoveSystemTo(group3, -1)); // -1  => add at tail
             AreEqual(1, group2.MoveSystemTo(group3,  1));
             AreEqual(1, group1.MoveSystemTo(group3,  2)); // returned index != passed index
 
-            AreEqual(1, baseGroup.ChildSystems.Count);
+            AreEqual(1, root.ChildSystems.Count);
             AreEqual(2, group3.ChildSystems.Count);
             
-            AreEqual(6, count);
+            AreEqual(6, changesRoot);
+            AreEqual(0, changesGroup1);
+            AreEqual(0, changesGroup2);
+            AreEqual(3, changesGroup3);
         }
         
         [Test]
         public static void Test_SystemGroup_RemoveSystem()
         {
             var store       = new EntityStore(PidType.UsePidAsId);
-            var root        = new SystemRoot (store, "base");
+            var root        = new SystemRoot (store, "Systems");
             var testSystem1 = new TestSystem1();
             var count = 0;
             root.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
-                    case 0: AreEqual("Add - System 'TestSystem1'",       str);   return;
-                    case 1: AreEqual("Remove - System 'TestSystem1'",    str);   return;
+                    case 0: AreEqual("Add - System 'TestSystem1' to: 'Systems'",     str);      return;
+                    case 1: AreEqual("Remove - System 'TestSystem1' from: 'Systems'", str);     return;
                 }
             };
             root.AddSystem(testSystem1);
@@ -98,18 +118,23 @@ namespace Tests.ECS.Systems
             e = Throws<InvalidOperationException>(() => {
                 group2.MoveSystemTo(baseGroup, 1);
             });
-            AreEqual("Group 'Group2' has no parent", e!.Message);
+            AreEqual("System 'Group2' has no parent", e!.Message);
         }
         
         [Test]
         public static void Test_SystemGroup_CastSystemChanged()
         {
-            var group       = new SystemGroup("Base");
+            var root        = new SystemRoot("Systems");
             var testSystem1 = new TestSystem1();
-            group.AddSystem(testSystem1);
-            
+            root.AddSystem(testSystem1);
             var count = 0;
-            group.OnSystemChanged += changed => {
+            testSystem1.OnSystemChanged += changed => {
+                var str = changed.ToString();
+                switch (count++) {
+                    case 0: AreEqual("Update - System 'TestSystem1' field: enabled, value: True", str);   return;
+                }
+            };
+            root.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
                     case 0: AreEqual("Update - System 'TestSystem1' field: enabled, value: True", str);   return;
@@ -118,7 +143,7 @@ namespace Tests.ECS.Systems
             testSystem1.Enabled = true;
             testSystem1.CastSystemUpdate("enabled", true);
             
-            AreEqual(1, count);
+            AreEqual(2, count);
         }
         
         [Test]

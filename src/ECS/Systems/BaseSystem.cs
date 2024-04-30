@@ -39,9 +39,53 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region system events
+        public event Action<SystemChanged>  OnSystemChanged;
+
         public void CastSystemUpdate(string field, object value)
         {
-            SystemGroup.CastSystemUpdate(this, field, value);
+            var system  = this;
+            var change  = new SystemChanged(SystemChangedAction.Update, system, field, value);
+            var root    = system.SystemRoot;
+            if (root != system) {
+                system.OnSystemChanged?.Invoke(change);
+            }
+            root?.OnSystemChanged?.Invoke(change);
+        }
+        
+        internal static void CastSystemChanged(BaseSystem system, SystemChangedAction action)
+        {
+            var change  = new SystemChanged(action, system, null, null);
+            var root    = system.SystemRoot;
+            var parent  = system.parentGroup;
+            if (root != parent) {
+                parent.OnSystemChanged?.Invoke(change);
+            }
+            root?.OnSystemChanged?.Invoke(change);
+        }
+        
+        private static void CastSystemMoved(BaseSystem system, SystemGroup oldParent)
+        {
+            var change  = new SystemChanged(SystemChangedAction.Move, system, null, oldParent);
+            var root    = system.SystemRoot;
+            var parent  = system.parentGroup;
+            if (parent == oldParent) {
+                parent.OnSystemChanged?.Invoke(change);
+            } else {
+                oldParent.OnSystemChanged?.Invoke(change);
+                parent.   OnSystemChanged?.Invoke(change);
+            }
+            if (root != parent && root != oldParent) {
+                root?.OnSystemChanged?.Invoke(change);
+            }
+        }
+        
+        internal static void CastSystemRemoved(BaseSystem system, SystemRoot oldRoot, SystemGroup oldParent)
+        {
+            var change  = new SystemChanged(SystemChangedAction.Remove, system, null, oldParent);
+            if (oldRoot != oldParent) {
+                oldParent.OnSystemChanged?.Invoke(change);
+            }
+            oldRoot?.OnSystemChanged?.Invoke(change);
         }
         #endregion
 
@@ -65,38 +109,40 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region system: move
-        public int MoveSystemTo(SystemGroup systemGroup, int index)
+        public int MoveSystemTo(SystemGroup targetGroup, int index)
         {
-            if (systemGroup == null)                                    throw new ArgumentNullException(nameof(systemGroup));
-            if (parentGroup == null)                                    throw new InvalidOperationException($"Group '{Name}' has no parent");
-            if (index < -1 || index > systemGroup.childSystems.Count)   throw new ArgumentException($"invalid index: {index}");
-            if (parentGroup == systemGroup) {
-                var oldIndex = systemGroup.childSystems.Remove(this);
+            if (targetGroup == null)                                    throw new ArgumentNullException(nameof(targetGroup));
+            if (parentGroup == null)                                    throw new InvalidOperationException($"System '{Name}' has no parent");
+            if (index < -1 || index > targetGroup.childSystems.Count)   throw new ArgumentException($"invalid index: {index}");
+            if (parentGroup == targetGroup) {
+                // case:    Change system potion within its parent  
+                var oldIndex = targetGroup.childSystems.Remove(this);
                 if (index == -1) {
-                    systemGroup.childSystems.Add(this);
-                    index = systemGroup.childSystems.Count - 1;
+                    targetGroup.childSystems.Add(this);
+                    index = targetGroup.childSystems.Count - 1;
                 } else {
                     if (index > oldIndex) index--;
-                    systemGroup.childSystems.InsertAt(index, this);
+                    targetGroup.childSystems.InsertAt(index, this);
                 }
                 // Send event. See: SEND_EVENT notes
-                SystemGroup.CastSystemChanged(this, SystemChangedAction.Move); 
+                CastSystemMoved(this, targetGroup); 
                 return index;
             }
-            if (systemRoot == systemGroup.systemRoot) {
-                parentGroup.childSystems.Remove(this);
-                if (index == -1) {
-                    systemGroup.childSystems.Add(this);
-                    index = systemGroup.childSystems.Count - 1;
-                } else {
-                    systemGroup.childSystems.InsertAt(index, this);
-                }
-                parentGroup = systemGroup;
-                // Send event. See: SEND_EVENT notes
-                SystemGroup.CastSystemChanged(this, SystemChangedAction.Move);
-                return index;
+            if (systemRoot != targetGroup.systemRoot) {
+                throw new InvalidOperationException($"Expect {nameof(targetGroup)} == {nameof(SystemRoot)}. Was {targetGroup.Name}");
             }
-            throw new NotImplementedException();
+            var oldParent = parentGroup;
+            oldParent.childSystems.Remove(this);
+            if (index == -1) {
+                targetGroup.childSystems.Add(this);
+                index = targetGroup.childSystems.Count - 1;
+            } else {
+                targetGroup.childSystems.InsertAt(index, this);
+            }
+            parentGroup = targetGroup;
+            // Send event. See: SEND_EVENT notes
+            CastSystemMoved(this, oldParent);
+            return index;
         }
         #endregion
         

@@ -7,7 +7,7 @@
 // ReSharper disable ConvertToPrimaryConstructor
 namespace Friflo.Engine.ECS
 {
-    // May add an array or field to add and get custom types by generic type T
+    // May add an array or field to add and get custom types (a class) by generic type T
     public readonly struct Tick
     {
         public readonly float deltaTime;

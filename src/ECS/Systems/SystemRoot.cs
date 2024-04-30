@@ -36,7 +36,7 @@ namespace Friflo.Engine.ECS.Systems
             stores          = new Array<EntityStore>(Array.Empty<EntityStore>());
         }
         
-        public SystemRoot (EntityStore store, string name = null) : base (name ?? "Root") {
+        public SystemRoot (EntityStore store, string name = null) : base (name ?? "Systems") {
             SetRoot(this);
             systemBuffer    = new Array<BaseSystem> (Array.Empty<BaseSystem>());
             stores          = new Array<EntityStore>(Array.Empty<EntityStore>());

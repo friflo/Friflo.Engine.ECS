@@ -150,42 +150,7 @@ namespace Friflo.Engine.ECS.Systems
             if (name is null or "") throw new ArgumentException("group name must not be null or empty");
             this.name   = name;
             // Send event. See: SEND_EVENT notes
-            CastSystemUpdate(this, nameof(Name), name);
-        }
-        #endregion
-        
-    #region system events
-        public event Action<SystemChanged>  OnSystemChanged;
-
-        internal static void CastSystemUpdate(BaseSystem system, string field, object value)
-        {
-            var change  = new SystemChanged(SystemChangedAction.Update, system, field, value);
-            var root    = system.SystemRoot;
-            var parent  = system.parentGroup;
-            if (root != parent) {
-                parent.OnSystemChanged?.Invoke(change);
-            }
-            root?.OnSystemChanged?.Invoke(change);
-        }
-        
-        internal static void CastSystemChanged(BaseSystem system, SystemChangedAction action)
-        {
-            var change  = new SystemChanged(action, system, null, null);
-            var root    = system.SystemRoot;
-            var parent  = system.parentGroup;
-            if (root != parent) {
-                parent.OnSystemChanged?.Invoke(change);
-            }
-            root?.OnSystemChanged?.Invoke(change);
-        }
-        
-        private static void CastSystemRemoved(BaseSystem system, SystemRoot oldRoot, SystemGroup oldParent)
-        {
-            var change  = new SystemChanged(SystemChangedAction.Remove, system, null, null);
-            if (oldRoot != oldParent) {
-                oldParent.OnSystemChanged?.Invoke(change);
-            }
-            oldRoot?.OnSystemChanged?.Invoke(change);
+            CastSystemUpdate(nameof(Name), name);
         }
         #endregion
         
