@@ -29,20 +29,29 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_QuerySystem_Disabled()
+        public static void Test_System_Enabled()
         {
             var store   = new EntityStore(PidType.UsePidAsId);
             var entity  = store.CreateEntity(new Position(1,2,3));
-            var query1  = new TestSystem1();
+            
             var root    = new SystemRoot(store);
+            var query1  = new TestSystem1();
+            var group   = new TestGroup();
+
             root.AddSystem(query1);
+            root.AddSystem(group);
             
             root.Update(42);
-            AreEqual(new Position(2,2,3), entity.Position);
+            AreEqual(new Position(2,2,3),   entity.Position);
+            AreEqual(1,                     group.beginCalled);
+            AreEqual(1,                     group.endCalled);
             
             query1.Enabled = false;
+            group.Enabled  = false;
             root.Update(42);
-            AreEqual(new Position(2,2,3), entity.Position);
+            AreEqual(new Position(2,2,3),   entity.Position);
+            AreEqual(1,                     group.beginCalled);
+            AreEqual(1,                     group.endCalled);
         }
     }
     

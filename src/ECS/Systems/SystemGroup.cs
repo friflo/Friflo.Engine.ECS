@@ -179,6 +179,7 @@ namespace Friflo.Engine.ECS.Systems
             var children = childSystems;
             // --- calls OnUpdateGroupBegin() once per child system.
             foreach (var child in children) {
+                if (!child.Enabled) continue;
                 child.Tick = tick;
                 child.OnUpdateGroupBegin();
             }
@@ -192,6 +193,7 @@ namespace Friflo.Engine.ECS.Systems
             }
             // --- calls OnUpdateGroupEnd() once per child system.
             foreach (var child in children) {
+                if (!child.Enabled) continue;
                 child.OnUpdateGroupEnd();
                 child.Tick = default;
             }
