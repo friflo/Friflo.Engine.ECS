@@ -193,7 +193,7 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
     }
     
-    internal class View
+    internal sealed class View
     {
         public  Tick                Tick            => system.Tick;
         public  int                 Id              => system.Id;

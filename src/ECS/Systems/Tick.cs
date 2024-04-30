@@ -8,7 +8,7 @@
 namespace Friflo.Engine.ECS.Systems
 {
    
-    // TODO add array to add and get custom types by generic type T
+    // May add an array or field to add and get custom types by generic type T
     public readonly struct Tick
     {
         public readonly float deltaTime;
