@@ -115,7 +115,7 @@ namespace Friflo.Engine.ECS.Systems
             if (parentGroup == null)                                    throw new InvalidOperationException($"System '{Name}' has no parent");
             if (index < -1 || index > targetGroup.childSystems.Count)   throw new ArgumentException($"invalid index: {index}");
             if (parentGroup == targetGroup) {
-                // case:    Change system potion within its parent  
+                // case:    Change system position within its parent  
                 var oldIndex = targetGroup.childSystems.Remove(this);
                 if (index == -1) {
                     targetGroup.childSystems.Add(this);
@@ -129,8 +129,11 @@ namespace Friflo.Engine.ECS.Systems
                 return index;
             }
             if (systemRoot != targetGroup.systemRoot) {
-                throw new InvalidOperationException($"Expect {nameof(targetGroup)} == {nameof(SystemRoot)}. Was {targetGroup.Name}");
+                var expect = systemRoot?.Name;
+                var msg = $"Expect {nameof(targetGroup)} == {nameof(SystemRoot)}. Expected: '{expect}' was: '{targetGroup.Name}'";
+                throw new InvalidOperationException(msg);
             }
+            // case:    System moved to another parent group  
             var oldParent = parentGroup;
             oldParent.childSystems.Remove(this);
             if (index == -1) {

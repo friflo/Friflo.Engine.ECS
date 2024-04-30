@@ -33,6 +33,7 @@ namespace Tests.ECS.Systems
                     case 3: AreEqual("Move - Group 'Group1' from: 'Systems' to: 'Group3'",  str);   return;
                     case 4: AreEqual("Move - Group 'Group2' from: 'Systems' to: 'Group3'",  str);   return;
                     case 5: AreEqual("Move - Group 'Group1' from: 'Group3' to: 'Group3'",   str);   return;
+                    case 6: AreEqual("Move - Group 'Group2' from: 'Group3' to: 'Group3'",   str);   return;
                 }
             };
             group1.OnSystemChanged += _ => {
@@ -47,6 +48,7 @@ namespace Tests.ECS.Systems
                     case 0: AreEqual("Move - Group 'Group1' from: 'Systems' to: 'Group3'",  str);   return;
                     case 1: AreEqual("Move - Group 'Group2' from: 'Systems' to: 'Group3'",  str);   return;
                     case 2: AreEqual("Move - Group 'Group1' from: 'Group3' to: 'Group3'",   str);   return;
+                    case 3: AreEqual("Move - Group 'Group2' from: 'Group3' to: 'Group3'",   str);   return;
                 }
             };
             root.AddSystem(group1);
@@ -56,14 +58,15 @@ namespace Tests.ECS.Systems
             AreEqual(0, group1.MoveSystemTo(group3, -1)); // -1  => add at tail
             AreEqual(1, group2.MoveSystemTo(group3,  1));
             AreEqual(1, group1.MoveSystemTo(group3,  2)); // returned index != passed index
+            AreEqual(1, group2.MoveSystemTo(group3, -1)); // move to tail within same group
 
             AreEqual(1, root.ChildSystems.Count);
             AreEqual(2, group3.ChildSystems.Count);
             
-            AreEqual(6, changesRoot);
+            AreEqual(7, changesRoot);
             AreEqual(0, changesGroup1);
             AreEqual(0, changesGroup2);
-            AreEqual(3, changesGroup3);
+            AreEqual(4, changesGroup3);
         }
         
         [Test]
@@ -96,29 +99,36 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemGroup_MoveTo_exception()
         {
-            var baseGroup   = new SystemGroup("Base");
-            var group1      = new SystemGroup("Group1");
-            baseGroup.AddSystem(group1);
+            var root1   = new SystemRoot("Systems-1");
+            var group1  = new SystemGroup("Group1");
+            root1.AddSystem(group1);
             
             Throws<ArgumentNullException>(() => {
                 group1.MoveSystemTo(null, 0);
             });
             
             Exception e = Throws<ArgumentException>(() => {
-                group1.MoveSystemTo(baseGroup, -2);
+                group1.MoveSystemTo(root1, -2);
             });
             AreEqual("invalid index: -2", e!.Message);
             
             e = Throws<ArgumentException>(() => {
-                group1.MoveSystemTo(baseGroup, 2);
+                group1.MoveSystemTo(root1, 2);
             });
             AreEqual("invalid index: 2", e!.Message);
             
             var group2      = new SystemGroup("Group2");
             e = Throws<InvalidOperationException>(() => {
-                group2.MoveSystemTo(baseGroup, 1);
+                group2.MoveSystemTo(root1, 1);
             });
             AreEqual("System 'Group2' has no parent", e!.Message);
+            
+            var root2   = new SystemRoot("Systems-2");
+            root2.AddSystem(group2);
+            e = Throws<InvalidOperationException>(() => {
+                group2.MoveSystemTo(root1, -1);
+            });
+            AreEqual("Expect targetGroup == SystemRoot. Expected: 'Systems-2' was: 'Systems-1'", e!.Message);
         }
         
         [Test]
