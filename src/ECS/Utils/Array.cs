@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-// Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS
