@@ -32,6 +32,15 @@ namespace Tests.Systems
             
             NotNull(root.CommandBuffers);
         }
+        
+        [Test]
+        public static void Test_Systems_RemoveSystem_coverage()
+        {
+            var root        = new SystemGroup("Test");
+            var querySystem = new TestQuerySystem();
+            querySystem.parentGroup = root;
+            root.RemoveSystem(querySystem);
+        }
     }
     
     class TestQuerySystem : QuerySystem<Position> {

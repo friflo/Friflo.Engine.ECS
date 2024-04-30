@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)]         public virtual  string          Name        => systemName;
         [Browse(Never)]         public          SystemRoot      SystemRoot  => systemRoot;
         [Browse(Never)]         public          SystemGroup     ParentGroup => parentGroup;
-        [Browse(Never)][Ignore] public          bool            Enabled     { get => enabled;       set => enabled = value; }
+        [Browse(Never)][Ignore] public          bool            Enabled     { get => enabled; set => enabled = value; }
         [Browse(Never)]         public          int             Id          => id;
         #endregion
             
