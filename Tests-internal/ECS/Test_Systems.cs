@@ -41,6 +41,30 @@ namespace Tests.Systems
             querySystem.parentGroup = root;
             root.RemoveSystem(querySystem);
         }
+        
+        [Test]
+        public static void Test_Systems_Id()
+        {
+            var root        = new SystemRoot("Systems");
+            var group1      = new SystemGroup("Test 1");
+            var group2      = new SystemGroup("Test 2");
+            var querySystem = new TestQuerySystem();
+            AreEqual(0, root.Id);
+            AreEqual(0, group1.Id);
+            AreEqual(0, querySystem.Id);
+            
+            group1.id       = 1;
+            group2.id       = 1;
+            querySystem.id  = 3;
+            
+            root.AddSystem(group1);
+            root.AddSystem(group2);
+            root.AddSystem(querySystem);
+            
+            AreEqual(1, group1.Id);
+            AreEqual(2, group2.Id);
+            AreEqual(3, querySystem.Id);
+        }
     }
     
     class TestQuerySystem : QuerySystem<Position> {

@@ -71,11 +71,7 @@ namespace Friflo.Engine.ECS.Systems
         {
             var map = systemMap;
             if (system.id != 0) {
-                if (!map.TryGetValue(system.Id, out var current)) {
-                    map.Add(system.Id, system);
-                    return;
-                }
-                if (current == system) {
+                if (map.TryAdd(system.Id, system)) {
                     return;
                 }
             }
