@@ -7,6 +7,7 @@ using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable InconsistentNaming
 namespace Tests.ECS.Systems
 {
     // ReSharper disable once InconsistentNaming
@@ -121,7 +122,63 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_SystemRoot_exceptions_add_remove()
+        public static void Test_SystemGroup_FindGroup()
+        {
+            var root        = new SystemRoot("Systems");
+            var child1      = new SystemGroup("Child1");
+            var child2      = new SystemGroup("Child2");
+            var child1_1    = new SystemGroup("Child1_1");
+            
+            root.AddSystem(child1);
+            root.AddSystem(child2);
+            child1.AddSystem(child1_1);
+            
+            AreSame(child1,     root.FindGroup("Child1"));
+            AreSame(child1_1,   root.FindGroup("Child1_1"));
+            IsNull (            root.FindGroup("Unknown"));
+        }
+        
+        [Test]
+        public static void Test_SystemGroup_FindSystem()
+        {
+            var root        = new SystemRoot("Systems");
+            var child1      = new SystemGroup("Child1");
+            var mySystem1   = new MySystem1();
+            var mySystem2   = new MySystem2();
+            
+            root.AddSystem(child1);
+            root.AddSystem(mySystem1);
+            child1.AddSystem(mySystem2);
+            
+            
+            AreSame(mySystem1,  root.FindSystem<MySystem1>());
+            AreSame(mySystem2,  root.FindSystem<MySystem2>());
+            IsNull (            root.FindSystem<TestSystem1>());
+        }
+        
+        [Test]
+        public static void Test_SystemGroup__IsAncestorOf()
+        {
+            var root        = new SystemRoot("Systems");
+            var child1      = new SystemGroup("Child1");
+            var child1_1    = new SystemGroup("Child1_1");
+            
+            root.AddSystem(child1);
+            child1.AddSystem(child1_1);
+            
+            IsTrue (root.IsAncestorOf(child1));
+            IsTrue (root.IsAncestorOf(child1_1));
+            
+            IsFalse(root.IsAncestorOf(root));
+            IsFalse(child1.IsAncestorOf(root));
+            
+            Throws<ArgumentNullException>(() => {
+                root.IsAncestorOf(null);
+            });
+        }
+        
+        [Test]
+        public static void Test_SystemGroup_exceptions_add_remove()
         {
             var group = new SystemGroup("Group1");
             Throws<ArgumentNullException>(() => {
