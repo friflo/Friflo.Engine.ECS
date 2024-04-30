@@ -62,11 +62,11 @@ namespace Friflo.Engine.ECS.Systems
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));
             if (system.ParentGroup != this) throw new ArgumentException($"system not child of Group '{Name}'", nameof(system));
+            var oldRoot = system.SystemRoot;
             
             foreach (var child in childSystems) {
                 if (child == system) {
                     childSystems.Remove(child);
-                    var oldRoot = system.SystemRoot;
                     system.ClearParentAndRoot();
                     CastSystemRemoved(system, oldRoot, this);
                     return;

@@ -70,7 +70,7 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_SystemGroup_RemoveSystem()
+        public static void Test_SystemGroup_RemoveSystem_with_root()
         {
             var store       = new EntityStore(PidType.UsePidAsId);
             var root        = new SystemRoot (store, "Systems");
@@ -92,6 +92,30 @@ namespace Tests.ECS.Systems
             AreEqual(0, testSystem1.Queries.Count);
             AreEqual(0, root.RootSystems.Count);
             AreEqual(0, root.ChildSystems.Count);
+            
+            AreEqual(2, count);
+        }
+        
+        [Test]
+        public static void Test_SystemGroup_RemoveSystem_without_root()
+        {
+            int count = 0;
+            var baseGroup   = new SystemGroup ("Base");
+            var testSystem1 = new TestSystem1();
+            baseGroup.OnSystemChanged += changed => {
+                var str = changed.ToString();
+                switch (count++) {
+                    case 0: AreEqual("Add - System 'TestSystem1' to: 'Base'",     str);      return;
+                    case 1: AreEqual("Remove - System 'TestSystem1' from: 'Base'", str);     return;
+                }
+            };
+            baseGroup.  AddSystem(testSystem1);
+            AreEqual(0, testSystem1.Queries.Count);
+            AreEqual(1, baseGroup.ChildSystems.Count);
+            
+            baseGroup.  RemoveSystem(testSystem1);
+            AreEqual(0, testSystem1.Queries.Count);
+            AreEqual(0, baseGroup.ChildSystems.Count);
             
             AreEqual(2, count);
         }

@@ -160,7 +160,7 @@ namespace Friflo.Engine.ECS.Systems
             parentGroup     = group;
             var newRoot     = group.systemRoot;
             if (newRoot == null) {
-                return;
+                return; // case: new parent is not part of a SystemRoot hierarchy
             }
             var rootSystems = GetSubSystems(ref newRoot.systemBuffer);
             // add stores of SystemRoot to all root Systems
@@ -176,7 +176,10 @@ namespace Friflo.Engine.ECS.Systems
         internal void ClearParentAndRoot()
         { 
             parentGroup     = null;
-            var currentRoot = systemRoot; // != null - asserted in caller
+            var currentRoot = systemRoot;
+            if (currentRoot == null) {
+                return; // case: system in not part of a SystemRoot hierarchy
+            }
             var rootSystems = GetSubSystems(ref currentRoot.systemBuffer);
             // remove stores of SystemRoot from all root Systems
             foreach (var system in rootSystems) {
