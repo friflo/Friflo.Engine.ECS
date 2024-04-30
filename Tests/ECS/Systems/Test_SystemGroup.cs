@@ -192,7 +192,7 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_SystemGroup__IsAncestorOf()
+        public static void Test_SystemGroup_IsAncestorOf()
         {
             var root        = new SystemRoot("Systems");
             var child1      = new SystemGroup("Child1");

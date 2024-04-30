@@ -159,10 +159,6 @@ namespace Friflo.Engine.ECS.Systems
         {
             parentGroup     = group;
             var newRoot     = group.systemRoot;
-            var currentRoot = systemRoot;
-            if (currentRoot == newRoot) {
-                return;
-            }
             if (newRoot == null) {
                 return;
             }
@@ -179,11 +175,8 @@ namespace Friflo.Engine.ECS.Systems
         
         internal void ClearParentAndRoot()
         { 
-            parentGroup         = null;
-            var currentRoot     = systemRoot;
-            if (currentRoot == null) {
-                return;
-            }
+            parentGroup     = null;
+            var currentRoot = systemRoot; // != null - asserted in caller
             var rootSystems = GetSubSystems(ref currentRoot.systemBuffer);
             // remove stores of SystemRoot from all root Systems
             foreach (var system in rootSystems) {
