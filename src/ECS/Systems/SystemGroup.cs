@@ -46,7 +46,7 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
         
-    #region group: add / insert / remove system
+    #region group: add / insert / remove / get - system
         public void AddSystem(BaseSystem system)
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));
@@ -86,6 +86,37 @@ namespace Friflo.Engine.ECS.Systems
                     system.ClearParentAndRoot();
                     CastSystemRemoved(system, oldRoot, this);
                     return;
+                }
+            }
+        }
+        
+        public void GetSystems(Array<BaseSystem> systems, bool includeGroups)
+        {
+            systems.Clear();
+            if (includeGroups) {
+                GetSystemsAndGroups(systems);
+            } else {
+                GetSystems(systems);
+            }
+        }
+        
+        private void GetSystems(Array<BaseSystem> systems)
+        {
+            foreach (var child in childSystems) {
+                if (child is SystemGroup systemGroup) {
+                    systemGroup.GetSystems(systems);
+                } else {
+                    systems.Add(child);
+                }
+            }
+        }
+        
+        private void GetSystemsAndGroups(Array<BaseSystem> systems)
+        {
+            foreach (var child in childSystems) {
+                systems.Add(child);
+                if (child is SystemGroup systemGroup) {
+                    systemGroup.GetSystemsAndGroups(systems);
                 }
             }
         }
