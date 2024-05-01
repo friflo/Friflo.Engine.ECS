@@ -3,6 +3,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -90,7 +91,7 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
         
-        public void GetSystems(Array<BaseSystem> systems, bool includeGroups)
+        public void GetSystems(List<BaseSystem> systems, bool includeGroups)
         {
             systems.Clear();
             if (includeGroups) {
@@ -100,7 +101,7 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
         
-        private void GetSystems(Array<BaseSystem> systems)
+        private void GetSystems(List<BaseSystem> systems)
         {
             foreach (var child in childSystems) {
                 if (child is SystemGroup systemGroup) {
@@ -111,7 +112,7 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
         
-        private void GetSystemsAndGroups(Array<BaseSystem> systems)
+        private void GetSystemsAndGroups(List<BaseSystem> systems)
         {
             foreach (var child in childSystems) {
                 systems.Add(child);
