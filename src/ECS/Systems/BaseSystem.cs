@@ -28,7 +28,7 @@ namespace Friflo.Engine.ECS.Systems
         [Serialize] [Browse(Never)] internal            int         id;
         [Serialize] [Browse(Never)] private             bool        enabled = true;
                     [Browse(Never)] private readonly    string      systemName;
-                    [Browse(Never)] internal            SystemGroup parentGroup;
+                    [Browse(Never)] private             SystemGroup parentGroup;
                     [Browse(Never)] private             SystemRoot  systemRoot;
          #endregion
          

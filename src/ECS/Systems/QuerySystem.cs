@@ -70,7 +70,7 @@ namespace Friflo.Engine.ECS.Systems
         public    override void Update(Tick tick)
         {
             if (!Enabled) return;
-            var commandBuffers = parentGroup.commandBuffers;
+            var commandBuffers = ParentGroup.commandBuffers;
             for (int n = 0; n < queries.Count; n++)
             {
                 var query       = queries[n];
