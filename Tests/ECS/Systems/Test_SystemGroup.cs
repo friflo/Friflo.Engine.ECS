@@ -70,6 +70,59 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
+        public static void Test_SystemGroup_InsertSystemAt()
+        {
+            var root        = new SystemRoot("Systems");
+            var group1      = new SystemGroup("Group1");
+            var group2      = new SystemGroup("Group2");
+            var testSystem1 = new TestSystem1();
+            var testSystem2 = new TestSystem1();
+            root.AddSystem(group1);
+            root.AddSystem(group2);
+            root.InsertSystemAt(2,  testSystem1);
+            root.InsertSystemAt(-1, testSystem2);
+            
+            AreEqual(4,             root.ChildSystems.Count);
+            AreSame(group1,         root.ChildSystems[0]);
+            AreSame(group2,         root.ChildSystems[1]);
+            AreSame(testSystem1,    root.ChildSystems[2]);
+            AreSame(testSystem2,    root.ChildSystems[3]);
+            
+            AreSame(root, testSystem1.ParentGroup);
+        }
+        
+        [Test]
+        public static void Test_SystemGroup_InsertSystemAt_exceptions()
+        {
+            var group = new SystemGroup("Systems");
+            Throws<ArgumentNullException>(() => {
+                group.InsertSystemAt(0, null);
+            });
+            
+            Exception e = Throws<ArgumentException>(() => {
+                group.InsertSystemAt(-2, new TestSystem1());
+            });
+            AreEqual("invalid index: -2", e!.Message);
+            
+            e = Throws<ArgumentException>(() => {
+                group.InsertSystemAt(1, new TestSystem1());
+            });
+            AreEqual("invalid index: 1", e!.Message);
+
+            e = Throws<ArgumentException>(() => {
+                group.InsertSystemAt(0, new SystemRoot("Systems"));
+            });
+            AreEqual("SystemRoot must not be a child system (Parameter 'system')", e!.Message);
+            
+            var testSystem1 = new TestSystem1();
+            group.AddSystem(testSystem1);
+            e = Throws<ArgumentException>(() => {
+                group.InsertSystemAt(0, testSystem1);
+            });
+            AreEqual("system already added to Group 'Systems' (Parameter 'system')", e!.Message);
+        }
+        
+        [Test]
         public static void Test_SystemGroup_RemoveSystem_with_root()
         {
             var store       = new EntityStore(PidType.UsePidAsId);

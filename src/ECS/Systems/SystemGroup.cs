@@ -46,13 +46,29 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
         
-    #region group: add / remove system
+    #region group: add / insert / remove system
         public void AddSystem(BaseSystem system)
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));
             if (system is SystemRoot)       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
             if (system.ParentGroup != null) throw new ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
             childSystems.Add(system);
+            system.SetParentAndRoot(this);
+            // Send event. See: SEND_EVENT notes
+            CastSystemAdded(system);
+        }
+        
+        public void InsertSystemAt(int index, BaseSystem system)
+        {
+            if (system == null)                             throw new ArgumentNullException(nameof(system));
+            if (system is SystemRoot)                       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
+            if (system.ParentGroup != null)                 throw new ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
+            if (index < -1 || index > childSystems.Count)   throw new ArgumentException($"invalid index: {index}");
+            if (index == -1) {
+                childSystems.Add(system);
+            } else {
+                childSystems.InsertAt(index, system);
+            }
             system.SetParentAndRoot(this);
             // Send event. See: SEND_EVENT notes
             CastSystemAdded(system);
@@ -74,30 +90,6 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
         #endregion
-        
-        /*
-        public void InsertSystemAt(int index, BaseSystem system)
-        {
-            if (system == null)                     throw new ArgumentNullException(nameof(system));
-            if (index < 0 || index > systems.Count) throw new ArgumentException("index out of range", nameof(index));
-            var currentParent   = system.parentGroup;
-            var action          = SystemChangedAction.Add;
-            if (currentParent != null) {
-                action = SystemChangedAction.Move;
-                foreach (var child in currentParent.systems) {
-                    if (child == system) {
-                        var oldIndex = currentParent.systems.Remove(child);
-                        if (currentParent == this && index > oldIndex) {
-                            index--;
-                        }
-                        break;
-                    }
-                }
-            }
-            system.parentGroup = this;
-            systems.InsertAt(index, system);
-            system.CastSystemChanged(action, null, null);
-        } */
         
     #region group: find system
         public SystemGroup FindGroup(string name)
