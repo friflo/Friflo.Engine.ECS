@@ -55,7 +55,7 @@ namespace Friflo.Engine.ECS.Systems
             childSystems.Add(system);
             system.SetParentAndRoot(this);
             // Send event. See: SEND_EVENT notes
-            CastSystemChanged(system, SystemChangedAction.Add);
+            CastSystemAdded(system);
         }
         
         public void RemoveSystem(BaseSystem system)

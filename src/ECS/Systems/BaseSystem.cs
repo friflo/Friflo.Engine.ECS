@@ -52,17 +52,6 @@ namespace Friflo.Engine.ECS.Systems
             root?.OnSystemChanged?.Invoke(change);
         }
         
-        internal static void CastSystemChanged(BaseSystem system, SystemChangedAction action)
-        {
-            var change  = new SystemChanged(action, system, null, null);
-            var root    = system.SystemRoot;
-            var parent  = system.parentGroup;
-            if (root != parent) {
-                parent.OnSystemChanged?.Invoke(change);
-            }
-            root?.OnSystemChanged?.Invoke(change);
-        }
-        
         private static void CastSystemMoved(BaseSystem system, SystemGroup oldParent)
         {
             var change  = new SystemChanged(SystemChangedAction.Move, system, null, oldParent);
@@ -77,6 +66,17 @@ namespace Friflo.Engine.ECS.Systems
             if (root != parent && root != oldParent) {
                 root?.OnSystemChanged?.Invoke(change);
             }
+        }
+        
+        internal static void CastSystemAdded(BaseSystem system)
+        {
+            var change  = new SystemChanged(SystemChangedAction.Add, system, null, null);
+            var root    = system.SystemRoot;
+            var parent  = system.parentGroup;
+            if (root != parent) {
+                parent.OnSystemChanged?.Invoke(change);
+            }
+            root?.OnSystemChanged?.Invoke(change);
         }
         
         internal static void CastSystemRemoved(BaseSystem system, SystemRoot oldRoot, SystemGroup oldParent)
