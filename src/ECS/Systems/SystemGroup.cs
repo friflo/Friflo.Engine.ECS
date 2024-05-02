@@ -3,7 +3,6 @@
 
 
 using System;
-using System.Collections.Generic;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -90,7 +89,7 @@ namespace Friflo.Engine.ECS.Systems
                 }
             }
         }
-        
+        /* remove or add as Extensions
         public void GetSystems(List<BaseSystem> systems, bool includeGroups)
         {
             systems.Clear();
@@ -120,7 +119,7 @@ namespace Friflo.Engine.ECS.Systems
                     systemGroup.GetSystemsAndGroups(systems);
                 }
             }
-        }
+        } */
         #endregion
         
     #region group: find system
