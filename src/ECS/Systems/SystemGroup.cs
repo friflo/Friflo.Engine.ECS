@@ -89,37 +89,6 @@ namespace Friflo.Engine.ECS.Systems
                 }
             }
         }
-        /* remove or add as Extensions
-        public void GetSystems(List<BaseSystem> systems, bool includeGroups)
-        {
-            systems.Clear();
-            if (includeGroups) {
-                GetSystemsAndGroups(systems);
-            } else {
-                GetSystems(systems);
-            }
-        }
-        
-        private void GetSystems(List<BaseSystem> systems)
-        {
-            foreach (var child in childSystems) {
-                if (child is SystemGroup systemGroup) {
-                    systemGroup.GetSystems(systems);
-                } else {
-                    systems.Add(child);
-                }
-            }
-        }
-        
-        private void GetSystemsAndGroups(List<BaseSystem> systems)
-        {
-            foreach (var child in childSystems) {
-                systems.Add(child);
-                if (child is SystemGroup systemGroup) {
-                    systemGroup.GetSystemsAndGroups(systems);
-                }
-            }
-        } */
         #endregion
         
     #region group: find system

@@ -1,0 +1,111 @@
+﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
+// See LICENSE file in the project root for full license information.
+
+using System;
+using System.Collections.Generic;
+
+// ReSharper disable once CheckNamespace
+namespace Friflo.Engine.ECS.Systems
+{
+    public static class SystemExtensions
+    {
+        private static SystemMatch[]    _matches = new SystemMatch[1];
+        private static int              _matchesCount;
+        
+        public static void GetMatchingSystems(this SystemGroup systemGroup, Entity entity, List<SystemMatch> target, bool addGroups)
+        {
+            target.Clear();
+            _matchesCount = 0;
+            var type    = entity.Archetype;
+            var stores  = systemGroup.SystemRoot.Stores;
+            for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)   // commonly: one or few stores per ECSSystemSet
+            {
+                var store = stores[storeIndex];
+                // early out if different EntityStore
+                if (store != entity.Store) {
+                    continue;
+                }
+                if (addGroups) {
+                    var parent = -1;
+                    AddMatch(new SystemMatch { system = systemGroup, depth = 0, parent = parent });
+                    GetGroupSystems(type, systemGroup, storeIndex, parent, 1);
+                } else {
+                    GetSystems(type, systemGroup, storeIndex);
+                }
+            }
+            if (addGroups) {
+                for (int n = 0; n < _matchesCount; n++) {
+                    ref var match = ref _matches[n];
+                    if (match.count == 0) {
+                        continue;
+                    }
+                    target.Add(match);
+                }
+                return;
+            }
+            for (int n = 0; n < _matchesCount; n++) {
+                target.Add(_matches[n]);
+            }
+        }
+        
+        private static void GetGroupSystems(Archetype type, SystemGroup group, int storeIndex, int parent, int depth)
+        {
+            foreach (var system in group.ChildSystems)            // commonly: a dozen or hundreds of systems
+            {
+                if (system is SystemGroup systemGroup) {
+                    var subParent = _matchesCount;
+                    AddMatch(new SystemMatch { system = systemGroup, depth = depth, parent = parent });
+                    GetGroupSystems(type, systemGroup, storeIndex, subParent, depth + 1);
+                    continue;
+                }
+                if (system is QuerySystem querySystem) {
+                    var query = querySystem.Queries[storeIndex];
+                    if (query.IsMatch(type.ComponentTypes, type.Tags)) {
+                        IncrementCount(parent);
+                        AddMatch(new SystemMatch { system = querySystem, depth = depth, parent = parent, count = 1 });
+                    }    
+                }
+            }
+        }
+        
+        private static void GetSystems(Archetype type, SystemGroup group, int storeIndex)
+        {
+            foreach (var system in group.ChildSystems)            // commonly: a dozen or hundreds of systems
+            {
+                if (system is SystemGroup systemGroup) {
+                    var subParent = _matchesCount;
+                    GetSystems(type, systemGroup, storeIndex);
+                    continue;
+                }
+                if (system is QuerySystem querySystem) {
+                    var query = querySystem.Queries[storeIndex];
+                    if (query.IsMatch(type.ComponentTypes, type.Tags)) {
+                        AddMatch(new SystemMatch { system = querySystem, count = 1 });
+                    }    
+                }
+            }
+        }
+        
+        private static void AddMatch(in SystemMatch match)
+        {
+            if (_matchesCount == _matches.Length) {
+                var newMatches = new SystemMatch [2 * _matchesCount];
+                Array.Copy(_matches, newMatches, _matchesCount);
+                _matches = newMatches;
+            }
+            _matches[_matchesCount++] = match;
+        }
+
+        private static void IncrementCount(int parent)
+        {
+            while (true) {
+                ref var match = ref _matches[parent];
+                match.count++;
+                parent = match.parent;
+                if (parent == -1) {
+                    return;
+                }
+            }
+        }
+    }
+}
