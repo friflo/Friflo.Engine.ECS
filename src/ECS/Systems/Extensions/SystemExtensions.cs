@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
@@ -97,9 +96,7 @@ namespace Friflo.Engine.ECS.Systems
         private static void AddMatch(in SystemMatch match)
         {
             if (_matchesCount == _matches.Length) {
-                var newMatches = new SystemMatch [2 * _matchesCount];
-                Array.Copy(_matches, newMatches, _matchesCount);
-                _matches = newMatches;
+                ArrayUtils.Resize(ref _matches, 2 * _matchesCount);
             }
             _matches[_matchesCount++] = match;
         }
