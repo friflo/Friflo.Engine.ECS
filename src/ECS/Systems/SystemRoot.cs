@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS.Systems
     public class SystemRoot : SystemGroup
     {
     #region properties
-        public  Array<EntityStore>              Stores      => stores;
+        public  ReadOnlyList<EntityStore>       Stores      => stores;
         public  IReadOnlyCollection<BaseSystem> RootSystems => systemMap.Values;
         public override string                  ToString()  => $"'{Name}' Root - systems: {systemMap.Count}";
         #endregion
@@ -24,22 +24,22 @@ namespace Friflo.Engine.ECS.Systems
     #region internal fields
         [Browse(Never)] private readonly    Dictionary<int, BaseSystem> systemMap = new();
         [Browse(Never)] private             int                         nextId;
-        [Browse(Never)] internal            Array<EntityStore>          stores;
-        [Browse(Never)] internal            Array<BaseSystem>           systemBuffer;
+        [Browse(Never)] internal            ReadOnlyList<EntityStore>   stores;
+        [Browse(Never)] internal            ReadOnlyList<BaseSystem>    systemBuffer;
         #endregion
 
         
     #region constructors
         public SystemRoot (string name) : base (name) {
             SetRoot(this);
-            systemBuffer    = new Array<BaseSystem> (Array.Empty<BaseSystem>());
-            stores          = new Array<EntityStore>(Array.Empty<EntityStore>());
+            systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
+            stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());
         }
         
         public SystemRoot (EntityStore store, string name = null) : base (name ?? "Systems") {
             SetRoot(this);
-            systemBuffer    = new Array<BaseSystem> (Array.Empty<BaseSystem>());
-            stores          = new Array<EntityStore>(Array.Empty<EntityStore>());
+            systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
+            stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());
             AddStore(store);
         }
         #endregion

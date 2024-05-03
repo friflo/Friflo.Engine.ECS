@@ -12,8 +12,8 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS
 {
-    [DebuggerTypeProxy(typeof(ArrayDebugView<>))]
-    public struct Array<T> : IReadOnlyList<T> where T : class
+    [DebuggerTypeProxy(typeof(ReadOnlyListDebugView<>))]
+    public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     {
     #region public properties    
         public          int             Count           => count;
@@ -30,7 +30,7 @@ namespace Friflo.Engine.ECS
         
     #region internal mutations
         // internal by intention. public interface is read only
-        internal Array(T[] array) {
+        internal ReadOnlyList(T[] array) {
             count       = 0;
             this.array  = array;
         }
@@ -82,13 +82,13 @@ namespace Friflo.Engine.ECS
         
     #region IEnumerator
 
-        public      ArrayEnumerator<T> GetEnumerator() => new ArrayEnumerator<T>(array, count);
+        public      ReadOnlyListEnumerator<T> GetEnumerator() => new ReadOnlyListEnumerator<T>(array, count);
 
         // --- IEnumerable
-        IEnumerator        IEnumerable.GetEnumerator() => new ArrayEnumerator<T>(array, count);
+        IEnumerator        IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<T>(array, count);
 
         // --- IEnumerable<>
-        IEnumerator<T>  IEnumerable<T>.GetEnumerator() => new ArrayEnumerator<T>(array, count);
+        IEnumerator<T>  IEnumerable<T>.GetEnumerator() => new ReadOnlyListEnumerator<T>(array, count);
         #endregion
         
         private static void Resize(ref T[] array, int len)
@@ -103,7 +103,7 @@ namespace Friflo.Engine.ECS
     }
     
     
-    public struct ArrayEnumerator<T> : IEnumerator<T>
+    public struct ReadOnlyListEnumerator<T> : IEnumerator<T>
     {
     #region private fields
         private readonly    T[]     array;  //  8
@@ -111,7 +111,7 @@ namespace Friflo.Engine.ECS
         private             int     index;  //  4
         #endregion
     
-        internal ArrayEnumerator(T[] array, int count) {
+        internal ReadOnlyListEnumerator(T[] array, int count) {
             this.array  = array;
             this.count  = count - 1;
             index       = -1;
@@ -139,17 +139,17 @@ namespace Friflo.Engine.ECS
         #endregion
     }
     
-    internal class ArrayDebugView<T> where T : class
+    internal class ReadOnlyListDebugView<T> where T : class
     {
         [Browse(RootHidden)]
-        public  T[]                 Items => array.ToArray();
+        public  T[]                 Items => readOnlyList.ToArray();
     
         [Browse(Never)]
-        private readonly Array<T>   array;
+        private readonly ReadOnlyList<T>   readOnlyList;
             
-        internal ArrayDebugView(Array<T> array)
+        internal ReadOnlyListDebugView(ReadOnlyList<T> readOnlyList)
         {
-            this.array = array;
+            this.readOnlyList = readOnlyList;
         }
     }
 }

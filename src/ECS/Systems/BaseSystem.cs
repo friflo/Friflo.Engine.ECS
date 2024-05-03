@@ -193,19 +193,19 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region get systems of systems sub tree
-        internal Array<BaseSystem> GetSubSystems(ref Array<BaseSystem> systemBuffer)
+        internal ReadOnlyList<BaseSystem> GetSubSystems(ref ReadOnlyList<BaseSystem> systemBuffer)
         {
             systemBuffer.Clear();
             AddSubSystems(ref systemBuffer, this);
             return systemBuffer;
         }
         
-        private static void AddSubSystems(ref Array<BaseSystem> array, BaseSystem system)
+        private static void AddSubSystems(ref ReadOnlyList<BaseSystem> readOnlyList, BaseSystem system)
         {
-            array.Add(system);
+            readOnlyList.Add(system);
             if (system is SystemGroup systemGroup) {
                 foreach (var child in systemGroup.childSystems) {
-                    AddSubSystems(ref array, child);
+                    AddSubSystems(ref readOnlyList, child);
                 }
             }
         }

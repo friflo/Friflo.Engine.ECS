@@ -18,7 +18,7 @@ namespace Tests.Systems
         [Test]
         public static void Test_Array_mutate()
         {
-            var array = new Array<object>(Array.Empty<object>());
+            var array = new ReadOnlyList<object>(Array.Empty<object>());
             var object1 = new object();
             var object2 = new object();
             var object3 = new object();
@@ -42,14 +42,14 @@ namespace Tests.Systems
             AreEqual(3, array.Count);
             
             //
-            var array2= new Array<object>(Array.Empty<object>());
+            var array2= new ReadOnlyList<object>(Array.Empty<object>());
             array2.InsertAt(0, object1); // cover resize
         }
         
         [Test]
         public static void Test_Array_enumerator()
         {
-            var array = new Array<object>(Array.Empty<object>());
+            var array = new ReadOnlyList<object>(Array.Empty<object>());
             var object1 = new object();
             array.Add(object1);
             {
@@ -85,12 +85,12 @@ namespace Tests.Systems
         [Test]
         public static void Test_Array_DebugView()
         {
-            var array = new Array<object>(Array.Empty<object>());
+            var array = new ReadOnlyList<object>(Array.Empty<object>());
             var object1 = new object();
             var object2 = new object();
             array.Add(object1);
             array.Add(object2);
-            var debugView = new ArrayDebugView<object>(array);
+            var debugView = new ReadOnlyListDebugView<object>(array);
             
             
             AreEqual(2, array.Count);

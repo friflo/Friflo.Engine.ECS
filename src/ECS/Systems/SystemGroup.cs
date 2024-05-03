@@ -16,33 +16,33 @@ namespace Friflo.Engine.ECS.Systems
     public class SystemGroup : BaseSystem
     {
     #region properties
-        [Browse(Never)] public override string              Name            => name;
-                        public          Array<BaseSystem>   ChildSystems    => childSystems;
-                        internal        View                System          => view ??= new View(this);
-                        internal        Array<CommandBuffer>CommandBuffers  => commandBuffers; // only for debug view
-                        public override string              ToString()      => $"'{name}' Group - systems: {childSystems.Count}";
+        [Browse(Never)] public override string                      Name            => name;
+                        public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
+                        internal        View                        System          => view ??= new View(this);
+                        internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
+                        public override string                      ToString()      => $"'{name}' Group - systems: {childSystems.Count}";
         #endregion
         
     #region fields
         [Serialize]
-        [Browse(Never)] private     string                  name;
-        [Browse(Never)] internal    Array<BaseSystem>       childSystems;
-        [Browse(Never)] internal    Array<CommandBuffer>    commandBuffers;
-        [Browse(Never)] private     View                    view;
+        [Browse(Never)] private     string                      name;
+        [Browse(Never)] internal    ReadOnlyList<BaseSystem>    childSystems;
+        [Browse(Never)] internal    ReadOnlyList<CommandBuffer> commandBuffers;
+        [Browse(Never)] private     View                        view;
         #endregion
         
     #region constructor
         /// <summary> Default constructor required to create SystemGroup for deserialization </summary>
         internal SystemGroup() {
-            childSystems    = new Array<BaseSystem>(Array.Empty<BaseSystem>());
-            commandBuffers  = new Array<CommandBuffer>(Array.Empty<CommandBuffer>());
+            childSystems    = new ReadOnlyList<BaseSystem>(Array.Empty<BaseSystem>());
+            commandBuffers  = new ReadOnlyList<CommandBuffer>(Array.Empty<CommandBuffer>());
         } 
         
         public SystemGroup(string name) {
             if (name is null or "") throw new ArgumentException("group name must not be null or empty");
             this.name       = name;
-            childSystems    = new Array<BaseSystem>(Array.Empty<BaseSystem>());
-            commandBuffers  = new Array<CommandBuffer>(Array.Empty<CommandBuffer>());
+            childSystems    = new ReadOnlyList<BaseSystem>(Array.Empty<BaseSystem>());
+            commandBuffers  = new ReadOnlyList<CommandBuffer>(Array.Empty<CommandBuffer>());
         }
         #endregion
         
