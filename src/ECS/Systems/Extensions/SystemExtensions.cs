@@ -15,9 +15,9 @@ namespace Friflo.Engine.ECS.Systems
         public static void GetMatchingSystems(this SystemGroup systemGroup, Entity entity, List<SystemMatch> target, bool addGroups)
         {
             target.Clear();
-            _matchesCount = 0;
-            var type    = entity.Archetype;
-            var stores  = systemGroup.SystemRoot.Stores;
+            _matchesCount   = 0;
+            var type        = entity.Archetype;
+            var stores      = systemGroup.SystemRoot.Stores;
             for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)   // commonly: one or few stores per ECSSystemSet
             {
                 var store = stores[storeIndex];
@@ -33,6 +33,15 @@ namespace Friflo.Engine.ECS.Systems
                     GetSystems(type, systemGroup, storeIndex);
                 }
             }
+            AddMatches(target, addGroups);
+            // Clear system references to enable collecting them by GC
+            for (int n = 0; n < _matchesCount; n++) {
+                _matches[n].system = null;
+            }
+        }
+        
+        private static void AddMatches(List<SystemMatch> target, bool addGroups)
+        {
             if (addGroups) {
                 for (int n = 0; n < _matchesCount; n++) {
                     ref var match = ref _matches[n];
@@ -73,7 +82,6 @@ namespace Friflo.Engine.ECS.Systems
             foreach (var system in group.ChildSystems)            // commonly: a dozen or hundreds of systems
             {
                 if (system is SystemGroup systemGroup) {
-                    var subParent = _matchesCount;
                     GetSystems(type, systemGroup, storeIndex);
                     continue;
                 }
