@@ -19,7 +19,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_1_Scripts_default() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         
         AreEqual(0, entity.Scripts.Length);
@@ -38,7 +38,7 @@ public static class Test_Script
     [Test]
     public static void Test_1_add_remove_Script()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         AreEqual("id: 1  []",   player.ToString());
         AreSame(store,          player.Archetype.Store);
@@ -140,7 +140,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_2_RemoveScript() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player = store.CreateEntity();
         
         var script1 = new TestScript1();
@@ -172,7 +172,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_3_RemoveScript() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player = store.CreateEntity();
         
         IsNull  (player.AddScript(new TestScript1 { val1 = 1 }));
@@ -189,7 +189,7 @@ public static class Test_Script
     /// <summary>Cover move last script in <see cref="EntityStore.RemoveScript"/> </summary>
     [Test]
     public static void Test_3_cover_move_last_script() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
         
@@ -251,7 +251,7 @@ public static class Test_Script
     [Test]
     public static void Test_Script_Enumerator()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         var script  = new TestScript1 { val1 = 1 };
         AreEqual(0,             entity.Scripts.Length);
@@ -287,7 +287,7 @@ public static class Test_Script
     /// <summary>Cover <see cref="EntityUtils.RemoveScript"/></summary>
     [Test]
     public static void Test_3_cover_remove_non_added_script() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         
         IsNull  (entity.AddScript(new TestScript1 { val1 = 1 }));
@@ -299,7 +299,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_2_Perf() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var list = new List<Entity>();
         for (long n = 0; n < 10; n++) {
             list.Add(store.CreateEntity());
@@ -309,7 +309,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_GetScript_Perf() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         player.AddScript(new TestScript1());
         NotNull(player.GetScript<TestScript1>());
@@ -322,7 +322,7 @@ public static class Test_Script
     
     [Test]
     public static void Test_3_Perf_Add_Remove_Component() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         AreEqual("id: 1  []", player.ToString());
         
@@ -354,7 +354,7 @@ public static class Test_Script
     */
     [Test]
     public static void Test_3_Simulate_Editor() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         
         var test    = new TestComponent();

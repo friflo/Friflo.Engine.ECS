@@ -62,7 +62,7 @@ public static class Test_Tags
         AreEqual(0, copy.Count);
         AreEqual("Tags: []",                    copy.ToString());
         
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         
         AreEqual("Tags: []", entity.Tags.ToString());
@@ -167,7 +167,7 @@ public static class Test_Tags
     
     [Test]
     public static void Test_tagged_Query() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var sig     = Signature.Get<Position>();
 
         var query1 = store.Query(sig).AllTags(Tags.Get<TestTag>());
@@ -180,7 +180,7 @@ public static class Test_Tags
     [Test]
     public static void Test_Tags_Add_Remove()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         AreEqual(1,                                 store.Archetypes.Length);
         var entity      = store.CreateEntity();
         var testTag2    = Tags.Get<TestTag2>();
@@ -272,7 +272,7 @@ public static class Test_Tags
     /// <summary>Cover <see cref="EntityStoreBase.GetArchetypeWithTags"/></summary>
     [Test]
     public static void Test_Tags_cover_GetArchetypeWithTags() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         entity.AddComponent<Position>();
         entity.AddTag<TestTag>();
@@ -283,7 +283,7 @@ public static class Test_Tags
     
     [Test]
     public static void Test_Tags_Query() {
-        var store           = new EntityStore();
+        var store           = new EntityStore(PidType.RandomPids);
         var archTestTag     = store.GetArchetype(default, Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(default, Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);

@@ -12,7 +12,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_Components()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         var entity = store.CreateEntity();
         var components = entity.Components.GetComponentArray(); 
         AreEqual(0, components.Length);
@@ -30,7 +30,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_Children()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         var entity = store.CreateEntity();
         var child1 = store.CreateEntity();
         var child2 = store.CreateEntity();
@@ -88,7 +88,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_debugger_screenshot()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("root"));
         
@@ -115,7 +115,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_EntityComponents()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         entity.AddComponent<Position>();
         entity.AddComponent<Rotation>();

@@ -16,7 +16,7 @@ public static class Test_Entity_Events
     [Test]
     public static void Test_Entity_Events_OnTagsChanged()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         
@@ -67,7 +67,7 @@ public static class Test_Entity_Events
     [Test]
     public static void Test_Entity_Events_OnComponentChanged()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
 
@@ -96,7 +96,7 @@ public static class Test_Entity_Events
     [Test]
     public static void Test_Entity_Events_OnScriptChanged()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
 
@@ -122,7 +122,7 @@ public static class Test_Entity_Events
     [Test]
     public static void Test_Entity_Events_OnChildEntitiesChanged()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         var child10     = store.CreateEntity(10);
@@ -157,7 +157,7 @@ public static class Test_Entity_Events
     {
         {
             // --- See: Note
-            var store2  = new EntityStore();
+            var store2  = new EntityStore(PidType.RandomPids);
             var entity2 = store2.CreateEntity(2);
             entity2.RemoveSignalHandler<MyEvent1>(_ => { });
             
@@ -171,7 +171,7 @@ public static class Test_Entity_Events
             entity3.RemoveSignalHandler<MyEvent1>(_ => { });
             AreEqual("event types: 1, handlers: 1", entity3.DebugEventHandlers.ToString());
         }
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity(1);
 
         var entity1SignalCount = 0;

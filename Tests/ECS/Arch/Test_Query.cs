@@ -53,7 +53,7 @@ public static class Test_Query
     [Test]
     public static void Test_generic_Query_with_AllTags()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity();
         entity1.AddComponent<Position>();
         entity1.AddComponent<Rotation>();
@@ -103,7 +103,7 @@ public static class Test_Query
     [Test]
     public static void Test_generic_Query_QueryFilter()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity();
         entity1.AddComponent<Position>();
         entity1.AddComponent<Rotation>();
@@ -141,7 +141,7 @@ public static class Test_Query
     [Test]
     public static void Test_generic_Query_QueryFilter_exceptions()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var filter = new QueryFilter().FreezeFilter();
 
         var e = Assert.Throws<InvalidOperationException>(() => {
@@ -153,7 +153,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_ForEachEntity()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         for (int n = 1; n <= 5; n++) {
             store.Batch()
                 .Add(new Position   (n, 0, 0))
@@ -228,7 +228,7 @@ public static class Test_Query
     [Test]
     public static void Test_Signature_Query()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         
         var sig1 = Signature.Get<Position>();
@@ -294,7 +294,7 @@ public static class Test_Query
     [Test]
     public static void Test_Signature_Query_ReadOnly()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         
         var sig1 = Signature.Get<Position>();
         var sig2 = Signature.Get<Position, Rotation>();
@@ -347,7 +347,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_creation_Perf()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var sig     = Signature.Get<Position, Rotation>();
         var count   = 10; // 100_000_000 ~ #PC: 1.897 ms
         for (int n = 0; n < count; n++) {
@@ -358,7 +358,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_AsEntityList()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         for (int n = 0; n < 10; n++) {
             store.CreateEntity().AddComponent<Position>();
         }
@@ -389,7 +389,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_loop()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity2 = store.CreateEntity();
         entity2.AddComponent(new Position(1,2,3));
         entity2.AddComponent(new Rotation(4,5,6,7));
@@ -438,7 +438,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_Chunks_RO()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity2 = store.CreateEntity();
         entity2.AddComponent(new Position(1, 1, 1));
         entity2.AddComponent(new Rotation(4, 2, 2, 2));
@@ -474,7 +474,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_Archetype_Entities()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var archetype = store.GetArchetype(ComponentTypes.Get<Position>());
         for (int n = 0; n < 10; n++) {
             archetype.CreateEntity();

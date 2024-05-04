@@ -15,7 +15,7 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_SetStore()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var list    = new EntityList();
         IsNull(list.EntityStore);
         var entity  = store.CreateEntity();
@@ -31,7 +31,7 @@ public static class Test_EntityList
         var count       = 10;   // 1_000_000 ~ #PC: 7715 ms
         var entityCount = 100;
         
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity();
         var arch2   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         var arch3   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>(), Tags.Get<Disabled>());
@@ -72,7 +72,7 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_ApplyBatch()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity = store.CreateEntity(1);
         
         var list = new EntityList(store);
@@ -134,7 +134,7 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_IList()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var list    = new EntityList(store);
         
         IsFalse(list.IsReadOnly);
@@ -154,8 +154,8 @@ public static class Test_EntityList
     [Test]
     public static void Test_EntityList_exception()
     {
-        var store1  = new EntityStore();
-        var store2  = new EntityStore();
+        var store1  = new EntityStore(PidType.RandomPids);
+        var store2  = new EntityStore(PidType.RandomPids);
         var entity1 = store1.CreateEntity();
         var entity2 = store2.CreateEntity();
         var list    = new EntityList(store2);

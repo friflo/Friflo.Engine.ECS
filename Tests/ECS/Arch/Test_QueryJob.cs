@@ -367,7 +367,7 @@ public static class Test_QueryJob
     [Test]
     public static void Test_QueryJob_ParallelComponentMultiple()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         var multiple = store.Query<ByteComponent>() .ForEach((_, _) => {}).ParallelComponentMultiple;
         Assert.AreEqual(64, multiple);
         

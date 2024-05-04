@@ -10,7 +10,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_ChunkEntitiesDebugView()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         store.CreateEntity(1).AddComponent<Position>();
         store.CreateEntity(2).AddComponent<Position>();
         
@@ -30,7 +30,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_QueryEntitiesDebugView()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         store.CreateEntity(1).AddComponent<Position>();
         store.CreateEntity(2).AddComponent<Position>();
         
@@ -46,7 +46,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_ChunkDebugView()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         store.CreateEntity(1).AddComponent<Position>();
         store.CreateEntity(2).AddComponent<Position>();
         

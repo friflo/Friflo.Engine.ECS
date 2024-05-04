@@ -12,7 +12,7 @@ public static class Test_Deprecated
     [Test]
     public static void Test_Deprecated_properties()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         
         AreEqual(0, store.EntityCount);     // replaced by Count
         
@@ -27,7 +27,7 @@ public static class Test_Deprecated
     [Test]
     public static void Test_Deprecated_QueryChunk_EntityCount()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         _ = store.Query<Position>()                                                 .Chunks.EntityCount;
         _ = store.Query<Position, Rotation>()                                       .Chunks.EntityCount;
         _ = store.Query<Position, Rotation, Scale3>()                               .Chunks.EntityCount;

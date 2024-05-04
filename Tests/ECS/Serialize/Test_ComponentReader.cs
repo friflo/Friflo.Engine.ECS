@@ -458,7 +458,7 @@ public static class Test_ComponentReader
     
     [Test]
     public static void Test_ComponentReader_Load_DataEntity_RandomPids() {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var converter   = EntityConverter.Default;
         
         var children    = new List<long>();

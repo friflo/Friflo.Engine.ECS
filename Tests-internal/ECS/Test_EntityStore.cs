@@ -27,7 +27,7 @@ public static class Test_EntityStore
     /// <summary>Cover <see cref="EntityStoreBase.AddArchetype"/></summary>
     [Test]
     public static void Test_Tags_cover_AddArchetype() {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var archetype   = store.GetArchetype(ComponentTypes.Get<Position>());
         
         archetype.SetInternalField(nameof(archetype.archIndex), 5);
@@ -41,7 +41,7 @@ public static class Test_EntityStore
     /// <summary>Cover invariant assertion in <see cref="EntityStore.RemoveScript"/></summary>
     [Test]
     public static void Test_EntityStore_RemoveScript() {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
         entity.AddScript(new TestScript1());
         store.SetInternalField("entityScriptCount", 1);

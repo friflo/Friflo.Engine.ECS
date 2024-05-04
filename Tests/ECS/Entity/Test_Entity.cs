@@ -27,7 +27,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_non_generic_Script_methods()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
         var schema      = EntityStore.GetEntitySchema();
         var script1Type = schema.ScriptTypeByType[typeof(TestScript1)];
@@ -62,7 +62,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_non_generic_Component_methods()
     {
-        var store           = new EntityStore();
+        var store           = new EntityStore(PidType.RandomPids);
         var entity          = store.CreateEntity();
         var schema          = EntityStore.GetEntitySchema();
         var componentType   = schema.ComponentTypeByType[typeof(EntityName)];
@@ -121,7 +121,7 @@ public static class Test_Entity
     [Test]
     public static void Assert_GetEntityById()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         store.CreateEntity(2);
 
         AreEqual(4, store.Capacity);
@@ -139,7 +139,7 @@ public static class Test_Entity
     [Test]
     public static void Assert_TryGetEntityById()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         store.CreateEntity(2);
 
         AreEqual(4, store.Capacity);
@@ -163,7 +163,7 @@ public static class Test_Entity
     [Test]
     public static void Test_EntityStore_CloneEntity()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
         var script1     = new TestScript1();
         entity.AddScript(script1);
@@ -196,7 +196,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_EqualityComparer()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         
@@ -211,7 +211,7 @@ public static class Test_Entity
     [Test]
     public static void Test_Entity_Equality()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity1     = store.CreateEntity(1);
         var entity2     = store.CreateEntity(2);
         

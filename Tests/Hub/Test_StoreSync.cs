@@ -173,7 +173,7 @@ public static class Test_StoreSync
         });
         AreEqual("store", e!.ParamName);
         
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         e = Throws<ArgumentNullException>(() => {
             _ = new StoreSync(store, null);
         });

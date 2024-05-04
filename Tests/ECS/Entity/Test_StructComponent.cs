@@ -22,7 +22,7 @@ public static class Test_StructComponent
 {
     [Test]
     public static void Test_1_TryGetComponentValue() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         
         var player1 = store.CreateEntity();
         IsTrue(player1.AddComponent<Scale3>());
@@ -61,7 +61,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_1_custom_Entity_Extensions() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         player.AddComponent<MyComponent1>();
         player.AddComponent<MyComponent2>();
@@ -76,7 +76,7 @@ public static class Test_StructComponent
     /// <summary>cover <see cref="EntityStoreBase.GetArchetypeWithout"/></summary>
     [Test]
     public static void Test_2_add_remove_struct_component() {
-        var store  = new EntityStore();
+        var store  = new EntityStore(PidType.RandomPids);
         var player = store.CreateEntity();
         IsTrue(player.AddComponent(new MyComponent1()));
         IsTrue(player.AddComponent(new Position()));
@@ -93,7 +93,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_2_CreateEntity() {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         for (int n = 0; n < 512; n++) {
             var player1 =store.CreateEntity();
             player1.AddComponent<Position>();
@@ -108,7 +108,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_3_AddPosition()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity();
         IsTrue (entity1.AddComponent(new Position { x = 1,  y = 2 }));
         IsFalse(entity1.AddComponent(new Position { x = 10, y = 11 }));
@@ -137,7 +137,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_4_GetArchetype() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         AreEqual(1, store.Archetypes.Length);
         
         var type1   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
@@ -163,7 +163,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_5_AddPositionRotation() {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         
         var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
         var posRotType  = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
@@ -209,7 +209,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_HasPosition_Perf() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         player.AddComponent(new Position());
         IsTrue(player.HasPosition);
@@ -222,7 +222,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_GetComponent_Perf() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         player.AddComponent(new MyComponent1());
         IsTrue(player.HasComponent<MyComponent1>());
@@ -244,7 +244,7 @@ public static class Test_StructComponent
 
     [Test]
     public static void Test_6_AddRotation() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var type    = store.GetArchetype(ComponentTypes.Get<Rotation, Scale3>());
         
         var player = store.CreateEntity();
@@ -284,7 +284,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_ComponentEnumerator()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         AreEqual(0,     player.Components.Count);
         
@@ -327,7 +327,7 @@ public static class Test_StructComponent
     /// </summary>
     [Test]
     public static void Test_7_MoveComponent() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         AreEqual(1, store.Archetypes.Length);
         
         var player1 = store.CreateEntity();
@@ -347,7 +347,7 @@ public static class Test_StructComponent
 
     [Test]
     public static void Test_8_ModifyComponent() {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         var player = store.CreateEntity();
         player.AddComponent<Position>();
         // set via GetComponent<>()
@@ -361,7 +361,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_9_TestMissingComponent()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var player  = store.CreateEntity();
         Throws<NullReferenceException>(() => {
             player.GetComponent<MyInvalidComponent>();
@@ -374,7 +374,7 @@ public static class Test_StructComponent
     /// <summary>Similar to <see cref="Raw.Test_RawEntities.Test_RawEntities_Components"/></summary>
     [Test]
     public static void Test_9_RemoveComponent() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var type1 = store.GetArchetype(ComponentTypes.Get<Position>());
         var type2 = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         
@@ -419,7 +419,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_9_Add_Remove_Component_Perf() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var posType = store.GetArchetype(ComponentTypes.Get<Position>());
         store.CreateEntity().AddComponent<Position>();
         store.CreateEntity().AddComponent<Position>();
@@ -440,7 +440,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_9_Set_Name() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         IsFalse(entity.HasName);
         IsFalse(entity.HasPosition);
@@ -464,19 +464,19 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_StructComponent_EntityStore_creation_Perf() {
-        _ = new EntityStore();
+        _ = new EntityStore(PidType.RandomPids);
         var stopwatch =  new Stopwatch();
         stopwatch.Start();
         int count = 10; // 1_000_000 ~ #PC: 422 ms
         for (int n = 0; n < count; n++) {
-            _ = new EntityStore();
+            _ = new EntityStore(PidType.RandomPids);
         }
         Console.WriteLine($"EntityStore count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
     }
     
     [Test]
     public static void Test_StructComponent_create_delete_entity() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var arch0   = store.GetArchetype(default);
         var entity1 = store.CreateEntity();
         var entity2 = store.CreateEntity();
@@ -497,7 +497,7 @@ public static class Test_StructComponent
     
     [Test]
     public static void Test_StructComponent_add_remove_component() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var arch0   = store.GetArchetype(default);
         var arch1   = store.GetArchetype(ComponentTypes.Get<Position>());
         var entity1 = store.CreateEntity();
@@ -522,7 +522,7 @@ public static class Test_StructComponent
     [Test]
     public static void Test_StructComponent_Archetype_CreateEntity_default_components()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
                     store.GetArchetype(ComponentTypes.Get<Position>());
         var arch2 = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         var arch3 = store.GetArchetype(ComponentTypes.Get<Position, Rotation, MyComponent1>());

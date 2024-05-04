@@ -12,7 +12,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_Key()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
         var posRotType  = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         
@@ -47,7 +47,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_StructHeap_ToString()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
         entity.AddComponent<Position>();
         var posType     = store.GetArchetype(ComponentTypes.Get<Position>());
@@ -58,7 +58,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_Tags_Query()
     {
-        var store           = new EntityStore();
+        var store           = new EntityStore(PidType.RandomPids);
         var archTestTag     = store.GetArchetype(default, Tags.Get<TestTag>());
         var archTestTagAll  = store.GetArchetype(default, Tags.Get<TestTag, TestTag2>());
         AreEqual(3,                             store.Archetypes.Length);
@@ -69,7 +69,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_Entities_query_ToString()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         
         var arch    = store.GetArchetype(ComponentTypes.Get<Position>());
         AreEqual("Archetype: [Position]  Count: 0", arch.Entities.query.ToString());
@@ -81,7 +81,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_EntityStore_Entities_query_ToString()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         AreEqual("Query: []  Count: 0", store.Entities.query.ToString());
     }
     

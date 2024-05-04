@@ -53,7 +53,7 @@ internal class ExplorerViewModel
     
     private static EntityStore CreateTestStore()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root =    CreateEntity(store, 1, "root");
         root.AddChild(CreateEntity(store, 2, "child 2"));
         root.AddChild(CreateEntity(store, 3, "child 3"));

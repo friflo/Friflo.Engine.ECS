@@ -14,7 +14,7 @@ public static class Test_Find
     {
         Assert.AreEqual("UniqueEntity: 'test'", new UniqueEntity("test").ToString());
         
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         
         var entity1 = store.CreateEntity();
         entity1.AddComponent(new UniqueEntity("Player"));
@@ -42,7 +42,7 @@ public static class Test_Find
     [Test]
     public static void Test_Find_UniqueEntity_error()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var archetype1  = store.GetArchetype(ComponentTypes.Get<Position>());
         
         var entity1 = archetype1.CreateEntity();

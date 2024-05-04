@@ -22,7 +22,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_CreateEntity_UseRandomPids()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         store.SetRandomSeed(0);
         var entity  = store.CreateEntity();
         AreEqual(1,             entity.Id);
@@ -45,7 +45,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_AddChild()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -100,7 +100,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_InsertChild()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -184,7 +184,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_InsertChild_EnsureChildIdsCapacity()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var events = SetHandlerSeq(store, (args, seq) => {
             AreEqual(1,                                 args.EntityId);
@@ -207,7 +207,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_InsertChild_cover()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
        
@@ -253,7 +253,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_AddChild_move_root_tree_entity()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var root        = store.CreateEntity(1);
         store.SetStoreRoot(root);
         var child1      = store.CreateEntity(2);
@@ -292,7 +292,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_RemoveChild()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
         AreEqual(floating,  root.TreeMembership);
@@ -329,7 +329,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_RemoveChild_from_multiple_children()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
         var child3  = store.CreateEntity(3);
@@ -361,7 +361,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_SetRoot()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         
         var root    = store.CreateEntity(1);
         IsTrue (root.Parent.IsNull);
@@ -390,7 +390,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_move_with_AddChild()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         var child   = store.CreateEntity(3);
@@ -429,7 +429,7 @@ public static class Test_Entity_Tree
         var nullEntity = new Entity();
         AreEqual("null",                nullEntity.ToString());
         
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         
         var entity  = store.CreateEntity(1);
         AreEqual("id: 1  []",           entity.ToString());
@@ -444,7 +444,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_DeleteEntity()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
         store.SetStoreRoot(root);
@@ -510,7 +510,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Test_Entity_Tree_cover_DeleteNode()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
         var child3  = store.CreateEntity(3);
@@ -551,7 +551,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_GetChildIndex()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         AreEqual(-1, root.GetChildIndex(entity2));
@@ -561,7 +561,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_EntityStore_ChildEntitiesChanged()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var child2  = store.CreateEntity(2);
         var child3  = store.CreateEntity(3);
@@ -584,7 +584,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_Tree_ChildEnumerator()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity(1);
         var child   = store.CreateEntity(2);
         root.AddChild(child);
@@ -619,7 +619,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_id_argument_exceptions()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var e = Throws<ArgumentException>(() => {
             store.CreateEntity(0);
         });
@@ -636,21 +636,21 @@ public static class Test_Entity_Tree
     public static void Test_Entity_SetRoot_assertions()
     {
         {
-            var store   = new EntityStore();
+            var store   = new EntityStore(PidType.RandomPids);
             var e       = Throws<ArgumentNullException>(() => {
                 store.SetStoreRoot(default);
             });
             AreEqual("entity", e!.ParamName);
         } {
-            var store1  = new EntityStore();
-            var store2  = new EntityStore();
+            var store1  = new EntityStore(PidType.RandomPids);
+            var store2  = new EntityStore(PidType.RandomPids);
             var entity  = store1.CreateEntity();
             var e       = Throws<ArgumentException>(() => {
                 store2.SetStoreRoot(entity);            
             });
             AreEqual("entity is owned by a different store (Parameter 'entity')", e!.Message);
         } {
-            var store   = new EntityStore();
+            var store   = new EntityStore(PidType.RandomPids);
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
             store.SetStoreRoot(entity1);
@@ -659,7 +659,7 @@ public static class Test_Entity_Tree
             });
             AreEqual("EntityStore already has a StoreRoot. StoreRoot id: 1", e!.Message);
         } {
-            var store   = new EntityStore();
+            var store   = new EntityStore(PidType.RandomPids);
             var entity1 = store.CreateEntity();
             var entity2 = store.CreateEntity();
             entity1.AddChild(entity2);
@@ -673,8 +673,8 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_Tree_InvalidStoreException()
     {
-        var store1   = new EntityStore();
-        var store2   = new EntityStore();
+        var store1   = new EntityStore(PidType.RandomPids);
+        var store2   = new EntityStore(PidType.RandomPids);
         
         var entity1 = store1.CreateEntity();
         var entity2 = store2.CreateEntity();
@@ -699,7 +699,7 @@ public static class Test_Entity_Tree
     [Test]
     public static void Test_Entity_Tree_RandomPid_Coverage()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         store.SetRandomSeed(1);
         store.CreateEntity();
         store.SetRandomSeed(1); // Random generate same pid. use Next() pid

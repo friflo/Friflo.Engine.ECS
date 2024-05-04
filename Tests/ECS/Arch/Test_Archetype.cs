@@ -11,7 +11,7 @@ public static class Test_Archetype
     [Test]
     public static void Test_Archetype_CreateEntity_id_exception()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var type1   = store.GetArchetype(ComponentTypes.Get<Position>());
         
         var e = Throws<ArgumentException>(() => {

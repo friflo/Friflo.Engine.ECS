@@ -152,7 +152,7 @@ public static class Test_ComponentTypes
     [Test]
     public static void Test_ComponentTypes_Tags()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var type        = store.GetArchetype(default, Tags.Get<TestTag2, TestTag3>());
         var tags        = type.Tags;
         AreEqual(2, tags.Count);
@@ -170,7 +170,7 @@ public static class Test_ComponentTypes
     [Test]
     public static void Test_ComponentTypes_lookup_structs_and_tags_Perf()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var type1   = store.GetArchetype(ComponentTypes.Get<Position>());
         var result  = store.FindArchetype(type1.ComponentTypes, type1.Tags);
         AreEqual(1, type1.ComponentTypes.Count);

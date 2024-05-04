@@ -15,7 +15,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_Entity()
     {
-        var store = new EntityStore();
+        var store = new EntityStore(PidType.RandomPids);
         var countAdd    = 0;
         var countRemove = 0;
         var countChange = 0;
@@ -112,7 +112,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_ApplyTo()
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var batch   = new EntityBatch();
         batch.Add   (new Position());
         batch.AddTag<TestTag>();
@@ -136,7 +136,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_ApplyBatch()
     {
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         for (int n = 0; n < 10; n++) {
             store.CreateEntity();
         }
@@ -161,7 +161,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_multiple_batches() 
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity1 = store.CreateEntity(1);
         var entity2 = store.CreateEntity(2);
         
@@ -186,7 +186,7 @@ public static class Test_Batch
     [Test]
     public static void Test_Batch_already_applied_exception() 
     {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity(1);
         
         var batch = entity.Batch().Add(new Position());
@@ -220,7 +220,7 @@ public static class Test_Batch
     public static void Test_Batch_Apply_Perf()
     {
         int count       = 10; // 10_000_000 ~ #PC: 1617 ms
-        var store       = new EntityStore();
+        var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
         var addTags     = Tags.Get<TestTag2>();
         var removeTags  = Tags.Get<TestTag>();
@@ -256,7 +256,7 @@ public static class Test_Batch
     {
         int count       = 10; // 100_000 ~ #PC: 1796 ms
         int entityCount = 100;
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         for (int n = 0; n < entityCount; n++) {
             store.CreateEntity();
         }
@@ -297,7 +297,7 @@ public static class Test_Batch
     
     [Test]
     public static void Test_Batch_obsolete() {
-        var store   = new EntityStore();
+        var store   = new EntityStore(PidType.RandomPids);
         var entity  = store.CreateEntity();
         entity.AddComponent(new EntityName("test"));
         
