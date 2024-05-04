@@ -156,7 +156,7 @@ public sealed partial class EntityStore : EntityStoreBase
     #endregion
     
 #region initialize
-    public EntityStore() : this (PidType.RandomPids) { }
+    public EntityStore() : this (PidType.UsePidAsId) { }
     
     public EntityStore(PidType pidType)
     {

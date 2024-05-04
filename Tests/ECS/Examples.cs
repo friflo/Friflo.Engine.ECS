@@ -81,7 +81,7 @@ public struct MyComponent : IComponent {
 [Test]
 public static void AddComponents()
 {
-    var store   = new EntityStore(PidType.UsePidAsId);
+    var store   = new EntityStore();
     var entity  = store.CreateEntity();
     
     // add components
@@ -193,7 +193,7 @@ public static void AddSignalHandler()
 [Test]
 public static void JsonSerialization()
 {
-    var store = new EntityStore(PidType.UsePidAsId);
+    var store = new EntityStore();
     var entity1 = store.CreateEntity(new EntityName("hello JSON"));
     var entity2 = store.CreateEntity(new Position(1, 2, 3));
 
@@ -204,7 +204,7 @@ public static void JsonSerialization()
     writeStream.Close();
     
     // --- Read JSON array into new store
-    var targetStore = new EntityStore(PidType.UsePidAsId);
+    var targetStore = new EntityStore();
     serializer.ReadIntoStore(targetStore, new FileStream("entity-store.json", FileMode.Open));
     
     Console.WriteLine($"entities: {targetStore.Count}"); // > entities: 2
