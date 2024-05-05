@@ -19,7 +19,7 @@ namespace Friflo.Engine.ECS.Systems
             if (archetype == null)      throw new ArgumentNullException(nameof(archetype));
             
             target.Clear();
-            var entityStore = archetype.store;
+            var entityStore = archetype.entityStore;
             _matchesCount   = 0;
             var stores      = systemGroup.SystemRoot.Stores;
             for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)   // commonly: one or few stores per ECSSystemSet
