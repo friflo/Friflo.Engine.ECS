@@ -38,7 +38,7 @@ namespace Tests.ECS.Systems
             var matches = new List<SystemMatch>();
             
             // --- add groups
-            root.GetMatchingSystems(entity1, matches, true);
+            root.GetMatchingSystems(entity1.Archetype, matches, true);
             AreEqual(2, matches.Count);
             AreEqual("Group-1 [1] - Depth: 1",      matches[0].ToString());
             AreEqual("PositionSystem - Depth: 2",   matches[1].ToString());
@@ -53,7 +53,7 @@ namespace Tests.ECS.Systems
             AreEqual(1,             match1.Count);
             AreEqual(2,             match1.Depth);
             
-            root.GetMatchingSystems(entity2, matches, true);
+            root.GetMatchingSystems(entity2.Archetype, matches, true);
             AreEqual(4, matches.Count);
             AreEqual("Group-1 [1] - Depth: 1",      matches[0].ToString());
             AreEqual("PositionSystem - Depth: 2",   matches[1].ToString());
@@ -61,11 +61,11 @@ namespace Tests.ECS.Systems
             AreEqual("ScaleSystem - Depth: 2",      matches[3].ToString());
             
             // --- flat
-            root.GetMatchingSystems(entity1, matches, false);
+            root.GetMatchingSystems(entity1.Archetype, matches, false);
             AreEqual(1, matches.Count);
             AreEqual("PositionSystem - Depth: 0",   matches[0].ToString());
             
-            root.GetMatchingSystems(entity2, matches, false);
+            root.GetMatchingSystems(entity2.Archetype, matches, false);
             AreEqual(2, matches.Count);
             AreEqual("PositionSystem - Depth: 0",   matches[0].ToString());
             AreEqual("ScaleSystem - Depth: 0",      matches[1].ToString());
@@ -80,18 +80,18 @@ namespace Tests.ECS.Systems
             var matches = new List<SystemMatch>();
             
             var e = Throws<ArgumentNullException>(() => {
-                root.GetMatchingSystems(entity, null, true);
+                root.GetMatchingSystems(entity.Archetype, null, true);
             });
             AreEqual("Value cannot be null. (Parameter 'target')", e!.Message);
             
             e = Throws<ArgumentNullException>(() => {
-                root.GetMatchingSystems(default, matches, true);
+                root.GetMatchingSystems(null, matches, true);
             });
-            AreEqual("Value cannot be null. (Parameter 'entity')", e!.Message);
+            AreEqual("Value cannot be null. (Parameter 'archetype')", e!.Message);
             
             e = Throws<ArgumentNullException>(() => {
                 root = null;
-                root.GetMatchingSystems(entity, matches, true);
+                root.GetMatchingSystems(entity.Archetype, matches, true);
             });
             AreEqual("Value cannot be null. (Parameter 'systemGroup')", e!.Message);
         }

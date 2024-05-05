@@ -31,7 +31,7 @@ namespace Tests.ECS.Systems
     public class ScaleSystem : QuerySystem<Scale3>
     {
         protected override void OnUpdate() {
-            Query.ForEachEntity((ref Scale3 scale3, Entity entity) => {
+            Query.ForEachEntity((ref Scale3 scale3, Entity _) => {
                 scale3.x++;
             });
         }
@@ -40,7 +40,7 @@ namespace Tests.ECS.Systems
     public class PositionSystem : QuerySystem<Position>
     {
         protected override void OnUpdate() {
-            Query.ForEachEntity((ref Position position, Entity entity) => {
+            Query.ForEachEntity((ref Position position, Entity _) => {
                 position.x++;
             });
         }

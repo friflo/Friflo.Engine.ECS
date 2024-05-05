@@ -12,29 +12,29 @@ namespace Friflo.Engine.ECS.Systems
         private static SystemMatch[]    _matches = new SystemMatch[1];
         private static int              _matchesCount;
         
-        public static void GetMatchingSystems(this SystemGroup systemGroup, Entity entity, List<SystemMatch> target, bool addGroups)
+        public static void GetMatchingSystems(this SystemGroup systemGroup, Archetype archetype, List<SystemMatch> target, bool addGroups)
         {
             if (systemGroup == null)    throw new ArgumentNullException(nameof(systemGroup));
             if (target == null)         throw new ArgumentNullException(nameof(target));
-            if (entity.IsNull)          throw new ArgumentNullException(nameof(entity));
+            if (archetype == null)      throw new ArgumentNullException(nameof(archetype));
             
             target.Clear();
+            var entityStore = archetype.store;
             _matchesCount   = 0;
-            var type        = entity.Archetype;
             var stores      = systemGroup.SystemRoot.Stores;
             for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)   // commonly: one or few stores per ECSSystemSet
             {
                 var store = stores[storeIndex];
                 // early out if different EntityStore
-                if (store != entity.Store) {
+                if (store != entityStore) {
                     continue;
                 }
                 if (addGroups) {
                     var parent = -1;
                     AddMatch(new SystemMatch { system = systemGroup, depth = 0, parent = parent });
-                    GetGroupSystems(type, systemGroup, storeIndex, parent, 1);
+                    GetGroupSystems(archetype, systemGroup, storeIndex, parent, 1);
                 } else {
-                    GetSystems(type, systemGroup, storeIndex);
+                    GetSystems(archetype, systemGroup, storeIndex);
                 }
             }
             AddMatches(target, addGroups);
