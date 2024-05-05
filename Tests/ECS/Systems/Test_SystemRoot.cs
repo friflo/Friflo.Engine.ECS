@@ -169,11 +169,13 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Update_Perf()
         {
-            int count   = 10;   // 100_000_000 ~ #PC: 3337 ms
-            var store   = new EntityStore(PidType.UsePidAsId);
-            var root    = new SystemRoot("Systems");
-            root.AddSystem(new TestSystem2());
+            int count       = 10;   // 100_000_000 ~ #PC: 3679 ms (perf ~ 300ms)
+            var store       = new EntityStore(PidType.UsePidAsId);
+            var root        = new SystemRoot("Systems");
+            var testSystem2 = new TestSystem2();
+            root.AddSystem(testSystem2);
             root.AddStore(store);
+            root.SetPerfEnabled(false);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -181,6 +183,8 @@ namespace Tests.ECS.Systems
                 root.Update(default);
             }
             Console.WriteLine($"Test_SystemRoot_Update_Perf - count: {count}, duration: {sw.ElapsedMilliseconds} ms");
+            Console.WriteLine($"SystemRoot  - DurationSumMs: {root.PerfSumMs}");
+            Console.WriteLine($"TestSystem2 - DurationSumMs: {testSystem2.PerfSumMs}");
         }
     }
     

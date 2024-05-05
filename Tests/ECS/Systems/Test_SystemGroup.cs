@@ -290,6 +290,46 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
+        public static void Test_SystemGroup_PerfMs()
+        {
+            var root        = new SystemRoot("Systems");
+            var child1      = new SystemGroup("Child1");
+            var perfSystem1 = new PerfSystem();
+            var perfSystem2 = new PerfSystem();
+            
+            root.AddSystem(child1);
+            root.AddSystem(perfSystem1);
+            child1.AddSystem(perfSystem2);
+            
+            IsFalse(root.       PerfEnabled);
+            IsFalse(child1.     PerfEnabled);
+            
+            root.Update(default);
+            IsTrue(root.        PerfMs == 0);
+            IsTrue(child1.      PerfMs == 0);
+            IsTrue(perfSystem1. PerfMs == 0);
+            IsTrue(perfSystem2. PerfMs == 0);
+            
+            root.SetPerfEnabled(true);
+            IsTrue(root.        PerfEnabled);
+            IsTrue(child1.      PerfEnabled);
+            
+            root.Update(default);
+            if (child1.PerfMs == 0) {
+                _ = 42;
+            }
+            IsTrue(root.        PerfMs > 0);
+            IsTrue(child1.      PerfMs > 0);
+            IsTrue(perfSystem1. PerfMs > 0);
+            IsTrue(perfSystem2. PerfMs > 0);
+            
+            AreEqual(root.          PerfMs, root.       PerfSumMs);
+            AreEqual(child1.        PerfMs, child1.     PerfSumMs);
+            AreEqual(perfSystem1.   PerfMs, perfSystem1.PerfSumMs);
+            AreEqual(perfSystem2.   PerfMs, perfSystem2.PerfSumMs);
+        }
+        
+        [Test]
         public static void Test_SystemGroup_exceptions_add_remove()
         {
             var group = new SystemGroup("Group1");

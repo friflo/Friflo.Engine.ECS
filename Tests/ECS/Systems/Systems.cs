@@ -1,7 +1,9 @@
-﻿using Friflo.Engine.ECS;
+﻿using System.Diagnostics;
+using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable NotAccessedField.Local
 namespace Tests.ECS.Systems
 {
     public class TestSystem1 : QuerySystem<Position>
@@ -74,5 +76,19 @@ namespace Tests.ECS.Systems
         protected   override void   OnUpdateGroupBegin() { }
         protected   override void   OnUpdateGroupEnd()   { }
         public      override void   Update(Tick tick)    { }
+    }
+    
+    public class PerfSystem: BaseSystem {
+        private int dummy;
+
+        /// <summary>
+        /// Do some loop iterations to ensure <see cref="BaseSystem.durationTicks"/> > 0.<br/>
+        /// Execution time must be greater than 1 / <see cref="Stopwatch.Frequency"/>.
+        /// </summary>
+        public override void Update(Tick tick) {
+            for (int n = 0; n < 1000; n++) {
+                dummy++;
+            }
+        }
     }
 }

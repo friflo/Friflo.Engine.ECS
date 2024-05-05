@@ -21,7 +21,6 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)] public          ComponentTypes              ComponentTypes  => componentTypes;
                         public          ReadOnlyList<ArchetypeQuery>Queries         => queries;
         [Browse(Never)] public          CommandBuffer               CommandBuffer   => commandBuffer;
-                        internal        View                        System          => view ??= new View(this);              
         #endregion
         
     #region fields
@@ -29,7 +28,6 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)] private  readonly   ComponentTypes              componentTypes;
         [Browse(Never)] private             ReadOnlyList<ArchetypeQuery>queries;
         [Browse(Never)] private             CommandBuffer               commandBuffer;
-        [Browse(Never)] private             View                        view;
         #endregion
         
     #region constructor

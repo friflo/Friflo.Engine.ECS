@@ -3,6 +3,7 @@
 
 
 using System;
+using System.Diagnostics;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -17,18 +18,17 @@ namespace Friflo.Engine.ECS.Systems
     {
     #region properties
         [Browse(Never)] public override string                      Name            => name;
+        [Browse(Never)] public          bool                        PerfEnabled     => perfEnabled;
                         public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
-                        internal        View                        System          => view ??= new View(this);
                         internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
                         public override string                      ToString()      => $"'{name}' Group - systems: {childSystems.Count}";
         #endregion
         
     #region fields
-        [Serialize]
-        [Browse(Never)] private     string                      name;
-        [Browse(Never)] internal    ReadOnlyList<BaseSystem>    childSystems;
-        [Browse(Never)] internal    ReadOnlyList<CommandBuffer> commandBuffers;
-        [Browse(Never)] private     View                        view;
+        [Serialize] [Browse(Never)] private     string                      name;
+                    [Browse(Never)] internal    ReadOnlyList<BaseSystem>    childSystems;
+                    [Browse(Never)] internal    ReadOnlyList<CommandBuffer> commandBuffers;
+        [Ignore]    [Browse(Never)] private     bool                        perfEnabled;
         #endregion
         
     #region constructor
@@ -173,8 +173,10 @@ namespace Friflo.Engine.ECS.Systems
             if (!Enabled) {
                 return;
             }
-            Tick = tick;
-            var children = childSystems;
+            var startGroup  = perfEnabled ? GetTimestamp() : 0;
+            Tick            = tick;
+            var children    = childSystems;
+            
             // --- calls OnUpdateGroupBegin() once per child system.
             foreach (var child in children) {
                 if (!child.Enabled) continue;
@@ -182,8 +184,10 @@ namespace Friflo.Engine.ECS.Systems
                 child.OnUpdateGroupBegin();
             }
             // --- calls OnUpdate() for every QuerySystem child and every store of SystemRoot.Stores - commonly a single store.
+            var start = perfEnabled ? GetTimestamp() : 0;
             foreach (var child in children) {
                 child.Update(tick);
+                SetChildDuration(child, ref start);
             }
             // --- apply command buffer changes
             foreach (var commandBuffer in commandBuffers) {
@@ -196,9 +200,53 @@ namespace Friflo.Engine.ECS.Systems
                 child.Tick = default;
             }
             Tick = default;
+            SetGroupDuration(ref startGroup);
         }
         #endregion
         
-
+    #region perf
+        public void SetPerfEnabled(bool enable)
+        {
+            perfEnabled = enable;
+            foreach (var child in childSystems) {
+                if (child is SystemGroup systemGroup) {
+                    systemGroup.SetPerfEnabled(enable);
+                }
+            }
+        }
+        
+        private static long GetTimestamp() {
+            return Stopwatch.GetTimestamp();
+        }
+        
+        private static void SetChildDuration(BaseSystem system, ref long start)
+        {
+            if (start == 0) {
+                system.durationTicks = 0;
+                return;
+            }
+            if (system is SystemGroup) {
+                return; // case: durations are set by: SystemGroup.Update(Tick) -> SetGroupDuration()
+            }
+            var time                = Stopwatch.GetTimestamp();
+            var duration            = time - start;
+            system.durationTicks    = duration;
+            system.durationSumTicks+= duration;
+            start                   = time;
+        }
+        
+        private void SetGroupDuration(ref long start)
+        {
+            if (start == 0) {
+                durationTicks = 0;
+                return;
+            }
+            var time            = Stopwatch.GetTimestamp();
+            var duration        = time - start;
+            durationTicks       = duration;
+            durationSumTicks   += duration;
+            start               = time;
+        }
+        #endregion
     }
 }

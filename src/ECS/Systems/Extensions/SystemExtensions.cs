@@ -3,12 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems
 {
     public static class SystemExtensions
     {
+        internal static readonly double StopwatchPeriodMs = 1 / (Stopwatch.Frequency / 1000d);
+        
         private static SystemMatch[]    _matches = new SystemMatch[1];
         private static int              _matchesCount;
         

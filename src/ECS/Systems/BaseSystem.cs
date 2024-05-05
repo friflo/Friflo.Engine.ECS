@@ -21,6 +21,9 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)]         public          SystemGroup     ParentGroup => parentGroup;
         [Browse(Never)][Ignore] public          bool            Enabled     { get => enabled; set => enabled = value; }
         [Browse(Never)]         public          int             Id          => id;
+        [Browse(Never)]         public          double          PerfMs      => durationTicks    * SystemExtensions.StopwatchPeriodMs;
+        [Browse(Never)]         public          double          PerfSumMs   => durationSumTicks * SystemExtensions.StopwatchPeriodMs;
+                                internal        View            System      => view ??= new View(this);
         #endregion
             
     #region fields
@@ -30,7 +33,10 @@ namespace Friflo.Engine.ECS.Systems
                     [Browse(Never)] private readonly    string      systemName;
                     [Browse(Never)] private             SystemGroup parentGroup;
                     [Browse(Never)] private             SystemRoot  systemRoot;
-         #endregion
+        [Ignore]    [Browse(Never)] internal            long        durationTicks;
+        [Ignore]    [Browse(Never)] internal            long        durationSumTicks;
+                    [Browse(Never)] private             View        view;
+        #endregion
          
     #region constructors
         protected BaseSystem() {
@@ -214,14 +220,16 @@ namespace Friflo.Engine.ECS.Systems
     
     internal sealed class View
     {
-        public  Tick                Tick            => system.Tick;
-        public  int                 Id              => system.Id;
-        public  bool                Enabled         => system.Enabled;
-        public  string              Name            => system.Name;
-        public  SystemRoot          SystemRoot      => system.SystemRoot;
-        public  SystemGroup         ParentGroup     => system.ParentGroup;
+        public  Tick                Tick        => system.Tick;
+        public  int                 Id          => system.Id;
+        public  bool                Enabled     => system.Enabled;
+        public  string              Name        => system.Name;
+        public  SystemRoot          SystemRoot  => system.SystemRoot;
+        public  SystemGroup         ParentGroup => system.ParentGroup;
+        public  double              PerfMs      => system.PerfMs;
+        public  double              PerfSumMs   => system.PerfSumMs;
 
-        public override string      ToString()      => $"Enabled: {Enabled}  Id: {Id}";
+        public override string      ToString()  => $"Enabled: {Enabled}  Id: {Id}";
 
         [Browse(Never)] private readonly BaseSystem   system;
         
