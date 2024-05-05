@@ -28,6 +28,24 @@ namespace Tests.ECS.Systems
         }
     }
     
+    public class ScaleSystem : QuerySystem<Scale3>
+    {
+        protected override void OnUpdate() {
+            Query.ForEachEntity((ref Scale3 scale3, Entity entity) => {
+                scale3.x++;
+            });
+        }
+    }
+    
+    public class PositionSystem : QuerySystem<Position>
+    {
+        protected override void OnUpdate() {
+            Query.ForEachEntity((ref Position position, Entity entity) => {
+                position.x++;
+            });
+        }
+    }
+    
     public class TestGroup : SystemGroup {
         internal int beginCalled;
         internal int endCalled;

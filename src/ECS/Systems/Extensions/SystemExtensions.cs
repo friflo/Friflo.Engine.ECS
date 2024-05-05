@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
@@ -13,6 +14,10 @@ namespace Friflo.Engine.ECS.Systems
         
         public static void GetMatchingSystems(this SystemGroup systemGroup, Entity entity, List<SystemMatch> target, bool addGroups)
         {
+            if (systemGroup == null)    throw new ArgumentNullException(nameof(systemGroup));
+            if (target == null)         throw new ArgumentNullException(nameof(target));
+            if (entity.IsNull)          throw new ArgumentNullException(nameof(entity));
+            
             target.Clear();
             _matchesCount   = 0;
             var type        = entity.Archetype;
