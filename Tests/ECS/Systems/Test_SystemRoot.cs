@@ -169,13 +169,17 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Update_Perf()
         {
-            int count       = 10;   // 100_000_000 ~ #PC: 3679 ms (perf ~ 300ms)
+            bool perfEnabled    = false;
+            int  count          = 100_000_000;
+                                // 100_000_000 - perfEnabled: false ~ #PC: 3577 ms (perf ~ 300ms)
+                                // 100_000_000 - perfEnabled: true  ~ #PC: 8546 ms
             var store       = new EntityStore(PidType.UsePidAsId);
             var root        = new SystemRoot("Systems");
             var testSystem2 = new TestSystem2();
             root.AddSystem(testSystem2);
             root.AddStore(store);
-            root.SetPerfEnabled(false);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            root.SetPerfEnabled(perfEnabled);
 
             var sw = new Stopwatch();
             sw.Start();

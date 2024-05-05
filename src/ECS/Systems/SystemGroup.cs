@@ -173,7 +173,7 @@ namespace Friflo.Engine.ECS.Systems
             if (!Enabled) {
                 return;
             }
-            var startGroup  = perfEnabled ? GetTimestamp() : 0;
+            var startGroup  = perfEnabled ? Stopwatch.GetTimestamp() : 0;
             Tick            = tick;
             var children    = childSystems;
             
@@ -184,10 +184,10 @@ namespace Friflo.Engine.ECS.Systems
                 child.OnUpdateGroupBegin();
             }
             // --- calls OnUpdate() for every QuerySystem child and every store of SystemRoot.Stores - commonly a single store.
-            var start = perfEnabled ? GetTimestamp() : 0;
             foreach (var child in children) {
+                var startChild = !perfEnabled || child is SystemGroup ? 0 : Stopwatch.GetTimestamp();
                 child.Update(tick);
-                SetChildDuration(child, ref start);
+                SetChildDuration(child, startChild);
             }
             // --- apply command buffer changes
             foreach (var commandBuffer in commandBuffers) {
@@ -200,7 +200,7 @@ namespace Friflo.Engine.ECS.Systems
                 child.Tick = default;
             }
             Tick = default;
-            SetGroupDuration(ref startGroup);
+            SetGroupDuration(startGroup);
         }
         #endregion
         
@@ -215,37 +215,26 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
         
-        private static long GetTimestamp() {
-            return Stopwatch.GetTimestamp();
-        }
-        
-        private static void SetChildDuration(BaseSystem system, ref long start)
+        private static void SetChildDuration(BaseSystem system, long start)
         {
             if (start == 0) {
-                system.durationTicks = 0;
                 return;
-            }
-            if (system is SystemGroup) {
-                return; // case: durations are set by: SystemGroup.Update(Tick) -> SetGroupDuration()
             }
             var time                = Stopwatch.GetTimestamp();
             var duration            = time - start;
             system.durationTicks    = duration;
             system.durationSumTicks+= duration;
-            start                   = time;
         }
         
-        private void SetGroupDuration(ref long start)
+        private void SetGroupDuration(long start)
         {
             if (start == 0) {
-                durationTicks = 0;
                 return;
             }
             var time            = Stopwatch.GetTimestamp();
             var duration        = time - start;
             durationTicks       = duration;
             durationSumTicks   += duration;
-            start               = time;
         }
         #endregion
     }
