@@ -28,8 +28,9 @@ namespace Tests.Systems
             AreEqual(new Tick(),                view.Tick);
             AreSame (root,                      view.SystemRoot);
             AreSame (root,                      view.ParentGroup);
-            AreEqual(0,                         view.PerfMs);
-            AreEqual(0,                         view.PerfSumMs);
+            AreEqual(0,                         view.Perf.UpdateCount);
+            AreEqual(0,                         view.Perf.LastMs);
+            AreEqual(0,                         view.Perf.SumMs);
             
             NotNull(root.System);
             NotNull(root.CommandBuffers);

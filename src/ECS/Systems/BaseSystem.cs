@@ -18,14 +18,13 @@ namespace Friflo.Engine.ECS.Systems
     public abstract class BaseSystem
     {
     #region properties
-        [Browse(Never)]         public virtual  string          Name        => systemName;
-        [Browse(Never)]         public          SystemRoot      SystemRoot  => systemRoot;
-        [Browse(Never)]         public          SystemGroup     ParentGroup => parentGroup;
-        [Browse(Never)][Ignore] public          bool            Enabled     { get => enabled; set => enabled = value; }
-        [Browse(Never)]         public          int             Id          => id;
-        /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
-        [Browse(Never)]         public          double          PerfMs      => perfTicks >= 0 ? perfTicks * StopwatchPeriodMs : -1;
-        [Browse(Never)]         public          double          PerfSumMs   => perfSumTicks * StopwatchPeriodMs;
+        [Browse(Never)]         public virtual      string          Name        => systemName;
+        [Browse(Never)]         public              SystemRoot      SystemRoot  => systemRoot;
+        [Browse(Never)]         public              SystemGroup     ParentGroup => parentGroup;
+        [Browse(Never)][Ignore] public              bool            Enabled     { get => enabled; set => enabled = value; }
+        [Browse(Never)]         public              int             Id          => id;
+        [Browse(Never)]         public ref readonly SystemPerf      Perf        => ref perf;
+
                                 internal        View            System      => view ??= new View(this);
         #endregion
             
@@ -36,14 +35,14 @@ namespace Friflo.Engine.ECS.Systems
                     [Browse(Never)] private readonly    string      systemName;
                     [Browse(Never)] private             SystemGroup parentGroup;
                     [Browse(Never)] private             SystemRoot  systemRoot;
-        [Ignore]    [Browse(Never)] internal            long        perfTicks;
-        [Ignore]    [Browse(Never)] internal            long        perfSumTicks;
+                    [Browse(Never)] internal            SystemPerf  perf;
                     [Browse(Never)] private             View        view;
         #endregion
          
     #region constructors
         protected BaseSystem() {
-            systemName = GetType().Name;
+            systemName  = GetType().Name;
+            perf        = new SystemPerf(new long[10]);
         }
         #endregion
         
@@ -221,18 +220,36 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
     }
     
+    public struct SystemPerf
+    {
+        /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
+        public          int     UpdateCount => updateCount;
+        public          double  LastMs      => lastTicks >= 0 ? lastTicks * StopwatchPeriodMs : -1;
+        public          double  SumMs       => sumTicks * StopwatchPeriodMs;
+
+        public override string  ToString() => $"updates: {UpdateCount} last: {LastMs:0.###} sum: {SumMs:0.###}";
+
+        [Ignore]    [Browse(Never)] internal            int     updateCount;
+        [Ignore]    [Browse(Never)] internal            long    lastTicks;
+        [Ignore]    [Browse(Never)] internal readonly   long[]  history;
+        [Ignore]    [Browse(Never)] internal            long    sumTicks;
+        
+        internal SystemPerf(long[] history) {
+            this.history = history;
+        }
+    }
+    
     internal sealed class View
     {
-        public  Tick                Tick        => system.Tick;
-        public  int                 Id          => system.Id;
-        public  bool                Enabled     => system.Enabled;
-        public  string              Name        => system.Name;
-        public  SystemRoot          SystemRoot  => system.SystemRoot;
-        public  SystemGroup         ParentGroup => system.ParentGroup;
-        public  double              PerfMs      => system.PerfMs;
-        public  double              PerfSumMs   => system.PerfSumMs;
+        public  Tick                    Tick        => system.Tick;
+        public  int                     Id          => system.Id;
+        public  bool                    Enabled     => system.Enabled;
+        public  string                  Name        => system.Name;
+        public  SystemRoot              SystemRoot  => system.SystemRoot;
+        public  SystemGroup             ParentGroup => system.ParentGroup;
+        public  SystemPerf              Perf        => system.perf;
 
-        public override string      ToString()  => $"Enabled: {Enabled}  Id: {Id}";
+        public override string          ToString()  => $"Enabled: {Enabled}  Id: {Id}";
 
         [Browse(Never)] private readonly BaseSystem   system;
         

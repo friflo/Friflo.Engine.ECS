@@ -187,8 +187,8 @@ namespace Tests.ECS.Systems
                 root.Update(default);
             }
             Console.WriteLine($"Test_SystemRoot_Update_Perf - count: {count}, duration: {sw.ElapsedMilliseconds} ms");
-            Console.WriteLine($"SystemRoot  - DurationSumMs: {root.PerfSumMs}");
-            Console.WriteLine($"TestSystem2 - DurationSumMs: {testSystem2.PerfSumMs}");
+            Console.WriteLine($"SystemRoot  - DurationSumMs: {root.Perf.SumMs}");
+            Console.WriteLine($"TestSystem2 - DurationSumMs: {testSystem2.Perf.SumMs}");
         }
     }
     

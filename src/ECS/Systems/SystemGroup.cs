@@ -217,14 +217,17 @@ namespace Friflo.Engine.ECS.Systems
             }
             var time                = Stopwatch.GetTimestamp();
             var duration            = time - start;
-            system.perfTicks        = duration;
-            system.perfSumTicks    += duration;
+            var history             = system.perf.history;
+            var index               = system.perf.updateCount++ % history.Length;
+            history[index]          = duration;
+            system.perf.lastTicks   = duration;
+            system.perf.sumTicks    += duration;
         }
         
         private void ClearPerfTicks(BaseSystem system)
         {
             if (!perfEnabled) return;
-            system.perfTicks = -1;
+            system.perf.lastTicks = -1;
             if (system is SystemGroup systemGroup) {
                 foreach (var child in systemGroup.childSystems) {
                     ClearPerfTicks(child);
