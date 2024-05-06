@@ -167,27 +167,34 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
         
-    #region update
-        public override void Update(Tick tick)
-        {
-            if (!Enabled) {
+    #region system: update
+        public void Update(Tick tick) {
+            if (!enabled) {
+                ClearPerfTicks(this);
                 return;
             }
-            var startGroup  = perfEnabled ? Stopwatch.GetTimestamp() : 0;
-            Tick            = tick;
-            var children    = childSystems;
-            
+            Tick = tick;
+            var start = perfEnabled ? Stopwatch.GetTimestamp() : 0;
+            OnUpdateGroup();
+            SetPerfTicks(this, start);
+            Tick = default;
+        }
+    
+        protected internal override void OnUpdateGroup()
+        {
+            var children = childSystems;
             // --- calls OnUpdateGroupBegin() once per child system.
             foreach (var child in children) {
-                if (!child.Enabled) continue;
-                child.Tick = tick;
+                if (!child.enabled) continue;
+                child.Tick = Tick;
                 child.OnUpdateGroupBegin();
             }
-            // --- calls OnUpdate() for every QuerySystem child and every store of SystemRoot.Stores - commonly a single store.
+            // --- calls OnUpdate() for every QuerySystem child and every store in SystemRoot.Stores - commonly a single store.
             foreach (var child in children) {
-                var startChild = !perfEnabled || child is SystemGroup ? 0 : Stopwatch.GetTimestamp();
-                child.Update(tick);
-                SetChildDuration(child, startChild);
+                if (!child.enabled) { ClearPerfTicks(child); continue; }
+                var start = perfEnabled ? Stopwatch.GetTimestamp() : 0;
+                child.OnUpdateGroup();
+                SetPerfTicks(child, start);
             }
             // --- apply command buffer changes
             foreach (var commandBuffer in commandBuffers) {
@@ -195,16 +202,36 @@ namespace Friflo.Engine.ECS.Systems
             }
             // --- calls OnUpdateGroupEnd() once per child system.
             foreach (var child in children) {
-                if (!child.Enabled) continue;
+                if (!child.enabled) continue;
                 child.OnUpdateGroupEnd();
                 child.Tick = default;
             }
-            Tick = default;
-            SetGroupDuration(startGroup);
         }
         #endregion
         
     #region perf
+        private static void SetPerfTicks(BaseSystem system, long start)
+        {
+            if (start == 0) {
+                return;
+            }
+            var time                = Stopwatch.GetTimestamp();
+            var duration            = time - start;
+            system.perfTicks        = duration;
+            system.perfSumTicks    += duration;
+        }
+        
+        private void ClearPerfTicks(BaseSystem system)
+        {
+            if (!perfEnabled) return;
+            system.perfTicks = -1;
+            if (system is SystemGroup systemGroup) {
+                foreach (var child in systemGroup.childSystems) {
+                    ClearPerfTicks(child);
+                }
+            }
+        }
+    
         public void SetPerfEnabled(bool enable)
         {
             perfEnabled = enable;
@@ -213,28 +240,6 @@ namespace Friflo.Engine.ECS.Systems
                     systemGroup.SetPerfEnabled(enable);
                 }
             }
-        }
-        
-        private static void SetChildDuration(BaseSystem system, long start)
-        {
-            if (start == 0) {
-                return;
-            }
-            var time                = Stopwatch.GetTimestamp();
-            var duration            = time - start;
-            system.durationTicks    = duration;
-            system.durationSumTicks+= duration;
-        }
-        
-        private void SetGroupDuration(long start)
-        {
-            if (start == 0) {
-                return;
-            }
-            var time            = Stopwatch.GetTimestamp();
-            var duration        = time - start;
-            durationTicks       = duration;
-            durationSumTicks   += duration;
         }
         #endregion
     }

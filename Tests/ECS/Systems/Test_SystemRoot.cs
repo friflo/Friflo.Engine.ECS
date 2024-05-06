@@ -170,9 +170,9 @@ namespace Tests.ECS.Systems
         public static void Test_SystemRoot_Update_Perf()
         {
             bool perfEnabled    = false;
-            int  count          = 100_000_000;
-                                // 100_000_000 - perfEnabled: false ~ #PC: 3577 ms (perf ~ 300ms)
-                                // 100_000_000 - perfEnabled: true  ~ #PC: 8546 ms
+            int  count          = 10;
+                                // 100_000_000 - perfEnabled: false ~ #PC: 3499 ms (overhead of  ~ 200 ms)
+                                // 100_000_000 - perfEnabled: true  ~ #PC: 8128 ms
             var store       = new EntityStore(PidType.UsePidAsId);
             var root        = new SystemRoot("Systems");
             var testSystem2 = new TestSystem2();

@@ -2,7 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics;
 using Friflo.Json.Fliox;
+using static Friflo.Engine.ECS.Systems.SystemExtensions;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
@@ -21,20 +23,21 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)]         public          SystemGroup     ParentGroup => parentGroup;
         [Browse(Never)][Ignore] public          bool            Enabled     { get => enabled; set => enabled = value; }
         [Browse(Never)]         public          int             Id          => id;
-        [Browse(Never)]         public          double          PerfMs      => durationTicks    * SystemExtensions.StopwatchPeriodMs;
-        [Browse(Never)]         public          double          PerfSumMs   => durationSumTicks * SystemExtensions.StopwatchPeriodMs;
+        /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
+        [Browse(Never)]         public          double          PerfMs      => perfTicks >= 0 ? perfTicks * StopwatchPeriodMs : -1;
+        [Browse(Never)]         public          double          PerfSumMs   => perfSumTicks * StopwatchPeriodMs;
                                 internal        View            System      => view ??= new View(this);
         #endregion
             
     #region fields
         [Ignore]    [Browse(Never)] public              Tick        Tick;
         [Serialize] [Browse(Never)] internal            int         id;
-        [Serialize] [Browse(Never)] private             bool        enabled = true;
+        [Serialize] [Browse(Never)] internal            bool        enabled = true;
                     [Browse(Never)] private readonly    string      systemName;
                     [Browse(Never)] private             SystemGroup parentGroup;
                     [Browse(Never)] private             SystemRoot  systemRoot;
-        [Ignore]    [Browse(Never)] internal            long        durationTicks;
-        [Ignore]    [Browse(Never)] internal            long        durationSumTicks;
+        [Ignore]    [Browse(Never)] internal            long        perfTicks;
+        [Ignore]    [Browse(Never)] internal            long        perfSumTicks;
                     [Browse(Never)] private             View        view;
         #endregion
          
@@ -101,17 +104,17 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region virtual - system: update
-        public             virtual void Update(Tick tick) { }
+        protected internal  virtual void OnUpdateGroup      () { }
         
         /// <summary>
         /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before group <see cref="SystemGroup.Update"/>.
         /// </summary>
-        protected internal virtual  void OnUpdateGroupBegin () { }
+        protected internal  virtual void OnUpdateGroupBegin () { }
         
         /// <summary>
         /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after group <see cref="SystemGroup.Update"/>.
         /// </summary>
-        protected internal virtual  void OnUpdateGroupEnd   () { }
+        protected internal  virtual void OnUpdateGroupEnd   () { }
         #endregion
         
     #region system: move

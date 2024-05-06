@@ -61,13 +61,12 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
         
-    #region update
+    #region system: update
         /// <summary> Called for every query in <see cref="Queries"/>. </summary>
         protected abstract void OnUpdate();
         
-        public    override void Update(Tick tick)
+        protected internal override void OnUpdateGroup()
         {
-            if (!Enabled) return;
             var commandBuffers = ParentGroup.commandBuffers;
             for (int n = 0; n < queries.Count; n++)
             {

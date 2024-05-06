@@ -75,7 +75,7 @@ namespace Tests.ECS.Systems
         
         protected   override void   OnUpdateGroupBegin() { }
         protected   override void   OnUpdateGroupEnd()   { }
-        public      override void   Update(Tick tick)    { }
+        protected   override void   OnUpdateGroup()      { }
     }
     
     public class PerfSystem: BaseSystem {
@@ -85,7 +85,7 @@ namespace Tests.ECS.Systems
         /// Do some loop iterations to ensure <see cref="BaseSystem.durationTicks"/> > 0.<br/>
         /// Execution time must be greater than 1 / <see cref="Stopwatch.Frequency"/>.
         /// </summary>
-        public override void Update(Tick tick) {
+        protected override void OnUpdateGroup() {
             for (int n = 0; n < 1000; n++) {
                 dummy++;
             }
