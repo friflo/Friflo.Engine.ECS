@@ -34,11 +34,12 @@ namespace Friflo.Engine.ECS.Systems
         
         private double GetLastAvgMs(int count)
         {
-            var length  = Math.Min(history.Length, count);
-            count       = Math.Min(updateCount, length);
+            var ticks   = history;
+            var length  = ticks.Length;
+            count       = Math.Min(updateCount, Math.Min(length, count));
             var sum     = 0L;
             for (int n = updateCount - count; n < updateCount; n++) {
-                sum += history[n];
+                sum += ticks[n % length];
             }
             sum /= count;
             return sum * StopwatchPeriodMs;
