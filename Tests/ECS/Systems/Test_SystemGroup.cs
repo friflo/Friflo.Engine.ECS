@@ -307,13 +307,15 @@ namespace Tests.ECS.Systems
             
             // --- by default perf is disabled
             root.Update(default);
-            IsTrue(root.        Perf.LastMs == 0);  AreEqual(0, root.        Perf.UpdateCount);
-            IsTrue(child1.      Perf.LastMs == 0);  AreEqual(0, child1.      Perf.UpdateCount);
-            IsTrue(perfSystem1. Perf.LastMs == 0);  AreEqual(0, perfSystem1. Perf.UpdateCount);
-            IsTrue(perfSystem2. Perf.LastMs == 0);  AreEqual(0, perfSystem2. Perf.UpdateCount);
+            IsTrue(root.        Perf.LastMs == -1);  AreEqual(0, root.        Perf.UpdateCount);
+            IsTrue(child1.      Perf.LastMs == -1);  AreEqual(0, child1.      Perf.UpdateCount);
+            IsTrue(perfSystem1. Perf.LastMs == -1);  AreEqual(0, perfSystem1. Perf.UpdateCount);
+            IsTrue(perfSystem2. Perf.LastMs == -1);  AreEqual(0, perfSystem2. Perf.UpdateCount);
             
-            AreEqual("updates: 0 last: 0 sum: 0",   root.Perf.ToString());
-            AreEqual(-1,                            root.Perf.LastAvgMs(20)); // no updates until now
+            IsTrue(perfSystem2. Perf.LastTicks == -1);
+            
+            AreEqual("updates: 0  last: -1 ms  sum: 0 ms",  root.Perf.ToString());
+            AreEqual(-1,                                    root.Perf.LastAvgMs(20)); // no updates until now
             
             // --- enable perf for entire hierarchy
             root.SetPerfEnabled(true);

@@ -29,9 +29,9 @@ namespace Tests.Systems
             AreSame (root,                      view.SystemRoot);
             AreSame (root,                      view.ParentGroup);
             AreEqual(0,                         view.Perf.UpdateCount);
-            AreEqual(0,                         view.Perf.LastMs);
+            AreEqual(-1d,                       view.Perf.LastMs);
             AreEqual(0,                         view.Perf.SumMs);
-            AreEqual(10,                        view.Perf.History.Length);
+            AreEqual(10,                        view.Perf.history.Length);
             
             NotNull(root.System);
             NotNull(root.CommandBuffers);

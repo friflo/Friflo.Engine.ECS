@@ -14,22 +14,23 @@ namespace Friflo.Engine.ECS.Systems
     public struct SystemPerf
     {
         /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
-        public          int     UpdateCount => updateCount;
-        public          double  LastMs      => lastTicks >= 0 ? lastTicks * StopwatchPeriodMs : -1;
-        public          double  SumMs       => sumTicks * StopwatchPeriodMs;
-        internal        long[]  History     => history;
+                        public  int     UpdateCount => updateCount;
+                        public  double  LastMs      => lastTicks >= 0 ? lastTicks * StopwatchPeriodMs : -1;
+                        public  double  SumMs       => sumTicks * StopwatchPeriodMs;
+        [Browse(Never)] public  double  LastTicks   => lastTicks;
 
-        public override string  ToString()  => $"updates: {UpdateCount} last: {LastMs:0.###} sum: {SumMs:0.###}";
+        public override string  ToString()  => $"updates: {UpdateCount}  last: {LastMs:0.###} ms  sum: {SumMs:0.###} ms";
         
         public          double  LastAvgMs(int count) => GetLastAvgMs(count);
 
         [Browse(Never)] internal            int     updateCount;
         [Browse(Never)] internal            long    lastTicks;
-        [Browse(Never)] internal readonly   long[]  history;
         [Browse(Never)] internal            long    sumTicks;
+                        internal readonly   long[]  history;
         
         internal SystemPerf(long[] history) {
-            this.history = history;
+            this.history    = history;
+            lastTicks       = -1;
         }
         
         private double GetLastAvgMs(int count)
