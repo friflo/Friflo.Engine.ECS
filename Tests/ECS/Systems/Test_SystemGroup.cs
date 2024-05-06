@@ -312,7 +312,8 @@ namespace Tests.ECS.Systems
             IsTrue(perfSystem1. Perf.LastMs == 0);  AreEqual(0, perfSystem1. Perf.UpdateCount);
             IsTrue(perfSystem2. Perf.LastMs == 0);  AreEqual(0, perfSystem2. Perf.UpdateCount);
             
-            AreEqual(-1, root.   Perf.LastAvgMs(20)); // no updates until now
+            AreEqual("updates: 0 last: 0 sum: 0",   root.Perf.ToString());
+            AreEqual(-1,                            root.Perf.LastAvgMs(20)); // no updates until now
             
             // --- enable perf for entire hierarchy
             root.SetPerfEnabled(true);
