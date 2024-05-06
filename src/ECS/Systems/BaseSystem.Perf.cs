@@ -37,6 +37,9 @@ namespace Friflo.Engine.ECS.Systems
             var ticks   = history;
             var length  = ticks.Length;
             count       = Math.Min(updateCount, Math.Min(length, count));
+            if (count == 0) {
+                return -1;
+            }
             var sum     = 0L;
             for (int n = updateCount - count; n < updateCount; n++) {
                 sum += ticks[n % length];
