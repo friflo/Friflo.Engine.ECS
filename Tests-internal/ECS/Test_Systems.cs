@@ -31,6 +31,7 @@ namespace Tests.Systems
             AreEqual(0,                         view.Perf.UpdateCount);
             AreEqual(0,                         view.Perf.LastMs);
             AreEqual(0,                         view.Perf.SumMs);
+            AreEqual(10,                        view.Perf.History.Length);
             
             NotNull(root.System);
             NotNull(root.CommandBuffers);

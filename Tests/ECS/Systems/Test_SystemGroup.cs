@@ -328,6 +328,11 @@ namespace Tests.ECS.Systems
             AreEqual(perfSystem1.   Perf.LastMs, perfSystem1.Perf.SumMs);
             AreEqual(perfSystem2.   Perf.LastMs, perfSystem2.Perf.SumMs);
             
+            AreEqual(root.          Perf.LastMs, root.          Perf.LastAvgMs(20));
+            AreEqual(child1.        Perf.LastMs, child1.        Perf.LastAvgMs(20));
+            AreEqual(perfSystem1.   Perf.LastMs, perfSystem1.   Perf.LastAvgMs(20));
+            AreEqual(perfSystem2.   Perf.LastMs, perfSystem2.   Perf.LastAvgMs(20));
+            
             // --- disable / enable systems
             perfSystem1.Enabled = false;
             root.Update(default);

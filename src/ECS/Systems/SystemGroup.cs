@@ -221,7 +221,7 @@ namespace Friflo.Engine.ECS.Systems
             var index               = system.perf.updateCount++ % history.Length;
             history[index]          = duration;
             system.perf.lastTicks   = duration;
-            system.perf.sumTicks    += duration;
+            system.perf.sumTicks   += duration;
         }
         
         private void ClearPerfTicks(BaseSystem system)

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
+using System;
 using System.Diagnostics;
 using static Friflo.Engine.ECS.Systems.SystemExtensions;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -16,8 +17,11 @@ namespace Friflo.Engine.ECS.Systems
         public          int     UpdateCount => updateCount;
         public          double  LastMs      => lastTicks >= 0 ? lastTicks * StopwatchPeriodMs : -1;
         public          double  SumMs       => sumTicks * StopwatchPeriodMs;
+        internal        long[]  History     => history;
 
-        public override string  ToString() => $"updates: {UpdateCount} last: {LastMs:0.###} sum: {SumMs:0.###}";
+        public override string  ToString()  => $"updates: {UpdateCount} last: {LastMs:0.###} sum: {SumMs:0.###}";
+        
+        public          double  LastAvgMs(int count) => GetLastAvgMs(count);
 
         [Browse(Never)] internal            int     updateCount;
         [Browse(Never)] internal            long    lastTicks;
@@ -26,6 +30,18 @@ namespace Friflo.Engine.ECS.Systems
         
         internal SystemPerf(long[] history) {
             this.history = history;
+        }
+        
+        private double GetLastAvgMs(int count)
+        {
+            var length  = Math.Min(history.Length, count);
+            count       = Math.Min(updateCount, length);
+            var sum     = 0L;
+            for (int n = updateCount - count; n < updateCount; n++) {
+                sum += history[n];
+            }
+            sum /= count;
+            return sum * StopwatchPeriodMs;
         }
     }
     
