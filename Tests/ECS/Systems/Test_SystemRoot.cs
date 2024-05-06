@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable once CheckNamespace
@@ -171,7 +172,7 @@ namespace Tests.ECS.Systems
         {
             bool perfEnabled    = false;
             int  count          = 10;
-                                // 100_000_000 - perfEnabled: false ~ #PC: 3499 ms (overhead of  ~ 200 ms)
+                                // 100_000_000 - perfEnabled: false ~ #PC: 3499 ms (overhead of perf conditions ~ 250 ms)
                                 // 100_000_000 - perfEnabled: true  ~ #PC: 8128 ms
             var store       = new EntityStore(PidType.UsePidAsId);
             var root        = new SystemRoot("Systems");
@@ -180,12 +181,15 @@ namespace Tests.ECS.Systems
             root.AddStore(store);
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             root.SetPerfEnabled(perfEnabled);
+            root.Update(default);
 
-            var sw = new Stopwatch();
+            var sw      = new Stopwatch();
+            var start   = Mem.GetAllocatedBytes();
             sw.Start();
             for (int n = 0; n < count; n++) {
                 root.Update(default);
             }
+            Mem.AssertNoAlloc(start);
             Console.WriteLine($"Test_SystemRoot_Update_Perf - count: {count}, duration: {sw.ElapsedMilliseconds} ms");
             Console.WriteLine($"SystemRoot  - DurationSumMs: {root.Perf.SumMs}");
             Console.WriteLine($"TestSystem2 - DurationSumMs: {testSystem2.Perf.SumMs}");
