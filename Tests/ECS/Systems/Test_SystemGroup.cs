@@ -6,6 +6,7 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Systems
@@ -304,12 +305,14 @@ namespace Tests.ECS.Systems
             IsFalse(root.       PerfEnabled);
             IsFalse(child1.     PerfEnabled);
             
+            // --- by default perf is disabled
             root.Update(default);
             IsTrue(root.        PerfMs == 0);
             IsTrue(child1.      PerfMs == 0);
             IsTrue(perfSystem1. PerfMs == 0);
             IsTrue(perfSystem2. PerfMs == 0);
             
+            // --- enable perf for entire hierachy
             root.SetPerfEnabled(true);
             IsTrue(root.        PerfEnabled);
             IsTrue(child1.      PerfEnabled);
@@ -327,6 +330,30 @@ namespace Tests.ECS.Systems
             AreEqual(child1.        PerfMs, child1.     PerfSumMs);
             AreEqual(perfSystem1.   PerfMs, perfSystem1.PerfSumMs);
             AreEqual(perfSystem2.   PerfMs, perfSystem2.PerfSumMs);
+            
+            // --- disable / enable systems
+            perfSystem1.Enabled = false;
+            root.Update(default);
+            IsTrue(root.        PerfMs > 0);
+            IsTrue(child1.      PerfMs > 0);
+            IsTrue(perfSystem1. PerfMs == -1);
+            IsTrue(perfSystem2. PerfMs > 0);
+            
+            child1.Enabled = false;
+            root.Update(default);
+            IsTrue(root.        PerfMs > 0);
+            IsTrue(child1.      PerfMs == -1);
+            IsTrue(perfSystem1. PerfMs == -1);
+            IsTrue(perfSystem2. PerfMs == -1);
+            
+            perfSystem1.Enabled = true;
+            child1.Enabled      = true;
+            root.Enabled        = false;
+            root.Update(default);
+            IsTrue(root.        PerfMs == -1);
+            IsTrue(child1.      PerfMs == -1);
+            IsTrue(perfSystem1. PerfMs == -1);
+            IsTrue(perfSystem2. PerfMs == -1);
         }
         
         [Test]
