@@ -82,7 +82,7 @@ namespace Tests.ECS.Systems
         private int dummy;
 
         /// <summary>
-        /// Do some loop iterations to ensure <see cref="BaseSystem.durationTicks"/> > 0.<br/>
+        /// Do some loop iterations to ensure <see cref="SystemPerf.LastTicks"/> > 0.<br/>
         /// Execution time must be greater than 1 / <see cref="Stopwatch.Frequency"/>.
         /// </summary>
         protected override void OnUpdateGroup() {
