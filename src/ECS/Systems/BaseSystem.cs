@@ -32,7 +32,7 @@ namespace Friflo.Engine.ECS.Systems
                     [Browse(Never)] private readonly    string      systemName;
                     [Browse(Never)] private             SystemGroup parentGroup;
                     [Browse(Never)] private             SystemRoot  systemRoot;
-                    [Browse(Never)] internal            SystemPerf  perf;
+        [Ignore]    [Browse(Never)] internal            SystemPerf  perf;
                     [Browse(Never)] private             View        view;
         #endregion
          

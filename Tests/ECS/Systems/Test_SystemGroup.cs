@@ -291,7 +291,7 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_SystemGroup_PerfMs()
+        public static void Test_SystemGroup_Perf()
         {
             var root        = new SystemRoot("Systems");
             var child1      = new SystemGroup("Child1");

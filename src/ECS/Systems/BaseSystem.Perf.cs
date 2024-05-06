@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
-using Friflo.Json.Fliox;
 using static Friflo.Engine.ECS.Systems.SystemExtensions;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -20,10 +19,10 @@ namespace Friflo.Engine.ECS.Systems
 
         public override string  ToString() => $"updates: {UpdateCount} last: {LastMs:0.###} sum: {SumMs:0.###}";
 
-        [Ignore]    [Browse(Never)] internal            int     updateCount;
-        [Ignore]    [Browse(Never)] internal            long    lastTicks;
-        [Ignore]    [Browse(Never)] internal readonly   long[]  history;
-        [Ignore]    [Browse(Never)] internal            long    sumTicks;
+        [Browse(Never)] internal            int     updateCount;
+        [Browse(Never)] internal            long    lastTicks;
+        [Browse(Never)] internal readonly   long[]  history;
+        [Browse(Never)] internal            long    sumTicks;
         
         internal SystemPerf(long[] history) {
             this.history = history;
