@@ -15,22 +15,14 @@ namespace Friflo.Engine.ECS.Systems
     {
         /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
                         public  int     UpdateCount => updateCount;
-        
-        /// <summary> Execution time in ms of the last Update. Precision 100 ns. <br/> -1 if not executed. </summary>        
-                        public  decimal LastMs      => lastTicks >= 0 ? Math.Round(Convert.ToDecimal(lastTicks) * StopwatchPeriodMs, PerfMsDecimals) : -1;
-        
-        /// <summary> Sum of all Update execution times in ms. Precision 100 ns.</summary>
-                        public  decimal SumMs       => Math.Round(Convert.ToDecimal(sumTicks) * StopwatchPeriodMs, PerfMsDecimals);
-        
-        /// <summary> Execution time in ticks of the last Update. <br/> -1 if not executed. </summary>
+                        public  float   LastMs      => lastTicks >= 0 ? (float)(lastTicks * StopwatchPeriodMs) : -1;
+                        public  float   SumMs       => (float)(sumTicks * StopwatchPeriodMs);
         [Browse(Never)] public  long    LastTicks   => lastTicks;
-        
-        /// <summary> Sum of all Update execution times in ticks.</summary>
         [Browse(Never)] public  long    SumTicks    => sumTicks;
 
         public override string  ToString()  => $"updates: {UpdateCount}  last: {LastMs:0.###} ms  sum: {SumMs:0.###} ms";
         
-        public          decimal LastAvgMs(int count) => GetLastAvgMs(count);
+        public          float   LastAvgMs(int count) => GetLastAvgMs(count);
 
         [Browse(Never)] internal            int     updateCount;
         [Browse(Never)] internal            long    lastTicks;
@@ -42,7 +34,7 @@ namespace Friflo.Engine.ECS.Systems
             lastTicks       = -1;
         }
         
-        private decimal GetLastAvgMs(int count)
+        private float GetLastAvgMs(int count)
         {
             var ticks   = history;
             var length  = ticks.Length;
@@ -55,7 +47,7 @@ namespace Friflo.Engine.ECS.Systems
                 sum += ticks[n % length];
             }
             sum /= count;
-            return Math.Round(Convert.ToDecimal(sum) * StopwatchPeriodMs, PerfMsDecimals);
+            return (float)(sum * StopwatchPeriodMs);
         }
     }
     

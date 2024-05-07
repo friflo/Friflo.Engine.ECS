@@ -291,7 +291,7 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_SystemGroup_SystemPerf()
+        public static void Test_SystemGroup_Perf()
         {
             var root        = new SystemRoot("Systems");
             var child1      = new SystemGroup("Child1");
@@ -339,16 +339,15 @@ namespace Tests.ECS.Systems
             AreEqual(perfSystem2.   Perf.LastMs, perfSystem2.   Perf.LastAvgMs(20));
             
             // --- Update() again to test Perf Sum
-            var rootSum         = root.  Perf.SumMs;
-            var child1Sum       = child1.Perf.SumMs;
-            var perfSystem1Sum  = perfSystem1.Perf.SumMs;
-            var perfSystem2Sum  = perfSystem2.Perf.SumMs;
-            
+            var rootSum         = root.  Perf.SumTicks;
+            var child1Sum       = child1.Perf.SumTicks;
+            var perfSystem1Sum  = perfSystem1.Perf.SumTicks;
+            var perfSystem2Sum  = perfSystem2.Perf.SumTicks;
             root.Update(default);
-            AreEqual(rootSum        + root.         Perf.LastMs, root.       Perf.SumMs);
-            AreEqual(child1Sum      + child1.       Perf.LastMs, child1.     Perf.SumMs);
-            AreEqual(perfSystem1Sum + perfSystem1.  Perf.LastMs, perfSystem1.Perf.SumMs);
-            AreEqual(perfSystem2Sum + perfSystem2.  Perf.LastMs, perfSystem2.Perf.SumMs);
+            AreEqual(rootSum        + root.         Perf.LastTicks, root.       Perf.SumTicks);
+            AreEqual(child1Sum      + child1.       Perf.LastTicks, child1.     Perf.SumTicks);
+            AreEqual(perfSystem1Sum + perfSystem1.  Perf.LastTicks, perfSystem1.Perf.SumTicks);
+            AreEqual(perfSystem2Sum + perfSystem2.  Perf.LastTicks, perfSystem2.Perf.SumTicks);
             
             // --- disable / enable systems
             perfSystem1.Enabled = false;
