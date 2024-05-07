@@ -301,8 +301,8 @@ namespace Tests.ECS.Systems
             root.AddSystem(perfSystem1);
             child1.AddSystem(perfSystem2);
             
-            IsFalse(root.       PerfEnabled);
-            IsFalse(child1.     PerfEnabled);
+            IsFalse(root.       MonitorPerf);
+            IsFalse(child1.     MonitorPerf);
             
             // --- by default perf is disabled
             root.Update(default);
@@ -317,9 +317,9 @@ namespace Tests.ECS.Systems
             AreEqual(-1,                                    root.Perf.LastAvgMs(20)); // no updates until now
             
             // --- enable perf for entire hierarchy
-            root.SetPerfEnabled(true);
-            IsTrue(root.        PerfEnabled);
-            IsTrue(child1.      PerfEnabled);
+            root.SetMonitorPerf(true);
+            IsTrue(root.        MonitorPerf);
+            IsTrue(child1.      MonitorPerf);
             
             root.Update(default);
             IsTrue(root.        Perf.LastMs > 0);   AreEqual(1, root.        Perf.UpdateCount);

@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS.Systems
     {
     #region properties
         [Browse(Never)] public override string                      Name            => name;
-        [Browse(Never)] public          bool                        PerfEnabled     => perfEnabled;
+        [Browse(Never)] public          bool                        MonitorPerf     => monitorPerf;
                         public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
                         internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
                         public override string                      ToString()      => $"'{name}' Group - child systems: {childSystems.Count}";
@@ -28,7 +28,7 @@ namespace Friflo.Engine.ECS.Systems
         [Serialize] [Browse(Never)] private     string                      name;
                     [Browse(Never)] internal    ReadOnlyList<BaseSystem>    childSystems;
                     [Browse(Never)] internal    ReadOnlyList<CommandBuffer> commandBuffers;
-        [Ignore]    [Browse(Never)] private     bool                        perfEnabled;
+        [Ignore]    [Browse(Never)] private     bool                        monitorPerf;
         #endregion
         
     #region constructor
@@ -202,7 +202,7 @@ namespace Friflo.Engine.ECS.Systems
                 return;
             }
             Tick = tick;
-            var startTime = perfEnabled ? Stopwatch.GetTimestamp() : 0;
+            var startTime = monitorPerf ? Stopwatch.GetTimestamp() : 0;
             OnUpdateGroup();
             SetPerfTicks(this, startTime);
             Tick = default;
@@ -226,7 +226,7 @@ namespace Friflo.Engine.ECS.Systems
             for (int n = 0; n < children.Count; n++) {
                 var child = children[n];
                 if (!child.enabled) { ClearPerfTicks(child); continue; }
-                var startTime = perfEnabled ? Stopwatch.GetTimestamp() : 0;
+                var startTime = monitorPerf ? Stopwatch.GetTimestamp() : 0;
                 child.OnUpdateGroup();
                 SetPerfTicks(child, startTime);
             }
@@ -244,6 +244,16 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region perf
+        public void SetMonitorPerf(bool enable)
+        {
+            monitorPerf = enable;
+            foreach (var child in childSystems) {
+                if (child is SystemGroup systemGroup) {
+                    systemGroup.SetMonitorPerf(enable);
+                }
+            }
+        }
+        
         private static void SetPerfTicks(BaseSystem system, long startTime)
         {
             if (startTime == 0) {
@@ -260,7 +270,7 @@ namespace Friflo.Engine.ECS.Systems
         
         private void ClearPerfTicks(BaseSystem system)
         {
-            if (!perfEnabled) return;
+            if (!monitorPerf) return;
             system.perf.lastTicks = -1;
             if (system is SystemGroup systemGroup) {
                 foreach (var child in systemGroup.childSystems) {
@@ -269,15 +279,7 @@ namespace Friflo.Engine.ECS.Systems
             }
         }
     
-        public void SetPerfEnabled(bool enable)
-        {
-            perfEnabled = enable;
-            foreach (var child in childSystems) {
-                if (child is SystemGroup systemGroup) {
-                    systemGroup.SetPerfEnabled(enable);
-                }
-            }
-        }
+
         #endregion
     }
 }

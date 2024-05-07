@@ -184,17 +184,17 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Update_Perf()
         {
-            bool perfEnabled    = false;
+            bool monitorPerf    = false;
             int  count          = 10;
-                                // 100_000_000 - perfEnabled: false ~ #PC: 3682 ms (overhead of perf conditions ~ 250 ms)
-                                // 100_000_000 - perfEnabled: true  ~ #PC: 8128 ms
+                                // 100_000_000 - monitorPerf: false ~ #PC: 3682 ms (overhead of perf conditions ~ 250 ms)
+                                // 100_000_000 - monitorPerf: true  ~ #PC: 8128 ms
             var store       = new EntityStore();
             var root        = new SystemRoot("Systems");
             var testSystem2 = new TestSystem2();
             root.AddSystem(testSystem2);
             root.AddStore(store);
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            root.SetPerfEnabled(perfEnabled);
+            root.SetMonitorPerf(monitorPerf);
             root.Update(default);
 
             var sw      = new Stopwatch();
