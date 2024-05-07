@@ -3,6 +3,8 @@
 
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -14,12 +16,13 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems
 {
-    public class SystemGroup : BaseSystem
+    [DebuggerTypeProxy(typeof(SystemGroupDebugView))]
+    public class SystemGroup : BaseSystem, IEnumerable<BaseSystem>
     {
     #region properties
         [Browse(Never)] public override string                      Name            => name;
         [Browse(Never)] public          bool                        MonitorPerf     => monitorPerf;
-                        public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
+        [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
                         internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
                         public override string                      ToString()      => $"'{name}' Group - child systems: {childSystems.Count}";
         #endregion
@@ -46,7 +49,19 @@ namespace Friflo.Engine.ECS.Systems
         }
         #endregion
         
+    #region enumerator
+        public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
+        IEnumerator<BaseSystem> IEnumerable<BaseSystem>.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
+        IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
+        #endregion
+        
     #region group: add / insert / remove / get - system
+        // Add() enables support for collection initializer
+        public void Add(BaseSystem system)
+        {
+            AddSystem(system);
+        }
+        
         public void AddSystem(BaseSystem system)
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));

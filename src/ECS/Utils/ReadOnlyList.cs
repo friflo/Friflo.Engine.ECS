@@ -24,8 +24,8 @@ namespace Friflo.Engine.ECS
         #endregion
 
     #region private fields
-        private T[] array; 
-        private int count;
+        internal T[] array; 
+        internal int count;
         #endregion
         
     #region internal mutations
@@ -82,13 +82,13 @@ namespace Friflo.Engine.ECS
         
     #region IEnumerator
 
-        public      ReadOnlyListEnumerator<T> GetEnumerator() => new ReadOnlyListEnumerator<T>(array, count);
+        public      ReadOnlyListEnumerator<T> GetEnumerator() => new ReadOnlyListEnumerator<T>(this);
 
         // --- IEnumerable
-        IEnumerator        IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<T>(array, count);
+        IEnumerator        IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<T>(this);
 
         // --- IEnumerable<>
-        IEnumerator<T>  IEnumerable<T>.GetEnumerator() => new ReadOnlyListEnumerator<T>(array, count);
+        IEnumerator<T>  IEnumerable<T>.GetEnumerator() => new ReadOnlyListEnumerator<T>(this);
         #endregion
         
         private static void Resize(ref T[] array, int len)
@@ -103,7 +103,7 @@ namespace Friflo.Engine.ECS
     }
     
     
-    public struct ReadOnlyListEnumerator<T> : IEnumerator<T>
+    public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
     {
     #region private fields
         private readonly    T[]     array;  //  8
@@ -111,9 +111,9 @@ namespace Friflo.Engine.ECS
         private             int     index;  //  4
         #endregion
     
-        internal ReadOnlyListEnumerator(T[] array, int count) {
-            this.array  = array;
-            this.count  = count - 1;
+        internal ReadOnlyListEnumerator(ReadOnlyList<T> list) {
+            array  = list.array;
+            count  = list.count - 1;
             index       = -1;
         }
     

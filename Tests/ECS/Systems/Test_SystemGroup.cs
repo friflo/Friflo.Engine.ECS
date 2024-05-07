@@ -15,6 +15,23 @@ namespace Tests.ECS.Systems
     public static class Test_SystemGroup
     {
         [Test]
+        public static void Test_SystemGroup_collection_initializer()
+        {
+            var root = new SystemRoot("Systems") {
+                new SystemGroup("Start") {
+                    new TestSystem1(),
+                },
+                new SystemGroup("Update") {
+                    new ScaleSystem(),
+                    new PositionSystem()
+                }
+            };
+            AreEqual(2,         root.ChildSystems.Count);
+            AreEqual("Start",   root.ChildSystems[0].Name);
+            AreEqual("Update",  root.ChildSystems[1].Name);
+        }
+    
+        [Test]
         public static void Test_SystemGroup_MoveTo()
         {
             int changesRoot     = 0;

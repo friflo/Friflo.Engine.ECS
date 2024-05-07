@@ -51,22 +51,7 @@ namespace Friflo.Engine.ECS.Systems
         }
     }
     
-    internal sealed class View
-    {
-        public  Tick                    Tick        => system.Tick;
-        public  int                     Id          => system.Id;
-        public  bool                    Enabled     => system.Enabled;
-        public  string                  Name        => system.Name;
-        public  SystemRoot              SystemRoot  => system.SystemRoot;
-        public  SystemGroup             ParentGroup => system.ParentGroup;
-        public  SystemPerf              Perf        => system.perf;
 
-        public override string          ToString()  => $"Enabled: {Enabled}  Id: {Id}";
-
-        [Browse(Never)] private readonly BaseSystem   system;
-        
-        internal View(BaseSystem system) {
-            this.system = system;
-        }
-    }
+    
+    
 }

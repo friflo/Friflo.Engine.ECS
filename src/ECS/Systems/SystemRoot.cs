@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
@@ -13,11 +14,12 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems
 {
+    [DebuggerTypeProxy(typeof(SystemRootDebugView))]
     public class SystemRoot : SystemGroup
     {
     #region properties
-        public  ReadOnlyList<EntityStore>   Stores      => stores;
-        public override string              ToString()  => $"'{Name}' Root - child systems: {childSystems.Count}";
+        [Browse(Never)] public  ReadOnlyList<EntityStore>   Stores      => stores;
+                        public override string              ToString()  => $"'{Name}' Root - child systems: {childSystems.Count}";
         #endregion
 
     #region internal fields
