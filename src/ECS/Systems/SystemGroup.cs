@@ -174,9 +174,9 @@ namespace Friflo.Engine.ECS.Systems
                 return;
             }
             Tick = tick;
-            var start = perfEnabled ? Stopwatch.GetTimestamp() : 0;
+            var startTime = perfEnabled ? Stopwatch.GetTimestamp() : 0;
             OnUpdateGroup();
-            SetPerfTicks(this, start);
+            SetPerfTicks(this, startTime);
             Tick = default;
         }
     
@@ -198,9 +198,9 @@ namespace Friflo.Engine.ECS.Systems
             for (int n = 0; n < children.Count; n++) {
                 var child = children[n];
                 if (!child.enabled) { ClearPerfTicks(child); continue; }
-                var start = perfEnabled ? Stopwatch.GetTimestamp() : 0;
+                var startTime = perfEnabled ? Stopwatch.GetTimestamp() : 0;
                 child.OnUpdateGroup();
-                SetPerfTicks(child, start);
+                SetPerfTicks(child, startTime);
             }
             // --- apply command buffer changes
             for (int n = 0; n < commands.Count; n++) { commands[n].Playback(); }
@@ -216,13 +216,13 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region perf
-        private static void SetPerfTicks(BaseSystem system, long start)
+        private static void SetPerfTicks(BaseSystem system, long startTime)
         {
-            if (start == 0) {
+            if (startTime == 0) {
                 return;
             }
             var time                = Stopwatch.GetTimestamp();
-            var duration            = time - start;
+            var duration            = time - startTime;
             var history             = system.perf.history;
             var index               = system.perf.updateCount++ % history.Length;
             history[index]          = duration;
