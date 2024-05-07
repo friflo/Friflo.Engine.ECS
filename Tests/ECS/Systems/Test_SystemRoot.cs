@@ -9,6 +9,7 @@ using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
+// ReSharper disable ArrangeTypeMemberModifiers
 
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS.Systems
@@ -17,20 +18,29 @@ namespace Tests.ECS.Systems
     public static class Test_SystemRoot
     {
         [Test]
-        public static void Test_SystemRoot_Tick() {
-            Tick tick = 42;
-            AreEqual("deltaTime: 42", tick.ToString());
-        }
-            
-        [Test]
-        public static void Test_SystemRoot_Add_System_minimal()
+        public static void Test_SystemRoot_minimal()
         {
             var store   = new EntityStore();
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
-            root.AddSystem(new TestSystem1());
+            root.AddSystem(new TestMoveSystem());
             root.Update(42); 
             AreEqual(new Position(1,0,0), entity.Position);
+        }
+        
+        class TestMoveSystem : QuerySystem<Position>
+        {
+            protected override void OnUpdate() {
+                Query.ForEachEntity((ref Position position, Entity _) => {
+                    position.x++;
+                });
+            }
+        }
+        
+        [Test]
+        public static void Test_SystemRoot_Tick() {
+            Tick tick = 42;
+            AreEqual("deltaTime: 42", tick.ToString());
         }
         
         [Test]
