@@ -38,8 +38,8 @@ namespace Tests.ECS.Systems
             var query1  = new TestSystem1();
             var group   = new TestGroup();
 
-            root.AddSystem(query1);
-            root.AddSystem(group);
+            root.Add(query1);
+            root.Add(group);
             
             root.Update(42);
             AreEqual(new Position(2,2,3),   entity.Position);

@@ -69,9 +69,9 @@ namespace Tests.ECS.Systems
                     case 3: AreEqual("Move - Group 'Group2' from 'Group3' to 'Group3'",   str);   return;
                 }
             };
-            root.AddSystem(group1);
-            root.AddSystem(group2);
-            root.AddSystem(group3);
+            root.Add(group1);
+            root.Add(group2);
+            root.Add(group3);
             
             AreEqual(0, group1.MoveSystemTo(group3, -1)); // -1  => add at tail
             AreEqual(1, group2.MoveSystemTo(group3,  1));
@@ -95,10 +95,10 @@ namespace Tests.ECS.Systems
             var group2      = new SystemGroup("Group2");
             var testSystem1 = new TestSystem1();
             var testSystem2 = new TestSystem1();
-            root.AddSystem(group1);
-            root.AddSystem(group2);
-            root.InsertSystemAt(2,  testSystem1);
-            root.InsertSystemAt(-1, testSystem2);
+            root.Add(group1);
+            root.Add(group2);
+            root.Insert(2,  testSystem1);
+            root.Insert(-1, testSystem2);
             
             AreEqual(4,             root.ChildSystems.Count);
             AreSame(group1,         root.ChildSystems[0]);
@@ -114,28 +114,28 @@ namespace Tests.ECS.Systems
         {
             var group = new SystemGroup("Systems");
             Throws<ArgumentNullException>(() => {
-                group.InsertSystemAt(0, null);
+                group.Insert(0, null);
             });
             
             Exception e = Throws<ArgumentException>(() => {
-                group.InsertSystemAt(-2, new TestSystem1());
+                group.Insert(-2, new TestSystem1());
             });
             AreEqual("invalid index: -2", e!.Message);
             
             e = Throws<ArgumentException>(() => {
-                group.InsertSystemAt(1, new TestSystem1());
+                group.Insert(1, new TestSystem1());
             });
             AreEqual("invalid index: 1", e!.Message);
 
             e = Throws<ArgumentException>(() => {
-                group.InsertSystemAt(0, new SystemRoot("Systems"));
+                group.Insert(0, new SystemRoot("Systems"));
             });
             AreEqual("SystemRoot must not be a child system (Parameter 'system')", e!.Message);
             
             var testSystem1 = new TestSystem1();
-            group.AddSystem(testSystem1);
+            group.Add(testSystem1);
             e = Throws<ArgumentException>(() => {
-                group.InsertSystemAt(0, testSystem1);
+                group.Insert(0, testSystem1);
             });
             AreEqual("system already added to Group 'Systems' (Parameter 'system')", e!.Message);
         }
@@ -154,11 +154,11 @@ namespace Tests.ECS.Systems
                     case 1: AreEqual("Remove - System 'TestSystem1' from 'Systems'", str);     return;
                 }
             };
-            root.AddSystem(testSystem1);
+            root.Add(testSystem1);
             AreEqual(1, testSystem1.Queries.Count);
             AreEqual(1, root.ChildSystems.Count);
             
-            root.RemoveSystem(testSystem1);
+            root.Remove(testSystem1);
             AreEqual(0, testSystem1.Queries.Count);
             AreEqual(0, root.ChildSystems.Count);
             
@@ -178,11 +178,11 @@ namespace Tests.ECS.Systems
                     case 1: AreEqual("Remove - System 'TestSystem1' from 'Base'", str);     return;
                 }
             };
-            baseGroup.  AddSystem(testSystem1);
+            baseGroup.  Add(testSystem1);
             AreEqual(0, testSystem1.Queries.Count);
             AreEqual(1, baseGroup.ChildSystems.Count);
             
-            baseGroup.  RemoveSystem(testSystem1);
+            baseGroup.  Remove(testSystem1);
             AreEqual(0, testSystem1.Queries.Count);
             AreEqual(0, baseGroup.ChildSystems.Count);
             
@@ -194,7 +194,7 @@ namespace Tests.ECS.Systems
         {
             var root1   = new SystemRoot("Systems-1");
             var group1  = new SystemGroup("Group1");
-            root1.AddSystem(group1);
+            root1.Add(group1);
             
             Throws<ArgumentNullException>(() => {
                 group1.MoveSystemTo(null, 0);
@@ -217,7 +217,7 @@ namespace Tests.ECS.Systems
             AreEqual("System 'Group2' has no parent", e!.Message);
             
             var root2   = new SystemRoot("Systems-2");
-            root2.AddSystem(group2);
+            root2.Add(group2);
             e = Throws<InvalidOperationException>(() => {
                 group2.MoveSystemTo(root1, -1);
             });
@@ -229,7 +229,7 @@ namespace Tests.ECS.Systems
         {
             var root        = new SystemRoot("Systems");
             var testSystem1 = new TestSystem1();
-            root.AddSystem(testSystem1);
+            root.Add(testSystem1);
             var count = 0;
             testSystem1.OnSystemChanged += changed => {
                 var str = changed.ToString();
@@ -257,9 +257,9 @@ namespace Tests.ECS.Systems
             var child2      = new SystemGroup("Child2");
             var child1_1    = new SystemGroup("Child1_1");
             
-            root.AddSystem(child1);
-            root.AddSystem(child2);
-            child1.AddSystem(child1_1);
+            root.Add(child1);
+            root.Add(child2);
+            child1.Add(child1_1);
             
             AreSame(child1,     root.FindGroup("Child1",  true));
             AreSame(child1_1,   root.FindGroup("Child1_1",true));
@@ -274,9 +274,9 @@ namespace Tests.ECS.Systems
             var mySystem1   = new MySystem1();
             var mySystem2   = new MySystem2();
             
-            root.AddSystem(child1);
-            root.AddSystem(mySystem1);
-            child1.AddSystem(mySystem2);
+            root.Add(child1);
+            root.Add(mySystem1);
+            child1.Add(mySystem2);
             
             AreSame(mySystem1,  root.FindSystem<MySystem1>(true));
             AreSame(mySystem1,  root.FindSystem<MySystem1>(false));
@@ -292,8 +292,8 @@ namespace Tests.ECS.Systems
             var child1      = new SystemGroup("Child1");
             var child1_1    = new SystemGroup("Child1_1");
             
-            root.AddSystem(child1);
-            child1.AddSystem(child1_1);
+            root.Add(child1);
+            child1.Add(child1_1);
             
             IsTrue (root.IsAncestorOf(child1));
             IsTrue (root.IsAncestorOf(child1_1));
@@ -314,9 +314,9 @@ namespace Tests.ECS.Systems
             var perfSystem1 = new PerfSystem();
             var perfSystem2 = new PerfSystem();
             
-            root.AddSystem(child1);
-            root.AddSystem(perfSystem1);
-            child1.AddSystem(perfSystem2);
+            root.Add(child1);
+            root.Add(perfSystem1);
+            child1.Add(perfSystem2);
             
             IsFalse(root.       MonitorPerf);
             IsFalse(child1.     MonitorPerf);
@@ -395,28 +395,28 @@ namespace Tests.ECS.Systems
         {
             var group = new SystemGroup("Group1");
             Throws<ArgumentNullException>(() => {
-                group.AddSystem(null);
+                group.Add(null);
             });
             
             Exception e = Throws<ArgumentException>(() => {
-                group.AddSystem(new SystemRoot("Root"));
+                group.Add(new SystemRoot("Root"));
             });
             AreEqual("SystemRoot must not be a child system (Parameter 'system')", e!.Message);
             
             var testSystem = new TestSystem1();
-            group.AddSystem(testSystem);
+            group.Add(testSystem);
             e = Throws<ArgumentException>(() => {
-                group.AddSystem(testSystem);
+                group.Add(testSystem);
             });
             AreEqual("system already added to Group 'Group1' (Parameter 'system')", e!.Message);
             
             Throws<ArgumentNullException>(() => {
-                group.RemoveSystem(null);
+                group.Remove(null);
             });
             
             var group2 = new SystemGroup("Group2");
             e = Throws<ArgumentException>(() => {
-                group2.RemoveSystem(testSystem);
+                group2.Remove(testSystem);
             });
             AreEqual("system not child of Group 'Group2' (Parameter 'system')", e!.Message);
         }

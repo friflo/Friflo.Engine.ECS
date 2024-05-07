@@ -23,7 +23,7 @@ namespace Tests.ECS.Systems
             var store   = new EntityStore();
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
-            root.AddSystem(new TestMoveSystem());
+            root.Add(new TestMoveSystem());
             root.Update(42); 
             AreEqual(new Position(1,0,0), entity.Position);
         }
@@ -55,8 +55,8 @@ namespace Tests.ECS.Systems
             IsNull(root.FindGroup("TestGroup",  true));
             
             
-            root.AddSystem(group1);
-            group1.AddSystem(testGroup);
+            root.Add(group1);
+            group1.Add(testGroup);
             
             AreEqual("'Systems' Root - child systems: 1", root.ToString());
             AreEqual("'Group1' Group - child systems: 1", group1.ToString());
@@ -86,12 +86,12 @@ namespace Tests.ECS.Systems
             var entity      = store.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot(store);    // create SystemRoot with store
             var testGroup   = new TestGroup();
-            root.AddSystem(testGroup);
+            root.Add(testGroup);
             var testSystem1 = new TestSystem1();
             AreEqual("TestSystem1 - [Position]", testSystem1.ToString());
             AreEqual("Components: [Position]", testSystem1.ComponentTypes.ToString());
             AreEqual(0,     testSystem1.Queries.Count);
-            testGroup.AddSystem(testSystem1);
+            testGroup.Add(testSystem1);
             AreEqual(1,     testSystem1.Queries.Count);
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
@@ -113,8 +113,8 @@ namespace Tests.ECS.Systems
             var root        = new SystemRoot("Systems");   // create SystemRoot without store
             var group       = new SystemGroup("Group");
             var testSystem1 = new TestSystem1();
-            group.AddSystem(testSystem1);
-            root.AddSystem(group);
+            group.Add(testSystem1);
+            root.Add(group);
             
             // --- add store
             AreEqual(0, testSystem1.Queries.Count);
@@ -162,7 +162,7 @@ namespace Tests.ECS.Systems
         {
             var root            = new SystemRoot("Systems");
             var customSystem    = new MySystem1();
-            root.AddSystem(customSystem);
+            root.Add(customSystem);
             var store = new EntityStore();
             root.AddStore(store);
             root.RemoveStore(store);
@@ -191,7 +191,7 @@ namespace Tests.ECS.Systems
             var store       = new EntityStore();
             var root        = new SystemRoot("Systems");
             var testSystem2 = new TestSystem2();
-            root.AddSystem(testSystem2);
+            root.Add(testSystem2);
             root.AddStore(store);
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             root.SetMonitorPerf(monitorPerf);

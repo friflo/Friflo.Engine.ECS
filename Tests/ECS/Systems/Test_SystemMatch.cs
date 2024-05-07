@@ -28,13 +28,13 @@ namespace Tests.ECS.Systems
             root.AddStore(store2);
             var group1  = new SystemGroup("Group-1");
             var group2  = new SystemGroup("Group-2");
-            root.AddSystem(group1);             // group with QuerySystem
-            root.AddSystem(group2);             // group with QuerySystem
-            root.AddSystem(new TestSystem2());  // QuerySystem in root
+            root.Add(group1);             // group with QuerySystem
+            root.Add(group2);             // group with QuerySystem
+            root.Add(new TestSystem2());  // QuerySystem in root
             var positionSystem  = new PositionSystem();
             var scaleSystem     = new ScaleSystem();
-            group1.AddSystem(positionSystem);
-            group2.AddSystem(scaleSystem);
+            group1.Add(positionSystem);
+            group2.Add(scaleSystem);
             
             var matches = new List<SystemMatch>();
             

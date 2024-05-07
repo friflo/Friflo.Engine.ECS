@@ -23,7 +23,7 @@ public class CreateSystems : Script
             5 => new MySystem_Arg5(),
             _ => throw new ArgumentException($"value: {argCount}", nameof(argCount))
         };
-        Systems.AddSystem(system);
+        Systems.Add(system);
         Systems.AddStore(Store);
     }
 

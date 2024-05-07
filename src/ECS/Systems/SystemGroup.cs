@@ -59,11 +59,6 @@ namespace Friflo.Engine.ECS.Systems
         // Add() enables support for collection initializer
         public void Add(BaseSystem system)
         {
-            AddSystem(system);
-        }
-        
-        public void AddSystem(BaseSystem system)
-        {
             if (system == null)             throw new ArgumentNullException(nameof(system));
             if (system is SystemRoot)       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
             if (system.ParentGroup != null) throw new ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
@@ -73,7 +68,7 @@ namespace Friflo.Engine.ECS.Systems
             CastSystemAdded(system);
         }
         
-        public void InsertSystemAt(int index, BaseSystem system)
+        public void Insert(int index, BaseSystem system)
         {
             if (system == null)                             throw new ArgumentNullException(nameof(system));
             if (system is SystemRoot)                       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
@@ -89,7 +84,7 @@ namespace Friflo.Engine.ECS.Systems
             CastSystemAdded(system);
         }
         
-        public void RemoveSystem(BaseSystem system)
+        public void Remove(BaseSystem system)
         {
             if (system == null)             throw new ArgumentNullException(nameof(system));
             if (system.ParentGroup != this) throw new ArgumentException($"system not child of Group '{Name}'", nameof(system));

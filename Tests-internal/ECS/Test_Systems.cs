@@ -18,7 +18,7 @@ namespace Tests.Systems
         {
             var root        = new SystemRoot("Systems");
             var querySystem = new TestQuerySystem();
-            root.AddSystem(querySystem);
+            root.Add(querySystem);
             
             var view = querySystem.System;
             AreEqual("TestQuerySystem",         view.Name);
@@ -53,9 +53,9 @@ namespace Tests.Systems
             group2.id       = 1;
             querySystem.id  = 3;
             
-            root.AddSystem(group1);
-            root.AddSystem(group2);
-            root.AddSystem(querySystem);
+            root.Add(group1);
+            root.Add(group2);
+            root.Add(querySystem);
             
             AreEqual(1, group1.Id);
             AreEqual(2, group2.Id);
@@ -70,11 +70,11 @@ namespace Tests.Systems
             var child = new SystemGroup();
             child.SetName("Child");
             
-            root.AddSystem(child);
+            root.Add(child);
             AreSame(store, child.CommandBuffers[0].EntityStore);
             
             var testQuerySystem = new TestQuerySystem();
-            child.AddSystem(testQuerySystem);
+            child.Add(testQuerySystem);
             AreSame(testQuerySystem, child.ChildSystems[0]);
         }
     }
