@@ -46,9 +46,9 @@ namespace Tests.ECS.Systems
             root.AddSystem(group1);
             root.AddSystem(testGroup);
             
-            AreEqual("'Systems' Root - systems: 2", root.ToString());
-            AreEqual("'Group1' Group - systems: 0", group1.ToString());
-            AreEqual("'TestGroup' Group - systems: 0", testGroup.ToString());
+            AreEqual("'Systems' Root - child systems: 2", root.ToString());
+            AreEqual("'Group1' Group - child systems: 0", group1.ToString());
+            AreEqual("'TestGroup' Group - child systems: 0", testGroup.ToString());
             
             AreSame(group1, root.FindGroup("Group1"));
             AreSame(testGroup, root.FindGroup("TestGroup"));

@@ -21,7 +21,7 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)] public          bool                        PerfEnabled     => perfEnabled;
                         public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
                         internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
-                        public override string                      ToString()      => $"'{name}' Group - systems: {childSystems.Count}";
+                        public override string                      ToString()      => $"'{name}' Group - child systems: {childSystems.Count}";
         #endregion
         
     #region fields

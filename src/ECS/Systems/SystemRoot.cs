@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS.Systems
     {
     #region properties
         public  ReadOnlyList<EntityStore>   Stores      => stores;
-        public override string              ToString()  => $"'{Name}' Root - systems: {systemMap.Count}";
+        public override string              ToString()  => $"'{Name}' Root - child systems: {childSystems.Count}";
         #endregion
 
     #region internal fields
