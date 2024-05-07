@@ -125,6 +125,15 @@ public sealed class CommandBuffer
         };
     }
     
+    public void Clear()
+    {
+        if (!intern.hasCommands) {
+            return;
+        }
+        var hasComponentChanges = intern.changedComponentTypes.Count > 0;
+        intern.Reset(hasComponentChanges);
+    }
+    
     /// <summary>
     /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#commandbuffer">Example.</a>

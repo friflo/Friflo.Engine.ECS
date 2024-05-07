@@ -452,6 +452,37 @@ public static class Test_CommandBuffer
         ecb.Playback();
         AreEqual(2, store.Count);
     }
+    
+    [Test]
+    public static void Test_CommandBuffer_Clear()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var ecb     = store.GetCommandBuffer();
+        ecb.ReuseBuffer = true;
+        ecb.Clear();    // cover early out
+        
+        var entity  = store.CreateEntity();
+        var child   = store.CreateEntity();
+        
+        ecb.AddComponent(entity.Id, new Position());
+        ecb.AddTag<TestTag>(entity.Id);
+        ecb.AddScript(entity.Id, new TestScript1());
+        ecb.AddChild(entity.Id, child.Id);
+        ecb.CreateEntity();
+        
+        AreEqual(1, ecb.ComponentCommandsCount);
+        AreEqual(1, ecb.TagCommandsCount);
+        AreEqual(1, ecb.ScriptCommandsCount);
+        AreEqual(1, ecb.ChildCommandsCount);
+        AreEqual(1, ecb.EntityCommandsCount);
+        
+        ecb.Clear();
+        AreEqual(0, ecb.ComponentCommandsCount);
+        AreEqual(0, ecb.TagCommandsCount);
+        AreEqual(0, ecb.ScriptCommandsCount);
+        AreEqual(0, ecb.ChildCommandsCount);
+        AreEqual(0, ecb.EntityCommandsCount);
+    }
 }
 
 }

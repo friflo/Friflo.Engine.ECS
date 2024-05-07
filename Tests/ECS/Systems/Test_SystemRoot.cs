@@ -171,7 +171,7 @@ namespace Tests.ECS.Systems
         {
             bool perfEnabled    = false;
             int  count          = 10;
-                                // 100_000_000 - perfEnabled: false ~ #PC: 3499 ms (overhead of perf conditions ~ 250 ms)
+                                // 100_000_000 - perfEnabled: false ~ #PC: 3682 ms (overhead of perf conditions ~ 250 ms)
                                 // 100_000_000 - perfEnabled: true  ~ #PC: 8128 ms
             var store       = new EntityStore(PidType.UsePidAsId);
             var root        = new SystemRoot("Systems");

@@ -183,25 +183,31 @@ namespace Friflo.Engine.ECS.Systems
         protected internal override void OnUpdateGroup()
         {
             var children = childSystems;
+            var commands = commandBuffers;
+            // --- clear command buffers in case Playback() was not called in a previous Update() caused by an exception
+            for (int n = 0; n < commands.Count; n++) { commands[n].Clear(); }
+            
             // --- calls OnUpdateGroupBegin() once per child system.
-            foreach (var child in children) {
+            for (int n = 0; n < children.Count; n++) {
+                var child = children[n];
                 if (!child.enabled) continue;
                 child.Tick = Tick;
                 child.OnUpdateGroupBegin();
             }
             // --- calls OnUpdate() for every QuerySystem child and every store in SystemRoot.Stores - commonly a single store.
-            foreach (var child in children) {
+            for (int n = 0; n < children.Count; n++) {
+                var child = children[n];
                 if (!child.enabled) { ClearPerfTicks(child); continue; }
                 var start = perfEnabled ? Stopwatch.GetTimestamp() : 0;
                 child.OnUpdateGroup();
                 SetPerfTicks(child, start);
             }
             // --- apply command buffer changes
-            foreach (var commandBuffer in commandBuffers) {
-                commandBuffer.Playback();
-            }
+            for (int n = 0; n < commands.Count; n++) { commands[n].Playback(); }
+            
             // --- calls OnUpdateGroupEnd() once per child system.
-            foreach (var child in children) {
+            for (int n = 0; n < children.Count; n++) {
+                var child = children[n];
                 if (!child.enabled) continue;
                 child.OnUpdateGroupEnd();
                 child.Tick = default;
