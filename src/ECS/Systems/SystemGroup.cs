@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -17,7 +16,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS.Systems
 {
     [DebuggerTypeProxy(typeof(SystemGroupDebugView))]
-    public class SystemGroup : BaseSystem, IEnumerable<BaseSystem>
+    // IEnumerable + Add() enables collection initializer.
+    // IEnumerable<> cannot be used as Friflo.Json.Fliox Mapper does not support Read() for IEnumerable<>.
+    public class SystemGroup : BaseSystem, IEnumerable
     {
     #region properties
         [Browse(Never)] public override string                      Name            => name;
@@ -51,7 +52,6 @@ namespace Friflo.Engine.ECS.Systems
         
     #region enumerator
         public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
-        IEnumerator<BaseSystem> IEnumerable<BaseSystem>.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
         IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
         #endregion
         
