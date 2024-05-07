@@ -44,21 +44,21 @@ namespace Friflo.Engine.ECS.Systems
             sb.Append('\'');
             switch (action) {
                 case SystemChangedAction.Add:
-                    sb.Append(" to: '");
+                    sb.Append(" to '");
                     sb.Append(system.ParentGroup.Name);
                     sb.Append('\'');
                     break;
                 case SystemChangedAction.Remove:
-                    sb.Append(" from: '");
+                    sb.Append(" from '");
                     var oldParent = (SystemGroup)value;
                     sb.Append(oldParent.Name);
                     sb.Append('\'');
                     break;
                 case  SystemChangedAction.Move:
-                    sb.Append(" from: '");
+                    sb.Append(" from '");
                     oldParent = (SystemGroup)value;
                     sb.Append(oldParent.Name);
-                    sb.Append("' to: '");
+                    sb.Append("' to '");
                     sb.Append(system.ParentGroup.Name);
                     sb.Append('\'');
                     break;

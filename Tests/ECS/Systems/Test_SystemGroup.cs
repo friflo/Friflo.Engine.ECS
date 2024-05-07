@@ -28,13 +28,13 @@ namespace Tests.ECS.Systems
             root.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (changesRoot++) {
-                    case 0: AreEqual("Add - Group 'Group1' to: 'Systems'",                  str);   return;
-                    case 1: AreEqual("Add - Group 'Group2' to: 'Systems'",                  str);   return;
-                    case 2: AreEqual("Add - Group 'Group3' to: 'Systems'",                  str);   return;
-                    case 3: AreEqual("Move - Group 'Group1' from: 'Systems' to: 'Group3'",  str);   return;
-                    case 4: AreEqual("Move - Group 'Group2' from: 'Systems' to: 'Group3'",  str);   return;
-                    case 5: AreEqual("Move - Group 'Group1' from: 'Group3' to: 'Group3'",   str);   return;
-                    case 6: AreEqual("Move - Group 'Group2' from: 'Group3' to: 'Group3'",   str);   return;
+                    case 0: AreEqual("Add - Group 'Group1' to 'Systems'",                  str);   return;
+                    case 1: AreEqual("Add - Group 'Group2' to 'Systems'",                  str);   return;
+                    case 2: AreEqual("Add - Group 'Group3' to 'Systems'",                  str);   return;
+                    case 3: AreEqual("Move - Group 'Group1' from 'Systems' to 'Group3'",  str);   return;
+                    case 4: AreEqual("Move - Group 'Group2' from 'Systems' to 'Group3'",  str);   return;
+                    case 5: AreEqual("Move - Group 'Group1' from 'Group3' to 'Group3'",   str);   return;
+                    case 6: AreEqual("Move - Group 'Group2' from 'Group3' to 'Group3'",   str);   return;
                 }
             };
             group1.OnSystemChanged += _ => {
@@ -46,10 +46,10 @@ namespace Tests.ECS.Systems
             group3.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (changesGroup3++) {
-                    case 0: AreEqual("Move - Group 'Group1' from: 'Systems' to: 'Group3'",  str);   return;
-                    case 1: AreEqual("Move - Group 'Group2' from: 'Systems' to: 'Group3'",  str);   return;
-                    case 2: AreEqual("Move - Group 'Group1' from: 'Group3' to: 'Group3'",   str);   return;
-                    case 3: AreEqual("Move - Group 'Group2' from: 'Group3' to: 'Group3'",   str);   return;
+                    case 0: AreEqual("Move - Group 'Group1' from 'Systems' to 'Group3'",  str);   return;
+                    case 1: AreEqual("Move - Group 'Group2' from 'Systems' to 'Group3'",  str);   return;
+                    case 2: AreEqual("Move - Group 'Group1' from 'Group3' to 'Group3'",   str);   return;
+                    case 3: AreEqual("Move - Group 'Group2' from 'Group3' to 'Group3'",   str);   return;
                 }
             };
             root.AddSystem(group1);
@@ -133,8 +133,8 @@ namespace Tests.ECS.Systems
             root.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
-                    case 0: AreEqual("Add - System 'TestSystem1' to: 'Systems'",     str);      return;
-                    case 1: AreEqual("Remove - System 'TestSystem1' from: 'Systems'", str);     return;
+                    case 0: AreEqual("Add - System 'TestSystem1' to 'Systems'",     str);      return;
+                    case 1: AreEqual("Remove - System 'TestSystem1' from 'Systems'", str);     return;
                 }
             };
             root.AddSystem(testSystem1);
@@ -157,8 +157,8 @@ namespace Tests.ECS.Systems
             baseGroup.OnSystemChanged += changed => {
                 var str = changed.ToString();
                 switch (count++) {
-                    case 0: AreEqual("Add - System 'TestSystem1' to: 'Base'",     str);      return;
-                    case 1: AreEqual("Remove - System 'TestSystem1' from: 'Base'", str);     return;
+                    case 0: AreEqual("Add - System 'TestSystem1' to 'Base'",     str);      return;
+                    case 1: AreEqual("Remove - System 'TestSystem1' from 'Base'", str);     return;
                 }
             };
             baseGroup.  AddSystem(testSystem1);
