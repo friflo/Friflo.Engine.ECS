@@ -50,7 +50,6 @@ namespace Tests.ECS.Systems
             AreEqual("'Group1' Group - systems: 0", group1.ToString());
             AreEqual("'TestGroup' Group - systems: 0", testGroup.ToString());
             
-            AreEqual(2,     root.RootSystems.Count);
             AreSame(group1, root.FindGroup("Group1"));
             AreSame(testGroup, root.FindGroup("TestGroup"));
             

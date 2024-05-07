@@ -139,12 +139,10 @@ namespace Tests.ECS.Systems
             };
             root.AddSystem(testSystem1);
             AreEqual(1, testSystem1.Queries.Count);
-            AreEqual(1, root.RootSystems.Count);
             AreEqual(1, root.ChildSystems.Count);
             
             root.RemoveSystem(testSystem1);
             AreEqual(0, testSystem1.Queries.Count);
-            AreEqual(0, root.RootSystems.Count);
             AreEqual(0, root.ChildSystems.Count);
             
             AreEqual(2, count);
