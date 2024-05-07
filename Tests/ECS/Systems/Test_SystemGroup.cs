@@ -244,9 +244,9 @@ namespace Tests.ECS.Systems
             root.AddSystem(child2);
             child1.AddSystem(child1_1);
             
-            AreSame(child1,     root.FindGroup("Child1"));
-            AreSame(child1_1,   root.FindGroup("Child1_1"));
-            IsNull (            root.FindGroup("Unknown"));
+            AreSame(child1,     root.FindGroup("Child1",  true));
+            AreSame(child1_1,   root.FindGroup("Child1_1",true));
+            IsNull (            root.FindGroup("Unknown", true));
         }
         
         [Test]
@@ -261,10 +261,11 @@ namespace Tests.ECS.Systems
             root.AddSystem(mySystem1);
             child1.AddSystem(mySystem2);
             
-            
-            AreSame(mySystem1,  root.FindSystem<MySystem1>());
-            AreSame(mySystem2,  root.FindSystem<MySystem2>());
-            IsNull (            root.FindSystem<TestSystem1>());
+            AreSame(mySystem1,  root.FindSystem<MySystem1>(true));
+            AreSame(mySystem1,  root.FindSystem<MySystem1>(false));
+            AreSame(mySystem2,  root.FindSystem<MySystem2>(true));
+            IsNull (            root.FindSystem<MySystem2>(false));
+            IsNull (            root.FindSystem<TestSystem1>(true));
         }
         
         [Test]

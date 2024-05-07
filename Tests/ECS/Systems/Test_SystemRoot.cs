@@ -41,19 +41,24 @@ namespace Tests.ECS.Systems
             var group1      = new SystemGroup("Group1");
             var testGroup   = new TestGroup();
             
-            IsNull(root.FindGroup("group1"));
-            IsNull(root.FindGroup("TestGroup"));
-            root.AddSystem(group1);
-            root.AddSystem(testGroup);
+            IsNull(root.FindGroup("Group1",     true));
+            IsNull(root.FindGroup("TestGroup",  true));
             
-            AreEqual("'Systems' Root - child systems: 2", root.ToString());
-            AreEqual("'Group1' Group - child systems: 0", group1.ToString());
+            
+            root.AddSystem(group1);
+            group1.AddSystem(testGroup);
+            
+            AreEqual("'Systems' Root - child systems: 1", root.ToString());
+            AreEqual("'Group1' Group - child systems: 1", group1.ToString());
             AreEqual("'TestGroup' Group - child systems: 0", testGroup.ToString());
             
-            AreSame(group1, root.FindGroup("Group1"));
-            AreSame(testGroup, root.FindGroup("TestGroup"));
+            AreSame(group1,     root.FindGroup("Group1",    true));
+            AreSame(group1,     root.FindGroup("Group1",    false));
+            AreSame(testGroup,  root.FindGroup("TestGroup", true));
+            IsNull (            root.FindGroup("TestGroup", false));
             
-            AreEqual(2, root.ChildSystems.Count);
+            AreEqual(1, root.ChildSystems.Count);
+            AreEqual(1, group1.ChildSystems.Count);
             
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);

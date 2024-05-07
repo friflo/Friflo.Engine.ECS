@@ -92,14 +92,29 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region group: find system
-        public SystemGroup FindGroup(string name)
+        public SystemGroup FindGroup(string name, bool recursive)
+        {
+            if (recursive) {
+                return FindGroupRecursive(name);
+            }
+            foreach (var child in childSystems)
+            {
+                if (child is SystemGroup group) {
+                    if (child.Name == name)
+                        return group;
+                }
+            }
+            return null;
+        }
+        
+        private SystemGroup FindGroupRecursive(string name)
         {
             foreach (var child in childSystems)
             {
                 if (child is SystemGroup group) {
                     if (child.Name == name)
                         return group;
-                    var result = group.FindGroup(name);
+                    var result = group.FindGroupRecursive(name);
                     if (result != null) {
                         return result;
                     }
@@ -108,14 +123,27 @@ namespace Friflo.Engine.ECS.Systems
             return null;
         }
         
-        public T FindSystem<T>() where T : BaseSystem
+        public T FindSystem<T>(bool recursive) where T : BaseSystem
+        {
+            if (recursive) {
+                return FindSystemRecursive<T>();
+            }
+            foreach (var child in childSystems) {
+                if (child is T querySystem) {
+                    return querySystem;
+                }
+            }
+            return null;
+        }
+        
+        private T FindSystemRecursive<T>() where T : BaseSystem
         {
             foreach (var child in childSystems) {
                 if (child is T querySystem) {
                     return querySystem;
                 }
                 if (child is SystemGroup group) {
-                    var result = group.FindSystem<T>();
+                    var result = group.FindSystemRecursive<T>();
                     if (result != null) {
                         return result;
                     }
