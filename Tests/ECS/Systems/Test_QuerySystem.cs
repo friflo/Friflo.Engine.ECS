@@ -31,7 +31,7 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_System_Enabled()
         {
-            var store   = new EntityStore(PidType.UsePidAsId);
+            var store   = new EntityStore();
             var entity  = store.CreateEntity(new Position(1,2,3));
             
             var root    = new SystemRoot(store);

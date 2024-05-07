@@ -208,7 +208,7 @@ public static class Test_Query
     }
     
     private static EntityStore SetupTestStore() {
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore();
         
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("root"));
@@ -248,7 +248,7 @@ public static class Test_Query
     [Test]
     public static void Test_Query_Chunk_Padding() {
         
-        var store       = new EntityStore(PidType.UsePidAsId);
+        var store       = new EntityStore();
         var archetype   = store.GetArchetype(ComponentTypes.Get<ByteComponent>());
         var query       = store.Query<ByteComponent>();
         for (int n = 0; n < 200; n++) {

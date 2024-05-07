@@ -48,7 +48,7 @@ public static class Bench_Query
     public static void Test_Bench()
     {
         using var runner = new ParallelJobRunner(8);
-        var store   = new EntityStore(PidType.UsePidAsId) { JobRunner = runner };
+        var store   = new EntityStore() { JobRunner = runner };
         var archetype = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         for (int n = 0; n < 32; n++) {
             archetype.CreateEntity();

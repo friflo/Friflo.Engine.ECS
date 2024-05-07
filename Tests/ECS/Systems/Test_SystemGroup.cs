@@ -126,7 +126,7 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemGroup_RemoveSystem_with_root()
         {
-            var store       = new EntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore();
             var root        = new SystemRoot (store, "Systems");
             var testSystem1 = new TestSystem1();
             var count = 0;

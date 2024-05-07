@@ -25,7 +25,7 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Add_System_minimal()
         {
-            var store   = new EntityStore(PidType.UsePidAsId);
+            var store   = new EntityStore();
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store);
             root.AddSystem(new TestSystem1());
@@ -36,7 +36,7 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Add_Group()
         {
-            var store       = new EntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore();
             var root        = new SystemRoot("Systems");
             var group1      = new SystemGroup("Group1");
             var testGroup   = new TestGroup();
@@ -72,7 +72,7 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Add_System()
         {
-            var store       = new EntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore();
             var entity      = store.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot(store);    // create SystemRoot with store
             var testGroup   = new TestGroup();
@@ -97,8 +97,8 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_Add_RemoveStore()
         {
-            var store1      = new EntityStore(PidType.UsePidAsId);
-            var store2      = new EntityStore(PidType.UsePidAsId);
+            var store1      = new EntityStore();
+            var store2      = new EntityStore();
             store1.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot("Systems");   // create SystemRoot without store
             var group       = new SystemGroup("Group");
@@ -153,7 +153,7 @@ namespace Tests.ECS.Systems
             var root            = new SystemRoot("Systems");
             var customSystem    = new MySystem1();
             root.AddSystem(customSystem);
-            var store = new EntityStore(PidType.UsePidAsId);
+            var store = new EntityStore();
             root.AddStore(store);
             root.RemoveStore(store);
             root.Update(0);
@@ -178,7 +178,7 @@ namespace Tests.ECS.Systems
             int  count          = 10;
                                 // 100_000_000 - perfEnabled: false ~ #PC: 3682 ms (overhead of perf conditions ~ 250 ms)
                                 // 100_000_000 - perfEnabled: true  ~ #PC: 8128 ms
-            var store       = new EntityStore(PidType.UsePidAsId);
+            var store       = new EntityStore();
             var root        = new SystemRoot("Systems");
             var testSystem2 = new TestSystem2();
             root.AddSystem(testSystem2);

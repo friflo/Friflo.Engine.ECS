@@ -291,7 +291,7 @@ public static class Test_Systems
     }
     
     internal static EntityStore SetupTestStore() {
-        var store   = new EntityStore(PidType.UsePidAsId);
+        var store   = new EntityStore();
         
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("root"));
