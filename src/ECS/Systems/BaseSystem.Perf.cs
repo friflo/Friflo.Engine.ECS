@@ -17,10 +17,10 @@ namespace Friflo.Engine.ECS.Systems
                         public  int     UpdateCount => updateCount;
         
         /// <summary> Execution time in ms of the last Update. Precision 100 ns. <br/> -1 if not executed. </summary>        
-                        public  decimal LastMs      => lastTicks >= 0 ? Math.Round(lastTicks * StopwatchPeriodMs, PerfMsDecimals) : -1;
+                        public  decimal LastMs      => lastTicks >= 0 ? Math.Round(lastTicks / FrequencyMs, PerfMsDecimals) : -1;
         
         /// <summary> Sum of all Update execution times in ms. Precision 100 ns.</summary>
-                        public  decimal SumMs       => Math.Round(sumTicks * StopwatchPeriodMs, PerfMsDecimals);
+                        public  decimal SumMs       => Math.Round(sumTicks / FrequencyMs, PerfMsDecimals);
         
         /// <summary> Execution time in ticks of the last Update. <br/> -1 if not executed. </summary>
         [Browse(Never)] public  long    LastTicks   => lastTicks;
@@ -55,7 +55,7 @@ namespace Friflo.Engine.ECS.Systems
                 sum += ticks[n % length];
             }
             sum /= count;
-            return Math.Round(sum * StopwatchPeriodMs, PerfMsDecimals);
+            return Math.Round(sum / FrequencyMs, PerfMsDecimals);
         }
     }
     
