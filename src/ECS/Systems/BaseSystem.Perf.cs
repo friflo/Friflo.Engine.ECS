@@ -15,13 +15,14 @@ namespace Friflo.Engine.ECS.Systems
     {
         /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
                         public  int     UpdateCount => updateCount;
-                        public  double  LastMs      => lastTicks >= 0 ? lastTicks * StopwatchPeriodMs : -1;
-                        public  double  SumMs       => sumTicks * StopwatchPeriodMs;
-        [Browse(Never)] public  double  LastTicks   => lastTicks;
+                        public  float   LastMs      => lastTicks >= 0 ? (float)(lastTicks * StopwatchPeriodMs) : -1;
+                        public  float   SumMs       => (float)(sumTicks * StopwatchPeriodMs);
+        [Browse(Never)] public  long    LastTicks   => lastTicks;
+        [Browse(Never)] public  long    SumTicks    => sumTicks;
 
         public override string  ToString()  => $"updates: {UpdateCount}  last: {LastMs:0.###} ms  sum: {SumMs:0.###} ms";
         
-        public          double  LastAvgMs(int count) => GetLastAvgMs(count);
+        public          float   LastAvgMs(int count) => GetLastAvgMs(count);
 
         [Browse(Never)] internal            int     updateCount;
         [Browse(Never)] internal            long    lastTicks;
@@ -33,7 +34,7 @@ namespace Friflo.Engine.ECS.Systems
             lastTicks       = -1;
         }
         
-        private double GetLastAvgMs(int count)
+        private float GetLastAvgMs(int count)
         {
             var ticks   = history;
             var length  = ticks.Length;
@@ -46,7 +47,7 @@ namespace Friflo.Engine.ECS.Systems
                 sum += ticks[n % length];
             }
             sum /= count;
-            return sum * StopwatchPeriodMs;
+            return (float)(sum * StopwatchPeriodMs);
         }
     }
     

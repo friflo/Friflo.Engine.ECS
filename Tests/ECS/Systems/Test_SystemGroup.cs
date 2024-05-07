@@ -338,29 +338,40 @@ namespace Tests.ECS.Systems
             AreEqual(perfSystem1.   Perf.LastMs, perfSystem1.   Perf.LastAvgMs(20));
             AreEqual(perfSystem2.   Perf.LastMs, perfSystem2.   Perf.LastAvgMs(20));
             
+            // --- Update() again to test Perf Sum
+            var rootSum         = root.  Perf.SumTicks;
+            var child1Sum       = child1.Perf.SumTicks;
+            var perfSystem1Sum  = perfSystem1.Perf.SumTicks;
+            var perfSystem2Sum  = perfSystem2.Perf.SumTicks;
+            root.Update(default);
+            AreEqual(rootSum        + root.         Perf.LastTicks, root.       Perf.SumTicks);
+            AreEqual(child1Sum      + child1.       Perf.LastTicks, child1.     Perf.SumTicks);
+            AreEqual(perfSystem1Sum + perfSystem1.  Perf.LastTicks, perfSystem1.Perf.SumTicks);
+            AreEqual(perfSystem2Sum + perfSystem2.  Perf.LastTicks, perfSystem2.Perf.SumTicks);
+            
             // --- disable / enable systems
             perfSystem1.Enabled = false;
             root.Update(default);
-            IsTrue(root.        Perf.LastMs > 0);       AreEqual(2, root.        Perf.UpdateCount);
-            IsTrue(child1.      Perf.LastMs > 0);       AreEqual(2, child1.      Perf.UpdateCount);
-            IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(1, perfSystem1. Perf.UpdateCount);
-            IsTrue(perfSystem2. Perf.LastMs > 0);       AreEqual(2, perfSystem2. Perf.UpdateCount);
+            IsTrue(root.        Perf.LastMs > 0);       AreEqual(3, root.        Perf.UpdateCount);
+            IsTrue(child1.      Perf.LastMs > 0);       AreEqual(3, child1.      Perf.UpdateCount);
+            IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(2, perfSystem1. Perf.UpdateCount);
+            IsTrue(perfSystem2. Perf.LastMs > 0);       AreEqual(3, perfSystem2. Perf.UpdateCount);
             
             child1.Enabled = false;
             root.Update(default);
-            IsTrue(root.        Perf.LastMs > 0);       AreEqual(3, root.        Perf.UpdateCount);
-            IsTrue(child1.      Perf.LastMs == -1);     AreEqual(2, child1.      Perf.UpdateCount);
-            IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(1, perfSystem1. Perf.UpdateCount);
-            IsTrue(perfSystem2. Perf.LastMs == -1);     AreEqual(2, perfSystem2. Perf.UpdateCount);
+            IsTrue(root.        Perf.LastMs > 0);       AreEqual(4, root.        Perf.UpdateCount);
+            IsTrue(child1.      Perf.LastMs == -1);     AreEqual(3, child1.      Perf.UpdateCount);
+            IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(2, perfSystem1. Perf.UpdateCount);
+            IsTrue(perfSystem2. Perf.LastMs == -1);     AreEqual(3, perfSystem2. Perf.UpdateCount);
             
             perfSystem1.Enabled = true;
             child1.Enabled      = true;
             root.Enabled        = false;
             root.Update(default);
-            IsTrue(root.        Perf.LastMs == -1);     AreEqual(3, root.        Perf.UpdateCount);
-            IsTrue(child1.      Perf.LastMs == -1);     AreEqual(2, child1.      Perf.UpdateCount);
-            IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(1, perfSystem1. Perf.UpdateCount);
-            IsTrue(perfSystem2. Perf.LastMs == -1);     AreEqual(2, perfSystem2. Perf.UpdateCount);
+            IsTrue(root.        Perf.LastMs == -1);     AreEqual(4, root.        Perf.UpdateCount);
+            IsTrue(child1.      Perf.LastMs == -1);     AreEqual(3, child1.      Perf.UpdateCount);
+            IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(2, perfSystem1. Perf.UpdateCount);
+            IsTrue(perfSystem2. Perf.LastMs == -1);     AreEqual(3, perfSystem2. Perf.UpdateCount);
         }
         
         [Test]
