@@ -10,7 +10,8 @@ namespace Friflo.Engine.ECS.Systems
 {
     public static class SystemExtensions
     {
-        internal static readonly double StopwatchPeriodMs = 1 / (Stopwatch.Frequency / 1000d);
+        internal static readonly    decimal StopwatchPeriodMs   = 1 / (Stopwatch.Frequency / 1000m);
+        internal const              int     PerfMsDecimals      = 4;
         
         private static SystemMatch[]    _matches = new SystemMatch[1];
         private static int              _matchesCount;
