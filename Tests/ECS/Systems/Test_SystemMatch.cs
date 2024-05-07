@@ -28,8 +28,9 @@ namespace Tests.ECS.Systems
             root.AddStore(store2);
             var group1  = new SystemGroup("Group-1");
             var group2  = new SystemGroup("Group-2");
-            root.AddSystem(group1);
-            root.AddSystem(group2);
+            root.AddSystem(group1);             // group with QuerySystem
+            root.AddSystem(group2);             // group with QuerySystem
+            root.AddSystem(new TestSystem2());  // QuerySystem in root
             var positionSystem  = new PositionSystem();
             var scaleSystem     = new ScaleSystem();
             group1.AddSystem(positionSystem);
@@ -39,9 +40,10 @@ namespace Tests.ECS.Systems
             
             // --- add groups
             root.GetMatchingSystems(entity1.Archetype, matches, true);
-            AreEqual(2, matches.Count);
+            AreEqual(3, matches.Count);
             AreEqual("Group-1 [1] - Depth: 1",      matches[0].ToString());
             AreEqual("PositionSystem - Depth: 2",   matches[1].ToString());
+            AreEqual("TestSystem2 - Depth: 1",      matches[2].ToString());
             
             var match0 = matches[0];
             AreSame (group1,        match0.System);
@@ -54,21 +56,24 @@ namespace Tests.ECS.Systems
             AreEqual(2,             match1.Depth);
             
             root.GetMatchingSystems(entity2.Archetype, matches, true);
-            AreEqual(4, matches.Count);
+            AreEqual(5, matches.Count);
             AreEqual("Group-1 [1] - Depth: 1",      matches[0].ToString());
             AreEqual("PositionSystem - Depth: 2",   matches[1].ToString());
             AreEqual("Group-2 [1] - Depth: 1",      matches[2].ToString());
             AreEqual("ScaleSystem - Depth: 2",      matches[3].ToString());
+            AreEqual("TestSystem2 - Depth: 1",      matches[4].ToString());
             
             // --- flat
             root.GetMatchingSystems(entity1.Archetype, matches, false);
-            AreEqual(1, matches.Count);
-            AreEqual("PositionSystem - Depth: 0",   matches[0].ToString());
-            
-            root.GetMatchingSystems(entity2.Archetype, matches, false);
             AreEqual(2, matches.Count);
             AreEqual("PositionSystem - Depth: 0",   matches[0].ToString());
+            AreEqual("TestSystem2 - Depth: 0",      matches[1].ToString());
+            
+            root.GetMatchingSystems(entity2.Archetype, matches, false);
+            AreEqual(3, matches.Count);
+            AreEqual("PositionSystem - Depth: 0",   matches[0].ToString());
             AreEqual("ScaleSystem - Depth: 0",      matches[1].ToString());
+            AreEqual("TestSystem2 - Depth: 0",      matches[2].ToString());
         }
         
         [Test]

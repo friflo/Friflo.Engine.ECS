@@ -112,12 +112,12 @@ namespace Friflo.Engine.ECS.Systems
         private static void IncrementCount(int parent)
         {
             while (true) {
-                ref var match = ref _matches[parent];
-                match.count++;
-                parent = match.parent;
                 if (parent == -1) {
                     return;
                 }
+                ref var match = ref _matches[parent];
+                match.count++;
+                parent = match.parent;
             }
         }
     }
