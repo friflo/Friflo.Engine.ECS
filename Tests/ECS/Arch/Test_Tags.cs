@@ -43,7 +43,10 @@ public static class Test_Tags
         tags = Tags.Get<TestTag, TestTag2>();
         AreEqual(2, tags.Count);
         AreEqual("Tags: [#TestTag, #TestTag2]", tags.ToString());
+        IsFalse(tags.Has<TestTag3, TestTag>());
         IsTrue (tags.Has<TestTag, TestTag2>());
+        
+        IsFalse(tags.Has<TestTag3, TestTag, TestTag2>());
         IsFalse(tags.Has<TestTag, TestTag2, TestTag3>());
         IsTrue (tags.HasAll(twoTags));
         IsTrue (tags.HasAny(twoTags));
