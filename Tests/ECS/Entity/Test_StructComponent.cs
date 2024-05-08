@@ -460,6 +460,7 @@ public static class Test_StructComponent
         
         entity.Name.value = null;
         AreEqual("id: 1  [EntityName]", entity.ToString());
+        IsNull(                         entity.Name.Utf8);
     }
     
     [Test]
