@@ -175,29 +175,46 @@ namespace Tests.ECS.Systems
         {
             var store       = new EntityStore();
             var root        = new SystemRoot (store, "Systems");
+            var group       = new SystemGroup("Update");
             var testSystem1 = new TestSystem1();
-            var count = 0;
+            var testSystem2 = new TestSystem2();
+            var rootCount   = 0;
+            var grouptCount = 0;
             Action<SystemChanged> rootChanged = changed => {
                 var str = changed.ToString();
-                switch (count++) {
-                    case 0: AreEqual("Add - System 'TestSystem1' to 'Systems'",     str);      return;
-                    case 1: AreEqual("Remove - System 'TestSystem1' from 'Systems'", str);     return;
+                switch (rootCount++) {
+                    case 0: AreEqual("Add - System 'TestSystem1' to 'Systems'",         str);   return;
+                    case 1: AreEqual("Remove - System 'TestSystem1' from 'Systems'",    str);   return;
                 }
             };
-            root.OnSystemChanged += rootChanged;
+            Action<SystemChanged> groupChanged = changed => {
+                var str = changed.ToString();
+                switch (grouptCount++) {
+                    case 0: AreEqual("Add - System 'TestSystem2' to 'Update'",          str);   return;
+                    case 1: AreEqual("Remove - System 'TestSystem2' from 'Update'",     str);   return;
+                }
+            };
+            root. OnSystemChanged   += rootChanged;
+            group.OnSystemChanged   += groupChanged;
             root.Add(testSystem1);
+            group.Add(testSystem2);
             AreEqual(1, testSystem1.Queries.Count);
             AreEqual(1, root.ChildSystems.Count);
             
             root.Remove(testSystem1);
             AreEqual(0, testSystem1.Queries.Count);
             AreEqual(0, root.ChildSystems.Count);
+            group.Remove(testSystem2);
             
-            root.OnSystemChanged -= rootChanged;
-            root.Add(testSystem1);
-            root.Remove(testSystem1);
+            root. OnSystemChanged   -= rootChanged;
+            group.OnSystemChanged   -= groupChanged;
+            root.Add    (testSystem1);
+            root.Remove (testSystem1);
+            group.Add   (testSystem2);
+            group.Remove(testSystem2);
             
-            AreEqual(2, count);
+            AreEqual(2, rootCount);
+            AreEqual(2, grouptCount);
         }
         
         [Test]
