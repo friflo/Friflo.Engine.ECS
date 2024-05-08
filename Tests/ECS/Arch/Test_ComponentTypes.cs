@@ -180,6 +180,9 @@ public static class Test_ComponentTypes
         AreEqual(1, type1.ComponentTypes.Count);
         AreSame (type1, result);
         
+        result = store.FindArchetype(ComponentTypes.Get<UniqueEntity, Scale3>(), Tags.Get<TestTag2, TestTag3, TestTag5>());
+        IsNull(result);
+        
         var start   = Mem.GetAllocatedBytes();
         var types   = type1.ComponentTypes;
         var tags    = type1.Tags;
