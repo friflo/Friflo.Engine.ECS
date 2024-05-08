@@ -132,9 +132,11 @@ namespace Tests.ECS.Systems
             AreEqual(1, root.Stores.Count);
             AreEqual(1, testSystem1.Queries.Count);
             
+            root.RemoveStore(store1);                   // remove same store again for coverage
+            
             root.RemoveStore(store2);                   // remove store after system setup
             AreEqual(0, root.Stores.Count);
-            AreEqual(0, testSystem1.Queries.Count); 
+            AreEqual(0, testSystem1.Queries.Count);
         }
         
         [Test]
