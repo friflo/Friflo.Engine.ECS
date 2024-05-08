@@ -25,6 +25,8 @@ namespace Friflo.Engine.ECS.Systems
         [Browse(Never)] public          bool                        MonitorPerf     => monitorPerf;
         [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
                         internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
+                        // only for display in debugger
+                        internal        Item[]                      AllSystems      => Item.GetAllSystems(this);
                         public override string                      ToString()      => $"'{name}' Group - child systems: {childSystems.Count}";
         #endregion
         
@@ -288,8 +290,6 @@ namespace Friflo.Engine.ECS.Systems
                 }
             }
         }
-    
-
         #endregion
     }
 }

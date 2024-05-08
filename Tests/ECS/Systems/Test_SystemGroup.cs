@@ -2,12 +2,14 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-// ReSharper disable CompareOfFloatsByEqualityOperator
 
+// ReSharper disable CompareOfFloatsByEqualityOperator
+// ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InconsistentNaming
 namespace Tests.ECS.Systems
 {
@@ -29,6 +31,19 @@ namespace Tests.ECS.Systems
             AreEqual(2,         root.ChildSystems.Count);
             AreEqual("Start",   root.ChildSystems[0].Name);
             AreEqual("Update",  root.ChildSystems[1].Name);
+
+            int count = 0;
+            foreach (var _ in root) {
+                count++;
+            }
+            AreEqual(2, count);
+            
+            count = 0;
+            IEnumerable enumerable = root;
+            foreach (var _ in enumerable) {
+                count++;
+            }
+            AreEqual(2, count);
         }
     
         [Test]

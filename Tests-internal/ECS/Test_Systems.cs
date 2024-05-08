@@ -5,6 +5,7 @@
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
+using Tests.ECS.Systems;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable once CheckNamespace
@@ -76,6 +77,41 @@ namespace Tests.Systems
             var testQuerySystem = new TestQuerySystem();
             child.Add(testQuerySystem);
             AreSame(testQuerySystem, child.ChildSystems[0]);
+        }
+        
+        [Test]
+        public static void Test_Systems_DebugView()
+        {
+            var root        = new SystemRoot("Systems");
+            var rootView    = new SystemRootDebugView(root);
+            AreEqual(0, rootView.ChildSystems.Count);
+            AreEqual(0, rootView.Stores.Count);
+            
+            var group       =  new SystemGroup("Update");
+            var groupView   = new SystemGroupDebugView(group);
+            AreEqual(0, groupView.ChildSystems.Count);
+        }
+        
+        [Test]
+        public static void Test_Systems_AllSystems()
+        {
+            var group = new SystemGroup("Update") {
+                new TestSystem1(),
+                new MySystem1()
+            };
+            var root  = new SystemRoot("Systems") { group };
+            var rootSystems = root.AllSystems;
+            AreEqual(4, rootSystems.Length);
+            AreEqual("0 - 'Systems' Root - child systems: 1",   rootSystems[0].ToString());
+            AreEqual("1 - 'Update' Group - child systems: 2",   rootSystems[1].ToString());
+            AreEqual("2 - TestSystem1 - entities: 0",           rootSystems[2].ToString());
+            AreEqual("3 - MySystem1",           rootSystems[3].ToString());
+            
+            var groupSystems = group.AllSystems;
+            AreEqual(3, groupSystems.Length);
+            AreEqual("1 - 'Update' Group - child systems: 2",   groupSystems[0].ToString());
+            AreEqual("2 - TestSystem1 - entities: 0",           groupSystems[1].ToString());
+            AreEqual("3 - MySystem1",                           groupSystems[2].ToString());
         }
     }
     
