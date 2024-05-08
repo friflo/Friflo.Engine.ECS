@@ -9,7 +9,7 @@ using Tests.Utils;
 namespace Tests.ECS.Systems {
 
 
-public class CreateSystems : Script
+public class SystemSet : Script
 {
     public              int         argCount;
     private readonly    SystemRoot  Systems = new ("Systems");
@@ -176,7 +176,7 @@ public static class Test_ScriptSystems
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 1 });
+        root.AddScript(new SystemSet { argCount = 1 });
         
         var child = store.CreateEntity();
         root.AddChild(child);
@@ -196,7 +196,7 @@ public static class Test_ScriptSystems
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 2 });
+        root.AddScript(new SystemSet { argCount = 2 });
         
         var child = store.CreateEntity();
         root.AddChild(child);
@@ -218,7 +218,7 @@ public static class Test_ScriptSystems
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 3 });
+        root.AddScript(new SystemSet { argCount = 3 });
         
         var child = store.CreateEntity();
         root.AddChild(child);
@@ -242,7 +242,7 @@ public static class Test_ScriptSystems
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 4 });
+        root.AddScript(new SystemSet { argCount = 4 });
         
         var child = store.CreateEntity();
         root.AddChild(child);
@@ -268,7 +268,7 @@ public static class Test_ScriptSystems
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 5 });
+        root.AddScript(new SystemSet { argCount = 5 });
         
         var child = store.CreateEntity();
         root.AddChild(child);

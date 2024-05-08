@@ -55,7 +55,7 @@ public static class Test_Query
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 2 });
+        root.AddScript(new SystemSet { argCount = 2 });
         
         var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation>());
         for (int n = 2; n <= 1000; n++) {
@@ -88,7 +88,7 @@ public static class Test_Query
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 3 });
+        root.AddScript(new SystemSet { argCount = 3 });
         
         var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, EntityName>());
         for (int n = 2; n <= 1000; n++) {
@@ -122,7 +122,7 @@ public static class Test_Query
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 4 });
+        root.AddScript(new SystemSet { argCount = 4 });
         
         var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, Scale3, EntityName>());
         for (int n = 2; n <= 1000; n++) {
@@ -157,7 +157,7 @@ public static class Test_Query
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
-        root.AddScript(new CreateSystems { argCount = 5 });
+        root.AddScript(new SystemSet { argCount = 5 });
         
         var archetype   = store.GetArchetype(ComponentTypes.Get<Position, Rotation, Scale3, EntityName>());
         for (int n = 2; n <= 1000; n++) {
