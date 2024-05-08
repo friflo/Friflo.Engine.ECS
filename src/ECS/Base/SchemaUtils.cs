@@ -102,12 +102,6 @@ internal static class SchemaUtils
         return new ScriptType<T>(scriptKey, scriptIndex, typeMapper);
     }
     
-    internal static int GetScriptIndex(Type type)
-    {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        return schema.scriptTypeByType[type].ScriptIndex;
-    }
-    
     private static string GetComponentKey(Type type)
     {
         foreach (var attr in type.CustomAttributes) {
@@ -168,8 +162,7 @@ internal static class SchemaUtils
             return new SymbolColor(r, g, b);
         }
         return null;
-    } 
-        
+    }
     
     /// <remarks>
     /// <see cref="TagType{T}.TagIndex"/> must be assigned here.<br/>
@@ -180,12 +173,6 @@ internal static class SchemaUtils
     {
         var tagName = GetTagName(typeof(T));
         return new TagType(tagName, typeof(T), tagIndex);
-    }
-
-    internal static int GetTagIndex(Type type)
-    {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        return schema.TagTypeByType[type].TagIndex;
     }
     
     private static string GetTagName(Type type)

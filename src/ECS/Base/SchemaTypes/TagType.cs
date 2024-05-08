@@ -31,7 +31,7 @@ public sealed class TagType : SchemaType
 internal static class TagType<T>
     where T : struct, ITag
 {
-    // Check initialization by directly calling unit test method: Test_SchemaType_Tag_Index() and Test_Tags_basics()
-    internal static readonly  int     TagIndex = SchemaUtils.GetTagIndex(typeof(T));
+    // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_Tag_Index()
+    internal static readonly  int     TagIndex = SchemaTypeUtils.GetTagIndex(typeof(T));
 }
 

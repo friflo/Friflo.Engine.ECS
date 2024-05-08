@@ -169,7 +169,7 @@ class TestComponent : Script
     }
 }
 
-/// <summary> Used only to cover <see cref="StructUtils.NewStructIndex"/>
+/// <summary> Used only to cover <see cref="SchemaTypeUtils.GetStructIndex"/>
 /// Deprecated methods
 /// TagType.NewTagIndex()
 /// ScriptType.NewScriptIndex()

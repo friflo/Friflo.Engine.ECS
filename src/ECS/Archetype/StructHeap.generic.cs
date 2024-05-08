@@ -26,7 +26,8 @@ internal sealed class StructHeap<T> : StructHeap
     private  readonly   TypeMapper<T>   typeMapper;     //  8
     
     // --- static internal
-    internal static readonly    int     StructIndex  = StructUtils.NewStructIndex(typeof(T));
+    // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_StructIndex()
+    internal static readonly    int     StructIndex  = SchemaTypeUtils.GetStructIndex(typeof(T));
     
     internal StructHeap(int structIndex, TypeMapper<T> mapper)
         : base (structIndex)

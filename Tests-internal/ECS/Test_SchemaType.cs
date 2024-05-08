@@ -39,6 +39,22 @@ public static class Test_SchemaType
         AreEqual(tagIndex,          tagType.TagIndex);
         AreEqual(typeof(TestTag),   tagType.Type);
     }
+    
+    /// <summary>
+    /// Ensure initialization of <see cref="StructHeap{T}.StructIndex"/>.
+    /// </summary>
+    [Test]
+    public static void Test_SchemaType_StructIndex()
+    {
+        int count = 0;
+        var componentTypes = ComponentTypes.Get<Position>();
+        foreach (var type in componentTypes) {
+            count++;
+            AreEqual("Position",        type.Name);
+            AreEqual(typeof(Position),  type.Type);
+        }
+        AreEqual(1, count);
+    }
 }
 
 }
