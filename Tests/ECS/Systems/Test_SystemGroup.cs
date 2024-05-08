@@ -485,12 +485,7 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemRoot_exceptions_name()
         {
-            Exception e = Throws<ArgumentException>(() => {
-                _ = new SystemRoot(null);
-            });
-            AreEqual("group name must not be null or empty", e!.Message);
-            
-            e = Throws<ArgumentException>(() => {
+            var e = Throws<ArgumentException>(() => {
                 _ = new SystemRoot("");
             });
             AreEqual("group name must not be null or empty", e!.Message);

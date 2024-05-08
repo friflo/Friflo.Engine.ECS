@@ -31,7 +31,7 @@ namespace Friflo.Engine.ECS.Systems
 
         
     #region constructors
-        public SystemRoot (string name) : base (name) {
+        public SystemRoot (string name = null) : base (name ?? "Systems") {
             SetRoot(this);
             systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
             stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());

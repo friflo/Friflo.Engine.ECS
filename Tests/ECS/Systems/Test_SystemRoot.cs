@@ -43,6 +43,17 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
+        public static void Test_SystemRoot_constructor_default_name()
+        {
+            var root1   = new SystemRoot();
+            AreEqual("Systems", root1.Name);
+            
+            var store   = new EntityStore(PidType.UsePidAsId);
+            var root2   = new SystemRoot(store);
+            AreEqual("Systems", root2.Name);
+        }
+        
+        [Test]
         public static void Test_SystemRoot_Add_Group()
         {
             var store       = new EntityStore();
