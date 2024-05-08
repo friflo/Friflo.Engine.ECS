@@ -13,7 +13,7 @@ public static class Test_ChunkEntities
     [Test]
     public static void Test_ChunkEntities_Enumerator()
     {
-        var store = Test_Systems.SetupTestStore();
+        var store = Test_ScriptSystems.SetupTestStore();
         var root  = store.StoreRoot;
         
         var child = store.CreateEntity();

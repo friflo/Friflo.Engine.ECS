@@ -169,10 +169,10 @@ public class MySystem_Arg5 : QuerySystem<Position, Rotation, EntityName, Scale3,
     }
 }
 
-public static class Test_Systems
+public static class Test_ScriptSystems
 {
     [Test]
-    public static void Test_Systems_query_arg_count_1()
+    public static void Test_ScriptSystems_query_arg_count_1()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -192,7 +192,7 @@ public static class Test_Systems
     }
     
     [Test]
-    public static void Test_Systems_query_arg_count_2()
+    public static void Test_ScriptSystems_query_arg_count_2()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -214,7 +214,7 @@ public static class Test_Systems
     }
     
     [Test]
-    public static void Test_Systems_query_arg_count_3()
+    public static void Test_ScriptSystems_query_arg_count_3()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -238,7 +238,7 @@ public static class Test_Systems
     }
     
     [Test]
-    public static void Test_Systems_query_arg_count_4()
+    public static void Test_ScriptSystems_query_arg_count_4()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
@@ -264,7 +264,7 @@ public static class Test_Systems
     }
     
     [Test]
-    public static void Test_Systems_query_arg_count_5()
+    public static void Test_ScriptSystems_query_arg_count_5()
     {
         var store = SetupTestStore();
         var root  = store.StoreRoot;
