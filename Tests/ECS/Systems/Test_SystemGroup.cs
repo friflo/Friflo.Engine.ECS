@@ -8,6 +8,7 @@ using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable ConvertToLocalFunction
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InconsistentNaming
@@ -57,7 +58,7 @@ namespace Tests.ECS.Systems
             var group1  = new SystemGroup("Group1");
             var group2  = new SystemGroup("Group2");
             var group3  = new SystemGroup("Group3");
-            root.OnSystemChanged += changed => {
+            Action<SystemChanged> rootChanged = changed => {
                 var str = changed.ToString();
                 switch (changesRoot++) {
                     case 0: AreEqual("Add - Group 'Group1' to 'Systems'",                  str);   return;
@@ -69,13 +70,13 @@ namespace Tests.ECS.Systems
                     case 6: AreEqual("Move - Group 'Group2' from 'Group3' to 'Group3'",   str);   return;
                 }
             };
-            group1.OnSystemChanged += _ => {
+            Action<SystemChanged> group1Changed = _ => {
                 changesGroup1++;
             };
-            group2.OnSystemChanged += _ => {
+            Action<SystemChanged> group2Changed = _ => {
                 changesGroup2++;
             };
-            group3.OnSystemChanged += changed => {
+            Action<SystemChanged> group3Changed = changed => {
                 var str = changed.ToString();
                 switch (changesGroup3++) {
                     case 0: AreEqual("Move - Group 'Group1' from 'Systems' to 'Group3'",  str);   return;
@@ -84,6 +85,11 @@ namespace Tests.ECS.Systems
                     case 3: AreEqual("Move - Group 'Group2' from 'Group3' to 'Group3'",   str);   return;
                 }
             };
+            root.OnSystemChanged    += rootChanged;
+            group1.OnSystemChanged  += group1Changed;
+            group2.OnSystemChanged  += group2Changed;
+            group3.OnSystemChanged  += group3Changed;
+            
             root.Add(group1);
             root.Add(group2);
             root.Add(group3);
@@ -95,6 +101,15 @@ namespace Tests.ECS.Systems
 
             AreEqual(1, root.ChildSystems.Count);
             AreEqual(2, group3.ChildSystems.Count);
+            
+            root.OnSystemChanged    -= rootChanged;
+            group1.OnSystemChanged  -= group1Changed;
+            group2.OnSystemChanged  -= group2Changed;
+            group3.OnSystemChanged  -= group3Changed;
+            
+            group1.MoveSystemTo(root,   -1);
+            group2.MoveSystemTo(root,    1);
+            group2.MoveSystemTo(root,    0);
             
             AreEqual(7, changesRoot);
             AreEqual(0, changesGroup1);
@@ -162,13 +177,14 @@ namespace Tests.ECS.Systems
             var root        = new SystemRoot (store, "Systems");
             var testSystem1 = new TestSystem1();
             var count = 0;
-            root.OnSystemChanged += changed => {
+            Action<SystemChanged> rootChanged = changed => {
                 var str = changed.ToString();
                 switch (count++) {
                     case 0: AreEqual("Add - System 'TestSystem1' to 'Systems'",     str);      return;
                     case 1: AreEqual("Remove - System 'TestSystem1' from 'Systems'", str);     return;
                 }
             };
+            root.OnSystemChanged += rootChanged;
             root.Add(testSystem1);
             AreEqual(1, testSystem1.Queries.Count);
             AreEqual(1, root.ChildSystems.Count);
@@ -176,6 +192,10 @@ namespace Tests.ECS.Systems
             root.Remove(testSystem1);
             AreEqual(0, testSystem1.Queries.Count);
             AreEqual(0, root.ChildSystems.Count);
+            
+            root.OnSystemChanged -= rootChanged;
+            root.Add(testSystem1);
+            root.Remove(testSystem1);
             
             AreEqual(2, count);
         }
@@ -242,27 +262,36 @@ namespace Tests.ECS.Systems
         [Test]
         public static void Test_SystemGroup_CastSystemChanged()
         {
-            var root        = new SystemRoot("Systems");
             var testSystem1 = new TestSystem1();
-            root.Add(testSystem1);
-            var count = 0;
-            testSystem1.OnSystemChanged += changed => {
+            var root        = new SystemRoot("Systems") { testSystem1 };
+            var rootCount = 0;
+            var systemCount = 0;
+            Action<SystemChanged> testChanged = changed => {
                 var str = changed.ToString();
-                switch (count++) {
+                switch (systemCount++) {
                     case 0: AreEqual("Update - System 'TestSystem1' field: enabled, value: True", str);   return;
                 }
             };
-            root.OnSystemChanged += changed => {
+            Action<SystemChanged> rootChanged = changed => {
                 var str = changed.ToString();
-                switch (count++) {
-                    case 0: AreEqual("Update - System 'TestSystem1' field: enabled, value: True", str);   return;
+                switch (rootCount++) {
+                    case 0: AreEqual("Update - System 'TestSystem1' field: enabled, value: True",   str);   return;
                 }
             };
+            testSystem1.OnSystemChanged += testChanged;
+            root.       OnSystemChanged += rootChanged;
             testSystem1.Enabled = true;
             testSystem1.CastSystemUpdate("enabled", true);
             
-            AreEqual(2, count);
+            testSystem1.OnSystemChanged -= testChanged;
+            root.       OnSystemChanged -= rootChanged;
+            testSystem1.CastSystemUpdate("enabled", false);
+
+            AreEqual(1, rootCount);
+            AreEqual(1, systemCount);
         }
+        
+
         
         [Test]
         public static void Test_SystemGroup_FindGroup()
