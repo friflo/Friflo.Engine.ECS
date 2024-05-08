@@ -48,11 +48,13 @@ public struct BitSetEnumerator
                 return true;
             }
             switch (++lngPos) {
-                //  case 0      not possible
+            //  case 0      not possible: lngPos > 0
                 case 1:     lng = l1;   break;  // use break instead of continue to reach scope end for test coverage
                 case 2:     lng = l2;   break;
                 case 3:     lng = l3;   break;
-                case 4:     return false;
+            //  case 4: == default     
+                default:    return false;
+                
             }
         }
     }
