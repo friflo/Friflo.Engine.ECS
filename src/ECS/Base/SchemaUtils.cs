@@ -99,8 +99,13 @@ internal static class SchemaUtils
     {
         var scriptKey   = GetComponentKey(typeof(T));
         var typeMapper  = typeStore.GetTypeMapper<T>();
-        ScriptType<T>.Index = scriptIndex;
         return new ScriptType<T>(scriptKey, scriptIndex, typeMapper);
+    }
+    
+    internal static int GetScriptIndex(Type type)
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        return schema.scriptTypeByType[type].ScriptIndex;
     }
     
     private static string GetComponentKey(Type type)
@@ -174,8 +179,13 @@ internal static class SchemaUtils
         where T : struct, ITag
     {
         var tagName = GetTagName(typeof(T));
-        TagType<T>.TagIndex = tagIndex;
         return new TagType(tagName, typeof(T), tagIndex);
+    }
+
+    internal static int GetTagIndex(Type type)
+    {
+        var schema = EntityStoreBase.Static.EntitySchema;
+        return schema.TagTypeByType[type].TagIndex;
     }
     
     private static string GetTagName(Type type)

@@ -26,20 +26,12 @@ public sealed class TagType : SchemaType
         TagName    = tagName;
         TagIndex   = tagIndex;
     }
-    /*
-    internal static int NewTagIndex(Type type)
-    {
-        var schema = EntityStoreBase.Static.EntitySchema;
-        return schema.TagTypeByType[type].TagIndex;
-    }
-    */
 }
 
-// ReSharper disable once UnusedTypeParameter
 internal static class TagType<T>
     where T : struct, ITag
 {
-    // ReSharper disable once StaticMemberInGenericType
-    internal static    int     TagIndex;
+    // Check initialization by directly calling unit test method: Test_SchemaType_Tag_Index() and Test_Tags_basics()
+    internal static readonly  int     TagIndex = SchemaUtils.GetTagIndex(typeof(T));
 }
 
