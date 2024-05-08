@@ -86,6 +86,20 @@ public static class Test_Entity
     }
     
     [Test]
+    public static void Test_Entity_Info_EventHandlers()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+
+        entity1.OnScriptChanged         += _ => { };
+        entity2.OnChildEntitiesChanged  += _ => { };
+
+        AreEqual("event types: 1, handlers: 1", entity1.Info.EventHandlers.ToString());
+        AreEqual("event types: 1, handlers: 1", entity2.Info.EventHandlers.ToString());
+    }
+    
+    [Test]
     public static void Test_Entity_debugger_screenshot()
     {
         var store   = new EntityStore(PidType.RandomPids);
