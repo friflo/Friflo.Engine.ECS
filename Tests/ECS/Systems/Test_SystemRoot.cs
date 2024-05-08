@@ -9,8 +9,8 @@ using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
-// ReSharper disable ArrangeTypeMemberModifiers
 
+// ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS.Systems
 {
@@ -22,9 +22,8 @@ namespace Tests.ECS.Systems
         {
             var store   = new EntityStore();
             var entity  = store.CreateEntity(new Position());
-            var root    = new SystemRoot(store);
-            root.Add(new TestMoveSystem());
-            root.Update(42); 
+            var root    = new SystemRoot(store) { new TestMoveSystem() };
+            root.Update(42);
             AreEqual(new Position(1,0,0), entity.Position);
         }
         

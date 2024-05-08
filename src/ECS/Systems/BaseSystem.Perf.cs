@@ -6,7 +6,6 @@ using System.Diagnostics;
 using static Friflo.Engine.ECS.Systems.SystemExtensions;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
-// Hard Rule! file must not have any dependency a to a specific game engine. E.g. Unity, Godot, Monogame, ...
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems
@@ -50,8 +49,4 @@ namespace Friflo.Engine.ECS.Systems
             return (float)(sum * StopwatchPeriodMs);
         }
     }
-    
-
-    
-    
 }
