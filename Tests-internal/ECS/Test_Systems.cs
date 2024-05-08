@@ -14,6 +14,15 @@ namespace Tests.Systems
     // ReSharper disable once InconsistentNaming
     public static class Test_Systems
     {
+        
+        [Test]
+        public static void Test_Systems_SystemChange_cover()
+        {
+            var system = new TestSystem1();
+            var changed = new SystemChanged((SystemChangedAction)99, system, null, null);
+            AreEqual("99 - System 'TestSystem1'", changed.ToString());
+        }
+        
         [Test]
         public static void Test_Systems_View()
         {
