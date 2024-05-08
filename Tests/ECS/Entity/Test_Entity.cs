@@ -133,6 +133,9 @@ public static class Test_Entity
         IsTrue (store.GetEntityById(3).IsNull);
         
         Throws<IndexOutOfRangeException>(() => {
+            store.GetEntityById(-1);
+        });
+        Throws<IndexOutOfRangeException>(() => {
             store.GetEntityById(4);
         });
     }
@@ -145,7 +148,10 @@ public static class Test_Entity
 
         AreEqual(4, store.Capacity);
         
-        IsFalse(store.TryGetEntityById(0, out Entity entity));
+        IsFalse(store.TryGetEntityById(-1, out Entity entity));
+        IsTrue (entity.IsNull);
+        
+        IsFalse(store.TryGetEntityById(0, out entity));
         IsTrue (entity.IsNull);
         
         IsFalse(store.TryGetEntityById(1, out entity));
