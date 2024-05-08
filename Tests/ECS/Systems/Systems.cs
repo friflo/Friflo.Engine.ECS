@@ -43,7 +43,7 @@ namespace Tests.ECS.Systems
     
     public class PositionSystem : QuerySystem<Position>
     {
-        internal float x = 1;
+        public float x = 1; // used to test serialization
         
         protected override void OnUpdate() {
             Query.ForEachEntity((ref Position position, Entity _) => {
@@ -71,7 +71,9 @@ namespace Tests.ECS.Systems
     }
     
     // Ensure a custom System class can be declared without any overrides
-    public class MySystem1 : BaseSystem { }
+    public class MySystem1 : BaseSystem {
+        public string value; // used to test serialization
+    }
     
     // A custom System class with all possible overrides
     public class MySystem2 : BaseSystem {
