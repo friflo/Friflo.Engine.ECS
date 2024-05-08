@@ -142,9 +142,9 @@ public static class Test_EntityGenericSet
         AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3]", e!.Message);
         
         e = Throws<MissingComponentException>(() => {
-            entity.Set(new Position(), new Scale3());    
+            entity.Set(new Scale3(), new Rotation());    
         });
-        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3]", e!.Message);
+        AreEqual("entity id: 1  [EntityName, Position] - missing: [Scale3, Rotation]", e!.Message);
         
         e = Throws<MissingComponentException>(() => {
             entity.Set(new Position(), new Scale3(), new Rotation());    
