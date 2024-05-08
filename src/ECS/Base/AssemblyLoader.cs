@@ -179,7 +179,7 @@ internal sealed class AssemblyLoader
             }
             return;
         }
-        if (type.IsClass && type.IsSubclassOf(typeof(Script)))
+        if (type.IsSubclassOf(typeof(Script)))
         {
             componentTypes.Add(type);
         }
