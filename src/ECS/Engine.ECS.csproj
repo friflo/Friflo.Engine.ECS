@@ -62,7 +62,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Friflo.Json.Fliox" Version="0.57.0" />
+    <PackageReference Include="Friflo.Json.Fliox" Version="1.0.0" />
     <!-- System.Runtime.CompilerServices.Unsafe is required by Unity -->
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
