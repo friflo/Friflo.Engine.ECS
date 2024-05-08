@@ -38,8 +38,12 @@ namespace Friflo.Engine.ECS.Systems
         #endregion
         
     #region constructor
-        /// <summary> Default constructor required to create SystemGroup for deserialization </summary>
+        /// <summary>
+        /// Default constructor required to create a SystemGroup via deserialization.<br/>
+        /// Group <see cref="Name"/> is set to <c>System</c> if missing in serialized JSON data.
+        /// </summary>
         internal SystemGroup() {
+            name            = "System";
             childSystems    = new ReadOnlyList<BaseSystem>(Array.Empty<BaseSystem>());
             commandBuffers  = new ReadOnlyList<CommandBuffer>(Array.Empty<CommandBuffer>());
         } 
@@ -57,7 +61,7 @@ namespace Friflo.Engine.ECS.Systems
         IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
         #endregion
         
-    #region group: add / insert / remove / get - system
+    #region group: add / insert / remove - system
         // Add() enables support for collection initializer
         public void Add(BaseSystem system)
         {
