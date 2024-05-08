@@ -196,6 +196,7 @@ var expect =
         entity.AddComponent(new EntityName("test"));
         entity.AddComponent<Position>();
         entity.AddComponent<Rotation>();
+        entity.AddScript(new TestScript1 { val1 = 42 });
         var unresolved = new Unresolved {
             components = new[] {
                 new UnresolvedComponent ("unknown", new JsonValue("{\"value\": 1}"))
@@ -206,11 +207,12 @@ var expect =
         var members = new List<JsonValue>();
         
         converter.EntityComponentsToJsonMembers(entity, members);
-        AreEqual(4, members.Count);
+        AreEqual(5, members.Count);
         AreEqual("\"name\":{\"value\":\"test\"}",               members[0].ToString());
         AreEqual("\"pos\":{\"x\":0,\"y\":0,\"z\":0}",           members[1].ToString());
         AreEqual("\"rot\":{\"x\":0,\"y\":0,\"z\":0,\"w\":0}",   members[2].ToString());
         AreEqual("\"unknown\":{\"value\": 1}",                  members[3].ToString());
+        AreEqual("\"script1\":{\"val1\":42}",                   members[4].ToString());
         
         Throws<ArgumentNullException>(() => {
             converter.EntityComponentsToJsonMembers(default, members);
