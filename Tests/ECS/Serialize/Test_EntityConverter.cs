@@ -113,6 +113,12 @@ public static class Test_EntityConverter
                 converter.DataEntityToEntity(entity, store, out _);    
             });
             AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 2147483648 (Parameter 'DataEntity.children')", e!.Message);
+        } {
+            var e = Throws<ArgumentException>(() => {
+                var entity = new DataEntity { pid = 1, children = new List<long> { 0 }};
+                converter.DataEntityToEntity(entity, store, out _);    
+            });
+            AreEqual("pid must be in range [1, 2147483647] when using PidType.UsePidAsId. was: 0 (Parameter 'DataEntity.children')", e!.Message);
         }
     }
     
