@@ -91,15 +91,11 @@ namespace Friflo.Engine.ECS.Systems
             if (system == null)             throw new ArgumentNullException(nameof(system));
             if (system.ParentGroup != this) throw new ArgumentException($"system not child of Group '{Name}'", nameof(system));
             var oldRoot = system.SystemRoot;
-            
-            foreach (var child in childSystems) {
-                if (child == system) {
-                    childSystems.Remove(child);
-                    system.ClearParentAndRoot();
-                    CastSystemRemoved(system, oldRoot, this);
-                    return;
-                }
-            }
+            var index   = childSystems.IndexOf(system); // index never -1
+            childSystems.RemoveAt(index);
+            system.ClearParentAndRoot();
+            // Send event. See: SEND_EVENT notes
+            CastSystemRemoved(system, oldRoot, this);
         }
         #endregion
         

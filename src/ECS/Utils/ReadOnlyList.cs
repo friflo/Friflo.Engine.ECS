@@ -22,6 +22,17 @@ namespace Friflo.Engine.ECS
         // No set by intention. public interface is read only
         public          T               this[int index] => array[index];
         #endregion
+        
+    #region public methods
+        public int IndexOf(T element)
+        {
+            var local = array;
+            for (int index = 0; index < count; index++) {
+                if (local[index] == element) return index;
+            }
+            return -1;
+        }
+        #endregion
 
     #region private fields
         internal T[] array; 
@@ -77,6 +88,15 @@ namespace Friflo.Engine.ECS
                 return n;
             }
             return -1;
+        }
+        
+        internal void RemoveAt(int index)
+        {
+            var arr = array;
+            count--;
+            for (int i = index; i < count; i++) {
+                arr[i] = arr[i + 1];   
+            }
         }
         #endregion
         

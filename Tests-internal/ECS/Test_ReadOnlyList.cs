@@ -41,6 +41,12 @@ namespace Tests.Systems
             AreEqual(-1, array.Remove(object4));
             AreEqual(3, array.Count);
             
+            array.RemoveAt(1);
+            AreEqual(2,         array.Count);
+            AreSame(object1,    array[0]);
+            AreSame(object3,    array[1]);
+            AreEqual(1,         array.IndexOf(object3));
+            AreEqual(-1,        array.IndexOf(object4));
             //
             var array2= new ReadOnlyList<object>(Array.Empty<object>());
             array2.InsertAt(0, object1); // cover resize
