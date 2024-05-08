@@ -33,7 +33,11 @@ public static class Test_ComponentTypes
         
         types.Add<Rotation>();
         AreEqual("Components: [Position, Rotation]",  types.ToString());
+        IsFalse(types.Has<MyComponent2, Rotation>());
         IsTrue (types.Has<Position, Rotation>());
+        
+        IsFalse(types.Has<MyComponent2, Rotation, Scale3>());
+        IsFalse(types.Has<MyComponent2, MyComponent3, Scale3>());
         IsFalse(types.Has<Position, Rotation, Scale3>());
         IsTrue (types.HasAll(twoStructs));
         IsTrue (types.HasAny(twoStructs));
