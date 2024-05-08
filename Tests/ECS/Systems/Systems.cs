@@ -32,18 +32,22 @@ namespace Tests.ECS.Systems
     
     public class ScaleSystem : QuerySystem<Scale3>
     {
+        internal float x = 1;
+        
         protected override void OnUpdate() {
             Query.ForEachEntity((ref Scale3 scale3, Entity _) => {
-                scale3.x++;
+                scale3.x += x;
             });
         }
     }
     
     public class PositionSystem : QuerySystem<Position>
     {
+        internal float x = 1;
+        
         protected override void OnUpdate() {
             Query.ForEachEntity((ref Position position, Entity _) => {
-                position.x++;
+                position.x += x;
             });
         }
     }
