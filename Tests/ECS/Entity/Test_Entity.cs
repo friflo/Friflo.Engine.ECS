@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable EqualExpressionComparison
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
@@ -218,6 +219,10 @@ public static class Test_Entity
         // --- operator ==, !=
         IsFalse (entity1 == entity2);
         IsTrue  (entity1 != entity2);
+        
+#pragma warning disable CS1718  // Comparison made to same variable; did you mean to compare something else?
+        IsFalse (entity1 != entity1);
+#pragma warning restore CS1718
         
         // --- IEquatable<Entity>
         var start = Mem.GetAllocatedBytes();
