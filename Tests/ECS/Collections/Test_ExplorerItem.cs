@@ -407,7 +407,6 @@ public static class Test_ExplorerItem
             AreSame(rootItem, sender);
         });
         rootItem.PropertyChanged += handler;
-        rootItem.PropertyChanged += (_, _) => { };
         
         IsFalse(rootItem.IsExpanded);
         rootItem.IsExpanded = true;

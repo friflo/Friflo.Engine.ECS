@@ -36,10 +36,16 @@ public static class Test_ExplorerItem
         var root        = store.CreateEntity(1);
         var tree        = new ExplorerItemTree(root, "test");
         var entity = new Entity();
+        
         var e = Throws<ArgumentNullException>(() => {
             _ = new ExplorerItem(tree, entity);
         });
         AreEqual("entity", e!.ParamName);
+        
+        e = Throws<ArgumentNullException>(() => {
+            _ = new ExplorerItem(null, entity);
+        });
+        AreEqual("tree", e!.ParamName);
     }
     
     [Test]
