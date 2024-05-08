@@ -67,7 +67,7 @@ internal static class SchemaUtils
                 return componentType;
             }
         } else {
-            if (type.IsClass && type.IsSubclassOf(typeof(Script)))
+            if (type.IsSubclassOf(typeof(Script)))
             {
                 // type: Script
                 var scriptIndex     = schemaTypes.scripts.Count + 1;
