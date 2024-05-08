@@ -48,6 +48,9 @@ namespace Friflo.Engine.ECS
         
         // internal by intention. public interface is read only
         internal void Clear() {
+            for (int i = 0; i < count; i++) {
+                array[i] = null;
+            }
             count = 0;
         }
         
@@ -85,6 +88,7 @@ namespace Friflo.Engine.ECS
                 for (int i = n; i < count; i++) {
                     arr[i] = arr[i + 1];   
                 }
+                array[count] = null;
                 return n;
             }
             return -1;
@@ -97,6 +101,7 @@ namespace Friflo.Engine.ECS
             for (int i = index; i < count; i++) {
                 arr[i] = arr[i + 1];   
             }
+            array[count] = null;
         }
         #endregion
         

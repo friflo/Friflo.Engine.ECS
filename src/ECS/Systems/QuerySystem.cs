@@ -68,7 +68,7 @@ namespace Friflo.Engine.ECS.Systems
         protected internal override void OnUpdateGroup()
         {
             var commandBuffers = ParentGroup.commandBuffers;
-            for (int n = 0; n < queries.Count; n++)
+            for (int n = 0; n < queries.count; n++)
             {
                 var query       = queries[n];
                 commandBuffer   = commandBuffers[n];
