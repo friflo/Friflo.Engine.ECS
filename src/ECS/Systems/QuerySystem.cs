@@ -16,7 +16,7 @@ namespace Friflo.Engine.ECS.Systems
     public abstract class QuerySystem : BaseSystem
     {
     #region properties
-        [Browse(Never)] protected       QueryFilter                 Filter          => filter;
+        [Browse(Never)] public          QueryFilter                 Filter          => filter;
         [Browse(Never)] public          int                         EntityCount     => GetEntityCount();
         [Browse(Never)] public          ComponentTypes              ComponentTypes  => componentTypes;
                         public          ReadOnlyList<ArchetypeQuery>Queries         => queries;
