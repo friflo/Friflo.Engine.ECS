@@ -64,7 +64,7 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     }
     
     // internal by intention. public interface is read only
-    internal void InsertAt(int index, T item)
+    internal void Insert(int index, T item)
     {
         if (count == array.Length) { 
             Resize(ref array, Math.Max(4, 2 * count));

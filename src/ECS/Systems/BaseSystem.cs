@@ -127,7 +127,7 @@ public abstract class BaseSystem
                 index = targetGroup.childSystems.Count - 1;
             } else {
                 if (index > oldIndex) index--;
-                targetGroup.childSystems.InsertAt(index, this);
+                targetGroup.childSystems.Insert(index, this);
             }
             // Send event. See: SEND_EVENT notes
             CastSystemMoved(this, targetGroup); 
@@ -145,7 +145,7 @@ public abstract class BaseSystem
             targetGroup.childSystems.Add(this);
             index = targetGroup.childSystems.Count - 1;
         } else {
-            targetGroup.childSystems.InsertAt(index, this);
+            targetGroup.childSystems.Insert(index, this);
         }
         parentGroup = targetGroup;
         // Send event. See: SEND_EVENT notes

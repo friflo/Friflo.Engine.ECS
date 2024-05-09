@@ -83,7 +83,7 @@ public class SystemGroup : BaseSystem, IEnumerable
         if (index == -1) {
             childSystems.Add(system);
         } else {
-            childSystems.InsertAt(index, system);
+            childSystems.Insert(index, system);
         }
         system.SetParentAndRoot(this);
         // Send event. See: SEND_EVENT notes

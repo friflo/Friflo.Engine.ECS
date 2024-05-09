@@ -33,7 +33,7 @@ namespace Tests.Systems
             AreSame(object3, list[2]);
             
             var object4 = new object();
-            list.InsertAt(1, object4);
+            list.Insert(1, object4);
             AreSame(object4, list[1]);
             AreEqual(4,     list.Count);
             
@@ -51,7 +51,7 @@ namespace Tests.Systems
             AreEqual(-1,        list.IndexOf(object4));
             //
             var list2= new ReadOnlyList<object>(Array.Empty<object>());
-            list2.InsertAt(0, object1); // cover resize
+            list2.Insert(0, object1); // cover resize
         }
         
         [Test]
