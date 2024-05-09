@@ -54,7 +54,6 @@ public struct BitSetEnumerator
                 case 3:     lng = l3;   break;
             //  case 4: == default     
                 default:    return false;
-                
             }
         }
     }
