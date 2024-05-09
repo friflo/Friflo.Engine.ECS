@@ -234,7 +234,7 @@ namespace Friflo.Engine.ECS.Systems
                 child.Tick = Tick;
                 child.OnUpdateGroupBegin();
             }
-            // --- calls OnUpdate() for every QuerySystem child and every store in SystemRoot.Stores - commonly a single store.
+            // --- calls QuerySystem.OnUpdate() for every store in SystemRoot.Stores - commonly a single store.
             for (int n = 0; n < children.Count; n++) {
                 var child = children[n];
                 if (!child.enabled) { ClearPerfTicks(child); continue; }
