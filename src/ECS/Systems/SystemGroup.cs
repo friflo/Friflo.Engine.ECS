@@ -31,10 +31,10 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region fields
-    [Serialize] [Browse(Never)] private     string                      name;
-                [Browse(Never)] internal    ReadOnlyList<BaseSystem>    childSystems;
-                [Browse(Never)] internal    ReadOnlyList<CommandBuffer> commandBuffers;
-    [Ignore]    [Browse(Never)] private     bool                        monitorPerf;
+    [Browse(Never)] [Serialize] private     string                      name;
+    [Browse(Never)]             internal    ReadOnlyList<BaseSystem>    childSystems;
+    [Browse(Never)]             internal    ReadOnlyList<CommandBuffer> commandBuffers;
+    [Browse(Never)] [Ignore]    private     bool                        monitorPerf;
     #endregion
     
 #region constructor

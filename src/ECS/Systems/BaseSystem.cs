@@ -26,14 +26,14 @@ public abstract class BaseSystem
     #endregion
         
 #region fields
-    [Ignore]    [Browse(Never)] public              Tick        Tick;
-    [Serialize] [Browse(Never)] internal            int         id;
-    [Serialize] [Browse(Never)] internal            bool        enabled = true;
-                [Browse(Never)] private readonly    string      systemName;
-                [Browse(Never)] private             SystemGroup parentGroup;
-                [Browse(Never)] private             SystemRoot  systemRoot;
-    [Ignore]    [Browse(Never)] internal            SystemPerf  perf;
-                [Browse(Never)] private             View        view;
+    [Browse(Never)] [Ignore]    public              Tick        Tick;
+    [Browse(Never)] [Serialize] internal            int         id;
+    [Browse(Never)] [Serialize] internal            bool        enabled = true;
+    [Browse(Never)]             private readonly    string      systemName;
+    [Browse(Never)]             private             SystemGroup parentGroup;
+    [Browse(Never)]             private             SystemRoot  systemRoot;
+    [Browse(Never)] [Ignore]    internal            SystemPerf  perf;
+    [Browse(Never)]             private             View        view;
     #endregion
      
 #region constructors
