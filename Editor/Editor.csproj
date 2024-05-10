@@ -35,7 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="1.0.0" />
+      <PackageReference Include="Friflo.Json.Fliox.Hub.Explorer" Version="1.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -55,7 +55,7 @@
         <!--<PackageReference Include="Silk.NET.Windowing" Version="2.20.0" />-->
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.7" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
     </ItemGroup>
 
     <!-- Copy XML files from all PackageReferences to output dir -->
