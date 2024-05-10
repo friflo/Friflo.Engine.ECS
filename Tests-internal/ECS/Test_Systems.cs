@@ -41,7 +41,7 @@ namespace Tests.Systems
             AreEqual("Enabled: True  Id: 1",    view.ToString());
             AreEqual(1,                         view.Id);
             AreEqual(true,                      view.Enabled);
-            AreEqual(new Tick(),                view.Tick);
+            AreEqual(new UpdateTick(),          view.Tick);
             AreSame (root,                      view.SystemRoot);
             AreSame (root,                      view.ParentGroup);
             AreEqual(0,                         view.Perf.UpdateCount);

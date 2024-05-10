@@ -9,7 +9,7 @@ namespace Friflo.Engine.ECS.Systems;
 
 internal sealed class View
 {
-    public  Tick                    Tick        => system.Tick;
+    public  UpdateTick              Tick        => system.Tick;
     public  int                     Id          => system.Id;
     public  bool                    Enabled     => system.Enabled;
     public  string                  Name        => system.Name;

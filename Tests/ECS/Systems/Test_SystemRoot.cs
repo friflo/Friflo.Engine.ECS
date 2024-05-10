@@ -38,7 +38,7 @@ namespace Tests.ECS.Systems
         
         [Test]
         public static void Test_SystemRoot_Tick() {
-            Tick tick = 42;
+            UpdateTick tick = 42;
             AreEqual("deltaTime: 42", tick.ToString());
         }
         
@@ -83,7 +83,7 @@ namespace Tests.ECS.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            root.Update(new Tick(42)); // use Tick constructor to ensure its available
+            root.Update(new UpdateTick(42)); // use Tick constructor to ensure its available
             
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);

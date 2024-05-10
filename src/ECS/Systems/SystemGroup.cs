@@ -208,7 +208,7 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region system: update
-    public void Update(Tick tick) {
+    public void Update(UpdateTick tick) {
         if (!enabled) {
             ClearPerfTicks(this);
             return;

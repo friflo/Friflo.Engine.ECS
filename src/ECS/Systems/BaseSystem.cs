@@ -26,7 +26,7 @@ public abstract class BaseSystem
     #endregion
         
 #region fields
-    [Browse(Never)] [Ignore]    public              Tick        Tick;
+    [Browse(Never)] [Ignore]    public              UpdateTick  Tick;
     [Browse(Never)] [Serialize] internal            int         id;
     [Browse(Never)] [Serialize] internal            bool        enabled = true;
     [Browse(Never)]             private readonly    string      systemName;
