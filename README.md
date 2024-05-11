@@ -32,20 +32,33 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 ```
 dotnet add package Friflo.Engine.ECS
 ```
+<br/>
 
-<span style="color:red;font-weight:bold;">Coming soon ...</span>
+
+![Coming soon...](https://img.shields.io/badge/Coming%20soon...-orange?style=for-the-badge)  
+**Friflo.Engine.ECS for Unity** with full Editor integration like **Entitas** or **Morpeh**.
 
 <span>
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="419" height="477"/>
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="450" height="477"/>
 </span>
 
+ECS - dead simple.  
+Highlights
+- No boilerplate - requires only code for C# components and systems and adding scripts: ECS Store, ECS Systems Set and ECS Entity.
+- Support Edit & Play Mode.
+- Entities & Systems are stored in scene file and support: Copy/Paste, Undo/Redo and Drag/Drop.
+
+<br/><br/>
+
+
+[![Demos](https://img.shields.io/badge/Demos-blueviolet?style=for-the-badge)](https://github.com/friflo/Friflo.Engine.ECS-Demos)  
+**Interactive Browser Demo** showing MonoGame WebAssembly integration. [Try online Demo](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
 
 <a href="https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/">
 <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/MonoGame-wasm.png" width="600" height="405"/>
 </a>
 
-Interactive Browser Demo showing MonoGame WebAssembly integration. [Try online Demo](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
 *Note:* WebGL has currently poor render performance.  
 *Desktop performance of Demos:* Godot 202 FPS, Unity 100 FPS at 65536 entities.
 
