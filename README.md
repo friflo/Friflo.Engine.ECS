@@ -36,8 +36,8 @@ dotnet add package Friflo.Engine.ECS
 <span style="color:red;font-weight:bold;">Coming soon ...</span>
 
 <span>
-  <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="489" height="557"/>
-  <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="525" height="557"/>
+  <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="419" height="477"/>
+  <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="450" height="477"/>
 </span>
 
 
