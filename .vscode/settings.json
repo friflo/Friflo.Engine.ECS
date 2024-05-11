@@ -52,6 +52,7 @@
         "Pids",
         "renderable",
         "reportgenerator",
+        "sbyte",
         "SIMD",
         "Skia",
         "Svelto",
@@ -59,8 +60,10 @@
         "Tizen",
         "typeof",
         "Ullrich",
+        "ulong",
         "unloadability",
         "upserts",
+        "ushort",
         "Veldrid",
         "Vulkan",
         "Zikmund"

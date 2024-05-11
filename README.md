@@ -36,7 +36,7 @@ dotnet add package Friflo.Engine.ECS
 
 
 ![Coming soon...](https://img.shields.io/badge/Coming%20soon...-orange?style=for-the-badge)  
-**Friflo.Engine.ECS for Unity** with full Editor integration like
+**Friflo.Engine.ECS** for **Unity** - with full Editor integration like
 [Entitas](https://github.com/sschmid/Entitas),
 [Unity DOTS](https://docs.unity3d.com/Packages/com.unity.entities@1.2/manual/index.html),
 [Morpeh](https://github.com/scellecs/morpeh) or
@@ -49,7 +49,8 @@ dotnet add package Friflo.Engine.ECS
 
 ECS - dead simple.  
 Highlights
-- No boilerplate - requires only code for **C# components** and **systems** and adding scripts: **ECS Store**, **ECS Systems Set** and **ECS Entity**.
+- No boilerplate - Requires only C# code for **components** and **systems** and adding scripts via the Editor:  
+  **ECS Store**, **ECS Systems Set** and **ECS Entity**.
 - Support **Edit** & **Play** Mode with synchronization of `GameObject` position, scale, rotation and activeSelf.
 - Entities & Systems are stored in scene file and support: Copy/Paste, Undo/Redo and Drag/Drop.
 
