@@ -50,7 +50,7 @@ dotnet add package Friflo.Engine.ECS
 ECS - dead simple.  
 Highlights
 - No boilerplate - requires only code for **C# components** and **systems** and adding scripts: **ECS Store**, **ECS Systems Set** and **ECS Entity**.
-- Support Edit & Play Mode.
+- Support **Edit** & **Play** Mode with synchronization of `GameObject` position, scale, rotation and activeSelf.
 - Entities & Systems are stored in scene file and support: Copy/Paste, Undo/Redo and Drag/Drop.
 
 <br/>
