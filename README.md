@@ -33,6 +33,12 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 dotnet add package Friflo.Engine.ECS
 ```
 
+<span style="color:red;font-weight:bold;">Coming soon ...</span>
+
+<img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="366" height="417"/>
+<img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="394" height="417"/>
+
+
 <a href="https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/">
 <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/MonoGame-wasm.png" width="600" height="405"/>
 </a>
