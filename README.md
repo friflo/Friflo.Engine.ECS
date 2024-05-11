@@ -36,7 +36,11 @@ dotnet add package Friflo.Engine.ECS
 
 
 ![Coming soon...](https://img.shields.io/badge/Coming%20soon...-orange?style=for-the-badge)  
-**Friflo.Engine.ECS for Unity** with full Editor integration like **Entitas** or **Morpeh**.
+**Friflo.Engine.ECS for Unity** with full Editor integration like
+[Entitas](https://github.com/sschmid/Entitas),
+[Unity DOTS](https://docs.unity3d.com/Packages/com.unity.entities@1.2/manual/index.html),
+[Morpeh](https://github.com/scellecs/morpeh) or
+[Arch.Unity](https://github.com/AnnulusGames/Arch.Unity).
 
 <span>
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="419" height="477"/>
@@ -49,7 +53,7 @@ Highlights
 - Support Edit & Play Mode.
 - Entities & Systems are stored in scene file and support: Copy/Paste, Undo/Redo and Drag/Drop.
 
-<br/><br/>
+<br/>
 
 
 [![Demos](https://img.shields.io/badge/Demos-blueviolet?style=for-the-badge)](https://github.com/friflo/Friflo.Engine.ECS-Demos)  
