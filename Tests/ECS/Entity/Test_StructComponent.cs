@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Friflo.Engine.ECS;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
@@ -513,6 +514,23 @@ public static class Test_StructComponent
         AreEqual(0, entity.Position.x);
         AreEqual(0, entity.Rotation.x);
         AreEqual(0, entity.MyComponent1().a);
+    }
+    
+    [Test]
+    // [Generic structs in components is not supported] https://github.com/friflo/Friflo.Json.Fliox/issues/45
+    public static void Test_StructComponent_generic_struct() {
+        _ = new EntityStore();
+    }
+    
+    public struct GenericStruct<T>
+    {
+        public T value;
+    }
+
+    public struct ComponentWithGenericStruct : IComponent
+    {
+        [Friflo.Json.Fliox.Ignore] // TODO fails without [Ignore]
+        public GenericStruct<int> gs;
     }
 }
 
