@@ -156,7 +156,7 @@ public sealed class EntityList : IList<Entity>
     }
     
     /// <summary>
-    /// Apply the the given <paramref name="batch"/> to all entities in the <see cref="EntityList"/>. 
+    /// Apply the given <paramref name="batch"/> to all entities in the <see cref="EntityList"/>. 
     /// </summary>
     public void ApplyBatch(EntityBatch batch)
     {
