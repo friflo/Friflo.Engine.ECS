@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable ConvertToConstant.Local
 // ReSharper disable RedundantTypeDeclarationBody
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS {
@@ -80,6 +81,67 @@ public static class Test_SchemaType
             ComponentTypes.Get<MyComponent1>();
         }
         Console.WriteLine($"ComponentTypes.Get<>() - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    // -------------------------- access Entity components performance --------------------------
+    [Test]
+    public static void Test_SchemaType_Entity_HasComponent_Perf()
+    {
+        var count   = 10; // 1_000_000_000 ~ #PC: 3118 ms
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(new Position());
+        var sw      = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            entity.GetComponent<Position>();
+        }
+        Console.WriteLine($"Entity.HasComponent<>() - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_SchemaType_Entity_GetComponent_Perf()
+    {
+        var count   = 10; // 1_000_000_000 ~ #PC: 3055 ms
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(new Position());
+        var sw      = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            entity.GetComponent<Position>();
+        }
+        Console.WriteLine($"Entity.GetComponent<>() - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_SchemaType_Entity_Position_Perf()
+    {
+        var count   = 10; // 1_000_000_000 ~ #PC: 983 ms
+        var store   = new EntityStore();
+        var entity  = store.CreateEntity(new Position());
+        var sw      = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            _ = entity.Position;
+        }
+        Console.WriteLine($"Entity.Position - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    /// <summary> performance reference for <see cref="Test_SchemaType_Entity_Position_Perf"/> </summary>
+    [Test]
+    public static void Test_SchemaType_Field_access_Perf()
+    {
+        var player  = new PlayerRef { position = default };
+        long count  = 10; // 1_000_000_000L ~ #PC: 381 ms
+        var sw      = new Stopwatch();
+        sw.Start();
+        for (var n = 0; n < count; n++) {
+            _ = player.position;
+        }
+        Console.WriteLine($"Field_access - duration: {sw.ElapsedMilliseconds} ms");
+    }
+
+    private class PlayerRef {
+        public Position position;
     }
 }
 

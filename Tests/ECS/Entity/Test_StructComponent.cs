@@ -14,10 +14,6 @@ using static NUnit.Framework.Assert;
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS {
 
-class PlayerRef {
-    public Position position;
-}
-
 public static class Test_StructComponent
 {
     [Test]
@@ -127,12 +123,6 @@ public static class Test_StructComponent
         Mem.AssertNoAlloc(start);
         AreEqual(10f, entity1.Position.x);
         AreEqual(11f, entity1.Position.y);
-        
-        long count = 10; // 1_000_000_000L ~ #PC: 1.924 ms
-        for (var n = 0; n < count; n++) {
-            // _ = player1.GetComponentValue<Position>();
-            _ = entity1.Position;
-        }
     }
     
     [Test]
@@ -199,12 +189,6 @@ public static class Test_StructComponent
         AreEqual(0,         node.ChildIds.Length);
         AreEqual(0,         node.ParentId);
         AreEqual("entities: 2", store.ToString());
-        
-        long count = 10; // 1_000_000_000L ~ #PC: 969 ms
-        for (var n = 0; n < count; n++) {
-            // _ = player1.GetComponentValue<Position>();
-            _ = player1.Position;
-        }
     }
     
     [Test]
@@ -213,11 +197,6 @@ public static class Test_StructComponent
         var player  = store.CreateEntity();
         player.AddComponent(new Position());
         IsTrue(player.HasPosition);
-        
-        const long count = 10; // 10_000_000_000L ~ #PC: 9.373 ms
-        for (long n = 0; n < count; n++) {
-            _ = player.HasPosition;
-        }
     }
     
     [Test]
@@ -226,20 +205,6 @@ public static class Test_StructComponent
         var player  = store.CreateEntity();
         player.AddComponent(new MyComponent1());
         IsTrue(player.HasComponent<MyComponent1>());
-        
-        const long count = 10; // 1_000_000_000L ~ #PC: 1.287 ms
-        for (long n = 0; n < count; n++) {
-            _ = player.HasComponent<MyComponent1>();
-        }
-    }
-    
-    [Test]
-    public static void Test_GetPositionField() {
-        var player = new PlayerRef();
-        long count = 10; // 1_000_000_000L ~ #PC: 386 ms
-        for (var n = 0; n < count; n++) {
-            _ = player.position;
-        }
     }
 
     [Test]
