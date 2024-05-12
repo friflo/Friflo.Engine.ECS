@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -167,13 +166,23 @@ public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
 internal class ReadOnlyListDebugView<T> where T : class
 {
     [Browse(RootHidden)]
-    public  T[]                 Items => readOnlyList.ToArray();
+    public              T[]             Items => GetItems();
 
     [Browse(Never)]
-    private readonly ReadOnlyList<T>   readOnlyList;
+    private readonly    ReadOnlyList<T> readOnlyList;
         
     internal ReadOnlyListDebugView(ReadOnlyList<T> readOnlyList)
     {
         this.readOnlyList = readOnlyList;
+    }
+    
+    private T[] GetItems()
+    {
+        var count       = readOnlyList.count;
+        var result      = new T[count];
+        Span<T> source  = new (readOnlyList.array, 0, count);
+        Span<T> target  = result;
+        source.CopyTo(target);
+        return result;
     }
 }
