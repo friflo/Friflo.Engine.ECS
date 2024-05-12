@@ -57,6 +57,7 @@ internal sealed class ScriptType<T> : ScriptType
     public  override    string          ToString() => $"Script: [*{typeof(T).Name}]";
     
     // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_Script_Index()
+    // readonly improves performance significant
     internal static readonly   int      Index = SchemaTypeUtils.GetScriptIndex(typeof(T));
     
     internal ScriptType(string scriptComponentKey, int scriptIndex, TypeMapper<T> typeMapper)

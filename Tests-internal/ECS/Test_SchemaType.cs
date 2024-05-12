@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
@@ -54,6 +56,30 @@ public static class Test_SchemaType
             AreEqual(typeof(Position),  type.Type);
         }
         AreEqual(1, count);
+    }
+        
+    [Test]
+    public static void Test_SchemaType_Tags_Get_Perf()
+    {
+        var count   = 10; // 10_000_000_000 ~ #PC: 2499 ms
+        var sw = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            Tags.Get<TestTag>();
+        }
+        Console.WriteLine($"Tags.Get<>() - duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
+    [Test]
+    public static void Test_SchemaType_ComponentTypes_Get_Perf()
+    {
+        var count   = 10; // 10_000_000_000 ~ #PC: 2544 ms
+        var sw = new Stopwatch();
+        sw.Start();
+        for (long n = 0; n < count; n++) {
+            ComponentTypes.Get<MyComponent1>();
+        }
+        Console.WriteLine($"ComponentTypes.Get<>() - duration: {sw.ElapsedMilliseconds} ms");
     }
 }
 
