@@ -43,7 +43,7 @@ dotnet add package Friflo.Engine.ECS
 [Arch.Unity](https://github.com/AnnulusGames/Arch.Unity).
 
 <span>
-  <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="419" height="477"/>
+  <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="418" height="477"/>
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="450" height="477"/>
 </span>
 
