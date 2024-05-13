@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Friflo.Engine.ECS;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using Tests.Utils;
 using static NUnit.Framework.Assert;
@@ -518,6 +517,10 @@ public static class Test_StructComponent
     
     [Test]
     // [Generic structs in components is not supported] https://github.com/friflo/Friflo.Json.Fliox/issues/45
+    // Fixed by commit:     [Mapper - Ignore unsupported fields/properties in custom classes, structs and interfaces.]
+    //                      https://github.com/friflo/Friflo.Json.Fliox/commit/12c4f88f26d86cffd014f00f823d152eede29d36
+    // Remarks:             Unsupported fields/properties in custom classes, structs and interfaces are now ignored by mapper/serialization.
+    // Fix published in:    https://www.nuget.org/packages/Friflo.Json.Fliox/1.0.2
     public static void Test_StructComponent_generic_struct() {
         _ = new EntityStore();
     }
@@ -529,7 +532,6 @@ public static class Test_StructComponent
 
     public struct ComponentWithGenericStruct : IComponent
     {
-        [Friflo.Json.Fliox.Ignore] // TODO fails without [Ignore]
         public GenericStruct<int> gs;
     }
 }
