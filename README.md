@@ -40,15 +40,16 @@ dotnet add package Friflo.Engine.ECS
 [Entitas](https://github.com/sschmid/Entitas),
 [Unity DOTS](https://docs.unity3d.com/Packages/com.unity.entities@1.2/manual/index.html),
 [Morpeh](https://github.com/scellecs/morpeh) or
-[Arch.Unity](https://github.com/AnnulusGames/Arch.Unity).
+[Arch.Unity](https://github.com/AnnulusGames/Arch.Unity).  
+Will post on Twitter when Unity extension is available.
+   [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/friflo.svg?label=FrisoFlo)](https://twitter.com/FrisoFlo)
+
 
 <span>
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Store.png"  width="418" height="477"/>
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="450" height="477"/>
 </span>
 
-Will post on https://twitter.com/FrisoFlo when Unity extension is available.
- 
 ECS - dead simple. Highlights
 - No boilerplate - Requires only C# code for **components** and **systems** and adding scripts via the Editor:  
   **ECS Store**, **ECS System Set** and **ECS Entity** shown in the Inspector.
