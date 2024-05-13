@@ -38,6 +38,7 @@
         "blittable",
         "Browsable",
         "cobertura",
+        "codecov",
         "Dependants",
         "Entitas",
         "Flecs",
