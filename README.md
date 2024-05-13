@@ -41,8 +41,10 @@ dotnet add package Friflo.Engine.ECS
 [Unity DOTS](https://docs.unity3d.com/Packages/com.unity.entities@1.2/manual/index.html),
 [Morpeh](https://github.com/scellecs/morpeh) or
 [Arch.Unity](https://github.com/AnnulusGames/Arch.Unity).  
-Will post on Twitter when Unity extension is available.
-   [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/friflo.svg?label=FrisoFlo)](https://twitter.com/FrisoFlo)
+Will write a post when Unity extension is available.
+ [![reddit](https://img.shields.io/badge/FrisoFlo-FF4500?logo=reddit&logoColor=white)](https://www.reddit.com/user/FrisoFlo/)
+ [![reddit](https://img.shields.io/badge/FrisoFlo-000000?logo=twitter&logoColor=white)](https://twitter.com/FrisoFlo)
+ [![reddit](https://img.shields.io/badge/Ullrich%20Praetz-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ullrich-praetz/)
 
 
 <span>
