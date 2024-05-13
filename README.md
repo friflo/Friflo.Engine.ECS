@@ -47,8 +47,9 @@ dotnet add package Friflo.Engine.ECS
   <img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/ECS Entity.png" width="450" height="477"/>
 </span>
 
-ECS - dead simple.  
-Highlights
+Will post on https://twitter.com/FrisoFlo when Unity extension is available.
+ 
+ECS - dead simple. Highlights
 - No boilerplate - Requires only C# code for **components** and **systems** and adding scripts via the Editor:  
   **ECS Store**, **ECS System Set** and **ECS Entity** shown in the Inspector.
 - Support **Edit** & **Play** Mode with synchronization of `GameObject` position, scale, rotation and activeSelf.
