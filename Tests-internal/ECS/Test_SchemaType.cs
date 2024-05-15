@@ -87,13 +87,13 @@ public static class Test_SchemaType
     [Test]
     public static void Test_SchemaType_Entity_HasComponent_Perf()
     {
-        var count   = 10; // 1_000_000_000 ~ #PC: 3118 ms
+        var count   = 10; // 1_000_000_000 ~ #PC: 522 ms
         var store   = new EntityStore();
         var entity  = store.CreateEntity(new Position());
         var sw      = new Stopwatch();
         sw.Start();
         for (long n = 0; n < count; n++) {
-            entity.GetComponent<Position>();
+            entity.HasComponent<Position>();
         }
         Console.WriteLine($"Entity.HasComponent<>() - duration: {sw.ElapsedMilliseconds} ms");
     }
