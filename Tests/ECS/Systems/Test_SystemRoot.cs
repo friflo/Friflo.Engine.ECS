@@ -111,9 +111,9 @@ namespace Tests.ECS.Systems
             root.Update(tick);
             
             AreEqual(new Scale3(4,5,6), entity.Scale3); // added by testSystem1
-            AreEqual(0, testSystem1.Tick.deltaTime);
-            AreEqual(0, testGroup.Tick.deltaTime);
-            AreEqual(0, root.Tick.deltaTime);
+            AreEqual(42, testSystem1.Tick.deltaTime);
+            AreEqual(42, testGroup.Tick.deltaTime);
+            AreEqual(42, root.Tick.deltaTime);
         }
         
         [Test]

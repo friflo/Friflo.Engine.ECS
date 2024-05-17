@@ -217,7 +217,6 @@ public class SystemGroup : BaseSystem, IEnumerable
         var startTime = monitorPerf ? Stopwatch.GetTimestamp() : 0;
         OnUpdateGroup();
         SetPerfTicks(this, startTime);
-        Tick = default;
     }
 
     protected internal override void OnUpdateGroup()
@@ -250,7 +249,6 @@ public class SystemGroup : BaseSystem, IEnumerable
             var child = children[n];
             if (!child.enabled) continue;
             child.OnUpdateGroupEnd();
-            child.Tick = default;
         }
     }
     #endregion
@@ -268,7 +266,6 @@ public class SystemGroup : BaseSystem, IEnumerable
     
     private static void SetPerfTicks(BaseSystem system, long startTime)
     {
-        system.perf.lastUpdate  = system.Tick.time;
         if (startTime == 0) {
             return;
         }

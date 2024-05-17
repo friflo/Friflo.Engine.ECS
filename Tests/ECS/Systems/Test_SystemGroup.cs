@@ -452,7 +452,7 @@ namespace Tests.ECS.Systems
         }
         
         [Test]
-        public static void Test_SystemGroup_Perf_LastUpdate()
+        public static void Test_SystemGroup_Update_Tick()
         {
             var root        = new SystemRoot("Systems");
             var child1      = new SystemGroup("Child1");
@@ -463,27 +463,27 @@ namespace Tests.ECS.Systems
             root.Add(perfSystem1);
             child1.Add(perfSystem2);
             
-            AreEqual(0,     root.       Perf.LastUpdate);
-            AreEqual(0,     child1.     Perf.LastUpdate);
-            AreEqual(0,     perfSystem1.Perf.LastUpdate);
-            AreEqual(0,     perfSystem2.Perf.LastUpdate);
+            AreEqual(0,     root.       Tick.time);
+            AreEqual(0,     child1.     Tick.time);
+            AreEqual(0,     perfSystem1.Tick.time);
+            AreEqual(0,     perfSystem2.Tick.time);
             
             var tick = new UpdateTick(0, 11);
             root.Update(tick);
-            AreEqual(11,    root.       Perf.LastUpdate);
-            AreEqual(11,    child1.     Perf.LastUpdate);
-            AreEqual(11,    perfSystem1.Perf.LastUpdate);
-            AreEqual(11,    perfSystem2.Perf.LastUpdate);
+            AreEqual(11,    root.       Tick.time);
+            AreEqual(11,    child1.     Tick.time);
+            AreEqual(11,    perfSystem1.Tick.time);
+            AreEqual(11,    perfSystem2.Tick.time);
             
             root.SetMonitorPerf(true);
             
             child1.Enabled = false;
             tick = new UpdateTick(0, 22);
             root.Update(tick);
-            AreEqual(22,    root.       Perf.LastUpdate);
-            AreEqual(11,    child1.     Perf.LastUpdate);
-            AreEqual(22,    perfSystem1.Perf.LastUpdate);
-            AreEqual(11,    perfSystem2.Perf.LastUpdate);
+            AreEqual(22,    root.       Tick.time);
+            AreEqual(11,    child1.     Tick.time);
+            AreEqual(22,    perfSystem1.Tick.time);
+            AreEqual(11,    perfSystem2.Tick.time);
         }
         
         

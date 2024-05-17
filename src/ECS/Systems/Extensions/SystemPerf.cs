@@ -15,7 +15,6 @@ public struct SystemPerf
 #region properties
     /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
                     public  int     UpdateCount => updateCount;
-                    public  float   LastUpdate  => lastUpdate;
                     public  float   LastMs      => lastTicks >= 0 ? (float)(lastTicks * StopwatchPeriodMs) : -1;
                     public  float   SumMs       => (float)(sumTicks * StopwatchPeriodMs);
     [Browse(Never)] public  long    LastTicks   => lastTicks;
@@ -24,7 +23,6 @@ public struct SystemPerf
     #endregion
 
 #region fields
-    [Browse(Never)] internal            float   lastUpdate;
     [Browse(Never)] internal            int     updateCount;
     [Browse(Never)] internal            long    lastTicks;
     [Browse(Never)] internal            long    sumTicks;
