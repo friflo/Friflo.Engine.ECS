@@ -41,7 +41,7 @@ namespace Tests.ECS.Systems
             root.Add(query1);
             root.Add(group);
             
-            var tick = new UpdateTick(42);
+            var tick = new UpdateTick(42, 0);
             root.Update(tick);
             AreEqual(new Position(2,2,3),   entity.Position);
             AreEqual(1,                     group.beginCalled);

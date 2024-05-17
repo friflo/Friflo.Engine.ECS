@@ -11,10 +11,12 @@ namespace Friflo.Engine.ECS;
 public readonly struct UpdateTick
 {
     public readonly float deltaTime;
+    public readonly float time;
 
     public override string ToString() => $"deltaTime: {deltaTime}";
     
-    public UpdateTick(float deltaTime) {
+    public UpdateTick(float deltaTime, float time) {
         this.deltaTime  = deltaTime;
+        this.time       = time;
     }
 }

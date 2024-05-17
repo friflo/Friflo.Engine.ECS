@@ -38,7 +38,7 @@ namespace Tests.ECS.Systems
         
         [Test]
         public static void Test_SystemRoot_Tick() {
-            var tick = new UpdateTick(42);
+            var tick = new UpdateTick(42, 0);
             AreEqual("deltaTime: 42", tick.ToString());
         }
         
@@ -83,7 +83,7 @@ namespace Tests.ECS.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            var tick = new UpdateTick(42);
+            var tick = new UpdateTick(42, 0);
             root.Update(tick);
             
             AreEqual(1, testGroup.beginCalled);
@@ -107,7 +107,7 @@ namespace Tests.ECS.Systems
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
             
-            var tick = new UpdateTick(42);
+            var tick = new UpdateTick(42, 0);
             root.Update(tick);
             
             AreEqual(new Scale3(4,5,6), entity.Scale3); // added by testSystem1
