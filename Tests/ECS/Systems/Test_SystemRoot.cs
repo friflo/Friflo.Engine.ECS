@@ -23,7 +23,7 @@ namespace Tests.ECS.Systems
             var store   = new EntityStore();
             var entity  = store.CreateEntity(new Position());
             var root    = new SystemRoot(store) { new TestMoveSystem() };
-            root.Update(42);
+            root.Update(default);
             AreEqual(new Position(1,0,0), entity.Position);
         }
         
@@ -38,7 +38,7 @@ namespace Tests.ECS.Systems
         
         [Test]
         public static void Test_SystemRoot_Tick() {
-            UpdateTick tick = 42;
+            var tick = new UpdateTick(42);
             AreEqual("deltaTime: 42", tick.ToString());
         }
         
@@ -83,7 +83,8 @@ namespace Tests.ECS.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
-            root.Update(new UpdateTick(42)); // use Tick constructor to ensure its available
+            var tick = new UpdateTick(42);
+            root.Update(tick);
             
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);
@@ -95,7 +96,7 @@ namespace Tests.ECS.Systems
             var store       = new EntityStore();
             var entity      = store.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot(store);    // create SystemRoot with store
-            var testGroup   = new TestGroup();
+            var testGroup   = new SystemGroup("Update");
             root.Add(testGroup);
             var testSystem1 = new TestSystem1();
             AreEqual("TestSystem1 - [Position]", testSystem1.ToString());
@@ -106,9 +107,10 @@ namespace Tests.ECS.Systems
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
             
-            root.Update(42);
+            var tick = new UpdateTick(42);
+            root.Update(tick);
             
-            AreEqual(new Scale3(4,5,6), entity.Scale3);
+            AreEqual(new Scale3(4,5,6), entity.Scale3); // added by testSystem1
             AreEqual(0, testSystem1.Tick.deltaTime);
             AreEqual(0, testGroup.Tick.deltaTime);
             AreEqual(0, root.Tick.deltaTime);
@@ -122,32 +124,32 @@ namespace Tests.ECS.Systems
             store1.CreateEntity(new Position(1,2,3));
             var root        = new SystemRoot("Systems");   // create SystemRoot without store
             var group       = new SystemGroup("Group");
-            var testSystem1 = new TestSystem1();
-            group.Add(testSystem1);
+            var testSystem2 = new TestSystem2();
+            group.Add(testSystem2);
             root.Add(group);
             
             // --- add store
-            AreEqual(0, testSystem1.Queries.Count);
+            AreEqual(0, testSystem2.Queries.Count);
             root.AddStore(store1);                      // add store after system setup
             AreEqual(1, root.Stores.Count);
-            AreEqual(1, testSystem1.Queries.Count);
-            AreEqual(1, testSystem1.EntityCount);
-            root.Update(42);
+            AreEqual(1, testSystem2.Queries.Count);
+            AreEqual(1, testSystem2.EntityCount);
+            root.Update(default);
             
             root.AddStore(store2);                      // add store after system setup
             AreEqual(2, root.Stores.Count);
-            AreEqual(2, testSystem1.Queries.Count);
+            AreEqual(2, testSystem2.Queries.Count);
             
             // --- remove store
             root.RemoveStore(store1);                   // remove store after system setup
             AreEqual(1, root.Stores.Count);
-            AreEqual(1, testSystem1.Queries.Count);
+            AreEqual(1, testSystem2.Queries.Count);
             
             root.RemoveStore(store1);                   // remove same store again for coverage
             
             root.RemoveStore(store2);                   // remove store after system setup
             AreEqual(0, root.Stores.Count);
-            AreEqual(0, testSystem1.Queries.Count);
+            AreEqual(0, testSystem2.Queries.Count);
         }
         
         [Test]
@@ -178,7 +180,7 @@ namespace Tests.ECS.Systems
             var store = new EntityStore();
             root.AddStore(store);
             root.RemoveStore(store);
-            root.Update(0);
+            root.Update(default);
         }
         
         [Test]

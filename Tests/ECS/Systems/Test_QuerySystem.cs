@@ -41,14 +41,15 @@ namespace Tests.ECS.Systems
             root.Add(query1);
             root.Add(group);
             
-            root.Update(42);
+            var tick = new UpdateTick(42);
+            root.Update(tick);
             AreEqual(new Position(2,2,3),   entity.Position);
             AreEqual(1,                     group.beginCalled);
             AreEqual(1,                     group.endCalled);
             
             query1.Enabled = false;
             group.Enabled  = false;
-            root.Update(42);
+            root.Update(tick);
             AreEqual(new Position(2,2,3),   entity.Position);
             AreEqual(1,                     group.beginCalled);
             AreEqual(1,                     group.endCalled);

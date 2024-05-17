@@ -7,16 +7,14 @@
 // ReSharper disable ConvertToPrimaryConstructor
 namespace Friflo.Engine.ECS;
 
-// May add an array or field to add and get custom types (a class) by generic type T
+
 public readonly struct UpdateTick
 {
     public readonly float deltaTime;
 
     public override string ToString() => $"deltaTime: {deltaTime}";
     
-    public static implicit operator UpdateTick(float deltaTime) => new UpdateTick(deltaTime);
-    
     public UpdateTick(float deltaTime) {
-        this.deltaTime = deltaTime;
+        this.deltaTime  = deltaTime;
     }
 }
