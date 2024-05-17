@@ -268,6 +268,7 @@ public class SystemGroup : BaseSystem, IEnumerable
     
     private static void SetPerfTicks(BaseSystem system, long startTime)
     {
+        system.perf.lastUpdate  = system.Tick.time;
         if (startTime == 0) {
             return;
         }
