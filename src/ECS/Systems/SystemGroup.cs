@@ -213,7 +213,7 @@ public class SystemGroup : BaseSystem, IEnumerable
             ClearPerfTicks(this);
             return;
         }
-        Tick = tick;
+        this.tick = tick;
         var startTime = monitorPerf ? Stopwatch.GetTimestamp() : 0;
         OnUpdateGroup();
         SetPerfTicks(this, startTime);
@@ -230,7 +230,7 @@ public class SystemGroup : BaseSystem, IEnumerable
         for (int n = 0; n < children.Count; n++) {
             var child = children[n];
             if (!child.enabled) continue;
-            child.Tick = Tick;
+            child.tick = tick;
             child.OnUpdateGroupBegin();
         }
         // --- calls QuerySystem.OnUpdate() for every store in SystemRoot.Stores - commonly a single store.

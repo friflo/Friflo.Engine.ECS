@@ -16,17 +16,18 @@ namespace Friflo.Engine.ECS.Systems;
 public abstract class BaseSystem
 {
 #region properties
-    [Browse(Never)]         public virtual      string          Name        => systemName;
-    [Browse(Never)]         public              SystemRoot      SystemRoot  => systemRoot;
-    [Browse(Never)]         public              SystemGroup     ParentGroup => parentGroup;
-    [Browse(Never)][Ignore] public              bool            Enabled     { get => enabled; set => enabled = value; }
-    [Browse(Never)]         public              int             Id          => id;
-    [Browse(Never)]         public ref readonly SystemPerf      Perf        => ref perf;
-                            internal            View            System      => view ??= new View(this);
+    [Browse(Never)] [Ignore]    public ref readonly UpdateTick  Tick        => ref tick;
+    [Browse(Never)]             public virtual      string      Name        => systemName;
+    [Browse(Never)]             public              SystemRoot  SystemRoot  => systemRoot;
+    [Browse(Never)]             public              SystemGroup ParentGroup => parentGroup;
+    [Browse(Never)] [Ignore]    public              bool        Enabled     { get => enabled; set => enabled = value; }
+    [Browse(Never)]             public              int         Id          => id;
+    [Browse(Never)]             public ref readonly SystemPerf  Perf        => ref perf;
+                                internal            View        System      => view ??= new View(this);
     #endregion
         
-#region fields
-    [Browse(Never)] [Ignore]    public              UpdateTick  Tick;
+#region internal fields
+    [Browse(Never)] [Ignore]    internal            UpdateTick  tick;
     [Browse(Never)] [Serialize] internal            int         id;
     [Browse(Never)] [Serialize] internal            bool        enabled = true;
     [Browse(Never)]             private readonly    string      systemName;
