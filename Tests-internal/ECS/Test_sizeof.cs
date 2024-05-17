@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Systems;
 using Friflo.Engine.ECS.Utils;
 using NUnit.Framework;
 using Tests.ECS;
@@ -84,6 +85,18 @@ public static class Test_sizeof
 
         size = sizeof(Archetypes);
         AreEqual(16, size);
+    }
+    
+    [Test]
+    public static unsafe void Test_Systems_sizeof() {
+        var size = sizeof(UpdateTick);
+        AreEqual(8, size);
+        
+        size = sizeof(SystemPerf);
+        AreEqual(32, size);
+        
+        size = sizeof(SystemMatch);
+        AreEqual(24, size);
     }
     
     [Test]
