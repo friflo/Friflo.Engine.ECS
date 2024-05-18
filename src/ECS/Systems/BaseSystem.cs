@@ -13,16 +13,33 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// Base class for all systems either a query system, a custom system or a system group.
+/// </summary>
 public abstract class BaseSystem
 {
 #region properties
+    /// <summary>The <see cref="UpdateTick"/> passed to <see cref="SystemGroup.Update"/>. </summary>
     [Browse(Never)] [Ignore]    public ref readonly UpdateTick  Tick        => ref tick;
+    
+    /// <summary> The system name. The Name of a <see cref="SystemGroup"/> can be changed. </summary>
     [Browse(Never)]             public virtual      string      Name        => systemName;
+
+    /// <summary> The <see cref="SystemRoot"/> containing this system. </summary>
     [Browse(Never)]             public              SystemRoot  SystemRoot  => systemRoot;
+
+    /// <summary> The parent <see cref="SystemGroup"/> containing this system. </summary>
     [Browse(Never)]             public              SystemGroup ParentGroup => parentGroup;
+
+    /// <summary> If true the system is executed when calling <see cref="SystemGroup.Update"/></summary>
     [Browse(Never)] [Ignore]    public              bool        Enabled     { get => enabled; set => enabled = value; }
+
+    /// <summary> Unique system id of all systems of a <see cref="SystemRoot"/>. </summary>
     [Browse(Never)]             public              int         Id          => id;
+
+    /// <summary> Provide execution times of a system if <see cref="SystemGroup.MonitorPerf"/> is enabled. </summary>
     [Browse(Never)]             public ref readonly SystemPerf  Perf        => ref perf;
+    
                                 internal            View        System      => view ??= new View(this);
     #endregion
         
@@ -45,8 +62,15 @@ public abstract class BaseSystem
     #endregion
     
 #region system events
+    /// <summary>
+    /// Event handlers to notify a system has changed.<br/>
+    /// Like a changed system field or a system was added / removed to / from a <see cref="SystemGroup"/>.
+    /// </summary>
     public event Action<SystemChanged>  OnSystemChanged;
 
+    /// <summary>
+    /// Send an event to <see cref="OnSystemChanged"/> handlers to notify a changed system <paramref name="field"/>.
+    /// </summary>
     public void CastSystemUpdate(string field, object value)
     {
         var system  = this;
@@ -115,6 +139,10 @@ public abstract class BaseSystem
     #endregion
     
 #region system: move
+    /// <summary>
+    /// Move the system to the specified <paramref name="targetGroup"/> at the given <paramref name="index"/>.<br/>
+    /// If <paramref name="index"/> is -1 the system is moved to the tail of the group.
+    /// </summary>
     public int MoveSystemTo(SystemGroup targetGroup, int index)
     {
         if (targetGroup == null)                                    throw new ArgumentNullException(nameof(targetGroup));
