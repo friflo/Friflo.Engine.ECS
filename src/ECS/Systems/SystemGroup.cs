@@ -15,18 +15,31 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// Contains a list of <see cref="ChildSystems"/> which are executed by calling <see cref="Update"/>. <br/>
+/// Each group has a <see cref="CommandBuffer"/> per <see cref="EntityStore"/>.
+/// </summary>
 [DebuggerTypeProxy(typeof(SystemGroupDebugView))]
 // IEnumerable + Add() enables collection initializer.
 // IEnumerable<> cannot be used as Friflo.Json.Fliox Mapper does not support Read() for IEnumerable<>.
 public class SystemGroup : BaseSystem, IEnumerable
 {
 #region properties
+    /// <summary> The name of the group. Can be changed by <see cref="SetName"/>. </summary>
     [Browse(Never)] public override string                      Name            => name;
+    
+    /// <summary> If true the execution statics of its <see cref="ChildSystems"/> are collected. </summary>
     [Browse(Never)] public          bool                        MonitorPerf     => monitorPerf;
+
+    /// <summary> The child systems added to the group. </summary>
     [Browse(Never)] public          ReadOnlyList<BaseSystem>    ChildSystems    => childSystems;
+
+    /// <summary> The <see cref="ECS.CommandBuffer"/>'s shared by all <see cref="ChildSystems"/>. </summary>
                     internal        ReadOnlyList<CommandBuffer> CommandBuffers  => commandBuffers; // only for debug view
+    
                     // only for display in debugger
                     internal        Item[]                      AllSystems      => Item.GetAllSystems(this);
+                    
                     public override string                      ToString()      => $"'{name}' Group - child systems: {childSystems.Count}";
     #endregion
     
@@ -48,6 +61,9 @@ public class SystemGroup : BaseSystem, IEnumerable
         commandBuffers  = new ReadOnlyList<CommandBuffer>(Array.Empty<CommandBuffer>());
     } 
     
+    /// <summary>
+    /// Creates a group with the passed <paramref name="name"/>.
+    /// </summary>
     public SystemGroup(string name) {
         if (name is null or "") throw new ArgumentException("group name must not be null or empty");
         this.name       = name;
@@ -57,11 +73,17 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region enumerator
+    /// <summary>
+    /// Returns an enumerator that iterates through the <see cref="ChildSystems"/>.
+    /// </summary>
     public       ReadOnlyListEnumerator<BaseSystem> GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
     IEnumerator                         IEnumerable.GetEnumerator() => new ReadOnlyListEnumerator<BaseSystem>(childSystems);
     #endregion
     
 #region group: add / insert / remove - system
+    /// <summary>
+    /// Adds the passed <paramref name="system"/> to the group.
+    /// </summary>
     // Add() enables support for collection initializer
     public void Add(BaseSystem system)
     {
@@ -74,6 +96,10 @@ public class SystemGroup : BaseSystem, IEnumerable
         CastSystemAdded(system);
     }
     
+    /// <summary>
+    /// Adds the passed <paramref name="system"/> at the given <paramref name="index"/> to the group.<br/>
+    /// If <paramref name="index"/> == -1 the system is added to the tail of the group.
+    /// </summary>
     public void Insert(int index, BaseSystem system)
     {
         if (system == null)                             throw new ArgumentNullException(nameof(system));
@@ -90,6 +116,9 @@ public class SystemGroup : BaseSystem, IEnumerable
         CastSystemAdded(system);
     }
     
+    /// <summary>
+    /// Removes the passed <paramref name="system"/> from the group.
+    /// </summary>
     public void Remove(BaseSystem system)
     {
         if (system == null)             throw new ArgumentNullException(nameof(system));
@@ -104,6 +133,9 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region group: find system
+    /// <summary>
+    /// Returns the group with the specified <paramref name="name"/>.
+    /// </summary>
     public SystemGroup FindGroup(string name, bool recursive)
     {
         if (recursive) {
@@ -135,6 +167,9 @@ public class SystemGroup : BaseSystem, IEnumerable
         return null;
     }
     
+    /// <summary>
+    /// Returns the system with of the specified type <typeparamref name="T"/>. 
+    /// </summary>
     public T FindSystem<T>(bool recursive) where T : BaseSystem
     {
         if (recursive) {
@@ -165,7 +200,10 @@ public class SystemGroup : BaseSystem, IEnumerable
     }
     #endregion
     
-#region group: general     
+#region group: general
+    /// <summary>
+    /// Returns true if the group is an ancestor of the passed <paramref name="system"/>.
+    /// </summary>
     public bool IsAncestorOf(BaseSystem system)
     {
         if (system == null) throw new ArgumentNullException(nameof(system));
@@ -178,6 +216,9 @@ public class SystemGroup : BaseSystem, IEnumerable
         return false;
     }
     
+    /// <summary>
+    /// Changes the name of the system group.
+    /// </summary>
     public void SetName(string name) {
         if (name is null or "") throw new ArgumentException("group name must not be null or empty");
         this.name   = name;
@@ -208,6 +249,9 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region system: update
+    /// <summary>
+    /// Execute all systems within the group.
+    /// </summary>
     public void Update(UpdateTick tick) {
         if (!enabled) {
             ClearPerfTicks(this);
@@ -219,6 +263,9 @@ public class SystemGroup : BaseSystem, IEnumerable
         SetPerfTicks(this, startTime);
     }
 
+    /// <summary>
+    /// Is called when executing <see cref="Update"/>.
+    /// </summary>
     protected internal override void OnUpdateGroup()
     {
         var children = childSystems;
@@ -254,6 +301,9 @@ public class SystemGroup : BaseSystem, IEnumerable
     #endregion
     
 #region perf
+    /// <summary>
+    /// Enable / disable performance monitoring of its <see cref="ChildSystems"/>. 
+    /// </summary>
     public void SetMonitorPerf(bool enable)
     {
         monitorPerf = enable;
