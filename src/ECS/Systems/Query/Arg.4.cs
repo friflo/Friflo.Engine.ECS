@@ -10,13 +10,18 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// A query system returning entities with the specified component types via its <see cref="Query"/> property.
+/// </summary>
 public abstract class QuerySystem<T1, T2, T3, T4> : QuerySystem
     where T1 : struct, IComponent
     where T2 : struct, IComponent
     where T3 : struct, IComponent
     where T4 : struct, IComponent
 {
-    public          ArchetypeQuery<T1, T2, T3, T4>  Query       => query;
+    /// <summary> Return all entities matching the <see cref="Query"/>. </summary>
+    protected       ArchetypeQuery<T1, T2, T3, T4>  Query       => query;
+    
     public override string                          ToString()  => GetString(Signature.Get<T1,T2,T3,T4>().signatureIndexes);
 #region fields
     [Browse(Never)] private     ArchetypeQuery<T1, T2, T3, T4>    query;

@@ -20,19 +20,19 @@ public abstract class QuerySystem : BaseSystem
 {
 #region properties
     /// <summary> A query filter used to restrict the entities returned by its <c>Query</c> property. </summary>
-    [Browse(Never)] public          QueryFilter                 Filter          => filter;
+    [Browse(Never)] public          QueryFilter         Filter          => filter;
 
     /// <summary> The number of entities matching the <c>Query</c>. </summary>
-    [Browse(Never)] public          int                         EntityCount     => GetEntityCount();
+    [Browse(Never)] public          int                 EntityCount     => GetEntityCount();
 
     /// <summary> The component types of components returned by its <c>Query</c> property. </summary>
-    [Browse(Never)] public          ComponentTypes              ComponentTypes  => componentTypes;
+    [Browse(Never)] public          ComponentTypes      ComponentTypes  => componentTypes;
 
-    /// <summary> Return a <see cref="ArchetypeQuery"/> per store in <see cref="SystemRoot.Stores"/>. </summary>
-                    public          ReadOnlyList<ArchetypeQuery>Queries         => queries;
+    /// <summary> Return all system queries. One per store in <see cref="SystemRoot.Stores"/>. </summary>
+                    public ReadOnlyList<ArchetypeQuery> Queries         => queries;
 
     /// <summary> Return the <see cref="CommandBuffer"/> of its <see cref="BaseSystem.ParentGroup"/>.</summary>
-    [Browse(Never)] public          CommandBuffer               CommandBuffer   => commandBuffer;
+    [Browse(Never)] protected       CommandBuffer       CommandBuffer   => commandBuffer;
     #endregion
     
 #region fields
