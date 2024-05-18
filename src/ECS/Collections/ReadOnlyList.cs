@@ -11,18 +11,31 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Represents a strongly typed readonly list of objects that can be accessed by index.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 [DebuggerTypeProxy(typeof(ReadOnlyListDebugView<>))]
 public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
 {
-#region public properties    
+#region public properties
+    /// <summary> Returns the number of elements contained in the list. </summary>
     public          int             Count           => count;
+    
+    /// <summary> Returns an <see cref="ReadOnlySpan{T}"/> of the list elements. </summary>
     public          ReadOnlySpan<T> Span            => new (array, 0, count);
+    
     public override string          ToString()      => $"{typeof(T).Name}[{count}]";
+    
+    /// <summary> Gets the element at the specified index. </summary>
     // No set by intention. public interface is read only
     public          T               this[int index] => array[index];
     #endregion
     
 #region public methods
+    /// <summary>
+    /// Returns the zero-based index of the first occurrence of a value within the entire list.
+    /// </summary>
     public int IndexOf(T element)
     {
         var local = array;
@@ -105,7 +118,9 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     #endregion
     
 #region IEnumerator
-
+    /// <summary>
+    /// Returns an enumerator that iterates through the list.
+    /// </summary>
     public      ReadOnlyListEnumerator<T> GetEnumerator() => new ReadOnlyListEnumerator<T>(this);
 
     // --- IEnumerable
@@ -126,7 +141,9 @@ public struct ReadOnlyList<T> : IReadOnlyList<T> where T : class
     }
 }
 
-
+/// <summary>
+/// Enumerates the elements of a <see cref="ReadOnlyList{T}"/>.
+/// </summary>
 public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
 {
 #region private fields
@@ -143,13 +160,16 @@ public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
 
 #region IEnumerator
     // --- IEnumerator
+    /// <summary> Sets the enumerator to its initial position, which is before the first element in the list. </summary>
     public          void         Reset()    => index = -1;
 
     readonly object  IEnumerator.Current    => array[index];
 
+    /// <summary> Gets the element at the current position of the enumerator. </summary>
     public   T                   Current    => array[index];
 
     // --- IEnumerator
+    /// <summary> Advances the enumerator to the next element of the collection. </summary>
     public bool MoveNext()
     {
         if (index < count) {
@@ -159,6 +179,7 @@ public struct ReadOnlyListEnumerator<T> : IEnumerator<T> where T : class
         return false;
     }
 
+    /// <summary> Releases all resources used by the list enumerator. </summary>
     public void Dispose() { }
     #endregion
 }
