@@ -8,6 +8,9 @@ using System.Diagnostics;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// Contains System extension methods.
+/// </summary>
 public static class SystemExtensions
 {
     internal static readonly double StopwatchPeriodMs = 1 / (Stopwatch.Frequency / 1000d);
@@ -15,6 +18,9 @@ public static class SystemExtensions
     private static SystemMatch[]    _matches = new SystemMatch[1];
     private static int              _matchesCount;
     
+    /// <summary>
+    /// Return the systems of a <see cref="SystemGroup"/> matching the passed <paramref name="archetype"/>.
+    /// </summary>
     public static void GetMatchingSystems(this SystemGroup systemGroup, Archetype archetype, List<SystemMatch> target, bool addGroups)
     {
         if (systemGroup == null)    throw new ArgumentNullException(nameof(systemGroup));

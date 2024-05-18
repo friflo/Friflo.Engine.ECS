@@ -5,12 +5,21 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// Information of a matching system returned by <see cref="SystemExtensions.GetMatchingSystems"/>.
+/// </summary>
 public struct SystemMatch
 {
 #region properties
+    /// <summary> The matching system. </summary>
     public          BaseSystem  System      => system;
+
+    /// <summary> The depth of a matching system. </summary>
     public          int         Depth       => depth;
+
+    /// <summary> The number of matching systems within a <see cref="SystemGroup"/>. </summary>
     public          int         Count       => count;
+
     public override string      ToString() => GetString(); 
     #endregion
     
