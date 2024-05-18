@@ -157,7 +157,7 @@ Made a subset as the other benchmarks are similar only with different parameters
 | Morpeh_Stash      |  | 30.655 ms | 0.3532 ms | 0.3131 ms | 4000.0000 | 2000.0000 | 1000.0000 | 44720.38 KB |
 | RelEcs            |  | 56.156 ms | 0.4419 ms | 0.4134 ms | 9000.0000 | 4000.0000 | 3000.0000 | 75714.03 KB |
 
-⁽¹⁾ *library of this project*
+🔥 *library of this project*
 
 ## 2. Update 100.000 entities with two components
 
