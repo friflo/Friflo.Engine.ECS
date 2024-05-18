@@ -28,3 +28,10 @@ namespace Friflo.Engine.ECS.Collections {
     /// </summary>
     internal static class NamespaceDoc { }
 }
+
+namespace Friflo.Engine.ECS.Systems {
+    /// <summary>
+    /// Used to organize and execute a set of systems within a <see cref="SystemRoot"/>.
+    /// </summary>
+    internal static class NamespaceDoc { }
+}

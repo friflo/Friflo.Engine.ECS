@@ -9,6 +9,10 @@ using System.Text;
 // ReSharper disable NotAccessedField.Global
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// The type of <see cref="SystemChanged"/> event. <br/>
+/// See: <see cref="Remove"/>, <see cref="Add"/>, <see cref="Move"/> or <see cref="Update"/> a system. 
+/// </summary>
 public enum SystemChangedAction
 {
     Remove  = 0,
@@ -17,11 +21,31 @@ public enum SystemChangedAction
     Update  = 3,
 }
 
+/// <summary>
+/// Is the event for event handlers added to <see cref="BaseSystem.OnSystemChanged"/>.
+/// </summary>
+/// <remarks>
+/// These events are fired on:
+/// <list type="bullet">
+///     <item><see cref="SystemGroup.Add"/></item>
+///     <item><see cref="SystemGroup.Insert"/></item>
+///     <item><see cref="SystemGroup.Remove"/></item>
+///     <item><see cref="BaseSystem.MoveSystemTo"/></item>
+///     <item><see cref="BaseSystem.CastSystemUpdate"/></item>
+/// </list>
+/// </remarks>
 public readonly struct SystemChanged
 {
+    /// <summary> The <see cref="SystemChangedAction"/> type of the system change. </summary>
     public readonly     SystemChangedAction action;
+
+    /// <summary> The changed system. </summary>
     public readonly     BaseSystem          system;
+
+    /// <summary> The name of the changed system field. </summary>
     public readonly     string              field;
+
+    /// <summary> The value of a changed system field. </summary>
     public readonly     object              value;
 
     public override     string              ToString() => GetString();
