@@ -37,7 +37,7 @@ public abstract class BaseSystem
     /// <summary> Unique system id of all systems of a <see cref="SystemRoot"/>. </summary>
     [Browse(Never)]             public              int         Id          => id;
 
-    /// <summary> Provide execution times of a system if <see cref="SystemGroup.MonitorPerf"/> is enabled. </summary>
+    /// <summary> Provide execution statistics of a system if <see cref="SystemGroup.MonitorPerf"/> is enabled. </summary>
     [Browse(Never)]             public ref readonly SystemPerf  Perf        => ref perf;
     
                                 internal            View        System      => view ??= new View(this);
@@ -126,17 +126,17 @@ public abstract class BaseSystem
     
 #region virtual - system: update
     /// <summary>
-    /// Called for every system in <see cref="SystemGroup.ChildSystems"/>.
+    /// Called for every system of the parent <see cref="SystemGroup.ChildSystems"/>.
     /// </summary>
     protected internal  virtual void OnUpdateGroup      () { }
     
     /// <summary>
-    /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before group <see cref="SystemGroup.OnUpdateGroup"/>.
+    /// Called for every system of the parent <see cref="SystemGroup.ChildSystems"/> before group <see cref="SystemGroup.OnUpdateGroup"/>.
     /// </summary>
     protected internal  virtual void OnUpdateGroupBegin () { }
     
     /// <summary>
-    /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after group <see cref="SystemGroup.OnUpdateGroup"/>.
+    /// Called for every system of the parent <see cref="SystemGroup.ChildSystems"/> after group <see cref="SystemGroup.OnUpdateGroup"/>.
     /// </summary>
     protected internal  virtual void OnUpdateGroupEnd   () { }
     #endregion

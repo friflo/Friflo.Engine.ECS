@@ -10,15 +10,29 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// Provide performance statics of system execution.
+/// </summary>
 public struct SystemPerf
 {
 #region properties
-    /// <remarks>Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision.</remarks>
+    /// <summary> Return the number of system executions. </summary>
                     public  int     UpdateCount => updateCount;
+    
+    /// <summary> Return the duration of the last execution in milliseconds. <br/>
+    /// Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision. </summary>
                     public  float   LastMs      => lastTicks >= 0 ? (float)(lastTicks * StopwatchPeriodMs) : -1;
+    
+    /// <summary> Return the sum of all execution times in milliseconds. </summary>
                     public  float   SumMs       => (float)(sumTicks * StopwatchPeriodMs);
+    
+    /// <summary>Return the duration of the last execution in timer ticks. <br/>
+    /// Can be 0 in case execution time was below <see cref="Stopwatch.Frequency"/> precision. </summary>
     [Browse(Never)] public  long    LastTicks   => lastTicks;
+    
+    /// <summary> Return the sum of all execution times in timer ticks. </summary>
     [Browse(Never)] public  long    SumTicks    => sumTicks;
+    
     public override         string  ToString()  => $"updates: {UpdateCount}  last: {LastMs:0.###} ms  sum: {SumMs:0.###} ms";
     #endregion
 
@@ -35,6 +49,9 @@ public struct SystemPerf
         lastTicks       = -1;
     }
     
+    /// <summary>
+    /// Return the average duration of the last <paramref name="count"/> executions in milliseconds.
+    /// </summary>
     public float LastAvgMs(int count)
     {
         var ticks   = history;
