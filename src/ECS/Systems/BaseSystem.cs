@@ -125,15 +125,18 @@ public abstract class BaseSystem
     #endregion
     
 #region virtual - system: update
+    /// <summary>
+    /// Called for every system in <see cref="SystemGroup.ChildSystems"/>.
+    /// </summary>
     protected internal  virtual void OnUpdateGroup      () { }
     
     /// <summary>
-    /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before group <see cref="SystemGroup.Update"/>.
+    /// Called for every system in <see cref="SystemGroup.ChildSystems"/> before group <see cref="SystemGroup.OnUpdateGroup"/>.
     /// </summary>
     protected internal  virtual void OnUpdateGroupBegin () { }
     
     /// <summary>
-    /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after group <see cref="SystemGroup.Update"/>.
+    /// Called for every system in <see cref="SystemGroup.ChildSystems"/> after group <see cref="SystemGroup.OnUpdateGroup"/>.
     /// </summary>
     protected internal  virtual void OnUpdateGroupEnd   () { }
     #endregion
