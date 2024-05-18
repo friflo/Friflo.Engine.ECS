@@ -159,12 +159,21 @@ public abstract class SchemaType
     }
 }
 
+/// <summary>
+/// The color assigned to a component or tag via <see cref="ComponentSymbolAttribute"/> for display in a UI or CLI.
+/// </summary>
 public readonly struct SymbolColor
 {
+    /// <summary> Gets the red component value of this Color. </summary>
     public readonly byte r;
+    
+    /// <summary> Gets the green component value of this Color. </summary>
     public readonly byte g;
+    
+    /// <summary> Gets the blue component value of this Color. </summary>
     public readonly byte b;
     
+    /// <summary> Create a <see cref="SymbolColor"/> with the specified color components. </summary>
     public SymbolColor (byte r, byte g, byte b) {
         this.r = r;
         this.g = g;
