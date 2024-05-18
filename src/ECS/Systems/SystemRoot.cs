@@ -14,11 +14,16 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// A <see cref="SystemRoot"/> setup a system hierarchy required to execute systems with <see cref="SystemGroup.Update"/>.
+/// </summary>
 [DebuggerTypeProxy(typeof(SystemRootDebugView))]
 public class SystemRoot : SystemGroup
 {
 #region properties
+    /// <summary> Returns the <see cref="EntityStore"/>'s added to the root system. </summary>
     [Browse(Never)] public  ReadOnlyList<EntityStore>   Stores      => stores;
+    
                     public override string              ToString()  => $"'{Name}' Root - child systems: {childSystems.Count}";
     #endregion
 
@@ -31,21 +36,31 @@ public class SystemRoot : SystemGroup
 
     
 #region constructors
+    /// <summary>
+    /// Create a root system without an <see cref="EntityStore"/>.
+    /// </summary>
+    /// <param name="name"></param>
     public SystemRoot (string name = null) : base (name ?? "Systems") {
         SetRoot(this);
         systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
         stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());
     }
-    
-    public SystemRoot (EntityStore store, string name = null) : base (name ?? "Systems") {
+
+    /// <summary>
+    /// Create a root system for the specified <paramref name="entityStore"/>.
+    /// </summary>
+    public SystemRoot (EntityStore entityStore, string name = null) : base (name ?? "Systems") {
         SetRoot(this);
         systemBuffer    = new ReadOnlyList<BaseSystem> (Array.Empty<BaseSystem>());
         stores          = new ReadOnlyList<EntityStore>(Array.Empty<EntityStore>());
-        AddStore(store);
+        AddStore(entityStore);
     }
     #endregion
 
 #region store: add / remove
+    /// <summary>
+    /// Adds the passed <paramref name="entityStore"/> to the root system.
+    /// </summary>
     public void AddStore(EntityStore entityStore)
     {
         if (entityStore == null) throw new ArgumentNullException(nameof(entityStore));
@@ -56,6 +71,9 @@ public class SystemRoot : SystemGroup
         }
     }
     
+    /// <summary>
+    /// Removed the passed <paramref name="entityStore"/> from the root system.
+    /// </summary>
     public void RemoveStore(EntityStore entityStore)
     {
         if (entityStore == null) throw new ArgumentNullException(nameof(entityStore));
