@@ -22,7 +22,7 @@ public enum SystemChangedAction
 }
 
 /// <summary>
-/// Is the event for event handlers added to <see cref="BaseSystem.OnSystemChanged"/>.
+/// The event for event handlers added to <see cref="BaseSystem.OnSystemChanged"/>.
 /// </summary>
 /// <remarks>
 /// These events are fired on:

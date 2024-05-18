@@ -64,7 +64,7 @@ public abstract class BaseSystem
 #region system events
     /// <summary>
     /// Event handlers to notify a system has changed.<br/>
-    /// Like a changed system field or a system was added / removed to / from a <see cref="SystemGroup"/>.
+    /// Like a changed system field or a system added / removed to / from a <see cref="SystemGroup"/>.
     /// </summary>
     public event Action<SystemChanged>  OnSystemChanged;
 

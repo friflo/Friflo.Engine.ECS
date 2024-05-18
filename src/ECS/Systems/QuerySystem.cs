@@ -13,6 +13,9 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
+/// <summary>
+/// A query system returning the components specified in a subclass extending <c>QuerySystem&lt;T1, ... , Tn></c>.
+/// </summary>
 public abstract class QuerySystem : BaseSystem
 {
 #region properties
