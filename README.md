@@ -63,7 +63,7 @@ Will write a post when extension is available. 
 <br/>
 
 
-[![Demos](https://img.shields.io/badge/Demos-blueviolet?style=for-the-badge)](https://github.com/friflo/Friflo.Engine.ECS-Demos)  
+# [![Demos](https://img.shields.io/badge/Demos-blueviolet?style=for-the-badge)](https://github.com/friflo/Friflo.Engine.ECS-Demos)  
 **Interactive Browser Demo** showing MonoGame WebAssembly integration. [Try online Demo](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
 
 <a href="https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/">
