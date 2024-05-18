@@ -25,17 +25,27 @@ public sealed class ArchetypeQuery<T1> : ArchetypeQuery
 {
     [Browse(Never)] internal    T1[]                copyT1;
     
+    /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1> AllTags       (in Tags tags) { SetHasAllTags(tags);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AnyTags"/>
     public new ArchetypeQuery<T1> AnyTags       (in Tags tags) { SetHasAnyTags(tags);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithDisabled"/>
     public new ArchetypeQuery<T1> WithDisabled  ()             { SetWithDisabled();         return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAllTags"/>
     public new ArchetypeQuery<T1> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);   return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAnyTags"/>
     public new ArchetypeQuery<T1> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);   return this; }
     
+    /// <inheritdoc cref="ArchetypeQuery.AllComponents"/>
     public new ArchetypeQuery<T1> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AnyComponents"/>
     public new ArchetypeQuery<T1> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAllComponents"/>
     public new ArchetypeQuery<T1> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAnyComponents"/>
     public new ArchetypeQuery<T1> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
+    /// <inheritdoc cref="ArchetypeQuery.FreezeFilter"/>
     public new ArchetypeQuery<T1> FreezeFilter() { SetFreezeFilter();   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1> signature, QueryFilter filter)

@@ -28,17 +28,27 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     [Browse(Never)] internal    T1[]    copyT1;
     [Browse(Never)] internal    T2[]    copyT2;
     
+    /// <inheritdoc cref="ArchetypeQuery.AllTags"/>
     public new ArchetypeQuery<T1, T2> AllTags       (in Tags tags) { SetHasAllTags(tags);      return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AnyTags"/>
     public new ArchetypeQuery<T1, T2> AnyTags       (in Tags tags) { SetHasAnyTags(tags);      return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithDisabled"/>
     public new ArchetypeQuery<T1, T2> WithDisabled  ()             { SetWithDisabled();        return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAllTags"/>
     public new ArchetypeQuery<T1, T2> WithoutAllTags(in Tags tags) { SetWithoutAllTags(tags);  return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAnyTags"/>
     public new ArchetypeQuery<T1, T2> WithoutAnyTags(in Tags tags) { SetWithoutAnyTags(tags);  return this; }
-     
+    
+    /// <inheritdoc cref="ArchetypeQuery.AllComponents"/>
     public new ArchetypeQuery<T1, T2> AllComponents       (in ComponentTypes componentTypes) { SetHasAllComponents(componentTypes);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.AnyComponents"/>
     public new ArchetypeQuery<T1, T2> AnyComponents       (in ComponentTypes componentTypes) { SetHasAnyComponents(componentTypes);       return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAllComponents"/>
     public new ArchetypeQuery<T1, T2> WithoutAllComponents(in ComponentTypes componentTypes) { SetWithoutAllComponents(componentTypes);   return this; }
+    /// <inheritdoc cref="ArchetypeQuery.WithoutAnyComponents"/>
     public new ArchetypeQuery<T1, T2> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
+    /// <inheritdoc cref="ArchetypeQuery.FreezeFilter"/>
     public new ArchetypeQuery<T1, T2> FreezeFilter() { SetFreezeFilter();   return this; }
     
     internal ArchetypeQuery(EntityStoreBase store, in Signature<T1, T2> signature, QueryFilter filter)
