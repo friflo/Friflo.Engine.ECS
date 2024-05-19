@@ -108,7 +108,7 @@ and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Exampl
 
 # Wiki
 
-The Wiki provide you detailed information about the ECS and illustrate them by examples.
+The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
 
 - [**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-%E2%80%90-General)  
   Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.
