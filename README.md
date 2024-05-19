@@ -196,4 +196,4 @@ So other threads can still keep running without competing for CPU resources.
 This project is licensed under LGPLv3.  
 
 Friflo.Engine.ECS  
-Copyright © 2024   Ullrich Praetz
+Copyright © 2024   Ullrich Praetz - https://github.com/friflo
