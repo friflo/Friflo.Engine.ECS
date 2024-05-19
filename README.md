@@ -126,7 +126,7 @@ Using systems instead have some significant advantages:
 
 - Systems have performance telemetry build-in to optimize those detected as bottleneck.
 
-- A single `SystemRoot` instance can operate on multiple worlds.
+- Multiple worlds can be added to a single `SystemRoot` instance.
 
 
 ```csharp
