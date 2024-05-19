@@ -116,7 +116,7 @@ and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Exampl
 
 ![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)  
 Systems in ECS are typically queries.
-So you can still use the `world.Query<Position, Velocity>()` shown the "Hello World" example.  
+So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello World" example.  
 Using systems instead have some significant advantages:
 
 - They enable chaining multiple decoupled system implementations.
