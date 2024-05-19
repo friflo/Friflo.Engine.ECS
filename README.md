@@ -96,11 +96,11 @@ public struct Velocity : IComponent { public Vector3 value; }
 
 public static void HelloWorld()
 {
-    var store = new EntityStore();
+    var world = new EntityStore();
     for (int n = 0; n < 10; n++) {
-        store.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
+        world.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
     }
-    var query = store.Query<Position, Velocity>();
+    var query = world.Query<Position, Velocity>();
     query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
         position.value += velocity.value;
     });
@@ -114,7 +114,17 @@ and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Exampl
 
 # System example
 
-![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)
+![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)  
+Systems in ECS are typically queries.
+So you can still use the `world.Query<Position, Velocity>()` shown the "Hello World" example.  
+Using systems instead have some significant advantages:
+
+- The enable chaining multiple decoupled system implementations.
+
+- Systems are organized in `SystemGroup`s. Each group already provide a
+  [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
+
+- Systems have performance telemetry build-in to optimize those detected as bottleneck.
 
 ```csharp
 public static void HelloSystem()
@@ -141,7 +151,7 @@ class MoveSystem : QuerySystem<Position, Velocity>
 ```
 
 A valuable strength of an ECS is establishing a clear code structure.  
-Adding the `PulseSystem` below to the `SystemRoot` is trivial.
+Adding the `PulseSystem` below to the `SystemRoot` above is trivial.
 
 ```csharp
 class PulseSystem : QuerySystem<Scale3>
