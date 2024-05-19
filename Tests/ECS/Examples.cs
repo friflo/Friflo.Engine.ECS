@@ -3,6 +3,7 @@ using System.IO;
 using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
+using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 
 #if !UNITY_5_3_OR_NEWER
@@ -28,14 +29,46 @@ public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.1
 [Test]
 public static void HelloWorld()
 {
-    var store = new EntityStore();
+    var world = new EntityStore();
     for (int n = 0; n < 10; n++) {
-        store.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
+        world.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
     }
-    var query = store.Query<Position, Velocity>();
+    var query = world.Query<Position, Velocity>();
     query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
         position.value += velocity.value;
     });
+}
+
+[Test]
+public static void HelloSystems()
+{
+    var store   = new EntityStore();
+    for (int n = 0; n < 10; n++) {
+        store.CreateEntity(new Position(n, 0, 0), new Velocity(), new Scale3());
+    }
+    var root = new SystemRoot(store) {
+        new MoveSystem(),
+        new PulseSystem(),
+    };
+    root.Update(default);
+}
+        
+class MoveSystem : QuerySystem<Position>
+{
+    protected override void OnUpdate() {
+        Query.ForEachEntity((ref Position position, Entity _) => {
+            position.x++;
+        });
+    }
+}
+
+class PulseSystem : QuerySystem<Scale3>
+{
+    protected override void OnUpdate() {
+        Query.ForEachEntity((ref Scale3 scale, Entity _) => {
+            scale.value = new Vector3(1, 1, 1) * (1 + 0.2f * (float)Math.Sin(4 * Tick.time));
+        });
+    }
 }
 
 [Test]
