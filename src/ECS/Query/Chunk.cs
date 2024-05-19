@@ -44,7 +44,7 @@ public readonly struct Chunk<T>
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/> - which can be assigned to Vector256{TTo}'s.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable safe conversion to a Vector256{TTo}.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#query-vectorization---simd">Example.</a>.
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     /// <remarks>
     /// By adding padding elements the returned <see cref="Span{TTo}"/> can be converted to Vector256's <br/>
@@ -73,7 +73,7 @@ public readonly struct Chunk<T>
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to Vector128{TTo}.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#query-vectorization---simd">Example.</a>.
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan128<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount128) & 0x7fff_fff0));
@@ -81,7 +81,7 @@ public readonly struct Chunk<T>
     /// <summary>
     /// Return the components as a <see cref="Span{TTo}"/> of type <typeparamref name="TTo"/>.<br/>
     /// The returned <see cref="Span{TTo}"/> contains padding elements on its tail to enable assignment to Vector512.<br/>
-    ///  See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#query-vectorization---simd">Example.</a>.
+    ///  See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd">Example.</a>.
     /// </summary>
     public              Span<TTo>  AsSpan512<TTo>() where TTo : struct
                         => MemoryMarshal.Cast<T, TTo>(new Span<T>(values, 0, (Length + ComponentType<T>.PadCount512) & 0x7fff_ffc0));

@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// An <see cref="Archetype"/> store entities with a specific set of <see cref="IComponent"/> and <see cref="ITag"/> types.<br/>
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#archetype">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#archetype">Example.</a>
 /// </summary>
 /// <remarks>
 /// E.g. all entities with a <see cref="Position"/> and <see cref="Rotation"/> component are store in the same archetype.<br/>

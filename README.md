@@ -23,7 +23,7 @@ The library implements all features a typical ECS provides.
   Subscribe to events in a world - *Supported by most ECS projects*.
 - JSON Serialization without any boilerplate.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
-  See screenshot at [Wiki ⋅ Examples](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-%E2%80%90-General).
+  See screenshot at [Wiki ⋅ Examples](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General).
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 - High-performance and compact ECS implementation - Friflo.Engine.ECS.dll size 220 kb
 - Does not use unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).
@@ -100,8 +100,8 @@ public static void HelloWorld()
 }
 ```
 In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
-See [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-%E2%80%90-General#enumerate-query-chunks)
-and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-%E2%80%90-Optimization#parallel-query-job).
+See [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#enumerate-query-chunks)
+and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job).
 
 <br/>
 
@@ -110,10 +110,10 @@ and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Exampl
 
 The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
 
-- [**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-%E2%80%90-General)  
+- [**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General)  
   Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.
 
-- [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-%E2%80%90-Optimization)  
+- [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
   Provide you techniques how to improve ECS performance by examples.
 
 - [**Features**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features)  

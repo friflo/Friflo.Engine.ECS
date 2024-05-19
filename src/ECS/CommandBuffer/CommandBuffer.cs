@@ -15,7 +15,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// A command buffer enables recording entity changes on <b>arbitrary</b> threads.<br/>
 /// These changes are executed by calling <see cref="Playback"/> on the <b>main</b> thread.<br/>
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#commandbuffer">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#commandbuffer">Example.</a>
 /// </summary>
 // Note: CommandBuffer is not a struct. Reasons:
 // - struct need to be passed as a ref parameter => easy to forget
@@ -136,7 +136,7 @@ public sealed class CommandBuffer
     
     /// <summary>
     /// Execute recorded entity changes. <see cref="Playback"/> must be called on the <b>main</b> thread.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#commandbuffer">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#commandbuffer">Example.</a>
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// When recording commands after calling <see cref="Playback"/>.<br/>

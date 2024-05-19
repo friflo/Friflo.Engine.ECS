@@ -21,7 +21,7 @@ public delegate void ForEachEntity<T1, T2, T3, T4>(ref T1 component1, ref T2 com
 
 /// <summary>
 /// A query instance use to retrieve the given component types.
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#query-entities">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#query-entities">Example.</a>
 /// </summary>
 public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     where T1 : struct, IComponent
@@ -73,7 +73,7 @@ public sealed class ArchetypeQuery<T1, T2, T3, T4> : ArchetypeQuery
     
     /// <summary>
     /// Return the <see cref="Chunk{T}"/>'s storing the components and entities of an <see cref="ArchetypeQuery{T1,T2,T3,T4}"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#enumerate-query-chunks">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#enumerate-query-chunks">Example.</a>
     /// </summary>
     public      QueryChunks    <T1, T2, T3, T4>  Chunks         => new (this);
     

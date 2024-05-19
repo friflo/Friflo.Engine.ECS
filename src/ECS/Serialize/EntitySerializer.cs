@@ -17,7 +17,7 @@ namespace Friflo.Engine.ECS.Serialize;
 
 /// <summary>
 /// Enables serialization of entities to / from JSON.
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#json-serialization">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#json-serialization">Example.</a>
 /// </summary>
 public sealed class EntitySerializer
 {
