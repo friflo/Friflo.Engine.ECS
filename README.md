@@ -126,6 +126,9 @@ Using systems instead have some significant advantages:
 
 - Systems have performance telemetry build-in to optimize those detected as bottleneck.
 
+- A single `SystemRoot` instance can operate on multiple worlds.
+
+
 ```csharp
 public static void HelloSystem()
 {
