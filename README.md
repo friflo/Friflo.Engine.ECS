@@ -119,7 +119,7 @@ Systems in ECS are typically queries.
 So you can still use the `world.Query<Position, Velocity>()` shown the "Hello World" example.  
 Using systems instead have some significant advantages:
 
-- The enable chaining multiple decoupled system implementations.
+- They enable chaining multiple decoupled system implementations.
 
 - Systems are organized in `SystemGroup`s. Each group already provide a
   [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
