@@ -79,7 +79,7 @@ public class ArchetypeQuery
     [Browse(Never)] private             int                 filterVersion;      //   4
     [Browse(Never)] private             int                 archetypeCount;     //   4  current number archetypes 
     [Browse(Never)] private             int                 lastArchetypeCount; //   4  number of archetypes the EntityStore had on last check
-    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  24  ordered struct indices of component types: T1,T2,T3,T4,T5
+    [Browse(Never)] internal readonly   SignatureIndexes    signatureIndexes;   //  16  ordered struct indices of component types: T1,T2,T3,T4,T5
     [Browse(Never)] private  readonly   ComponentTypes      components;         //  32
     [Browse(Never)] private  readonly   bool                singleArchetype;    //   1  if true it returns only the entities a specific archetype
     #endregion
