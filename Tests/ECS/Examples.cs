@@ -42,13 +42,14 @@ public static void HelloWorld()
 [Test]
 public static void HelloSystems()
 {
-    var store   = new EntityStore();
+    var world = new EntityStore();
     for (int n = 0; n < 10; n++) {
-        store.CreateEntity(new Position(n, 0, 0), new Velocity(), new Scale3());
+        world.CreateEntity(new Position(n, 0, 0), new Velocity(), new Scale3());
     }
-    var root = new SystemRoot(store) {
+    var root = new SystemRoot(world) {
         new MoveSystem(),
         new PulseSystem(),
+        // Hundreds of systems can be added. The execution order still remains clear.
     };
     root.Update(default);
 }
@@ -66,7 +67,7 @@ class PulseSystem : QuerySystem<Scale3>
 {
     protected override void OnUpdate() {
         Query.ForEachEntity((ref Scale3 scale, Entity _) => {
-            scale.value = new Vector3(1, 1, 1) * (1 + 0.2f * (float)Math.Sin(4 * Tick.time));
+            scale.value = Vector3.One * (1 + 0.2f * MathF.Sin(4 * Tick.time));
         });
     }
 }

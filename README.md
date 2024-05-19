@@ -112,6 +112,46 @@ and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Exampl
 
 <br/>
 
+# Systems example
+
+![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)
+
+```csharp
+public static void HelloSystems()
+{
+    var world = new EntityStore();
+    for (int n = 0; n < 10; n++) {
+        world.CreateEntity(new Position(n, 0, 0), new Velocity(), new Scale3());
+    }
+    var root = new SystemRoot(world) {
+        new MoveSystem(),
+        new PulseSystem(),
+        // Hundreds of systems can be added. The execution order still remains clear.
+    };
+    root.Update(default);
+}
+        
+class MoveSystem : QuerySystem<Position>
+{
+    protected override void OnUpdate() {
+        Query.ForEachEntity((ref Position position, Entity _) => {
+            position.x++;
+        });
+    }
+}
+
+class PulseSystem : QuerySystem<Scale3>
+{
+    protected override void OnUpdate() {
+        Query.ForEachEntity((ref Scale3 scale, Entity _) => {
+            scale.value = Vector3.One * (1 + 0.2f * MathF.Sin(4 * Tick.time));
+        });
+    }
+}
+```
+
+<br/>
+
 
 # Wiki
 
