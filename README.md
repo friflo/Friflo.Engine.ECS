@@ -191,7 +191,7 @@ So other threads can still keep running without competing for CPU resources.
 <br/>
 
 
-## License
+# License
 
 This project is licensed under LGPLv3.  
 
