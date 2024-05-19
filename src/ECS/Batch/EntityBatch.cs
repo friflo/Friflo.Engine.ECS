@@ -47,11 +47,11 @@ internal enum BatchOwner
 /// <b>Bulk operation</b><br/>
 /// To perform a batch on multiple entities you can use <see cref="QueryEntities.ApplyBatch"/> for <br/>
 /// - the entities of an <see cref="ArchetypeQuery"/> using <see cref="ArchetypeQuery.Entities"/>.
-///   See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entitybatch---query">Example.</a><br/>
+///   See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#entitybatch---query">Example.</a><br/>
 /// - all entities of an <see cref="EntityStore"/> using <see cref="EntityStore.Entities"/>.<br/>
 /// - or the entities of an <see cref="Archetype"/> using <see cref="Archetype.Entities"/>.<br/>
 /// To perform a batch on entities in an <see cref="EntityList"/> you can use <see cref="EntityList.ApplyBatch"/>.
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entitybatch---entitylist">Example.</a><br/>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#entitybatch---entitylist">Example.</a><br/>
 /// </remarks>
 public sealed class  EntityBatch
 {

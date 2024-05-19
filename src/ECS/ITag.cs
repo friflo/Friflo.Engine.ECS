@@ -8,7 +8,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Used to create entity <b>Tag</b>'s by declaring a struct without fields or properties extending <see cref="ITag"/>.<br/>
 /// <b>Note:</b> An <see cref="ITag"/> should be used to tag a group of multiple entities.<br/>
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#tag">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#tag">Example.</a>
 /// </summary>
 /// <remarks>
 /// In case you want to find a unique entity add the component <see cref="UniqueEntity"/> to an entity<br/>

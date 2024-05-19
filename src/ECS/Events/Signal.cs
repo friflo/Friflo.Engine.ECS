@@ -7,7 +7,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// <see cref="Signal{TEvent}"/>'s are used to emit custom events from an entity to custom <see cref="Signal{TEvent}"/> handlers.<br/>
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#signal">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#signal">Example.</a>
 /// </summary>
 /// <remarks>
 /// <see cref="Signal{TEvent}"/> handlers are added with <see cref="ECS.Entity.AddSignalHandler{TEvent}"/>.<br/>

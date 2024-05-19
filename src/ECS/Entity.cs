@@ -12,7 +12,7 @@ namespace Friflo.Engine.ECS;
 /// <summary>
 /// Represent an object in an <see cref="EntityStore"/> - e.g. a cube in a game scene.<br/>
 /// It is the <b>main API</b> to deal with entities in the engine.<br/>
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#entity">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#entity">Example.</a>
 /// </summary>
 /// <remarks>
 /// <para>
@@ -333,7 +333,7 @@ public readonly struct Entity : IEquatable<Entity>
     }
     /// <summary>
     /// Add a component of the given type <typeparamref name="T"/> to the entity.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#component">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#component">Example.</a>
     /// <br/>
     /// If the entity contains a component of the same type it is updated.</summary>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
@@ -345,7 +345,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>
     /// Add the given <paramref name="component"/> to the entity.<br/>
     /// If the entity contains a component of the same type it is updated.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#component">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#component">Example.</a>
     /// </summary>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
@@ -388,7 +388,7 @@ public readonly struct Entity : IEquatable<Entity>
     }
     /// <summary>Add the given <paramref name="script"/> to the entity.<br/>
     /// If the entity contains a script of the same <typeparamref name="TScript"/> <see cref="Type"/> it is replaced.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#script">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#script">Example.</a>
     /// </summary>
     /// <returns>
     /// The script with the passed <typeparamref name="TScript"/> <see cref="Type"/> previously added to the entity.<br/>
@@ -417,7 +417,7 @@ public readonly struct Entity : IEquatable<Entity>
     // Note: no query Tags methods like HasTag<T>() here by intention. Tags offers query access
     /// <summary>
     /// Add the given <typeparamref name="TTag"/> to the entity.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#tag">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#tag">Example.</a>
     /// </summary>
     public bool AddTag<TTag>()    where TTag : struct, ITag {
         int index = 0;
@@ -453,7 +453,7 @@ public readonly struct Entity : IEquatable<Entity>
 #region child / tree - methods
     /// <summary>
     /// Add the given <paramref name="entity"/> as a child to the entity.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#child-entities">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#child-entities">Example.</a>
     /// </summary>
     /// <remarks>
     /// Executes in O(1).<br/>If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
@@ -552,7 +552,7 @@ public readonly struct Entity : IEquatable<Entity>
 
     /// <summary>
     /// Returns an <see cref="EntityBatch"/> to add/remove components or tags to/from this entity using the batch.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#batch---entity">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#batch---entity">Example.</a>
     /// </summary>
     /// <remarks>
     /// The returned batch is used to add/removed components and tags.<br/>
@@ -577,35 +577,35 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>
     /// Add / remove an event handler for <see cref="TagsChanged"/> events triggered by:<br/>
     /// <see cref="AddTag{T}"/> <br/> <see cref="AddTags"/> <br/> <see cref="RemoveTag{T}"/> <br/> <see cref="RemoveTags"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#event">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#event">Example.</a>
     /// </summary>
     public event Action<TagsChanged>            OnTagsChanged           { add    => EntityStoreBase.AddEntityTagsChangedHandler     (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveEntityTagsChangedHandler  (store, Id, value);  }
     /// <summary>
     /// Add / remove an event handler for <see cref="ComponentChanged"/> events triggered by: <br/>
     /// <see cref="AddComponent{T}()"/> <br/> <see cref="RemoveComponent{T}"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#event">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#event">Example.</a>
     /// </summary>
     public event Action<ComponentChanged>       OnComponentChanged      { add    => EntityStoreBase.AddComponentChangedHandler      (store, Id, value);
                                                                           remove => EntityStoreBase.RemoveComponentChangedHandler   (store, Id, value);  }
     /// <summary>
     /// Add / remove an event handler for <see cref="ScriptChanged"/> events triggered by:<br/>
     /// <see cref="AddScript{T}"/> <br/> <see cref="RemoveScript{T}"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#event">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#event">Example.</a>
     /// </summary>
     public event Action<ScriptChanged>          OnScriptChanged         { add    => EntityStore.AddScriptChangedHandler             (store, Id, value);
                                                                           remove => EntityStore.RemoveScriptChangedHandler          (store, Id, value);  }
     /// <summary>
     /// Add / remove an event handler for <see cref="ChildEntitiesChanged"/> events triggered by:<br/>
     /// <see cref="AddChild"/> <br/> <see cref="InsertChild"/> <br/> <see cref="RemoveChild"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#event">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#event">Example.</a>
     /// </summary>
     public event Action<ChildEntitiesChanged>   OnChildEntitiesChanged  { add    => EntityStore.AddChildEntitiesChangedHandler      (store, Id, value);
                                                                           remove => EntityStore.RemoveChildEntitiesChangedHandler   (store, Id, value);  }
     
     /// <summary>
     /// Add the given <see cref="Signal{TEvent}"/> handler to the entity.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#signal">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#signal">Example.</a>
     /// </summary>
     /// <returns>The the signal handler added to the entity.<br/>
     /// Practical when passing a lambda that can be removed later with <see cref="RemoveSignalHandler{TEvent}"/>.</returns>
@@ -621,7 +621,7 @@ public readonly struct Entity : IEquatable<Entity>
 
     /// <summary>
     /// Emits the passed signal event to all signal handlers added with <see cref="AddSignalHandler{TEvent}"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#signal">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#signal">Example.</a>
     /// </summary>
     /// <remarks> It executes in ~10 nano seconds per signal handler. </remarks>
     public void  EmitSignal<TEvent> (in TEvent ev) where TEvent : struct {

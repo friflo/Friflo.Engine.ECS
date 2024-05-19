@@ -11,7 +11,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Enables <see cref="JobExecution.Parallel"/> query execution returning the specified components.
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#parallel-query-job">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#parallel-query-job">Example.</a>
 /// </summary>
 public sealed class QueryJob<T1> : QueryJob
     where T1 : struct, IComponent
@@ -51,7 +51,7 @@ public sealed class QueryJob<T1> : QueryJob
     }
 
     /// <summary>Execute the query.
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#parallel-query-job">Example.</a>.<br/>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-Optimization#parallel-query-job">Example.</a>.<br/>
     /// All chunks having at least <see cref="QueryJob.MinParallelChunkLength"/> * <see cref="ParallelJobRunner.ThreadCount"/>
     /// components are executed <see cref="JobExecution.Parallel"/>. 
     /// </summary>

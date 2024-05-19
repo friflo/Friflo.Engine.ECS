@@ -10,7 +10,7 @@ public partial class EntityStoreBase
 {
     /// <summary>
     /// Return the entity with a <see cref="UniqueEntity"/> component and its <see cref="UniqueEntity.uid"/> == <paramref name="uid"/>.<br/>
-    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#unique-entity">Example.</a>
+    /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-‐-General#unique-entity">Example.</a>
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// In case none or more than one <see cref="UniqueEntity"/> with the given <paramref name="uid"/> found.
