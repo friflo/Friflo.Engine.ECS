@@ -40,7 +40,7 @@ public static void HelloWorld()
 }
 
 [Test]
-public static void HelloSystems()
+public static void HelloSystem()
 {
     var world = new EntityStore();
     for (int n = 0; n < 10; n++) {
@@ -48,17 +48,16 @@ public static void HelloSystems()
     }
     var root = new SystemRoot(world) {
         new MoveSystem(),
-        new PulseSystem(),
         // Hundreds of systems can be added. The execution order still remains clear.
     };
     root.Update(default);
 }
         
-class MoveSystem : QuerySystem<Position>
+class MoveSystem : QuerySystem<Position, Velocity>
 {
     protected override void OnUpdate() {
-        Query.ForEachEntity((ref Position position, Entity _) => {
-            position.x++;
+        Query.ForEachEntity((ref Position position, ref Velocity velocity, Entity _) => {
+            position.value += velocity.value;
         });
     }
 }

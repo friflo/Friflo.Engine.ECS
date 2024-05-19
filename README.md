@@ -112,12 +112,12 @@ and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Exampl
 
 <br/>
 
-# Systems example
+# System example
 
 ![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)
 
 ```csharp
-public static void HelloSystems()
+public static void HelloSystem()
 {
     var world = new EntityStore();
     for (int n = 0; n < 10; n++) {
@@ -125,21 +125,25 @@ public static void HelloSystems()
     }
     var root = new SystemRoot(world) {
         new MoveSystem(),
-        new PulseSystem(),
         // Hundreds of systems can be added. The execution order still remains clear.
     };
     root.Update(default);
 }
         
-class MoveSystem : QuerySystem<Position>
+class MoveSystem : QuerySystem<Position, Velocity>
 {
     protected override void OnUpdate() {
-        Query.ForEachEntity((ref Position position, Entity _) => {
-            position.x++;
+        Query.ForEachEntity((ref Position position, ref Velocity velocity, Entity _) => {
+            position.value += velocity.value;
         });
     }
 }
+```
 
+A valuable strength of an ECS is establishing a clear code structure.  
+Adding the `PulseSystem` below to the `SystemRoot` is trivial.
+
+```csharp
 class PulseSystem : QuerySystem<Scale3>
 {
     protected override void OnUpdate() {
