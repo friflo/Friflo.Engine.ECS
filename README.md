@@ -187,3 +187,13 @@ So other threads can still keep running without competing for CPU resources.
 | SveltoECS                       |  |   162.80 μs |  0.688 μs |  0.643 μs |   162.45 μs |      - |         - |
 
 🔥 *library of this project*
+
+<br/>
+
+
+## License
+
+This project is licensed under LGPLv3.  
+
+Friflo.Engine.ECS  
+Copyright © 2024   Ullrich Praetz
