@@ -35,7 +35,7 @@ public partial class EntityStoreBase
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
-    public ArchetypeQuery<T1> Query<T1> (in Signature<T1> signature)
+    public ArchetypeQuery<T1> Query<T1> (Signature<T1> signature)
         where T1 : struct, IComponent
     {
         return new ArchetypeQuery<T1>(this, signature, null);
@@ -67,7 +67,7 @@ public partial class EntityStoreBase
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
-    public ArchetypeQuery<T1, T2> Query<T1, T2> (in Signature<T1, T2> signature)
+    public ArchetypeQuery<T1, T2> Query<T1, T2> (Signature<T1, T2> signature)
         where T1: struct, IComponent
         where T2: struct, IComponent
     {
@@ -102,7 +102,7 @@ public partial class EntityStoreBase
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
-    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (in Signature<T1, T2, T3> signature)
+    public ArchetypeQuery<T1, T2, T3> Query<T1, T2, T3> (Signature<T1, T2, T3> signature)
         where T1: struct, IComponent
         where T2: struct, IComponent
         where T3: struct, IComponent
@@ -140,7 +140,7 @@ public partial class EntityStoreBase
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
-    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (in Signature<T1, T2, T3, T4> signature)
+    public ArchetypeQuery<T1, T2, T3, T4> Query<T1, T2, T3, T4> (Signature<T1, T2, T3, T4> signature)
         where T1: struct, IComponent
         where T2: struct, IComponent
         where T3: struct, IComponent
@@ -180,7 +180,7 @@ public partial class EntityStoreBase
     /// <summary>
     /// Create a reusable <see cref="ArchetypeQuery"/> for given component <paramref name="signature"/>.
     /// </summary>
-    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (in Signature<T1, T2, T3, T4, T5> signature)
+    public ArchetypeQuery<T1, T2, T3, T4, T5> Query<T1, T2, T3, T4, T5> (Signature<T1, T2, T3, T4, T5> signature)
         where T1: struct, IComponent
         where T2: struct, IComponent
         where T3: struct, IComponent
