@@ -112,7 +112,7 @@ See:
 [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks),
 [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job) and
 [Query Vectorization - SIMD](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd).  
-All query optimizations are using the same `query` type but with different enumeration techniques.
+All query optimizations are using the same `query` but with different enumeration techniques.
 
 
 
@@ -125,7 +125,7 @@ Using systems instead have some significant advantages:
 
 - It enables chaining multiple decoupled system classes.
 
-- Each system is added to a `SystemGroup` - `SystemRoot` is also a `SystemGroup`.  
+- Each system is added to a `SystemGroup`. `SystemRoot` is also a `SystemGroup`.  
   Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
 
 - Systems have performance telemetry build-in. If enabled systems detected as bottleneck can be optimized.
@@ -143,7 +143,8 @@ public static void HelloSystem()
     }
     var root = new SystemRoot(world) {
         new MoveSystem(),
-        // Hundreds of systems can be added. The execution order still remains clear.
+    //  new PulseSystem(),
+    //  Multiple systems can be added. The execution order still remains clear.
     };
     root.Update(default);
 }
