@@ -254,20 +254,20 @@ public static void JsonSerialization()
 public static void EntityQueries()
 {
     var store   = new EntityStore();
-    store.CreateEntity(new EntityName("test"), Tags.Get<MyTag1>());
-    store.CreateEntity(Tags.Get<MyTag1>());
-    store.CreateEntity(Tags.Get<MyTag1, MyTag2>());
+    store.CreateEntity(new EntityName("entity-1"));
+    store.CreateEntity(new EntityName("entity-2"), Tags.Get<MyTag1>());
+    store.CreateEntity(new EntityName("entity-3"), Tags.Get<MyTag1, MyTag2>());
     
     // --- query components
     var queryNames = store.Query<EntityName>();
     queryNames.ForEachEntity((ref EntityName name, Entity entity) => {
-        // ...
+        // ... 3 matches
     });
     
     // --- query components with tags
     var queryNamesWithTags  = store.Query<EntityName>().AllTags(Tags.Get<MyTag1, MyTag2>());
     queryNamesWithTags.ForEachEntity((ref EntityName name, Entity entity) => {
-        // ...
+        // ... 1 match
     });
 }
 #endregion
