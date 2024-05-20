@@ -112,7 +112,7 @@ See:
 [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks),
 [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job) and
 [Query Vectorization - SIMD](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd).  
-All query optimizations are using the same `query` type but with different enumeration approaches.
+All query optimizations are using the same `query` type but with different enumeration techniques.
 
 
 
