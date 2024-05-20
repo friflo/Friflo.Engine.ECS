@@ -10,7 +10,7 @@ using NUnit.Framework;
 using System.Runtime.Intrinsics;
 #endif
 
-
+// ReSharper disable UnusedType.Local
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable UnusedVariable
@@ -22,9 +22,9 @@ namespace Tests.ECS {
 public static class Examples
 {
 
-// --------------------------------------------------------------------------------------
-// README.md: Examples
-// https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
+    
+#region README.md: Examples 
+// See: https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
 
 public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.19.0
 
@@ -72,10 +72,12 @@ class PulseSystem : QuerySystem<Scale3>
         });
     }
 }
+#endregion
 
-// --------------------------------------------------------------------------------------
-// Wiki: Examples - General
-// https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General
+
+
+#region Wiki: Examples - General
+// See: https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General
 [Test]
 public static void CreateStore()
 {
@@ -252,26 +254,28 @@ public static void JsonSerialization()
 public static void EntityQueries()
 {
     var store   = new EntityStore();
-    
-    var entity1 = store.CreateEntity(new EntityName("test"), Tags.Get<MyTag1>());
-    var entity2 = store.CreateEntity(Tags.Get<MyTag1>());
-    var entity3 = store.CreateEntity(Tags.Get<MyTag1, MyTag2>());
+    store.CreateEntity(new EntityName("test"), Tags.Get<MyTag1>());
+    store.CreateEntity(Tags.Get<MyTag1>());
+    store.CreateEntity(Tags.Get<MyTag1, MyTag2>());
     
     // --- query components
     var queryNames = store.Query<EntityName>();
-    Console.WriteLine($"EntityName:     {queryNames.Entities}");    // > EntityName:     Entity[1]
+    queryNames.ForEachEntity((ref EntityName name, Entity entity) => {
+        // ...
+    });
     
-    // --- query tags
-    var queryTag  = store.Query().AllTags(Tags.Get<MyTag1>());
-    Console.WriteLine($"MyTag1:         {queryTag.Entities}");      // > MyTag1:         Entity[3]
-    
-    var queryTags = store.Query().AllTags(Tags.Get<MyTag1, MyTag2>());
-    Console.WriteLine($"MyTag1, MyTag2: {queryTags.Entities}");     // > MyTag1, MyTag2: Entity[1]
+    // --- query components with tags
+    var queryNamesWithTags  = store.Query<EntityName>().AllTags(Tags.Get<MyTag1, MyTag2>());
+    queryNamesWithTags.ForEachEntity((ref EntityName name, Entity entity) => {
+        // ...
+    });
 }
+#endregion
 
-// --------------------------------------------------------------------------------------
-// Wiki: Examples - Optimization
-// https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization
+
+
+#region Wiki: Examples - Optimization
+// See: https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization
 
 [Test]
 public static void EnumerateQueryChunks()
@@ -458,7 +462,7 @@ public static void CommandBuffer()
     Console.WriteLine(entity2);                         // > id: 2  (detached)
     Console.WriteLine(entity3);                         // > id: 3  "new entity"  [EntityName]
 }
-
+#endregion
 
 }
 
