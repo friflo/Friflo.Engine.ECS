@@ -89,7 +89,7 @@ See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
 ## Hello World
 
-The hello world examples demonstrates the creation of some entities  
+The hello world examples demonstrates the creation of a world, some entities with components  
 and their movement using a simple `ForEachEntity()` call.  
 
 ```csharp
@@ -108,8 +108,12 @@ public static void HelloWorld()
 }
 ```
 In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
-See [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks)
-and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job).
+See:
+[Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks),
+[Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job) and
+[Query Vectorization - SIMD](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#query-vectorization---simd).  
+All query optimizations are using the same `query` type but with different enumeration approaches.
+
 
 
 ## Systems
