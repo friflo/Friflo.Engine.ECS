@@ -12,7 +12,6 @@ using System.Runtime.Intrinsics;
 namespace Tests.Examples {
 
 // See: https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
-
 public static class Readme
 {
 
