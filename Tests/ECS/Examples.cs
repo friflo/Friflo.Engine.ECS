@@ -22,7 +22,9 @@ namespace Tests.ECS {
 public static class Examples
 {
 
-
+// --------------------------------------------------------------------------------------
+// README.md: Examples
+// https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
 
 public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.19.0
 
@@ -71,6 +73,9 @@ class PulseSystem : QuerySystem<Scale3>
     }
 }
 
+// --------------------------------------------------------------------------------------
+// Wiki: Examples - General
+// https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General
 [Test]
 public static void CreateStore()
 {
@@ -263,6 +268,10 @@ public static void EntityQueries()
     var queryTags = store.Query().AllTags(Tags.Get<MyTag1, MyTag2>());
     Console.WriteLine($"MyTag1, MyTag2: {queryTags.Entities}");     // > MyTag1, MyTag2: Entity[1]
 }
+
+// --------------------------------------------------------------------------------------
+// Wiki: Examples - Optimization
+// https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization
 
 [Test]
 public static void EnumerateQueryChunks()

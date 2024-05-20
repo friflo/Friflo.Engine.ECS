@@ -85,8 +85,9 @@ See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
 <br/>
 
+# Examples
 
-# Hello World
+## Hello World
 
 The hello world examples demonstrates the creation of some entities  
 and their movement using a simple `ForEachEntity()` call.  
@@ -110,9 +111,8 @@ In case of moving (updating) thousands or millions of entities an optimized appr
 See [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#enumerate-query-chunks)
 and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job).
 
-<br/>
 
-# System example
+## Systems
 
 ![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)  
 Systems in ECS are typically queries.
