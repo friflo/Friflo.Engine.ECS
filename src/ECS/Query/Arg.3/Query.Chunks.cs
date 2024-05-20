@@ -14,7 +14,7 @@ namespace Friflo.Engine.ECS;
 
 /// <summary>
 /// Contains the components returned by a component query.
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#enumerate-query-chunks">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct Chunks<T1, T2, T3>
     where T1 : struct, IComponent
@@ -57,7 +57,7 @@ public readonly struct Chunks<T1, T2, T3>
 
 /// <summary>
 /// Contains the component chunks returned by a component query.
-/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#enumerate-query-chunks">Example.</a>
+/// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks">Example.</a>
 /// </summary>
 public readonly struct QueryChunks<T1, T2, T3>  : IEnumerable <Chunks<T1, T2, T3>>
     where T1 : struct, IComponent

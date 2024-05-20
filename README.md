@@ -108,7 +108,7 @@ public static void HelloWorld()
 }
 ```
 In case of moving (updating) thousands or millions of entities an optimized approach can be used.  
-See [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#enumerate-query-chunks)
+See [Enumerate Query Chunks](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#enumerate-query-chunks)
 and [Parallel Query Job](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#parallel-query-job).
 
 
