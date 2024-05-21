@@ -117,16 +117,18 @@ So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello
 
 Using Systems is optional but they have some significant advantages:
 
-- It enables chaining multiple decoupled system classes.
+- It enables chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes.
 
 - System fields can be used as parameters in `OnUpdate()`.
 
-- Each system is added to a `SystemGroup`. `SystemRoot` is also a `SystemGroup`.  
+- Each system is added to a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).
+  [SystemRoot](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemRoot.md)
+  is also a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
   Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
 
 - Systems have performance monitoring build-in. If enabled systems detected as bottleneck can be optimized.
 
-- Multiple worlds can be added to a single `SystemRoot` instance.  
+- Multiple worlds can be added to a single  [SystemRoot](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemRoot.md) instance.  
   `root.Update()` will execute every system on all worlds.
 
 
