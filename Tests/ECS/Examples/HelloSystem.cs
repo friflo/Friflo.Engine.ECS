@@ -12,10 +12,10 @@ using NUnit.Framework;
 namespace Tests.Examples {
 
 // See: https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
-public static class Readme
+public static class HelloSystemExample
 {
 
-public struct Velocity : IComponent { public Vector3 value; } // requires >= 1.19.0
+public struct Velocity : IComponent { public Vector3 value; }
 
 [Test]
 public static void HelloWorld()
