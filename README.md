@@ -32,8 +32,18 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 ```
 dotnet add package Friflo.Engine.ECS
 ```
-<br/>
 
+
+# Contents
+
+* [Demos](#demos)
+* [Examples](#examples)
+  - [Hello World](#hello-world)
+  - [Systems](#systems)
+* [Wiki](#wiki)
+* [Benchmarks](#ecs-benchmarks)
+
+<br/>
 
 
 # [![Demos](https://img.shields.io/badge/Demos-blueviolet?style=for-the-badge)](https://github.com/friflo/Friflo.Engine.ECS-Demos)  
