@@ -15,18 +15,21 @@ Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benc
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
-The library implements all features a typical ECS provides.
-
-*Unique library features*
-- Build up a hierarchy of entities with parent / child relationship - optional.
+*Feature highlights*
+- Simple API.
 - Subscribe to events/signals for specific entities - *Unique feature*.  
   Subscribe to events in a world - *Supported by most ECS projects*.
+- Build up a hierarchy of entities with parent / child relationship - optional.
 - JSON Serialization without any boilerplate.
 - Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
   See screenshot at [Wiki ⋅ Examples](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General).
-- SIMD Support - optional. Multi thread capable and remainder loop free.
 - High-performance and compact ECS implementation - Friflo.Engine.ECS.dll size 220 kb
+- SIMD Support - optional. Multi thread capable and remainder loop free.
+- Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8  
+  WASM / WebAssembly, Unity (Mono & AOT/IL2CPP), Godot and MonoGame.
 - Does not use unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).
+
+Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
 
 Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use the dotnet CLI.
 ```
