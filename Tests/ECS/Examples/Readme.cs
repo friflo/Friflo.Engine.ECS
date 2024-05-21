@@ -4,10 +4,10 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 
-#if !UNITY_5_3_OR_NEWER
-using System.Runtime.Intrinsics;
-#endif
-
+// ReSharper disable UnusedType.Local
+// ReSharper disable ArrangeTypeMemberModifiers
+// ReSharper disable FieldCanBeMadeReadOnly.Local
+// ReSharper disable UnusedParameter.Local
 // ReSharper disable CheckNamespace
 namespace Tests.Examples {
 
@@ -43,11 +43,11 @@ public static void HelloSystem()
     };
     root.Update(default);
 }
-        
+
 class MoveSystem : QuerySystem<Position, Velocity>
 {
     protected override void OnUpdate() {
-        Query.ForEachEntity((ref Position position, ref Velocity velocity, Entity _) => {
+        Query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
             position.value += velocity.value;
         });
     }
@@ -55,9 +55,11 @@ class MoveSystem : QuerySystem<Position, Velocity>
 
 class PulseSystem : QuerySystem<Scale3>
 {
+    float frequency = 4f;
+    
     protected override void OnUpdate() {
-        Query.ForEachEntity((ref Scale3 scale, Entity _) => {
-            scale.value = Vector3.One * (1 + 0.2f * MathF.Sin(4 * Tick.time));
+        Query.ForEachEntity((ref Scale3 scale, Entity entity) => {
+            scale.value = Vector3.One * (1 + 0.2f * MathF.Sin(frequency * Tick.time));
         });
     }
 }

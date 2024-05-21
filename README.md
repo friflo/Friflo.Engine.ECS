@@ -119,11 +119,14 @@ All query optimizations are using the same `query` but with different enumeratio
 ## Systems
 
 ![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)  
-Systems in ECS are typically queries.
+Systems in ECS are typically queries.  
 So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello World" example.  
-Using systems instead have some significant advantages:
+
+Using systems is optional but they have some significant advantages:
 
 - It enables chaining multiple decoupled system classes.
+
+- System fields can be used as parameters in `OnUpdate()`.
 
 - Each system is added to a `SystemGroup`. `SystemRoot` is also a `SystemGroup`.  
   Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
@@ -144,7 +147,7 @@ public static void HelloSystem()
     var root = new SystemRoot(world) {
         new MoveSystem(),
     //  new PulseSystem(),
-    //  Multiple systems can be added. The execution order still remains clear.
+    //  new ... multiple systems can be added. The execution order still remains clear.
     };
     root.Update(default);
 }
@@ -152,22 +155,24 @@ public static void HelloSystem()
 class MoveSystem : QuerySystem<Position, Velocity>
 {
     protected override void OnUpdate() {
-        Query.ForEachEntity((ref Position position, ref Velocity velocity, Entity _) => {
+        Query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
             position.value += velocity.value;
         });
     }
 }
 ```
 
-A valuable strength of an ECS is establishing a clear code structure.  
+A valuable strength of an ECS is establishing a clear and decoupled code structure.  
 Adding the `PulseSystem` below to the `SystemRoot` above is trivial.
 
 ```csharp
 class PulseSystem : QuerySystem<Scale3>
 {
+    float frequency = 4f;
+    
     protected override void OnUpdate() {
-        Query.ForEachEntity((ref Scale3 scale, Entity _) => {
-            scale.value = Vector3.One * (1 + 0.2f * MathF.Sin(4 * Tick.time));
+        Query.ForEachEntity((ref Scale3 scale, Entity entity) => {
+            scale.value = Vector3.One * (1 + 0.2f * MathF.Sin(frequency * Tick.time));
         });
     }
 }
