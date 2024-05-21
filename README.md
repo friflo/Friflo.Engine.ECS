@@ -109,7 +109,8 @@ All query optimizations are using the same `query` but with different enumeratio
 
 ## Systems
 
-![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)
+Systems are new in **Friflo.Engine.ECS v2**  
+[![nuget](https://img.shields.io/nuget/vpre/Friflo.Engine.ECS?logo=nuget&logoColor=white&color=orange)](https://www.nuget.org/packages/Friflo.Engine.ECS/absoluteLatest)
 
 Systems in ECS are typically queries.  
 So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello World" example.  
