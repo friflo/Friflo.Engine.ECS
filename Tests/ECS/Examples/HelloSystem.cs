@@ -18,19 +18,6 @@ public static class HelloSystemExample
 public struct Velocity : IComponent { public Vector3 value; }
 
 [Test]
-public static void HelloWorld()
-{
-    var world = new EntityStore();
-    for (int n = 0; n < 10; n++) {
-        world.CreateEntity(new Position(n, 0, 0), new Velocity{ value = new Vector3(0, n, 0)});
-    }
-    var query = world.Query<Position, Velocity>();
-    query.ForEachEntity((ref Position position, ref Velocity velocity, Entity entity) => {
-        position.value += velocity.value;
-    });
-}
-
-[Test]
 public static void HelloSystem()
 {
     var world = new EntityStore();
@@ -39,7 +26,8 @@ public static void HelloSystem()
     }
     var root = new SystemRoot(world) {
         new MoveSystem(),
-        // Hundreds of systems can be added. The execution order still remains clear.
+    //  new PulseSystem(),
+    //  new ... multiple systems can be added. The execution order still remains clear.
     };
     root.Update(default);
 }

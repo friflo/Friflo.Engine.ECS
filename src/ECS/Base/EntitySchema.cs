@@ -104,22 +104,43 @@ public sealed class EntitySchema
         foreach (var componentType in componentList) {
             var key = componentType.ComponentKey;
             if (key != null) {
-                schemaTypeByKey.Add (key,                           componentType); // SHOULD_USE_ADD
+                if (!schemaTypeByKey.TryAdd(key, componentType)) {
+                    DuplicateComponentKey(componentType);
+                }
             }
             componentTypeByType.Add (componentType.Type,            componentType);
             components              [componentType.StructIndex] =   componentType;
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];
         foreach (var scriptType in scriptList) {
-            schemaTypeByKey. Add    (scriptType.ComponentKey,       scriptType);    // SHOULD_USE_ADD
+            var key = scriptType.ComponentKey;
+            if (!schemaTypeByKey.   TryAdd(key,                     scriptType)) {
+                DuplicateComponentKey(scriptType);
+            } 
             scriptTypeByType.Add    (scriptType.Type,               scriptType);
             scripts                 [scriptType.ScriptIndex] =      scriptType;
         }
         foreach (var tagType in tagList) {
-            tagTypeByName.Add       (tagType.TagName,               tagType);       // SHOULD_USE_ADD
+            var name = tagType.TagName;
+            if (!schemaTypeByKey.   TryAdd(name,                     tagType)) {
+                DuplicateTagName(tagType);
+            }
+            tagTypeByName.Add       (tagType.TagName,               tagType);
             tagTypeByType.Add       (tagType.Type,                  tagType);
             tags                    [tagType.TagIndex] =            tagType;
         }
+    }
+    
+    private static void DuplicateComponentKey(SchemaType schemaType)
+    {
+        var msg = $"warning: Duplicate component name: '{schemaType.ComponentKey}' for: {schemaType.Type.FullName}. Add unique [ComponentKey()] attribute.";
+        Console.WriteLine(msg);
+    }
+    
+    private static void DuplicateTagName(TagType tagType)
+    {
+        var msg = $"warning: Duplicate tag name: '{tagType.TagName}' for: {tagType.Type.FullName}. Add unique [TagName()] attribute.";
+        Console.WriteLine(msg);
     }
     
     /// <summary>
