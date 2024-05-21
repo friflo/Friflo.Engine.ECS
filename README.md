@@ -124,7 +124,7 @@ Using Systems is optional but they have some significant advantages:
 - Each system is added to a `SystemGroup`. `SystemRoot` is also a `SystemGroup`.  
   Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
 
-- Systems have performance telemetry build-in. If enabled systems detected as bottleneck can be optimized.
+- Systems have performance monitoring build-in. If enabled systems detected as bottleneck can be optimized.
 
 - Multiple worlds can be added to a single `SystemRoot` instance.  
   `root.Update()` will execute every system on all worlds.
