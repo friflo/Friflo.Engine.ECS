@@ -66,6 +66,15 @@ See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
 # Examples
 
+This section contains two typical use cases when using an ECS.  
+More examples are in the GitHub Wiki.
+
+[**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General)  
+Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and how to use them.
+
+[**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
+Provide techniques how to improve ECS performance.
+
 ## Hello World
 
 The hello world examples demonstrates the creation of a world, some entities with components  
@@ -97,11 +106,12 @@ All query optimizations are using the same `query` but with different enumeratio
 
 ## Systems
 
-![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)  
+![Preview v2.0](https://img.shields.io/badge/Preview%20v2.0-orange?style=for-the-badge)
+
 Systems in ECS are typically queries.  
 So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello World" example.  
 
-Using systems is optional but they have some significant advantages:
+Using Systems is optional but they have some significant advantages:
 
 - It enables chaining multiple decoupled system classes.
 
@@ -168,13 +178,16 @@ The **GitHub Wiki** provide you detailed information about the ECS and illustrat
   Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.
 
 - [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
-  Provide you techniques how to improve ECS performance by examples.
+  Provide you techniques how to improve ECS performance.
 
 - [**Features**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features)  
   Integration possibilities, a complete feature list and performance characteristics 🔥.
 
 - [**Library**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library)  
   List supported platforms, properties of the assembly dll and build statistics.
+
+- [**Extensions**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Extensions)  
+  Projects extending Friflo.Engine.ECS with additional features.
 
 - [**Release Notes**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Release-Notes)  
   List of changes of every release available on nuget.
