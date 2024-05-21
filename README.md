@@ -180,14 +180,14 @@ The **GitHub Wiki** provide you detailed information about the ECS and illustrat
 - [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
   Provide you techniques how to improve ECS performance.
 
+- [**Extensions**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Extensions)  
+  Projects extending Friflo.Engine.ECS with additional features.
+  
 - [**Features**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features)  
   Integration possibilities, a complete feature list and performance characteristics 🔥.
 
 - [**Library**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library)  
   List supported platforms, properties of the assembly dll and build statistics.
-
-- [**Extensions**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Extensions)  
-  Projects extending Friflo.Engine.ECS with additional features.
 
 - [**Release Notes**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Release-Notes)  
   List of changes of every release available on nuget.
