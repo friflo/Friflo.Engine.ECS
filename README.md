@@ -17,17 +17,13 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipe
 
 *Feature highlights*
 - Simple API.
-- Subscribe to events/signals for specific entities - *Unique feature*.  
-  Subscribe to events in a world - *Supported by most ECS projects*.
-- Build up a hierarchy of entities with parent / child relationship - optional.
-- JSON Serialization without any boilerplate.
-- Enable exploring entities, query results, parent/child relationships, components & tags in the debugger.  
-  See screenshot at [Wiki ⋅ Examples](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General).
-- High-performance and compact ECS implementation - Friflo.Engine.ECS.dll size 220 kb
+- High-performance 🔥 and compact ECS implementation - Friflo.Engine.ECS.dll size 250 KB
+- Subscribe events of specific or all entities.
+- JSON Serialization.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8  
   WASM / WebAssembly, Unity (Mono & AOT/IL2CPP), Godot and MonoGame.
-- Does not use unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).
+- No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).
 
 Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
 
