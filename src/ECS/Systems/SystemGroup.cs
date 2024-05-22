@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -88,8 +89,8 @@ public class SystemGroup : BaseSystem, IEnumerable
     public void Add(BaseSystem system)
     {
         if (system == null)             throw new ArgumentNullException(nameof(system));
-        if (system is SystemRoot)       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
-        if (system.ParentGroup != null) throw new ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
+        if (system is SystemRoot)       throw ExceptionUtils.ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
+        if (system.ParentGroup != null) throw ExceptionUtils.ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
         childSystems.Add(system);
         system.SetParentAndRoot(this);
         // Send event. See: SEND_EVENT notes
@@ -103,9 +104,9 @@ public class SystemGroup : BaseSystem, IEnumerable
     public void Insert(int index, BaseSystem system)
     {
         if (system == null)                             throw new ArgumentNullException(nameof(system));
-        if (system is SystemRoot)                       throw new ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
-        if (system.ParentGroup != null)                 throw new ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
-        if (index < -1 || index > childSystems.Count)   throw new ArgumentException($"invalid index: {index}");
+        if (system is SystemRoot)                       throw ExceptionUtils.ArgumentException($"{nameof(SystemRoot)} must not be a child system", nameof(system));
+        if (system.ParentGroup != null)                 throw ExceptionUtils.ArgumentException($"system already added to Group '{system.ParentGroup.Name}'", nameof(system));
+        if (index < -1 || index > childSystems.Count)   throw ExceptionUtils.ArgumentException($"invalid index: {index}", nameof(index));
         if (index == -1) {
             childSystems.Add(system);
         } else {
@@ -122,7 +123,7 @@ public class SystemGroup : BaseSystem, IEnumerable
     public void Remove(BaseSystem system)
     {
         if (system == null)             throw new ArgumentNullException(nameof(system));
-        if (system.ParentGroup != this) throw new ArgumentException($"system not child of Group '{Name}'", nameof(system));
+        if (system.ParentGroup != this) throw ExceptionUtils.ArgumentException($"system not child of Group '{Name}'", nameof(system));
         var oldRoot = system.SystemRoot;
         var index   = childSystems.IndexOf(system); // index never -1
         childSystems.RemoveAt(index);

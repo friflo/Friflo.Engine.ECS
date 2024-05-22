@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox.Mapper;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -150,26 +151,21 @@ public abstract partial class EntityStoreBase
     
     
 #region exceptions
-    private static ArgumentException ArgumentException(string message, string parameterName) {
-        // required as Unity format exception message different than CLR
-        return new ArgumentException($"{message} (Parameter '{parameterName}')");
-    }
-
     internal static Exception   InvalidStoreException(string parameterName) {
-        return ArgumentException("entity is owned by a different store", parameterName);
+        return ExceptionUtils.ArgumentException("entity is owned by a different store", parameterName);
     }
         
     internal static Exception   InvalidEntityIdException(int id, string parameterName) {
-        return ArgumentException($"invalid entity id <= 0. was: {id}", parameterName);
+        return ExceptionUtils.ArgumentException($"invalid entity id <= 0. was: {id}", parameterName);
     }
         
     internal static Exception   IdAlreadyInUseException(int id, string parameterName) {
-        return ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
+        return ExceptionUtils.ArgumentException($"id already in use in EntityStore. id: {id}", parameterName);
     }
     
     internal static Exception   PidOutOfRangeException(long pid, string parameterName) {
         var msg = $"pid must be in range [1, 2147483647] when using {nameof(PidType)}.{nameof(PidType.UsePidAsId)}. was: {pid}";
-        return ArgumentException(msg, parameterName);
+        return ExceptionUtils.ArgumentException(msg, parameterName);
     }
     
     internal static Exception   AddEntityAsChildToItselfException(int id) {

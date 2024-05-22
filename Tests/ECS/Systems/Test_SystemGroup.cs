@@ -150,12 +150,12 @@ namespace Tests.ECS.Systems
             Exception e = Throws<ArgumentException>(() => {
                 group.Insert(-2, new TestSystem1());
             });
-            AreEqual("invalid index: -2", e!.Message);
+            AreEqual("invalid index: -2 (Parameter 'index')", e!.Message);
             
             e = Throws<ArgumentException>(() => {
                 group.Insert(1, new TestSystem1());
             });
-            AreEqual("invalid index: 1", e!.Message);
+            AreEqual("invalid index: 1 (Parameter 'index')", e!.Message);
 
             e = Throws<ArgumentException>(() => {
                 group.Insert(0, new SystemRoot("Systems"));
