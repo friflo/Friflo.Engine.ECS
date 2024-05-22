@@ -87,18 +87,18 @@ namespace Tests.ECS.Systems
             var e = Throws<ArgumentNullException>(() => {
                 root.GetMatchingSystems(entity.Archetype, null, true);
             });
-            AreEqual("Value cannot be null. (Parameter 'target')", e!.Message);
+            AreEqual("target", e!.ParamName);
             
             e = Throws<ArgumentNullException>(() => {
                 root.GetMatchingSystems(null, matches, true);
             });
-            AreEqual("Value cannot be null. (Parameter 'archetype')", e!.Message);
+            AreEqual("archetype", e!.ParamName);
             
             e = Throws<ArgumentNullException>(() => {
                 root = null;
                 root.GetMatchingSystems(entity.Archetype, matches, true);
             });
-            AreEqual("Value cannot be null. (Parameter 'systemGroup')", e!.Message);
+            AreEqual("systemGroup", e!.ParamName);
         }
     }
 }

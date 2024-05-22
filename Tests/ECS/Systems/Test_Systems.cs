@@ -52,7 +52,7 @@ namespace Tests.ECS.Systems
                 });
                 var inner = e!.InnerException;
                 IsTrue(inner is ArgumentException);
-                AreEqual("Type 'Friflo.Engine.ECS.Systems.SystemRoot' does not have a default constructor (Parameter 'type')", inner.Message);
+                StringAssert.StartsWith("Type 'Friflo.Engine.ECS.Systems.SystemRoot' does not have a default constructor", inner.Message);
             }
         }
     }
