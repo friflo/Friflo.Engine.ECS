@@ -228,7 +228,7 @@ public sealed class CreateEntityBatch
     {
         if (isReturned) throw BatchAlreadyReturnedException();
         archetype = null;
-        tagsCreate.bitSet.SetBit(TagInfo<T>.TagIndex);
+        tagsCreate.bitSet.SetBit(TagInfo<T>.Index);
         return this;
     }
     

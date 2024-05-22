@@ -33,6 +33,6 @@ internal static class TagInfo<T>
 {
     // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_Tag_Index()
     // readonly improves performance significant
-    internal static readonly  int     TagIndex = SchemaTypeUtils.GetTagIndex(typeof(T));
+    internal static readonly  int     Index = SchemaTypeUtils.GetTagIndex(typeof(T));
 }
 

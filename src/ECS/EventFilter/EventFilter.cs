@@ -68,14 +68,14 @@ public sealed class EventFilter
     public void TagAdded<T>()
         where T : struct, ITag
     {
-        AddFilter(ref tagFilters, TagInfo<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Added);
+        AddFilter(ref tagFilters, TagInfo<T>.Index, SchemaTypeKind.Tag, EntityEventAction.Added);
     }
     
     /// <summary> Enable filtering remove tag events of the given <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
     public void TagRemoved<T>()
         where T : struct, ITag
     {
-        AddFilter(ref tagFilters, TagInfo<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Removed);
+        AddFilter(ref tagFilters, TagInfo<T>.Index, SchemaTypeKind.Tag, EntityEventAction.Removed);
     }
     
     private static void AddFilter(ref EventFilters filters, int typeIndex, SchemaTypeKind kind, EntityEventAction action)

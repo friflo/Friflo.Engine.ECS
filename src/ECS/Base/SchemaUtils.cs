@@ -161,7 +161,7 @@ internal static class SchemaUtils
     }
     
     /// <remarks>
-    /// <see cref="TagInfo{T}.TagIndex"/> must be assigned here.<br/>
+    /// <see cref="TagInfo{T}.Index"/> must be assigned here.<br/>
     /// Unity initializes static fields of generic types already when creating a instance of that type.  
     /// </remarks>
     internal static TagType CreateTagType<T>(int tagIndex)

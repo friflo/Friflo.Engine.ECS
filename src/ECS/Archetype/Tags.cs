@@ -53,7 +53,7 @@ public struct Tags : IEnumerable<TagType>
     public readonly bool    Has<T1> ()
         where T1 : struct, ITag
     {
-        return bitSet.Has(TagInfo<T1>.TagIndex);
+        return bitSet.Has(TagInfo<T1>.Index);
     }
 
     /// <summary>
@@ -64,8 +64,8 @@ public struct Tags : IEnumerable<TagType>
         where T1 : struct, ITag
         where T2 : struct, ITag
     {
-        return bitSet.Has(TagInfo<T1>.TagIndex) &&
-               bitSet.Has(TagInfo<T2>.TagIndex);
+        return bitSet.Has(TagInfo<T1>.Index) &&
+               bitSet.Has(TagInfo<T2>.Index);
     }
 
     /// <summary>
@@ -77,9 +77,9 @@ public struct Tags : IEnumerable<TagType>
         where T2 : struct, ITag
         where T3 : struct, ITag
     {
-        return bitSet.Has(TagInfo<T1>.TagIndex) &&
-               bitSet.Has(TagInfo<T2>.TagIndex) &&
-               bitSet.Has(TagInfo<T3>.TagIndex);
+        return bitSet.Has(TagInfo<T1>.Index) &&
+               bitSet.Has(TagInfo<T2>.Index) &&
+               bitSet.Has(TagInfo<T3>.Index);
     }
     
     /// <summary>
@@ -103,7 +103,7 @@ public struct Tags : IEnumerable<TagType>
     public void Add<T>()
         where T : struct, ITag
     {
-        bitSet.SetBit(TagInfo<T>.TagIndex);
+        bitSet.SetBit(TagInfo<T>.Index);
     }
     
     /// <summary> Add the passed <paramref name="tags"/>.</summary>
@@ -116,7 +116,7 @@ public struct Tags : IEnumerable<TagType>
     public void Remove<T>()
         where T : struct, ITag
     {
-        bitSet.ClearBit(TagInfo<T>.TagIndex);
+        bitSet.ClearBit(TagInfo<T>.Index);
     }
     
     /// <summary> Removes the passed <paramref name="tags"/>.</summary>
@@ -133,7 +133,7 @@ public struct Tags : IEnumerable<TagType>
         where T : struct, ITag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagInfo<T>.TagIndex);
+        tags.bitSet.SetBit(TagInfo<T>.Index);
         return tags;
     }
     
@@ -146,8 +146,8 @@ public struct Tags : IEnumerable<TagType>
         where T2 : struct, ITag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagInfo<T1>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T2>.TagIndex);
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
         return tags;
     }
     
@@ -161,9 +161,9 @@ public struct Tags : IEnumerable<TagType>
         where T3 : struct, ITag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagInfo<T1>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T2>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T3>.TagIndex);
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
         return tags;
     }
     
@@ -178,10 +178,10 @@ public struct Tags : IEnumerable<TagType>
         where T4 : struct, ITag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagInfo<T1>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T2>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T3>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T4>.TagIndex);
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
         return tags;
     }
     
@@ -198,11 +198,11 @@ public struct Tags : IEnumerable<TagType>
         where T5 : struct, ITag
     {
         var tags = new Tags();
-        tags.bitSet.SetBit(TagInfo<T1>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T2>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T3>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T4>.TagIndex);
-        tags.bitSet.SetBit(TagInfo<T5>.TagIndex);
+        tags.bitSet.SetBit(TagInfo<T1>.Index);
+        tags.bitSet.SetBit(TagInfo<T2>.Index);
+        tags.bitSet.SetBit(TagInfo<T3>.Index);
+        tags.bitSet.SetBit(TagInfo<T4>.Index);
+        tags.bitSet.SetBit(TagInfo<T5>.Index);
         return tags;
     }
     

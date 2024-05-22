@@ -29,12 +29,12 @@ public static class Test_SchemaType
     }
 
     /// <summary>
-    /// Ensure initialization of <see cref="TagInfo{T}.TagIndex"/>.
+    /// Ensure initialization of <see cref="TagInfo{T}.Index"/>.
     /// </summary>
     [Test]
     public static void Test_SchemaType_Tag_Index()
     {
-        var tagIndex    = TagInfo<TestTag>.TagIndex;
+        var tagIndex    = TagInfo<TestTag>.Index;
         var schema      = EntityStore.GetEntitySchema();
         var tagType     = schema.tags[tagIndex];
         

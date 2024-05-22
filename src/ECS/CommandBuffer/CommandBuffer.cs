@@ -441,7 +441,7 @@ public sealed class CommandBuffer
     public void AddTag<T>(int entityId)
         where T : struct, ITag
     {
-        ChangeTag(entityId, TagInfo<T>.TagIndex, TagChange.Add);
+        ChangeTag(entityId, TagInfo<T>.Index, TagChange.Add);
     }
     
     /// <summary>
@@ -460,7 +460,7 @@ public sealed class CommandBuffer
     public void RemoveTag<T>(int entityId)
         where T : struct, ITag
     {
-        ChangeTag(entityId, TagInfo<T>.TagIndex, TagChange.Remove);
+        ChangeTag(entityId, TagInfo<T>.Index, TagChange.Remove);
     }
     
     /// <summary>

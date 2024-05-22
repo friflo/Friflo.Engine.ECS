@@ -245,7 +245,7 @@ public sealed class  EntityBatch
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
         if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
-        var tagIndex = TagInfo<T>.TagIndex;
+        var tagIndex = TagInfo<T>.Index;
         tagsAdd.    bitSet.SetBit   (tagIndex);
         tagsRemove. bitSet.ClearBit (tagIndex);
         return this;
@@ -268,7 +268,7 @@ public sealed class  EntityBatch
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
         if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
-        var tagIndex = TagInfo<T>.TagIndex;
+        var tagIndex = TagInfo<T>.Index;
         tagsRemove. bitSet.SetBit   (tagIndex);
         tagsAdd.    bitSet.ClearBit (tagIndex);
         return this;
