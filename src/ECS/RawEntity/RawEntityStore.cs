@@ -134,7 +134,7 @@ public sealed class RawEntityStore : EntityStoreBase
         where T : struct, IComponent
     {
         ref var entity  = ref entities[id];
-        var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructHeap<T>.StructIndex];
+        var heap        = (StructHeap<T>)archs[entity.archIndex].heapMap[StructInfo<T>.Index];
         return ref heap.components[entity.compIndex];
     }
     
@@ -143,7 +143,7 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        var structIndex     = StructHeap<T>.StructIndex;
+        var structIndex     = StructInfo<T>.Index;
         return AddComponent(id, structIndex, ref archetype, ref entity.compIndex, ref entity.archIndex, component);
     }
     
@@ -152,7 +152,7 @@ public sealed class RawEntityStore : EntityStoreBase
     {
         ref var entity      = ref entities[id];
         var archetype       = archs[entity.archIndex];
-        return RemoveComponent<T>(id, ref archetype, ref entity.compIndex, ref entity.archIndex, StructHeap<T>.StructIndex);
+        return RemoveComponent<T>(id, ref archetype, ref entity.compIndex, ref entity.archIndex, StructInfo<T>.Index);
     }
     #endregion
     

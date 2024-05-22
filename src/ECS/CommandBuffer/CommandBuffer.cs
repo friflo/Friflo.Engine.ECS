@@ -411,7 +411,7 @@ public sealed class CommandBuffer
         if (intern.returnedBuffer) {
             throw CannotReuseCommandBuffer();   
         }
-        var structIndex = StructHeap<T>.StructIndex;
+        var structIndex = StructInfo<T>.Index;
         intern.hasCommands      = true;
         intern.changedComponentTypes.bitSet.SetBit(structIndex);
         var componentCommands   = intern.componentCommandTypes[structIndex];
@@ -441,7 +441,7 @@ public sealed class CommandBuffer
     public void AddTag<T>(int entityId)
         where T : struct, ITag
     {
-        ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Add);
+        ChangeTag(entityId, TagInfo<T>.TagIndex, TagChange.Add);
     }
     
     /// <summary>
@@ -460,7 +460,7 @@ public sealed class CommandBuffer
     public void RemoveTag<T>(int entityId)
         where T : struct, ITag
     {
-        ChangeTag(entityId, TagType<T>.TagIndex, TagChange.Remove);
+        ChangeTag(entityId, TagInfo<T>.TagIndex, TagChange.Remove);
     }
     
     /// <summary>
@@ -498,7 +498,7 @@ public sealed class CommandBuffer
     public void AddScript<T>(int entityId, T script)
         where T : Script, new()
     {
-        ChangeScript(entityId, script, ScriptType<T>.Index, ScriptChangedAction.Add);
+        ChangeScript(entityId, script, ScriptInfo<T>.Index, ScriptChangedAction.Add);
     }
         
     /// <summary>
@@ -507,7 +507,7 @@ public sealed class CommandBuffer
     public void RemoveScript<T>(int entityId)
         where T : Script, new()
     {
-        ChangeScript(entityId, null, ScriptType<T>.Index, ScriptChangedAction.Remove);
+        ChangeScript(entityId, null, ScriptInfo<T>.Index, ScriptChangedAction.Remove);
     }
     
     private void ChangeScript(int entityId, Script script, int scriptIndex, ScriptChangedAction action)

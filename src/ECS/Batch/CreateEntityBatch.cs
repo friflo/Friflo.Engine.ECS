@@ -178,7 +178,7 @@ public sealed class CreateEntityBatch
     {
         if (isReturned) throw BatchAlreadyReturnedException();
         archetype       = null;
-        var structIndex = StructHeap<T>.StructIndex;
+        var structIndex = StructInfo<T>.Index;
         componentsCreate.bitSet.SetBit(structIndex);
         var batchComponent = batchComponents[structIndex] ??= CreateBatchComponent(structIndex);
         ((BatchComponent<T>)batchComponent).value = component;
@@ -192,7 +192,7 @@ public sealed class CreateEntityBatch
     {
         if (isReturned) throw BatchAlreadyReturnedException();
         archetype       = null;
-        var structIndex = StructHeap<T>.StructIndex;
+        var structIndex = StructInfo<T>.Index;
         componentsCreate.bitSet.SetBit(structIndex);
         var batchComponent = batchComponents[structIndex] ??= CreateBatchComponent(structIndex);
         ((BatchComponent<T>)batchComponent).value = default;
@@ -206,7 +206,7 @@ public sealed class CreateEntityBatch
     public ref T Get<T>() where T : struct, IComponent
     {
         if (isReturned) throw BatchAlreadyReturnedException();
-        var structIndex = StructHeap<T>.StructIndex;
+        var structIndex = StructInfo<T>.Index;
         if (!componentsCreate.bitSet.Has(structIndex)) throw GetException(structIndex);
         return ref ((BatchComponent<T>)batchComponents[structIndex]).value;
     }
@@ -228,7 +228,7 @@ public sealed class CreateEntityBatch
     {
         if (isReturned) throw BatchAlreadyReturnedException();
         archetype = null;
-        tagsCreate.bitSet.SetBit(TagType<T>.TagIndex);
+        tagsCreate.bitSet.SetBit(TagInfo<T>.TagIndex);
         return this;
     }
     

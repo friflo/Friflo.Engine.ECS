@@ -28,7 +28,7 @@ public sealed class TagType : SchemaType
     }
 }
 
-internal static class TagType<T>
+internal static class TagInfo<T>
     where T : struct, ITag
 {
     // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_Tag_Index()

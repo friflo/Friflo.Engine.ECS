@@ -11,7 +11,7 @@ public static partial class EntityExtensions
         where T1 : struct, IComponent
     {
         return new SignatureIndexes(1,
-            T1: StructHeap<T1>.StructIndex);
+            T1: StructInfo<T1>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2>()
@@ -19,8 +19,8 @@ public static partial class EntityExtensions
         where T2 : struct, IComponent
     {
         return new SignatureIndexes(2,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3>()
@@ -29,9 +29,9 @@ public static partial class EntityExtensions
         where T3 : struct, IComponent
     {
         return new SignatureIndexes(3,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4>()
@@ -41,10 +41,10 @@ public static partial class EntityExtensions
         where T4 : struct, IComponent
     {
         return new SignatureIndexes(4,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5>()
@@ -55,11 +55,11 @@ public static partial class EntityExtensions
         where T5 : struct, IComponent
     {
         return new SignatureIndexes(5,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex,
-            T5: StructHeap<T5>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index,
+            T5: StructInfo<T5>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5, T6>()
@@ -71,12 +71,12 @@ public static partial class EntityExtensions
         where T6 : struct, IComponent
     {
         return new SignatureIndexes(6,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex,
-            T5: StructHeap<T5>.StructIndex,
-            T6: StructHeap<T6>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index,
+            T5: StructInfo<T5>.Index,
+            T6: StructInfo<T6>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5, T6, T7>()
@@ -89,13 +89,13 @@ public static partial class EntityExtensions
         where T7 : struct, IComponent
     {
         return new SignatureIndexes(7,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex,
-            T5: StructHeap<T5>.StructIndex,
-            T6: StructHeap<T6>.StructIndex,
-            T7: StructHeap<T7>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index,
+            T5: StructInfo<T5>.Index,
+            T6: StructInfo<T6>.Index,
+            T7: StructInfo<T7>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8>()
@@ -109,14 +109,14 @@ public static partial class EntityExtensions
         where T8 : struct, IComponent
     {
         return new SignatureIndexes(8,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex,
-            T5: StructHeap<T5>.StructIndex,
-            T6: StructHeap<T6>.StructIndex,
-            T7: StructHeap<T7>.StructIndex,
-            T8: StructHeap<T8>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index,
+            T5: StructInfo<T5>.Index,
+            T6: StructInfo<T6>.Index,
+            T7: StructInfo<T7>.Index,
+            T8: StructInfo<T8>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8, T9>()
@@ -131,15 +131,15 @@ public static partial class EntityExtensions
         where T9 : struct, IComponent
     {
         return new SignatureIndexes(9,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex,
-            T5: StructHeap<T5>.StructIndex,
-            T6: StructHeap<T6>.StructIndex,
-            T7: StructHeap<T7>.StructIndex,
-            T8: StructHeap<T8>.StructIndex,
-            T9: StructHeap<T9>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index,
+            T5: StructInfo<T5>.Index,
+            T6: StructInfo<T6>.Index,
+            T7: StructInfo<T7>.Index,
+            T8: StructInfo<T8>.Index,
+            T9: StructInfo<T9>.Index);
     }
     
     internal static SignatureIndexes GetIndexes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
@@ -155,15 +155,15 @@ public static partial class EntityExtensions
         where T10: struct, IComponent
     {
         return new SignatureIndexes(10,
-            T1: StructHeap<T1>.StructIndex,
-            T2: StructHeap<T2>.StructIndex,
-            T3: StructHeap<T3>.StructIndex,
-            T4: StructHeap<T4>.StructIndex,
-            T5: StructHeap<T5>.StructIndex,
-            T6: StructHeap<T6>.StructIndex,
-            T7: StructHeap<T7>.StructIndex,
-            T8: StructHeap<T8>.StructIndex,
-            T9: StructHeap<T9>.StructIndex,
-            T10:StructHeap<T10>.StructIndex);
+            T1: StructInfo<T1>.Index,
+            T2: StructInfo<T2>.Index,
+            T3: StructInfo<T3>.Index,
+            T4: StructInfo<T4>.Index,
+            T5: StructInfo<T5>.Index,
+            T6: StructInfo<T6>.Index,
+            T7: StructInfo<T7>.Index,
+            T8: StructInfo<T8>.Index,
+            T9: StructInfo<T9>.Index,
+            T10:StructInfo<T10>.Index);
     }
 }

@@ -312,18 +312,18 @@ public readonly struct Entity : IEquatable<Entity>
     /// <summary>Return true if the entity contains a component of the given type.</summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructHeap<T>.StructIndex] != null;
+    public  bool    HasComponent<T> ()  where T : struct, IComponent  => archetype.heapMap[StructInfo<T>.Index] != null;
 
     /// <summary>Return the component of the given type as a reference.</summary>
     /// <exception cref="NullReferenceException"> if entity has no component of Type <typeparamref name="T"/></exception>
     /// <remarks>Executes in O(1)</remarks>
     public  ref T   GetComponent<T>()   where T : struct, IComponent
-    => ref ((StructHeap<T>)archetype.heapMap[StructHeap<T>.StructIndex]).components[compIndex];
+    => ref ((StructHeap<T>)archetype.heapMap[StructInfo<T>.Index]).components[compIndex];
     
     /// <remarks>Executes in O(1)</remarks>
     public bool     TryGetComponent<T>(out T result) where T : struct, IComponent
     {
-        var heap = archetype.heapMap[StructHeap<T>.StructIndex];
+        var heap = archetype.heapMap[StructInfo<T>.Index];
         if (heap == null) {
             result = default;
             return false;
@@ -340,7 +340,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <remarks>Note: Use <see cref="EntityUtils.AddEntityComponent"/> as non generic alternative</remarks>
     public bool AddComponent<T>()               where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent<T>(Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, default);
+        return EntityStoreBase.AddComponent<T>(Id, StructInfo<T>.Index, ref refArchetype, ref refCompIndex, ref archIndex, default);
     }
     /// <summary>
     /// Add the given <paramref name="component"/> to the entity.<br/>
@@ -350,7 +350,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <returns>true - component is newly added to the entity.<br/> false - component is updated.</returns>
     public bool AddComponent<T>(in T component) where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.AddComponent   (Id, StructHeap<T>.StructIndex, ref refArchetype, ref refCompIndex, ref archIndex, in component);
+        return EntityStoreBase.AddComponent   (Id, StructInfo<T>.Index, ref refArchetype, ref refCompIndex, ref archIndex, in component);
     }
     /// <summary>Remove the component of the given type from the entity.</summary>
     /// <returns>true if entity contained a component of the given type before</returns>
@@ -360,7 +360,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </remarks>
     public bool RemoveComponent<T>()            where T : struct, IComponent {
         int archIndex = 0;
-        return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructHeap<T>.StructIndex);
+        return EntityStoreBase.RemoveComponent<T>(Id, ref refArchetype, ref refCompIndex, ref archIndex, StructInfo<T>.Index);
     }
     #endregion
 
@@ -396,7 +396,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </returns>
     /// <remarks>Note: Use <see cref="EntityUtils.AddNewEntityScript"/> as non generic alternative.</remarks>
     public TScript  AddScript<TScript>(TScript script)   where TScript : Script, new() {
-        return (TScript)EntityUtils.AddScript    (this, ScriptType<TScript>.Index, script);
+        return (TScript)EntityUtils.AddScript    (this, ScriptInfo<TScript>.Index, script);
     }
     /// <summary>Remove the script with the given <typeparamref name="TScript"/> <see cref="Type"/> from the entity.</summary>
     /// <returns>
@@ -405,7 +405,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// </returns>
     /// <remarks>Note: Use <see cref="EntityUtils.RemoveEntityScript"/> as non generic alternative.</remarks>
     public TScript        RemoveScript<TScript>()        where TScript : Script, new() {
-        return (TScript)EntityUtils.RemoveScript (this, ScriptType<TScript>.Index);
+        return (TScript)EntityUtils.RemoveScript (this, ScriptInfo<TScript>.Index);
     }
     #endregion
 

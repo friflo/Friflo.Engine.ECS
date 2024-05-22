@@ -14,7 +14,7 @@ public static partial class EntityExtensions
             where T1 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
     }
 
     internal static void AssignComponents<T1, T2>(
@@ -26,8 +26,8 @@ public static partial class EntityExtensions
             where T2 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
     }
 
     internal static void AssignComponents<T1, T2, T3>(
@@ -41,9 +41,9 @@ public static partial class EntityExtensions
             where T3 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
     }
 
     internal static void AssignComponents<T1, T2, T3, T4>(
@@ -59,10 +59,10 @@ public static partial class EntityExtensions
             where T4 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
     }
 
     internal static void AssignComponents<T1, T2, T3, T4, T5>(
@@ -80,11 +80,11 @@ public static partial class EntityExtensions
             where T5 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
+        ((StructHeap<T5>)heapMap[StructInfo<T5>.Index]).components[compIndex] = component5;
     }
     
     internal static void AssignComponents<T1, T2, T3, T4, T5, T6>(
@@ -104,12 +104,12 @@ public static partial class EntityExtensions
             where T6 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
-        ((StructHeap<T6>)heapMap[StructHeap<T6>.StructIndex]).components[compIndex] = component6;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
+        ((StructHeap<T5>)heapMap[StructInfo<T5>.Index]).components[compIndex] = component5;
+        ((StructHeap<T6>)heapMap[StructInfo<T6>.Index]).components[compIndex] = component6;
     }
     
    
@@ -132,13 +132,13 @@ public static partial class EntityExtensions
             where T7 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
-        ((StructHeap<T6>)heapMap[StructHeap<T6>.StructIndex]).components[compIndex] = component6;
-        ((StructHeap<T7>)heapMap[StructHeap<T7>.StructIndex]).components[compIndex] = component7;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
+        ((StructHeap<T5>)heapMap[StructInfo<T5>.Index]).components[compIndex] = component5;
+        ((StructHeap<T6>)heapMap[StructInfo<T6>.Index]).components[compIndex] = component6;
+        ((StructHeap<T7>)heapMap[StructInfo<T7>.Index]).components[compIndex] = component7;
     }
     
     internal static void AssignComponents<T1, T2, T3, T4, T5, T6, T7, T8>(
@@ -162,14 +162,14 @@ public static partial class EntityExtensions
             where T8 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
-        ((StructHeap<T6>)heapMap[StructHeap<T6>.StructIndex]).components[compIndex] = component6;
-        ((StructHeap<T7>)heapMap[StructHeap<T7>.StructIndex]).components[compIndex] = component7;
-        ((StructHeap<T8>)heapMap[StructHeap<T8>.StructIndex]).components[compIndex] = component8;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
+        ((StructHeap<T5>)heapMap[StructInfo<T5>.Index]).components[compIndex] = component5;
+        ((StructHeap<T6>)heapMap[StructInfo<T6>.Index]).components[compIndex] = component6;
+        ((StructHeap<T7>)heapMap[StructInfo<T7>.Index]).components[compIndex] = component7;
+        ((StructHeap<T8>)heapMap[StructInfo<T8>.Index]).components[compIndex] = component8;
     }
     
     internal static void AssignComponents<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -195,15 +195,15 @@ public static partial class EntityExtensions
             where T9 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
-        ((StructHeap<T6>)heapMap[StructHeap<T6>.StructIndex]).components[compIndex] = component6;
-        ((StructHeap<T7>)heapMap[StructHeap<T7>.StructIndex]).components[compIndex] = component7;
-        ((StructHeap<T8>)heapMap[StructHeap<T8>.StructIndex]).components[compIndex] = component8;
-        ((StructHeap<T9>)heapMap[StructHeap<T9>.StructIndex]).components[compIndex] = component9;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
+        ((StructHeap<T5>)heapMap[StructInfo<T5>.Index]).components[compIndex] = component5;
+        ((StructHeap<T6>)heapMap[StructInfo<T6>.Index]).components[compIndex] = component6;
+        ((StructHeap<T7>)heapMap[StructInfo<T7>.Index]).components[compIndex] = component7;
+        ((StructHeap<T8>)heapMap[StructInfo<T8>.Index]).components[compIndex] = component8;
+        ((StructHeap<T9>)heapMap[StructInfo<T9>.Index]).components[compIndex] = component9;
     }
     
     internal static void AssignComponents<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
@@ -231,15 +231,15 @@ public static partial class EntityExtensions
             where T10: struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        ((StructHeap<T1>)heapMap[StructHeap<T1>.StructIndex]).components[compIndex] = component1;
-        ((StructHeap<T2>)heapMap[StructHeap<T2>.StructIndex]).components[compIndex] = component2;
-        ((StructHeap<T3>)heapMap[StructHeap<T3>.StructIndex]).components[compIndex] = component3;
-        ((StructHeap<T4>)heapMap[StructHeap<T4>.StructIndex]).components[compIndex] = component4;
-        ((StructHeap<T5>)heapMap[StructHeap<T5>.StructIndex]).components[compIndex] = component5;
-        ((StructHeap<T6>)heapMap[StructHeap<T6>.StructIndex]).components[compIndex] = component6;
-        ((StructHeap<T7>)heapMap[StructHeap<T7>.StructIndex]).components[compIndex] = component7;
-        ((StructHeap<T8>)heapMap[StructHeap<T8>.StructIndex]).components[compIndex] = component8;
-        ((StructHeap<T9>)heapMap[StructHeap<T9>.StructIndex]).components[compIndex] = component9;
-        ((StructHeap<T10>)heapMap[StructHeap<T10>.StructIndex]).components[compIndex] = component10;
+        ((StructHeap<T1>)heapMap[StructInfo<T1>.Index]).components[compIndex] = component1;
+        ((StructHeap<T2>)heapMap[StructInfo<T2>.Index]).components[compIndex] = component2;
+        ((StructHeap<T3>)heapMap[StructInfo<T3>.Index]).components[compIndex] = component3;
+        ((StructHeap<T4>)heapMap[StructInfo<T4>.Index]).components[compIndex] = component4;
+        ((StructHeap<T5>)heapMap[StructInfo<T5>.Index]).components[compIndex] = component5;
+        ((StructHeap<T6>)heapMap[StructInfo<T6>.Index]).components[compIndex] = component6;
+        ((StructHeap<T7>)heapMap[StructInfo<T7>.Index]).components[compIndex] = component7;
+        ((StructHeap<T8>)heapMap[StructInfo<T8>.Index]).components[compIndex] = component8;
+        ((StructHeap<T9>)heapMap[StructInfo<T9>.Index]).components[compIndex] = component9;
+        ((StructHeap<T10>)heapMap[StructInfo<T10>.Index]).components[compIndex] = component10;
     }
 }

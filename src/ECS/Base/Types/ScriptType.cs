@@ -50,15 +50,24 @@ public abstract class ScriptType : SchemaType
     }
 }
 
+/// <remarks>
+/// Note:<br/>
+/// Before <see cref="ScriptInfo{T}.Index"/> was a static field in <see cref="ScriptType{T}"/>. <br/> 
+/// But this approach fails in Unity. Reason: <br/> 
+/// Unity initializes static fields of generic types already when creating an instance of that type.
+/// </remarks>
+internal static class ScriptInfo<T>
+{
+    // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_Script_Index()
+    // readonly improves performance significant
+    internal static readonly   int      Index = SchemaTypeUtils.GetScriptIndex(typeof(T));
+}
+
 internal sealed class ScriptType<T> : ScriptType 
     where T : Script, new()
 {
     private readonly    TypeMapper<T>   typeMapper;
     public  override    string          ToString() => $"Script: [*{typeof(T).Name}]";
-    
-    // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_Script_Index()
-    // readonly improves performance significant
-    internal static readonly   int      Index = SchemaTypeUtils.GetScriptIndex(typeof(T));
     
     internal ScriptType(string scriptComponentKey, int scriptIndex, TypeMapper<T> typeMapper)
         : base(scriptComponentKey, scriptIndex, typeof(T))

@@ -25,11 +25,6 @@ internal sealed class StructHeap<T> : StructHeap
     internal            T               componentStash; //  sizeof(T)
     private  readonly   TypeMapper<T>   typeMapper;     //  8
     
-    // --- static internal
-    // Check initialization by directly calling unit test method: Test_SchemaType.Test_SchemaType_StructIndex()
-    // readonly improves performance significant
-    internal static readonly    int     StructIndex  = SchemaTypeUtils.GetStructIndex(typeof(T));
-    
     internal StructHeap(int structIndex, TypeMapper<T> mapper)
         : base (structIndex)
     {

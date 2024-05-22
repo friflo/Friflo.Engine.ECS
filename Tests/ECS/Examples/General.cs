@@ -4,10 +4,8 @@ using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Serialize;
 using NUnit.Framework;
 
-#if !UNITY_5_3_OR_NEWER
-using System.Runtime.Intrinsics;
-#endif
 
+// ReSharper disable UnusedVariable
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable CheckNamespace

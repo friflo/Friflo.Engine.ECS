@@ -182,7 +182,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     public readonly bool    Has<T1> ()
         where T1 : struct, IComponent
     {
-        return bitSet.Has(StructHeap<T1>.StructIndex);
+        return bitSet.Has(StructInfo<T1>.Index);
     }
     
     /// <summary>
@@ -193,8 +193,8 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T1 : struct, IComponent
         where T2 : struct, IComponent
     {
-        return bitSet.Has(StructHeap<T1>.StructIndex) &&
-               bitSet.Has(StructHeap<T2>.StructIndex);
+        return bitSet.Has(StructInfo<T1>.Index) &&
+               bitSet.Has(StructInfo<T2>.Index);
     }
 
     /// <summary>
@@ -206,9 +206,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T2 : struct, IComponent
         where T3 : struct, IComponent
     {
-        return bitSet.Has(StructHeap<T1>.StructIndex) &&
-               bitSet.Has(StructHeap<T2>.StructIndex) &&
-               bitSet.Has(StructHeap<T3>.StructIndex);
+        return bitSet.Has(StructInfo<T1>.Index) &&
+               bitSet.Has(StructInfo<T2>.Index) &&
+               bitSet.Has(StructInfo<T3>.Index);
     }
     
     /// <summary>
@@ -236,7 +236,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     public void Add<T>()
         where T : struct, IComponent
     {
-        bitSet.SetBit(StructHeap<T>.StructIndex);
+        bitSet.SetBit(StructInfo<T>.Index);
     }
     
     /// <summary>
@@ -253,7 +253,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
     public void Remove<T>()
         where T : struct, IComponent
     {
-        bitSet.ClearBit(StructHeap<T>.StructIndex);
+        bitSet.ClearBit(StructInfo<T>.Index);
     }
     
     /// <summary>
@@ -275,7 +275,7 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T1 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex);
+            StructInfo<T1>.Index);
     }
     
     /// <summary>
@@ -287,8 +287,8 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T2 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index);
     }
     
     /// <summary>
@@ -301,9 +301,9 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T3 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index);
     }
     
     /// <summary>
@@ -317,10 +317,10 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T4 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index);
     }
     
     /// <summary>
@@ -335,11 +335,11 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T5 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex,
-            StructHeap<T5>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index,
+            StructInfo<T5>.Index);
     }
     
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6>()
@@ -351,12 +351,12 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T6 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex,
-            StructHeap<T5>.StructIndex,
-            StructHeap<T6>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index,
+            StructInfo<T5>.Index,
+            StructInfo<T6>.Index);
     }
     
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7>()
@@ -369,13 +369,13 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T7 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex,
-            StructHeap<T5>.StructIndex,
-            StructHeap<T6>.StructIndex,
-            StructHeap<T7>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index,
+            StructInfo<T5>.Index,
+            StructInfo<T6>.Index,
+            StructInfo<T7>.Index);
     }
     
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8>()
@@ -389,14 +389,14 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T8 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex,
-            StructHeap<T5>.StructIndex,
-            StructHeap<T6>.StructIndex,
-            StructHeap<T7>.StructIndex,
-            StructHeap<T8>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index,
+            StructInfo<T5>.Index,
+            StructInfo<T6>.Index,
+            StructInfo<T7>.Index,
+            StructInfo<T8>.Index);
     }
     
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9>()
@@ -411,15 +411,15 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T9 : struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex,
-            StructHeap<T5>.StructIndex,
-            StructHeap<T6>.StructIndex,
-            StructHeap<T7>.StructIndex,
-            StructHeap<T8>.StructIndex,
-            StructHeap<T9>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index,
+            StructInfo<T5>.Index,
+            StructInfo<T6>.Index,
+            StructInfo<T7>.Index,
+            StructInfo<T8>.Index,
+            StructInfo<T9>.Index);
     }
     
     internal static ComponentTypes Get<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>()
@@ -435,16 +435,16 @@ public struct ComponentTypes : IEnumerable<ComponentType>
         where T10: struct, IComponent
     {
         return new ComponentTypes(
-            StructHeap<T1>.StructIndex,
-            StructHeap<T2>.StructIndex,
-            StructHeap<T3>.StructIndex,
-            StructHeap<T4>.StructIndex,
-            StructHeap<T5>.StructIndex,
-            StructHeap<T6>.StructIndex,
-            StructHeap<T7>.StructIndex,
-            StructHeap<T8>.StructIndex,
-            StructHeap<T9>.StructIndex,
-            StructHeap<T10>.StructIndex);
+            StructInfo<T1>.Index,
+            StructInfo<T2>.Index,
+            StructInfo<T3>.Index,
+            StructInfo<T4>.Index,
+            StructInfo<T5>.Index,
+            StructInfo<T6>.Index,
+            StructInfo<T7>.Index,
+            StructInfo<T8>.Index,
+            StructInfo<T9>.Index,
+            StructInfo<T10>.Index);
     }
     #endregion
     

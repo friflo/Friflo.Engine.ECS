@@ -54,28 +54,28 @@ public sealed class EventFilter
     public void ComponentAdded<T>()
         where T : struct, IComponent
     {
-        AddFilter(ref componentFilters, StructHeap<T>.StructIndex, SchemaTypeKind.Component, EntityEventAction.Added);
+        AddFilter(ref componentFilters, StructInfo<T>.Index, SchemaTypeKind.Component, EntityEventAction.Added);
     }
     
     /// <summary> Enable filtering remove component events of the given <see cref="IComponent"/> type <typeparamref name="T"/>.</summary>
     public void ComponentRemoved<T>()
         where T : struct, IComponent
     {
-        AddFilter(ref componentFilters, StructHeap<T>.StructIndex, SchemaTypeKind.Component, EntityEventAction.Removed);
+        AddFilter(ref componentFilters, StructInfo<T>.Index, SchemaTypeKind.Component, EntityEventAction.Removed);
     }
     
     /// <summary> Enable filtering add tag events of the given <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
     public void TagAdded<T>()
         where T : struct, ITag
     {
-        AddFilter(ref tagFilters, TagType<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Added);
+        AddFilter(ref tagFilters, TagInfo<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Added);
     }
     
     /// <summary> Enable filtering remove tag events of the given <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
     public void TagRemoved<T>()
         where T : struct, ITag
     {
-        AddFilter(ref tagFilters, TagType<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Removed);
+        AddFilter(ref tagFilters, TagInfo<T>.TagIndex, SchemaTypeKind.Tag, EntityEventAction.Removed);
     }
     
     private static void AddFilter(ref EventFilters filters, int typeIndex, SchemaTypeKind kind, EntityEventAction action)

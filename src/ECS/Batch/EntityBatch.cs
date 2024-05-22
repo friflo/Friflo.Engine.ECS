@@ -209,7 +209,7 @@ public sealed class  EntityBatch
     public EntityBatch Add<T>(in T component) where T : struct, IComponent
     {
         if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
-        var structIndex = StructHeap<T>.StructIndex;
+        var structIndex = StructInfo<T>.Index;
         componentsAdd.      bitSet.SetBit   (structIndex);
         componentsRemove.   bitSet.ClearBit (structIndex);
         var components      = batchComponents           ??= CreateBatchComponents();
@@ -233,7 +233,7 @@ public sealed class  EntityBatch
     public EntityBatch Remove<T>() where T : struct, IComponent
     {
         if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
-        var structIndex = StructHeap<T>.StructIndex;
+        var structIndex = StructInfo<T>.Index;
         componentsRemove.   bitSet.SetBit   (structIndex);
         componentsAdd.      bitSet.ClearBit (structIndex);
         return this;   
@@ -245,7 +245,7 @@ public sealed class  EntityBatch
     public EntityBatch AddTag<T>() where T : struct, ITag
     {
         if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
-        var tagIndex = TagType<T>.TagIndex;
+        var tagIndex = TagInfo<T>.TagIndex;
         tagsAdd.    bitSet.SetBit   (tagIndex);
         tagsRemove. bitSet.ClearBit (tagIndex);
         return this;
@@ -268,7 +268,7 @@ public sealed class  EntityBatch
     public EntityBatch RemoveTag<T>() where T : struct, ITag
     {
         if (owner == BatchOwner.EntityStore) throw BatchAlreadyAppliedException();
-        var tagIndex = TagType<T>.TagIndex;
+        var tagIndex = TagInfo<T>.TagIndex;
         tagsRemove. bitSet.SetBit   (tagIndex);
         tagsAdd.    bitSet.ClearBit (tagIndex);
         return this;
