@@ -93,28 +93,53 @@ public static class Test_StructHeap
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf()
     {
-        int count   = 10; // 10_000_000 (UsePidAsId) ~ #PC: 201 ms
-        // --- warmup
-        var store   = new EntityStore(PidType.UsePidAsId);
-        store.EnsureCapacity(count + 1);
-        var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
-        arch1.EnsureCapacity(count + 1);
-        _ = arch1.CreateEntity(); // warmup
-        
-        var storeCapacity = store.Capacity;
-        var arch1Capacity = arch1.Capacity;
-        
-        // --- perf
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        for (int n = 0; n < count; n++) {
-            _ = arch1.CreateEntity();
+        int repeat  = 10;     // 1000
+        int count   = 10;     // 100_000
+/*      #PC:
+Entity count: 100000, repeat: 1000
+EntityStore.EnsureCapacity() 100000, duration: 1,0186763 µs
+Archetype.EnsureCapacity()   100000, duration: 0,5695898 µs
+CreateEntity()               100000, duration: 2,5284755 µs
+CreateEntity() - all         100000, duration: 4,1167416 µs
+*/
+        long time1 = 0;
+        long time2 = 0;
+        long time3 = 0;
+
+        for (int i = 0; i < repeat; i++)
+        {
+            var store       = new EntityStore(PidType.UsePidAsId);
+            var arch1       = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>());
+            _ = arch1.CreateEntity(); // warmup
+            
+            var start1 = Stopwatch.GetTimestamp();
+            store.EnsureCapacity(count + 1);
+            var start2 = Stopwatch.GetTimestamp();
+            time1 += start2 - start1;
+            
+            arch1.EnsureCapacity(count + 1);
+            var start3 = Stopwatch.GetTimestamp();
+            time2 += start3 - start2;
+            
+            var storeCapacity = store.Capacity;
+            var arch1Capacity = arch1.Capacity;
+
+            for (int n = 0; n < count; n++) {
+                _ = arch1.CreateEntity();
+            }
+            time3 += Stopwatch.GetTimestamp() - start3;
+            Mem.AreEqual(count + 1, arch1.Count);
+            // assert initial capacity was sufficient
+            Assert.AreEqual(storeCapacity, store.Capacity);
+            Assert.AreEqual(arch1Capacity, arch1.Capacity);
         }
-        Console.WriteLine($"CreateEntity() - Entity.  count: {count}, duration: {stopwatch.ElapsedMilliseconds} ms");
-        Mem.AreEqual(count + 1, arch1.Count);
-        // assert initial capacity was sufficient
-        Assert.AreEqual(storeCapacity, store.Capacity);
-        Assert.AreEqual(arch1Capacity, arch1.Capacity);
+        var freq = repeat * Stopwatch.Frequency / 1000d;
+        Console.WriteLine($"Entity count: {count}, repeat: {repeat}");
+        Console.WriteLine($"EntityStore.EnsureCapacity() {count}, duration: {time1 / freq} µs");
+        Console.WriteLine($"Archetype.EnsureCapacity()   {count}, duration: {time2 / freq} µs");
+        Console.WriteLine($"CreateEntity()               {count}, duration: {time3 / freq} µs");
+        var all = time1 + time2 + time3;
+        Console.WriteLine($"CreateEntity() - all         {count}, duration: {all   / freq} µs");
     }
     
     [Test]
