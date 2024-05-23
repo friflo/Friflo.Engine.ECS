@@ -475,7 +475,25 @@ public partial class EntityStore
         nodes[id].compIndex = compIndex;
     }
     
+    /// <summary> Note!  Sync implementation with <see cref="NewIdInterlocked"/>. </summary>
     internal int NewId()
+    {
+        var localNodes  = nodes;
+        var max         = localNodes.Length;
+        var id          = ++intern.sequenceId;
+        for (; id < max;)
+        {
+            if ((localNodes[id].flags & Created) != 0) {
+                id = ++intern.sequenceId;
+                continue;
+            }
+            break;
+        }
+        return id;
+    }
+    
+    /// <summary> Same as <see cref="NewId"/> but thread safe for <see cref="CommandBuffer"/>. </summary>
+    internal int NewIdInterlocked()
     {
         var localNodes  = nodes;
         var max         = localNodes.Length;
