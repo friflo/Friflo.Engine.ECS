@@ -59,8 +59,12 @@ public static class Test_EntityStore
         var store   = new EntityStore(PidType.UsePidAsId);
         for (int n = 0; n < 10; n++) {
             var nodes = store.nodes;
-            for (int i = 0; i < nodes.Length; i++) {
+            int i = 0;
+            for (; i <= store.Count; i++) {
                 AreEqual(i, nodes[i].Id);
+            }
+            for (; i < nodes.Length; i++) {
+                AreEqual(0, nodes[i].Id);
             }
             store.CreateEntity();
         }

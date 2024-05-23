@@ -97,10 +97,10 @@ public static class Test_StructHeap
         int count   = 10;     // 100_000
 /*      #PC:
 Entity count: 100000, repeat: 1000
-EntityStore.EnsureCapacity() 100000, duration: 1,0186763 µs
-Archetype.EnsureCapacity()   100000, duration: 0,5695898 µs
-CreateEntity()               100000, duration: 2,5284755 µs
-CreateEntity() - all         100000, duration: 4,1167416 µs
+EntityStore.EnsureCapacity()  duration: 0,1298964 µs
+Archetype.EnsureCapacity()    duration: 0,5057852 µs
+CreateEntity()                duration: 3,0709829 µs
+CreateEntity() - all          duration: 3,7066645 µs
 */
         long time1 = 0;
         long time2 = 0;
@@ -135,11 +135,11 @@ CreateEntity() - all         100000, duration: 4,1167416 µs
         }
         var freq = repeat * Stopwatch.Frequency / 1000d;
         Console.WriteLine($"Entity count: {count}, repeat: {repeat}");
-        Console.WriteLine($"EntityStore.EnsureCapacity() {count}, duration: {time1 / freq} µs");
-        Console.WriteLine($"Archetype.EnsureCapacity()   {count}, duration: {time2 / freq} µs");
-        Console.WriteLine($"CreateEntity()               {count}, duration: {time3 / freq} µs");
+        Console.WriteLine($"EntityStore.EnsureCapacity()  duration: {time1 / freq} µs");
+        Console.WriteLine($"Archetype.EnsureCapacity()    duration: {time2 / freq} µs");
+        Console.WriteLine($"CreateEntity()                duration: {time3 / freq} µs");
         var all = time1 + time2 + time3;
-        Console.WriteLine($"CreateEntity() - all         {count}, duration: {all   / freq} µs");
+        Console.WriteLine($"CreateEntity() - all          duration: {all   / freq} µs");
     }
     
     [Test]

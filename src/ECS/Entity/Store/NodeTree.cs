@@ -29,11 +29,12 @@ public partial class EntityStore
         }
         var newLength   = last + capacity;
         ArrayUtils.Resize(ref nodes, newLength);
+        /* assigning an EntityNode.id is obsolete
         var localNodes = nodes;
         for (int n = curLength; n < newLength; n++) {
             localNodes[n].id = n;
             // localNodes[n] = new EntityNode (n);      // see: EntityNode.id comment
-        }
+        } */
         return newLength - last;
     }
     
@@ -45,11 +46,12 @@ public partial class EntityStore
         }
         var newLength = Math.Max(length, 2 * curLength); // could grow slower to minimize heap pressure
         ArrayUtils.Resize(ref nodes, newLength);
-        var localNodes = nodes;
+        /* assigning an EntityNode.id is obsolete
+        var localNodes = nodes;        
         for (int n = curLength; n < newLength; n++) {
             localNodes[n].id = n;
             // localNodes[n] = new EntityNode (n);      // see: EntityNode.id comment
-        }
+        } */
     }
     
     /// <summary>
@@ -89,7 +91,7 @@ public partial class EntityStore
                 return -1;
             }
             // --- remove child from current parent
-            int curIndex = RemoveChildNode(ref localNodes[curParentId], childId);
+            int curIndex = RemoveChildNode(ref localNodes[curParentId], curParentId, childId);
             OnChildNodeRemove(curParentId, childId, curIndex);
         } else {
             if (parentId == childId) {
@@ -125,7 +127,7 @@ public partial class EntityStore
             ref var curParent = ref localNodes[curParentId];
             if (curParentId != parentId) {
                 // --- case: child has a different parent => remove node from current parent
-                curIndex = RemoveChildNode(ref curParent, childId);
+                curIndex = RemoveChildNode(ref curParent, curParentId, childId);
                 OnChildNodeRemove(curParentId, childId, curIndex);
                 goto InsertNode;
             }
@@ -135,7 +137,7 @@ public partial class EntityStore
                 // case: child entity is already at the requested childIndex
                 return;
             }
-            curIndex = RemoveChildNode(ref curParent, childId);
+            curIndex = RemoveChildNode(ref curParent, curParentId, childId);
             OnChildNodeRemove(curParentId, childId, curIndex);
             
             InsertChildNode(ref localNodes[parentId], childId, childIndex);
@@ -159,7 +161,7 @@ public partial class EntityStore
             return false;
         }
         childNode.parentId  = Static.NoParentId;
-        var curIndex        = RemoveChildNode(ref localNodes[parentId], childId);
+        var curIndex        = RemoveChildNode(ref localNodes[parentId], parentId, childId);
         ClearTreeFlags(localNodes, childId, TreeNode);
         
         OnChildNodeRemove(parentId, childId, curIndex);
@@ -193,7 +195,7 @@ public partial class EntityStore
         return -1;
     }
     
-    private static int RemoveChildNode (ref EntityNode parent, int childId)
+    private static int RemoveChildNode (ref EntityNode parent, int parentId, int childId)
     {
         var childIds    = parent.childIds;
         int count       = parent.childCount;
@@ -208,7 +210,7 @@ public partial class EntityStore
             childIds[count]     = 0;  // clear last child id for debug clarity. not necessary because of childCount--
             return n;
         }
-        throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parent.id}, child id: {childId}");
+        throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {childId}");
     }
     
     private static void InsertChildNode (ref EntityNode parent, int childId, int childIndex)
@@ -531,7 +533,7 @@ public partial class EntityStore
         if (!HasParent(parentId)) {
             return;
         }
-        int curIndex = RemoveChildNode(ref localNodes[parentId], id);
+        int curIndex = RemoveChildNode(ref localNodes[parentId], parentId, id);
         OnChildNodeRemove(parentId, id, curIndex);
     }
     

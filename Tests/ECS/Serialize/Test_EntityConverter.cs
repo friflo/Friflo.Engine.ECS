@@ -49,7 +49,7 @@ public static class Test_EntityConverter
         IsTrue  (                       store.GetEntityById(8).IsNull);
         ref readonly var node8 = ref store.GetEntityNode(8);
         AreEqual(NullNode,              node8.Flags);      // diff_flags
-        AreEqual(8,                     node8.Id);
+        AreEqual(0,                     node8.Id);
         AreEqual(5,                     node8.ParentId);   // diff_parent
         AreEqual(1,                     store.Count);
         
