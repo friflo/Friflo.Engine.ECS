@@ -52,7 +52,7 @@ public static class Test_EntityStore
         });
         AreEqual("invariant: entityScriptCount > 0", e!.Message);
     }
-    
+    /*
     /// <summary>Test id assignment in <see cref="EntityStore.EnsureNodesLength"/></summary>
     [Test]
     public static void Test_EntityStore_EnsureNodesLength()
@@ -70,6 +70,7 @@ public static class Test_EntityStore
             store.CreateEntity();
         }
     }
+    */
 }
 
 }

@@ -184,7 +184,6 @@ public partial class EntityStore
         ref var node = ref nodes[id];
         if ((node.flags & Created) != 0) {
             AssertPid(node.pid, pid);
-            AssertId (node.id,  id);
             return node.compIndex;
         }
         entityCount++;
@@ -194,7 +193,6 @@ public partial class EntityStore
         AssertPid0(node.pid, pid);
         node.compIndex      = Archetype.AddEntity(archetype, id);
         node.archetype      = archetype;
-        node.id             = id;
         node.pid            = pid;
         node.scriptIndex    = EntityUtils.NoScripts;
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.

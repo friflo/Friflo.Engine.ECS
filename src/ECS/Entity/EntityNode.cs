@@ -47,8 +47,8 @@ namespace Friflo.Engine.ECS;
 public struct EntityNode
 {
 #region public properties
-    /// <summary>The unique entity id.</summary>
-                    public              int                 Id          =>  id;
+    //  <summary>The unique entity id.</summary>
+    //              public              int                 Id          =>  id;
     
     /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
                     public              long                Pid         =>  pid;
@@ -72,7 +72,6 @@ public struct EntityNode
     #endregion
     
 #region internal fields
-    [Browse(Never)] internal    int             id;             //  4   not readonly for perf. If readonly EnsureCapacity() & EnsureNodesLength() must call its constructor.  
     [Browse(Never)] internal    long            pid;            //  8   permanent id used for serialization
     
 //  [Browse(Never)] internal    int             parentId;       //  4   0 if entity has no parent
@@ -96,20 +95,16 @@ public struct EntityNode
     #endregion
     
 #region internal methods
-    internal EntityNode(int id) {
-        this.id = id;
-    }
-    
     private readonly string GetString()
     {
         var sb = new StringBuilder();
-        if (archetype != null) {
+    /*  if (archetype != null) {
             EntityUtils.EntityToString(id, archetype, sb);
         } else {
             sb.Append("id: ");
             sb.Append(id);
         }
-        /*
+
         if (childCount > 0) {
             if (sb.Length > 0) {
                 sb.Append("  ");    
@@ -118,7 +113,7 @@ public struct EntityNode
             sb.Append(childCount);
         } */
         if (flags != 0) {
-            sb.Append("  flags: ");
+            sb.Append("flags: ");
             var startPos = sb.Length;
             if (Is(NodeFlags.TreeNode)) {
                 sb.Append("TreeNode");

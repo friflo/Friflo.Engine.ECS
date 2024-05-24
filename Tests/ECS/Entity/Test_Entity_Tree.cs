@@ -380,11 +380,11 @@ public static class Test_Entity_Tree
         AreEqual(2,             store.Count);
         var node0 = store.GetEntityNode(0);
         var node2 = store.GetEntityNode(2);
-        AreEqual("id: 0",                                   node0.ToString());
-        AreEqual("id: 2  []  flags: TreeNode | Created",    node2.ToString());
+        AreEqual("",                            node0.ToString());
+        AreEqual("flags: TreeNode | Created",   node2.ToString());
         
-        AreEqual(NullNode,                                  node0.Flags);
-        AreEqual(NodeFlags.TreeNode | Created,                        node2.Flags);
+        AreEqual(NullNode,                      node0.Flags);
+        AreEqual(NodeFlags.TreeNode | Created,  node2.Flags);
     }
     
     [Test]
@@ -489,9 +489,7 @@ public static class Test_Entity_Tree
         IsNull  (child.Store);
         
         var childNode = store.GetEntityNode(2); // child is detached => all fields have their default value
-        var entity2   = store.GetEntityById(2);
-        IsTrue  (           store.GetEntityById(childNode.Id).IsNull);
-        AreEqual(2,         childNode.Id);
+        IsTrue  (           store.GetEntityById(2).IsNull);
         AreEqual(0,         childNode.Pid);
     //  child.TryGetComponent<TreeNode>(out var childTreeNode);
     //  AreEqual(0,         childTreeNode.ChildIds.Length);

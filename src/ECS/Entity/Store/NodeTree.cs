@@ -557,29 +557,30 @@ public partial class EntityStore
     /// <remarks> Set <see cref="EntityNode.archetype"/> = null. </remarks>
     internal void DeleteNode(Entity entity)
     {
+        int id = entity.Id;
         entityCount--;
     //  var localNodes  = nodes;
-        ref var node    = ref nodes[entity.Id];
+        ref var node    = ref nodes[id];
         
         // --- mark its child nodes as floating
-        ClearTreeFlags(nodes, entity.Id, NodeFlags.TreeNode);
+        ClearTreeFlags(nodes, id, NodeFlags.TreeNode);
         foreach (var childId in entity.ChildIds) {
         //  localNodes[childId].parentId = Static.NoParentId;
             parentMap.Remove(childId);
         }
-        RemoveAllEntityEventHandlers(this, node);
+        RemoveAllEntityEventHandlers(this, node, id);
     //  var parentId    = node.parentId;
-        parentMap.TryGetValue(entity.Id, out int parentId);
+        parentMap.TryGetValue(id, out int parentId);
         // --- clear node entry.
         //     Set node.archetype = null
-        node            = new EntityNode(entity.Id); // clear node    todo change to: node = default
+        node = default;
         
         // --- remove child from parent 
         if (!HasParent(parentId)) {
             return;
         }
-        int curIndex = RemoveChildNode(parentId, entity.Id);
-        OnChildNodeRemove(parentId, entity.Id, curIndex);
+        int curIndex = RemoveChildNode(parentId, id);
+        OnChildNodeRemove(parentId, id, curIndex);
     }
     
     private void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {

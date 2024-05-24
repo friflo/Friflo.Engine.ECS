@@ -50,7 +50,7 @@ public static class Test_EntityConverter
         IsTrue  (                       store.GetEntityById(8).IsNull);
         ref readonly var node8 = ref store.GetEntityNode(8);
         AreEqual(NullNode,              node8.Flags);      // diff_flags
-        AreEqual(0,                     node8.Id);
+    //  AreEqual(0,                     node8.Id);
         AreEqual(5,                     entity8.Parent.Id);   // diff_parent
         AreEqual(1,                     store.Count);
         
@@ -58,7 +58,7 @@ public static class Test_EntityConverter
         entity8 = converter.DataEntityToEntity(new DataEntity { pid = 8 }, store, out _);
         IsTrue  (entity8 ==             store.GetEntityById(8));
         AreEqual(Created,               node8.Flags);
-        AreEqual(8,                     node8.Id);
+    //  AreEqual(8,                     node8.Id);
         AreEqual(5,                     entity8.Parent.Id);
         AreEqual(2,                     store.Count);
         //
@@ -78,7 +78,7 @@ public static class Test_EntityConverter
         
         ref readonly var node8 = ref store.GetEntityNode(8);
         AreEqual(Created,               node8.Flags);      // diff_flags
-        AreEqual(8,                     node8.Id);
+    //  AreEqual(8,                     node8.Id);
         AreEqual(0,                     entity8.Parent.Id);   // diff_parent
         AreEqual(1,                     store.Count);
 
@@ -89,8 +89,8 @@ public static class Test_EntityConverter
         AreEqual(1,                     ids.Length);
         AreEqual(8,                     ids[0]);
         AreEqual(Created,               node8.Flags);
-        AreEqual(8,                     node8.Id);
-        AreEqual(5,                      entity8.Parent.Id);
+    //  AreEqual(8,                     node8.Id);
+        AreEqual(5,                     entity8.Parent.Id);
         AreEqual(2,                     store.Count);
         
         //
