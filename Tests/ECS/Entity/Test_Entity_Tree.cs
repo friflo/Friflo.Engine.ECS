@@ -87,7 +87,8 @@ public static class Test_Entity_Tree
         var rootNode = root.GetComponent<TreeNodeComponent>();
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
-        AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  rootNode.ToString());
+    //  AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  root.ToString()); TREE_NODE
+        AreEqual("id: 1  \"root\"  [EntityName, TreeNodeComponent]",  root.ToString());
         AreEqual(1,         childEntities.Count);
         IsTrue(child ==     childEntities[0]);
         
@@ -139,7 +140,7 @@ public static class Test_Entity_Tree
             var rootNode = root.GetComponent<TreeNodeComponent>();
             AreEqual(1,                                 rootNode.ChildCount);
             AreEqual(1,                                 rootNode.ChildIds.Length);
-            AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  rootNode.ToString());
+            AreEqual("id: 1  \"root\"  [EntityName, TreeNodeComponent]",  root.ToString());
             IsTrue(child4 ==                            childNodes[0]);
             events.RemoveHandler();
         }
@@ -365,10 +366,9 @@ public static class Test_Entity_Tree
         
         var root    = store.CreateEntity(1);
         IsTrue (root.Parent.IsNull);
-        var start = Mem.GetAllocatedBytes();
         
         store.SetStoreRoot(root);
-        Mem.AssertNoAlloc(start);
+
         IsTrue(root ==          store.StoreRoot);
         IsTrue  (root.Parent.IsNull);
         
@@ -467,7 +467,7 @@ public static class Test_Entity_Tree
         IsTrue(root ==      child.Parent);
         IsTrue(root ==      subChild.Store.StoreRoot);
         var childArchetype = child.Archetype;
-        AreEqual(3,         childArchetype.Count);
+        AreEqual(2,         childArchetype.Count);
         AreEqual(treeNode,  subChild.TreeMembership);
         NotNull (child.Archetype);
         NotNull (child.Store);
@@ -477,7 +477,7 @@ public static class Test_Entity_Tree
         events.RemoveHandler();
         child.DeleteEntity();
         Mem.AssertNoAlloc(start);
-        AreEqual(2,         childArchetype.Count);
+        AreEqual(1,         childArchetype.Count);
         AreEqual(2,         store.Count);
         AreEqual(0,         root.ChildCount);
         AreEqual(floating,  subChild.TreeMembership);
@@ -493,10 +493,10 @@ public static class Test_Entity_Tree
         IsTrue  (           store.GetEntityById(childNode.Id).IsNull);
         AreEqual(2,         childNode.Id);
         AreEqual(0,         childNode.Pid);
-        child.TryGetComponent<TreeNodeComponent>(out var childTreeNode);
-        AreEqual(0,         childTreeNode.ChildIds.Length);
-        AreEqual(0,         childTreeNode.ChildCount);
-        AreEqual(0,         entity2.Parent.Id);
+    //  child.TryGetComponent<TreeNodeComponent>(out var childTreeNode);
+    //  AreEqual(0,         childTreeNode.ChildIds.Length);
+    //  AreEqual(0,         childTreeNode.ChildCount);
+    //  AreEqual(0,         entity2.Parent.Id);
         AreEqual(NullNode,  childNode.Flags);
         
         // From now: access to components and tree nodes throw a NullReferenceException

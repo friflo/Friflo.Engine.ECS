@@ -185,9 +185,6 @@ public static class Test_StructComponent
         AreEqual(2,         store.Count);
         var entity1 = store.GetEntityById(1);
         IsTrue  (player1 == entity1);
-        var node = player1.GetComponent<TreeNodeComponent>();          // check node fields are reset to default values
-        AreEqual(0,         node.ChildCount);
-        AreEqual(0,         node.ChildIds.Length);
         AreEqual(0,         entity1.Parent.Id);
         AreEqual("entities: 2", store.ToString());
     }

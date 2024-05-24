@@ -276,7 +276,7 @@ public readonly struct Entity : IEquatable<Entity>
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
-                    public  Entity              Parent      => EntityStore.GetParent(archetype.entityStore, Id);
+                    public  Entity              Parent      => EntityStore.GetParent(this);
     
     /// <summary>Return all child entities of an entity.</summary>
     /// <remarks>
