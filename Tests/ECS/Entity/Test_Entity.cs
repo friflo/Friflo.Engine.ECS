@@ -231,6 +231,7 @@ public static class Test_Entity
 #pragma warning restore CS1718
         
         // --- IEquatable<Entity>
+        Mem.AreEqual (false, entity1.Equals(entity2)); // force one time allocation
         var start = Mem.GetAllocatedBytes();
         Mem.AreEqual (false, entity1.Equals(entity2));
         Mem.AreEqual (true,  entity1.Equals(entity1));

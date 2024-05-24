@@ -62,7 +62,7 @@ public static class Test_ComponentSchema
             AreEqual(n, type.StructIndex);
             AreEqual(SchemaTypeKind.Component, type.Kind);
             if (type.Type == typeof(NonSerializedComponent) ||
-                type.Type == typeof(TreeNodeComponent)) {
+                type.Type == typeof(TreeNode)) {
                 IsNull (type.ComponentKey);
             } else {
                 NotNull(type.ComponentKey);    

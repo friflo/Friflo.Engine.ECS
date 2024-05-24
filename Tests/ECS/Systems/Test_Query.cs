@@ -29,7 +29,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 1) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNodeComponent, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
                 var positions = chunk.Chunk1;
                 Mem.AreEqual("Position[1]", positions.ToString());
                 Mem.AreEqual(1, positions[0].x);
@@ -71,7 +71,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 1) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNodeComponent, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
             }
         }
         Mem.AreEqual(2, chunkCount);
@@ -141,7 +141,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 1) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNodeComponent, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
             }
         }
         Mem.AreEqual(2, chunkCount);
@@ -177,7 +177,7 @@ public static class Test_Query
         foreach (var chunk in query.Chunks) {
             if (chunkCount++ == 0) {
                 Mem.AreEqual(1, chunk.Length);
-                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNodeComponent, MyComponent1]  entities: 1", chunk.ToString());
+                Mem.AreEqual("Chunks[1]    Archetype: [EntityName, Position, Rotation, Scale3, Transform, TreeNode, MyComponent1]  entities: 1", chunk.ToString());
             }
         }
         Mem.AreEqual(1, chunkCount);

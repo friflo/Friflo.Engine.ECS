@@ -105,7 +105,7 @@ public partial class EntityStore
     //  ref var parent      = ref localNodes[parentId];
         var parentEntity = new Entity(this, parentId);
         if (!parentEntity.HasTreeNode()) { // todo could optimize
-            parentEntity.AddComponent<TreeNodeComponent>();
+            parentEntity.AddComponent<TreeNode>();
         }
         ref var parent      = ref parentEntity.GetTreeNode();
         int index           = parent.childCount;
@@ -114,7 +114,7 @@ public partial class EntityStore
         parent.childCount++;
         EnsureChildIdsCapacity(ref parent,  parent.childCount);
         parent.childIds[index] = childId;
-        SetTreeFlags(localNodes, childId, nodes[parentId].flags & TreeNode);
+        SetTreeFlags(localNodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId, childId, index);
         return index;
@@ -126,7 +126,7 @@ public partial class EntityStore
     //  ref var parent  = ref localNodes[parentId];
         var parentEntity = new Entity(this, parentId);
         if (!parentEntity.HasTreeNode()) {  // todo could optimize
-            parentEntity.AddComponent<TreeNodeComponent>();
+            parentEntity.AddComponent<TreeNode>();
         }
         ref var parent = ref parentEntity.GetTreeNode();
         
@@ -165,7 +165,7 @@ public partial class EntityStore
     //  childNode.parentId  = parentId;
         parentMap[childId] = parentId;
         InsertChildNode(ref parent, childId, childIndex);
-        SetTreeFlags(localNodes, childId, nodes[parentId].flags & TreeNode);
+        SetTreeFlags(localNodes, childId, nodes[parentId].flags & NodeFlags.TreeNode);
         
         OnChildNodeAdd(parentId,    childId, childIndex);
     }
@@ -181,7 +181,7 @@ public partial class EntityStore
     //  childNode.parentId  = Static.NoParentId;
         parentMap.Remove(childId);
         var curIndex        = RemoveChildNode(parentId, childId);
-        ClearTreeFlags(localNodes, childId, TreeNode);
+        ClearTreeFlags(localNodes, childId, NodeFlags.TreeNode);
         
         OnChildNodeRemove(parentId, childId, curIndex);
         return true;
@@ -233,7 +233,7 @@ public partial class EntityStore
         throw new InvalidOperationException($"unexpected state: child id not found. parent id: {parentId}, child id: {childId}");
     }
     
-    private static void InsertChildNode (ref TreeNodeComponent parent, int childId, int childIndex)
+    private static void InsertChildNode (ref TreeNode parent, int childId, int childIndex)
     {
         EnsureChildIdsCapacity(ref parent, parent.childCount + 1);
         var childIds = parent.childIds;
@@ -244,7 +244,7 @@ public partial class EntityStore
         parent.childCount++;
     }
     
-    private static void EnsureChildIdsCapacity(ref TreeNodeComponent parent, int length)
+    private static void EnsureChildIdsCapacity(ref TreeNode parent, int length)
     {
         if (parent.childIds == null) {
             parent.childIds = new int[Math.Max(4, length)];
@@ -271,7 +271,7 @@ public partial class EntityStore
         var     newCount    = newChildIds.Length;
         int[]   childIds;
         if (!parent.HasTreeNode()) {    // todo could optimize
-            parent.AddComponent<TreeNodeComponent>();
+            parent.AddComponent<TreeNode>();
         }
         ref var node = ref parent.GetTreeNode();
         if (newCount <= node.childCount) {
@@ -287,7 +287,7 @@ public partial class EntityStore
     private void SetChildNodesWithEvents(Entity parent, ReadOnlySpan<int> newIds)
     {
         if (!parent.HasTreeNode()) {    // todo could optimize
-            parent.AddComponent<TreeNodeComponent>();
+            parent.AddComponent<TreeNode>();
         }
         ref var node    = ref parent.GetTreeNode();
         var newCount    = newIds.Length;
@@ -323,7 +323,7 @@ public partial class EntityStore
     }
 
     // --- 1.
-    private void ChildIds_RemoveMissingIds(ReadOnlySpan<int> newIds, ref TreeNodeComponent node, int parentId)
+    private void ChildIds_RemoveMissingIds(ReadOnlySpan<int> newIds, ref TreeNode node, int parentId)
     {
         var childIds = node.childIds;
         var newIdSet = idBufferSet;
@@ -349,7 +349,7 @@ public partial class EntityStore
     }
 
     // --- 2.
-    private void ChildIds_InsertNewIds(ReadOnlySpan<int> newIds, ref TreeNodeComponent node, int parentId)
+    private void ChildIds_InsertNewIds(ReadOnlySpan<int> newIds, ref TreeNode node, int parentId)
     {
         var childIds = node.childIds;
         var curIdSet = idBufferSet;
@@ -400,7 +400,7 @@ public partial class EntityStore
     }
     
     // --- 3.2
-    private void ChildIds_RemoveRange(ref TreeNodeComponent node, int first, int last, int parentId)
+    private void ChildIds_RemoveRange(ref TreeNode node, int first, int last, int parentId)
     {
         var childIds    = node.childIds;
         for (int index = last; index >= first; index--)
@@ -418,7 +418,7 @@ public partial class EntityStore
     }
     
     // --- 3.3
-    private void ChildIds_InsertRange(ref TreeNodeComponent node, int first, int last, ReadOnlySpan<int> newIds, int parentId)
+    private void ChildIds_InsertRange(ref TreeNode node, int first, int last, ReadOnlySpan<int> newIds, int parentId)
     {
         var childIds = node.childIds;
         for (int index = first; index <= last; index++)
@@ -562,7 +562,7 @@ public partial class EntityStore
         ref var node    = ref nodes[entity.Id];
         
         // --- mark its child nodes as floating
-        ClearTreeFlags(nodes, entity.Id, TreeNode);
+        ClearTreeFlags(nodes, entity.Id, NodeFlags.TreeNode);
         foreach (var childId in entity.ChildIds) {
         //  localNodes[childId].parentId = Static.NoParentId;
             parentMap.Remove(childId);
@@ -619,7 +619,7 @@ public partial class EntityStore
         storeRoot   = entity;
     //  parentId    = Static.StoreRootParentId;
         parentMap.Add(id, Static.StoreRootParentId);
-        SetTreeFlags(nodes, id, TreeNode);
+        SetTreeFlags(nodes, id, NodeFlags.TreeNode);
     }
     
     // ---------------------------------- child nodes change notification ----------------------------------
@@ -646,7 +646,7 @@ public partial class EntityStore
     
     // ------------------------------------- Entity access -------------------------------------
     internal TreeMembership  GetTreeMembership(int id) {
-        return nodes[id].Is(TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
+        return nodes[id].Is(NodeFlags.TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
     internal static Entity GetParent(Entity entity)

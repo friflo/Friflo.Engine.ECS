@@ -519,21 +519,21 @@ public readonly struct Entity : IEquatable<Entity>
     /// <returns></returns>
     public int  GetChildIndex(Entity child)     => EntityStore.GetChildIndex(this, child.Id);
     
-    internal bool TryGetTreeNode(out TreeNodeComponent node)
+    internal bool TryGetTreeNode(out TreeNode node)
     {
-        var heap = archetype.heapMap[StructInfo<TreeNodeComponent>.Index];
+        var heap = archetype.heapMap[StructInfo<TreeNode>.Index];
         if (heap == null) {
             node = default;
             return false;
         }
-        node = ((StructHeap<TreeNodeComponent>)heap).components[compIndex];
+        node = ((StructHeap<TreeNode>)heap).components[compIndex];
         return true;
     }
     
-    internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNodeComponent>.Index] != null;
+    internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNode>.Index] != null;
     
-    internal  ref TreeNodeComponent   GetTreeNode()
-        => ref ((StructHeap<TreeNodeComponent>)archetype.heapMap[StructInfo<TreeNodeComponent>.Index]).components[compIndex];
+    internal  ref TreeNode   GetTreeNode()
+        => ref ((StructHeap<TreeNode>)archetype.heapMap[StructInfo<TreeNode>.Index]).components[compIndex];
     #endregion
 
 

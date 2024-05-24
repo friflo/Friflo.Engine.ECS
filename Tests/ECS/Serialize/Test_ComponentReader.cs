@@ -445,7 +445,7 @@ public static class Test_ComponentReader
         AreEqual(100,   entity.ChildEntities.Count);
         var node10 = store.GetEntityNode(10);
         var entity10 = store.GetEntityById(10);
-        entity10.TryGetComponent<TreeNodeComponent>(out var treeNode);
+        entity10.TryGetComponent<TreeNode>(out var treeNode);
         AreEqual(100,   treeNode.ChildCount);
         AreEqual(10,    node10.Pid);
         var entity20    = store.GetEntityById(20);
@@ -477,7 +477,7 @@ public static class Test_ComponentReader
         AreEqual(100,   entity.ChildEntities.Count);
         var node1   = store.GetEntityNode(1);
         var entity1 = store.GetEntityById(1);
-        entity1.TryGetComponent<TreeNodeComponent>(out var treeNode1);
+        entity1.TryGetComponent<TreeNode>(out var treeNode1);
         AreEqual(100,   treeNode1.ChildCount);
         AreEqual(10,    node1.Pid);
         var node2       = store.GetEntityNode(2);

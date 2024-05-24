@@ -84,11 +84,11 @@ public static class Test_Entity_Tree
         // -- add same child again
         AreEqual(-1,        root.AddChild(child));       // event handler is not called
         AreEqual(1,         childEntities.Ids.Length);
-        var rootNode = root.GetComponent<TreeNodeComponent>();
+        var rootNode = root.GetComponent<TreeNode>();
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
     //  AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  root.ToString()); TREE_NODE
-        AreEqual("id: 1  \"root\"  [EntityName, TreeNodeComponent]",  root.ToString());
+        AreEqual("id: 1  \"root\"  [EntityName, TreeNode]",  root.ToString());
         AreEqual(1,         childEntities.Count);
         IsTrue(child ==     childEntities[0]);
         
@@ -137,10 +137,10 @@ public static class Test_Entity_Tree
             // --- insert same child (id: 4) at same index again
             root.InsertChild(0, child4);     // event handler is not called
             AreEqual(1,                                 childNodes.Ids.Length);
-            var rootNode = root.GetComponent<TreeNodeComponent>();
+            var rootNode = root.GetComponent<TreeNode>();
             AreEqual(1,                                 rootNode.ChildCount);
             AreEqual(1,                                 rootNode.ChildIds.Length);
-            AreEqual("id: 1  \"root\"  [EntityName, TreeNodeComponent]",  root.ToString());
+            AreEqual("id: 1  \"root\"  [EntityName, TreeNode]",  root.ToString());
             IsTrue(child4 ==                            childNodes[0]);
             events.RemoveHandler();
         }
@@ -384,7 +384,7 @@ public static class Test_Entity_Tree
         AreEqual("id: 2  []  flags: TreeNode | Created",    node2.ToString());
         
         AreEqual(NullNode,                                  node0.Flags);
-        AreEqual(TreeNode | Created,                        node2.Flags);
+        AreEqual(NodeFlags.TreeNode | Created,                        node2.Flags);
     }
     
     [Test]
@@ -493,7 +493,7 @@ public static class Test_Entity_Tree
         IsTrue  (           store.GetEntityById(childNode.Id).IsNull);
         AreEqual(2,         childNode.Id);
         AreEqual(0,         childNode.Pid);
-    //  child.TryGetComponent<TreeNodeComponent>(out var childTreeNode);
+    //  child.TryGetComponent<TreeNode>(out var childTreeNode);
     //  AreEqual(0,         childTreeNode.ChildIds.Length);
     //  AreEqual(0,         childTreeNode.ChildCount);
     //  AreEqual(0,         entity2.Parent.Id);

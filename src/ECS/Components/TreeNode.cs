@@ -10,7 +10,7 @@ namespace Friflo.Engine.ECS;
 
 // TODO make internal, rename: TreeNodeComponent -> TreeNode
 [ComponentKey(null)]
-public struct TreeNodeComponent : IComponent    // todo should be internal
+public struct TreeNode : IComponent    // todo should be internal
 {
                     public      ReadOnlySpan<int>   ChildIds    => new (childIds,0, childCount);
                     public      int                 ChildCount  => childCount;
