@@ -23,16 +23,9 @@ namespace Friflo.Engine.ECS;
 /// <br/>
 /// It provide the properties listed below
 /// <list type="bullet">
-///   <item><see cref="Id"/> to identify an entity in its <see cref="EntityStore"/></item>
 ///   <item><see cref="Pid"/> used to store entities in a database</item>
 ///   <item><see cref="Entity"/> to access the <see cref="ECS.Entity"/> attached to a node</item>
-///   <item><see cref="ParentId"/> and <see cref="ChildIds"/> to get the direct related nodes</item>
 /// </list>
-/// <b><see cref="Id"/></b><br/>
-/// The entity id change when performing an <see cref="EntityStore"/> id cleanup.<br/>
-/// The clean remove unused ids and ensure that entities with the same <see cref="Archetype"/> have consecutive ids.<br/>
-/// <br/>
-/// <b><see cref="Pid"/></b><br/>
 /// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
 /// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
 /// Using random pids avoid merge conflicts when multiples users make changes to the same <see cref="EntityStore"/> file / database.<br/>
@@ -56,14 +49,9 @@ public struct EntityNode
     /// <summary>The <see cref="ECS.Archetype"/> the entity node is stored.</summary>
                     public              Archetype           Archetype   =>  archetype;
     
-/*  /// <summary>The child entities of an entity as an array of ids.</summary>
-                    public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
-                    
-    /// <summary>Number of child entities.</summary>
-    [Browse(Never)] public              int                 ChildCount  =>  childCount;
-    
-    /// <summary>The parent id of the entity. 0 - if the entity has no parent.</summary>
-                    public              int                 ParentId    =>  parentId; */
+    //  removed     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
+    //  removed     public              int                 ChildCount  =>  childCount;
+    //  removed     public              int                 ParentId    =>  parentId;
                     
     /// <summary>Internally used flags assigned to the entity.</summary>
                     public              NodeFlags           Flags       =>  flags;
@@ -74,9 +62,9 @@ public struct EntityNode
 #region internal fields
     [Browse(Never)] internal    long            pid;            //  8   permanent id used for serialization
     
-//  [Browse(Never)] internal    int             parentId;       //  4   0 if entity has no parent
-//                  internal    int[]           childIds;       //  8   null if entity has no child entities
-//  [Browse(Never)] internal    int             childCount;     //  4   count of child entities
+    // removed      internal    int             parentId;       //  4   0 if entity has no parent
+    // removed      internal    int[]           childIds;       //  8   null if entity has no child entities
+    // removed      internal    int             childCount;     //  4   count of child entities
     
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal    NodeFlags       flags;          //  4 (1)
