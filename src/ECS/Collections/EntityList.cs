@@ -109,17 +109,18 @@ public sealed class EntityList : IList<Entity>
     public void AddTree(Entity entity)
     {
         if (entity.store != entityStore) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        AddEntityTree(new Span<EntityNode>(entity.store.nodes), entity.Id);
+        AddEntityTree(entity);
     }
     
-    private void AddEntityTree(Span<EntityNode> nodes, int entityId)
+    private void AddEntityTree(Entity entity)
     {
-        Add(entityId);
-        ref var node    = ref nodes[entityId];
+        Add(entity.Id);
+        entity.TryGetTreeNode(out var node);
         var childCount  = node.childCount;
         var childIds    = node.childIds;
         for (int index = 0; index < childCount; index++) {
-            AddEntityTree(nodes, childIds[index]);
+            var child = new Entity(entityStore, childIds[index]);
+            AddEntityTree(child);
         }
     }
     #endregion

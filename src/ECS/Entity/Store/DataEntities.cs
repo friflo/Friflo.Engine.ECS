@@ -22,7 +22,7 @@ public partial class EntityStore
 #region Entity -> DataEntity
     internal void EntityToDataEntity(Entity entity, DataEntity dataEntity, ComponentWriter writer, bool pretty)
     {
-        ProcessChildren(dataEntity, nodes[entity.Id]);
+        ProcessChildren(dataEntity, entity);
         
         // --- write components & scripts
         var jsonComponents = writer.Write(entity, null, pretty);
@@ -63,17 +63,18 @@ public partial class EntityStore
         }
     }
 
-    private void ProcessChildren(DataEntity dataEntity, in EntityNode node)
+    private void ProcessChildren(DataEntity dataEntity, Entity entity)
     {
         var children = dataEntity.children;
-        if (node.childCount > 0) {
+        var childEntities = entity.ChildEntities;
+        if (childEntities.childCount > 0) {
             if (children == null) {
-                children = dataEntity.children = new List<long>(node.childCount);
+                children = dataEntity.children = new List<long>(childEntities.childCount);
             } else {
                 children.Clear();
             }
-            foreach (var childId in node.ChildIds) {
-                var pid = nodes[childId].pid;
+            foreach (var child in childEntities) {
+                var pid = nodes[child.Id].pid;
                 children.Add(pid);
             }
         } else {
@@ -129,8 +130,9 @@ public partial class EntityStore
         if (ids.Length > 0) {
             UpdateEntityNodes(ids, children);
         }
-        SetChildNodes(id, ids);
-        return new Entity(this, id);
+        var entity = new Entity(this, id); 
+        SetChildNodes(entity, ids);
+        return entity;
     }
     
     private Entity CreateFromDataEntityUsePidAsId(DataEntity dataEntity)
@@ -163,8 +165,9 @@ public partial class EntityStore
         if (ids.Length > 0) {
             UpdateEntityNodes(ids, children);
         }
-        SetChildNodes(id, ids);
-        return new Entity(this, id);
+        var entity = new Entity(this, id);
+        SetChildNodes(entity, ids);
+        return entity;
     }
     
     private void EnsureIdBufferCapacity(int count) {

@@ -448,7 +448,7 @@ public static class Test_ExplorerItem
         
         var tree = new ExplorerItemTree(root, "test-tree");
         
-        AreEqual("id: 1  \"root\"  [EntityName]   children: 2", tree.GetItemById(1).ToString());
+        AreEqual("id: 1  \"root\"  [EntityName, TreeNodeComponent]   children: 2", tree.GetItemById(1).ToString());
         AreEqual("id: 2  [Position]",                           tree.GetItemById(2).ToString());
         AreEqual("id: 3  [#TestTag]",                           tree.GetItemById(3).ToString());
     }

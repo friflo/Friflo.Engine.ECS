@@ -444,12 +444,15 @@ public static class Test_ComponentReader
         AreEqual(10,    entity.Id);
         AreEqual(100,   entity.ChildEntities.Count);
         var node10 = store.GetEntityNode(10);
-        AreEqual(100,   node10.ChildCount);
+        var entity10 = store.GetEntityById(10);
+        entity10.TryGetComponent<TreeNodeComponent>(out var treeNode);
+        AreEqual(100,   treeNode.ChildCount);
         AreEqual(10,    node10.Pid);
-        var node20 = store.GetEntityNode(20);
-        AreEqual(10,    node20.ParentId);
+        var entity20    = store.GetEntityById(20);
+        var node20      = store.GetEntityNode(20);
+        AreEqual(10,    entity20.Parent.Id);
         AreEqual(20,    node20.Pid);
-        var childIds = node10.ChildIds;
+        var childIds = treeNode.ChildIds;
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 20, childIds[n]);
         }
@@ -472,13 +475,16 @@ public static class Test_ComponentReader
         AreEqual(1,     store.GetEntityByPid(10L).Id);
         AreEqual(1,     entity.Id);
         AreEqual(100,   entity.ChildEntities.Count);
-        var node1 = store.GetEntityNode(1);
-        AreEqual(100,   node1.ChildCount);
+        var node1   = store.GetEntityNode(1);
+        var entity1 = store.GetEntityById(1);
+        entity1.TryGetComponent<TreeNodeComponent>(out var treeNode1);
+        AreEqual(100,   treeNode1.ChildCount);
         AreEqual(10,    node1.Pid);
-        var node2 = store.GetEntityNode(2);
-        AreEqual(1,     node2.ParentId);
+        var node2       = store.GetEntityNode(2);
+        var entity2     = store.GetEntityById(2);
+        AreEqual(1,     entity2.Parent.Id);
         AreEqual(20,    node2.Pid);
-        var childIds = node1.ChildIds;
+        var childIds = treeNode1.ChildIds;
         for (int n = 0; n < 100; n++) {
             AreEqual(n + 2, childIds[n]);
         }

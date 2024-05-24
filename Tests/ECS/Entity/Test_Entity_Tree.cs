@@ -84,7 +84,7 @@ public static class Test_Entity_Tree
         // -- add same child again
         AreEqual(-1,        root.AddChild(child));       // event handler is not called
         AreEqual(1,         childEntities.Ids.Length);
-        var rootNode = store.GetEntityNode(1);
+        var rootNode = root.GetComponent<TreeNodeComponent>();
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
         AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  rootNode.ToString());
@@ -136,7 +136,7 @@ public static class Test_Entity_Tree
             // --- insert same child (id: 4) at same index again
             root.InsertChild(0, child4);     // event handler is not called
             AreEqual(1,                                 childNodes.Ids.Length);
-            var rootNode = store.GetEntityNode(1);
+            var rootNode = root.GetComponent<TreeNodeComponent>();
             AreEqual(1,                                 rootNode.ChildCount);
             AreEqual(1,                                 rootNode.ChildIds.Length);
             AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  rootNode.ToString());
@@ -489,12 +489,14 @@ public static class Test_Entity_Tree
         IsNull  (child.Store);
         
         var childNode = store.GetEntityNode(2); // child is detached => all fields have their default value
+        var entity2   = store.GetEntityById(2);
         IsTrue  (           store.GetEntityById(childNode.Id).IsNull);
         AreEqual(2,         childNode.Id);
         AreEqual(0,         childNode.Pid);
-        AreEqual(0,         childNode.ChildIds.Length);
-        AreEqual(0,         childNode.ChildCount);
-        AreEqual(0,         childNode.ParentId);
+        child.TryGetComponent<TreeNodeComponent>(out var childTreeNode);
+        AreEqual(0,         childTreeNode.ChildIds.Length);
+        AreEqual(0,         childTreeNode.ChildCount);
+        AreEqual(0,         entity2.Parent.Id);
         AreEqual(NullNode,  childNode.Flags);
         
         // From now: access to components and tree nodes throw a NullReferenceException

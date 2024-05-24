@@ -106,8 +106,9 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             int                     entityScriptCount;  //  4   - invariant: > 0  and  <= entityScripts.Length
     // --- buffers
     [Browse(Never)] private             int[]                   idBuffer;           //  8
-    [Browse(Never)] private readonly    HashSet<int>            idBufferSet;        //  8
-    [Browse(Never)] private readonly    DataEntity              dataBuffer;         //  8
+    [Browse(Never)] private  readonly   HashSet<int>            idBufferSet;        //  8
+    [Browse(Never)] private  readonly   DataEntity              dataBuffer;         //  8
+                    internal readonly   Dictionary<int, int>    parentMap;          //  8   - store the parent (value) of an entity (key)
 
                     private             Intern                  intern;             // 88
     /// <summary>Contains state of <see cref="EntityStore"/> not relevant for application development.</summary>
@@ -168,6 +169,7 @@ public sealed partial class EntityStore : EntityStoreBase
         idBuffer            = new int[1];
         idBufferSet         = new HashSet<int>();
         dataBuffer          = new DataEntity();
+        parentMap           = new Dictionary<int, int>();
         Info                = new EntityStoreInfo(this);
     }
     #endregion

@@ -198,7 +198,7 @@ public partial class EntityStore
         node.pid            = pid;
         node.scriptIndex    = EntityUtils.NoScripts;
         // node.parentId    = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
-        node.childIds       = Static.EmptyChildIds;
+    //  node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
         return node.compIndex;
     }

@@ -268,8 +268,8 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ child / tree properties -------------------------------
 #region child / tree - properties
     /// <summary>Return the number of child entities.</summary>
-    [Browse(Never)] public  int                 ChildCount  => archetype.entityStore.nodes[Id].childCount;
-    
+    [Browse(Never)] public  int                 ChildCount { get { TryGetTreeNode(out var node); return node.childCount; } }
+
     /// <summary>Returns the parent entity that contains the entity.</summary>
     /// <returns>
     /// null if the entity has no parent.<br/>
@@ -285,10 +285,10 @@ public readonly struct Entity : IEquatable<Entity>
     ///     foreach (var child in entity.ChildEntities)
     /// </code>
     /// </remarks>
-     public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(archetype.entityStore, Id);
+     public  ChildEntities       ChildEntities   => EntityStore.GetChildEntities(this);
     
     /// <summary>Return the ids of the child entities.</summary>
-    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(archetype.entityStore, Id);
+    [Browse(Never)] public  ReadOnlySpan<int>   ChildIds        => EntityStore.GetChildIds(this);
     #endregion
 
 
@@ -510,17 +510,31 @@ public readonly struct Entity : IEquatable<Entity>
             var arch            = archetype;
             var componentIndex  = compIndex;
             var entityStore     = arch.entityStore;
-            entityStore.DeleteNode(Id); 
+            entityStore.DeleteNode(this); 
             Archetype.MoveLastComponentsTo(arch, componentIndex);
         }
     }
     /// <summary>Return the position of the given <paramref name="child"/> in the entity.</summary>
     /// <param name="child"></param>
     /// <returns></returns>
-    public int  GetChildIndex(Entity child)     => archetype.entityStore.GetChildIndex(Id, child.Id);    
+    public int  GetChildIndex(Entity child)     => EntityStore.GetChildIndex(this, child.Id);
+    
+    internal bool TryGetTreeNode(out TreeNodeComponent node)
+    {
+        var heap = archetype.heapMap[StructInfo<TreeNodeComponent>.Index];
+        if (heap == null) {
+            node = default;
+            return false;
+        }
+        node = ((StructHeap<TreeNodeComponent>)heap).components[compIndex];
+        return true;
+    }
+    
+    internal  bool    HasTreeNode ()   => archetype.heapMap[StructInfo<TreeNodeComponent>.Index] != null;
+    
+    internal  ref TreeNodeComponent   GetTreeNode()
+        => ref ((StructHeap<TreeNodeComponent>)archetype.heapMap[StructInfo<TreeNodeComponent>.Index]).components[compIndex];
     #endregion
-
-
 
 
     // ------------------------------------ general methods ---------------------------------------

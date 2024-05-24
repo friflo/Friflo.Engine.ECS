@@ -56,14 +56,14 @@ public struct EntityNode
     /// <summary>The <see cref="ECS.Archetype"/> the entity node is stored.</summary>
                     public              Archetype           Archetype   =>  archetype;
     
-    /// <summary>The child entities of an entity as an array of ids.</summary>
+/*  /// <summary>The child entities of an entity as an array of ids.</summary>
                     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
                     
     /// <summary>Number of child entities.</summary>
     [Browse(Never)] public              int                 ChildCount  =>  childCount;
     
     /// <summary>The parent id of the entity. 0 - if the entity has no parent.</summary>
-                    public              int                 ParentId    =>  parentId;
+                    public              int                 ParentId    =>  parentId; */
                     
     /// <summary>Internally used flags assigned to the entity.</summary>
                     public              NodeFlags           Flags       =>  flags;
@@ -74,9 +74,11 @@ public struct EntityNode
 #region internal fields
     [Browse(Never)] internal    int             id;             //  4   not readonly for perf. If readonly EnsureCapacity() & EnsureNodesLength() must call its constructor.  
     [Browse(Never)] internal    long            pid;            //  8   permanent id used for serialization
-    [Browse(Never)] internal    int             parentId;       //  4   0 if entity has no parent
-                    internal    int[]           childIds;       //  8   null if entity has no child entities
-    [Browse(Never)] internal    int             childCount;     //  4   count of child entities
+    
+//  [Browse(Never)] internal    int             parentId;       //  4   0 if entity has no parent
+//                  internal    int[]           childIds;       //  8   null if entity has no child entities
+//  [Browse(Never)] internal    int             childCount;     //  4   count of child entities
+    
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
     [Browse(Never)] internal    NodeFlags       flags;          //  4 (1)
     /// <remarks> Is set to null only in <see cref="EntityStore.DeleteNode"/>. </remarks>
@@ -107,13 +109,14 @@ public struct EntityNode
             sb.Append("id: ");
             sb.Append(id);
         }
+        /*
         if (childCount > 0) {
             if (sb.Length > 0) {
                 sb.Append("  ");    
             }
             sb.Append("ChildCount: ");
             sb.Append(childCount);
-        }
+        } */
         if (flags != 0) {
             sb.Append("  flags: ");
             var startPos = sb.Length;
