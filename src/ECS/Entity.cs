@@ -452,7 +452,7 @@ public readonly struct Entity : IEquatable<Entity>
     // ------------------------------------ child / tree methods ----------------------------------
 #region child / tree - methods
     /// <summary>
-    /// Add the given <paramref name="entity"/> as a child to the entity.<br/>
+    /// Add the given <paramref name="child"/> as a child to the entity.<br/>
     /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General#child-entities">Example.</a>
     /// </summary>
     /// <remarks>
@@ -460,36 +460,45 @@ public readonly struct Entity : IEquatable<Entity>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
     /// <returns>
-    /// The index within <see cref="ChildIds"/> the <paramref name="entity"/> is added.<br/>
-    /// -1 if the <paramref name="entity"/> is already a child entity.
+    /// The index within <see cref="ChildIds"/> the <paramref name="child"/> is added.<br/>
+    /// -1 if the <paramref name="child"/> is already a child entity.
     /// </returns>
-    public int AddChild(Entity entity) {
+    public int AddChild(Entity child) {
+        if (child.store == null)                throw new ArgumentNullException              (nameof(child));
+        var childType = child.archetype;
+        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(child));
         var entityStore = archetype.entityStore;
-        if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        return entityStore.AddChild(Id, entity.Id);
+        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(child));
+        return entityStore.AddChild(Id, child.Id);
     }
-    /// <summary>Insert the given <paramref name="entity"/> as a child to the entity at the passed <paramref name="index"/>.</summary>
+    /// <summary>Insert the given <paramref name="child"/> as a child to the entity at the passed <paramref name="index"/>.</summary>
     /// <remarks>
     /// Executes in O(1) in case <paramref name="index"/> == <see cref="ChildCount"/>.<br/>
-    /// Otherwise O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
+    /// Otherwise, O(N). N = <see cref="ChildCount"/> - <paramref name="index"/><br/>
     /// If its <see cref="TreeMembership"/> changes O(number of nodes in sub tree).<br/>
     /// The subtree structure of the added entity remains unchanged<br/>
     /// </remarks>
-    public void InsertChild(int index, Entity entity) {
+    public void InsertChild(int index, Entity child) {
+        if (child.store == null)                throw new ArgumentNullException              (nameof(child));
+        var childType = child.archetype;
+        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(child));
         var entityStore = archetype.entityStore;
-        if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        entityStore.InsertChild(Id, entity.Id, index);
+        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(child));
+        entityStore.InsertChild(Id, child.Id, index);
     }
-    /// <summary>Remove the given child <paramref name="entity"/> from the entity.</summary>
+    /// <summary>Remove the given child <paramref name="child"/> from the entity.</summary>
     /// <remarks>
     /// Executes in O(N) to search the entity. N = <see cref="ChildCount"/><br/>
     /// If its <see cref="TreeMembership"/> changes (in-tree / floating) O(number of nodes in sub tree).<br/>
     /// The subtree structure of the removed entity remains unchanged<br/>
     /// </remarks>
-    public bool RemoveChild(Entity entity) {
+    public bool RemoveChild(Entity child) {
+        if (child.store == null)                throw new ArgumentNullException              (nameof(child));
+        var childType = child.archetype;
+        if (childType == null)                  throw EntityStoreBase.EntityDetachedException(nameof(child));
         var entityStore = archetype.entityStore;
-        if (entityStore != entity.archetype.store) throw EntityStoreBase.InvalidStoreException(nameof(entity));
-        return entityStore.RemoveChild(Id, entity.Id);
+        if (entityStore != childType.store)     throw EntityStoreBase.InvalidStoreException  (nameof(child));
+        return entityStore.RemoveChild(Id, child.Id);
     }
     
     /// <summary>
@@ -658,8 +667,8 @@ public readonly struct Entity : IEquatable<Entity>
 #region internal properties
     // ReSharper disable InconsistentNaming - placed on bottom to disable all subsequent hints
     /// <summary>The <see cref="Archetype"/> used to store the components of they the entity</summary>
-    [Browse(Never)] internal    ref Archetype   refArchetype    => ref store.nodes[Id].archetype;
-    [Browse(Never)] internal        Archetype      archetype    =>     store.nodes[Id].archetype;
+    [Browse(Never)] internal    ref Archetype   refArchetype        => ref store. nodes[Id].archetype;
+    [Browse(Never)] internal        Archetype      archetype        =>     store. nodes[Id].archetype;
 
     /// <summary>The index within the <see cref="refArchetype"/> the entity is stored</summary>
     /// <remarks>The index will change if entity is moved to another <see cref="Archetype"/></remarks>

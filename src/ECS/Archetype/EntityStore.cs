@@ -151,6 +151,10 @@ public abstract partial class EntityStoreBase
     
     
 #region exceptions
+    internal static Exception   EntityDetachedException(string parameterName) {
+        return ExceptionUtils.ArgumentException("entity is detached", parameterName);
+    }
+    
     internal static Exception   InvalidStoreException(string parameterName) {
         return ExceptionUtils.ArgumentException("entity is owned by a different store", parameterName);
     }
