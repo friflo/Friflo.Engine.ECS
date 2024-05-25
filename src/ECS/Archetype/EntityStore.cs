@@ -120,12 +120,12 @@ public abstract partial class EntityStoreBase
         
         /// <summary>to avoid accidental entity access by id using (default value) 0 </summary>
         internal const              int             MinNodeId               =  1;
-        /// <summary>
-        /// A <see cref="EntityNode"/> with <see cref="Entity.Parent"/> == null
-        /// is declared as <see cref="TreeMembership.floating"/>.
-        /// </summary>
-        internal const              int             NoParentId              =  0;
-        internal const              int             StoreRootParentId       = -1;
+    //  /// <summary>
+    //  /// A <see cref="EntityNode"/> with <see cref="Entity.Parent"/> == null
+    //  /// is declared as <see cref="TreeMembership.floating"/>.
+    //  /// </summary>
+    //  internal const              int             NoParentId              =  0;
+    //  internal const              int             StoreRootParentId       = -1;
     }
     #endregion
     

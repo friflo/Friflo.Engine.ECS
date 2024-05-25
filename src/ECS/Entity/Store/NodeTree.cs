@@ -619,7 +619,7 @@ public partial class EntityStore
         }
         storeRoot   = entity;
     //  parentId    = Static.StoreRootParentId;
-        parentMap.Add(id, Static.StoreRootParentId);
+    //  parentMap.Add(id, Static.StoreRootParentId);
         SetTreeFlags(nodes, id, NodeFlags.TreeNode);
     }
     
@@ -650,13 +650,13 @@ public partial class EntityStore
         return nodes[id].Is(NodeFlags.TreeNode) ? TreeMembership.treeNode : TreeMembership.floating;
     }
 
-    internal static Entity GetParent(Entity entity)
+    public int GetInternalParentId(int id)
     {
     //    var parentNode  = store.nodes[id].parentId;
     //    parentNode      = HasParent(parentNode) ? parentNode : Static.NoParentId;
-        entity.store.parentMap.TryGetValue(entity.Id, out int parentId);
-        parentId = HasParent(parentId) ? parentId : Static.NoParentId;
-        return new Entity(entity.store, parentId); // ENTITY_STRUCT
+        parentMap.TryGetValue(id, out int parentId);
+    //  parentId = HasParent(parentId) ? parentId : Static.NoParentId;
+        return parentId; // ENTITY_STRUCT
     }
     
     internal static ChildEntities GetChildEntities(Entity entity)

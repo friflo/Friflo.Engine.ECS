@@ -51,7 +51,7 @@ public static class Test_EntityConverter
         ref readonly var node8 = ref store.GetEntityNode(8);
         AreEqual(NullNode,              node8.Flags);      // diff_flags
     //  AreEqual(0,                     node8.Id);
-        AreEqual(5,                     entity8.Parent.Id);   // diff_parent
+        AreEqual(5,                     store.GetInternalParentId(entity8.Id));   // diff_parent
         AreEqual(1,                     store.Count);
         
         // --- create child 8

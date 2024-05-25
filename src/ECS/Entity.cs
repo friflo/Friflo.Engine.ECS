@@ -276,8 +276,11 @@ public readonly struct Entity : IEquatable<Entity>
     /// <i>Note:</i>The <see cref="EntityStore"/>.<see cref="EntityStore.StoreRoot"/> returns always null
     /// </returns>
     /// <remarks>Executes in O(1)</remarks> 
-                    public  Entity              Parent      => EntityStore.GetParent(this);
-    
+                    public  Entity              Parent { get {
+                        if (archetype == null) throw new NullReferenceException();
+                        return new Entity(store, store.GetInternalParentId(Id));
+                    }}
+
     /// <summary>Return all child entities of an entity.</summary>
     /// <remarks>
     /// Executes in O(1).<br/> Enumerate with:
