@@ -34,16 +34,17 @@ public static class Test_ComponentReader
         var child       = converter.DataEntityToEntity(childNode, store, out _);
         AssertRootEntity(root, 3);
         AssertChildEntity(child);
-        var type = store.GetArchetype(ComponentTypes.Get<Position, Scale3>());
-        AreEqual(2,     type.Count);
+        AreEqual("Components: [Position, Scale3, TreeNode]",    root.Archetype.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Scale3]",              child.Archetype.ComponentTypes.ToString());
         AreEqual(2,     store.Count);
         
         // --- read root DataEntity again
         root.Position   = default;
         root.Scale3     = default;
         root            = converter.DataEntityToEntity(rootNode, store, out _);
-        AssertRootEntity(root, 2);
-        AreEqual(2,     type.Count);
+        AssertRootEntity(root, 3);
+        AreEqual("Components: [Position, Scale3, TreeNode]",    root.Archetype.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Scale3]",              child.Archetype.ComponentTypes.ToString());
         AreEqual(2,     store.Count);
         
         // --- read child DataEntity again
@@ -51,7 +52,8 @@ public static class Test_ComponentReader
         child.Scale3    = default;
         child           = converter.DataEntityToEntity(childNode, store, out _);
         AssertChildEntity(child);
-        AreEqual(2,     type.Count);
+        AreEqual("Components: [Position, Scale3, TreeNode]",    root.Archetype.ComponentTypes.ToString());
+        AreEqual("Components: [Position, Scale3]",              child.Archetype.ComponentTypes.ToString());
         AreEqual(2,     store.Count);
     }
     

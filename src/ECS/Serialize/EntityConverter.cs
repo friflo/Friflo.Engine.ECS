@@ -57,7 +57,8 @@ public sealed class EntityConverter
     /// </summary>
     public Entity DataEntityToEntity(DataEntity dataEntity, EntityStore store, out string error)
     {
-        return store.DataEntityToEntity(dataEntity, out error, reader, default);
+        var options = new ConvertOptions { preserve = true, preserveComponents = ComponentTypes.Get<TreeNode>() };
+        return store.DataEntityToEntity(dataEntity, out error, reader, options);
     }
     
     /// <summary>
