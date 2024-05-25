@@ -90,6 +90,8 @@ public static class Test_TreeUtils
         AreEqual(2,             child2.ChildCount);
         
         var clone2 =            root.ChildEntities  [indexes[0]];
+        AreEqual(1,             clone2.ChildEntities.Count);
+        AreEqual("child-3",     clone2.ChildEntities[0].Name.value);
         AreEqual("child-2",     clone2.Name.value);
         
         var clone3 =            child2.ChildEntities[indexes[1]];

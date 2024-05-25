@@ -107,6 +107,7 @@ public partial class EntityStore
             
             // --- deserialize DataEntity
             dataBuffer.pid      = IdToPid(clone.Id);
+            dataBuffer.children = null; // child ids are not copied. If doing this these children would have two parents.
             // convert will use entity created above
             converter.DataEntityToEntity(dataBuffer, this, out string error); // error == null. No possibility for mapping errors
             AssertNoError(error);
