@@ -110,7 +110,6 @@ public abstract partial class EntityStoreBase
     // use nested class to minimize noise in debugger
     internal static class Static
     {
-        internal static readonly    int[]           EmptyChildIds   = null;
         internal static readonly    TypeStore       TypeStore       = new TypeStore();
         internal static readonly    EntitySchema    EntitySchema    = SchemaUtils.RegisterSchemaTypes(TypeStore);
         /// <summary>All items in the <see cref="DefaultHeapMap"/> are always null</summary>
