@@ -59,21 +59,25 @@ public partial class EntityStore
     /// created with <see cref="PidType"/> == <see cref="PidType.RandomPids"/>.
     /// </summary>
     public void SetRandomSeed(int seed) {
-        intern.randPid = new Random(seed);
+        internals.randPid = new Random(seed);
     }
     
-    private long GeneratePid(int id) {
-        return intern.pidType == PidType.UsePidAsId ? id : GenerateRandomPidForId(id);
+    private void GeneratePid(int id) {
+        if (intern.pidType == PidType.UsePidAsId) {
+            return;
+        }
+        GenerateRandomPidForId(id);
     }
     
-    private long GenerateRandomPidForId(int id)
+    private void GenerateRandomPidForId(int id)
     {
         while(true) {
             // generate random int to have numbers with small length e.g. 2147483647 (max int)
             // could also generate long which requires more memory when persisting entities
-            long pid = intern.randPid.Next();
-            if (intern.pid2Id.TryAdd(pid, id)) {
-                return pid;
+            long pid = internals.randPid.Next();
+            if (internals.pid2Id.TryAdd(pid, id)) {
+                internals.id2Pid.Add(id, pid);
+                return;
             }
         }
     }
@@ -574,7 +578,11 @@ public partial class EntityStore
         // --- clear node entry.
         //     Set node.archetype = null
         node = default;
-        
+        if (internals.id2Pid != null) {
+            var pid = internals.id2Pid[id];
+            internals.id2Pid.Remove(id);
+            internals.pid2Id.Remove(pid);
+        }
         // --- remove child from parent 
         if (!HasParent(parentId)) {
             return;

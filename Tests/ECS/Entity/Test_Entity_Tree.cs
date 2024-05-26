@@ -448,7 +448,10 @@ public static class Test_Entity_Tree
         var root    = store.CreateEntity(1);
         root.AddComponent(new EntityName("root"));
         store.SetStoreRoot(root);
-        var child   = store.CreateEntity(2);
+        var child       = store.CreateEntity(2);
+        var childPid    = child.Pid;
+        AreEqual(2,         store.PidToId(childPid));
+        AreEqual(childPid,  store.IdToPid(2));
         AreEqual(attached,  child.StoreOwnership);
         child.AddComponent(new EntityName("child"));
         var events = AddHandler(store, args => AreEqual("entity: 1 - event > Add Child[0] = 2", args.ToString()));
@@ -490,13 +493,19 @@ public static class Test_Entity_Tree
         
         var childNode = store.GetEntityNode(2); // child is detached => all fields have their default value
         IsTrue  (           store.GetEntityById(2).IsNull);
-        AreEqual(0,         childNode.Pid);
+    //  AreEqual(0,         childNode.Pid);
     //  child.TryGetComponent<TreeNode>(out var childTreeNode);
     //  AreEqual(0,         childTreeNode.ChildIds.Length);
     //  AreEqual(0,         childTreeNode.ChildCount);
     //  AreEqual(0,         entity2.Parent.Id);
         AreEqual(NullNode,  childNode.Flags);
-        
+        IsNull  (           childNode.Archetype);
+        Throws<KeyNotFoundException>(() => {
+            store.PidToId(childPid);    // above successful
+        });
+        Throws<KeyNotFoundException>(() => {
+            store.IdToPid(2);           // above successful
+        });
         // From now: access to components and tree nodes throw a NullReferenceException
         Throws<NullReferenceException> (() => {
             _ = child.Name; // access component

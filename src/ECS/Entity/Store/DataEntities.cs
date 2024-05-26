@@ -74,7 +74,7 @@ public partial class EntityStore
                 children.Clear();
             }
             foreach (var child in childEntities) {
-                var pid = nodes[child.Id].pid;
+                var pid = IdToPid(child.Id);
                 children.Add(pid);
             }
         } else {
@@ -105,10 +105,12 @@ public partial class EntityStore
     {
         // --- map pid to id
         var pid     = dataEntity.pid;
-        var pidMap  = intern.pid2Id;
-        if (!pidMap.TryGetValue(pid, out int id)) {
+        var pid2Id  = internals.pid2Id;
+        var id2Pid  = internals.id2Pid;
+        if (!pid2Id.TryGetValue(pid, out int id)) {
             id = NewId();
-            pidMap.Add(pid, id);
+            pid2Id.Add(pid, id);
+            id2Pid.Add(id, pid);
         }
         // --- map children pid's to id's
         var children    = dataEntity.children;
@@ -118,18 +120,16 @@ public partial class EntityStore
         for (int n = 0; n < childCount; n++)
         {
             var childPid = children![n];
-            if (!pidMap.TryGetValue(childPid, out int childId)) {
+            if (!pid2Id.TryGetValue(childPid, out int childId)) {
                 childId = NewId();
-                pidMap.Add(childPid, childId);
+                pid2Id.Add(childPid, childId);
+                id2Pid.Add(childId, childPid);
             }
             ids[n] = childId;
         }
         EnsureNodesLength(intern.sequenceId + 1);
-        CreateEntityNode(defaultArchetype, id, pid);
+        CreateEntityNode(defaultArchetype, id);
 
-        if (ids.Length > 0) {
-            UpdateEntityNodes(ids, children);
-        }
         var entity = new Entity(this, id); 
         SetChildNodes(entity, ids);
         return entity;
@@ -160,11 +160,8 @@ public partial class EntityStore
             maxPid = Math.Max(maxPid, childId);
         }
         EnsureNodesLength(maxPid + 1);
-        CreateEntityNode(defaultArchetype, id, id);
+        CreateEntityNode(defaultArchetype, id);
         
-        if (ids.Length > 0) {
-            UpdateEntityNodes(ids, children);
-        }
         var entity = new Entity(this, id);
         SetChildNodes(entity, ids);
         return entity;
@@ -175,17 +172,6 @@ public partial class EntityStore
             return;
         }
         ArrayUtils.Resize(ref idBuffer, Math.Max(2 * idBuffer.Length, count));
-    }
-    
-    /// update EntityNode.pid of the child nodes
-    private void UpdateEntityNodes(ReadOnlySpan<int> childIds, List<long> children)
-    {
-        var localNodes  = nodes;
-        var count       = childIds.Length;
-        for (int n = 0; n < count; n++) {
-            var childId             = childIds[n];
-            localNodes[childId].pid = children[n];
-        }
     }
     #endregion
 }

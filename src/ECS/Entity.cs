@@ -180,7 +180,7 @@ public readonly struct Entity : IEquatable<Entity>
 #region general properties
     /// <summary>Returns the permanent entity id used for serialization.</summary>
     [Browse(Never)]
-    public              long                    Pid             => store.nodes[Id].pid;
+    public              long                    Pid             => store.IdToPid(Id);
 
     /// <summary>Return the <see cref="IComponent"/>'s added to the entity.</summary>
     public              EntityComponents        Components      => new EntityComponents(this);

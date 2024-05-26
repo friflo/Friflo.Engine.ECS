@@ -108,14 +108,23 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private  readonly   HashSet<int>            idBufferSet;        //  8
     [Browse(Never)] private  readonly   DataEntity              dataBuffer;         //  8
-                    internal readonly   Internals               internals;          //  8
+                    internal            Internals               internals;          //  8
                     private             Intern                  intern;             // 88
 
     internal struct Internals {
-        internal readonly                   Dictionary<int, int>    parentMap;              //  8   - store the parent (value) of an entity (key)
+        internal readonly                   Dictionary<int, int>    parentMap;      //  8   - store the parent (value) of an entity (key)
+        internal                            Random                  randPid;        //  8   - generate random pid's                       - null if UsePidAsId
+        internal readonly                   Dictionary<long, int>   pid2Id;         //  8   - store the id (value) of a pid (key)         - null if UsePidAsId
+        internal readonly                   Dictionary<int, long>   id2Pid;         //  8   - store the pid (value) of an entity id (key) - null if UsePidAsId
         
-        internal Internals(PidType _) {
-           parentMap       = new Dictionary<int, int>();
+        internal Internals(PidType pidType)
+        {
+           parentMap = new Dictionary<int, int>();
+           if (pidType == PidType.RandomPids) {
+               randPid  = new Random();
+               pid2Id   = new Dictionary<long, int>();
+               id2Pid   = new Dictionary<int, long>();
+           }
         }
     }
     
@@ -123,10 +132,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     // MUST be private by all means.
     private struct Intern {
-                        internal readonly   PidType                 pidType;                //  4   - pid != id  /  pid == id
-                        internal            Random                  randPid;                //  8   - null if using pid == id
-                        internal readonly   Dictionary<long, int>   pid2Id;                 //  8   - null if using pid == id
-
+        internal readonly                   PidType                 pidType;                //  4   - pid != id  /  pid == id
                         internal            int                     sequenceId;             //  4   - incrementing id used for next new entity
         // --- delegates
         internal    Action                <ChildEntitiesChanged>    childEntitiesChanged;   // 8   - fires event on add, insert, remove or delete an Entity
@@ -153,13 +159,9 @@ public sealed partial class EntityStore : EntityStoreBase
                     
         internal Intern(PidType pidType)
         {
-            this.pidType    = pidType;
-            sequenceId      = Static.MinNodeId - 1;
-            if (pidType == PidType.RandomPids) {
-                pid2Id  = new Dictionary<long, int>();
-                randPid = new Random();
-            }
-            signalHandlerMap = Array.Empty<SignalHandler>();
+            this.pidType        = pidType;
+            sequenceId          = Static.MinNodeId - 1;
+            signalHandlerMap    = Array.Empty<SignalHandler>();
         }
     }
     #endregion
@@ -192,12 +194,12 @@ public sealed partial class EntityStore : EntityStoreBase
     /// Instead use <see cref="Entity.Id"/> instead of <see cref="Entity.Pid"/> if possible
     /// as this method performs a <see cref="Dictionary{TKey,TValue}"/> lookup.
     /// </remarks>
-    public  int             PidToId(long pid)   => intern.pid2Id != null ? intern.pid2Id[pid] : (int)pid;
+    public  int             PidToId(long pid)   => internals.pid2Id != null ? internals.pid2Id[pid] : (int)pid;
 
     /// <summary>
     /// Return the <see cref="Entity.Pid"/> for the passed entity <paramref name="id"/>.
     /// </summary>
-    public  long            IdToPid(int id)     => nodes[id].pid;
+    public  long            IdToPid(int id)     => internals.id2Pid != null ? internals.id2Pid[id] : id;
     #endregion
     
 #region get EntityNode by id
@@ -244,7 +246,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     public  Entity  GetEntityByPid(long pid)
     {
-        var pid2Id = intern.pid2Id;
+        var pid2Id = internals.pid2Id;
         if (pid2Id != null) {
             return new Entity(this, pid2Id[pid]);
         }
@@ -256,7 +258,7 @@ public sealed partial class EntityStore : EntityStoreBase
     /// </summary>
     public  bool  TryGetEntityByPid(long pid, out Entity value)
     {
-        var pid2Id = intern.pid2Id;
+        var pid2Id = internals.pid2Id;
         if (pid2Id != null) {
             if (pid2Id.TryGetValue(pid,out int id)) {
                 value = new Entity(this, id);

@@ -21,13 +21,8 @@ namespace Friflo.Engine.ECS;
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
 /// The tree graph is stored in an <see cref="EntityStore"/> starting with a single <see cref="EntityStore.StoreRoot"/> entity.<br/> 
 /// <br/>
-/// It provide the properties listed below
-/// <list type="bullet">
-///   <item><see cref="Pid"/> used to store entities in a database</item>
-///   <item><see cref="Entity"/> to access the <see cref="ECS.Entity"/> attached to a node</item>
-/// </list>
-/// When creating a new entity in the <see cref="EntityStore"/> it generates a random <see cref="Pid"/>
-/// using <see cref="EntityStore.GenerateRandomPidForId"/>.<br/>
+/// When creating a new entity in a <see cref="EntityStore"/> instantiated with <see cref="PidType.RandomPids"/>
+/// it generates a unique random pid assigned to the entity.<br/>
 /// Using random pids avoid merge conflicts when multiples users make changes to the same <see cref="EntityStore"/> file / database.<br/>
 /// The probability generating the same pid by two different users is:
 /// <code>
@@ -43,8 +38,8 @@ public struct EntityNode
     //  <summary>The unique entity id.</summary>
     //              public              int                 Id          =>  id;
     
-    /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
-                    public              long                Pid         =>  pid;
+    // /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
+    //              public              long                Pid         =>  pid;
     
     /// <summary>The <see cref="ECS.Archetype"/> the entity node is stored.</summary>
                     public              Archetype           Archetype   =>  archetype;
@@ -60,8 +55,7 @@ public struct EntityNode
     #endregion
     
 #region internal fields
-    [Browse(Never)] internal    long            pid;            //  8   permanent id used for serialization
-    
+    //              internal    long            pid;            //  8   permanent id used for serialization
     // removed      internal    int             parentId;       //  4   0 if entity has no parent
     // removed      internal    int[]           childIds;       //  8   null if entity has no child entities
     // removed      internal    int             childCount;     //  4   count of child entities

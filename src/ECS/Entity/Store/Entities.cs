@@ -71,12 +71,12 @@ public partial class EntityStore
     internal int CreateEntityInternal(Archetype archetype, int id)
     {
         EnsureNodesLength(id + 1);
-        var pid = GeneratePid(id);
-        return CreateEntityNode(archetype, id, pid);
+        GeneratePid(id);
+        return CreateEntityNode(archetype, id);
     }
     
     /// <summary>
-    /// Create and return a clone of the of the passed <paramref name="entity"/> in the store.
+    /// Create and return a clone of the passed <paramref name="entity"/> in the store.
     /// </summary>
     /// <returns></returns>
     public Entity CloneEntity(Entity entity)
@@ -153,40 +153,21 @@ public partial class EntityStore
         throw new InvalidOperationException("expect id < nodes.length");
     }
     
-    [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
-    private static void AssertPid(long pid, long expected) {
-        if (expected == pid) {
-            return;
-        }
-        throw new InvalidOperationException($"invalid pid. expected: {expected}, was: {pid}");
-    }
-    
-    [Conditional("DEBUG")] [ExcludeFromCodeCoverage] // assert invariant
-    private static void AssertPid0(long pid, long expected) {
-        if (pid == 0 || pid == expected) {
-            return;
-        }
-        throw new InvalidOperationException($"invalid pid. expected: 0 or {expected}, was: {pid}");
-    }
-
     /// <summary> expect <see cref="EntityStore.nodes"/> Length > id </summary>
     /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
-    private int CreateEntityNode(Archetype archetype, int id, long pid)
+    private int CreateEntityNode(Archetype archetype, int id)
     {
         AssertIdInNodes(id);
         ref var node = ref nodes[id];
         if ((node.flags & Created) != 0) {
-            AssertPid(node.pid, pid);
             return node.compIndex;
         }
         entityCount++;
         if (nodesMaxId < id) {
             nodesMaxId = id;
         }
-        AssertPid0(node.pid, pid);
         node.compIndex      = Archetype.AddEntity(archetype, id);
         node.archetype      = archetype;
-        node.pid            = pid;
         node.scriptIndex    = EntityUtils.NoScripts;
     //  node.parentId       = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
     //  node.childIds       = Static.EmptyChildIds;
