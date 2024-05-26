@@ -14,14 +14,16 @@ namespace Friflo.Engine.ECS;
 
 internal partial struct StoreExtension
 {
-#region random pid storage
-    internal readonly                   Dictionary<int, int>    parentMap;                  //  8   - store the parent (value) of an entity (key)
+#region pid storage
     internal                            Random                  randPid;                    //  8   - generate random pid's                       - null if UsePidAsId
     internal readonly                   Dictionary<long, int>   pid2Id;                     //  8   - store the id (value) of a pid (key)         - null if UsePidAsId
     internal readonly                   Dictionary<int, long>   id2Pid;                     //  8   - store the pid (value) of an entity id (key) - null if UsePidAsId
+    #endregion
     
+#region entity hierarchy
+    internal readonly                   Dictionary<int, int>    parentMap;                  //  8   - store the parent (value) of an entity (key)
     // --- events
-    internal    Action                <ChildEntitiesChanged>    childEntitiesChanged;       // 8   - fires event on add, insert, remove or delete an Entity
+    internal    Action                <ChildEntitiesChanged>    childEntitiesChanged;       //  8   - fires event on add, insert, remove or delete an Entity
     internal    Dictionary<int, Action<ChildEntitiesChanged>>   entityChildEntitiesChanged; //  8
     #endregion
     
