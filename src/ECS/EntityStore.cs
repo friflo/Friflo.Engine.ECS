@@ -49,7 +49,7 @@ public sealed partial class EntityStore : EntityStoreBase
                     public              Entity              StoreRoot       => storeRoot; // null if no graph origin set
     
     /// <summary> Return all <see cref="Script"/>'s added to <see cref="Entity"/>'s in the <see cref="EntityStore"/>. </summary>
-                    public ReadOnlySpan<EntityScripts>      EntityScripts   => new (entityScripts, 1, entityScriptCount - 1);
+                    public ReadOnlySpan<EntityScripts>      EntityScripts   => new (internals.entityScripts, 1, internals.entityScriptCount - 1);
     
     /// <summary> Return all <see cref="Entity"/>'s stored in the <see cref="EntityStore"/>.</summary>
     /// <remarks>Property is mainly used for debugging.<br/>
@@ -100,13 +100,7 @@ public sealed partial class EntityStore : EntityStoreBase
     // --- Note: all fields must stay private to limit the scope of mutations
     [Browse(Never)] internal            EntityNode[]            nodes;              //  8   - acts also id2pid
     [Browse(Never)] private             Entity                  storeRoot;          // 16   - origin of the tree graph. null if no origin assigned
-    /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
-    [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8   - invariant: entityScripts[0] = 0
-    /// <summary>Contains the <see cref="entityScripts"/> index (value) of an entity id (key)</summary>
-                    internal readonly   Dictionary<int, int>    scriptMap;          //  8   - invariant: entityScripts[0] = 0
-    
-    /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
-    [Browse(Never)] private             int                     entityScriptCount;  //  4   - invariant: > 0  and  <= entityScripts.Length
+
     // --- buffers
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private  readonly   HashSet<int>            idBufferSet;        //  8
@@ -115,10 +109,19 @@ public sealed partial class EntityStore : EntityStoreBase
                     private             Intern                  intern;             // 88
 
     internal struct Internals {
-        internal readonly                   Dictionary<int, int>    parentMap;      //  8   - store the parent (value) of an entity (key)
-        internal                            Random                  randPid;        //  8   - generate random pid's                       - null if UsePidAsId
-        internal readonly                   Dictionary<long, int>   pid2Id;         //  8   - store the id (value) of a pid (key)         - null if UsePidAsId
-        internal readonly                   Dictionary<int, long>   id2Pid;         //  8   - store the pid (value) of an entity id (key) - null if UsePidAsId
+        // --- storage for random pid's
+        internal readonly                   Dictionary<int, int>    parentMap;          //  8   - store the parent (value) of an entity (key)
+        internal                            Random                  randPid;            //  8   - generate random pid's                       - null if UsePidAsId
+        internal readonly                   Dictionary<long, int>   pid2Id;             //  8   - store the id (value) of a pid (key)         - null if UsePidAsId
+        internal readonly                   Dictionary<int, long>   id2Pid;             //  8   - store the pid (value) of an entity id (key) - null if UsePidAsId
+        
+        // --- storage for entity scripts
+        /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
+        [Browse(Never)] internal            int                     entityScriptCount;  //  4   - invariant: > 0  and  <= entityScripts.Length
+        /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
+        internal                            EntityScripts[]         entityScripts;      //  8   - invariant: entityScripts[0] = 0
+        /// <summary>Contains the <see cref="entityScripts"/> index (value) of an entity id (key)</summary>
+        internal readonly                   Dictionary<int, int>    scriptMap;          //  8   - invariant: entityScripts[0] = 0
         
         internal Internals(PidType pidType)
         {
@@ -128,6 +131,9 @@ public sealed partial class EntityStore : EntityStoreBase
                pid2Id   = new Dictionary<long, int>();
                id2Pid   = new Dictionary<int, long>();
            }
+           scriptMap           = new Dictionary<int, int>();
+           entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
+           entityScriptCount   = 1;
         }
     }
     
@@ -176,11 +182,8 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         intern              = new Intern(pidType);
         internals           = new Internals(pidType);
-        scriptMap           = new Dictionary<int, int>();
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
-        entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
-        entityScriptCount   = 1;
         idBuffer            = new int[1];
         idBufferSet         = new HashSet<int>();
         dataBuffer          = new DataEntity();

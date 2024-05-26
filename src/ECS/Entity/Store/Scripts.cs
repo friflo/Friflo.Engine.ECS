@@ -11,12 +11,12 @@ public partial class EntityStore
 {
     // --------------------------------- script methods ---------------------------------
     internal static Script[] GetScripts(Entity entity, int scriptIndex) {
-        return entity.store.entityScripts[scriptIndex].scripts;
+        return entity.store.internals.entityScripts[scriptIndex].scripts;
     }
     
     internal static Script GetScript(Entity entity, Type scriptType, int scriptIndex)
     {
-        var scripts = entity.store.entityScripts[scriptIndex].scripts;
+        var scripts = entity.store.internals.entityScripts[scriptIndex].scripts;
         foreach (var script in scripts) {
             if (script.GetType() == scriptType) {
                 return script;
@@ -28,18 +28,18 @@ public partial class EntityStore
     internal void AppendScript(Entity entity, Script script)
     {
         script.entity = entity;
-        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             // case: entity has not scripts => add new Scripts entry
-            var lastIndex = entityScriptCount++;
-            scriptMap.Add(entity.Id, lastIndex);
-            if (entityScripts.Length == lastIndex) {
+            var lastIndex = internals.entityScriptCount++;
+            internals.scriptMap.Add(entity.Id, lastIndex);
+            if (internals.entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
-                ArrayUtils.Resize(ref entityScripts, newLength);
+                ArrayUtils.Resize(ref internals.entityScripts, newLength);
             }
-            entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script[] { script });
+            internals.entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script[] { script });
         } else {
             // case: entity already has scripts => add script to its scripts
-            ref var scripts = ref entityScripts[scriptIndex].scripts;
+            ref var scripts = ref internals.entityScripts[scriptIndex].scripts;
             var len = scripts.Length;
             ArrayUtils.Resize(ref scripts, len + 1);
             scripts[len] = script;
@@ -68,23 +68,23 @@ public partial class EntityStore
         Script              currentScript;
         ScriptChangedAction action;
         script.entity = entity;
-        if (!scriptMap.TryGetValue(entity.Id, out int scriptIndex))
+        if (!internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex))
         {
             // case: entity has not scripts => add new Scripts entry
             action = ScriptChangedAction.Add;
-            var lastIndex = entityScriptCount++;
-            scriptMap.Add(entity.Id, lastIndex);
-            if (entityScripts.Length == lastIndex) {
+            var lastIndex = internals.entityScriptCount++;
+            internals.scriptMap.Add(entity.Id, lastIndex);
+            if (internals.entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
-                ArrayUtils.Resize(ref entityScripts, newLength);
+                ArrayUtils.Resize(ref internals.entityScripts, newLength);
             }
-            entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script [] { script });
+            internals.entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script [] { script });
             currentScript   = null;
             goto SendEvent;
         }
         // case: entity has already scripts => add / replace script to / in scripts
         action = ScriptChangedAction.Replace;
-        ref var entityScript    = ref entityScripts[scriptIndex];
+        ref var entityScript    = ref internals.entityScripts[scriptIndex];
         var scripts             = entityScript.scripts;
         var len                 = scripts.Length;
         for (int n = 0; n < len; n++)
@@ -114,7 +114,7 @@ public partial class EntityStore
     
     internal Script RemoveScript(Entity entity, ScriptType scriptType, int scriptIndex)
     {
-        ref var entityScript    = ref entityScripts[scriptIndex];
+        ref var entityScript    = ref internals.entityScripts[scriptIndex];
         var     scripts         = entityScript.scripts;
         var     len             = scripts.Length;
         for (int n = 0; n < len; n++)
@@ -127,17 +127,17 @@ public partial class EntityStore
             script.entity   = default;
             if (len == 1) {
                 // case: script is the only one attached to the entity => remove complete scripts entry 
-                var lastIndex       = --entityScriptCount;
+                var lastIndex       = --internals.entityScriptCount;
                 if (lastIndex < 1)  throw new InvalidOperationException("invariant: entityScriptCount > 0");
-                var lastEntityId    = entityScripts[lastIndex].id;
+                var lastEntityId    = internals.entityScripts[lastIndex].id;
                 // Is the Script not the last in store.entityScripts?
                 if (entity.Id != lastEntityId) {
                     // move scriptIndex of last item in store.entityScripts to the index which will be removed
-                    entityScripts[scriptIndex]  = entityScripts[lastIndex];
-                    scriptMap[lastEntityId]     = scriptIndex;
+                    internals.entityScripts[scriptIndex]  = internals.entityScripts[lastIndex];
+                    internals.scriptMap[lastEntityId]     = scriptIndex;
                 }
-                entityScripts[lastIndex] = default;                  // clear last Script entry
-                scriptMap.Remove(entity.Id);
+                internals.entityScripts[lastIndex] = default;                  // clear last Script entry
+                internals.scriptMap.Remove(entity.Id);
                 goto SendEvent;
             }
             // case: entity has two or more scripts. Remove the given one from its scripts

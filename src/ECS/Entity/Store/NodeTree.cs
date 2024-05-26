@@ -583,7 +583,7 @@ public partial class EntityStore
             internals.id2Pid.Remove(id);
             internals.pid2Id.Remove(pid);
         }
-        if (scriptMap.Remove(id)) {
+        if (internals.scriptMap.Remove(id)) {
             RemoveEntityScript(id);
         }
         // --- remove child from parent 
@@ -596,15 +596,15 @@ public partial class EntityStore
     
     private void RemoveEntityScript(int id)
     {
-        var scripts = entityScripts;
-        int len     = entityScriptCount - 1;
+        var scripts = internals.entityScripts;
+        int len     = internals.entityScriptCount - 1;
         for (int n = 1; n <= len; n++) {
             if (scripts[n].id != id) continue;
             for (; n < len; n++) {
                 scripts[n] = scripts[n + 1];
             }
-            entityScriptCount   = len;
-            scripts[len]        = default;
+            internals.entityScriptCount = len;
+            scripts[len]                = default;
             break;
         }
     } 

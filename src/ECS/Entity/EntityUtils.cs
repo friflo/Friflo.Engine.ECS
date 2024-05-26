@@ -196,7 +196,7 @@ public static class EntityUtils
     private  static readonly Dictionary<Type, ScriptType>   ScriptTypeByType    = EntityStoreBase.Static.EntitySchema.scriptTypeByType;
     
     internal static Script[] GetScripts(Entity entity) {
-        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return EmptyScripts;
         }
         return EntityStore.GetScripts(entity, scriptIndex); 
@@ -204,7 +204,7 @@ public static class EntityUtils
     
     internal static Script GetScript(Entity entity, Type scriptType)
     {
-        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
         return EntityStore.GetScript(entity, scriptType, scriptIndex);
@@ -236,7 +236,7 @@ public static class EntityUtils
     }
     
     internal static Script RemoveScript(Entity entity, int scriptTypeIndex) {
-        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
         var scriptType  = ScriptTypes[scriptTypeIndex];
@@ -244,7 +244,7 @@ public static class EntityUtils
     }
     
     private static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
-        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
         return entity.archetype.entityStore.RemoveScript(entity, scriptType, scriptIndex);

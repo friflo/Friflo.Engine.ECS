@@ -45,7 +45,7 @@ public static class Test_EntityStore
         var store       = new EntityStore(PidType.RandomPids);
         var entity      = store.CreateEntity();
         entity.AddScript(new TestScript1());
-        store.SetInternalField("entityScriptCount", 1);
+        store.internals.entityScriptCount = 1;
 
         var e = Throws<InvalidOperationException>(() => {
             entity.RemoveScript<TestScript1>();    
