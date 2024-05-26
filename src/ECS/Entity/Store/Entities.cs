@@ -168,9 +168,6 @@ public partial class EntityStore
         }
         node.compIndex      = Archetype.AddEntity(archetype, id);
         node.archetype      = archetype;
-    //  node.scriptIndex    = EntityUtils.NoScripts;
-    //  node.parentId       = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
-    //  node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;
         return node.compIndex;
     }
@@ -212,7 +209,7 @@ public partial class EntityStore
 
 /// <summary>
 /// Reserved symbol name.
-/// If exposing public it need to store an array of <see cref="Entity"/>'s.<br/>
+/// If exposing public it needs to store an array of <see cref="Entity"/>'s.<br/>
 /// Similar to <see cref="Archetypes"/>.
 /// </summary>
 internal struct Entities;

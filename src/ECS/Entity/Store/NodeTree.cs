@@ -29,12 +29,6 @@ public partial class EntityStore
         }
         var newLength   = last + capacity;
         ArrayUtils.Resize(ref nodes, newLength);
-        /* assigning an EntityNode.id is obsolete
-        var localNodes = nodes;
-        for (int n = curLength; n < newLength; n++) {
-            localNodes[n].id = n;
-            // localNodes[n] = new EntityNode (n);      // see: EntityNode.id comment
-        } */
         return newLength - last;
     }
     
@@ -46,12 +40,6 @@ public partial class EntityStore
         }
         var newLength = Math.Max(length, 2 * curLength); // could grow slower to minimize heap pressure
         ArrayUtils.Resize(ref nodes, newLength);
-        /* assigning an EntityNode.id is obsolete
-        var localNodes = nodes;        
-        for (int n = curLength; n < newLength; n++) {
-            localNodes[n].id = n;
-            // localNodes[n] = new EntityNode (n);      // see: EntityNode.id comment
-        } */
     }
     
     /// <summary>
