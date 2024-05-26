@@ -12,6 +12,12 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+/// <summary>
+/// Add extended features to an <see cref="EntityStore"/> which are typically not part of an ECS. Like:<br/>
+/// - An entity hierarchy with patent / child relationship.<br/>
+/// - Permanent ids (pid's) of type long used as an alternative identifier for id of type int.<br/>
+/// - Entity <see cref="Script"/>'s to support entity components via OOP.<br/> 
+/// </summary>
 internal partial struct StoreExtension
 {
 #region pid storage
