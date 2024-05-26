@@ -400,7 +400,7 @@ public static class Test_ComponentReader
     private static JsonValue Scripts => new JsonValue(
         "{ \"script1\": { \"val1\": 11 }, \"script2\": { \"val2\": 22 }, \"script3\": { \"val3\": 33 } }");
     
-    /// <summary>Cover <see cref="EntityStore.AppendScript"/></summary>
+    /// <summary>Cover <see cref="StoreExtension.AppendScript"/></summary>
     [Test]
     public static void Test_ComponentReader_read_multiple_scripts()
     {

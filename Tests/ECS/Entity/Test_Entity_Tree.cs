@@ -749,7 +749,7 @@ public static class Test_Entity_Tree
         AreEqual("entity is owned by a different store (Parameter 'child')", e!.Message);
     }
 
-    /// <summary><see cref="EntityStore.GenerateRandomPidForId"/></summary>
+    /// <summary><see cref="StoreExtension.GenerateRandomPidForId"/></summary>
     [Test]
     public static void Test_Entity_Tree_RandomPid_Coverage()
     {

@@ -98,7 +98,7 @@ public partial class EntityStore
                 var scriptType      = scriptTypeByType[script.GetType()];
                 var scriptClone     = scriptType.CloneScript(script);
                 scriptClone.entity  = clone;
-                AddScript(clone, scriptClone, scriptType);
+                extension.AddScript(clone, scriptClone, scriptType);
             }
         } else {
             // --- serialize entity

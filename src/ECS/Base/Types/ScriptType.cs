@@ -86,6 +86,6 @@ internal sealed class ScriptType<T> : ScriptType
             return;
         }
         script = reader.ReadMapper(typeMapper, json);
-        entity.archetype.entityStore.AppendScript(entity, script);
+        entity.archetype.entityStore.extension.AppendScript(entity, script);
     }
 }

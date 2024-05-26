@@ -105,8 +105,8 @@ public partial class EntityStore
     {
         // --- map pid to id
         var pid     = dataEntity.pid;
-        var pid2Id  = internals.pid2Id;
-        var id2Pid  = internals.id2Pid;
+        var pid2Id  = extension.pid2Id;
+        var id2Pid  = extension.id2Pid;
         if (!pid2Id.TryGetValue(pid, out int id)) {
             id = NewId();
             pid2Id.Add(pid, id);

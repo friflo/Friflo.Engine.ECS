@@ -17,7 +17,7 @@ public partial class EntityStore
 #region add / remove script events
     private void ScriptChanged(ScriptChanged args)
     {
-        if (!intern.entityScriptChanged.TryGetValue(args.Entity.Id, out var handlers)) {
+        if (!extension.entityScriptChanged.TryGetValue(args.Entity.Id, out var handlers)) {
             return;
         }
         handlers.Invoke(args);
@@ -25,17 +25,17 @@ public partial class EntityStore
     
     internal static void AddScriptChangedHandler(EntityStore store, int entityId, Action<ScriptChanged> handler)
     {
-        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ScriptChanged ,ref store.intern.entityScriptChanged)) {
-            store.intern.scriptAdded     += store.ScriptChanged;
-            store.intern.scriptRemoved   += store.ScriptChanged;
+        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ScriptChanged ,ref store.extension.entityScriptChanged)) {
+            store.extension.scriptAdded     += store.ScriptChanged;
+            store.extension.scriptRemoved   += store.ScriptChanged;
         }
     }
     
     internal static void RemoveScriptChangedHandler(EntityStore store, int entityId, Action<ScriptChanged> handler)
     {
-        if (RemoveEntityHandler(store, entityId, handler,  HasEventFlags.ScriptChanged, store.intern.entityScriptChanged)) {
-            store.intern.scriptAdded     -= store.ScriptChanged;
-            store.intern.scriptRemoved   -= store.ScriptChanged;
+        if (RemoveEntityHandler(store, entityId, handler,  HasEventFlags.ScriptChanged, store.extension.entityScriptChanged)) {
+            store.extension.scriptAdded     -= store.ScriptChanged;
+            store.extension.scriptRemoved   -= store.ScriptChanged;
         }
     }
     #endregion
@@ -46,7 +46,7 @@ public partial class EntityStore
 #region add / remove child entity events
     private void ChildEntitiesChanged(ChildEntitiesChanged args)
     {
-        if (!intern.entityChildEntitiesChanged.TryGetValue(args.EntityId, out var handlers)) {
+        if (!extension.entityChildEntitiesChanged.TryGetValue(args.EntityId, out var handlers)) {
             return;
         }
         handlers.Invoke(args);
@@ -54,15 +54,15 @@ public partial class EntityStore
     
     internal static void AddChildEntitiesChangedHandler   (EntityStore store, int entityId, Action<ChildEntitiesChanged> handler)
     {
-        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ChildEntitiesChanged, ref store.intern.entityChildEntitiesChanged)) {
-            store.intern.childEntitiesChanged     += store.ChildEntitiesChanged;
+        if (AddEntityHandler(store, entityId, handler, HasEventFlags.ChildEntitiesChanged, ref store.extension.entityChildEntitiesChanged)) {
+            store.extension.childEntitiesChanged     += store.ChildEntitiesChanged;
         }
     }
     
     internal static void RemoveChildEntitiesChangedHandler(EntityStore store, int entityId, Action<ChildEntitiesChanged> handler)
     {
-        if (RemoveEntityHandler(store, entityId, handler, HasEventFlags.ChildEntitiesChanged, store.intern.entityChildEntitiesChanged)) {
-            store.intern.childEntitiesChanged     -= store.ChildEntitiesChanged;
+        if (RemoveEntityHandler(store, entityId, handler, HasEventFlags.ChildEntitiesChanged, store.extension.entityChildEntitiesChanged)) {
+            store.extension.childEntitiesChanged     -= store.ChildEntitiesChanged;
         }
     }
     #endregion
@@ -72,18 +72,18 @@ public partial class EntityStore
         var hasEvent    = node.hasEvent;
         RemoveAllEntityEventHandlers(store, entityId, hasEvent);
         if ((hasEvent & HasEventFlags.ScriptChanged) != 0) {
-            var handlerMap = store.intern.entityScriptChanged;
+            var handlerMap = store.extension.entityScriptChanged;
             handlerMap.Remove(entityId);
             if (handlerMap.Count == 0) {
-                store.intern.scriptAdded            -= store.ScriptChanged;
-                store.intern.scriptRemoved          -= store.ScriptChanged;
+                store.extension.scriptAdded            -= store.ScriptChanged;
+                store.extension.scriptRemoved          -= store.ScriptChanged;
             }
         }
         if ((hasEvent & HasEventFlags.ChildEntitiesChanged) != 0) {
-            var handlerMap = store.intern.entityChildEntitiesChanged;
+            var handlerMap = store.extension.entityChildEntitiesChanged;
             handlerMap.Remove(entityId);
             if (handlerMap.Count == 0) {
-                store.intern.childEntitiesChanged   -= store.ChildEntitiesChanged;
+                store.extension.childEntitiesChanged   -= store.ChildEntitiesChanged;
             }
         }
         if (node.signalTypeCount > 0) {
@@ -99,9 +99,9 @@ public partial class EntityStore
     [ExcludeFromCodeCoverage]
     internal new static void AssertEventDelegatesNull(EntityStore store)
     {
-        if (store.intern.scriptAdded            != null) throw new InvalidOperationException("expect null");
-        if (store.intern.scriptRemoved          != null) throw new InvalidOperationException("expect null");
-        if (store.intern.childEntitiesChanged   != null) throw new InvalidOperationException("expect null");
+        if (store.extension.scriptAdded             != null) throw new InvalidOperationException("expect null");
+        if (store.extension.scriptRemoved           != null) throw new InvalidOperationException("expect null");
+        if (store.extension.childEntitiesChanged    != null) throw new InvalidOperationException("expect null");
     }
     
 #region subscribed event / signal delegates 
@@ -112,13 +112,13 @@ public partial class EntityStore
         AddEventHandlers(ref eventHandlers, store, entityId, hasEvent);
         
         if ((hasEvent & HasEventFlags.ScriptChanged) != 0) {
-            var handlers    = store.intern.entityScriptChanged[entityId];
+            var handlers    = store.extension.entityScriptChanged[entityId];
             var handler     = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ScriptChanged), handlers.GetInvocationList());
             eventHandlers ??= new List<DebugEventHandler>();
             eventHandlers.Add(handler);
         }
         if ((hasEvent & HasEventFlags.ChildEntitiesChanged) != 0) {
-            var handlers    = store.intern.entityChildEntitiesChanged[entityId];
+            var handlers    = store.extension.entityChildEntitiesChanged[entityId];
             var handler     = new DebugEventHandler(DebugEntityEventKind.Event, typeof(ChildEntitiesChanged), handlers.GetInvocationList());
             eventHandlers ??= new List<DebugEventHandler>();
             eventHandlers.Add(handler);

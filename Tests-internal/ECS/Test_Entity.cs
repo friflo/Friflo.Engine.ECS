@@ -184,17 +184,17 @@ public static class Test_Entity
         
         AreEqual(1, entity1.Scripts.Length);
         AreEqual(1, store.EntityScripts.Length);
-        AreEqual(1, store.internals.scriptMap.Count);
+        AreEqual(1, store.extension.scriptMap.Count);
 
         var script2 = new TestScript2();
         entity2.AddScript(script2);
         
         AreEqual(1, entity2.Scripts.Length);
         AreEqual(2, store.EntityScripts.Length);
-        AreEqual(2, store.internals.scriptMap.Count);
+        AreEqual(2, store.extension.scriptMap.Count);
         
         entity1.DeleteEntity();
-        AreEqual(1,         store.internals.scriptMap.Count);
+        AreEqual(1,         store.extension.scriptMap.Count);
         AreEqual(1,         store.EntityScripts.Length);
         AreSame (script2,   store.EntityScripts[0].scripts[0]);
     }

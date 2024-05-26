@@ -186,7 +186,7 @@ public static class Test_Script
         NotNull(player.GetScript<TestScript3>());
     }
     
-    /// <summary>Cover move last script in <see cref="EntityStore.RemoveScript"/> </summary>
+    /// <summary>Cover move last script in <see cref="StoreExtension.RemoveScript"/> </summary>
     [Test]
     public static void Test_3_cover_move_last_script() {
         var store   = new EntityStore(PidType.RandomPids);

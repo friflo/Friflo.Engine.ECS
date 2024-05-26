@@ -116,8 +116,8 @@ public struct EntityNode
 /// Use to avoid Dictionary lookups for:
 /// <see cref="EntityStoreBase.InternBase.entityComponentChanged"/><br/>
 /// <see cref="EntityStoreBase.InternBase.entityTagsChanged"/><br/>
-/// <see cref="EntityStore.Intern.entityScriptChanged"/><br/>
-/// <see cref="EntityStore.Intern.entityChildEntitiesChanged"/><br/>
+/// <see cref="StoreExtension.entityScriptChanged"/><br/>
+/// <see cref="StoreExtension.entityChildEntitiesChanged"/><br/>
 /// </summary>
 [Flags]
 internal enum HasEventFlags : byte
@@ -126,9 +126,9 @@ internal enum HasEventFlags : byte
     ComponentChanged        = 1,
     /// <summary> Bit is set - <see cref="EntityStoreBase.InternBase.entityTagsChanged"/>.Count > 0<br/> </summary>
     TagsChanged             = 2,
-    /// <summary> Bit is set - <see cref="EntityStore.Intern.entityScriptChanged"/>.Count > 0<br/> </summary>
+    /// <summary> Bit is set - <see cref="StoreExtension.entityScriptChanged"/>.Count > 0<br/> </summary>
     ScriptChanged           = 4,
-    /// <summary> Bit is set - <see cref="EntityStore.Intern.entityChildEntitiesChanged"/>.Count > 0<br/> </summary>
+    /// <summary> Bit is set - <see cref="StoreExtension.entityChildEntitiesChanged"/>.Count > 0<br/> </summary>
     ChildEntitiesChanged    = 8,
 }
 

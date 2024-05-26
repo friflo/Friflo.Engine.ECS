@@ -196,18 +196,18 @@ public static class EntityUtils
     private  static readonly Dictionary<Type, ScriptType>   ScriptTypeByType    = EntityStoreBase.Static.EntitySchema.scriptTypeByType;
     
     internal static Script[] GetScripts(Entity entity) {
-        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.extension.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return EmptyScripts;
         }
-        return EntityStore.GetScripts(entity, scriptIndex); 
+        return StoreExtension.GetScripts(entity, scriptIndex); 
     }
     
     internal static Script GetScript(Entity entity, Type scriptType)
     {
-        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.extension.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
-        return EntityStore.GetScript(entity, scriptType, scriptIndex);
+        return StoreExtension.GetScript(entity, scriptType, scriptIndex);
     }
     
     internal static Script AddScript(Entity entity, int scriptIndex, Script script)
@@ -224,7 +224,7 @@ public static class EntityUtils
     
     internal static Script AddScript (Entity entity, Script script) {
         var scriptType = ScriptTypeByType[script.GetType()];
-        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
+        return entity.archetype.entityStore.extension.AddScript(entity, script, scriptType);
     }
     
     private static  Script AddScriptInternal(Entity entity, Script script, ScriptType scriptType)
@@ -232,22 +232,22 @@ public static class EntityUtils
         if (!script.entity.IsNull) {
             throw new InvalidOperationException($"script already added to an entity. current entity id: {script.entity.Id}");
         }
-        return entity.archetype.entityStore.AddScript(entity, script, scriptType);
+        return entity.archetype.entityStore.extension.AddScript(entity, script, scriptType);
     }
     
     internal static Script RemoveScript(Entity entity, int scriptTypeIndex) {
-        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.extension.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
         var scriptType  = ScriptTypes[scriptTypeIndex];
-        return entity.archetype.entityStore.RemoveScript(entity, scriptType, scriptIndex);
+        return entity.archetype.entityStore.extension.RemoveScript(entity, scriptType, scriptIndex);
     }
     
     private static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
-        if (!entity.store.internals.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
+        if (!entity.store.extension.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
-        return entity.archetype.entityStore.RemoveScript(entity, scriptType, scriptIndex);
+        return entity.archetype.entityStore.extension.RemoveScript(entity, scriptType, scriptIndex);
     }
     
     internal static void AddTreeTags(Entity entity, in Tags tags)
