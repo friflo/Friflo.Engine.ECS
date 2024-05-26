@@ -168,7 +168,7 @@ public partial class EntityStore
         }
         node.compIndex      = Archetype.AddEntity(archetype, id);
         node.archetype      = archetype;
-        node.scriptIndex    = EntityUtils.NoScripts;
+    //  node.scriptIndex    = EntityUtils.NoScripts;
     //  node.parentId       = Static.NoParentId;     // Is not set. A previous parent node has .parentId already set.
     //  node.childIds       = Static.EmptyChildIds;
         node.flags          = Created;

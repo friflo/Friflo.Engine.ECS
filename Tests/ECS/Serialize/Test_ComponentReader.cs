@@ -360,6 +360,7 @@ public static class Test_ComponentReader
         var rootNode    = new DataEntity { pid = 10, components = Script, children = new List<long> { 11 } };
 
         var root        = converter.DataEntityToEntity(rootNode, store, out _);
+        AreEqual(1,     store.EntityScripts.Length);
         AreEqual(1,     root.Scripts.Length);
         var script1     = root.GetScript<TestScript1>();
         AreEqual(2,     script1.val1);
@@ -367,6 +368,8 @@ public static class Test_ComponentReader
         
         // --- read same DataEntity again
         converter.DataEntityToEntity(rootNode, store, out _);
+        AreEqual(1,     store.EntityScripts.Length);
+        AreEqual(1,     root.Scripts.Length);
         var comp2       = root.GetScript<TestScript1>();
         AreEqual(2,     comp2.val1);
         AreSame(script1,comp2);
@@ -374,6 +377,8 @@ public static class Test_ComponentReader
         // --- remove script from JSON components read again
         rootNode.components = new JsonValue("{ }");
         converter.DataEntityToEntity(rootNode, store, out _);
+        AreEqual(0,     store.EntityScripts.Length);
+        AreEqual(0,     root.Scripts.Length);
         var comp3       = root.GetScript<TestScript1>();
         IsNull(comp3);
     }

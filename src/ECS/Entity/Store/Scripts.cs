@@ -10,13 +10,13 @@ namespace Friflo.Engine.ECS;
 public partial class EntityStore
 {
     // --------------------------------- script methods ---------------------------------
-    internal static Script[] GetScripts(Entity entity) {
-        return entity.archetype.entityStore.entityScripts[entity.scriptIndex].scripts;
+    internal static Script[] GetScripts(Entity entity, int scriptIndex) {
+        return entity.store.entityScripts[scriptIndex].scripts;
     }
     
-    internal static Script GetScript(Entity entity, Type scriptType)
+    internal static Script GetScript(Entity entity, Type scriptType, int scriptIndex)
     {
-        var scripts = entity.archetype.entityStore.entityScripts[entity.scriptIndex].scripts;
+        var scripts = entity.store.entityScripts[scriptIndex].scripts;
         foreach (var script in scripts) {
             if (script.GetType() == scriptType) {
                 return script;
@@ -28,9 +28,10 @@ public partial class EntityStore
     internal void AppendScript(Entity entity, Script script)
     {
         script.entity = entity;
-        if (entity.scriptIndex == EntityUtils.NoScripts) {
+        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             // case: entity has not scripts => add new Scripts entry
-            var lastIndex = entity.refScriptIndex = entityScriptCount++;
+            var lastIndex = entityScriptCount++;
+            scriptMap.Add(entity.Id, lastIndex);
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
                 ArrayUtils.Resize(ref entityScripts, newLength);
@@ -38,7 +39,7 @@ public partial class EntityStore
             entityScripts[lastIndex] = new EntityScripts(entity.Id, new Script[] { script });
         } else {
             // case: entity already has scripts => add script to its scripts
-            ref var scripts = ref entityScripts[entity.scriptIndex].scripts;
+            ref var scripts = ref entityScripts[scriptIndex].scripts;
             var len = scripts.Length;
             ArrayUtils.Resize(ref scripts, len + 1);
             scripts[len] = script;
@@ -59,7 +60,6 @@ public partial class EntityStore
     /// <list type="bullet">
     ///   <item><see cref="Entity.refArchetype"/></item>
     ///   <item><see cref="Entity.refCompIndex"/></item>
-    ///   <item><see cref="Entity.refScriptIndex"/></item>
     ///   <item><see cref="RawEntity.archIndex"/></item>
     /// </list>
     /// </remarks>
@@ -68,11 +68,12 @@ public partial class EntityStore
         Script              currentScript;
         ScriptChangedAction action;
         script.entity = entity;
-        if (entity.scriptIndex == EntityUtils.NoScripts)
+        if (!scriptMap.TryGetValue(entity.Id, out int scriptIndex))
         {
             // case: entity has not scripts => add new Scripts entry
             action = ScriptChangedAction.Add;
-            var lastIndex = entity.refScriptIndex = entityScriptCount++;
+            var lastIndex = entityScriptCount++;
+            scriptMap.Add(entity.Id, lastIndex);
             if (entityScripts.Length == lastIndex) {
                 var newLength = Math.Max(1, 2 * lastIndex);
                 ArrayUtils.Resize(ref entityScripts, newLength);
@@ -83,7 +84,7 @@ public partial class EntityStore
         }
         // case: entity has already scripts => add / replace script to / in scripts
         action = ScriptChangedAction.Replace;
-        ref var entityScript    = ref entityScripts[entity.scriptIndex];
+        ref var entityScript    = ref entityScripts[scriptIndex];
         var scripts             = entityScript.scripts;
         var len                 = scripts.Length;
         for (int n = 0; n < len; n++)
@@ -111,9 +112,9 @@ public partial class EntityStore
         return currentScript;
     }
     
-    internal Script RemoveScript(Entity entity, ScriptType scriptType)
+    internal Script RemoveScript(Entity entity, ScriptType scriptType, int scriptIndex)
     {
-        ref var entityScript    = ref entityScripts[entity.scriptIndex];
+        ref var entityScript    = ref entityScripts[scriptIndex];
         var     scripts         = entityScript.scripts;
         var     len             = scripts.Length;
         for (int n = 0; n < len; n++)
@@ -132,11 +133,11 @@ public partial class EntityStore
                 // Is the Script not the last in store.entityScripts?
                 if (entity.Id != lastEntityId) {
                     // move scriptIndex of last item in store.entityScripts to the index which will be removed
-                    entityScripts[entity.scriptIndex]   = entityScripts[lastIndex];
-                    nodes[lastEntityId].scriptIndex     = entity.scriptIndex;
+                    entityScripts[scriptIndex]  = entityScripts[lastIndex];
+                    scriptMap[lastEntityId]     = scriptIndex;
                 }
-                entityScripts[lastIndex]    = default;                  // clear last Script entry
-                entity.refScriptIndex       = EntityUtils.NoScripts;    // set entity state to: contains no scripts 
+                entityScripts[lastIndex] = default;                  // clear last Script entry
+                scriptMap.Remove(entity.Id);
                 goto SendEvent;
             }
             // case: entity has two or more scripts. Remove the given one from its scripts

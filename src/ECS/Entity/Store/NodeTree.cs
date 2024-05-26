@@ -583,6 +583,9 @@ public partial class EntityStore
             internals.id2Pid.Remove(id);
             internals.pid2Id.Remove(pid);
         }
+        if (scriptMap.Remove(id)) {
+            RemoveEntityScript(id);
+        }
         // --- remove child from parent 
         if (!HasParent(parentId)) {
             return;
@@ -590,6 +593,21 @@ public partial class EntityStore
         int curIndex = RemoveChildNode(parentId, id);
         OnChildNodeRemove(parentId, id, curIndex);
     }
+    
+    private void RemoveEntityScript(int id)
+    {
+        var scripts = entityScripts;
+        int len     = entityScriptCount - 1;
+        for (int n = 1; n <= len; n++) {
+            if (scripts[n].id != id) continue;
+            for (; n < len; n++) {
+                scripts[n] = scripts[n + 1];
+            }
+            entityScriptCount   = len;
+            scripts[len]        = default;
+            break;
+        }
+    } 
     
     private void SetTreeFlags(EntityNode[] nodes, int id, NodeFlags flag) {
         ref var node    = ref nodes[id];

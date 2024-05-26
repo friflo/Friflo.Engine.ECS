@@ -65,7 +65,7 @@ public struct EntityNode
     /// <remarks> Is set to null only in <see cref="EntityStore.DeleteNode"/>. </remarks>
     [Browse(Never)] internal    Archetype       archetype;      //  8   can be null. Could use int to relieve GC tracing reference types 
     [Browse(Never)] internal    int             compIndex;      //  4   index within Archetype.entityIds & StructHeap<>.components
-    [Browse(Never)] internal    int             scriptIndex;    //  4   0 if entity has no scripts
+    // removed      internal    int             scriptIndex;    //  4   0 if entity has no scripts
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
                     internal    byte            signalTypeCount;//  1   number of different signal types attached to the entity. 
                     internal    HasEventFlags   hasEvent;       //  1   bit is 1 in case an event handler is attached to the entity. 

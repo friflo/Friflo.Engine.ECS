@@ -149,7 +149,7 @@ public struct TestTag5 : ITag { }
 public class TestScript1    : Script { public   int     val1; }
 
 [ComponentKey("script2")]
-class TestScript2           : Script { public   int     val2; }
+public class TestScript2    : Script { public   int     val2; }
 
 [ComponentKey("script3")]
 class TestScript3           : Script { public   int     val3; }

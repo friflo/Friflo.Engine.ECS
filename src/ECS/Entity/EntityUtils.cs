@@ -191,24 +191,23 @@ public static class EntityUtils
     
     // ---------------------------------- Script utils ----------------------------------
     private  static readonly Script[]                       EmptyScripts        = Array.Empty<Script>();
-    internal const  int                                     NoScripts           = 0;
     internal static readonly Tags                           Disabled            = Tags.Get<Disabled>();
     private  static readonly ScriptType[]                   ScriptTypes         = EntityStoreBase.Static.EntitySchema.scripts;
     private  static readonly Dictionary<Type, ScriptType>   ScriptTypeByType    = EntityStoreBase.Static.EntitySchema.scriptTypeByType;
     
     internal static Script[] GetScripts(Entity entity) {
-        if (entity.scriptIndex == NoScripts) {
+        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return EmptyScripts;
         }
-        return EntityStore.GetScripts(entity); 
+        return EntityStore.GetScripts(entity, scriptIndex); 
     }
     
     internal static Script GetScript(Entity entity, Type scriptType)
     {
-        if (entity.scriptIndex == NoScripts) {
+        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
-        return EntityStore.GetScript(entity, scriptType);
+        return EntityStore.GetScript(entity, scriptType, scriptIndex);
     }
     
     internal static Script AddScript(Entity entity, int scriptIndex, Script script)
@@ -236,19 +235,19 @@ public static class EntityUtils
         return entity.archetype.entityStore.AddScript(entity, script, scriptType);
     }
     
-    internal static Script RemoveScript(Entity entity, int scriptIndex) {
-        if (entity.scriptIndex == NoScripts) {
+    internal static Script RemoveScript(Entity entity, int scriptTypeIndex) {
+        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
-        var scriptType  = ScriptTypes[scriptIndex];
-        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
+        var scriptType  = ScriptTypes[scriptTypeIndex];
+        return entity.archetype.entityStore.RemoveScript(entity, scriptType, scriptIndex);
     }
     
     private static Script RemoveScriptType(Entity entity, ScriptType scriptType) {
-        if (entity.scriptIndex == NoScripts) {
+        if (!entity.store.scriptMap.TryGetValue(entity.Id, out int scriptIndex)) {
             return null;
         }
-        return entity.archetype.entityStore.RemoveScript(entity, scriptType);
+        return entity.archetype.entityStore.RemoveScript(entity, scriptType, scriptIndex);
     }
     
     internal static void AddTreeTags(Entity entity, in Tags tags)

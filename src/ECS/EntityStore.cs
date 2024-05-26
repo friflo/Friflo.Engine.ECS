@@ -102,6 +102,9 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             Entity                  storeRoot;          // 16   - origin of the tree graph. null if no origin assigned
     /// <summary>Contains implicit all entities with one or more <see cref="Script"/>'s to minimize iteration cost for <see cref="Script.Update"/>.</summary>
     [Browse(Never)] private             EntityScripts[]         entityScripts;      //  8   - invariant: entityScripts[0] = 0
+    /// <summary>Contains the <see cref="entityScripts"/> index (value) of an entity id (key)</summary>
+                    internal readonly   Dictionary<int, int>    scriptMap;          //  8   - invariant: entityScripts[0] = 0
+    
     /// <summary>Count of entities with one or more <see cref="Script"/>'s</summary>
     [Browse(Never)] private             int                     entityScriptCount;  //  4   - invariant: > 0  and  <= entityScripts.Length
     // --- buffers
@@ -173,6 +176,7 @@ public sealed partial class EntityStore : EntityStoreBase
     {
         intern              = new Intern(pidType);
         internals           = new Internals(pidType);
+        scriptMap           = new Dictionary<int, int>();
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0

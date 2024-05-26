@@ -124,7 +124,7 @@ public static class Test_Script
         player.RemoveScript<TestScript2>();
         AreEqual(1,             player.Scripts.Length);
         
-        // --- remove non existing Script
+        // --- remove non-existing Script
         player.RemoveScript<TestScript2>();
         AreEqual(1,             player.Scripts.Length); // no event sent
         

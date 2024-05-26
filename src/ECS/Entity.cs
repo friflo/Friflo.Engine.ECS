@@ -678,8 +678,8 @@ public readonly struct Entity : IEquatable<Entity>
     [Browse(Never)] internal    ref int         refCompIndex    => ref store.nodes[Id].compIndex;
     [Browse(Never)] internal        int            compIndex    =>     store.nodes[Id].compIndex;
     
-    [Browse(Never)] internal    ref int         refScriptIndex  => ref store.nodes[Id].scriptIndex;
-    [Browse(Never)] internal        int            scriptIndex  =>     store.nodes[Id].scriptIndex;
+    // [Browse(Never)] internal ref int         refScriptIndex  => ref store.nodes[Id].scriptIndex;
+    // [Browse(Never)] internal     int            scriptIndex  =>     store.scriptMap[Id];
 
     // Deprecated comment. Was valid when Entity was a class
     // [c# - What is the memory overhead of a .NET Object - Stack Overflow]     // 16 overhead for reference type on x64

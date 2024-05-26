@@ -172,6 +172,32 @@ public static class Test_Entity
         AreEqual(1,     scripts .Length);
         AreSame(script, scripts[0]);
     }
+    
+    [Test]
+    public static void Test_Entity_delete_with_Script()
+    {
+        var store   = new EntityStore(PidType.UsePidAsId);
+        var entity1 = store.CreateEntity();
+        var entity2 = store.CreateEntity();
+        var script1 = new TestScript1();
+        entity1.AddScript(script1);
+        
+        AreEqual(1, entity1.Scripts.Length);
+        AreEqual(1, store.EntityScripts.Length);
+        AreEqual(1, store.scriptMap.Count);
+
+        var script2 = new TestScript2();
+        entity2.AddScript(script2);
+        
+        AreEqual(1, entity2.Scripts.Length);
+        AreEqual(2, store.EntityScripts.Length);
+        AreEqual(2, store.scriptMap.Count);
+        
+        entity1.DeleteEntity();
+        AreEqual(1,         store.scriptMap.Count);
+        AreEqual(1,         store.EntityScripts.Length);
+        AreSame (script2,   store.EntityScripts[0].scripts[0]);
+    }
 }
 
 internal struct MyTag : ITag { }
