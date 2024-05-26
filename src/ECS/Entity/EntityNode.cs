@@ -19,9 +19,9 @@ namespace Friflo.Engine.ECS;
 /// </summary> 
 /// <remarks>
 /// <see cref="EntityNode"/>'s enable organizing entities in a tree graph structure.<br/>
-/// The tree graph is stored in an <see cref="EntityStore"/> starting with a single <see cref="EntityStore.StoreRoot"/> entity.<br/> 
+/// The tree graph is stored in a <see cref="EntityStore"/> starting with a single <see cref="EntityStore.StoreRoot"/> entity.<br/> 
 /// <br/>
-/// When creating a new entity in a <see cref="EntityStore"/> instantiated with <see cref="PidType.RandomPids"/>
+/// When creating a new entity in an <see cref="EntityStore"/> instantiated with <see cref="PidType.RandomPids"/>
 /// it generates a unique random pid assigned to the entity.<br/>
 /// Using random pids avoid merge conflicts when multiples users make changes to the same <see cref="EntityStore"/> file / database.<br/>
 /// The probability generating the same pid by two different users is:
@@ -35,40 +35,28 @@ namespace Friflo.Engine.ECS;
 public struct EntityNode
 {
 #region public properties
-    //  <summary>The unique entity id.</summary>
-    //              public              int                 Id          =>  id;
+    /// <summary>The <see cref="ECS.Archetype"/> storing the entity.</summary>
+                    public              Archetype   Archetype   =>  archetype;
     
-    // /// <summary>Permanent unique pid used for persistence of an entity in a database </summary>
-    //              public              long                Pid         =>  pid;
-    
-    /// <summary>The <see cref="ECS.Archetype"/> the entity node is stored.</summary>
-                    public              Archetype           Archetype   =>  archetype;
-    
-    //  removed     public              ReadOnlySpan<int>   ChildIds    =>  new (childIds, 0, childCount);
-    //  removed     public              int                 ChildCount  =>  childCount;
-    //  removed     public              int                 ParentId    =>  parentId;
-                    
     /// <summary>Internally used flags assigned to the entity.</summary>
-                    public              NodeFlags           Flags       =>  flags;
+                    public              NodeFlags   Flags       =>  flags;
                     
-                    public   override   string              ToString()  => GetString();
+                    public   override   string      ToString()  => GetString();
     #endregion
     
 #region internal fields
-    //              internal    long            pid;            //  8   permanent id used for serialization
-    // removed      internal    int             parentId;       //  4   0 if entity has no parent
-    // removed      internal    int[]           childIds;       //  8   null if entity has no child entities
-    // removed      internal    int             childCount;     //  4   count of child entities
+    /// <remarks> Is set to null only in <see cref="EntityStore.DeleteNode"/>. </remarks>
+    [Browse(Never)] internal    Archetype       archetype;          //  8   can be null. Could use int to relieve GC tracing reference types
+    
+    [Browse(Never)] internal    int             compIndex;          //  4   index within Archetype.entityIds & StructHeap<>.components
     
     /// <summary> Use <see cref="Is"/> or <see cref="IsNot"/> for read access. </summary>
-    [Browse(Never)] internal    NodeFlags       flags;          //  1
-    /// <remarks> Is set to null only in <see cref="EntityStore.DeleteNode"/>. </remarks>
-    [Browse(Never)] internal    Archetype       archetype;      //  8   can be null. Could use int to relieve GC tracing reference types 
-    [Browse(Never)] internal    int             compIndex;      //  4   index within Archetype.entityIds & StructHeap<>.components
-    // removed      internal    int             scriptIndex;    //  4   0 if entity has no scripts
+    [Browse(Never)] internal    NodeFlags       flags;              //  1
+    
     /// <remarks> Used to avoid enumeration of <see cref="EntityStore.Intern.signalHandlers"/> </remarks>
-                    internal    byte            signalTypeCount;//  1   number of different signal types attached to the entity. 
-                    internal    HasEventFlags   hasEvent;       //  1   bit is 1 in case an event handler is attached to the entity. 
+                    internal    byte            signalTypeCount;    //  1   number of different signal types attached to the entity.
+    
+                    internal    HasEventFlags   hasEvent;           //  1   bit is 1 in case an event handler is attached to the entity. 
     #endregion
     
 #region internal getter
