@@ -108,9 +108,17 @@ public sealed partial class EntityStore : EntityStoreBase
     [Browse(Never)] private             int[]                   idBuffer;           //  8
     [Browse(Never)] private  readonly   HashSet<int>            idBufferSet;        //  8
     [Browse(Never)] private  readonly   DataEntity              dataBuffer;         //  8
-                    internal readonly   Dictionary<int, int>    parentMap;          //  8   - store the parent (value) of an entity (key)
-
+                    internal readonly   Internals               internals;          //  8
                     private             Intern                  intern;             // 88
+
+    internal struct Internals {
+        internal readonly                   Dictionary<int, int>    parentMap;              //  8   - store the parent (value) of an entity (key)
+        
+        internal Internals(PidType _) {
+           parentMap       = new Dictionary<int, int>();
+        }
+    }
+    
     /// <summary>Contains state of <see cref="EntityStore"/> not relevant for application development.</summary>
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     // MUST be private by all means.
@@ -131,8 +139,8 @@ public sealed partial class EntityStore : EntityStoreBase
         internal    SignalHandler[]                                 signalHandlerMap;       //  8
         internal    List<SignalHandler>                             signalHandlers;         //  8 
         //
-        internal    Action                <EntityCreate>            entityCreate;          //  8   - fires event on create entity
-        internal    Action                <EntityDelete>            entityDelete;          //  8   - fires event on delete entity
+        internal    Action                <EntityCreate>            entityCreate;           //  8   - fires event on create entity
+        internal    Action                <EntityDelete>            entityDelete;           //  8   - fires event on delete entity
         //
         internal    EventHandler          <EntitiesChanged>         entitiesChanged;        //  8   - fires event to notify changes of multiple entities
         //
@@ -162,6 +170,7 @@ public sealed partial class EntityStore : EntityStoreBase
     public EntityStore(PidType pidType)
     {
         intern              = new Intern(pidType);
+        internals           = new Internals(pidType);
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
@@ -169,7 +178,6 @@ public sealed partial class EntityStore : EntityStoreBase
         idBuffer            = new int[1];
         idBufferSet         = new HashSet<int>();
         dataBuffer          = new DataEntity();
-        parentMap           = new Dictionary<int, int>();
         Info                = new EntityStoreInfo(this);
     }
     #endregion
