@@ -156,6 +156,7 @@ CreateEntity() - all          duration: 2,8798948 ms
             
             arch1.EnsureCapacity(count + 1);
             var start3 = Stopwatch.GetTimestamp();
+            var memStart = Mem.GetAllocatedBytes();
             time2 += start3 - start2;
             
             var storeCapacity = store.Capacity;
@@ -167,8 +168,9 @@ CreateEntity() - all          duration: 2,8798948 ms
             time3 += Stopwatch.GetTimestamp() - start3;
             Mem.AreEqual(count + 1, arch1.Count);
             // assert initial capacity was sufficient
-            Assert.AreEqual(storeCapacity, store.Capacity);
-            Assert.AreEqual(arch1Capacity, arch1.Capacity);
+            Mem.AreEqual(storeCapacity, store.Capacity);
+            Mem.AreEqual(arch1Capacity, arch1.Capacity);
+            Mem.AssertNoAlloc(memStart);
         }
         var freq = repeat * Stopwatch.Frequency / 1000d;
         Console.WriteLine($"Entity count: {count}, repeat: {repeat}");
