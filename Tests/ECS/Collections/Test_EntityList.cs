@@ -30,11 +30,14 @@ public static class Test_EntityList
     {
         var store   = new EntityStore();
         AreEqual(2, store.Capacity);
-        var list = new EntityList(store) { 1 };
+        // ReSharper disable once UseObjectOrCollectionInitializer
+        var list = new EntityList(store);
+        list.Add(0);
+        IsTrue(list[0].IsNull);
         var e = Throws<ArgumentException>(() => {
             list.Add(2);
         });
-        AreEqual("id: 2. expect in [1, current maximum: 1]", e!.Message);
+        AreEqual("id: 2. expect in [0, current maximum: 1]", e!.Message);
     }
     
     [Test]
