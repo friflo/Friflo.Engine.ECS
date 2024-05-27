@@ -113,7 +113,9 @@ public static class Test_StructHeap
             type.CreateEntities(count, list);
             Mem.AssertNoAlloc(start);
             for (int i = 0; i < count; i++) {
-                Assert.AreEqual(seqId++, list[i].Id);
+                var entity = list[i];
+                Assert.AreSame(type,        entity.Archetype);
+                Assert.AreEqual(seqId++,    entity.Id);
             }
         }
         list = type.CreateEntities(count); // list = null
