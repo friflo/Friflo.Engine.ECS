@@ -197,6 +197,23 @@ Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,479 m
         var duration = (double)sw.ElapsedMilliseconds / repeat;
         Console.WriteLine($"Archetype.CreateEntities() Entity count: {count}, repeat: {repeat}, duration: {duration} ms");
     }
+    
+    [Test]
+    public static void Test_Span_Clear_Pref() {
+        var len     = 10_000;
+        var repeat  = 1;
+        var array   = new string[len];
+        var span    = new Span<string>(array, 0, len);
+        var sw      = new Stopwatch();
+        sw.Start();
+        for (int n = 0; n < repeat; n++) {
+            span.Clear();
+            // Array.Clear(array, 0, len);
+            // span.Fill(default);
+        }
+        Console.WriteLine($"Span<>.Clear() count: {len},  duration: {sw.ElapsedMilliseconds} ms");
+    }
+    
 
     [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()

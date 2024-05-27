@@ -83,7 +83,7 @@ internal sealed class StructHeap<T> : StructHeap
     internal  override  void SetComponentsDefault (int compIndexStart, int count)
     {
         var componentSpan = new Span<T>(components, compIndexStart, count);
-        componentSpan.Fill(default);
+        componentSpan.Clear();
     }
     
     /// <summary>
