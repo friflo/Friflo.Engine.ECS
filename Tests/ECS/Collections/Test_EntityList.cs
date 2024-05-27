@@ -26,6 +26,31 @@ public static class Test_EntityList
     }
     
     [Test]
+    public static void Test_EntityList_Add()
+    {
+        var store   = new EntityStore();
+        AreEqual(2, store.Capacity);
+        var list = new EntityList(store) { 1 };
+        var e = Throws<ArgumentException>(() => {
+            list.Add(2);
+        });
+        AreEqual("id: 2. expect in [1, current maximum: 1]", e!.Message);
+    }
+    
+    [Test]
+    public static void Test_EntityList_Capacity()
+    {
+        var store   = new EntityStore();
+        var list = new EntityList(store) { Capacity = 10 };
+        AreEqual(10, list.Capacity);
+        var start = Mem.GetAllocatedBytes();
+        for (int n = 1; n <= 10; n ++) {
+            list.Add(1);
+        }
+        Mem.AssertNoAlloc(start);
+    }
+    
+    [Test]
     public static void Test_EntityList_AddTreeEntities()
     {
         var count       = 10;   // 1_000_000 ~ #PC: 7715 ms

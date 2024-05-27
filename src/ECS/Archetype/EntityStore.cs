@@ -171,6 +171,10 @@ public abstract partial class EntityStoreBase
         return ExceptionUtils.ArgumentException(msg, parameterName);
     }
     
+    internal ArgumentException IdOutOfRangeException(EntityStore store, int id) {
+        return new ArgumentException($"id: {id}. expect in [1, current maximum: {store.nodes.Length - 1}]");
+    }
+    
     internal static Exception   AddEntityAsChildToItselfException(int id) {
         return new InvalidOperationException($"Cannot add entity to itself as a child. id: {id}");
     }

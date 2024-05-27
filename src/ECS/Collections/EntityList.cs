@@ -111,6 +111,18 @@ public sealed class EntityList : IList<Entity>
     /// </summary>
     public void Add(int id)
     {
+        if (id < 1 || id >= entityStore.nodes.Length) {
+            throw entityStore.IdOutOfRangeException(entityStore, id);
+        }
+        entityStore.GetEntityById(1);
+        if (ids.Length == count) {
+            ResizeIds();
+        }
+        ids[count++] = id;
+    }
+    
+    internal void AddInternal(int id)
+    {
         if (ids.Length == count) {
             ResizeIds();
         }
@@ -129,7 +141,7 @@ public sealed class EntityList : IList<Entity>
     
     private void AddEntityTree(Entity entity)
     {
-        Add(entity.Id);
+        AddInternal(entity.Id);
         entity.TryGetTreeNode(out var node);
         var childCount  = node.childCount;
         var childIds    = node.childIds;

@@ -194,7 +194,7 @@ public sealed partial class EntityStore : EntityStoreBase
         if (0 <= id && id < nodes.Length) {
             return new Entity(this, id);
         }
-        throw new IndexOutOfRangeException();
+        throw IdOutOfRangeException(this, id);
     }
     
     /// <summary>

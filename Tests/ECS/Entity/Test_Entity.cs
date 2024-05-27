@@ -132,12 +132,14 @@ public static class Test_Entity
         IsFalse(store.GetEntityById(2).IsNull);
         IsTrue (store.GetEntityById(3).IsNull);
         
-        Throws<IndexOutOfRangeException>(() => {
+        var e = Throws<ArgumentException>(() => {
             store.GetEntityById(-1);
         });
-        Throws<IndexOutOfRangeException>(() => {
+        AreEqual("id: -1. expect in [1, current maximum: 3]", e!.Message);
+        e = Throws<ArgumentException>(() => {
             store.GetEntityById(4);
         });
+        AreEqual("id: 4. expect in [1, current maximum: 3]", e!.Message);
     }
     
     [Test]

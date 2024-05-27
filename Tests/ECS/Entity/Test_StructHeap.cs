@@ -46,7 +46,7 @@ public static class Test_StructHeap
             entities[n] = entity;
             entity.Position.x = n;
         }
-        // --- delete majority of entities
+        // --- delete the majority of entities
         const int remaining = 500;
         for (int n = remaining; n < count; n++) {
             entities[n].DeleteEntity();
