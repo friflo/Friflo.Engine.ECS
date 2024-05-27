@@ -111,10 +111,11 @@ public sealed class EntityList : IList<Entity>
     /// </summary>
     public void Add(int id)
     {
-        if (id < 0 || id >= entityStore.nodes.Length) {
-            throw entityStore.IdOutOfRangeException(entityStore, id);
+        var store = entityStore;
+        if (id < 0 || id >= store.nodes.Length) {
+            throw EntityStoreBase.IdOutOfRangeException(store, id);
         }
-        entityStore.GetEntityById(1);
+        store.GetEntityById(1);
         if (ids.Length == count) {
             ResizeIds();
         }

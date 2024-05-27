@@ -171,7 +171,7 @@ public abstract partial class EntityStoreBase
         return ExceptionUtils.ArgumentException(msg, parameterName);
     }
     
-    internal ArgumentException IdOutOfRangeException(EntityStore store, int id) {
+    internal static ArgumentException IdOutOfRangeException(EntityStore store, int id) {
         return new ArgumentException($"id: {id}. expect in [0, current maximum: {store.nodes.Length - 1}]");
     }
     
