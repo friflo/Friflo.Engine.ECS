@@ -121,6 +121,32 @@ public sealed class Archetype
         return entity;
     }
     
+    public EntityList CreateEntities(int count, EntityList list = null)
+    {
+        if (list == null) {
+            list = new EntityList(entityStore);
+        } else {
+            list.Clear();
+            list.SetStore(entityStore);
+        }
+        list.Capacity   = count;
+        var localStore  = entityStore;
+        var ids         = list.ids;
+        localStore.NewIds(ids, count);
+        list.count          = count;
+        var maxId           = list.ids[count - 1];
+        int compIndexStart  = entityCount;
+        localStore.CreateEntityNodes(this, ids, count, maxId);
+        
+        foreach (var heap in structHeaps) {
+            heap.SetComponentsDefault(compIndexStart, count);
+        }
+        
+        // Send event. See: SEND_EVENT notes
+        localStore.CreateEntityEvents(ids, count);
+        return list;
+    }
+    
     /// <summary>
     /// Allocates memory for entity components in the archetype to enable adding entity components without reallocation.
     /// </summary>

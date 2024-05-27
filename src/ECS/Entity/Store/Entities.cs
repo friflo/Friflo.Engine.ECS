@@ -172,6 +172,34 @@ public partial class EntityStore
         return node.compIndex;
     }
     
+    internal void CreateEntityNodes(Archetype archetype, int[] ids, int count, int maxId)
+    {
+        EnsureNodesLength(maxId + 1);
+        archetype.EnsureCapacity(count);
+        int compIndexStart  = archetype.entityCount;
+        var entityIds       = archetype.entityIds;
+        var localNodes      = nodes;
+        for (int n = 0; n < count; n++)
+        {
+            var id = ids[n];
+            AssertIdInNodes(id);
+            ref var node = ref localNodes[id];
+            if ((node.flags & Created) != 0) {
+                continue;
+            }
+            var compIndex           = compIndexStart + n; 
+            entityIds[compIndex]    = id;  // Archetype.AddEntity(archetype, id);
+            node.compIndex          = compIndex;
+            node.archetype          = archetype;
+            node.flags              = Created;
+        }
+        if (nodesMaxId < maxId) {
+            nodesMaxId = maxId;
+        }
+        entityCount             += count;
+        archetype.entityCount   += count;
+    }
+    
     /// <summary>
     /// Set the passed <paramref name="entity"/> as the <see cref="StoreRoot"/> entity.
     /// </summary>
@@ -188,6 +216,17 @@ public partial class EntityStore
     private QueryEntities GetEntities() {
         var query = intern.entityQuery ??= new ArchetypeQuery(this);
         return query.Entities;
+    }
+    
+    internal void CreateEntityEvents(int[] ids, int count)
+    {
+        var create = intern.entityCreate;
+        if (create == null) {
+            return;
+        }
+        for (int n = 0; n < count; n++) {
+            create(new EntityCreate(new Entity(this, ids[n])));
+        }
     }
     
     internal void CreateEntityEvent(Entity entity)

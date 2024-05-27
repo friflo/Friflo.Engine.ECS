@@ -80,6 +80,12 @@ internal sealed class StructHeap<T> : StructHeap
         components[compIndex] = default;
     }
     
+    internal  override  void SetComponentsDefault (int compIndexStart, int count)
+    {
+        var componentSpan = new Span<T>(components, compIndexStart, count);
+        componentSpan.Fill(default);
+    }
+    
     /// <summary>
     /// Method only available for debugging. Reasons:<br/>
     /// - it boxes struct values to return them as objects<br/>

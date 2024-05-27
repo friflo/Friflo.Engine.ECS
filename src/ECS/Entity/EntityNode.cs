@@ -68,20 +68,6 @@ public struct EntityNode
     private readonly string GetString()
     {
         var sb = new StringBuilder();
-    /*  if (archetype != null) {
-            EntityUtils.EntityToString(id, archetype, sb);
-        } else {
-            sb.Append("id: ");
-            sb.Append(id);
-        }
-
-        if (childCount > 0) {
-            if (sb.Length > 0) {
-                sb.Append("  ");    
-            }
-            sb.Append("ChildCount: ");
-            sb.Append(childCount);
-        } */
         if (flags != 0) {
             sb.Append("flags: ");
             var startPos = sb.Length;

@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable ConvertToAutoPropertyWithPrivateSetter
 // ReSharper disable InlineTemporaryVariable
 // ReSharper disable ConvertToPrimaryConstructor
@@ -27,6 +28,8 @@ public sealed class EntityList : IList<Entity>
     /// <summary> Returns the number of entities stored in the container. </summary>
     public              int         Count       => count;
     
+    public              int         Capacity    { get => ids.Length; set => SetCapacity(value); }
+
     /// <summary> Returns the store to which the list entities belong to. </summary>
     public              EntityStore EntityStore => entityStore;
     
@@ -49,7 +52,7 @@ public sealed class EntityList : IList<Entity>
     /// </summary>
     public EntityList()
     {
-        ids         = new int[8];
+        ids         = Array.Empty<int>();
     }
 
     /// <summary>
@@ -58,7 +61,7 @@ public sealed class EntityList : IList<Entity>
     public EntityList(EntityStore store)
     {
         entityStore = store;
-        ids         = new int[8];
+        ids         = Array.Empty<int>();
     }
     
     /// <summary>
@@ -69,6 +72,18 @@ public sealed class EntityList : IList<Entity>
     {
         if (count > 0) throw new ArgumentException("EntityList must be empty when calling SetStore()");
         entityStore = store;
+    }
+    
+    private void SetCapacity(int capacity)
+    {
+        if (capacity <= ids.Length) {
+            return;
+        }
+        var newIds = new int[capacity];
+        var source = new ReadOnlySpan<int>  (ids,    0, count) ;
+        var target = new Span<int>          (newIds, 0, count) ;
+        source.CopyTo(target);
+        ids = newIds;
     }
     #endregion
 
@@ -86,7 +101,7 @@ public sealed class EntityList : IList<Entity>
     {
         if (entity.store != entityStore) throw EntityStoreBase.InvalidStoreException(nameof(entity));
         if (ids.Length == count) {
-            ArrayUtils.Resize(ref ids, 2 * count);
+            ResizeIds();
         }
         ids[count++] = entity.Id;
     }
@@ -97,7 +112,7 @@ public sealed class EntityList : IList<Entity>
     public void Add(int id)
     {
         if (ids.Length == count) {
-            ArrayUtils.Resize(ref ids, 2 * count);
+            ResizeIds();
         }
         ids[count++] = id;
     }
@@ -122,6 +137,10 @@ public sealed class EntityList : IList<Entity>
             var child = new Entity(entityStore, childIds[index]);
             AddEntityTree(child);
         }
+    }
+    
+    private void ResizeIds() {
+        ArrayUtils.Resize(ref ids, Math.Max(8, 2 * count));
     }
     #endregion
     

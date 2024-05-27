@@ -143,6 +143,26 @@ CreateEntity() - all          duration: 3,7066645 µs
     }
     
     [Test]
+    public static void Test_StructHeap_CreateEntities_Perf()
+    {
+        int repeat  = 10;     // 1000
+        int count   = 10;     // 100_000
+/*      #PC:
+Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1563 ms
+*/
+        var list        = new EntityList();
+        var sw          = new Stopwatch();
+        sw.Start();
+        for (int i = 0; i < repeat; i++)
+        {
+            var store   = new EntityStore();
+            var type    = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>());
+            type.CreateEntities(count, list);
+        }
+        Console.WriteLine($"Archetype.CreateEntities() Entity count: {count}, repeat: {repeat}, duration: {sw.ElapsedMilliseconds} ms");
+    }
+
+    [Test]
     public static void Test_StructHeap_CreateEntity_Perf_100()
     {
         int count = 10; // 100_000 (UsePidAsId) ~ #PC: 3688 ms
@@ -152,7 +172,7 @@ CreateEntity() - all          duration: 3,7066645 µs
         var arch1   = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
         arch1.EnsureCapacity(count);
         arch1.CreateEntity();
-        
+
         // --- perf
         var stopwatch = new Stopwatch();
         stopwatch.Start();
