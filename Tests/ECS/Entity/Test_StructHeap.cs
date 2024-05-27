@@ -4,6 +4,7 @@ using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.Utils;
 
+// ReSharper disable UselessBinaryOperation
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
 namespace Tests.ECS {
@@ -88,6 +89,40 @@ public static class Test_StructHeap
             arch1.CreateEntity();
         }
         Mem.AreEqual(0, arch1.EnsureCapacity(0));
+    }
+    
+    [Test]
+    public static void Test_StructHeap_CreateEntities()
+    {
+        var count   = 10;
+        var repeat  = 5;
+        var list    = new EntityList();
+        var store   = new EntityStore();
+        // store.CreateEntity(1);
+        var type    = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>());
+        var seqId   = 1;
+        var evId    = 1;
+        store.EnsureCapacity(repeat * count);
+        type.EnsureCapacity (repeat * count);
+        list.Capacity = 10;
+        store.OnEntityCreate += create => {
+            Mem.AreEqual(evId++, create.Entity.Id);
+        };
+        for (int n = 0; n < repeat; n++) {
+            var start = Mem.GetAllocatedBytes();
+            type.CreateEntities(count, list);
+            Mem.AssertNoAlloc(start);
+            for (int i = 0; i < count; i++) {
+                Assert.AreEqual(seqId++, list[i].Id);
+            }
+        }
+        list = type.CreateEntities(count); // list = null
+        for (int i = 0; i < count; i++) {
+            Assert.AreEqual(seqId++, list[i].Id);
+        }
+        var entityCount = (1 + repeat) * count; 
+        Assert.AreEqual(entityCount, store.Count);
+        Assert.AreEqual(entityCount, type.Count);
     }
     
     [Test]
