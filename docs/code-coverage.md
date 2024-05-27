@@ -32,7 +32,7 @@ cd ./Engine
 Create single `coverage.cobertura.xml` file by running unit tests.  
 *Executes in ~ 7 second.*
 ```
-dotnet-coverage collect -f cobertura -s coverage.settings.xml -o "coverage.cobertura.xml" "dotnet test"
+dotnet-coverage collect -f cobertura -s scripts/coverage.settings.xml -o "coverage.cobertura.xml" "dotnet test"
 ```
 
 Create html files from `coverage.cobertura.xml`.  
