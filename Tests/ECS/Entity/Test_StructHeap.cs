@@ -97,10 +97,10 @@ public static class Test_StructHeap
         int count   = 10;     // 100_000
 /*      #PC:
 Entity count: 100000, repeat: 1000
-EntityStore.EnsureCapacity()  duration: 0,0549166 µs
-Archetype.EnsureCapacity()    duration: 0,2796653 µs
-CreateEntity()                duration: 2,5453129 µs
-CreateEntity() - all          duration: 2,8798948 µs
+EntityStore.EnsureCapacity()  duration: 0,0549166 ms
+Archetype.EnsureCapacity()    duration: 0,2796653 ms
+CreateEntity()                duration: 2,5453129 ms
+CreateEntity() - all          duration: 2,8798948 ms
 */
         long time1 = 0;
         long time2 = 0;
@@ -135,11 +135,11 @@ CreateEntity() - all          duration: 2,8798948 µs
         }
         var freq = repeat * Stopwatch.Frequency / 1000d;
         Console.WriteLine($"Entity count: {count}, repeat: {repeat}");
-        Console.WriteLine($"EntityStore.EnsureCapacity()  duration: {time1 / freq} µs");
-        Console.WriteLine($"Archetype.EnsureCapacity()    duration: {time2 / freq} µs");
-        Console.WriteLine($"CreateEntity()                duration: {time3 / freq} µs");
+        Console.WriteLine($"EntityStore.EnsureCapacity()  duration: {time1 / freq} ms");
+        Console.WriteLine($"Archetype.EnsureCapacity()    duration: {time2 / freq} ms");
+        Console.WriteLine($"CreateEntity()                duration: {time3 / freq} ms");
         var all = time1 + time2 + time3;
-        Console.WriteLine($"CreateEntity() - all          duration: {all   / freq} µs");
+        Console.WriteLine($"CreateEntity() - all          duration: {all   / freq} ms");
     }
     
     [Test]
@@ -148,7 +148,7 @@ CreateEntity() - all          duration: 2,8798948 µs
         int repeat  = 10;     // 1000
         int count   = 10;     // 100_000
 /*      #PC:
-Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,479 µs
+Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,479 ms
 */
         var list        = new EntityList();
         var sw          = new Stopwatch();
@@ -160,7 +160,7 @@ Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,479 �
             type.CreateEntities(count, list);
         }
         var duration = (double)sw.ElapsedMilliseconds / repeat;
-        Console.WriteLine($"Archetype.CreateEntities() Entity count: {count}, repeat: {repeat}, duration: {duration} µs");
+        Console.WriteLine($"Archetype.CreateEntities() Entity count: {count}, repeat: {repeat}, duration: {duration} ms");
     }
 
     [Test]
