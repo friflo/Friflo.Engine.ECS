@@ -499,6 +499,28 @@ public partial class EntityStore
         nodes[id].compIndex = compIndex;
     }
     
+    /// <summary> Note!  Sync implementation with <see cref="NewId"/>. </summary>
+    private void NewIds(int[] ids, int start, int count)
+    {
+        var localNodes  = nodes;
+        var max         = localNodes.Length;
+        var sequenceId  = intern.sequenceId;
+        for (int n = 0; n < count; n++)
+        {
+            var id = ++sequenceId;
+            for (; id < max;)
+            {
+                if ((localNodes[id].flags & Created) != 0) {
+                    id = ++sequenceId;
+                    continue;
+                }
+                break;
+            }
+            ids[n + start] = id;
+        }
+        intern.sequenceId = sequenceId;
+    }
+    
     /// <summary> Note!  Sync implementation with <see cref="NewIdInterlocked"/>  and <see cref="CreateEntityNodes"/>. </summary>
     internal int NewId()
     {
