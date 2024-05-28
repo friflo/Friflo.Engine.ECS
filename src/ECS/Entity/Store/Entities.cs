@@ -246,9 +246,3 @@ public partial class EntityStore
     }
 }
 
-/// <summary>
-/// Reserved symbol name.
-/// If exposing public it needs to store an array of <see cref="Entity"/>'s.<br/>
-/// Similar to <see cref="Archetypes"/>.
-/// </summary>
-internal struct Entities;
