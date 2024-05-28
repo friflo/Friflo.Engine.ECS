@@ -8,7 +8,7 @@ obj/
 
 
 !**/*.meta
-Tests/**/*.meta
+src/Tests/**/*.meta
 
 
 *.DotSettings.user
