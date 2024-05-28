@@ -31,7 +31,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Editor.UI\Editor.UI.csproj" />
       <ProjectReference Include="..\OpenGL\Engine.OpenGL.csproj" />
-      <ProjectReference Include="..\src\Hub\Engine.Hub.csproj" />
+      <ProjectReference Include="..\..\Hub\Engine.Hub.csproj" />
     </ItemGroup>
 
     <ItemGroup>

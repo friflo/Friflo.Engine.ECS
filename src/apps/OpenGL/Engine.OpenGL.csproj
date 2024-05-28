@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ECS\Engine.ECS.csproj" />
+    <ProjectReference Include="..\..\ECS\Engine.ECS.csproj" />
   </ItemGroup>
 
 </Project>

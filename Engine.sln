@@ -11,13 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-internal", "Tests-internal\Tests-internal.csproj", "{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "src\apps\Editor\Editor.csproj", "{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.OpenGL", "OpenGL\Engine.OpenGL.csproj", "{A941382D-5C4A-48D4-B7A6-D0F72AA4DC41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.OpenGL", "src\apps\OpenGL\Engine.OpenGL.csproj", "{A941382D-5C4A-48D4-B7A6-D0F72AA4DC41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTest", "GameTest\GameTest.csproj", "{A28046BA-D99F-46F4-8027-3333E405A71E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTest", "src\apps\GameTest\GameTest.csproj", "{A28046BA-D99F-46F4-8027-3333E405A71E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.UI", "Editor.UI\Editor.UI.csproj", "{14EADD4E-A06E-4E56-9D28-C616D33108EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.UI", "src\apps\Editor.UI\Editor.UI.csproj", "{14EADD4E-A06E-4E56-9D28-C616D33108EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
