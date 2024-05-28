@@ -37,7 +37,7 @@ public static class Test_EntityList
         var e = Throws<ArgumentException>(() => {
             list.Add(2);
         });
-        AreEqual("id: 2. expect in [0, current maximum: 1]", e!.Message);
+        AreEqual("id: 2. expect in [0, current max id: 1]", e!.Message);
     }
     
     [Test]

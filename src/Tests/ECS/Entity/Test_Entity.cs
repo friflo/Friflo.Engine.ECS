@@ -135,11 +135,11 @@ public static class Test_Entity
         var e = Throws<ArgumentException>(() => {
             store.GetEntityById(-1);
         });
-        AreEqual("id: -1. expect in [0, current maximum: 3]", e!.Message);
+        AreEqual("id: -1. expect in [0, current max id: 3]", e!.Message);
         e = Throws<ArgumentException>(() => {
             store.GetEntityById(4);
         });
-        AreEqual("id: 4. expect in [0, current maximum: 3]", e!.Message);
+        AreEqual("id: 4. expect in [0, current max id: 3]", e!.Message);
     }
     
     [Test]
