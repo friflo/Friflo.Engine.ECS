@@ -121,30 +121,19 @@ public sealed class Archetype
         return entity;
     }
     
-    public EntityList CreateEntities(int count, EntityList list = null)
+    public Entities CreateEntities(int count)
     {
-        if (list == null) {
-            list = new EntityList(entityStore);
-        } else {
-            list.Clear();
-            list.SetStore(entityStore);
-        }
-        list.Capacity   = count;
-        var localStore  = entityStore;
-        var ids         = list.ids;
-        localStore.NewIds(ids, count);
-        list.count          = count;
-        var maxId           = list.ids[count - 1];
+        var localStore      = entityStore;
         int compIndexStart  = entityCount;
-        localStore.CreateEntityNodes(this, ids, count, maxId);
+        localStore.CreateEntityNodes(this, count);
         
         foreach (var heap in structHeaps) {
             heap.SetComponentsDefault(compIndexStart, count);
         }
-        
         // Send event. See: SEND_EVENT notes
-        localStore.CreateEntityEvents(ids, count);
-        return list;
+        var entities = new Entities(entityIds, localStore, compIndexStart, count);
+        localStore.CreateEntityEvents(entities);
+        return entities;
     }
     
     /// <summary>

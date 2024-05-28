@@ -109,18 +109,19 @@ public static class Test_StructHeap
             Mem.AreEqual(evId++, create.Entity.Id);
         };
         for (int n = 0; n < repeat; n++) {
-            var start = Mem.GetAllocatedBytes();
-            type.CreateEntities(count, list);
+            var start       = Mem.GetAllocatedBytes();
+            var entities    = type.CreateEntities(count);
             Mem.AssertNoAlloc(start);
-            for (int i = 0; i < count; i++) {
-                var entity = list[i];
+            foreach (var entity in entities) {
                 Assert.AreSame(type,        entity.Archetype);
                 Assert.AreEqual(seqId++,    entity.Id);
             }
         }
-        list = type.CreateEntities(count); // list = null
-        for (int i = 0; i < count; i++) {
-            Assert.AreEqual(seqId++, list[i].Id);
+        {
+            var entities = type.CreateEntities(count); // list = null
+            foreach (var entity in entities) {
+                Assert.AreEqual(seqId++, entity.Id);
+            }
         }
         var entityCount = (1 + repeat) * count; 
         Assert.AreEqual(entityCount, store.Count);
@@ -189,14 +190,14 @@ CreateEntity() - all          duration: 2,8798948 ms
 /*      #PC:
 Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,479 ms
 */
-        var list        = new EntityList();
         var sw          = new Stopwatch();
         sw.Start();
         for (int i = 0; i < repeat; i++)
         {
             var store   = new EntityStore();
             var type    = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>());
-            type.CreateEntities(count, list);
+            var entities = type.CreateEntities(count);
+            Mem.AreEqual(count, entities.Count);
         }
         var duration = (double)sw.ElapsedMilliseconds / repeat;
         Console.WriteLine($"Archetype.CreateEntities() Entity count: {count}, repeat: {repeat}, duration: {duration} ms");

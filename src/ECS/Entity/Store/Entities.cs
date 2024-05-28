@@ -172,8 +172,9 @@ public partial class EntityStore
         return node.compIndex;
     }
     
-    internal void CreateEntityNodes(Archetype archetype, int[] ids, int count, int maxId)
+    internal void CreateEntityNodes(Archetype archetype, int count)
     {
+        int maxId = intern.sequenceId + count; 
         EnsureNodesLength(maxId + 1);
         archetype.EnsureCapacity(count);
         int compIndexStart  = archetype.entityCount;
@@ -181,7 +182,7 @@ public partial class EntityStore
         var localNodes      = nodes;
         for (int n = 0; n < count; n++)
         {
-            var id = ids[n];
+            var id = NewId();
             AssertIdInNodes(id);
             ref var node = ref localNodes[id];
             if ((node.flags & Created) != 0) {
@@ -218,14 +219,14 @@ public partial class EntityStore
         return query.Entities;
     }
     
-    internal void CreateEntityEvents(int[] ids, int count)
+    internal void CreateEntityEvents(Entities entities)
     {
         var create = intern.entityCreate;
         if (create == null) {
             return;
         }
-        for (int n = 0; n < count; n++) {
-            create(new EntityCreate(new Entity(this, ids[n])));
+        foreach (var entity in entities) {
+            create(new EntityCreate(entity));
         }
     }
     

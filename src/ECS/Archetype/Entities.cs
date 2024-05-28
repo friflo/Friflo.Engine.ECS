@@ -17,7 +17,7 @@ public readonly struct Entities : IReadOnlyList<Entity>
     internal    readonly int[]          ids;    //  8
     internal    readonly EntityStore    store;  //  8
     internal    readonly int            start;  //  4
-    public      readonly int            count;  //  4
+    internal    readonly int            count;  //  4
     #endregion
     
 #region general
@@ -49,13 +49,13 @@ public struct EntityEnumerator : IEnumerator<Entity>
     private readonly    int[]       ids;        //  8
     private readonly    EntityStore store;      //  8
     private readonly    int         start;      //  4
-    private readonly    int         last;       //  8
+    private readonly    int         last;       //  4
     private             int         index;      //  4
     
     internal EntityEnumerator(in Entities entities) {
         ids     = entities.ids;
         store   = entities.store;
-        start   = entities.start;
+        start   = entities.start - 1;
         last    = start + entities.count;
         index   = start;
     }
