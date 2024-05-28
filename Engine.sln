@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.ECS", "src\ECS\Engin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Hub", "src\Hub\Engine.Hub.csproj", "{1C33A81E-E654-40DC-94A5-27A8765E65B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C224813F-2372-4879-B661-5F00FD947938}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "src\Tests\Tests.csproj", "{C224813F-2372-4879-B661-5F00FD947938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-internal", "Tests-internal\Tests-internal.csproj", "{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-internal", "src\Tests-internal\Tests-internal.csproj", "{9A5375A3-8D38-48CA-BBF0-5338A4811FDB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "src\apps\Editor\Editor.csproj", "{EABD51D9-E768-4DCA-B2F4-5650AA7547DD}"
 EndProject
