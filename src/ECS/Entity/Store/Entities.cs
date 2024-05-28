@@ -172,17 +172,28 @@ public partial class EntityStore
         return node.compIndex;
     }
     
+    /// <summary> Note!  Sync implementation with <see cref="NewId"/>. </summary>
     internal void CreateEntityNodes(Archetype archetype, int count)
     {
-        int maxId = intern.sequenceId + count; 
+        var sequenceId      = intern.sequenceId;
+        int maxId           = sequenceId + count; 
         EnsureNodesLength(maxId + 1);
         archetype.EnsureCapacity(count);
         int compIndexStart  = archetype.entityCount;
         var entityIds       = archetype.entityIds;
         var localNodes      = nodes;
+        var max             = localNodes.Length;
         for (int n = 0; n < count; n++)
         {
-            var id = NewId();
+            var id = ++sequenceId;
+            for (; id < max;)
+            {
+                if ((localNodes[id].flags & Created) != 0) {
+                    id = ++sequenceId;
+                    continue;
+                }
+                break;
+            }
             AssertIdInNodes(id);
             ref var node = ref localNodes[id];
             if ((node.flags & Created) != 0) {
@@ -194,6 +205,7 @@ public partial class EntityStore
             node.archetype          = archetype;
             node.flags              = Created;
         }
+        intern.sequenceId = sequenceId;
         if (nodesMaxId < maxId) {
             nodesMaxId = maxId;
         }

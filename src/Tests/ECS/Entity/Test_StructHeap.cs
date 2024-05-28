@@ -188,7 +188,7 @@ CreateEntity() - all          duration: 2,8798948 ms
         int repeat  = 10;     // 1000
         int count   = 10;     // 100_000
 /*      #PC:
-Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,479 ms
+Archetype.CreateEntities() Entity count: 100000, repeat: 1000, duration: 1,55 ms
 */
         var sw          = new Stopwatch();
         sw.Start();
