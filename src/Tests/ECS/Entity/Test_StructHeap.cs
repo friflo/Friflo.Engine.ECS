@@ -96,7 +96,6 @@ public static class Test_StructHeap
     {
         var count   = 10;
         var repeat  = 5;
-        var list    = new EntityList();
         var store   = new EntityStore();
         // store.CreateEntity(1);
         var type    = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>());
@@ -104,7 +103,6 @@ public static class Test_StructHeap
         var evId    = 1;
         store.EnsureCapacity(repeat * count);
         type.EnsureCapacity (repeat * count);
-        list.Capacity = 10;
         store.OnEntityCreate += create => {
             Mem.AreEqual(evId++, create.Entity.Id);
         };
@@ -118,7 +116,7 @@ public static class Test_StructHeap
             }
         }
         {
-            var entities = type.CreateEntities(count); // list = null
+            var entities = type.CreateEntities(count);
             foreach (var entity in entities) {
                 Assert.AreEqual(seqId++, entity.Id);
             }

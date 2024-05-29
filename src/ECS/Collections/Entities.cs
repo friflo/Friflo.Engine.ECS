@@ -10,14 +10,15 @@ namespace Friflo.Engine.ECS;
 public readonly struct Entities : IReadOnlyList<Entity>
 {
 #region properties
-    public          int     Count => count;
+    public              int             Count       => count;
+    public              EntityStore     EntityStore => store;
     #endregion
 
 #region interal fields
-    internal    readonly int[]          ids;    //  8
-    internal    readonly EntityStore    store;  //  8
-    internal    readonly int            start;  //  4
-    internal    readonly int            count;  //  4
+    internal readonly   int[]           ids;    //  8
+    internal readonly   EntityStore     store;  //  8
+    internal readonly   int             start;  //  4
+    internal readonly   int             count;  //  4
     #endregion
     
 #region general
@@ -28,7 +29,7 @@ public readonly struct Entities : IReadOnlyList<Entity>
         this.count  = count;
     }
     
-    public Entity this[int index] => throw new System.NotImplementedException();
+    public Entity this[int index] => new Entity(store, ids[start + index]);
     #endregion
 
     
