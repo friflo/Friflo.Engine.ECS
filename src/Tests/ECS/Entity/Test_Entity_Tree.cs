@@ -87,6 +87,7 @@ public static class Test_Entity_Tree
         var rootNode = root.GetComponent<TreeNode>();
         AreEqual(1,         rootNode.ChildCount);
         AreEqual(1,         rootNode.ChildIds.Length);
+        AreEqual("ChildCount: 1", rootNode.ToString());
     //  AreEqual("id: 1  \"root\"  [EntityName]  ChildCount: 1  flags: Created",  root.ToString()); TREE_NODE
         AreEqual("id: 1  \"root\"  [EntityName, TreeNode]",  root.ToString());
         AreEqual(1,         childEntities.Count);

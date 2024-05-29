@@ -51,6 +51,10 @@ public static class Test_EntityList
             list.Add(1);
         }
         Mem.AssertNoAlloc(start);
+        
+        // set capacity less than current capacity
+        list.Capacity = 5;
+        AreEqual(10, list.Capacity);
     }
     
     [Test]

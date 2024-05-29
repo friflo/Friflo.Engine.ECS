@@ -20,5 +20,5 @@ public struct TreeNode : IComponent    // todo should be internal
     [Browse(Never)] internal    int     childCount;     //  4   count of child entities
     
     
-    public override             string  ToString() => $"count: {childCount}";
+    public override             string  ToString() => $"ChildCount: {childCount}";
 }
