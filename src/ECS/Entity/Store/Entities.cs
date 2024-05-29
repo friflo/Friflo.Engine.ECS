@@ -178,19 +178,16 @@ public partial class EntityStore
         int compIndexStart  = archetype.entityCount;
         var entityIds       = archetype.entityIds;
         NewIds(entityIds, compIndexStart, count);
-        int maxId           = intern.sequenceId;
-        EnsureNodesLength(maxId + 1);
+        EnsureNodesLength(intern.sequenceId + 1); // may resize nodes
         var localNodes      = nodes;
-        for (int n = 0; n < count; n++)
+        var maxIndex        = compIndexStart + count;
+        for (int index = compIndexStart; index < maxIndex; index++)
         {
-            var id                  = entityIds[n + compIndexStart];
-            AssertIdInNodes(id);
-            ref var node            = ref localNodes[id];
-            var compIndex           = compIndexStart + n; 
-            entityIds[compIndex]    = id;  // Archetype.AddEntity(archetype, id);
-            node.compIndex          = compIndex;
-            node.archetype          = archetype;
-            node.flags              = Created;
+            var id          = entityIds[index];
+            ref var node    = ref localNodes[id];
+            node.compIndex  = index;
+            node.archetype  = archetype;
+            node.flags      = Created;
         }
         entityCount             += count;
         archetype.entityCount   += count;

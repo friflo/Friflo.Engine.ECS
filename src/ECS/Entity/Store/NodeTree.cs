@@ -507,16 +507,14 @@ public partial class EntityStore
         var sequenceId  = intern.sequenceId;
         for (int n = 0; n < count; n++)
         {
-            var id = ++sequenceId;
-            for (; id < max;)
+            for (; ++sequenceId < max;)
             {
-                if ((localNodes[id].flags & Created) != 0) {
-                    id = ++sequenceId;
+                if ((localNodes[sequenceId].flags & Created) != 0) {
                     continue;
                 }
                 break;
             }
-            ids[n + start] = id;
+            ids[n + start] = sequenceId;
         }
         intern.sequenceId = sequenceId;
     }
