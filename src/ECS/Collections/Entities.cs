@@ -3,10 +3,14 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using static System.Diagnostics.DebuggerBrowsableState;
+using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[DebuggerTypeProxy(typeof(EntitiesDebugView))]
 public readonly struct Entities : IReadOnlyList<Entity>
 {
 #region properties
@@ -80,3 +84,27 @@ public struct EntityEnumerator : IEnumerator<Entity>
     
     public readonly void Dispose() { }
 }
+
+internal sealed class EntitiesDebugView
+{
+    [Browse(RootHidden)]
+    internal            Entity[]    Entities => GetEntities();
+    
+    private readonly    Entities    entities;
+    
+    internal EntitiesDebugView(Entities entities) {
+        this.entities = entities;
+    }
+    
+    private Entity[] GetEntities()
+    {
+        var store   = entities.store;
+        var count   = entities.count;
+        var ids     = entities.ids;
+        var result  = new Entity[count];
+        for (int n = 0; n < count; n++) {
+            result[n] = new Entity(store, ids[n]);
+        }
+        return result;
+    }
+} 

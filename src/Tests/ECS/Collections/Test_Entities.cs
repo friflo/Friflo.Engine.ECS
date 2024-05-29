@@ -21,6 +21,8 @@ public static class Test_Entities
         {
             int count = 0;
             foreach (var entity in entities) {
+                AreSame (store, entity.Store);
+                AreSame (type,  entity.Archetype);
                 AreEqual(count + 1, entities[count].Id);
                 count++;
                 AreEqual(count, entity.Id);
