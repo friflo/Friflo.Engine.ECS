@@ -99,36 +99,36 @@ public sealed partial class EntityStore : EntityStoreBase
     
 #region internal fields
     // --- Note: all fields must stay private to limit the scope of mutations
-    [Browse(Never)] internal            EntityNode[]            nodes;              //  8   - acts also id2pid
-    [Browse(Never)] private             Entity                  storeRoot;          // 16   - origin of the tree graph. null if no origin assigned
+    [Browse(Never)] internal            EntityNode[]    nodes;          //  8   - acts also id2pid
+    [Browse(Never)] private             Entity          storeRoot;      // 16   - origin of the tree graph. null if no origin assigned
 
     // --- buffers
-    [Browse(Never)] private             int[]                   idBuffer;           //  8
-    [Browse(Never)] private  readonly   HashSet<int>            idBufferSet;        //  8
-    [Browse(Never)] private  readonly   DataEntity              dataBuffer;         //  8
-                    internal            StoreExtension          extension;          //  8
-                    private             Intern                  intern;             // 88
+    [Browse(Never)] private             int[]           idBuffer;       //  8
+    [Browse(Never)] private  readonly   HashSet<int>    idBufferSet;    //  8
+    [Browse(Never)] private  readonly   DataEntity      dataBuffer;     //  8
+                    internal            StoreExtension  extension;      // 96
+                    private             Intern          intern;         // 88
     
     /// <summary>Contains state of <see cref="EntityStore"/> not relevant for application development.</summary>
     /// <remarks>Declaring internal state fields in this struct remove noise in debugger.</remarks>
     // MUST be private by all means.
     private struct Intern {
-        internal readonly                   PidType                 pidType;                //  4   - pid != id  /  pid == id
-                        internal            int                     sequenceId;             //  4   - incrementing id used for next new entity
+        internal readonly   PidType                 pidType;            //  4   - pid != id  /  pid == id
+        internal            int                     sequenceId;         //  4   - incrementing id used for next new entity
         //
-        internal    SignalHandler[]                                 signalHandlerMap;       //  8
-        internal    List<SignalHandler>                             signalHandlers;         //  8 
+        internal    SignalHandler[]                 signalHandlerMap;   //  8
+        internal    List<SignalHandler>             signalHandlers;     //  8 
         //
-        internal    Action                <EntityCreate>            entityCreate;           //  8   - fires event on create entity
-        internal    Action                <EntityDelete>            entityDelete;           //  8   - fires event on delete entity
+        internal    Action<EntityCreate>            entityCreate;       //  8   - fires event on create entity
+        internal    Action<EntityDelete>            entityDelete;       //  8   - fires event on delete entity
         //
-        internal    EventHandler          <EntitiesChanged>         entitiesChanged;        //  8   - fires event to notify changes of multiple entities
+        internal    EventHandler<EntitiesChanged>   entitiesChanged;    //  8   - fires event to notify changes of multiple entities
         //
-        internal    ArchetypeQuery                                  entityQuery;            //  8
+        internal    ArchetypeQuery                  entityQuery;        //  8
         //
-        internal    Stack<CommandBuffer>                            commandBufferPool;      //  8
-        internal    Playback                                        playback;               // 16
-        internal    EventRecorder                                   eventRecorder;          //  8
+        internal    Stack<CommandBuffer>            commandBufferPool;  //  8
+        internal    Playback                        playback;           // 16
+        internal    EventRecorder                   eventRecorder;      //  8
 
                     
         internal Intern(PidType pidType)

@@ -21,6 +21,12 @@ public static class Test_sizeof
     }
     
     [Test]
+    public static unsafe void Test_sizeof_StoreExtension() {
+        var size = sizeof(StoreExtension);
+        AreEqual(96, size);
+    }
+    
+    [Test]
     public static unsafe void Test_sizeof_Entity() {
         var size = sizeof(Entity);
         AreEqual(16, size);
