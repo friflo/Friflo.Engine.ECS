@@ -203,7 +203,8 @@ Two benchmarks - subset of [Ecs.CSharp.Benchmark + PR #38](https://github.com/Do
 running on a Mac Mini M2.
 
 ![new](docs/images/new.svg) **2024-05-29** - Updated benchmarks.  
-Improved create entities performance with version **2.0.0-preview.3** by **3x** to **4x**.
+Improved create entities performance by **3x** to **4x** and minimized entity memory footprint from **48** to **16** bytes.  
+Published in nuget package **2.0.0-preview.3**.
 
 Made a subset as the other benchmarks are similar only with different parameters.
 
