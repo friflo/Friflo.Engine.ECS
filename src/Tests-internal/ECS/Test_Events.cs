@@ -118,6 +118,73 @@ public static class Test_Events
         AreEqual(2, countEvent2A);
         AreEqual(1, countEvent2B);
     }
+    
+    [Test]
+    public static void Test_Events_add_multiple_ComponentChanged_handler()
+    {
+        var store = new EntityStore();
+        var entity = store.CreateEntity();
+        var countEvent1  = 0;
+        var countEvent2A = 0;
+        var countEvent2B = 0;
+        Action<ComponentChanged> handler1 = changed => {
+            var value = changed.Component<MyComponent1>().a;
+            switch (countEvent1++) {
+                case 0: AreEqual(10, value); break;
+                case 1: AreEqual(20, value); break;
+                case 2: AreEqual(40, value); break;
+            }
+        };
+        Action<ComponentChanged> handler2A = changed => {
+            var value = changed.Component<MyComponent1>().a;
+            switch (countEvent2A++) {
+                case 0: AreEqual(10, value); break;
+                case 1: AreEqual(20, value); break;
+            }
+        };
+        Action<ComponentChanged> handler2B = changed => {
+            var value = changed.Component<MyComponent1>().a;
+            switch (countEvent2B++) {
+                case 0: AreEqual(10, value); break;
+            }
+        };
+        entity.OnComponentChanged += handler1;
+        entity.OnComponentChanged += handler2A;
+        entity.OnComponentChanged += handler2B;
+        
+        var handlers = entity.DebugEventHandlers;
+        AreEqual(3, handlers.HandlerCount);
+        AreEqual(1, handlers.TypeCount);
+        
+        entity.AddComponent(new MyComponent1{ a = 10 });
+        
+        entity.OnComponentChanged -= handler2B;
+        handlers = entity.DebugEventHandlers;
+        AreEqual(2, handlers.HandlerCount);
+        AreEqual(1, handlers.TypeCount);
+        entity.AddComponent(new MyComponent1{ a = 20 });
+        
+        entity.OnComponentChanged -= handler2A;
+        handlers = entity.DebugEventHandlers;
+        AreEqual(1, handlers.HandlerCount);
+        AreEqual(1, handlers.TypeCount);
+        
+        entity.OnComponentChanged -= handler1;
+        handlers = entity.DebugEventHandlers;
+        AreEqual(0, handlers.HandlerCount);
+        AreEqual(0, handlers.TypeCount);
+        
+        // All event handlers removed. AddComponent() will not call any delegate  
+        entity.AddComponent(new MyComponent1{ a = 30 });
+        
+        // add handler1 again
+        entity.OnComponentChanged += handler1;
+        entity.AddComponent(new MyComponent1{ a = 40 });
+        
+        AreEqual(3, countEvent1);
+        AreEqual(2, countEvent2A);
+        AreEqual(1, countEvent2B);
+    }
 }
 
 }
