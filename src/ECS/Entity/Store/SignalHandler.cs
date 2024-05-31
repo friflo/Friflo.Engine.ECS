@@ -111,7 +111,8 @@ public partial class EntityStore
                 return (SignalHandler<TEvent>)signalHandler;
             }
         } else {
-            map = store.intern.signalHandlerMap = new SignalHandler[signalIndex + 1];
+            ArrayUtils.Resize(ref store.intern.signalHandlerMap, signalIndex + 1);
+            map = store.intern.signalHandlerMap;
         }
         var typedHandler    = new SignalHandler<TEvent>();
         var list            = store.intern.signalHandlers ??= new List<SignalHandler>();

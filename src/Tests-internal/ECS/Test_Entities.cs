@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Friflo.Engine.ECS;
+﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
 using Tests.ECS;
 using static NUnit.Framework.Assert;

@@ -263,8 +263,8 @@ public static class Test_Entity_Events
     }
 }
 
-internal struct MyEvent1 { }
-internal struct MyEvent2 { internal int value; }
-internal struct MyEvent3 { }
+public struct MyEvent1 { public int value; }
+public struct MyEvent2 { public int value; }
+public struct MyEvent3 { }
 
 }
