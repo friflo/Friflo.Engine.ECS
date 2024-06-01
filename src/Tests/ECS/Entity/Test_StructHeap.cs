@@ -138,9 +138,10 @@ Archetype.EnsureCapacity()    duration: 0,2796653 ms
 CreateEntity()                duration: 2,5453129 ms
 CreateEntity() - all          duration: 2,8798948 ms
 */
-        long time1 = 0;
-        long time2 = 0;
-        long time3 = 0;
+        long time1      = 0;
+        long time2      = 0;
+        long time3      = 0;
+        long memAlloc   = 0;
 
         for (int i = 0; i < repeat; i++)
         {
@@ -169,7 +170,7 @@ CreateEntity() - all          duration: 2,8798948 ms
             // assert initial capacity was sufficient
             Mem.AreEqual(storeCapacity, store.Capacity);
             Mem.AreEqual(arch1Capacity, arch1.Capacity);
-            Mem.AssertNoAlloc(memStart);
+            memAlloc += Mem.GetAllocatedBytes() - memStart;
         }
         var freq = repeat * Stopwatch.Frequency / 1000d;
         Console.WriteLine($"Entity count: {count}, repeat: {repeat}");
@@ -178,6 +179,7 @@ CreateEntity() - all          duration: 2,8798948 ms
         Console.WriteLine($"CreateEntity()                duration: {time3 / freq} ms");
         var all = time1 + time2 + time3;
         Console.WriteLine($"CreateEntity() - all          duration: {all   / freq} ms");
+        Assert.AreEqual(0, memAlloc);
     }
     
     [Test]
