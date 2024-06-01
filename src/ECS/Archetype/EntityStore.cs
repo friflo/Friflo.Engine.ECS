@@ -32,11 +32,6 @@ public abstract partial class EntityStoreBase
     [Obsolete($"Renamed to {nameof(Count)}")]
     [Browse(Never)] public              int                     EntityCount     => entityCount;
     
-    /// <summary> Return the largest entity <see cref="Entity.Id"/> store in the entity store. </summary>
-    [Browse(Never)] public              int                     NodeMaxId       => nodesMaxId;
-    
-
-    
     /// <summary> Initialize a default <see cref="ParallelJobRunner"/> used for <see cref="QueryJob"/>'s. </summary>
     [Browse(Never)] public              ParallelJobRunner       JobRunner       { get; init; }
 
@@ -80,7 +75,6 @@ public abstract partial class EntityStoreBase
     /// Its <see cref="Archetype"/>.<see cref="Archetype.archIndex"/> is always 0 (<see cref="Static.DefaultArchIndex"/>).</summary>
     [Browse(Never)] internal readonly   Archetype               defaultArchetype;   //  8   - default archetype. has no components & tags
     // --- nodes
-    [Browse(Never)] protected           int                     nodesMaxId;         //  4   - highest entity id
     [Browse(Never)] internal            int                     entityCount;        //  4   - number of all entities
     // --- misc
     [Browse(Never)] private   readonly  ArchetypeKey            searchKey;          //  8   - key buffer to find archetypes by key

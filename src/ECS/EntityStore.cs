@@ -69,6 +69,9 @@ public sealed partial class EntityStore : EntityStoreBase
     /// <summary> Return store information used for debugging and optimization. </summary>
     // ReSharper disable once InconsistentNaming
     [Browse(Never)] public readonly     EntityStoreInfo     Info;
+    
+    /// <summary> Return the largest entity <see cref="Entity.Id"/> store in the entity store. </summary>
+    [Browse(Never)] public              int                 NodeMaxId        => nodes.Length - 1;
     #endregion
     
 #region events
@@ -239,7 +242,7 @@ public sealed partial class EntityStore : EntityStoreBase
             value = default;
             return false;
         }
-        if (0 < pid && pid <= nodesMaxId) {
+        if (0 < pid && pid < nodes.Length) {
             var id = (int)pid;
             if (nodes[id].Is(NodeFlags.Created)) {
                 value = new Entity(this, id);

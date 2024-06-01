@@ -28,8 +28,8 @@ namespace Friflo.Engine.ECS;
 /// </remarks>
 public sealed class RawEntityStore : EntityStoreBase
 {
-    private     RawEntity[]     entities;       //  8 + all raw entities
-    private     int             sequenceId;     //  4               - incrementing id used for next new entity
+    private         RawEntity[] entities;       //  8 + all raw entities
+    private         int         sequenceId;     //  4               - incrementing id used for next new entity
 
     public RawEntityStore()
     {
@@ -90,14 +90,11 @@ public sealed class RawEntityStore : EntityStoreBase
     private void CreateEntity(Archetype archetype, int id)
     {
         EnsureEntitiesLength(id + 1);
-        var index   = entityCount;
-        entityCount = index + 1;
-        if (nodesMaxId < id) {
-            nodesMaxId = id;
-        }
-        ref var node = ref entities[id];
-        node.compIndex = Archetype.AddEntity(archetype, id);
-        node.archIndex = archetype.archIndex; // default archetype index
+        var index       = entityCount;
+        entityCount     = index + 1;
+        ref var node    = ref entities[id];
+        node.compIndex  = Archetype.AddEntity(archetype, id);
+        node.archIndex  = archetype.archIndex; // default archetype index
     }
     
     protected internal override void    UpdateEntityCompIndex(int id, int compIndex) {

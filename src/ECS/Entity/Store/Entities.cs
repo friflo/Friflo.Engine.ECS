@@ -163,12 +163,9 @@ public partial class EntityStore
             return node.compIndex;
         }
         entityCount++;
-        if (nodesMaxId < id) {
-            nodesMaxId = id;
-        }
-        node.compIndex      = Archetype.AddEntity(archetype, id);
-        node.archetype      = archetype;
-        node.flags          = Created;
+        node.compIndex  = Archetype.AddEntity(archetype, id);
+        node.archetype  = archetype;
+        node.flags      = Created;
         return node.compIndex;
     }
     
