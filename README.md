@@ -46,17 +46,15 @@ dotnet add package Friflo.Engine.ECS
 
 # Demos
 
-**Interactive Browser Demo** showing MonoGame WebAssembly integration. [Try online Demo](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
+MonoGame Demo is available as WASM / WebAssembly app. [**Try Demo in your browser**](https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/).  
 
-| <a href="https://sdl-wasm-sample-web.vercel.app/docs/MonoGame/"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/MonoGame-wasm.png"  width="320" height="197"/></a>   | <a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity"   ><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Unity.png"          width="320" height="197"/></a>  |  <a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Godot.png" width="320" height="197"/></a> |
-|:---:|:---:|:---:|
-| [MonoGame Project](https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame) | [Godot Project](https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot) | [Unity Project](https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity) |
+| <a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/MonoGame-wasm.png"  width="320" height="197"/></a>  | <a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Unity.png" width="320" height="197"/></a>  |  <a href="https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot"><img src="https://raw.githubusercontent.com/friflo/Friflo.Engine-docs/main/docs/images/Godot.png" width="320" height="197"/></a> |
+| :---:                                                                                                                                                                                                                     | :---:                                                                                                                                                                                                         | :---:                                                                                                                                                                                                         |
+| [MonoGame Project](https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/MonoGame)                                                                                                                                  | [Unity Project](https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Unity)                                                                                                                            | [Godot Project](https://github.com/friflo/Friflo.Engine.ECS-Demos/tree/main/Godot)                                                                                                                            |
 
+*Desktop Demo performance:* Godot 202 FPS, Unity 100 FPS at 65536 entities.
 
-*Note:* WebGL has currently poor render performance.  
-*Desktop performance of Demos:* Godot 202 FPS, Unity 100 FPS at 65536 entities.
-
-Example Demos for **Windows**, **macOS** & **Linux** available as projects for **Godot**, **MonoGame** and **Unity**.  
+All example Demos - **Windows**, **macOS** & **Linux** - available as projects for **MonoGame**, **Unity** and **Godot**.  
 See [Demos · GitHub](https://github.com/friflo/Friflo.Engine.ECS-Demos)
 
 <br/>
