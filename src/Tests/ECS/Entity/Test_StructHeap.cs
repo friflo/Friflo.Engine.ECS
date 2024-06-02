@@ -111,19 +111,33 @@ public static class Test_StructHeap
             var entities    = type.CreateEntities(count);
             Mem.AssertNoAlloc(start);
             foreach (var entity in entities) {
+                Assert.AreEqual(entity.Id,  entity.Pid);
                 Assert.AreSame(type,        entity.Archetype);
                 Assert.AreEqual(seqId++,    entity.Id);
             }
         }
-        {
-            var entities = type.CreateEntities(count);
-            foreach (var entity in entities) {
-                Assert.AreEqual(seqId++, entity.Id);
-            }
-        }
-        var entityCount = (1 + repeat) * count; 
+        var entityCount = repeat * count;
         Assert.AreEqual(entityCount, store.Count);
         Assert.AreEqual(entityCount, type.Count);
+    }
+    
+    [Test]
+    public static void Test_StructHeap_CreateEntities_with_pids()
+    {
+        var count       = 5;
+        var store       = new EntityStore(PidType.RandomPids);
+        store.SetRandomSeed(1);
+        var type        = store.GetArchetype(ComponentTypes.Get<MyComponent1, MyComponent2, MyComponent3>());
+        var seqId       = 1;
+        var entities    = type.CreateEntities(count);
+        var pids = new long[] { 534011718, 237820880, 1002897798, 1657007234, 1412011072 };
+        foreach (var entity in entities) {
+            Assert.AreEqual(pids[seqId - 1], entity.Pid);
+            Assert.AreSame(type,        entity.Archetype);
+            Assert.AreEqual(seqId++,    entity.Id);
+        }
+        Assert.AreEqual(count, store.Count);
+        Assert.AreEqual(count, type.Count);
     }
     
     [Test]

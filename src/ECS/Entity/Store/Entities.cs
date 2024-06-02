@@ -186,6 +186,11 @@ public partial class EntityStore
             node.archetype  = archetype;
             node.flags      = Created;
         }
+        if (intern.pidType == PidType.RandomPids) {
+            for (int index = compIndexStart; index < maxIndex; index++) {
+                extension.GenerateRandomPidForId(entityIds[index]);
+            }
+        }
         entityCount             += count;
         archetype.entityCount   += count;
     }
