@@ -512,7 +512,7 @@ public partial class EntityStore
         intern.sequenceId = sequenceId;
     }
     
-    /// <summary> Note!  Sync implementation with <see cref="NewIdInterlocked"/>  and <see cref="CreateEntityNodes"/>. </summary>
+    /// <summary> Note!  Sync implementation with <see cref="NewIdInterlocked"/>  and <see cref="NewIds"/>. </summary>
     internal int NewId()
     {
         var localNodes  = nodes;
