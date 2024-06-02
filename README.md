@@ -14,7 +14,7 @@ See benchmark results - Mac Mini M2 - at the bottom of this page.
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
 *Feature highlights*
-- Simple API.
+- Simple API - no boilerplate.
 - High-performance 🔥 and compact ECS implementation - Friflo.Engine.ECS.dll size 250 KB
 - Zero allocations for entire API after buffers grown large enough.
 - Subscribe events of specific or all entities.
