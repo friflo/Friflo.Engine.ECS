@@ -70,8 +70,11 @@ public partial class EntityStore
     /// <returns> compIndex to access <see cref="StructHeap{T}.components"/> </returns>
     internal int CreateEntityInternal(Archetype archetype, int id)
     {
+        // Assign pid: assign pid if intern.pidType == PidType.RandomPids
+        if (intern.pidType == PidType.RandomPids) {
+            extension.GenerateRandomPidForId(id);
+        }
         EnsureNodesLength(id + 1);
-        GeneratePid(id);
         return CreateEntityNode(archetype, id);
     }
     

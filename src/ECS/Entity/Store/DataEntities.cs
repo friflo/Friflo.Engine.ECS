@@ -127,6 +127,7 @@ public partial class EntityStore
             }
             ids[n] = childId;
         }
+        // Assign pid: pid's for entity and its child entities are added above.
         EnsureNodesLength(intern.sequenceId + 1);
         CreateEntityNode(defaultArchetype, id);
 
@@ -143,7 +144,7 @@ public partial class EntityStore
         }
         var id          = (int)pid;
         // --- use pid's as id's
-        var maxPid      = id;
+        var maxId       = id;
         var children    = dataEntity.children;
         var childCount  = children?.Count ?? 0; 
         EnsureIdBufferCapacity(childCount);
@@ -157,9 +158,10 @@ public partial class EntityStore
             ids[n] = (int)childId;
         }
         foreach (var childId in ids) {
-            maxPid = Math.Max(maxPid, childId);
+            maxId = Math.Max(maxId, childId);
         }
-        EnsureNodesLength(maxPid + 1);
+        // Assign pid: assign no pid. intern.pidType == PidType.UsePidAsId 
+        EnsureNodesLength(maxId + 1);
         CreateEntityNode(defaultArchetype, id);
         
         var entity = new Entity(this, id);

@@ -50,13 +50,6 @@ public partial class EntityStore
         extension.randPid = new Random(seed);
     }
     
-    private void GeneratePid(int id) {
-        if (intern.pidType == PidType.UsePidAsId) {
-            return;
-        }
-        extension.GenerateRandomPidForId(id);
-    }
-    
     private static bool HasParent(int id)  =>   id >= Static.MinNodeId;
     
     internal int AddChild (int parentId, int childId)
