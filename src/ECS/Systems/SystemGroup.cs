@@ -260,9 +260,9 @@ public class SystemGroup : BaseSystem, IEnumerable
             return;
         }
         this.tick = tick;
-        var startTime = monitorPerf ? Stopwatch.GetTimestamp() : 0;
+        var start = monitorPerf ? new PerfResource() : default;
         OnUpdateGroup();
-        SetPerfTicks(this, startTime);
+        SetPerfTicks(this, start);
     }
 
     /// <summary>
@@ -286,9 +286,9 @@ public class SystemGroup : BaseSystem, IEnumerable
         for (int n = 0; n < children.Count; n++) {
             var child = children[n];
             if (!child.enabled) { ClearPerfTicks(child); continue; }
-            var startTime = monitorPerf ? Stopwatch.GetTimestamp() : 0;
+            var start = monitorPerf ? new PerfResource() : default;
             child.OnUpdateGroup();
-            SetPerfTicks(child, startTime);
+            SetPerfTicks(child, start);
         }
         // --- apply command buffer changes
         for (int n = 0; n < commands.Count; n++) { commands[n].Playback(); }
@@ -316,18 +316,21 @@ public class SystemGroup : BaseSystem, IEnumerable
         }
     }
     
-    private static void SetPerfTicks(BaseSystem system, long startTime)
+    private static void SetPerfTicks(BaseSystem system, in PerfResource start)
     {
-        if (startTime == 0) {
+        if (start.time == 0) {
             return;
         }
         var time                = Stopwatch.GetTimestamp();
-        var duration            = time - startTime;
+        var duration            = time - start.time;
+        var memory              = GC.GetAllocatedBytesForCurrentThread() - start.memory;
         var history             = system.perf.history;
         var index               = system.perf.updateCount++ % history.Length;
         history[index]          = duration;
         system.perf.lastTicks   = duration;
         system.perf.sumTicks   += duration;
+        system.perf.lastMemory  = memory;
+        system.perf.sumMemory  += memory;
     }
     
     private void ClearPerfTicks(BaseSystem system)

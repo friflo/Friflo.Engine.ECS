@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Globalization;
 using System.Text;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -256,7 +255,7 @@ public abstract class BaseSystem
     {
         var sb = stringBuilder ??= new StringBuilder();
         sb.Clear();
-        sb.Append("------------------------------ |    last ms |     sum ms |   update # |   entity #\n");
+        sb.Append("------------------------------ |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #\n");
         AppendPerfStats(sb, 0);
         sb.Replace(',', '.'); // no more patience with NumberFormatInfo
         return sb.ToString();
@@ -276,7 +275,8 @@ public abstract class BaseSystem
         }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
-        sb.AppendFormat(CultureInfo.InvariantCulture, $" {Perf.LastMs,12:0.000} {Perf.SumMs,12:0.000} {Perf.UpdateCount,12}");
+        sb.Append($" {Perf.LastMs,12:0.000} {Perf.SumMs,12:0.000} {Perf.UpdateCount,12} {Perf.LastMemory,12} {Perf.SumMemory,12}");
+        
         if (this is QuerySystem querySystem) {
             sb.Append($" {querySystem.EntityCount,12}");
         }

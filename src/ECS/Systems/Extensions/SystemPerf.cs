@@ -7,6 +7,7 @@ using static Friflo.Engine.ECS.Systems.SystemExtensions;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Systems;
 
@@ -33,6 +34,12 @@ public struct SystemPerf
     /// <summary> Return the sum of all execution times in timer ticks. </summary>
     [Browse(Never)] public  long    SumTicks    => sumTicks;
     
+    /// <summary> Return the sum of all memory allocations in bytes. </summary>
+    [Browse(Never)] public  long    LastMemory  => lastMemory;
+    
+    /// <summary> Return the memory allocations of the last execution in bytes. </summary>
+    [Browse(Never)] public  long    SumMemory   => sumMemory;
+    
     public override         string  ToString()  => $"updates: {UpdateCount}  last: {LastMs:0.###} ms  sum: {SumMs:0.###} ms";
     #endregion
 
@@ -40,6 +47,8 @@ public struct SystemPerf
     [Browse(Never)] internal            int     updateCount;
     [Browse(Never)] internal            long    lastTicks;
     [Browse(Never)] internal            long    sumTicks;
+    [Browse(Never)] internal            long    lastMemory;
+    [Browse(Never)] internal            long    sumMemory;
                     internal readonly   long[]  history;
     #endregion
 
@@ -68,5 +77,16 @@ public struct SystemPerf
         return (float)(sum * StopwatchPeriodMs);
     }
     #endregion
+}
+
+internal readonly struct PerfResource
+{
+    internal readonly long time;
+    internal readonly long memory;
+    
+    public PerfResource () {
+        time    = Stopwatch.GetTimestamp();
+        memory  = GC.GetAllocatedBytesForCurrentThread();
+    }
 }
 

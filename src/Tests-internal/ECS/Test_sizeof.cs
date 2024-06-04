@@ -99,7 +99,7 @@ public static class Test_sizeof
         AreEqual(8, size);
         
         size = sizeof(SystemPerf);
-        AreEqual(32, size);
+        AreEqual(48, size);
         
         size = sizeof(SystemMatch);
         AreEqual(24, size);

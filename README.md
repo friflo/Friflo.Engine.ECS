@@ -128,7 +128,8 @@ Using Systems is optional but they have some significant advantages:
   is also a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
   Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
 
-- Systems have performance monitoring build-in. If enabled systems detected as bottleneck can be optimized.
+- Systems have performance monitoring build-in to measure execution times and memory allocations.  
+  If enabled systems detected as bottleneck can be optimized.
 
 - Multiple worlds can be added to a single  [SystemRoot](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemRoot.md) instance.  
   `root.Update()` will execute every system on all worlds.
@@ -193,10 +194,10 @@ Console.WriteLine(root.GetPerfLog());
 
 The log result will look like:
 ```
------------------------------- |    last ms |     sum ms |   update # |   entity #
-Systems [2]                           0.074        2.690           10
-  ScaleSystem                         0.036        1.629           10        10000
-  PositionSystem                      0.037        1.057           10        10000
+------------------------------ |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #
+Systems [2]                           0.075        2.909           10          128         1392
+  ScaleSystem                         0.037        1.679           10           64          696        10000
+  PositionSystem                      0.037        1.214           10           64          696        10000
 ```
 
 

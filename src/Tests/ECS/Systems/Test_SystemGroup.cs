@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections;
-using System.Net.Sockets;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
@@ -474,10 +473,10 @@ namespace Tests.ECS.Systems
             }
             Console.WriteLine(root.GetPerfLog());
 /*
------------------------------- | last ms |  sum ms | update# | entity#
-Systems [2]                       0.0737    3.3496        10
-  ScaleSystem                     0.0363    1.8818        10     10000
-  PositionSystem                  0.0372    1.4603        10     10000
+------------------------------ |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #
+Systems [2]                           0.074        5.645           10          128         1392
+  ScaleSystem                         0.037        3.107           10           64          696        10000
+  PositionSystem                      0.037        1.941           10           64          696        10000
 */
         }
         
