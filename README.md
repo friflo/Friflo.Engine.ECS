@@ -185,6 +185,7 @@ To enable monitoring call:
 root.SetMonitorPerf(true);
 ```
 
+The performance statistics available at [SystemPerf](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemPerf.md).  
 To get performance statistics on console use:
 
 ```csharp

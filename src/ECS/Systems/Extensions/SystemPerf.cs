@@ -12,7 +12,7 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS.Systems;
 
 /// <summary>
-/// Provide performance statics of system execution.
+/// Provide performance statistics of system execution via the system property <see cref="BaseSystem.Perf"/>.
 /// </summary>
 public struct SystemPerf
 {
@@ -34,10 +34,10 @@ public struct SystemPerf
     /// <summary> Return the sum of all execution times in timer ticks. </summary>
     [Browse(Never)] public  long    SumTicks    => sumTicks;
     
-    /// <summary> Return the sum of all memory allocations in bytes. </summary>
+    /// <summary> Return the memory allocations of the last execution in bytes. </summary>
     [Browse(Never)] public  long    LastMemory  => lastMemory;
     
-    /// <summary> Return the memory allocations of the last execution in bytes. </summary>
+    /// <summary> Return the sum of memory allocations of all executions in bytes. </summary>
     [Browse(Never)] public  long    SumMemory   => sumMemory;
     
     public override         string  ToString()  => $"updates: {UpdateCount}  last: {LastMs:0.###} ms  sum: {SumMs:0.###} ms";
