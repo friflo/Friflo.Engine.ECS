@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Text;
 using Friflo.Engine.ECS.Utils;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -337,6 +338,14 @@ public class SystemGroup : BaseSystem, IEnumerable
             foreach (var child in systemGroup.childSystems) {
                 ClearPerfTicks(child);
             }
+        }
+    }
+    
+    internal override void AppendPerfStats(StringBuilder sb, int depth)
+    {
+        base.AppendPerfStats(sb, depth);
+        foreach (var child in childSystems) {
+            child.AppendPerfStats(sb, depth + 1);
         }
     }
     #endregion

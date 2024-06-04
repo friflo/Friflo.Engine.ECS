@@ -415,6 +415,8 @@ namespace Tests.ECS.Systems
             AreEqual(perfSystem1.   Perf.LastMs, perfSystem1.   Perf.LastAvgMs(20));
             AreEqual(perfSystem2.   Perf.LastMs, perfSystem2.   Perf.LastAvgMs(20));
             
+            Console.WriteLine(root.GetPerfLog());
+            
             // --- Update() again to test Perf Sum
             var rootSum         = root.  Perf.SumTicks;
             var child1Sum       = child1.Perf.SumTicks;

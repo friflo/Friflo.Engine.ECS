@@ -83,8 +83,11 @@ namespace Tests.ECS.Systems
             root.AddStore(store);
             AreEqual(1, root.Stores.Count);
             
+            root.SetMonitorPerf(true);
             var tick = new UpdateTick(42, 0);
             root.Update(tick);
+            
+            Console.WriteLine(root.GetPerfLog());
             
             AreEqual(1, testGroup.beginCalled);
             AreEqual(1, testGroup.endCalled);
@@ -106,6 +109,19 @@ namespace Tests.ECS.Systems
             AreEqual(1,     testSystem1.Queries.Count);
             AreEqual(1,     testSystem1.EntityCount);
             AreSame(root,   testSystem1.SystemRoot);
+            
+            root.SetMonitorPerf(true);
+            Console.WriteLine(root.GetPerfLog());
+            AreEqual(
+@"------------------------------ | last ms |  sum ms | update# | entity#
+Systems [1]                      -1,0000    0,0000         0
+  Update [1]                     -1,0000    0,0000         0
+    TestSystem1                  -1,0000    0,0000         0         1
+", root.GetPerfLog());
+            AreEqual(
+@"------------------------------ | last ms |  sum ms | update# | entity#
+TestSystem1                      -1,0000    0,0000         0         1
+", testSystem1.GetPerfLog());
             
             var tick = new UpdateTick(42, 0);
             root.Update(tick);

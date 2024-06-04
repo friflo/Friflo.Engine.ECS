@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Text;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -44,14 +45,15 @@ public abstract class BaseSystem
     #endregion
         
 #region internal fields
-    [Browse(Never)] [Ignore]    internal            UpdateTick  tick;
-    [Browse(Never)] [Serialize] internal            int         id;
-    [Browse(Never)] [Serialize] internal            bool        enabled = true;
-    [Browse(Never)]             private readonly    string      systemName;
-    [Browse(Never)]             private             SystemGroup parentGroup;
-    [Browse(Never)]             private             SystemRoot  systemRoot;
-    [Browse(Never)] [Ignore]    internal            SystemPerf  perf;
-    [Browse(Never)]             private             View        view;
+    [Browse(Never)] [Ignore]    internal            UpdateTick      tick;
+    [Browse(Never)] [Serialize] internal            int             id;
+    [Browse(Never)] [Serialize] internal            bool            enabled = true;
+    [Browse(Never)]             private readonly    string          systemName;
+    [Browse(Never)]             private             SystemGroup     parentGroup;
+    [Browse(Never)]             private             SystemRoot      systemRoot;
+    [Browse(Never)] [Ignore]    internal            SystemPerf      perf;
+    [Browse(Never)]             private             View            view;
+    [Browse(Never)]             private             StringBuilder   stringBuilder;
     #endregion
      
 #region constructors
@@ -245,6 +247,38 @@ public abstract class BaseSystem
                 AddSubSystems(ref readOnlyList, child);
             }
         }
+    }
+    #endregion
+    
+#region perf
+    public string GetPerfLog()
+    {
+        var sb = stringBuilder ??= new StringBuilder();
+        sb.Clear();
+        sb.Append("------------------------------ | last ms |  sum ms | update# | entity#\n");
+        AppendPerfStats(sb, 0);
+        return sb.ToString();
+    }
+
+    internal virtual void AppendPerfStats(StringBuilder sb, int depth)
+    {
+        var start = sb.Length;
+        for (int n = 0; n < depth; n++) {
+            sb.Append("  ");
+        }
+        sb.Append(Name);
+        if (this is SystemGroup group) {
+            sb.Append(" [");
+            sb.Append(group.childSystems.Count);
+            sb.Append(']');
+        }
+        var len = 30 - (sb.Length - start);
+        sb.Append(' ', len);
+        sb.Append($" {Perf.LastMs,9:F4} {Perf.SumMs,9:F4} {Perf.UpdateCount,9}");
+        if (this is QuerySystem querySystem) {
+            sb.Append($" {querySystem.EntityCount,9}");
+        }
+        sb.Append('\n');
     }
     #endregion
 }

@@ -52,6 +52,10 @@ public static void ParallelQueryJob()
             myComponent.value += 10;                
         }
     });
+    Console.WriteLine($"JobRunner - thread count:              {runner.ThreadCount}");
+    Console.WriteLine($"Query     - entity count:              {query.Count}");
+    Console.WriteLine($"QueryJob  - MinParallelChunkLength:    {queryJob.MinParallelChunkLength}");
+    Console.WriteLine($"QueryJob  - ParallelComponentMultiple: {queryJob.ParallelComponentMultiple}");
     queryJob.RunParallel();
     runner.Dispose();
 }
