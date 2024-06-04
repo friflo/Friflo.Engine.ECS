@@ -175,6 +175,31 @@ class PulseSystem : QuerySystem<Scale3>
 }
 ```
 
+### System monitoring
+
+System performance monitoring is disabled by default.  
+To enable monitoring call:
+
+```csharp
+root.SetMonitorPerf(true);
+```
+
+To get performance statistics on console use:
+
+```csharp
+root.Update(default);
+Console.WriteLine(root.GetPerfLog());
+```
+
+The log result will look like:
+```
+------------------------------ | last ms |  sum ms | update# | entity#
+Systems [2]                       0.0737    3.3496        10
+  ScaleSystem                     0.0363    1.8818        10     10000
+  PositionSystem                  0.0372    1.4603        10     10000
+```
+
+
 <br/>
 
 

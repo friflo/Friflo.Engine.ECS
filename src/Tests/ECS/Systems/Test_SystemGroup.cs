@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Net.Sockets;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
@@ -451,6 +452,33 @@ namespace Tests.ECS.Systems
             IsTrue(child1.      Perf.LastMs == -1);     AreEqual(3, child1.      Perf.UpdateCount);
             IsTrue(perfSystem1. Perf.LastMs == -1);     AreEqual(2, perfSystem1. Perf.UpdateCount);
             IsTrue(perfSystem2. Perf.LastMs == -1);     AreEqual(3, perfSystem2. Perf.UpdateCount);
+        }
+        
+        [Test]
+        public static void Test_SystemGroup_GetPerfLog()
+        {
+            var store       = new EntityStore();
+            for (int n = 0; n < 10000; n++) {
+                store.CreateEntity(new Position(), new Scale3());
+            }
+            var root        = new SystemRoot(store);
+            var perfSystem1 = new ScaleSystem();
+            var perfSystem2 = new PositionSystem();
+            
+            root.Add(perfSystem1);
+            root.Add(perfSystem2);
+            
+            root.SetMonitorPerf(true);
+            for (int n = 0; n < 10; n++) {
+                root.Update(default);
+            }
+            Console.WriteLine(root.GetPerfLog());
+/*
+------------------------------ | last ms |  sum ms | update# | entity#
+Systems [2]                       0.0737    3.3496        10
+  ScaleSystem                     0.0363    1.8818        10     10000
+  PositionSystem                  0.0372    1.4603        10     10000
+*/
         }
         
         [Test]
