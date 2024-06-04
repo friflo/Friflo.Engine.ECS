@@ -114,13 +114,13 @@ namespace Tests.ECS.Systems
             Console.WriteLine(root.GetPerfLog());
             AreEqual(
 @"------------------------------ | last ms |  sum ms | update# | entity#
-Systems [1]                      -1,0000    0,0000         0
-  Update [1]                     -1,0000    0,0000         0
-    TestSystem1                  -1,0000    0,0000         0         1
+Systems [1]                      -1.0000    0.0000         0
+  Update [1]                     -1.0000    0.0000         0
+    TestSystem1                  -1.0000    0.0000         0         1
 ", root.GetPerfLog());
             AreEqual(
 @"------------------------------ | last ms |  sum ms | update# | entity#
-TestSystem1                      -1,0000    0,0000         0         1
+TestSystem1                      -1.0000    0.0000         0         1
 ", testSystem1.GetPerfLog());
             
             var tick = new UpdateTick(42, 0);

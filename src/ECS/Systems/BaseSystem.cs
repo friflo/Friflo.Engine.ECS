@@ -258,6 +258,7 @@ public abstract class BaseSystem
         sb.Clear();
         sb.Append("------------------------------ | last ms |  sum ms | update# | entity#\n");
         AppendPerfStats(sb, 0);
+        sb.Replace(',', '.'); // no more patience with NumberFormatInfo
         return sb.ToString();
     }
 
