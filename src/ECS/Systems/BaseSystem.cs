@@ -253,9 +253,11 @@ public abstract class BaseSystem
 #region perf
     public string GetPerfLog()
     {
-        var sb = stringBuilder ??= new StringBuilder();
+        var stores  = SystemRoot?.stores.count ?? 0;
+        var sb      = stringBuilder ??= new StringBuilder();
         sb.Clear();
-        sb.Append("------------------------------ |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #\n");
+        sb.Append($"stores: {stores,-3}                         last ms       sum ms      updates     last mem      sum mem     entities\n");
+        sb.Append("---------------------              --------     --------     --------     --------     --------     --------\n");
         AppendPerfStats(sb, 0);
         sb.Replace(',', '.'); // no more patience with NumberFormatInfo
         return sb.ToString();

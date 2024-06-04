@@ -473,10 +473,11 @@ namespace Tests.ECS.Systems
             }
             Console.WriteLine(root.GetPerfLog());
 /*
------------------------------- |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #
-Systems [2]                           0.074        5.645           10          128         1392
-  ScaleSystem                         0.037        3.107           10           64          696        10000
-  PositionSystem                      0.037        1.941           10           64          696        10000
+stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
+---------------------              --------     --------     --------     --------     --------     --------
+Systems [2]                           0.095        6.205           10          128         1392
+  ScaleSystem                         0.047        3.611           10           64          696        10000
+  PositionSystem                      0.048        2.031           10           64          696        10000
 */
         }
         

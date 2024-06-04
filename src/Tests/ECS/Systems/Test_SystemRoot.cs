@@ -113,14 +113,16 @@ namespace Tests.ECS.Systems
             root.SetMonitorPerf(true);
             Console.WriteLine(root.GetPerfLog());
             AreEqual(
-@"------------------------------ |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #
+@"stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
+---------------------              --------     --------     --------     --------     --------     --------
 Systems [1]                          -1.000        0.000            0            0            0
   Update [1]                         -1.000        0.000            0            0            0
     TestSystem1                      -1.000        0.000            0            0            0            1
 ", root.GetPerfLog());
             
             AreEqual(
-@"------------------------------ |    last ms |     sum ms |   update # |   last mem |    sum mem |   entity #
+@"stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
+---------------------              --------     --------     --------     --------     --------     --------
 TestSystem1                          -1.000        0.000            0            0            0            1
 ", testSystem1.GetPerfLog());
             
