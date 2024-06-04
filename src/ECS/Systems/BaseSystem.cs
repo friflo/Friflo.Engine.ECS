@@ -275,7 +275,7 @@ public abstract class BaseSystem
         }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
-        sb.AppendFormat(CultureInfo.InvariantCulture, $" {Perf.LastMs,9:F4} {Perf.SumMs,9:F4} {Perf.UpdateCount,9}");
+        sb.AppendFormat(CultureInfo.InvariantCulture, $" {Perf.LastMs,9:0.0000} {Perf.SumMs,9:0.0000} {Perf.UpdateCount,9}");
         if (this is QuerySystem querySystem) {
             sb.Append($" {querySystem.EntityCount,9}");
         }
