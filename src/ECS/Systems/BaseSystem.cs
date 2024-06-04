@@ -256,7 +256,7 @@ public abstract class BaseSystem
     {
         var sb = stringBuilder ??= new StringBuilder();
         sb.Clear();
-        sb.Append("------------------------------ | last ms |  sum ms | update# | entity#\n");
+        sb.Append("------------------------------ |    last ms |     sum ms |   update # |   entity #\n");
         AppendPerfStats(sb, 0);
         sb.Replace(',', '.'); // no more patience with NumberFormatInfo
         return sb.ToString();
@@ -276,9 +276,9 @@ public abstract class BaseSystem
         }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
-        sb.AppendFormat(CultureInfo.InvariantCulture, $" {Perf.LastMs,9:0.0000} {Perf.SumMs,9:0.0000} {Perf.UpdateCount,9}");
+        sb.AppendFormat(CultureInfo.InvariantCulture, $" {Perf.LastMs,12:0.000} {Perf.SumMs,12:0.000} {Perf.UpdateCount,12}");
         if (this is QuerySystem querySystem) {
-            sb.Append($" {querySystem.EntityCount,9}");
+            sb.Append($" {querySystem.EntityCount,12}");
         }
         sb.Append('\n');
     }
