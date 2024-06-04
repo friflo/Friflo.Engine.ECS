@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Globalization;
 using System.Text;
 using Friflo.Json.Fliox;
 using static System.Diagnostics.DebuggerBrowsableState;
@@ -274,7 +275,7 @@ public abstract class BaseSystem
         }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
-        sb.Append($" {Perf.LastMs,9:F4} {Perf.SumMs,9:F4} {Perf.UpdateCount,9}");
+        sb.AppendFormat(CultureInfo.InvariantCulture, $" {Perf.LastMs,9:F4} {Perf.SumMs,9:F4} {Perf.UpdateCount,9}");
         if (this is QuerySystem querySystem) {
             sb.Append($" {querySystem.EntityCount,9}");
         }
