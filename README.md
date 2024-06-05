@@ -201,7 +201,12 @@ Systems [2]                           0.079        3.074           10          1
 | ScaleSystem                         0.039        1.789           10           64          696        10000
 | PositionSystem                      0.039        1.278           10           64          696        10000
 ```
-
+```
+last ms, sum ms     last/sum system execution time in ms
+updates             number of executions
+last mem, sum mem   last/sum allocated bytes
+entities            number of entities matching a QuerySystem
+```
 
 <br/>
 
