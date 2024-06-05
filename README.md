@@ -7,7 +7,7 @@
 [![stars](https://img.shields.io/github/stars/friflo/Friflo.Json.Fliox.svg)](https://github.com/friflo/Friflo.Json.Fliox)
 
 
-# Friflo.Engine.ECS
+# C# ECS - Friflo.Engine.ECS
 
 Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benchmark** as reference.  
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
