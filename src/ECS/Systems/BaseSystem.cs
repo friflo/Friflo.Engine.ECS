@@ -266,7 +266,10 @@ public abstract class BaseSystem
     internal virtual void AppendPerfStats(StringBuilder sb, int depth)
     {
         var start = sb.Length;
-        for (int n = 0; n < depth; n++) {
+        if (depth > 0) {
+            sb.Append("| ");
+        }
+        for (int n = 1; n < depth; n++) {
             sb.Append("  ");
         }
         sb.Append(Name);

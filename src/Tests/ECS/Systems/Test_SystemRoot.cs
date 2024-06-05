@@ -116,8 +116,8 @@ namespace Tests.ECS.Systems
 @"stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
 ---------------------              --------     --------     --------     --------     --------     --------
 Systems [1]                          -1.000        0.000            0            0            0
-  Update [1]                         -1.000        0.000            0            0            0
-    TestSystem1                      -1.000        0.000            0            0            0            1
+| Update [1]                         -1.000        0.000            0            0            0
+|   TestSystem1                      -1.000        0.000            0            0            0            1
 ", root.GetPerfLog());
             
             AreEqual(

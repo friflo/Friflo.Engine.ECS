@@ -197,9 +197,9 @@ The log result will look like:
 ```
 stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
 ---------------------              --------     --------     --------     --------     --------     --------
-Systems [2]                           0.095        6.205           10          128         1392
-  ScaleSystem                         0.047        3.611           10           64          696        10000
-  PositionSystem                      0.048        2.031           10           64          696        10000
+Systems [2]                           0.079        3.074           10          128         1392
+| ScaleSystem                         0.039        1.789           10           64          696        10000
+| PositionSystem                      0.039        1.278           10           64          696        10000
 ```
 
 
