@@ -15,7 +15,7 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipe
 
 *Feature highlights*
 - Simple API - no boilerplate.
-- High-performance 🔥 and compact ECS implementation - Friflo.Engine.ECS.dll size 250 KB
+- High-performance 🔥 and compact ECS with low memory footprint.
 - Zero allocations for entire API after buffers grown large enough.
 - Fully reactive. Subscribe change events of all or specific entities.
 - JSON Serialization.
@@ -322,7 +322,7 @@ So other threads can still keep running without competing for CPU resources.
 <br/>
 
 
-# License
+**License**
 
 This project is licensed under LGPLv3.  
 
