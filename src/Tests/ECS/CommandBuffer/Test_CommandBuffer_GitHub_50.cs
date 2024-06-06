@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
@@ -15,10 +14,10 @@ public static class Test_CommandBuffer_GitHub_50
     [Ignore("FixMe: Add locking CommandBuffer")][Test]
     public static void Test_CommandBuffer_Parallel()
     {
-        int count = 100_000;
+        int count = 20; // must be > ParallelComponentMultiple (16 for MyComponent1)
         var store = new EntityStore();
         for (int n = 0; n < count; n++) {
-            store.CreateEntity(new TransientComponent { LifeTime = n } );
+            store.CreateEntity(new MyComponent1() );
         }
         var root = new SystemRoot(store) {
             new ParallelPositionSystem()
@@ -28,15 +27,8 @@ public static class Test_CommandBuffer_GitHub_50
         }
         Assert.AreEqual(0, store.Count);
     }
-
-    struct TransientComponent : IComponent
-    {
-        public float    LifeTime;
-        public Vector3  Position;
-        public Vector3  Velocity;
-    }
     
-    class ParallelPositionSystem : QuerySystem<TransientComponent>
+    class ParallelPositionSystem : QuerySystem<MyComponent1>
     {
         readonly ParallelJobRunner runner = new (Environment.ProcessorCount);
         
@@ -45,18 +37,12 @@ public static class Test_CommandBuffer_GitHub_50
             CommandBuffer cmdBuffer = Query.Store.GetCommandBuffer();
             var elementJob = Query.ForEach((transients, entities) =>
             {
-                var counter = 0;
-                foreach (ref var transient in transients.Span)
-                {
-                    transient.LifeTime -= Tick.deltaTime;
-                    if (transient.LifeTime <= 0) {
-                        cmdBuffer.DeleteEntity(entities[counter]);
-                    } else {
-                        transient.Position += transient.Velocity * Tick.deltaTime;
-                    }
-                    counter++;
+                if (entities.Length > 0) {
+                    cmdBuffer.DeleteEntity(entities[0]);
                 }
             });
+            Assert.AreEqual(16, elementJob.ParallelComponentMultiple);
+            elementJob.MinParallelChunkLength = 1;
             elementJob.JobRunner = runner;
             elementJob.RunParallel();
 
