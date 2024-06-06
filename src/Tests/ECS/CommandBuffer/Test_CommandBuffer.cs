@@ -286,7 +286,7 @@ public static class Test_CommandBuffer
         var e = Throws<InvalidOperationException>(() => {
             ecb.Playback();    
         });
-        AreEqual("Playback - entity not found. Delete entity, entity: 42", e!.Message);
+        AreEqual("Playback - entity not found. Delete entity: 42", e!.Message);
     }
     
     [Test]

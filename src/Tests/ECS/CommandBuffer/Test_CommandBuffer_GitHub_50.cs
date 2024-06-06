@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ public static class Test_CommandBuffer_GitHub_50
     [Test]
     public static void Test_CommandBuffer_Parallel()
     {
-        int count = 20; // must be > ParallelComponentMultiple (16 for MyComponent1)
+        int count = 1000; // must be > ParallelComponentMultiple (16 for MyComponent1)
         var store = new EntityStore();
         for (int n = 0; n < count; n++) {
             store.CreateEntity(new MyComponent1() );
@@ -34,11 +35,14 @@ public static class Test_CommandBuffer_GitHub_50
         
         protected override void OnUpdate()
         {
-            CommandBuffer cmdBuffer = Query.Store.GetCommandBuffer();
+            var commandBuffer   = Query.Store.GetCommandBuffer();
+            var synced          = commandBuffer.Synced;
+            int deleteCount     = 0;
             var elementJob = Query.ForEach((_, entities) =>
             {
                 if (entities.Length > 0) {
-                    cmdBuffer.DeleteEntity(entities[0]);
+                    synced.DeleteEntity(entities[0]);
+                    Interlocked.Increment(ref deleteCount);
                 }
             });
             Assert.AreEqual(16, elementJob.ParallelComponentMultiple);
@@ -46,7 +50,8 @@ public static class Test_CommandBuffer_GitHub_50
             elementJob.JobRunner = runner;
             elementJob.RunParallel();
 
-            cmdBuffer.Playback();
+            Assert.AreEqual(deleteCount, commandBuffer.EntityCommandsCount);
+            synced.Playback();
         }
     }
 }

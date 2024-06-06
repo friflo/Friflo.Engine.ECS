@@ -13,14 +13,14 @@ using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 namespace Friflo.Engine.ECS;
 
 /// <summary>
-/// A command buffer enables recording entity changes on <b>arbitrary</b> threads.<br/>
-/// These changes are executed by calling <see cref="Playback"/> on the <b>main</b> thread.<br/>
+/// A command buffer recording entity changes and execute these changes when calling <see cref="Playback"/>.<br/>
+/// <see cref="CommandBuffer"/> is not thread safe. To record changes on arbitrary threads use <see cref="Synced"/>.<br/>
 /// See <a href="https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer">Example.</a>
 /// </summary>
 // Note: CommandBuffer is not a struct. Reasons:
 // - struct need to be passed as a ref parameter => easy to forget
 // - ref parameters cannot be used in lambdas
-public sealed class CommandBuffer
+public sealed class CommandBuffer : ICommandBuffer
 {
 #region public properties
     /// <summary> Return the number of recorded components commands. </summary>
@@ -44,6 +44,12 @@ public sealed class CommandBuffer
     /// Set <see cref="ReuseBuffer"/> = true to reuse a <see cref="CommandBuffer"/> instance for multiple <see cref="Playback"/>'s.
     /// </summary>
     public                  bool            ReuseBuffer             { get => intern.reuseBuffer; set => intern.reuseBuffer = value; }
+
+    /// <summary>
+    /// Returns a command buffer that must be used in parallel queries - executed with <see cref="QueryJob.RunParallel"/>.
+    /// </summary>
+    [Browse(Never)]
+    public              CommandBufferSynced Synced                  => intern.synced ??= new CommandBufferSynced(this);
     
     public override     string              ToString() => $"component commands: {ComponentCommandsCount}  tag commands: {TagCommandsCount}";
     #endregion
@@ -81,6 +87,9 @@ public sealed class CommandBuffer
         internal readonly   EntityStore         store;
         internal            bool                reuseBuffer;
         internal            bool                returnedBuffer;
+        //
+        internal            CommandBufferSynced synced;
+        
         
         internal Intern(EntityStore store, ComponentCommands[] componentCommandTypes) {
             this.store                  = store;
@@ -217,7 +226,7 @@ public sealed class CommandBuffer
                 entity.DeleteEntity();
                 continue;
             }
-            throw new InvalidOperationException($"Playback - entity not found. Delete entity, entity: {entityId}");
+            throw new InvalidOperationException($"Playback - entity not found. Delete entity: {entityId}");
         }
     }
     
