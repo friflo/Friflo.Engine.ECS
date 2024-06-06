@@ -11,7 +11,7 @@ namespace Tests.ECS.Buffer {
 // https://github.com/friflo/Friflo.Json.Fliox/discussions/50
 public static class Test_CommandBuffer_GitHub_50
 {
-    [Ignore("FixMe: Add locking CommandBuffer")][Test]
+    [Test]
     public static void Test_CommandBuffer_Parallel()
     {
         int count = 20; // must be > ParallelComponentMultiple (16 for MyComponent1)
@@ -35,7 +35,7 @@ public static class Test_CommandBuffer_GitHub_50
         protected override void OnUpdate()
         {
             CommandBuffer cmdBuffer = Query.Store.GetCommandBuffer();
-            var elementJob = Query.ForEach((transients, entities) =>
+            var elementJob = Query.ForEach((_, entities) =>
             {
                 if (entities.Length > 0) {
                     cmdBuffer.DeleteEntity(entities[0]);

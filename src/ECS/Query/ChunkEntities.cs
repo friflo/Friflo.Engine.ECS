@@ -37,7 +37,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public   readonly   Archetype           Archetype;  //  8
     
     // ReSharper disable once NotAccessedField.Local
-    private  readonly   int                 start;      //  4
+    internal readonly   int                 start;      //  4
     
     /// <summary> The number of entities in <see cref="ChunkEntities"/>. </summary>
     public   readonly   int                 Length;     //  4
@@ -83,7 +83,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     public int this[int index] {
         get {
             if (index < Length) {
-                return entityIds[index];
+                return entityIds[start + index];
             }
             throw new IndexOutOfRangeException();
         }
@@ -94,7 +94,7 @@ public readonly struct ChunkEntities : IEnumerable<Entity>
     /// </summary>
     public Entity EntityAt(int index) {
         if (index < Length) {
-            return new Entity(Archetype.entityStore, entityIds[index]);
+            return new Entity(Archetype.entityStore, entityIds[start + index]);
         }
         throw new IndexOutOfRangeException();
     }
@@ -146,8 +146,8 @@ public struct ChunkEntitiesEnumerator : IEnumerator<Entity>
     internal ChunkEntitiesEnumerator(in ChunkEntities chunkEntities) {
         entityIds   = chunkEntities.entityIds;
         store       = chunkEntities.Archetype.entityStore;
-        last        = chunkEntities.Length - 1;
-        index       = -1;
+        index       = chunkEntities.start - 1;
+        last        = chunkEntities.Length + index;
     }
     
     // --- IEnumerator<>

@@ -1,5 +1,6 @@
 ﻿using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.ECS;
 
 
 // ReSharper disable once InconsistentNaming
@@ -60,6 +61,50 @@ public static class Test_Query
             Assert.AreEqual(2, positions.Length);
         }
         Assert.AreEqual(1, count);
+    }
+    
+    [Test]
+    public static void Test_Query_ChunkEntitiesEnumerator()
+    {
+        var store = new EntityStore();
+        var type = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        for (int n = 1; n <= 10; n++) {
+            type.CreateEntity(n);
+        }
+        var entities = new ChunkEntities(type, 10);
+        int id = 1;
+        foreach (var entity in entities) {
+            Assert.AreEqual(id++, entity.Id);
+        }
+        id = 6;
+        var section = new ChunkEntities(entities, 5, 5, 0);
+        foreach (var entity in section) {
+            Assert.AreEqual(id++, entity.Id);
+        }  
+    }
+    
+    [Test]
+    public static void Test_Query_ChunkEntities_index_operator()
+    {
+        var store = new EntityStore();
+        var type = store.GetArchetype(ComponentTypes.Get<MyComponent1>());
+        for (int n = 1; n <= 10; n++) {
+            type.CreateEntity(n);
+        }
+        var entities = new ChunkEntities(type, 10);
+        int id = 1;
+        for (int n = 0; n < 10; n++) {
+            Assert.AreEqual(id, entities[n]);
+            Assert.AreEqual(id, entities.EntityAt(n).Id);
+            id++;
+        }
+        id = 6;
+        var section = new ChunkEntities(entities, 5, 5, 0);
+        for (int n = 0; n < 5; n++) {
+            Assert.AreEqual(id, section[n]);
+            Assert.AreEqual(id, section.EntityAt(n).Id);
+            id++;
+        }
     }
 }
 
