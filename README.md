@@ -121,12 +121,14 @@ Using Systems is optional but they have some significant advantages:
 
 - It enables chaining multiple decoupled [QuerySystem](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/QuerySystem.md) classes.
 
-- System fields can be used as parameters in `OnUpdate()`.
+- A system can have state - fields or properties - which can be used as parameters in `OnUpdate()`.  
+  The system state can be serialized to JSON.
 
-- Each system is added to a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).
-  [SystemRoot](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemRoot.md)
-  is also a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
+- Systems are added to a [SystemGroup](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemGroup.md).  
   Each group provide a [CommandBuffer](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization#commandbuffer).
+
+- Systems can be enabled/disabled or removed.  
+  The order of systems in a group can be changed.
 
 - Systems have performance monitoring build-in to measure execution times and memory allocations.  
   If enabled systems detected as bottleneck can be optimized.
