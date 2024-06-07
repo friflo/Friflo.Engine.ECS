@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
@@ -122,20 +123,31 @@ public static class Test_Tags
     public static void Test_TagsEnumerator()
     {
         var tags = Tags.Get<TestTag>();
-        var enumerator = tags.GetEnumerator();
-        int count = 0;
-        while (enumerator.MoveNext()) {
-            count++;
+        {
+            var enumerator = tags.GetEnumerator();
+            int count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+            }
+            AreEqual(1, count);
+            
+            count = 0;
+            enumerator.Reset();
+            while (enumerator.MoveNext()) {
+                count++;
+            }
+            AreEqual(1, count);
+            enumerator.Dispose();
+        } {
+            IEnumerable enumerable = tags;
+            var enumerator = enumerable.GetEnumerator();
+            using var enumerator1 = enumerator as IDisposable;
+            var count = 0;
+            while (enumerator.MoveNext()) {
+                count++;
+            }
+            AreEqual(1, count);
         }
-        AreEqual(1, count);
-        
-        count = 0;
-        enumerator.Reset();
-        while (enumerator.MoveNext()) {
-            count++;
-        }
-        AreEqual(1, count);
-        enumerator.Dispose();
     }
     
     [Test]
