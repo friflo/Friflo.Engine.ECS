@@ -3,6 +3,7 @@ using System.Numerics;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
+using static Tests.Examples.HelloWorldExample;
 
 // ReSharper disable UnusedType.Local
 // ReSharper disable ArrangeTypeMemberModifiers
@@ -14,8 +15,6 @@ namespace Tests.Examples {
 // See: https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md#examples
 public static class HelloSystemExample
 {
-
-public struct Velocity : IComponent { public Vector3 value; }
 
 [Test]
 public static void HelloSystem()
