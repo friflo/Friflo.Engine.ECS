@@ -194,7 +194,7 @@ Console.WriteLine(root.GetPerfLog());
 ```
 
 The log result will look like:
-```cs
+```js
 stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
 ---------------------              --------     --------     --------     --------     --------     --------
 Systems [2]                           0.079        3.074           10          128         1392
