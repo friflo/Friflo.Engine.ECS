@@ -263,7 +263,7 @@ public abstract class BaseSystem
     }
     
     /// <summary>
-    /// Add performance statistics formatted as a table to the given <see cref="stringBuilder"/> without memory allocations.
+    /// Add performance statistics formatted as a table to the given <see cref="StringBuilder"/> without memory allocations.
     /// </summary>
     public void AppendPerfLog(StringBuilder stringBuilder) {
         var stores  = SystemRoot?.stores.count ?? 0;
