@@ -53,7 +53,7 @@ public abstract class BaseSystem
     [Browse(Never)]             private             SystemRoot      systemRoot;
     [Browse(Never)] [Ignore]    internal            SystemPerf      perf;
     [Browse(Never)]             private             View            view;
-    [Browse(Never)]             private             StringBuilder   stringBuilder;
+    [Browse(Never)]             private             StringBuilder   stringBuffer;
     #endregion
      
 #region constructors
@@ -251,16 +251,26 @@ public abstract class BaseSystem
     #endregion
     
 #region perf
+    /// <summary>
+    /// Returns performance statistics formatted as a table intended for logging.
+    /// </summary>
     public string GetPerfLog()
     {
-        var stores  = SystemRoot?.stores.count ?? 0;
-        var sb      = stringBuilder ??= new StringBuilder();
+        var sb = stringBuffer ??= new StringBuilder();
         sb.Clear();
-        sb.Append($"stores: {stores,-3}                         last ms       sum ms      updates     last mem      sum mem     entities\n");
-        sb.Append("---------------------              --------     --------     --------     --------     --------     --------\n");
-        AppendPerfStats(sb, 0);
-        sb.Replace(',', '.'); // no more patience with NumberFormatInfo
+        AppendPerfLog (sb);
         return sb.ToString();
+    }
+    
+    /// <summary>
+    /// Add performance statistics formatted as a table to the given <see cref="stringBuilder"/> without memory allocations.
+    /// </summary>
+    public void AppendPerfLog(StringBuilder stringBuilder) {
+        var stores  = SystemRoot?.stores.count ?? 0;
+        stringBuilder.Append($"stores: {stores,-3}                         last ms       sum ms      updates     last mem      sum mem     entities\n");
+        stringBuilder.Append("---------------------              --------     --------     --------     --------     --------     --------\n");
+        AppendPerfStats(stringBuilder, 0);
+        stringBuilder.Replace(',', '.'); // no more patience with NumberFormatInfo
     }
 
     internal virtual void AppendPerfStats(StringBuilder sb, int depth)
@@ -280,7 +290,11 @@ public abstract class BaseSystem
         }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
-        sb.Append($" {Perf.LastMs,12:0.000} {Perf.SumMs,12:0.000} {Perf.UpdateCount,12} {Perf.LastMemory,12} {Perf.SumMemory,12}");
+        sb.Append($" {(double)Perf.LastMs,12:0.000}"); // (double) prevents allocation
+        sb.Append($" {(double)Perf.SumMs,12:0.000}");
+        sb.Append($" {Perf.UpdateCount,12}");
+        sb.Append($" {Perf.LastMemory,12}");
+        sb.Append($" {Perf.SumMemory,12}");
         
         if (this is QuerySystem querySystem) {
             sb.Append($" {querySystem.EntityCount,12}");

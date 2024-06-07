@@ -2,10 +2,12 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System.Text;
 using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Systems;
 using NUnit.Framework;
 using Tests.ECS.Systems;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 // ReSharper disable once CheckNamespace
@@ -127,6 +129,26 @@ namespace Tests.Systems
             AreEqual("1 - 'Update' Group - child systems: 2",   groupSystems[0].ToString());
             AreEqual("2 - TestSystem1 - entities: 0",           groupSystems[1].ToString());
             AreEqual("3 - MySystem1",                           groupSystems[2].ToString());
+            
+            // --- assert log allocations
+            root.SetMonitorPerf(true);
+            var sb = new StringBuilder();
+            root.AppendPerfLog(sb);
+            var log = sb.ToString();
+            AreEqual(
+@"stores: 0                           last ms       sum ms      updates     last mem      sum mem     entities
+---------------------              --------     --------     --------     --------     --------     --------
+Systems [1]                          -1.000        0.000            0            0            0
+| Update [2]                         -1.000        0.000            0            0            0
+|   TestSystem1                      -1.000        0.000            0            0            0            0
+|   MySystem1                        -1.000        0.000            0            0            0
+", log);
+            
+            sb.Clear();
+            
+            var start = Mem.GetAllocatedBytes();
+            root.AppendPerfLog(sb);
+            Mem.AssertNoAlloc(start);
         }
     }
     
