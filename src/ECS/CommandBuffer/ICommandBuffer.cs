@@ -10,6 +10,7 @@ public interface ICommandBuffer
     public void Clear();
     public void Playback();
     #endregion
+    
 #region component
     public void AddComponent  <T>(int entityId)                     where T : struct, IComponent;
     public void AddComponent   <T>(int entityId, in T component)    where T : struct, IComponent;

@@ -18,7 +18,7 @@ namespace Friflo.Engine.ECS;
 /// </summary>
 [CLSCompliant(true)]
 [DebuggerTypeProxy(typeof(TagsDebugView))]
-public struct Tags : IEnumerable<TagType>
+public struct Tags : IEnumerable<TagType>, IEquatable<Tags>
 {
     internal            BitSet   bitSet;  // 32
     
@@ -97,6 +97,16 @@ public struct Tags : IEnumerable<TagType>
     {
         return bitSet.HasAny(tags.bitSet);
     }
+    
+    // --- equality
+    
+    public override int     GetHashCode()           => throw new NotImplementedException("to prevent boxing");
+    public override bool    Equals(object other)    => throw new NotImplementedException("to prevent boxing");
+    public bool             Equals(Tags other)      => bitSet.Equals(other.bitSet);
+    
+    public static   bool    operator == (in Tags a, in Tags b)  => a.bitSet.Equals(b.bitSet);
+    
+    public static   bool    operator != (in Tags a, in Tags b)  => !a.bitSet.Equals(b.bitSet);
     
     // ----------------------------------------- mutate Tags -----------------------------------------
     /// <summary> Add the passed <see cref="ITag"/> type <typeparamref name="T"/>.</summary>
