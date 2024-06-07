@@ -11,7 +11,7 @@
 
 Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benchmark** as reference.  
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
-This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
+This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
 *Feature highlights*
 - Simple API - no boilerplate.
@@ -22,7 +22,8 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS - Wikipe
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8  
   WASM / WebAssembly, Unity (Mono & AOT/IL2CPP), Godot and MonoGame.
-- No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).
+- Library uses only secure and managed code. No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).  
+  App / Game can access component chunks with native or unsafe code using `Span<>`s.
 
 Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
 
@@ -241,7 +242,7 @@ The **GitHub Wiki** provide you detailed information about the ECS and illustrat
 
 # ECS Benchmarks
 
-Two benchmarks - subset of [Ecs.CSharp.Benchmark + PR #38](https://github.com/Doraku/Ecs.CSharp.Benchmark/pull/38)
+Two benchmarks - subset of [GitHub ⋅ Ecs.CSharp.Benchmark + PR #38](https://github.com/Doraku/Ecs.CSharp.Benchmark/pull/38)
 running on a Mac Mini M2.
 
 ![new](docs/images/new.svg) **2024-05-29** - Updated benchmarks.  
