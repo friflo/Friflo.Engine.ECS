@@ -122,10 +122,9 @@ public sealed class EntitySchema
         }
         foreach (var tagType in tagList) {
             var name = tagType.TagName;
-            if (!schemaTypeByKey.   TryAdd(name,                     tagType)) {
+            if (!tagTypeByName.     TryAdd(name,                    tagType)) {
                 DuplicateTagName(tagType);
             }
-            tagTypeByName.Add       (tagType.TagName,               tagType);
             tagTypeByType.Add       (tagType.Type,                  tagType);
             tags                    [tagType.TagIndex] =            tagType;
         }

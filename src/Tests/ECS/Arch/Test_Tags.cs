@@ -109,7 +109,7 @@ public static class Test_Tags
     }
     
     [Test]
-    public static void Test_Tags_generic_IEnumerator()
+    public static void Test_Tags_generic_IEnumerator_generic()
     {
         IEnumerable<TagType> tags = Tags.Get<TestTag>();
         int count = 0;
@@ -123,31 +123,38 @@ public static class Test_Tags
     public static void Test_TagsEnumerator()
     {
         var tags = Tags.Get<TestTag>();
-        {
-            var enumerator = tags.GetEnumerator();
-            int count = 0;
-            while (enumerator.MoveNext()) {
-                count++;
-            }
-            AreEqual(1, count);
-            
-            count = 0;
-            enumerator.Reset();
-            while (enumerator.MoveNext()) {
-                count++;
-            }
-            AreEqual(1, count);
-            enumerator.Dispose();
-        } {
-            IEnumerable enumerable = tags;
-            var enumerator = enumerable.GetEnumerator();
-            using var enumerator1 = enumerator as IDisposable;
-            var count = 0;
-            while (enumerator.MoveNext()) {
-                count++;
-            }
-            AreEqual(1, count);
+
+        var enumerator = tags.GetEnumerator();
+        int count = 0;
+        while (enumerator.MoveNext()) {
+            count++;
         }
+        AreEqual(1, count);
+        
+        count = 0;
+        enumerator.Reset();
+        while (enumerator.MoveNext()) {
+            count++;
+        }
+        AreEqual(1, count);
+        enumerator.Dispose();
+    }
+    
+    [Test]
+    public static void Test_Tags_generic_IEnumerator()
+    {
+        var tags = Tags.Get<TestTag>();
+
+        IEnumerable enumerable = tags;
+        var enumerator = enumerable.GetEnumerator();
+        using var enumerator1 = enumerator as IDisposable;
+        var count = 0;
+        var schema = EntityStore.GetEntitySchema();
+        while (enumerator.MoveNext()) {
+            AreEqual(schema.GetTagType<TestTag>(), (TagType)enumerator.Current);
+            count++;
+        }
+        AreEqual(1, count);
     }
     
     [Test]

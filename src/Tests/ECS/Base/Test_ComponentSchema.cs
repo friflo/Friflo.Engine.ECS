@@ -10,7 +10,7 @@ public static class Test_ComponentSchema
     [Test]
     public static void Test_EntityTags() {
         var schema      = EntityStore.GetEntitySchema();
-        AreEqual(11,     schema.Tags.Length);
+        AreEqual(12,     schema.Tags.Length);
         
         var tags = schema.Tags;
         IsNull(tags[0]);
@@ -20,7 +20,7 @@ public static class Test_ComponentSchema
             AreEqual(SchemaTypeKind.Tag, type.Kind);
             IsNull  (type.ComponentKey);
         }
-        AreEqual(10,                     schema.TagTypeByType.Count);
+        AreEqual(11,                     schema.TagTypeByType.Count);
         AreEqual(10,                     schema.TagTypeByName.Count);
         {
             var testTagType = schema.TagTypeByType[typeof(TestTag)];
@@ -48,13 +48,13 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 43  scripts: 8  entity tags: 10", schema.ToString());
-        AreEqual(44,    components.Length);
-        AreEqual( 9,    scripts.Length);
+        AreEqual("components: 44  scripts: 9  entity tags: 11", schema.ToString());
+        AreEqual(45,    components.Length);
+        AreEqual(10,    scripts.Length);
         
-        AreEqual(58,    schema.SchemaTypeByKey.Count);
-        AreEqual(43,    schema.ComponentTypeByType.Count);
-        AreEqual( 8,    schema.ScriptTypeByType.Count);
+        AreEqual(48,    schema.SchemaTypeByKey.Count);
+        AreEqual(44,    schema.ComponentTypeByType.Count);
+        AreEqual( 9,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);
         for (int n = 1; n < components.Length; n++) {
@@ -187,6 +187,20 @@ public static class Test_ComponentSchema
         AssertBlittableScript<TestComponent>(schema, true);
     }
 
+    // -------------- Cover duplicate component keys & tag names
+    // ReSharper disable UnusedType.Local
+    
+    // Cover: warning: Duplicate component key  for a component
+    [ComponentKey("my7")]
+    private struct DuplicateMyComponent7 : IComponent { }
+
+    // Cover: warning: Duplicate component key  for a script
+    [ComponentKey("script3")]
+    private class DuplicateScript3 : Script { }
+    
+    // Cover: warning: Duplicate tag name for a tag
+    [TagName("TestTag5")]
+    private struct DuplicateTag : ITag { }
 }
 
 }
