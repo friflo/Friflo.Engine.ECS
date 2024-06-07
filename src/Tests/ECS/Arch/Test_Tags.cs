@@ -72,6 +72,28 @@ public static class Test_Tags
     }
     
     [Test]
+    public static void Test_Tags_equality()
+    {
+        var tags  = Tags.Get<TestTag>();
+        var tags1 = Tags.Get<TestTag>();
+        var tags2 = Tags.Get<TestTag2>();
+        
+        IsTrue(tags == tags1);
+        IsTrue(tags != tags2);
+        IsTrue(tags.Equals(tags1));
+        
+        var e = Throws<NotImplementedException>(() => {
+            _ = tags.Equals((object)tags1);
+        });
+        AreEqual("to prevent boxing", e!.Message);
+        
+        e = Throws<NotImplementedException>(() => {
+            _ = tags.GetHashCode();
+        });
+        AreEqual("to prevent boxing", e!.Message);
+    }
+    
+    [Test]
     public static void Test_Tags_constructor()
     {
         var schema  = EntityStore.GetEntitySchema();
