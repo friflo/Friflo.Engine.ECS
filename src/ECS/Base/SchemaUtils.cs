@@ -26,9 +26,10 @@ internal static class SchemaUtils
         
         var dependants  = assemblyLoader.dependants;
         var schemaTypes = new SchemaTypes();
+        var types       = new List<Type>();
         foreach (var assembly in assemblies) {
-            var types           = AssemblyLoader.GetComponentTypes(assembly);
-            var engineTypes     = new List<SchemaType>();
+            AssemblyLoader.GetComponentTypes(assembly, types);
+            var engineTypes = new List<SchemaType>();
             foreach (var type in types) {
                 var schemaType = CreateSchemaType(type, typeStore, schemaTypes);
                 engineTypes.Add(schemaType);

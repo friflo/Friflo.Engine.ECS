@@ -147,9 +147,9 @@ internal sealed class AssemblyLoader
         toLoad.ForEach(path => loadedAssemblies.Add(domain.Load(AssemblyName.GetAssemblyName(path))));        
     } */
    
-    internal static List<Type> GetComponentTypes(Assembly assembly)
+    internal static void GetComponentTypes(Assembly assembly, List<Type> componentTypes)
     {
-        var componentTypes = new List<Type>();
+        componentTypes.Clear();
         var types = assembly.GetTypes();
         foreach (var type in types)
         {
@@ -167,7 +167,6 @@ internal sealed class AssemblyLoader
             }
             AddComponentType(componentTypes, type);
         }
-        return componentTypes;
     }
     
     private static void AddComponentType(List<Type> componentTypes, Type type)
