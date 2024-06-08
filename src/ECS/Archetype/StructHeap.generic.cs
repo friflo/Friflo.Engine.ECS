@@ -5,7 +5,6 @@ using System;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
-using Friflo.Json.Fliox.Mapper.Map;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable once CheckNamespace
@@ -21,15 +20,15 @@ internal sealed class StructHeap<T> : StructHeap
 {
     // Note: Should not contain any other field. See class <remarks>
     // --- internal fields
-    internal            T[]             components;     //  8
-    internal            T               componentStash; //  sizeof(T)
-    private  readonly   TypeMapper<T>   typeMapper;     //  8
+    internal            T[]                 components;     //  8
+    internal            T                   componentStash; //  sizeof(T)
+    private  readonly   ComponentType<T>    componentType;  //  8
     
-    internal StructHeap(int structIndex, TypeMapper<T> mapper)
+    internal StructHeap(int structIndex, ComponentType<T> componentType)
         : base (structIndex)
     {
-        typeMapper      = mapper;
-        components      = new T[ArchetypeUtils.MinCapacity];
+        this.componentType  = componentType;
+        components          = new T[ArchetypeUtils.MinCapacity];
     }
     
     internal override void StashComponent(int compIndex) {
@@ -103,10 +102,10 @@ internal sealed class StructHeap<T> : StructHeap
     
     internal override Bytes Write(ObjectWriter writer, int compIndex) {
         ref var value = ref components[compIndex];
-        return writer.WriteAsBytesMapper(value, typeMapper);
+        return writer.WriteAsBytesMapper(value, componentType.TypeMapper);
     }
     
     internal override void Read(ObjectReader reader, int compIndex, JsonValue json) {
-        components[compIndex] = reader.ReadMapper(typeMapper, json);  // todo avoid boxing within typeMapper, T is struct
+        components[compIndex] = reader.ReadMapper(componentType.TypeMapper, json);  // todo avoid boxing within typeMapper, T is struct
     }
 }

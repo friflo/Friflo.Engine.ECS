@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using Friflo.Json.Fliox.Mapper;
 using Friflo.Json.Fliox.Mapper.Map;
 using static Friflo.Engine.ECS.SchemaTypeKind;
 
@@ -52,13 +53,24 @@ internal static class StructInfo<T>
 internal sealed class ComponentType<T> : ComponentType 
     where T : struct, IComponent
 {
-    private readonly    TypeMapper<T>   typeMapper;
-    public  override    string          ToString() => $"Component: [{typeof(T).Name}]";
+#region properties
+    /// <summary>
+    /// Create <see cref="TypeMapper"/> on demand.<br/>
+    /// So possible exceptions thrown by <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
+    /// </summary>
+    internal            TypeMapper<T>   TypeMapper  => typeMapper ??= typeStore.GetTypeMapper<T>();
+    public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";
+    #endregion
 
-    internal ComponentType(string componentKey, int structIndex, TypeMapper<T> typeMapper)
+#region fields
+    private             TypeMapper<T>   typeMapper;
+    private  readonly   TypeStore       typeStore;
+    #endregion
+
+    internal ComponentType(string componentKey, int structIndex, TypeStore typeStore)
         : base(componentKey, structIndex, typeof(T), ByteSize)
     {
-        this.typeMapper = typeMapper;
+        this.typeStore = typeStore;
     }
     
     internal override bool RemoveEntityComponent(Entity entity) {
@@ -78,7 +90,7 @@ internal sealed class ComponentType<T> : ComponentType
     }
     
     internal override StructHeap CreateHeap() {
-        return new StructHeap<T>(StructIndex, typeMapper);
+        return new StructHeap<T>(StructIndex, this);
     }
     
     internal override ComponentCommands CreateComponentCommands()

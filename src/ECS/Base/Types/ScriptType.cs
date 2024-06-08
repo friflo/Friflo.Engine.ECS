@@ -66,13 +66,24 @@ internal static class ScriptInfo<T>
 internal sealed class ScriptType<T> : ScriptType 
     where T : Script, new()
 {
-    private readonly    TypeMapper<T>   typeMapper;
+#region properties
+    /// <summary>
+    /// Create <see cref="TypeMapper"/> on demand.<br/>
+    /// So possible exceptions thrown by <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
+    /// </summary>
+    private             TypeMapper<T>   TypeMapper => typeMapper ??= typeStore.GetTypeMapper<T>();
     public  override    string          ToString() => $"Script: [*{typeof(T).Name}]";
+    #endregion
+
+#region fields
+    private             TypeMapper<T>   typeMapper;
+    private readonly    TypeStore       typeStore;
+    #endregion
     
-    internal ScriptType(string scriptComponentKey, int scriptIndex, TypeMapper<T> typeMapper)
+    internal ScriptType(string scriptComponentKey, int scriptIndex, TypeStore typeStore)
         : base(scriptComponentKey, scriptIndex, typeof(T))
     {
-        this.typeMapper = typeMapper;
+        this.typeStore = typeStore;
     }
     
     internal override Script CreateScript() {
@@ -82,10 +93,10 @@ internal sealed class ScriptType<T> : ScriptType
     internal override void ReadScript(ObjectReader reader, JsonValue json, Entity entity) {
         var script = entity.GetScript<T>();
         if (script != null) { 
-            reader.ReadToMapper(typeMapper, json, script, true);
+            reader.ReadToMapper(TypeMapper, json, script, true);
             return;
         }
-        script = reader.ReadMapper(typeMapper, json);
+        script = reader.ReadMapper(TypeMapper, json);
         entity.archetype.entityStore.extension.AppendScript(entity, script);
     }
 }
