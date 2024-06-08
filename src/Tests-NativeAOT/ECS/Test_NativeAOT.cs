@@ -13,7 +13,7 @@ public class Test_NativeAOT
         Assert.IsTrue(true);
     }
 
-	// [TestMethod]
+	[TestMethod]
 	public void Test_NativeAOT_Create_EntityStore()
 	{
         var store = new EntityStore();

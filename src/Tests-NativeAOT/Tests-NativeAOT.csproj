@@ -37,10 +37,7 @@
         <PackageReference Include="MSTest.Engine" Version="1.0.0-alpha.24163.4" />
         <PackageReference Include="MSTest.SourceGeneration" Version="1.0.0-alpha.24163.4" />
         <PackageReference Include="MSTest.TestFramework" Version="3.4.3" />
-        <PackageReference Include="MSTest.Analyzers" Version="3.4.3">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+        <PackageReference Include="MSTest.Analyzers" Version="3.4.3"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
