@@ -56,7 +56,7 @@ internal sealed class ComponentType<T> : ComponentType
 #region properties
     /// <summary>
     /// Create <see cref="TypeMapper"/> on demand.<br/>
-    /// So possible exceptions thrown by <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
+    /// So possible exceptions in <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
     /// </summary>
     internal            TypeMapper<T>   TypeMapper  => typeMapper ??= typeStore.GetTypeMapper<T>();
     public   override   string          ToString()  => $"Component: [{typeof(T).Name}]";

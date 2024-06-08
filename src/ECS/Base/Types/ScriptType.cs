@@ -69,7 +69,7 @@ internal sealed class ScriptType<T> : ScriptType
 #region properties
     /// <summary>
     /// Create <see cref="TypeMapper"/> on demand.<br/>
-    /// So possible exceptions thrown by <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
+    /// So possible exceptions in <see cref="TypeStore.GetTypeMapper{T}"/> thrown only when using JSON serialization.
     /// </summary>
     private             TypeMapper<T>   TypeMapper => typeMapper ??= typeStore.GetTypeMapper<T>();
     public  override    string          ToString() => $"Script: [*{typeof(T).Name}]";
