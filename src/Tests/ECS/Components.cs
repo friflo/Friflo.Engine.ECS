@@ -154,6 +154,9 @@ public class TestScript2    : Script { public   int     val2; }
 [ComponentKey("script3")]
 class TestScript3           : Script { public   int     val3; }
 
+[ComponentKey("script4")]
+class TestScript4           : Script { public   int     val4; }
+
 class NonBlittableScript    : Script { internal int[]   array; }
 
 [ComponentKey("test")]
@@ -177,4 +180,20 @@ class TestComponent : Script
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public sealed class CodeCoverageTestAttribute : Attribute { }
 
+}
+
+// -------------- Cover duplicate component keys & tag names
+namespace Tests.Duplicates
+{
+    // Cover: warning: Duplicate component key  for a component
+    [ComponentKey("my7")]
+    internal struct DupMyComponent7 : IComponent { }
+
+    // Cover: warning: Duplicate component key  for a script
+    [ComponentKey("script4")]
+    internal class DupScript4 : Script { }
+    
+    // Cover: warning: Duplicate tag name for a tag
+    [TagName("TestTag5")]
+    internal struct DupTag5 : ITag { }
 }

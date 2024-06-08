@@ -48,13 +48,13 @@ public static class Test_ComponentSchema
         var components  = schema.Components;
         var scripts     = schema.Scripts;
         
-        AreEqual("components: 43  scripts: 9  entity tags: 11", schema.ToString());
+        AreEqual("components: 43  scripts: 10  entity tags: 11", schema.ToString());
         AreEqual(44,    components.Length);
-        AreEqual(10,    scripts.Length);
+        AreEqual(11,    scripts.Length);
         
-        AreEqual(48,    schema.SchemaTypeByKey.Count);
+        AreEqual(49,    schema.SchemaTypeByKey.Count);
         AreEqual(43,    schema.ComponentTypeByType.Count);
-        AreEqual( 9,    schema.ScriptTypeByType.Count);
+        AreEqual(10,    schema.ScriptTypeByType.Count);
         
         IsNull(components[0]);
         for (int n = 1; n < components.Length; n++) {
@@ -186,21 +186,7 @@ public static class Test_ComponentSchema
         
         AssertBlittableScript<TestComponent>(schema, true);
     }
-
-    // -------------- Cover duplicate component keys & tag names
-    // ReSharper disable UnusedType.Local
-    
-    // Cover: warning: Duplicate component key  for a component
-    [ComponentKey("my7")]
-    private struct DuplicateMyComponent7 : IComponent { }
-
-    // Cover: warning: Duplicate component key  for a script
-    [ComponentKey("script3")]
-    private class DuplicateScript3 : Script { }
-    
-    // Cover: warning: Duplicate tag name for a tag
-    [TagName("TestTag5")]
-    private struct DuplicateTag : ITag { }
 }
 
 }
+
