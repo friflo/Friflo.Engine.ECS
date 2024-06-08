@@ -2,6 +2,9 @@ using System;
 using Friflo.Engine.ECS;
 using Tests.ECS;
 
+// [Testing Your Native AOT Applications - .NET Blog](https://devblogs.microsoft.com/dotnet/testing-your-native-aot-dotnet-apps/)
+// > Parallelize() is ignored in NativeOAT unit tests  => tests run in parallel
+[assembly: Parallelize(Workers = 1, Scope = ExecutionScope.ClassLevel)]
 
 // ReSharper disable InconsistentNaming
 namespace Tests.AOT.ECS {
@@ -15,7 +18,7 @@ public class Test_AOT
         Assert.IsTrue(true);
     }
     
-    [TestMethod]
+    [TestMethod] // [DoNotParallelize]
     public void Test_All()
     {
         Test_AOT_Create_EntityStore();
@@ -24,7 +27,7 @@ public class Test_AOT
         Test_AOT_AddScript();
     }
 
-	// [TestMethod]
+	[Ignore] [TestMethod]
 	public void Test_AOT_Create_EntityStore()
 	{
         CreateSchema();
@@ -33,7 +36,7 @@ public class Test_AOT
         Assert.AreEqual(1, entity.Id);
 	}
     
-    // [TestMethod]
+    [Ignore] [TestMethod]
     public void Test_AOT_AddComponent()
     {
         CreateSchema();
@@ -42,7 +45,7 @@ public class Test_AOT
         entity.AddComponent(new Position(1,2,3));
     }
     
-    // [TestMethod]
+    [Ignore] [TestMethod]
     public void Test_AOT_AddTag()
     {
         CreateSchema();
@@ -51,7 +54,7 @@ public class Test_AOT
         entity.AddTag<TestTag>();
     }
     
-    // [TestMethod]
+    [Ignore] [TestMethod]
     public void Test_AOT_AddScript()
     {
         CreateSchema();
@@ -64,10 +67,11 @@ public class Test_AOT
     
     private static void CreateSchema()
     {
-        Console.WriteLine("Test_AOT.CreateSchema()");
+        Console.WriteLine("Test_AOT.CreateSchema() - 1");
         if (schemaCreated) {
             return;
         }
+        Console.WriteLine("Test_AOT.CreateSchema() - 2");
         schemaCreated = true;
         NativeAOT.RegisterComponent<MyComponent1>();
         NativeAOT.RegisterTag<TestTag>();
