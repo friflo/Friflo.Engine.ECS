@@ -27,6 +27,8 @@ public static class NativeAOT
         RegisterComponent<UniqueEntity>();
         RegisterComponent<Unresolved>();
         
+        RegisterTag<Disabled>();
+        
         var dependant   = new EngineDependant (null, Types);
         var dependants  = new List<EngineDependant> { dependant };
         var schema      =  new EntitySchema(dependants, SchemaTypes);
@@ -41,5 +43,23 @@ public static class NativeAOT
         var componentType   = SchemaUtils.CreateComponentType<T>(TypeStore, structIndex);
         components.Add(componentType);
         Types.Add(componentType);
+    }
+    
+    private static void RegisterTag<T>()  where T : struct, ITag 
+    {
+        var tags            = SchemaTypes.tags;
+        var tagIndex        = tags.Count + 1;
+        var tagType         = SchemaUtils.CreateTagType<T>(tagIndex);
+        tags.Add(tagType);
+        Types.Add(tagType);
+    }
+    
+    private static void RegisterScript<T>()  where T : Script, new()
+    {
+        var scripts         = SchemaTypes.scripts;
+        var scriptIndex     = scripts.Count + 1;
+        var scriptType      = SchemaUtils.CreateScriptType<T>(TypeStore, scriptIndex);
+        scripts.Add(scriptType);
+        Types.Add(scriptType);
     }
 }
