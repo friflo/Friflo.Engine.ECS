@@ -10,7 +10,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <GenerateProgramFile>true</GenerateProgramFile>
-        <RootNamespace>NativeAOT</RootNamespace>
+        <RootNamespace>Tests.AOT</RootNamespace>
 
         <!-- packaging -->
         <PublishRepositoryUrl>false</PublishRepositoryUrl>
