@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTest", "src\apps\GameTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.UI", "src\apps\Editor.UI\Editor.UI.csproj", "{14EADD4E-A06E-4E56-9D28-C616D33108EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests-NativeAOT", "src\Tests-NativeAOT\Tests-NativeAOT.csproj", "{7B9EE459-F2DD-4522-B488-D48AA6248C76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{14EADD4E-A06E-4E56-9D28-C616D33108EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14EADD4E-A06E-4E56-9D28-C616D33108EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EADD4E-A06E-4E56-9D28-C616D33108EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9EE459-F2DD-4522-B488-D48AA6248C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9EE459-F2DD-4522-B488-D48AA6248C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9EE459-F2DD-4522-B488-D48AA6248C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9EE459-F2DD-4522-B488-D48AA6248C76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

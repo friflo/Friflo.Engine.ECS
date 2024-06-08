@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <PublishAot>true</PublishAot>
+        <!-- <DefineConstants Condition="'$(PublishAot)' == 'true'">
+            $(DefineConstants);IS_NATIVE_AOT
+        </DefineConstants> -->
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <GenerateProgramFile>true</GenerateProgramFile>
+        <RootNamespace>NativeAOT</RootNamespace>
+
+        <!-- packaging -->
+        <PublishRepositoryUrl>false</PublishRepositoryUrl>
+        <LangVersion>10</LangVersion>
+        <!-- packaging: end -->
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <DefineConstants>TRACE,COMP_ITER</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeCoverage.MSBuild" Version="17.11.3" />
+        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.11.3" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.2.1" />
+        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.2.1" />
+
+        <PackageReference Include="MSTest.Engine" Version="1.0.0-alpha.24163.4" />
+        <PackageReference Include="MSTest.SourceGeneration" Version="1.0.0-alpha.24163.4" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.4.3" />
+        <PackageReference Include="MSTest.Analyzers" Version="3.4.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tests\Tests.csproj" />
+    </ItemGroup>
+
+
+
+</Project>
