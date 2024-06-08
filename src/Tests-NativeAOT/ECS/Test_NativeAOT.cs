@@ -14,8 +14,17 @@ public class Test_AOT
     {
         Assert.IsTrue(true);
     }
+    
+    [TestMethod]
+    public void Test_All()
+    {
+        Test_AOT_Create_EntityStore();
+        Test_AOT_AddComponent();
+        Test_AOT_AddTag();
+        Test_AOT_AddScript();
+    }
 
-	[TestMethod]
+	// [TestMethod]
 	public void Test_AOT_Create_EntityStore()
 	{
         CreateSchema();
@@ -24,7 +33,7 @@ public class Test_AOT
         Assert.AreEqual(1, entity.Id);
 	}
     
-    [TestMethod]
+    // [TestMethod]
     public void Test_AOT_AddComponent()
     {
         CreateSchema();
@@ -62,7 +71,7 @@ public class Test_AOT
         schemaCreated = true;
         NativeAOT.RegisterComponent<MyComponent1>();
         NativeAOT.RegisterTag<TestTag>();
-        // NativeAOT.RegisterScript<TestScript1>();
+        NativeAOT.RegisterScript<TestScript1>();
         NativeAOT.CreateSchema();
     }
 
