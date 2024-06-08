@@ -10,54 +10,56 @@ using Friflo.Json.Fliox.Mapper;
 namespace Friflo.Engine.ECS;
 
 // ReSharper disable once InconsistentNaming
-public static class NativeAOT
+public sealed class NativeAOT
 {
-    private static readonly StaticAot AOT = new StaticAot();
-    
-    private class StaticAot {
-        internal            EntitySchema        entitySchema;
-        internal            bool                engineTypeRegistered;
+    private             EntitySchema        entitySchema;
+    private             bool                engineTypeRegistered;
         
-        internal readonly   List<SchemaType>    types       = new();
-        internal readonly   TypeStore           typeStore   = new TypeStore();
-        internal readonly   SchemaTypes         schemaTypes = new();
-    }
+    private readonly    List<SchemaType>    types       = new();
+    private readonly    TypeStore           typeStore   = new TypeStore();
+    private readonly    SchemaTypes         schemaTypes = new();
+    
+    private static          NativeAOT       Instance;
     
     internal static EntitySchema GetSchema()
     {
         Console.WriteLine("NativeAOT.GetSchema()");
-        return AOT.entitySchema;
-        if (AOT.entitySchema == null) {
+        var schema = Instance?.entitySchema; 
+        if (schema == null) {
             var msg =
-@"EntitySchema not created. 
-1. Register types with: NativeAOT.Register...() methods. 
-2. Finish with:         NativeAOT.CreateSchema() on startup.";
+@"EntitySchema not created.
+NativeAOT requires schema creation on startup:
+1. Create NativeAOT instance:   var aot = new NativeAOT();
+2. Register types with:         aot.Register...(); 
+3. Finish with:                 aot.CreateSchema();";
             throw new InvalidOperationException(msg);
         }
-        return AOT.entitySchema;
+        return schema;
     }
     
-    public static EntitySchema CreateSchema()
+    public EntitySchema CreateSchema()
     {
         RegisterEngineTypes();
         Console.WriteLine("NativeAOT.CreateSchema() - begin");
         
-        var dependant       = new EngineDependant (null, AOT.types);
-        var dependants      = new List<EngineDependant> { dependant };
-        AOT.entitySchema   = new EntitySchema(dependants, AOT.schemaTypes);
+        var dependant   = new EngineDependant (null, types);
+        var dependants  = new List<EngineDependant> { dependant };
+        entitySchema    = new EntitySchema(dependants, schemaTypes);
         Console.WriteLine("NativeAOT.CreateSchema() - end");
-        return AOT.entitySchema;
+        
+        Instance = this;
+        return entitySchema;
     }
     
-    private static void RegisterEngineTypes()
+    private void RegisterEngineTypes()
     {
-        if (AOT.entitySchema != null) {
+        if (entitySchema != null) {
             throw new InvalidOperationException("EntitySchema already created");
         }
-        if (AOT.engineTypeRegistered) {
+        if (engineTypeRegistered) {
             return;
         }
-        AOT.engineTypeRegistered = true;
+        engineTypeRegistered = true;
 
         RegisterComponent<EntityName>();
         RegisterComponent<Position>();
@@ -71,33 +73,33 @@ public static class NativeAOT
         RegisterTag<Disabled>();
     }
     
-    public static void RegisterComponent<T>() where T : struct, IComponent 
+    public void RegisterComponent<T>() where T : struct, IComponent 
     {
         RegisterEngineTypes();
-        var components      = AOT.schemaTypes.components;
+        var components      = schemaTypes.components;
         var structIndex     = components.Count + 1;
-        var componentType   = SchemaUtils.CreateComponentType<T>(AOT.typeStore, structIndex);
+        var componentType   = SchemaUtils.CreateComponentType<T>(typeStore, structIndex);
         components.Add(componentType);
-        AOT.types.Add(componentType);
+        types.Add(componentType);
     }
     
-    public static void RegisterTag<T>()  where T : struct, ITag 
+    public void RegisterTag<T>()  where T : struct, ITag 
     {
         RegisterEngineTypes();
-        var tags            = AOT.schemaTypes.tags;
+        var tags            = schemaTypes.tags;
         var tagIndex        = tags.Count + 1;
         var tagType         = SchemaUtils.CreateTagType<T>(tagIndex);
         tags.Add(tagType);
-        AOT.types.Add(tagType);
+        types.Add(tagType);
     }
     
-    public static void RegisterScript<T>()  where T : Script, new()
+    public void RegisterScript<T>()  where T : Script, new()
     {
         RegisterEngineTypes();
-        var scripts         = AOT.schemaTypes.scripts;
+        var scripts         = schemaTypes.scripts;
         var scriptIndex     = scripts.Count + 1;
-        var scriptType      = SchemaUtils.CreateScriptType<T>(AOT.typeStore, scriptIndex);
+        var scriptType      = SchemaUtils.CreateScriptType<T>(typeStore, scriptIndex);
         scripts.Add(scriptType);
-        AOT.types.Add(scriptType);
+        types.Add(scriptType);
     }
 }

@@ -27,7 +27,7 @@ public class Test_AOT
         Test_AOT_AddScript();
     }
 
-	[Ignore] [TestMethod]
+	[TestMethod]
 	public void Test_AOT_Create_EntityStore()
 	{
         CreateSchema();
@@ -36,7 +36,7 @@ public class Test_AOT
         Assert.AreEqual(1, entity.Id);
 	}
     
-    [Ignore] [TestMethod]
+    [TestMethod]
     public void Test_AOT_AddComponent()
     {
         CreateSchema();
@@ -45,7 +45,7 @@ public class Test_AOT
         entity.AddComponent(new Position(1,2,3));
     }
     
-    [Ignore] [TestMethod]
+    [TestMethod]
     public void Test_AOT_AddTag()
     {
         CreateSchema();
@@ -54,7 +54,7 @@ public class Test_AOT
         entity.AddTag<TestTag>();
     }
     
-    [Ignore] [TestMethod]
+    [TestMethod]
     public void Test_AOT_AddScript()
     {
         CreateSchema();
@@ -63,20 +63,26 @@ public class Test_AOT
         entity.AddScript(new TestScript1());
     }
     
-    private static bool schemaCreated;
+    private static          bool    schemaCreated;
+    private static readonly object  monitor = new object();
     
     private static void CreateSchema()
     {
-        Console.WriteLine("Test_AOT.CreateSchema() - 1");
-        if (schemaCreated) {
-            return;
+        // monitor required as tests are executed in parallel in MSTest
+        lock (monitor)
+        {
+            Console.WriteLine("Test_AOT.CreateSchema() - 1");
+            if (schemaCreated) {
+                return;
+            }
+            Console.WriteLine("Test_AOT.CreateSchema() - 2");
+            schemaCreated = true;
+            var aot = new NativeAOT();
+            aot.RegisterComponent<MyComponent1>();
+            aot.RegisterTag<TestTag>();
+            aot.RegisterScript<TestScript1>();
+            aot.CreateSchema();
         }
-        Console.WriteLine("Test_AOT.CreateSchema() - 2");
-        schemaCreated = true;
-        NativeAOT.RegisterComponent<MyComponent1>();
-        NativeAOT.RegisterTag<TestTag>();
-        NativeAOT.RegisterScript<TestScript1>();
-        NativeAOT.CreateSchema();
     }
 
 }

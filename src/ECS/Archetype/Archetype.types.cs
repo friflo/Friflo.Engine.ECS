@@ -20,11 +20,11 @@ internal readonly struct ArchetypeConfig
     internal readonly   int             archetypeIndex;
     internal readonly   int             maxStructIndex;
     
-    internal ArchetypeConfig(EntityStoreBase store, int archetypeIndex)
+    internal ArchetypeConfig(EntityStoreBase store, int archetypeIndex, int maxStructIndex)
     {
         this.store          = store;
         this.archetypeIndex = archetypeIndex;
-        maxStructIndex      = EntityStoreBase.Static.EntitySchema.maxStructIndex;
+        this.maxStructIndex = maxStructIndex;
     }
 }
 
