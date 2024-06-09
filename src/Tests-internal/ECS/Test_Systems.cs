@@ -114,7 +114,7 @@ namespace Tests.Systems
         {
             var group = new SystemGroup("Update") {
                 new TestSystem1(),
-                new MySystem1()
+                new MySystem1 { Enabled = false }
             };
             var root  = new SystemRoot("Systems") { group };
             var rootSystems = root.AllSystems;
@@ -136,12 +136,12 @@ namespace Tests.Systems
             root.AppendPerfLog(sb);
             var log = sb.ToString();
             AreEqual(
-@"stores: 0                           last ms       sum ms      updates     last mem      sum mem     entities
----------------------              --------     --------     --------     --------     --------     --------
-Systems [1]                          -1.000        0.000            0            0            0
-| Update [2]                         -1.000        0.000            0            0            0
-|   TestSystem1                      -1.000        0.000            0            0            0            0
-|   MySystem1                        -1.000        0.000            0            0            0
+@"stores: 0                     on      last ms       sum ms      updates     last mem      sum mem     entities
+---------------------         --     --------     --------     --------     --------     --------     --------
+Systems [1]                    +       -1.000        0.000            0            0            0
+| Update [2]                   +       -1.000        0.000            0            0            0
+|   TestSystem1                +       -1.000        0.000            0            0            0            0
+|   MySystem1                  -       -1.000        0.000            0            0            0
 ", log);
             
             sb.Clear();

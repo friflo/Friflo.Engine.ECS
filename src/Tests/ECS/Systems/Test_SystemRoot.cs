@@ -113,17 +113,17 @@ namespace Tests.ECS.Systems
             root.SetMonitorPerf(true);
             Console.WriteLine(root.GetPerfLog());
             AreEqual(
-@"stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
----------------------              --------     --------     --------     --------     --------     --------
-Systems [1]                          -1.000        0.000            0            0            0
-| Update [1]                         -1.000        0.000            0            0            0
-|   TestSystem1                      -1.000        0.000            0            0            0            1
+@"stores: 1                     on      last ms       sum ms      updates     last mem      sum mem     entities
+---------------------         --     --------     --------     --------     --------     --------     --------
+Systems [1]                    +       -1.000        0.000            0            0            0
+| Update [1]                   +       -1.000        0.000            0            0            0
+|   TestSystem1                +       -1.000        0.000            0            0            0            1
 ", root.GetPerfLog());
             
             AreEqual(
-@"stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
----------------------              --------     --------     --------     --------     --------     --------
-TestSystem1                          -1.000        0.000            0            0            0            1
+@"stores: 1                     on      last ms       sum ms      updates     last mem      sum mem     entities
+---------------------         --     --------     --------     --------     --------     --------     --------
+TestSystem1                    +       -1.000        0.000            0            0            0            1
 ", testSystem1.GetPerfLog());
             
             var tick = new UpdateTick(42, 0);

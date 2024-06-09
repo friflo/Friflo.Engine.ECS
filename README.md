@@ -198,13 +198,14 @@ Console.WriteLine(root.GetPerfLog());
 
 The log result will look like:
 ```js
-stores: 1                           last ms       sum ms      updates     last mem      sum mem     entities
----------------------              --------     --------     --------     --------     --------     --------
-Systems [2]                           0.079        3.074           10          128         1392
-| ScaleSystem                         0.039        1.789           10           64          696        10000
-| PositionSystem                      0.039        1.278           10           64          696        10000
+stores: 1                     on      last ms       sum ms      updates     last mem      sum mem     entities
+---------------------         --     --------     --------     --------     --------     --------     --------
+Systems [2]                    +        0.076        3.322           10          128         1392
+| ScaleSystem                  +        0.038        2.088           10           64          696        10000
+| PositionSystem               +        0.038        1.222           10           64          696        10000
 ```
 ```
+on                  + enabled  - disabled
 last ms, sum ms     last/sum system execution time in ms
 updates             number of executions
 last mem, sum mem   last/sum allocated bytes

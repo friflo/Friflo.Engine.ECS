@@ -267,8 +267,8 @@ public abstract class BaseSystem
     /// </summary>
     public void AppendPerfLog(StringBuilder stringBuilder) {
         var stores  = SystemRoot?.stores.count ?? 0;
-        stringBuilder.Append($"stores: {stores,-3}                         last ms       sum ms      updates     last mem      sum mem     entities\n");
-        stringBuilder.Append("---------------------              --------     --------     --------     --------     --------     --------\n");
+        stringBuilder.Append($"stores: {stores,-3}                   on      last ms       sum ms      updates     last mem      sum mem     entities\n");
+        stringBuilder.Append("---------------------         --     --------     --------     --------     --------     --------     --------\n");
         AppendPerfStats(stringBuilder, 0);
         stringBuilder.Replace(',', '.'); // no more patience with NumberFormatInfo
     }
@@ -290,6 +290,7 @@ public abstract class BaseSystem
         }
         var len = 30 - (sb.Length - start);
         sb.Append(' ', len);
+        sb.Append(enabled ? " +" : " -");
         sb.Append($" {(double)Perf.LastMs,12:0.000}"); // (double) prevents allocation
         sb.Append($" {(double)Perf.SumMs,12:0.000}");
         sb.Append($" {Perf.UpdateCount,12}");
