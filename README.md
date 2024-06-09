@@ -17,9 +17,9 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wiki
 - Simple API - no boilerplate.
 - High-performance 🔥 and compact ECS with low memory footprint.
 - Zero allocations for entire API after buffers grown large enough.
-- Fully reactive. Subscribe change events of all or specific entities.
-- JSON Serialization.
-- SIMD Support - optional. Multi thread capable and remainder loop free.
+- Fully reactive - *optional*. Subscribe change events of all or specific entities.
+- JSON Serialization - *optional*.
+- SIMD Support - *optional*. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and ![new](docs/images/new.svg) Native AOT
 - Library uses only secure and managed code. No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
