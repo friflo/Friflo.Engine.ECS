@@ -23,6 +23,7 @@
     <Copyright>Ullrich Praetz</Copyright>
     <PackageProjectUrl>https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md</PackageProjectUrl>
     <RepositoryUrl>https://github.com/friflo/Friflo.Json.Fliox/blob/main/Engine/README.md</RepositoryUrl>
+    <PackageTags>ecs, entity-component-system, gamedev, game-engine, unity, godot, monogame, fna, stride, flax, dots, entt, flecs</PackageTags>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
     <RepositoryType>git</RepositoryType>
