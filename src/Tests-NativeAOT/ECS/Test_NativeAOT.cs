@@ -26,6 +26,19 @@ public class Test_AOT
         Test_AOT_AddTag();
         Test_AOT_AddScript();
     }
+    
+    [TestMethod]
+    public void Test_AOT_Create_Schema()
+    {
+        var schema = CreateSchema();
+        var dependants = schema.EngineDependants;
+        Assert.AreEqual(2, dependants.Length);
+        var engine = dependants[0];
+        var test   = dependants[1];
+        Assert.AreEqual("Friflo.Engine.ECS",    engine.AssemblyName);
+        Assert.AreEqual(9,                      engine.Types.Length);
+        Assert.AreEqual("Tests",                test.AssemblyName);
+    }
 
 	[TestMethod]
 	public void Test_AOT_Create_EntityStore()
@@ -74,20 +87,19 @@ public class Test_AOT
         });
     }
     
-    private static          bool    schemaCreated;
-    private static readonly object  monitor = new object();
+    private static          EntitySchema    schemaCreated;
+    private static readonly object          monitor = new object();
     
-    private static void CreateSchema()
+    private static EntitySchema CreateSchema()
     {
         // monitor required as tests are executed in parallel in MSTest
         lock (monitor)
         {
             Console.WriteLine("Test_AOT.CreateSchema() - 1");
-            if (schemaCreated) {
-                return;
+            if (schemaCreated != null) {
+                return schemaCreated;
             }
             Console.WriteLine("Test_AOT.CreateSchema() - 2");
-            schemaCreated = true;
             var aot = new NativeAOT();
             
             aot.RegisterComponent<MyComponent1>();
@@ -99,7 +111,7 @@ public class Test_AOT
             aot.RegisterScript<TestScript1>();
             aot.RegisterScript<TestScript1>(); // register again
             
-            aot.CreateSchema();
+            return schemaCreated = aot.CreateSchema();
         }
     }
 

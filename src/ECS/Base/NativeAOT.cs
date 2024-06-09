@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Friflo.Json.Fliox.Mapper;
 
 // ReSharper disable UseRawString
@@ -58,10 +59,22 @@ A type initializer threw an exception. To determine which type, inspect the Inne
     private EntitySchema CreateSchemaInternal()
     {
         InitSchema();
-        var dependant   = new EngineDependant (null, types);
-        var dependants  = new List<EngineDependant> { dependant };
+        var assemblies = new Dictionary<Assembly, List<SchemaType>>();
+        foreach (var schemaType in types) {
+            var assembly = schemaType.Type.Assembly;
+            if (!assemblies.TryGetValue(assembly, out var list)) {
+                list = new List<SchemaType>();
+                assemblies.Add(assembly, list);
+            }
+            list.Add(schemaType);
+        }
+        var dependants  = new List<EngineDependant>();
+        foreach (var pair in assemblies) {
+            var dependant = new EngineDependant(pair.Key, pair.Value);
+            dependants.Add(dependant);
+        }
         entitySchema    = new EntitySchema(dependants, schemaTypes);
-        Instance = this;
+        Instance        = this;
         return entitySchema;
     }
     
@@ -117,7 +130,6 @@ A type initializer threw an exception. To determine which type, inspect the Inne
         var tagType         = SchemaUtils.CreateTagType<T>(tagIndex);
         tags.Add(tagType);
         types.Add(tagType);
-
     }
     
     public void RegisterScript<T>()  where T : Script, new()
