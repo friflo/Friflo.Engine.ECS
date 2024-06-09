@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Reflection;
 using Friflo.Json.Burst;
@@ -134,6 +135,7 @@ public abstract class SchemaType
         BindingFlags.Instance           |
         BindingFlags.FlattenHierarchy;
 
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Expect type is registered by NativeAOT on startup")]
     private static BlittableType AreAllMembersBlittable(Type type)
     {
         var members = type.GetMembers(MemberFlags);
