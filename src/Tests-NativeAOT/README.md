@@ -7,15 +7,18 @@ Example unit test for NativeAOT:
 
 **Note** NativeAOT test run currently only from command line
 
+```
+cd Engine/src/Tests-NativeAOT
+```
 
 Debug
 ```
-dotnet publish Tests-NativeAOT --runtime win-x64 -c DEBUG
-Tests-NativeAOT\bin\Debug\net8.0\win-x64\publish\Tests-NativeAOT.exe
+dotnet publish --runtime win-x64 -c DEBUG
+bin\Debug\net8.0\win-x64\publish\Tests-NativeAOT.exe
 ```
 
 Release
 ```
-dotnet publish Tests-NativeAOT --runtime win-x64
-Tests-NativeAOT\bin\Release\net8.0\win-x64\publish\Tests-NativeAOT.exe
+dotnet publish --runtime win-x64
+bin\Release\net8.0\win-x64\publish\Tests-NativeAOT.exe
 ```
