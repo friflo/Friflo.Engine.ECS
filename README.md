@@ -21,7 +21,7 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wiki
 - JSON Serialization.
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8  
-  WASM / WebAssembly, Unity (Mono & AOT/IL2CPP), Godot and MonoGame.
+  WASM / WebAssembly, Unity (Mono & AOT/IL2CPP), Godot, MonoGame, ... and ![new](docs/images/new.svg) Native AOT
 - Library uses only secure and managed code. No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).  
   App / Game can access component chunks with native or unsafe code using `Span<>`s.
 
@@ -219,7 +219,8 @@ entities            number of entities matching a QuerySystem
 The **GitHub Wiki** provide you detailed information about the ECS and illustrate them by examples.
 
 - [**Examples - General**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-General)  
-  Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.
+  Explain fundamental ECS types like *Entity*, *Component*, *Tag*, *Command Buffer*, ... and show you how to use them.  
+  Contains an example for [Native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot) integration.
 
 - [**Examples - Optimization**](https://github.com/friflo/Friflo.Json.Fliox/wiki/Examples-~-Optimization)  
   Provide you techniques how to improve ECS performance.
