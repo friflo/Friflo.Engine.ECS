@@ -22,7 +22,7 @@ This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wiki
 - SIMD Support - optional. Multi thread capable and remainder loop free.
 - Supports .NET Standard 2.1 .NET 5 .NET 6 .NET 7 .NET 8    
   WASM / WebAssembly, Unity (Mono, AOT/IL2CPP, WebGL), Godot, MonoGame, ... and ![new](docs/images/new.svg) Native AOT
-- Library uses only secure and managed code. No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library).  
+- Library uses only secure and managed code. No use of unsafe code. See [Wiki ⋅ Library](https://github.com/friflo/Friflo.Json.Fliox/wiki/Library#assembly-dll).  
   App / Game can access component chunks with native or unsafe code using `Span<>`s.
 
 Complete feature list at [Wiki ⋅ Features](https://github.com/friflo/Friflo.Json.Fliox/wiki/Features).
