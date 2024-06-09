@@ -8,7 +8,9 @@
     <RootNamespace>Friflo.Engine.ECS</RootNamespace>
     <AssemblyName>Friflo.Engine.ECS</AssemblyName>
     <LangVersion>12.0</LangVersion>
+      
     <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
 
     <!-- packaging -->
     <PackageVersion>0.0.0</PackageVersion>
