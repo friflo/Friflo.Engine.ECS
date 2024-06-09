@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Json.Fliox.Mapper;
 
@@ -43,6 +44,7 @@ internal static class SchemaUtils
         return new EntitySchema(dependants, schemaTypes);
     }
     
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "Not called for NativeAOT")]
     internal static SchemaType CreateSchemaType(Type type, TypeStore typeStore, SchemaTypes schemaTypes)
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;

@@ -22,3 +22,7 @@ Release
 dotnet publish --runtime win-x64
 bin\Release\net8.0\win-x64\publish\Tests-NativeAOT.exe
 ```
+
+## Links
+
+- [How to make libraries compatible with native AOT - .NET Blog](https://devblogs.microsoft.com/dotnet/creating-aot-compatible-libraries/)

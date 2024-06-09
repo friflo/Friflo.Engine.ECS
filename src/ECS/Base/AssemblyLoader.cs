@@ -76,6 +76,7 @@ internal sealed class AssemblyLoader
         return result;
     }
     
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
     private void CheckAssembly(Assembly assembly)
     {
         if (!checkedAssemblies.Add(assembly)) {
@@ -147,6 +148,7 @@ internal sealed class AssemblyLoader
         toLoad.ForEach(path => loadedAssemblies.Add(domain.Load(AssemblyName.GetAssemblyName(path))));        
     } */
    
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026", Justification = "Not called for NativeAOT")]
     internal static void GetComponentTypes(Assembly assembly, List<Type> componentTypes)
     {
         componentTypes.Clear();

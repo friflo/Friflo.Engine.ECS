@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;
@@ -27,6 +28,7 @@ public abstract class ScriptType : SchemaType
     internal abstract   Script          CreateScript();
     internal abstract   void            ReadScript  (ObjectReader reader, JsonValue json, Entity entity);
     
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2070", Justification = "MemberwiseClone is part of BCL")]
     protected ScriptType(string scriptKey, int scriptIndex, Type type)
         : base (scriptKey, type, SchemaTypeKind.Script)
     {
