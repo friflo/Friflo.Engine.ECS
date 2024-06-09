@@ -86,7 +86,7 @@ internal readonly struct PerfResource
     
     public PerfResource () {
         time    = Stopwatch.GetTimestamp();
-        memory  = GC.GetAllocatedBytesForCurrentThread();
+        memory  = Platform.IsUnityRuntime ? 0 : GC.GetAllocatedBytesForCurrentThread();
     }
 }
 

@@ -20,9 +20,17 @@ internal sealed class SchemaTypes
 
 internal static class SchemaUtils
 {
+    [ExcludeFromCodeCoverage]
+    private static bool RegisterComponentTypesByReflection() {
+        if (Platform.IsUnityRuntime) {
+            return true;
+        }
+        return System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
+    }
+    
     internal static EntitySchema RegisterSchemaTypes(TypeStore typeStore)
     {
-        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled) {
+        if (!RegisterComponentTypesByReflection()) {
             return NativeAOT.GetSchema();
         }
         var assemblyLoader  = new AssemblyLoader();
