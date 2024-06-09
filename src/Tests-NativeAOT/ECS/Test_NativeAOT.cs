@@ -63,6 +63,17 @@ public class Test_AOT
         entity.AddScript(new TestScript1());
     }
     
+    [TestMethod]
+    public void Test_AOT_AddComponent_unknown()
+    {
+        CreateSchema();
+        var store = new EntityStore();
+        var entity = store.CreateEntity(1);
+        Assert.ThrowsException<TypeInitializationException>(() => {
+            entity.AddComponent(new MyComponent2());    
+        });
+    }
+    
     private static          bool    schemaCreated;
     private static readonly object  monitor = new object();
     
@@ -78,9 +89,16 @@ public class Test_AOT
             Console.WriteLine("Test_AOT.CreateSchema() - 2");
             schemaCreated = true;
             var aot = new NativeAOT();
+            
             aot.RegisterComponent<MyComponent1>();
+            aot.RegisterComponent<MyComponent1>(); // register again
+
             aot.RegisterTag<TestTag>();
+            aot.RegisterTag<TestTag>(); // register again
+            
             aot.RegisterScript<TestScript1>();
+            aot.RegisterScript<TestScript1>(); // register again
+            
             aot.CreateSchema();
         }
     }
