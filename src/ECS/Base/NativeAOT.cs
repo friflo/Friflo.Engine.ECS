@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Json.Fliox.Mapper;
 
@@ -23,9 +24,20 @@ public sealed class NativeAOT
     
     private static      NativeAOT           Instance;
     
+    [ExcludeFromCodeCoverage]
     internal static EntitySchema GetSchema()
     {
-        var schema = Instance?.entitySchema; 
+        var schema = Instance?.entitySchema;
+        if (schema != null) {
+            return schema;
+        }
+        return CreateDefaultSchema();
+    }
+    
+    [ExcludeFromCodeCoverage]
+    private static EntitySchema CreateDefaultSchema()
+    {
+        var schema = Instance?.entitySchema;
         if (schema != null) {
             return schema;
         }
