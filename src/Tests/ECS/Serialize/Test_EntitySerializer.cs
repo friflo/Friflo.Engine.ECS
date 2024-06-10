@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Friflo.Engine.ECS;
@@ -455,6 +456,42 @@ public static class Test_Serializer
         var entityRead = storeRead.GetEntityById(1);
         var nonClsRead = entityRead.GetComponent<NonClsTypes>();
         AreEqual(nonClsWrite, nonClsRead);
+    }
+    
+    [Test]
+    public static void Test_Serializer_ignored_field_types()
+    {
+        var store       = new EntityStore();
+        var serializer  = new EntitySerializer();
+        
+        var entity = store.CreateEntity();
+        entity.AddComponent(new ComponentWithGenerics());
+        var json = serializer.WriteEntity(entity);
+        var expect =
+@"{
+    ""id"": 1,
+    ""components"": {
+        ""ComponentWithGenerics"": {}
+    }
+}";
+        AreEqual(expect, json);
+    }
+    
+    [Test]
+    public static void Test_Serializer_unsupported_field_types()
+    {
+        var store       = new EntityStore();
+        var serializer  = new EntitySerializer();
+        
+        var entity = store.CreateEntity();
+        entity.AddComponent(new BlittableUri());
+        
+        var e = Throws<TargetInvocationException>(() => {
+            serializer.WriteEntity(entity);
+        });
+        var inner = e!.InnerException as ArgumentException;
+        NotNull(inner);
+        AreEqual("Type 'System.Uri' does not have a default constructor (Parameter 'type')", inner.Message);
     }
 }
 

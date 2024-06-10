@@ -4,6 +4,8 @@
 // File is copy of https://github.com/eerhardt/blog-resources/blob/main/creating-aot-compatible-libraries/TrimmingAttributes.cs
 // As recommended in [How to make libraries compatible with native AOT](https://devblogs.microsoft.com/dotnet/creating-aot-compatible-libraries/#approach-2-define-the-attributes-internally)
 
+// ReSharper disable once EmptyNamespace
+// ReSharper disable once CheckNamespace
 namespace System.Diagnostics.CodeAnalysis
 {
 #if !NET7_0_OR_GREATER
