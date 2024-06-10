@@ -13,6 +13,10 @@ Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benc
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
 This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
+![new](docs/images/new.svg) released **Friflo.Engine.ECS v2.0.0**.  
+New features, performance improvements and bug fixes listed at 
+[Release ⋅ engine-v2.0.0](https://github.com/friflo/Friflo.Json.Fliox/releases/tag/engine-v2.0.0).
+
 *Feature highlights*
 - Simple API - no boilerplate.
 - High-performance 🔥 and compact ECS with low memory footprint.
@@ -112,8 +116,7 @@ All query optimizations are using the same `query` but with different enumeratio
 
 ## Systems
 
-Systems are new in **Friflo.Engine.ECS v2**  
-[![nuget](https://img.shields.io/nuget/vpre/Friflo.Engine.ECS?logo=nuget&logoColor=white&color=orange)](https://www.nuget.org/packages/Friflo.Engine.ECS/absoluteLatest)
+Systems are new in **Friflo.Engine.ECS v2.0.0**
 
 Systems in ECS are typically queries.  
 So you can still use the `world.Query<Position, Velocity>()` shown in the "Hello World" example.  
