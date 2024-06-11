@@ -135,7 +135,8 @@ Using Systems is optional but they have some significant advantages:
   The order of systems in a group can be changed.
 
 - Systems have performance monitoring build-in to measure execution times and memory allocations.  
-  If enabled systems detected as bottleneck can be optimized.
+  If enabled systems detected as bottleneck can be optimized.  
+  Are perf log (see example below) also provide a clear overview of all systems and the amount of entities and their impact on performance.
 
 - Multiple worlds can be added to a single  [SystemRoot](https://github.com/friflo/Friflo.Engine-docs/blob/main/api/SystemRoot.md) instance.  
   `root.Update()` will execute every system on all worlds.
