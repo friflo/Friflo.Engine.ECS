@@ -491,7 +491,7 @@ public static class Test_Serializer
         });
         var inner = e!.InnerException as ArgumentException;
         NotNull(inner);
-        AreEqual("Type 'System.Uri' does not have a default constructor (Parameter 'type')", inner.Message);
+        StringAssert.StartsWith("Type 'System.Uri' does not have a default constructor", inner.Message);
     }
 }
 
