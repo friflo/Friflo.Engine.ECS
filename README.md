@@ -53,7 +53,7 @@ It is often used in the Gaming industry - e.g. Minecraft - and used for high per
 An ECS provide two strengths:
 
 1. It enables writing *highly decoupled code*. Data is stored in **Components** which are assigned to objects - aka **Entities** - at runtime.  
-   Code decoupling is accomplished by dividing implementation in pure data structures (**Component types**) - and code - **Systems** - to process them.  
+   Code decoupling is accomplished by dividing implementation in pure data structures (**Component types**) - and code (**Systems**) to process them.  
   
 2. It enables *high performant system execution* by storing components in continuous memory to leverage CPU caches L1, L2 & L3.  
    It improves CPU branch prediction by minimizing conditional branches when processing components in tight loops.
