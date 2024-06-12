@@ -52,10 +52,10 @@ An entity-component-system (**ECS**) is a software architecture pattern. See [EC
 It is often used in the Gaming industry - e.g. Minecraft - and used for high performant data processing.  
 An ECS provide two strengths:
 
-1. It enables writing *highly decoupled code*. Data is stored in components added to objects (**Entities**) at runtime.  
-   Code decoupling is accomplished by dividing implementation in pure data structures (**Components**) and code (**Systems**) to process them.  
+1. It enables writing *highly decoupled code*. Data is stored in **Components** which are assigned to objects - aka **Entities** - at runtime.  
+   Code decoupling is accomplished by dividing implementation in pure data structures (**Component types**) - and code - **Systems** - to process them.  
   
-2. It enables *high performant system execution* as components are stored in continuous memory to leverage CPU caches L1, L2 & L3.  
+2. It enables *high performant system execution* by storing components in continuous memory to leverage CPU caches L1, L2 & L3.  
    It improves CPU branch prediction by minimizing conditional branches when processing components in tight loops.
 
 <br/>
