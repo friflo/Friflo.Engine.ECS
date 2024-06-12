@@ -35,7 +35,18 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 dotnet add package Friflo.Engine.ECS
 ```
 
-**ECS ⋅ Definition**
+# Contents
+
+* [ECS ⋅ Definition](#ecs-⋅-definition)
+* [Demos](#demos)
+* [Examples](#examples)
+  - [Hello World](#hello-world)
+  - [Systems](#systems)
+* [Wiki](#wiki)
+* [Benchmarks](#ecs-benchmarks)
+
+
+## ECS ⋅ Definition
 
 An entity-component-system (**ECS**) is a software architecture pattern. See [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).  
 It is often used in the Gaming industry - e.g. Minecraft - and used for high performant data processing.  
@@ -46,18 +57,6 @@ An ECS provide two strengths:
   
 2. It enables high performant system execution as components are stored in continuous memory to leverage CPU caches L1, L2 & L3.  
    It improves CPU branch prediction by minimizing conditional branches in tight loops.
-
-<br/>
-
-
-# Contents
-
-* [Demos](#demos)
-* [Examples](#examples)
-  - [Hello World](#hello-world)
-  - [Systems](#systems)
-* [Wiki](#wiki)
-* [Benchmarks](#ecs-benchmarks)
 
 <br/>
 
