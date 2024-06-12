@@ -11,7 +11,6 @@
 
 Currently fastest 🔥 ECS implementation in C# / .NET - using **Ecs.CSharp.Benchmark** as reference.  
 See benchmark results - Mac Mini M2 - at the bottom of this page.  
-This ECS is an Archetype / AoS based Entity Component System. See: [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).   
 
 ![new](docs/images/new.svg) released **Friflo.Engine.ECS v2.0.0**.  
 New features, performance improvements and bug fixes listed at 
@@ -35,6 +34,20 @@ Get package on [nuget](https://www.nuget.org/packages/Friflo.Engine.ECS/) or use
 ```
 dotnet add package Friflo.Engine.ECS
 ```
+
+**ECS ⋅ Definition**
+
+An entity-component-system (**ECS**) is a software architecture pattern. See [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).  
+It is often used in the Gaming industry - e.g. Minecraft - and used for high performant data processing.  
+An ECS provide two strengths:
+
+1. It enables writing highly decoupled code. Data is stored in components added to objects (**Entities**) at runtime.  
+   It accomplish this by dividing implementation in pure data structures (**Components**) and code (**Systems**) to process them.  
+  
+2. It enables high performant system execution as components are stored in continuous memory to leverage CPU caches L1, L2 & L3.  
+   It improves CPU branch prediction by minimizing conditional branches in tight loops.
+
+<br/>
 
 
 # Contents
