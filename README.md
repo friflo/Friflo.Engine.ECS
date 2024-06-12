@@ -56,7 +56,7 @@ An ECS provide two strengths:
    Code decoupling is accomplished by dividing implementation in pure data structures (**Components**) and code (**Systems**) to process them.  
   
 2. It enables *high performant system execution* as components are stored in continuous memory to leverage CPU caches L1, L2 & L3.  
-   It improves CPU branch prediction by minimizing conditional branches when processing component in tight loops.
+   It improves CPU branch prediction by minimizing conditional branches when processing components in tight loops.
 
 <br/>
 
