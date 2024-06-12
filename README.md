@@ -37,7 +37,7 @@ dotnet add package Friflo.Engine.ECS
 
 # Contents
 
-* [ECS ⋅ Definition](#ecs-⋅-definition)
+* [ECS definition](#ecs-definition)
 * [Demos](#demos)
 * [Examples](#examples)
   - [Hello World](#hello-world)
@@ -46,7 +46,7 @@ dotnet add package Friflo.Engine.ECS
 * [Benchmarks](#ecs-benchmarks)
 
 
-## ECS ⋅ Definition
+## ECS definition
 
 An entity-component-system (**ECS**) is a software architecture pattern. See [ECS ⋅ Wikipedia](https://en.wikipedia.org/wiki/Entity_component_system).  
 It is often used in the Gaming industry - e.g. Minecraft - and used for high performant data processing.  
