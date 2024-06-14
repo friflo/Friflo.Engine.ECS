@@ -107,7 +107,7 @@ public sealed partial class EntityStore : EntityStoreBase
 
     // --- buffers
     [Browse(Never)] private             int[]           idBuffer;       //  8
-    [Browse(Never)] private  readonly   HashSet<int>    idBufferSet;    //  8
+    [Browse(Never)] internal readonly   HashSet<int>    idBufferSet;    //  8
     [Browse(Never)] private  readonly   DataEntity      dataBuffer;     //  8
                     internal            StoreExtension  extension;      // 96
                     private             Intern          intern;         // 88

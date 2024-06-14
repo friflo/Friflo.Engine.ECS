@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
 
@@ -64,6 +65,8 @@ public class QueryFilter
                     private     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
                     internal    int             version;                    //   4  incremented if filter changes
                     private     bool            frozen;                     //   1  if true the filter cannot be changed anymore
+                    
+                    internal    List<Clause>    clauses;                    //   8
     #endregion
     
     
@@ -164,6 +167,16 @@ public class QueryFilter
         Change();
         withoutAnyComponents         = types;
         return this;
+    }
+    
+    internal QueryFilter Has<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
+        AddClause(new HasClause<TComponent, TValue>(value));
+        return this;
+    }
+    
+    private void AddClause(Clause clause) {
+        clauses ??= new List<Clause>();
+        clauses.Add(clause);
     }
     #endregion
     

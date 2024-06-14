@@ -65,6 +65,7 @@ public sealed class EntitySchema
     [Browse(Never)] private  readonly   EngineDependant[]                   engineDependants;
     [Browse(Never)] internal readonly   int                                 maxStructIndex;
     [Browse(Never)] internal readonly   ComponentType[]                     components;
+    [Browse(Never)] internal readonly   IndexedComponentType[]              indexedComponents;
     [Browse(Never)] internal readonly   ScriptType[]                        scripts;
     [Browse(Never)] internal readonly   TagType[]                           tags;
     [Browse(Never)] internal readonly   ComponentType                       unresolvedType;
@@ -80,9 +81,10 @@ public sealed class EntitySchema
 #region internal methods
     internal EntitySchema(List<EngineDependant> dependants, SchemaTypes schemaTypes)
     {
-        var componentList   = schemaTypes.components;
-        var scriptList      = schemaTypes.scripts;
-        var tagList         = schemaTypes.tags;
+        var componentList           = schemaTypes.components;
+        var indexedComponentList    = schemaTypes.indexedComponents;
+        var scriptList              = schemaTypes.scripts;
+        var tagList                 = schemaTypes.tags;
         
         engineDependants        = dependants.ToArray();
         int count               = componentList.Count + scriptList.Count;
@@ -93,6 +95,7 @@ public sealed class EntitySchema
         tagTypeByType           = new Dictionary<Type,   TagType>   (count);
         maxStructIndex          = componentList.Count + 1;
         components              = new ComponentType[maxStructIndex];
+        indexedComponents       = new IndexedComponentType[indexedComponentList.Count];
         scripts                 = new ScriptType[scriptList.Count + 1];
         tags                    = new TagType   [tagList.Count + 1];
 
@@ -112,6 +115,10 @@ public sealed class EntitySchema
             components              [componentType.StructIndex] =   componentType;
         }
         unresolvedType = componentTypeByType[typeof(Unresolved)];
+        var index = 0;
+        foreach (var type in indexedComponentList) {
+            indexedComponents[index++] = type;
+        }
         foreach (var scriptType in scriptList) {
             var key = scriptType.ComponentKey;
             if (!schemaTypeByKey.   TryAdd(key,                     scriptType)) {

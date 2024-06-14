@@ -128,26 +128,42 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     {
         Archetype archetype;
         // --- skip archetypes without entities
-        do {
-           if (archetypePos >= archetypes.last) {  // last = length - 1
-               return false;
-           }
-           archetype    = archetypes.array[++archetypePos];
+        int count;
+        int start = 0;
+        if (archetypes.chunkPositions != null) {
+            if (archetypePos >= archetypes.last) {  // last = length - 1
+                return false;
+            }
+            SetArchetypeComponent(out archetype, out start);
+            count = 1;
+        } else {
+            do {
+               if (archetypePos >= archetypes.last) {  // last = length - 1
+                   return false;
+               }
+               archetype    = archetypes.array[++archetypePos];
+               count        = archetype.entityCount;
+            }
+            while (count == 0);
         }
-        while (archetype.entityCount == 0);
-        
         // --- set chunks of new archetype
         var heapMap     = archetype.heapMap;
         var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
         var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
-        var count       = archetype.entityCount;
 
-        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count);
-        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count);
+        var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, start);
+        var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count, start);
         var entities    = new ChunkEntities(archetype, count);
         chunks          = new Chunks<T1, T2>(chunk1, chunk2, entities);
         return true;  
     }
+    
+    private void SetArchetypeComponent(out Archetype archetype, out int start)
+    {
+        start       = archetypes.chunkPositions[archetypePos];
+        archetype   = archetypes.array[++archetypePos];
+    }
+    
     
     // --- IDisposable
     public void Dispose() { }

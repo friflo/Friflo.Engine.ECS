@@ -13,9 +13,10 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class SchemaTypes
 {
-    internal readonly   List<ComponentType> components  = new ();
-    internal readonly   List<ScriptType>    scripts     = new ();
-    internal readonly   List<TagType>       tags        = new ();
+    internal readonly   List<ComponentType>         components          = new ();
+    internal readonly   List<IndexedComponentType>  indexedComponents   = new ();
+    internal readonly   List<ScriptType>            scripts             = new ();
+    internal readonly   List<TagType>               tags                = new ();
 }
 
 internal static class SchemaUtils
@@ -79,6 +80,7 @@ internal static class SchemaUtils
                 var genericMethod   = method!.MakeGenericMethod(type);
                 var componentType   = (ComponentType)genericMethod.Invoke(null, createParams);
                 schemaTypes.components.Add(componentType);
+                IndexedComponentType.AddIndexedComponentType(schemaTypes, componentType);
                 return componentType;
             }
         } else {

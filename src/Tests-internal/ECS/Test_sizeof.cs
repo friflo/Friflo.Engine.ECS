@@ -23,7 +23,7 @@ public static class Test_sizeof
     [Test]
     public static unsafe void Test_sizeof_StoreExtension() {
         var size = sizeof(StoreExtension);
-        AreEqual(96, size);
+        AreEqual(104, size);
     }
     
     [Test]
@@ -90,7 +90,7 @@ public static class Test_sizeof
         AreEqual(16, size);
 
         size = sizeof(Archetypes);
-        AreEqual(16, size);
+        AreEqual(24, size);
     }
     
     [Test]

@@ -71,6 +71,7 @@ public class ArchetypeQuery
     // --- non blittable types
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //   8
     [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
+    [Browse(Never)] private             int[]               chunkPositions;     //   8  indexes of chunk entities matching a clause
     [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
     [Browse(Never)] private             EntityList          entityList;         //   8  provide entities as list to perform structural changes
 
@@ -128,6 +129,8 @@ public class ArchetypeQuery
     /// <summary> Entities having any of the passed <paramref name="componentTypes"/> are excluded from query result. </summary>
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
+    
+    internal ArchetypeQuery Has<TComponent,TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> { Filter.Has<TComponent, TValue>(value);  return this; }
     
     internal void SetHasAllComponents       (in ComponentTypes types) => Filter.AllComponents(types);
     internal void SetHasAnyComponents       (in ComponentTypes types) => Filter.AnyComponents(types);
@@ -188,6 +191,7 @@ public class ArchetypeQuery
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
+        chunkPositions  = Array.Empty<int>();
         components      = new ComponentTypes(indexes);
         signatureIndexes= indexes;
         Filter          = filter ?? new QueryFilter();
@@ -201,6 +205,7 @@ public class ArchetypeQuery
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
+        chunkPositions  = Array.Empty<int>();
         components      = componentTypes;
         Filter          = filter ?? new QueryFilter();
     }
@@ -210,6 +215,7 @@ public class ArchetypeQuery
     {
         this.store      = store;
         archetypes      = Array.Empty<Archetype>();
+        chunkPositions  = Array.Empty<int>();
         Filter          = new QueryFilter(default).FreezeFilter();
     }
     
@@ -234,8 +240,12 @@ public class ArchetypeQuery
         if (filterVersion      != localFilter.version) {
             filterVersion       = localFilter.version;
             archetypes          = Array.Empty<Archetype>();
+            chunkPositions      = Array.Empty<int>();
             archetypeCount      = 0;
             lastArchetypeCount  = 0;
+        }
+        if (Filter.clauses != null) {
+            return GetClauseArchetypes();
         }
         if (store.ArchetypeCount == lastArchetypeCount) {
             return new Archetypes(archetypes, archetypeCount);
@@ -274,6 +284,45 @@ public class ArchetypeQuery
         archetypeCount      = nextCount;        // archetypes already changed                                       => OK
         lastArchetypeCount  = newStoreLength;   // using old lastArchetypeCount result only in a redundant update   => OK
         return new Archetypes(nextArchetypes, nextCount);
+    }
+    
+    private Archetypes GetClauseArchetypes()
+    {
+        var entityStore = Store;
+        var idSet       = entityStore.idBufferSet;
+        idSet.Clear();
+        // --- add all matching ids
+        foreach (var clause in Filter.clauses) {
+            foreach (Entity entity in clause.GetEntities(entityStore)) {
+                idSet.Add(entity.Id);
+            }
+        }
+        var nodes           = entityStore.nodes;
+        var nextArchetypes  = archetypes;
+        var nextPositions   = chunkPositions;
+        var nextCount       = archetypeCount;
+        
+        // --- add archetype and chunk position for all matching entities
+        foreach (var id in idSet)
+        {
+            var node        = nodes[id];
+            var archetype   = node.archetype;
+            if (!IsMatch(archetype.componentTypes, archetype.tags)) {
+                continue;
+            }
+            if (nextCount == nextArchetypes.Length) {
+                var length = Math.Max(4, 2 * nextCount);
+                ArrayUtils.Resize(ref nextArchetypes, length);
+                ArrayUtils.Resize(ref nextPositions,  length);
+            }
+            nextArchetypes  [nextCount]     = archetype;
+            nextPositions   [nextCount++]   = node.compIndex;
+        }
+        // --- order matters in case of parallel execution
+        chunkPositions      = nextPositions;
+        archetypes          = nextArchetypes;   // using changed (added) archetypes with old archetypeCount         => OK
+        archetypeCount      = nextCount;        // archetypes already changed                                       => OK
+        return new Archetypes(nextArchetypes, nextCount, nextPositions);
     }
     
     /// <summary>

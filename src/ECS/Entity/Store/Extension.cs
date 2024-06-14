@@ -48,17 +48,27 @@ internal partial struct StoreExtension
     internal    Dictionary<int, Action<ScriptChanged>>          entityScriptChanged;        //  8   - entity event handlers for add/remove script
     #endregion
     
+#region inverted index 
+    internal                            InvertedIndex[]         invertedIndexes;            //  8
+    #endregion
+    
     internal StoreExtension(PidType pidType)
     {
-       parentMap = new Dictionary<int, int>();
-       if (pidType == PidType.RandomPids) {
-           randPid  = new Random();
-           pid2Id   = new Dictionary<long, int>();
-           id2Pid   = new Dictionary<int, long>();
-       }
-       scriptMap           = new Dictionary<int, int>();
-       entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
-       entityScriptCount   = 1;
+        parentMap = new Dictionary<int, int>();
+        if (pidType == PidType.RandomPids) {
+            randPid  = new Random();
+            pid2Id   = new Dictionary<long, int>();
+            id2Pid   = new Dictionary<int, long>();
+        }
+        scriptMap           = new Dictionary<int, int>();
+        entityScripts       = new EntityScripts[1]; // invariant: entityScripts[0] = 0
+        entityScriptCount   = 1;
+        var schema          = EntityStoreBase.Static.EntitySchema;
+        var indexes         = new InvertedIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
+        invertedIndexes     = indexes;
+        foreach (var type in schema.indexedComponents) {
+            indexes[type.componentType.StructIndex] = type.CreateInvertedIndex();
+        }
     }
     
     internal void RemoveEntity(int id) {
