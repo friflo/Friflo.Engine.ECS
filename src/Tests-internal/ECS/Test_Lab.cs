@@ -15,11 +15,15 @@ internal struct AttackComponent : IIndexedComponent<Entity> {
 internal struct IndexedName : IIndexedComponent<string> {
     public      string  Value => name;
     internal    string  name;
+
+    public override string ToString() => name;
 }
 
 internal struct IndexedInt : IIndexedComponent<int> {
     public      int     Value => value;
     internal    int     value;
+    
+    public override string ToString() => value.ToString();
 }
 
 
@@ -40,29 +44,44 @@ public static class Test_Lab
         }
         Entity target = targets[0];
         
-        entities[0].AddComponent(new IndexedName   { name   = "find-me"});
-        entities[1].AddComponent(new IndexedInt    { value  = 123      });
+        entities[0].AddComponent(new IndexedName   { name   = "find-me" });
+        entities[1].AddComponent(new IndexedInt    { value  = 123       });
+        entities[2].AddComponent(new IndexedName   { name   = "find-me" });
+        entities[2].AddComponent(new IndexedInt    { value  = 123       });
     //  entities[1].AddComponent(new AttackComponent { target = target }); // todo throws NotImplementedException : to avoid excessive boxing. ...
         
-        var query1  = world.Query<Position, IndexedName>().  Has<IndexedName,   string>("find-me");
-        var query2  = world.Query<Position, IndexedInt>().   Has<IndexedInt,    int>   (123);
-        var query3  = world.Query<Position, AttackComponent>().Has<AttackComponent, Entity>(target);
+        var query1  = world.Query<Position, IndexedName>().     Has<IndexedName,   string>("find-me");
+        var query2  = world.Query<Position, IndexedInt>().      Has<IndexedInt,    int>   (123);
+        var query3  = world.Query<IndexedName, IndexedInt>().   Has<IndexedName,   string>("find-me").
+                                                                Has<IndexedInt,    int>   (123);
+        var query4  = world.Query().                            Has<IndexedName,   string>("find-me").
+                                                                Has<IndexedInt,    int>   (123);
         
-        int countNames = 0;
-        query1.ForEachEntity((ref Position _, ref IndexedName indexedName, Entity _) => {
-            countNames++;
-            AreEqual("find-me", indexedName.name);
-        });
-        AreEqual(1, countNames);
+        var query5  = world.Query<Position, AttackComponent>().Has<AttackComponent, Entity>(target);
+        {
+            int count = 0;
+            query1.ForEachEntity((ref Position _, ref IndexedName indexedName, Entity _) => {
+                count++;
+                AreEqual("find-me", indexedName.name);
+            });
+            AreEqual(2, count);
+        } { 
+            int count = 0;
+            query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity _) => {
+                count++;
+                AreEqual(123, indexedInt.value);
+            });
+            AreEqual(2, count);
+        } { 
+            var count = 0;
+            query3.ForEachEntity((ref IndexedName _, ref IndexedInt _, Entity _) => {
+                count++;
+            });
+            AreEqual(1, count);
+        }
+        AreEqual(3, query4.Entities.Count);
         
-        int intCount = 0;
-        query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity _) => {
-            intCount++;
-            AreEqual(123, indexedInt.value);
-        });
-        AreEqual(1, intCount);
-        
-        query3.ForEachEntity((ref Position _, ref AttackComponent attack, Entity _) => {
+        query5.ForEachEntity((ref Position _, ref AttackComponent attack, Entity _) => {
             AreEqual(target, attack.target);
         });
     }
