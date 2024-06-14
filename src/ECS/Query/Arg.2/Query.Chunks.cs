@@ -160,8 +160,9 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
     
     private void SetArchetypeComponent(out Archetype archetype, out int start)
     {
-        start       = archetypes.chunkPositions[archetypePos];
-        archetype   = archetypes.array[++archetypePos];
+        var pos     = ++archetypePos;
+        start       = archetypes.chunkPositions[pos];
+        archetype   = archetypes.array         [pos];
     }
     
     

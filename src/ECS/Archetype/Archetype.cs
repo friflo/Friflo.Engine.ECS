@@ -172,7 +172,7 @@ public sealed class Archetype
     /// <summary>
     /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
     /// </summary>
-    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags)
+    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags, InvertedIndex[] indexes)
     {
         memory.capacity         = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
@@ -188,9 +188,10 @@ public sealed class Archetype
         key             = new ArchetypeKey(this);
         for (int pos = 0; pos < componentCount; pos++)
         {
-            var heap = heaps[pos];
+            var heap    = heaps[pos];
+            var index   = indexes?[heap.structIndex];
             heap.SetArchetypeDebug(this);
-            heapMap[heap.structIndex] = new HeapInfo(heap, null);
+            heapMap[heap.structIndex] = new HeapInfo(heap, index);
             SetStandardComponentHeaps(heap, ref std);
         }
     }
@@ -209,15 +210,20 @@ public sealed class Archetype
         }
     }
 
-    internal static Archetype CreateWithComponentTypes(in ArchetypeConfig config, in ComponentTypes componentTypes, in Tags tags)
+    internal static Archetype CreateWithComponentTypes(
+        in ArchetypeConfig  config,
+        in ComponentTypes   componentTypes,
+        in Tags             tags,
+           EntityStoreBase  store)
     {
+        var indexes         = (store as EntityStore)?.extension.invertedIndexes;    // would be nice to avoid cast
         var length          = componentTypes.Count;
         var componentHeaps  = new StructHeap[length];
         int n = 0;
         foreach (var componentType in componentTypes) {
             componentHeaps[n++] = componentType.CreateHeap();
         }
-        return new Archetype(config, componentHeaps, tags);
+        return new Archetype(config, componentHeaps, tags, indexes);
     }
     #endregion
 

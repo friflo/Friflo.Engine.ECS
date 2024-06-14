@@ -7,10 +7,17 @@ using System.Collections.Generic;
 namespace Friflo.Engine.ECS;
 
 internal abstract class InvertedIndex {
+    internal abstract void Add<TComponent>(in TComponent component, int id);
 }
 
 // internal sealed class InvertedIndex<TComponent, TValue> : InverseIndex where TComponent : struct, IIndexedComponent<TValue> 
 internal sealed class InvertedIndex<TValue>  : InvertedIndex
 {
     internal readonly    Dictionary<TValue, int[]>   map = new ();
+    
+    internal override void Add<TComponent>(in TComponent component, int id)
+    {
+        var indexedComponent = (IIndexedComponent<TValue>)component;    // TODO avoid boxing 
+        map.Add(indexedComponent.Value, new int[] { id });              // TODO fix array creation
+    }
 }

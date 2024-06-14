@@ -49,7 +49,7 @@ internal partial struct StoreExtension
     #endregion
     
 #region inverted index 
-    internal                            InvertedIndex[]         invertedIndexes;            //  8
+    internal    readonly                InvertedIndex[]         invertedIndexes;            //  8
     #endregion
     
     internal StoreExtension(PidType pidType)

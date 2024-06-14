@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using static System.Diagnostics.DebuggerBrowsableState;
 using Browse = System.Diagnostics.DebuggerBrowsableAttribute;
@@ -300,11 +301,16 @@ public class ArchetypeQuery
         var nodes           = entityStore.nodes;
         var nextArchetypes  = archetypes;
         var nextPositions   = chunkPositions;
-        var nextCount       = archetypeCount;
+        var nextCount       = 0;
         
+        // use nextPositions also to store ids temporarily
+        CopyIds(idSet, ref nextPositions);
+        int idCount = idSet.Count;
+
         // --- add archetype and chunk position for all matching entities
-        foreach (var id in idSet)
+        for (int n = 0; n < idCount; n++)
         {
+            var id          = nextPositions[n]; // nextPositions store ids temporarily
             var node        = nodes[id];
             var archetype   = node.archetype;
             if (!IsMatch(archetype.componentTypes, archetype.tags)) {
@@ -315,14 +321,26 @@ public class ArchetypeQuery
                 ArrayUtils.Resize(ref nextArchetypes, length);
                 ArrayUtils.Resize(ref nextPositions,  length);
             }
-            nextArchetypes  [nextCount]     = archetype;
-            nextPositions   [nextCount++]   = node.compIndex;
+            nextArchetypes[nextCount]   = archetype;
+            nextPositions [nextCount++] = node.compIndex;
         }
         // --- order matters in case of parallel execution
         chunkPositions      = nextPositions;
         archetypes          = nextArchetypes;   // using changed (added) archetypes with old archetypeCount         => OK
         archetypeCount      = nextCount;        // archetypes already changed                                       => OK
         return new Archetypes(nextArchetypes, nextCount, nextPositions);
+    }
+    
+    // Copy HashSet<> to array to enable simple debugging. Otherwise, debugger with throw collection modified for HashSet<> 
+    private static void CopyIds(HashSet<int> source, ref int[] target)
+    {
+        int index = 0;
+        if (source.Count > target.Length) {
+            ArrayUtils.Resize(ref target,  source.Count);
+        }
+        foreach (var id in source) {
+            target[index++] = id;
+        }
     }
     
     /// <summary>

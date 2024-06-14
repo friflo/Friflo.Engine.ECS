@@ -30,9 +30,9 @@ public partial class EntityStoreBase
         ComponentChangedAction  action;
         bool                    added;
 
-        var structHeap  = arch.heapMap[structIndex].heap;
-        var oldHeap     = structHeap;
-        if (structHeap != null) {
+        var info        = arch.heapMap[structIndex];
+        var oldHeap     = info.heap;
+        if (info.heap != null) {
             // --- case: archetype contains the component type  => archetype remains unchanged
             ((StructHeap<T>)oldHeap).StashComponent(compIndex);
             added   = false;
@@ -46,11 +46,12 @@ public partial class EntityStoreBase
         added               = true;
         action              = ComponentChangedAction.Add;
         archIndex           = arch.archIndex;
-        structHeap          = arch.heapMap[structIndex].heap;
+        info                = arch.heapMap[structIndex];
         
     AssignComponent:  // --- assign passed component value
-        var heap                    = (StructHeap<T>)structHeap;
+        var heap            = (StructHeap<T>)info.heap;
         heap.components[compIndex]  = component;
+        info.invertedIndex?.Add(component, id);
         // Send event. See: SEND_EVENT notes
         var componentAdded = store.internBase.componentAdded;
         if (componentAdded == null) {
