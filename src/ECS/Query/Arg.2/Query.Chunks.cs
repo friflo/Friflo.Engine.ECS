@@ -148,8 +148,8 @@ public struct ChunkEnumerator<T1, T2> : IEnumerator<Chunks<T1,T2>>
         }
         // --- set chunks of new archetype
         var heapMap     = archetype.heapMap;
-        var chunks1     = (StructHeap<T1>)heapMap[structIndex1];
-        var chunks2     = (StructHeap<T2>)heapMap[structIndex2];
+        var chunks1     = (StructHeap<T1>)heapMap[structIndex1].heap;
+        var chunks2     = (StructHeap<T2>)heapMap[structIndex2].heap;
 
         var chunk1      = new Chunk<T1>(chunks1.components, copyT1, count, start);
         var chunk2      = new Chunk<T2>(chunks2.components, copyT2, count, start);

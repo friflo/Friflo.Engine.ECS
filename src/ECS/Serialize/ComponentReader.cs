@@ -121,7 +121,7 @@ internal sealed class ComponentReader
                     break;
                 case SchemaTypeKind.Component:
                     var componentType   = (ComponentType)schemaType;
-                    var heap            = entity.archetype.heapMap[componentType.StructIndex]; // no range or null check required
+                    var heap            = entity.archetype.heapMap[componentType.StructIndex].heap; // no range or null check required
                     // --- read & change component
                     heap.Read(componentReader, entity.compIndex, json);
                     break;

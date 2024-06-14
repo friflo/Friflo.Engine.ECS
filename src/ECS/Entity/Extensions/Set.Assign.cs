@@ -14,7 +14,7 @@ public static partial class EntityExtensions
         where T1 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
 
         if (heap1 == null) {
             return false;
@@ -32,8 +32,8 @@ public static partial class EntityExtensions
         where T2 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
         if (heap1 == null ||
             heap2 == null) {
             return false;
@@ -54,9 +54,9 @@ public static partial class EntityExtensions
         where T3 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null) {
@@ -81,10 +81,10 @@ public static partial class EntityExtensions
         where T4 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||
@@ -113,11 +113,11 @@ public static partial class EntityExtensions
         where T5 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
-        var heap5 = heapMap[StructInfo<T5>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
+        var heap5 = heapMap[StructInfo<T5>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||
@@ -150,12 +150,12 @@ public static partial class EntityExtensions
         where T6 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
-        var heap5 = heapMap[StructInfo<T5>.Index];
-        var heap6 = heapMap[StructInfo<T6>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
+        var heap5 = heapMap[StructInfo<T5>.Index].heap;
+        var heap6 = heapMap[StructInfo<T6>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||
@@ -192,13 +192,13 @@ public static partial class EntityExtensions
         where T7 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
-        var heap5 = heapMap[StructInfo<T5>.Index];
-        var heap6 = heapMap[StructInfo<T6>.Index];
-        var heap7 = heapMap[StructInfo<T7>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
+        var heap5 = heapMap[StructInfo<T5>.Index].heap;
+        var heap6 = heapMap[StructInfo<T6>.Index].heap;
+        var heap7 = heapMap[StructInfo<T7>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||
@@ -239,14 +239,14 @@ public static partial class EntityExtensions
         where T8 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
-        var heap5 = heapMap[StructInfo<T5>.Index];
-        var heap6 = heapMap[StructInfo<T6>.Index];
-        var heap7 = heapMap[StructInfo<T7>.Index];
-        var heap8 = heapMap[StructInfo<T8>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
+        var heap5 = heapMap[StructInfo<T5>.Index].heap;
+        var heap6 = heapMap[StructInfo<T6>.Index].heap;
+        var heap7 = heapMap[StructInfo<T7>.Index].heap;
+        var heap8 = heapMap[StructInfo<T8>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||
@@ -291,15 +291,15 @@ public static partial class EntityExtensions
         where T9 : struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
-        var heap5 = heapMap[StructInfo<T5>.Index];
-        var heap6 = heapMap[StructInfo<T6>.Index];
-        var heap7 = heapMap[StructInfo<T7>.Index];
-        var heap8 = heapMap[StructInfo<T8>.Index];
-        var heap9 = heapMap[StructInfo<T9>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
+        var heap5 = heapMap[StructInfo<T5>.Index].heap;
+        var heap6 = heapMap[StructInfo<T6>.Index].heap;
+        var heap7 = heapMap[StructInfo<T7>.Index].heap;
+        var heap8 = heapMap[StructInfo<T8>.Index].heap;
+        var heap9 = heapMap[StructInfo<T9>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||
@@ -348,16 +348,16 @@ public static partial class EntityExtensions
         where T10: struct, IComponent
     {
         var heapMap = archetype.heapMap;
-        var heap1 = heapMap[StructInfo<T1>.Index];
-        var heap2 = heapMap[StructInfo<T2>.Index];
-        var heap3 = heapMap[StructInfo<T3>.Index];
-        var heap4 = heapMap[StructInfo<T4>.Index];
-        var heap5 = heapMap[StructInfo<T5>.Index];
-        var heap6 = heapMap[StructInfo<T6>.Index];
-        var heap7 = heapMap[StructInfo<T7>.Index];
-        var heap8 = heapMap[StructInfo<T8>.Index];
-        var heap9 = heapMap[StructInfo<T9>.Index];
-        var heap10= heapMap[StructInfo<T10>.Index];
+        var heap1 = heapMap[StructInfo<T1>.Index].heap;
+        var heap2 = heapMap[StructInfo<T2>.Index].heap;
+        var heap3 = heapMap[StructInfo<T3>.Index].heap;
+        var heap4 = heapMap[StructInfo<T4>.Index].heap;
+        var heap5 = heapMap[StructInfo<T5>.Index].heap;
+        var heap6 = heapMap[StructInfo<T6>.Index].heap;
+        var heap7 = heapMap[StructInfo<T7>.Index].heap;
+        var heap8 = heapMap[StructInfo<T8>.Index].heap;
+        var heap9 = heapMap[StructInfo<T9>.Index].heap;
+        var heap10= heapMap[StructInfo<T10>.Index].heap;
         if (heap1 == null ||
             heap2 == null ||
             heap3 == null ||

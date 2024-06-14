@@ -30,7 +30,7 @@ public partial class EntityStoreBase
         ComponentChangedAction  action;
         bool                    added;
 
-        var structHeap  = arch.heapMap[structIndex];
+        var structHeap  = arch.heapMap[structIndex].heap;
         var oldHeap     = structHeap;
         if (structHeap != null) {
             // --- case: archetype contains the component type  => archetype remains unchanged
@@ -46,7 +46,7 @@ public partial class EntityStoreBase
         added               = true;
         action              = ComponentChangedAction.Add;
         archIndex           = arch.archIndex;
-        structHeap          = arch.heapMap[structIndex];
+        structHeap          = arch.heapMap[structIndex].heap;
         
     AssignComponent:  // --- assign passed component value
         var heap                    = (StructHeap<T>)structHeap;
@@ -70,7 +70,7 @@ public partial class EntityStoreBase
     {
         var arch    = archetype;
         var store   = arch.store;
-        var heap    = arch.heapMap[structIndex];
+        var heap    = arch.heapMap[structIndex].heap;
         if (heap == null) {
             return false;
         }

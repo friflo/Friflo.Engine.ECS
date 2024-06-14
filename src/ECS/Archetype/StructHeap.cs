@@ -12,6 +12,17 @@ using Friflo.Json.Fliox.Mapper;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+internal readonly struct HeapInfo
+{
+    internal readonly StructHeap    heap;
+    internal readonly InvertedIndex invertedIndex;
+        
+    internal HeapInfo(StructHeap heap, InvertedIndex invertedIndex) {
+        this.heap           = heap;
+        this.invertedIndex  = invertedIndex;
+    }
+}
+
 /// <remarks>
 /// <b>Note:</b> Should not contain any other fields. Reasons:<br/>
 /// - to enable maximum efficiency when GC iterate <see cref="Archetype.structHeaps"/> <see cref="Archetype.heapMap"/>
