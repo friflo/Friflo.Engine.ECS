@@ -7,19 +7,20 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal abstract class InvertedIndex {
-    internal abstract void Add<TComponent>(in TComponent component, int id);
+internal abstract class InvertedIndex
+{
+    internal abstract void Add<TComponent>(in TComponent component, int id) where TComponent : struct, IComponent;
 }
 
-// internal sealed class InvertedIndex<TComponent, TValue> : InverseIndex where TComponent : struct, IIndexedComponent<TValue> 
 internal sealed class InvertedIndex<TValue>  : InvertedIndex
 {
     internal readonly    Dictionary<TValue, int[]>   map = new ();
     
     internal override void Add<TComponent>(in TComponent component, int id)
     {
-        var indexedComponent    = (IIndexedComponent<TValue>)component; // TODO avoid boxing
-        var value               = indexedComponent.GetValue();
+        var value = IndexedComponentUtils<TComponent,TValue>.GetValue(component);
+        // var indexedComponent    = (IIndexedComponent<TValue>)component; // boxing implementation of IIndexedComponent<>.GetValue()
+        // var value               = indexedComponent.GetValue();
         if (!map.TryGetValue(value, out var ids)) {
             map.Add(value, new int[] { id });                           // TODO avoid array creation
             return;

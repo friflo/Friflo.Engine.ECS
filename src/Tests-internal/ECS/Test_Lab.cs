@@ -104,7 +104,7 @@ public static class Test_Lab
     }
     
     // https://stackoverflow.com/questions/61185678/c-sharp-casting-t-where-t-struct-to-an-interface-without-boxing
-    private static GetIndexedValue<T,V> CreateGetValue<T,V>() where T : struct, IIndexedComponent<V>
+    private static GetIndexedValue<T,V> CreateGetValue<T,V>() where T : struct, IComponent
     {
         const BindingFlags flags    = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
         var method          = typeof(Test_Lab).GetMethod(nameof(GetIndexedComponentValue), flags);
@@ -118,7 +118,7 @@ public static class Test_Lab
         return component.GetValue();
     }
     
-    internal delegate V GetIndexedValue<T, out V>(in T component) where T : struct, IIndexedComponent<V>;
+    internal delegate V GetIndexedValue<T, out V>(in T component) where T : struct, IComponent;
 }
 
 }
