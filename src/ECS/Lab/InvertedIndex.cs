@@ -45,14 +45,14 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex
         if (idIndex == -1) {
             return;
         }
-        var length = ids.Length;
-        if (length == 1) {
+        var newLength = ids.Length - 1;
+        if (newLength == 0) {
             map.Remove(value);
             return;
         }
-        var newIds = new int[length - 1];                           // TODO avoid array creation
+        var newIds = new int[newLength];                           // TODO avoid array creation
         Array.Copy(ids, 0,           newIds, 0,       idIndex);
-        Array.Copy(ids, idIndex + 1, newIds, idIndex, length - idIndex - 1);
+        Array.Copy(ids, idIndex + 1, newIds, idIndex, newLength - idIndex);
         map[value] = newIds;
     }
 }
