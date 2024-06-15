@@ -98,6 +98,24 @@ public static class Test_Lab
         AreEqual(2, query2.Entities.Count);
         AreEqual(0, query3.Entities.Count);
         AreEqual(3, query4.Entities.Count);
+        
+        entity2.RemoveComponent<IndexedInt>();
+        AreEqual(1, query1.Entities.Count);
+        AreEqual(1, query2.Entities.Count);
+        AreEqual(0, query3.Entities.Count);
+        AreEqual(2, query4.Entities.Count);
+        
+        entity1.RemoveComponent<IndexedInt>();
+        AreEqual(1, query1.Entities.Count);
+        AreEqual(0, query2.Entities.Count);
+        AreEqual(0, query3.Entities.Count);
+        AreEqual(1, query4.Entities.Count);
+        
+        entity0.RemoveComponent<IndexedName>();
+        AreEqual(0, query1.Entities.Count);
+        AreEqual(0, query2.Entities.Count);
+        AreEqual(0, query3.Entities.Count);
+        AreEqual(0, query4.Entities.Count);
     }
     
     [Test]
