@@ -24,8 +24,8 @@ internal class HasClause<TComponent, TValue> : Clause where TComponent : struct,
     
     internal override Entities GetEntities(EntityStore store)
     {
-        var invertedIndex   = store.extension.invertedIndexes[StructInfo<TComponent>.Index];
-        var typedIndex      = (InvertedIndex<TValue>)invertedIndex;
+        var componentIndex  = store.extension.componentIndexes[StructInfo<TComponent>.Index];
+        var typedIndex      = (InvertedIndex<TValue>)componentIndex;
         if (!typedIndex.map.TryGetValue(value, out var ids)) {
             return default;
         }

@@ -11,17 +11,17 @@ namespace Friflo.Engine.ECS;
 internal readonly struct IndexedComponentType
 {
     internal readonly ComponentType componentType;
-    private  readonly MethodInfo    createIndexMethod;
+    private  readonly MethodInfo    createIndex;
     
-    private IndexedComponentType(ComponentType componentType, MethodInfo createIndexMethod) {
-        this.componentType      = componentType;
-        this.createIndexMethod  = createIndexMethod;
+    private IndexedComponentType(ComponentType componentType, MethodInfo createIndex) {
+        this.componentType  = componentType;
+        this.createIndex    = createIndex;
     }
     
-    internal InvertedIndex CreateInvertedIndex()
+    internal ComponentIndex CreateComponentIndex()
     {
-        var index = createIndexMethod.Invoke(null, null);
-        return (InvertedIndex)index;
+        var index = createIndex.Invoke(null, null);
+        return (ComponentIndex)index;
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO
@@ -36,21 +36,21 @@ internal readonly struct IndexedComponentType
                 continue;
             }
             var valueType               = i.GenericTypeArguments[0];
-            var createMethod            = CreateCreateDelegate(valueType);
-            var indexedComponentType    = new IndexedComponentType(componentType, createMethod);
+            var createIndex             = MakeCreateIndex(valueType);
+            var indexedComponentType    = new IndexedComponentType(componentType, createIndex);
             schemaTypes.indexedComponents.Add(indexedComponentType);
         }
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO
-    private static MethodInfo CreateCreateDelegate(Type valueType)
+    private static MethodInfo MakeCreateIndex(Type valueType)
     {
         const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
-        var method = typeof(IndexedComponentType).GetMethod(nameof(CreateInvertedIndexGeneric), flags);
+        var method = typeof(IndexedComponentType).GetMethod(nameof(CreateInvertedIndex), flags);
         return method?.MakeGenericMethod(valueType);
     }
     
-    internal static InvertedIndex CreateInvertedIndexGeneric<TValue>()
+    internal static ComponentIndex CreateInvertedIndex<TValue>()
     {
         return new InvertedIndex<TValue>();
     }

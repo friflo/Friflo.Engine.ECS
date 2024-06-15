@@ -172,9 +172,9 @@ public sealed class Archetype
     /// <summary>
     /// Note!: Ensure constructor cannot throw exceptions to eliminate <see cref="TypeInitializationException"/>'s
     /// </summary>
-    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags, InvertedIndex[] indexes)
+    private Archetype(in ArchetypeConfig config, StructHeap[] heaps, in Tags tags, ComponentIndex[] indexes)
     {
-        memory.capacity         = ArchetypeUtils.MinCapacity;
+        memory.capacity = ArchetypeUtils.MinCapacity;
         memory.shrinkThreshold  = -1;
         store           = config.store;
         entityStore     = store as EntityStore;
@@ -216,7 +216,7 @@ public sealed class Archetype
         in Tags             tags,
            EntityStoreBase  store)
     {
-        var indexes         = (store as EntityStore)?.extension.invertedIndexes;    // would be nice to avoid cast
+        var indexes         = (store as EntityStore)?.extension.componentIndexes;    // would be nice to avoid cast
         var length          = componentTypes.Count;
         var componentHeaps  = new StructHeap[length];
         int n = 0;

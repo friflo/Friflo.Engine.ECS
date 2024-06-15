@@ -28,6 +28,7 @@ internal static class IndexedComponentUtils
 
 internal static class IndexedComponentUtils<TComponent, TValue>  where TComponent : struct, IComponent
 {
+    /// <summary> Returns the indexed component value without boxing. </summary>
     internal static readonly GetIndexedValue<TComponent,TValue> GetIndexedValue;
         
     static IndexedComponentUtils() {

@@ -51,7 +51,7 @@ public partial class EntityStoreBase
     AssignComponent:  // --- assign passed component value
         var heap            = (StructHeap<T>)info.heap;
         heap.components[compIndex]  = component;
-        info.invertedIndex?.Add(component, id);
+        info.index?.Add(component, id);
         // Send event. See: SEND_EVENT notes
         var componentAdded = store.internBase.componentAdded;
         if (componentAdded == null) {

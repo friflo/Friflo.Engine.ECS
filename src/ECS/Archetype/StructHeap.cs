@@ -14,12 +14,12 @@ namespace Friflo.Engine.ECS;
 
 internal readonly struct HeapInfo
 {
-    internal readonly StructHeap    heap;
-    internal readonly InvertedIndex invertedIndex;
+    internal readonly StructHeap        heap;
+    internal readonly ComponentIndex    index;
         
-    internal HeapInfo(StructHeap heap, InvertedIndex invertedIndex) {
-        this.heap           = heap;
-        this.invertedIndex  = invertedIndex;
+    internal HeapInfo(StructHeap heap, ComponentIndex index) {
+        this.heap   = heap;
+        this.index  = index;
     }
 }
 

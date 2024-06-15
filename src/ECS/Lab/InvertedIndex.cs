@@ -7,12 +7,12 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal abstract class InvertedIndex
+internal abstract class ComponentIndex
 {
     internal abstract void Add<TComponent>(in TComponent component, int id) where TComponent : struct, IComponent;
 }
 
-internal sealed class InvertedIndex<TValue>  : InvertedIndex
+internal sealed class InvertedIndex<TValue>  : ComponentIndex
 {
     internal readonly    Dictionary<TValue, int[]>   map = new ();
     
