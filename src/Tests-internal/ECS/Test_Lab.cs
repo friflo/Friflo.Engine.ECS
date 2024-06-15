@@ -55,8 +55,8 @@ public static class Test_Lab
         entity2.AddComponent(new IndexedInt    { value  = 123       });
     //  entities[1].AddComponent(new AttackComponent { target = target }); // todo throws NotImplementedException : to avoid excessive boxing. ...
         
-        var query1  = world.Query<Position, IndexedName>().     Has<IndexedName,   string>("find-me");
-        var query2  = world.Query<Position, IndexedInt>().      Has<IndexedInt,    int>   (123);
+        var query1  = world.Query<Position,    IndexedName>().  Has<IndexedName,   string>("find-me");
+        var query2  = world.Query<Position,    IndexedInt>().   Has<IndexedInt,    int>   (123);
         var query3  = world.Query<IndexedName, IndexedInt>().   Has<IndexedName,   string>("find-me").
                                                                 Has<IndexedInt,    int>   (123);
         var query4  = world.Query().                            Has<IndexedName,   string>("find-me").
