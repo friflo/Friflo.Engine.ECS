@@ -6,7 +6,7 @@ namespace Friflo.Engine.ECS;
 
 internal abstract class Clause
 {
-    internal abstract Entities GetEntities(EntityStore store);
+    internal abstract Entities GetMatchingEntities(EntityStore store);
 }
 
 internal class HasClause<TComponent, TValue> : Clause where TComponent : struct, IIndexedComponent<TValue>
@@ -17,13 +17,9 @@ internal class HasClause<TComponent, TValue> : Clause where TComponent : struct,
         this.value = value;
     }
     
-    internal override Entities GetEntities(EntityStore store)
+    internal override Entities GetMatchingEntities(EntityStore store)
     {
-        var componentIndex  = store.extension.componentIndexes[StructInfo<TComponent>.Index];
-        var typedIndex      = (InvertedIndex<TValue>)componentIndex;
-        if (!typedIndex.map.TryGetValue(value, out var ids)) {
-            return default;
-        }
-        return new Entities(ids, store, 0, ids.Length);
+        var index = (ComponentIndex<TValue>)store.extension.componentIndexes[StructInfo<TComponent>.Index];
+        return index.GetEntities(value);
     }
 }

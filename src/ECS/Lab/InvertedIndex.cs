@@ -7,9 +7,9 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal sealed class InvertedIndex<TValue>  : ComponentIndex
+internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {
-    internal readonly    Dictionary<TValue, int[]>   map = new ();
+    private readonly    Dictionary<TValue, int[]>   map = new ();
     
     internal override void Add<TComponent>(int id, in TComponent component)
     {
@@ -48,5 +48,13 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex
         Array.Copy(ids, 0,           newIds, 0,       idIndex);
         Array.Copy(ids, idIndex + 1, newIds, idIndex, newLength - idIndex);
         map[value] = newIds;
+    }
+    
+    internal override Entities GetEntities(in TValue value)
+    {
+        if (!map.TryGetValue(value, out var ids)) {
+            return default;
+        }
+        return new Entities(ids, store, 0, ids.Length);
     }
 }

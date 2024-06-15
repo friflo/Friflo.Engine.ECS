@@ -52,7 +52,7 @@ internal partial struct StoreExtension
     internal    readonly                ComponentIndex[]        componentIndexes;           //  8
     #endregion
     
-    internal StoreExtension(PidType pidType)
+    internal StoreExtension(PidType pidType, EntityStore store)
     {
         parentMap = new Dictionary<int, int>();
         if (pidType == PidType.RandomPids) {
@@ -67,7 +67,7 @@ internal partial struct StoreExtension
         var indexes         = new ComponentIndex[schema.maxStructIndex]; // could create smaller array containing no null elements
         componentIndexes    = indexes;
         foreach (var type in schema.indexedComponents) {
-            indexes[type.componentType.StructIndex] = type.CreateComponentIndex();
+            indexes[type.componentType.StructIndex] = type.CreateComponentIndex(store);
         }
     }
     

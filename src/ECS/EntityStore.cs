@@ -149,7 +149,7 @@ public sealed partial class EntityStore : EntityStoreBase
     public EntityStore(PidType pidType)
     {
         intern              = new Intern(pidType);
-        extension           = new StoreExtension(pidType);
+        extension           = new StoreExtension(pidType, this);
         nodes               = Array.Empty<EntityNode>();
         EnsureNodesLength(2);
         idBuffer            = new int[1];

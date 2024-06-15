@@ -18,10 +18,12 @@ internal readonly struct IndexedComponentType
         this.createIndex    = createIndex;
     }
     
-    internal ComponentIndex CreateComponentIndex()
+    internal ComponentIndex CreateComponentIndex(EntityStore store)
     {
-        var index = createIndex.Invoke(null, null);
-        return (ComponentIndex)index;
+        var obj     = createIndex.Invoke(null, null);
+        var index   = (ComponentIndex)obj!;
+        index.store = store;
+        return index;
     }
     
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2080", Justification = "TODO")] // TODO

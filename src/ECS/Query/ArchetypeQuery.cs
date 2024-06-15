@@ -294,7 +294,7 @@ public class ArchetypeQuery
         idSet.Clear();
         // --- add all matching ids
         foreach (var clause in Filter.clauses) {
-            foreach (Entity entity in clause.GetEntities(entityStore)) {
+            foreach (Entity entity in clause.GetMatchingEntities(entityStore)) {
                 idSet.Add(entity.Id);
             }
         }
