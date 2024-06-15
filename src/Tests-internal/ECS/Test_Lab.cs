@@ -9,20 +9,20 @@ using static NUnit.Framework.Assert;
 namespace Internal.ECS {
 
 internal struct AttackComponent : IIndexedComponent<Entity> {
-    public      Entity  GetValue() => target;
+    public      Entity  GetIndexedValue() => target;
     internal    Entity  target;
 }
 
 
 internal struct IndexedName : IIndexedComponent<string> {
-    public      string  GetValue() => name;
+    public      string  GetIndexedValue() => name;
     internal    string  name;
 
     public override string ToString() => name;
 }
 
 internal struct IndexedInt : IIndexedComponent<int> {
-    public      int     GetValue() => value;
+    public      int     GetIndexedValue() => value;
     internal    int     value;
     
     public override string ToString() => value.ToString();
@@ -115,7 +115,7 @@ public static class Test_Lab
     }
     
     internal static V GetIndexedComponentValue<T,V>(in T component) where T : struct, IIndexedComponent<V> {
-        return component.GetValue();
+        return component.GetIndexedValue();
     }
     
     internal delegate V GetIndexedValue<T, out V>(in T component) where T : struct, IComponent;

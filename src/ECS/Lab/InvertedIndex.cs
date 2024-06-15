@@ -18,7 +18,7 @@ internal sealed class InvertedIndex<TValue>  : InvertedIndex
     
     internal override void Add<TComponent>(in TComponent component, int id)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetValue(component);
+        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
         // var indexedComponent    = (IIndexedComponent<TValue>)component; // boxing implementation of IIndexedComponent<>.GetValue()
         // var value               = indexedComponent.GetValue();
         if (!map.TryGetValue(value, out var ids)) {

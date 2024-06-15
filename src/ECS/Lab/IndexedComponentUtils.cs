@@ -22,16 +22,16 @@ internal static class IndexedComponentUtils
     }
     
     internal static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component) where TComponent : struct, IIndexedComponent<TValue> {
-        return component.GetValue();
+        return component.GetIndexedValue();
     }
 }
 
 internal static class IndexedComponentUtils<TComponent, TValue>  where TComponent : struct, IComponent
 {
-    internal static readonly GetIndexedValue<TComponent,TValue> GetValue;
+    internal static readonly GetIndexedValue<TComponent,TValue> GetIndexedValue;
         
     static IndexedComponentUtils() {
-        GetValue = IndexedComponentUtils.CreateGetValue<TComponent,TValue>();
+        GetIndexedValue = IndexedComponentUtils.CreateGetValue<TComponent,TValue>();
     }
 }
     
