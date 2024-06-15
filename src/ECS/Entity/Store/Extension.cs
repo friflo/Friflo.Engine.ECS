@@ -48,7 +48,7 @@ internal partial struct StoreExtension
     internal    Dictionary<int, Action<ScriptChanged>>          entityScriptChanged;        //  8   - entity event handlers for add/remove script
     #endregion
     
-#region inverted index 
+#region component indices
     internal    readonly                ComponentIndex[]        componentIndexes;           //  8
     #endregion
     
