@@ -21,7 +21,7 @@ internal static class IndexedComponentUtils
         return (GetIndexedValue<TComponent,TValue>)genericDelegate;
     }
     
-    internal static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component) where TComponent : struct, IIndexedComponent<TValue> {
+    private static TValue GetIndexedComponentValue<TComponent,TValue>(in TComponent component) where TComponent : struct, IIndexedComponent<TValue> {
         return component.GetIndexedValue();
     }
 }

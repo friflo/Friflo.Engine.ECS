@@ -4,11 +4,6 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal interface IIndexedComponent<out TValue> : IComponent
-{
-    TValue GetIndexedValue();
-}
-
 internal abstract class Clause
 {
     internal abstract Entities GetEntities(EntityStore store);
