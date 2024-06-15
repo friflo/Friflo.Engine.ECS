@@ -72,7 +72,7 @@ public class ArchetypeQuery
     // --- non blittable types
     [Browse(Never)] private  readonly   EntityStoreBase     store;              //   8
     [Browse(Never)] private             Archetype[]         archetypes;         //   8  current list of matching archetypes, can grow
-    [Browse(Never)] private             int[]               chunkPositions;     //   8  indexes of chunk entities matching a clause
+    [Browse(Never)] private             int[]               chunkPositions;     //   8  indexes of chunk entities matching a value condition
     [Browse(Never)] private             EventFilter         eventFilter;        //   8  used to filter component/tag add/remove events
     [Browse(Never)] private             EntityList          entityList;         //   8  provide entities as list to perform structural changes
 
@@ -245,8 +245,8 @@ public class ArchetypeQuery
             archetypeCount      = 0;
             lastArchetypeCount  = 0;
         }
-        if (Filter.clauses != null) {
-            return GetClauseArchetypes();
+        if (Filter.valueConditions != null) {
+            return GetValueConditionArchetypes();
         }
         if (store.ArchetypeCount == lastArchetypeCount) {
             return new Archetypes(archetypes, archetypeCount);
@@ -287,14 +287,14 @@ public class ArchetypeQuery
         return new Archetypes(nextArchetypes, nextCount);
     }
     
-    private Archetypes GetClauseArchetypes()
+    private Archetypes GetValueConditionArchetypes()
     {
         var entityStore = Store;
         var idSet       = entityStore.idBufferSet;
         idSet.Clear();
         // --- add all matching ids
-        foreach (var clause in Filter.clauses) {
-            foreach (Entity entity in clause.GetMatchingEntities(entityStore)) {
+        foreach (var condition in Filter.valueConditions) {
+            foreach (Entity entity in condition.GetMatchingEntities(entityStore)) {
                 idSet.Add(entity.Id);
             }
         }
@@ -345,10 +345,10 @@ public class ArchetypeQuery
     
     private int GetEntityCount()
     {
-        if (Filter.clauses == null) {
+        if (Filter.valueConditions == null) {
             return Archetype.GetEntityCount(GetArchetypesSpan());
         }
-        return GetClauseArchetypes().length;
+        return GetValueConditionArchetypes().length;
     }
     
     /// <summary>

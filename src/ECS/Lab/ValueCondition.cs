@@ -4,16 +4,16 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal abstract class Clause
+internal abstract class ValueCondition
 {
     internal abstract Entities GetMatchingEntities(EntityStore store);
 }
 
-internal class HasClause<TComponent, TValue> : Clause where TComponent : struct, IIndexedComponent<TValue>
+internal class HasValueCondition<TComponent, TValue> : ValueCondition where TComponent : struct, IIndexedComponent<TValue>
 {
     private readonly TValue value;
     
-    internal HasClause(TValue value) {
+    internal HasValueCondition(TValue value) {
         this.value = value;
     }
     

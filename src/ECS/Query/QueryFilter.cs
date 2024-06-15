@@ -62,11 +62,11 @@ public class QueryFilter
     [Browse(Never)] private     int             anyComponentsCount;         //   8
     [Browse(Never)] private     int             allComponentsCount;         //   8
     
-                    private     bool            withoutDisabled;            //   1  if true (default) entity must be enabled
-                    internal    int             version;                    //   4  incremented if filter changes
-                    private     bool            frozen;                     //   1  if true the filter cannot be changed anymore
+                private         bool            withoutDisabled;            //   1  if true (default) entity must be enabled
+                internal        int             version;                    //   4  incremented if filter changes
+                private         bool            frozen;                     //   1  if true the filter cannot be changed anymore
                     
-                    internal    List<Clause>    clauses;                    //   8
+                internal   List<ValueCondition> valueConditions;            //   8
     #endregion
     
     
@@ -170,13 +170,13 @@ public class QueryFilter
     }
     
     internal QueryFilter Has<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
-        AddClause(new HasClause<TComponent, TValue>(value));
+        AddValueCondition(new HasValueCondition<TComponent, TValue>(value));
         return this;
     }
     
-    private void AddClause(Clause clause) {
-        clauses ??= new List<Clause>();
-        clauses.Add(clause);
+    private void AddValueCondition(ValueCondition valueCondition) {
+        valueConditions ??= new List<ValueCondition>();
+        valueConditions.Add(valueCondition);
     }
     #endregion
     
