@@ -86,6 +86,8 @@ public static class Test_Lab
         query5.ForEachEntity((ref Position _, ref AttackComponent attack, Entity _) => {
             AreEqual(target, attack.target);
         });
+        
+        entities[2].RemoveComponent<IndexedName>();
     }
     
     [Test]

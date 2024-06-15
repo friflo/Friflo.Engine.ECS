@@ -9,14 +9,15 @@ namespace Friflo.Engine.ECS;
 
 internal abstract class ComponentIndex
 {
-    internal abstract void Add<TComponent>(in TComponent component, int id) where TComponent : struct, IComponent;
+    internal abstract void Add   <TComponent>(int id, in TComponent component)          where TComponent : struct, IComponent;
+    internal abstract void Remove<TComponent>(int id, StructHeap heap, int compIndex)   where TComponent : struct, IComponent;
 }
 
 internal sealed class InvertedIndex<TValue>  : ComponentIndex
 {
     internal readonly    Dictionary<TValue, int[]>   map = new ();
     
-    internal override void Add<TComponent>(in TComponent component, int id)
+    internal override void Add<TComponent>(int id, in TComponent component)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
         // var indexedComponent    = (IIndexedComponent<TValue>)component; // boxing implementation of IIndexedComponent<>.GetValue()
@@ -32,5 +33,26 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex
         ids.CopyTo(newIds, 0);
         newIds[ids.Length]  = id;
         map[value]          = newIds;
+    }
+    
+    internal override void Remove<TComponent>(int id, StructHeap heap, int compIndex)
+    {
+        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).components[compIndex]);
+        if (!map.TryGetValue(value, out var ids)) {
+            return;
+        }
+        var idIndex = Array.IndexOf(ids, id);
+        if (idIndex == -1) {
+            return;
+        }
+        var length = ids.Length;
+        if (length == 1) {
+            map.Remove(value);
+            return;
+        }
+        var newIds = new int[length - 1];                           // TODO avoid array creation
+        Array.Copy(ids, 0,           newIds, 0,       idIndex);
+        Array.Copy(ids, idIndex + 1, newIds, idIndex, length - idIndex - 1);
+        map[value] = newIds;
     }
 }

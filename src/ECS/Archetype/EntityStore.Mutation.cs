@@ -51,7 +51,7 @@ public partial class EntityStoreBase
     AssignComponent:  // --- assign passed component value
         var heap            = (StructHeap<T>)info.heap;
         heap.components[compIndex]  = component;
-        info.index?.Add(component, id);
+        info.index?.Add(id, component);
         // Send event. See: SEND_EVENT notes
         var componentAdded = store.internBase.componentAdded;
         if (componentAdded == null) {
@@ -71,10 +71,12 @@ public partial class EntityStoreBase
     {
         var arch    = archetype;
         var store   = arch.store;
-        var heap    = arch.heapMap[structIndex].heap;
+        var info    = arch.heapMap[structIndex];
+        var heap    = info.heap; 
         if (heap == null) {
             return false;
         }
+        info.index?.Remove<T>(id, heap, compIndex);
         ((StructHeap<T>)heap).StashComponent(compIndex);
         var newArchetype = GetArchetypeWithout(store, arch, structIndex);
 
