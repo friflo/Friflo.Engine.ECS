@@ -7,20 +7,20 @@ using static NUnit.Framework.Assert;
 namespace Internal.ECS {
 
 internal struct AttackComponent : IIndexedComponent<Entity> {
-    public      Entity  Value => target;
+    public      Entity  GetValue() => target;
     internal    Entity  target;
 }
 
 
 internal struct IndexedName : IIndexedComponent<string> {
-    public      string  Value => name;
+    public      string  GetValue() => name;
     internal    string  name;
 
     public override string ToString() => name;
 }
 
 internal struct IndexedInt : IIndexedComponent<int> {
-    public      int     Value => value;
+    public      int     GetValue() => value;
     internal    int     value;
     
     public override string ToString() => value.ToString();

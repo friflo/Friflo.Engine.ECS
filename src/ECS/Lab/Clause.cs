@@ -6,7 +6,7 @@ namespace Friflo.Engine.ECS;
 
 internal interface IIndexedComponent<out TValue> : IComponent
 {
-    TValue Value { get; }
+    TValue GetValue();
 }
 
 internal abstract class Clause
