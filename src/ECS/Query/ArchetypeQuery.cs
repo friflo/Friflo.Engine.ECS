@@ -27,12 +27,12 @@ public class ArchetypeQuery
     /// Execution time O(matching <see cref="Archetypes"/>).<br/>
     /// Typically, there are only a few matching <see cref="Archetypes"/>.
     /// </remarks>
-    public              int             Count           => Archetype.GetEntityCount(GetArchetypesSpan());
+    public              int             Count           => GetEntityCount();
     
     /// <summary> Obsolete. Renamed to <see cref="Count"/>. </summary>
     [Obsolete($"Renamed to {nameof(Count)}")]
     [Browse(Never)]
-    public              int             EntityCount     => Archetype.GetEntityCount(GetArchetypesSpan());
+    public              int             EntityCount     => GetEntityCount();
     
     /// <summary> Return the number of <c>Chunks</c> returned by the query. </summary>
     public              int             ChunkCount      => Archetype.GetChunkCount (GetArchetypesSpan());
@@ -341,6 +341,14 @@ public class ArchetypeQuery
         foreach (var id in source) {
             target[index++] = id;
         }
+    }
+    
+    private int GetEntityCount()
+    {
+        if (Filter.clauses == null) {
+            return Archetype.GetEntityCount(GetArchetypesSpan());
+        }
+        return GetClauseArchetypes().length;
     }
     
     /// <summary>

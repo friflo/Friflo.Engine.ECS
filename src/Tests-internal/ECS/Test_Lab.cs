@@ -45,11 +45,14 @@ public static class Test_Lab
             entities.Add(entity);
         }
         Entity target = targets[0];
+        var entity0 = entities[0];
+        var entity1 = entities[1];
+        var entity2 = entities[2];
         
-        entities[0].AddComponent(new IndexedName   { name   = "find-me" });
-        entities[1].AddComponent(new IndexedInt    { value  = 123       });
-        entities[2].AddComponent(new IndexedName   { name   = "find-me" });
-        entities[2].AddComponent(new IndexedInt    { value  = 123       });
+        entity0.AddComponent(new IndexedName   { name   = "find-me" });
+        entity1.AddComponent(new IndexedInt    { value  = 123       });
+        entity2.AddComponent(new IndexedName   { name   = "find-me" });
+        entity2.AddComponent(new IndexedInt    { value  = 123       });
     //  entities[1].AddComponent(new AttackComponent { target = target }); // todo throws NotImplementedException : to avoid excessive boxing. ...
         
         var query1  = world.Query<Position, IndexedName>().     Has<IndexedName,   string>("find-me");
@@ -67,6 +70,7 @@ public static class Test_Lab
                 AreEqual("find-me", indexedName.name);
             });
             AreEqual(2, count);
+            AreEqual(2, query1.Entities.Count);
         } { 
             int count = 0;
             query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity _) => {
@@ -74,12 +78,14 @@ public static class Test_Lab
                 AreEqual(123, indexedInt.value);
             });
             AreEqual(2, count);
+            AreEqual(2, query2.Entities.Count);
         } { 
             var count = 0;
             query3.ForEachEntity((ref IndexedName _, ref IndexedInt _, Entity _) => {
                 count++;
             });
             AreEqual(1, count);
+            AreEqual(1, query3.Entities.Count);
         }
         AreEqual(3, query4.Entities.Count);
         
@@ -87,7 +93,11 @@ public static class Test_Lab
             AreEqual(target, attack.target);
         });
         
-        entities[2].RemoveComponent<IndexedName>();
+        entity2.RemoveComponent<IndexedName>();
+        AreEqual(1, query1.Entities.Count);
+        AreEqual(2, query2.Entities.Count);
+        AreEqual(0, query3.Entities.Count);
+        AreEqual(3, query4.Entities.Count);
     }
     
     [Test]
@@ -120,7 +130,7 @@ public static class Test_Lab
         return component.GetIndexedValue();
     }
     
-    internal delegate V GetIndexedValue<T, out V>(in T component) where T : struct, IComponent;
+    private delegate V GetIndexedValue<T, out V>(in T component) where T : struct, IComponent;
 }
 
 }
