@@ -50,7 +50,7 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         map[value] = newIds;
     }
     
-    internal override Entities GetEntities(in TValue value)
+    internal override Entities GetMatchingEntities(in TValue value)
     {
         if (!map.TryGetValue(value, out var ids)) {
             return default;

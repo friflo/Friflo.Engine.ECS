@@ -20,6 +20,6 @@ internal class HasClause<TComponent, TValue> : Clause where TComponent : struct,
     internal override Entities GetMatchingEntities(EntityStore store)
     {
         var index = (ComponentIndex<TValue>)store.extension.componentIndexes[StructInfo<TComponent>.Index];
-        return index.GetEntities(value);
+        return index.GetMatchingEntities(value);
     }
 }
