@@ -331,6 +331,36 @@ public class ArchetypeQuery
         return new Archetypes(nextArchetypes, nextCount, nextPositions);
     }
     
+    private int GetEntityCount()
+    {
+        if (Filter.valueConditions == null) {
+            return Archetype.GetEntityCount(GetArchetypesSpan());
+        }
+        // --- get number of entities of a query with value conditions
+        var entityStore = Store;
+        var idSet       = entityStore.idBufferSet;
+        idSet.Clear();
+        // --- add all matching ids
+        foreach (var condition in Filter.valueConditions) {
+            foreach (Entity entity in condition.GetMatchingEntities(entityStore)) {
+                idSet.Add(entity.Id);
+            }
+        }
+        var nodes   = entityStore.nodes;
+        var count   = 0;
+
+        foreach (var id in idSet)
+        {
+            var node        = nodes[id];
+            var archetype   = node.archetype;
+            if (!IsMatch(archetype.componentTypes, archetype.tags)) {
+                continue;
+            }
+            count++;
+        }
+        return count;
+    }
+    
     // Copy HashSet<> to array to enable simple debugging. Otherwise, debugger with throw collection modified for HashSet<> 
     private static void CopyIds(HashSet<int> source, ref int[] target)
     {
@@ -341,14 +371,6 @@ public class ArchetypeQuery
         foreach (var id in source) {
             target[index++] = id;
         }
-    }
-    
-    private int GetEntityCount()
-    {
-        if (Filter.valueConditions == null) {
-            return Archetype.GetEntityCount(GetArchetypesSpan());
-        }
-        return GetValueConditionArchetypes().length;
     }
     
     /// <summary>
