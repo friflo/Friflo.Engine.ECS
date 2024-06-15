@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+// ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS {
 
@@ -29,6 +31,8 @@ internal struct IndexedInt : IIndexedComponent<int> {
 }
 
 
+[SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
+[SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations")]
 public static class Test_Lab
 {
     [Test]
@@ -70,7 +74,6 @@ public static class Test_Lab
                 AreEqual("find-me", indexedName.name);
             });
             AreEqual(2, count);
-            AreEqual(2, query1.Entities.Count);
         } { 
             int count = 0;
             query2.ForEachEntity((ref Position _, ref IndexedInt indexedInt, Entity _) => {
@@ -78,45 +81,51 @@ public static class Test_Lab
                 AreEqual(123, indexedInt.value);
             });
             AreEqual(2, count);
-            AreEqual(2, query2.Entities.Count);
         } { 
             var count = 0;
             query3.ForEachEntity((ref IndexedName _, ref IndexedInt _, Entity _) => {
                 count++;
             });
             AreEqual(1, count);
-            AreEqual(1, query3.Entities.Count);
+
         }
-        AreEqual(3, query4.Entities.Count);
+
         
         query5.ForEachEntity((ref Position _, ref AttackComponent attack, Entity _) => {
             AreEqual(target, attack.target);
         });
         
+        AreEqual(2, query1.Entities.Count);     AreEqual(new int[] { 11, 13 },      query1.Entities.ToIds());
+        AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 12, 13 },      query2.Entities.ToIds());
+        AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 13 },          query3.Entities.ToIds());
+        AreEqual(3, query4.Entities.Count);     AreEqual(new int[] { 11, 13, 12 },  query4.Entities.ToIds());
+        
         entity2.RemoveComponent<IndexedName>();
-        AreEqual(1, query1.Entities.Count);
-        AreEqual(2, query2.Entities.Count);
-        AreEqual(0, query3.Entities.Count);
-        AreEqual(3, query4.Entities.Count);
+        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 11 },          query1.Entities.ToIds());
+        AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 12, 13 },      query2.Entities.ToIds());
+        AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
+        AreEqual(3, query4.Entities.Count);     AreEqual(new int[] { 11, 12, 13 },  query4.Entities.ToIds());
         
         entity2.RemoveComponent<IndexedInt>();
-        AreEqual(1, query1.Entities.Count);
-        AreEqual(1, query2.Entities.Count);
-        AreEqual(0, query3.Entities.Count);
-        AreEqual(2, query4.Entities.Count);
+        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 11 },          query1.Entities.ToIds());
+        AreEqual(1, query2.Entities.Count);     AreEqual(new int[] { 12 },          query2.Entities.ToIds());
+        AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
+        AreEqual(2, query4.Entities.Count);     AreEqual(new int[] { 11, 12 },      query4.Entities.ToIds());
         
         entity1.RemoveComponent<IndexedInt>();
-        AreEqual(1, query1.Entities.Count);
-        AreEqual(0, query2.Entities.Count);
-        AreEqual(0, query3.Entities.Count);
-        AreEqual(1, query4.Entities.Count);
+        AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 11 },          query1.Entities.ToIds());
+        AreEqual(0, query2.Entities.Count);     AreEqual(new int[] { },             query2.Entities.ToIds());
+        AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
+        AreEqual(1, query4.Entities.Count);     AreEqual(new int[] { 11 },          query4.Entities.ToIds());
         
         entity0.RemoveComponent<IndexedName>();
-        AreEqual(0, query1.Entities.Count);
-        AreEqual(0, query2.Entities.Count);
-        AreEqual(0, query3.Entities.Count);
-        AreEqual(0, query4.Entities.Count);
+        AreEqual(0, query1.Entities.Count);     AreEqual(new int[] { },             query1.Entities.ToIds());
+        AreEqual(0, query2.Entities.Count);     AreEqual(new int[] { },             query2.Entities.ToIds());
+        AreEqual(0, query3.Entities.Count);     AreEqual(new int[] { },             query3.Entities.ToIds());
+        AreEqual(0, query4.Entities.Count);     AreEqual(new int[] { },             query4.Entities.ToIds());
     }
+    
+    private static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
     
     [Test]
     public static void Test_AvoidBoxing()

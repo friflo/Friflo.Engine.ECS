@@ -112,6 +112,14 @@ public struct EntitiesEnumerator : IEnumerator<Entity>
     
     public bool MoveNext()
     {
+        if (archetypes.chunkPositions != null) {
+            if (entityIndex >= archetypes.last) {  // last = length - 1
+                return false;
+            }
+            var pos = ++entityIndex;
+            current = new Entity(store, archetypes.array[pos].entityIds[archetypes.chunkPositions[pos]]);
+            return true;
+        }
         if (entityIndex < entityLast) {
             current = new Entity(store, entityIds[++entityIndex]);
             return true;
