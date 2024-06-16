@@ -1,4 +1,5 @@
-﻿using Friflo.Engine.ECS;
+﻿using System;
+using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -17,6 +18,7 @@ namespace Internal.ECS
             var heap    = new IdArrayHeap();
             
             var array   = new IdArray();
+            AreEqual("count: 0", array.ToString());
             AreEqual(0, array.Count);
             AreEqual(new int[] { }, array.GetIdSpan(heap).ToArray());
 
@@ -45,6 +47,10 @@ namespace Internal.ECS
             AreEqual(5, array.Count);
             AreEqual(new int[] { 100, 101, 102, 103, 104 }, array.GetIdSpan(heap).ToArray());
             AreEqual(1, heap.Count);
+            
+            AreEqual("arraySize: 2 count: 0", heap.GetPool(1).ToString());
+            AreEqual("arraySize: 4 count: 0", heap.GetPool(2).ToString());
+            AreEqual("arraySize: 8 count: 1", heap.GetPool(3).ToString());
         }
         
         [Test]
@@ -94,7 +100,39 @@ namespace Internal.ECS
                 var ids     = array.GetIdSpan(heap);
                 AreEqual(new int[] { 100, 101 }, ids.ToArray());
                 AreEqual(2, heap.Count);
+            } {
+                var array   = new IdArray();
+                array.AddId(100, heap);
+                array.AddId(101, heap);
+                array.AddId(102, heap);
+                array.AddId(103, heap);
+                array.RemoveAt(0, heap);
+                AreEqual(3, array.Count);
+                var ids     = array.GetIdSpan(heap);
+                AreEqual(new int[] { 101, 102, 103 }, ids.ToArray());
+                AreEqual(3, heap.Count);
+            } {
+                var array   = new IdArray();
+                array.AddId(100, heap);
+                array.AddId(101, heap);
+                array.AddId(102, heap);
+                array.AddId(103, heap);
+                array.RemoveAt(3, heap);
+                AreEqual(3, array.Count);
+                var ids     = array.GetIdSpan(heap);
+                AreEqual(new int[] { 100, 101, 102 }, ids.ToArray());
+                AreEqual(4, heap.Count);
             }
+        }
+        
+        [Test]
+        public void Test_IdArray_exceptions()
+        {
+            var heap    = new IdArrayHeap();
+            var array   = new IdArray();
+            Throws<IndexOutOfRangeException>(() => {
+                array.RemoveAt(0, heap);    
+            });
         }
     }
 }

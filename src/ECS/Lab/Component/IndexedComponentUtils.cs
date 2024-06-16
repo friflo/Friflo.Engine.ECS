@@ -8,7 +8,6 @@ using System.Reflection;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-[ExcludeFromCodeCoverage]
 internal static class IndexedComponentUtils
 {
     [UnconditionalSuppressMessage("ReflectionAnalysis", "IL3050", Justification = "TODO")] // TODO

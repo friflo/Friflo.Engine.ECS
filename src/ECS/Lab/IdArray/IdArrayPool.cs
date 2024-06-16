@@ -2,14 +2,11 @@
 // See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-[ExcludeFromCodeCoverage]
 internal sealed class IdArrayPool
 {
     public              int             Count   => count;

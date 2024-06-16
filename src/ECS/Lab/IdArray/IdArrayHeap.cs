@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-[ExcludeFromCodeCoverage]
 internal sealed class IdArrayHeap
 {
     public              int             Count => GetCount();       
@@ -40,6 +39,7 @@ internal sealed class IdArrayHeap
 #endif
     }
     
+    [ExcludeFromCodeCoverage]
     internal static int LeadingZeroCount(int i)
     {
         if (i == 0) return 32;
