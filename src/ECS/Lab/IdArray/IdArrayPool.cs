@@ -12,15 +12,15 @@ namespace Friflo.Engine.ECS;
 [ExcludeFromCodeCoverage]
 internal sealed class IdArrayPool
 {
-    public              int         Count   => count;
-    internal            int[]       Ids     => ids;
+    public              int             Count   => count;
+    internal            int[]           Ids     => ids;
     
-    private             int[]       ids;
-    private  readonly   Stack<int>  freeStarts;
-    private  readonly   int         arraySize;
-    private             int         freeStart;
-    private             int         maxStart;
-    private             int         count;
+    private             int[]           ids;
+    private             StackArray<int> freeStarts;
+    private  readonly   int             arraySize;
+    private             int             freeStart;
+    private             int             maxStart;
+    private             int             count;
 
     public override string ToString() => $"arraySize: {arraySize} count: {count}";
 
@@ -28,7 +28,7 @@ internal sealed class IdArrayPool
     {
         arraySize   = 2 << (poolIndex - 1);
         ids         = Array.Empty<int>();
-        freeStarts  = new Stack<int>();
+        freeStarts  = new StackArray<int>(Array.Empty<int>());
     }
     
     internal int CreateArrayStart()
