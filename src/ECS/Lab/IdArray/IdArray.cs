@@ -4,13 +4,12 @@
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal readonly struct IdArray
+internal struct IdArray
 {
-    public int Count => count;
+    public              int Count => count;
     
-    internal readonly int start;
-    internal readonly int count;
-    
+    internal            int start;
+    internal readonly   int count;
     
     internal IdArray(int start, int count) {
         this.start = start;

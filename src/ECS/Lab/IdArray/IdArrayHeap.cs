@@ -20,12 +20,12 @@ internal sealed class IdArrayHeap
         }
     }
     
-    internal ReadOnlySpan<int> Ids(IdArray array)
+    internal ReadOnlySpan<int> IdSpan(IdArray array)
     {
         var count = array.count;
         switch (count) {
             case 0:     return default;
-            case 1:     return default; // MemoryMarshal.CreateReadOnlySpan(ref array.start, 1); todo
+            case 1:     return MemoryMarshal.CreateReadOnlySpan(ref array.start, 1);
         }
         var curPoolIndex = PoolIndex(count);
         return new ReadOnlySpan<int>(pools[curPoolIndex].ids, array.start, count);
