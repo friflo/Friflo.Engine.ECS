@@ -11,14 +11,24 @@ namespace Friflo.Engine.ECS;
 [ExcludeFromCodeCoverage]
 internal sealed class IdArrayHeap
 {
-    internal readonly IdArrayPool[] pools;
+    public              int             Count => GetCount();       
+    internal            IdArrayPool     GetPool(int index) => pools[index] ??= new IdArrayPool(index);
+    
+    private  readonly   IdArrayPool[]   pools;
     
     internal IdArrayHeap() {
-        
         pools = new IdArrayPool[32];
+    }
+    
+    private int GetCount()
+    {
+        int count = 0;
         for (int n = 1; n < 32; n++) {
-            pools[n] = new IdArrayPool(n);
+            var pool = pools[n];
+            if (pool == null) continue;
+            count += pool.Count;
         }
+        return count;
     }
 
     internal static int PoolIndex(int count)

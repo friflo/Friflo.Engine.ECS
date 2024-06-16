@@ -24,22 +24,27 @@ namespace Internal.ECS
             AreEqual(1, array.Count);
             var span = array.GetIdSpan(heap);
             AreEqual(new int[] { 100 }, span.ToArray());
+            AreEqual(0, heap.Count);
             
             array.AddId(101, heap);
             AreEqual(2, array.Count);
             AreEqual(new int[] { 100, 101 }, array.GetIdSpan(heap).ToArray());
+            AreEqual(1, heap.Count);
 
             array.AddId(102, heap);
             AreEqual(3, array.Count);
             AreEqual(new int[] { 100, 101, 102 }, array.GetIdSpan(heap).ToArray());
+            AreEqual(1, heap.Count);
             
             array.AddId(103, heap);
             AreEqual(4, array.Count);
             AreEqual(new int[] { 100, 101, 102, 103 }, array.GetIdSpan(heap).ToArray());
+            AreEqual(1, heap.Count);
             
             array.AddId(104, heap);
             AreEqual(5, array.Count);
             AreEqual(new int[] { 100, 101, 102, 103, 104 }, array.GetIdSpan(heap).ToArray());
+            AreEqual(1, heap.Count);
         }
         
         [Test]
@@ -59,6 +64,7 @@ namespace Internal.ECS
                 AreEqual(1, array.Count);
                 var ids     = array.GetIdSpan(heap);
                 AreEqual(new int[] { 101 }, ids.ToArray());
+                AreEqual(0, heap.Count);
             } {
                 var array   = new IdArray();
                 array.AddId(100, heap);
@@ -67,6 +73,27 @@ namespace Internal.ECS
                 AreEqual(1, array.Count);
                 var ids     = array.GetIdSpan(heap);
                 AreEqual(new int[] { 100 }, ids.ToArray());
+                AreEqual(0, heap.Count);
+            } {
+                var array   = new IdArray();
+                array.AddId(100, heap);
+                array.AddId(101, heap);
+                array.AddId(102, heap);
+                array.RemoveAt(0, heap);
+                AreEqual(2, array.Count);
+                var ids     = array.GetIdSpan(heap);
+                AreEqual(new int[] { 101, 102 }, ids.ToArray());
+                AreEqual(1, heap.Count);
+            } {
+                var array   = new IdArray();
+                array.AddId(100, heap);
+                array.AddId(101, heap);
+                array.AddId(102, heap);
+                array.RemoveAt(2, heap);
+                AreEqual(2, array.Count);
+                var ids     = array.GetIdSpan(heap);
+                AreEqual(new int[] { 100, 101 }, ids.ToArray());
+                AreEqual(2, heap.Count);
             }
         }
     }

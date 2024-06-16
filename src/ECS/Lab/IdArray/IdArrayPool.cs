@@ -5,19 +5,24 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable UseCollectionExpression
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 [ExcludeFromCodeCoverage]
 internal class IdArrayPool
 {
-    internal            int[]       ids;
-    internal readonly   Stack<int>  freeStarts;
+    public              int         Count   => count;
+    internal            int[]       Ids     => ids;
+    
+    private             int[]       ids;
+    private  readonly   Stack<int>  freeStarts;
     private  readonly   int         arraySize;
     private             int         freeStart;
     private             int         maxStart;
+    private             int         count;
 
-    public override string ToString() => $"arraySize: {arraySize}";
+    public override string ToString() => $"arraySize: {arraySize} count: {count}";
 
     internal IdArrayPool(int poolIndex)
     {
@@ -28,6 +33,7 @@ internal class IdArrayPool
     
     internal int CreateArrayStart()
     {
+        count++;
         if (freeStarts.TryPop(out var start)) {
             return start;
         }
@@ -37,6 +43,12 @@ internal class IdArrayPool
         maxStart = Math.Max(4 * arraySize, 2 * maxStart);
         ArrayUtils.Resize(ref ids, maxStart);
         return freeStart;
+    }
+    
+    internal void DeleteArrayStart(int start)
+    {
+        count--;
+        freeStarts.Push(start);
     }
     
 }
