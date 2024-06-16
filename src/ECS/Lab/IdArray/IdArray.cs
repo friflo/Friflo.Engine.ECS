@@ -10,8 +10,14 @@ namespace Friflo.Engine.ECS;
 internal struct IdArray
 {
     public              int     Count => count;
-    
+    /// <summary>
+    /// Stores an id in case <see cref="count"/> == 1.<br/>
+    /// The start index within <see cref="IdArrayPool.ids"/> if <see cref="count"/> > 1.
+    /// </summary>
     internal            int     start;
+    /// <summary>
+    /// Number of array ids.
+    /// </summary>
     internal readonly   int     count;
 
     public   override   string  ToString() => $"count: {count}";
@@ -77,7 +83,7 @@ internal static class IdArrayExtensions {
     public static void RemoveAt(this ref IdArray array, int index, IdArrayHeap heap)
     {
         var count = array.count;
-        if (index >= count) throw new IndexOutOfRangeException();
+        if (index < 0 || index >= count) throw new IndexOutOfRangeException();
         if (count == 1) {
             array = default;
             return;
