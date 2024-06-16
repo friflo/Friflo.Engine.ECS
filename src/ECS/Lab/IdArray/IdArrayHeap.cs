@@ -8,11 +8,11 @@ using System;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
-internal sealed class IdArrays
+internal sealed class IdArrayHeap
 {
     private readonly IdArrayPool[] pools;
     
-    internal IdArrays() {
+    internal IdArrayHeap() {
         
         pools = new IdArrayPool[32];
         for (int n = 1; n < 32; n++) {
