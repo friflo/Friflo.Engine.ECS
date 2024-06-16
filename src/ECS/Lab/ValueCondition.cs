@@ -2,6 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 // ReSharper disable once CheckNamespace
+
+using System.Diagnostics.CodeAnalysis;
+
 namespace Friflo.Engine.ECS;
 
 internal abstract class ValueCondition
@@ -9,6 +12,7 @@ internal abstract class ValueCondition
     internal abstract Entities GetMatchingEntities(EntityStore store);
 }
 
+[ExcludeFromCodeCoverage]
 internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition where TComponent : struct, IIndexedComponent<TValue>
 {
     private readonly TValue value;

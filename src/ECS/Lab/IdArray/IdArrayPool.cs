@@ -3,10 +3,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[ExcludeFromCodeCoverage]
 internal class IdArrayPool
 {
     internal            int[]       ids;

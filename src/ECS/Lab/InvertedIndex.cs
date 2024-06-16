@@ -3,10 +3,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[ExcludeFromCodeCoverage]
 internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {
     private readonly    Dictionary<TValue, int[]>   map = new ();

@@ -4,10 +4,13 @@
 
 using System.Runtime.InteropServices;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable ConvertIfStatementToSwitchStatement
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[ExcludeFromCodeCoverage]
 internal sealed class IdArrayHeap
 {
     private readonly IdArrayPool[] pools;
@@ -31,41 +34,79 @@ internal sealed class IdArrayHeap
         return new ReadOnlySpan<int>(pools[curPoolIndex].ids, array.start, count);
     }
     
-    internal IdArray Add(IdArray array, int id)
+    internal IdArray AddId(IdArray array, int id)
     {
         var count = array.count; 
         if (count == 0) {
             return new IdArray(id, 1);
         }
         if (count == 1) {
-            var newPool = pools[1];
-            var start   = newPool.CreateArrayStart();
-            var ids     = newPool.ids;
+            var pool        = pools[1];
+            var start       = pool.CreateArrayStart();
+            var ids         = pool.ids;
             ids[start]      = array.start;
             ids[start + 1]  = id;
             return new IdArray(start, 2);
         }
-        else
-        {
-            var newCount        = count + 1;
-            var curPoolIndex    = PoolIndex(count);
-            var newPoolIndex    = PoolIndex(newCount);
-            var curPool         = pools[curPoolIndex];
-            if (newPoolIndex == curPoolIndex) {
-                curPool.ids[array.start + count] = id;
-                return new IdArray(array.start, newCount);
-            }
-            curPool.freeStarts.Push(array.start);
-            var curIds  = curPool.ids;
-            var newPool = pools[newPoolIndex];
-            var start   = newPool.CreateArrayStart();
-            var newIds  = newPool.ids;
-            for (int n = 0; n < count; n++) {
-                newIds[array.start + n] = curIds[start + n]; 
-            }
-            newIds[start + count] = id;
-            return new IdArray(start, newCount);
+        var newCount        = count + 1;
+        var curPoolIndex    = PoolIndex(count);
+        var newPoolIndex    = PoolIndex(newCount);
+        var curPool         = pools[curPoolIndex];
+        if (newPoolIndex == curPoolIndex) {
+            curPool.ids[array.start + count] = id;
+            return new IdArray(array.start, newCount);
         }
+        curPool.freeStarts.Push(array.start);
+        var curIds      = curPool.ids;
+        var newPool     = pools[newPoolIndex];
+        var newStart    = newPool.CreateArrayStart();
+        var newIds      = newPool.ids;
+        for (int n = 0; n < count; n++) {
+            newIds[array.start + n] = curIds[newStart + n]; 
+        }
+        newIds[newStart + count] = id;
+        return new IdArray(newStart, newCount);
+    }
+    
+    internal IdArray RemoveAt(IdArray array, int index)
+    {
+        var count = array.count;
+        if (index >= count) throw new IndexOutOfRangeException();
+        if (count == 1) {
+            return default;
+        }
+        if (count == 2) {
+            var pool = pools[1];
+            pool.freeStarts.Push(array.start);
+            if (index == 0) {
+                return new IdArray(pool.ids[array.start + 1], 1);    
+            }
+            return new IdArray(pool.ids[array.start + 0], 1);
+        }
+        var newCount        = count - 1;
+        var curPoolIndex    = PoolIndex(count);
+        var newPoolIndex    = PoolIndex(newCount);
+        var curPool         = pools[curPoolIndex];
+        if (newPoolIndex == curPoolIndex) {
+            var ids = curPool.ids;
+            var end = count + array.start;
+            for (int n = array.start + index + 1; n < end; n++) {
+                ids[n - 1] = ids[n];
+            }
+            return new IdArray(array.start, newCount);
+        }
+        curPool.freeStarts.Push(array.start);
+        var curIds      = curPool.ids;
+        var newPool     = pools[newPoolIndex];
+        var start       = newPool.CreateArrayStart();
+        var newIds      = newPool.ids;
+        for (int n = 0; n < index; n++) {
+            newIds[array.start + n] = curIds[start + n]; 
+        }
+        for (int n = index + 1; n < count; n++) {
+            newIds[array.start + n - 1] = curIds[start + n];    
+        }
+        return new IdArray(start, newCount);
     }
     
 

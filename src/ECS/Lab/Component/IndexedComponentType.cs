@@ -8,6 +8,7 @@ using System.Reflection;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
+[ExcludeFromCodeCoverage]
 internal readonly struct IndexedComponentType
 {
     internal readonly ComponentType componentType;
