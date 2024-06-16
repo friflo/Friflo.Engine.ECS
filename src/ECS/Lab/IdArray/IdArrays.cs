@@ -13,7 +13,7 @@ internal sealed class IdArrays
         
         pools = new IdArrayPool[32];
         for (int n = 1; n < 32; n++) {
-            pools[n] = new IdArrayPool();
+            pools[n] = new IdArrayPool(n);
         }
     }
     
@@ -23,32 +23,44 @@ internal sealed class IdArrays
         if (count == 0) {
             return new IdArray(id, 1);
         }
-        var curPoolIndex    = PoolIndex(count);
-        var poolIndex       = PoolIndex(count + 1);
-        
-        if (poolIndex == curPoolIndex) {
-            var curStart        = (2 << curPoolIndex) * array.index;
-            pools[curPoolIndex].ids[curStart + count] = id;
-            return new IdArray(curPoolIndex, count + 1);
+        if (count == 1) {
+            var newPool = pools[1];
+            var start   = newPool.CreateArrayStart();
+            var ids     = newPool.ids;
+            ids[start]      = array.start;
+            ids[start + 1]  = id;
+            return new IdArray(start, 2);
         }
-        pools[curPoolIndex].freeList.Push(poolIndex);
-        
-        var arrayIndex = pools[poolIndex].GetArrayIndex();
-
-        var newStart    = (2 << poolIndex) * arrayIndex;
-        
-        
-        
-        return new IdArray(arrayIndex, count + 1);
+        else
+        {
+            var newCount        = count + 1;
+            var curPoolIndex    = PoolIndex(count);
+            var newPoolIndex    = PoolIndex(newCount);
+            var curPool         = pools[curPoolIndex];
+            if (newPoolIndex == curPoolIndex) {
+                curPool.ids[array.start + count] = id;
+                return new IdArray(array.start, newCount);
+            }
+            curPool.freeStarts.Push(array.start);
+            var curIds  = curPool.ids;
+            var newPool = pools[newPoolIndex];
+            var start   = newPool.CreateArrayStart();
+            var newIds  = newPool.ids;
+            for (int n = 0; n < count; n++) {
+                newIds[array.start + n] = curIds[start + n]; 
+            }
+            newIds[start + count] = id;
+            return new IdArray(start, newCount);
+        }
     }
     
 
     private static int PoolIndex(int count)
     {
 #if NETCOREAPP3_0_OR_GREATER
-        return 32 - System.Numerics.BitOperations.LeadingZeroCount((ulong)count);
+        return 64 - System.Numerics.BitOperations.LeadingZeroCount((ulong)(count - 1));
 #else
-        return 32 - LeadingZeroCount(count);
+        return LeadingZeroCount(count - 1);
 #endif
     }
     

@@ -8,12 +8,12 @@ internal readonly struct IdArray
 {
     public int Count => count;
     
-    internal readonly int index;
+    internal readonly int start;
     internal readonly int count;
     
     
-    internal IdArray(int index, int count) {
-        this.index = index;
+    internal IdArray(int start, int count) {
+        this.start = start;
         this.count = count;
     }
 }

@@ -10,24 +10,31 @@ namespace Friflo.Engine.ECS;
 internal class IdArrayPool
 {
     internal            int[]       ids;
-    internal readonly   Stack<int>  freeList;
-    internal            int         arrayCount;
-    internal            int         maxCount;
-    
-    internal IdArrayPool() {
+    internal readonly   Stack<int>  freeStarts;
+    private  readonly   int         arraySize;
+    private             int         freeStart;
+    private             int         maxStart;
+
+    public override string ToString() => $"arraySize: {arraySize}";
+
+    internal IdArrayPool(int poolIndex)
+    {
+        arraySize   = 2 << (poolIndex - 1);
         ids         = Array.Empty<int>();
-        freeList    = new Stack<int>();
+        freeStarts  = new Stack<int>();
     }
     
-    internal int GetArrayIndex()
+    internal int CreateArrayStart()
     {
-        if (freeList.TryPop(out var poolIndex)) {
-            return poolIndex;
+        if (freeStarts.TryPop(out var start)) {
+            return start;
         }
-        if (arrayCount < maxCount) {
-            return arrayCount++;
+        if (freeStart < maxStart) {
+            return freeStart += arraySize;
         }
-        return -1;
+        maxStart = Math.Max(4 * arraySize, 2 * maxStart);
+        ArrayUtils.Resize(ref ids, maxStart);
+        return freeStart;
     }
     
 }

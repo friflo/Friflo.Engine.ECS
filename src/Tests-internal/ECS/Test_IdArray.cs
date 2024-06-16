@@ -12,10 +12,21 @@ namespace Internal.ECS {
         public void Test_IdArray_basics()
         {
             var idArrays    = new IdArrays();
-            var array1      = new IdArray(); 
-            array1          = idArrays.Add(array1, 42);
-            AreEqual(1, array1.Count);
+            var array       = new IdArray(); 
+            array           = idArrays.Add(array, 100);
+            AreEqual(1, array.Count);
+            
+            array           = idArrays.Add(array, 101);
+            AreEqual(2, array.Count);
 
+            array           = idArrays.Add(array, 102);
+            AreEqual(3, array.Count);
+            
+            array           = idArrays.Add(array, 103);
+            AreEqual(4, array.Count);
+            
+            array           = idArrays.Add(array, 104);
+            AreEqual(5, array.Count);
         }
     }
 }
