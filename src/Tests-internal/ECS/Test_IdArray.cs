@@ -47,6 +47,7 @@ namespace Internal.ECS
             AreEqual(5, array.Count);
             AreEqual(new int[] { 100, 101, 102, 103, 104 }, array.GetIdSpan(heap).ToArray());
             AreEqual(1, heap.Count);
+            AreEqual("count: 1", heap.ToString());
             
             AreEqual("arraySize: 2 count: 0", heap.GetPool(1).ToString());
             AreEqual("arraySize: 4 count: 0", heap.GetPool(2).ToString());

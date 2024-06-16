@@ -10,8 +10,9 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class IdArrayHeap
 {
-    public              int             Count => GetCount();       
-    internal            IdArrayPool     GetPool(int index) => pools[index] ??= new IdArrayPool(index);
+    public              int             Count               => GetCount();
+    public   override   string          ToString()          => $"count: {Count}";
+    internal            IdArrayPool     GetPool(int index)  => pools[index] ??= new IdArrayPool(index);
     
     private  readonly   IdArrayPool[]   pools;
     
