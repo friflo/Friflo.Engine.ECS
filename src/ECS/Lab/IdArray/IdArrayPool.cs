@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Friflo.Engine.ECS;
 
 [ExcludeFromCodeCoverage]
-internal class IdArrayPool
+internal sealed class IdArrayPool
 {
     public              int         Count   => count;
     internal            int[]       Ids     => ids;

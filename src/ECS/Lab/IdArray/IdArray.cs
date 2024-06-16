@@ -83,14 +83,15 @@ internal static class IdArrayExtensions {
             array = default;
             return;
         }
+        var curStart = array.start;
         if (count == 2) {
             var pool = heap.GetPool(1);
-            pool.DeleteArrayStart(array.start);
+            pool.DeleteArrayStart(curStart);
             if (index == 0) {
-                array = new IdArray(pool.Ids[array.start + 1], 1);
+                array = new IdArray(pool.Ids[curStart + 1], 1);
                 return;
             }
-            array = new IdArray(pool.Ids[array.start + 0], 1);
+            array = new IdArray(pool.Ids[curStart + 0], 1);
             return;
         }
         var newCount        = count - 1;
@@ -99,24 +100,24 @@ internal static class IdArrayExtensions {
         var curPool         = heap.GetPool(curPoolIndex);
         if (newPoolIndex == curPoolIndex) {
             var ids = curPool.Ids;
-            var end = count + array.start;
-            for (int n = array.start + index + 1; n < end; n++) {
+            var end = count + curStart;
+            for (int n = curStart + index + 1; n < end; n++) {
                 ids[n - 1] = ids[n];
             }
-            array = new IdArray(array.start, newCount);
+            array = new IdArray(curStart, newCount);
             return;
         }
-        curPool.DeleteArrayStart(array.start);
+        curPool.DeleteArrayStart(curStart);
         var curIds      = curPool.Ids;
         var newPool     = heap.GetPool(newPoolIndex);
-        var start       = newPool.CreateArrayStart();
+        var newStart    = newPool.CreateArrayStart();
         var newIds      = newPool.Ids;
         for (int n = 0; n < index; n++) {
-            newIds[array.start + n] = curIds[start + n]; 
+            newIds[newStart + n] = curIds[curStart + n]; 
         }
         for (int n = index + 1; n < count; n++) {
-            newIds[array.start + n - 1] = curIds[start + n];    
+            newIds[newStart + n - 1] = curIds[curStart + n];    
         }
-        array = new IdArray(start, newCount);
+        array = new IdArray(newStart, newCount);
     }
 } 
