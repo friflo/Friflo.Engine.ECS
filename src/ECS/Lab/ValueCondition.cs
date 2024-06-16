@@ -9,7 +9,7 @@ internal abstract class ValueCondition
     internal abstract Entities GetMatchingEntities(EntityStore store);
 }
 
-internal class HasValueCondition<TComponent, TValue> : ValueCondition where TComponent : struct, IIndexedComponent<TValue>
+internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition where TComponent : struct, IIndexedComponent<TValue>
 {
     private readonly TValue value;
     
