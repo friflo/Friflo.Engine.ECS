@@ -45,11 +45,12 @@ internal static class IdArrayExtensions {
             array = new IdArray(id, 1);
             return;
         }
+        var curStart = array.start;
         if (count == 1) {
             var pool        = heap.GetPool(1);
             var start       = pool.CreateArrayStart();
             var ids         = pool.Ids;
-            ids[start]      = array.start;
+            ids[start]      = curStart;
             ids[start + 1]  = id;
             array = new IdArray(start, 2);
             return;
@@ -59,17 +60,17 @@ internal static class IdArrayExtensions {
         var newPoolIndex    = IdArrayHeap.PoolIndex(newCount);
         var curPool         = heap.GetPool(curPoolIndex);
         if (newPoolIndex == curPoolIndex) {
-            curPool.Ids[array.start + count] = id;
-            array = new IdArray(array.start, newCount);
+            curPool.Ids[curStart + count] = id;
+            array = new IdArray(curStart, newCount);
             return;
         }
-        curPool.DeleteArrayStart(array.start);
+        curPool.DeleteArrayStart(curStart);
         var curIds      = curPool.Ids;
         var newPool     = heap.GetPool(newPoolIndex);
         var newStart    = newPool.CreateArrayStart();
         var newIds      = newPool.Ids;
         for (int n = 0; n < count; n++) {
-            newIds[array.start + n] = curIds[newStart + n]; 
+            newIds[newStart + n] = curIds[curStart + n]; 
         }
         newIds[newStart + count] = id;
         array = new IdArray(newStart, newCount);
