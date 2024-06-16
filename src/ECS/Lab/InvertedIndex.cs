@@ -4,57 +4,63 @@
 using System;
 using System.Collections.Generic;
 
+// ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
 internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {
-    private readonly    Dictionary<TValue, int[]>   map = new ();
+    private readonly    Dictionary<TValue, IdArray> map     = new ();
+    private readonly    IdArrayHeap                 heap    = new IdArrayHeap();
     
     internal override void Add<TComponent>(int id, in TComponent component)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
         // var indexedComponent    = (IIndexedComponent<TValue>)component; // boxing implementation of IIndexedComponent<>.GetValue()
         // var value               = indexedComponent.GetValue();
-        if (!map.TryGetValue(value, out var ids)) {
-            map.Add(value, new int[] { id });                           // TODO avoid array creation
+#if NET6_0_OR_GREATER
+        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
+#else
+        map.TryGetValue(value, out var ids);
+#endif
+        var idSpan = ids.GetIdSpan(heap);
+        if (idSpan.IndexOf(id) != -1) {
             return;
         }
-        if (Array.IndexOf(ids, id) != -1) {
-            return;
-        }
-        var newIds = new int[ids.Length + 1];                           // TODO avoid array creation
-        ids.CopyTo(newIds, 0);
-        newIds[ids.Length]  = id;
-        map[value]          = newIds;
+        ids.AddId(id, heap);
+        MapUtils.Set(map, value, ids);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap heap, int compIndex)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).components[compIndex]);
-        if (!map.TryGetValue(value, out var ids)) {
+        bool exists;
+#if NET6_0_OR_GREATER
+        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out exists);
+#else
+        exists      = map.TryGetValue(value, out var ids);
+#endif
+        if (!exists) {
             return;
         }
-        var idIndex = Array.IndexOf(ids, id);
-        if (idIndex == -1) {
+        var idSpan = ids.GetIdSpan(this.heap);
+        var index = idSpan.IndexOf(id);
+        if (index == -1) {
             return;
         }
-        var newLength = ids.Length - 1;
-        if (newLength == 0) {
+        if (ids.Count == 1) {
             map.Remove(value);
             return;
         }
-        var newIds = new int[newLength];                           // TODO avoid array creation
-        Array.Copy(ids, 0,           newIds, 0,       idIndex);
-        Array.Copy(ids, idIndex + 1, newIds, idIndex, newLength - idIndex);
-        map[value] = newIds;
+        ids.RemoveAt(index, this.heap);
+        MapUtils.Set(map, value, ids);
     }
     
-    internal override Entities GetMatchingEntities(in TValue value)
+    internal override void AddMatchingEntities(in TValue value, HashSet<int> set)
     {
-        if (!map.TryGetValue(value, out var ids)) {
-            return default;
+        map.TryGetValue(value, out var ids);
+        foreach (var id in ids.GetIdSpan(heap)) {
+            set.Add(id);   
         }
-        return new Entities(ids, store, 0, ids.Length);
     }
 }

@@ -20,11 +20,19 @@ internal struct IdArray
     /// </summary>
     internal readonly   int     count;
 
-    public   override   string  ToString() => $"count: {count}";
+    public   override   string  ToString() => GetString();
 
     internal IdArray(int start, int count) {
         this.start = start;
         this.count = count;
+    }
+    
+    private string GetString()
+    {
+        if (count == 1) {
+            return $"count: 1  id: {start}";    
+        }
+        return $"count: {count}";
     }
 }
 

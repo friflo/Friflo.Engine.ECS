@@ -24,12 +24,14 @@ namespace Internal.ECS
 
             array.AddId(100, heap);
             AreEqual(1, array.Count);
+            AreEqual("count: 1  id: 100", array.ToString());
             var span = array.GetIdSpan(heap);
             AreEqual(new int[] { 100 }, span.ToArray());
             AreEqual(0, heap.Count);
             
             array.AddId(101, heap);
             AreEqual(2, array.Count);
+            AreEqual("count: 2", array.ToString());
             AreEqual(new int[] { 100, 101 }, array.GetIdSpan(heap).ToArray());
             AreEqual(1, heap.Count);
 

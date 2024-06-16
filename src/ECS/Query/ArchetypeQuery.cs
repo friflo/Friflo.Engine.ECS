@@ -294,9 +294,7 @@ public class ArchetypeQuery
         idSet.Clear();
         // --- add all matching ids
         foreach (var condition in Filter.valueConditions) {
-            foreach (Entity entity in condition.GetMatchingEntities(entityStore)) {
-                idSet.Add(entity.Id);
-            }
+            condition.AddMatchingEntities(entityStore, idSet);
         }
         var nodes           = entityStore.nodes;
         var nextArchetypes  = archetypes;
@@ -342,9 +340,7 @@ public class ArchetypeQuery
         idSet.Clear();
         // --- add all matching ids
         foreach (var condition in Filter.valueConditions) {
-            foreach (Entity entity in condition.GetMatchingEntities(entityStore)) {
-                idSet.Add(entity.Id);
-            }
+            condition.AddMatchingEntities(entityStore, idSet);
         }
         var nodes   = entityStore.nodes;
         var count   = 0;
