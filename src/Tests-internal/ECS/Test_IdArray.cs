@@ -2,59 +2,71 @@
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
+#pragma warning disable CA1861
+
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable InconsistentNaming
 namespace Internal.ECS
 {
+
     public class Test_IdArray
     {
-        // [Test]
+        [Test]
         public void Test_IdArray_Add()
         {
             var heap    = new IdArrayHeap();
             
             var array   = new IdArray();
             AreEqual(0, array.Count);
-            AreEqual(new int[] { }, heap.IdSpan(array).ToArray());
+            AreEqual(new int[] { }, array.GetIdSpan(heap).ToArray());
 
-            array = heap.AddId(array, 100);
+            array.AddId(100, heap);
             AreEqual(1, array.Count);
-            var span = heap.IdSpan(array);
+            var span = array.GetIdSpan(heap);
             AreEqual(new int[] { 100 }, span.ToArray());
             
-            array = heap.AddId(array, 101);
+            array.AddId(101, heap);
             AreEqual(2, array.Count);
-            AreEqual(new int[] { 100, 101 }, heap.IdSpan(array).ToArray());
+            AreEqual(new int[] { 100, 101 }, array.GetIdSpan(heap).ToArray());
 
-            array = heap.AddId(array, 102);
+            array.AddId(102, heap);
             AreEqual(3, array.Count);
-            AreEqual(new int[] { 100, 101, 102 }, heap.IdSpan(array).ToArray());
+            AreEqual(new int[] { 100, 101, 102 }, array.GetIdSpan(heap).ToArray());
             
-            array = heap.AddId(array, 103);
+            array.AddId(103, heap);
             AreEqual(4, array.Count);
-            AreEqual(new int[] { 100, 101, 102, 103 }, heap.IdSpan(array).ToArray());
+            AreEqual(new int[] { 100, 101, 102, 103 }, array.GetIdSpan(heap).ToArray());
             
-            array = heap.AddId(array, 104);
+            array.AddId(104, heap);
             AreEqual(5, array.Count);
-            AreEqual(new int[] { 100, 101, 102, 103, 104 }, heap.IdSpan(array).ToArray());
+            AreEqual(new int[] { 100, 101, 102, 103, 104 }, array.GetIdSpan(heap).ToArray());
         }
         
-        // [Test]
+        [Test]
         public void Test_IdArray_Remove()
         {
             var heap    = new IdArrayHeap();
             {
                 var array   = new IdArray();
-                array       = heap.AddId(array, 100);
-                array       = heap.RemoveAt(array, 0);
+                array.AddId(100, heap);
+                array.RemoveAt(0, heap);
                 AreEqual(0, array.Count);
             } {
                 var array   = new IdArray();
-                array       = heap.AddId(array, 100);
-                array       = heap.AddId(array, 101);
-                array       = heap.RemoveAt(array, 0);
+                array.AddId(100, heap);
+                array.AddId(101, heap);
+                array.RemoveAt(0, heap);
                 AreEqual(1, array.Count);
-                AreEqual(new int[] { 101 }, heap.IdSpan(array).ToArray());
+                var ids     = array.GetIdSpan(heap);
+                AreEqual(new int[] { 101 }, ids.ToArray());
+            } {
+                var array   = new IdArray();
+                array.AddId(100, heap);
+                array.AddId(101, heap);
+                array.RemoveAt(1, heap);
+                AreEqual(1, array.Count);
+                var ids     = array.GetIdSpan(heap);
+                AreEqual(new int[] { 100 }, ids.ToArray());
             }
         }
     }
