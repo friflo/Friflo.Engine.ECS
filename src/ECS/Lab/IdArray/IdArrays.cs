@@ -2,6 +2,9 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System.Runtime.InteropServices;
+using System;
+
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS;
 
@@ -15,6 +18,17 @@ internal sealed class IdArrays
         for (int n = 1; n < 32; n++) {
             pools[n] = new IdArrayPool(n);
         }
+    }
+    
+    internal ReadOnlySpan<int> Ids(IdArray array)
+    {
+        var count = array.count;
+        switch (count) {
+            case 0:     return default;
+            case 1:     return default; // MemoryMarshal.CreateReadOnlySpan(ref array.start, 1); todo
+        }
+        var curPoolIndex = PoolIndex(count);
+        return new ReadOnlySpan<int>(pools[curPoolIndex].ids, array.start, count);
     }
     
     internal IdArray Add(IdArray array, int id)
