@@ -13,11 +13,23 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
     private readonly    Dictionary<TValue, IdArray> map         = new ();
     private readonly    IdArrayHeap                 arrayHeap   = new IdArrayHeap();
     
+#region add / update
     internal override void Add<TComponent>(int id, in TComponent component)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
         // var indexedComponent    = (IIndexedComponent<TValue>)component; // boxing implementation of IIndexedComponent<>.GetValue()
         // var value               = indexedComponent.GetValue();
+        AddComponentValue(id, value);
+    }
+    
+    internal override void Update<TComponent>(int id, in TComponent component)
+    {
+        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
+        AddComponentValue(id, value);
+    }
+    
+    private void AddComponentValue(int id, in TValue value)
+    {
 #if NET6_0_OR_GREATER
         ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
 #else
@@ -30,19 +42,22 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         ids.AddId(id, arrayHeap);
         MapUtils.Set(map, value, ids);
     }
+    #endregion
     
+#region remove
     internal override void Remove<TComponent>(int id, StructHeap heap, int compIndex)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).components[compIndex]);
-        bool exists;
 #if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out exists);
+        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
 #else
-        exists      = map.TryGetValue(value, out var ids);
+        map.TryGetValue(value, out var ids);
 #endif
-        if (!exists) {
-            return;
-        }
+        RemoveComponentValue(id, value, ref ids);
+    }
+    
+    private void RemoveComponentValue(int id, in TValue value, ref IdArray ids)
+    {
         var idSpan = ids.GetIdSpan(arrayHeap);
         var index = idSpan.IndexOf(id);
         if (index == -1) {
@@ -55,7 +70,9 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         ids.RemoveAt(index, arrayHeap);
         MapUtils.Set(map, value, ids);
     }
+    #endregion
     
+#region get matches
     internal override void AddMatchingEntities(in TValue value, HashSet<int> set)
     {
         map.TryGetValue(value, out var ids);
@@ -63,4 +80,5 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
             set.Add(id);   
         }
     }
+    #endregion
 }

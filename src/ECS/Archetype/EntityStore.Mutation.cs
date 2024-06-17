@@ -37,6 +37,7 @@ public partial class EntityStoreBase
             ((StructHeap<T>)oldHeap).StashComponent(compIndex);
             added   = false;
             action  = ComponentChangedAction.Update;
+            info.index?.Update(id, component);
             goto AssignComponent;
         }
         // --- case: archetype doesn't contain component type   => change entity archetype
@@ -47,11 +48,11 @@ public partial class EntityStoreBase
         action              = ComponentChangedAction.Add;
         archIndex           = arch.archIndex;
         info                = arch.heapMap[structIndex];
+        info.index?.Add(id, component);
         
     AssignComponent:  // --- assign passed component value
         var heap            = (StructHeap<T>)info.heap;
         heap.components[compIndex]  = component;
-        info.index?.Add(id, component);
         // Send event. See: SEND_EVENT notes
         var componentAdded = store.internBase.componentAdded;
         if (componentAdded == null) {
