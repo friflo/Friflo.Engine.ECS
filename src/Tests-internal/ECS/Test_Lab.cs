@@ -125,6 +125,47 @@ public static class Test_Lab
         AreEqual(0, query4.Entities.Count);     AreEqual(new int[] { },             query4.Entities.ToIds());
     }
     
+    /// <summary>
+    /// Cover <see cref="InvertedIndex{TValue}.Add{TComponent}"/>
+    /// </summary>
+    [Test]
+    public static void Test_Lab_coverage()
+    {
+        var world = new EntityStore();
+
+        var entities = new List<Entity>();
+        for (int n = 0; n < 10; n++) {
+            var entity = world.CreateEntity(new Position(n, 0, 0));
+            entities.Add(entity);
+        }
+        var entity0 = entities[0];
+        var entity1 = entities[1];
+        var entity2 = entities[2];
+        
+        entity0.AddComponent(new IndexedName   { name   = "find-me" });
+        entity1.AddComponent(new IndexedInt    { value  = 123       });
+        entity2.AddComponent(new IndexedName   { name   = "find-me" });
+        entity2.AddComponent(new IndexedInt    { value  = 123       });
+        
+        // Cover adding same component again
+        entity0.AddComponent(new IndexedName   { name   = "find-me" });
+        
+        
+    //  entities[1].AddComponent(new AttackComponent { target = target }); // todo throws NotImplementedException : to avoid excessive boxing. ...
+        
+        var query1  = world.Query<Position,    IndexedName>().  Has<IndexedName,   string>("find-me");
+        var query2  = world.Query<Position,    IndexedInt>().   Has<IndexedInt,    int>   (123);
+        var query3  = world.Query<IndexedName, IndexedInt>().   Has<IndexedName,   string>("find-me").
+                                                                Has<IndexedInt,    int>   (123);
+        var query4  = world.Query().                            Has<IndexedName,   string>("find-me").
+                                                                Has<IndexedInt,    int>   (123);
+        
+        AreEqual(2, query1.Entities.Count);     AreEqual(new int[] { 1, 3 },        query1.Entities.ToIds());
+        AreEqual(2, query2.Entities.Count);     AreEqual(new int[] { 2, 3 },        query2.Entities.ToIds());
+        AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 3 },           query3.Entities.ToIds());
+        AreEqual(3, query4.Entities.Count);     AreEqual(new int[] { 1, 3, 2 },     query4.Entities.ToIds());
+    }
+    
     private static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
     
     [Test]
