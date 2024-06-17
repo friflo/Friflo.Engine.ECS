@@ -143,7 +143,7 @@ namespace Internal.ECS
         public void Test_IdArray_Add_Remove_One_Perf()
         {
             int repeat  = 100; // 100_000_000;
-            //  #PC: Add_Remove_One - repeat: 100000000 duration: 1878 ms
+            //  #PC: Add_Remove_One: repeat: 100000000 duration: 732 ms
             var heap    = new IdArrayHeap();
             var array   = new IdArray();
             var sw = new Stopwatch();
@@ -160,8 +160,8 @@ namespace Internal.ECS
         public void Test_IdArray_Add_Remove_Many_Perf()
         {
             int count   = 100; // 1_000_000
-            int repeat  = 50;
-            //  #PC: Add_Remove_Many_Perf - count: 1000000 repeat: 50 duration: 3715 ms
+            int repeat  = 100;
+            //  #PC: Add_Remove_Many_Perf - count: 1000000 repeat: 100 duration: 1472 ms
             var heap    = new IdArrayHeap();
             var array   = new IdArray();
             var sw = new Stopwatch();
