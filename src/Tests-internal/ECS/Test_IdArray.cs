@@ -214,5 +214,16 @@ namespace Internal.ECS
         {
             AreEqual(8, sizeof(IdArray));
         }
+        
+        [Test]
+        public void Test_IdArray_LeadingZeroCount()
+        {
+            for (uint n = 0; n < 1000; n++) {
+                AreEqual(System.Numerics.BitOperations.LeadingZeroCount(n), IdArrayHeap.LeadingZeroCount(n));    
+            }
+            for (uint n = int.MaxValue - 1000; n < int.MaxValue; n++) {
+                AreEqual(System.Numerics.BitOperations.LeadingZeroCount(n), IdArrayHeap.LeadingZeroCount(n));    
+            }
+        }
     }
 }

@@ -34,25 +34,25 @@ internal sealed class IdArrayHeap
     internal static int PoolIndex(int count)
     {
 #if NETCOREAPP3_0_OR_GREATER
-        return 64 - System.Numerics.BitOperations.LeadingZeroCount((ulong)(count - 1));
+        return 32 - System.Numerics.BitOperations.LeadingZeroCount((uint)(count - 1));
 #else
-        return LeadingZeroCount(count - 1);
+        return 32 - LeadingZeroCount((uint)(count - 1));
 #endif
     }
     
+    // C# - Fast way of finding most and least significant bit set in a 64-bit integer - Stack Overflow
+    // https://stackoverflow.com/questions/31374628/fast-way-of-finding-most-and-least-significant-bit-set-in-a-64-bit-integer
     [ExcludeFromCodeCoverage]
-    internal static int LeadingZeroCount(int i)
+    internal static int LeadingZeroCount(uint i)
     {
         if (i == 0) return 32;
-
-        int n = 1;
+        ulong n = 1;
 
         if ((i >> 16) == 0) { n = n + 16; i = i << 16; }
-        if ((i >> 24) == 0) { n = n + 8;  i = i << 8;  }
-        if ((i >> 28) == 0) { n = n + 4;  i = i << 4;  }
-        if ((i >> 30) == 0) { n = n + 2;  i = i << 2;  }
+        if ((i >> 24) == 0) { n = n +  8; i = i <<  8; }
+        if ((i >> 28) == 0) { n = n +  4; i = i <<  4; }
+        if ((i >> 30) == 0) { n = n +  2; i = i <<  2; }
         n = n - (i >> 31);
-
-        return n;
+        return (int)n;
     }
 }
