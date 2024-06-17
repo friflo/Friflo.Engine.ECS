@@ -22,10 +22,20 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         AddComponentValue(id, value);
     }
     
-    internal override void Update<TComponent>(int id, in TComponent component)
+    internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
-        AddComponentValue(id, value);
+        var oldValue = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value    = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
+        if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
+            return;
+        }
+#if NET6_0_OR_GREATER
+        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, oldValue, out _);
+#else
+        map.TryGetValue(oldValue, out var ids);
+#endif
+        RemoveComponentValue(id, oldValue, ref ids);
+        AddComponentValue   (id, value);
     }
     
     private void AddComponentValue(int id, in TValue value)
@@ -45,9 +55,9 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
     #endregion
     
 #region remove
-    internal override void Remove<TComponent>(int id, StructHeap heap, int compIndex)
+    internal override void Remove<TComponent>(int id, StructHeap heap)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).components[compIndex]);
+        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
 #if NET6_0_OR_GREATER
         ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
 #else
