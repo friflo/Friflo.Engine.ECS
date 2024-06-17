@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
@@ -136,6 +137,34 @@ namespace Internal.ECS
             Throws<IndexOutOfRangeException>(() => {
                 array.RemoveAt(0, heap);    
             });
+        }
+        
+        [Test]
+        public void Test_IdArray_Perf()
+        {
+            int count   = 100; // 1_000_000
+            int repeat  = 50;
+            //  #PC: IdArray Perf: count: 1000000 repeat: 50 duration: 3715 ms
+            var heap    = new IdArrayHeap();
+            var array   = new IdArray();
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < repeat; i++) {
+                for (int n = 0; n < count; n++) {
+                    array.AddId(n, heap);
+                }
+                for (int n = 0; n < count; n++) {
+                    array.RemoveAt(array.Count - 1, heap);
+                }
+            }
+            Console.WriteLine($"IdArray Perf: count: {count} repeat: {repeat} duration: {sw.ElapsedMilliseconds} ms");
+            AreEqual(0, heap.Count);
+        }
+        
+        [Test]
+        public unsafe void Test_IdArray_size_of()
+        {
+            AreEqual(8, sizeof(IdArray));
         }
     }
 }
