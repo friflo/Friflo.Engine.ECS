@@ -33,7 +33,7 @@ namespace Internal.ECS
             
             array.AddId(101, heap);
             AreEqual(2, array.Count);
-            AreEqual("count: 2", array.ToString());
+            AreEqual("count: 2  index: 1  start: 0", array.ToString());
             AreEqual(new int[] { 100, 101 }, array.GetIdSpan(heap).ToArray());
             AreEqual(1, heap.Count);
 

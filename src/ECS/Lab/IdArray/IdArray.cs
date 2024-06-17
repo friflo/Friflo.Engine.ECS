@@ -29,10 +29,13 @@ internal struct IdArray
     
     private string GetString()
     {
+        if (count == 0) {
+            return "count: 0";    
+        }
         if (count == 1) {
             return $"count: 1  id: {start}";    
         }
-        return $"count: {count}";
+        return $"count: {count}  index: {IdArrayHeap.PoolIndex(count)}  start: {start}";
     }
 }
 
