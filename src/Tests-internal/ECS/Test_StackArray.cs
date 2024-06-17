@@ -27,6 +27,12 @@ public static class Test_StackArray
         }
         Assert.IsFalse(stack.TryPop(out value));
         Assert.AreEqual(0, stack.Count);
+        
+        stack.Push(42);
+        Assert.AreEqual(1, stack.Count);
+        
+        stack.Clear();
+        Assert.AreEqual(0, stack.Count);
     }
 }
 

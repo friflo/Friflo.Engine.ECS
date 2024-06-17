@@ -9,8 +9,9 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class IdArrayPool
 {
-    public              int             Count   => count;
-    internal            int[]           Ids     => ids;
+    public              int             Count       => count;
+    internal            int[]           Ids         => ids;
+    internal            int             FreeCount   => freeStarts.Count;
     
     private             int[]           ids;
     private             StackArray<int> freeStarts;
@@ -38,14 +39,16 @@ internal sealed class IdArrayPool
             newIds = ids;
             return start;
         }
-        if (freeStart < maxStart) {
+        start       = freeStart;
+        freeStart   = start + arraySize;
+        if (start < maxStart) {
             newIds = ids;
-            return freeStart += arraySize;
+            return start;
         }
-        maxStart = Math.Max(4 * arraySize, 2 * maxStart);
+        maxStart    = Math.Max(4 * arraySize, 2 * maxStart);
         ArrayUtils.Resize(ref ids, maxStart);
         newIds = ids;
-        return freeStart;
+        return start;
     }
     
     /// <summary>
@@ -54,8 +57,13 @@ internal sealed class IdArrayPool
     internal void DeleteArray(int start, out int[] ids)
     {
         count--;
-        freeStarts.Push(start);
         ids = this.ids;
+        if (count > 0) {
+            freeStarts.Push(start);
+            return;
+        }
+        freeStart = 0;
+        freeStarts.Clear();
     }
     
 }

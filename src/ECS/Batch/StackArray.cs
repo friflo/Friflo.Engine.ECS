@@ -23,6 +23,7 @@ internal struct StackArray<T>
     {
         if (count > 0) {
             item = items[--count];
+            items[count] = default;
             return true;
         }
         item = default;
@@ -38,5 +39,14 @@ internal struct StackArray<T>
         }
         curItems[curCount] = item;
         count = curCount + 1;
+    }
+    
+    internal void Clear() {
+        var end         = count;
+        var curItems    = items;
+        for (int n = 0; n < end; n++) {
+            curItems[n] = default;
+        }
+        count = 0;
     }
 }

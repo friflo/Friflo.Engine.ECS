@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Friflo.Engine.ECS;
 using NUnit.Framework;
+using Tests.Utils;
 using static NUnit.Framework.Assert;
 
 #pragma warning disable CA1861
@@ -127,6 +128,36 @@ namespace Internal.ECS
                 AreEqual(new int[] { 700, 701, 702 }, ids.ToArray());
                 AreEqual(4, heap.Count);
             }
+        }
+        
+        [Test]
+        public void Test_IdArray_clear_freeList()
+        {
+            var heap    = new IdArrayHeap();
+            var arrays  = new IdArray[100];
+            int id      = 0;
+            for (int n = 0; n < 100; n++) {
+                ref var array = ref arrays[n]; 
+                for (int i = 0; i < 10; i++) {
+                    array.AddId(id++, heap);
+                }
+            }
+            id = 0;
+            for (int n = 0; n < 100; n++) {
+                var span = arrays[n].GetIdSpan(heap);
+                for (int i = 0; i < 10; i++) {
+                    Mem.AreEqual(id++, span[i]);
+                }
+            }
+            var pool16 = heap.GetPool(4);
+            for (int n = 0; n < 100; n++) {
+                Mem.AreEqual(n, pool16.FreeCount);
+                ref var array = ref arrays[n]; 
+                for (int i = 0; i < 10; i++) {
+                    array.RemoveAt(array.Count - 1, heap);
+                }
+            }
+            AreEqual(0, pool16.FreeCount);
         }
         
         [Test]
