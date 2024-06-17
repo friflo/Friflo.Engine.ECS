@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 // ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
 internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {

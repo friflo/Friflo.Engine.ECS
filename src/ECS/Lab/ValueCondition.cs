@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
 internal abstract class ValueCondition
 {

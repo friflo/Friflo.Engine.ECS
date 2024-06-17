@@ -3,6 +3,7 @@
 
 using System;
 using System.Text;
+using Friflo.Engine.ECS.Index;
 using Friflo.Json.Burst;
 using Friflo.Json.Fliox;
 using Friflo.Json.Fliox.Mapper;

@@ -124,7 +124,7 @@ public static class Test_Lab
     }
     
     /// <summary>
-    /// Cover <see cref="InvertedIndex{TValue}.Add{TComponent}"/>
+    /// Cover <see cref="Friflo.Engine.ECS.Index.InvertedIndex{TValue}.Add{TComponent}"/>
     /// </summary>
     [Test]
     public static void Test_Index_Component_Update()

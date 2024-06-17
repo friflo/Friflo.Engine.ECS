@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
 internal static class IndexedComponentUtils
 {

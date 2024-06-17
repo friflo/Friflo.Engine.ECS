@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertIfStatementToSwitchStatement
 // ReSharper disable once CheckNamespace
-namespace Friflo.Engine.ECS;
+namespace Friflo.Engine.ECS.Index;
 
 internal sealed class IdArrayHeap
 {
