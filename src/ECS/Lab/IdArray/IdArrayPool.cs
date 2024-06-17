@@ -28,24 +28,34 @@ internal sealed class IdArrayPool
         freeStarts  = new StackArray<int>(Array.Empty<int>());
     }
     
-    internal int CreateArrayStart()
+    /// <summary>
+    /// Return the start index within the returned newIds.
+    /// </summary>
+    internal int CreateArray(out int[] newIds)
     {
         count++;
         if (freeStarts.TryPop(out var start)) {
+            newIds = ids;
             return start;
         }
         if (freeStart < maxStart) {
+            newIds = ids;
             return freeStart += arraySize;
         }
         maxStart = Math.Max(4 * arraySize, 2 * maxStart);
         ArrayUtils.Resize(ref ids, maxStart);
+        newIds = ids;
         return freeStart;
     }
     
-    internal void DeleteArrayStart(int start)
+    /// <summary>
+    /// Delete the array with the passed start index.
+    /// </summary>
+    internal void DeleteArray(int start, out int[] ids)
     {
         count--;
         freeStarts.Push(start);
+        ids = this.ids;
     }
     
 }

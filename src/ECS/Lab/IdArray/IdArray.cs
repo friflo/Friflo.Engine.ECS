@@ -60,8 +60,7 @@ internal static class IdArrayExtensions {
         var curStart = array.start;
         if (count == 1) {
             var pool        = heap.GetPool(1);
-            var start       = pool.CreateArrayStart();
-            var ids         = pool.Ids;
+            var start       = pool.CreateArray(out var ids);
             ids[start]      = curStart;
             ids[start + 1]  = id;
             array = new IdArray(start, 2);
@@ -76,11 +75,9 @@ internal static class IdArrayExtensions {
             array = new IdArray(curStart, newCount);
             return;
         }
-        curPool.DeleteArrayStart(curStart);
-        var curIds      = curPool.Ids;
+        curPool.DeleteArray(curStart, out var curIds);
         var newPool     = heap.GetPool(newPoolIndex);
-        var newStart    = newPool.CreateArrayStart();
-        var newIds      = newPool.Ids;
+        var newStart    = newPool.CreateArray(out var newIds);
         for (int n = 0; n < count; n++) {
             newIds[newStart + n] = curIds[curStart + n]; 
         }
@@ -99,12 +96,12 @@ internal static class IdArrayExtensions {
         var curStart = array.start;
         if (count == 2) {
             var pool = heap.GetPool(1);
-            pool.DeleteArrayStart(curStart);
+            pool.DeleteArray(curStart, out var ids);
             if (index == 0) {
-                array = new IdArray(pool.Ids[curStart + 1], 1);
+                array = new IdArray(ids[curStart + 1], 1);
                 return;
             }
-            array = new IdArray(pool.Ids[curStart + 0], 1);
+            array = new IdArray(ids[curStart + 0], 1);
             return;
         }
         var newCount        = count - 1;
@@ -120,13 +117,11 @@ internal static class IdArrayExtensions {
             array = new IdArray(curStart, newCount);
             return;
         }
-        curPool.DeleteArrayStart(curStart);
-        var curIds      = curPool.Ids;
+        curPool.DeleteArray(curStart, out var curIds);
         var newPool     = heap.GetPool(newPoolIndex);
-        var newStart    = newPool.CreateArrayStart();
-        var newIds      = newPool.Ids;
+        var newStart    = newPool.CreateArray(out var newIds);
         for (int n = 0; n < index; n++) {
-            newIds[newStart + n] = curIds[curStart + n]; 
+            newIds[newStart + n]     = curIds[curStart + n]; 
         }
         for (int n = index + 1; n < count; n++) {
             newIds[newStart + n - 1] = curIds[curStart + n];    
