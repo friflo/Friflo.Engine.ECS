@@ -140,11 +140,28 @@ namespace Internal.ECS
         }
         
         [Test]
-        public void Test_IdArray_Perf()
+        public void Test_IdArray_Add_Remove_One_Perf()
+        {
+            int repeat  = 100; // 100_000_000;
+            //  #PC: Add_Remove_One - repeat: 100000000 duration: 1878 ms
+            var heap    = new IdArrayHeap();
+            var array   = new IdArray();
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < repeat; i++) {
+                array.AddId(42, heap);
+                array.RemoveAt(0, heap);
+            }
+            Console.WriteLine($"Add_Remove_One: repeat: {repeat} duration: {sw.ElapsedMilliseconds} ms");
+            AreEqual(0, heap.Count);
+        }
+        
+        [Test]
+        public void Test_IdArray_Add_Remove_Many_Perf()
         {
             int count   = 100; // 1_000_000
             int repeat  = 50;
-            //  #PC: IdArray Perf: count: 1000000 repeat: 50 duration: 3715 ms
+            //  #PC: Add_Remove_Many_Perf - count: 1000000 repeat: 50 duration: 3715 ms
             var heap    = new IdArrayHeap();
             var array   = new IdArray();
             var sw = new Stopwatch();
@@ -157,7 +174,7 @@ namespace Internal.ECS
                     array.RemoveAt(array.Count - 1, heap);
                 }
             }
-            Console.WriteLine($"IdArray Perf: count: {count} repeat: {repeat} duration: {sw.ElapsedMilliseconds} ms");
+            Console.WriteLine($"Add_Remove_Many_Perf - count: {count} repeat: {repeat} duration: {sw.ElapsedMilliseconds} ms");
             AreEqual(0, heap.Count);
         }
         
