@@ -10,8 +10,8 @@ namespace Friflo.Engine.ECS;
 
 internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {
-    private readonly    Dictionary<TValue, IdArray> map     = new ();
-    private readonly    IdArrayHeap                 heap    = new IdArrayHeap();
+    private readonly    Dictionary<TValue, IdArray> map         = new ();
+    private readonly    IdArrayHeap                 arrayHeap   = new IdArrayHeap();
     
     internal override void Add<TComponent>(int id, in TComponent component)
     {
@@ -23,11 +23,11 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 #else
         map.TryGetValue(value, out var ids);
 #endif
-        var idSpan = ids.GetIdSpan(heap);
+        var idSpan = ids.GetIdSpan(arrayHeap);
         if (idSpan.IndexOf(id) != -1) {
             return;
         }
-        ids.AddId(id, heap);
+        ids.AddId(id, arrayHeap);
         MapUtils.Set(map, value, ids);
     }
     
@@ -43,7 +43,7 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         if (!exists) {
             return;
         }
-        var idSpan = ids.GetIdSpan(this.heap);
+        var idSpan = ids.GetIdSpan(arrayHeap);
         var index = idSpan.IndexOf(id);
         if (index == -1) {
             return;
@@ -52,14 +52,14 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
             map.Remove(value);
             return;
         }
-        ids.RemoveAt(index, this.heap);
+        ids.RemoveAt(index, arrayHeap);
         MapUtils.Set(map, value, ids);
     }
     
     internal override void AddMatchingEntities(in TValue value, HashSet<int> set)
     {
         map.TryGetValue(value, out var ids);
-        foreach (var id in ids.GetIdSpan(heap)) {
+        foreach (var id in ids.GetIdSpan(arrayHeap)) {
             set.Add(id);   
         }
     }
