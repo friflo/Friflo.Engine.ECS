@@ -7,7 +7,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal abstract class ValueCondition
 {
-    internal abstract EntitySpan GetMatchingEntities(EntityStore store);
+    internal abstract Entities GetMatchingEntities(EntityStore store);
 }
 
 internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition where TComponent : struct, IIndexedComponent<TValue>
@@ -18,7 +18,7 @@ internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition whe
         this.value = value;
     }
     
-    internal override EntitySpan GetMatchingEntities(EntityStore store)
+    internal override Entities GetMatchingEntities(EntityStore store)
     {
         var index = (ComponentIndex<TValue>)store.extension.componentIndexes[StructInfo<TComponent>.Index];
         return index.GetMatchingEntities(value);

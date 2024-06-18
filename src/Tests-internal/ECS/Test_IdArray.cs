@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Friflo.Engine.ECS;
 using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
 using Tests.Utils;
@@ -227,51 +226,6 @@ namespace Internal.ECS
             }
         }
         
-        [Test]
-        public void Test_IdArray_EntitySpan()
-        {
-            var store = new EntityStore();
-            store.CreateEntity(1);
-            store.CreateEntity(2);
-            store.CreateEntity(42);
 
-            // --- Length: 0
-            var span0 = new EntitySpan(store, default, 0);
-            AreEqual("Entity[0]", span0.ToString());
-            AreEqual(0, span0.Length);
-            var entities = span0.Entities;
-            AreEqual(0,     entities.Count);
-            AreSame (store, span0.Store);
-            
-            // --- Length: 1
-            var span1 = new EntitySpan(store, default, 42);
-            AreEqual("Entity[1]", span1.ToString());
-            AreEqual(1, span1.Length);
-            entities = span1.Entities;
-            AreEqual(1,     entities.Count);
-            AreSame (store, entities[0].Store);
-            AreEqual(42,    entities[0].Id);
-            AreEqual(42,    span1[0].Id);
-            
-            // --- Length: 2
-            var span2 = new EntitySpan(store, new int[] { 1, 2 }, 0);
-            AreEqual("Entity[2]", span2.ToString());
-            AreEqual(2, span2.Length);
-            entities = span2.Entities;
-            AreEqual(2,     entities.Count);
-            AreSame (store, entities[0].Store);
-            AreEqual(1,     entities[0].Id);
-            AreEqual(2,     entities[1].Id);
-            AreEqual(2,     span2[1].Id);
-
-            int count = 0;
-            foreach (var entity in span2) {
-                switch (count++) {
-                    case 0: AreEqual(1, entity.Id); break;
-                    case 1: AreEqual(2, entity.Id); break;
-                }
-            }
-            AreEqual(2, count);
-        }
     }
 }

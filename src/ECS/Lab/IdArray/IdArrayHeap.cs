@@ -2,7 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertIfStatementToSwitchStatement
@@ -33,16 +32,16 @@ internal sealed class IdArrayHeap
         return count;
     }
     
-    public EntitySpan GetEntitySpan(EntityStore store, IdArray array)
+    public Entities GetEntities(EntityStore store, IdArray array)
     {
         var count = array.count;
         switch (count) {
-            case 0: return  new EntitySpan(store, default, 0);
-            case 1: return  new EntitySpan(store, default, array.start);
+            case 0: return  new Entities(store, 0);
+            case 1: return  new Entities(store, array.start);
         }
         var curPoolIndex  = PoolIndex(count);
-        var ids           = new ReadOnlySpan<int>(GetPool(curPoolIndex).Ids, array.start, count);
-        return              new EntitySpan(store, ids, 0);
+        var ids           = GetPool(curPoolIndex).Ids;
+        return              new Entities(store, ids, array.start, count);
     }
 
     internal static int PoolIndex(int count)

@@ -132,7 +132,7 @@ public sealed class Archetype
             heap.SetComponentsDefault(compIndexStart, count);
         }
         // Send event. See: SEND_EVENT notes
-        var entities = new Entities(entityIds, localStore, compIndexStart, count);
+        var entities = new Entities(localStore, entityIds, compIndexStart, count);
         localStore.CreateEntityEvents(entities);
         return entities;
     }

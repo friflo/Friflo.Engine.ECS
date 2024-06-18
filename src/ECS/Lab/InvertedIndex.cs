@@ -94,10 +94,10 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
     #endregion
     
 #region get matches
-    internal override EntitySpan GetMatchingEntities(TValue value)
+    internal override Entities GetMatchingEntities(TValue value)
     {
         map.TryGetValue(value, out var ids);
-        return arrayHeap.GetEntitySpan(store, ids);
+        return arrayHeap.GetEntities(store, ids);
     }
     #endregion
 }

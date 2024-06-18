@@ -16,5 +16,5 @@ internal abstract class ComponentIndex
 
 internal abstract class ComponentIndex<TValue> : ComponentIndex
 {
-    internal abstract EntitySpan GetMatchingEntities(TValue value);
+    internal abstract Entities GetMatchingEntities(TValue value);
 }

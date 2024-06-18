@@ -665,7 +665,7 @@ public readonly struct Entity : IEquatable<Entity>
     #endregion
 
 #region Lab
-    internal EntitySpan GetForeignEntities<TComponent>() where TComponent: struct, IIndexedComponent<Entity> {
+    internal Entities GetForeignEntities<TComponent>() where TComponent: struct, IIndexedComponent<Entity> {
         var index = (ComponentIndex<Entity>)store.extension.componentIndexes[StructInfo<TComponent>.Index];
         return index.GetMatchingEntities(this);
     }
