@@ -44,12 +44,7 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
-#if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, oldValue, out _);
-#else
-        map.TryGetValue(oldValue, out var ids);
-#endif
-        RemoveComponentValue(id, oldValue, ref ids);
+        RemoveComponentValue(id, oldValue);
         AddComponentValue   (id, value);
     }
     
@@ -73,16 +68,16 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        RemoveComponentValue(id, value);
+    }
+    
+    private void RemoveComponentValue(int id, in TValue value)
+    {
 #if NET6_0_OR_GREATER
         ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
 #else
         map.TryGetValue(value, out var ids);
 #endif
-        RemoveComponentValue(id, value, ref ids);
-    }
-    
-    private void RemoveComponentValue(int id, in TValue value, ref IdArray ids)
-    {
         var idSpan = ids.GetIdSpan(arrayHeap);
         var index = idSpan.IndexOf(id);
         if (index == -1) {
