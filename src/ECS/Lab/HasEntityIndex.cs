@@ -9,16 +9,8 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class HasEntityIndex : ComponentIndex<Entity>
 {
-    private readonly    Dictionary<int, IdArray>    map;
-    private readonly    IdArrayHeap                 arrayHeap;
-    
-#region general
-    internal HasEntityIndex() {
-        map         = new Dictionary<int, IdArray>();
-        arrayHeap   = new IdArrayHeap();
-    }
-    #endregion
-    
+    private readonly    Dictionary<int, IdArray>    map       = new();
+    private readonly    IdArrayHeap                 arrayHeap = new();
     
 #region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
