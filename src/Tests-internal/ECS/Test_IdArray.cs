@@ -233,6 +233,7 @@ namespace Internal.ECS
             var store = new EntityStore();
             store.CreateEntity(1);
             store.CreateEntity(2);
+            store.CreateEntity(42);
 
             // --- Length: 0
             var span0 = new EntitySpan(store, default, 0);
@@ -248,7 +249,7 @@ namespace Internal.ECS
             AreEqual(1, span1.Length);
             entities = span1.Entities;
             AreEqual(1,     entities.Count);
-            AreSame (store, entities[0].store);
+            AreSame (store, entities[0].Store);
             AreEqual(42,    entities[0].Id);
             
             // --- Length: 2
@@ -257,7 +258,7 @@ namespace Internal.ECS
             AreEqual(2, span2.Length);
             entities = span2.Entities;
             AreEqual(2,     entities.Count);
-            AreSame (store, entities[0].store);
+            AreSame (store, entities[0].Store);
             AreEqual(1,     entities[0].Id);
             AreEqual(2,     entities[1].Id);
 
