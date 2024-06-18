@@ -767,12 +767,13 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.RandomPids);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
+        int count       = 10; // 10_000_000 ~ #PC: 2824 ms
+        var type        = store.GetArchetype(default);
         var sw = new Stopwatch();
         sw.Start();
-        long count  = 10; // 10_000_000L ~ #PC: 3.101 ms
-        for (long n = 0; n < count; n++) {
-            var child = store.CreateEntity();
-            root.AddChild(child);
+        var entities    = type.CreateEntities(count);
+        foreach (var entity in entities) {
+            root.AddChild(entity);
         }
         Console.WriteLine($"CreateEntity(idType.RandomPids) - count: {count}, duration: {sw.ElapsedMilliseconds}");
         AreEqual(count, root.ChildCount);
@@ -784,12 +785,14 @@ public static class Test_Entity_Tree
         var store   = new EntityStore(PidType.UsePidAsId);
         var root    = store.CreateEntity();
         root.AddComponent(new EntityName("Root"));
-        var sw = new Stopwatch();
+
+        int count       = 10; // 10_000_000 ~ #PC: 776 ms
+        var type        = store.GetArchetype(default);
+        var sw          = new Stopwatch();
         sw.Start();
-        long count  = 10; // 10_000_000L ~ #PC: 1.215 ms
-        for (long n = 0; n < count; n++) {
-            var child = store.CreateEntity();
-            root.AddChild(child);
+        var entities    = type.CreateEntities(count);
+        foreach (var entity in entities) {
+            root.AddChild(entity);
         }
         Console.WriteLine($"CreateEntity(PidType.UsePidAsId) - count: {count}, duration: {sw.ElapsedMilliseconds}");
         AreEqual(count, root.ChildCount);
