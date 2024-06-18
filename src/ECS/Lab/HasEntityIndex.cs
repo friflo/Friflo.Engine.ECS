@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 
-// ReSharper disable InlineOutVariableDeclaration
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
@@ -17,7 +16,7 @@ internal sealed class HasEntityIndex : ComponentIndex<Entity>
     {
         var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-    IndexUtils.AddComponentValue(id, value.Id, map, arrayHeap);
+        IndexUtils.AddComponentValue    (id, value.Id, map, arrayHeap);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
@@ -27,14 +26,14 @@ internal sealed class HasEntityIndex : ComponentIndex<Entity>
         if (oldValue.Id == value.Id) {
             return;
         }
-        IndexUtils.RemoveComponentValue(id, oldValue.Id, map, arrayHeap);
-        IndexUtils.AddComponentValue   (id, value.   Id, map, arrayHeap);
+        IndexUtils.RemoveComponentValue (id, oldValue.Id, map, arrayHeap);
+        IndexUtils.AddComponentValue    (id, value.   Id, map, arrayHeap);
     }
     
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
         var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        IndexUtils.RemoveComponentValue(id, value.Id, map, arrayHeap);
+        IndexUtils.RemoveComponentValue (id, value.Id, map, arrayHeap);
     }
     #endregion
     
