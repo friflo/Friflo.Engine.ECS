@@ -131,7 +131,7 @@ public class ArchetypeQuery
     /// <param name="componentTypes"> Use <c>ComponentTypes.Get&lt;>()</c> to set the parameter. </param>
     public ArchetypeQuery   WithoutAnyComponents  (in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes); return this; }
     
-    internal ArchetypeQuery Has<TComponent,TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> { Filter.Has<TComponent, TValue>(value);  return this; }
+    internal ArchetypeQuery HasValue<TComponent,TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> { Filter.HasValue<TComponent, TValue>(value);  return this; }
     
     internal void SetHasAllComponents       (in ComponentTypes types) => Filter.AllComponents(types);
     internal void SetHasAnyComponents       (in ComponentTypes types) => Filter.AnyComponents(types);

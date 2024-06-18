@@ -170,7 +170,7 @@ public class QueryFilter
         return this;
     }
     
-    internal QueryFilter Has<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
+    internal QueryFilter HasValue<TComponent, TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> {
         AddValueCondition(new HasValueCondition<TComponent, TValue>(value));
         return this;
     }

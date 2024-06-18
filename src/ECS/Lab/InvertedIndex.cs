@@ -10,8 +10,24 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {
-    private readonly    Dictionary<TValue, IdArray> map         = new ();
-    private readonly    IdArrayHeap                 arrayHeap   = new IdArrayHeap();
+    private readonly    Dictionary<TValue, IdArray> map;
+    private readonly    IdArrayHeap                 arrayHeap;
+    
+#region general
+    internal InvertedIndex() {
+        map         = new Dictionary<TValue, IdArray>(GetEqualityComparer());
+        arrayHeap   = new IdArrayHeap();
+    }
+    
+    private static IEqualityComparer<TValue> GetEqualityComparer()
+    {
+        if (typeof(Entity) == typeof(TValue)) {
+            return (IEqualityComparer<TValue>)(object)EntityUtils.EqualityComparer;
+        }
+        return null;
+    }
+    #endregion
+    
     
 #region add / update
     internal override void Add<TComponent>(int id, in TComponent component)

@@ -30,6 +30,13 @@ internal struct IndexedInt : IIndexedComponent<int> {
     public override string ToString() => value.ToString();
 }
 
+internal struct IndexedEntity : IIndexedComponent<Entity> {
+    public      Entity  GetIndexedValue() => entity;
+    internal    Entity  entity;
+    
+    public override string ToString() => entity.ToString();
+}
+
 
 [SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
 [SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations")]
@@ -59,14 +66,14 @@ public static class Test_Lab
         entity2.AddComponent(new IndexedInt    { value  = 123       });
     //  entities[1].AddComponent(new AttackComponent { target = target }); // todo throws NotImplementedException : to avoid excessive boxing. ...
         
-        var query1  = world.Query<Position,    IndexedName>().  Has<IndexedName,   string>("find-me");
-        var query2  = world.Query<Position,    IndexedInt>().   Has<IndexedInt,    int>   (123);
-        var query3  = world.Query<IndexedName, IndexedInt>().   Has<IndexedName,   string>("find-me").
-                                                                Has<IndexedInt,    int>   (123);
-        var query4  = world.Query().                            Has<IndexedName,   string>("find-me").
-                                                                Has<IndexedInt,    int>   (123);
+        var query1  = world.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me");
+        var query2  = world.Query<Position,    IndexedInt>().   HasValue<IndexedInt,    int>   (123);
+        var query3  = world.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me").
+                                                                HasValue<IndexedInt,    int>   (123);
+        var query4  = world.Query().                            HasValue<IndexedName,   string>("find-me").
+                                                                HasValue<IndexedInt,    int>   (123);
         
-        var query5  = world.Query<Position, AttackComponent>().Has<AttackComponent, Entity>(target);
+        var query5  = world.Query<Position, AttackComponent>().HasValue<AttackComponent, Entity>(target);
         {
             int count = 0;
             query1.ForEachEntity((ref Position _, ref IndexedName indexedName, Entity _) => {
@@ -145,9 +152,9 @@ public static class Test_Lab
         entity3.AddComponent(new IndexedName   { name   = "find-me1" });
         entity3.AddComponent(new IndexedInt    { value  = 123       });
 
-        var query1  = world.Query<Position,    IndexedName>().  Has<IndexedName,   string>("find-me1");
-        var query2  = world.Query<IndexedName, IndexedInt>().   Has<IndexedName,   string>("find-me1");
-        var query3  = world.Query().                            Has<IndexedName,   string>("find-me1");
+        var query1  = world.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me1");
+        var query2  = world.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me1");
+        var query3  = world.Query().                            HasValue<IndexedName,   string>("find-me1");
         
         AreEqual(2, query1.Entities.Count);     AreEqual(new int[] { 1, 3 },        query1.Entities.ToIds());
         AreEqual(1, query2.Entities.Count);     AreEqual(new int[] { 3    },        query2.Entities.ToIds());
@@ -166,13 +173,33 @@ public static class Test_Lab
         AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 3 },       query3.Entities.ToIds());
 
         // --- change queries
-        query1  = world.Query<Position,    IndexedName>().  Has<IndexedName,   string>("find-me2");
-        query2  = world.Query<IndexedName, IndexedInt>().   Has<IndexedName,   string>("find-me2");
-        query3  = world.Query().                            Has<IndexedName,   string>("find-me2");
+        query1  = world.Query<Position,    IndexedName>().  HasValue<IndexedName,   string>("find-me2");
+        query2  = world.Query<IndexedName, IndexedInt>().   HasValue<IndexedName,   string>("find-me2");
+        query3  = world.Query().                            HasValue<IndexedName,   string>("find-me2");
         
         AreEqual(1, query1.Entities.Count);     AreEqual(new int[] { 1 },       query1.Entities.ToIds());
         AreEqual(0, query2.Entities.Count);     AreEqual(new int[] {   },       query2.Entities.ToIds());
         AreEqual(1, query3.Entities.Count);     AreEqual(new int[] { 1 },       query3.Entities.ToIds());
+    }
+    
+    [Test]
+    public static void Test_Index_indexed_Entity()
+    {
+        var world   = new EntityStore();
+        var entity1 = world.CreateEntity(1);
+        var entity2 = world.CreateEntity(2);
+        var entity3 = world.CreateEntity(3);
+        var entity4 = world.CreateEntity(4);
+        
+        entity1.AddComponent(new IndexedEntity { entity = entity3 });
+        entity2.AddComponent(new IndexedEntity { entity = entity4 });
+        
+        var query1  = world.Query().HasValue<IndexedEntity,   Entity>(entity3);
+        var query2  = world.Query().HasValue<IndexedEntity,   Entity>(entity3).
+                                    HasValue<IndexedEntity,   Entity>(entity4);
+        
+        AreEqual(new int [] { 1 },    query1.Entities.ToIds());
+        AreEqual(new int [] { 1, 2 }, query2.Entities.ToIds());
     }
     
     private static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();

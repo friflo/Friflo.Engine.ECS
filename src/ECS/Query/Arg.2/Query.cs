@@ -49,7 +49,7 @@ public sealed class ArchetypeQuery<T1, T2> : ArchetypeQuery // : IEnumerable <> 
     public new ArchetypeQuery<T1, T2> WithoutAnyComponents(in ComponentTypes componentTypes) { SetWithoutAnyComponents(componentTypes);   return this; }
     
     
-    internal new ArchetypeQuery<T1, T2> Has<TComponent,TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> { Filter.Has<TComponent, TValue>(value);  return this; }
+    internal new ArchetypeQuery<T1, T2> HasValue<TComponent,TValue>(TValue value) where TComponent : struct, IIndexedComponent<TValue> { Filter.HasValue<TComponent, TValue>(value);  return this; }
     
     /// <inheritdoc cref="ArchetypeQuery.FreezeFilter"/>
     public new ArchetypeQuery<T1, T2> FreezeFilter() { SetFreezeFilter();   return this; }
