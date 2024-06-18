@@ -8,15 +8,15 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
-internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
+internal sealed class HasEntityIndex : ComponentIndex<Entity>
 {
     internal            int                         Count => map.Count;
-    private readonly    Dictionary<TValue, IdArray> map;
+    private readonly    Dictionary<int, IdArray>    map;
     private readonly    IdArrayHeap                 arrayHeap;
     
 #region general
-    internal HasValueIndex() {
-        map         = new Dictionary<TValue, IdArray>();
+    internal HasEntityIndex() {
+        map         = new Dictionary<int, IdArray>();
         arrayHeap   = new IdArrayHeap();
     }
     #endregion
@@ -25,51 +25,51 @@ internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
 #region add / update
     internal override void Add<TComponent>(int id, in TComponent component)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
-    //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
+        var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(component);
+    //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
         AddComponentValue(id, value);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
     {
-        var oldValue = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        var value    = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
-        if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
+        var oldValue = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value    = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(component);
+        if (oldValue.Id == value.Id) {
             return;
         }
         RemoveComponentValue(id, oldValue);
         AddComponentValue   (id, value);
     }
     
-    private void AddComponentValue(int id, in TValue value)
+    private void AddComponentValue(int id, in Entity value)
     {
 #if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
+        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value.Id, out _);
 #else
-        map.TryGetValue(value, out var ids);
+        map.TryGetValue(value.Id, out var ids);
 #endif
         var idSpan = ids.GetIdSpan(arrayHeap);
         if (idSpan.IndexOf(id) != -1) {
             return;
         }
         ids.AddId(id, arrayHeap);
-        MapUtils.Set(map, value, ids);
+        MapUtils.Set(map, value.Id, ids);
     }
     #endregion
     
 #region remove
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
-        var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
+        var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
         RemoveComponentValue(id, value);
     }
     
-    internal void RemoveComponentValue(int id, in TValue value)
+    private void RemoveComponentValue(int id, in Entity value)
     {
 #if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
+        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value.Id, out _);
 #else
-        map.TryGetValue(value, out var ids);
+        map.TryGetValue(value.Id, out var ids);
 #endif
         var idSpan = ids.GetIdSpan(arrayHeap);
         var index = idSpan.IndexOf(id);
@@ -77,18 +77,18 @@ internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
             return;
         }
         if (ids.Count == 1) {
-            map.Remove(value);
+            map.Remove(value.Id);
             return;
         }
         ids.RemoveAt(index, arrayHeap);
-        MapUtils.Set(map, value, ids);
+        MapUtils.Set(map, value.Id, ids);
     }
     #endregion
     
 #region get matches
-    internal override Entities GetMatchingEntities(TValue value)
+    internal override Entities GetMatchingEntities(Entity value)
     {
-        map.TryGetValue(value, out var ids);
+        map.TryGetValue(value.Id, out var ids);
         return arrayHeap.GetEntities(store, ids);
     }
     #endregion
