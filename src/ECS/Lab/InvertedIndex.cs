@@ -10,6 +10,7 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
 {
+    internal            int                         Count => map.Count;
     private readonly    Dictionary<TValue, IdArray> map;
     private readonly    IdArrayHeap                 arrayHeap;
     
@@ -71,7 +72,7 @@ internal sealed class InvertedIndex<TValue>  : ComponentIndex<TValue>
         RemoveComponentValue(id, value);
     }
     
-    private void RemoveComponentValue(int id, in TValue value)
+    internal void RemoveComponentValue(int id, in TValue value)
     {
 #if NET6_0_OR_GREATER
         ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);

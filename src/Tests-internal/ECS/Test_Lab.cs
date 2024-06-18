@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Friflo.Engine.ECS;
+using Friflo.Engine.ECS.Index;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -200,6 +201,30 @@ public static class Test_Lab
         
         AreEqual(new int [] { 1 },    query1.Entities.ToIds());
         AreEqual(new int [] { 1, 2 }, query2.Entities.ToIds());
+    }
+    
+    [Test]
+    public static void Test_Index_already_added()
+    {
+        var world   = new EntityStore();
+        var entity  = world.CreateEntity(1);
+        
+        entity.AddComponent(new IndexedName { name = "added" });
+        
+        var index = (InvertedIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
+        index.Add(1, new IndexedName { name = "added" });
+        AreEqual(1, index.Count);
+    }
+    
+    [Test]
+    public static void Test_Index_already_removed()
+    {
+        var world   = new EntityStore();
+        
+        var index = (InvertedIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
+        AreEqual(0, index.Count);
+        index.RemoveComponentValue(1, "missing");   // add key with default IdArray
+        AreEqual(1, index.Count);
     }
     
     private static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();
