@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable ConvertIfStatementToSwitchStatement
@@ -11,6 +12,7 @@ namespace Friflo.Engine.ECS.Index;
 internal sealed class IdArrayHeap
 {
     public              int             Count               => GetCount();
+    
     public   override   string          ToString()          => $"count: {Count}";
     internal            IdArrayPool     GetPool(int index)  => pools[index] ??= new IdArrayPool(index);
     
@@ -29,6 +31,18 @@ internal sealed class IdArrayHeap
             count += pool.Count;
         }
         return count;
+    }
+    
+    public EntitySpan GetEntitySpan(EntityStore store, IdArray array)
+    {
+        var count = array.count;
+        switch (count) {
+            case 0: return  new EntitySpan(store, default, 0);
+            case 1: return  new EntitySpan(store, default, array.start);
+        }
+        var curPoolIndex  = PoolIndex(count);
+        var ids           = new ReadOnlySpan<int>(GetPool(curPoolIndex).Ids, array.start, count);
+        return              new EntitySpan(store, ids, 0);
     }
 
     internal static int PoolIndex(int count)

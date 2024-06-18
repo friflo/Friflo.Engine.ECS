@@ -2,8 +2,6 @@
 // See LICENSE file in the project root for full license information.
 
 
-using System.Collections.Generic;
-
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
@@ -18,5 +16,5 @@ internal abstract class ComponentIndex
 
 internal abstract class ComponentIndex<TValue> : ComponentIndex
 {
-    internal abstract void AddMatchingEntities(in TValue value, HashSet<int> set);
+    internal abstract EntitySpan GetMatchingEntities(TValue value);
 }

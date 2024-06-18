@@ -190,17 +190,26 @@ public static class Test_Lab
         var entity1 = world.CreateEntity(1);
         var entity2 = world.CreateEntity(2);
         var entity3 = world.CreateEntity(3);
+        
         var entity4 = world.CreateEntity(4);
+        var entity5 = world.CreateEntity(5);
         
-        entity1.AddComponent(new IndexedEntity { entity = entity3 });
-        entity2.AddComponent(new IndexedEntity { entity = entity4 });
+        entity1.AddComponent(new IndexedEntity { entity = entity4 });
+        entity2.AddComponent(new IndexedEntity { entity = entity5 });
+        entity3.AddComponent(new IndexedEntity { entity = entity5 });
         
-        var query1  = world.Query().HasValue<IndexedEntity,   Entity>(entity3);
-        var query2  = world.Query().HasValue<IndexedEntity,   Entity>(entity3).
-                                    HasValue<IndexedEntity,   Entity>(entity4);
+        var query1  = world.Query().HasValue<IndexedEntity,   Entity>(entity4);
+        var query2  = world.Query().HasValue<IndexedEntity,   Entity>(entity4).
+                                    HasValue<IndexedEntity,   Entity>(entity5);
         
-        AreEqual(new int [] { 1 },    query1.Entities.ToIds());
-        AreEqual(new int [] { 1, 2 }, query2.Entities.ToIds());
+        AreEqual(new int [] { 1       },    query1.Entities.ToIds());
+        AreEqual(new int [] { 1, 2, 3 },    query2.Entities.ToIds());
+        
+        var references4 = entity4.GetForeignEntities<IndexedEntity>();
+        AreEqual(new int [] { 1 },          references4.Ids.ToArray());
+        
+        var references5 = entity5.GetForeignEntities<IndexedEntity>();
+        AreEqual(new int [] { 2, 3 },       references5.Ids.ToArray());
     }
     
     [Test]

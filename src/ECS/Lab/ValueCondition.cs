@@ -1,14 +1,13 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Friflo.Engine.ECS.Index;
 
 internal abstract class ValueCondition
 {
-    internal abstract void AddMatchingEntities(EntityStore store, HashSet<int> set);
+    internal abstract EntitySpan GetMatchingEntities(EntityStore store);
 }
 
 internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition where TComponent : struct, IIndexedComponent<TValue>
@@ -19,9 +18,9 @@ internal sealed class HasValueCondition<TComponent, TValue> : ValueCondition whe
         this.value = value;
     }
     
-    internal override void AddMatchingEntities(EntityStore store, HashSet<int> set)
+    internal override EntitySpan GetMatchingEntities(EntityStore store)
     {
         var index = (ComponentIndex<TValue>)store.extension.componentIndexes[StructInfo<TComponent>.Index];
-        index.AddMatchingEntities(value, set);
+        return index.GetMatchingEntities(value);
     }
 }
