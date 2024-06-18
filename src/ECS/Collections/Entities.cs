@@ -119,12 +119,10 @@ internal sealed class EntitiesDebugView
     
     private Entity[] GetEntities()
     {
-        var store   = entities.store;
-        var count   = entities.count;
-        var ids     = entities.ids;
-        var result  = new Entity[count];
-        for (int n = 0; n < count; n++) {
-            result[n] = new Entity(store, ids[n]);
+        var result  = new Entity[entities.Count];
+        int index   = 0;
+        foreach (var entity in entities) {
+            result[index++] = entity;
         }
         return result;
     }

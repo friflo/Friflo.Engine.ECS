@@ -25,6 +25,13 @@ public static class Test_Entities
             AreSame (store, entity.Store);
             AreEqual(n + 1, entity.Id);   
         }
+        
+        var entities1   = new Entities(store, 1);
+        view            = new EntitiesDebugView(entities1);
+        array           = view.Entities;
+        AreEqual(1,     array.Length);
+        AreEqual(1,     array[0].Id);
+        AreSame (store, array[0].Store);
     }
     
     [Test]
