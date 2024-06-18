@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 
 // ReSharper disable InlineOutVariableDeclaration
@@ -10,7 +9,6 @@ namespace Friflo.Engine.ECS.Index;
 
 internal sealed class HasEntityIndex : ComponentIndex<Entity>
 {
-    internal            int                         Count => map.Count;
     private readonly    Dictionary<int, IdArray>    map;
     private readonly    IdArrayHeap                 arrayHeap;
     
@@ -22,12 +20,12 @@ internal sealed class HasEntityIndex : ComponentIndex<Entity>
     #endregion
     
     
-#region add / update
+#region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
         var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<Entity>)component).GetIndexedValue();    // boxes component
-        AddComponentValue(id, value);
+    IndexUtils.AddComponentValue(id, value.Id, map, arrayHeap);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
@@ -37,51 +35,14 @@ internal sealed class HasEntityIndex : ComponentIndex<Entity>
         if (oldValue.Id == value.Id) {
             return;
         }
-        RemoveComponentValue(id, oldValue);
-        AddComponentValue   (id, value);
+        IndexUtils.RemoveComponentValue(id, oldValue.Id, map, arrayHeap);
+        IndexUtils.AddComponentValue   (id, value.   Id, map, arrayHeap);
     }
     
-    private void AddComponentValue(int id, in Entity value)
-    {
-#if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value.Id, out _);
-#else
-        map.TryGetValue(value.Id, out var ids);
-#endif
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        if (idSpan.IndexOf(id) != -1) {
-            return;
-        }
-        ids.AddId(id, arrayHeap);
-        MapUtils.Set(map, value.Id, ids);
-    }
-    #endregion
-    
-#region remove
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
         var value = IndexedComponentUtils<TComponent,Entity>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        RemoveComponentValue(id, value);
-    }
-    
-    private void RemoveComponentValue(int id, in Entity value)
-    {
-#if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value.Id, out _);
-#else
-        map.TryGetValue(value.Id, out var ids);
-#endif
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        var index = idSpan.IndexOf(id);
-        if (index == -1) {
-            return;
-        }
-        if (ids.Count == 1) {
-            map.Remove(value.Id);
-            return;
-        }
-        ids.RemoveAt(index, arrayHeap);
-        MapUtils.Set(map, value.Id, ids);
+        IndexUtils.RemoveComponentValue(id, value.Id, map, arrayHeap);
     }
     #endregion
     

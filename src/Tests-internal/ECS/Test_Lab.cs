@@ -228,12 +228,10 @@ public static class Test_Lab
     [Test]
     public static void Test_Index_already_removed()
     {
-        var world   = new EntityStore();
-        
-        var index = (HasValueIndex<string>)world.extension.componentIndexes[StructInfo<IndexedName>.Index];
-        AreEqual(0, index.Count);
-        index.RemoveComponentValue(1, "missing");   // add key with default IdArray
-        AreEqual(1, index.Count);
+        var map = new Dictionary<string, IdArray>();
+        var arrayHeap = new IdArrayHeap();
+        IndexUtils.RemoveComponentValue(1, "missing", map, arrayHeap);   // add key with default IdArray
+        AreEqual(1, map.Count);
     }
     
     private static int[] ToIds(this QueryEntities entities) => entities.ToEntityList().Ids.ToArray();

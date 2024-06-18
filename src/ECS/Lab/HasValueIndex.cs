@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Ullrich Praetz - https://github.com/friflo. All rights reserved.
 // See LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Generic;
 
 // ReSharper disable InlineOutVariableDeclaration
@@ -22,12 +21,12 @@ internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
     #endregion
     
     
-#region add / update
+#region indexing
     internal override void Add<TComponent>(int id, in TComponent component)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(component);
     //  var value = ((IIndexedComponent<TValue>)component).GetIndexedValue();    // boxes component
-        AddComponentValue(id, value);
+        IndexUtils.AddComponentValue(id, value, map, arrayHeap);
     }
     
     internal override void Update<TComponent>(int id, in TComponent component, StructHeap heap)
@@ -37,51 +36,14 @@ internal sealed class HasValueIndex<TValue>  : ComponentIndex<TValue>
         if (EqualityComparer<TValue>.Default.Equals(oldValue , value)) {
             return;
         }
-        RemoveComponentValue(id, oldValue);
-        AddComponentValue   (id, value);
+        IndexUtils.RemoveComponentValue(id, oldValue, map, arrayHeap);
+        IndexUtils.AddComponentValue   (id, value,    map, arrayHeap);
     }
-    
-    private void AddComponentValue(int id, in TValue value)
-    {
-#if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
-#else
-        map.TryGetValue(value, out var ids);
-#endif
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        if (idSpan.IndexOf(id) != -1) {
-            return;
-        }
-        ids.AddId(id, arrayHeap);
-        MapUtils.Set(map, value, ids);
-    }
-    #endregion
-    
-#region remove
+
     internal override void Remove<TComponent>(int id, StructHeap heap)
     {
         var value = IndexedComponentUtils<TComponent,TValue>.GetIndexedValue(((StructHeap<TComponent>)heap).componentStash);
-        RemoveComponentValue(id, value);
-    }
-    
-    internal void RemoveComponentValue(int id, in TValue value)
-    {
-#if NET6_0_OR_GREATER
-        ref var ids = ref System.Runtime.InteropServices.CollectionsMarshal.GetValueRefOrAddDefault(map, value, out _);
-#else
-        map.TryGetValue(value, out var ids);
-#endif
-        var idSpan = ids.GetIdSpan(arrayHeap);
-        var index = idSpan.IndexOf(id);
-        if (index == -1) {
-            return;
-        }
-        if (ids.Count == 1) {
-            map.Remove(value);
-            return;
-        }
-        ids.RemoveAt(index, arrayHeap);
-        MapUtils.Set(map, value, ids);
+        IndexUtils.RemoveComponentValue(id, value, map, arrayHeap);
     }
     #endregion
     
