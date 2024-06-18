@@ -251,6 +251,7 @@ namespace Internal.ECS
             AreEqual(1,     entities.Count);
             AreSame (store, entities[0].Store);
             AreEqual(42,    entities[0].Id);
+            AreEqual(42,    span1[0].Id);
             
             // --- Length: 2
             var span2 = new EntitySpan(store, new int[] { 1, 2 }, 0);
@@ -261,6 +262,7 @@ namespace Internal.ECS
             AreSame (store, entities[0].Store);
             AreEqual(1,     entities[0].Id);
             AreEqual(2,     entities[1].Id);
+            AreEqual(2,     span2[1].Id);
 
             int count = 0;
             foreach (var entity in span2) {

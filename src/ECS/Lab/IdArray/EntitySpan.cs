@@ -32,6 +32,15 @@ internal ref struct EntitySpan
         this.id     = id;
     }
     
+    public Entity this[int index] {
+        get {
+            if (id == 0) {
+                return new Entity(Store, ids[index]);
+            }
+            return new Entity(Store, id);
+        }
+    }
+    
     public EntitySpanEnumerator GetEnumerator() => new EntitySpanEnumerator(this);
 }
 
